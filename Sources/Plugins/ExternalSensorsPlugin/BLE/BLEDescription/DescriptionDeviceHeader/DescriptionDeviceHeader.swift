@@ -86,7 +86,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
-                print("connect success")
+                debugPrint("connect success")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: device.id)
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
@@ -135,11 +135,7 @@ final class DescriptionDeviceHeader: UIView {
                     for characteristic in characteristics {
                         debugPrint(characteristic)
                         if characteristic.properties.contains(.read) {
-                            device.update(with: characteristic) { [weak self] result in
-                                if case .success = result {
-#warning("reload data")
-                                }
-                            }
+                            device.update(with: characteristic) { _ in }
                         }
                         if characteristic.properties.contains(.notify) {
                             debugPrint("\(characteristic.uuid): properties contains .notify")

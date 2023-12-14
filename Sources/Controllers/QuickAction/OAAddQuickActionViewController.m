@@ -15,6 +15,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OASizes.h"
 #import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAAddQuickActionViewController () <UISearchBarDelegate>
 
@@ -81,15 +82,15 @@
     if (isFiltered)
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.whiteColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
+        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.grayColor;
+        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
     }
 }
 
@@ -167,7 +168,8 @@
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.titleLabel.text = action.name;
-            cell.leftIconView.image = [UIImage imageNamed:action.iconName];
+            cell.leftIconView.image = [UIImage templateImageNamed:action.iconName];
+            cell.leftIconView.tintColor = UIColor.iconColorSelected;
             if (cell.leftIconView.subviews.count > 0)
                 [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
@@ -177,7 +179,7 @@
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-                [background setTintColor:UIColor.whiteColor];
+                [background setTintColor:UIColor.groupBgColor];
                 [cell.leftIconView addSubview:background];
                 UIImage *img = [UIImage imageNamed:act.getSecondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];

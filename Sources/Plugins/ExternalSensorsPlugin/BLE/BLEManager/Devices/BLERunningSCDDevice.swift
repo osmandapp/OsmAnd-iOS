@@ -11,7 +11,7 @@ import CoreBluetooth
 
 final class BLERunningSCDDevice: Device {
     
-    var name: String {
+    override var deviceServiceName: String {
         "Running Sensor"
     }
     

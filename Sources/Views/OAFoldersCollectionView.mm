@@ -237,7 +237,7 @@
         {
             backgroundColor = UIColor.buttonBgColorPrimary;
             destCell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
-            destCell.imageView.tintColor = UIColor.buttonTextColorPrimary;
+            destCell.imageView.tintColor = UIColor.buttonIconColorPrimary;
             destCell.layer.borderWidth = 0.;
             destCell.layer.borderColor = UIColor.clearColor.CGColor;
         }
@@ -251,7 +251,7 @@
             destCell.titleLabel.textColor = available
                     ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
             destCell.imageView.tintColor = available
-                    ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
+                    ? UIColor.buttonIconColorSecondary : UIColor.textColorSecondary;
             destCell.layer.borderWidth = enabled ? 0. : 1.;
             destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : UIColor.buttonBgColorSecondary.CGColor;
         }

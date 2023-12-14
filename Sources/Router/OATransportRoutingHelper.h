@@ -52,7 +52,7 @@
 
 - (void) clearCurrentRoute:(CLLocation *) newFinalLocation;
 - (void) recalculateRouteDueToSettingsChange;
-- (void) addProgressBar:(id<OATransportRouteCalculationProgressCallback>) progressRoute;
+- (void) addCalculationProgressCallback:(id<OATransportRouteCalculationProgressCallback>) progressRoute;
 
 - (std::vector<SHARED_PTR<TransportRouteResult>>) getRoutes;
 

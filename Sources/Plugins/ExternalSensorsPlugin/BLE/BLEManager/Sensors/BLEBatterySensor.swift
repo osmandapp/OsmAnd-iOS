@@ -18,7 +18,7 @@ final class BLEBatterySensor: Sensor {
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         switch characteristic.uuid {
         case GattAttributes.CHARACTERISTIC_BATTERY.CBUUIDRepresentation:
-            if let value = characteristic.value {
+            if let value = characteristic.value, !value.isEmpty {
                 lastBatteryData.batteryLevel = Int(value[0])
                 lastBatteryData.timestamp = Date().timeIntervalSince1970
                 result(.success)

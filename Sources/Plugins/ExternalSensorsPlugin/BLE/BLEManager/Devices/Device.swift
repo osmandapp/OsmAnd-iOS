@@ -28,7 +28,7 @@ enum DeviceState: Int {
 
 @objc(OADevice)
 @objcMembers
-class Device : NSObject {
+class Device: NSObject {
     static let identifier = "identifier"
     
     var deviceType: DeviceType!
@@ -41,6 +41,10 @@ class Device : NSObject {
     private(set) var peripheral: Peripheral!
     
     private var RSSIUpdateTimer: Timer?
+    
+    var deviceServiceName: String {
+        ""
+    }
     
     var id: String {
         peripheral.identifier.uuidString
@@ -109,12 +113,16 @@ class Device : NSObject {
             guard let self else { return }
             if let identifier = notification.userInfo?["identifier"] as? UUID, identifier.uuidString == self.id {
                 DeviceHelper.shared.removeDisconnected(device: self)
-                NotificationCenter.default.post(name: .DeviceDisconnected,
-                                                object: nil,
-                                                userInfo: [Self.identifier: self.id])
-                didDisconnect?()
+                didDisconnectDevice()
             }
         }
+    }
+    
+    func didDisconnectDevice() {
+        NotificationCenter.default.post(name: .DeviceDisconnected,
+                                        object: nil,
+                                        userInfo: [Self.identifier: self.id])
+        didDisconnect?()
     }
     
     func peripheralCharacteristicValueUpdate(notification: NSNotification) {

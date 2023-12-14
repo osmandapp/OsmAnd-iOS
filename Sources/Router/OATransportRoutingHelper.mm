@@ -124,11 +124,10 @@
 @interface OATransportRoutingHelper()
 
 @property (nonatomic) std::vector<std::shared_ptr<TransportRouteResult>> routes;
-@property (nonatomic) NSThread *currentRunningJob;
 
 @property (nonatomic) NSString *lastRouteCalcError;
 @property (nonatomic) NSString *lastRouteCalcErrorShort;
-@property (nonatomic) BOOL waitingNextJob;
+@property (nonatomic) NSTimeInterval lastTimeEvaluatedRoute;
 
 @property (nonatomic) NSMutableArray<id<OARouteInformationListener>> *listeners;
 
@@ -137,19 +136,20 @@
 
 @end
 
-@interface OATransportRouteRecalculationThread : NSThread <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
+@interface OATransportRouteRecalculationTask : NSOperation <OARouteCalculationProgressCallback, OARouteCalculationResultListener>
 
 @property (nonatomic) OATransportRouteCalculationParams *params;
-@property (nonatomic) NSThread *prevRunningJob;
+
+@property (nonatomic) NSString *routeCalcError;
+@property (nonatomic) NSString *routeCalcErrorShort;
 
 @property (nonatomic) BOOL walkingSegmentsCalculated;
 
 - (void) stopCalculation;
-- (void) setWaitPrevJob:(NSThread *)prevRunningJob;
 
 @end
 
-@implementation OATransportRouteRecalculationThread
+@implementation OATransportRouteRecalculationTask
 {
     OATransportRoutingHelper *_helper;
     OAAppSettings *_settings;
@@ -191,9 +191,11 @@
     _params.calculationProgress->cancelled = true;
 }
 
-- (void) setWaitPrevJob:(NSThread *)prevRunningJob
+- (void) cancel
 {
-    _prevRunningJob = prevRunningJob;
+    [super cancel];
+
+    [self stopCalculation];
 }
 
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
@@ -351,42 +353,15 @@
 
 - (void) main
 {
-    @synchronized (_helper)
-    {
-        _helper.currentRunningJob = self;
-        _helper.waitingNextJob = _prevRunningJob != nil;
-    }
-    
-    if (_prevRunningJob)
-    {
-        while (_prevRunningJob.executing)
-        {
-            [NSThread sleepForTimeInterval:.05];
-        }
-        @synchronized (_helper)
-        {
-            _helper.currentRunningJob = self;
-            _helper.waitingNextJob = false;
-        }
-    }
-    
     NSString *error = nil;
     
     auto res = [self calculateRouteImpl:_params];
     if (res.size() != 0 && !_params.calculationProgress->isCancelled())
-    {
         [self calculateWalkingRoutes:res];
-    }
-    
+
     if (_params.calculationProgress->isCancelled())
-    {
-        @synchronized (_helper)
-        {
-            _helper.currentRunningJob = nil;
-        }
         return;
-    }
-    
+
     @synchronized (_helper)
     {
         _helper.routes = res;
@@ -397,17 +372,16 @@
             if (_params.resultListener)
                 [_params.resultListener onRouteCalculated:res];
         }
-        _helper.currentRunningJob = nil;
     }
 
     if (error)
     {
-        _helper.lastRouteCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), error];
-        _helper.lastRouteCalcErrorShort = OALocalizedString(@"error_calculating_route");
+        _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), error];
+        _routeCalcErrorShort = OALocalizedString(@"error_calculating_route");
     }
     else
     {
-        _helper.lastRouteCalcError = OALocalizedString(@"empty_route_calculated");
+        _routeCalcError = OALocalizedString(@"empty_route_calculated");
     }
     [_helper setNewRoute:res];
 }
@@ -465,7 +439,11 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     
-    NSMutableArray<id<OATransportRouteCalculationProgressCallback>> *_progressRoutes;
+    NSOperationQueue *_executor;
+    NSMutableArray<OATransportRouteRecalculationTask *> *_tasks;
+    OATransportRouteRecalculationTask *_lastTask;
+
+    NSMutableArray<id<OATransportRouteCalculationProgressCallback>> *_calculationProgressCallbacks;
 }
 
 - (instancetype)init
@@ -476,9 +454,13 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
 
+        _executor = [[NSOperationQueue alloc] init];
+        _executor.maxConcurrentOperationCount = 1;
+        _tasks = [NSMutableArray array];
+
         _listeners = [NSMutableArray array];
         _applicationMode = OAApplicationMode.PUBLIC_TRANSPORT;
-        _progressRoutes = [NSMutableArray new];
+        _calculationProgressCallbacks = [NSMutableArray new];
         
         _currentRoute = -1;
     }
@@ -642,31 +624,39 @@
 
 - (void) startRouteCalculationThread:(OATransportRouteCalculationParams *) params
 {
-    @synchronized(self)
+    @synchronized (self)
     {
-        NSThread *prevRunningJob = _currentRunningJob;
         _settings.lastRoutingApplicationMode = OARoutingHelper.sharedInstance.getAppMode;
-        OATransportRouteRecalculationThread *newThread = [[OATransportRouteRecalculationThread alloc] initWithName:@"Calculating public transport route" params:params helper:self];
-        _currentRunningJob = newThread;
-        
+
+        OATransportRouteRecalculationTask *newTask = [[OATransportRouteRecalculationTask alloc] initWithName:@"Calculating public transport route" params:params helper:self];
+        _lastTask = newTask;
         [self startProgress:params];
         [self updateProgress:params];
-        if (prevRunningJob)
-        {
-            [newThread setWaitPrevJob:prevRunningJob];
-        }
-        [_currentRunningJob start];
+
+        __weak OATransportRouteRecalculationTask *newTaskRef = newTask;
+        [newTask setCompletionBlock:^{
+            OATransportRouteRecalculationTask *newTask = newTaskRef;
+            if (newTask)
+            {
+                [_tasks removeObject:newTask];
+                _lastRouteCalcError = newTask.routeCalcError;
+                _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
+                _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+            }
+        }];
+        [_tasks addObject:newTask];
+        [_executor addOperation:newTask];
     }
 }
 
-- (void) addProgressBar:(id<OATransportRouteCalculationProgressCallback>) progressRoute
+- (void) addCalculationProgressCallback:(id<OATransportRouteCalculationProgressCallback>)callback
 {
-    [_progressRoutes addObject:progressRoute];
+    [_calculationProgressCallbacks addObject:callback];
 }
 
 - (void) startProgress:(OATransportRouteCalculationParams *) params
 {
-    for (id<OATransportRouteCalculationProgressCallback> pr in _progressRoutes)
+    for (id<OATransportRouteCalculationProgressCallback> pr in _calculationProgressCallbacks)
         [pr start];
 
     [self setCurrentRoute:-1];
@@ -674,31 +664,25 @@
 
 - (void) updateProgress:(OATransportRouteCalculationParams *) params
 {
-    if (_progressRoutes && _progressRoutes.count > 0)
+    if (_calculationProgressCallbacks && _calculationProgressCallbacks.count > 0)
     {
+        __weak OATransportRoutingHelper *helperRef = self;
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-            
+
             auto calculationProgress = params.calculationProgress;
             if ([self isRouteBeingCalculated])
             {
-                float pr = MAX(calculationProgress->distanceFromBegin, calculationProgress->distanceFromEnd);
-                for (id<OATransportRouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                float pr = calculationProgress->getLinearProgress();
+                for (id<OATransportRouteCalculationProgressCallback> progressRoute in _calculationProgressCallbacks)
                     [progressRoute updateProgress:(int) pr];
                 
-                NSThread *t = _currentRunningJob;
-                if ([t isKindOfClass:[OATransportRouteRecalculationThread class]] && ((OATransportRouteRecalculationThread *) t).params != params)
-                {
-                    // different calculation started
-                    return;
-                }
-                else
-                {
-                    [self updateProgress:params];
-                }
+                OATransportRoutingHelper *helper = helperRef;
+                if (helper && _lastTask && _lastTask.params == params)
+                    [helper updateProgress:params];
             }
             else
             {
-                for (id<OATransportRouteCalculationProgressCallback> progressRoute in _progressRoutes)
+                for (id<OATransportRouteCalculationProgressCallback> progressRoute in _calculationProgressCallbacks)
                     [progressRoute finish];
             }
         });
@@ -707,7 +691,22 @@
 
 - (BOOL) isRouteBeingCalculated
 {
-    return [_currentRunningJob isKindOfClass:OATransportRouteRecalculationThread.class] || _waitingNextJob;
+    @synchronized (self)
+    {
+        for (OATransportRouteRecalculationTask *task in _tasks)
+            if (!task.finished)
+                return YES;
+
+        return NO;
+    }
+}
+
+- (void) stopCalculation
+{
+    @synchronized (self) {
+        for (OATransportRouteRecalculationTask *task in _tasks)
+            [task cancel];
+    }
 }
 
 - (OABBox) getBBox
@@ -797,15 +796,10 @@
                 }
             });
         }
-        
-        
+
         _endLocation = newFinalLocation;
-        if ([_currentRunningJob isKindOfClass:OATransportRouteRecalculationThread.class])
-        {
-            [((OATransportRouteRecalculationThread *) _currentRunningJob) stopCalculation];
-        }
+        [self stopCalculation];
     }
-    
 }
 
 - (void) setCurrentLocation:(CLLocation *) currentLocation

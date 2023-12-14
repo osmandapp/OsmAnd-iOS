@@ -15,8 +15,8 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Guc-jW-K1C" userLabel="dividerTopView">
-                    <rect key="frame" x="0.0" y="0.0" width="393" height="0.6666666666666714"/>
-                    <color key="backgroundColor" name="divider"/>
+                    <rect key="frame" x="0.0" y="0.0" width="393" height="0.66666666666666663"/>
+                    <color key="backgroundColor" name="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="jzc-gT-FPh"/>
                     </constraints>
@@ -70,7 +70,7 @@
                 </imageView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ebP-O7-4Aq" userLabel="dividerBottomView">
                     <rect key="frame" x="0.0" y="156.66666666666666" width="393" height="0.33333333333334281"/>
-                    <color key="backgroundColor" name="divider"/>
+                    <color key="backgroundColor" name="separatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="RHS-8i-Liw"/>
                     </constraints>
@@ -109,9 +109,6 @@
     </objects>
     <resources>
         <image name="ic_custom_bluetooth_off" width="49" height="48"/>
-        <namedColor name="divider">
-            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="groupBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

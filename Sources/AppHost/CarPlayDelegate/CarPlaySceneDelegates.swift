@@ -17,6 +17,8 @@ final class CarPlaySceneDelegate: UIResponder {
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillResignActive")
         isForegroundScene = false
+        carPlayDashboardController = nil
+        carPlayMapController = nil
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -58,12 +60,11 @@ final class CarPlaySceneDelegate: UIResponder {
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
             }
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
-            window.rootViewController = carPlayMapController
-            
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
             carPlayDashboardController?.delegate = carPlayMapController
-            carPlayDashboardController?.present()
             carPlayMapController?.delegate = carPlayDashboardController
+            window.rootViewController = carPlayMapController
+            carPlayDashboardController?.present()
             OARootViewController.instance()?.mapPanel.onCarPlayConnected()
         } else {
             let vc = OACarPlayActiveViewController()
@@ -109,7 +110,12 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         OsmAndApp.swiftInstance().carPlayActive = false
         OAAppSettings.sharedManager().setApplicationModePref(OAAppSettings.sharedManager().defaultApplicationMode.get(), markAsLastUsed: false)
         
-        OARootViewController.instance().mapPanel.onCarPlayDisconnected { [weak self] in
+        guard let mapPanel = OARootViewController.instance()?.mapPanel else {
+            NSLog("[CarPlay] CarPlaySceneDelegate rootViewController mapPanel is nil")
+            return
+        }
+        
+        mapPanel.onCarPlayDisconnected { [weak self] in
             guard let self else { return }
             NSLog("[CarPlay] CarPlaySceneDelegate onCarPlayDisconnected")
             carPlayMapController?.detachFromCarPlayWindow()

@@ -3079,3 +3079,15 @@
 "apply_to_existing_favorites_descr" = "Applicare le modifiche ai preferiti esistenti o solo ai nuovi?";
 "apply_only_to_new_points" = "Applica solo ai nuovi punti";
 "apply_to_existing" = "Applica agli esistenti";
+"user_guide" = "Guida utente";
+"send_log" = "Invia il registro";
+"my_data" = "I miei dati";
+"map_widgets" = "Widget della mappa";
+"setup" = "Impostazione";
+"most_viewed" = "I più visti";
+"copy_build_version" = "Copia la versione di compilazione";
+"gitHub_discussion" = "Discussione su GitHub";
+"open_issue_on_gitHub" = "Problema aperto su GitHub";
+"report_an_issues" = "Segnala un problema";
+"telegram_chats" = "Chat Telegram";
+"troubleshooting" = "Risoluzione dei problemi";

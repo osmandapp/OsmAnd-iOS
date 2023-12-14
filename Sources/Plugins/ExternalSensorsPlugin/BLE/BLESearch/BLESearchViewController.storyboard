@@ -77,6 +77,7 @@
                                                 <constraint firstItem="lKe-KR-MQG" firstAttribute="centerY" secondItem="LNJ-lH-ZnF" secondAttribute="centerY" id="uxT-Ul-s7W"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
                                         <connections>
                                             <outlet property="connectStatusLabel" destination="Fdj-ZX-izt" id="pb5-IN-rXj"/>
                                             <outlet property="deviceImageView" destination="lKe-KR-MQG" id="ulN-oa-UvA"/>
@@ -158,10 +159,10 @@
                                         <rect key="frame" x="0.0" y="-40" width="430" height="286"/>
                                     </imageView>
                                     <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="medium" translatesAutoresizingMaskIntoConstraints="NO" id="mdf-qV-p4H">
-                                        <rect key="frame" x="205" y="63" width="20" height="20"/>
+                                        <rect key="frame" x="205" y="93" width="20" height="20"/>
                                     </activityIndicatorView>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="4Wl-rn-pk9">
-                                        <rect key="frame" x="30" y="181" width="370" height="84.333333333333314"/>
+                                        <rect key="frame" x="30" y="211" width="370" height="84.333333333333314"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Searching for sensors" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QzX-76-Tgh">
                                                 <rect key="frame" x="102.33333333333336" y="0.0" width="165.66666666666663" height="20.333333333333332"/>
@@ -170,7 +171,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wQV-O7-UKe" userLabel="Please hold the device close to the sensor.  You need to activate the sensor so OsmAnd can find it.">
-                                                <rect key="frame" x="19" y="26.333333333333314" width="332" height="58"/>
+                                                <rect key="frame" x="4" y="26.333333333333314" width="362" height="58"/>
                                                 <string key="text">Please hold the device close to the sensor. 
 You need to activate the sensor so OsmAnd can find it.</string>
                                                 <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
@@ -182,7 +183,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
-                                    <constraint firstItem="mdf-qV-p4H" firstAttribute="top" secondItem="OMj-M0-oTs" secondAttribute="top" constant="63" id="3nZ-a1-PlV"/>
+                                    <constraint firstItem="mdf-qV-p4H" firstAttribute="top" secondItem="OMj-M0-oTs" secondAttribute="top" constant="93" id="3nZ-a1-PlV"/>
                                     <constraint firstAttribute="trailing" secondItem="4Wl-rn-pk9" secondAttribute="trailing" constant="30" id="9aE-xj-4QS"/>
                                     <constraint firstAttribute="trailing" secondItem="Y7B-4e-J3M" secondAttribute="trailing" id="BvU-b8-jWB"/>
                                     <constraint firstItem="4Wl-rn-pk9" firstAttribute="leading" secondItem="OMj-M0-oTs" secondAttribute="leading" constant="30" id="EL6-8Q-hZk"/>
@@ -308,6 +309,9 @@ You need to activate the sensor so OsmAnd can find it.</string>
         </namedColor>
         <namedColor name="buttonSecondary">
             <color red="0.87800002098083496" green="0.86699998378753662" blue="0.88999998569488525" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

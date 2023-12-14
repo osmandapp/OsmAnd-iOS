@@ -25,7 +25,20 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
         self.appMode = nil
         super.init(coder: coder)
     }
-
+    
+    override func registerObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(deviceDisconnected),
+                                               name: .DeviceDisconnected,
+                                               object: nil)
+    }
+    
+    // MARK: - Life circle
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        reloadData()
+    }
 
     // MARK: - Base UI
 
@@ -101,17 +114,23 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
                 controller.appMode = appMode
                 controller.widgetType = widgetType
                 controller.onSelectDeviceAction = { [weak self] _ in
-                    guard let self else { return }
-                    generateData()
-                    tableView.reloadData()
+                    self?.reloadData()
                 }
                 controller.onSelectCommonOptionsAction = { [weak self] in
-                    guard let self else { return }
-                    generateData()
-                    tableView.reloadData()
+                    self?.reloadData()
                 }
                 showModalViewController(controller)
             }
         }
+    }
+    
+    private func reloadData() {
+        generateData()
+        tableView.reloadData()
+    }
+    
+    @objc private func deviceDisconnected() {
+        guard view.window != nil else { return }
+        reloadData()
     }
 }

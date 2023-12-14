@@ -99,7 +99,7 @@ final class TravelObfHelper : NSObject {
                     }
                     foundAmenitiesIndex += 1
                 }
-            } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS) || popularArticles.articles.count == 0
+            } while (!articlesLimitReached && searchRadius < MAX_SEARCH_RADIUS)
         }
         self.popularArticles = popularArticles
         return popularArticles
@@ -386,7 +386,7 @@ final class TravelObfHelper : NSObject {
                         parts[i] = String(originalParts[originalParts.count - i - 1])
                     }
                 } else {
-                    parts[0] = String(originalParts[0])
+                    parts = originalParts.map { String($0) }
                 }
             }
         } else {

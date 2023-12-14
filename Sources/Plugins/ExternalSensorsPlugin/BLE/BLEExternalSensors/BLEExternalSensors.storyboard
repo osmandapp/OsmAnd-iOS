@@ -21,6 +21,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="cox-yX-wdY">
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <color key="backgroundColor" name="viewBgColor"/>
+                                <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="SearchDeviceTableViewCell" rowHeight="72" id="Azm-Kk-kxe" customClass="SearchDeviceTableViewCell" customModule="OsmAnd_Maps" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="393" height="72"/>
@@ -76,6 +77,7 @@
                                                 <constraint firstItem="0BF-D5-Iu6" firstAttribute="leading" secondItem="waX-JL-gZb" secondAttribute="trailing" constant="16" id="lGH-tk-AZH"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" name="groupBgColor"/>
                                         <connections>
                                             <outlet property="connectStatusLabel" destination="3xT-tE-29r" id="uEb-65-0fA"/>
                                             <outlet property="deviceImageView" destination="waX-JL-gZb" id="uqi-CM-79i"/>
@@ -137,6 +139,9 @@
         </namedColor>
         <namedColor name="buttonTextColorPrimary">
             <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

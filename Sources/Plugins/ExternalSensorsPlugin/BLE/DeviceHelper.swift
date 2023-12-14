@@ -71,7 +71,7 @@ final class DeviceHelper: NSObject {
     }
     
     func getDevicesFrom(peripherals: [Peripheral], pairedDevices: [DeviceSettings]) -> [Device] {
-        return peripherals.map { peripheral in
+        return peripherals.compactMap { peripheral in
             if let savedDevice = pairedDevices.first(where: { $0.deviceId == peripheral.identifier.uuidString }) {
                 let device = getDeviceFor(type: savedDevice.deviceType)
                 device.deviceName = savedDevice.deviceName
@@ -80,9 +80,9 @@ final class DeviceHelper: NSObject {
                 device.addObservers()
                 return device
             } else {
-                fatalError("getDevicesFrom")
+                return nil
             }
-        }
+        } 
     }
     
     func isDeviceEnabled(for id: String) -> Bool {
@@ -177,24 +177,29 @@ final class DeviceHelper: NSObject {
 
 extension DeviceHelper {
     
+    @objc enum DisconnectDeviceReason: Int {
+        case pluginOff, bluetoothPoweredOff
+    }
+    
     func disconnectIfNeeded(device: Device) {
         if device.isConnected || device.isConnecting {
             device.peripheral.disconnect { _ in }
         }
     }
     
-    func clearConnectedDevicesList() {
-        connectedDevices.removeAll()
-    }
-    
-    func disconnectAllDevices() {
+    func disconnectAllDevices(reason: DisconnectDeviceReason) {
         guard !connectedDevices.isEmpty else { return }
-        connectedDevices.forEach {
-            $0.disableRSSI()
-            disconnectIfNeeded(device: $0)
+        switch reason {
+        case .pluginOff:
+            connectedDevices.forEach {
+                $0.disableRSSI()
+                disconnectIfNeeded(device: $0)
+            }
+            BLEManager.shared.removeAndDisconnectDiscoveredDevices()
+        case .bluetoothPoweredOff:
+            connectedDevices.forEach { $0.didDisconnectDevice() }
         }
         connectedDevices.removeAll()
-        BLEManager.shared.removeAndDisconnectDiscoveredDevices()
     }
     
     func restoreConnectedDevices(with peripherals: [Peripheral]) {

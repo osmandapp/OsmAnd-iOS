@@ -3182,3 +3182,8 @@
 "about_osmAnd" = "À propos d'OsmAnd";
 "troubleshooting" = "FAQ";
 "ask_question_propose_features" = "Poser des questions, proposer des fonctionnalités";
+"travel_guides_no_file_error" = "Erreur : pas de données de région";
+"calendar_new_event_message" = "Nouvel évènement ajouté au calendrier : Reprenez le véhicule à %@";
+"calendar_new_event_title" = "Nouvel évènement";
+"popular_articles_not_found_title" = "Articles populaires non trouvés";
+"popular_articles_not_found_descr" = "Il n'y a aucun article à proximité du centre de la carte actuel. Utilisez la recherche pour trouver des articles.";

@@ -19,7 +19,7 @@
 #define kOsmAndMapPathPrefix @"/map"
 
 //#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-3-released"
-#define kDocsLatestVersion  @"https://osmand.net/blog/osmand-ios-4-6-released"
+#define kDocsLatestVersion  @"https://osmand.net/blog/osmand-ios-4-5-released"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
 #define kSupportEmail @"support@osmand.net"

@@ -55,12 +55,30 @@
     return self;
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+
+    if (self.delegate)
+        [self.delegate onIntefaceControllerAttached];
+}
+
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+
     [self attachMapToWindow];
     [self setupAlarmWidget];
-    [self.delegate onMapViewAttached];
+    if (self.delegate)
+        [self.delegate onMapViewAttached];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    if (self.delegate)
+        [self.delegate onIntefaceControllerDetached];
 }
 
 - (void)viewDidLayoutSubviews

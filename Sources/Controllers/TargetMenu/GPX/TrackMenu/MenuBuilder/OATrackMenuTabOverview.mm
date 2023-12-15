@@ -324,7 +324,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"edit_description",
-            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kCellType: [OASimpleTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
             kCellToggle: @YES,
@@ -336,7 +336,7 @@
 {
     return [OAGPXTableCellData withData:@{
             kTableKey: @"read_full_description",
-            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kCellType: [OASimpleTableViewCell getCellIdentifier],
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"read_full_description"),
             kCellToggle: @YES,
@@ -624,28 +624,35 @@
 
 - (void)onButtonPressed:(OAGPXBaseTableData *)tableData sourceView:(UIView *)sourceView
 {
-    if ([tableData.key isEqualToString:@"add_description"] && self.trackMenuDelegate)
+    if (self.trackMenuDelegate)
     {
-        [self.trackMenuDelegate openDescriptionEditor];
-    }
-    else if ([tableData.key isEqualToString:@"edit_description"] && self.trackMenuDelegate)
-    {
-        [self.trackMenuDelegate openDescriptionEditor];
-    }
-    else if ([tableData.key isEqualToString:@"read_full_description"] && self.trackMenuDelegate)
-    {
-        [self.trackMenuDelegate openDescription];
-    }
-    else if ([tableData isKindOfClass:OAGPXTableCellData.class])
-    {
-        OAGPXTableCellData *cellData = (OAGPXTableCellData *) tableData;
-        if ([cellData.key isEqualToString:@"wiki"] && self.trackMenuDelegate)
+        if ([tableData.key isEqualToString:@"add_description"])
         {
-            [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            [self.trackMenuDelegate openDescriptionEditor];
         }
-        else if (([cellData.key isEqualToString:@"website"] || [OAWikiAlgorithms isUrl:cellData.desc]) && self.trackMenuDelegate)
+        else if ([tableData.key isEqualToString:@"edit_description"])
         {
-            [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            [self.trackMenuDelegate openDescriptionEditor];
+        }
+        else if ([tableData.key isEqualToString:@"read_full_description"])
+        {
+            [self.trackMenuDelegate openDescription];
+        }
+        else if ([tableData isKindOfClass:OAGPXTableCellData.class])
+        {
+            OAGPXTableCellData *cellData = (OAGPXTableCellData *) tableData;
+            if ([cellData.key isEqualToString:@"wiki"])
+            {
+                [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
+            else if (([cellData.key isEqualToString:@"website"] || [cellData.key hasPrefix:@"link_"] || [OAWikiAlgorithms isUrl:cellData.desc]))
+            {
+                [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
+            else if ([cellData.key hasPrefix:@"email_"])
+            {
+                [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
         }
     }
 }

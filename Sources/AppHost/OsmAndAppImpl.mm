@@ -1089,6 +1089,8 @@
 
 - (void) shutdown
 {
+    [OAQuickSearchHelper.instance cancelSearch:YES];
+
     [_locationServices stop];
     _locationServices = nil;
 

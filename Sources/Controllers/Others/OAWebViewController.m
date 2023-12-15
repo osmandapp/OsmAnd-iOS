@@ -43,6 +43,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    // Strong override theme depending color to white
     if (!_isDarkModeSupported)
         self.webView.backgroundColor = UIColor.whiteColor;
 }

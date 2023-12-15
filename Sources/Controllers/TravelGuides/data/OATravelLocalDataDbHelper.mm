@@ -353,10 +353,7 @@
                     NSLog(@"Failed to migrate to 9 version Travel Guides table: %@", [NSString stringWithCString:errMsg encoding:NSUTF8StringEncoding]);
                     isError = YES;
                 }
-                if (errMsg != NULL)
-                {
-                    sqlite3_free(errMsg);
-                }
+                if (errMsg != NULL) sqlite3_free(errMsg);
                 sqlite3_close(_dbInstance);
             }
         });
@@ -393,12 +390,10 @@
     dispatch_sync(_dbQueue, ^{
         if (sqlite3_open(dbpath, &_dbInstance) == SQLITE_OK)
         {
-            sqlite3_stmt *statement;
             char *errMsg;
             const char *stmt = [[NSString stringWithFormat:@"PRAGMA user_version = %i", versionNumber] UTF8String];
             sqlite3_exec(_dbInstance, stmt, NULL, NULL, &errMsg);
-            sqlite3_step(statement);
-            sqlite3_finalize(statement);
+            if (errMsg != NULL) sqlite3_free(errMsg);
             sqlite3_close(_dbInstance);
         }
     });

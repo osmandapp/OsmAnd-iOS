@@ -78,7 +78,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         let add = UIBarButtonItem(barButtonSystemItem: .add,
                                   target: self,
                                   action: #selector(onRightNavbarButtonPressed))
-        add.tintColor = UIColor.buttonBgColorPrimary
+        add.tintColor = UIColor.iconColorActive
         return [add]
     }
     
@@ -124,13 +124,10 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
                 cell = nib?.first as? OASimpleTableViewCell
                 cell?.descriptionVisibility(false)
                 cell?.leftIconVisibility(false)
-                // separators go edge to edge
-                cell?.separatorInset = .zero
-                cell?.layoutMargins = .zero
-                cell?.preservesSuperviewLayoutMargins = false
             }
             if let cell {
                 cell.setCustomLeftSeparatorInset(true)
+                cell.separatorInset = .zero
                 cell.titleLabel.text = item.title
                 if let key = item.key, let item = ExternalSensorsCellData(rawValue: key) {
                     switch item {
@@ -209,6 +206,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
             tableView.sectionHeaderTopPadding = 0
             tableView.contentInset.top = 0
             tableView.contentInset.bottom = 64
+            tableView.rowHeight = UITableView.automaticDimension
             configureEmptyHeader()
         } else {
             tableView.rowHeight = 72
@@ -243,11 +241,22 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
     }
     
     private func configureEmptyHeader() {
+        view.layoutIfNeeded()
         headerEmptyView.subviews.forEach { $0.removeFromSuperview() }
         let imageView = UIImageView(image: UIImage(named: "img_help_sensors_day"))
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        
         headerEmptyView.addSubview(imageView)
+        
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            imageView.leadingAnchor.constraint(equalTo: headerEmptyView.leadingAnchor),
+            imageView.trailingAnchor.constraint(equalTo: headerEmptyView.trailingAnchor),
+            imageView.topAnchor.constraint(equalTo: headerEmptyView.topAnchor),
+            imageView.bottomAnchor.constraint(equalTo: headerEmptyView.bottomAnchor)
+        ])
+        
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
         headerEmptyView.backgroundColor = UIColor.groupBgColor

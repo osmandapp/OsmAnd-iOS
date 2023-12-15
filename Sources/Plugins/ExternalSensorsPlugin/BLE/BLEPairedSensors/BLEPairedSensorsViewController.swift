@@ -70,7 +70,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     }
     
     override func getTitle() -> String {
-        localizedString("ant_plus_pair_new_sensor")
+        localizedString("paired_sensors")
     }
     
     override func generateData() {

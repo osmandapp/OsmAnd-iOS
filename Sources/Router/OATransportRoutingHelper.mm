@@ -26,6 +26,8 @@
 #include <transportRoutePlanner.h>
 #include <transportRoutingContext.h>
 
+#define WALKING_COUNT_CALCULATING 4
+
 @interface OAWalkingRouteSegment : NSObject
 
 @property (nonatomic) std::shared_ptr<TransportRouteResultSegment> s1;
@@ -335,8 +337,10 @@
     [_walkingRouteSegmentsCache removeAllObjects];
     if (routes.size() > 0)
     {
-        for (SHARED_PTR<TransportRouteResult>& r : routes)
+        int size = min(int(routes.size()), WALKING_COUNT_CALCULATING);
+        for (int i = 0; i < size; i++)
         {
+            SHARED_PTR<TransportRouteResult>& r = routes[i];
             SHARED_PTR<TransportRouteResultSegment> prevSegment = nullptr;
             for (SHARED_PTR<TransportRouteResultSegment>& segment : r->segments)
             {

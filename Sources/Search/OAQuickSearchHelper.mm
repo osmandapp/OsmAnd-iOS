@@ -441,6 +441,11 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     [_core setActivePoiFiltersByOrder:[poiFilters getPoiFilterOrders:YES]];
 }
 
+- (void) cancelSearch:(BOOL)sync
+{
+    [_core cancelSearch:sync];
+}
+
 - (void) setResourcesForSearchUICore
 {
     OsmAndAppInstance app = [OsmAndApp instance];

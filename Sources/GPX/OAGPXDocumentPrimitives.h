@@ -116,16 +116,33 @@ struct RouteDataBundle;
 
 @end
 
-// OAAuthor
-// OACopyright
+@interface OAAuthor : OAGpxExtensions
+
+@property (nonatomic) NSString *name;
+@property (nonatomic) NSString *email;
+@property (nonatomic) NSString *link;
+
+@end
+
+@interface OACopyright : OAGpxExtensions
+
+@property (nonatomic) NSString *author;
+@property (nonatomic) NSString *year;
+@property (nonatomic) NSString *license;
+
+@end
+
 // OABounds
 
 @interface OAMetadata : OAGpxExtensions
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *desc;
-@property (nonatomic) NSArray *links;
+@property (nonatomic) NSArray<OALink *> *links;
+@property (nonatomic) NSString *keywords;
 @property (nonatomic) long time;
+@property (nonatomic) OAAuthor *author;
+@property (nonatomic) OACopyright *copyright;
 
 @end
 

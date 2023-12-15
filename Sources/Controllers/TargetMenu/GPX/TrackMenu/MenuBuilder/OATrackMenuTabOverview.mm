@@ -15,6 +15,7 @@
 #import "OAImageDescTableViewCell.h"
 #import "OARouteKey.h"
 #import "OAPOIHelper.h"
+#import "OAGPXDocumentPrimitives.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kDescriptionImageCell 0
@@ -76,12 +77,16 @@
     OARouteKey *key = self.trackMenuDelegate.getRouteKey;
     [self populateRouteInfoSection:self.tableData routeKey:key];
 
-    OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_info",
-            kSectionHeader: OALocalizedString(@"info_button"),
+    OAGPXTableSectionData *generalSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_general",
+            kSectionHeader: OALocalizedString(@"general_settings"),
             kSectionHeaderHeight: @56.
     }];
-    [self.tableData.subjects addObject:infoSectionData];
+    [self.tableData.subjects addObject:generalSectionData];
+
+    OAGPXTableCellData *createdOnCellData = [self generateCreatedOnCellData];
+    if (createdOnCellData.desc && createdOnCellData.desc.length > 0)
+        [generalSectionData.subjects addObject:createdOnCellData];
 
     OAGPXTableCellData *sizeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"size",
@@ -89,15 +94,23 @@
             kCellTitle: OALocalizedString(@"shared_string_size"),
             kCellDesc: self.trackMenuDelegate ? [self.trackMenuDelegate getGpxFileSize] : @""
     }];
-    [infoSectionData.subjects addObject:sizeCellData];
-
-    OAGPXTableCellData *createdOnCellData = [self generateCreatedOnCellData];
-    if (createdOnCellData.desc && createdOnCellData.desc.length > 0)
-        [infoSectionData.subjects addObject:createdOnCellData];
+    [generalSectionData.subjects addObject:sizeCellData];
 
     OAGPXTableCellData *locationCellData = [self generateLocationCellData];
     if (self.trackMenuDelegate && ![self.trackMenuDelegate currentTrack])
-        [infoSectionData.subjects addObject:locationCellData];
+        [generalSectionData.subjects addObject:locationCellData];
+
+    OAGPXTableSectionData *infoSectionData = [self generateInfoSectionData];
+    if (infoSectionData)
+        [self.tableData.subjects addObject:infoSectionData];
+
+    OAGPXTableSectionData *authorSectionData = [self generateAuthorSectionData];
+    if (authorSectionData)
+        [self.tableData.subjects addObject:authorSectionData];
+
+    OAGPXTableSectionData *copyrightSectionData = [self generateCopyrightSectionData];
+    if (copyrightSectionData)
+        [self.tableData.subjects addObject:copyrightSectionData];
 
     self.isGeneratedData = YES;
 }
@@ -331,6 +344,139 @@
     }];
 }
 
+- (OAGPXTableSectionData *)generateInfoSectionData
+{
+    NSString *keywords = self.trackMenuDelegate ? [self.trackMenuDelegate getKeywords] : nil;
+    NSArray<OALink *> *links = self.trackMenuDelegate ? [self.trackMenuDelegate getLinks] : nil;
+    BOOL hasKeywords = keywords && keywords.length > 0;
+    BOOL hasLinks = links && links.count > 0;
+    if (hasKeywords || hasLinks)
+    {
+        OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
+            kTableKey: @"section_info",
+            kSectionHeader: OALocalizedString(@"info_button"),
+            kSectionHeaderHeight: @56.
+        }];
+
+        if (hasKeywords)
+        {
+            OAGPXTableCellData *keywordsCellData = [OAGPXTableCellData withData:@{
+                kTableKey: @"keywords",
+                kCellType: [OAValueTableViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"shared_string_keywords"),
+                kCellDesc: keywords
+            }];
+            [infoSectionData.subjects addObject:keywordsCellData];
+        }
+        if (hasLinks)
+        {
+            for (NSInteger i = 0; i < links.count; i++)
+            {
+                OALink *link = links[i];
+                OAGPXTableCellData *keywordsCellData = [OAGPXTableCellData withData:@{
+                    kTableKey: [NSString stringWithFormat:@"link_%ld", i],
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"shared_string_link"),
+                    kCellDesc: link.url.absoluteString
+                }];
+                [infoSectionData.subjects addObject:keywordsCellData];
+            }
+        }
+        return infoSectionData;
+    }
+    return nil;
+}
+
+- (OAGPXTableSectionData *)generateAuthorSectionData
+{
+    OAAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
+    BOOL hasAuthorName = author && author.name.length > 0;
+    BOOL hasAuthorEmail = author && author.email.length > 0;
+    BOOL hasAuthorLink = author && author.link.length > 0;
+    if (hasAuthorName || hasAuthorEmail || hasAuthorLink)
+    {
+        OAGPXTableSectionData *authorSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_author",
+                kSectionHeader: OALocalizedString(@"shared_string_author"),
+                kSectionHeaderHeight: @56.
+        }];
+
+        if (hasAuthorName)
+        {
+            OAGPXTableCellData *nameCellData = [OAGPXTableCellData withData:@{
+                    kTableKey: @"author_name",
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"shared_string_name"),
+                    kCellDesc: author.name
+            }];
+            [authorSectionData.subjects addObject:nameCellData];
+        }
+        if (hasAuthorEmail)
+        {
+            OAGPXTableCellData *emailCellData = [OAGPXTableCellData withData:@{
+                    kTableKey: @"email_author",
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"shared_string_email"),
+                    kCellDesc: author.email
+            }];
+            [authorSectionData.subjects addObject:emailCellData];
+        }
+        if (hasAuthorLink)
+        {
+            OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
+                    kTableKey: @"link_author",
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"shared_string_link"),
+                    kCellDesc: author.link
+            }];
+            [authorSectionData.subjects addObject:linkCellData];
+        }
+        return authorSectionData;
+    }
+    return nil;
+}
+
+- (OAGPXTableSectionData *)generateCopyrightSectionData
+{
+    OACopyright *copyright = self.trackMenuDelegate ? [self.trackMenuDelegate getCopyright] : nil;
+    BOOL hasCopyrightAuthor = copyright && copyright.author.length > 0;
+    BOOL hasCopyrightLicense = copyright && copyright.license.length > 0;
+    if (hasCopyrightAuthor || hasCopyrightLicense)
+    {
+        OAGPXTableSectionData *copyrightSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_copyright",
+                kSectionHeader: OALocalizedString(@"shared_string_author"),
+                kSectionHeaderHeight: @56.
+        }];
+
+        if (hasCopyrightAuthor)
+        {
+            NSString *author = copyright.year.length > 0
+                ? [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_comma"), copyright.author, copyright.year]
+                : copyright.author;
+            OAGPXTableCellData *nameCellData = [OAGPXTableCellData withData:@{
+                    kTableKey: @"copyright_author",
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"shared_string_author"),
+                    kCellDesc: author
+            }];
+            [copyrightSectionData.subjects addObject:nameCellData];
+        }
+        if (hasCopyrightLicense)
+        {
+            OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
+                    kTableKey: @"link_license",
+                    kCellType: [OAValueTableViewCell getCellIdentifier],
+                    kCellTitle: OALocalizedString(@"shared_string_license"),
+                    kCellDesc: copyright.license
+            }];
+            [copyrightSectionData.subjects addObject:linkCellData];
+        }
+        return copyrightSectionData;
+    }
+    return nil;
+}
+
 #pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
@@ -430,7 +576,7 @@
             }
         }
     }
-    else if ([tableData.key isEqualToString:@"section_info"])
+    else if ([tableData.key isEqualToString:@"section_general"])
     {
         OAGPXTableSectionData *sectionData = (OAGPXTableSectionData *) tableData;
 
@@ -490,13 +636,17 @@
     {
         [self.trackMenuDelegate openDescription];
     }
-    else if ([tableData.key isEqualToString:@"wiki"] && self.trackMenuDelegate)
+    else if ([tableData isKindOfClass:OAGPXTableCellData.class])
     {
-        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc sourceView:sourceView];
-    }
-    else if ([tableData.key isEqualToString:@"website"] && self.trackMenuDelegate)
-    {
-        [self.trackMenuDelegate openURL:((OAGPXTableCellData *) tableData).desc sourceView:sourceView];
+        OAGPXTableCellData *cellData = (OAGPXTableCellData *) tableData;
+        if ([cellData.key isEqualToString:@"wiki"] && self.trackMenuDelegate)
+        {
+            [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+        }
+        else if (([cellData.key isEqualToString:@"website"] || [OAWikiAlgorithms isUrl:cellData.desc]) && self.trackMenuDelegate)
+        {
+            [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+        }
     }
 }
 

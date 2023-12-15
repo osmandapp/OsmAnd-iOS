@@ -12,7 +12,7 @@
 #import "OATrackMenuHudViewControllerConstants.h"
 
 @class LineChartView;
-@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey;
+@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -57,6 +57,10 @@
 - (NSString *)getTrackSegmentTitle:(OATrkSegment *)segment;
 - (NSString *)getDirName;
 - (NSString *)getGpxFileSize;
+- (OAAuthor *)getAuthor;
+- (OACopyright *)getCopyright;
+- (NSString *)getKeywords;
+- (NSArray<OALink *> *)getLinks;
 - (NSString *)getCreatedOn;
 - (NSString *)generateDescription;
 - (NSString *)getMetadataImageLink;

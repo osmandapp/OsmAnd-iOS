@@ -1430,6 +1430,26 @@
                                           countStyle:NSByteCountFormatterCountStyleFile];
 }
 
+- (OAAuthor *)getAuthor
+{
+    return self.doc.metadata.author;
+}
+
+- (OACopyright *)getCopyright
+{
+    return self.doc.metadata.copyright;
+}
+
+- (NSString *)getKeywords
+{
+    return self.doc.metadata.keywords;
+}
+
+- (NSArray<OALink *> *)getLinks
+{
+    return self.doc.metadata.links;
+}
+
 - (NSString *)getCreatedOn
 {
     long time = self.doc.metadata.time;

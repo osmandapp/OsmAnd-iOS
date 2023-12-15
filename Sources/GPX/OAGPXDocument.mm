@@ -216,7 +216,7 @@
     [self setExtension:@"show_start_finish" value:strValue];
 }
 
-+ (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
++ (NSArray<OALink *> *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
 {
     if (!links.isEmpty()) {
         NSMutableArray<OALink *> *gpxLinks = [NSMutableArray array];
@@ -315,9 +315,26 @@
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toSecsSinceEpoch();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
-
+        metadata.keywords = gpxDocument->metadata->keywords.toNSString();
         OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *metadataRef = &gpxDocument->metadata;
         [metadata fetchExtensions:metadataRef->shared_ptr()];
+
+        OAAuthor *author = [[OAAuthor alloc] init];
+        author.name = gpxDocument->metadata->author->name.toNSString();
+        author.email = gpxDocument->metadata->author->email.toNSString();
+        author.link = gpxDocument->metadata->author->link.toNSString();
+        OsmAnd::Ref<OsmAnd::GpxDocument::Author> *authorRef = &gpxDocument->metadata->author;
+        [author fetchExtensions:authorRef->shared_ptr()];
+        metadata.author = author;
+
+        OACopyright *copyright = [[OACopyright alloc] init];
+        copyright.author = gpxDocument->metadata->copyright->author.toNSString();
+        copyright.year = gpxDocument->metadata->copyright->year.toNSString();
+        copyright.license = gpxDocument->metadata->copyright->license.toNSString();
+        OsmAnd::Ref<OsmAnd::GpxDocument::Copyright> *copyrightRef = &gpxDocument->metadata->copyright;
+        [copyright fetchExtensions:copyrightRef->shared_ptr()];
+        metadata.copyright = copyright;
+
         self.metadata = metadata;
     }
 
@@ -556,10 +573,25 @@
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
     meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time).toUTC() : QDateTime().toUTC();
-    
     [self fillLinks:meta->links linkArray:m.links];
-    
+    meta->keywords = QString::fromNSString(m.keywords);
     [m fillExtensions:meta];
+
+    std::shared_ptr<OsmAnd::GpxDocument::Author> author;
+    author.reset(new OsmAnd::GpxDocument::Author());
+    author->name = QString::fromNSString(m.author.name);
+    author->email = QString::fromNSString(m.author.email);
+    author->link = QString::fromNSString(m.author.link);
+    [m.author fillExtensions:author];
+    meta->author = author;
+
+    std::shared_ptr<OsmAnd::GpxDocument::Copyright> copyright;
+    copyright.reset(new OsmAnd::GpxDocument::Copyright());
+    copyright->author = QString::fromNSString(m.copyright.author);
+    copyright->year = QString::fromNSString(m.copyright.year);
+    copyright->license = QString::fromNSString(m.copyright.license);
+    [m.copyright fillExtensions:copyright];
+    meta->copyright = copyright;
 }
 
 + (void)fillPointsGroup:(OAWptPt *)wptPt

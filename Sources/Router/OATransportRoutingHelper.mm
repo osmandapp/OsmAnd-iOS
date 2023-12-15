@@ -273,7 +273,9 @@
     dispatch_sync(_queue, ^{
         do {
             walkingRouteSegment = _walkingSegmentsToCalculate.firstObject;
-            [_walkingSegmentsToCalculate removeObjectAtIndex:0];
+            if (_walkingSegmentsToCalculate.count > 0)
+                [_walkingSegmentsToCalculate removeObjectAtIndex:0];
+            
             if (!walkingRouteSegment)
             {
                 for (OAWalkingRouteSegment *ws in _walkingSegmentsFromCacheOnly)

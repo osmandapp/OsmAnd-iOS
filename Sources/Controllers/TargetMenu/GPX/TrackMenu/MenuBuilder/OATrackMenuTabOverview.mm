@@ -373,13 +373,16 @@
             for (NSInteger i = 0; i < links.count; i++)
             {
                 OALink *link = links[i];
-                OAGPXTableCellData *keywordsCellData = [OAGPXTableCellData withData:@{
+                BOOL hasText = link.text && link.text.length > 0;
+                OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: [NSString stringWithFormat:@"link_%ld", i],
                     kCellType: [OAValueTableViewCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"shared_string_link"),
-                    kCellDesc: link.url.absoluteString
+                    kCellDesc: hasText ? link.text : link.url.absoluteString
                 }];
-                [infoSectionData.subjects addObject:keywordsCellData];
+                if (hasText)
+                    linkCellData.values[@"url"] = link.url.absoluteString;
+                [infoSectionData.subjects addObject:linkCellData];
             }
         }
         return infoSectionData;
@@ -392,7 +395,7 @@
     OAAuthor *author = self.trackMenuDelegate ? [self.trackMenuDelegate getAuthor] : nil;
     BOOL hasAuthorName = author && author.name.length > 0;
     BOOL hasAuthorEmail = author && author.email.length > 0;
-    BOOL hasAuthorLink = author && author.link.length > 0;
+    BOOL hasAuthorLink = author && author.link;
     if (hasAuthorName || hasAuthorEmail || hasAuthorLink)
     {
         OAGPXTableSectionData *authorSectionData = [OAGPXTableSectionData withData:@{
@@ -423,12 +426,15 @@
         }
         if (hasAuthorLink)
         {
+            BOOL hasText = author.link.text && author.link.text.length > 0;
             OAGPXTableCellData *linkCellData = [OAGPXTableCellData withData:@{
                     kTableKey: @"link_author",
                     kCellType: [OAValueTableViewCell getCellIdentifier],
                     kCellTitle: OALocalizedString(@"shared_string_link"),
-                    kCellDesc: author.link
+                    kCellDesc: hasText ? author.link.text : author.link.url.absoluteString
             }];
+            if (hasText)
+                linkCellData.values[@"url"] = author.link.url.absoluteString;
             [authorSectionData.subjects addObject:linkCellData];
         }
         return authorSectionData;
@@ -645,9 +651,14 @@
             {
                 [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
             }
-            else if (([cellData.key isEqualToString:@"website"] || [cellData.key hasPrefix:@"link_"] || [OAWikiAlgorithms isUrl:cellData.desc]))
+            else if (([cellData.key isEqualToString:@"website"] || [OAWikiAlgorithms isUrl:cellData.desc]))
             {
                 [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
+            else if ([cellData.key hasPrefix:@"link_"])
+            {
+                NSString *url = [cellData.values.allKeys containsObject:@"url"] ? cellData.values[@"url"] : cellData.desc;
+                [self.trackMenuDelegate openURL:url sourceView:sourceView];
             }
             else if ([cellData.key hasPrefix:@"email_"])
             {

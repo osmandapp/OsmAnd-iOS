@@ -2135,7 +2135,7 @@
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
-            cell.selectionStyle = UITableViewCellSelectionStyleDefault; //cellData.toggle || isWebsite ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.selectionStyle = cellData.toggle || isWebsite ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
             cell.titleLabel.textColor = tintColor;
             cell.valueLabel.text = cellData.desc;
@@ -2620,7 +2620,6 @@
                 OAGPXTableCellData *cellData = [self getCellData:indexPath];
                 NSString *textToCopy = cellData.desc;
                 [[UIPasteboard generalPasteboard] setString:textToCopy];
-                [OAUtilities showToast:@"test" details:@"test" duration:4 inView:self.view];
             }];
             copyAction.accessibilityLabel = OALocalizedString(@"shared_string_copy");
             

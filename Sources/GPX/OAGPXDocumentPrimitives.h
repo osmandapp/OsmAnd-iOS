@@ -120,7 +120,7 @@ struct RouteDataBundle;
 
 @property (nonatomic) NSString *name;
 @property (nonatomic) NSString *email;
-@property (nonatomic) NSString *link;
+@property (nonatomic) OALink *link;
 
 @end
 
@@ -159,7 +159,7 @@ struct RouteDataBundle;
 @property (nonatomic) long time;
 @property (nonatomic) NSString *comment;
 @property (nonatomic) NSString *type;
-@property (nonatomic) NSArray *links;
+@property (nonatomic) NSArray<OALink *> *links;
 @property (nonatomic) double distance;
 @property (nonatomic) double speed;
 @property (nonatomic) double horizontalDilutionOfPrecision;

@@ -319,21 +319,28 @@
         OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *metadataRef = &gpxDocument->metadata;
         [metadata fetchExtensions:metadataRef->shared_ptr()];
 
-        OAAuthor *author = [[OAAuthor alloc] init];
-        author.name = gpxDocument->metadata->author->name.toNSString();
-        author.email = gpxDocument->metadata->author->email.toNSString();
-        author.link = gpxDocument->metadata->author->link.toNSString();
-        OsmAnd::Ref<OsmAnd::GpxDocument::Author> *authorRef = &gpxDocument->metadata->author;
-        [author fetchExtensions:authorRef->shared_ptr()];
-        metadata.author = author;
+        if (gpxDocument->metadata->author != nullptr)
+        {
+            OAAuthor *author = [[OAAuthor alloc] init];
+            author.name = gpxDocument->metadata->author->name.toNSString();
+            author.email = gpxDocument->metadata->author->email.toNSString();
+            if (gpxDocument->metadata->author->link != nullptr)
+                author.link = [self.class fetchLinks:{ gpxDocument->metadata->author->link }].firstObject;
+            OsmAnd::Ref<OsmAnd::GpxDocument::Author> *authorRef = &gpxDocument->metadata->author;
+            [author fetchExtensions:authorRef->shared_ptr()];
+            metadata.author = author;
+        }
 
-        OACopyright *copyright = [[OACopyright alloc] init];
-        copyright.author = gpxDocument->metadata->copyright->author.toNSString();
-        copyright.year = gpxDocument->metadata->copyright->year.toNSString();
-        copyright.license = gpxDocument->metadata->copyright->license.toNSString();
-        OsmAnd::Ref<OsmAnd::GpxDocument::Copyright> *copyrightRef = &gpxDocument->metadata->copyright;
-        [copyright fetchExtensions:copyrightRef->shared_ptr()];
-        metadata.copyright = copyright;
+        if (gpxDocument->metadata->copyright != nullptr)
+        {
+            OACopyright *copyright = [[OACopyright alloc] init];
+            copyright.author = gpxDocument->metadata->copyright->author.toNSString();
+            copyright.year = gpxDocument->metadata->copyright->year.toNSString();
+            copyright.license = gpxDocument->metadata->copyright->license.toNSString();
+            OsmAnd::Ref<OsmAnd::GpxDocument::Copyright> *copyrightRef = &gpxDocument->metadata->copyright;
+            [copyright fetchExtensions:copyrightRef->shared_ptr()];
+            metadata.copyright = copyright;
+        }
 
         self.metadata = metadata;
     }
@@ -551,7 +558,7 @@
         return false;
 }
 
-+ (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
++ (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray<OALink *> *)linkArray
 {
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
     for (OALink *l in linkArray)
@@ -576,12 +583,14 @@
     [self fillLinks:meta->links linkArray:m.links];
     meta->keywords = QString::fromNSString(m.keywords);
     [m fillExtensions:meta];
-
+    
     std::shared_ptr<OsmAnd::GpxDocument::Author> author;
     author.reset(new OsmAnd::GpxDocument::Author());
     author->name = QString::fromNSString(m.author.name);
     author->email = QString::fromNSString(m.author.email);
-    author->link = QString::fromNSString(m.author.link);
+    QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
+    [self fillLinks:links linkArray:@[m.author.link]];
+    author->link = links.first();
     [m.author fillExtensions:author];
     meta->author = author;
 

@@ -56,7 +56,6 @@
 @implementation OAMapInfoController
 {
     OAMapHudViewController __weak *_mapHudViewController;
-    UIView __weak *_widgetsView;
 
     OAMapWidgetRegistry *_mapWidgetRegistry;
     BOOL _expanded;
@@ -221,8 +220,9 @@
 - (void) execOnDraw
 {
     _lastUpdateTime = CACurrentMediaTime();
+    __weak OAMapInfoController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onDraw];
+        [weakSelf onDraw];
     });
 }
 
@@ -275,8 +275,9 @@
 
 - (void) updateInfo
 {
+    __weak OAMapInfoController *weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self onDraw];
+        [weakSelf onDraw];
     });
 }
 

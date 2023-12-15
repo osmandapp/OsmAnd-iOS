@@ -154,7 +154,10 @@
         case AppLaunchEventRestoreSession:
             NSLog(@"AppLaunchEventRestoreSession");
             _rootViewController = [OARootViewController new];
-            [self appDelegate].rootViewController = _rootViewController;
+            if ([self appDelegate].rootViewController == nil)
+            {
+                [self appDelegate].rootViewController = _rootViewController;
+            }
             _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
             [_window makeKeyAndVisible];
             break;

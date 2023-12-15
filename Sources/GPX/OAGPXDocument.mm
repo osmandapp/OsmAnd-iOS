@@ -583,24 +583,30 @@
     [self fillLinks:meta->links linkArray:m.links];
     meta->keywords = QString::fromNSString(m.keywords);
     [m fillExtensions:meta];
-    
-    std::shared_ptr<OsmAnd::GpxDocument::Author> author;
-    author.reset(new OsmAnd::GpxDocument::Author());
-    author->name = QString::fromNSString(m.author.name);
-    author->email = QString::fromNSString(m.author.email);
-    QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
-    [self fillLinks:links linkArray:@[m.author.link]];
-    author->link = links.first();
-    [m.author fillExtensions:author];
-    meta->author = author;
 
-    std::shared_ptr<OsmAnd::GpxDocument::Copyright> copyright;
-    copyright.reset(new OsmAnd::GpxDocument::Copyright());
-    copyright->author = QString::fromNSString(m.copyright.author);
-    copyright->year = QString::fromNSString(m.copyright.year);
-    copyright->license = QString::fromNSString(m.copyright.license);
-    [m.copyright fillExtensions:copyright];
-    meta->copyright = copyright;
+    if (m.author)
+    {
+        std::shared_ptr<OsmAnd::GpxDocument::Author> author;
+        author.reset(new OsmAnd::GpxDocument::Author());
+        author->name = QString::fromNSString(m.author.name);
+        author->email = QString::fromNSString(m.author.email);
+        QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
+        [self fillLinks:links linkArray:@[m.author.link]];
+        author->link = links.first();
+        [m.author fillExtensions:author];
+        meta->author = author;
+    }
+
+    if (m.copyright)
+    {
+        std::shared_ptr<OsmAnd::GpxDocument::Copyright> copyright;
+        copyright.reset(new OsmAnd::GpxDocument::Copyright());
+        copyright->author = QString::fromNSString(m.copyright.author);
+        copyright->year = QString::fromNSString(m.copyright.year);
+        copyright->license = QString::fromNSString(m.copyright.license);
+        [m.copyright fillExtensions:copyright];
+        meta->copyright = copyright;
+    }
 }
 
 + (void)fillPointsGroup:(OAWptPt *)wptPt

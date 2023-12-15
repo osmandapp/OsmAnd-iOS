@@ -26,7 +26,7 @@
 #include <transportRoutePlanner.h>
 #include <transportRoutingContext.h>
 
-#define WALKING_COUNT_CALCULATING 4
+#define MAX_WALKING_CNT 4
 
 @interface OAWalkingRouteSegment : NSObject
 
@@ -159,6 +159,7 @@
     
     dispatch_queue_t _queue;
     NSMutableArray<OAWalkingRouteSegment *> *_walkingSegmentsToCalculate;
+    NSMutableArray<OAWalkingRouteSegment *> *_walkingSegmentsFromCacheOnly;
     NSMapTable<NSArray<OATransportRouteResultSegment *> *, OARouteCalculationResult *> *_walkingRouteSegments;
     NSMutableDictionary<NSArray<CLLocation *> *, OARouteCalculationResult *> *_walkingRouteSegmentsCache;
     
@@ -179,6 +180,7 @@
         _params = params;
         _queue = dispatch_queue_create("array_queue", DISPATCH_QUEUE_CONCURRENT);
         _walkingSegmentsToCalculate = [NSMutableArray new];
+        _walkingSegmentsFromCacheOnly = [NSMutableArray new];
         _walkingRouteSegments = [NSMapTable strongToStrongObjectsMapTable];
         _walkingRouteSegmentsCache = [NSMutableDictionary dictionary];
 
@@ -270,22 +272,20 @@
     __block BOOL success = YES;
     dispatch_sync(_queue, ^{
         do {
-            
             walkingRouteSegment = _walkingSegmentsToCalculate.firstObject;
             [_walkingSegmentsToCalculate removeObjectAtIndex:0];
             if (!walkingRouteSegment)
             {
+                for (OAWalkingRouteSegment *ws in _walkingSegmentsFromCacheOnly)
+                {
+                    [self retrieveFromCache:ws];
+                }
+                [_walkingSegmentsFromCacheOnly removeAllObjects];
                 _walkingSegmentsCalculated = YES;
                 success = NO;
                 break;
             }
-            start = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.start.coordinate.latitude longitude:walkingRouteSegment.start.coordinate.longitude];
-            end = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.end.coordinate.latitude longitude:walkingRouteSegment.end.coordinate.longitude];
-            cachedRoute = [self getRouteFromCache:start end:end];
-            if (cachedRoute)
-            {
-                [_walkingRouteSegments setObject:cachedRoute forKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:walkingRouteSegment.s1], [[OATransportRouteResultSegment alloc] initWithSegment:walkingRouteSegment.s2]]];
-            }
+            cachedRoute = [self retrieveFromCache:walkingRouteSegment];
         }
         while (cachedRoute);
     });
@@ -295,6 +295,8 @@
     _currentDistanceFromBegin = _params.calculationProgress->distanceFromBegin + (walkingRouteSegment.s1 != nullptr ? walkingRouteSegment.s1->getTravelDist() : 0);
     OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
     params.inPublicTransportMode = YES;
+    start = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.start.coordinate.latitude longitude:walkingRouteSegment.start.coordinate.longitude];
+    end = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.end.coordinate.latitude longitude:walkingRouteSegment.end.coordinate.longitude];
     params.start = start;
     params.end = end;
     params.startTransportStop = walkingRouteSegment.startTransportStop;
@@ -306,6 +308,18 @@
     params.resultListener = self;
     params.walkingRouteSegment = walkingRouteSegment;
     return params;
+}
+
+- (OARouteCalculationResult *) retrieveFromCache:(OAWalkingRouteSegment *)ws
+{
+    CLLocation *start = [[CLLocation alloc] initWithLatitude:ws.start.coordinate.latitude longitude:ws.start.coordinate.longitude];
+    CLLocation *end = [[CLLocation alloc] initWithLatitude:ws.end.coordinate.latitude longitude:ws.end.coordinate.longitude];
+    OARouteCalculationResult *cachedRoute = [self getRouteFromCache:start end:end];
+    if (cachedRoute)
+    {
+        [_walkingRouteSegments setObject:cachedRoute forKey:@[[[OATransportRouteResultSegment alloc] initWithSegment:ws.s1], [[OATransportRouteResultSegment alloc] initWithSegment:ws.s2]]];
+    }
+    return cachedRoute;
 }
 
 - (OARouteCalculationResult *) getRouteFromCache:(CLLocation *)start end:(CLLocation *)end
@@ -337,11 +351,11 @@
     [_walkingRouteSegmentsCache removeAllObjects];
     if (routes.size() > 0)
     {
-        int size = min(int(routes.size()), WALKING_COUNT_CALCULATING);
-        for (int i = 0; i < size; i++)
+        for (int i = 0; i < routes.size(); i++)
         {
             SHARED_PTR<TransportRouteResult>& r = routes[i];
             SHARED_PTR<TransportRouteResultSegment> prevSegment = nullptr;
+            BOOL cacheOnly = i >= MAX_WALKING_CNT;
             for (SHARED_PTR<TransportRouteResultSegment>& segment : r->segments)
             {
                 CLLocation *start = prevSegment != nullptr ? [[CLLocation alloc] initWithLatitude:prevSegment->getEnd().lat longitude:prevSegment->getEnd().lon] : _params.start;
@@ -351,13 +365,17 @@
                 {
                     if (prevSegment == nullptr || OsmAnd::Utilities::distance(OsmAnd::LatLon(start.coordinate.latitude, start.coordinate.longitude), OsmAnd::LatLon(end.coordinate.latitude, end.coordinate.longitude)) > 50)
                     {
-                        OAWalkingRouteSegment *seg;
+                        OAWalkingRouteSegment *ws;
                         if (prevSegment == nullptr)
-                            seg = [[OAWalkingRouteSegment alloc] initWithStartLocation:start segment:segment];
+                            ws = [[OAWalkingRouteSegment alloc] initWithStartLocation:start segment:segment];
                         else
-                            seg = [[OAWalkingRouteSegment alloc] initWithTransportRouteResultSegment:prevSegment s2:segment];
+                            ws = [[OAWalkingRouteSegment alloc] initWithTransportRouteResultSegment:prevSegment s2:segment];
+                        
                         dispatch_sync(_queue, ^{
-                            [_walkingSegmentsToCalculate addObject:seg];
+                            if (cacheOnly)
+                                [_walkingSegmentsFromCacheOnly addObject:ws];
+                            else
+                                [_walkingSegmentsToCalculate addObject:ws];
                         });
                     }
                 }
@@ -366,7 +384,11 @@
             if (prevSegment != nullptr)
             {
                 dispatch_sync(_queue, ^{
-                    [_walkingSegmentsToCalculate addObject:[[OAWalkingRouteSegment alloc] initWithRouteResultSegment:prevSegment end:_params.end]];
+                    OAWalkingRouteSegment *ws = [[OAWalkingRouteSegment alloc] initWithRouteResultSegment:prevSegment end:_params.end];
+                    if (cacheOnly)
+                        [_walkingSegmentsFromCacheOnly addObject:ws];
+                    else
+                        [_walkingSegmentsToCalculate addObject:ws];
                 });
             }
         }
@@ -448,6 +470,11 @@
 {
     if (_walkingSegmentsToCalculate.count == 0)
     {
+        for (OAWalkingRouteSegment *ws in _walkingSegmentsFromCacheOnly)
+        {
+            [self retrieveFromCache:ws];
+        }
+        [_walkingSegmentsFromCacheOnly removeAllObjects];
         _walkingSegmentsCalculated = YES;
     }
     else

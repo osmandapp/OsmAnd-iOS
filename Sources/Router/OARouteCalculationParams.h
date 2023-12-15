@@ -25,7 +25,7 @@
 
 @required
 
-- (void) onRouteCalculated:(OARouteCalculationResult *) route segment:(OAWalkingRouteSegment *)segment;
+- (void) onRouteCalculated:(OARouteCalculationResult *) route segment:(OAWalkingRouteSegment *)segment start:(CLLocation *)start end:(CLLocation *)end;
 
 @end
 

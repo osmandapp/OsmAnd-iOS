@@ -12,14 +12,31 @@ import UIKit
 @objcMembers
 final class HelpDetailsViewController: OABaseNavbarViewController {
     var telegramChats: [TelegramChat] = []
+    var childArticles: [ArticleNode] = []
+    var titleText: String?
+    
+    init(childArticles: [ArticleNode], title: String) {
+        self.childArticles = childArticles
+        self.titleText = title
+        super.init(nibName: "OABaseNavbarViewController", bundle: nil)
+        initTableData()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadAndParseJson()
+        if titleText == localizedString("telegram_chats") {
+            loadAndParseJson()
+        } else {
+            generateChildArticlesData()
+        }
     }
     
     override func getTitle() -> String? {
-        localizedString("telegram_chats")
+        titleText
     }
     
     override func getNavbarColorScheme() -> EOABaseNavbarColorScheme {
@@ -40,9 +57,11 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             cell?.leftIconView.tintColor = .iconColorDefault
         }
         if let cell {
+            cell.descriptionVisibility(item.key == "telegramChats")
             cell.titleLabel.text = item.title
             cell.descriptionLabel.text = item.descr
             cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.accessoryType = (item.obj(forKey: "childArticles") as? [ArticleNode])?.isEmpty == false ? .disclosureIndicator : .none
         }
         return cell
     }
@@ -54,6 +73,15 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             if let urlString = item.obj(forKey: "url") as? String,
                let url = URL(string: urlString) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        } else if item.key == "childArticle" {
+            if let childArticles = item.obj(forKey: "childArticles") as? [ArticleNode], !childArticles.isEmpty, let title = item.title {
+                let vc = HelpDetailsViewController(childArticles: childArticles, title: title)
+                self.navigationController?.pushViewController(vc, animated: true)
+            } else if let urlString = item.obj(forKey: "url") as? String {
+                if let webView = OAWebViewController(urlAndTitle: urlString, title: item.title ?? "") {
+                    self.navigationController?.pushViewController(webView, animated: true)
+                }
             }
         }
     }
@@ -71,6 +99,22 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             chatRow.descr = url
             chatRow.iconName = "ic_custom_logo_telegram"
             chatRow.setObj(url, forKey: "url")
+        }
+    }
+    
+    private func generateChildArticlesData() {
+        tableData.clearAllData()
+        let childArticlesSection = tableData.createNewSection()
+        for article in childArticles {
+            let title = MenuHelpDataService.shared.getArticleName(from: article.url)
+            let url = kDocsBaseURL + article.url
+            let articleRow = childArticlesSection.createNewRow()
+            articleRow.cellType = OASimpleTableViewCell.getIdentifier()
+            articleRow.key = "childArticle"
+            articleRow.title = title
+            articleRow.iconName = "ic_custom_book_info"
+            articleRow.setObj(url, forKey: "url")
+            articleRow.setObj(article.childArticles, forKey: "childArticles")
         }
     }
     

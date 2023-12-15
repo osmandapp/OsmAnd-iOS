@@ -178,6 +178,7 @@
         _queue = dispatch_queue_create("array_queue", DISPATCH_QUEUE_CONCURRENT);
         _walkingSegmentsToCalculate = [NSMutableArray new];
         _walkingRouteSegments = [NSMapTable strongToStrongObjectsMapTable];
+        _walkingRouteSegmentsCache = [NSMutableDictionary dictionary];
 
         if (!params.calculationProgress)
         {

@@ -223,7 +223,7 @@
             CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
             UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-            [background setTintColor:UIColor.whiteColor];
+            [background setTintColor:UIColor.groupBgColor];
             [cell.iconView addSubview:background];
             UIImage *img = [UIImage imageNamed:action.getSecondaryIconName];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];

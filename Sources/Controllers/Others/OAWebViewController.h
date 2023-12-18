@@ -11,8 +11,8 @@
 @interface OAWebViewController : OABaseWebViewController
 
 @property NSString *urlString;
-@property BOOL *isCssOverriding;
-@property BOOL *isDarkModeSupported;
+@property (nonatomic, assign) BOOL isCssOverriding;
+@property (nonatomic, assign) BOOL isDarkModeSupported;
 
 - (id)initWithUrl:(NSString*)url;
 - (id)initWithUrlAndTitle:(NSString*)url title:(NSString *) title;

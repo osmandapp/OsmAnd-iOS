@@ -51,8 +51,11 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
-    if (!_isDarkModeSupported)
-        self.webView.backgroundColor = UIColor.whiteColor;
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        if (!_isDarkModeSupported)
+            self.webView.backgroundColor = UIColor.whiteColor;
+    }
 }
 
 - (NSString *)getTitle

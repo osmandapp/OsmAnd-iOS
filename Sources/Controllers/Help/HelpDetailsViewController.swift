@@ -75,11 +75,11 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
         } else if item.key == "childArticle" {
-            let title = item.title
-            if let childArticles = item.obj(forKey: "childArticles") as? [ArticleNode], !childArticles.isEmpty, let title = item.title {
+            guard let title = item.title else { return }
+            if let childArticles = item.obj(forKey: "childArticles") as? [ArticleNode], !childArticles.isEmpty {
                 let vc = HelpDetailsViewController(childArticles: childArticles, title: title)
                 self.navigationController?.pushViewController(vc, animated: true)
-            } else if let urlString = item.obj(forKey: "url") as? String, let title = item.title {
+            } else if let urlString = item.obj(forKey: "url") as? String {
                 guard let webView = OAWebViewController(urlAndTitle: urlString, title: title) else { return }
                 self.navigationController?.pushViewController(webView, animated: true)
             }

@@ -265,8 +265,6 @@
 {
     OAApplicationMode *walkingMode = OAApplicationMode.PEDESTRIAN;
     __block OARouteCalculationResult *cachedRoute;
-    __block CLLocation *start = [[CLLocation alloc] init];
-    __block CLLocation *end = [[CLLocation alloc] init];
     __block OAWalkingRouteSegment *walkingRouteSegment = nil;
     
     __block BOOL success = YES;
@@ -297,8 +295,8 @@
     _currentDistanceFromBegin = _params.calculationProgress->distanceFromBegin + (walkingRouteSegment.s1 != nullptr ? walkingRouteSegment.s1->getTravelDist() : 0);
     OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
     params.inPublicTransportMode = YES;
-    start = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.start.coordinate.latitude longitude:walkingRouteSegment.start.coordinate.longitude];
-    end = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.end.coordinate.latitude longitude:walkingRouteSegment.end.coordinate.longitude];
+    CLLocation *start = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.start.coordinate.latitude longitude:walkingRouteSegment.start.coordinate.longitude];
+    CLLocation *end = [[CLLocation alloc] initWithLatitude:walkingRouteSegment.end.coordinate.latitude longitude:walkingRouteSegment.end.coordinate.longitude];
     params.start = start;
     params.end = end;
     params.startTransportStop = walkingRouteSegment.startTransportStop;

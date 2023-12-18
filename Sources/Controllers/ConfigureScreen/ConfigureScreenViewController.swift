@@ -47,7 +47,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             row.title = panel.title
             row.iconName = panel.iconName
             row.setObj(panel, forKey: "panel")
-            row.iconTintColor = (widgetsCount == 0) ? UIColor.iconColorDisabled : UIColor(rgb: Int(appMode!.getIconColor()));
+            row.iconTintColor = (widgetsCount == 0) ? UIColor.iconColorDefault : UIColor(rgb: Int(appMode!.getIconColor()));
             row.descr = String(widgetsCount)
             row.accessibilityLabel = panel.title
             row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
@@ -83,7 +83,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         quickActionRow.descr = quickActionsEnabled ? String(format: localizedString("ltr_or_rtl_combine_via_colon"),
                                                             localizedString("shared_string_actions"),
                                                             actionsString) : actionsString
-        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDisabled
+        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
         quickActionRow.key = "quick_action"
         quickActionRow.iconName = "ic_custom_quick_action"
         quickActionRow.cellType = OAValueTableViewCell.getIdentifier()
@@ -96,7 +96,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         map3dModeRow.key = "map_3d_mode"
         map3dModeRow.title = localizedString("map_3d_mode_action")
         map3dModeRow.descr = OAMap3DModeVisibility.getTitle(selected3dMode) ?? ""
-        map3dModeRow.iconTintColor = isMap3DVisible ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDisabled
+        map3dModeRow.iconTintColor = isMap3DVisible ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
         map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(selected3dMode)
         map3dModeRow.cellType = OAValueTableViewCell.getIdentifier()
         map3dModeRow.accessibilityLabel = map3dModeRow.title
@@ -113,7 +113,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         row.accessibilityLabel = title
         row.accessibilityValue = descr
         row.key = "compass"
-        row.iconTintColor = appMode != nil ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDisabled
+        row.iconTintColor = appMode != nil ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
         row.iconName = OACompassMode.getIconName(compassMode)
         row.cellType = OAValueTableViewCell.getIdentifier()
     }
@@ -214,7 +214,7 @@ extension ConfigureScreenViewController {
                     cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 }
                 let selected = item.bool(forKey: Self.selectedKey)
-                cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDisabled
+                cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
                 cell.titleLabel.text = item.title
 
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
@@ -247,7 +247,7 @@ extension ConfigureScreenViewController {
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = UIColor(rgb: sw.isOn ? Int(settings.applicationMode.get().getIconColor()) : Int(color_tint_gray))
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : UIColor.iconColorDefault
             }
         }
         

@@ -78,10 +78,10 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
             guard let title = item.title else { return }
             if let childArticles = item.obj(forKey: "childArticles") as? [ArticleNode], !childArticles.isEmpty {
                 let vc = HelpDetailsViewController(childArticles: childArticles, title: title)
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             } else if let urlString = item.obj(forKey: "url") as? String {
                 guard let webView = OAWebViewController(urlAndTitle: urlString, title: title) else { return }
-                self.navigationController?.pushViewController(webView, animated: true)
+                navigationController?.pushViewController(webView, animated: true)
             }
         }
     }

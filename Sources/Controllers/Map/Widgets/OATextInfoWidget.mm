@@ -319,7 +319,7 @@
 
 - (void) adjustViewSize
 {
-    CGFloat leadingOffset = _imageView.hidden ? 4 : 34;
+    CGFloat leadingOffset = _imageView.hidden ? 4 : 31;
     _leadingTextAnchor.constant = leadingOffset;
     
     [_textView sizeToFit];

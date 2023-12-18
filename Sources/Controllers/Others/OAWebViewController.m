@@ -48,6 +48,13 @@
         self.webView.backgroundColor = UIColor.whiteColor;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if (!_isDarkModeSupported)
+        self.webView.backgroundColor = UIColor.whiteColor;
+}
+
 - (NSString *)getTitle
 {
     return _title ? _title : OALocalizedString(@"help_quiz");

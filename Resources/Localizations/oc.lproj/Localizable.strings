@@ -98,9 +98,9 @@
 "rotate_map_to" = "Orientacion de la mapa";
 "rotate_map_to_bearing_descr" = "Chausissètz l'alinhament de l'ecran de la mapa.";
 "rotate_map_compass_opt" = "Segon la bossòla";
-"rotate_map_bearing_opt" = "Segon la direccion dau movement";
+"rotate_map_bearing_opt" = "Segon la direccion";
 "rotate_map_north_opt" = "Ges de rotacion (nòrd adaut)";
-"driving_region_descr" = "Seleccionatz la region de guida: EUA, Euròpa, Reiaume Unit, Asia e autres.";
+"driving_region_descr" = "Seleccionatz la region guida: EUA, Euròpa, Reiaume Unit, Asia ò autres.";
 "driving_region" = "Region de guida";
 "shared_string_automatic" = "Automatic";
 // Trip recording settings
@@ -1334,7 +1334,7 @@
 "map_during_navigation" = "Mapa dau temps de la navigacion";
 "nav_type_osmand" = "OsmAnd (determinacion de l'itinerari sensa connexion)";
 "repeat_after" = "Repetir après";
-"dialogs_and_notifications_descr" = "Controlar lei fenestrons contextuaus, lei boitas de dialòg e lei notificacions";
+"dialogs_and_notifications_descr" = "Controlar lei fenestrons contextuaus, lei boitas de dialòg e lei notificacions.";
 "map_widget_distance_by_tap" = "Distança de la tòca";
 "favorites_empty" = "Avètz pas registrat de ponchs preferits";
 "carplay_active_message" = "La mapa se mòstra per CarPlay";
@@ -1350,7 +1350,7 @@
 "select_nav_profile_dialog_message" = "« Mena de navigacion » selecciona lo biais de calcular lei percors, amb de motors de rotatge disponibles fòra de linha e en linha.";
 "arrows_direction_to_markers" = "Lei sagetas mòstran la direccion vèrs lo marcador actiu s'es fòra de l'ecran. Leis endrechieras traçan una linha vèrs lei marcadors actius.";
 "specify_number_of_dir_indicators" = "Donatz lo nombre d'indicadors de direccion, aquò afectarà totei lei paramètres que seguisson.";
-"reset_plugin_to_default" = "Restablir la configuracion per defaut de l\'ajust";
+"reset_plugin_to_default" = "Restablir la configuracion per defaut de l'ajust";
 "trip_rec_actions_descr" = "Podètz trobar totei vòstrei traças registradas a %@";
 "save_track_logging_accuracy" = "Precision dau registrament";
 "max_speed" = "Velocitat maximala";
@@ -2657,3 +2657,19 @@
 "osm_live_banner_desc" = "Teledescargatz un nombre de mapas illimitat, amb d’actualizacions setmanieras, jornadieras emai oràrias.";
 "subscription" = "Abonament";
 "loading_purchase_information" = "Cargament deis informacions sus la crompa";
+"user_guide" = "Guida de l'utilizator";
+"send_log" = "Mandar lo jornau";
+"my_data" = "Mei donadas";
+"distance_circles" = "Cèrcles de distància";
+"setup" = "Reglatges";
+"most_viewed" = "Lei pus vistas";
+"osmAnd_team" = "Chorma d'OsmAnd";
+"open_issue_on_gitHub" = "Dorbir un avís sus GitHub";
+"download_install_beta_version" = "Teledescargar e installar la version beta d'OsmAnd";
+"context_menu_read_article" = "Legir l'article";
+"detailed_log_file" = "Fichier jornadier per lo menut";
+"testFlight" = "TestFlight";
+"report_an_issues" = "Avisar d'una dificultat";
+"about_osmAnd" = "A prepaus d'OsmAnd";
+"troubleshooting" = "Resolucion de dificultats";
+"ask_question_propose_features" = "Demandar, prepausar de fonccionalitats";

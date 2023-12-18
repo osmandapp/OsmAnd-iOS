@@ -37,7 +37,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 48
+        tableView.rowHeight = UITableView.automaticDimension
 
         configureHeader()
         headerView.configure(device: device)
@@ -140,7 +140,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        DeviceHelper.shared.isPairedDevice(id: device.id) ? .leastNonzeroMagnitude : 34
+        DeviceHelper.shared.isPairedDevice(id: device.id) ? .leastNonzeroMagnitude : UITableView.automaticDimension
     }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {

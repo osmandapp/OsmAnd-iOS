@@ -3443,6 +3443,8 @@
 "learn_more_about_sensors_link" = "Learn more about sensors.";
 "ant_plus_pair_bluetooth_prompt" = "You can pair Bluetooth Low Energy (BLE) sensors with OsmAnd.";
 "ant_plus_pair_new_sensor" = "Pair new sensor";
+"paired_sensors" = "Paired sensors";
+
 "ant_plus_searching" = "Searching";
 "ble_search_again" = "Search again";
 "ant_plus_nothing_found_text" = "Unable to find any sensors";

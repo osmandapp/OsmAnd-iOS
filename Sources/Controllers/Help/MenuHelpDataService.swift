@@ -169,8 +169,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                 return
             }
             
-            URLSession.shared.dataTask(with: url) { [weak self] data, _, error in
-                guard let self else { return }
+            URLSession.shared.dataTask(with: url) { data, _, error in
                 guard let data, error == nil else {
                     DispatchQueue.main.async {
                         completion(nil, error)
@@ -267,10 +266,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     private func getArticlePropertyName(from url: String) -> String {
         var propertyName = url.lowercased().replacingOccurrences(of: kOsmAndUserBaseURL, with: "")
         propertyName = propertyName.replacingOccurrences(of: "-", with: "_").replacingOccurrences(of: "/", with: "_")
-        if !propertyName.isEmpty && propertyName.last == "_" {
-            propertyName.removeLast()
-        }
-        
+        guard !propertyName.isEmpty, propertyName.last == "_" else { return propertyName }
+        propertyName.removeLast()
         return propertyName
     }
     

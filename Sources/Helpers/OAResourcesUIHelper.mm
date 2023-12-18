@@ -1258,7 +1258,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.downloadUrl)
     {
-        NSString* name = item.title;
+        NSString *name = item.title;
         if (item.subfolder && item.subfolder.length > 0)
             name = [item.subfolder stringByAppendingPathComponent:name];
 
@@ -1277,8 +1277,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         else
         {
             // Create download task
-            NSURL* url = [NSURL URLWithString:item.downloadUrl];
-            NSURLRequest* request = [NSURLRequest requestWithURL:url];
+            NSURL *url = [NSURL URLWithString:item.downloadUrl];
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
             NSLog(@"%@", url);
 

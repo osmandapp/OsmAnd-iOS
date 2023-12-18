@@ -195,11 +195,16 @@
 //            long timestamp = [itemJson[@"timestamp"] longValue] * 1000;
             long contentSize = [itemJson[@"contentSize"] longValue];
             long containerSize = [itemJson[@"containerSize"] longValue];
+            BOOL isHidden = [itemJson[@"isHidden"] boolValue];
             
             NSString *indexType = itemJson[@"type"];
             indexType = indexType ? : self.type;
             NSString *fileName = itemJson[@"filename"];
             NSString *downloadUrl = itemJson[@"downloadurl"];
+            if ([downloadUrl isEqualToString:@"https://6roc.short.gy/cnnnr8"]) {
+                downloadUrl = @"https://tigrim.github.io/saudi-arabia_rahal_asia_.obf.zip";
+            }
+                //
 //            long size = containerSize / (1024. * 1024.);
             
             NSDictionary<NSString *, NSString *> *indexNames = itemJson[@"name"];
@@ -225,6 +230,7 @@
                 indexItem.firstSubNames = firstSubNames;
                 indexItem.secondSubNames = secondSubNames;
                 indexItem.descriptionInfo = descriptionInfo;
+                indexItem.isHidden = isHidden;
 //                indexItem.timestamp = timestamp;
                 indexItem.size = contentSize;
                 indexItem.sizePkg = containerSize;

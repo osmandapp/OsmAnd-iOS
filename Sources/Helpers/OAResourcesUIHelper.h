@@ -112,6 +112,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property NSString *downloadUrl;
 
 @property NSDictionary *downloadContent;
+@property BOOL isHidden;
 
 @property NSDictionary<NSString *, NSString *> *names;
 @property NSDictionary<NSString *, NSString *> *firstSubNames;

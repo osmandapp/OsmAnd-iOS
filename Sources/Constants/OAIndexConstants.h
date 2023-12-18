@@ -70,8 +70,12 @@
 #define INDEX_DOWNLOAD_DOMAIN @"download.osmand.net"
 #define APP_DIR @"osmand/"
 #define MAPS_PATH @""
+
+static NSString * const HIDDEN_DIR = @"hidden/";
+
 #define BACKUP_INDEX_DIR @"backup/"
 #define GPX_INDEX_DIR @"tracks/"
+#define HIDDEN_BACKUP_DIR = HIDDEN_DIR + BACKUP_INDEX_DIR;
 #define MAP_MARKERS_INDEX_DIR @"/map markers"
 //public static final String GPX_RECORDED_INDEX_DIR = GPX_INDEX_DIR + "rec/";
 //public static final String GPX_IMPORT_DIR = GPX_INDEX_DIR + "import/";

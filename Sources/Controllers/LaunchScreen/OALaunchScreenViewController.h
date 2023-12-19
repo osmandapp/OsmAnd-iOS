@@ -11,5 +11,6 @@
 @interface OALaunchScreenViewController : UIViewController
 
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView *indicator;
+@property (weak, nonatomic) IBOutlet UIImageView *appNameImageView;
 
 @end

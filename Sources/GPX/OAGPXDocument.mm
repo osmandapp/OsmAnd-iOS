@@ -592,7 +592,8 @@
         author->email = QString::fromNSString(m.author.email);
         QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
         [self fillLinks:links linkArray:@[m.author.link]];
-        author->link = links.first();
+        if (links.size() > 0)
+            author->link = links.first();
         [m.author fillExtensions:author];
         meta->author = author;
     }

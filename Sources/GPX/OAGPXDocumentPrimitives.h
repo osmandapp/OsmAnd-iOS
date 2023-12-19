@@ -118,7 +118,7 @@ struct RouteDataBundle;
 
 @interface OAAuthor : OAGpxExtensions
 
-@property (nonatomic) NSString *name;
+@property (nonatomic, copy) NSString *name;
 @property (nonatomic) NSString *email;
 @property (nonatomic) OALink *link;
 

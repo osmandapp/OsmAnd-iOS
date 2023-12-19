@@ -136,16 +136,19 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     for (ArticleNode *childArticle in _troubleshootingChildArticles)
     {
-        NSString *title = [_helpDataManager getArticleNameFrom:childArticle.url];
-        OATableRowData *row = [troubleshootingSection createNewRow];
-        [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
-        [row setKey:@"troubleshooting"];
-        [row setTitle:title];
-        NSString *fullURL = [kDocsBaseURL stringByAppendingString:childArticle.url];
-        NSString *iconName = specialIcons[childArticle.url] ?: @"ic_custom_book_info";
-        [row setIconName:iconName];
-        [row setObj:fullURL forKey:@"url"];
-        [row setObj:kLinkInternalType forKey:@"linkType"];
+        if (![childArticle.url isEqualToString:@"troubleshooting/android_auto/"])
+        {
+            NSString *title = [_helpDataManager getArticleNameFrom:childArticle.url];
+            OATableRowData *row = [troubleshootingSection createNewRow];
+            [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
+            [row setKey:@"troubleshooting"];
+            [row setTitle:title];
+            NSString *fullURL = [kDocsBaseURL stringByAppendingString:childArticle.url];
+            NSString *iconName = specialIcons[childArticle.url] ?: @"ic_custom_book_info";
+            [row setIconName:iconName];
+            [row setObj:fullURL forKey:@"url"];
+            [row setObj:kLinkInternalType forKey:@"linkType"];
+        }
     }
     
     OATableSectionData *contactUsSection = [_data createNewSection];

@@ -128,7 +128,7 @@
 "help_article_map_point_layers_on_map_name" = "Points on the map";
 "help_article_map_raster_maps_name" = "Raster Maps (Online / Offline)";
 "help_article_map_track_context_menu_name" = "Tracks Context menu";
-"help_article_map_tracks_on_map_name" = "Tracks Context mees";
+"help_article_map_tracks_on_map_name" = "Tracks and Routes";
 "help_article_map_vector_maps_name" = "Vector maps (Map styles)";
 "help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_car_play_name" = "CarPlay";
@@ -179,7 +179,7 @@
 "help_article_widgets_map_buttons_name" = "Map buttons";
 "help_article_widgets_markers_name" = "Marker widgets";
 "help_article_widgets_nav_widgets_name" = "Navigational widgets";
-"help_article_widgets_radius_ruler_name" = "Radius-ruler and Ruler";
+"help_article_widgets_radius_ruler_name" = "Radius ruler and Ruler";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_troubleshooting_android_auto_name" = "Android Auto";
 "global_settings" = "Global settings";

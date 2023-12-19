@@ -194,17 +194,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     }
     
     func prepareArticlesForDisplay(rootNode: ArticleNode) -> [ArticleNode] {
-        let sortedMainArticles = rootNode.childArticles.sorted {
-            getArticleName(from: $0.url) < getArticleName(from: $1.url)
-        }
-        
         var items: [ArticleNode] = []
-        for node in sortedMainArticles {
-            if !node.childArticles.isEmpty {
-                node.childArticles.sort {
-                    getArticleName(from: $0.url) < getArticleName(from: $1.url)
-                }
-            }
+        for node in rootNode.childArticles {
             items.append(node)
         }
         

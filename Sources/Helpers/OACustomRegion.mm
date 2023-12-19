@@ -201,7 +201,8 @@
             indexType = indexType ? : self.type;
             NSString *fileName = itemJson[@"filename"];
             NSString *downloadUrl = itemJson[@"downloadurl"];
-            if ([downloadUrl isEqualToString:@"https://6roc.short.gy/cnnnr8"]) {
+            if ([downloadUrl isEqualToString:@"https://6roc.short.gy/cnnnr8"]
+                || [downloadUrl isEqualToString:@"https://6roc.short.gy/TfTzQ7"]) {
                 downloadUrl = @"https://tigrim.github.io/saudi-arabia_rahal_asia_.obf.zip";
             }
                 //

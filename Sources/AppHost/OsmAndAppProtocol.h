@@ -25,15 +25,16 @@
 - (BOOL) initializeCore;
 - (void) shutdown;
 
-@property(nonatomic, readonly) NSString* dataPath;
-@property(nonatomic, readonly) NSString* documentsPath;
-@property(nonatomic, readonly) NSString* cachePath;
-@property(nonatomic, readonly) NSString* weatherForecastPath;
-@property(nonatomic, readonly) NSString* gpxPath;
-@property(nonatomic, readonly) NSString* inboxPath;
-@property(nonatomic, readonly) NSString* favoritesPath;
-@property(nonatomic, readonly) NSString* travelGuidesPath;
-@property(nonatomic, readonly) NSString* gpxTravelPath;
+@property(nonatomic, readonly) NSString *dataPath;
+@property(nonatomic, readonly) NSString *documentsPath;
+@property(nonatomic, readonly) NSString *cachePath;
+@property(nonatomic, readonly) NSString *weatherForecastPath;
+@property(nonatomic, readonly) NSString *gpxPath;
+@property(nonatomic, readonly) NSString *inboxPath;
+@property(nonatomic, readonly) NSString *favoritesPath;
+@property(nonatomic, readonly) NSString *travelGuidesPath;
+@property(nonatomic, readonly) NSString *gpxTravelPath;
+@property(nonatomic, readonly) NSString *hiddenMapsPath;
 
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;

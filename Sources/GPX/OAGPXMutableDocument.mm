@@ -87,15 +87,9 @@
     metadata.reset(new OsmAnd::GpxDocument::Metadata());
     if (self.metadata)
     {
-        metadata->name = QString::fromNSString(self.metadata.name);
-        metadata->description = QString::fromNSString(self.metadata.desc);
-
+        [self.class fillMetadata:metadata usingMetadata:self.metadata];
         OAWptPt *pt = [self findPointToShow];
         metadata->timestamp = pt != nil && pt.time > 0 ? QDateTime::fromTime_t(pt.time).toUTC() : QDateTime::currentDateTime().toUTC();
-
-        [self.class fillLinks:metadata->links linkArray:self.metadata.links];
-        
-        [self.metadata fillExtensions:metadata];
     }
     document->metadata = metadata;
     metadata = nullptr;

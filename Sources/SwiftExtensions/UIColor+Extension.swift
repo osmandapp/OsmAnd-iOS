@@ -38,6 +38,29 @@ extension UIColor {
     @objc static var weatherSliderLabelBgColor: UIColor { UIColor(named: #function)! }
     @objc static var buttonIconColorPrimary: UIColor { UIColor(named: #function)! }
     @objc static var buttonIconColorSecondary: UIColor { UIColor(named: #function)! }
+
+    @objc static var chartAxisValueBgColor: UIColor { UIColor(named: #function)! }
+    @objc static var chartAxisGridLineColor: UIColor { UIColor(named: #function)! }
+    @objc static var chartSliderLabelBgColor: UIColor { UIColor(named: #function)! }
+    @objc static var chartSliderLabelStrokeColor: UIColor { UIColor(named: #function)! }
+    @objc static var chartSliderLineColor: UIColor { UIColor(named: #function)! }
+
+    @objc static var chartTextColorAxisX: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorElevation: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorSlope: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorSpeed: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorBicycleCadence: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorBicyclePower: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorHeartRate: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorSpeedSensor: UIColor { UIColor(named: #function)! }
+
+    @objc static var chartLineColorElevation: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorSlope: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorSpeed: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorBicycleCadence: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorBicyclePower: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorHeartRate: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorSpeedSensor: UIColor { UIColor(named: #function)! }
 }
 
 extension UIColor {

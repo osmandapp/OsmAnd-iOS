@@ -94,13 +94,28 @@
     {
         [self buildCommentRow:rows comment:self.wpt.point.comment];
     }
+    if (self.wpt.point.links && self.wpt.point.links.count > 0)
+    {
+        for (OALink *link in self.wpt.point.links)
+        {
+            [rows addObject:[[OARowInfo alloc] initWithKey:nil
+                                                      icon:[OATargetInfoViewController getIcon:@"mx_website"]
+                                                textPrefix:link.text
+                                                      text:link.url.absoluteString
+                                                 textColor:UIColorFromRGB(kHyperlinkColor)
+                                                    isText:NO
+                                                 needLinks:YES
+                                                     order:2
+                                                  typeName:@""
+                                             isPhoneNumber:NO
+                                                     isUrl:YES]];
+        }
+    }
     
     //TODO: add extra fields
     //wpt.speed
     //wpt.ele
     //wpt.hdop
-    //wpt.desc
-    //wpt.comment
     
     if ( _originObject && [ _originObject isKindOfClass:OAPOI.class])
     {

@@ -396,6 +396,7 @@
 "shared_string_symbol" = "Symbol";
 "shared_string_never" = "Never";
 "confirm_every_run" = "Always ask";
+"general_settings" = "General";
 "general_settings_2" = "General settings";
 "general_settings_descr" = "Set up display and common settings for the app.";
 "routing_settings_descr" = "Specify options for navigation.";
@@ -772,6 +773,10 @@
 "shared_string_result" = "Result";
 "shared_string_any" = "Any";
 "shared_string_data_type" = "Data type";
+"shared_string_author" = "Author";
+"shared_string_link" = "Link";
+"shared_string_license" = "License";
+"shared_string_keywords" = "Keywords";
 
 "restart" = "Restart";
 

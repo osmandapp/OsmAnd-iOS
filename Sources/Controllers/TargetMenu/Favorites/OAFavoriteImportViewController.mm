@@ -194,8 +194,13 @@ NSNotificationName const OAFavoriteImportViewControllerDidDismissNotification = 
             for (OAWptPt *item in pointGroup.points)
             {
                 NSString *importItemName = item.name;
-                if ([importItemName isEqualToString:[localItem getName]]
-                    && ![_ignoredNames containsObject:importItemName])
+                NSString *importItemFolder = item.type;
+                NSString *localItemName = [localItem getName];
+                NSString *localItemFolder = [localItem getCategory];
+                
+                if ([importItemName isEqualToString:localItemName] &&
+                    [importItemFolder isEqualToString:localItemFolder] &&
+                    ![_ignoredNames containsObject:importItemName])
                 {
                     _conflictedItem = item;
 

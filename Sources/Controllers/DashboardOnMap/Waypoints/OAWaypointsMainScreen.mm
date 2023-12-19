@@ -36,6 +36,8 @@
 #import "OAFavoriteItem.h"
 #import "OAOsmAndFormatter.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 @interface OARadiusItem : NSObject
 
 @property (nonatomic) int type;
@@ -709,7 +711,7 @@
         UIImage *deviationImg = nil;
         if (dist > 0 && p.deviationDistance > 0) {
             deviationStr = [NSString stringWithFormat:@"+%@", [OAOsmAndFormatter getFormattedDistance:p.deviationDistance]];
-            UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
+            UIColor *color = UIColor.textColorSecondary;
             if (p.deviationDirectionRight)
                 deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
             else
@@ -720,7 +722,7 @@
         if (distStr)
         {
             distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
-            UIColor *color = UIColorFromRGB(color_myloc_distance);
+            UIColor *color =  UIColor.iconColorActive;
             [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
             [distAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, distAttrStr.length)];
         }
@@ -782,7 +784,7 @@
         }
         if (descAttrStr.length > 0)
         {
-            UIColor *color = UIColorFromARGB(color_secondary_text_light_argb);
+            UIColor *color = UIColor.textColorSecondary;
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
             [descAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, descAttrStr.length)];
         }

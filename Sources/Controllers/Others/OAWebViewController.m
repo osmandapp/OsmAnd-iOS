@@ -40,6 +40,24 @@
 
 #pragma mark - Base UI
 
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    // Strong override theme depending color to white
+    if (!_isDarkModeSupported)
+        self.webView.backgroundColor = UIColor.whiteColor;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        if (!_isDarkModeSupported)
+            self.webView.backgroundColor = UIColor.whiteColor;
+    }
+}
+
 - (NSString *)getTitle
 {
     return _title ? _title : OALocalizedString(@"help_quiz");
@@ -70,12 +88,18 @@
 {
     if ([[self getUrl].scheme isEqualToString:@"file"])
     {
-        NSString *cssDay = @"  body { max-width: 100% !important; margin-top: 0%; margin-bottom: 30%; margin-left: 5%; margin-right: 5%; font-size: 1em; -webkit-text-size-adjust: none; } .main { background-color: #ffffff; font-family: sans-serif; padding-left: 7%; padding-right: 7%; } p { color: #212121; } h1 { color: #212121; font-family: -apple-system-headline1, sans-serif; } h2 { color: #454545; font-family: -apple-system, sans-serif;  } h3 { color: #727272; font-family: sans-serif; } h4, h5 { color: #454545; } p { color: #212121; } a, a.external.free, a.text { color: #237bff; text-decoration-color: #a3c8ff; word-wrap: break-word; } hr { color: #eaecf0; background-color: #eaecf0; } img { padding-bottom: 10%; }";
+        NSString *styleBlock = @"";
+        if (_isCssOverriding)
+        {
+            NSString *cssDay = @"  body { max-width: 100% !important; margin-top: 0%; margin-bottom: 30%; margin-left: 5%; margin-right: 5%; font-size: 1em; -webkit-text-size-adjust: none; } .main { background-color: #ffffff; font-family: sans-serif; padding-left: 7%; padding-right: 7%; } p { color: #212121; } h1 { color: #212121; font-family: -apple-system-headline1, sans-serif; } h2 { color: #454545; font-family: -apple-system, sans-serif;  } h3 { color: #727272; font-family: sans-serif; } h4, h5 { color: #454545; } p { color: #212121; } a, a.external.free, a.text { color: #237bff; text-decoration-color: #a3c8ff; word-wrap: break-word; } hr { color: #eaecf0; background-color: #eaecf0; } img { padding-bottom: 10%; }";
+            
+            NSString *cssNight = @"  body { max-width: 100% !important; margin-top: 0%; margin-bottom: 30%; margin-left: 5%; margin-right: 5%; font-size: 1em; -webkit-text-size-adjust: none; } .main { background-color: #17191a; font-family: sans-serif; padding-left: 7%; padding-right: 7%; } p { color: #cccccc; } h1 { color: #cccccc; font-family: -apple-system-headline1, sans-serif; } h2 { color: #999999; font-family: -apple-system, sans-serif;  } h3 { color: #727272; font-family: sans-serif; } h4, h5 { color: #999999; } p { color: #cccccc; } a, a.external.free, a.text { color: #d28521; text-decoration-color: #854f08; word-wrap: break-word; } hr { color: #2d3133; background-color: #2d3133; } img { padding-bottom: 10%; }";
+            
+            styleBlock = [ThemeManager shared].isLightTheme ? cssDay : cssNight;
+            styleBlock = [NSString stringWithFormat:@"<style> %@ </style>", styleBlock];
+        }
         
-        NSString *cssNight = @"  body { max-width: 100% !important; margin-top: 0%; margin-bottom: 30%; margin-left: 5%; margin-right: 5%; font-size: 1em; -webkit-text-size-adjust: none; } .main { background-color: #17191a; font-family: sans-serif; padding-left: 7%; padding-right: 7%; } p { color: #cccccc; } h1 { color: #cccccc; font-family: -apple-system-headline1, sans-serif; } h2 { color: #999999; font-family: -apple-system, sans-serif;  } h3 { color: #727272; font-family: sans-serif; } h4, h5 { color: #999999; } p { color: #cccccc; } a, a.external.free, a.text { color: #d28521; text-decoration-color: #854f08; word-wrap: break-word; } hr { color: #2d3133; background-color: #2d3133; } img { padding-bottom: 10%; }";
-        
-        NSString *css = [ThemeManager shared].isLightTheme ? cssDay : cssNight;
-        NSString *content = [NSString stringWithFormat:@"<html><head> <style> %@ </style></head> <body> %@ </body></html>", css, [self getContent]];
+        NSString *content = [NSString stringWithFormat:@"<html><head> %@ </head> <body> %@ </body></html>", styleBlock, [self getContent]];
         [self.webView loadHTMLString:content baseURL:[NSURL URLWithString:@"https://osmand.net/"]];
     }
     else

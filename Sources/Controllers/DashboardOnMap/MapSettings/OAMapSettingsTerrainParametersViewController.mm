@@ -312,9 +312,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (NSArray<NSString *> *)getPossibleZoomValues
 {
     NSMutableArray *res = [NSMutableArray new];
-    OsmAnd::ZoomLevel maxZoom = OARootViewController.instance.mapPanel.mapViewController.mapLayers.terrainMapLayer.getMaxZoom;
-    int maxVisibleZoom = maxZoom + kMaxMissingDataZoomShift;
-    for (int i = 1; i <= maxVisibleZoom; i++)
+    for (int i = 1; i <= kMaxAllowedZoom; i++)
     {
         [res addObject:[NSString stringWithFormat:@"%d", i]];
     }

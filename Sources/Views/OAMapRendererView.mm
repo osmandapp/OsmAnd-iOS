@@ -51,6 +51,7 @@
     OsmAnd::PointI _viewSize;
     CGFloat _topOffset;
     CGFloat _bottomOffset;
+    OsmAnd::PointI _centerPixel;
 
     std::shared_ptr<OsmAnd::IMapRenderer> _renderer;
     std::shared_ptr<OsmAnd::MapAnimator> _mapAnimator;
@@ -756,9 +757,6 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
 
     _viewportXScale = viewportXScale;
-
-    // Kill buffers, since viewport was resized
-    [self releaseRenderAndFrameBuffers];
 }
 
 - (void) setViewportYScale:(float)viewportYScale
@@ -767,12 +765,6 @@ forcedUpdate:(BOOL)forcedUpdate
         return;
 
     _viewportYScale = viewportYScale;
-
-    // Normalize elevation angle
-    [self setElevationAngle:self.elevationAngle];
-
-    // Kill buffers, since viewport was resized
-    [self releaseRenderAndFrameBuffers];
 }
 
 - (void) setSkyColor:(OsmAnd::FColorRGB)skyColor
@@ -886,8 +878,6 @@ forcedUpdate:(BOOL)forcedUpdate
     {
         _topOffset = newTopOffset;
         _bottomOffset = newBottomOffset;
-        // Kill buffers, since viewport was resized
-        [self releaseRenderAndFrameBuffers];
     }
 }
 
@@ -939,6 +929,19 @@ forcedUpdate:(BOOL)forcedUpdate
         _renderer->setWindowSize(_viewSize);
         _renderer->setViewport(OsmAnd::AreaI(OsmAnd::PointI(0, 0), _viewSize));
         _renderer->setMapTarget([self getCenterPixel], self.target31);
+    }
+    else
+    {
+        OsmAnd::PointI centerPixel = [self getCenterPixel];
+        if (_centerPixel != centerPixel)
+        {
+            _centerPixel = centerPixel;
+            
+            // Normalize elevation angle
+            [self setElevationAngle:self.elevationAngle];
+
+            _renderer->setMapTarget(centerPixel, self.target31);
+        }
     }
 
     if (self.rendererDelegate)

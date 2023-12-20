@@ -119,7 +119,6 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         NSLog(@"Custom obf in the archive is not valid");
         failed = YES;
     }
-    // Hidden/
     NSString *unzippedPath = nil;
     if ([fileName hasPrefix:HIDDEN_DIR])
     {

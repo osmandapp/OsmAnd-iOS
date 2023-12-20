@@ -584,7 +584,6 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (NSString *) getTargetFilePath
 {
-    // FIXME:
     if (self.downloadContent && ![self.downloadContent[@"sql"] boolValue])
         return self.getBasePathByExtension;
 

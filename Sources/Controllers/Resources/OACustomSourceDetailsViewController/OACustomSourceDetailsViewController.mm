@@ -47,10 +47,6 @@
     self = [super init];
     if (self) {
         _item = item;
-//        if ([_item isHidden])
-//        {
-//            _item.subfolder = HIDDEN_DIR;
-//        }
         _region = region;
         _downloadedImages = [NSMutableArray new];
         [self generateData];

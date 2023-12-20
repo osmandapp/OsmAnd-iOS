@@ -241,7 +241,6 @@
                 indexItem.size = contentSize;
                 indexItem.sizePkg = containerSize;
                 indexItem.resourceType = type;
-            //https://6roc.short.gy/cnnnr8
                 [items addObject:indexItem];
             }
         }

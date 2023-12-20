@@ -7,6 +7,7 @@
 //
 
 #import "OALaunchScreenViewController.h"
+#import "OAIAPHelper.h"
 
 @interface OALaunchScreenViewController ()
 
@@ -37,6 +38,21 @@
 - (void) viewDidLoad
 {
     [super viewDidLoad];
+    
+    if ([OAIAPHelper isOsmAndProAvailable])
+    {
+        self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps_pro"];
+        [self animateImageView];
+    }
+    else if ([OAIAPHelper isFullVersionPurchased] || [OAIAPHelper isSubscribedToMaps])
+    {
+        self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps_plus"];
+        [self animateImageView];
+    }
+    else
+    {
+        self.appNameImageView.image = [UIImage imageNamed:@"img_text_osmand_maps"];
+    }
 }
 
 - (void) didReceiveMemoryWarning
@@ -48,6 +64,14 @@
 - (BOOL) prefersStatusBarHidden
 {
     return YES;
+}
+
+- (void) animateImageView
+{
+    self.appNameImageView.alpha = 0.0;
+    [UIView animateWithDuration:0.5 animations:^{
+        self.appNameImageView.alpha = 1.0;
+    }];
 }
 
 @end

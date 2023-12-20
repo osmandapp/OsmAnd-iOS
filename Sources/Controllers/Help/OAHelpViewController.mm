@@ -24,7 +24,9 @@ static NSString * const kLinkExternalType = @"ext_link";
 {
     OAMenuHelpDataService *_helpDataManager;
     OATableDataModel *_data;
-    NSArray *_mostViewedArticles;
+    NSArray<PopularArticle *> *_mostViewedArticles;
+    NSArray<ArticleNode *> *_parsedArticles;
+    NSArray<ArticleNode *> *_troubleshootingChildArticles;
 }
 
 #pragma mark - Initialization
@@ -41,6 +43,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [super viewDidLoad];
     
     [self loadAndParseJson];
+    [self loadAndProcessXML];
 }
 
 #pragma mark - Base UI
@@ -102,53 +105,58 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     OATableSectionData *userGuideSection = [_data createNewSection];
     userGuideSection.headerText = OALocalizedString(@"user_guide");
-    NSArray *userGuideItems = @[
-        @{@"title": OALocalizedString(@"shared_string_map"), @"url": kDocsMap},
-        @{@"title": OALocalizedString(@"map_widgets"), @"url": kDocsWidgets},
-        @{@"title": OALocalizedString(@"shared_string_navigation"), @"url": kDocsNavigation},
-        @{@"title": OALocalizedString(@"search_activity"), @"url": kDocsSearch},
-        @{@"title": OALocalizedString(@"my_data"), @"url": kDocsPersonal},
-        @{@"title": OALocalizedString(@"plan_route"), @"url": kDocsPlanRoute},
-        @{@"title": OALocalizedString(@"plugins_menu_group"), @"url": kDocsPlugins},
-        @{@"title": OALocalizedString(@"purchases"), @"url": kDocsPurchases}
-    ];
-    for (NSDictionary *item in userGuideItems)
+    
+    for (ArticleNode *articleNode in _parsedArticles)
     {
+        NSString *title = [_helpDataManager getArticleNameFrom:articleNode.url];
+        if ([title isEqualToString:OALocalizedString(@"troubleshooting")])
+        {
+            _troubleshootingChildArticles = articleNode.childArticles;
+            continue;
+        }
         OATableRowData *row = [userGuideSection createNewRow];
         [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [row setKey:@"userGuide"];
-        [row setTitle:item[@"title"]];
+        [row setTitle:title];
         [row setIconName:@"ic_custom_book_info"];
-        [row setObj:kLinkInternalType forKey:@"linkType"];
-        [row setObj:item[@"url"] forKey:@"url"];
+        [row setObj:articleNode forKey:@"articleNode"];
     }
     
     OATableSectionData *troubleshootingSection = [_data createNewSection];
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
-    NSArray *troubleshootingItems = @[
-        @{@"title": OALocalizedString(@"setup"), @"url": kTroubleshootingSetup, @"icon": @"ic_custom_device_download"},
-        @{@"title": OALocalizedString(@"shared_string_map"), @"url": kTroubleshootingMap, @"icon": @"ic_custom_overlay_map"},
-        @{@"title": OALocalizedString(@"shared_string_navigation"), @"url": kTroubleshootingNavigation, @"icon": @"ic_custom_navigation"},
-        @{@"title": OALocalizedString(@"track_recording"), @"url": kTroubleshootingTrackRecording, @"icon": @"ic_custom_track_recordable"},
-        @{@"title": OALocalizedString(@"plugins_menu_group"), @"url": kDocsPlugins, @"icon": @"ic_custom_extension"}
-    ];
-    for (NSDictionary *item in troubleshootingItems)
+    
+    NSDictionary *specialIcons = @{
+        @"troubleshooting/setup/": @"ic_custom_device_download",
+        @"troubleshooting/maps-data/": @"ic_custom_overlay_map",
+        @"troubleshooting/navigation/": @"ic_custom_navigation",
+        @"troubleshooting/track-recording-issues/": @"ic_custom_track_recordable"
+    };
+    
+    for (ArticleNode *childArticle in _troubleshootingChildArticles)
     {
+        if ([childArticle.url isEqualToString:@"troubleshooting/android_auto/"])
+            continue;
+        
+        NSString *title = [_helpDataManager getArticleNameFrom:childArticle.url];
         OATableRowData *row = [troubleshootingSection createNewRow];
         [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [row setKey:@"troubleshooting"];
-        [row setTitle:item[@"title"]];
-        [row setIconName:item[@"icon"]];
+        [row setTitle:title];
+        NSString *fullURL = [kDocsBaseURL stringByAppendingString:childArticle.url];
+        NSString *iconName = specialIcons[childArticle.url] ?: @"ic_custom_book_info";
+        [row setIconName:iconName];
+        [row setObj:fullURL forKey:@"url"];
         [row setObj:kLinkInternalType forKey:@"linkType"];
-        [row setObj:item[@"url"] forKey:@"url"];
     }
     
     OATableSectionData *contactUsSection = [_data createNewSection];
     contactUsSection.headerText = OALocalizedString(@"help_contact_us");
+    
     NSArray *initialContactUsItems = @[
-        @{@"title": OALocalizedString(@"contact_support"), @"descr": kSupportEmail, @"icon": @"ic_custom_at_mail", @"url": kContactEmail},
+        @{@"title": OALocalizedString(@"contact_support"), @"descr": kSupportEmail, @"icon": @"ic_custom_at_mail", @"url": [self createMailToUrl]},
         @{@"title": OALocalizedString(@"gitHub_discussion"), @"descr": OALocalizedString(@"ask_question_propose_features"), @"icon": @"ic_custom_logo_github", @"url": kGitHubDiscussion}
     ];
+    
     for (NSDictionary *item in initialContactUsItems)
     {
         OATableRowData *row = [contactUsSection createNewRow];
@@ -175,6 +183,7 @@ static NSString * const kLinkExternalType = @"ext_link";
         @{@"title": OALocalizedString(@"reddit"), @"descr": kCommunityReddit, @"icon": @"ic_custom_logo_reddit", @"url": kCommunityReddit},
         @{@"title": OALocalizedString(@"facebook"), @"descr": kCommunityFacebook, @"icon": @"ic_custom_logo_facebook", @"url": kCommunityFacebook}
     ];
+    
     for (NSDictionary *item in additionalContactUsItems)
     {
         OATableRowData *row = [contactUsSection createNewRow];
@@ -208,11 +217,13 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     OATableSectionData *aboutOsmAndSection = [_data createNewSection];
     aboutOsmAndSection.headerText = OALocalizedString(@"about_osmAnd");
+    
     NSArray *aboutOsmAndItems = @[
         @{@"title": OALocalizedString(@"osmAnd_team"), @"descr": @"", @"icon": @"ic_custom_logo_osmand", @"url": kOsmAndTeam},
-        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
+        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [OAAppVersionDependentConstants getBuildVersion]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
         @{@"title": OALocalizedString(@"testFlight"), @"descr": OALocalizedString(@"download_install_beta_version"), @"icon": @"ic_custom_download", @"url": kTestFlight}
     ];
+    
     for (NSDictionary *item in aboutOsmAndItems)
     {
         OATableRowData *row = [aboutOsmAndSection createNewRow];
@@ -229,10 +240,29 @@ static NSString * const kLinkExternalType = @"ext_link";
 - (void)loadAndParseJson
 {
     [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsPopularArticles completion:^(NSArray *articles, NSError *error) {
-        if (error) {
+        if (error)
+        {
             NSLog(OALocalizedString(@"osm_failed_uploads"));
-        } else if (articles) {
+        }
+        else if (articles)
+        {
             _mostViewedArticles = articles;
+            [self generateData];
+            [self.tableView reloadData];
+        }
+    }];
+}
+
+- (void)loadAndProcessXML
+{
+    [_helpDataManager loadAndProcessSitemapWithCompletion:^(NSArray *articles, NSError *error) {
+        if (error)
+        {
+            NSLog(@"Error loading articles: %@", error.localizedDescription);
+        }
+        else
+        {
+            _parsedArticles = articles;
             [self generateData];
             [self.tableView reloadData];
         }
@@ -292,6 +322,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
+    ArticleNode *articleNode = [item objForKey:@"articleNode"];
     NSString *key = item.key;
     NSString *linkType = [item objForKey:@"linkType"];
     NSString *url = [item objForKey:@"url"];
@@ -306,9 +337,9 @@ static NSString * const kLinkExternalType = @"ext_link";
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
     }
     
-    if ([key isEqualToString:@"contactSupportTelegram"])
+    if ([key isEqualToString:@"userGuide"] || [key isEqualToString:@"contactSupportTelegram"])
     {
-        OAHelpDetailsViewController *vc = [[OAHelpDetailsViewController alloc] init];
+        OAHelpDetailsViewController *vc = [[OAHelpDetailsViewController alloc] initWithChildArticles:articleNode.childArticles title:item.title];
         [self.navigationController pushViewController:vc animated:YES];
     }
     else if ([key isEqualToString:@"sendLog"])
@@ -343,7 +374,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)copyBuildVersion
 {
-    [UIPasteboard generalPasteboard].string = [OAAppVersionDependentConstants getVersion];
+    [UIPasteboard generalPasteboard].string = [OAAppVersionDependentConstants getBuildVersion];
 }
 
 - (void)sendLogFile
@@ -368,6 +399,21 @@ static NSString * const kLinkExternalType = @"ext_link";
         UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[logFileURL] applicationActivities:nil];
         [self presentViewController:activityViewController animated:YES completion:nil];
     }
+}
+
+- (NSString *)createMailToUrl
+{
+    UIDevice *currentDevice = [UIDevice currentDevice];
+    NSString *deviceName = currentDevice.name;
+    NSString *osName = currentDevice.systemName;
+    NSString *osVersion = currentDevice.systemVersion;
+    NSString *appBuild = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    
+    NSString *deviceInfo = [NSString stringWithFormat:@"Device: %@\nOS: %@\nOS Version: %@\nOsmAnd Build: %@", deviceName, osName, osVersion, appBuild];
+    NSString *encodedDeviceInfo = [deviceInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
+    NSString *mailtoUrlString = [NSString stringWithFormat:@"%@?subject=Support Request&body=%@", kContactEmail, encodedDeviceInfo];
+    
+    return mailtoUrlString;
 }
 
 @end

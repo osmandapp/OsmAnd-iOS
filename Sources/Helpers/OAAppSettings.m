@@ -3976,10 +3976,7 @@
         [_profilePreferences setObject:_maxSpeed forKey:@"max_speed"];
         [_profilePreferences setObject:_routeStraightAngle forKey:@"routing_straight_angle"];
 
-        _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:YES];
-        [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
-        [_transparentMapTheme setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
-        [_transparentMapTheme setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
+        _transparentMapTheme = [OACommonBoolean withKey:transparentMapThemeKey defValue:NO];
         [_profilePreferences setObject:_transparentMapTheme forKey:@"transparent_map_theme"];
 
         _showStreetName = [OACommonBoolean withKey:showStreetNameKey defValue:NO];
@@ -4021,7 +4018,7 @@
         _rotateMap = [OACommonInteger withKey:rotateMapKey defValue:ROTATE_MAP_NONE];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode CAR]];
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode BICYCLE]];
-        [_rotateMap setModeDefaultValue:@(ROTATE_MAP_COMPASS) mode:[OAApplicationMode PEDESTRIAN]];
+        [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
 
         _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
@@ -4240,6 +4237,7 @@
         _snapToRoad = [OACommonBoolean withKey:snapToRoadKey defValue:NO];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode BICYCLE]];
+        [_snapToRoad setModeDefaultValue:@YES mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_snapToRoad forKey:@"snap_to_road"];
 
         _poiFiltersOrder = [OACommonStringList withKey:poiFiltersOrderKey defValue:@[]];
@@ -4315,7 +4313,7 @@
         [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
         
-        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisibleIn3DMode] makeShared];
+        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisible] makeShared];
         _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
         _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
         _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];

@@ -191,15 +191,6 @@
 		157F3CE524A1FC85000A66F0 /* ic_checkmark_default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CE224A1FC85000A66F0 /* ic_checkmark_default@2x.png */; };
 		157F3CEF24A23A94000A66F0 /* ic_custom_undo_button@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */; };
 		157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */; };
-		158A3818257E65CD0038056A /* img_text_openstreetmap.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A380F257E65C90038056A /* img_text_openstreetmap.png */; };
-		158A3819257E65CD0038056A /* img_text_osmand_maps.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3810257E65CA0038056A /* img_text_osmand_maps.png */; };
-		158A381A257E65CD0038056A /* img_text_osmand_maps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3811257E65CB0038056A /* img_text_osmand_maps@3x.png */; };
-		158A381B257E65CD0038056A /* img_text_openstreetmap@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3812257E65CB0038056A /* img_text_openstreetmap@2x.png */; };
-		158A381C257E65CD0038056A /* img_text_osmand_maps@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3813257E65CB0038056A /* img_text_osmand_maps@2x.png */; };
-		158A381D257E65CD0038056A /* img_logo_osmand_120pt@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3814257E65CC0038056A /* img_logo_osmand_120pt@3x.png */; };
-		158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3815257E65CC0038056A /* img_text_openstreetmap@3x.png */; };
-		158A381F257E65CD0038056A /* img_logo_osmand_120pt.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3816257E65CD0038056A /* img_logo_osmand_120pt.png */; };
-		158A3820257E65CD0038056A /* img_logo_osmand_120pt@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A3817257E65CD0038056A /* img_logo_osmand_120pt@2x.png */; };
 		158DE48E25AEF31B007C1B57 /* ic_destination_pin_6@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158DE48825AEF31A007C1B57 /* ic_destination_pin_6@2x.png */; };
 		158DE48F25AEF31B007C1B57 /* ic_destination_pin_6@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158DE48925AEF31B007C1B57 /* ic_destination_pin_6@3x.png */; };
 		158DE49025AEF31B007C1B57 /* ic_destination_pin_6_small@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 158DE48A25AEF31B007C1B57 /* ic_destination_pin_6_small@3x.png */; };
@@ -3717,15 +3708,6 @@
 		157F3CE224A1FC85000A66F0 /* ic_checkmark_default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_checkmark_default@2x.png"; path = "Resources/Icons/ic_checkmark_default@2x.png"; sourceTree = "<group>"; };
 		157F3CEC24A23A92000A66F0 /* ic_custom_undo_button@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@2x.png"; path = "Resources/Icons/ic_custom_undo_button@2x.png"; sourceTree = "<group>"; };
 		157F3CED24A23A94000A66F0 /* ic_custom_undo_button@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_undo_button@3x.png"; path = "Resources/Icons/ic_custom_undo_button@3x.png"; sourceTree = "<group>"; };
-		158A380F257E65C90038056A /* img_text_openstreetmap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_text_openstreetmap.png; path = Resources/IntroImages/img_text_openstreetmap.png; sourceTree = "<group>"; };
-		158A3810257E65CA0038056A /* img_text_osmand_maps.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_text_osmand_maps.png; path = Resources/IntroImages/img_text_osmand_maps.png; sourceTree = "<group>"; };
-		158A3811257E65CB0038056A /* img_text_osmand_maps@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_osmand_maps@3x.png"; path = "Resources/IntroImages/img_text_osmand_maps@3x.png"; sourceTree = "<group>"; };
-		158A3812257E65CB0038056A /* img_text_openstreetmap@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_openstreetmap@2x.png"; path = "Resources/IntroImages/img_text_openstreetmap@2x.png"; sourceTree = "<group>"; };
-		158A3813257E65CB0038056A /* img_text_osmand_maps@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_osmand_maps@2x.png"; path = "Resources/IntroImages/img_text_osmand_maps@2x.png"; sourceTree = "<group>"; };
-		158A3814257E65CC0038056A /* img_logo_osmand_120pt@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_logo_osmand_120pt@3x.png"; path = "Resources/IntroImages/img_logo_osmand_120pt@3x.png"; sourceTree = "<group>"; };
-		158A3815257E65CC0038056A /* img_text_openstreetmap@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_text_openstreetmap@3x.png"; path = "Resources/IntroImages/img_text_openstreetmap@3x.png"; sourceTree = "<group>"; };
-		158A3816257E65CD0038056A /* img_logo_osmand_120pt.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = img_logo_osmand_120pt.png; path = Resources/IntroImages/img_logo_osmand_120pt.png; sourceTree = "<group>"; };
-		158A3817257E65CD0038056A /* img_logo_osmand_120pt@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_logo_osmand_120pt@2x.png"; path = "Resources/IntroImages/img_logo_osmand_120pt@2x.png"; sourceTree = "<group>"; };
 		158DE48825AEF31A007C1B57 /* ic_destination_pin_6@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_pin_6@2x.png"; path = "Resources/Icons/ic_destination_pin_6@2x.png"; sourceTree = "<group>"; };
 		158DE48925AEF31B007C1B57 /* ic_destination_pin_6@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_pin_6@3x.png"; path = "Resources/Icons/ic_destination_pin_6@3x.png"; sourceTree = "<group>"; };
 		158DE48A25AEF31B007C1B57 /* ic_destination_pin_6_small@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_destination_pin_6_small@3x.png"; path = "Resources/Icons/ic_destination_pin_6_small@3x.png"; sourceTree = "<group>"; };
@@ -8529,15 +8511,6 @@
 				841A111F1DEC454F009558D3 /* osmand_logo@2x.png */,
 				841A11201DEC454F009558D3 /* osmand_logo@3x.png */,
 				842431671AE939B400925821 /* welcome_wide.png */,
-				158A3816257E65CD0038056A /* img_logo_osmand_120pt.png */,
-				158A3817257E65CD0038056A /* img_logo_osmand_120pt@2x.png */,
-				158A3814257E65CC0038056A /* img_logo_osmand_120pt@3x.png */,
-				158A380F257E65C90038056A /* img_text_openstreetmap.png */,
-				158A3812257E65CB0038056A /* img_text_openstreetmap@2x.png */,
-				158A3815257E65CC0038056A /* img_text_openstreetmap@3x.png */,
-				158A3810257E65CA0038056A /* img_text_osmand_maps.png */,
-				158A3813257E65CB0038056A /* img_text_osmand_maps@2x.png */,
-				158A3811257E65CB0038056A /* img_text_osmand_maps@3x.png */,
 			);
 			name = IntroImages;
 			sourceTree = "<group>";
@@ -14935,7 +14908,6 @@
 				46B9E78A29B2298F00FA802D /* ic_navbar_image_download_outlined@2x.png in Resources */,
 				321251472A4B2081006C44BD /* ic_custom_2d@3x.png in Resources */,
 				DA0D163A281BEEF500CEEF58 /* map_turn_roundabout_left_dark@2x.png in Resources */,
-				158A381C257E65CD0038056A /* img_text_osmand_maps@2x.png in Resources */,
 				849E81991AFA5D6700549953 /* btn_map_type_icon_view@2x.png in Resources */,
 				1571CE2A24ADEE2F00083F92 /* ic_custom_ruler@2x.png in Resources */,
 				46B9E78C29B2298F00FA802D /* ic_navbar_languge@3x.png in Resources */,
@@ -15243,7 +15215,6 @@
 				DA25FA5623FFFC90009CDEAD /* ic_custom_change_object_position@2x.png in Resources */,
 				8476E2A01F6C1EEC00EC274F /* map_default_location_night@3x.png in Resources */,
 				DA5A82B626C563A800F274C7 /* OAWebViewCell.xib in Resources */,
-				158A381B257E65CD0038056A /* img_text_openstreetmap@2x.png in Resources */,
 				15B4E4B024AB401C00119365 /* ic_custom_length_limit@2x.png in Resources */,
 				46453B0A28352407001F9A3A /* ic_custom_monthly_map_updates_colored_day@2x.png in Resources */,
 				4613BFAC2A93DECC004385FB /* ic_custom_screen_side_top_48@3x.png in Resources */,
@@ -15431,7 +15402,6 @@
 				DA1340C2243DC5A70039D214 /* ic_action_aircraft@3x.png in Resources */,
 				8431E7B91B3877B80063C9AF /* check@2x.png in Resources */,
 				B247454827E4A8E300C18C3F /* ic_custom_read_from_file@3x.png in Resources */,
-				158A3820257E65CD0038056A /* img_logo_osmand_120pt@2x.png in Resources */,
 				3266C96426B150D6007A9187 /* ic_custom_openplacereview_logo@2x.png in Resources */,
 				97EF50D72AB1D926005E861B /* map_action_paragliding@2x.png in Resources */,
 				8AFC2BDD24334A4E0095BA9F /* map_navigation_car_bottom@3x.png in Resources */,
@@ -15466,7 +15436,6 @@
 				DABA3DDD22686E72005BB777 /* ic_tabbar_osm_edits@2x.png in Resources */,
 				DA2EC63829FBBE0200ECEB37 /* widget_coordinates_map_center_longitude_west_day@3x.png in Resources */,
 				0A8D1A1726FBA1750042444C /* ic_small_ascent@3x.png in Resources */,
-				158A381E257E65CD0038056A /* img_text_openstreetmap@3x.png in Resources */,
 				DA5A82C926C563A800F274C7 /* OALabelCollectionViewCell.xib in Resources */,
 				DA9A2C2D26FCB50600BEC681 /* map_direction_arrow_small@3x.png in Resources */,
 				0AA3BB8F26EB540100A9885D /* ic_custom_overview@3x.png in Resources */,
@@ -16319,7 +16288,6 @@
 				843E5D891AB341E000BE14BE /* menu_direction_icon@3x.png in Resources */,
 				158DE48E25AEF31B007C1B57 /* ic_destination_pin_6@2x.png in Resources */,
 				DA6BF94424DBF21B00F7DC7B /* ic_custom_remove_outlined@3x.png in Resources */,
-				158A3819257E65CD0038056A /* img_text_osmand_maps.png in Resources */,
 				323BD9112628850400D255ED /* ic_bg_point_octagon_top@2x.png in Resources */,
 				DA23425423477F33003911B8 /* ic_custom_clear_list@2x.png in Resources */,
 				8476E27C1F6C1EEC00EC274F /* map_car_location_lost_night@3x.png in Resources */,
@@ -16585,7 +16553,6 @@
 				DA5A83A126C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.xib in Resources */,
 				32A7EE1B261BBF7E00F7A697 /* bg_point_square_contour@2x.png in Resources */,
 				84DE41662001258F00F022F9 /* map_pin_avoid_road@2x.png in Resources */,
-				158A381D257E65CD0038056A /* img_logo_osmand_120pt@3x.png in Resources */,
 				84B6E0882073CF55002CA15B /* ic_action_route_subsequent_destination@2x.png in Resources */,
 				DA9C623F221C46590087E140 /* ic_custom_osm_edits@3x.png in Resources */,
 				0AA3BB9026EB540100A9885D /* ic_small_map_point@2x.png in Resources */,
@@ -16595,7 +16562,6 @@
 				8476E29A1F6C1EEC00EC274F /* map_car_location@3x.png in Resources */,
 				DAB985B1212423710081F8F8 /* en-gb_tts.js in Resources */,
 				3212514A2A4B2081006C44BD /* ic_custom_2d@2x.png in Resources */,
-				158A3818257E65CD0038056A /* img_text_openstreetmap.png in Resources */,
 				DAA88913241BCD2A0057722C /* ic_small_pedestrian@3x.png in Resources */,
 				46B2EAC228E5CA6B00F466F6 /* ic_custom_cloud_info@3x.png in Resources */,
 				0A0EAC0526E619420044E82C /* ic_custom_point_labels@2x.png in Resources */,
@@ -16680,10 +16646,8 @@
 				DA8A928425DE8B4A00F5320A /* ic_carplay_tracks@2x.png in Resources */,
 				3AC639F51A220A96001D5E57 /* icon_edit@2x.png in Resources */,
 				C5CD4CF329EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@2x.png in Resources */,
-				158A381F257E65CD0038056A /* img_logo_osmand_120pt.png in Resources */,
 				32A7EE16261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png in Resources */,
 				DA6BF94824DBF21B00F7DC7B /* ic_custom_copy@3x.png in Resources */,
-				158A381A257E65CD0038056A /* img_text_osmand_maps@3x.png in Resources */,
 				DA2EC69729FBBE0300ECEB37 /* ic_action_altitude@3x.png in Resources */,
 				DA0D162B281BEEF500CEEF58 /* map_turn_slight_left@2x.png in Resources */,
 				8AFC2BBF24334A4E0095BA9F /* map_location_car_center@3x.png in Resources */,

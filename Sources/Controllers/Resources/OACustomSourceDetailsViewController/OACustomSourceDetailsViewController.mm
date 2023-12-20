@@ -19,6 +19,8 @@
 #import "OAImagesTableViewCell.h"
 #import "OAIndexConstants.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 #define kImageViewHeight 200.0
 
 @interface OACustomSourceDetailsViewController () <UITableViewDelegate, UITableViewDataSource>
@@ -113,7 +115,7 @@
     
     if (_item.descriptionInfo.getLocalizedDescription.length > 0)
     {
-        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.blackColor];
+        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.textColorPrimary];
         [data addObject:@{
                 @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"attrText" : attrString
@@ -127,12 +129,23 @@
     [super viewDidLoad];
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    self.tableView.backgroundColor = UIColor.clearColor;
     
     self.actionButton.layer.cornerRadius = 9.;
     self.navBarView.backgroundColor = _region.headerColor;
     
     [self queryImage];
     [self setupActionButtons];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [self generateData];
+        [_tableView reloadData];
+    }
 }
 
 - (void) setupActionButtons
@@ -171,8 +184,8 @@
     _downloadButton = downloadButton;
     BOOL active = downloadButton != nil;
     [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"map_downloaded") forState:UIControlStateNormal];
-    self.actionButton.backgroundColor = active ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_button_gray_background);
-    [self.actionButton setTitleColor:active ? UIColor.whiteColor : UIColorFromRGB(color_text_footer) forState:UIControlStateNormal];
+    self.actionButton.backgroundColor = active ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorSecondary;
+    [self.actionButton setTitleColor:active ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary forState:UIControlStateNormal];
     [self.actionButton setUserInteractionEnabled:active];
 }
 
@@ -242,7 +255,7 @@
         if (cell)
         {
             cell.textView.attributedText = item[@"attrText"];
-            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColorFromRGB(color_primary_purple)};
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
             [cell.textView sizeToFit];
         }
         return cell;

@@ -528,54 +528,43 @@
         NSMutableAttributedString *res = [NSMutableAttributedString new];
 
         NSTextAttachment *arrowUpAttachment = [[NSTextAttachment alloc] init];
-        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_ascent"];
-        arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        arrowUpAttachment.image = [UIImage templateImageNamed:@"ic_small_uphill"];
+        arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *uphillIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                  [NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
         [uphillIcon setColor:UIColor.iconColorDefault forString:uphillIcon.string];
 
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
-        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_descent"];
-        arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 20.)/2.f, 20., 20.);
+        arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_downhill"];
+        arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *downhilIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
         [downhilIcon setColor:UIColor.iconColorDefault forString:downhilIcon.string];
 
-        NSTextAttachment *elevationMaxAttachment = [[NSTextAttachment alloc] init];
-        elevationMaxAttachment.image = [UIImage systemImageNamed:@"arrow.up"];
-        elevationMaxAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 14.)/2.f, 14., 14.);
-        NSMutableAttributedString *elevationMaxIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
-                                                  [NSAttributedString attributedStringWithAttachment:elevationMaxAttachment]];
-        [elevationMaxIcon setColor:UIColor.iconColorDefault forString:elevationMaxIcon.string];
-
-        NSTextAttachment *elevationMinAttachment = [[NSTextAttachment alloc] init];
-        elevationMinAttachment.image = [UIImage systemImageNamed:@"arrow.down"];
-        elevationMinAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 14.)/2.f, 14., 14.);
-        NSMutableAttributedString *elevationMinIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
-                                                  [NSAttributedString attributedStringWithAttachment:elevationMinAttachment]];
-        [elevationMinIcon setColor:UIColor.iconColorDefault forString:elevationMinIcon.string];
+        NSTextAttachment *rangeAttachment = [[NSTextAttachment alloc] init];
+        rangeAttachment.image = [UIImage templateImageNamed:@"ic_small_altitude_range"];
+        rangeAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
+        NSMutableAttributedString *elevationIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
+                                                  [NSAttributedString attributedStringWithAttachment:rangeAttachment]];
+        [elevationIcon setColor:UIColor.iconColorDefault forString:elevationIcon.string];
 
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp]]
-                                                                    attributes:textAttrs]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
-
-        [res appendAttributedString:downhilIcon];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown]]
+                                     [NSString stringWithFormat:@"  %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp]]
                                                                     attributes:textAttrs]];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
 
-        [res appendAttributedString:elevationMaxIcon];
+        [res appendAttributedString:downhilIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]
+                                     [NSString stringWithFormat:@"  %@", [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown]]
                                                                     attributes:textAttrs]];
-        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
+        [res appendAttributedString:[[NSAttributedString alloc] initWithString:@"    "]];
 
-        [res appendAttributedString:elevationMinIcon];
+        [res appendAttributedString:elevationIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
-                                     [NSString stringWithFormat:@" %@", [OAOsmAndFormatter getFormattedAlt:analysis.minElevation]]
+        [NSString stringWithFormat:@"  %@", [NSString stringWithFormat:@"%@ - %@",
+                                            [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
+                                            [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]]]
                                                                     attributes:textAttrs]];
         return res;
     }

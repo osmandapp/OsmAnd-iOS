@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="18122" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="18093"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -15,24 +16,24 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3gO-t7-roK">
-                    <rect key="frame" x="0.0" y="44" width="428" height="848"/>
+                    <rect key="frame" x="0.0" y="47" width="428" height="845"/>
                     <subviews>
-                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_openstreetmap.png" translatesAutoresizingMaskIntoConstraints="NO" id="Nii-cE-fcN">
-                            <rect key="frame" x="94" y="810" width="240" height="30"/>
+                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_openstreetmap" translatesAutoresizingMaskIntoConstraints="NO" id="Nii-cE-fcN">
+                            <rect key="frame" x="94" y="807" width="240" height="30"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="240" id="RGe-rW-g5k"/>
                                 <constraint firstAttribute="height" constant="30" id="RcG-VW-P6A"/>
                             </constraints>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zRb-V1-xNB">
-                            <rect key="frame" x="0.0" y="0.0" width="428" height="313"/>
+                            <rect key="frame" x="0.0" y="0.0" width="428" height="305.66666666666669"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="JPt-zZ-LQr">
-                            <rect key="frame" x="0.0" y="455" width="428" height="313"/>
+                            <rect key="frame" x="0.0" y="459.66666666666674" width="428" height="305.33333333333326"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_osmand_maps.png" translatesAutoresizingMaskIntoConstraints="NO" id="CPV-2n-7Kb">
-                                    <rect key="frame" x="107.66666666666669" y="138" width="213" height="37"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_text_osmand_maps" translatesAutoresizingMaskIntoConstraints="NO" id="CPV-2n-7Kb">
+                                    <rect key="frame" x="108.66666666666669" y="137.99999999999994" width="211" height="29"/>
                                 </imageView>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -41,18 +42,18 @@
                                 <constraint firstItem="CPV-2n-7Kb" firstAttribute="centerX" secondItem="JPt-zZ-LQr" secondAttribute="centerX" id="x3S-2P-wGO"/>
                             </constraints>
                         </view>
-                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_logo_osmand_120pt.png" translatesAutoresizingMaskIntoConstraints="NO" id="A9r-2G-HpT">
-                            <rect key="frame" x="148.66666666666666" y="313" width="130.99999999999997" height="142"/>
+                        <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_logo_osmand" translatesAutoresizingMaskIntoConstraints="NO" id="A9r-2G-HpT">
+                            <rect key="frame" x="137" y="305.66666666666669" width="154" height="154"/>
                         </imageView>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Sjn-Ib-R2z">
-                            <rect key="frame" x="0.0" y="776" width="428" height="26"/>
+                            <rect key="frame" x="0.0" y="773" width="428" height="26"/>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="26" id="YAT-th-mLJ"/>
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <color key="backgroundColor" name="launchScreenBgColor"/>
                     <constraints>
                         <constraint firstItem="zRb-V1-xNB" firstAttribute="top" secondItem="3gO-t7-roK" secondAttribute="top" id="3tB-pM-m5Z"/>
                         <constraint firstItem="Sjn-Ib-R2z" firstAttribute="leading" secondItem="3gO-t7-roK" secondAttribute="leading" id="50l-Ft-Nnn"/>
@@ -73,7 +74,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="350-KX-KPn"/>
-            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color key="backgroundColor" name="launchScreenBgColor"/>
             <constraints>
                 <constraint firstItem="3gO-t7-roK" firstAttribute="trailing" secondItem="350-KX-KPn" secondAttribute="trailing" id="2g3-Qq-GGb"/>
                 <constraint firstItem="3gO-t7-roK" firstAttribute="top" secondItem="350-KX-KPn" secondAttribute="top" id="YoG-iw-igs"/>
@@ -84,8 +85,11 @@
         </view>
     </objects>
     <resources>
-        <image name="img_logo_osmand_120pt.png" width="131" height="141.66667175292969"/>
-        <image name="img_text_openstreetmap.png" width="251" height="24"/>
-        <image name="img_text_osmand_maps.png" width="213" height="36.333332061767578"/>
+        <image name="img_logo_osmand" width="154" height="154"/>
+        <image name="img_text_openstreetmap" width="230" height="20"/>
+        <image name="img_text_osmand_maps" width="211" height="29"/>
+        <namedColor name="launchScreenBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

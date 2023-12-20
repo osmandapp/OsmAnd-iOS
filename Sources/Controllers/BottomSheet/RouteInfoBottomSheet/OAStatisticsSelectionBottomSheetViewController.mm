@@ -40,7 +40,6 @@
 {
     OsmAndAppInstance _app;
     OAStatisticsSelectionBottomSheetViewController *vwController;
-    OATargetPointsHelper *_pointsHelper;
     NSArray* _data;
 }
 
@@ -118,6 +117,15 @@
             @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_speed")],
             @"img" : @"ic_custom_altitude_and_slope",
             @"mode" : @(EOARouteStatisticsModeAltitudeSpeed),
+            @"round_bottom" : @(NO),
+            @"round_top" : @(NO)
+    }];
+
+    [arr addObject:@{
+            @"type" : [OATitleIconRoundCell getCellIdentifier],
+            @"title" : OALocalizedString(@"map_widget_ant_heart_rate"),
+            @"img" : @"ic_action_sensor_heart_rate_outlined",
+            @"mode" : @(EOARouteStatisticsModeSensorHearRate),
             @"round_bottom" : @(YES),
             @"round_top" : @(NO)
     }];
@@ -197,7 +205,10 @@
             cell.backgroundColor = UIColor.clearColor;
 
             cell.titleView.text = item[@"title"];
-            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? UIColor.buttonBgColorTertiary : UIColor.textColorPrimary;
+
+            BOOL isSpeed = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed);
+            BOOL hasSensorHearRate = mode == EOARouteStatisticsModeSensorHearRate && [vwController.analysis hasData:OAPointAttributes.sensorTagHeartRate];
+            cell.textColorNormal = (isSpeed && vwController.analysis.hasSpeedData) || (!isSpeed && !hasSensorHearRate) || hasSensorHearRate ? UIColor.buttonBgColorTertiary : UIColor.textColorPrimary;
 
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
             cell.iconColorNormal = vwController.mode == mode ? UIColor.iconColorActive : UIColor.iconColorDisabled;
@@ -251,7 +262,8 @@
     {
         EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [[self getItem:indexPath][@"mode"] integerValue];
         BOOL isSpeed = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed);
-        if ((isSpeed && vwController.hasSpeed) || !isSpeed)
+        BOOL hasSensorHearRate = mode == EOARouteStatisticsModeSensorHearRate && [vwController.analysis hasData:OAPointAttributes.sensorTagHeartRate];
+        if ((isSpeed && vwController.analysis.hasSpeedData) || (!isSpeed && !hasSensorHearRate) || hasSensorHearRate)
         {
             [vwController.delegate onNewModeSelected:mode];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
@@ -270,10 +282,10 @@
 
 @implementation OAStatisticsSelectionBottomSheetViewController
 
-- (instancetype)initWithMode:(EOARouteStatisticsMode)mode hasSpeed:(BOOL)hasSpeed
+- (instancetype)initWithMode:(EOARouteStatisticsMode)mode analysis:(OAGPXTrackAnalysis *)analysis;
 {
     _mode = mode;
-    _hasSpeed = hasSpeed;
+    _analysis = analysis;
     return [super initWithParam:nil];
 }
 

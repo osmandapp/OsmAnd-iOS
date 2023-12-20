@@ -9,8 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OATrkSegment;
-@class OAWptPt;
+@class OATrkSegment, OAWptPt, OAPointAttributes;
 
 @interface OASplitMetric : NSObject
 
@@ -105,6 +104,9 @@
 @property (nonatomic) BOOL hasSpeedData;
 @property (nonatomic) BOOL hasSpeedInTrack;
 
+@property (nonatomic) NSMutableArray<OAPointAttributes *> *pointAttributes;
+@property (nonatomic) NSMutableSet<NSString *> *availableAttributes;
+
 -(BOOL) isTimeSpecified;
 -(BOOL) isTimeMoving;
 -(BOOL) isElevationSpecified;
@@ -114,6 +116,8 @@
 -(int) getTimeMinutes:(long)time;
 
 -(BOOL) isSpeedSpecified;
+- (BOOL)hasData:(NSString *)tag;
+- (void)setHasData:(NSString *)tag hasData:(BOOL)hasData;
 
 - (BOOL) isColorizationTypeAvailable:(NSInteger)colorizationType;
 

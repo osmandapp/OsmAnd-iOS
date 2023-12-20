@@ -325,7 +325,7 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode hasSpeed:self.analysis.hasSpeedData];
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode analysis:self.analysis];
     statsModeBottomSheet.delegate = self;
     [statsModeBottomSheet show];
 }

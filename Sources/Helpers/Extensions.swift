@@ -8,6 +8,50 @@
 
 import Foundation
 import UIKit
+import Charts
+
+struct Pair<T, U> {
+  let first: T
+  let second: U
+}
+
+extension OAPlugin {
+
+    @objc func getOrderedLineDataSet(chart: LineChartView,
+                                     analysis: OAGPXTrackAnalysis,
+                                     graphType: GPXDataSetType,
+                                     axisType: GPXDataSetAxisType,
+                                     calcWithoutGaps: Bool,
+                                     useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
+        return nil
+    }
+
+    static func getOrderedLineDataSet(chart: LineChartView,
+                                             analysis: OAGPXTrackAnalysis,
+                                             graphType: GPXDataSetType,
+                                             axisType: GPXDataSetAxisType,
+                                             calcWithoutGaps: Bool,
+                                             useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
+        for plugin in Self.getAvailablePlugins() {
+            let dataSet: GpxUIHelper.OrderedLineDataSet? = plugin.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
+                if let dataSet {
+                    return dataSet
+                }
+            }
+            return nil
+        }
+}
+
+extension OAExternalSensorsPlugin {
+    @objc override func getOrderedLineDataSet(chart: LineChartView,
+                                              analysis: OAGPXTrackAnalysis,
+                                              graphType: GPXDataSetType,
+                                              axisType: GPXDataSetAxisType,
+                                              calcWithoutGaps: Bool,
+                                              useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
+        return SensorAttributesUtils.getOrderedLineDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
+    }
+}
 
 extension Date {
     var startOfDay: Date {

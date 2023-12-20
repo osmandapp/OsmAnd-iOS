@@ -642,6 +642,7 @@
 		464C9B4328E49793006F57B7 /* ic_custom_globe_upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B3F28E49792006F57B7 /* ic_custom_globe_upload@2x.png */; };
 		464C9B4428E49793006F57B7 /* ic_custom_globe_upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4028E49792006F57B7 /* ic_custom_globe_upload@3x.png */; };
 		464C9B4528E49793006F57B7 /* ic_custom_device_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4128E49792006F57B7 /* ic_custom_device_download@2x.png */; };
+		464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FF36A2B309488001D855E /* SensorAttributesUtils.swift */; };
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
 		465B935229BF7805008F476F /* ic_carplay_history_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */; };
 		465B935329BF7805008F476F /* ic_carplay_history_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */; };
@@ -4270,6 +4271,7 @@
 		464C9B3F28E49792006F57B7 /* ic_custom_globe_upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_globe_upload@2x.png"; path = "Resources/Icons/ic_custom_globe_upload@2x.png"; sourceTree = "<group>"; };
 		464C9B4028E49792006F57B7 /* ic_custom_globe_upload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_globe_upload@3x.png"; path = "Resources/Icons/ic_custom_globe_upload@3x.png"; sourceTree = "<group>"; };
 		464C9B4128E49792006F57B7 /* ic_custom_device_download@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_device_download@2x.png"; path = "Resources/Icons/ic_custom_device_download@2x.png"; sourceTree = "<group>"; };
+		464FF36A2B309488001D855E /* SensorAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorAttributesUtils.swift; sourceTree = "<group>"; };
 		4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupConflictDetailsViewController.h; sourceTree = "<group>"; };
 		4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAStatusBackupConflictDetailsViewController.m; sourceTree = "<group>"; };
 		465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@3x.png"; path = "Resources/Icons/ic_carplay_history_night@3x.png"; sourceTree = "<group>"; };
@@ -14489,6 +14491,7 @@
 				FAA650332ADD42990020DCEA /* BLE */,
 				FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */,
 				FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */,
+				464FF36A2B309488001D855E /* SensorAttributesUtils.swift */,
 			);
 			path = ExternalSensorsPlugin;
 			sourceTree = "<group>";
@@ -18027,6 +18030,7 @@
 				32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
 				DA4ABF352876ECB300B996EF /* OAAbstractWriter.m in Sources */,
+				464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */,
 				DAD3FD262A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift in Sources */,
 				DA5A84A026C563A900F274C7 /* OAReorderPointCommand.mm in Sources */,
 				FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */,

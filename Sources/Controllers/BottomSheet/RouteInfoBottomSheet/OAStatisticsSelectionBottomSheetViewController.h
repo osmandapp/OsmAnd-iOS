@@ -10,13 +10,21 @@
 #import "OABottomSheetTwoButtonsViewController.h"
 #import "OAWaypointUIHelper.h"
 
+@class OAGPXTrackAnalysis;
+
 typedef NS_ENUM(NSInteger, EOARouteStatisticsMode)
 {
     EOARouteStatisticsModeAltitudeSlope = 0,
     EOARouteStatisticsModeAltitudeSpeed,
     EOARouteStatisticsModeAltitude,
     EOARouteStatisticsModeSlope,
-    EOARouteStatisticsModeSpeed
+    EOARouteStatisticsModeSpeed,
+
+    EOARouteStatisticsModeSensorSpeed,
+    EOARouteStatisticsModeSensorHearRate,
+    EOARouteStatisticsModeSensorBikePower,
+    EOARouteStatisticsModeSensorBikeCadence,
+    EOARouteStatisticsModeSensorTemperature
 };
 
 @class OAStatisticsSelectionBottomSheetViewController;
@@ -36,10 +44,10 @@ typedef NS_ENUM(NSInteger, EOARouteStatisticsMode)
 @interface OAStatisticsSelectionBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
 @property (nonatomic, readonly) EOARouteStatisticsMode mode;
-@property (nonatomic, readonly) BOOL hasSpeed;
+@property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
 @property (nonatomic, weak) id<OAStatisticsSelectionDelegate> delegate;
 
-- (instancetype)initWithMode:(EOARouteStatisticsMode)mode hasSpeed:(BOOL)hasSpeed;
+- (instancetype)initWithMode:(EOARouteStatisticsMode)mode analysis:(OAGPXTrackAnalysis *)analysis;
 
 @end
 

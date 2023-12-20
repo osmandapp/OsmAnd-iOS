@@ -12,6 +12,7 @@
 #import "OALocationServices.h"
 #import "OARouteColorizationHelper.h"
 #import "OAMapUtils.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -259,6 +260,19 @@
     return _avgSpeed > 0.0;
 }
 
+- (BOOL)hasData:(NSString *)tag
+{
+    return [_availableAttributes containsObject:tag];
+}
+
+- (void)setHasData:(NSString *)tag hasData:(BOOL)hasData
+{
+    if (hasData)
+        [_availableAttributes addObject:tag];
+    else
+        [_availableAttributes removeObject:tag];
+}
+
 +(OAGPXTrackAnalysis *) segment:(long)fileTimestamp seg:(OATrkSegment *)seg
 {
     OAGPXTrackAnalysis *obj = [[OAGPXTrackAnalysis alloc] init];
@@ -281,7 +295,10 @@
     NSInteger timeDiffSec = 0;
     double totalSpeedSum = 0;
     _points = 0;
-    
+
+    _pointAttributes = [NSMutableArray array];
+    _availableAttributes = [NSMutableSet set];
+
     NSMutableArray<OAElevation *> *elevationData = [NSMutableArray new];
     NSMutableArray<OASpeed *> *speedData = [NSMutableArray new];
     
@@ -299,7 +316,7 @@
                 _locationStart = point;
             if (j == numberOfPoints - 1)
                 _locationEnd = point;
-
+            
             long time = point.time;
             if (time != 0)
             {
@@ -364,7 +381,7 @@
             
             if (j > 0) {
                 OAWptPt *prev = [s get:j - 1];
-
+                
                 // Old complete summation approach for elevation gain/loss
                 //if (!Double.isNaN(point.ele) && !Double.isNaN(prev.ele)) {
                 //    double diff = point.ele - prev.ele;
@@ -430,16 +447,19 @@
             [speedData addObject:speed1];
             if (!_hasSpeedData && speed1.speed > 0 && _totalDistance > 0)
                 _hasSpeedData = YES;
-            
+
+            BOOL firstPoint = NO;
+            BOOL lastPoint = NO;
             if (s.segment.generalSegment)
             {
                 distanceOfSingleSegment += distance;
                 if (point.firstPoint)
                 {
+                    firstPoint = j > 0;
                     distanceOfSingleSegment = 0;
                     timeMovingOfSingleSegment = 0;
                     distanceMovingOfSingleSegment = 0;
-                    if (j > 0)
+                    if (firstPoint)
                     {
                         elevation1.firstPoint = YES;
                         speed1.firstPoint = YES;
@@ -447,16 +467,22 @@
                 }
                 if (point.lastPoint)
                 {
+                    lastPoint = j < numberOfPoints - 1;
                     _totalDistanceWithoutGaps += distanceOfSingleSegment;
                     _timeMovingWithoutGaps += timeMovingOfSingleSegment;
                     _totalDistanceMovingWithoutGaps += distanceMovingOfSingleSegment;
-                    if (j < numberOfPoints - 1)
+                    if (lastPoint)
                     {
                         elevation1.lastPoint = true;
                         speed1.lastPoint = true;
                     }
                 }
             }
+            float attrDistance = (j > 0) ? distance : 0;
+            OAPointAttributes *attribute = [[OAPointAttributes alloc] initWithDistance:attrDistance timeDiff:timeDiffSec firstPoint:firstPoint lastPoint:lastPoint];
+            attribute.speed = speed;
+            attribute.elevation = elevation;
+            [self addWptAttribute:point attribute:attribute];// pointsAnalyser);
         }
         OAElevationApproximator *approximator = [[OAElevationApproximator alloc] init];
         NSArray<OAApproxResult *> *approxData = [approximator approximate:s];
@@ -468,10 +494,13 @@
             _diffElevationDown += elevationDiffsCalc.diffElevationDown;
         }
     }
-    if (_totalDistance < 0) {
+    if (_totalDistance < 0)
+    {
         _hasElevationData = NO;
         _hasSpeedData = NO;
+        [_availableAttributes removeAllObjects];
     }
+
     if (![self isTimeSpecified])
     {
         _startTime = fileStamp;
@@ -505,6 +534,19 @@
     }
     _elevationData = [NSArray arrayWithArray:elevationData];
     _speedData = [NSArray arrayWithArray:speedData];
+}
+
+- (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute // TrackPointsAnalyser pointsAnalyser)
+{
+    if (![self hasSpeedData] && attribute.speed > 0 && _totalDistance > 0)
+        [self setHasData:OAPointAttributes.pointSpeed hasData:YES];
+    if (![self hasElevationData] && !isnan(attribute.elevation) && _totalDistance > 0)
+        [self setHasData:OAPointAttributes.pointElevation hasData:true];
+    [OAExternalSensorsPlugin onAnalysePoint:self point:point attribute:attribute]; //todo
+//    if (pointsAnalyser != null) {
+//        pointsAnalyser.onAnalysePoint(this, point, attribute);
+//    }
+    [_pointAttributes addObject:attribute];
 }
 
 +(void) splitSegment:(OASplitMetric*)metric

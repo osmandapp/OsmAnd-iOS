@@ -131,6 +131,18 @@
             renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
             break;
         }
+        case EOARouteStatisticsModeSensorHearRate:
+        {
+            if (statsModeCell)
+                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_ant_heart_rate") forState:UIControlStateNormal];
+            [GpxUIHelper refreshLineChartWithChartView:chart
+                                              analysis:analysis
+                                   useGesturesAndScale:YES
+                                             firstType:GPXDataSetTypeSENSOR_HEART_RATE
+                                          useRightAxis:YES];
+            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
+            break;
+        }
         default:
             break;
     }

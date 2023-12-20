@@ -11,7 +11,7 @@
 FOUNDATION_EXPORT NSString * _Nonnull const OATrackRecordingNone;
 FOUNDATION_EXPORT NSString * _Nonnull const OATrackRecordingAnyConnected;
 
-@class OACommonString, OAApplicationMode;
+@class OACommonString, OAApplicationMode, OAGPXTrackAnalysis, OAWptPt, OAPointAttributes;
 
 @interface OAExternalSensorsPlugin : OAPlugin
 
@@ -19,5 +19,6 @@ FOUNDATION_EXPORT NSString * _Nonnull const OATrackRecordingAnyConnected;
 - (OACommonString * _Nullable)getWriteToTrackDeviceIdPref:(OAWidgetType * _Nonnull)dataType;
 - (void)saveDeviceId:(NSString *_Nonnull)deviceID widgetType:(OAWidgetType *_Nonnull)widgetType appMode:(OAApplicationMode *_Nonnull)appMode;
 - (NSString *_Nonnull)getDeviceIdForWidgetType:(OAWidgetType *_Nonnull)widgetType appMode:(OAApplicationMode *_Nonnull)appMode;
++ (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(OAWptPt *)point attribute:(OAPointAttributes *)attribute;
 
 @end

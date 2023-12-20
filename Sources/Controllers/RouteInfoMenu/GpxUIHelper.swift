@@ -14,14 +14,30 @@ import Charts
     case SPEED = 1
     case SLOPE = 2
     
+    case SENSOR_SPEED = 3
+    case SENSOR_HEART_RATE = 4
+    case SENSOR_BIKE_POWER = 5
+    case SENSOR_BIKE_CADENCE = 6
+    case SENSOR_TEMPERATURE = 7
+    
     public func getName() -> String {
         switch self {
-            case .ALTITUDE:
-                return OAUtilities.getLocalizedString("map_widget_altitude");
-            case .SPEED:
-                return OAUtilities.getLocalizedString("shared_string_speed");
-            case .SLOPE:
-                return OAUtilities.getLocalizedString("shared_string_slope");
+        case .ALTITUDE:
+            return OAUtilities.getLocalizedString("map_widget_altitude")
+        case .SPEED:
+            return OAUtilities.getLocalizedString("shared_string_speed")
+        case .SLOPE:
+            return OAUtilities.getLocalizedString("shared_string_slope")
+        case .SENSOR_SPEED:
+            return OAUtilities.getLocalizedString("shared_string_speed")
+        case .SENSOR_HEART_RATE:
+            return OAUtilities.getLocalizedString("map_widget_ant_heart_rate")
+        case .SENSOR_BIKE_POWER:
+            return OAUtilities.getLocalizedString("map_widget_ant_bicycle_power")
+        case .SENSOR_BIKE_CADENCE:
+            return OAUtilities.getLocalizedString("map_widget_ant_bicycle_cadence")
+        case .SENSOR_TEMPERATURE:
+            return OAUtilities.getLocalizedString("map_settings_weather_temp")
         }
     }
     
@@ -33,6 +49,77 @@ import Charts
             return ""
         case .SLOPE:
             return ""
+        case .SENSOR_SPEED:
+            return ""
+        case .SENSOR_HEART_RATE:
+            return ""
+        case .SENSOR_BIKE_POWER:
+            return ""
+        case .SENSOR_BIKE_CADENCE:
+            return ""
+        case .SENSOR_TEMPERATURE:
+            return ""
+        }
+    }
+    
+    public func getDatakey() -> String {
+        switch self {
+        case .ALTITUDE:
+            return PointAttributes.pointElevation
+        case .SPEED:
+            return PointAttributes.pointSpeed
+        case .SLOPE:
+            return PointAttributes.pointElevation
+        case .SENSOR_SPEED:
+            return PointAttributes.sensorTagSpeed
+        case .SENSOR_HEART_RATE:
+            return PointAttributes.sensorTagHeartRate
+        case .SENSOR_BIKE_POWER:
+            return PointAttributes.sensorTagBikePower
+        case .SENSOR_BIKE_CADENCE:
+            return PointAttributes.sensorTagBikePower
+        case .SENSOR_TEMPERATURE:
+            return PointAttributes.sensorTagTemperature
+        }
+    }
+    
+    public func getMainUnitY() -> String {
+        let settings: OAAppSettings = OAAppSettings.sharedManager()
+        switch self {
+        case .ALTITUDE:
+            let shouldUseFeet: Bool = OAMetricsConstant.shouldUseFeet(settings.metricSystem.get())
+            return localizedString(shouldUseFeet ? "foot" : "m")
+        case .SLOPE:
+            return "%"
+        case .SPEED, .SENSOR_SPEED:
+            return OASpeedConstant.toShortString(settings.speedSystem.get())
+        case .SENSOR_HEART_RATE:
+            return localizedString("beats_per_minute_short")
+        case .SENSOR_BIKE_POWER:
+            return localizedString("power_watts_unit")
+        case .SENSOR_BIKE_CADENCE:
+            return localizedString("revolutions_per_minute_unit")
+        case .SENSOR_TEMPERATURE:
+            return ""
+        }
+    }
+
+    public func getFillColor() -> UIColor {
+        switch self {
+        case .ALTITUDE:
+            return UIColor(rgb: color_elevation_chart)
+        case .SLOPE:
+            return UIColor(rgb: color_slope_chart)
+        case .SPEED, .SENSOR_SPEED:
+            return UIColor(rgb: color_chart_red)
+        case .SENSOR_HEART_RATE:
+            return UIColor(rgb: color_elevation_chart)
+        case .SENSOR_BIKE_POWER:
+            return UIColor(rgb: color_elevation_chart)
+        case .SENSOR_BIKE_CADENCE:
+            return UIColor(rgb: color_elevation_chart)
+        case .SENSOR_TEMPERATURE:
+            return UIColor(rgb: color_elevation_chart)
         }
     }
 }
@@ -75,7 +162,7 @@ import Charts
     
     private static let MAX_CHART_DATA_ITEMS: Double = 10000
     
-    private class ValueFormatter: IAxisValueFormatter
+    public class ValueFormatter: IAxisValueFormatter
     {
         private var formatX: String?
         private var unitsX: String
@@ -146,8 +233,8 @@ import Charts
             return dateFormatter.string(from: date)
         }
     }
-    
-    private class OrderedLineDataSet: LineChartDataSet {
+
+    public class OrderedLineDataSet: LineChartDataSet {
         
         private var dataSetType: GPXDataSetType;
         private var dataSetAxisType: GPXDataSetAxisType;
@@ -208,6 +295,18 @@ import Charts
             case .SLOPE:
                 return UIColor(rgbValue: color_slope_chart)
             case .SPEED:
+                return UIColor(rgbValue: color_chart_orange)
+                
+                // todo
+            case .SENSOR_SPEED:
+                return UIColor(rgbValue: color_chart_orange)
+            case .SENSOR_HEART_RATE:
+                return UIColor(rgbValue: color_chart_orange)
+            case .SENSOR_BIKE_POWER:
+                return UIColor(rgbValue: color_chart_orange)
+            case .SENSOR_BIKE_CADENCE:
+                return UIColor(rgbValue: color_chart_orange)
+            case .SENSOR_TEMPERATURE:
                 return UIColor(rgbValue: color_chart_orange)
             }
         }
@@ -335,13 +434,13 @@ import Charts
                                    type: GPXDataSetType) -> OrderedLineDataSet? {
         switch type {
             case .ALTITUDE:
-                return createGPXElevationDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
+                return createGPXElevationDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
             case .SLOPE:
-                return createGPXSlopeDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, eleValues: Array(), useRightAxis: true, drawFilled: true)
+                return createGPXSlopeDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, eleValues: Array(), useRightAxis: true, drawFilled: true)
             case .SPEED:
-                return createGPXSpeedDataSet(chartView: chartView, analysis: analysis, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: true, drawFilled: true)
+                return createGPXSpeedDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: true, drawFilled: true)
             default:
-                return nil;
+            return OAPlugin.getOrderedLineDataSet(chart: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, calcWithoutGaps: false, useRightAxis: false) //todo
         }
     }
 
@@ -594,22 +693,18 @@ import Charts
         return dataSet
     }
     
-    private static func createGPXElevationDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis, axisType: GPXDataSetAxisType, useRightAxis: Bool, drawFilled: Bool) -> OrderedLineDataSet {
-        let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
-        let useFeet: Bool = (mc == EOAMetricsConstant.MILES_AND_FEET) || (mc == EOAMetricsConstant.MILES_AND_YARDS) || (mc == EOAMetricsConstant.NAUTICAL_MILES_AND_FEET)
+    private static func createGPXElevationDataSet(chartView: LineChartView,
+                                                  analysis: OAGPXTrackAnalysis,
+                                                  graphType: GPXDataSetType,
+                                                  axisType: GPXDataSetAxisType,
+                                                  useRightAxis: Bool,
+                                                  drawFilled: Bool) -> OrderedLineDataSet {
+        let useFeet: Bool = OAMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().metricSystem.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
-        var divX: Double
-        let xAxis: XAxis = chartView.xAxis
-        if (axisType == GPXDataSetAxisType.TIME && analysis.isTimeSpecified()) {
-            divX = setupXAxisTime(xAxis: xAxis, timeSpan: Int64(analysis.timeSpan))
-        } else if (axisType == GPXDataSetAxisType.TIMEOFDAY && analysis.isTimeSpecified()) {
-            divX = setupXAxisTimeOfDay(xAxis: xAxis, startTime: Int64(analysis.startTime));
-        } else {
-            divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
-        }
-        let mainUnitY: String = OAUtilities.getLocalizedString(useFeet ? "foot" : "m")
+        var divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false)
+        let mainUnitY: String = graphType.getMainUnitY()
 
-        var yAxis: YAxis
+        var yAxis: YAxis //todo
         if (useRightAxis) {
             yAxis = chartView.rightAxis;
             yAxis.enabled = true;
@@ -658,6 +753,7 @@ import Charts
     }
     
     private static func createGPXSlopeDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis,
+                                      graphType: GPXDataSetType,
                                       axisType: GPXDataSetAxisType,
                                       eleValues: Array<ChartDataEntry>,
                                       useRightAxis: Bool,
@@ -673,7 +769,7 @@ import Charts
         let xAxis: XAxis = chartView.xAxis
         let divX: Double = setupAxisDistance(axisBase: xAxis, meters: totalDistance)
         
-        let mainUnitY: String = "%"
+        let mainUnitY: String = graphType.getMainUnitY()
         
         var yAxis: YAxis
         if (useRightAxis) {
@@ -936,100 +1032,36 @@ import Charts
         return values;
     }
 
-    private static func createGPXSpeedDataSet(chartView: LineChartView, analysis: OAGPXTrackAnalysis,
+    private static func createGPXSpeedDataSet(chartView: LineChartView,
+                                              analysis: OAGPXTrackAnalysis,
+                                              graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               useRightAxis: Bool,
                                               drawFilled: Bool) -> OrderedLineDataSet {
-        let settings: OAAppSettings = OAAppSettings.sharedManager()
-        //    boolean light = settings.isLightContent();
-        
-        var divX: Double
-        let xAxis: XAxis = chartView.xAxis
-        if (axisType == GPXDataSetAxisType.TIME && analysis.isTimeSpecified()) {
-            divX = setupXAxisTime(xAxis: xAxis, timeSpan: Int64(analysis.timeSpan))
-        } else if (axisType == GPXDataSetAxisType.TIMEOFDAY && analysis.isTimeSpecified()) {
-            divX = setupXAxisTimeOfDay(xAxis: xAxis, startTime: Int64(analysis.startTime))
-        } else {
-            divX = setupAxisDistance(axisBase: xAxis, meters: Double(analysis.totalDistance))
-        }
-        
-        let sps: OACommonSpeedConstant = settings.speedSystem
-        var mulSpeed = Double.nan
-        var divSpeed = Double.nan
-        let mainUnitY = OASpeedConstant.toShortString(sps.get())
-        if (sps.get() == EOASpeedConstant.KILOMETERS_PER_HOUR) {
-            mulSpeed = 3.6;
-        } else if (sps.get() == EOASpeedConstant.MILES_PER_HOUR) {
-            mulSpeed = 3.6 * GpxUIHelper.METERS_IN_KILOMETER / GpxUIHelper.METERS_IN_ONE_MILE
-        } else if (sps.get() == EOASpeedConstant.NAUTICALMILES_PER_HOUR) {
-            mulSpeed = 3.6 * GpxUIHelper.METERS_IN_KILOMETER / GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
-        } else if (sps.get() == EOASpeedConstant.MINUTES_PER_KILOMETER) {
-            divSpeed = GpxUIHelper.METERS_IN_KILOMETER / 60
-        } else if (sps.get() == EOASpeedConstant.MINUTES_PER_MILE) {
-            divSpeed = GpxUIHelper.METERS_IN_ONE_MILE / 60
-        } else {
-            mulSpeed = 1
-        }
-        
-        var yAxis: YAxis
-        if (useRightAxis) {
-            yAxis = chartView.rightAxis
-            yAxis.enabled = true
-        } else {
-            yAxis = chartView.leftAxis
-        }
-        if (analysis.hasSpeedInTrack) {
-            yAxis.labelTextColor = UIColor(rgbValue: color_chart_orange_label)
-            yAxis.gridColor = UIColor(argbValue: color_chart_orange_grid)
-        } else {
-            yAxis.labelTextColor = UIColor(rgbValue: color_chart_red_label)
-            yAxis.gridColor = UIColor(argbValue: color_chart_red_grid)
-        }
+        var divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false) //todo
+
+        let pair: Pair<Double, Double>? = Self.getScalingY(graphType)
+        let mulSpeed: Double = pair?.first ?? Double.nan
+        let divSpeed: Double = pair?.second ?? Double.nan
+        let mainUnitY: String = graphType.getMainUnitY()
+
+        let speedInTrack: Bool = analysis.hasSpeedInTrack
+        let textColor: UIColor = UIColor(rgbValue: speedInTrack ? color_chart_orange_label : color_chart_red_label)
+        let gridColor: UIColor = UIColor(argbValue: speedInTrack ? color_chart_orange_grid : color_chart_red_grid)
+        var yAxis: YAxis = getYAxis(chart: chartView, textColor: textColor, gridColor: gridColor, useRightAxis: useRightAxis)
 
         yAxis.axisMinimum = 0.0
         
-        var values: Array<ChartDataEntry> = [ChartDataEntry]()
-        let speedData: Array<OASpeed> = analysis.speedData
-        var nextX: Double = 0
-        var nextY: Double
-        var x: Double
-        for s: OASpeed in speedData {
-            switch(axisType) {
-            case GPXDataSetAxisType.TIMEOFDAY, GPXDataSetAxisType.TIME:
-                x = Double(s.time)
-                break;
-            default:
-                x = s.distance;
-                break;
-            }
-            
-            if (x > 0) {
-                if (axisType == GPXDataSetAxisType.TIME && x > 60 ||
-                    axisType == GPXDataSetAxisType.TIMEOFDAY && x > 60) {
-                    values.append(ChartDataEntry(x: nextX + 1, y: 0))
-                    values.append(ChartDataEntry(x: nextX + x - 1, y: 0))
-                }
-                nextX += x / divX
-                if (divSpeed.isNaN) {
-                    nextY = s.speed * mulSpeed
-                } else {
-                    nextY = divSpeed / s.speed
-                }
-                if (nextY < 0 || nextY.isInfinite) {
-                    nextY = 0
-                }
-                if (s.firstPoint) {
-                    values.append(ChartDataEntry(x: nextX, y: 0))
-                }
-                values.append(ChartDataEntry(x: nextX, y: nextY))
-                if (s.lastPoint) {
-                    values.append(ChartDataEntry(x: nextX, y: 0))
-                }
-            }
-        }
+        var values: Array<ChartDataEntry> = getPointAttributeValues(key: graphType.getDatakey(),
+                                                                    pointAttributes: analysis.pointAttributes as! [PointAttributes],
+                                                                    axisType: axisType,
+                                                                    divX: divX,
+                                                                    mulY: mulSpeed,
+                                                                    divY: divSpeed,
+                                                                    calcWithoutGaps: false) //todo
         
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.SPEED, dataSetAxisType: axisType)
-        yAxis.valueFormatter = ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY ?? "")
+        yAxis.valueFormatter = ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
         
         if (divSpeed.isNaN) {
             dataSet.priority = analysis.avgSpeed * Float(mulSpeed)
@@ -1044,7 +1076,7 @@ import Charts
             dataSet.divY = divSpeed
             dataSet.mulY = Double.nan
         }
-        dataSet.units = mainUnitY ?? ""
+        dataSet.units = mainUnitY
         
         if (analysis.hasSpeedInTrack) {
             dataSet.setColor(UIColor(rgbValue: color_chart_orange))
@@ -1096,4 +1128,130 @@ import Charts
         
         return 1
     }
+
+    static func getScalingY(_ graphType: GPXDataSetType) -> Pair<Double, Double>? {
+        if graphType == GPXDataSetType.SPEED || graphType == GPXDataSetType.SENSOR_SPEED {
+            var mulSpeed: Double = Double.nan
+            var divSpeed: Double = Double.nan
+            let speedConstants: EOASpeedConstant = OAAppSettings.sharedManager().speedSystem.get()
+            if speedConstants == EOASpeedConstant.KILOMETERS_PER_HOUR {
+                mulSpeed = 3.6
+            } else if speedConstants == EOASpeedConstant.MILES_PER_HOUR {
+                mulSpeed = 3.6 * GpxUIHelper.METERS_IN_KILOMETER / GpxUIHelper.METERS_IN_ONE_MILE
+            } else if speedConstants == EOASpeedConstant.NAUTICALMILES_PER_HOUR {
+                mulSpeed = 3.6 * GpxUIHelper.METERS_IN_KILOMETER / GpxUIHelper.METERS_IN_ONE_NAUTICALMILE
+            } else if speedConstants == EOASpeedConstant.MINUTES_PER_KILOMETER {
+                divSpeed = GpxUIHelper.METERS_IN_KILOMETER / 60.0
+            } else if speedConstants == EOASpeedConstant.MINUTES_PER_MILE {
+                divSpeed = GpxUIHelper.METERS_IN_ONE_MILE / 60.0
+            } else {
+                mulSpeed = 1
+            }
+            return Pair(first: mulSpeed, second: divSpeed)
+        }
+        return nil
+    }
+
+    static func getDivX(lineChart: LineChartView,
+                        analysis: OAGPXTrackAnalysis,
+                        axisType: GPXDataSetAxisType,
+                        calcWithoutGaps: Bool) -> Double {
+        let xAxis: XAxis = lineChart.xAxis
+        if axisType == .TIME && analysis.isTimeSpecified() {
+            return setupXAxisTime(xAxis: xAxis, timeSpan: Int64(calcWithoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan))
+        } else if axisType == .TIMEOFDAY && analysis.isTimeSpecified() {
+            return setupXAxisTimeOfDay(xAxis: xAxis, startTime: Int64(analysis.startTime))
+        } else {
+            return setupAxisDistance(axisBase: xAxis, meters: Double(calcWithoutGaps ? analysis.totalDistanceWithoutGaps : analysis.totalDistance))
+        }
+    }
+
+    static func getYAxis(chart: LineChartView, textColor: UIColor, gridColor: UIColor, useRightAxis: Bool) -> YAxis {
+        let yAxis: YAxis = useRightAxis ? chart.rightAxis : chart.leftAxis
+        yAxis.enabled = true
+        yAxis.labelTextColor = textColor
+        yAxis.gridColor = gridColor
+        return yAxis
+    }
+
+    static func getPointAttributeValues(key: String,
+                                        pointAttributes: [PointAttributes],
+                                        axisType: GPXDataSetAxisType,
+                                        divX: Double,
+                                        mulY: Double,
+                                        divY: Double,
+                                        calcWithoutGaps: Bool) -> [ChartDataEntry] {
+        var values: [ChartDataEntry] = []
+        var currentX: Double = 0
+
+        for i in 0..<pointAttributes.count {
+            let attribute: PointAttributes = pointAttributes[i]
+            let stepX: Double = Double(axisType == .TIME || axisType == .TIMEOFDAY ? attribute.timeDiff : attribute.distance)
+            if i == 0 || stepX > 0 {
+                if !(calcWithoutGaps && attribute.firstPoint) {
+                    currentX += stepX / divX
+                }
+                if attribute.hasValidValue(for: key) {
+                    let value: Float = attribute.getAttributeValue(for: key) ?? 1
+                    var currentY: Float = divY.isNaN ? value * Float(mulY) : Float(divY) / value
+                    if currentY < 0 || currentY.isInfinite {
+                        currentY = 0
+                    }
+                    if attribute.firstPoint && currentY != 0 {
+                        values.append(ChartDataEntry(x: currentX, y:0))
+                    }
+                    values.append(ChartDataEntry(x: currentX, y: Double(currentY)))
+                    if attribute.lastPoint && currentY != 0 {
+                        values.append(ChartDataEntry(x: currentX, y: 0))
+                    }
+                }
+            }
+        }
+        return values
+    }
+
+    static func setupDataSet(dataSet: OrderedLineDataSet,
+                                    color: UIColor,
+                                    fillColor: UIColor,
+                                    drawFilled: Bool,
+                                    drawCircles: Bool,
+                                    useRightAxis: Bool) {
+            if drawCircles {
+                dataSet.setCircleColor(color)
+                dataSet.circleRadius = 3
+                dataSet.circleHoleColor = UIColor.black
+                dataSet.circleHoleRadius = 2
+                dataSet.drawCircleHoleEnabled = false
+                dataSet.drawCirclesEnabled = true
+                dataSet.color = UIColor.black
+            } else {
+                dataSet.drawCirclesEnabled = false
+                dataSet.drawCircleHoleEnabled = false
+                dataSet.color = color
+            }
+            dataSet.lineWidth = 1
+            if drawFilled && !drawCircles {
+                dataSet.fillAlpha = 0.1
+                dataSet.fillColor = fillColor
+            }
+            dataSet.drawFilledEnabled = drawFilled && !drawCircles
+            dataSet.drawValuesEnabled = false
+            if drawCircles {
+                dataSet.highlightEnabled = false
+                dataSet.drawVerticalHighlightIndicatorEnabled = false
+                dataSet.drawHorizontalHighlightIndicatorEnabled = false
+            } else {
+                dataSet.valueFont = UIFont.systemFont(ofSize: 9)
+                dataSet.formLineWidth = 1
+                dataSet.formSize = 15
+
+                dataSet.highlightEnabled = true
+                dataSet.drawVerticalHighlightIndicatorEnabled = true
+                dataSet.drawHorizontalHighlightIndicatorEnabled = false
+                dataSet.highlightColor = UIColor.textColorSecondary
+            }
+            if useRightAxis {
+                dataSet.axisDependency = YAxis.AxisDependency.right
+            }
+        }
 }

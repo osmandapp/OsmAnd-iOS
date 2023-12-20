@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAImagesTableViewCell.h"
+#import "OAIndexConstants.h"
 
 #define kImageViewHeight 200.0
 
@@ -46,6 +47,10 @@
     self = [super init];
     if (self) {
         _item = item;
+//        if ([_item isHidden])
+//        {
+//            _item.subfolder = HIDDEN_DIR;
+//        }
         _region = region;
         _downloadedImages = [NSMutableArray new];
         [self generateData];

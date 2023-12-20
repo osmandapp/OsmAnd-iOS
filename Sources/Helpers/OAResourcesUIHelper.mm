@@ -584,6 +584,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (NSString *) getTargetFilePath
 {
+    // FIXME:
     if (self.downloadContent && ![self.downloadContent[@"sql"] boolValue])
         return self.getBasePathByExtension;
 
@@ -616,8 +617,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
     else if ([titleWithoutExt.lowercaseString hasSuffix:GPX_FILE_EXT])
         return OsmAndApp.instance.gpxPath;
-    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
-        return OsmAndApp.instance.documentsPath;
+    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP] && [self isHidden])
+        return OsmAndApp.instance.dataPath;
     return OsmAndApp.instance.documentsPath;
 }
 

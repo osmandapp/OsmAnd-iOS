@@ -71,7 +71,7 @@
 #define APP_DIR @"osmand/"
 #define MAPS_PATH @""
 
-static NSString * const HIDDEN_DIR = @"hidden";
+static NSString * const HIDDEN_DIR = @"Hidden";
 
 #define BACKUP_INDEX_DIR @"backup/"
 #define GPX_INDEX_DIR @"tracks/"

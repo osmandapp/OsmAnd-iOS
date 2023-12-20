@@ -173,7 +173,7 @@
         _favoritesLegacyFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
-        _hiddenMapsPath = [_documentsPath stringByAppendingPathComponent:HIDDEN_DIR];
+        _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
@@ -211,19 +211,26 @@
 
 - (void)buildFolders
 {
-    [self createFolderIfNeeded:_gpxPath withIntermediateDirectories:NO];
-    [self createFolderIfNeeded:_favoritesPath withIntermediateDirectories: NO];
-    [self createFolderIfNeeded:_weatherForecastPath withIntermediateDirectories:NO];
-    [self createFolderIfNeeded:_hiddenMapsPath withIntermediateDirectories:YES];
+    [self createFolderIfNeeded:_gpxPath];
+    [self createFolderIfNeeded:_favoritesPath];
+    [self createFolderIfNeeded:_weatherForecastPath];
+    
+    [self createHiddenMapFolderIfNeeded];
 }
 
-- (void)createFolderIfNeeded:(NSString *)path withIntermediateDirectories:(BOOL)withIntermediateDirectories
+- (void)createHiddenMapFolderIfNeeded
+{
+    if (![[NSFileManager defaultManager] fileExistsAtPath:_hiddenMapsPath])
+        [[NSFileManager defaultManager] createDirectoryAtPath:_hiddenMapsPath withIntermediateDirectories:YES attributes:nil error:nil];
+}
+
+- (void)createFolderIfNeeded:(NSString *)path
 {
     NSError *error;
     NSFileManager *fileManager = NSFileManager.defaultManager;
     if (![fileManager fileExistsAtPath:path])
     {
-        if (![fileManager createDirectoryAtPath:path withIntermediateDirectories:withIntermediateDirectories attributes:nil error:&error])
+        if (![fileManager createDirectoryAtPath:path withIntermediateDirectories:NO attributes:nil error:&error])
             OALog(@"Error creating folder \"%@\": %@", path, error.localizedFailureReason);
     }
 }

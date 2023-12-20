@@ -30,6 +30,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property id<OADownloadTask> __weak downloadTask;
 @property OAWorldRegion *worldRegion;
 @property BOOL disabled;
+@property (nonatomic, assign) BOOL isHidden;
 
 - (void)updateSize;
 - (NSString *)getDate;
@@ -112,7 +113,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property NSString *downloadUrl;
 
 @property NSDictionary *downloadContent;
-@property BOOL isHidden;
 
 @property NSDictionary<NSString *, NSString *> *names;
 @property NSDictionary<NSString *, NSString *> *firstSubNames;

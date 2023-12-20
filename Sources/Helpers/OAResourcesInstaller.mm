@@ -119,7 +119,18 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         NSLog(@"Custom obf in the archive is not valid");
         failed = YES;
     }
-    NSString *unzippedPath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
+    // Hidden/
+    NSString *unzippedPath = nil;
+    if ([fileName hasPrefix:HIDDEN_DIR])
+    {
+        unzippedPath = [OsmAndApp.instance.dataPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
+    }
+    else
+    {
+        unzippedPath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
+    }
+
+   
     [NSFileManager.defaultManager removeItemAtPath:unzippedPath error:nil];
     QString pathToFile = QString::fromNSString(unzippedPath);
     if (!archive.extractItemToFile(obfArchiveItem.name, pathToFile))

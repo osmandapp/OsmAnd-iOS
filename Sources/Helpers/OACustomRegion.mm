@@ -17,6 +17,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #import <TTTColorFormatter.h>
+#import "OAIndexConstants.h"
 
 @interface OADynamicDownloadItems ()
 
@@ -232,11 +233,15 @@
                 indexItem.secondSubNames = secondSubNames;
                 indexItem.descriptionInfo = descriptionInfo;
                 indexItem.isHidden = isHidden;
+                if (indexItem.isHidden)
+                {
+                    indexItem.subfolder = HIDDEN_DIR;
+                }
 //                indexItem.timestamp = timestamp;
                 indexItem.size = contentSize;
                 indexItem.sizePkg = containerSize;
                 indexItem.resourceType = type;
-                
+            //https://6roc.short.gy/cnnnr8
                 [items addObject:indexItem];
             }
         }

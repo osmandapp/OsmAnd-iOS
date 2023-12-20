@@ -13,7 +13,7 @@
 #import "OsmAnd_Maps-Swift.h"
 
 #define textHeight 22
-#define imageSide 24
+#define imageSide 30
 #define minTextWidth 64
 #define fullTextWidth 90
 #define minWidgetHeight 32
@@ -319,7 +319,7 @@
 
 - (void) adjustViewSize
 {
-    CGFloat leadingOffset = _imageView.hidden ? 4 : 28;
+    CGFloat leadingOffset = _imageView.hidden ? 4 : 31;
     _leadingTextAnchor.constant = leadingOffset;
     
     [_textView sizeToFit];

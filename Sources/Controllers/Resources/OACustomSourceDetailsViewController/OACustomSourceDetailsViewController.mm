@@ -17,7 +17,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAImagesTableViewCell.h"
-#import "OAIndexConstants.h"
 
 #import "OsmAnd_Maps-Swift.h"
 

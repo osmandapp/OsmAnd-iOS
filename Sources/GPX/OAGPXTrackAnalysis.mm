@@ -482,7 +482,7 @@
             OAPointAttributes *attribute = [[OAPointAttributes alloc] initWithDistance:attrDistance timeDiff:timeDiffSec firstPoint:firstPoint lastPoint:lastPoint];
             attribute.speed = speed;
             attribute.elevation = elevation;
-            [self addWptAttribute:point attribute:attribute];// pointsAnalyser);
+            [self addWptAttribute:point attribute:attribute];
         }
         OAElevationApproximator *approximator = [[OAElevationApproximator alloc] init];
         NSArray<OAApproxResult *> *approxData = [approximator approximate:s];
@@ -536,16 +536,13 @@
     _speedData = [NSArray arrayWithArray:speedData];
 }
 
-- (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute // TrackPointsAnalyser pointsAnalyser)
+- (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
 {
     if (![self hasSpeedData] && attribute.speed > 0 && _totalDistance > 0)
         [self setHasData:OAPointAttributes.pointSpeed hasData:YES];
     if (![self hasElevationData] && !isnan(attribute.elevation) && _totalDistance > 0)
         [self setHasData:OAPointAttributes.pointElevation hasData:true];
-    [OAExternalSensorsPlugin onAnalysePoint:self point:point attribute:attribute]; //todo
-//    if (pointsAnalyser != null) {
-//        pointsAnalyser.onAnalysePoint(this, point, attribute);
-//    }
+    [OAPlugin analysePoint:self point:point attribute:attribute];
     [_pointAttributes addObject:attribute];
 }
 

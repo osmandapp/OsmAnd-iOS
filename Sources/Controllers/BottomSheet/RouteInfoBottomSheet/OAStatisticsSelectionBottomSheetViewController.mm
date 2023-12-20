@@ -124,7 +124,7 @@
     [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"map_widget_ant_heart_rate"),
-            @"img" : @"ic_action_sensor_heart_rate_outlined",
+            @"img" : @"ic_custom_sensor_heart_rate_outlined",
             @"mode" : @(EOARouteStatisticsModeSensorHearRate),
             @"round_bottom" : @(YES),
             @"round_top" : @(NO)

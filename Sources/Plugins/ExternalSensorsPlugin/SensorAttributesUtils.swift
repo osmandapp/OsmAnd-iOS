@@ -39,19 +39,19 @@ final class SensorAttributesUtils: NSObject {
 
     @objc static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {
         if Self.hasSensorSpeedData(analysis) {
-            availableTypes.add(NSNumber(value: GPXDataSetType.SENSOR_SPEED.rawValue))
+            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_SPEED.rawValue)])
         }
         if Self.hasHeartRateData(analysis) {
-            availableTypes.add(NSNumber(value: GPXDataSetType.SENSOR_HEART_RATE.rawValue))
+            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_HEART_RATE.rawValue)])
         }
         if Self.hasBikePowerData(analysis) {
-            availableTypes.add(NSNumber(value: GPXDataSetType.SENSOR_BIKE_POWER.rawValue))
+            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_BIKE_POWER.rawValue)])
         }
         if Self.hasBikeCadenceData(analysis) {
-            availableTypes.add(NSNumber(value: GPXDataSetType.SENSOR_BIKE_CADENCE.rawValue))
+            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_BIKE_CADENCE.rawValue)])
         }
         if Self.hasTemperatureData(analysis) {
-            availableTypes.add(NSNumber(value: GPXDataSetType.SENSOR_TEMPERATURE.rawValue))
+            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_TEMPERATURE.rawValue)])
         }
     }
 
@@ -101,10 +101,7 @@ final class SensorAttributesUtils: NSObject {
         let mulY: Double = pair?.first ?? 1
         let divY: Double = pair?.second ?? Double.nan
 
-        let speedInTrack: Bool = analysis.hasSpeedInTrack
-        let textColor: UIColor = UIColor(rgbValue: speedInTrack ? color_chart_orange_label : color_chart_red_label)
-        let gridColor: UIColor = UIColor(argbValue: speedInTrack ? color_chart_orange_grid : color_chart_red_grid)
-        let yAxis: YAxis = GpxUIHelper.getYAxis(chart: chart, textColor: textColor, gridColor: gridColor, useRightAxis: useRightAxis)
+        let yAxis: YAxis = GpxUIHelper.getYAxis(chart: chart, textColor: graphType.getTextColor(), useRightAxis: useRightAxis)
         yAxis.axisMinimum = 0
 
         let values: [ChartDataEntry] = GpxUIHelper.getPointAttributeValues(key: graphType.getDatakey(),

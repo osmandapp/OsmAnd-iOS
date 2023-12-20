@@ -68,6 +68,7 @@ extension Theme {
     var chartTextColorBicyclePower: UIColor { getColorTheme(with: UIColor.chartTextColorBicyclePower) }
     var chartTextColorHeartRate: UIColor { getColorTheme(with: UIColor.chartTextColorHeartRate) }
     var chartTextColorSpeedSensor: UIColor { getColorTheme(with: UIColor.chartTextColorSpeedSensor) }
+    var chartTextColorTemperature: UIColor { getColorTheme(with: UIColor.chartTextColorTemperature) }
 
     var chartLineColorElevation: UIColor { getColorTheme(with: UIColor.chartLineColorElevation) }
     var chartLineColorSlope: UIColor { getColorTheme(with: UIColor.chartLineColorSlope) }
@@ -76,6 +77,7 @@ extension Theme {
     var chartLineColorBicyclePower: UIColor { getColorTheme(with: UIColor.chartLineColorBicyclePower) }
     var chartLineColorHeartRate: UIColor { getColorTheme(with: UIColor.chartLineColorHeartRate) }
     var chartLineColorSpeedSensor: UIColor { getColorTheme(with: UIColor.chartLineColorSpeedSensor) }
+    var chartLineColorTemperature: UIColor { getColorTheme(with: UIColor.chartLineColorTemperature) }
 }
 
 extension Theme {

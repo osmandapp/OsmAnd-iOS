@@ -19,108 +19,29 @@ import Charts
     case SENSOR_BIKE_POWER = 5
     case SENSOR_BIKE_CADENCE = 6
     case SENSOR_TEMPERATURE = 7
-    
-    public func getName() -> String {
-        switch self {
-        case .ALTITUDE:
-            return OAUtilities.getLocalizedString("map_widget_altitude")
-        case .SPEED:
-            return OAUtilities.getLocalizedString("shared_string_speed")
-        case .SLOPE:
-            return OAUtilities.getLocalizedString("shared_string_slope")
-        case .SENSOR_SPEED:
-            return OAUtilities.getLocalizedString("shared_string_speed")
-        case .SENSOR_HEART_RATE:
-            return OAUtilities.getLocalizedString("map_widget_ant_heart_rate")
-        case .SENSOR_BIKE_POWER:
-            return OAUtilities.getLocalizedString("map_widget_ant_bicycle_power")
-        case .SENSOR_BIKE_CADENCE:
-            return OAUtilities.getLocalizedString("map_widget_ant_bicycle_cadence")
-        case .SENSOR_TEMPERATURE:
-            return OAUtilities.getLocalizedString("map_settings_weather_temp")
-        }
+
+    public func getTitle() -> String {
+        return OAGPXDataSetType.getTitle(self.rawValue)
     }
-    
-    public func getImageName() -> String {
-        switch self {
-        case .ALTITUDE:
-            return ""
-        case .SPEED:
-            return ""
-        case .SLOPE:
-            return ""
-        case .SENSOR_SPEED:
-            return ""
-        case .SENSOR_HEART_RATE:
-            return ""
-        case .SENSOR_BIKE_POWER:
-            return ""
-        case .SENSOR_BIKE_CADENCE:
-            return ""
-        case .SENSOR_TEMPERATURE:
-            return ""
-        }
+
+    public func getIconName() -> String {
+        return OAGPXDataSetType.getIconName(self.rawValue)
     }
-    
+
     public func getDatakey() -> String {
-        switch self {
-        case .ALTITUDE:
-            return PointAttributes.pointElevation
-        case .SPEED:
-            return PointAttributes.pointSpeed
-        case .SLOPE:
-            return PointAttributes.pointElevation
-        case .SENSOR_SPEED:
-            return PointAttributes.sensorTagSpeed
-        case .SENSOR_HEART_RATE:
-            return PointAttributes.sensorTagHeartRate
-        case .SENSOR_BIKE_POWER:
-            return PointAttributes.sensorTagBikePower
-        case .SENSOR_BIKE_CADENCE:
-            return PointAttributes.sensorTagBikePower
-        case .SENSOR_TEMPERATURE:
-            return PointAttributes.sensorTagTemperature
-        }
+        return OAGPXDataSetType.getDataKey(self.rawValue)
     }
-    
-    public func getMainUnitY() -> String {
-        let settings: OAAppSettings = OAAppSettings.sharedManager()
-        switch self {
-        case .ALTITUDE:
-            let shouldUseFeet: Bool = OAMetricsConstant.shouldUseFeet(settings.metricSystem.get())
-            return localizedString(shouldUseFeet ? "foot" : "m")
-        case .SLOPE:
-            return "%"
-        case .SPEED, .SENSOR_SPEED:
-            return OASpeedConstant.toShortString(settings.speedSystem.get())
-        case .SENSOR_HEART_RATE:
-            return localizedString("beats_per_minute_short")
-        case .SENSOR_BIKE_POWER:
-            return localizedString("power_watts_unit")
-        case .SENSOR_BIKE_CADENCE:
-            return localizedString("revolutions_per_minute_unit")
-        case .SENSOR_TEMPERATURE:
-            return ""
-        }
+
+    public func getTextColor() -> UIColor {
+        return OAGPXDataSetType.getTextColor(self.rawValue)
     }
 
     public func getFillColor() -> UIColor {
-        switch self {
-        case .ALTITUDE:
-            return UIColor(rgb: color_elevation_chart)
-        case .SLOPE:
-            return UIColor(rgb: color_slope_chart)
-        case .SPEED, .SENSOR_SPEED:
-            return UIColor(rgb: color_chart_red)
-        case .SENSOR_HEART_RATE:
-            return UIColor(rgb: color_elevation_chart)
-        case .SENSOR_BIKE_POWER:
-            return UIColor(rgb: color_elevation_chart)
-        case .SENSOR_BIKE_CADENCE:
-            return UIColor(rgb: color_elevation_chart)
-        case .SENSOR_TEMPERATURE:
-            return UIColor(rgb: color_elevation_chart)
-        }
+        return OAGPXDataSetType.getFillColor(self.rawValue)
+    }
+
+    public func getMainUnitY() -> String {
+        return OAGPXDataSetType.getMainUnitY(self.rawValue)
     }
 }
 
@@ -701,23 +622,13 @@ import Charts
                                                   drawFilled: Bool) -> OrderedLineDataSet {
         let useFeet: Bool = OAMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().metricSystem.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
-        var divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false)
+        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false)
         let mainUnitY: String = graphType.getMainUnitY()
 
-        var yAxis: YAxis //todo
-        if (useRightAxis) {
-            yAxis = chartView.rightAxis;
-            yAxis.enabled = true;
-        } else {
-            yAxis = chartView.leftAxis
-        }
-//        yAxis.setTextColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_blue_label));
-//        yAxis.setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_blue_grid));
+        let yAxis: YAxis  = getYAxis(chart: chartView, textColor: UIColor.chartTextColorElevation, useRightAxis: useRightAxis)
         yAxis.granularity = 1
         yAxis.resetCustomAxisMax()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
-        yAxis.labelTextColor = UIColor.chartTextColorElevation
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
         let values: Array<ChartDataEntry> = calculateElevationArray(analysis: analysis,axisType: axisType, divX: divX, convEle: convEle, useGeneralTrackPoints: true)
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.ALTITUDE, dataSetAxisType: axisType)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
@@ -767,22 +678,11 @@ import Charts
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Double = Double(analysis.totalDistance)
         
-        let xAxis: XAxis = chartView.xAxis
-        let divX: Double = setupAxisDistance(axisBase: xAxis, meters: totalDistance)
-        
+        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false) //todo
+
         let mainUnitY: String = graphType.getMainUnitY()
         
-        var yAxis: YAxis
-        if (useRightAxis) {
-            yAxis = chartView.rightAxis
-            yAxis.enabled = true
-        } else {
-            yAxis = chartView.leftAxis
-        }
-        yAxis.labelTextColor = UIColor.chartTextColorSlope
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
-//        yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
-//        setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_green_grid));
+        let yAxis: YAxis = getYAxis(chart: chartView, textColor: UIColor.chartTextColorSlope, useRightAxis: useRightAxis)
         yAxis.granularity = 1.0
         yAxis.resetCustomAxisMin()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
@@ -1040,23 +940,17 @@ import Charts
                                               axisType: GPXDataSetAxisType,
                                               useRightAxis: Bool,
                                               drawFilled: Bool) -> OrderedLineDataSet {
-        var divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false) //todo
+        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false) //todo
 
         let pair: Pair<Double, Double>? = Self.getScalingY(graphType)
         let mulSpeed: Double = pair?.first ?? Double.nan
         let divSpeed: Double = pair?.second ?? Double.nan
         let mainUnitY: String = graphType.getMainUnitY()
 
-        let speedInTrack: Bool = analysis.hasSpeedInTrack
-        let textColor: UIColor = UIColor(rgbValue: speedInTrack ? color_chart_orange_label : color_chart_red_label)
-        let gridColor: UIColor = UIColor(argbValue: speedInTrack ? color_chart_orange_grid : color_chart_red_grid)
-        var yAxis: YAxis = getYAxis(chart: chartView, textColor: textColor, gridColor: gridColor, useRightAxis: useRightAxis)
-
-        yAxis.labelTextColor = UIColor.chartTextColorSpeed
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
+        let yAxis: YAxis = getYAxis(chart: chartView, textColor: UIColor.chartTextColorSpeed, useRightAxis: useRightAxis)
         yAxis.axisMinimum = 0.0
         
-        var values: Array<ChartDataEntry> = getPointAttributeValues(key: graphType.getDatakey(),
+        let values: Array<ChartDataEntry> = getPointAttributeValues(key: graphType.getDatakey(),
                                                                     pointAttributes: analysis.pointAttributes as! [PointAttributes],
                                                                     axisType: axisType,
                                                                     divX: divX,
@@ -1083,7 +977,6 @@ import Charts
         dataSet.units = mainUnitY
         let chartColor = UIColor.chartLineColorSpeed
         dataSet.setColor(chartColor)
-        dataSet.units = mainUnitY ?? ""
         dataSet.lineWidth = 1
         if (drawFilled) {
             dataSet.fillAlpha = 0.1
@@ -1163,11 +1056,11 @@ import Charts
         }
     }
 
-    static func getYAxis(chart: LineChartView, textColor: UIColor, gridColor: UIColor, useRightAxis: Bool) -> YAxis {
+    static func getYAxis(chart: LineChartView, textColor: UIColor, useRightAxis: Bool) -> YAxis {
         let yAxis: YAxis = useRightAxis ? chart.rightAxis : chart.leftAxis
         yAxis.enabled = true
         yAxis.labelTextColor = textColor
-        yAxis.gridColor = gridColor
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
         return yAxis
     }
 

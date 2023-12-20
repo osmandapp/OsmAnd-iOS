@@ -195,36 +195,39 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
 }
 
 - (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
-                     availableTypes:(NSMutableArray<NSNumber *> *)availableTypes
+                     availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {
     [OASensorAttributesUtils getAvailableGPXDataSetTypesWithAnalysis:analysis availableTypes:availableTypes];
 }
 
-+ (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
+- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
 {
-    for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
+    if ([point isKindOfClass:OAWptPt.class])
     {
-        CGFloat defaultValue = [OAPointAttributes.sensorTagTemperature isEqualToString:tag] ?  NAN : 0;
-
-        CGFloat value = defaultValue;
-        OAGpxExtension *trackpointextension = [point getExtensionByKey:@"trackpointextension"];
-        if (trackpointextension)
+        for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
         {
-            for (OAGpxExtension *subextension in trackpointextension.subextensions)
+            CGFloat defaultValue = [OAPointAttributes.sensorTagTemperature isEqualToString:tag] ?  NAN : 0;
+            
+            CGFloat value = defaultValue;
+            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:@"trackpointextension"];
+            if (trackpointextension)
             {
-                if ([subextension.name isEqualToString:tag])
+                for (OAGpxExtension *subextension in trackpointextension.subextensions)
                 {
-                    NSNumber *val = [[[NSNumberFormatter alloc] init] numberFromString:subextension.value];
-                    if (val)
-                        value = val.floatValue;
+                    if ([subextension.name isEqualToString:tag])
+                    {
+                        NSNumber *val = [[[NSNumberFormatter alloc] init] numberFromString:subextension.value];
+                        if (val)
+                            value = val.floatValue;
+                    }
                 }
             }
+            
+            [attribute setAttributeValueFor:tag value:value];
+            
+            if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
+                [analysis setHasData:tag hasData:YES];
         }
-        
-        [attribute setAttributeValueFor:tag value:value];
-        
-        if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
-            [analysis setHasData:tag hasData:YES];
     }
 }
 

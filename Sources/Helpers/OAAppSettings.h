@@ -13,6 +13,7 @@
 #import "OAColoringType.h"
 #import "OADownloadMode.h"
 #import "OAMap3DModeVisibilityType.h"
+//#import "OsmAnd_Maps-Swift.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
@@ -58,6 +59,17 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 + (NSString *) getTitle:(EOACompassMode)cm;
 + (NSString *) getDescription:(EOACompassMode)cm;
 + (NSString *) getIconName:(EOACompassMode)cm;
+
+@end
+
+@interface OAGPXDataSetType : NSObject
+
++ (NSString *)getTitle:(NSInteger)dst;
++ (NSString *)getIconName:(NSInteger)dst;
++ (NSString *)getDataKey:(NSInteger)dst;
++ (UIColor *)getTextColor:(NSInteger)dst;
++ (UIColor *)getFillColor:(NSInteger)dst;
++ (NSString *)getMainUnitY:(NSInteger)dst;
 
 @end
 

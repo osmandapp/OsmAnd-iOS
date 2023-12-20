@@ -53,6 +53,7 @@ extension UIColor {
     @objc static var chartTextColorBicyclePower: UIColor { UIColor(named: #function)! }
     @objc static var chartTextColorHeartRate: UIColor { UIColor(named: #function)! }
     @objc static var chartTextColorSpeedSensor: UIColor { UIColor(named: #function)! }
+    @objc static var chartTextColorTemperature: UIColor { UIColor(named: #function)! }
 
     @objc static var chartLineColorElevation: UIColor { UIColor(named: #function)! }
     @objc static var chartLineColorSlope: UIColor { UIColor(named: #function)! }
@@ -61,6 +62,7 @@ extension UIColor {
     @objc static var chartLineColorBicyclePower: UIColor { UIColor(named: #function)! }
     @objc static var chartLineColorHeartRate: UIColor { UIColor(named: #function)! }
     @objc static var chartLineColorSpeedSensor: UIColor { UIColor(named: #function)! }
+    @objc static var chartLineColorTemperature: UIColor { UIColor(named: #function)! }
 }
 
 extension UIColor {

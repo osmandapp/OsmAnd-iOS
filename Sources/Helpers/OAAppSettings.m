@@ -425,6 +425,150 @@
 #define kTopWidgetPanelOrderKey @"top_widget_panel_order"
 #define kBottomWidgetPanelOrderKey @"bottom_widget_panel_order"
 
+@implementation OAGPXDataSetType
+
++ (NSString *) getTitle:(GPXDataSetType)dst
+{
+    switch (dst)
+    {
+        case GPXDataSetTypeALTITUDE:
+            return OALocalizedString(@"map_widget_altitude");
+        case GPXDataSetTypeSPEED:
+            return OALocalizedString(@"shared_string_speed");
+        case GPXDataSetTypeSLOPE:
+            return OALocalizedString(@"shared_string_slope");
+        case GPXDataSetTypeSENSOR_SPEED:
+            return OALocalizedString(@"shared_string_speed");
+        case GPXDataSetTypeSENSOR_HEART_RATE:
+            return OALocalizedString(@"map_widget_ant_heart_rate");
+        case GPXDataSetTypeSENSOR_BIKE_POWER:
+            return OALocalizedString(@"map_widget_ant_bicycle_power");
+        case GPXDataSetTypeSENSOR_BIKE_CADENCE:
+            return OALocalizedString(@"map_widget_ant_bicycle_cadence");
+        case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return OALocalizedString(@"map_settings_weather_temp");
+    }
+}
+
++ (NSString *) getIconName:(GPXDataSetType)dst
+{
+    switch (dst)
+    {
+        case GPXDataSetTypeALTITUDE:
+            return @"ic_custom_altitude";
+        case GPXDataSetTypeSPEED:
+            return @"ic_action_speed";
+        case GPXDataSetTypeSLOPE:
+            return @"ic_custom_ascent";
+        case GPXDataSetTypeSENSOR_SPEED:
+            return @"ic_custom_sensor_speed_outlined";
+        case GPXDataSetTypeSENSOR_HEART_RATE:
+            return @"ic_custom_sensor_heart_rate_outlined";
+        case GPXDataSetTypeSENSOR_BIKE_POWER:
+            return @"ic_custom_sensor_bicycle_power_outlined";
+        case GPXDataSetTypeSENSOR_BIKE_CADENCE:
+            return @"ic_custom_sensor_cadence_outlined";
+        case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return @"ic_custom_sensor_thermometer";
+    }
+}
+
++ (NSString *) getDataKey:(GPXDataSetType)dst
+{
+    switch (dst)
+    {
+        case GPXDataSetTypeALTITUDE:
+            return OAPointAttributes.pointElevation;
+        case GPXDataSetTypeSPEED:
+            return OAPointAttributes.pointSpeed;
+        case GPXDataSetTypeSLOPE:
+            return OAPointAttributes.pointElevation;
+        case GPXDataSetTypeSENSOR_SPEED:
+            return OAPointAttributes.sensorTagSpeed;
+        case GPXDataSetTypeSENSOR_HEART_RATE:
+            return OAPointAttributes.sensorTagHeartRate;
+        case GPXDataSetTypeSENSOR_BIKE_POWER:
+            return OAPointAttributes.sensorTagBikePower;
+        case GPXDataSetTypeSENSOR_BIKE_CADENCE:
+            return OAPointAttributes.sensorTagCadence;
+        case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return OAPointAttributes.sensorTagTemperature;
+    }
+}
+
++ (UIColor *) getTextColor:(GPXDataSetType)dst
+{
+    switch (dst)
+    {
+        case GPXDataSetTypeALTITUDE:
+            return UIColor.chartTextColorElevation;
+        case GPXDataSetTypeSPEED:
+            return UIColor.chartTextColorSpeed;
+        case GPXDataSetTypeSLOPE:
+            return UIColor.chartTextColorSlope;
+        case GPXDataSetTypeSENSOR_SPEED:
+            return UIColor.chartTextColorSpeedSensor;
+        case GPXDataSetTypeSENSOR_HEART_RATE:
+            return UIColor.chartTextColorHeartRate;
+        case GPXDataSetTypeSENSOR_BIKE_POWER:
+            return UIColor.chartTextColorBicyclePower;
+        case GPXDataSetTypeSENSOR_BIKE_CADENCE:
+            return UIColor.chartTextColorBicycleCadence;
+        case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return UIColor.chartTextColorTemperature;
+    }
+}
+
++ (UIColor *) getFillColor:(GPXDataSetType)dst
+{
+    switch (dst)
+    {
+        case GPXDataSetTypeALTITUDE:
+            return UIColor.chartLineColorElevation;
+        case GPXDataSetTypeSPEED:
+            return UIColor.chartLineColorSpeed;
+        case GPXDataSetTypeSLOPE:
+            return UIColor.chartLineColorSlope;
+        case GPXDataSetTypeSENSOR_SPEED:
+            return UIColor.chartLineColorSpeedSensor;
+        case GPXDataSetTypeSENSOR_HEART_RATE:
+            return UIColor.chartLineColorHeartRate;
+        case GPXDataSetTypeSENSOR_BIKE_POWER:
+            return UIColor.chartLineColorBicyclePower;
+        case GPXDataSetTypeSENSOR_BIKE_CADENCE:
+            return UIColor.chartLineColorBicycleCadence;
+        case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return UIColor.chartLineColorTemperature;
+    }
+}
+
++ (NSString *) getMainUnitY:(GPXDataSetType)dst
+{
+    switch (dst)
+    {
+        case GPXDataSetTypeALTITUDE:
+        {
+            BOOL shouldUseFeet = [OAMetricsConstant shouldUseFeet:[[OAAppSettings sharedManager].metricSystem get]];
+            return OALocalizedString(shouldUseFeet ? @"foot" : @"m");
+        }
+        case GPXDataSetTypeSPEED:
+        case GPXDataSetTypeSENSOR_SPEED:
+            return [OASpeedConstant toShortString:[[OAAppSettings sharedManager].speedSystem get]];
+        case GPXDataSetTypeSLOPE:
+            return @"%";
+        case GPXDataSetTypeSENSOR_HEART_RATE:
+            return OALocalizedString(@"beats_per_minute_short");
+        case GPXDataSetTypeSENSOR_BIKE_POWER:
+            return OALocalizedString(@"power_watts_unit");
+        case GPXDataSetTypeSENSOR_BIKE_CADENCE:
+            return OALocalizedString(@"revolutions_per_minute_unit");
+        case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACompassMode
 
 + (NSString *) getTitle:(EOACompassMode)cm

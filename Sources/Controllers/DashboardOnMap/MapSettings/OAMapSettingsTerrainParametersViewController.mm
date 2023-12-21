@@ -502,8 +502,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         [self.tableView beginUpdates];
         NSIndexPath *newPickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-        BOOL isThisPicker = _openedPickerIndexPath == newPickerIndexPath;
-        if (isThisPicker)
+        if (newPickerIndexPath == _openedPickerIndexPath)
         {
             [self.tableView deleteRowsAtIndexPaths:@[_openedPickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
             _openedPickerIndexPath = nil;

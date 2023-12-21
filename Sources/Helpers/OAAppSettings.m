@@ -427,12 +427,12 @@
 
 @implementation OAGPXDataSetType
 
-+ (NSString *) getTitle:(GPXDataSetType)dst
++ (NSString *) getTitle:(NSInteger)dst
 {
     switch (dst)
     {
         case GPXDataSetTypeALTITUDE:
-            return OALocalizedString(@"map_widget_altitude");
+            return OALocalizedString(@"altitude");
         case GPXDataSetTypeSPEED:
             return OALocalizedString(@"shared_string_speed");
         case GPXDataSetTypeSLOPE:
@@ -447,10 +447,12 @@
             return OALocalizedString(@"map_widget_ant_bicycle_cadence");
         case GPXDataSetTypeSENSOR_TEMPERATURE:
             return OALocalizedString(@"map_settings_weather_temp");
+        default:
+            return @"";
     }
 }
 
-+ (NSString *) getIconName:(GPXDataSetType)dst
++ (NSString *) getIconName:(NSInteger)dst
 {
     switch (dst)
     {
@@ -470,10 +472,12 @@
             return @"ic_custom_sensor_cadence_outlined";
         case GPXDataSetTypeSENSOR_TEMPERATURE:
             return @"ic_custom_sensor_thermometer";
+        default:
+            return @"";
     }
 }
 
-+ (NSString *) getDataKey:(GPXDataSetType)dst
++ (NSString *) getDataKey:(NSInteger)dst
 {
     switch (dst)
     {
@@ -493,10 +497,12 @@
             return OAPointAttributes.sensorTagCadence;
         case GPXDataSetTypeSENSOR_TEMPERATURE:
             return OAPointAttributes.sensorTagTemperature;
+        default:
+            return @"";
     }
 }
 
-+ (UIColor *) getTextColor:(GPXDataSetType)dst
++ (UIColor *) getTextColor:(NSInteger)dst
 {
     switch (dst)
     {
@@ -516,10 +522,12 @@
             return UIColor.chartTextColorBicycleCadence;
         case GPXDataSetTypeSENSOR_TEMPERATURE:
             return UIColor.chartTextColorTemperature;
+        default:
+            return nil;
     }
 }
 
-+ (UIColor *) getFillColor:(GPXDataSetType)dst
++ (UIColor *) getFillColor:(NSInteger)dst
 {
     switch (dst)
     {
@@ -539,10 +547,12 @@
             return UIColor.chartLineColorBicycleCadence;
         case GPXDataSetTypeSENSOR_TEMPERATURE:
             return UIColor.chartLineColorTemperature;
+        default:
+            return nil;
     }
 }
 
-+ (NSString *) getMainUnitY:(GPXDataSetType)dst
++ (NSString *) getMainUnitY:(NSInteger)dst
 {
     switch (dst)
     {
@@ -563,6 +573,8 @@
         case GPXDataSetTypeSENSOR_BIKE_CADENCE:
             return OALocalizedString(@"revolutions_per_minute_unit");
         case GPXDataSetTypeSENSOR_TEMPERATURE:
+            return @"";
+        default:
             return @"";
     }
 }

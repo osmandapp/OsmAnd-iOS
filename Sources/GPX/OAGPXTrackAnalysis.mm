@@ -538,10 +538,10 @@
 
 - (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
 {
-    if (![self hasSpeedData] && attribute.speed > 0 && _totalDistance > 0)
+    if (![self hasData:OAPointAttributes.pointSpeed] && attribute.speed > 0 && _totalDistance > 0)
         [self setHasData:OAPointAttributes.pointSpeed hasData:YES];
-    if (![self hasElevationData] && !isnan(attribute.elevation) && _totalDistance > 0)
-        [self setHasData:OAPointAttributes.pointElevation hasData:true];
+    if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
+        [self setHasData:OAPointAttributes.pointElevation hasData:YES];
     [OAPlugin analysePoint:self point:point attribute:attribute];
     [_pointAttributes addObject:attribute];
 }

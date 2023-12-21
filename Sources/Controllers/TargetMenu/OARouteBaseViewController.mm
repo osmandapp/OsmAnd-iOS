@@ -43,108 +43,58 @@
     return self;
 }
 
-- (void)changeChartMode:(EOARouteStatisticsMode)mode
+- (void)changeChartTypes:(NSArray<NSNumber *> *)types
                   chart:(LineChartView *)chart
                analysis:(OAGPXTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell
 {
     ChartYAxisCombinedRenderer *renderer = (ChartYAxisCombinedRenderer *) chart.rightYAxisRenderer;
-    switch (mode)
+    
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
+    BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);
+    if (types.count == 2)
     {
-        case EOARouteStatisticsModeAltitudeSlope:
+        if (types.lastObject.integerValue == GPXDataSetTypeSPEED && ![analysis isSpeedSpecified])
+        {
+            [self changeChartTypes:@[@(GPXDataSetTypeALTITUDE)]
+                             chart:chart
+                          analysis:analysis
+                          modeCell:statsModeCell];
+        }
+        else
         {
             if (statsModeCell)
             {
-                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                        OALocalizedString(@"altitude"),
-                                        OALocalizedString(@"shared_string_slope")]
+                [statsModeCell.modeButton setTitle:[NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"),
+                                                    [OAGPXDataSetType getTitle:types.firstObject.integerValue],
+                                                    [OAGPXDataSetType getTitle:types.lastObject.integerValue]]
                                           forState:UIControlStateNormal];
             }
             [GpxUIHelper refreshLineChartWithChartView:chart
                                               analysis:analysis
                                    useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeALTITUDE
-                                            secondType:GPXDataSetTypeSLOPE];
+                                             firstType:(GPXDataSetType) types.firstObject.integerValue
+                                            secondType:(GPXDataSetType) types.lastObject.integerValue
+                                       calcWithoutGaps:calcWithoutGaps];
             renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
-            break;
         }
-        case EOARouteStatisticsModeAltitudeSpeed:
+    }
+    else
+    {
+        if (statsModeCell)
         {
-            if (analysis.isSpeedSpecified)
-            {
-                if (statsModeCell)
-                {
-                    [statsModeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@",
-                                            OALocalizedString(@"altitude"),
-                                            OALocalizedString(@"shared_string_speed")]
-                                              forState:UIControlStateNormal];
-                }
-                [GpxUIHelper refreshLineChartWithChartView:chart
-                                                  analysis:analysis
-                                       useGesturesAndScale:YES
-                                                 firstType:GPXDataSetTypeALTITUDE
-                                                secondType:GPXDataSetTypeSPEED];
-                renderer.renderingMode = YAxisCombinedRenderingModeBothValues;
-            }
-            else
-            {
-                [self changeChartMode:EOARouteStatisticsModeAltitude
-                                chart:chart
-                             analysis:analysis
-                             modeCell:statsModeCell];
-            }
-            break;
+            [statsModeCell.modeButton setTitle:[OAGPXDataSetType getTitle:types.firstObject.integerValue]
+                                      forState:UIControlStateNormal];
         }
-        case EOARouteStatisticsModeAltitude:
-        {
-            if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"altitude") forState:UIControlStateNormal];
-            [GpxUIHelper refreshLineChartWithChartView:chart
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeALTITUDE
-                                          useRightAxis:YES];
-            renderer.renderingMode = YAxisCombinedRenderingModeSecondaryValueOnly;
-            break;
-        }
-        case EOARouteStatisticsModeSlope:
-        {
-            if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"shared_string_slope") forState:UIControlStateNormal];
-            [GpxUIHelper refreshLineChartWithChartView:chart
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeSLOPE
-                                          useRightAxis:YES];
-            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
-            break;
-        }
-        case EOARouteStatisticsModeSpeed:
-        {
-            if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"shared_string_speed") forState:UIControlStateNormal];
-            [GpxUIHelper refreshLineChartWithChartView:chart
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeSPEED
-                                          useRightAxis:YES];
-            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
-            break;
-        }
-        case EOARouteStatisticsModeSensorHearRate:
-        {
-            if (statsModeCell)
-                [statsModeCell.modeButton setTitle:OALocalizedString(@"map_widget_ant_heart_rate") forState:UIControlStateNormal];
-            [GpxUIHelper refreshLineChartWithChartView:chart
-                                              analysis:analysis
-                                   useGesturesAndScale:YES
-                                             firstType:GPXDataSetTypeSENSOR_HEART_RATE
-                                          useRightAxis:YES];
-            renderer.renderingMode = YAxisCombinedRenderingModePrimaryValueOnly;
-            break;
-        }
-        default:
-            break;
+        [GpxUIHelper refreshLineChartWithChartView:chart
+                                          analysis:analysis
+                               useGesturesAndScale:YES
+                                         firstType:(GPXDataSetType) types.firstObject.integerValue
+                                      useRightAxis:YES
+                                   calcWithoutGaps:calcWithoutGaps];
+        renderer.renderingMode = types.lastObject.integerValue == GPXDataSetTypeALTITUDE
+            ? YAxisCombinedRenderingModeSecondaryValueOnly
+            : YAxisCombinedRenderingModePrimaryValueOnly;
     }
     [chart notifyDataSetChanged];
 }

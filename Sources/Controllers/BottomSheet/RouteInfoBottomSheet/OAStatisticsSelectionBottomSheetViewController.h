@@ -12,28 +12,13 @@
 
 @class OAGPXTrackAnalysis;
 
-typedef NS_ENUM(NSInteger, EOARouteStatisticsMode)
-{
-    EOARouteStatisticsModeAltitudeSlope = 0,
-    EOARouteStatisticsModeAltitudeSpeed,
-    EOARouteStatisticsModeAltitude,
-    EOARouteStatisticsModeSlope,
-    EOARouteStatisticsModeSpeed,
-
-    EOARouteStatisticsModeSensorSpeed,
-    EOARouteStatisticsModeSensorHearRate,
-    EOARouteStatisticsModeSensorBikePower,
-    EOARouteStatisticsModeSensorBikeCadence,
-    EOARouteStatisticsModeSensorTemperature
-};
-
 @class OAStatisticsSelectionBottomSheetViewController;
 
 @protocol OAStatisticsSelectionDelegate <NSObject>
 
 @required
 
-- (void) onNewModeSelected:(EOARouteStatisticsMode)mode;
+- (void) onTypesSelected:(NSArray<NSNumber *> *)types;
 
 @end
 
@@ -43,11 +28,11 @@ typedef NS_ENUM(NSInteger, EOARouteStatisticsMode)
 
 @interface OAStatisticsSelectionBottomSheetViewController : OABottomSheetTwoButtonsViewController
 
-@property (nonatomic, readonly) EOARouteStatisticsMode mode;
+@property (nonatomic, readonly) NSArray<NSNumber *> *types;
 @property (nonatomic, readonly) OAGPXTrackAnalysis *analysis;
 @property (nonatomic, weak) id<OAStatisticsSelectionDelegate> delegate;
 
-- (instancetype)initWithMode:(EOARouteStatisticsMode)mode analysis:(OAGPXTrackAnalysis *)analysis;
+- (instancetype)initWithTypes:(NSArray<NSNumber *> *)types analysis:(OAGPXTrackAnalysis *)analysis;
 
 @end
 

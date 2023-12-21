@@ -750,10 +750,10 @@
     return state;
 }
 
-- (OATrackMenuViewControllerState *)getCurrentStateForAnalyze:(EOARouteStatisticsMode)routeStatistics
+- (OATrackMenuViewControllerState *)getCurrentStateForAnalyze:(NSArray<NSNumber *> *)types
 {
     OATrackMenuViewControllerState *state = [self getCurrentState];
-    state.routeStatistics = routeStatistics;
+    state.routeStatistics = types;
     return state;
 }
 
@@ -962,19 +962,18 @@
 
 #pragma mark - OATrackMenuViewControllerDelegate
 
-- (void)openAnalysis:(EOARouteStatisticsMode)modeType
+- (void)openAnalysis:(NSArray<NSNumber *> *)types
 {
-    [self openAnalysis:self.analysis
-              withMode:modeType];
+    [self openAnalysis:self.analysis withTypes:types];
 }
 
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
-            withMode:(EOARouteStatisticsMode)mode
+           withTypes:(NSArray<NSNumber *> *)types
 {
     [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:analysis
-                                                        menuControlState:[self getCurrentStateForAnalyze:mode]
+                                                        menuControlState:[self getCurrentStateForAnalyze:types]
                                                                  isRoute:NO];
     }];
 }

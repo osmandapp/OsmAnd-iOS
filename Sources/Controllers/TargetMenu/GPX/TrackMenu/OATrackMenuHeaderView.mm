@@ -258,7 +258,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
-                            @"int_value": @(EOARouteStatisticsModeAltitude)
+                            @"int_value": @[@(GPXDataSetTypeALTITUDE)]
                     },
                     kCellTitle: OALocalizedString(@"shared_string_distance"),
                     kCellRightIconName: @"ic_small_distance"
@@ -270,7 +270,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp],
-                            @"int_value": @(EOARouteStatisticsModeSlope)
+                            @"int_value": @[@(GPXDataSetTypeSLOPE)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_ascent"),
                     kCellRightIconName: @"ic_small_ascent"
@@ -278,7 +278,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown],
-                            @"int_value": @(EOARouteStatisticsModeSlope)
+                            @"int_value": @[@(GPXDataSetTypeSLOPE)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_descent"),
                     kCellRightIconName: @"ic_small_descent"
@@ -288,7 +288,7 @@
                             @"string_value": [NSString stringWithFormat:@"%@ - %@",
                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]],
-                            @"int_value": @(EOARouteStatisticsModeAltitude)
+                            @"int_value": @[@(GPXDataSetTypeALTITUDE)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_range"),
                     kCellRightIconName: @"ic_small_altitude_range"
@@ -300,7 +300,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedSpeed:analysis.avgSpeed],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSPEED)]
                     },
                     kCellTitle: OALocalizedString(@"map_widget_average_speed"),
                     kCellRightIconName: @"ic_small_speed"
@@ -308,7 +308,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSPEED)]
                     },
                     kCellTitle: OALocalizedString(@"gpx_max_speed"),
                     kCellRightIconName: @"ic_small_max_speed"
@@ -321,7 +321,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSPEED)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
                     kCellRightIconName: @"ic_small_time_interval"
@@ -334,7 +334,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSPEED)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),
                     kCellRightIconName: @"ic_small_time_moving"
@@ -637,9 +637,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
-    EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [cellData.values[@"int_value"] intValue];
+    NSArray<NSNumber *> *types = cellData.values[@"int_value"];
     if (self.trackMenuDelegate)
-        [self.trackMenuDelegate openAnalysis:modeType];
+        [self.trackMenuDelegate openAnalysis:types];
 }
 
 @end

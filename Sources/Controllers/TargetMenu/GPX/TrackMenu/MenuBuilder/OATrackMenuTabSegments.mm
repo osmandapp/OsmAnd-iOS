@@ -117,7 +117,7 @@
 
     if (_routeLineChartHelper)
     {
-        [_routeLineChartHelper changeChartMode:EOARouteStatisticsModeAltitudeSpeed
+        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]
                                          chart:cell.lineChartView
                                       analysis:analysis
                                       modeCell:nil];
@@ -131,7 +131,7 @@
             kTableValues: @{
                     @"segment_value": segment,
                     @"analysis_value": analysis,
-                    @"mode_value": @(EOARouteStatisticsModeAltitudeSpeed),
+                    @"mode_value": @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)],
                     @"points_value": _routeLineChartHelper
                             ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
                                                                    startPoint:startChartPoint
@@ -199,7 +199,7 @@
     OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
             kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
-            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment mode:EOARouteStatisticsModeAltitudeSpeed],
+            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment types:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]],
             kCellToggle: @(analysis.timeSpan > 0)
     }];
     [segmentSectionData.subjects addObject:statisticsCellData];
@@ -256,7 +256,7 @@
 
 - (NSDictionary<NSString *, NSDictionary *> *)getStatisticsDataForAnalysis:(OAGPXTrackAnalysis *)analysis
                                                                    segment:(OATrkSegment *)segment
-                                                                      mode:(EOARouteStatisticsMode)mode
+                                                                     types:(NSArray<NSNumber *> *)types
 {
     NSMutableDictionary *titles = [NSMutableDictionary dictionary];
     NSMutableDictionary *icons = [NSMutableDictionary dictionary];
@@ -264,59 +264,58 @@
 
     OATrack *track = self.trackMenuDelegate ? [self.trackMenuDelegate getTrack:segment] : nil;
     BOOL joinSegments = self.trackMenuDelegate && [self.trackMenuDelegate isJoinSegments];
-    switch (mode)
+    if (types.count == 2)
     {
-        case EOARouteStatisticsModeAltitudeSpeed:
+        if (types.firstObject.integerValue == GPXDataSetTypeALTITUDE && types.lastObject.integerValue == GPXDataSetTypeSPEED)
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"shared_string_start_time");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"shared_string_end_time");
-
+            
             icons[@"top_left_icon_name_string_value"] = @"ic_small_distance";
             icons[@"top_right_icon_name_string_value"] = @"ic_small_time_interval";
             icons[@"bottom_left_icon_name_string_value"] = @"ic_small_time_start";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_time_end";
-
+            
             descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
-                    !joinSegments && track && track.generalTrack
-                            ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
-
+                                                                  !joinSegments && track && track.generalTrack
+                                                                  ? analysis.totalDistanceWithoutGaps : analysis.totalDistance];
+            
             descriptions[@"top_right_description_string_value"] = [OAOsmAndFormatter getFormattedTimeInterval:
-                    !joinSegments && track && track.generalTrack
-                            ? analysis.timeSpanWithoutGaps : analysis.timeSpan shortFormat:YES];
-
+                                                                   !joinSegments && track && track.generalTrack
+                                                                   ? analysis.timeSpanWithoutGaps : analysis.timeSpan shortFormat:YES];
+            
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"HH:mm, MM-dd-yy"];
             descriptions[@"bottom_left_description_string_value"] =
-                    [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.startTime]];
+            [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.startTime]];
             descriptions[@"bottom_right_description_string_value"] =
-                    [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.endTime]];
-
-            break;
+            [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.endTime]];
         }
-        case EOARouteStatisticsModeAltitudeSlope:
+        if (types.firstObject.integerValue == GPXDataSetTypeALTITUDE && types.lastObject.integerValue == GPXDataSetTypeSLOPE)
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"average_altitude");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"altitude_range");
             titles[@"bottom_left_title_string_value"] = OALocalizedString(@"altitude_ascent");
             titles[@"bottom_right_title_string_value"] = OALocalizedString(@"altitude_descent");
-
+            
             icons[@"top_left_icon_name_string_value"] = @"ic_small_altitude_average";
             icons[@"top_right_icon_name_string_value"] = @"ic_small_altitude_range";
             icons[@"bottom_left_icon_name_string_value"] = @"ic_small_ascent";
             icons[@"bottom_right_icon_name_string_value"] = @"ic_small_descent";
-
+            
             descriptions[@"top_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.avgElevation];
             descriptions[@"top_right_description_string_value"] = [NSString stringWithFormat:@"%@ - %@",
-                    [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
-                    [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]];
+                                                                   [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
+                                                                   [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]];
             descriptions[@"bottom_left_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp];
             descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown];
-
-            break;
         }
-        case EOARouteStatisticsModeSpeed:
+    }
+    else
+    {
+        if (types.firstObject.integerValue == GPXDataSetTypeSPEED)
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"map_widget_average_speed");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_max_speed");
@@ -337,13 +336,12 @@
             descriptions[@"bottom_right_description_string_value"] = [OAOsmAndFormatter getFormattedDistance:
                     !joinSegments && track && track.generalTrack
                             ? analysis.totalDistanceWithoutGaps : analysis.totalDistanceMoving];
-
-            break;
         }
-        default:
+        else
+        {
             return @{ };
+        }
     }
-
     return @{
             @"titles": titles,
             @"icons": icons,
@@ -513,7 +511,7 @@
             OALineChartCell *cell = ((OALineChartCell *) sectionData.values[@"cell_value"]);
             if (cell)
             {
-                [_routeLineChartHelper changeChartMode:(EOARouteStatisticsMode) [sectionData.values[@"mode_value"] integerValue]
+                [_routeLineChartHelper changeChartTypes:sectionData.values[@"mode_value"]
                                                  chart:cell.lineChartView
                                               analysis:sectionData.values[@"analysis_value"]
                                               modeCell:nil];
@@ -526,14 +524,14 @@
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
         if (sectionData)
         {
-            EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [sectionData.values[@"mode_value"] integerValue];
+            NSArray<NSNumber *> *types = sectionData.values[@"mode_value"];
             OAGPXTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
             [tableData setData:@{
                     kTableValues: [self getStatisticsDataForAnalysis:analysis
                                                              segment:sectionData.values[@"segment_value"]
-                                                                mode:mode],
-                    kCellToggle: @((mode == EOARouteStatisticsModeAltitudeSpeed && analysis.timeSpan > 0)
-                            || mode != EOARouteStatisticsModeAltitudeSpeed)
+                                                               types:types],
+                    kCellToggle: @(([types isEqual:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]] && analysis.timeSpan > 0)
+                            || ![types isEqual:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]])
             }];
         }
     }
@@ -546,21 +544,21 @@
             NSInteger selectedIndex = [tableData.values[@"selected_index_int_value"] integerValue];
             if (selectedIndex != NSNotFound)
             {
-                EOARouteStatisticsMode mode;
+                NSArray<NSNumber *> *types;
                 if (tableData.values.count > selectedIndex && selectedIndex != 0)
                 {
                     NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
-                    mode = [value isEqualToString:OALocalizedString(@"altitude")]
-                            ? EOARouteStatisticsModeAltitudeSlope
+                    types = [value isEqualToString:OALocalizedString(@"altitude")]
+                            ? @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSLOPE)]
                             : [value isEqualToString:OALocalizedString(@"shared_string_speed")]
-                                    ? EOARouteStatisticsModeSpeed
-                                    : EOARouteStatisticsModeAltitudeSpeed;
+                                    ? @[@(GPXDataSetTypeSPEED)]
+                                    : @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)];
                 }
                 else
                 {
-                    mode = EOARouteStatisticsModeAltitudeSpeed;
+                    types = @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)];
                 }
-                sectionData.values[@"mode_value"] = @(mode);
+                sectionData.values[@"mode_value"] = types;
 
                 OAGPXTableCellData *chartData = [sectionData getSubject:[@"chart_" stringByAppendingString:segmentKey]];
                 if (chartData)
@@ -608,11 +606,11 @@
         OAGPXTableSectionData *sectionData = [self.tableData getSubject:[@"section_" stringByAppendingString:segmentKey]];
         if (sectionData)
         {
-            EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [sectionData.values[@"mode_value"] integerValue];
+            NSArray<NSNumber *> *types = sectionData.values[@"mode_value"];
             OAGPXTrackAnalysis *analysis = sectionData.values[@"analysis_value"];
             BOOL isLeftButtonSelected = [tableData.values[@"is_left_button_selected"] boolValue];
             if (isLeftButtonSelected)
-                [self.trackMenuDelegate openAnalysis:analysis withMode:mode];
+                [self.trackMenuDelegate openAnalysis:analysis withTypes:types];
             else
                 [self.trackMenuDelegate openEditSegmentScreen:sectionData.values[@"segment_value"] analysis:analysis];
         }

@@ -352,27 +352,30 @@ import Charts
 
     private static func getDataSet(chartView: LineChartView,
                                    analysis: OAGPXTrackAnalysis,
-                                   type: GPXDataSetType) -> OrderedLineDataSet? {
+                                   type: GPXDataSetType,
+                                   calcWithoutGaps: Bool,
+                                   useRightAxis: Bool) -> OrderedLineDataSet? {
         switch type {
             case .ALTITUDE:
-                return createGPXElevationDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: false, drawFilled: true)
+            return createGPXElevationDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             case .SLOPE:
-                return createGPXSlopeDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, eleValues: Array(), useRightAxis: true, drawFilled: true)
+                return createGPXSlopeDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, eleValues: Array(), useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             case .SPEED:
-                return createGPXSpeedDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: true, drawFilled: true)
+                return createGPXSpeedDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             default:
-            return OAPlugin.getOrderedLineDataSet(chart: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, calcWithoutGaps: false, useRightAxis: false) //todo
+            return OAPlugin.getOrderedLineDataSet(chart: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.DISTANCE, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
         }
     }
 
-    @objc static public func refreshLineChart(chartView: LineChartView,
+        @objc static public func refreshLineChart(chartView: LineChartView,
                                               analysis: OAGPXTrackAnalysis,
                                               useGesturesAndScale: Bool,
                                               firstType: GPXDataSetType,
-                                              useRightAxis: Bool)
+                                              useRightAxis: Bool,
+                                              calcWithoutGaps: Bool)
     {
         var dataSets = [ILineChartDataSet]()
-        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType)
+        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
         if (firstDataSet != nil) {
             dataSets.append(firstDataSet!);
         }
@@ -403,11 +406,12 @@ import Charts
                                               analysis: OAGPXTrackAnalysis,
                                               useGesturesAndScale: Bool,
                                               firstType: GPXDataSetType,
-                                              secondType: GPXDataSetType)
+                                              secondType: GPXDataSetType,
+                                              calcWithoutGaps: Bool)
     {
         var dataSets = [ILineChartDataSet]()
-        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType)
-        let secondDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: secondType)
+        let firstDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: firstType, calcWithoutGaps: calcWithoutGaps, useRightAxis: false)
+        let secondDataSet: OrderedLineDataSet? = getDataSet(chartView: chartView, analysis: analysis, type: secondType, calcWithoutGaps: calcWithoutGaps, useRightAxis: true)
 
         if (firstDataSet != nil) {
             dataSets.append(firstDataSet!);
@@ -619,10 +623,11 @@ import Charts
                                                   graphType: GPXDataSetType,
                                                   axisType: GPXDataSetAxisType,
                                                   useRightAxis: Bool,
-                                                  drawFilled: Bool) -> OrderedLineDataSet {
+                                                  drawFilled: Bool,
+                                                  calcWithoutGaps: Bool) -> OrderedLineDataSet {
         let useFeet: Bool = OAMetricsConstant.shouldUseFeet(OAAppSettings.sharedManager().metricSystem.get())
         let convEle: Double = useFeet ? 3.28084 : 1.0
-        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false)
+        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: calcWithoutGaps)
         let mainUnitY: String = graphType.getMainUnitY()
 
         let yAxis: YAxis  = getYAxis(chart: chartView, textColor: UIColor.chartTextColorElevation, useRightAxis: useRightAxis)
@@ -637,30 +642,9 @@ import Charts
         dataSet.divY = Double.nan
         dataSet.units = mainUnitY
 
-        let chartColor = UIColor.chartLineColorElevation
-        dataSet.setColor(chartColor)
-        dataSet.lineWidth = 1
-        if drawFilled {
-            dataSet.fillAlpha = 0.1
-            dataSet.fillColor = chartColor
-            dataSet.drawFilledEnabled = true
-        } else {
-            dataSet.drawFilledEnabled = false
-        }
-        dataSet.drawValuesEnabled = false
-        dataSet.valueFont = NSUIFont.systemFont(ofSize: 15)
-        dataSet.formLineWidth = 1
-        dataSet.formSize = 15
-        dataSet.drawCirclesEnabled = false
-        dataSet.drawCircleHoleEnabled = false
-        dataSet.highlightEnabled = true
-        dataSet.drawVerticalHighlightIndicatorEnabled = true
-        dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor.chartSliderLineColor
+        let color: UIColor = graphType.getFillColor()
+        setupDataSet(dataSet: dataSet, color: color, fillColor: color, drawFilled: drawFilled, drawCircles: false, useRightAxis: useRightAxis)
         dataSet.fillFormatter = HeightFormatter()
-        if useRightAxis {
-           dataSet.axisDependency = YAxis.AxisDependency.right
-        }
         return dataSet
     }
     
@@ -669,7 +653,8 @@ import Charts
                                       axisType: GPXDataSetAxisType,
                                       eleValues: Array<ChartDataEntry>,
                                       useRightAxis: Bool,
-                                      drawFilled: Bool) -> OrderedLineDataSet? {
+                                      drawFilled: Bool,
+                                      calcWithoutGaps: Bool) -> OrderedLineDataSet? {
         if (axisType == GPXDataSetAxisType.TIME || axisType == GPXDataSetAxisType.TIMEOFDAY) {
             return nil;
         }
@@ -678,7 +663,7 @@ import Charts
         let convEle: Double = useFeet ? 3.28084 : 1.0
         let totalDistance: Double = Double(analysis.totalDistance)
         
-        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false) //todo
+        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: calcWithoutGaps)
 
         let mainUnitY: String = graphType.getMainUnitY()
         
@@ -779,33 +764,8 @@ import Charts
         dataSet.divX = divX
         dataSet.units = mainUnitY
 
-        let chartColor = UIColor.chartLineColorSlope
-        dataSet.setColor(chartColor)
-        dataSet.lineWidth = 1
-        if (drawFilled) {
-            dataSet.fillAlpha = 0.1
-            dataSet.fillColor = chartColor
-            dataSet.drawFilledEnabled = true
-        } else {
-            dataSet.drawFilledEnabled = false
-        }
-        
-        dataSet.drawValuesEnabled = false
-        dataSet.valueFont = UIFont.systemFont(ofSize: 9)
-        dataSet.formLineWidth = 1
-        dataSet.formSize = 15
-        
-        dataSet.drawCirclesEnabled = false
-        dataSet.drawCircleHoleEnabled = false
-        
-        dataSet.highlightEnabled = true
-        dataSet.drawVerticalHighlightIndicatorEnabled = true
-        dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor.chartSliderLineColor
-
-        if useRightAxis {
-            dataSet.axisDependency = YAxis.AxisDependency.right
-        }
+        let color: UIColor = graphType.getFillColor()
+        GpxUIHelper.setupDataSet(dataSet: dataSet, color: color, fillColor: color, drawFilled: drawFilled, drawCircles: false, useRightAxis: useRightAxis)
         return dataSet;
     }
     
@@ -939,8 +899,9 @@ import Charts
                                               graphType: GPXDataSetType,
                                               axisType: GPXDataSetAxisType,
                                               useRightAxis: Bool,
-                                              drawFilled: Bool) -> OrderedLineDataSet {
-        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: false) //todo
+                                              drawFilled: Bool,
+                                              calcWithoutGaps: Bool) -> OrderedLineDataSet {
+        let divX: Double = getDivX(lineChart: chartView, analysis: analysis, axisType: axisType, calcWithoutGaps: calcWithoutGaps)
 
         let pair: Pair<Double, Double>? = Self.getScalingY(graphType)
         let mulSpeed: Double = pair?.first ?? Double.nan
@@ -956,7 +917,7 @@ import Charts
                                                                     divX: divX,
                                                                     mulY: mulSpeed,
                                                                     divY: divSpeed,
-                                                                    calcWithoutGaps: false) //todo
+                                                                    calcWithoutGaps: calcWithoutGaps)
         
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.SPEED, dataSetAxisType: axisType)
         yAxis.valueFormatter = ValueFormatter(formatX: dataSet.yMax < 3 ? "%.0f" : nil, unitsX: mainUnitY)
@@ -975,32 +936,9 @@ import Charts
             dataSet.mulY = Double.nan
         }
         dataSet.units = mainUnitY
-        let chartColor = UIColor.chartLineColorSpeed
-        dataSet.setColor(chartColor)
-        dataSet.lineWidth = 1
-        if (drawFilled) {
-            dataSet.fillAlpha = 0.1
-            dataSet.fillColor = chartColor
-            dataSet.drawFilledEnabled = true
-        } else {
-            dataSet.drawFilledEnabled = false
-        }
-        dataSet.drawValuesEnabled = false
-        dataSet.valueFont = UIFont.systemFont(ofSize: 9.0)
-        dataSet.formLineWidth = 1
-        dataSet.formSize = 15.0
-        
-        dataSet.drawCirclesEnabled = false
-        dataSet.drawCircleHoleEnabled = false
-        
-        dataSet.highlightEnabled = true
-        dataSet.drawVerticalHighlightIndicatorEnabled = true
-        dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor.chartSliderLineColor
 
-        if (useRightAxis) {
-            dataSet.axisDependency = .right
-        }
+        let color: UIColor = graphType.getFillColor()
+        GpxUIHelper.setupDataSet(dataSet: dataSet, color: color, fillColor: color, drawFilled: drawFilled, drawCircles: false, useRightAxis: useRightAxis)
         return dataSet;
     }
     
@@ -1138,7 +1076,7 @@ import Charts
                 dataSet.highlightEnabled = true
                 dataSet.drawVerticalHighlightIndicatorEnabled = true
                 dataSet.drawHorizontalHighlightIndicatorEnabled = false
-                dataSet.highlightColor = UIColor.textColorSecondary
+                dataSet.highlightColor = UIColor.chartSliderLineColor
             }
             if useRightAxis {
                 dataSet.axisDependency = YAxis.AxisDependency.right

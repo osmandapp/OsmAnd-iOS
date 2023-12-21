@@ -451,6 +451,7 @@
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
                                                          _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
+                                                         QString::fromNSString(_hiddenMapsPath),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"https://download.osmand.net"),
@@ -1054,6 +1055,7 @@
                                                              ? QString::fromNSString(_worldMiniBasemapFilename)
                                                              : QString(),
                                                              QString::fromNSString(NSTemporaryDirectory()),
+                                                             QString::fromNSString(_hiddenMapsPath),
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                              QString::fromNSString(@"https://download.osmand.net"),

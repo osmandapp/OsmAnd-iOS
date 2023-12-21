@@ -393,7 +393,9 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     << OsmAnd::ResourcesManager::ResourceType::SlopeRegion
     << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
     << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
-    NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types];
+    NSMutableArray<NSString *> *localIndexFiles = [[OAResourcesUIHelper getInstalledResourcePathsByTypes:types] mutableCopy];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT SELF CONTAINS[cd] %@", [HIDDEN_DIR stringByAppendingString:@"/"]];
+    [localIndexFiles filterUsingPredicate:predicate];
     if (localIndexFiles.count > 0)
     {
         NSArray<NSString *> *sortedFiles = [localIndexFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {

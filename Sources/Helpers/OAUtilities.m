@@ -506,12 +506,10 @@
 
 - (NSString *) escapeUrl
 {
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
-         NULL,
-         (__bridge CFStringRef) self,
-         NULL,
-         CFSTR("!*'();:@&=+$,/?%#[]\" "),
-         kCFStringEncodingUTF8));
+    NSMutableCharacterSet *charset = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+    [charset removeCharactersInString:@"!*'();:@&=+$,/?%#[]\" "];
+    NSString *encodedValue = [self stringByAddingPercentEncodingWithAllowedCharacters:charset];
+    return encodedValue;
 }
 
 - (NSString *) sanitizeFileName

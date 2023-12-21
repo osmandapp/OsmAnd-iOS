@@ -17,8 +17,6 @@ final class CarPlaySceneDelegate: UIResponder {
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillResignActive")
         isForegroundScene = false
-        carPlayDashboardController = nil
-        carPlayMapController = nil
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -59,6 +57,7 @@ final class CarPlaySceneDelegate: UIResponder {
                 mapVc = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
             }
+            mapVc?.isCarPlayDashboardActive = false
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
             carPlayDashboardController?.delegate = carPlayMapController

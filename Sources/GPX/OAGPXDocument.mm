@@ -580,7 +580,8 @@
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
     meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time).toUTC() : QDateTime().toUTC();
-    [self fillLinks:meta->links linkArray:m.links];
+    if (m.links)
+        [self fillLinks:meta->links linkArray:m.links];
     meta->keywords = QString::fromNSString(m.keywords);
     [m fillExtensions:meta];
 
@@ -590,10 +591,13 @@
         author.reset(new OsmAnd::GpxDocument::Author());
         author->name = QString::fromNSString(m.author.name);
         author->email = QString::fromNSString(m.author.email);
-        QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
-        [self fillLinks:links linkArray:@[m.author.link]];
-        if (links.size() > 0)
-            author->link = links.first();
+        if (m.author.link)
+        {
+            QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
+            [self fillLinks:links linkArray:@[m.author.link]];
+            if (links.size() > 0)
+                author->link = links.first();
+        }
         [m.author fillExtensions:author];
         meta->author = author;
     }

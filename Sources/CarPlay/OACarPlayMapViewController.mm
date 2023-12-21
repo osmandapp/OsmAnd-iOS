@@ -31,16 +31,11 @@
     
     CGFloat _cachedViewportX;
     CGFloat _cachedViewportY;
-    
-    CGFloat _cachedWidthOffset;
-    CGFloat _cachedHeightOffset;
-    
+
     BOOL _isInNavigationMode;
     
     OAAlarmWidget *_alarmWidget;
     
-    BOOL _leftSideDriving;
-    BOOL _drivingSideChecked;
     NSLayoutConstraint *leftHandDrivingAlarmWidgetConstraint;
     NSLayoutConstraint *rightHandDrivingAlarmWidgetConstraint;
 }
@@ -86,10 +81,6 @@
     [super viewDidLayoutSubviews];
     
     BOOL isLeftSideDriving = [self isLeftSideDriving];
-
-    if (_isInNavigationMode && !_mapVc.isCarPlayDashboardActive)
-        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:kViewportBottomScale];
-   
     if (isLeftSideDriving)
     {
         [rightHandDrivingAlarmWidgetConstraint setActive:NO];
@@ -100,24 +91,28 @@
         [leftHandDrivingAlarmWidgetConstraint setActive:NO];
         [rightHandDrivingAlarmWidgetConstraint setActive:YES];
     }
-    
+
+    [self updateMapCenterPoint];
+}
+
+- (void)updateMapCenterPoint
+{
+    if (_mapVc.isCarPlayDashboardActive)
+        return;
+
     UIEdgeInsets insets = _window.safeAreaInsets;
 
     CGFloat w = self.view.frame.size.width;
     CGFloat h = self.view.frame.size.height;
-    
+
     CGFloat widthOffset = MAX(insets.right, insets.left) / w;
     CGFloat heightOffset = insets.top / h;
-    
-    if (widthOffset != _cachedWidthOffset && heightOffset != _cachedHeightOffset && widthOffset != 0 && heightOffset != 0 && !_isInNavigationMode)
-    {
+
+    BOOL isLeftSideDriving = [self isLeftSideDriving];
+    if (_isInNavigationMode)
+        [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:kViewportBottomScale];
+    else
         [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:1.0 + heightOffset];
-        _cachedWidthOffset = widthOffset;
-        _cachedHeightOffset = heightOffset;
-        
-        _cachedViewportX = _mapVc.mapView.viewportXScale;
-        _cachedViewportY = _mapVc.mapView.viewportYScale;
-    }
 }
 
 - (void)setupAlarmWidget
@@ -275,6 +270,7 @@
 
 - (void)enterNavigationMode
 {
+    _cachedViewportX = _mapVc.mapView.viewportXScale;
     _isInNavigationMode = YES;
     [self.view layoutIfNeeded];
 }

@@ -54,7 +54,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
-    NSIndexPath *_pickerIndexPath;
+    NSIndexPath *_openedPickerIndexPath;
     
     UIButton *_applyButton;
     
@@ -156,7 +156,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
             @"value" : @(_minZoom)
         }];
         _minValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
-        if (_pickerIndexPath && _pickerIndexPath.row == _minValueIndexPath.row + 1)
+        if (_openedPickerIndexPath && _openedPickerIndexPath.row == _minValueIndexPath.row + 1)
             [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
         
         [topSection addRowFromDictionary:@{
@@ -165,7 +165,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
             @"value" : @(_maxZoom)
         }];
         _maxValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
-        if (_pickerIndexPath && _pickerIndexPath.row == _maxValueIndexPath.row + 1)
+        if (_openedPickerIndexPath && _openedPickerIndexPath.row == _maxValueIndexPath.row + 1)
             [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
     }
 }
@@ -502,13 +502,31 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         [self.tableView beginUpdates];
         NSIndexPath *newPickerIndexPath = [NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section];
-        BOOL isThisPicker = _pickerIndexPath == newPickerIndexPath;
-        if (_pickerIndexPath != nil)
-            [self.tableView deleteRowsAtIndexPaths:@[_pickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-        _pickerIndexPath = isThisPicker ? nil : newPickerIndexPath;
+        BOOL isThisPicker = _openedPickerIndexPath == newPickerIndexPath;
+        if (isThisPicker)
+        {
+            [self.tableView deleteRowsAtIndexPaths:@[_openedPickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+            _openedPickerIndexPath = nil;
+        }
+        else
+        {
+            if (_openedPickerIndexPath)
+            {
+                if (_openedPickerIndexPath.row < newPickerIndexPath.row)
+                    newPickerIndexPath = [NSIndexPath indexPathForRow:newPickerIndexPath.row - 1 inSection:newPickerIndexPath.section];
+                
+                [self.tableView deleteRowsAtIndexPaths:@[_openedPickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                [self.tableView insertRowsAtIndexPaths:@[newPickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                _openedPickerIndexPath = newPickerIndexPath;
+            }
+            else
+            {
+                [self.tableView insertRowsAtIndexPaths:@[newPickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+                _openedPickerIndexPath = newPickerIndexPath;
+            }
+        }
         [self generateData];
-        if (!isThisPicker)
-            [self.tableView insertRowsAtIndexPaths:@[_pickerIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        
         [self.tableView endUpdates];
         [self.tableView scrollToRowAtIndexPath:_minValueIndexPath atScrollPosition:UITableViewScrollPositionTop animated:YES];
     }
@@ -518,9 +536,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)resetPickerValue:(NSInteger)zoomValue
 {
-    if (_pickerIndexPath)
+    if (_openedPickerIndexPath)
     {
-        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_pickerIndexPath];
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:_openedPickerIndexPath];
         if ([cell isKindOfClass:OACustomPickerTableViewCell.class])
         {
             OACustomPickerTableViewCell *pickerCell = (OACustomPickerTableViewCell *) cell;

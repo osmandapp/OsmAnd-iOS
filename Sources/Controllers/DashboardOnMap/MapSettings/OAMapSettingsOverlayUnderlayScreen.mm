@@ -26,6 +26,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 
 #include <QSet>
 
@@ -501,7 +502,8 @@ static NSInteger kButtonsSection;
 
 - (void) importPressed
 {
-    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.sqlitedb"] inMode:UIDocumentPickerModeImport];
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"net.osmand.sqlitedb" conformingToType:UTTypeDatabase]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     documentPickerVC.allowsMultipleSelection = NO;
     documentPickerVC.delegate = self;
     [self.vwController presentViewController:documentPickerVC animated:YES completion:nil];

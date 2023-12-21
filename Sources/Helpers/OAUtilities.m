@@ -1780,7 +1780,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 
 + (void) callUrl:(NSString *)url
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]
+                                       options:@{}
+                             completionHandler:nil];
 }
 
 + (NSString *) stripNonDigits:(NSString *)input
@@ -1814,7 +1816,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
                                                 if (selectedIndex == i)
                                                 {
                                                     NSString *p = parsedPhones[i];
-                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
+                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]] options:@{} completionHandler:nil];
                                                     break;
                                                 }
                                             }

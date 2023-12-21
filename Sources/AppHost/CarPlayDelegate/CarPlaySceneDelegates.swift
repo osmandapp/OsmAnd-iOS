@@ -59,6 +59,7 @@ final class CarPlaySceneDelegate: UIResponder {
                 mapVc = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
             }
+            mapVc?.isCarPlayDashboardActive = false
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
             carPlayDashboardController?.delegate = carPlayMapController

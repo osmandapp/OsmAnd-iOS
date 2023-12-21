@@ -17,8 +17,6 @@ final class CarPlaySceneDelegate: UIResponder {
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillResignActive")
         isForegroundScene = false
-        carPlayDashboardController = nil
-        carPlayMapController = nil
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

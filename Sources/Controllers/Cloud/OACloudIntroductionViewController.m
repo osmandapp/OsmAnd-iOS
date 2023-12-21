@@ -10,7 +10,7 @@
 #import "Localization.h"
 #import "OASizes.h"
 #import "OACloudIntroductionHeaderView.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OACloudAccountCreateViewController.h"
 #import "OACloudAccountLoginViewController.h"
@@ -165,18 +165,23 @@
 {
     NSDictionary *item = _data[indexPath.section][@"rows"][indexPath.row];
     NSString *cellId = item[@"cellId"];
-    if ([cellId isEqualToString:OATitleRightIconCell.getCellIdentifier])
+    if ([cellId isEqualToString:OARightIconTableViewCell.getCellIdentifier])
     {
-        OATitleRightIconCell* cell = [self.tableView dequeueReusableCellWithIdentifier:OATitleRightIconCell.getCellIdentifier];
+        OARightIconTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:OARightIconTableViewCell.getCellIdentifier];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColor.iconColorActive;
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            if (cell)
+            {
+                cell.titleLabel.text = item[@"title"];
+                [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"image"]]];
+            }
         }
-        cell.titleView.text = item[@"title"];
-        [cell.iconView setImage:[UIImage templateImageNamed:item[@"image"]]];
         return cell;
     }
     return nil;

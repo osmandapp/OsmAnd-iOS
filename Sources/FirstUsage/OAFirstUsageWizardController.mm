@@ -568,9 +568,10 @@ typedef enum
 - (void)updateRepository
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [OAOcbfHelper downloadOcbfIfUpdated];
-        [_app loadWorldRegions];
-        [_app startRepositoryUpdateAsync:NO];
+        [OAOcbfHelper downloadOcbfIfUpdated:^{
+            [_app loadWorldRegions];
+            [_app startRepositoryUpdateAsync:NO];
+        }];
     });
 }
 

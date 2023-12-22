@@ -325,7 +325,7 @@
         if (_currentSearchPhrase.length == 0)
         {
             [_searchUICore resetPhrase];
-            [_searchUICore cancelSearch];
+            [_searchUICore cancelSearch:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateSearchResult:nil completionHandler:completionHandler];
             });

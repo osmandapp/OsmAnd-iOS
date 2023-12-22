@@ -188,25 +188,22 @@
     return YES;
 }
 
-- (std::shared_ptr<OsmAnd::MapMarkersCollection>) getDestinationsMarkersCollection
-{
-    return _destinationsMarkersCollection;
-}
-
 - (void) refreshDestinationsMarkersCollection
 {
-    _destinationsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
+    [self.mapViewController runWithRenderSync:^{
+        _destinationsMarkersCollection.reset(new OsmAnd::MapMarkersCollection());
 
-    for (OADestination *destination in self.app.data.destinations)
-    {
-        if (!destination.hidden)
+        for (OADestination *destination in self.app.data.destinations)
         {
-            [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
-            [_destinationLayerWidget drawLineArrowWidget:destination];
+            if (!destination.hidden)
+            {
+                [self addDestinationPin:destination.markerResourceName color:destination.color latitude:destination.latitude longitude:destination.longitude description:destination.desc];
+                [_destinationLayerWidget drawLineArrowWidget:destination];
+            }
         }
-    }
 
-    [self drawDestinationLines];
+        [self drawDestinationLines];
+    }];
 }
 
 - (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude description:(NSString *)description

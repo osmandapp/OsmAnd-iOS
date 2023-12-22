@@ -1441,6 +1441,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
                     cell.leftIconView.tintColor = UIColor.iconColorDisabled;
                     cell.descriptionLabel.text = nil;
+                    cell.descriptionLabel.font = nil;
+                    cell.descriptionLabel.textColor = nil;
                     cell.descriptionLabel.attributedText = item[@"title"];
                 }
                 else
@@ -1448,9 +1450,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     cell.leftIconView.image = [UIImage imageNamed:item[@"img"]];
                     cell.descriptionLabel.attributedText = nil;
                     cell.descriptionLabel.text = item[@"title"];
+                    cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                    cell.descriptionLabel.textColor = UIColor.textColorPrimary;
                 }
-                cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.descriptionLabel.textColor = UIColor.textColorPrimary;
                 cell.titleLabel.attributedText = nil;
                 cell.titleLabel.text = item[@"descr"];
                 cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
@@ -1460,9 +1462,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             {
                 [cell leftIconVisibility:NO];
                 cell.titleLabel.text = nil;
+                cell.titleLabel.font = nil;
+                cell.titleLabel.textColor = nil;
                 cell.titleLabel.attributedText = [OARouteBaseViewController getFormattedDistTimeString];
-                cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.titleLabel.textColor = UIColor.textColorPrimary;
+
                 NSMutableAttributedString *attrDescription =
                 [[NSMutableAttributedString alloc] initWithAttributedString:[OARouteBaseViewController getFormattedElevationString:[self getTrackAnalysis]]];
                 if (_emission)
@@ -1472,9 +1475,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     [attrDescription setColor:UIColor.textColorSecondary forString:emission];
                 }
                 cell.descriptionLabel.text = nil;
+                cell.descriptionLabel.font = nil;
+                cell.descriptionLabel.textColor = nil;
                 cell.descriptionLabel.attributedText = attrDescription;
-                cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-                cell.descriptionLabel.textColor = UIColor.textColorSecondary;
             }
         }
         return cell;

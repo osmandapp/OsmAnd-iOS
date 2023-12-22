@@ -24,6 +24,7 @@
 #import "OARouteKey.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
+#import "OASimpleTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATextLineViewCell.h"
@@ -1430,6 +1431,26 @@
                                           countStyle:NSByteCountFormatterCountStyleFile];
 }
 
+- (OAAuthor *)getAuthor
+{
+    return self.doc.metadata.author;
+}
+
+- (OACopyright *)getCopyright
+{
+    return self.doc.metadata.copyright;
+}
+
+- (NSString *)getKeywords
+{
+    return self.doc.metadata.keywords;
+}
+
+- (NSArray<OALink *> *)getLinks
+{
+    return self.doc.metadata.links;
+}
+
 - (NSString *)getCreatedOn
 {
     long time = self.doc.metadata.time;
@@ -1701,7 +1722,11 @@
 
 - (void)openURL:(NSString *)url sourceView:(UIView *)sourceView
 {
-    if ([url containsString:OAWikiAlgorithms.wikipediaDomain])
+    if ([url isValidEmail])
+    {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
+    }
+    else if ([url containsString:OAWikiAlgorithms.wikipediaDomain])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             MBProgressHUD *progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
@@ -2068,9 +2093,29 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
-    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [OAWikiAlgorithms isUrl:cellData.desc];
+    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [cellData.key hasPrefix:@"link_"] || [OAWikiAlgorithms isUrl:cellData.desc] || [cellData.desc isValidEmail];
     UITableViewCell *outCell = nil;
-    if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    if ([cellData.type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
+                    ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
+            cell.titleLabel.text = cellData.title;
+            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.textColorPrimary;;
+        }
+        outCell = cell;
+    }
+    else if ([cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
         OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
         if (cell == nil)
@@ -2104,6 +2149,10 @@
             {
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
                 cell.accessoryView.tintColor = tintColor;
+            }
+            else
+            {
+                cell.accessoryView = nil;
             }
         }
         outCell = cell;
@@ -2552,6 +2601,38 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     [_uiBuilder onButtonPressed:cellData sourceView:[tableView cellForRowAtIndexPath:indexPath]];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+}
+
+- (UIContextMenuConfiguration *)tableView:(UITableView *)tableView contextMenuConfigurationForRowAtIndexPath:(NSIndexPath *)indexPath point:(CGPoint)point
+{
+    OAGPXTableCellData *cellData = [self getCellData:indexPath];
+    if (_selectedTab == EOATrackMenuHudOverviewTab && [cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    {
+        BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [cellData.key hasPrefix:@"link_"] || [OAWikiAlgorithms isUrl:cellData.desc] || [cellData.desc isValidEmail];
+        if (!isWebsite)
+        {
+            NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+            
+            UIAction *copyAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_copy")
+                                                       image:[UIImage systemImageNamed:@"copy"]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+                OAGPXTableCellData *cellData = [self getCellData:indexPath];
+                NSString *textToCopy = cellData.desc;
+                [[UIPasteboard generalPasteboard] setString:textToCopy];
+            }];
+            copyAction.accessibilityLabel = OALocalizedString(@"shared_string_copy");
+            
+            [menuElements addObject:copyAction];
+            UIMenu *contextMenu = [UIMenu menuWithChildren:menuElements];
+            return [UIContextMenuConfiguration configurationWithIdentifier:nil
+                                                           previewProvider:nil
+                                                            actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+                return contextMenu;
+            }];
+        }
+    }
+    return nil;
 }
 
 #pragma mark - Selectors

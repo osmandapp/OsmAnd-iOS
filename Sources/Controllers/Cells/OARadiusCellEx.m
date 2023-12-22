@@ -10,6 +10,8 @@
 #import "OAColors.h"
 #import "OAUtilities.h"
 
+#import "OsmAnd_Maps-Swift.h"
+
 @implementation OARadiusCellEx
 {
     UIFont *_fontRegular;
@@ -62,8 +64,8 @@
 {
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, description]];
     
-    [str addAttribute:NSForegroundColorAttributeName value:UIColor.blackColor range:NSMakeRange(0, title.length)];
-    [str addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_dialog_buttons_light) range:NSMakeRange(title.length + 1, description.length)];
+    [str addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:NSMakeRange(0, title.length)];
+    [str addAttribute:NSForegroundColorAttributeName value:UIColor.iconColorActive range:NSMakeRange(title.length + 1, description.length)];
     [str addAttribute:NSFontAttributeName value:_fontRegular range:NSMakeRange(0, title.length)];
     [str addAttribute:NSFontAttributeName value:_fontBold range:NSMakeRange(title.length + 1, description.length)];
     [button setAttributedTitle:str forState:UIControlStateNormal];

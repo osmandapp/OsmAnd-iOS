@@ -78,7 +78,7 @@
 - (void) searchAndDisplayResult
 {
     [_searchUICore resetPhrase];
-    [_searchUICore cancelSearch];
+    [_searchUICore cancelSearch:NO];
     
     if ([_searchResult.object isKindOfClass:[OAPOIType class]] && [((OAPOIType *) _searchResult.object) isAdditional])
     {

@@ -163,6 +163,10 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (int) toNumberFromString:(NSString *)string;
 + (BOOL) colorRGB:(UIColor *)color1 equalToColorRGB:(UIColor *)color2;
 
+- (UIColor *)lightThemeColor;
+- (UIColor *)darkThemeColor;
+- (UIColor *)currentThemeColor;
+
 @end
 
 @interface UIFont (util)

@@ -205,7 +205,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         return;
     if (!isReviewed)
     {
-        [SKStoreReviewController requestReview];
+        [SKStoreReviewController requestReviewInScene:(UIWindowScene *) UIApplication.sharedApplication.mainScene];
         [userDefaults setBool:true forKey:@"isReviewed"];
     }
 }

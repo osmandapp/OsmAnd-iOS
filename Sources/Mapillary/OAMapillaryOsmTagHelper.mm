@@ -30,7 +30,7 @@
 {
     NSString *urlStr = [NSString stringWithFormat:@"%@%@?%@&%@",
             GRAPH_URL_ENDPOINT, key, PARAM_ACCESS_TOKEN, PARAM_FIELDS];
-    NSURL *dataURL = [NSURL URLWithString:[urlStr stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
+    NSURL *dataURL = [NSURL URLWithString:[urlStr stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]];
     [self fetchFromUrl:dataURL onDownloaded:^(NSData *data) {
         if (data)
         {

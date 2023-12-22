@@ -30,21 +30,15 @@
         if (error)
             NSLog(@"Error copying file: %@ to %@ - %@", cachedPathBundle, cachedPathLib, [error localizedDescription]);
     }
-
+    
     BOOL downloadFromServer = NO;
-    __block NSString *lastModifiedString = nil;
+    NSString *lastModifiedString = nil;
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"HEAD"];
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-    NSURLSessionDataTask *task = [[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
-        NSInteger responseCode = httpResponse.statusCode;
-        if (!error && (responseCode >= 200 && responseCode < 300))
-            lastModifiedString = httpResponse.allHeaderFields[@"Last-Modified"];
-        dispatch_semaphore_signal(semaphore);
-    }];
-    [task resume];
-    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+    NSHTTPURLResponse *response;
+    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error: NULL];
+    if ([response respondsToSelector:@selector(allHeaderFields)])
+        lastModifiedString = [[response allHeaderFields] objectForKey:@"Last-Modified"];
 
     NSDate *lastModifiedServer = nil;
     @try

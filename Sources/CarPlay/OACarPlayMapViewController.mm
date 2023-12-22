@@ -25,10 +25,7 @@
 {
     CPWindow *_window;
     OAMapViewController *_mapVc;
-    
-    CGFloat _originalViewportX;
-    CGFloat _originalViewportY;
-    
+
     CGFloat _cachedViewportX;
     CGFloat _cachedViewportY;
 
@@ -145,9 +142,6 @@
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
         [_mapVc.mapView resumeRendering];
-        
-        _originalViewportX = _mapVc.mapView.viewportXScale;
-        _originalViewportY = _mapVc.mapView.viewportYScale;
 
         _mapVc.isCarPlayActive = YES;
     }
@@ -170,7 +164,8 @@
         _mapVc.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         [_mapVc.mapView resumeRendering];
 
-        [_mapVc setViewportForCarPlayScaleX:_originalViewportX y:_originalViewportY];
+        [_mapVc setViewportScaleX:kViewportScale];
+        [[OAMapViewTrackingUtilities instance] updateSettings];
     }
 }
 

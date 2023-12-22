@@ -10,7 +10,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     func sceneWillEnterForeground(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillEnterForeground")
         isForegroundScene = true
-        mapVC?.isCarPlayDashboardActive = true
         configureScene()
     }
     
@@ -33,8 +32,20 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 mapVC = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVC)
             }
+            mapVC?.isCarPlayDashboardActive = true
             if let mapVC {
                 let settings: OAAppSettings = OAAppSettings.sharedManager()
+
+                dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
+                dashboardVC?.attachMapToWindow()
+                self.window?.rootViewController = dashboardVC
+                OARootViewController.instance()?.mapPanel.onCarPlayConnected()
+
+                let carPlayMode = settings.isCarPlayModeDefault.get() == true
+                    ? OAApplicationMode.getFirstAvailableNavigation()
+                    : settings.carPlayMode.get()
+                settings.setApplicationModePref(carPlayMode, markAsLastUsed: false)
+
                 let isRoutePlanning = OARoutingHelper.sharedInstance().isRoutePlanningMode()
                 let placement = settings.positionPlacementOnMap.get()
                 var y: Double
@@ -45,10 +56,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
                 }
                 let heightOffset = 1 - (window.frame.height / mapVC.view.frame.height)
                 mapVC.setViewportForCarPlayScaleX(1.0, y: y - heightOffset)
-                dashboardVC = OACarPlayMapDashboardViewController(carPlay: mapVC)
-                dashboardVC?.attachMapToWindow()
-                self.window?.rootViewController = dashboardVC
-                OARootViewController.instance()?.mapPanel.onCarPlayConnected()
             }
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller

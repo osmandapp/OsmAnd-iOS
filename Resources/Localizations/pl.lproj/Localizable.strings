@@ -2688,3 +2688,21 @@
 // Widget descriptions
 "coordinates_widget_map_center_desc" = "Pokazuje współrzędne geograficzne bieżącego środka mapy";
 "map_widget_rendering_fps_desc" = "Pokazuje, jak szybko mapa i jej elementy są wyświetlane i odświeżane, wyrażone w klatkach na sekundę (FPS).";
+"user_guide" = "Samouczek";
+"send_log" = "Wyślij log";
+"my_data" = "Moje dane";
+"map_widgets" = "Widżety Mapy";
+"setup" = "Konfiguracja";
+"most_viewed" = "Najczęściej wyświetlane";
+"osmAnd_team" = "Zespół OsmAnd";
+"copy_build_version" = "Skopiuj wersję kompilacji";
+"gitHub_discussion" = "Dyskusje GitHub";
+"open_issue_on_gitHub" = "Otwórz issue w GitHubie";
+"download_install_beta_version" = "Pobierz i zainstaluj wersję beta OsmAnd";
+"detailed_log_file" = "Szczegółowy plik logu";
+"testFlight" = "TestFlight";
+"report_an_issues" = "Zgłoś błędy";
+"telegram_chats" = "Czaty Telegramowe";
+"about_osmAnd" = "O OsmAnd";
+"troubleshooting" = "Rozwiązywanie problemów";
+"ask_question_propose_features" = "Zadaj pytanie, zaproponuj zmiany";

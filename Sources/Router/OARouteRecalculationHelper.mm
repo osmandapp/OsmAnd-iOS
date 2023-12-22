@@ -357,7 +357,7 @@
                 [_routingHelper setRoute:res];
 
             if (_params.resultListener)
-                [_params.resultListener onRouteCalculated:res segment:_params.walkingRouteSegment];
+                [_params.resultListener onRouteCalculated:res segment:_params.walkingRouteSegment start:_params.start end:_params.end];
 
             [_routingHelper setRoute:res];
         }

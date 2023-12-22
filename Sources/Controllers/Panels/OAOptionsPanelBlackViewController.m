@@ -258,7 +258,7 @@
 {
     [super viewDidLoad];
 
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.navigationController.delegate = self;
 
     _menuButtonMapsDiv = [[CALayer alloc] init];

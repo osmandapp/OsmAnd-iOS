@@ -1193,7 +1193,6 @@ typedef enum
 
     UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:_searchViewController];
     navController.navigationBarHidden = YES;
-    navController.automaticallyAdjustsScrollViewInsets = NO;
     navController.edgesForExtendedLayout = UIRectEdgeNone;
 
     if (_scrollableHudViewController && [_scrollableHudViewController isKindOfClass:OARoutePlanningHudViewController.class])

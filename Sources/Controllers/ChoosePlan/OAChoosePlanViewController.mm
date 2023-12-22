@@ -112,6 +112,7 @@
     [super viewDidLoad];
 
     self.scrollView.delegate = self;
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
     self.labelNavigationTitle.text = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
     self.labelNavigationTitle.hidden = YES;

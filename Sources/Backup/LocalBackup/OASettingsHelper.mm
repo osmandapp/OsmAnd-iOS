@@ -393,7 +393,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     << OsmAnd::ResourcesManager::ResourceType::SlopeRegion
     << OsmAnd::ResourcesManager::ResourceType::WikiMapRegion
     << OsmAnd::ResourcesManager::ResourceType::DepthMapRegion;
-    NSMutableArray<NSString *> *localIndexFiles = [[OAResourcesUIHelper getInstalledResourcePathsByTypes:types includeHidden:NO] mutableCopy];
+    NSArray<NSString *> *localIndexFiles = [OAResourcesUIHelper getInstalledResourcePathsByTypes:types includeHidden:NO];
     if (localIndexFiles.count > 0)
     {
         NSArray<NSString *> *sortedFiles = [localIndexFiles sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {

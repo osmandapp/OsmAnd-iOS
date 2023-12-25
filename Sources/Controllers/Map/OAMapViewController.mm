@@ -751,13 +751,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void)setViewportScaleX:(double)x
 {
-    if (_mapView.viewportXScale != x && !_isCarPlayActive)
+    if (_mapView.viewportXScale != x && !_isCarPlayActive && !_isCarPlayDashboardActive)
         _mapView.viewportXScale = x;
 }
 
 - (void)setViewportScaleY:(double)y
 {
-    if (_mapView.viewportYScale != y && !_isCarPlayActive)
+    if (_mapView.viewportYScale != y && !_isCarPlayActive && !_isCarPlayDashboardActive)
         _mapView.viewportYScale = y;
 }
 
@@ -769,13 +769,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void)setViewportForCarPlayScaleX:(double)x
 {
-    if (_mapView.viewportXScale != x && _isCarPlayActive)
+    if (_mapView.viewportXScale != x && (_isCarPlayActive || _isCarPlayDashboardActive))
         _mapView.viewportXScale = x;
 }
 
 - (void)setViewportForCarPlayScaleY:(double)y
 {
-    if (_mapView.viewportYScale != y && _isCarPlayActive)
+    if (_mapView.viewportYScale != y && (_isCarPlayActive || _isCarPlayDashboardActive))
         _mapView.viewportYScale = y;
 }
 

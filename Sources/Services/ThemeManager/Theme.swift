@@ -53,6 +53,29 @@ extension Theme {
     var weatherSliderLabelBgColor: UIColor { getColorTheme(with: UIColor.weatherSliderLabelBgColor) }
     var buttonIconColorPrimary: UIColor { getColorTheme(with: UIColor.buttonIconColorPrimary) }
     var buttonIconColorSecondary: UIColor { getColorTheme(with: UIColor.buttonIconColorSecondary) }
+
+    var chartAxisValueBgColor: UIColor { getColorTheme(with: UIColor.chartAxisValueBgColor) }
+    var chartAxisGridLineColor: UIColor { getColorTheme(with: UIColor.chartAxisGridLineColor) }
+    var chartSliderLabelBgColor: UIColor { getColorTheme(with: UIColor.chartSliderLabelBgColor) }
+    var chartSliderLabelStrokeColor: UIColor { getColorTheme(with: UIColor.chartSliderLabelStrokeColor) }
+    var chartSliderLineColor: UIColor { getColorTheme(with: UIColor.chartSliderLineColor) }
+
+    var chartTextColorAxisX: UIColor { getColorTheme(with: UIColor.chartTextColorAxisX) }
+    var chartTextColorElevation: UIColor { getColorTheme(with: UIColor.chartTextColorElevation) }
+    var chartTextColorSlope: UIColor { getColorTheme(with: UIColor.chartTextColorSlope) }
+    var chartTextColorSpeed: UIColor { getColorTheme(with: UIColor.chartTextColorSpeed) }
+    var chartTextColorBicycleCadence: UIColor { getColorTheme(with: UIColor.chartTextColorBicycleCadence) }
+    var chartTextColorBicyclePower: UIColor { getColorTheme(with: UIColor.chartTextColorBicyclePower) }
+    var chartTextColorHeartRate: UIColor { getColorTheme(with: UIColor.chartTextColorHeartRate) }
+    var chartTextColorSpeedSensor: UIColor { getColorTheme(with: UIColor.chartTextColorSpeedSensor) }
+
+    var chartLineColorElevation: UIColor { getColorTheme(with: UIColor.chartLineColorElevation) }
+    var chartLineColorSlope: UIColor { getColorTheme(with: UIColor.chartLineColorSlope) }
+    var chartLineColorSpeed: UIColor { getColorTheme(with: UIColor.chartLineColorSpeed) }
+    var chartLineColorBicycleCadence: UIColor { getColorTheme(with: UIColor.chartLineColorBicycleCadence) }
+    var chartLineColorBicyclePower: UIColor { getColorTheme(with: UIColor.chartLineColorBicyclePower) }
+    var chartLineColorHeartRate: UIColor { getColorTheme(with: UIColor.chartLineColorHeartRate) }
+    var chartLineColorSpeedSensor: UIColor { getColorTheme(with: UIColor.chartLineColorSpeedSensor) }
 }
 
 extension Theme {

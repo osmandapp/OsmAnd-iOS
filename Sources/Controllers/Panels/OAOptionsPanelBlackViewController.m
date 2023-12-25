@@ -155,7 +155,7 @@
                                             self.menuButtonHelp
                                             ];
     
-    CALayer *bottomDiv = _menuButtonWeatherDiv;
+    CALayer *bottomDiv = isExternalSensorsPluginEnabled ? _menuButtonExternalSensorsDiv : _menuButtonWeatherDiv;
     
     NSInteger buttonsCount = topButtons.count + bottomButtons.count;
     CGFloat buttonsHeight = buttonHeight * buttonsCount;

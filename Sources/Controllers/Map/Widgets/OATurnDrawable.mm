@@ -14,6 +14,8 @@
 {
     BOOL _mini;
     UIColor *_routeDirectionColor;
+    UIBezierPath *_pathForTurnForDrawing;
+    UIBezierPath *_pathForTurnOutlayForDrawing;
 }
 
 - (instancetype) initWithMini:(BOOL)mini
@@ -49,9 +51,11 @@
     float scaleX = self.bounds.size.width / 72.f;
     float scaleY = self.bounds.size.height / 72.f;
     CGAffineTransform m = CGAffineTransformMakeScale(scaleX, scaleY);
-    [_pathForTurn applyTransform:m];
+    _pathForTurnForDrawing = [_pathForTurn copy];
+    [_pathForTurnForDrawing applyTransform:m];
     self.centerText = CGPointMake(scaleX * self.centerText.x, scaleY * self.centerText.y);
-    [_pathForTurnOutlay applyTransform:m];
+    _pathForTurnOutlayForDrawing = [_pathForTurnOutlay copy];
+    [_pathForTurnOutlayForDrawing applyTransform:m];
 }
 
 - (void) setTurnImminent:(int)turnImminent deviatedFromRoute:(BOOL)deviatedFromRoute
@@ -95,10 +99,13 @@
     CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
 
     //CGContextTranslateCTM(aRef, 50, 50);
-    [_pathForTurnOutlay stroke];
-    [_pathForTurn fill];
-    [_pathForTurn stroke];
-    
+    if (_pathForTurnOutlayForDrawing && _pathForTurnForDrawing)
+    {
+        [_pathForTurnOutlayForDrawing stroke];
+        [_pathForTurnForDrawing fill];
+        [_pathForTurnForDrawing stroke];
+    }
+
     if (_turnType && !_mini && _turnType->getExitOut() > 0)
     {
         

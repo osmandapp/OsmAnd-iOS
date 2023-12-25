@@ -17,8 +17,6 @@ final class CarPlaySceneDelegate: UIResponder {
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillResignActive")
         isForegroundScene = false
-        carPlayDashboardController = nil
-        carPlayMapController = nil
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -41,9 +39,9 @@ final class CarPlaySceneDelegate: UIResponder {
             }
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
             let carPlayMode = OAAppSettings.sharedManager()?.isCarPlayModeDefault.get() == true
-            ? OAApplicationMode.getFirstAvailableNavigation()
-            : OAAppSettings.sharedManager()?.carPlayMode.get()
-            
+                ? OAApplicationMode.getFirstAvailableNavigation()
+                : OAAppSettings.sharedManager()?.carPlayMode.get()
+
             OAAppSettings.sharedManager()?.setApplicationModePref(carPlayMode, markAsLastUsed: false)
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
@@ -59,6 +57,7 @@ final class CarPlaySceneDelegate: UIResponder {
                 mapVc = OAMapViewController()
                 OARootViewController.instance()?.mapPanel.setMap(mapVc)
             }
+            mapVc?.isCarPlayDashboardActive = false
             carPlayMapController = OACarPlayMapViewController(carPlay: window, mapViewController: mapVc)
             carPlayDashboardController = OACarPlayDashboardInterfaceController(interfaceController: interfaceController)
             carPlayDashboardController?.delegate = carPlayMapController

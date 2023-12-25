@@ -204,11 +204,11 @@ import Charts
         private static func getColorForType(type: GPXDataSetType) -> UIColor {
             switch type {
             case .ALTITUDE:
-                return UIColor(rgbValue: color_elevation_chart)
+                return UIColor.chartTextColorElevation
             case .SLOPE:
-                return UIColor(rgbValue: color_slope_chart)
+                return UIColor.chartTextColorSlope
             case .SPEED:
-                return UIColor(rgbValue: color_chart_orange)
+                return UIColor.chartTextColorSpeed
             }
         }
     }
@@ -282,8 +282,8 @@ import Charts
             
             let outline = CALayer()
             
-            outline.borderColor = UIColor(rgbValue: color_primary_purple).cgColor
-            outline.backgroundColor = UIColor.white.cgColor
+            outline.borderColor = UIColor.chartSliderLabelStrokeColor.cgColor
+            outline.backgroundColor = UIColor.chartSliderLabelBgColor.cgColor
             outline.borderWidth = 1.0
             outline.cornerRadius = 2.0
             outline.bounds = CGRect(origin: CGPoint(x: labelRect.origin.x - widthOffset, y: labelRect.origin.y), size: CGSize(width: labelRect.size.width + widthOffset * 2, height: labelRect.size.height + heightOffset * 2))
@@ -506,17 +506,17 @@ import Charts
         chartView.marker = marker
         chartView.drawMarkers = true
         
-        let labelsColor = UIColor(rgbValue: color_text_footer)
+        let labelsColor = UIColor.chartTextColorAxisX
         let xAxis: XAxis = chartView.xAxis;
         xAxis.drawAxisLineEnabled = false
         xAxis.drawGridLinesEnabled = false
         xAxis.gridLineWidth = 1.5
-        xAxis.gridColor = .black
+        xAxis.gridColor = UIColor.chartAxisGridLineColor
         xAxis.gridLineDashLengths = [10]
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
         xAxis.resetCustomAxisMin()
-        let yColor = UIColor(rgbValue: color_tint_gray)
+        let yColor = UIColor.chartAxisGridLineColor
         var yAxis: YAxis = chartView.leftAxis;
         yAxis.gridLineDashLengths = [4.0, 4.0]
         yAxis.gridColor = yColor
@@ -526,7 +526,7 @@ import Charts
         yAxis.xOffset = 16.0
         yAxis.yOffset = -6.0
         yAxis.labelCount = yLabelsCount
-        yAxis.labelTextColor = UIColor(rgbValue: color_elevation_chart)
+        yAxis.labelTextColor = UIColor.chartTextColorAxisX
         yAxis.labelFont = UIFont.systemFont(ofSize: 11)
         
         yAxis = chartView.rightAxis;
@@ -621,7 +621,8 @@ import Charts
         yAxis.granularity = 1
         yAxis.resetCustomAxisMax()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
-        yAxis.labelBackgroundColor = UIColor.white.withAlphaComponent(0.6)
+        yAxis.labelTextColor = UIColor.chartTextColorElevation
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
         let values: Array<ChartDataEntry> = calculateElevationArray(analysis: analysis,axisType: axisType, divX: divX, convEle: convEle, useGeneralTrackPoints: true)
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.ALTITUDE, dataSetAxisType: axisType)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
@@ -630,7 +631,7 @@ import Charts
         dataSet.divY = Double.nan
         dataSet.units = mainUnitY
 
-        let chartColor = UIColor(rgbValue: color_elevation_chart)
+        let chartColor = UIColor.chartLineColorElevation
         dataSet.setColor(chartColor)
         dataSet.lineWidth = 1
         if drawFilled {
@@ -649,7 +650,7 @@ import Charts
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
+        dataSet.highlightColor = UIColor.chartSliderLineColor
         dataSet.fillFormatter = HeightFormatter()
         if useRightAxis {
            dataSet.axisDependency = YAxis.AxisDependency.right
@@ -682,8 +683,8 @@ import Charts
         } else {
             yAxis = chartView.leftAxis
         }
-        yAxis.labelTextColor = UIColor(rgbValue: color_slope_chart)
-        yAxis.labelBackgroundColor = UIColor.white.withAlphaComponent(0.6)
+        yAxis.labelTextColor = UIColor.chartTextColorSlope
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
 //        yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
 //        setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_green_grid));
         yAxis.granularity = 1.0
@@ -781,12 +782,13 @@ import Charts
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: slopeValues, label: "", dataSetType: GPXDataSetType.SLOPE, dataSetAxisType: axisType)
         dataSet.divX = divX
         dataSet.units = mainUnitY
-        
-        dataSet.setColor(UIColor(rgbValue: color_slope_chart))
+
+        let chartColor = UIColor.chartLineColorSlope
+        dataSet.setColor(chartColor)
         dataSet.lineWidth = 1
         if (drawFilled) {
             dataSet.fillAlpha = 0.1
-            dataSet.fillColor = UIColor(rgbValue: color_slope_chart)
+            dataSet.fillColor = chartColor
             dataSet.drawFilledEnabled = true
         } else {
             dataSet.drawFilledEnabled = false
@@ -803,7 +805,7 @@ import Charts
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
+        dataSet.highlightColor = UIColor.chartSliderLineColor
 
         if useRightAxis {
             dataSet.axisDependency = YAxis.AxisDependency.right
@@ -978,14 +980,8 @@ import Charts
         } else {
             yAxis = chartView.leftAxis
         }
-        if (analysis.hasSpeedInTrack) {
-            yAxis.labelTextColor = UIColor(rgbValue: color_chart_orange_label)
-            yAxis.gridColor = UIColor(argbValue: color_chart_orange_grid)
-        } else {
-            yAxis.labelTextColor = UIColor(rgbValue: color_chart_red_label)
-            yAxis.gridColor = UIColor(argbValue: color_chart_red_grid)
-        }
-
+        yAxis.labelTextColor = UIColor.chartTextColorSpeed
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
         yAxis.axisMinimum = 0.0
         
         var values: Array<ChartDataEntry> = [ChartDataEntry]()
@@ -1045,20 +1041,13 @@ import Charts
             dataSet.mulY = Double.nan
         }
         dataSet.units = mainUnitY ?? ""
-        
-        if (analysis.hasSpeedInTrack) {
-            dataSet.setColor(UIColor(rgbValue: color_chart_orange))
-        } else {
-            dataSet.setColor(UIColor(rgbValue: color_chart_red))
-        }
+
+        let chartColor = UIColor.chartLineColorSpeed
+        dataSet.setColor(chartColor)
         dataSet.lineWidth = 1
         if (drawFilled) {
             dataSet.fillAlpha = 0.1
-            if (analysis.hasSpeedInTrack) {
-                dataSet.fillColor = UIColor(rgbValue: color_chart_orange)
-            } else {
-                dataSet.fillColor = UIColor(rgbValue: color_chart_red)
-            }
+            dataSet.fillColor = chartColor
             dataSet.drawFilledEnabled = true
         } else {
             dataSet.drawFilledEnabled = false
@@ -1074,7 +1063,7 @@ import Charts
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor(rgbValue: color_primary_purple)
+        dataSet.highlightColor = UIColor.chartSliderLineColor
 
         if (useRightAxis) {
             dataSet.axisDependency = .right

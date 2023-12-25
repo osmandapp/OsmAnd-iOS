@@ -87,6 +87,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     [self configureAppLaunchEvent:AppLaunchEventStart];
 
     NSLog(@"OAAppDelegate initialize start");
+    
 
     // Configure device
     UIDevice* device = [UIDevice currentDevice];
@@ -179,6 +180,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     return YES;
 }
 
+- (void)protectedDataAvailable
+{
+    NSLog(@"protectedDataAvailable");
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationProtectedDataDidBecomeAvailable object:nil];
+    [self initialize];
+    [self setupDataFetchQueue];
+}
+
 - (void)requestUpdatesOnNetworkReachable
 {
     [AFNetworkReachabilityManager.sharedManager startMonitoring];
@@ -223,7 +232,27 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    NSLog(@"didFinishLaunchingWithOptions");
+    if (![UIApplication sharedApplication].isProtectedDataAvailable) {
+        NSLog(@"isProtectedDataAvailable is false");
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(protectedDataAvailable)
+                                                     name:UIApplicationProtectedDataDidBecomeAvailable
+                                                   object:nil];
+        return NO;
+    }
+    
     [self initialize];
+    [self setupDataFetchQueue];
+
+    if (application.applicationState == UIApplicationStateBackground)
+        return NO;
+
+    return YES;
+}
+
+- (void)setupDataFetchQueue
+{
     if (!_dataFetchQueue)
     {
         // Set the background fetch
@@ -240,11 +269,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
         }
     }
-
-    if (application.applicationState == UIApplicationStateBackground)
-        return NO;
-
-    return YES;
 }
 
 - (void)handleBackgroundDataFetch:(BGProcessingTask *)task

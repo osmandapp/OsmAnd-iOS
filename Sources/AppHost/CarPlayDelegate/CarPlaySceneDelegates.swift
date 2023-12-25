@@ -39,9 +39,9 @@ final class CarPlaySceneDelegate: UIResponder {
             }
             presentInCarPlay(interfaceController: carPlayInterfaceController, window: windowToAttach)
             let carPlayMode = OAAppSettings.sharedManager()?.isCarPlayModeDefault.get() == true
-            ? OAApplicationMode.getFirstAvailableNavigation()
-            : OAAppSettings.sharedManager()?.carPlayMode.get()
-            
+                ? OAApplicationMode.getFirstAvailableNavigation()
+                : OAAppSettings.sharedManager()?.carPlayMode.get()
+
             OAAppSettings.sharedManager()?.setApplicationModePref(carPlayMode, markAsLastUsed: false)
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller

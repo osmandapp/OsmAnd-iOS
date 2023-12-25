@@ -25,7 +25,7 @@
 #import <MBProgressHUD.h>
 #import "OAAutoObserverProxy.h"
 #import "OAImageDescTableViewCell.h"
-#import "OATitleRightIconCell.h"
+#import "OARightIconTableViewCell.h"
 #import "OAMapViewController.h"
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
@@ -613,16 +613,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:[OATitleRightIconCell getCellIdentifier]];
+        OARightIconTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.titleView.text = item[@"title"];
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.titleView.textColor = UIColor.textColorActive;
-            cell.iconView.tintColor = UIColor.iconColorActive;
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+            cell.rightIconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.titleLabel.text = item[@"title"];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.rightIconView.tintColor = UIColor.iconColorActive;
         }
         return cell;
     }

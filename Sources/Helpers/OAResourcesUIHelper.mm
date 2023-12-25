@@ -616,7 +616,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
     else if ([titleWithoutExt.lowercaseString hasSuffix:GPX_FILE_EXT])
         return OsmAndApp.instance.gpxPath;
-    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP] && [self isHidden])
+    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP] && [self hidden])
         return OsmAndApp.instance.dataPath;
     return OsmAndApp.instance.documentsPath;
 }
@@ -914,6 +914,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 }
 
 + (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes
+includeHidden:(BOOL)includeHidden
 {
     NSMutableArray<NSString *> *items = [NSMutableArray new];
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -925,6 +926,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         // Skip mini basemap since it's builtin and not installed in ios
         if (resourceTypes.contains(installedResource->type) && installedResource->id != QString::fromNSString(kWorldMiniBasemapKey.lowercaseString))
             [items addObject:installedResource->localPath.toNSString()];
+    }
+    if (!includeHidden)
+    {
+        // Exclude files from the folder Hidden/
+        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT SELF CONTAINS[cd] %@", [HIDDEN_DIR stringByAppendingString:@"/"]];
+        [items filterUsingPredicate:predicate];
     }
     return items;
 }

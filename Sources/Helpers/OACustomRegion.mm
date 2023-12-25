@@ -227,8 +227,8 @@
                 indexItem.firstSubNames = firstSubNames;
                 indexItem.secondSubNames = secondSubNames;
                 indexItem.descriptionInfo = descriptionInfo;
-                indexItem.isHidden = isHidden;
-                if (indexItem.isHidden)
+                indexItem.hidden = isHidden;
+                if (indexItem.hidden)
                 {
                     indexItem.subfolder = HIDDEN_DIR;
                 }

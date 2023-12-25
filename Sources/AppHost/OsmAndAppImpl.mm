@@ -214,14 +214,7 @@
     [self createFolderIfNeeded:_gpxPath];
     [self createFolderIfNeeded:_favoritesPath];
     [self createFolderIfNeeded:_weatherForecastPath];
-    
-    [self createHiddenMapFolderIfNeeded];
-}
-
-- (void)createHiddenMapFolderIfNeeded
-{
-    if (![[NSFileManager defaultManager] fileExistsAtPath:_hiddenMapsPath])
-        [[NSFileManager defaultManager] createDirectoryAtPath:_hiddenMapsPath withIntermediateDirectories:YES attributes:nil error:nil];
+    [self createFolderIfNeeded:_hiddenMapsPath];
 }
 
 - (void)createFolderIfNeeded:(NSString *)path

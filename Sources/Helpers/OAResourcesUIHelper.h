@@ -30,7 +30,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @property id<OADownloadTask> __weak downloadTask;
 @property OAWorldRegion *worldRegion;
 @property BOOL disabled;
-@property (nonatomic, assign) BOOL isHidden;
+@property (nonatomic, assign) BOOL hidden;
 
 - (void)updateSize;
 - (NSString *)getDate;
@@ -286,7 +286,7 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (NSArray<OAMapStyleResourceItem *> *) getExternalMapStyles;
 
-+ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes;
++ (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes includeHidden:(BOOL)includeHidden;
 + (QVector<std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>>) getExternalMapFilesAt:(OsmAnd::PointI)point routeData:(BOOL)routeData;
 
 @end

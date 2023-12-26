@@ -36,6 +36,8 @@
 @property(nonatomic, readonly) NSString *gpxTravelPath;
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
 
+@property(readonly) BOOL initialized;
+
 @property(readonly) OAAppData* data;
 @property(readonly) OAWorldRegion* worldRegion;
 

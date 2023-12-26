@@ -25,6 +25,8 @@
 - (BOOL) initializeCore;
 - (void) shutdown;
 
+@property(readonly) BOOL initialized;
+
 @property(nonatomic, readonly) NSString* dataPath;
 @property(nonatomic, readonly) NSString* documentsPath;
 @property(nonatomic, readonly) NSString* cachePath;

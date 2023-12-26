@@ -60,6 +60,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     UIBackgroundTaskIdentifier _appInitTask;
     BOOL _appInitDone;
     BOOL _appInitializing;
+    BOOL _didFinishLaunching;
     NSTimer *_checkUpdatesTimer;
     NSOperationQueue *_dataFetchQueue;
 }
@@ -77,13 +78,24 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (BOOL)initialize
 {
-    if (_appInitDone || _appInitializing)
-    {
-        [self configureAppLaunchEvent:AppLaunchEventRestoreSession];
-        return YES;
+    @synchronized (self) {
+        if (_appInitDone)
+        {
+            if (_didFinishLaunching)
+            {
+                _didFinishLaunching = NO;
+                //[self configureAppLaunchEvent:AppLaunchEventRestoreSession];
+                [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
+            }
+            return YES;
+        }
+
+        if (_appInitializing)
+            return NO;
+
+        _appInitializing = YES;
     }
-       
-    _appInitializing = YES;
+
     [self configureAppLaunchEvent:AppLaunchEventStart];
 
     NSLog(@"OAAppDelegate initialize start");
@@ -223,7 +235,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    [self initialize];
+    _didFinishLaunching = YES;
     if (!_dataFetchQueue)
     {
         // Set the background fetch
@@ -240,9 +252,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             NSLog(@"Failed to schedule background fetch. Reason: %@", e.reason);
         }
     }
-
-    if (application.applicationState == UIApplicationStateBackground)
-        return NO;
 
     return YES;
 }

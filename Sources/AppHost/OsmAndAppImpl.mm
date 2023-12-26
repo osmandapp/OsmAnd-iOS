@@ -92,7 +92,6 @@
 #define _(name)
 @implementation OsmAndAppImpl
 {
-    BOOL _initialized;
     BOOL _initializedCore;
 
     NSString* _worldMiniBasemapFilename;
@@ -111,6 +110,7 @@
     BOOL _carPlayActive;
 }
 
+@synthesize initialized = _initialized;
 @synthesize dataPath = _dataPath;
 @synthesize dataDir = _dataDir;
 @synthesize documentsPath = _documentsPath;

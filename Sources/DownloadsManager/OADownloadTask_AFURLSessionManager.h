@@ -21,7 +21,8 @@
                       andRequest:(NSURLRequest*)request
                    andTargetPath:(NSString*)targetPath
                           andKey:(NSString*)key
-                         andName:(NSString*)name;
+                         andName:(NSString*)name
+                       andHidden:(BOOL)hidden;
 
 - (instancetype)initUsingManager:(AFURLSessionManager*)manager
                        withOwner:(OADownloadsManager*)owner
@@ -29,7 +30,8 @@
                    andResumeData:(NSData*)resumeData
                    andTargetPath:(NSString*)targetPath
                           andKey:(NSString*)key
-                         andName:(NSString*)name;
+                         andName:(NSString*)name
+                       andHidden:(BOOL)hidden;
 
 @property(readonly) NSURLSessionDownloadTask* task;
 

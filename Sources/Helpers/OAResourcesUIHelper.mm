@@ -616,8 +616,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
     else if ([titleWithoutExt.lowercaseString hasSuffix:GPX_FILE_EXT])
         return OsmAndApp.instance.gpxPath;
-    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP] && [self hidden])
-        return OsmAndApp.instance.dataPath;
+    else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
+        return self.hidden ? OsmAndApp.instance.hiddenMapsPath : OsmAndApp.instance.documentsPath;
     return OsmAndApp.instance.documentsPath;
 }
 
@@ -880,7 +880,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
     id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
                                                                                       andKey:[@"resource:" stringByAppendingString:resourceId]
-                                                                                     andName:name];
+                                                                                     andName:name
+                                                                                   andHidden:NO];
 
     if ([[OsmAndApp instance].downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
         [task resume];
@@ -922,16 +923,13 @@ includeHidden:(BOOL)includeHidden
     {
         if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed)
             continue;
+        if (!includeHidden && app.resourcesManager->isLocalResourceHidden(localResource))
+            continue;
+
         const auto& installedResource = std::static_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
         // Skip mini basemap since it's builtin and not installed in ios
         if (resourceTypes.contains(installedResource->type) && installedResource->id != QString::fromNSString(kWorldMiniBasemapKey.lowercaseString))
             [items addObject:installedResource->localPath.toNSString()];
-    }
-    if (!includeHidden)
-    {
-        // Exclude files from the folder Hidden/
-        NSPredicate *predicate = [NSPredicate predicateWithFormat:@"NOT SELF CONTAINS[cd] %@", [HIDDEN_DIR stringByAppendingString:@"/"]];
-        [items filterUsingPredicate:predicate];
     }
     return items;
 }
@@ -1276,7 +1274,7 @@ includeHidden:(BOOL)includeHidden
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent fileName:name];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }
@@ -1292,7 +1290,8 @@ includeHidden:(BOOL)includeHidden
             OsmAndAppInstance app = [OsmAndApp instance];
             id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
-                                                                            andName:name];
+                                                                            andName:name
+                                                                          andHidden:item.hidden];
             if (onTaskCreated)
                 onTaskCreated(task);
 
@@ -1574,7 +1573,8 @@ includeHidden:(BOOL)includeHidden
         id<OADownloadTask> task;
         if (!item.downloadTask)
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
-                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name];
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name
+                                                                           andHidden:item.hidden];
         else
             task = item.downloadTask;
 
@@ -1609,7 +1609,7 @@ includeHidden:(BOOL)includeHidden
         OsmAndAppInstance app = [OsmAndApp instance];
         id<OADownloadTask> task;
         if (!item.downloadTask)
-            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name];
+            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name andHidden:item.hidden];
         else
             task = item.downloadTask;
 
@@ -1668,7 +1668,8 @@ includeHidden:(BOOL)includeHidden
     OsmAndAppInstance app = [OsmAndApp instance];
     id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
-                                                                    andName:name];
+                                                                    andName:name
+                                                                  andHidden:NO];
 
     if (onTaskCreated)
         onTaskCreated(task);

@@ -24,6 +24,7 @@
                    andTargetPath:(NSString*)targetPath
                           andKey:(NSString*)key
                          andName:(NSString*)name
+                       andHidden:(BOOL)hidden
 {
     self = [super init];
     if (self) {
@@ -32,7 +33,8 @@
         _targetPath = [targetPath copy];
         _key = [key copy];
         _name = [name copy];
-        
+        _hidden = hidden;
+
         NSProgress* progress;
         _task = [manager downloadTaskWithRequest:request
                                         progress:&progress
@@ -59,6 +61,7 @@
                    andTargetPath:(NSString*)targetPath
                           andKey:(NSString*)key
                          andName:(NSString*)name
+                       andHidden:(BOOL)hidden
 {
     self = [super init];
     if (self) {
@@ -67,7 +70,8 @@
         _targetPath = [targetPath copy];
         _key = [key copy];
         _name = [name copy];
-        
+        _hidden = hidden;
+
         NSProgress* progress;
         NSURLSessionDownloadTask* task = [manager downloadTaskWithResumeData:resumeData
                                                                     progress:&progress
@@ -200,6 +204,7 @@
 @synthesize targetPath = _targetPath;
 @synthesize key = _key;
 @synthesize name = _name;
+@synthesize hidden = _hidden;
 
 - (OADownloadTaskState)state
 {

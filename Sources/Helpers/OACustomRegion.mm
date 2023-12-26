@@ -228,10 +228,6 @@
                 indexItem.secondSubNames = secondSubNames;
                 indexItem.descriptionInfo = descriptionInfo;
                 indexItem.hidden = isHidden;
-                if (indexItem.hidden)
-                {
-                    indexItem.subfolder = HIDDEN_DIR;
-                }
 //                indexItem.timestamp = timestamp;
                 indexItem.size = contentSize;
                 indexItem.sizePkg = containerSize;

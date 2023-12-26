@@ -90,7 +90,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     [[OAGPXDatabase sharedDb] save];
 }
 
-+ (void)installObfResource:(BOOL &)failed localPath:(NSString *)localPath fileName:(NSString *)fileName
++ (void)installObfResource:(BOOL &)failed localPath:(NSString *)localPath fileName:(NSString *)fileName hidden:(BOOL)hidden
 {
     OsmAnd::ArchiveReader archive(QString::fromNSString(localPath));
     // List items
@@ -119,17 +119,10 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         NSLog(@"Custom obf in the archive is not valid");
         failed = YES;
     }
-    NSString *unzippedPath = nil;
-    if ([fileName hasPrefix:HIDDEN_DIR])
-    {
-        unzippedPath = [OsmAndApp.instance.dataPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
-    }
-    else
-    {
-        unzippedPath = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
-    }
+    NSString *unzippedPath = hidden
+        ? [OsmAndApp.instance.hiddenMapsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension
+        : [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:fileName].stringByDeletingPathExtension;
 
-   
     [NSFileManager.defaultManager removeItemAtPath:unzippedPath error:nil];
     QString pathToFile = QString::fromNSString(unzippedPath);
     if (!archive.extractItemToFile(obfArchiveItem.name, pathToFile))
@@ -148,7 +141,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     [mapCreatorHelper installFile:localPath newFileName:fileName.lastPathComponent];
 }
 
-+ (BOOL) installCustomResource:(NSString *)localPath nsResourceId:(NSString *)nsResourceId fileName:(NSString *)fileName
++ (BOOL) installCustomResource:(NSString *)localPath nsResourceId:(NSString *)nsResourceId fileName:(NSString *)fileName hidden:(BOOL)hidden
 {
     BOOL failed = NO;
     NSString *unzippedFilePath = localPath;
@@ -196,7 +189,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     if ([nsResourceId hasSuffix:@"sqlitedb"])
         [self installSqliteResource:unzippedFilePath fileName:fileName];
     else if ([nsResourceId hasSuffix:@"obf.zip"])
-        [self installObfResource:failed localPath:unzippedFilePath fileName:fileName];
+        [self installObfResource:failed localPath:unzippedFilePath fileName:fileName hidden:hidden];
     else if ([nsResourceId hasSuffix:@"gpx"])
         [self installGpxResource:unzippedFilePath fileName:fileName];
     
@@ -328,7 +321,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                 else
                 {
                     // Handle custom resources
-                    BOOL failed = [self.class installCustomResource:localPath nsResourceId:nsResourceId fileName:task.name];
+                    BOOL failed = [self.class installCustomResource:localPath nsResourceId:nsResourceId fileName:task.name hidden:task.hidden];
                     if (failed)
                     {
                         task.installResourceRetry++;

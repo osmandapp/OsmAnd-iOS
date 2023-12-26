@@ -122,6 +122,7 @@
 @synthesize favoritesPath = _favoritesPath;
 @synthesize travelGuidesPath = _travelGuidesPath;
 @synthesize gpxTravelPath = _gpxTravelPath;
+@synthesize hiddenMapsPath = _hiddenMapsPath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -172,6 +173,7 @@
         _favoritesLegacyFilename = _documentsDir.filePath(QLatin1String("favourites.gpx")).toNSString();
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
+        _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
@@ -212,6 +214,7 @@
     [self createFolderIfNeeded:_gpxPath];
     [self createFolderIfNeeded:_favoritesPath];
     [self createFolderIfNeeded:_weatherForecastPath];
+    [self createFolderIfNeeded:_hiddenMapsPath];
 }
 
 - (void)createFolderIfNeeded:(NSString *)path
@@ -441,6 +444,7 @@
                                                          QList<QString>() << QString::fromNSString([[NSBundle mainBundle] resourcePath]),
                                                          _worldMiniBasemapFilename != nil ? QString::fromNSString(_worldMiniBasemapFilename) : QString(),
                                                          QString::fromNSString(NSTemporaryDirectory()),
+                                                         QString::fromNSString(_hiddenMapsPath),
                                                          QString::fromNSString(_cachePath),
                                                          QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                          QString::fromNSString(@"https://download.osmand.net"),
@@ -1044,6 +1048,7 @@
                                                              ? QString::fromNSString(_worldMiniBasemapFilename)
                                                              : QString(),
                                                              QString::fromNSString(NSTemporaryDirectory()),
+                                                             QString::fromNSString(_hiddenMapsPath),
                                                              QString::fromNSString(_cachePath),
                                                              QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
                                                              QString::fromNSString(@"https://download.osmand.net"),

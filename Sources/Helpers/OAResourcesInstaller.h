@@ -15,6 +15,6 @@ UIKIT_EXTERN NSString *const OAResourceInstallationFailedNotification;
 
 - (instancetype)init;
 
-+ (BOOL) installCustomResource:(NSString *)localPath nsResourceId:(NSString *)nsResourceId fileName:(NSString *)fileName hidden:(BOOL)hidden;
++ (BOOL) installCustomResource:(NSString *)localPath resourceId:(NSString *)resourceId fileName:(NSString *)fileName hidden:(BOOL)hidden;
 
 @end

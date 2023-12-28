@@ -163,7 +163,7 @@
 "map_widget_distance_by_tap" = "Distance by tap";
 "shared_string_collapse" = "ჩამოშლა";
 "shared_string_topbar" = "ზედა პანელი";
-"shared_string_widgets" = "ღილაკები";
+"shared_string_widgets" = "ვიჯეტები";
 "map_widget_right" = "მარჯვენა პანელი";
 "map_widget_left" = "მარცხენა პანელი";
 "layer_map_appearance" = "ეკრანის გამართვა";
@@ -546,7 +546,7 @@
 "name_and_descr" = "Name & description";
 "select_group" = "აირჩიეთ ჯგუფი";
 "shared_string_icon" = "ხატულა";
-"shared_string_shape" = "Shape";
+"shared_string_shape" = "მოხაზულობა";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
 "fav_point_dublicate_message" = "Favorite renamed to \'%@\' to avoid duplication.";
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
@@ -1963,7 +1963,7 @@
 "rendering_attr_surfaceIntegrity_name" = "გზის საფრის ერთიანობა";
 "routing_attr_allow_intermediate_description" = "More difficult routes with steeper sections. Generally some obstacles that should be avoided.";
 "rendering_attr_coloredBuildings_name" = "Color-code buildings by type";
-"rendering_attr_piste_difficulty_advanced_name" = "რთული";
+"rendering_attr_piste_difficulty_advanced_name" = "დამატებით";
 "routeInfo_road_types_name" = "გზის ტიპები";
 "rendering_attr_showRoadMaps_description" = "აირჩიეთ მხოლოდ გზების საჩვენებლად:";
 "rendering_value_translucent_blue_name" = "გამჭირვალე ლურჯი";
@@ -1988,7 +1988,7 @@
 "rendering_attr_hideWoodScrubs_name" = "Wood and scrubs";
 "rendering_attr_surface_wood_name" = "ხე";
 "rendering_attr_smoothness_horrible_name" = "საშინელი";
-"rendering_attr_smoothness_impassable_name" = "შეუძლებელი";
+"rendering_attr_smoothness_impassable_name" = "გაუვალი";
 "rendering_attr_surface_sett_name" = "კოჭი";
 "rendering_attr_roadStyle_name" = "გზის სტილი";
 "rendering_attr_surface_gravel_name" = "ხრეში";
@@ -2329,3 +2329,12 @@
 "shared_string_keep_active" = "აქტიურად დატოვება";
 "shared_string_height" = "სიმაღლე";
 "icon_group_service" = "სერვისი";
+"rendering_attr_horse_scale_impossible_name" = "შეუძლებელი";
+"rendering_attr_horse_scale_common_name" = "საერთო";
+"routing_attr_difficulty_preference_beginner_name" = "დამწყები";
+"rendering_attr_horse_scale_critical_name" = "კრიტიკული";
+"shared_string_symbol" = "სიმბოლო";
+"shared_string_buttons" = "ღილაკები";
+"rendering_attr_horse_scale_difficult_name" = "რთული";
+"routing_attr_freeride_policy_allow_name" = "დაშვება";
+"rendering_attr_horse_scale_dangerous_name" = "საშიში";

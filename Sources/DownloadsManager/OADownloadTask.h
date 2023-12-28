@@ -29,6 +29,7 @@ typedef NS_ENUM(NSInteger, OADownloadTaskState) {
 @property(readonly) NSString* targetPath;
 @property(readonly) NSString* key;
 @property(readonly) NSString* name;
+@property(readonly) BOOL hidden;
 
 @property(readonly) OADownloadTaskState state;
 - (void)resume;

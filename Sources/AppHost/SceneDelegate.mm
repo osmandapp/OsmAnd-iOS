@@ -80,8 +80,10 @@
     _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
     
     OAAppDelegate *appDelegate = [self appDelegate];
+    [appDelegate initialize];
+
     _rootViewController = appDelegate.rootViewController;
-    
+
     [self configureServices];
     
     if (connectionOptions.URLContexts.count > 0) {
@@ -155,9 +157,8 @@
             NSLog(@"AppLaunchEventRestoreSession");
             _rootViewController = [OARootViewController new];
             if ([self appDelegate].rootViewController == nil)
-            {
                 [self appDelegate].rootViewController = _rootViewController;
-            }
+
             _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
             [_window makeKeyAndVisible];
             break;
@@ -174,11 +175,10 @@
 {
     // setup rootViewController if CarPlay(another scenes) was launched first
     if ([self appDelegate].rootViewController == nil)
-    {
         [self appDelegate].rootViewController = [OARootViewController new];
-    }
+
     _rootViewController = [self appDelegate].rootViewController;
-    
+
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
 }

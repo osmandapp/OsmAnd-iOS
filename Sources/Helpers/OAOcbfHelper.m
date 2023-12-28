@@ -13,7 +13,7 @@
 
 + (void) downloadOcbfIfUpdated
 {
-    NSString *urlString = @"https://download.osmand.net/regions_v2.ocbf";
+    NSString *urlString = @"https://creator.osmand.net/basemap/regions.ocbf";
     
     OALog(@"Downloading HTTP header from: %@", urlString);
     NSURL *url = [NSURL URLWithString:urlString];
@@ -39,7 +39,7 @@
     [NSURLConnection sendSynchronousRequest:request returningResponse:&response error: NULL];
     if ([response respondsToSelector:@selector(allHeaderFields)])
         lastModifiedString = [[response allHeaderFields] objectForKey:@"Last-Modified"];
-    
+
     NSDate *lastModifiedServer = nil;
     @try
     {

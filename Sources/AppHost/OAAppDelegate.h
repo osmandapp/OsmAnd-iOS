@@ -24,6 +24,8 @@ FOUNDATION_EXPORT NSNotificationName _Nonnull const OALaunchUpdateStateNotificat
 @property (nonatomic, assign) AppLaunchEvent appLaunchEvent;
 @property (nonatomic, assign) UIInterfaceOrientation interfaceOrientation;
 
+- (BOOL)initialize;
+
 - (void)scheduleBackgroundDataFetch;
 
 - (void)applicationDidBecomeActive;

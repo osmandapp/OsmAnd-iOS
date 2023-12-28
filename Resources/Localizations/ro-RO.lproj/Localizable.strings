@@ -976,7 +976,7 @@
 "select_group" = "Selectați grupul";
 "quick_action_switch_profile_descr" = "Butonul de acțiune permite comutarea între profilurile selectate.";
 "shared_string_add_profile" = "Adaugă profil";
-"width_limit_description" = "Țineți cont de lățimea vehiculului dumneavoastră, deoarece se pot aplica unele restricții de traseu pentru vehiculele late.";
+"width_limit_description" = "Precizați lățimea vehiculului dumneavoastră, deoarece se pot aplica unele restricții de traseu pentru vehiculele late.";
 "height_limit_description" = "Precizați înălțimea vehiculului dumneavoastră, deoarece se pot aplica unele restricții de traseu pentru vehiculele înalte.";
 "weight_limit_description" = "Precizați greutatea vehiculului, deoarece se pot aplica unele restricții de traseu pentru vehiculele grele.";
 "gpx_parse_error" = "Probleme găsite cu un fișier GPX.\n\nPuteți contacta serviciul de asistență OsmAnd pentru a investiga.";
@@ -2026,9 +2026,9 @@
 "shared_string_meters" = "metri";
 "srtm_download_list_help_message" = "OsmAnd oferă date despre curbele de nivel în metri și picioare. Va trebui să descărcați din nou fișierul pentru a schimba formatul.";
 "srtm_download_single_help_message" = "Selectați varianta. Va trebui să descărcați iar fișierul pentru a schimba formatul.";
-"srtm_unit_format" = "Variantă unități linii de contur";
+"srtm_unit_format" = "Variantă unitate linii de contur";
 "download_suggestion" = "Descărcați harta detaliată %@ pentru a vizualiza această zonă";
-"download_map_dialog" = "Descărcați harta de dialog";
+"download_map_dialog" = "Dialog pentru descărcare hartă";
 "shared_string_navigation" = "Navigație";
 "dialogs_and_notifications_descr" = "Control popups, dialoguriși notificări.";
 "dialogs_and_notifications_title" = "Dialoguriși notificări";
@@ -2068,7 +2068,7 @@
 "slope_grey_color_descr" = "Culoarea gri este utilizată atunci când panta este nedefinită.";
 "shared_string_overview" = "Vedere de ansamblu";
 "analyze_on_map" = "Analizează pe hartă";
-"upload_to_openstreetmap" = "Încărcați pe OpenStreetMap";
+"upload_to_openstreetmap" = "Încarcă pe OpenStreetMap";
 "edit_track" = "Editează traseu";
 "activity" = "Activitate";
 "delete_waypoints" = "Șterge puncte intermediare";
@@ -2318,7 +2318,7 @@
 "annual_subscription" = "Abonament anual";
 "transport_hazmat_yes_desc" = "Selectați categoria aplicabilă.";
 "expired" = "Expirat";
-"restore_purchases" = "Restaurarea achizițiilor";
+"restore_purchases" = "Restaurează achiziții";
 "explore_osmnad_plans_to_find_suitable" = "Explorați planurile OsmAnd pentru a găsi unul potrivit pentru dumneavoastră.";
 "ltr_or_rtl_combine_via_or" = "%@ sau %@";
 "nautical_depth" = "Adâncime nautică";
@@ -2545,7 +2545,7 @@
 "shared_string_leave" = "Lăsați";
 "backup_delete_all_data" = "Șterge toate datele mele";
 "manage_storage" = "Gestionați stocarea";
-"contact_support" = "Contactați asistența";
+"contact_support" = "Contactează asistența";
 "map_widget_rendering_fps" = "FPS randare hartă";
 "shared_string_contributions" = "Contribuții";
 "shared_string_profile" = "Profil";
@@ -2632,7 +2632,7 @@
 "routing_attr_goods_restrictions_yes_desc" = "Se vor evita drumurile care sunt închise pentru livrarea mărfurilor.";
 "shared_string_cloud" = "Cloud";
 "upload_all" = "Încarcă tot";
-"download_all" = "Descărcați toate";
+"download_all" = "Descărcați tot";
 "cloud_all_changes_downloaded" = "S-au descărcat toate modificările";
 "recalc_angle_dialog_title" = "Unghiul minim dintre locație și rută";
 "upload_change" = "Încarcă modificarea";

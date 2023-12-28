@@ -15,13 +15,17 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
     
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate sceneWillResignActive")
+        NotificationCenter.default.removeObserver(self)
         isForegroundScene = false
         mapVC?.isCarPlayDashboardActive = false
     }
     
     private func configureScene() {
+        NotificationCenter.default.removeObserver(self)
         guard let window else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
+        appDelegate.initialize()
+
         if case .setupRoot = appDelegate.appLaunchEvent {
             // if CarPlay was open without a connected device
             if appDelegate.rootViewController == nil {
@@ -59,7 +63,6 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
             }
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
-            NotificationCenter.default.removeObserver(self)
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
         }
     }
@@ -71,9 +74,7 @@ final class DashboardCarPlaySceneDelegate: UIResponder {
               let event = AppLaunchEvent(rawValue: item) else { return }
         if case .setupRoot = event {
             guard isForegroundScene else { return }
-            guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
             NSLog("[CarPlay] DashboardCarPlaySceneDelegate appInitEventConfigureScene success")
-            appDelegate.rootViewController = OARootViewController()
             configureScene()
         }
     }

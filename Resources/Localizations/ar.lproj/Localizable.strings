@@ -2906,7 +2906,7 @@
 "mapillary_widget_desc" = "ويدجت الوصول السريع إلى تطبيق مابيلاري لإضافة صور على مستوى الشارع.";
 "current_time_widget_desc" = "ويدجت عرض الوقت الحالي من جهازك.";
 "map_widget_group_sunrise_sunset" = "شروق الشمس، غروب الشمس";
-"angular_measeurement" = "وحدات قياس الزاويا";
+"angular_measeurement" = "وحدات قياس الزوايا";
 "av_notes_choose_action_widget_desc" = "اختر إجراء.";
 "second_next_turn_widget_desc" = "يعرض الويدجت معلومات حول المنعطف التالي الثاني الذي يتم تمكينه إذا انعطف ضمن مسافة قريبة.";
 "gps_info_widget_desc" = "ويدجت عرض الأقمار الصناعية المستخدمة في هذه اللحظة.";

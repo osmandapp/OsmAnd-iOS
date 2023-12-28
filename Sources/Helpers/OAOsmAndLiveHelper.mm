@@ -149,12 +149,10 @@
             int secondsRequired = updateFrequency == ELiveUpdateFrequencyHourly ? kLiveUpdateFrequencyHour : updateFrequency == ELiveUpdateFrequencyDaily ? kLiveUpdateFrequencyDay : kLiveUpdateFrequencyWeek;
             if (seconds > secondsRequired || updateTime == -1.0)
             {
-                const auto& lst = resourcesManager->changesManager->
-                getUpdatesByMonth(regionName);
+                const auto& lst = resourcesManager->changesManager->getUpdatesByMonth(regionName);
                 for (const auto& res : lst->getItemsForUpdate())
-                {
                     [OAResourcesUIHelper startBackgroundDownloadOf:res];
-                }
+
                 [OAOsmAndLiveHelper setPreferenceLastUpdateForLocalIndex:regionNameStr value:
                     [[NSDate date] timeIntervalSince1970]];
                 [[OsmAndApp instance].osmAndLiveUpdatedObservable notifyEvent];

@@ -16,6 +16,7 @@ final class CarPlaySceneDelegate: UIResponder {
     
     func sceneWillResignActive(_ scene: UIScene) {
         NSLog("[CarPlay] CarPlaySceneDelegate sceneWillResignActive")
+        NotificationCenter.default.removeObserver(self)
         isForegroundScene = false
     }
     
@@ -29,8 +30,10 @@ final class CarPlaySceneDelegate: UIResponder {
     }
     
     private func configureScene() {
+        NotificationCenter.default.removeObserver(self)
         guard let carPlayInterfaceController, let windowToAttach else { return }
         guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
+        appDelegate.initialize()
         
         if case .setupRoot = appDelegate.appLaunchEvent {
             // if CarPlay was open without a connected device
@@ -45,7 +48,6 @@ final class CarPlaySceneDelegate: UIResponder {
             OAAppSettings.sharedManager()?.setApplicationModePref(carPlayMode, markAsLastUsed: false)
         } else {
             // if the scene becomes active (sceneWillEnterForeground) before setting the root view controller
-            NotificationCenter.default.removeObserver(self)
             NotificationCenter.default.addObserver(self, selector: #selector(appInitEventConfigureScene(notification:)), name: NSNotification.Name.OALaunchUpdateState, object: nil)
         }
     }
@@ -86,9 +88,7 @@ final class CarPlaySceneDelegate: UIResponder {
               let event = AppLaunchEvent(rawValue: item) else { return }
         if case .setupRoot = event {
             guard isForegroundScene else { return }
-            guard let appDelegate = UIApplication.shared.delegate as? OAAppDelegate else { return }
             NSLog("[CarPlay] CarPlaySceneDelegate appInitEventConfigureScene success")
-            appDelegate.rootViewController = OARootViewController()
             configureScene()
         }
     }

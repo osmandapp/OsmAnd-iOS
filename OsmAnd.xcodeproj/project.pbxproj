@@ -12294,10 +12294,8 @@
 		DA5A7D7826C563A300F274C7 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				FA0ADED92B31995A006129D1 /* OACustomSourceDetailsViewController */,
 				FA6797EC2A8501C60022F2A9 /* OAWeatherAutoUpdateSettingsViewController */,
-				DA5A7D7A26C563A300F274C7 /* OACustomSourceDetailsViewController.h */,
-				DA5A7D8D26C563A300F274C7 /* OACustomSourceDetailsViewController.mm */,
-				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
 				DA5A7D8B26C563A300F274C7 /* OADonationSettingsViewController.h */,
 				DA5A7D7F26C563A300F274C7 /* OADonationSettingsViewController.mm */,
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
@@ -14002,6 +14000,16 @@
 				DAD3FD252A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift */,
 			);
 			path = WidgetSettings;
+			sourceTree = "<group>";
+		};
+		FA0ADED92B31995A006129D1 /* OACustomSourceDetailsViewController */ = {
+			isa = PBXGroup;
+			children = (
+				DA5A7D7A26C563A300F274C7 /* OACustomSourceDetailsViewController.h */,
+				DA5A7D8D26C563A300F274C7 /* OACustomSourceDetailsViewController.mm */,
+				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
+			);
+			path = OACustomSourceDetailsViewController;
 			sourceTree = "<group>";
 		};
 		FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */ = {

@@ -966,7 +966,7 @@
 "rendering_attr_hideOverground_name" = "Obiecte supraterane";
 "no_inet_connection_desc_map" = "Necesar pentru a descărca hărți.";
 "first_usage_wizard_desc" = "Lăsați OsmAnd să vă determine locația și să vă recomande hărți de descărcat pentru regiunea respectivă.";
-"skip_map_downloading" = "Săriți peste descărcarea hărților";
+"skip_map_downloading" = "Sări peste descărcarea hărților";
 "rendering_attr_surfaceIntegrity_name" = "Integritatea suprafeței drumurilor";
 "rendering_attr_contourColorScheme_name" = "Schemă de culori pentru linii de contur";
 "rendering_attr_contourColorScheme_description" = "Schemă de culori pentru linii de contur";

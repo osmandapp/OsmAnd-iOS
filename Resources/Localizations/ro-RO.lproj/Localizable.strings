@@ -5,7 +5,7 @@
 "osm_live_payment_renews_monthly" = "Reînnoire lunară";
 "osm_live_payment_renews_quarterly" = "Se reînnoiește trimestrial";
 "osm_live_payment_renews_annually" = "Se reînnoiește anual";
-"simulate_navigation" = "Simulați navigația";
+"simulate_navigation" = "Simulare navigație";
 "day" = "Ziua";
 "days_2_4" = "Zile";
 "days_5" = "Zile";
@@ -81,7 +81,7 @@
 "gpx_start_new_segment" = "Începe un segment nou";
 "auto_zoom_close" = "La apropiere maximă";
 "versions_item" = "Versiuni";
-"route_tr" = "Virați la dreapta și continuați pe";
+"route_tr" = "Virați la dreapta și continuați";
 "plugins_menu_group" = "Pluginuri";
 "map_widget_next_turn_small" = "Următoarea manevră (mic)";
 "angular_units_descr" = "Schimbați unitățile de măsură a azimutului.";
@@ -123,7 +123,7 @@
 "general_settings_2" = "Setări generale";
 "shared_string_never" = "Niciodată";
 "unit_of_length" = "Unități de lungime";
-"route_tsll" = "Virați ușor la stânga și continuați pe";
+"route_tsll" = "Virați ușor la stânga și continuați";
 "cancel_route" = "Elimină ruta?";
 "select_street" = "Selectează strada";
 "int_min" = "min.";
@@ -263,7 +263,7 @@
 "city_type_village" = "Sat";
 "int_hour" = "h";
 "auto_zoom_map" = "Zoom automat hartă";
-"route_tl" = "Virați la stânga și continuați pe";
+"route_tl" = "Virați la stânga și continuați";
 "shared_string_world" = "Lume";
 "shared_string_slope" = "Pantă";
 "no_address_found" = "Nu s-a determinat adresa";
@@ -297,7 +297,7 @@
 "voice_pref_title" = "Voce";
 "poi_filter_parking" = "Parcare";
 "simulate_your_location" = "Simulează poziția ta";
-"route_tslr" = "Virați ușor la dreapta și continuați pe";
+"route_tslr" = "Virați ușor la dreapta și continuați";
 "map_widget_right" = "Panou dreapta";
 "osmand_parking_time_left" = "stânga";
 "map_widget_battery" = "Nivel baterie";
@@ -347,7 +347,7 @@
 "rendering_value_category_name" = "Categorie";
 "shared_string_clear" = "Șterge";
 "save_track_interval_globally" = "Interval de salvare";
-"route_kr" = "Țineți pe dreapta și mergeți";
+"route_kr" = "Țineți banda dreapta și continuați";
 "map_legend" = "Legendă hartă";
 "arrival_distance_factor_late" = "Târziu";
 "shared_string_all" = "Toate";
@@ -873,7 +873,7 @@
 "shared_string_import" = "Importă";
 "coordinates_widget_current_location" = "Coordonatele widget";
 "map_during_navigation" = "Harta în timpul navigației";
-"join_segments" = "Alăturați segmente";
+"join_segments" = "Alăturare segmente";
 "shared_string_gpx_tracks" = "Trasee";
 "favorite_places_category" = "Locuri";
 "save_current_track_descr" = "Salvează traseul curent ca fișier GPX acum.";
@@ -2246,7 +2246,7 @@
 "routeInfo_roadClass_description" = "Colorați traseul sau linia de cale ferată în funcție de clasificarea drumului.";
 "routing_attr_only_permitted_streets_description" = "Folosește numai străzile care sunt permise în mod expres";
 "routing_attr_only_permitted_ways_name" = "Căi permise în mod expres";
-"customize_route_line" = "Personalizați linia de traseu";
+"customize_route_line" = "Personalizează linia de traseu";
 "route_line_use_map_style_color" = "Utilizați culoarea implicită a stilului de hartă (%@).";
 "route_line_use_map_style_width" = "Utilizați lățimea implicită a stilului de hartă (%@).";
 "shared_string_min_height" = "Înălțime minimă";
@@ -2535,7 +2535,7 @@
 "weather_accuracy_forecast_description" = "Prognoza offline este disponibilă până la: %@.\nPrecizie: %@, din oră în oră. %@ la fiecare 3 ore.";
 "weather_forecast" = "Prognoza meteo";
 "weather_updates_automatically" = "OsmAnd va descărca automat actualizări atunci când este în funcțiune.";
-"shared_string_recorded" = "Înregistrată";
+"shared_string_recorded" = "Înregistrat";
 "backup_pause_all" = "Pauză la toate";
 "shared_string_changed" = "Modificat";
 "shared_string_refresh" = "Reîmprospătare";

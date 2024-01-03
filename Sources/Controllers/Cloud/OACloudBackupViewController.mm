@@ -12,7 +12,6 @@
 #import "OAFilledButtonCell.h"
 #import "OATwoFilledButtonsTableViewCell.h"
 #import "OALargeImageTitleDescrTableViewCell.h"
-#import "OATitleRightIconCell.h"
 #import "OAIAPHelper.h"
 #import "OABackupHelper.h"
 #import "OAStatusBackupConflictDetailsViewController.h"
@@ -501,21 +500,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     NSString *cellId = item.cellType;
-    if ([cellId isEqualToString:OATitleRightIconCell.getCellIdentifier])
-    {
-        OATitleRightIconCell* cell = [tableView dequeueReusableCellWithIdentifier:OATitleRightIconCell.getCellIdentifier];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleRightIconCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleRightIconCell *)[nib objectAtIndex:0];
-            cell.iconView.tintColor = UIColor.iconColorActive;
-            cell.titleView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-        }
-        cell.titleView.text = item.title;
-        [cell.iconView setImage:[UIImage templateImageNamed:item.iconName]];
-        return cell;
-    }
-    else if ([cellId isEqualToString:OALargeImageTitleDescrTableViewCell.getCellIdentifier])
+    if ([cellId isEqualToString:OALargeImageTitleDescrTableViewCell.getCellIdentifier])
     {
         OALargeImageTitleDescrTableViewCell* cell = [tableView dequeueReusableCellWithIdentifier:OALargeImageTitleDescrTableViewCell.getCellIdentifier];
         if (cell == nil)

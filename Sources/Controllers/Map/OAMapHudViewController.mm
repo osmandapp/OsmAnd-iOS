@@ -276,7 +276,7 @@
 {
     if (_overlayUnderlayView)
     {
-        if (OAUtilities.isLandscape)
+        if (OAUtilities.isLandscape || OAUtilities.isIPad)
         {
             CGFloat w = (self.view.frame.size.width < 570) ? 200 : 300;
             CGFloat h = [_overlayUnderlayView getHeight:w];

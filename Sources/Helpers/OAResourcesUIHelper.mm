@@ -1274,7 +1274,7 @@ includeHidden:(BOOL)includeHidden
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }

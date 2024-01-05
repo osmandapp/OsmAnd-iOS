@@ -1,9 +1,8 @@
 {
   "images" : [
     {
-      "filename" : "ic_custom_folder_move_outlined.svg",
-      "idiom" : "universal",
-      "language-direction" : "left-to-right"
+      "filename" : "ic_navbar_overflow_menu_outlined.svg",
+      "idiom" : "universal"
     }
   ],
   "info" : {

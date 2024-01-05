@@ -9,6 +9,7 @@
 #import "OAInfoBottomView.h"
 #import "OATitleIconRoundCell.h"
 #import "Localization.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAInfoBottomView () <UITableViewDelegate, UITableViewDataSource>
 
@@ -102,8 +103,9 @@
 - (void)setHeaderViewText:(NSString *)headerViewText
 {
     _headerViewText = headerViewText;
-    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:kHeaderDescriptionFont textColor:UIColor.blackColor isBigTitle:NO parentViewWidth:self.frame.size.width];
+    _tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerViewText font:kHeaderDescriptionFont textColor:UIColor.textColorPrimary isBigTitle:NO parentViewWidth:self.frame.size.width];
     _tableView.tableHeaderView = _tableHeaderView;
+    _tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
 }
 
 - (CGFloat) getViewHeight
@@ -148,7 +150,7 @@
             
             cell.textColorNormal = nil;
             cell.iconView.image = [UIImage imageNamed:item[@"img"]];
-            cell.titleView.textColor = UIColor.blackColor;
+            cell.titleView.textColor = UIColor.textColorPrimary;
             cell.separatorView.hidden = indexPath.row == _data.count - 1;
         }
         return cell;

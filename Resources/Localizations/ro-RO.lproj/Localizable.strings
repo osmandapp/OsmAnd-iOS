@@ -3026,3 +3026,5 @@
 "upload_poi" = "Încărcă punct de interes";
 "shared_string_system_default" = "Sistem implicit";
 "ios_release_4_5" = "• Experiența widgeturilor complet reproiectată: a fost adăugată posibilitatea de a schimba poziția widgeturilor, a fost adăugată gruparea pe pagini, o singură listă de widgeturi pentru panoul din stânga și din dreapta.\n• Ecran de configurare reproiectat\n• Copie de rezervă gratuită a preferințelor, setărilor și editărilor OSM în OsmAnd Cloud\n• A fost adăugată scara \"CAI\" pentru \"Clasificarea dificultății traseelor\"\n• \"Plugin pentru curbe de nivel\" redenumit în \"Topografie\", a adăugat suport pentru noul format al hărților de teren.\n• Adăugat 3D Relief\n• A fost adăugată autorizarea OAuth pentru pluginul de editare OpenStreetMap Editing\n• A fost adăugat un buton separat pentru a comuta între modul 2D sau 3D\n• Direcția schimbată a gestului de înclinare\n• S-a rezolvat o problemă cu exportul de favorite, care putea duce la pierderea de date\n";
+"help_article_map_point_layers_on_map_name" = "Puncte pe hartă";
+"help_article_map_raster_maps_name" = "Hărți raster (online / offline)";

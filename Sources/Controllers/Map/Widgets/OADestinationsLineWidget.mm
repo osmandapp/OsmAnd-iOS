@@ -296,15 +296,14 @@
     return strokeWidth * kWidthCorrectionValue / [[UIScreen mainScreen] scale] / mapDensity;
 }
 
-- (UIImage *) getArrowImage:(UIImage*) fgImage inImage:(UIImage*) bgImage withShadow:(UIImage*)shadow
+- (UIImage *)getArrowImage:(UIImage *)fgImage inImage:(UIImage *)bgImage withShadow:(UIImage *)shadow
 {
-    UIGraphicsBeginImageContextWithOptions(bgImage.size, NO, 0.0);
-    [shadow drawInRect:CGRectMake(0.0, 0.0, shadow.size.width, shadow.size.height)];
-    [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
-    [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
-    UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    return newImage;
+    UIGraphicsImageRenderer *renderer = [[UIGraphicsImageRenderer alloc] initWithSize:bgImage.size];
+    return [renderer imageWithActions:^(UIGraphicsImageRendererContext * _Nonnull rendererContext) {
+        [shadow drawInRect:CGRectMake(0.0, 0.0, shadow.size.width, shadow.size.height)];
+        [bgImage drawInRect:CGRectMake(0.0, 0.0, bgImage.size.width, bgImage.size.height)];
+        [fgImage drawInRect:CGRectMake(0.0, 0.0, fgImage.size.width, fgImage.size.height)];
+    }];
 }
 
 #pragma mark - Supporting methods

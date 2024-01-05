@@ -69,11 +69,21 @@
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        NSLog(@"SceneDelegate initialized");
+    }
+    return self;
+}
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
-    NSLog(@"willConnectToSession");
+    NSLog(@"SceneDelegate willConnectToSession");
     _windowScene = (UIWindowScene *)scene;
     if (!_windowScene) {
+        NSLog(@"SceneDelegate _windowScene in nil");
         return;
     }
     

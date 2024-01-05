@@ -17,6 +17,7 @@
 #import "OARoadSegmentData.h"
 #import "OAMapUtils.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAPointOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -340,8 +341,8 @@
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
-                cell.iconColorNormal = isActiveCell ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-                cell.textColorNormal = isActiveCell ? [UIColor blackColor] : [UIColor lightGrayColor];
+                cell.iconColorNormal = isActiveCell ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+                cell.textColorNormal = isActiveCell ? UIColor.textColorPrimary : UIColor.textColorSecondary;
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }
@@ -374,8 +375,8 @@
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
-                cell.iconColorNormal = isActiveCell ? UIColorFromRGB(color_chart_orange) : UIColorFromRGB(color_tint_gray);
-                cell.textColorNormal = isActiveCell ? [UIColor blackColor] : [UIColor lightGrayColor];
+                cell.iconColorNormal = isActiveCell ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+                cell.textColorNormal = isActiveCell ? UIColor.textColorPrimary : UIColor.textColorSecondary;
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }

@@ -212,7 +212,7 @@
             switch (dialogMode)
             {
                 case EOARouteBetweenPointsDialogModeSingle:
-                    return OALocalizedString(@"selected_seg_recalc_descr");
+                    return OALocalizedString(@"only_selected_segment_recalc");
                 case EOARouteBetweenPointsDialogModeAll:
                     return OALocalizedString(@"next_segs_recalc_descr");
             }
@@ -222,7 +222,7 @@
         {
             switch (dialogMode) {
                 case EOARouteBetweenPointsDialogModeSingle:
-                    return OALocalizedString(@"selected_seg_recalc_descr");
+                    return OALocalizedString(@"only_selected_segment_recalc");
                 case EOARouteBetweenPointsDialogModeAll:
                     return OALocalizedString(@"prev_segs_recalc_descr");
             }

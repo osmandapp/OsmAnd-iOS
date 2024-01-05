@@ -1195,7 +1195,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 #pragma mark - OARouteCalculationResultListener
 
-- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment
+- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment start:(CLLocation *)start end:(CLLocation *)end
 {
     NSArray<CLLocation *> *locations = route.getRouteLocations;
     NSMutableArray<OAWptPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];

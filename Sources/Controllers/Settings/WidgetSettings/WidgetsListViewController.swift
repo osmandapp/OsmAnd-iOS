@@ -12,24 +12,24 @@ import SafariServices
 @objc(OAWidgetsListViewController)
 @objcMembers
 class WidgetsListViewController: OABaseNavbarSubviewViewController {
-
+    
     static let kWidgetAddedNotification = "onWidgetAdded"
-
+    
     private let kPageKey = "page_"
     private let kPageNumberKey = "page_number"
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled)
-
+    
     let panels = WidgetsPanel.values
-
+    
     private var widgetPanel: WidgetsPanel! {
         didSet {
             navigationItem.title = getTitle()
             updateUIAnimated(nil)
         }
     }
-
+    
     private var editMode: Bool = false {
         didSet {
             tableView.setEditing(editMode, animated: true)
@@ -40,34 +40,34 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             }
         }
     }
-
+    
     private var selectedAppMode: OAApplicationMode {
         get {
             OAAppSettings.sharedManager().applicationMode.get()
         }
     }
-
+    
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     lazy private var widgetsSettingsHelper = WidgetsSettingsHelper(appMode: selectedAppMode)
-
+    
     // MARK: - Initialization
-
+    
     init(widgetPanel: WidgetsPanel!) {
         self.widgetPanel = widgetPanel
         super.init()
     }
-
+    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
+    
     override func registerNotifications() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
         addNotification(NSNotification.Name(Self.kWidgetAddedNotification), selector: #selector(onWidgetAdded(notification:)))
     }
-
+    
     // MARK: - Base setup UI
-
+    
     override func createSubview() -> UIView! {
         if editMode {
             return nil
@@ -81,13 +81,13 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         segmentedControl.addTarget(self, action: #selector(segmentedControlValueChanged(_:)), for: .valueChanged)
         return segmentedControl
     }
-
+    
     @objc private func segmentedControlValueChanged(_ control: UISegmentedControl) {
         widgetPanel = panels[control.selectedSegmentIndex]
     }
-
+    
     // MARK: - Selectors
-
+    
     override func onGestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer!) -> Bool {
         if gestureRecognizer == navigationController?.interactivePopGestureRecognizer {
             if editMode, tableData.hasChanged {
@@ -97,11 +97,11 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         return true
     }
-
+    
     private func showUnsavedChangesAlert(shouldDismiss: Bool) {
-        let alert = UIAlertController.init(title: localizedString("unsaved_changes"),
-                                                              message: localizedString("unsaved_changes_will_be_lost_discard"),
-                                                              preferredStyle: .actionSheet)
+        let alert = UIAlertController(title: localizedString("unsaved_changes"),
+                                      message: localizedString("unsaved_changes_will_be_lost_discard"),
+                                      preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_discard"), style: .destructive) { [weak self] _ in
             guard let self else { return }
             editMode = false
@@ -113,10 +113,10 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         let popPresenter = alert.popoverPresentationController
         popPresenter?.barButtonItem = getLeftNavbarButton()
         popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any
-
+        
         present(alert, animated: true)
     }
-
+    
     override func onLeftNavbarButtonPressed() {
         if editMode {
             if tableData.hasChanged {
@@ -128,20 +128,20 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         super.onLeftNavbarButtonPressed()
     }
-
+    
     override func onRightNavbarButtonPressed() {
         if editMode {
             reorderWidgets()
             editMode = false
         }
     }
-
+    
     override func onTopButtonPressed() {
         let vc = WidgetGroupListViewController()
         vc.widgetPanel = widgetPanel
         show(vc)
     }
-
+    
     override func onBottomButtonPressed() {
         if editMode {
             let section = tableData.sectionData(for: tableData.sectionCount() - 1)
@@ -155,51 +155,51 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             editMode = true
         }
     }
-
+    
     @objc private func onWidgetAdded(notification: NSNotification) {
-        let widget = (notification.object as? MapWidgetInfo) ?? nil
-        if let newWidget = widget {
-            let lastSection = tableData.sectionCount() - 1
-            let lastSectionData = tableData.sectionData(for: lastSection)
-            createWidgetItem(newWidget, lastSectionData)
-            if editMode {
-                DispatchQueue.main.async { [weak self] in
-                    self?.tableView.reloadData()
-                    self?.updateBottomButtons()
-                }
-            } else {
-                if let userInfo = notification.userInfo as? [String: Any] {
-                    reorderWidgets(with: userInfo)
-                } else {
-                    reorderWidgets()
-                }
-                updateUIAnimated(nil)
+        guard let newWidget = notification.object as? MapWidgetInfo else {
+            return
+        }
+        let lastSection = tableData.sectionCount() - 1
+        let lastSectionData = tableData.sectionData(for: lastSection)
+        createWidgetItem(newWidget, lastSectionData)
+        if editMode {
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+                self?.updateBottomButtons()
             }
+        } else {
+            if let userInfo = notification.userInfo as? [String: Any] {
+                reorderWidgets(with: userInfo)
+            } else {
+                reorderWidgets()
+            }
+            updateUIAnimated(nil)
         }
     }
-
+    
     @objc private func onWidgetStateChanged() {
         if !editMode {
             updateUIAnimated(nil)
         }
     }
-
-    @objc func onButtonClicked(sender: UIButton) {
+    
+    @objc private func onButtonClicked(sender: UIButton) {
         let indexPath: IndexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
         let item: OATableRowData = tableData.item(for: indexPath)
         if item.key == kNoWidgetsKey {
             onTopButtonPressed()
         }
     }
-
+    
     // MARK: - Additions
-
+    
     private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
         for i in 0..<tableData.sectionData(for: 0).rowCount() {
             let rowData = tableData.sectionData(for: 0).getRow(i)
-    
+            
             if rowData.key == kPageKey && i != 0 {
                 orders.append(currPage)
                 currPage = [String]()
@@ -210,7 +210,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             }
         }
         orders.append(currPage)
-    
+        
         WidgetUtils.reorderWidgets(orderedWidgetPages: orders,
                                    panel: widgetPanel,
                                    selectedAppMode: selectedAppMode,
@@ -220,13 +220,13 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
 
 // MARK: - Table data
 extension WidgetsListViewController {
-
+    
     override func generateData() {
         tableData.clearAllData()
         updateEnabledWidgets()
         tableData.resetChanges()
     }
-
+    
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
@@ -237,9 +237,9 @@ extension WidgetsListViewController {
                 cell = nib?.first as? OASimpleTableViewCell
                 cell?.descriptionVisibility(false)
             }
-            if let cell = cell {
+            if let cell {
                 let isPageCell = item.key == kPageKey
-                cell.titleLabel.text = isPageCell ? String(format:localizedString("shared_string_page_number"), item.integer(forKey: kPageNumberKey) + 1) : item.title
+                cell.titleLabel.text = isPageCell ? String(format: localizedString("shared_string_page_number"), item.integer(forKey: kPageNumberKey) + 1) : item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
@@ -254,7 +254,7 @@ extension WidgetsListViewController {
                 cell = nib?.first as? OALargeImageTitleDescrTableViewCell
                 cell?.selectionStyle = .none
             }
-            if let cell = cell {
+            if let cell {
                 cell.titleLabel?.text = item.title
                 cell.titleLabel?.accessibilityLabel = item.title
                 cell.descriptionLabel?.text = item.descr
@@ -268,35 +268,33 @@ extension WidgetsListViewController {
                 cell.button?.addTarget(self, action: #selector(onButtonClicked(sender:)), for: .touchUpInside)
             }
             outCell = cell
-
+            
             let update: Bool = outCell?.needsUpdateConstraints() ?? false
             if update {
                 outCell?.setNeedsUpdateConstraints()
             }
         }
-
+        
         return outCell
     }
-
+    
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            let vc = WidgetConfigurationViewController()!
+        if item.cellType == OASimpleTableViewCell.getIdentifier(), let vc = WidgetConfigurationViewController() {
             vc.selectedAppMode = selectedAppMode
             vc.widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
             vc.widgetPanel = widgetPanel
             show(vc)
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.row == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
-        let isPageCell = item.key == kPageKey
         return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
-
+    
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.row == 0
@@ -306,7 +304,6 @@ extension WidgetsListViewController {
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
         let item = tableData.item(for: sourceIndexPath)
-        let isPageCell = item.key == kPageKey
         tableData.removeRow(at: sourceIndexPath)
         let movedIndexPath = destinationIndexPath.row == 0 ? IndexPath(row: 1, section: destinationIndexPath.section) : destinationIndexPath
         tableData.addRow(at: movedIndexPath, row: item)
@@ -314,7 +311,7 @@ extension WidgetsListViewController {
         tableView.reloadData()
         updateBottomButtons()
     }
-
+    
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = tableData.item(for: indexPath)
@@ -334,7 +331,7 @@ extension WidgetsListViewController {
             updateBottomButtons()
         }
     }
-
+    
     override func tableView(_ tableView: UITableView,
                             targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                             toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
@@ -343,7 +340,7 @@ extension WidgetsListViewController {
         }
         return proposedDestinationIndexPath
     }
-
+    
     private func updateEnabledWidgets() {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])!
         let noEnabledWidgets = enabledWidgets.count == 0
@@ -383,20 +380,20 @@ extension WidgetsListViewController {
             }
         }
     }
-
+    
     private func createWidgetItems(_ widgets: NSOrderedSet, _ pageIndex: Int) {
         let section = tableData.sectionData(for: 0)
         let row = section.createNewRow()
         row.key = kPageKey
         row.cellType = OASimpleTableViewCell.getIdentifier()
         row.setObj(pageIndex, forKey: kPageNumberKey)
-
+        
         let sortedWidgets = (widgets.array as! [MapWidgetInfo]).sorted { $0.priority < $1.priority }
         for widget in sortedWidgets {
             createWidgetItem(widget, section)
         }
     }
-
+    
     private func createWidgetItem(_ widget: MapWidgetInfo, _ section: OATableSectionData) {
         if section.rowCount() > 0 && section.getRow(0).key != kPageKey {
             section.addRow(OATableRowData(), position: 0)
@@ -429,57 +426,57 @@ extension WidgetsListViewController {
 }
 
 extension WidgetsListViewController {
-
-    //MARK: - Base UI
-
+    
+    // MARK: - Base UI
+    
     override func getTitle() -> String! {
         widgetPanel.title
     }
-
+    
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .horizontal
     }
-
+    
     override func isNavbarSeparatorVisible() -> Bool {
         editMode
     }
-
+    
     override func getLeftNavbarButtonTitle() -> String! {
         editMode ? localizedString("shared_string_cancel") : nil
     }
-
+    
     override func getRightNavbarButtons() -> [UIBarButtonItem]! {
         var menuElements: [UIMenuElement]?
         var resetAlert: UIAlertController?
         if !editMode {
-            resetAlert = UIAlertController.init(title: self.widgetPanel.title,
-                                                message: localizedString("reset_all_settings_desc"),
-                                                preferredStyle: .actionSheet)
-            let resetAction: UIAction  = UIAction(title: localizedString("reset_to_default"),
-                                                  image: UIImage.init(systemName: "gobackward")) { [weak self] _ in
-                guard let self = self else { return }
-
+            resetAlert = UIAlertController(title: widgetPanel.title,
+                                           message: localizedString("reset_all_settings_desc"),
+                                           preferredStyle: .actionSheet)
+            let resetAction: UIAction = UIAction(title: localizedString("reset_to_default"),
+                                                 image: UIImage(systemName: "gobackward")) { [weak self] _ in
+                guard let self else { return }
+                
                 resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { UIAlertAction in
                     self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
                     OARootViewController.instance().mapPanel.recreateAllControls()
                     self.updateUIAnimated(nil)
                 })
                 resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-                self.present(resetAlert!, animated: true)
+                present(resetAlert!, animated: true)
             }
             let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
-                                                image: UIImage.init(systemName: "doc.on.doc")) { [weak self] _ in
-                guard let self = self else { return }
-
-                let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler.init(mode: self.selectedAppMode)
-                bottomSheet.delegate = self;
+                                                image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in
+                guard let self else { return }
+                
+                let bottomSheet: OACopyProfileBottomSheetViewControler = OACopyProfileBottomSheetViewControler(mode: self.selectedAppMode)
+                bottomSheet.delegate = self
                 bottomSheet.present(in: self)
             }
             let helpAction: UIAction = UIAction(title: localizedString("shared_string_help"),
-                                                image: UIImage.init(systemName: "questionmark.circle")) { [weak self] _ in
-                guard let self = self else { return }
-
-                self.openSafariWithURL("https://docs.osmand.net/docs/user/widgets/configure-screen")
+                                                image: UIImage(systemName: "questionmark.circle")) { [weak self] _ in
+                guard let self else { return }
+                
+                openSafariWithURL("https://docs.osmand.net/docs/user/widgets/configure-screen")
             }
             let helpMenuAction: UIMenu = UIMenu(options: .displayInline, children: [helpAction])
             menuElements = [resetAction, copyAction, helpMenuAction]
@@ -496,29 +493,25 @@ extension WidgetsListViewController {
         popover?.barButtonItem = button
         return [button!]
     }
-
+    
     override func getTopButtonTitle() -> String {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel])!
         return editMode || enabledWidgets.count > 0 ? localizedString("add_widget") : ""
     }
-
+    
     override func getBottomButtonTitle() -> String {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel])!
-        if editMode || enabledWidgets.count > 0 {
-            return editMode && (widgetPanel == WidgetsPanel.topPanel || widgetPanel == WidgetsPanel.bottomPanel) ? "" : localizedString(editMode ? "add_page" : "shared_string_edit")
-        } else {
-            return ""
-        }
+        return editMode || enabledWidgets.count > 0 ? localizedString(editMode ? "add_page" : "shared_string_edit") : ""
     }
-
+    
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        return .graySimple
+        .graySimple
     }
-
+    
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
         if editMode {
             for i in 0..<tableData.sectionCount() {
@@ -530,34 +523,36 @@ extension WidgetsListViewController {
         }
         return .graySimple
     }
-
 }
 
 // MARK: - SFSafariViewControllerDelegate
 
 extension WidgetsListViewController: SFSafariViewControllerDelegate {
-
+    
     @nonobjc func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
         controller.dismiss(animated: true)
     }
-
-    func openSafariWithURL(_ url: String) {
-        let safariViewController:SFSafariViewController = SFSafariViewController(url: URL(string: url)!)
+    
+    private func openSafariWithURL(_ url: String) {
+        guard let url = URL(string: url) else {
+            return
+        }
+        let safariViewController = SFSafariViewController(url: url)
         safariViewController.delegate = self
-        self.present(safariViewController, animated:true)
+        present(safariViewController, animated: true)
     }
 }
 
 // MARK: - OACopyProfileBottomSheetDelegate
 
 extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
-
+    
     func onCopyProfileCompleted() {
     }
-
+    
     func onCopyProfile(_ fromAppMode: OAApplicationMode!) {
-        widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: self.widgetPanel)
+        widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: widgetPanel)
         OARootViewController.instance().mapPanel.recreateAllControls()
-        self.updateUIAnimated(nil)
+        updateUIAnimated(nil)
     }
 }

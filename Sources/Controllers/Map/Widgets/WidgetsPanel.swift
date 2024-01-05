@@ -25,7 +25,7 @@ class WidgetsPanel: NSObject, NSCopying {
         return WidgetType.values.reduce(into: [String]()) { result, type in
             let id = type.id
             let defaultPanel = type.defaultPanel
-            if (defaultPanel == panel) {
+            if defaultPanel == panel {
                 result.append(id)
             }
         }
@@ -56,11 +56,11 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func getOriginalOrder() -> [String] {
-        if (self == .leftPanel) {
+        if self == .leftPanel {
             return WidgetsPanel.ORIGINAL_LEFT_ORDER
-        } else if (self == .rightPanel) {
+        } else if self == .rightPanel {
             return WidgetsPanel.ORIGINAL_RIGHT_ORDER
-        } else if (self == .topPanel) {
+        } else if self == .topPanel {
             return WidgetsPanel.ORIGINAL_TOP_ORDER
         } else {
             return WidgetsPanel.ORIGINAL_BOTTOM_ORDER
@@ -115,7 +115,7 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func isPagingAllowed() -> Bool {
-        return self == .leftPanel || self == .rightPanel
+        self == .leftPanel || self == .rightPanel || self == .topPanel || self == .bottomPanel
     }
 
     func getOrderPreference() -> OACommonListOfStringList {

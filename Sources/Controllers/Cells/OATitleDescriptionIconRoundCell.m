@@ -9,6 +9,7 @@
 #import "OATitleDescriptionIconRoundCell.h"
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define defaultCellHeight 48.0
 #define titleTextWidthDelta 64.0
@@ -48,15 +49,15 @@ static UIFont *_descrFont;
 {
     if (highlighted)
     {
-        _contentContainer.backgroundColor = UIColor.iconColorActive;
+        _contentContainer.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
         _titleView.textColor = UIColor.whiteColor;
         [_iconView setTintColor:UIColor.whiteColor];
     }
     else
     {
-        _contentContainer.backgroundColor = UIColor.groupBgColor;
-        _titleView.textColor = _textColorNormal ? _textColorNormal : UIColor.textColorPrimary;
-        [_iconView setTintColor:_iconColorNormal ? _iconColorNormal : UIColor.iconColorActive];
+        _contentContainer.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _titleView.textColor = _textColorNormal ? _textColorNormal : [UIColor colorNamed:ACColorNameTextColorPrimary];
+        [_iconView setTintColor:_iconColorNormal ? _iconColorNormal : [UIColor colorNamed:ACColorNameIconColorActive]];
     }
 }
 

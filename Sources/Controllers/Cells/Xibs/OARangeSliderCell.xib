@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -44,7 +44,7 @@
                     </label>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FM2-7w-sAd" customClass="OARangeSlider">
                         <rect key="frame" x="8" y="34" width="359" height="35"/>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <color key="tintColor" red="0.47058823529411764" green="0.47058823529411764" blue="0.50196078431372548" alpha="0.20000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="35" id="Itx-Pz-CYK"/>
@@ -60,7 +60,7 @@
                         </userDefinedRuntimeAttributes>
                     </view>
                 </subviews>
-                <color key="backgroundColor" name="groupBgColor"/>
+                <color key="backgroundColor" name="groupBg"/>
                 <constraints>
                     <constraint firstItem="FM2-7w-sAd" firstAttribute="centerY" secondItem="SRd-8Q-YGB" secondAttribute="centerY" id="0TS-7J-e6P"/>
                     <constraint firstItem="gZD-5G-Et2" firstAttribute="top" secondItem="FM2-7w-sAd" secondAttribute="bottom" constant="2" id="4fq-Qq-ljB"/>
@@ -80,7 +80,7 @@
                     <constraint firstItem="972-v0-xbc" firstAttribute="top" secondItem="SRd-8Q-YGB" secondAttribute="top" constant="11" id="wmY-1u-itr"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="maxLabel" destination="xN9-IC-unb" id="fbg-4k-cWG"/>
                 <outlet property="maxValueLabel" destination="gZD-5G-Et2" id="uXo-nG-AaU"/>
@@ -92,7 +92,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBlueColor">

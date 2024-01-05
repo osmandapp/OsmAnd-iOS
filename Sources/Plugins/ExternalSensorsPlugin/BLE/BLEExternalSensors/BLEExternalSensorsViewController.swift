@@ -41,7 +41,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         super.viewDidLoad()
         tableView.delegate = self
         tableView.dataSource = self
-        view.backgroundColor = UIColor.viewBgColor
+        view.backgroundColor = UIColor.viewBg
         tableView.contentInset.bottom = 64
     }
     
@@ -259,7 +259,7 @@ final class BLEExternalSensorsViewController: OABaseNavbarViewController {
         
         headerEmptyView.frame.size.height = 201
         headerEmptyView.frame.size.width = view.frame.width
-        headerEmptyView.backgroundColor = UIColor.groupBgColor
+        headerEmptyView.backgroundColor = UIColor.groupBg
         imageView.frame = headerEmptyView.frame
         tableView.tableHeaderView = headerEmptyView
     }

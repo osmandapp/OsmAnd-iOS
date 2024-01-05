@@ -18,6 +18,7 @@
 #import "OAMapUtils.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAPointOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -341,8 +342,8 @@
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
-                cell.iconColorNormal = isActiveCell ? UIColor.iconColorActive : UIColor.iconColorDisabled;
-                cell.textColorNormal = isActiveCell ? UIColor.textColorPrimary : UIColor.textColorSecondary;
+                cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.textColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }
@@ -375,8 +376,8 @@
             else
             {
                 BOOL isActiveCell =  [self isActiveCell:indexPath];
-                cell.iconColorNormal = isActiveCell ? UIColor.iconColorActive : UIColor.iconColorDisabled;
-                cell.textColorNormal = isActiveCell ? UIColor.textColorPrimary : UIColor.textColorSecondary;
+                cell.iconColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+                cell.textColorNormal = isActiveCell ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
                 cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
                 cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
             }

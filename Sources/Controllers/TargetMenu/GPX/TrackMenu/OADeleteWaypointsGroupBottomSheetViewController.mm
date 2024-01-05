@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OATrackMenuHudViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -61,7 +62,7 @@
     self.tableView.separatorInset = UIEdgeInsetsZero;
 
     self.buttonsView.layoutMargins = UIEdgeInsetsMake(0, 20, 0, 20);
-    self.leftIconView.tintColor = UIColor.buttonBgColorDisruptive;
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined"]];
     [self hideSliderView];
     [self.rightButton removeFromSuperview];
@@ -92,7 +93,7 @@
                             kCellType: [OAFilledButtonCell getCellIdentifier],
                             kTableValues: @{ @"title_color_value_integer": @color_icon_color_night },
                             kCellTitle: OALocalizedString(@"shared_string_delete"),
-                            kCellTintColor: UIColor.buttonBgColorDisruptive
+                            kCellTintColor: [UIColor colorNamed:ACColorNameButtonBgColorDisruptive]
                     }]]
             }]
     ];
@@ -173,7 +174,7 @@
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textView.textColor = UIColor.textColorPrimary;
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         if (cell)
         {

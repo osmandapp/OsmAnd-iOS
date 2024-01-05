@@ -10,6 +10,7 @@
 #import "OAShapesCollectionViewCell.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAShapesTableViewCell
 
@@ -67,12 +68,12 @@
     if (cell)
     {
         cell.iconImageView.image = [UIImage templateImageNamed:_iconNames[indexPath.row]];
-        cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
+        cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
         if (indexPath.row == _currentIcon)
         {
             cell.backgroundImageView.hidden = NO;
             cell.backgroundImageView.image = [UIImage templateImageNamed:_contourIconNames[indexPath.row]];
-            cell.backgroundImageView.tintColor = UIColor.iconColorActive;
+            cell.backgroundImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.iconImageView.tintColor = UIColorFromRGB(_currentColor);
         }
         else

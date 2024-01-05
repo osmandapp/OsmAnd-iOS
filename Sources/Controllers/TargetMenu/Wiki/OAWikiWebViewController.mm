@@ -23,6 +23,7 @@
 #import <SafariServices/SafariServices.h>
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kHeaderImageHeight 170
 
@@ -360,7 +361,7 @@
 
 - (UIColor *)getButtonTintColor:(EOABaseButtonColorScheme)scheme
 {
-    return UIColor.iconColorActive;
+    return [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 - (EOABaseButtonColorScheme)getTopButtonColorScheme

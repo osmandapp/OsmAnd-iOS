@@ -17,6 +17,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OADeleteWaypointsViewController
 {
@@ -100,7 +101,7 @@
 
     NSString *textShow = OALocalizedString(@"shared_string_delete");
     UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-    UIColor *colorShow = hasSelection ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary;
+    UIColor *colorShow = hasSelection ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
     NSInteger selectedGroupsCount = 0;
@@ -124,7 +125,7 @@
                                 selectedWaypointsCount];
     
     UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-    UIColor *colorCategories = hasSelection ? UIColor.whiteColor : UIColor.textColorSecondary;
+    UIColor *colorCategories = hasSelection ? UIColor.whiteColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
     NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
     [attrShow appendAttributedString:attrCategories];
@@ -178,9 +179,9 @@
             cell = (OAPointWithRegionTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
 
-            cell.tintColor = UIColor.iconColorActive;
+            cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             UIView *bgColorView = [[UIView alloc] init];
-            bgColorView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.05];
+            bgColorView.backgroundColor = [[UIColor colorNamed:ACColorNameIconColorActive] colorWithAlphaComponent:.05];
             [cell setSelectedBackgroundView:bgColorView];
         }
         if (cell)
@@ -225,7 +226,7 @@
             [cell.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_folder"]];
             cell.leftIconView.tintColor = cellData.tintColor;
 
-            cell.arrowIconView.tintColor = UIColor.iconColorActive;
+            cell.arrowIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
             if (!cellData.toggle && [cell isDirectionRTL])
                 cell.arrowIconView.image = cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;

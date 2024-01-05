@@ -98,7 +98,7 @@
                     <constraint firstAttribute="bottom" secondItem="iVs-u6-J98" secondAttribute="bottom" constant="8" id="mFP-g5-OFB"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="btnSaveGpx" destination="Ei3-YO-3Hy" id="k9u-1w-7Gg"/>
                 <outlet property="btnStartStopRec" destination="f7a-PV-50u" id="W0w-RI-X3O"/>
@@ -119,7 +119,7 @@
         <namedColor name="buttonBgColorDisruptive">
             <color red="0.90588235294117647" green="0.11372549019607843" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">

@@ -20,6 +20,7 @@
 #import "OASelectTrackFolderViewController.h"
 #import "OAAddTrackFolderViewController.h"
 #import "OACollectionViewCellState.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OASaveTrackViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate, OASelectTrackFolderDelegate, OAFolderCardsCellDelegate, OAAddTrackFolderDelegate>
 
@@ -165,16 +166,16 @@
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = UIColor.separatorColor;
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.textColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
 }
 
@@ -237,7 +238,7 @@
 - (void) updateBottomButtons
 {
     self.saveButton.userInteractionEnabled = _rightButtonEnabled;
-    [self.saveButton setBackgroundColor:_rightButtonEnabled ? UIColor.buttonBgColorPrimary: UIColor.buttonBgColorDisabled];
+    [self.saveButton setBackgroundColor:_rightButtonEnabled ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
 }
 
 - (BOOL) cellValueByKey:(NSString *)key
@@ -375,7 +376,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = UIColor.textColorPrimary;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.valueLabel.text = item[@"value"];
         }
         return cell;
@@ -391,7 +392,7 @@
             cell.delegate = self;
             cell.cellIndex = indexPath;
             cell.state = _scrollCellsState;
-            cell.backgroundColor = UIColor.groupBgColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         }
         if (cell)
         {
@@ -429,7 +430,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = UIColor.textColorSecondary;
+        headerView.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 
@@ -437,7 +438,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView *headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
+        headerView.textLabel.textColor = _inputFieldError != nil && section == 0 ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 
@@ -533,7 +534,7 @@
     
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
+    footer.textLabel.textColor = _inputFieldError != nil ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];

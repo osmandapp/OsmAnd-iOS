@@ -9,6 +9,7 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OARouteStatisticsModeCell
 
@@ -18,7 +19,7 @@
     // Initialization code
     self.contentContainer.layer.cornerRadius = 9.;
     self.contentContainer.layer.borderWidth = 1.;
-    self.contentContainer.layer.borderColor = UIColor.separatorColor.CGColor;
+    self.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 
     self.modeButton.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
     self.rightLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
@@ -36,7 +37,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        self.contentContainer.layer.borderColor = UIColor.separatorColor.CGColor;
+        self.contentContainer.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 }
 
 @end

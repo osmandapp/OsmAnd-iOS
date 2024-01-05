@@ -31,7 +31,7 @@
                         </constraints>
                     </activityIndicatorView>
                 </subviews>
-                <color key="backgroundColor" name="groupBgColor"/>
+                <color key="backgroundColor" name="groupBg"/>
                 <constraints>
                     <constraint firstItem="zps-ha-ZHl" firstAttribute="centerX" secondItem="cVj-3d-TBb" secondAttribute="centerX" id="1bW-zb-Cds"/>
                     <constraint firstItem="pRF-tK-dAE" firstAttribute="centerY" secondItem="cVj-3d-TBb" secondAttribute="centerY" id="5Eu-6g-EdU"/>
@@ -39,7 +39,7 @@
                     <constraint firstItem="zps-ha-ZHl" firstAttribute="centerY" secondItem="cVj-3d-TBb" secondAttribute="centerY" id="NKm-ER-NPL"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="activityIndicatorView" destination="pRF-tK-dAE" id="ydZ-pI-NFV"/>
                 <outlet property="titleView" destination="zps-ha-ZHl" id="sol-Ym-OcB"/>
@@ -48,7 +48,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorSecondary">

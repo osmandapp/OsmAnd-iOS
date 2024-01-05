@@ -48,14 +48,14 @@
                 </wkWebView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fK1-ba-Shy" userLabel="Separator Bottom View">
                     <rect key="frame" x="0.0" y="745" width="414" height="1"/>
-                    <color key="backgroundColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="zu5-yl-mHK"/>
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5aW-Eu-S0A" userLabel="Bottom Background View">
                     <rect key="frame" x="0.0" y="746" width="414" height="150"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="Fx7-mk-y0y" userLabel="Bottom Stack View">
                     <rect key="frame" x="20" y="746" width="374" height="116"/>
@@ -150,7 +150,7 @@
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="OSE-nP-3iA"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="OSE-nP-3iA" firstAttribute="trailing" secondItem="Fx7-mk-y0y" secondAttribute="trailing" constant="20" id="4nI-BK-q8a"/>
                 <constraint firstAttribute="trailing" secondItem="qjx-t9-H7r" secondAttribute="trailing" id="6sM-7x-s4O"/>
@@ -177,13 +177,13 @@
         <namedColor name="buttonBgColorSecondary">
             <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
+        <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">

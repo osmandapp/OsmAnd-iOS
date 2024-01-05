@@ -18,6 +18,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASliderWithValuesCell.h"
 #import "OARangeSliderCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kSidePadding 16
 #define kTopPadding 16
@@ -160,7 +161,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.textColorPrimary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         if (cell)
         {
@@ -217,7 +218,7 @@
     footerDescription.numberOfLines = 0;
     footerDescription.lineBreakMode = NSLineBreakByWordWrapping;
     footerDescription.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-    footerDescription.textColor = UIColor.textColorSecondary;
+    footerDescription.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     [vw addSubview:footerDescription];
     return vw;
 }

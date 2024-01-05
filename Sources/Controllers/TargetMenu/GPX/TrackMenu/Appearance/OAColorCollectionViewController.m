@@ -18,6 +18,7 @@
 #import "OAUtilities.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAColorCollectionViewController () <UIColorPickerViewControllerDelegate, OAColorsCollectionCellDelegate>
 
@@ -58,7 +59,7 @@
     [super viewDidLoad];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    self.tableView.backgroundColor = UIColor.groupBgColor;
+    self.tableView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
 }
 
 #pragma mark - Base UI

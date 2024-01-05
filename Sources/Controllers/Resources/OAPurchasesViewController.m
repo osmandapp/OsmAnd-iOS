@@ -25,6 +25,7 @@
 #import <SafariServices/SafariServices.h>
 #import <MessageUI/MFMailComposeViewController.h>
 #import "OABackupHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define OSMAND_START @"OsmAnd Start"
 
@@ -154,7 +155,7 @@ static BOOL _purchasesUpdated;
                 [noPurchasesSection addRowFromDictionary:@{
                     kCellTypeKey : [OALargeImageTitleDescrTableViewCell getCellIdentifier],
                     kCellIconNameKey : @"ic_custom_shop_bag_48",
-                    kCellIconTintColor : UIColor.iconColorDefault,
+                    kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
                     kCellTitleKey : OALocalizedString(@"no_purchases"),
                     kCellDescrKey : [NSString stringWithFormat:OALocalizedString(@"empty_purchases_description"), OALocalizedString(@"restore_purchases")]
                 }];
@@ -168,7 +169,7 @@ static BOOL _purchasesUpdated;
                     kCellDescrKey : OALocalizedString(@"osm_live_banner_desc"),
                     @"button_title": OALocalizedString(@"shared_string_get"),
                     @"button_icon_name": @"ic_custom_arrow_forward",
-                    @"button_icon_color": UIColor.iconColorActive
+                    @"button_icon_color": [UIColor colorNamed:ACColorNameIconColorActive]
                 }];
             }
         }
@@ -242,7 +243,7 @@ static BOOL _purchasesUpdated;
                 kCellTitleKey : OALocalizedString(@"explore_osmnad_plans_to_find_suitable"),
                 @"button_title": OALocalizedString(@"shared_string_learn_more"),
                 @"button_icon_name": @"ic_custom_arrow_forward",
-                @"button_icon_color": UIColor.iconColorActive
+                @"button_icon_color": [UIColor colorNamed:ACColorNameIconColorActive]
             }];
         }
     }
@@ -255,7 +256,7 @@ static BOOL _purchasesUpdated;
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"restore_purchases"),
         kCellIconNameKey : @"ic_custom_reset",
-        kCellIconTintColor : UIColor.iconColorActive
+        kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 
     [helpSection addRowFromDictionary:@{
@@ -263,7 +264,7 @@ static BOOL _purchasesUpdated;
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"redeem_promo_code"),
         kCellIconNameKey : @"ic_custom_label_sale",
-        kCellIconTintColor : UIColor.iconColorActive
+        kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 
     [helpSection addRowFromDictionary:@{
@@ -271,21 +272,21 @@ static BOOL _purchasesUpdated;
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"new_device_account"),
         kCellIconNameKey : @"ic_navbar_help",
-        kCellIconTintColor : UIColor.iconColorActive
+        kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"contact_support_description",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : [NSString stringWithFormat: OALocalizedString(@"contact_support_description"), kSupportEmail],
-        kCellIconTintColor : UIColor.textColorSecondary,
+        kCellIconTintColor : [UIColor colorNamed:ACColorNameTextColorSecondary],
     }];
 
     [helpSection addRowFromDictionary:@{
         kCellKeyKey : @"contact_support",
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"contact_support"),
-        kCellIconTintColor : UIColor.iconColorActive
+        kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 }
 
@@ -355,7 +356,7 @@ static BOOL _purchasesUpdated;
 
             NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[item stringForKey:@"button_title"]];
             [buttonTitle addAttribute:NSForegroundColorAttributeName
-                                value:UIColor.textColorActive
+                                value:[UIColor colorNamed:ACColorNameTextColorActive]
                                 range:NSMakeRange(0, buttonTitle.string.length)];
             [buttonTitle addAttribute:NSFontAttributeName
                                 value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold]
@@ -416,7 +417,7 @@ static BOOL _purchasesUpdated;
                 paragraphStyle.lineSpacing = 2.;
                 [attributedString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attributedString.length)];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] range:NSMakeRange(0, attributedString.length)];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:NSMakeRange(0, attributedString.length)];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(0, attributedString.length)];
                 cell.descriptionLabel.text = nil;
                 cell.descriptionLabel.attributedText = attributedString;
             }
@@ -426,7 +427,7 @@ static BOOL _purchasesUpdated;
                 cell.leftIconView.image = [UIImage imageNamed:item.iconName];
                 cell.descriptionLabel.attributedText = nil;
                 cell.descriptionLabel.text = item.descr;
-                cell.descriptionLabel.textColor = UIColor.textColorSecondary;
+                cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
                 cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
             }
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -539,7 +540,7 @@ static BOOL _purchasesUpdated;
         UILabel *loadingLabel = [[UILabel alloc] init];
         loadingLabel.translatesAutoresizingMaskIntoConstraints = NO;
         loadingLabel.text = OALocalizedString(@"loading_purchase_information");
-        loadingLabel.textColor = UIColor.textColorSecondary;
+        loadingLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         loadingLabel.font = labelFont;
         loadingLabel.adjustsFontForContentSizeCategory = YES;
         [loadingContainerView addSubview:loadingLabel];

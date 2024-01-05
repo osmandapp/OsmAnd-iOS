@@ -60,6 +60,7 @@
 #import "OAFavoriteViewController.h"
 #import "OATargetAddressViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -469,7 +470,7 @@
 
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group color:(UIColor *)color
 {
-    UIColor *iconColor = color ?: UIColor.iconColorDefault;
+    UIColor *iconColor = color ?: [UIColor colorNamed:ACColorNameIconColorDefault];
     
     NSMutableAttributedString *string = [[NSMutableAttributedString alloc] init];
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];

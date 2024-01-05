@@ -33,6 +33,7 @@
 #import "OAAutoObserverProxy.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -975,7 +976,7 @@
 
             BOOL hasLeftIcon = [item.allKeys containsObject:@"image"];
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:item[@"image"]] : nil;
-            cell.leftIconView.tintColor = isOn ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }
@@ -998,7 +999,7 @@
             NSString *iconName = item[@"image"];
             BOOL hasLeftIcon = iconName && iconName.length > 0;
             cell.leftIconView.image = hasLeftIcon ? [UIImage templateImageNamed:iconName] : nil;
-            cell.leftIconView.tintColor = isOn ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }
@@ -1022,7 +1023,7 @@
             if (item[@"has_empty_icon"])
             {
                 cell.leftIconView.image = nil;
-                cell.leftIconView.backgroundColor = isOn ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+                cell.leftIconView.backgroundColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
                 cell.leftIconView.layer.cornerRadius = cell.leftIconView.layer.frame.size.width / 2;
                 cell.leftIconView.clipsToBounds = YES;
             }
@@ -1036,7 +1037,7 @@
                 else
                     icon = iconName && iconName.length > 0 ? [UIImage templateImageNamed:iconName] : nil;
                 cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
 
             cell.switchView.on = isOn;
@@ -1068,7 +1069,7 @@
             cell.leftIconView.image = hasLeftIcon ? [UIImage rtlImageNamed:item[@"image"]] : nil;
 
             [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
-            [cell.button setTitleColor:[UIColor.textColorActive colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
+            [cell.button setTitleColor:[[UIColor colorNamed:ACColorNameTextColorActive] colorWithAlphaComponent:0.1] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.button addTarget:self action:@selector(onButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -1116,9 +1117,9 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             cell.titleLabel.text = group.groupName;
             if (indexPath.row > 0)
-                cell.titleLabel.textColor = UIColor.textColorActive;
+                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
 
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.rightIconView.image = [UIImage templateImageNamed:group.isOpen ? @"ic_custom_arrow_up" : @"ic_custom_arrow_down"];
             if (!group.isOpen && [cell isDirectionRTL])
                 cell.rightIconView.image = cell.rightIconView.image.imageFlippedForRightToLeftLayoutDirection;

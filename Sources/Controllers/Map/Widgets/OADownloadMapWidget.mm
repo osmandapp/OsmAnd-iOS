@@ -24,6 +24,7 @@
 #import "OAToolbarViewController.h"
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/ResourcesManager.h>
@@ -258,13 +259,13 @@
 
 - (void) updateColors
 {
-    self.backgroundColor = UIColor.groupBgColor;
-    self.titleView.textColor = UIColor.textColorPrimary;
-    self.descrView.textColor = UIColor.textColorSecondary;
-    self.closeButton.backgroundColor = UIColor.buttonBgColorSecondary;
-    [self.closeButton setTitleColor:UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
-    self.downloadButton.backgroundColor = UIColor.buttonBgColorPrimary;
-    [self.downloadButton setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
+    self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.titleView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.descrView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    self.closeButton.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
+    [self.closeButton setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
+    self.downloadButton.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+    [self.downloadButton setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
 }
 
 - (IBAction)closeButtonPressed:(id)sender

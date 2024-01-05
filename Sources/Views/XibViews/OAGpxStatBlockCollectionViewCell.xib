@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -50,7 +50,7 @@
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="KWA-ql-SWu"/>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="40" id="4xn-9j-4u6"/>
                             <constraint firstItem="s8Q-yH-SlA" firstAttribute="trailing" secondItem="SYa-5w-hj3" secondAttribute="trailing" id="ElF-aO-eSQ"/>
@@ -66,7 +66,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lYe-Cg-mFc" userLabel="Separator">
                         <rect key="frame" x="92" y="2" width="1" height="36"/>
-                        <color key="backgroundColor" name="separatorColor"/>
+                        <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="1" id="X2W-mT-MVk"/>
                         </constraints>
@@ -84,7 +84,7 @@
                     <constraint firstItem="liF-OQ-Ype" firstAttribute="leading" secondItem="H9S-S3-bDt" secondAttribute="leading" id="slL-8N-RMq"/>
                 </constraints>
             </collectionViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <size key="customSize" width="93" height="40"/>
             <connections>
                 <outlet property="iconView" destination="s8Q-yH-SlA" id="Y0x-xZ-1lM"/>
@@ -99,14 +99,14 @@
     </objects>
     <resources>
         <image name="ic_action_osmand_logo_banner.png" width="28" height="28"/>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorSecondary">
             <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

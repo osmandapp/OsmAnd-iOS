@@ -282,8 +282,8 @@ import Charts
             
             let outline = CALayer()
             
-            outline.borderColor = UIColor.chartSliderLabelStrokeColor.cgColor
-            outline.backgroundColor = UIColor.chartSliderLabelBgColor.cgColor
+            outline.borderColor = UIColor.chartSliderLabelStroke.cgColor
+            outline.backgroundColor = UIColor.chartSliderLabelBg.cgColor
             outline.borderWidth = 1.0
             outline.cornerRadius = 2.0
             outline.bounds = CGRect(origin: CGPoint(x: labelRect.origin.x - widthOffset, y: labelRect.origin.y), size: CGSize(width: labelRect.size.width + widthOffset * 2, height: labelRect.size.height + heightOffset * 2))
@@ -511,12 +511,12 @@ import Charts
         xAxis.drawAxisLineEnabled = false
         xAxis.drawGridLinesEnabled = false
         xAxis.gridLineWidth = 1.5
-        xAxis.gridColor = UIColor.chartAxisGridLineColor
+        xAxis.gridColor = UIColor.chartAxisGridLine
         xAxis.gridLineDashLengths = [10]
         xAxis.labelPosition = .bottom
         xAxis.labelTextColor = labelsColor
         xAxis.resetCustomAxisMin()
-        let yColor = UIColor.chartAxisGridLineColor
+        let yColor = UIColor.chartAxisGridLine
         var yAxis: YAxis = chartView.leftAxis;
         yAxis.gridLineDashLengths = [4.0, 4.0]
         yAxis.gridColor = yColor
@@ -622,7 +622,7 @@ import Charts
         yAxis.resetCustomAxisMax()
         yAxis.valueFormatter = ValueFormatter(formatX: nil, unitsX: mainUnitY)
         yAxis.labelTextColor = UIColor.chartTextColorElevation
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
         let values: Array<ChartDataEntry> = calculateElevationArray(analysis: analysis,axisType: axisType, divX: divX, convEle: convEle, useGeneralTrackPoints: true)
         let dataSet: OrderedLineDataSet = OrderedLineDataSet(entries: values, label: "", dataSetType: GPXDataSetType.ALTITUDE, dataSetAxisType: axisType)
         dataSet.priority = Float((analysis.avgElevation - analysis.minElevation) * convEle)
@@ -650,7 +650,7 @@ import Charts
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor.chartSliderLineColor
+        dataSet.highlightColor = UIColor.chartSliderLine
         dataSet.fillFormatter = HeightFormatter()
         if useRightAxis {
            dataSet.axisDependency = YAxis.AxisDependency.right
@@ -684,7 +684,7 @@ import Charts
             yAxis = chartView.leftAxis
         }
         yAxis.labelTextColor = UIColor.chartTextColorSlope
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
 //        yAxis.gridColor = UIColor(rgbValue: color_slope_chart)
 //        setGridColor(ActivityCompat.getColor(mChart.getContext(), R.color.gpx_chart_green_grid));
         yAxis.granularity = 1.0
@@ -805,7 +805,7 @@ import Charts
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor.chartSliderLineColor
+        dataSet.highlightColor = UIColor.chartSliderLine
 
         if useRightAxis {
             dataSet.axisDependency = YAxis.AxisDependency.right
@@ -981,7 +981,7 @@ import Charts
             yAxis = chartView.leftAxis
         }
         yAxis.labelTextColor = UIColor.chartTextColorSpeed
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
         yAxis.axisMinimum = 0.0
         
         var values: Array<ChartDataEntry> = [ChartDataEntry]()
@@ -1063,7 +1063,7 @@ import Charts
         dataSet.highlightEnabled = true
         dataSet.drawVerticalHighlightIndicatorEnabled = true
         dataSet.drawHorizontalHighlightIndicatorEnabled = false
-        dataSet.highlightColor = UIColor.chartSliderLineColor
+        dataSet.highlightColor = UIColor.chartSliderLine
 
         if (useRightAxis) {
             dataSet.axisDependency = .right

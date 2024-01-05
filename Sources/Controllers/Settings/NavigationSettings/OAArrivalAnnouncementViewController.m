@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kSidePadding 20.
 
@@ -58,7 +59,7 @@
     CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
 
     UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.tableView.frame.size.width, .5)];
-    topImageDivider.backgroundColor = UIColor.iconColorDefault;
+    topImageDivider.backgroundColor = [UIColor colorNamed:ACColorNameIconColorDefault];
 
     UIImage *image = [UIImage imageNamed:@"img_help_announcement_time_day"];
     CGFloat aspectRatio = MIN(self.tableView.frame.size.width, self.tableView.frame.size.height) / image.size.width;
@@ -67,7 +68,7 @@
     imageView.contentMode = UIViewContentModeScaleAspectFit;
 
     UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, self.tableView.frame.size.width, imageView.frame.size.height)];
-    imageBackgroundView.backgroundColor = UIColor.groupBgColor;
+    imageBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
 
     UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, self.tableView.frame.size.width, .5)];
     bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
@@ -177,7 +178,7 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {

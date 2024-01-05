@@ -17,6 +17,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAWikipediaImagesSettingsViewController
 {
@@ -90,7 +91,7 @@
 
             BOOL isSelected = [downloadMode isEqual:[_app.data getWikipediaImagesDownloadMode:self.appMode]];
             cell.accessoryType = isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }

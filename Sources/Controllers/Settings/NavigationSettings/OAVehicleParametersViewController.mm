@@ -24,6 +24,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAVehicleParametersViewController () <OASettingsDataDelegate>
 
@@ -211,7 +212,7 @@
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? UIColor.iconColorDisabled : UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftIconView.tintColor = [item[@"selectedItem"] intValue] == 0 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : UIColorFromRGB(self.appMode.getIconColor);
         }
         return cell;
     }

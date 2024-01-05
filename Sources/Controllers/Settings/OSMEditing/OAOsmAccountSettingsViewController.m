@@ -20,6 +20,7 @@
 #import "OASizes.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAOsmAccountSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -70,7 +71,7 @@
         self.tableView.tableHeaderView =
                 [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"use_login_and_password_description")
                                                      font:kHeaderDescriptionFont
-                                                textColor:UIColor.textColorSecondary
+                                                textColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
                                                isBigTitle:NO
                                           parentViewWidth:self.view.frame.size.width];
     }
@@ -138,7 +139,7 @@
             @"key" : @"error_cell",
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : _errorMessage,
-            @"title_color" : UIColor.buttonBgColorDisruptive
+            @"title_color" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive]
         }];
     }
     else
@@ -209,7 +210,7 @@
                 cell.inputField.textContentType = UITextContentTypePassword;
                 cell.inputField.secureTextEntry = YES;
             }
-            cell.titleLabel.textColor = [UIColor textColorPrimary];
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.inputField.userInteractionEnabled = !_isAuthorised;
             cell.inputField.tag = indexPath.section << 10 | indexPath.row;;
             cell.inputField.returnKeyType = UIReturnKeyDone;
@@ -233,12 +234,12 @@
         if (cell)
         {
             cell.button.backgroundColor = _isAuthorised || _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
-                    ? UIColor.buttonBgColorSecondary
-                    : UIColor.buttonBgColorPrimary;
+                    ? [UIColor colorNamed:ACColorNameButtonBgColorSecondary]
+            : [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
             [cell.button setTitleColor:_isAuthorised
-                            ? UIColor.buttonTextColorSecondary
+             ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary]
                             : _newUserName.length == 0 || _newPassword.length == 0 || _errorMessage != nil
-                                    ? UIColor.textColorSecondary : UIColor.buttonTextColorPrimary
+             ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameButtonTextColorPrimary]
                               forState:UIControlStateNormal];
             [cell.button setTitle:_isAuthorised > 0 ? OALocalizedString(@"shared_string_logout") : OALocalizedString(@"user_login")
                          forState:UIControlStateNormal];
@@ -255,13 +256,13 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.dividerColor = UIColor.separatorColor;
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
             BOOL isErrorEmptyCell = [item[@"key"] isEqualToString:@"empty_cell"];
-            cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : UIColor.groupBgColor;
+            cell.backgroundColor = isErrorEmptyCell ? UIColor.clearColor : [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerHight = isErrorEmptyCell ? 30. : (1. / [UIScreen mainScreen].scale);
             cell.dividerInsets = UIEdgeInsetsMake(0., isErrorEmptyCell ? CGFLOAT_MAX : [item[@"left_inset"] floatValue], 0., 0.);
         }
@@ -283,7 +284,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"title_color"] ? item[@"title_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         return cell;
     }

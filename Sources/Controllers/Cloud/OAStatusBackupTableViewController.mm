@@ -45,6 +45,7 @@
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
@@ -269,7 +270,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 EOABackupSyncOperationType operation = deleted ? EOABackupSyncOperationDelete
                     : _tableType == EOARecentChangesLocal ? EOABackupSyncOperationUpload : EOABackupSyncOperationDownload;
                 [itemsSection addRow:[self rowFromKey:it.firstObject
-                                             mainTint:deleted ? UIColor.iconColorActive : UIColor.iconColorDisabled
+                                             mainTint:deleted ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
                                         secondaryTint:deleted ? color_primary_red : color_primary_purple
                                             operation:operation
                                             localFile:it.lastObject[@"localFile"]
@@ -342,7 +343,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                               remoteFile:(OARemoteFile *)remoteFile
 {
     OATableRowData *rowData = [self rowFromKey:key
-                                      mainTint:UIColor.iconColorDisabled
+                                      mainTint:[UIColor colorNamed:ACColorNameIconColorDisabled]
                                  secondaryTint:color_tint_gray
                                      operation:EOABackupSyncOperationNone
                                      localFile:localFile
@@ -350,15 +351,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSString *conflictStr = [OALocalizedString(@"cloud_conflict") stringByAppendingString:@". "];
     NSMutableAttributedString *attributedDescr = [[NSMutableAttributedString alloc] initWithString:[conflictStr stringByAppendingString:rowData.descr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightMedium],
-                                      NSForegroundColorAttributeName : UIColor.buttonBgColorDisruptive }
+                                      NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] }
                              range:[attributedDescr.string rangeOfString:conflictStr]];
     [attributedDescr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote],
-                                      NSForegroundColorAttributeName : UIColor.textColorSecondary }
+                                      NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
                              range:[attributedDescr.string rangeOfString:rowData.descr]];
     [rowData setObj:attributedDescr forKey:@"descrAttr"];
     [rowData setObj:@"ic_custom_alert" forKey:@"secondaryIconConflict"];
     [rowData setObj:@(color_primary_red) forKey:@"secondaryIconColor"];
-    [rowData setIconTintColor:UIColor.iconColorActive];
+    [rowData setIconTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     return rowData;
 }
 
@@ -534,7 +535,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     {
         progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
         progressView.iconView = [[UIView alloc] init];
-        progressView.tintColor = UIColor.iconColorActive;
+        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         cell.accessoryView = progressView;
     }
 
@@ -711,7 +712,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             paragraphStyle.lineSpacing = 4;
             paragraphStyle.alignment = NSTextAlignmentCenter;
             [str addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
-            [str addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:range];
+            [str addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:range];
             [str addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:range];
             cell.descriptionLabel.attributedText = str;
             [cell.cellImageView setImage:[UIImage rtlImageNamed:item.iconName]];
@@ -729,7 +730,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconProgressbarCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            [cell.progressBar setProgressTintColor:UIColor.iconColorActive];
+            [cell.progressBar setProgressTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
         }
         if (cell)
         {

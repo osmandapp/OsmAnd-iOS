@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
@@ -41,12 +41,12 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="MiH-Ug-q1h">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
-                    <color key="separatorColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="separatorColor" name="customSeparator"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPB-MS-llO" userLabel="Separator Bottom View">
                     <rect key="frame" x="0.0" y="745" width="414" height="1"/>
-                    <color key="backgroundColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="1" id="7Tr-g1-3oq"/>
                     </constraints>
@@ -156,7 +156,7 @@
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="MEk-kg-hIM"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="uPB-MS-llO" firstAttribute="leading" secondItem="hLM-mY-zOx" secondAttribute="leading" id="1bc-Og-QlJ"/>
                 <constraint firstAttribute="trailing" secondItem="MiH-Ug-q1h" secondAttribute="trailing" id="2qN-yb-V0d"/>
@@ -177,10 +177,10 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="separatorColor">
+        <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">

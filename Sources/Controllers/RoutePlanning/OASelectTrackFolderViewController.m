@@ -16,6 +16,7 @@
 #import "OsmAndApp.h"
 #import "OALoadGpxTask.h"
 #import "OATableViewCustomHeaderView.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAddNewFolderSection 0
 #define kFoldersListSection 1
@@ -63,9 +64,9 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-    self.tableView.tintColor = UIColor.iconColorActive;
+    self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 #pragma mark - Base UI
@@ -139,7 +140,7 @@
     NSString *title = [self tableView:self.tableView titleForHeaderInSection:section];
     OATableViewCustomHeaderView *vw = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     vw.label.text = [title upperCase];
-    vw.label.textColor = UIColor.textColorSecondary;
+    vw.label.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     return vw;
 }
 
@@ -168,8 +169,8 @@
             cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleLabel.text = item[@"title"];

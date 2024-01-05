@@ -29,6 +29,7 @@
 #import "OADividerCell.h"
 #import "OAUsernameFilterViewController.h"
 #import "OATableViewCustomFooterView.h"
+#import "GeneratedAssetSymbols.h"
 
 #define resetButtonTag 500
 #define applyButtonTag 600
@@ -187,9 +188,9 @@ static const NSInteger panoImageFilterSection = 2;
     _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     
     NSDictionary *applyAttrs = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                             NSForegroundColorAttributeName : [UIColor buttonTextColorPrimary] };
+                                  NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonTextColorPrimary] };
     NSDictionary *resetAttrs = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                  NSForegroundColorAttributeName : UIColor.buttonTextColorSecondary};
+                                  NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonTextColorSecondary]};
     NSAttributedString *resetText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_reset") attributes:resetAttrs];
     NSAttributedString *applyText = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_apply") attributes:applyAttrs];
     UIButton *reset = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -198,8 +199,8 @@ static const NSInteger panoImageFilterSection = 2;
     [apply setAttributedTitle:applyText forState:UIControlStateNormal];
     [reset addTarget:self action:@selector(resetPressed) forControlEvents:UIControlEventTouchUpInside];
     [apply addTarget:self action:@selector(applyPressed) forControlEvents:UIControlEventTouchUpInside];
-    reset.backgroundColor = UIColor.buttonBgColorDisabled;
-    apply.backgroundColor = UIColor.buttonBgColorPrimary;
+    reset.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorDisabled];
+    apply.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
     reset.layer.cornerRadius = 9;
     apply.layer.cornerRadius = 9;
     reset.tag = resetButtonTag;
@@ -346,13 +347,13 @@ static const NSInteger panoImageFilterSection = 2;
                 cell.titleLabel.text = _mapillaryEnabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name");
                 NSString *imgName = _mapillaryEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
                 cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-                cell.leftIconView.tintColor = _mapillaryEnabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = _mapillaryEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
                 [cell.switchView setOn:_mapillaryEnabled];
             }
             else if ([key isEqualToString:@"pano_only"])
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-                cell.leftIconView.tintColor = _panoOnly ? UIColor.iconColorSelected  : UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = _panoOnly ? [UIColor colorNamed:ACColorNameIconColorSelected]  : [UIColor colorNamed:ACColorNameIconColorDisabled];
                 [cell.switchView setOn:_panoOnly];
             }
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -374,7 +375,7 @@ static const NSInteger panoImageFilterSection = 2;
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = UIColor.iconColorDefault;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             [cell.button setTitle:item[@"btnTitle"] forState:UIControlStateNormal];
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.button addTarget:self action:@selector(reloadCache) forControlEvents:UIControlEventTouchUpInside];
@@ -389,7 +390,7 @@ static const NSInteger panoImageFilterSection = 2;
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColor.separatorColor;
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }
@@ -410,7 +411,7 @@ static const NSInteger panoImageFilterSection = 2;
             BOOL isNotSet = dateVal == 0;
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = isNotSet ? UIColor.iconColorDefault : UIColor.iconColorSelected;
+            cell.leftIconView.tintColor = isNotSet ? [UIColor colorNamed:ACColorNameIconColorDefault] : [UIColor colorNamed:ACColorNameIconColorSelected];
 
             NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
             [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
@@ -419,7 +420,7 @@ static const NSInteger panoImageFilterSection = 2;
             NSDate *date = [NSDate dateWithTimeIntervalSince1970:dateVal];
             NSString *dateStr = isNotSet ? OALocalizedString(@"shared_string_not_set") : [formatter stringFromDate:date];
             cell.valueLabel.text = dateStr;
-            cell.valueLabel.textColor = isNotSet ? UIColor.textColorSecondary : UIColor.textColorActive;
+            cell.valueLabel.textColor = isNotSet ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorActive];
         }
         outCell = cell;
     }
@@ -541,7 +542,7 @@ static const NSInteger panoImageFilterSection = 2;
     if (section == dateFilterSection)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColor.textColorSecondary;
+        header.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 

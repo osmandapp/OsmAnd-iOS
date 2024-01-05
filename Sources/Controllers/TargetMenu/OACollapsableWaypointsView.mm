@@ -19,6 +19,7 @@
 #import "OAMapLayers.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMaxItemsCount 11
 #define kButtonHeight 32.0
@@ -103,10 +104,10 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColor.separatorColor.CGColor;
-    btn.tintColor = UIColor.textColorActive;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+    btn.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
     btn.tag = tag;
-    [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.iconColorActive] forState:UIControlStateHighlighted];
+    [btn setBackgroundImage:[OAUtilities imageWithColor:[UIColor colorNamed:ACColorNameIconColorActive]] forState:UIControlStateHighlighted];
     btn.delegate = self;
     return btn;
 }
@@ -127,7 +128,7 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
         }
         if ([_data[i] isEqual:_currentWpt] || [_data[i] isEqual:_favorite])
         {
-            btn.tintColor = UIColor.iconColorDefault;
+            btn.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             btn.userInteractionEnabled = NO;
         }
         [self addSubview:btn];
@@ -233,14 +234,14 @@ typedef NS_ENUM(NSInteger, EOAWaypointsType)
     {
         OAButton *button = _buttons[tag];
         [UIView animateWithDuration:0.3 animations:^{
-            button.layer.backgroundColor = UIColor.iconColorActive.CGColor;
+            button.layer.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;
             button.tintColor = UIColor.whiteColor;
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = UIColor.iconColorDefault.CGColor;
-                button.tintColor = UIColor.iconColorActive;
+                button.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
+                button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 if (_data.count > tag)
                 {
                     OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;

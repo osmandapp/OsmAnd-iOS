@@ -524,6 +524,7 @@
     NSInteger cardsCount = cards.count;
     NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSMutableArray<OAAbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
@@ -538,7 +539,7 @@
                     if (features.count == 0)
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                         });
                     }
                     else
@@ -550,15 +551,15 @@
                                 [self getCard:dict onComplete:^(OAAbstractCard *card) {
                                     if (card)
                                     {
-                                        [cards addObject:card];
-                                        if (cards.count == count + cardsCount)
-                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                                        [newCards addObject:card];
+                                        if (newCards.count == count + cardsCount)
+                                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                                     }
                                     else
                                     {
                                         count--;
-                                        if (cards.count == count + cardsCount)
-                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                                        if (newCards.count == count + cardsCount)
+                                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                                     }
                                 }];
                             });

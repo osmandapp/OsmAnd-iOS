@@ -691,6 +691,9 @@
     for (NSInteger k = routePoint - 1; k >= -1; k--)
     {
         CLLocation *l = k == -1 ? lastProjection : routeNodes[k];
+        if (l == nil)
+            continue;
+
         double locDist = [lprevious distanceFromLocation:l];
         dist += locDist;
         if (dist >= DISTANCE_ACTION)

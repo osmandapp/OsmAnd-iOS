@@ -1483,3 +1483,6 @@
 "help_article_plan_route_coordinate_input_name" = "좌표입력";
 "routing_attr_prefer_unpaved_description" = "비포장도로 선호함.";
 "announce_when_exceeded" = "초과시 안내";
+"selected_profile" = "선택된 프로필";
+"help_article_navigation_guidance_voice_navigation_name" = "음성 프롬프트/알림";
+"help_article_personal_storage_name" = "저장공간";

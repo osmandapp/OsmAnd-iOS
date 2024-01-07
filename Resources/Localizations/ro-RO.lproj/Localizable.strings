@@ -361,7 +361,7 @@
 "type_address" = "Tastați adresa";
 "si_nm" = "Mile nautice";
 "speak_traffic_warnings" = "Avertismente din trafic";
-"save_global_track_interval" = "Interval de înregistrare generală";
+"save_global_track_interval" = "Interval general de înregistrare";
 "shared_string_color_magenta" = "Purpuriu";
 "shared_string_show_on_map" = "Arată pe hartă";
 "mapillary_menu_title_tile_cache" = "Cache pentru segmente";
@@ -2359,13 +2359,13 @@
 "speed_mode" = "Mod viteză";
 "routing_attr_allow_private_for_truck_name" = "Permite accesul privat (camion)";
 "new_device_account" = "Dispozitiv nou / cont nou";
-"osmand_maps_plus_tagline" = "Obțineți funcționalități extinse";
+"osmand_maps_plus_tagline" = "Obținere funcționalități extinse";
 "wikipedia_and_wikivoyage_offline" = "Wikipediași Wikivoyage offline";
 "debugging_and_development" = "Dezvoltare OsmAnd";
 "purchases_feature_desc_combined_wiki" = "Explorați articolele din Wikipedia în deplasare, fără conexiune la internet. Datele offline împărțite pe țări și disponibile în toate limbile.";
 "purchases_feature_desc_monthly_map_updates" = "Obțineți acces la actualizări lunare regulate pentru hărțile offline.";
 "purchases_feature_desc_osmand_cloud" = "Obțineți OsmAnd Cloud pentru a stoca toate datele OsmAnd online. Fără date pierdute după reinstalare. Faceți backup și restaurați toate informațiile cu ușurință.";
-"osmand_pro_tagline" = "Obțineți funcționalitățile maxime";
+"osmand_pro_tagline" = "Obținere maximul de funcționalități";
 "cloud_backup" = "Copie de rezervă";
 "weather_pressure_enable_descr" = "Activează pentru a vizualiza stratul de presiune pe hartă.";
 "backup_and_restore" = "Backupși restaurare";
@@ -2986,12 +2986,12 @@
 "no_widgets_here_yet" = "Niciun widget aici";
 "no_widgets_descr" = "Adăugați unul sau mai multe widgeturi din lista de widgeturi disponibile.";
 "reset_all_settings_desc" = "Resetați toate setările la valorile implicite?";
-"add_row" = "Adăugați rând";
+"add_row" = "Adaugă rând";
 "free_account" = "Cont gratuit";
 "free_favorites_backup_description" = "Înregistrează-te în OsmAnd Cloud pentru a obține backup gratuit pentru favorite și setări";
 "free_favorites_backup" = "Backup gratuit pentru favorite";
 "banner_payment_free_backup_settings_title" = "Backup gratuit pentru setări";
-"get_osmand_cloud" = "Obțineți OsmAnd Cloud";
+"get_osmand_cloud" = "Obține OsmAnd Cloud";
 "map_widget_target_distance_desc" = "Arată distanța dintre cameră și locația țintă.";
 "map_widget_camera_tilt_desc" = "Arată unghiul de înclinare al camerei în modul perspectivă. Implicit este 90° (fără înclinare).";
 "shared_string_relief_3d" = "Relief 3D";
@@ -3028,3 +3028,4 @@
 "ios_release_4_5" = "• Experiența widgeturilor complet reproiectată: a fost adăugată posibilitatea de a schimba poziția widgeturilor, a fost adăugată gruparea pe pagini, o singură listă de widgeturi pentru panoul din stânga și din dreapta.\n• Ecran de configurare reproiectat\n• Copie de rezervă gratuită a preferințelor, setărilor și editărilor OSM în OsmAnd Cloud\n• A fost adăugată scara \"CAI\" pentru \"Clasificarea dificultății traseelor\"\n• \"Plugin pentru curbe de nivel\" redenumit în \"Topografie\", a adăugat suport pentru noul format al hărților de teren.\n• Adăugat 3D Relief\n• A fost adăugată autorizarea OAuth pentru pluginul de editare OpenStreetMap Editing\n• A fost adăugat un buton separat pentru a comuta între modul 2D sau 3D\n• Direcția schimbată a gestului de înclinare\n• S-a rezolvat o problemă cu exportul de favorite, care putea duce la pierderea de date\n";
 "help_article_map_point_layers_on_map_name" = "Puncte pe hartă";
 "help_article_map_raster_maps_name" = "Hărți raster (online / offline)";
+"help_article_map_interact_with_map_name" = "Interacționați cu harta";

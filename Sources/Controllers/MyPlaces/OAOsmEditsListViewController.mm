@@ -338,10 +338,19 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     BOOL shouldEdit = ![self.tableView isEditing];
     
     if (shouldEdit)
-        [_uploadButton setHidden:YES];
+    {
+        if (@available(iOS 16.0, *))
+            [_uploadButton setHidden:YES];
+        else
+            [self.navigationItem setRightBarButtonItems:@[_deleteButton] animated:YES];
+    }
     else
     {
-        [_uploadButton setHidden:NO];
+        if (@available(iOS 16.0, *))
+            [_uploadButton setHidden:NO];
+        else
+            [self.navigationItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
+
         NSArray *indexes = [self.tableView indexPathsForSelectedRows];
         if (indexes.count > 0)
         {
@@ -378,10 +387,19 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     BOOL shouldEdit = ![self.tableView isEditing];
 
     if (shouldEdit)
-        [_deleteButton setHidden:YES];
+    {
+        if (@available(iOS 16.0, *))
+            [_deleteButton setHidden:YES];
+        else
+            [self.navigationItem setRightBarButtonItems:@[_uploadButton] animated:YES];
+    }
     else
     {
-        [_deleteButton setHidden:NO];
+        if (@available(iOS 16.0, *))
+            [_uploadButton setHidden:NO];
+        else
+            [self.navigationItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
+
         NSArray *indexes = [self.tableView indexPathsForSelectedRows];
         NSMutableArray *edits = [NSMutableArray new];
         NSMutableArray *notes = [NSMutableArray new];

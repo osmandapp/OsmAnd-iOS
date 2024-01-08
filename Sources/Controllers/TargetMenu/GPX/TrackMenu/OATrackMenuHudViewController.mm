@@ -1724,7 +1724,7 @@
 {
     if ([url isValidEmail])
     {
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:url] options:@{} completionHandler:nil];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"mailto:" stringByAppendingString:url]] options:@{} completionHandler:nil];
     }
     else if ([url containsString:OAWikiAlgorithms.wikipediaDomain])
     {
@@ -2608,29 +2608,25 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if (_selectedTab == EOATrackMenuHudOverviewTab && [cellData.type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [cellData.key hasPrefix:@"link_"] || [OAWikiAlgorithms isUrl:cellData.desc] || [cellData.desc isValidEmail];
-        if (!isWebsite)
-        {
-            NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-            
-            UIAction *copyAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_copy")
-                                                       image:[UIImage systemImageNamed:@"copy"]
-                                                  identifier:nil
-                                                     handler:^(__kindof UIAction * _Nonnull action) {
-                OAGPXTableCellData *cellData = [self getCellData:indexPath];
-                NSString *textToCopy = cellData.desc;
-                [[UIPasteboard generalPasteboard] setString:textToCopy];
-            }];
-            copyAction.accessibilityLabel = OALocalizedString(@"shared_string_copy");
-            
-            [menuElements addObject:copyAction];
-            UIMenu *contextMenu = [UIMenu menuWithChildren:menuElements];
-            return [UIContextMenuConfiguration configurationWithIdentifier:nil
-                                                           previewProvider:nil
-                                                            actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
-                return contextMenu;
-            }];
-        }
+        NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+        
+        UIAction *copyAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_copy")
+                                                   image:[UIImage systemImageNamed:@"copy"]
+                                              identifier:nil
+                                                 handler:^(__kindof UIAction * _Nonnull action) {
+            OAGPXTableCellData *cellData = [self getCellData:indexPath];
+            NSString *textToCopy = [cellData.values.allKeys containsObject:@"url"] ? cellData.values[@"url"] : cellData.desc;
+            [[UIPasteboard generalPasteboard] setString:textToCopy];
+        }];
+        copyAction.accessibilityLabel = OALocalizedString(@"shared_string_copy");
+        
+        [menuElements addObject:copyAction];
+        UIMenu *contextMenu = [UIMenu menuWithChildren:menuElements];
+        return [UIContextMenuConfiguration configurationWithIdentifier:nil
+                                                       previewProvider:nil
+                                                        actionProvider:^UIMenu * _Nullable(NSArray<UIMenuElement *> * _Nonnull suggestedActions) {
+            return contextMenu;
+        }];
     }
     return nil;
 }

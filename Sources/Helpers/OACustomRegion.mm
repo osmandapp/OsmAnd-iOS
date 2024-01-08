@@ -17,6 +17,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #import <TTTColorFormatter.h>
+#import "OAIndexConstants.h"
 
 @interface OADynamicDownloadItems ()
 
@@ -195,6 +196,7 @@
 //            long timestamp = [itemJson[@"timestamp"] longValue] * 1000;
             long contentSize = [itemJson[@"contentSize"] longValue];
             long containerSize = [itemJson[@"containerSize"] longValue];
+            BOOL isHidden = [itemJson[@"isHidden"] boolValue];
             
             NSString *indexType = itemJson[@"type"];
             indexType = indexType ? : self.type;
@@ -225,11 +227,11 @@
                 indexItem.firstSubNames = firstSubNames;
                 indexItem.secondSubNames = secondSubNames;
                 indexItem.descriptionInfo = descriptionInfo;
+                indexItem.hidden = isHidden;
 //                indexItem.timestamp = timestamp;
                 indexItem.size = contentSize;
                 indexItem.sizePkg = containerSize;
                 indexItem.resourceType = type;
-                
                 [items addObject:indexItem];
             }
         }

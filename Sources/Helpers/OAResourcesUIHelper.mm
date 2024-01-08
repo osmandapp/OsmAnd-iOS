@@ -617,7 +617,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     else if ([titleWithoutExt.lowercaseString hasSuffix:GPX_FILE_EXT])
         return OsmAndApp.instance.gpxPath;
     else if ([titleWithoutExt hasSuffix:BINARY_MAP_INDEX_EXT_ZIP])
-        return OsmAndApp.instance.documentsPath;
+        return self.hidden ? OsmAndApp.instance.hiddenMapsPath : OsmAndApp.instance.documentsPath;
     return OsmAndApp.instance.documentsPath;
 }
 
@@ -880,7 +880,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
     id<OADownloadTask> task = [[OsmAndApp instance].downloadsManager downloadTaskWithRequest:request
                                                                                       andKey:[@"resource:" stringByAppendingString:resourceId]
-                                                                                     andName:name];
+                                                                                     andName:name
+                                                                                   andHidden:NO];
 
     if ([[OsmAndApp instance].downloadsManager firstActiveDownloadTasksWithKeyPrefix:@"resource:"] == nil)
         [task resume];
@@ -914,6 +915,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 }
 
 + (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes
+includeHidden:(BOOL)includeHidden
 {
     NSMutableArray<NSString *> *items = [NSMutableArray new];
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -921,6 +923,9 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     {
         if (localResource->origin != OsmAnd::ResourcesManager::ResourceOrigin::Installed)
             continue;
+        if (!includeHidden && app.resourcesManager->isLocalResourceHidden(localResource))
+            continue;
+
         const auto& installedResource = std::static_pointer_cast<const OsmAnd::ResourcesManager::InstalledResource>(localResource);
         // Skip mini basemap since it's builtin and not installed in ios
         if (resourceTypes.contains(installedResource->type) && installedResource->id != QString::fromNSString(kWorldMiniBasemapKey.lowercaseString))
@@ -1258,7 +1263,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 {
     if (item.downloadUrl)
     {
-        NSString* name = item.title;
+        NSString *name = item.title;
         if (item.subfolder && item.subfolder.length > 0)
             name = [item.subfolder stringByAppendingPathComponent:name];
 
@@ -1269,7 +1274,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
-                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath nsResourceId:srcFilePath.lastPathComponent fileName:name];
+                BOOL failed = [OAResourcesInstaller installCustomResource:srcFilePath resourceId:srcFilePath.lastPathComponent fileName:name hidden:item.hidden];
                 if (!failed)
                     [OsmAndApp.instance.localResourcesChangedObservable notifyEvent];
             }
@@ -1277,15 +1282,16 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         else
         {
             // Create download task
-            NSURL* url = [NSURL URLWithString:item.downloadUrl];
-            NSURLRequest* request = [NSURLRequest requestWithURL:url];
+            NSURL *url = [NSURL URLWithString:item.downloadUrl];
+            NSURLRequest *request = [NSURLRequest requestWithURL:url];
 
             NSLog(@"%@", url);
 
             OsmAndAppInstance app = [OsmAndApp instance];
             id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                              andKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]
-                                                                            andName:name];
+                                                                            andName:name
+                                                                          andHidden:item.hidden];
             if (onTaskCreated)
                 onTaskCreated(task);
 
@@ -1567,7 +1573,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         id<OADownloadTask> task;
         if (!item.downloadTask)
             item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request
-                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name];
+                                                                              andKey:[@"resource:" stringByAppendingString:[NSString stringWithFormat:@"%@%@", [item.worldRegion.downloadsIdPrefix lowerCase], @"tifsqlite"]] andName:name
+                                                                           andHidden:item.hidden];
         else
             task = item.downloadTask;
 
@@ -1602,7 +1609,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
         OsmAndAppInstance app = [OsmAndApp instance];
         id<OADownloadTask> task;
         if (!item.downloadTask)
-            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name];
+            item.downloadTask = task = [app.downloadsManager downloadTaskWithRequest:request andKey:[@"resource:" stringByAppendingString:item.resource->id.toNSString()] andName:name andHidden:item.hidden];
         else
             task = item.downloadTask;
 
@@ -1661,7 +1668,8 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     OsmAndAppInstance app = [OsmAndApp instance];
     id<OADownloadTask> task = [app.downloadsManager downloadTaskWithRequest:request
                                                                      andKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]
-                                                                    andName:name];
+                                                                    andName:name
+                                                                  andHidden:NO];
 
     if (onTaskCreated)
         onTaskCreated(task);

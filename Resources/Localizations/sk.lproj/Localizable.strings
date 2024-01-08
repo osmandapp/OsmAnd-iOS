@@ -1564,7 +1564,7 @@
 "shared_string_one" = "Jedna";
 "save_as_new_track" = "Uložiť ako novú stopu";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"quick_action_remove_next_destination" = "Vymazať najbližší cieľový bod";
+"quick_action_remove_next_destination" = "Vymazať ďalší cieľový bod";
 "profile_prefs_reset_successful" = "Všetky nastavenia profilov obnovené do východzieho stavu.";
 "route_between_points" = "Trasa medzi bodmi";
 "select_icon_profile_dialog_title" = "Zvoľte ikonu";
@@ -2335,3 +2335,7 @@
 "add_folder" = "Pridať priečinok";
 "icon_group_service" = "Služby";
 "map_widget_distance_to_intermediate" = "Vzdialenosť k prechodnému cieľu";
+"shared_string_cache" = "Vyrovnávacia pamäť";
+"offline_wikivoyage" = "Offline Wikivoyage";
+"shared_string_temperature" = "Teplota";
+"app_mode_moped" = "Moped";

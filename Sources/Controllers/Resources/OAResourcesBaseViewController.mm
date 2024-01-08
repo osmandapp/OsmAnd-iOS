@@ -20,6 +20,7 @@
 #import "OAWeatherHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAChoosePlanHelper.h"
+#import "OAIndexConstants.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -238,7 +239,8 @@ static BOOL dataInvalidated = NO;
 - (void) validateDownloadViewForTask:(id<OADownloadTask>)task
 {
     [self.downloadView setProgress:task.progressCompleted];
-    [self.downloadView setTitle:task.name];
+    
+    [self.downloadView setTitle:[task.name stringByReplacingOccurrencesOfString:[HIDDEN_DIR stringByAppendingString:@"/"] withString:@""]];
     [self.downloadView setTaskName:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]];
     if (task.state == OADownloadTaskStatePaused)
         [self.downloadView setButtonStateResume];

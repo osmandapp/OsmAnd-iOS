@@ -3036,3 +3036,9 @@
 "help_article_map_map_context_menu_name" = "Meniul contextual al hărții";
 "help_article_map_track_context_menu_name" = "Meniul contextual pentru trasee";
 "help_article_map_tracks_on_map_name" = "Trasee și rute";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_navigation_guidance_name" = "Ghidare";
+"help_article_navigation_guidance_voice_navigation_name" = "Solicitări vocale / Notificări";
+"help_article_navigation_routing_name" = "Parametrii rutei";
+"help_article_navigation_routing_bicycle_based_routing_name" = "Traseu pentru biciclete (MTB)";
+"help_article_navigation_routing_boat_navigation_name" = "Traseu pentru bărci";

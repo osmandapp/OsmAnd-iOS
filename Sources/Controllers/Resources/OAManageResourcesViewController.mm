@@ -419,6 +419,7 @@ static BOOL _repositoryUpdated = NO;
     {
         [_subscribeEmailView updateColorForCALayer];
         _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+        [self.tableView reloadData];
     }
 }
 

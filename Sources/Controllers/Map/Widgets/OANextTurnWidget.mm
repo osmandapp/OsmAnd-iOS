@@ -61,7 +61,7 @@
     if (self)
     {
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
-        _leftView = [UIView new];
+        _leftView = [[UIView alloc] initWithFrame:CGRectMake(2., 84., kLeftViewSide, kLeftViewSide)];
         _leftView.translatesAutoresizingMaskIntoConstraints = NO;
         [self addSubview:_topView];
         [self addSubview:_leftView];
@@ -201,17 +201,7 @@
 - (void) adjustViewSize
 {
     [super adjustViewSize];
-    if (!_horisontalMini)
-    {
-        self.topTextAnchor.constant = self.topView.frame.size.height + 5;
-    }
-    else
-    {
-        self.topTextAnchor.constant = 5;
-        CGRect leftViewFrame = self.leftView.frame;
-        leftViewFrame.origin.y = (self.getWidgetHeight - leftViewFrame.size.height) / 2;
-        self.leftView.frame = leftViewFrame;
-    }
+    self.topTextAnchor.constant = _horisontalMini ? 5 : self.topView.frame.size.height + 5;
     CGRect rect = self.frame;
     rect.size.height += self.textView.frame.origin.y;
     self.frame = rect;

@@ -27,6 +27,8 @@
 #include <CommonCrypto/CommonDigest.h>
 #import <CocoaSecurity.h>
 
+#import "OsmAnd_Maps-Swift.h"
+
 #define kBlurViewTag -999
 #define kSpinnerViewTag -998
 
@@ -333,6 +335,26 @@
     int col1 = [color1 toRGBNumber];
     int col2 = [color2 toRGBNumber];
     return col1 == col2;
+}
+
+- (UIColor *)lightThemeColor
+{
+    UITraitCollection *trait = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight];
+    return [self resolvedColorWithTraitCollection:trait];
+}
+
+- (UIColor *)darkThemeColor
+{
+    UITraitCollection *trait = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark];
+    return [self resolvedColorWithTraitCollection:trait];
+}
+
+- (UIColor *)currentThemeColor
+{
+    if ([[ThemeManager shared] isLightTheme])
+        return [self lightThemeColor];
+    else
+        return [self darkThemeColor];
 }
 
 @end
@@ -2555,10 +2577,10 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor
 {
     if (!textColor)
-        textColor = [UIColor blackColor];
+        textColor = UIColor.textColorPrimary;
 
     CGFloat red, green, blue, alpha;
-    [textColor getRed:&red green:&green blue:&blue alpha:&alpha];
+    [textColor.currentThemeColor getRed:&red green:&green blue:&blue alpha:&alpha];
     NSString *textColorString = [NSString stringWithFormat:@"rgba(%.0f, %.0f, %.0f, %.2f)", red*255, green*255, blue*255, alpha];
 
     NSString *modifiedFontHtml =

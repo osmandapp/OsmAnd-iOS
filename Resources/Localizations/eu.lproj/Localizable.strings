@@ -2310,7 +2310,7 @@
 "copy_to_map_favorites" = "Kopiatu gogokoetan";
 "purchases_feature_desc_hourly_map_updates" = "Lortu sarrien erabiltzen dituzun mapen eguneraketak, aukeratu: orduko, eguneroko edo asteko eguneratzeak. Eguneratzeak modu mailakatuan deskargatzen dira, aldatutako eremurako soilik.";
 "continue_with" = "jarraitu %@-rekin";
-"terrain_maps" = "Lurraren mapak";
+"terrain_maps" = "Lurreko mapak";
 "toast_empty_name_error" = "Izen gabeko kokalekua";
 "new_device_account" = "Gailu berria / kontu berria";
 "shared_string_purchased" = "Erosita";
@@ -2549,3 +2549,5 @@
 "rendering_value_sacScale_description" = "Suitzako Alpino Kluba";
 "rendering_value_caiScale_description" = "Italiako Alpino Kluba";
 "search_favorites" = "Gogokoenetan bilatu";
+"add_row" = "Gehitu errenkada";
+"shared_string_cache" = "Cache";

@@ -303,33 +303,39 @@
 {
     return [self downloadTaskWithRequest:request
                            andTargetPath:nil
-                                 andName:@""];
+                                 andName:@""
+                               andHidden:NO];
 }
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                 andTargetPath:(NSString*)targetPath
                                       andName:(NSString*)name
+                                    andHidden:(BOOL)hidden
 {
     return [self downloadTaskWithRequest:request
                            andTargetPath:targetPath
                                   andKey:nil
-                                 andName:name];
+                                 andName:name
+                               andHidden:hidden];
 }
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                        andKey:(NSString*)key
                                       andName:(NSString*)name
+                                    andHidden:(BOOL)hidden
 {
     return [self downloadTaskWithRequest:request
                            andTargetPath:nil
                                   andKey:key
-                                 andName:name];
+                                 andName:name
+                               andHidden:hidden];
 }
 
 - (id<OADownloadTask>)downloadTaskWithRequest:(NSURLRequest*)request
                                 andTargetPath:(NSString*)targetPath
                                        andKey:(NSString*)key
                                       andName:(NSString*)name
+                                    andHidden:(BOOL)hidden
 {
     [OAAnalyticsHelper logEvent:@"map_download_start"];
 
@@ -357,7 +363,8 @@
                                                               andResumeData:resumeData
                                                               andTargetPath:targetPath
                                                                      andKey:key
-                                                                    andName:name];
+                                                                    andName:name
+    															  andHidden:hidden];
     }
     else
     {
@@ -366,7 +373,8 @@
                                                                  andRequest:request
                                                               andTargetPath:targetPath
                                                                      andKey:key
-                                                                    andName:name];
+                                                                    andName:name
+															      andHidden:hidden];
     }
     
     // Add task to collection

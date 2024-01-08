@@ -286,6 +286,12 @@
 @implementation OALink
 @end
 
+@implementation OAAuthor
+@end
+
+@implementation OACopyright
+@end
+
 @implementation OAMetadata
 @end
 

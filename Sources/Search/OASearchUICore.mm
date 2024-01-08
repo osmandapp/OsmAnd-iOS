@@ -469,7 +469,8 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     dispatch_queue_t _taskQueue;
     OAAtomicInteger *_requestNumber;
     int totalLimit; // -1 unlimited - not used
-    
+    BOOL _searchActive;
+
     NSMutableArray<OASearchCoreAPI *> *_apis;
     OASearchSettings *_searchSettings;
     OAPOIHelper *_poiTypes;
@@ -637,20 +638,23 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
     return _phrase;
 }
 
-- (void) cancelSearch
+- (void) cancelSearch:(BOOL)sync
 {
     [_requestNumber incrementAndGet];
+    while (sync && _searchActive)
+        [NSThread sleepForTimeInterval:0.01];
 }
 
 - (void) search:(NSString *)text delayedExecution:(BOOL)delayedExecution matcher:(OAResultMatcher<OASearchResult *> *)matcher
 {
     int request = [_requestNumber incrementAndGet];
+    _searchActive = YES;
     OASearchPhrase *phrase = [_phrase generateNewPhrase:text settings:_searchSettings];
     _phrase = phrase;
     NSLog(@"> Search phrase %@", [_phrase toString]);
     
     dispatch_async(_taskQueue, ^{
-        try
+        @try
         {
             if (_onSearchStart)
                 _onSearchStart();
@@ -707,9 +711,13 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
                     _onResultsComplete();
             }
         }
-        catch (NSException *e)
+        @catch (NSException *e)
         {
             NSLog(@"OASearchUICore.search error %@", e);
+        }
+        @finally
+        {
+            _searchActive = NO;
         }
     });
 }

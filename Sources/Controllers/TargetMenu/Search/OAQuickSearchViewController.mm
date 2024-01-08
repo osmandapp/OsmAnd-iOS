@@ -1414,7 +1414,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         {
             [self restoreInputLayout];
             [self.searchUICore resetPhrase];
-            [self.searchUICore cancelSearch];
+            [self.searchUICore cancelSearch:NO];
         }
         else
         {

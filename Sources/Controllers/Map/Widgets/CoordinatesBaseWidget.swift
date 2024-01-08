@@ -66,19 +66,22 @@ class CoordinatesBaseWidget: OABaseWidgetView {
             return
         }
 
-        var coordinates = firstCoordinate.text ?? ""
-        if secondContainer.isHidden == false {
-            coordinates += ", \(secondCoordinate.text ?? "")"
+        let firstCoordText = firstCoordinate.text ?? ""
+        let secondCoordText = secondCoordinate.text ?? ""
+        var coordinates = ""
+
+        if isDirectionRTL() {
+            coordinates = "\(secondCoordText), \(firstCoordText)"
+        } else {
+            coordinates = "\(firstCoordText), \(secondCoordText)"
         }
 
-        let pasteboard: UIPasteboard  = UIPasteboard.general
+        let pasteboard: UIPasteboard = UIPasteboard.general
         pasteboard.string = coordinates
 
-        OAUtilities.showToast(String(format: localizedString("ltr_or_rtl_combine_via_colon"),
-                                     arguments: [localizedString("copied_to_clipboard"), coordinates]),
-                              details: nil,
-                              duration: 4,
-                              in: OARootViewController.instance().view)
+        let toastMessage = isDirectionRTL() ? "\(coordinates) :\(localizedString("copied_to_clipboard"))" : String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("copied_to_clipboard"), coordinates)
+
+        OAUtilities.showToast(toastMessage, details: nil, duration: 4, in: OARootViewController.instance().view)
     }
 
     func showFormattedCoordinates(lat: Double, lon: Double) {

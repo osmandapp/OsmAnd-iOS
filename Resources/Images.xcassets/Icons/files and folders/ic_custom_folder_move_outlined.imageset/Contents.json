@@ -2,7 +2,8 @@
   "images" : [
     {
       "filename" : "ic_custom_folder_move_outlined.svg",
-      "idiom" : "universal"
+      "idiom" : "universal",
+      "language-direction" : "left-to-right"
     }
   ],
   "info" : {

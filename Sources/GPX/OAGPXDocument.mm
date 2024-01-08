@@ -216,7 +216,7 @@
     [self setExtension:@"show_start_finish" value:strValue];
 }
 
-+ (NSArray *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
++ (NSArray<OALink *> *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
 {
     if (!links.isEmpty()) {
         NSMutableArray<OALink *> *gpxLinks = [NSMutableArray array];
@@ -315,9 +315,33 @@
         metadata.desc = gpxDocument->metadata->description.toNSString();
         metadata.time = gpxDocument->metadata->timestamp.toSecsSinceEpoch();
         metadata.links = [self.class fetchLinks:gpxDocument->metadata->links];
-
+        metadata.keywords = gpxDocument->metadata->keywords.toNSString();
         OsmAnd::Ref<OsmAnd::GpxDocument::Metadata> *metadataRef = &gpxDocument->metadata;
         [metadata fetchExtensions:metadataRef->shared_ptr()];
+
+        if (gpxDocument->metadata->author != nullptr)
+        {
+            OAAuthor *author = [[OAAuthor alloc] init];
+            author.name = gpxDocument->metadata->author->name.toNSString();
+            author.email = gpxDocument->metadata->author->email.toNSString();
+            if (gpxDocument->metadata->author->link != nullptr)
+                author.link = [self.class fetchLinks:{ gpxDocument->metadata->author->link }].firstObject;
+            OsmAnd::Ref<OsmAnd::GpxDocument::Author> *authorRef = &gpxDocument->metadata->author;
+            [author fetchExtensions:authorRef->shared_ptr()];
+            metadata.author = author;
+        }
+
+        if (gpxDocument->metadata->copyright != nullptr)
+        {
+            OACopyright *copyright = [[OACopyright alloc] init];
+            copyright.author = gpxDocument->metadata->copyright->author.toNSString();
+            copyright.year = gpxDocument->metadata->copyright->year.toNSString();
+            copyright.license = gpxDocument->metadata->copyright->license.toNSString();
+            OsmAnd::Ref<OsmAnd::GpxDocument::Copyright> *copyrightRef = &gpxDocument->metadata->copyright;
+            [copyright fetchExtensions:copyrightRef->shared_ptr()];
+            metadata.copyright = copyright;
+        }
+
         self.metadata = metadata;
     }
 
@@ -534,7 +558,7 @@
         return false;
 }
 
-+ (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray *)linkArray
++ (void) fillLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>&)links linkArray:(NSArray<OALink *> *)linkArray
 {
     std::shared_ptr<OsmAnd::GpxDocument::Link> link;
     for (OALink *l in linkArray)
@@ -556,10 +580,38 @@
     meta->name = QString::fromNSString(m.name);
     meta->description = QString::fromNSString(m.desc);
     meta->timestamp = m.time > 0 ? QDateTime::fromTime_t(m.time).toUTC() : QDateTime().toUTC();
-    
-    [self fillLinks:meta->links linkArray:m.links];
-    
+    if (m.links)
+        [self fillLinks:meta->links linkArray:m.links];
+    meta->keywords = QString::fromNSString(m.keywords);
     [m fillExtensions:meta];
+
+    if (m.author)
+    {
+        std::shared_ptr<OsmAnd::GpxDocument::Author> author;
+        author.reset(new OsmAnd::GpxDocument::Author());
+        author->name = QString::fromNSString(m.author.name);
+        author->email = QString::fromNSString(m.author.email);
+        if (m.author.link)
+        {
+            QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>> links;
+            [self fillLinks:links linkArray:@[m.author.link]];
+            if (links.size() > 0)
+                author->link = links.first();
+        }
+        [m.author fillExtensions:author];
+        meta->author = author;
+    }
+
+    if (m.copyright)
+    {
+        std::shared_ptr<OsmAnd::GpxDocument::Copyright> copyright;
+        copyright.reset(new OsmAnd::GpxDocument::Copyright());
+        copyright->author = QString::fromNSString(m.copyright.author);
+        copyright->year = QString::fromNSString(m.copyright.year);
+        copyright->license = QString::fromNSString(m.copyright.license);
+        [m.copyright fillExtensions:copyright];
+        meta->copyright = copyright;
+    }
 }
 
 + (void)fillPointsGroup:(OAWptPt *)wptPt

@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAAppSettings.h"
 #import "OASwitchTableViewCell.h"
-#import "OASettingsCheckmarkCell.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapPanelViewController.h"

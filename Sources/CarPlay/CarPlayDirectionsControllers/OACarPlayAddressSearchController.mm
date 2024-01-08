@@ -134,6 +134,7 @@
     if (res && [res getCurrentSearchResults].count > 0)
     {
         NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
+        __weak __typeof(self) weakSelf = self;
         for (NSInteger i = 0; i < searchResultItems.count; i++)
         {
             OASearchResult *sr = searchResultItems[i];
@@ -145,7 +146,7 @@
                                                     accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             cpItem.userInfo = @(i);
             cpItem.handler = ^(id <CPSelectableListItem> item, dispatch_block_t completionBlock) {
-                [self onItemSelected:item];
+                [weakSelf onItemSelected:item];
                 if (completionBlock)
                     completionBlock();
             };
@@ -202,11 +203,15 @@
     OASearchResultCollection __block *regionResultCollection;
     OASearchCoreAPI __block *regionResultApi;
     NSMutableArray<OASearchResult *> __block *results = [NSMutableArray array];
-
+    __weak __typeof(self) weakSelf = self;
     [_searchUICore search:_currentSearchPhrase
          delayedExecution:YES
                   matcher:[[OAResultMatcher<OASearchResult *> alloc] initWithPublishFunc:^BOOL(OASearchResult *__autoreleasing *object)
     {
+        __strong __typeof(weakSelf) strongSelf = weakSelf;
+        if (!strongSelf)
+            return NO;
+
         OASearchResult *obj = *object;
         if (obj.objectType == SEARCH_STARTED)
             _cancelPrev = NO;
@@ -222,13 +227,13 @@
         {
             case FILTER_FINISHED:
             {
-                [self updateSearchResult:[_searchUICore getCurrentSearchResult] completionHandler:completionHandler];
+                [strongSelf updateSearchResult:[_searchUICore getCurrentSearchResult] completionHandler:completionHandler];
                 break;
             }
             case SEARCH_FINISHED:
             {
                 _searching = NO;
-                [self updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
+                [strongSelf updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
                 break;
             }
             case SEARCH_API_FINISHED:
@@ -257,7 +262,7 @@
                         [_searchHelper setResultCollection:resCollection];
                     }
                     if (!hasRegionCollection)
-                        [self updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
+                        [strongSelf updateSearchResult:[_searchHelper getResultCollection] completionHandler:completionHandler];
                 }
                 break;
             }
@@ -275,11 +280,11 @@
                         OASearchResultCollection *resCollection = [[_searchHelper getResultCollection] combineWithCollection:regionResultCollection
                                                                                                                       resort:YES
                                                                                                             removeDuplicates:YES];
-                        [self updateSearchResult:resCollection completionHandler:completionHandler];
+                        [strongSelf updateSearchResult:resCollection completionHandler:completionHandler];
                     }
                     else
                     {
-                        [self updateSearchResult:regionResultCollection completionHandler:completionHandler];
+                        [strongSelf updateSearchResult:regionResultCollection completionHandler:completionHandler];
                     }
                 }
                 break;
@@ -325,7 +330,7 @@
         if (_currentSearchPhrase.length == 0)
         {
             [_searchUICore resetPhrase];
-            [_searchUICore cancelSearch];
+            [_searchUICore cancelSearch:NO];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateSearchResult:nil completionHandler:completionHandler];
             });

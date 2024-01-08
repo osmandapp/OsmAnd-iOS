@@ -69,19 +69,31 @@
 @synthesize window = _window;
 @synthesize rootViewController = _rootViewController;
 
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        NSLog(@"SceneDelegate initialized");
+    }
+    return self;
+}
 - (void)scene:(UIScene *)scene willConnectToSession:(UISceneSession *)session options:(UISceneConnectionOptions *)connectionOptions
 {
-    NSLog(@"willConnectToSession");
+    NSLog(@"SceneDelegate willConnectToSession");
     _windowScene = (UIWindowScene *)scene;
     if (!_windowScene) {
+        NSLog(@"SceneDelegate _windowScene in nil");
         return;
     }
     
     _window = [[UIWindow alloc] initWithWindowScene:_windowScene];
     
     OAAppDelegate *appDelegate = [self appDelegate];
+    [appDelegate initialize];
+
     _rootViewController = appDelegate.rootViewController;
-    
+
     [self configureServices];
     
     if (connectionOptions.URLContexts.count > 0) {
@@ -154,7 +166,9 @@
         case AppLaunchEventRestoreSession:
             NSLog(@"AppLaunchEventRestoreSession");
             _rootViewController = [OARootViewController new];
-            [self appDelegate].rootViewController = _rootViewController;
+            if ([self appDelegate].rootViewController == nil)
+                [self appDelegate].rootViewController = _rootViewController;
+
             _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
             [_window makeKeyAndVisible];
             break;
@@ -171,11 +185,10 @@
 {
     // setup rootViewController if CarPlay(another scenes) was launched first
     if ([self appDelegate].rootViewController == nil)
-    {
         [self appDelegate].rootViewController = [OARootViewController new];
-    }
+
     _rootViewController = [self appDelegate].rootViewController;
-    
+
     _window.rootViewController = [[OANavigationController alloc] initWithRootViewController:_rootViewController];
     [_window makeKeyAndVisible];
 }

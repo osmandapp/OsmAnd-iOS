@@ -97,8 +97,8 @@
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
                                       analysis:self.analysis
                            useGesturesAndScale:YES
-                                     firstType:GPXDataSetTypeALTITUDE
-                                    secondType:GPXDataSetTypeSLOPE
+                                     firstType:GPXDataSetTypeAltitude
+                                    secondType:GPXDataSetTypeSlope
                                calcWithoutGaps:calcWithoutGaps];
     
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
@@ -201,7 +201,7 @@
         self.analysis = [self.gpx getAnalysis:0];
     }
     _expandedSections = [NSMutableSet new];
-    _types = @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSLOPE)];
+    _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;

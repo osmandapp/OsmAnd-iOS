@@ -77,11 +77,11 @@
                      }];
 
     NSMutableArray<NSArray<NSNumber *> *> *allTypes = [NSMutableArray array];
-    [allTypes addObject:@[@(GPXDataSetTypeALTITUDE)]];
-    [allTypes addObject:@[@(GPXDataSetTypeSLOPE)]];
-    [allTypes addObject:@[@(GPXDataSetTypeSPEED)]];
-    [allTypes addObject:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSLOPE)]];
-    [allTypes addObject:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]];
+    [allTypes addObject:@[@(GPXDataSetTypeAltitude)]];
+    [allTypes addObject:@[@(GPXDataSetTypeSlope)]];
+    [allTypes addObject:@[@(GPXDataSetTypeSpeed)]];
+    [allTypes addObject:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
+    [allTypes addObject:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]];
     [OAPlugin getAvailableGPXDataSetTypes:vwController.analysis availableTypes:allTypes];
 
     for (NSInteger i = 0; i < allTypes.count; i++)
@@ -199,7 +199,7 @@
             cell.iconColorNormal = [vwController.types isEqual:types] ? UIColor.iconColorActive : UIColor.iconColorDisabled;
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
 
-            BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSPEED)] || [types containsObject:@(GPXDataSetTypeSENSOR_SPEED)];
+            BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSpeed)] || [types containsObject:@(GPXDataSetTypeSensorSpeed)];
             cell.textColorNormal = [item[@"hasData"] boolValue] && ((isSpeed && vwController.analysis.hasSpeedData) || !isSpeed) ? UIColor.textColorPrimary : UIColor.buttonBgColorTertiary;
         }
         return cell;
@@ -247,7 +247,7 @@
     {
         NSDictionary *item = [self getItem:indexPath];
         NSArray<NSNumber *> *types = item[@"types"];
-        BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSPEED)] || [types containsObject:@(GPXDataSetTypeSENSOR_SPEED)];
+        BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSpeed)] || [types containsObject:@(GPXDataSetTypeSensorSpeed)];
         if ([item[@"hasData"] boolValue] && ((isSpeed && vwController.analysis.hasSpeedData) || !isSpeed))
         {
             [vwController.delegate onTypesSelected:types];

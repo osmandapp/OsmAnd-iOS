@@ -92,8 +92,8 @@
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
                                       analysis:self.analysis
                            useGesturesAndScale:YES
-                                     firstType:GPXDataSetTypeALTITUDE
-                                    secondType:GPXDataSetTypeSLOPE
+                                     firstType:GPXDataSetTypeAltitude
+                                    secondType:GPXDataSetTypeSlope
                                calcWithoutGaps:calcWithoutGaps];
 
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
@@ -134,7 +134,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSLOPE)];
+    _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;

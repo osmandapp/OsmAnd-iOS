@@ -1,5 +1,5 @@
 //
-//  ExternalSensorsPlugin+Ext.swift
+//  ExternalSensorsPlugin+Extension.swift
 //  OsmAnd Maps
 //
 //  Created by Skalii on 20.12.2023.

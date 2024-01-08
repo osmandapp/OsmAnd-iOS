@@ -54,9 +54,9 @@
     BOOL calcWithoutGaps = !gpx.joinSegments && (_gpxDoc.tracks.count > 0 && _gpxDoc.tracks.firstObject.generalTrack);
     if (types.count == 2)
     {
-        if (types.lastObject.integerValue == GPXDataSetTypeSPEED && ![analysis isSpeedSpecified])
+        if (types.lastObject.integerValue == GPXDataSetTypeSpeed && ![analysis isSpeedSpecified])
         {
-            [self changeChartTypes:@[@(GPXDataSetTypeALTITUDE)]
+            [self changeChartTypes:@[@(GPXDataSetTypeAltitude)]
                              chart:chart
                           analysis:analysis
                           modeCell:statsModeCell];
@@ -92,7 +92,7 @@
                                          firstType:(GPXDataSetType) types.firstObject.integerValue
                                       useRightAxis:YES
                                    calcWithoutGaps:calcWithoutGaps];
-        renderer.renderingMode = types.lastObject.integerValue == GPXDataSetTypeALTITUDE
+        renderer.renderingMode = types.lastObject.integerValue == GPXDataSetTypeAltitude
             ? YAxisCombinedRenderingModeSecondaryValueOnly
             : YAxisCombinedRenderingModePrimaryValueOnly;
     }
@@ -264,7 +264,7 @@
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpxDoc.path]];
         BOOL joinSegments = gpx.joinSegments;
         id<IChartDataSet> dataSet = dataSets.firstObject;
-        if ([GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet] == GPXDataSetAxisTypeTIME)
+        if ([GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet] == GPXDataSetAxisTypeTime)
         {
             double time = position * 1000;
             return [OAGPXUIHelper getSegmentPointByTime:segment
@@ -330,7 +330,7 @@
         id <IChartDataSet> dataSet = dataSets.firstObject;
 
         GPXDataSetAxisType axisType = [GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet];
-        if (axisType == GPXDataSetAxisTypeTIME || axisType == GPXDataSetAxisTypeTIMEOFDAY)
+        if (axisType == GPXDataSetAxisTypeTime || axisType == GPXDataSetAxisTypeTimeofday)
         {
             float startTime = startPos * 1000;
             float endTime = endPos * 1000;

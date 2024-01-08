@@ -117,7 +117,7 @@
 
     if (_routeLineChartHelper)
     {
-        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]
+        [_routeLineChartHelper changeChartTypes:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]
                                          chart:cell.lineChartView
                                       analysis:analysis
                                       modeCell:nil];
@@ -131,7 +131,7 @@
             kTableValues: @{
                     @"segment_value": segment,
                     @"analysis_value": analysis,
-                    @"mode_value": @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)],
+                    @"mode_value": @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)],
                     @"points_value": _routeLineChartHelper
                             ? [_routeLineChartHelper generateTrackChartPoints:cell.lineChartView
                                                                    startPoint:startChartPoint
@@ -199,7 +199,7 @@
     OAGPXTableCellData *statisticsCellData = [OAGPXTableCellData withData:@{
             kTableKey: [NSString stringWithFormat:@"statistics_%p", (__bridge void *) segment],
             kCellType: [OAQuadItemsWithTitleDescIconCell getCellIdentifier],
-            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment types:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]],
+            kTableValues: [self getStatisticsDataForAnalysis:analysis segment:segment types:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]],
             kCellToggle: @(analysis.timeSpan > 0)
     }];
     [segmentSectionData.subjects addObject:statisticsCellData];
@@ -266,7 +266,7 @@
     BOOL joinSegments = self.trackMenuDelegate && [self.trackMenuDelegate isJoinSegments];
     if (types.count == 2)
     {
-        if (types.firstObject.integerValue == GPXDataSetTypeALTITUDE && types.lastObject.integerValue == GPXDataSetTypeSPEED)
+        if (types.firstObject.integerValue == GPXDataSetTypeAltitude && types.lastObject.integerValue == GPXDataSetTypeSpeed)
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"shared_string_distance");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"shared_string_time_span");
@@ -293,7 +293,7 @@
             descriptions[@"bottom_right_description_string_value"] =
             [dateFormatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:analysis.endTime]];
         }
-        if (types.firstObject.integerValue == GPXDataSetTypeALTITUDE && types.lastObject.integerValue == GPXDataSetTypeSLOPE)
+        if (types.firstObject.integerValue == GPXDataSetTypeAltitude && types.lastObject.integerValue == GPXDataSetTypeSlope)
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"average_altitude");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"altitude_range");
@@ -315,7 +315,7 @@
     }
     else
     {
-        if (types.firstObject.integerValue == GPXDataSetTypeSPEED)
+        if (types.firstObject.integerValue == GPXDataSetTypeSpeed)
         {
             titles[@"top_left_title_string_value"] = OALocalizedString(@"map_widget_average_speed");
             titles[@"top_right_title_string_value"] = OALocalizedString(@"gpx_max_speed");
@@ -530,8 +530,8 @@
                     kTableValues: [self getStatisticsDataForAnalysis:analysis
                                                              segment:sectionData.values[@"segment_value"]
                                                                types:types],
-                    kCellToggle: @(([types isEqual:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]] && analysis.timeSpan > 0)
-                            || ![types isEqual:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)]])
+                    kCellToggle: @(([types isEqual:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]] && analysis.timeSpan > 0)
+                            || ![types isEqual:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]])
             }];
         }
     }
@@ -549,14 +549,14 @@
                 {
                     NSString *value = tableData.values[[NSString stringWithFormat:@"tab_%li_string_value", selectedIndex]];
                     types = [value isEqualToString:OALocalizedString(@"altitude")]
-                            ? @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSLOPE)]
+                            ? @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]
                             : [value isEqualToString:OALocalizedString(@"shared_string_speed")]
-                                    ? @[@(GPXDataSetTypeSPEED)]
-                                    : @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)];
+                                    ? @[@(GPXDataSetTypeSpeed)]
+                                    : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
                 }
                 else
                 {
-                    types = @[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSPEED)];
+                    types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
                 }
                 sectionData.values[@"mode_value"] = types;
 

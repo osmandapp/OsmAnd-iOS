@@ -13,7 +13,6 @@
 #import "OAColoringType.h"
 #import "OADownloadMode.h"
 #import "OAMap3DModeVisibilityType.h"
-//#import "OsmAnd_Maps-Swift.h"
 
 #define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
 #define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"

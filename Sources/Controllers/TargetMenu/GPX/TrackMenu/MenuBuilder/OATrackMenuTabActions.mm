@@ -214,7 +214,7 @@
     else if ([tableData.key isEqualToString:@"control_navigation"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openNavigation];
     else if ([tableData.key isEqualToString:@"analyze"] && self.trackMenuDelegate)
-        [self.trackMenuDelegate openAnalysis:@[@(GPXDataSetTypeALTITUDE), @(GPXDataSetTypeSLOPE)]];
+        [self.trackMenuDelegate openAnalysis:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
     else if ([tableData.key isEqualToString:@"share"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openExport];
     else if ([tableData.key isEqualToString:@"edit"] && self.trackMenuDelegate)

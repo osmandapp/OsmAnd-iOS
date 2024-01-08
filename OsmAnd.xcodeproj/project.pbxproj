@@ -771,8 +771,8 @@
 		46E9AD9C28DC8F4C00CC55F9 /* OAValueTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9AD9B28DC8F4C00CC55F9 /* OAValueTableViewCell.m */; };
 		46E9AD9E28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E9AD9D28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib */; };
 		46E9ADA128DC9FD000CC55F9 /* OAButtonTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E9ADA028DC9FD000CC55F9 /* OAButtonTableViewCell.m */; };
-		46ED6C3E2B333B4400A5555F /* Plugin+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED6C3D2B333B4400A5555F /* Plugin+Ext.swift */; };
-		46ED6C402B333B8100A5555F /* ExternalSensorsPlugin+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Ext.swift */; };
+		46ED6C3E2B333B4400A5555F /* Plugin+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED6C3D2B333B4400A5555F /* Plugin+Extension.swift */; };
+		46ED6C402B333B8100A5555F /* ExternalSensorsPlugin+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Extension.swift */; };
 		46ED6C422B333BE400A5555F /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED6C412B333BE400A5555F /* Pair.swift */; };
 		46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */; };
 		46F0CA9829B0C4F50009C205 /* OAWikipediaSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F0CA9729B0C4F50009C205 /* OAWikipediaSettingsViewController.m */; };
@@ -4341,8 +4341,8 @@
 		46E9AD9D28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAButtonTableViewCell.xib; sourceTree = "<group>"; };
 		46E9AD9F28DC9F8300CC55F9 /* OAButtonTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAButtonTableViewCell.h; sourceTree = "<group>"; };
 		46E9ADA028DC9FD000CC55F9 /* OAButtonTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAButtonTableViewCell.m; sourceTree = "<group>"; };
-		46ED6C3D2B333B4400A5555F /* Plugin+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Plugin+Ext.swift"; sourceTree = "<group>"; };
-		46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExternalSensorsPlugin+Ext.swift"; sourceTree = "<group>"; };
+		46ED6C3D2B333B4400A5555F /* Plugin+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Plugin+Extension.swift"; sourceTree = "<group>"; };
+		46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ExternalSensorsPlugin+Extension.swift"; sourceTree = "<group>"; };
 		46ED6C412B333BE400A5555F /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		46F0CA9629B0C4E20009C205 /* OAWikipediaSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikipediaSettingsViewController.h; sourceTree = "<group>"; };
 		46F0CA9729B0C4F50009C205 /* OAWikipediaSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikipediaSettingsViewController.m; sourceTree = "<group>"; };
@@ -9936,9 +9936,9 @@
 			isa = PBXGroup;
 			children = (
 				DA45B23F2A2F47200055055A /* Extensions.swift */,
-				46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Ext.swift */,
+				46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Extension.swift */,
 				46ED6C412B333BE400A5555F /* Pair.swift */,
-				46ED6C3D2B333B4400A5555F /* Plugin+Ext.swift */,
+				46ED6C3D2B333B4400A5555F /* Plugin+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -17216,7 +17216,7 @@
 				DA5A840326C563A800F274C7 /* OAAddressTableViewController.mm in Sources */,
 				328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */,
 				32119B3D28477142005E1E0C /* OAOsmandDevelopmentPlugin.mm in Sources */,
-				46ED6C3E2B333B4400A5555F /* Plugin+Ext.swift in Sources */,
+				46ED6C3E2B333B4400A5555F /* Plugin+Extension.swift in Sources */,
 				3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */,
 				DA5A835D26C563A800F274C7 /* OATextLineViewCell.m in Sources */,
 				DA4ABF1D2876DA6800B996EF /* OAGpxSettingsItem.mm in Sources */,
@@ -17572,7 +17572,7 @@
 				DA5A81C126C563A700F274C7 /* OAPOIParser.m in Sources */,
 				FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */,
 				DA5A824C26C563A700F274C7 /* OANavigationLanguageViewController.m in Sources */,
-				46ED6C402B333B8100A5555F /* ExternalSensorsPlugin+Ext.swift in Sources */,
+				46ED6C402B333B8100A5555F /* ExternalSensorsPlugin+Extension.swift in Sources */,
 				DA5A84FE26C563A900F274C7 /* OATableView.m in Sources */,
 				DA5A847126C563A900F274C7 /* OATimeWidgetState.m in Sources */,
 				DA5A815F26C563A700F274C7 /* OALiveMonitoringHelper.m in Sources */,

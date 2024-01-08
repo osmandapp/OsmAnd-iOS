@@ -18,40 +18,40 @@ final class SensorAttributesUtils: NSObject {
                                                  PointAttributes.sensorTagTemperature]
 
     static func hasHeartRateData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        return analysis.hasData(PointAttributes.sensorTagHeartRate)
+        analysis.hasData(PointAttributes.sensorTagHeartRate)
     }
 
     static func hasSensorSpeedData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        return analysis.hasData(PointAttributes.sensorTagSpeed)
+        analysis.hasData(PointAttributes.sensorTagSpeed)
     }
 
     static func hasBikeCadenceData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        return analysis.hasData(PointAttributes.sensorTagCadence)
+        analysis.hasData(PointAttributes.sensorTagCadence)
     }
 
     static func hasBikePowerData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        return analysis.hasData(PointAttributes.sensorTagBikePower)
+        analysis.hasData(PointAttributes.sensorTagBikePower)
     }
 
     static func hasTemperatureData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        return analysis.hasData(PointAttributes.sensorTagTemperature)
+        analysis.hasData(PointAttributes.sensorTagTemperature)
     }
 
     @objc static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {
         if Self.hasSensorSpeedData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_SPEED.rawValue)])
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorSpeed.rawValue)])
         }
         if Self.hasHeartRateData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_HEART_RATE.rawValue)])
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorHeartRate.rawValue)])
         }
         if Self.hasBikePowerData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_BIKE_POWER.rawValue)])
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorBikePower.rawValue)])
         }
         if Self.hasBikeCadenceData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_BIKE_CADENCE.rawValue)])
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorBikeCadence.rawValue)])
         }
         if Self.hasTemperatureData(analysis) {
-            availableTypes.add([NSNumber(value: GPXDataSetType.SENSOR_TEMPERATURE.rawValue)])
+            availableTypes.add([NSNumber(value: GPXDataSetType.sensorTemperature.rawValue)])
         }
     }
 
@@ -62,23 +62,23 @@ final class SensorAttributesUtils: NSObject {
                                                    calcWithoutGaps: Bool,
                                                    useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
         switch graphType {
-        case .SENSOR_SPEED:
+        case .sensorSpeed:
             if hasSensorSpeedData(analysis) {
                 return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             }
-        case .SENSOR_HEART_RATE:
+        case .sensorHeartRate:
             if hasHeartRateData(analysis) {
                 return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             }
-        case .SENSOR_BIKE_POWER:
+        case .sensorBikePower:
             if hasBikePowerData(analysis) {
                 return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             }
-        case .SENSOR_BIKE_CADENCE:
+        case .sensorBikeCadence:
             if hasBikeCadenceData(analysis) {
                 return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             }
-        case .SENSOR_TEMPERATURE:
+        case .sensorTemperature:
             if hasTemperatureData(analysis) {
                 return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             }

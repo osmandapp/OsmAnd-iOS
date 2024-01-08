@@ -657,8 +657,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView
                                                   analysis:trackAnalysis
                                        useGesturesAndScale:NO
-                                                 firstType:GPXDataSetTypeALTITUDE
-                                                secondType:GPXDataSetTypeSLOPE
+                                                 firstType:GPXDataSetTypeAltitude
+                                                secondType:GPXDataSetTypeSlope
                                            calcWithoutGaps:calcWithoutGaps];
                 _needChartUpdate = NO;
             }

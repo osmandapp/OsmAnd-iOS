@@ -62,30 +62,19 @@ final class SensorAttributesUtils: NSObject {
                                                    calcWithoutGaps: Bool,
                                                    useRightAxis: Bool) -> GpxUIHelper.OrderedLineDataSet? {
         switch graphType {
-        case .sensorSpeed:
-            if hasSensorSpeedData(analysis) {
-                return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-            }
-        case .sensorHeartRate:
-            if hasHeartRateData(analysis) {
-                return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-            }
-        case .sensorBikePower:
-            if hasBikePowerData(analysis) {
-                return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-            }
-        case .sensorBikeCadence:
-            if hasBikeCadenceData(analysis) {
-                return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-            }
-        case .sensorTemperature:
-            if hasTemperatureData(analysis) {
-                return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
-            }
+        case .sensorSpeed where hasSensorSpeedData(analysis):
+            return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
+        case .sensorHeartRate where hasHeartRateData(analysis):
+            return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
+        case .sensorBikePower where hasBikePowerData(analysis):
+            return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
+        case .sensorBikeCadence where hasBikeCadenceData(analysis):
+            return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
+        case .sensorTemperature where hasTemperatureData(analysis):
+            return createSensorDataSet(chart: chart, analysis: analysis, graphType: graphType, axisType: axisType, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
         default:
             return nil
         }
-        return nil
     }
 
     static func createSensorDataSet(chart: LineChartView,

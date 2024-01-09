@@ -10,15 +10,7 @@ import UIKit
 import Charts
 
 @objc public enum GPXDataSetType: Int {
-    case altitude = 0
-    case speed = 1
-    case slope = 2
-    
-    case sensorSpeed = 3
-    case sensorHeartRate = 4
-    case sensorBikePower = 5
-    case sensorBikeCadence = 6
-    case sensorTemperature = 7
+    case altitude, speed, slope, sensorSpeed, sensorHeartRate, sensorBikePower, sensorBikeCadence, sensorTemperature
 
     public func getTitle() -> String {
         OAGPXDataSetType.getTitle(self.rawValue)
@@ -46,9 +38,7 @@ import Charts
 }
 
 @objc public enum GPXDataSetAxisType: Int {
-    case distance = 0
-    case time = 1
-    case timeOfDay = 2
+    case distance, time, timeOfDay
 
     public func getName() -> String {
         switch self {
@@ -83,7 +73,7 @@ import Charts
     
     private static let MAX_CHART_DATA_ITEMS: Double = 10000
     
-    public class ValueFormatter: IAxisValueFormatter
+    final class ValueFormatter: IAxisValueFormatter
     {
         private var formatX: String?
         private var unitsX: String
@@ -155,7 +145,7 @@ import Charts
         }
     }
 
-    public class OrderedLineDataSet: LineChartDataSet {
+    final class OrderedLineDataSet: LineChartDataSet {
         
         private var dataSetType: GPXDataSetType;
         private var dataSetAxisType: GPXDataSetAxisType;

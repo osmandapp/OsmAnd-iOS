@@ -117,7 +117,7 @@
 
 -(BOOL) isSpeedSpecified;
 - (BOOL)hasData:(NSString *)tag;
-- (void)setHasData:(NSString *)tag hasData:(BOOL)hasData;
+- (void)setTag:(NSString *)tag hasData:(BOOL)hasData;
 
 - (BOOL) isColorizationTypeAvailable:(NSInteger)colorizationType;
 

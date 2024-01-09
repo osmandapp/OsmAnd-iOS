@@ -226,7 +226,7 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
             [attribute setAttributeValueFor:tag value:value];
             
             if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
-                [analysis setHasData:tag hasData:YES];
+                [analysis setTag:tag hasData:YES];
         }
     }
 }

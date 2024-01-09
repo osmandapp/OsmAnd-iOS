@@ -265,7 +265,7 @@
     return [_availableAttributes containsObject:tag];
 }
 
-- (void)setHasData:(NSString *)tag hasData:(BOOL)hasData
+- (void)setTag:(NSString *)tag hasData:(BOOL)hasData
 {
     if (hasData)
         [_availableAttributes addObject:tag];
@@ -539,9 +539,9 @@
 - (void)addWptAttribute:(OAWptPt *)point attribute:(OAPointAttributes *)attribute
 {
     if (![self hasData:OAPointAttributes.pointSpeed] && attribute.speed > 0 && _totalDistance > 0)
-        [self setHasData:OAPointAttributes.pointSpeed hasData:YES];
+        [self setTag:OAPointAttributes.pointSpeed hasData:YES];
     if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
-        [self setHasData:OAPointAttributes.pointElevation hasData:YES];
+        [self setTag:OAPointAttributes.pointElevation hasData:YES];
     [OAPlugin analysePoint:self point:point attribute:attribute];
     [_pointAttributes addObject:attribute];
 }

@@ -15,8 +15,17 @@ final class OptionDevice: Device {
 }
 
 final class OptionDeviceTableViewCell: UITableViewCell {
+    @IBOutlet weak var topSeparatorView: UIView!
     @IBOutlet private weak var deviceImageView: UIImageView!
     @IBOutlet private weak var titleLabel: UILabel!
+    
+    @IBOutlet private weak var separatorBottomInsetLeftConstraint: NSLayoutConstraint!
+    
+    var separatorBottomInsetLeft: CGFloat = 0 {
+        didSet {
+            separatorBottomInsetLeftConstraint.constant = separatorBottomInsetLeft
+        }
+    }
     
     private lazy var accessoryImageView: UIImageView = {
         let imgView = UIImageView(frame: .init(x: 0, y: 0, width: 30, height: 30))

@@ -15,6 +15,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kIconBigTitleSize 48.
 
@@ -97,10 +98,10 @@
 {
     self.labelTitle.font = [UIFont scaledSystemFontOfSize:34 weight:UIFontWeightBold];
     self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.labelDescription.textColor = UIColor.textColorSecondary;
+    self.labelDescription.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     [self.labelPurchaseDescription setText:OALocalizedString(@"subscription_cancel_description")];
     self.viewChooseSubscriptionButtonsBorder.layer.borderWidth = 1.;
-    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColor.buttonBgColorSecondary.CGColor;
+    self.viewChooseSubscriptionButtonsBorder.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorSecondary].CGColor;
     self.viewChooseSubscriptionButtonsBorder.layer.cornerRadius = 9.;
 }
 
@@ -109,7 +110,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        self.viewChooseSubscriptionButtonsBorder.layer.borderColor = UIColor.buttonBgColorSecondary.CGColor;
+        self.viewChooseSubscriptionButtonsBorder.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorSecondary].CGColor;
 }
 
 - (BOOL)isProPlan:(OAProduct *)subscription
@@ -356,7 +357,7 @@
                 }
                 row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColor.buttonBgColorTertiary;
+                    row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[_selectedSubscriptionIndex];
@@ -381,7 +382,7 @@
             [UIView animateWithDuration:0.2 animations:^{
                 OAPlanTypeCardRow *row = isPurchaseButton ? _completePurchasePlanCardRow : self.subviews[tag];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColor.buttonBgColorTertiary;
+                    row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:nil];
         }
     }

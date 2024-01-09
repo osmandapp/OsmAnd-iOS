@@ -18,6 +18,7 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OADownloadingCellHelper() <OADownloadMultipleResourceDelegate>
 
@@ -99,14 +100,14 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
+            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
             UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColor.iconColorActive;
+            btnAcc.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
@@ -115,7 +116,7 @@
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
             cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
+            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
             FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
             progressView.iconView = [[UIView alloc] init];
@@ -126,13 +127,13 @@
     {
         if (!mapItem.disabled)
         {
-            cell.textLabel.textColor = [UIColor textColorPrimary];
+            cell.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
             UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
             [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
             [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = UIColor.iconColorActive;
+            btnAcc.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
             [cell setAccessoryView:btnAcc];
         }
@@ -144,7 +145,7 @@
     }
 
     cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
-    cell.imageView.tintColor = UIColor.iconColorDefault;
+    cell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
     cell.textLabel.text = title;
     if (cell.detailTextLabel != nil)
         cell.detailTextLabel.text = subtitle;
@@ -305,7 +306,7 @@
             if (!progressView.isSpinning)
                 [progressView startSpinProgressBackgroundLayer];
         }
-        progressView.tintColor = UIColor.iconColorActive;
+        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     }
 }
 

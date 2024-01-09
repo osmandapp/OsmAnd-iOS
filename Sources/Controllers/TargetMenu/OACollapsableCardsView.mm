@@ -16,6 +16,7 @@
 #import "OANoImagesCard.h"
 #import "OAMapillaryContributeCard.h"
 #import "OAAppSettings.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -73,7 +74,7 @@ static NSArray<NSString *> *nibNames;
 
 - (void) buildViews
 {
-    _cardCollection.backgroundColor = UIColor.groupBgColor;
+    _cardCollection.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated

@@ -36,6 +36,7 @@
 #import "OAFavoriteImportViewController.h"
 #import "Localization.h"
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -118,7 +119,7 @@ static UIViewController *parentController;
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     isDecelerating = NO;
     self.sortingType = 0;
-    self.view.backgroundColor = [UIColor viewBgColor];
+    self.view.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
 
     _sortedHeaderView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 44.0)];
     _sortedHeaderView.delegate = self;
@@ -131,8 +132,8 @@ static UIViewController *parentController;
     _editToolbarView.hidden = YES;
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
-    self.editToolbarView.backgroundColor = UIColor.groupBgColor;
+    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
+    self.editToolbarView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     [self.editToolbarView.layer addSublayer:_horizontalLine];
 
     _selectedItems = [[NSMutableArray alloc] init];
@@ -147,7 +148,7 @@ static UIViewController *parentController;
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
 }
 
 - (void)favoriteImportViewControllerDidDismiss:(NSNotification *)notification
@@ -222,7 +223,7 @@ static UIViewController *parentController;
 - (void)configureSeparator:(UIView *)view top:(BOOL)top
 {
     view.translatesAutoresizingMaskIntoConstraints = NO;
-    view.backgroundColor = UIColor.separatorColor;
+    view.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     [_freeBackupBanner addSubview:view];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -542,16 +543,16 @@ static UIViewController *parentController;
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.textColorTertiary}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
 }
 
@@ -1230,7 +1231,7 @@ static UIViewController *parentController;
             if ([cell isDirectionRTL])
                 [cell.arrowImage setImage:cell.arrowImage.image.imageFlippedForRightToLeftLayoutDirection];
         }
-        cell.arrowImage.tintColor = UIColor.iconColorDefault;
+        cell.arrowImage.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
     }
     return cell;
 }
@@ -1285,7 +1286,7 @@ static UIViewController *parentController;
     {
         [cell.titleLabel setText:[item objectForKey:@"text"]];
         [cell.leftIconView setImage:[UIImage templateImageNamed:[item objectForKey:@"icon"]]];
-        cell.leftIconView.tintColor = UIColor.iconColorSelected;
+        cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
     }
     return cell;
 }

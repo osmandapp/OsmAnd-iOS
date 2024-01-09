@@ -12,6 +12,7 @@
 #import "OAUtilities.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OsmAndApp.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAAddTrackFolderViewController() <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
@@ -35,7 +36,7 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     _newFolderName = @"";
     _isFirstLaunch = YES;
 }
@@ -212,7 +213,7 @@
     [textView sizeToFit];
     [self.tableView beginUpdates];
     UITableViewHeaderFooterView *footer = [self.tableView footerViewForSection:0];
-    footer.textLabel.textColor = _inputFieldError != nil ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary;
+    footer.textLabel.textColor = _inputFieldError != nil ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     footer.textLabel.text = _inputFieldError;
     [footer sizeToFit];
     [self.tableView endUpdates];

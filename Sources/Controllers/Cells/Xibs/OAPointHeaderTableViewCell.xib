@@ -71,7 +71,7 @@
                     <constraint firstItem="6Yp-A5-8et" firstAttribute="centerY" secondItem="qd5-3M-q8K" secondAttribute="centerY" id="rPA-cA-dO7"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="arrowImage" destination="qd5-3M-q8K" id="DZq-4h-RPL"/>
                 <outlet property="folderIcon" destination="6Yp-A5-8et" id="zwK-Cp-VnM"/>
@@ -83,7 +83,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">

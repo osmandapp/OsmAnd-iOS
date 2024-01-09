@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.0
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -252,15 +253,15 @@
     _tableView.contentInset = UIEdgeInsetsZero;
     
     _tableBackgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _tableBackgroundView.backgroundColor = UIColor.groupBgColor;
+    _tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     UIView *buttonsView = [[UIView alloc] init];
-    buttonsView.backgroundColor = UIColor.groupBgColor;
+    buttonsView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     buttonsView.frame = _buttonsView.bounds;
     buttonsView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_buttonsView insertSubview:buttonsView atIndex:0];
     UIView *divider = [[UIView alloc] initWithFrame:{0, 0, _buttonsView.bounds.size.width, 0.5}];
     divider.tag = kButtonsDividerTag;
-    divider.backgroundColor = UIColor.separatorColor;
+    divider.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     divider.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     [_buttonsView addSubview:divider];
     _cancelButton.backgroundColor = UIColor.clearColor;
@@ -278,7 +279,7 @@
     _tableView.clipsToBounds = YES;
     
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    _tableView.separatorColor = UIColor.separatorColor;
+    _tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     
     [self setupView];
     

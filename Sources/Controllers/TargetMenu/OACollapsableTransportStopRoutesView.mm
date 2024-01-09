@@ -14,6 +14,7 @@
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"
 #import "OATransportRouteController.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kTransportIconWidth 16.0
 
@@ -58,9 +59,9 @@
         int imgIndex = [text indexOf:@"<img>"];
         if (imgIndex != -1)
         {
-            UIColor *titleColor = UIColor.textColorSecondary;
-            UIColor *imgColor = UIColor.iconColorSecondary;
-            UIColor *descrColor = UIColor.textColorPrimary;
+            UIColor *titleColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            UIColor *imgColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+            UIColor *descrColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             [title addAttribute:NSForegroundColorAttributeName value:titleColor range:NSMakeRange(0, imgIndex - 1)];
             [title addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, imgIndex - 1)];
             

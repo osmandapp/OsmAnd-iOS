@@ -16,6 +16,7 @@
 #import "OsmAndAppImpl.h"
 #import "OARoutingHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OADefaultSpeedViewController
 {
@@ -151,7 +152,7 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.textColorPrimary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         if (cell)
         {

@@ -24,7 +24,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
-
+#import "GeneratedAssetSymbols.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kButtonHeight 36.0
@@ -218,9 +218,9 @@
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColor.separatorColor.CGColor;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.clearColor] forState:UIControlStateNormal];
-    btn.tintColor = UIColor.textColorActive;
+    btn.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
     btn.delegate = self;
     return btn;
 }

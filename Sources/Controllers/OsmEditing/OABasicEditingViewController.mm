@@ -22,6 +22,7 @@
 #import "OAOSMSettings.h"
 #import "OAButtonTableViewCell.h"
 #import "OAOpeningHoursSelectionViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <openingHoursParser.h>
 
@@ -77,7 +78,7 @@ static const NSInteger _contactInfoSectionCount = 5;
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
-    textField.textColor = [UIColor textColorPrimary];
+    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -88,19 +89,19 @@ static const NSInteger _contactInfoSectionCount = 5;
     [textField.clearButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
+    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
     if (!_floatingTextFieldControllers)
         _floatingTextFieldControllers = [NSMutableArray new];
     
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
-    fieldController.inlinePlaceholderColor = UIColor.textColorSecondary;
+    fieldController.inlinePlaceholderColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
     if (isFloating)
     {
         fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
-        [fieldController setFloatingPlaceholderNormalColor:UIColor.textColorSecondary];
+        [fieldController setFloatingPlaceholderNormalColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
         fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
         fieldController.textInput.hidesPlaceholderOnInput = NO;
         [_floatingTextFieldControllers addObject:fieldController];

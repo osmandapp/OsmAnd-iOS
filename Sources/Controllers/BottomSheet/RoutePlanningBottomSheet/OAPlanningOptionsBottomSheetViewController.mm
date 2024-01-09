@@ -18,6 +18,7 @@
 #import "OAMapLayers.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAPlanningOptionsBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -75,7 +76,7 @@
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : OALocalizedString(@"gpx_start_new_segment"),
                 @"img" : @"ic_custom_new_segment",
-                @"tintColor" : UIColor.iconColorActive,
+                @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
                 @"key" : @"start_new_segment"
             }
         ]];
@@ -115,21 +116,21 @@
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"profile_alert_need_save_title"),
             @"img" : @"ic_custom_save_to_file",
-            @"tintColor" : UIColor.iconColorActive,
+            @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"save_changes"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"save_as_new_track"),
             @"img" : @"ic_custom_save_as_new_file",
-            @"tintColor" :  UIColor.iconColorActive,
+            @"tintColor" :  [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"save_new_track"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"add_to_a_track"),
             @"img" : @"ic_custom_add_to_track",
-            @"tintColor" :  UIColor.iconColorActive,
+            @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"add_to_track"
         }
     ]];
@@ -139,14 +140,14 @@
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_navigation"),
             @"img" : @"left_menu_icon_navigation",
-            @"tintColor" :  UIColor.iconColorActive,
+            @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"shared_string_navigation"
         },
         @{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"reverse_route"),
             @"img" : @"ic_custom_swap",
-            @"tintColor" : UIColor.iconColorActive,
+            @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"key" : @"reverse_route"
         }
     ]];
@@ -156,7 +157,7 @@
             @"type" : [OATitleIconRoundCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_clear_all"),
             @"img" : @"ic_custom_remove",
-            @"tintColor" : UIColor.buttonBgColorDisruptive,
+            @"tintColor" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
             @"key" : @"clear_all"
         }
     ]];
@@ -176,7 +177,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
-            cell.textColorNormal = UIColor.textColorPrimary;
+            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         if (cell)
         {
@@ -195,7 +196,7 @@
                 cell.iconView.image = [UIImage imageNamed:item[@"img"]];
             }
             cell.separatorView.hidden = indexPath.row == (NSInteger) _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColor.separatorColor;
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         [cell layoutIfNeeded];
         return cell;
@@ -208,7 +209,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleDescriptionIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleDescriptionIconRoundCell *)[nib objectAtIndex:0];
-            cell.textColorNormal = UIColor.textColorPrimary;
+            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         if (cell)
         {
@@ -216,7 +217,7 @@
             cell.titleView.text = item[@"title"];
             cell.descrView.text = item[@"descr"];
             
-            UIColor *tintColor = _routeAppMode && _routeAppMode != OAApplicationMode.DEFAULT ? UIColorFromRGB(_routeAppMode.getIconColor) : UIColor.iconColorSelected;
+            UIColor *tintColor = _routeAppMode && _routeAppMode != OAApplicationMode.DEFAULT ? UIColorFromRGB(_routeAppMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorSelected];
             if (tintColor)
             {
                 cell.iconColorNormal = tintColor;

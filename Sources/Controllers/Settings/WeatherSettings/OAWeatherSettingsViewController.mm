@@ -17,6 +17,7 @@
 #import "OASizes.h"
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kBandsSectionIndex 0
 #define kUseOfflineDataSectionIndex 1
@@ -195,7 +196,7 @@
             cell = (OAValueTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColor.iconColorDefault;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         }
         if (cell)
         {

@@ -17,6 +17,7 @@
 #import "OARTargetPoint.h"
 #import "OAPointDescription.h"
 #import "OATargetPointsHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define defaultCellHeight 60.0
 #define titleTextWidthDelta 50.0
@@ -147,7 +148,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:UIColor.viewBgColor];
+        [cell setBackgroundColor:[UIColor colorNamed:ACColorNameViewBg]];
     }
                      completion:nil];
 }
@@ -158,7 +159,7 @@
                           delay:0
                         options:(UIViewAnimationOptionAllowUserInteraction)
                      animations:^{
-        [cell setBackgroundColor:UIColor.groupBgColor];
+        [cell setBackgroundColor:[UIColor colorNamed:ACColorNameGroupBg]];
     }
                      completion:nil];
 }

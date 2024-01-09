@@ -13,6 +13,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kWhiteColor 0x44FFFFFF
 
@@ -257,7 +258,7 @@
         if (indexPath == _selectedIndexPath)
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColor.iconColorActive.CGColor;
+            cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
         }
         else
         {

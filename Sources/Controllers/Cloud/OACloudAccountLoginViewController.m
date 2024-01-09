@@ -16,6 +16,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAInputTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
 
@@ -78,7 +79,7 @@
     [data addObject:@[@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"osmand_cloud_login_descr"),
-        @"color" : UIColor.iconColorSecondary,
+        @"color" : [UIColor colorNamed:ACColorNameIconColorSecondary],
         @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
@@ -97,7 +98,7 @@
             [otherCells addObject:@{
                 @"type" : [OASimpleTableViewCell getCellIdentifier],
                 @"title" : self.errorMessage,
-                @"color" : UIColor.buttonBgColorDisruptive,
+                @"color" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
                 @"spacing" : @1
             }];
         }
@@ -106,8 +107,8 @@
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_continue"),
-                @"buttonColor" : UIColor.buttonBgColorPrimary,
-                @"textColor" : UIColor.buttonTextColorPrimary,
+                @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorPrimary],
+                @"textColor" : [UIColor colorNamed:ACColorNameButtonTextColorPrimary],
                 @"action" : @"continueButtonPressed",
                 @"inteactive" : @YES,
                 @"topMargin" : !_hasValidSub ? @0 : @20
@@ -118,8 +119,8 @@
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_continue"),
-                @"buttonColor" : UIColor.buttonBgColorSecondary,
-                @"textColor" : UIColor.textColorSecondary,
+                @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
+                @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
                 @"action": @"continueButtonPressed",
                 @"inteactive" : @NO,
                 @"topMargin" : !_hasValidSub ? @0 : @20
@@ -130,8 +131,8 @@
             [otherCells addObject: @{
                 @"type" : [OAFilledButtonCell getCellIdentifier],
                 @"title" : OALocalizedString(@"shared_string_get"),
-                @"buttonColor" : UIColor.buttonBgColorPrimary,
-                @"textColor" : UIColor.textColorPrimary,
+                @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorPrimary],
+                @"textColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],
                 @"action" : @"getButtonPressed",
                 @"inteactive" : @YES,
             }];
@@ -142,15 +143,15 @@
         [otherCells addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : self.errorMessage,
-            @"color" : UIColor.buttonBgColorDisruptive,
+            @"color" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
             @"spacing" : @1
         }];
         
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"register_opr_create_new_account"),
-            @"buttonColor" : UIColor.buttonBgColorSecondary,
-            @"textColor" : UIColor.textColorActive,
+            @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
+            @"textColor" : [UIColor colorNamed:ACColorNameTextColorActive],
             @"action": @"createAccountButtonPressed",
             @"inteactive" : @YES,
             @"topMargin" : @0
@@ -159,8 +160,8 @@
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
-            @"buttonColor" : UIColor.buttonBgColorSecondary,
-            @"textColor" : UIColor.textColorSecondary,
+            @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
+            @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
             @"action": @"continueButtonPressed",
             @"inteactive" : @NO,
         }];

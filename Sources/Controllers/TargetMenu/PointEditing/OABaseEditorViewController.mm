@@ -23,6 +23,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kIllegalFileNameCharacters [NSCharacterSet characterSetWithCharactersInString:@"\\?%*|\"<>:;.,"]
 
@@ -196,7 +197,7 @@
     allColorsRow.key = @"allColors";
     allColorsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
     allColorsRow.title = OALocalizedString(@"shared_string_all_colors");
-    [allColorsRow setObj:UIColor.textColorActive forKey:@"titleTintColor"];
+    [allColorsRow setObj:[UIColor colorNamed:ACColorNameTextColorActive] forKey:@"titleTintColor"];
     _allColorsIndexPath = [NSIndexPath indexPathForRow:[colorSection rowCount] - 1
                                              inSection:appearenceSectionIndex];
 }
@@ -248,7 +249,7 @@
 
             UIColor *tintColor = [item objForKey:@"titleTintColor"];
             cell.titleLabel.text = item.title;
-            cell.titleLabel.textColor = tintColor ?: UIColor.textColorPrimary;
+            cell.titleLabel.textColor = tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         return cell;
     }
@@ -599,7 +600,7 @@
                                                options:nil];
     OATextInputFloatingCell *resultCell = nib[0];
     MDCMultilineTextField *textField = resultCell.inputField;
-    textField.textColor = [UIColor textColorPrimary];
+    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -611,7 +612,7 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
+    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field"] forState:UIControlStateHighlighted];
 
@@ -619,8 +620,8 @@
         _floatingTextFieldControllers = [NSMutableArray array];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
     fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
-    fieldController.inlinePlaceholderColor = UIColor.textColorSecondary;
-    [fieldController setFloatingPlaceholderNormalColor:UIColor.textColorSecondary];
+    fieldController.inlinePlaceholderColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    [fieldController setFloatingPlaceholderNormalColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.floatingPlaceholderNormalColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;

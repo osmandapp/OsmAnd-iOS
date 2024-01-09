@@ -16,6 +16,7 @@
 #import "OAProducts.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATrackColoringTypeViewController
 {
@@ -94,7 +95,7 @@
             cell.accessoryType = _selectedItem == appearanceItem ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
             cell.accessibilityLabel = appearanceItem.title;
             cell.titleLabel.text = appearanceItem.title;
-            cell.titleLabel.textColor = appearanceItem.isAvailable && appearanceItem.isEnabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
+            cell.titleLabel.textColor = appearanceItem.isAvailable && appearanceItem.isEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         return cell;
     }

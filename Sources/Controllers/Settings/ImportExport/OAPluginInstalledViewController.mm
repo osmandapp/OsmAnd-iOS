@@ -22,6 +22,7 @@
 #import "OASizes.h"
 #import "OADownloadingCellHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -122,13 +123,13 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     appearance.shadowColor = self.tableView.backgroundColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.textColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     UIBarButtonItem *cancelButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_close") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
@@ -376,8 +377,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         if (cell)
         {
-            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize textColor:UIColor.textColorPrimary];
-            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
+            cell.textView.attributedText = [OAUtilities attributedStringFromHtmlString:item[@"text"] fontSize:[UIFont preferredFontForTextStyle:UIFontTextStyleBody].pointSize textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive]};
             [cell.textView sizeToFit];
         }
         return cell;
@@ -401,7 +402,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColor.iconColorDisabled;
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -439,7 +440,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSAttributedString *attrString;
     if (boldFragment && boldFragment.length > 0)
     {
-        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:UIColor.textColorPrimary mainColor:UIColor.textColorSecondary];
+        attrString = [OAUtilities getStringWithBoldPart:descriptionText mainString:text boldString:boldFragment lineSpacing:0. fontSize:17. boldFontSize:34. boldColor:[UIColor colorNamed:ACColorNameTextColorPrimary] mainColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
     }
     else
     {
@@ -447,7 +448,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [style setLineSpacing:6];
         attrString = [[NSAttributedString alloc] initWithString:descriptionText attributes:@{NSParagraphStyleAttributeName : style}];
     }
-    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:UIColor.iconColorActive iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
+    return [OAUtilities setupTableHeaderViewWithText:attrString tintColor:UIColor.whiteColor icon:_plugin.getLogoResource iconFrameSize:48. iconBackgroundColor:[UIColor colorNamed:ACColorNameIconColorActive] iconContentMode:UIViewContentModeScaleAspectFit iconYOffset:48.];
 }
 
 - (NSInteger) getTypeForSection:(NSInteger)section

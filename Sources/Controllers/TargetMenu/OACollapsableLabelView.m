@@ -9,6 +9,7 @@
 #import "OACollapsableLabelView.h"
 #import "OALabel.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OACollapsableLabelView () <OALabelDelegate>
 
@@ -26,7 +27,7 @@
         _label = [[OALabel alloc] initWithFrame:CGRectMake(kMarginLeft, 12.0, viewWidth - kMarginLeft - kMarginRight, 21.0)];
         _label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _label.font = font;
-        _label.textColor = UIColor.textColorPrimary;
+        _label.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         _label.numberOfLines = 0;
         [_label setUserInteractionEnabled:YES];
         [_label bringSubviewToFront:self];

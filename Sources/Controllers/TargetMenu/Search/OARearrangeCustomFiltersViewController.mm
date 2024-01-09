@@ -16,6 +16,7 @@
 #import "OAQuickSearchButtonListItem.h"
 #import "OAPOIHelper.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAllFiltersSection 0
 #define kHiddenFiltersSection 1
@@ -267,7 +268,7 @@
             [cell descriptionVisibility:NO];
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.leftIconView.tintColor = UIColor.iconColorDefault;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
         }
         if (cell)
@@ -304,9 +305,9 @@
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {

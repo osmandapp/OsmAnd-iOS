@@ -20,6 +20,7 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAMapSettingsNauticalDepthScreen () <OANauticalDepthParametersDelegate>
 
@@ -68,8 +69,8 @@
         kCellTypeKey: [OASwitchTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"nautical_depth"),
         kCellIconNameKey: @"ic_custom_nautical_depth_colored",
-        kCellIconTintColor: UIColor.iconColorActive,
-        @"iconTintDisabled" : UIColor.iconColorDisabled
+        kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
+        @"iconTintDisabled" : [UIColor colorNamed:ACColorNameIconColorDisabled]
     }];
     [_data addSection:switchSection];
 

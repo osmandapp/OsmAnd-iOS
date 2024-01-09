@@ -20,6 +20,7 @@
 #import "OARendererRegistry.h"
 #import "OARoutePreferencesParameters.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OACopyProfileBottomSheetViewControler()
 
@@ -87,9 +88,9 @@
     _data = [NSArray arrayWithObject:dataArr];
     
     self.rightButton.userInteractionEnabled = _sourceAppMode;
-    self.rightButton.backgroundColor = _sourceAppMode ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorDisabled;
-    [self.rightButton setTintColor:_sourceAppMode ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary];
-    [self.rightButton setTitleColor:_sourceAppMode ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary forState:UIControlStateNormal];
+    self.rightButton.backgroundColor = _sourceAppMode ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorDisabled];
+    [self.rightButton setTintColor:_sourceAppMode ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [self.rightButton setTitleColor:_sourceAppMode ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateNormal];
 }
 
 - (void) onRightButtonPressed
@@ -225,7 +226,7 @@
             cell = (OAIconTitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
             cell.secondaryImageView.image = [UIImage templateImageNamed:@"ic_checkmark_default"];
-            cell.secondaryImageView.tintColor = UIColor.iconColorActive;
+            cell.secondaryImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -268,7 +269,7 @@
     UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(16., 8., textWidth, heightForHeader)];
     description.attributedText = [OAUtilities getStringWithBoldPart:descriptionString mainString:OALocalizedString(@"copy_from_other_profile_descr") boldString:_targetAppMode.toHumanString lineSpacing:4.];
     description.adjustsFontForContentSizeCategory = YES;
-    description.textColor = UIColor.textColorSecondary;
+    description.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     description.numberOfLines = 0;
     description.lineBreakMode = NSLineBreakByWordWrapping;
     description.autoresizingMask = UIViewAutoresizingFlexibleWidth;

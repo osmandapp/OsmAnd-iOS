@@ -34,6 +34,7 @@
 #import "OALinks.h"
 #import "OASizes.h"
 #import <SafariServices/SafariServices.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kRelief3DCellRowHeight 48.3
 
@@ -127,7 +128,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellTitleKey : type != EOATerrainTypeDisabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name"),
         kCellIconNameKey : type != EOATerrainTypeDisabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
-        kCellIconTintColor : type != EOATerrainTypeDisabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled,
+        kCellIconTintColor : type != EOATerrainTypeDisabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled],
         @"value" : @(type != EOATerrainTypeDisabled)
     }];
 
@@ -176,7 +177,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
-            kCellIconTintColor : UIColor.iconColorDefault,
+            kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
             @"value" : alphaValueString
         }];
         [titleSection addRowFromDictionary:@{
@@ -184,7 +185,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_zoom_levels"),
             kCellIconNameKey : @"ic_custom_overlay_map",
-            kCellIconTintColor : UIColor.iconColorDefault,
+            kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
             @"value" : zoomRangeString
         }];
         OATableSectionData *relief3DSection = [_data createNewSection];
@@ -193,7 +194,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : isRelief3D ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
-            kCellIconTintColor : ![_plugin.enable3DMaps get] || !isRelief3D ? UIColor.iconColorDisabled : UIColor.iconColorSelected,
+            kCellIconTintColor : ![_plugin.enable3DMaps get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellSecondaryIconName : @"ic_payment_label_pro",
             @"value" : @([_plugin.enable3DMaps get]),
         }];
@@ -400,7 +401,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.separatorInset = isTerrainTypeSlope ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textView.textColor = UIColor.textColorSecondary;
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         return cell;
     }
@@ -426,8 +427,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
-                [cell.button setTitleColor:UIColor.textColorActive forState:UIControlStateHighlighted];
-                cell.button.tintColor = UIColor.textColorActive;
+                [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
+                cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
                 cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 
                 cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
@@ -459,8 +460,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = UIColor.iconColorDefault;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -482,18 +483,18 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 if (!mapItem.downloadTask)
                 {
                     cell.accessoryView = nil;
-                    cell.titleLabel.textColor = !mapItem.disabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
+                    cell.titleLabel.textColor = !mapItem.disabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
                     cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
                 }
                 else
                 {
-                    cell.titleLabel.textColor = UIColor.textColorPrimary;
+                    cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
                     cell.rightIconView.image = nil;
                     if (!cell.accessoryView)
                     {
                         FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
                         progressView.iconView = [[UIView alloc] init];
-                        progressView.tintColor = UIColor.iconColorActive;
+                        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                         cell.accessoryView = progressView;
                     }
                     [self updateDownloadingCell:cell indexPath:indexPath];
@@ -505,7 +506,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 BOOL isReadMore = [item.key isEqualToString:@"readMore"];
                 [cell leftIconVisibility:!isReadMore];
                 [cell descriptionVisibility:!isReadMore];
-                cell.titleLabel.textColor = isReadMore ? UIColor.textColorActive : UIColor.textColorPrimary;
+                cell.titleLabel.textColor = isReadMore ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorPrimary];
                 cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
                 cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
                 cell.titleLabel.text = item.title;
@@ -540,7 +541,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             {
                 NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:descr attributes:@{
                     NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                    NSForegroundColorAttributeName: UIColor.textColorPrimary
+                    NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorPrimary]
                 }];
                 NSRange range = [descr rangeOfString:@" " options:NSBackwardsSearch];
                 if (range.location != NSNotFound)

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,7 +46,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstItem="INu-1z-ZGs" firstAttribute="leading" secondItem="SV7-JS-8nd" secondAttribute="trailing" id="WbP-10-Wd9"/>
                             <constraint firstItem="INu-1z-ZGs" firstAttribute="centerY" secondItem="SV7-JS-8nd" secondAttribute="centerY" id="Yzh-zV-Ivw"/>
@@ -88,7 +88,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstItem="NKc-Ip-ofc" firstAttribute="centerY" secondItem="2Gf-eT-zF3" secondAttribute="centerY" id="6Xv-XR-qbC"/>
                             <constraint firstAttribute="trailing" secondItem="ttn-B1-ICm" secondAttribute="trailing" id="8Ez-eG-XXg"/>
@@ -102,7 +102,7 @@
                     </view>
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Azg-8w-bDb" userLabel="Separator View">
                         <rect key="frame" x="20" y="65" width="374" height="0.5"/>
-                        <color key="backgroundColor" name="separatorColor"/>
+                        <color key="backgroundColor" name="customSeparator"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="0.5" id="YGL-31-0vg"/>
                         </constraints>
@@ -136,7 +136,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstItem="0dD-m2-f4J" firstAttribute="leading" secondItem="UI4-2F-Wcq" secondAttribute="leading" id="2Cu-4n-Ika"/>
                             <constraint firstAttribute="bottom" secondItem="0dD-m2-f4J" secondAttribute="bottom" id="9fM-vV-Sjr"/>
@@ -178,7 +178,7 @@
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="znz-Wq-yem" secondAttribute="bottom" id="0ce-cW-MO1"/>
                             <constraint firstAttribute="trailing" secondItem="znz-Wq-yem" secondAttribute="trailing" id="5rX-Xs-h24"/>
@@ -216,7 +216,7 @@
                     <constraint firstItem="Azg-8w-bDb" firstAttribute="top" secondItem="aBY-Rk-PI9" secondAttribute="bottom" constant="11" id="xDx-v2-8fE"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="bottomButtonsBottomConstraint" destination="p4D-mY-AAS" id="Ayn-LD-Gj4"/>
                 <outlet property="bottomLeftDescription" destination="0dD-m2-f4J" id="Kal-3c-gnn"/>
@@ -244,11 +244,11 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="separatorColor">
+        <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

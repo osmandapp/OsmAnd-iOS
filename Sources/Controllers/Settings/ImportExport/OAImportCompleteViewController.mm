@@ -45,6 +45,7 @@
 #import "OADestination.h"
 #import "OAHistoryViewController.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeProfiles = 0,
@@ -117,8 +118,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     if (_needRestart)
         importComplete = [NSString stringWithFormat:@"%@\n\n%@", importComplete, OALocalizedString(@"app_restart_required")];
     NSMutableAttributedString *descriptionAttr = [[NSMutableAttributedString alloc] initWithString:importComplete];
-    [descriptionAttr setColor:UIColor.textColorSecondary forString:importComplete];
-    [descriptionAttr setColor:UIColor.textColorPrimary forString:_fileName];
+    [descriptionAttr setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:importComplete];
+    [descriptionAttr setColor:[UIColor colorNamed:ACColorNameTextColorPrimary] forString:_fileName];
     [descriptionAttr setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] forString:descriptionAttr.string];
     [descriptionAttr setMinLineHeight:18. alignment:NSTextAlignmentNatural forString:descriptionAttr.string];
     return descriptionAttr;
@@ -389,7 +390,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
         NSString *countString = [NSString stringWithFormat:OALocalizedString(@"added_items"), item[@"count"]];
         [cell.descriptionLabel setText:countString];
         [cell.rightIconView setImage:[UIImage templateImageNamed:item[@"iconName"]]];
-        [cell.rightIconView setTintColor:UIColor.iconColorActive];
+        [cell.rightIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
         cell.rightIconView.contentMode = UIViewContentModeCenter;
     }
     return cell;

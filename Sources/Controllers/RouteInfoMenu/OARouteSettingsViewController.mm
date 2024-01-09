@@ -20,6 +20,7 @@
 #import "OAUtilities.h"
 #import "OASwitchTableViewCell.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OARouteSettingsViewController ()
 
@@ -168,7 +169,7 @@
 
             cell.titleLabel.text = text;
             cell.leftIconView.image = [param.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = [param isChecked] ? UIColorFromRGB([appMode getIconColor]) : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             BOOL showDivider = [param hasOptions];
             [cell dividerVisibility:showDivider];

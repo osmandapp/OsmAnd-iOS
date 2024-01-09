@@ -17,6 +17,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OsmAndApp.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAddNewGroupSection 0
 #define kGroupsListSection 1
@@ -63,8 +64,8 @@
 {
     [super viewDidLoad];
 
-    self.tableView.separatorColor = UIColor.separatorColor;
-    self.tableView.tintColor = UIColor.iconColorActive;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 #pragma mark - Base UI
@@ -144,7 +145,7 @@
                 @"title": group[@"title"],
                 @"description": [NSString stringWithFormat:@"%i", group[@"count"].intValue],
                 @"isSelected": @([group[@"title"] isEqualToString:_selectedGroupName]),
-                @"color": group[@"color"] ? group[@"color"] : UIColor.iconColorActive.toHexString,
+                @"color": group[@"color"] ? group[@"color"] : [UIColor colorNamed:ACColorNameIconColorActive].toHexString,
                 @"img": @"ic_custom_folder"
             }];
         }
@@ -190,8 +191,8 @@
             cell = nib[0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if (cell)
@@ -220,7 +221,7 @@
             UIColor *color;
             if (item[@"color"])
                 color = [item[@"color"] isKindOfClass:NSString.class] ? [UIColor colorFromString:item[@"color"]] : item[@"color"];
-            cell.leftIconView.tintColor = color ? color : UIColor.iconColorActive;
+            cell.leftIconView.tintColor = color ? color : [UIColor colorNamed:ACColorNameIconColorActive];
             
             if ([item[@"isSelected"] boolValue])
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;

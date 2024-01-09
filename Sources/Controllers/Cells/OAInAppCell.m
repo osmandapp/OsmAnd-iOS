@@ -8,6 +8,7 @@
 
 #import "OAInAppCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAInAppCell
 
@@ -36,25 +37,25 @@
         if (!disabled)
         {
             self.btnPrice.layer.borderWidth = 0.0;
-            self.btnPrice.backgroundColor = UIColor.iconColorSelected;
+            self.btnPrice.backgroundColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             self.btnPrice.tintColor = [UIColor whiteColor];
             [self.btnPrice setImage:[UIImage imageNamed:@"ic_checkmark_small_enable"] forState:UIControlStateNormal];
         }
         else
         {
             self.btnPrice.layer.borderWidth = 0.8;
-            self.btnPrice.layer.borderColor = UIColor.iconColorSelected.CGColor;
+            self.btnPrice.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorSelected].CGColor;
             self.btnPrice.backgroundColor = [UIColor clearColor];
-            self.btnPrice.tintColor = UIColor.iconColorSelected;
+            self.btnPrice.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             [self.btnPrice setImage:[UIImage imageNamed:@"ic_checkmark_small_enable"] forState:UIControlStateNormal];
         }
     }
     else
     {
         self.btnPrice.layer.borderWidth = 0.8;
-        self.btnPrice.layer.borderColor = UIColor.iconColorSelected.CGColor;
+        self.btnPrice.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorSelected].CGColor;
         self.btnPrice.backgroundColor = [UIColor clearColor];
-        self.btnPrice.tintColor = UIColor.iconColorSelected;
+        self.btnPrice.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         [self.btnPrice setImage:nil forState:UIControlStateNormal];
     }
 }

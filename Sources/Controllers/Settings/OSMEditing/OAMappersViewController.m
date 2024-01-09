@@ -15,6 +15,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import <SafariServices/SafariServices.h>
+#import "GeneratedAssetSymbols.h"
 
 #define USER_CHANGES_URL @"https://osmand.net/changesets/user-changes"
 #define CONTRIBUTIONS_URL @"https://www.openstreetmap.org/user/"
@@ -95,12 +96,12 @@
                     @"attributed_title" : [[NSAttributedString alloc] initWithString:availableTitle
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-                                                                                 NSForegroundColorAttributeName : UIColor.textColorPrimary
+                                                                                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
                                                                          }],
                     @"description" : availableDescription,
                     @"description_font" : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                     @"right_icon" : rightIcon,
-                    @"tint_color" : UIColor.iconColorActive,
+                    @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive],
                     @"top_right_content" : @(YES)
             },
             @{
@@ -109,10 +110,10 @@
                     @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_refresh")
                                                                          attributes:@{
                                                                                  NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
-                                                                                 NSForegroundColorAttributeName : UIColor.textColorActive
+                                                                                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive]
                                                                                      }],
                     @"right_icon": @"ic_custom_reset",
-                    @"tint_color" : UIColor.iconColorActive
+                    @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive]
             }
     ]];
 
@@ -141,10 +142,10 @@
                                    value:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
                                    range:NSMakeRange(0, dateAttributed.length)];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
-                                   value:UIColor.textColorPrimary
+                                   value:[UIColor colorNamed:ACColorNameTextColorPrimary]
                                    range:[dateAttributed.string rangeOfString:[formatterMonth stringFromDate:date].capitalizedString]];
             [dateAttributed addAttribute:NSForegroundColorAttributeName
-                                   value:UIColor.textColorSecondary
+                                   value:[UIColor colorNamed:ACColorNameTextColorSecondary]
                                    range:[dateAttributed.string rangeOfString:[formatterYear stringFromDate:date]]];
 
             [dateCells addObject:@{
@@ -167,7 +168,7 @@
             @"attributed_title": [[NSAttributedString alloc] initWithString:OALocalizedString(@"last_two_month_total")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-                                                                         NSForegroundColorAttributeName : UIColor.textColorPrimary
+                                                                         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
                                                                  }],
             @"value": [NSString stringWithFormat:@"%li", [self getChangesSize]],
             @"description": [self getMonthPeriod]
@@ -184,10 +185,10 @@
             @"attributed_title" : [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_profile")
                                                                  attributes:@{
                                                                          NSFontAttributeName : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium],
-                                                                         NSForegroundColorAttributeName : UIColor.textColorActive
+                                                                         NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive]
                                                                              }],
             @"right_icon" : @"ic_action_openstreetmap_logo",
-            @"tint_color" : UIColor.iconColorActive,
+            @"tint_color" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"url" : [NSURL URLWithString:url]
     }];
     [data addObject:dateCells];
@@ -260,7 +261,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.textColorPrimary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             [cell leftIconVisibility:NO];
         }
         if (cell)

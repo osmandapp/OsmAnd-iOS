@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kIconBigTitleSize 48.
 
@@ -119,7 +120,7 @@
     NSString *secondaryDesc = [NSString stringWithFormat:patternPlan, [selectedFeature getListTitle], availablePlans];
 
     NSMutableAttributedString *productIncludedText = [[NSMutableAttributedString alloc] initWithString:secondaryDesc];
-    [productIncludedText addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:NSMakeRange(0, secondaryDesc.length)];
+    [productIncludedText addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, secondaryDesc.length)];
     [productIncludedText addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightBold] range:[secondaryDesc rangeOfString:mapsPlus]];
@@ -291,7 +292,7 @@
             _stateCanceled = YES;
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[tag];
-                row.backgroundColor = tag == _selectedFeatureIndex ? UIColor.cellBgColorSelected : UIColor.groupBgColor;
+                row.backgroundColor = tag == _selectedFeatureIndex ? [UIColor colorNamed:ACColorNameCellBgColorSelected] : [UIColor colorNamed:ACColorNameGroupBg];
             }                completion:nil];
         }
         else if (state == UIGestureRecognizerStateEnded)
@@ -304,14 +305,14 @@
 
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
-                row.backgroundColor = UIColor.groupBgColor;
+                row.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
                 _selectedFeatureIndex = tag;
                 row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
-                row.backgroundColor = UIColor.buttonBgColorTertiary;
+                row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[_selectedFeatureIndex];
-                    row.backgroundColor = UIColor.cellBgColorSelected;
+                    row.backgroundColor = [UIColor colorNamed:ACColorNameCellBgColorSelected];
                     NSMutableArray<OAFeature *> *allFeatures = [NSMutableArray arrayWithArray:OAFeature.OSMAND_PRO_FEATURES];
                     [allFeatures removeObject:OAFeature.COMBINED_WIKI];
                     OAFeature *feature = allFeatures[tag];
@@ -333,7 +334,7 @@
         {
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.viewFeatureRowsContainer.subviews[tag];
-                row.backgroundColor = UIColor.buttonBgColorTertiary;
+                row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:nil];
         }
     }
@@ -354,7 +355,7 @@
             [UIView animateWithDuration:0.2 animations:^{
                 OAPlanTypeCardRow *row = self.viewChoosePlanButtonsContainer.subviews[tag];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColor.buttonBgColorTertiary;
+                    row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:nil];
         }
         else if (state == UIGestureRecognizerStateEnded)
@@ -372,12 +373,12 @@
                 _selectedPlanTypeIndex = tag;
                 row = self.viewChoosePlanButtonsContainer.subviews[_selectedPlanTypeIndex];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColor.buttonBgColorTertiary;
+                    row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAPlanTypeCardRow *row = self.viewChoosePlanButtonsContainer.subviews[_selectedPlanTypeIndex];
                     if (row.userInteractionEnabled)
-                        row.backgroundColor = UIColor.buttonBgColorTertiary;
+                        row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
                     if (self.delegate)
                         [self.delegate onPlanTypeSelected:subscription];
                 }];
@@ -388,7 +389,7 @@
             [UIView animateWithDuration:0.2 animations:^{
                 OAPlanTypeCardRow *row = self.viewChoosePlanButtonsContainer.subviews[tag];
                 if (row.userInteractionEnabled)
-                    row.backgroundColor = UIColor.buttonBgColorTertiary;
+                    row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:nil];
         }
     }

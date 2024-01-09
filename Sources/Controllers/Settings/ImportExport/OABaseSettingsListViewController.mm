@@ -20,6 +20,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OATableCollapsableGroup
 
@@ -177,12 +178,12 @@
                 [cell setCustomLeftSeparatorInset:YES];
                 cell.delegate = self;
                 cell.separatorInset = UIEdgeInsetsZero;
-                cell.rightIconView.tintColor = UIColor.iconColorActive;
+                cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
                 UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
                 conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
                 cell.leftEditButton.configuration = conf;
-                cell.leftEditButton.layer.shadowColor = UIColor.iconColorDisabled.CGColor;
+                cell.leftEditButton.layer.shadowColor = [UIColor colorNamed:ACColorNameIconColorDisabled].CGColor;
                 cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
                 cell.leftEditButton.layer.shadowOpacity = 1.;
                 cell.leftEditButton.layer.shadowRadius = 1.;
@@ -269,7 +270,7 @@
                         selectedStr = [selectedStr stringByAppendingFormat:@" • %@", [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
                     }
                     
-                    UIColor *color = selectedAmount == 0 ? UIColor.iconColorDisabled : item[@"color"];
+                    UIColor *color = selectedAmount == 0 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : item[@"color"];
                     cell.leftIconView.tintColor = color;
                     cell.descriptionLabel.text = selectedStr;
                     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -279,7 +280,7 @@
                     [cell descriptionVisibility:NO];
                     cell.titleLabel.text = item[@"title"];
                     cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : UIColor.iconColorDisabled;
+                    cell.leftIconView.tintColor = item[@"color"] ? item[@"color"] : [UIColor colorNamed:ACColorNameIconColorDisabled];
                     cell.descriptionLabel.text = nil;
                     cell.accessoryType = UITableViewCellAccessoryNone;
                 }

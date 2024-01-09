@@ -44,7 +44,7 @@
                 </label>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="7Pi-Dk-jYc" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="64O-n4-hRC"/>
                 <constraint firstItem="dJi-6c-xLK" firstAttribute="leading" secondItem="VP6-qR-MKM" secondAttribute="trailing" constant="16" id="6qU-MV-F6m"/>
@@ -68,7 +68,7 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">

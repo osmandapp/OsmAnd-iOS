@@ -50,7 +50,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
         switch pairedSensorsType {
         case .widget:
             configureWidgetDataSource()
@@ -73,6 +72,14 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         localizedString("paired_sensors")
     }
     
+    override func getLeftNavbarButtonTitle() -> String {
+        localizedString("shared_string_cancel")
+    }
+    
+    override func hideFirstHeader() -> Bool {
+        true
+    }
+    
     override func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
@@ -93,18 +100,14 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         48
     }
     
-    override func getCustomHeight(forHeader section: Int) -> CGFloat {
-        10
-    }
-    
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         if let devices, devices.count > indexPath.row {
             let item = devices[indexPath.row]
             if item is OptionDevice {
                 if let cell = tableView.dequeueReusableCell(withIdentifier: OptionDeviceTableViewCell.reuseIdentifier) as? OptionDeviceTableViewCell {
-                    cell.separatorInset = .zero
-                    cell.layoutMargins = .zero
-                    cell.preservesSuperviewLayoutMargins = false
+                    cell.topSeparatorView.isHidden = indexPath.row != 0
+                    cell.separatorBottomInsetLeft = indexPath.row < devices.count - 1 ? 66 : 0
+                    
                     if let widgetType, let optionDevice = devices[indexPath.row] as? OptionDevice {
                         var title = ""
                         switch optionDevice.option {
@@ -121,10 +124,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
                 }
             } else {
                 if let cell = tableView.dequeueReusableCell(withIdentifier: СhoicePairedDeviceTableViewCell.reuseIdentifier) as? СhoicePairedDeviceTableViewCell {
-                    // separators go edge to edge
-                    cell.separatorInset = .zero
-                    cell.layoutMargins = .zero
-                    cell.preservesSuperviewLayoutMargins = false
+                    cell.separatorBottomInsetLeft = indexPath.row < devices.count - 1 ? 66 : 0
                     cell.configure(item: devices[indexPath.row])
                     return cell
                 }
@@ -170,7 +170,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
             onSelectDeviceAction?(currentSelectedDevice)
         }
         tableView.reloadData()
-        self.dismiss()
+        dismiss()
     }
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -260,6 +260,8 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         tableView.isHidden = false
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.sectionHeaderTopPadding = 34
+        tableView.separatorStyle = .none
         
         tableView.backgroundColor = .clear
         view.backgroundColor = UIColor.viewBg

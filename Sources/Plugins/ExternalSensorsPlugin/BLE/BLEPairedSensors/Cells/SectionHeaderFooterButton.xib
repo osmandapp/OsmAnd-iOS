@@ -17,7 +17,7 @@
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H21-Vd-Lip">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <inset key="titleEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -30,7 +30,7 @@
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-pK-pQb" userLabel="dividerBottomView">
                     <rect key="frame" x="0.0" y="148.66666666666666" width="375" height="0.33333333333334281"/>
-                    <color key="backgroundColor" name="divider"/>
+                    <color key="backgroundColor" name="widgetSeparatorColor"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="ubh-OB-dOE"/>
                     </constraints>
@@ -38,8 +38,8 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="H21-Vd-Lip" secondAttribute="trailing" id="FuZ-lo-0Ox"/>
-                <constraint firstItem="H21-Vd-Lip" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="HA9-av-Klw"/>
+                <constraint firstAttribute="trailing" secondItem="H21-Vd-Lip" secondAttribute="trailing" id="FuZ-lo-0Ox"/>
+                <constraint firstItem="H21-Vd-Lip" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HA9-av-Klw"/>
                 <constraint firstItem="H21-Vd-Lip" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="UpC-Ek-XIH"/>
                 <constraint firstAttribute="bottom" secondItem="H21-Vd-Lip" secondAttribute="bottom" id="b3B-Pg-Kx9"/>
                 <constraint firstItem="AYX-pK-pQb" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="gzU-kX-fpF"/>
@@ -54,14 +54,14 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="divider">
-            <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="widgetSeparatorColor">
+            <color red="0.89803921568627454" green="0.8901960784313725" blue="0.90980392156862744" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

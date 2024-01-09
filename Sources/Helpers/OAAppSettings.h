@@ -61,17 +61,6 @@ typedef NS_ENUM(NSInteger, EOACompassMode)
 
 @end
 
-@interface OAGPXDataSetType : NSObject
-
-+ (NSString *)getTitle:(NSInteger)dst;
-+ (NSString *)getIconName:(NSInteger)dst;
-+ (NSString *)getDataKey:(NSInteger)dst;
-+ (UIColor *)getTextColor:(NSInteger)dst;
-+ (UIColor *)getFillColor:(NSInteger)dst;
-+ (NSString *)getMainUnitY:(NSInteger)dst;
-
-@end
-
 typedef NS_ENUM(NSInteger, EOAMap3DModeVisibility)
 {
     EOAMap3DModeVisibilityHidden = 0,

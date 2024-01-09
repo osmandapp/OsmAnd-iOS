@@ -776,6 +776,7 @@
 		46ED6C422B333BE400A5555F /* Pair.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46ED6C412B333BE400A5555F /* Pair.swift */; };
 		46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */; };
 		46F0CA9829B0C4F50009C205 /* OAWikipediaSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F0CA9729B0C4F50009C205 /* OAWikipediaSettingsViewController.m */; };
+		46F494132B4D9D6400CAB805 /* OAGPXDataSetType.m in Sources */ = {isa = PBXBuildFile; fileRef = 46F494122B4D9D6400CAB805 /* OAGPXDataSetType.m */; };
 		46FB65B82A8BBC2000A21850 /* CoordinatesCurrentLocationWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B52A8BBC1F00A21850 /* CoordinatesCurrentLocationWidget.swift */; };
 		46FB65B92A8BBC2000A21850 /* CoordinatesBaseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */; };
 		46FB65BA2A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */; };
@@ -4346,6 +4347,8 @@
 		46ED6C412B333BE400A5555F /* Pair.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pair.swift; sourceTree = "<group>"; };
 		46F0CA9629B0C4E20009C205 /* OAWikipediaSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikipediaSettingsViewController.h; sourceTree = "<group>"; };
 		46F0CA9729B0C4F50009C205 /* OAWikipediaSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikipediaSettingsViewController.m; sourceTree = "<group>"; };
+		46F494112B4D9D3500CAB805 /* OAGPXDataSetType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXDataSetType.h; sourceTree = "<group>"; };
+		46F494122B4D9D6400CAB805 /* OAGPXDataSetType.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXDataSetType.m; sourceTree = "<group>"; };
 		46FB65B52A8BBC1F00A21850 /* CoordinatesCurrentLocationWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesCurrentLocationWidget.swift; sourceTree = "<group>"; };
 		46FB65B62A8BBC2000A21850 /* CoordinatesBaseWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesBaseWidget.swift; sourceTree = "<group>"; };
 		46FB65B72A8BBC2000A21850 /* CoordinatesMapCenterWidget.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoordinatesMapCenterWidget.swift; sourceTree = "<group>"; };
@@ -12219,12 +12222,19 @@
 				DA5A7D5E26C563A300F274C7 /* OAAppModeView.xib */,
 				DA5A7D5326C563A300F274C7 /* OADestinationItemsListViewController.h */,
 				DA5A7D4326C563A300F274C7 /* OADestinationItemsListViewController.mm */,
+				46F494112B4D9D3500CAB805 /* OAGPXDataSetType.h */,
+				46F494122B4D9D6400CAB805 /* OAGPXDataSetType.m */,
+				CA4ED4ED6060269841C56359 /* OAPreviewRouteLineInfo.h */,
+				CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */,
 				DA5A7D5026C563A300F274C7 /* OARouteAvoidSettingsViewController.h */,
 				DA5A7D5826C563A300F274C7 /* OARouteAvoidSettingsViewController.mm */,
 				DA5A7D5C26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.h */,
 				DA5A7D3E26C563A300F274C7 /* OARouteAvoidTransportSettingsViewController.mm */,
 				DA5A7D5726C563A300F274C7 /* OARouteInfoView.h */,
 				DA5A7D5926C563A300F274C7 /* OARouteInfoView.mm */,
+				CA4EDD64C998F4C38A58E4D5 /* OARouteLineAppearanceHudViewController.h */,
+				CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */,
+				460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */,
 				DA5A7D6126C563A300F274C7 /* OARoutePreferencesParameters.h */,
 				DA5A7D5626C563A300F274C7 /* OARoutePreferencesParameters.mm */,
 				DA5A7D4726C563A300F274C7 /* OARouteSegmentShieldView.h */,
@@ -12250,11 +12260,6 @@
 				DA5A7D4026C563A300F274C7 /* OARoutingTargetCell.h */,
 				DA5A7D4A26C563A300F274C7 /* OARoutingTargetCell.m */,
 				DA5A7D4826C563A300F274C7 /* OARoutingTargetCell.xib */,
-				CA4EDE5AC5CCE1F6DFDC5D41 /* OARouteLineAppearanceHudViewController.mm */,
-				CA4EDD64C998F4C38A58E4D5 /* OARouteLineAppearanceHudViewController.h */,
-				460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */,
-				CA4ED0D4B38A47C7C60819AA /* OAPreviewRouteLineInfo.mm */,
-				CA4ED4ED6060269841C56359 /* OAPreviewRouteLineInfo.h */,
 			);
 			path = RouteInfoMenu;
 			sourceTree = "<group>";
@@ -17057,6 +17062,7 @@
 				C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
 				DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */,
+				46F494132B4D9D6400CAB805 /* OAGPXDataSetType.m in Sources */,
 				DA5A838626C563A800F274C7 /* OADestinationItem.m in Sources */,
 				DA5A823D26C563A700F274C7 /* OAConfigureProfileViewController.m in Sources */,
 				DA5A819126C563A700F274C7 /* OAShowHideMapillaryAction.m in Sources */,

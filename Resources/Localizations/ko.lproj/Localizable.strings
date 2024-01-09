@@ -209,7 +209,7 @@
 "hud_no_movement" = "무동작동 없음";
 
 // Favorites
-"shared_string_color" = "색";
+"shared_string_color" = "색상";
 "fav_colors" = "컬러스";
 "shared_string_name" = "이름";
 "favorite" = "즐겨찾기";
@@ -1486,3 +1486,11 @@
 "selected_profile" = "선택된 프로필";
 "help_article_navigation_guidance_voice_navigation_name" = "음성 프롬프트/알림";
 "help_article_personal_storage_name" = "저장공간";
+"shared_string_slope" = "경사";
+"previous_route" = "이전 노선";
+"attach_to_the_roads" = "도로에 부착";
+"ant_plus_pair_new_sensor" = "새 센서 페어링";
+"cloud_all_changes_downloaded" = "다운로드된 모든 변경 사항";
+"save_track_logging_accuracy" = "로깅정확도";
+"cloud_email_not_registered" = "이 이메일 주소는 OsmAnd Cloud에 등록되어 있지 않음";
+"login_account" = "계정";

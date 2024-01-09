@@ -19,6 +19,7 @@
 #import "OASearchSettings.h"
 #import "OAPOIType.h"
 #import "OAPOIFilterViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OACustomPOIViewController () <OASelectSubcategoryDelegate, UISearchBarDelegate>
 
@@ -134,12 +135,12 @@
         
         NSString *textShow = OALocalizedString(@"recording_context_menu_show");
         UIFont *fontShow = [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold];
-        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : UIColor.textColorSecondary;
+        UIColor *colorShow = _countShowCategories != 0 ? UIColor.whiteColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
         NSMutableAttributedString *attrShow = [[NSMutableAttributedString alloc] initWithString:textShow attributes:@{NSFontAttributeName: fontShow, NSForegroundColorAttributeName: colorShow}];
 
         NSString *textCategories = [NSString stringWithFormat:@"\n%@: %li", OALocalizedString(@"search_categories"), _countShowCategories];
         UIFont *fontCategories = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : UIColor.textColorSecondary;
+        UIColor *colorCategories = _countShowCategories != 0 ? [[UIColor alloc] initWithWhite:1 alpha:0.5] : [UIColor colorNamed:ACColorNameTextColorSecondary];
         NSMutableAttributedString *attrCategories = [[NSMutableAttributedString alloc] initWithString:textCategories attributes:@{NSFontAttributeName: fontCategories, NSForegroundColorAttributeName: colorCategories}];
 
         [attrShow appendAttributedString:attrCategories];
@@ -229,7 +230,7 @@
         cell = (OASimpleTableViewCell *) nib[0];
         if (_searchMode)
         {
-            cell.tintColor = UIColor.iconColorActive;
+            cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             [cell setSelectedBackgroundView:bgColorView];
@@ -250,7 +251,7 @@
             
             UIImage *categoryIcon = [[category icon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
             cell.leftIconView.image = categoryIcon;
-            cell.leftIconView.tintColor = isSelected ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             
             NSString *descText;
@@ -260,7 +261,7 @@
                 descText = [NSString stringWithFormat:@"%lu/%lu", countAcceptedTypes, countAllTypes];
             [cell descriptionVisibility:YES];
             cell.descriptionLabel.text = descText;
-            cell.descriptionLabel.textColor = UIColor.textColorSecondary;
+            cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else
         {
@@ -270,7 +271,7 @@
             
             cell.titleLabel.text = poiType.nameLocalized ? poiType.nameLocalized : @"";
             
-            UIColor *selectedColor = accepted ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            UIColor *selectedColor = accepted ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.image = [self getPoiIcon:poiType];
             cell.leftIconView.tintColor = selectedColor;
             if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)

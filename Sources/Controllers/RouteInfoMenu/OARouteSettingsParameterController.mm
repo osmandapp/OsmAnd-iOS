@@ -12,6 +12,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OATableViewCustomFooterView.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OARouteSettingsParameterController ()
 
@@ -144,7 +145,7 @@
         }
         else
         {
-            cell.leftIconView.tintColor = UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     }
@@ -181,7 +182,7 @@
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColor.textColorSecondary
+            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
     }];
     vw.label.attributedText = textStr;
     return vw;

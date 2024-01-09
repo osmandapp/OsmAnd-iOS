@@ -16,6 +16,7 @@
 #import "OASizes.h"
 #import "OAOSMSettings.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <ctime>
 
@@ -76,7 +77,7 @@ static const NSInteger timeSectionIndex = 1;
     [super viewDidLoad];
     [self setupView];
     self.tableView.estimatedRowHeight = kEstimatedRowHeight;
-    self.tableView.tintColor = UIColor.iconColorActive;
+    self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationItem.title = OALocalizedString(@"osm_add_timespan");
 }
 
@@ -331,7 +332,7 @@ static const NSInteger timeSectionIndex = 1;
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.textColorPrimary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         if (cell)
         {

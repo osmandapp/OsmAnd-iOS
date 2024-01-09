@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAPlanTypeCardRow ()
 
@@ -96,39 +97,39 @@
     {
         case EOAPlanTypeChoosePlan:
         {
-            self.backgroundColor = UIColor.buttonBgColorTertiary;
+            self.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             self.imageViewLeftIcon.hidden = NO;
             self.imageViewRightIcon.hidden = YES;
             self.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            self.labelTitle.textColor = UIColor.buttonTextColorSecondary;
-            self.labelDescription.textColor = UIColor.buttonTextColorSecondary;
+            self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
             self.labelDescription.textAlignment = NSTextAlignmentLeft;
             break;
         }
         case EOAPlanTypeChooseSubscription:
         {
-            self.backgroundColor = UIColor.groupBgColor;
+            self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = NO;
             self.labelTitle.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            self.labelTitle.textColor = UIColor.buttonTextColorSecondary;
-            self.labelDescription.textColor = UIColor.textColorPrimary;
+            self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             self.labelTitle.textAlignment = NSTextAlignmentLeft;
             self.labelDescription.textAlignment = NSTextAlignmentLeft;
             break;
         }
         case EOAPlanTypePurchase:
         {
-            self.backgroundColor = UIColor.buttonBgColorPrimary;
+            self.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
             self.imageViewLeftIcon.hidden = YES;
             self.imageViewRightIcon.hidden = YES;
             self.labelTitle.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             self.labelDescription.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            self.labelTitle.textColor = UIColor.buttonTextColorPrimary;
-            self.labelDescription.textColor = UIColor.buttonTextColorPrimary;
+            self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
+            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
             self.labelTitle.textAlignment = NSTextAlignmentCenter;
             self.labelDescription.textAlignment = NSTextAlignmentCenter;
             break;
@@ -141,11 +142,11 @@
     if (_type == EOAPlanTypeChooseSubscription)
     {
         self.layer.borderWidth = selected ? 2. : 0.;
-        self.layer.borderColor = selected ? UIColor.buttonBgColorPrimary.CGColor : UIColor.clearColor.CGColor;
+        self.layer.borderColor = selected ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary].CGColor : UIColor.clearColor.CGColor;
         self.imageViewRightIcon.image = selected ? [UIImage imageNamed:@"ic_system_checkbox_selected"] : [UIImage templateImageNamed: @"ic_custom_checkbox_unselected"];
-        self.imageViewRightIcon.tintColor = [UIColor iconColorDefault];
-        self.backgroundColor = selected ? UIColor.buttonBgColorTertiary : UIColor.clearColor;
-        self.labelTitle.textColor = selected ? UIColor.buttonTextColorSecondary : UIColor.textColorActive;
+        self.imageViewRightIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+        self.backgroundColor = selected ? [UIColor colorNamed:ACColorNameButtonBgColorTertiary] : UIColor.clearColor;
+        self.labelTitle.textColor = selected ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorActive];
     }
 }
 
@@ -196,9 +197,9 @@
                 icon = [UIImage imageNamed:iconName];
             self.imageViewLeftIcon.image = icon;
             self.imageViewRightIcon.image = nil;
-            self.backgroundColor = available && !isPurchased ? UIColor.buttonBgColorTertiary : UIColor.buttonBgColorSecondary;
-            self.labelTitle.textColor = available && !isPurchased ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
-            self.labelDescription.textColor = available && !isPurchased ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
+            self.backgroundColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonBgColorTertiary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
+            self.labelTitle.textColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
+            self.labelDescription.textColor = available && !isPurchased ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
             self.userInteractionEnabled = available && !isPurchased;
             self.layer.borderWidth = 0.;
             break;
@@ -258,8 +259,8 @@
             }
             
             self.imageViewLeftIcon.image = nil;
-            self.labelTitle.textColor = UIColor.buttonTextColorSecondary;
-            self.labelDescription.textColor = UIColor.textColorPrimary;
+            self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             [self updateSelected:selected];
             self.userInteractionEnabled = YES;
             break;
@@ -274,9 +275,9 @@
             self.layer.borderWidth = 0.;
             self.imageViewLeftIcon.image = nil;
             self.imageViewRightIcon.image = nil;
-            self.backgroundColor = UIColor.buttonBgColorPrimary;
-            self.labelTitle.textColor = UIColor.buttonTextColorPrimary;
-            self.labelDescription.textColor = UIColor.buttonTextColorPrimary;
+            self.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+            self.labelTitle.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
+            self.labelDescription.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
             self.userInteractionEnabled = YES;
             break;
         }

@@ -44,6 +44,7 @@
 #import "OATextMultilineTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -330,9 +331,9 @@
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     UIView *view = [[UIView alloc] init];
-    view.backgroundColor = UIColor.groupBgColor;
+    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     _calculatedWidth = 0;
@@ -673,7 +674,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            cell.backgroundColor = UIColor.separatorColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
@@ -703,12 +704,12 @@
         {
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
             cell.textView.text = info.textPrefix;
-            cell.textView.textColor = [UIColor textColorSecondary];
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else
         {
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor textColorPrimary];
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];

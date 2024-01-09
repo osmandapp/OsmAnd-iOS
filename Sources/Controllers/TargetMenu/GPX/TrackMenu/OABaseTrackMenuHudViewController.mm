@@ -17,6 +17,7 @@
 #import "OsmAndApp.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAGPXBaseTableData
 
@@ -308,7 +309,7 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColor.iconColorActive;
+    self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
 

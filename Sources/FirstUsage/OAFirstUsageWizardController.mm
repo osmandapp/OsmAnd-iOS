@@ -16,7 +16,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "SafariServices/SafariServices.h"
-
+#import "GeneratedAssetSymbols.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #include <OsmAndCore.h>
@@ -167,21 +167,21 @@ typedef enum
                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                         documentAttributes:nil error:nil];
     [titleStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, titleStr.length)];
-    [titleStr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:NSMakeRange(0, titleStr.length)];
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
         {
             NSString *link = attrs[@"NSLink"];
             [titleStr removeAttribute:attrs[@"NSLink"] range:range];
             [titleStr addAttribute:NSLinkAttributeName value:link  range:range];
-            [titleStr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorActive range:range];
+            [titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorActive] range:range];
         }
     }];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.alignment = NSTextAlignmentNatural;
     paragraphStyle.lineBreakMode = NSLineBreakByWordWrapping;
     [titleStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, titleStr.length)];
-    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive,
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive],
                                      NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                                      NSUnderlineStyleAttributeName: @(NSUnderlineStyleNone)
     };

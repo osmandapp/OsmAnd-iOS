@@ -9,6 +9,7 @@
 #import "OABaseNavbarSubviewViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <Foundation/Foundation.h>
+#import "GeneratedAssetSymbols.h"
 
 @implementation OABaseNavbarSubviewViewController
 {
@@ -47,16 +48,16 @@
     switch ([self getNavbarColorScheme])
     {
         case EOABaseNavbarColorSchemeGray:
-            container.backgroundColor = UIColor.viewBgColor;
+            container.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
             break;
         case EOABaseNavbarColorSchemeOrange:
-            container.backgroundColor = [UIColor.navBarBgColorPrimary colorWithAlphaComponent:1.0];
+            container.backgroundColor = [[UIColor colorNamed:ACColorNameNavBarBgColorPrimary] colorWithAlphaComponent:1.0];
             break;
         case EOABaseNavbarColorSchemeWhite:
-            container.backgroundColor = UIColor.groupBgColor;
+            container.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             break;
         default:
-            container.backgroundColor = UIColor.groupBgColor;
+            container.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             break;
     }
 }
@@ -144,7 +145,7 @@
         ]];
 
         _separatorView = [[UIView alloc] init];
-        _separatorView.backgroundColor = UIColor.separatorColor;
+        _separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
         _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
         [containerView addSubview:_separatorView];

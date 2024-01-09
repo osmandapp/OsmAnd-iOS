@@ -50,6 +50,7 @@
 #import "OsmAndApp.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -140,22 +141,22 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
-    appearance.shadowColor = UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     blurAppearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
@@ -326,7 +327,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
                 kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
                 kCellKeyKey: @"checkingBackup",
                 kCellTitleKey: OALocalizedString(@"checking_progress"),
-                @"titleTint": UIColor.textColorActive
+                @"titleTint": [UIColor colorNamed:ACColorNameTextColorActive]
             };
             [backupRows addRowFromDictionary:checkingCell];
         }
@@ -388,11 +389,11 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconProgressbarCell getCellIdentifier] owner:self options:nil];
     OATitleIconProgressbarCell *resultCell = (OATitleIconProgressbarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColor.iconColorActive];
+    [resultCell.progressBar setProgressTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     resultCell.textView.text = [OALocalizedString(@"syncing_progress") stringByAppendingString:[NSString stringWithFormat:@"%i%%", 0]];
-    resultCell.textView.textColor = UIColor.textColorPrimary;
+    resultCell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     resultCell.imgView.image = [UIImage templateImageNamed:@"ic_custom_cloud_upload"];
-    resultCell.imgView.tintColor = UIColor.iconColorActive;
+    resultCell.imgView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     resultCell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return resultCell;
@@ -532,7 +533,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         cell.titleLabel.text = item.title;
         cell.valueLabel.text = [item stringForKey:@"value"];
         cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-        cell.leftIconView.tintColor = [item integerForKey:@"value"] > 0 ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+        cell.leftIconView.tintColor = [item integerForKey:@"value"] > 0 ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         cell.separatorInset = UIEdgeInsetsMake(0., ([item.key isEqualToString:@"conflicts"] ? 0. : 65.), 0., 0.);
         return cell;
     }
@@ -543,8 +544,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-            cell.button.backgroundColor = UIColor.buttonBgColorPrimary;
-            [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
+            cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
             cell.button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             cell.button.layer.cornerRadius = 9.;
             cell.topMarginConstraint.constant = 9.;
@@ -582,7 +583,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
             [cell.button setTitle:nil forState:UIControlStateNormal];
-            cell.button.tintColor = UIColor.iconColorActive;
+            cell.button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
         [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
@@ -591,7 +592,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         cell.titleLabel.text = item.title;
         cell.descriptionLabel.text = item.descr;
         [cell.leftIconView setImage:[UIImage templateImageNamed:item.iconName]];
-        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : UIColor.iconColorActive;
+        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : [UIColor colorNamed:ACColorNameIconColorActive];
         return cell;
     }
     else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
@@ -614,7 +615,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             cell.selectionStyle = isWarningCell ? UITableViewCellSelectionStyleNone : UITableViewCellSelectionStyleDefault;
             if (isWarningCell)
             {
-                cell.titleLabel.textColor = UIColor.textColorPrimary;
+                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
                 NSInteger color = item.iconTint;
                 if (color != -1)
                 {
@@ -630,8 +631,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             {
                 BOOL actionButtonDisabled = [self isActionButtonDisabled:item];
                 cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-                cell.rightIconView.tintColor = actionButtonDisabled ? UIColor.iconColorDisabled : UIColor.iconColorActive;
-                cell.titleLabel.textColor = actionButtonDisabled ? UIColor.textColorSecondary : UIColor.textColorActive;
+                cell.rightIconView.tintColor = actionButtonDisabled ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorActive];
+                cell.titleLabel.textColor = actionButtonDisabled ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorActive];
             }
         }
         return cell;

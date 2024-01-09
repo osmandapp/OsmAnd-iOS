@@ -10,6 +10,7 @@
 #import "OALabelCollectionViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kSidePadding 16
 
@@ -54,14 +55,14 @@
     cell.titleLabel.text = _dataArray[indexPath.row];
     if (indexPath.row == _selectedIndex)
     {
-        cell.backView.backgroundColor = UIColor.buttonBgColorPrimary;
-        cell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
+        cell.backView.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightBold];
     }
     else
     {
-        cell.backView.backgroundColor = UIColor.buttonBgColorDisabled;
-        cell.titleLabel.textColor = UIColor.buttonTextColorSecondary;
+        cell.backView.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorDisabled];
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     }
     return cell;

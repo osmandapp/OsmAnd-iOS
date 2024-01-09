@@ -15,6 +15,7 @@
 #import "OAIAPHelper.h"
 #import "OAWeatherForecastViewController.h"
 #import "OAPluginPopupViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kRowsInUpdatesSection 2
 
@@ -63,7 +64,7 @@
     [super viewDidLoad];
     
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     
     self.navigationItem.title = OALocalizedString(@"download_tab_updates");
 }
@@ -75,22 +76,22 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
-    appearance.shadowColor = UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     blurAppearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     _updateAllButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"res_update_all") style:UIBarButtonItemStylePlain target:self action:@selector(onUpdateAllBarButtonClicked)];
@@ -132,7 +133,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
 }
 
 - (void)prepareContent
@@ -504,7 +505,7 @@
                                               reuseIdentifier:cellTypeId];
                 UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
                 cell.accessoryView = [[UIImageView alloc] initWithImage:iconImage];
-                [cell.accessoryView setTintColor:UIColor.iconColorActive];
+                [cell.accessoryView setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
             }
             else if ([cellTypeId isEqualToString:downloadingResourceCell])
             {
@@ -513,7 +514,7 @@
 
                 FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
                 progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor =UIColor.iconColorActive;
+                progressView.tintColor =[UIColor colorNamed:ACColorNameIconColorActive];
 
                 cell.accessoryView = progressView;
             }
@@ -527,7 +528,7 @@
     if (cell && indexPath.section == _availableMapsSection && item)
     {
         cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        cell.imageView.tintColor = UIColor.iconColorDisabled;
+        cell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
     }
 
     // Fill cell content
@@ -554,7 +555,7 @@
             {
                 cell.detailTextLabel.text = [OAResourceType resourceTypeLocalized:item.resourceType];
             }
-            cell.detailTextLabel.textColor = UIColor.textColorSecondary;
+            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
     }
 

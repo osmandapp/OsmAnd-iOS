@@ -20,6 +20,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAUninstallSpeedCamerasViewController
 {
@@ -116,7 +117,7 @@
     NSMutableAttributedString *attrText = [[NSMutableAttributedString alloc] initWithString:text
                                                                                  attributes:@{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleBody],
-        NSForegroundColorAttributeName: UIColor.textColorPrimary
+        NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorPrimary]
     }];
     [attrText addAttribute:NSFontAttributeName
                      value:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]

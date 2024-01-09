@@ -96,7 +96,7 @@ final class BLESearchViewController: OABaseNavbarViewController {
         tableView.delegate = self
         tableView.rowHeight = 72
         tableView.backgroundColor = .clear
-        view.backgroundColor = UIColor.viewBgColor
+        view.backgroundColor = UIColor.viewBg
         tableView.sectionHeaderTopPadding = 26
         startScan()
     }

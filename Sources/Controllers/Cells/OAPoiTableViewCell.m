@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OATargetInfoViewController.h"
 #import "OAUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kCategoryCellIndex 0
 #define kPoiCellIndex 1
@@ -249,7 +250,7 @@
             OAFoldersCollectionViewCell *destCell = (OAFoldersCollectionViewCell *) cell;
             destCell.layer.cornerRadius = 9;
             destCell.titleLabel.text = item[@"title"];
-            destCell.imageView.tintColor = UIColor.iconColorActive;
+            destCell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             NSString *iconName = item[@"img"];
 
             BOOL hasIcon = iconName && iconName.length > 0;
@@ -259,15 +260,15 @@
             NSString *categoryName = item[@"categoryName"];
             if ([categoryName isEqualToString:_currentCategory])
             {
-                destCell.layer.backgroundColor = UIColor.buttonBgColorTap.CGColor;
-                destCell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
-                destCell.imageView.tintColor = UIColor.buttonTextColorPrimary;
+                destCell.layer.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTap].CGColor;
+                destCell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
+                destCell.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
             }
             else
             {
-                destCell.layer.backgroundColor = UIColor.buttonBgColorTertiary.CGColor;
-                destCell.titleLabel.textColor = UIColor.buttonTextColorSecondary;
-                destCell.imageView.tintColor = UIColor.buttonTextColorSecondary;
+                destCell.layer.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary].CGColor;
+                destCell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+                destCell.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
             }
         }
         
@@ -288,13 +289,13 @@
         img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
         
         cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        cell.iconImageView.tintColor = UIColor.buttonBgColorTertiary;
+        cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
         
         if ([_poiData[indexPath.row] isEqualToString:_currentIcon])
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColor.iconColorActive.CGColor;
-            cell.iconImageView.tintColor = UIColor.buttonTextColorPrimary;
+            cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
+            cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
             cell.iconView.backgroundColor = UIColorFromRGB(_currentColor);
         }
         else
@@ -302,8 +303,8 @@
             
             cell.backView.layer.borderWidth = 0;
             cell.backView.layer.borderColor = [UIColor clearColor].CGColor;
-            cell.iconView.backgroundColor = UIColor.contextMenuButtonBgColor;
-            cell.iconImageView.tintColor = UIColor.buttonTextColorSecondary;
+            cell.iconView.backgroundColor = [UIColor colorNamed:ACColorNameContextMenuButtonBg];
+            cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
         }
         if ([self isDirectionRTL])
             [cell.contentView setTransform:CGAffineTransformMakeScale(-1, 1)];

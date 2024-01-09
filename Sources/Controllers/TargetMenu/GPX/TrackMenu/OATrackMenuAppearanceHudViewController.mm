@@ -38,6 +38,7 @@
 #import "OARouteStatisticsHelper.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kColorsSection 1
 
@@ -276,7 +277,7 @@
 - (void)setupView
 {
     self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_appearance"];
-    self.titleIconView.tintColor = UIColor.iconColorSecondary;
+    self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
 
     [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
     [self.doneButton setAttributedTitle:
@@ -312,7 +313,7 @@
         kTableKey: @"all_colors",
         kCellType: [OASimpleTableViewCell getCellIdentifier],
         kCellTitle: OALocalizedString(@"shared_string_all_colors"),
-        kCellTintColor: UIColor.iconColorActive
+        kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 }
 
@@ -614,7 +615,7 @@
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.doneButton.userInteractionEnabled = isAvailable;
-    [self.doneButton setTitleColor:isAvailable ? UIColor.iconColorActive : UIColor.iconColorDisabled
+    [self.doneButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled]
                            forState:UIControlStateNormal];
 }
 
@@ -768,9 +769,9 @@
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         return cell;
     }
@@ -819,11 +820,11 @@
 
             cell.descView.text = cellData.desc;
             cell.descView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.descView.textColor = UIColor.textColorSecondary;
+            cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
             cell.extraDescView.text = extraDesc;
             cell.extraDescView.font = [UIFont scaledSystemFontOfSize:[cellData.values[@"desc_font_size"] intValue]];
-            cell.extraDescView.textColor = UIColor.textColorSecondary;
+            cell.extraDescView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
 
         if ([cell needsUpdateConstraints])
@@ -877,7 +878,7 @@
             [cell makeSmallMargins:indexPath.row != [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1];
             cell.textView.text = cellData.title;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-            cell.textView.textColor = UIColor.textColorSecondary;
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         outCell = cell;
     }
@@ -892,17 +893,17 @@
             cell = (OASegmentedControlCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.backgroundColor = UIColor.groupBgColor;
-            cell.segmentedControl.backgroundColor = [UIColor.buttonBgColorPrimary colorWithAlphaComponent:.1];
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.segmentedControl.backgroundColor = [[UIColor colorNamed:ACColorNameButtonBgColorPrimary] colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
 
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorPrimary}
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonTextColorPrimary]}
                                                  forState:UIControlStateSelected];
-            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorSecondary,
+            [cell.segmentedControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonTextColorSecondary],
                                                                        NSFontAttributeName : [UIFont scaledBoldSystemFontOfSize:15.0f]}
                                                  forState:UIControlStateNormal];
 
-            cell.segmentedControl.selectedSegmentTintColor = UIColor.buttonBgColorPrimary;
+            cell.segmentedControl.selectedSegmentTintColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
         }
         if (cell)
         {
@@ -952,8 +953,8 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.groupBgColor;
-            cell.dividerColor = UIColor.groupBgColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
             cell.dividerHight = 0.;
@@ -978,7 +979,7 @@
             [cell showLabels:hasTopLabels topRight:hasTopLabels bottomLeft:hasBottomLabels bottomRight:hasBottomLabels];
             cell.topLeftLabel.text = cellData.title;
             cell.topRightLabel.text = cellData.values[@"custom_string_value"];
-            cell.topRightLabel.textColor = UIColor.textColorActive;
+            cell.topRightLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17 weight:UIFontWeightMedium];
             cell.bottomLeftLabel.text = arrayValue.firstObject;
             cell.bottomRightLabel.text = arrayValue.lastObject;
@@ -1006,7 +1007,7 @@
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.textColorPrimary;
+            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         return cell;
     }
@@ -1064,7 +1065,7 @@
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColor.textColorSecondary
+            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
     }];
     vw.label.attributedText = textStr;
     return vw;
@@ -1561,7 +1562,7 @@
                     {
                         [self.tableView reloadData];
                         self.doneButton.userInteractionEnabled = YES;
-                        [self.doneButton setTitleColor:UIColor.iconColorActive
+                        [self.doneButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive]
                                               forState:UIControlStateNormal];
                     }
                     completion:nil];

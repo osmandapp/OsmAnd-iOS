@@ -380,7 +380,7 @@
 "towards" = "către";
 "shared_string_ellipsis" = "…";
 "looking_up_address" = "Se caută adresa";
-"shared_string_clear_all" = "Curăță tot";
+"shared_string_clear_all" = "Șterge tot";
 "offline_edition" = "Editare offline";
 "yard" = "yd";
 "daynight_mode_night" = "Noapte";
@@ -958,7 +958,7 @@
 "shared_string_topbar" = "Bara superioară";
 "no_waypoints_found" = "Nu s-au găsit puncte intermediare";
 "rendering_value_bold_name" = "Groasă";
-"rendering_value_fine_name" = "Fin";
+"rendering_value_fine_name" = "Fină";
 "map_widget_bearing" = "Poziție relativă";
 "map_widget_magnetic_bearing" = "Direcție magnetică";
 "city_type_neighbourhood" = "Vecinătate";
@@ -2061,7 +2061,7 @@
 "track_coloring_solid" = "Solid";
 "attribute" = "Atribut";
 "gpx_split_interval" = "Interval de divizare";
-"reset_to_original" = "Resetare la original";
+"reset_to_original" = "Resetează la original";
 "gpx_join_gaps" = "Alăturați lacunele";
 "gpx_join_gaps_descr" = "Lacunele dintre segmente vor fi conectate.";
 "gpx_split_interval_none_descr" = "Selectați opțiunea de împărțire dorită: în funcție de timp sau de distanță.";
@@ -3040,5 +3040,5 @@
 "help_article_navigation_guidance_name" = "Ghidare";
 "help_article_navigation_guidance_voice_navigation_name" = "Solicitări vocale / Notificări";
 "help_article_navigation_routing_name" = "Parametrii rutei";
-"help_article_navigation_routing_bicycle_based_routing_name" = "Traseu pentru biciclete (MTB)";
-"help_article_navigation_routing_boat_navigation_name" = "Traseu pentru bărci";
+"help_article_navigation_routing_bicycle_based_routing_name" = "Rutare pentru biciclete (MTB)";
+"help_article_navigation_routing_boat_navigation_name" = "Rutare pentru bărci";

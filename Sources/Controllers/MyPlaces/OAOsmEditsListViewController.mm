@@ -343,14 +343,14 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         if (@available(iOS 16.0, *))
             [_uploadButton setHidden:YES];
         else
-            [self.navigationItem setRightBarButtonItems:@[_deleteButton] animated:YES];
+            [_uploadButton setEnabled:NO];
     }
     else
     {
         if (@available(iOS 16.0, *))
             [_uploadButton setHidden:NO];
         else
-            [self.navigationItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
+            [_uploadButton setEnabled:YES];
 
         NSArray *indexes = [self.tableView indexPathsForSelectedRows];
         if (indexes.count > 0)
@@ -392,14 +392,14 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         if (@available(iOS 16.0, *))
             [_deleteButton setHidden:YES];
         else
-            [self.navigationItem setRightBarButtonItems:@[_uploadButton] animated:YES];
+            [_deleteButton setEnabled:NO];
     }
     else
     {
         if (@available(iOS 16.0, *))
-            [_uploadButton setHidden:NO];
+            [_deleteButton setHidden:NO];
         else
-            [self.navigationItem setRightBarButtonItems:@[_uploadButton, _deleteButton] animated:YES];
+            [_deleteButton setEnabled:YES];
 
         NSArray *indexes = [self.tableView indexPathsForSelectedRows];
         NSMutableArray *edits = [NSMutableArray new];

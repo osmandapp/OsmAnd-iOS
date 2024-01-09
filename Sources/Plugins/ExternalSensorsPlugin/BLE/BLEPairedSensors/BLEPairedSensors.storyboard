@@ -76,7 +76,7 @@
                                                 <constraint firstAttribute="trailing" secondItem="mtf-4U-yJJ" secondAttribute="trailing" constant="16" id="uVZ-iJ-GhF"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBgColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <connections>
                                             <outlet property="connectStatusLabel" destination="b6T-qF-BhX" id="dfb-Rz-s3M"/>
                                             <outlet property="deviceImageView" destination="pu1-Zc-sYK" id="FUM-51-HuW"/>
@@ -113,7 +113,7 @@
         <namedColor name="active">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">

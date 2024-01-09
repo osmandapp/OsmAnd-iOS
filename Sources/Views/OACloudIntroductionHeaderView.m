@@ -9,6 +9,7 @@
 #import "OACloudIntroductionHeaderView.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kBorderWidth 2.
 
@@ -90,7 +91,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        self.bannerMainImageView.layer.borderColor = UIColor.buttonBgColorTertiary.CGColor;
+        self.bannerMainImageView.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary].CGColor;
 }
 
 - (CGFloat)getCompoundImageWidth:(NSInteger)count
@@ -172,7 +173,7 @@
     
     // Add border to main image
     self.bannerMainImageView.layer.borderWidth = kBorderWidth;
-    self.bannerMainImageView.layer.borderColor = UIColor.buttonBgColorTertiary.CGColor;
+    self.bannerMainImageView.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary].CGColor;
 }
 
 - (CGFloat)calculateViewHeight

@@ -26,6 +26,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OARouteParametersViewController () <OARoutePreferencesParametersDelegate>
 
@@ -418,12 +419,12 @@
         {
             cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon].imageFlippedForRightToLeftLayoutDirection : [item[@"icon"] imageFlippedForRightToLeftLayoutDirection];
             if (param && ![param isSelected] && ![item.allKeys containsObject:@"icon"])
-                cell.leftIconView.tintColor = UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             else
                 cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
 
             if ([item[@"key"] isEqualToString:@"recalculateRoute"])
-                cell.leftIconView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? UIColor.iconColorDisabled : UIColorFromRGB(_iconColor);
+                cell.leftIconView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : UIColorFromRGB(_iconColor);
 
             cell.titleLabel.text = param ? [param getText] : item[@"title"];
             cell.valueLabel.text = param
@@ -448,7 +449,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }
@@ -481,7 +482,7 @@
                 cell.switchView.on = [v boolValue];
                 [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             }
-            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
         }
         return cell;

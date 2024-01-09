@@ -70,7 +70,7 @@ final class DescriptionDeviceHeader: UIView {
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
             deviceImageView.image = device.getServiceConnectedImage.noir
             configureConnectButtonTitle(with: .connected)
-            imageContainerView.backgroundColor = UIColor.viewBgColor
+            imageContainerView.backgroundColor = UIColor.viewBg
         }
     }
     

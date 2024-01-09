@@ -10,6 +10,7 @@
 #import "OATableDataModel.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OABaseButtonsViewController ()
 
@@ -206,11 +207,11 @@
     switch ([self getBottomColorScheme])
     {
         case EOABaseBottomColorSchemeBlank:
-            return UIColor.viewBgColor;
+            return [UIColor colorNamed:ACColorNameViewBg];
         case EOABaseBottomColorSchemeGray:
-            return UIColor.groupBgColor;
+            return [UIColor colorNamed:ACColorNameGroupBg];
         case EOABaseBottomColorSchemeWhite:
-            return UIColor.groupBgColor;
+            return [UIColor colorNamed:ACColorNameGroupBg];
         default:
             return nil;
     }
@@ -221,14 +222,14 @@
     switch (scheme)
     {
         case EOABaseButtonColorSchemeInactive:
-            return UIColor.textColorSecondary;
+            return [UIColor colorNamed:ACColorNameTextColorSecondary];
         case EOABaseButtonColorSchemeGrayAttn:
-            return UIColor.buttonBgColorDisruptive;
+            return [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         case EOABaseButtonColorSchemePurple:
         case EOABaseButtonColorSchemeRed:
-            return UIColor.buttonTextColorPrimary;
+            return [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
         default:
-            return UIColor.buttonTextColorSecondary;
+            return [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
     }
 }
 
@@ -240,11 +241,11 @@
     switch (scheme)
     {
         case EOABaseButtonColorSchemePurple:
-            return UIColor.buttonBgColorPrimary;
+            return [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
         case EOABaseButtonColorSchemeRed:
-            return UIColor.buttonBgColorDisruptive;
+            return [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         default:
-            return UIColor.buttonBgColorDisabled;
+            return [UIColor colorNamed:ACColorNameButtonBgColorDisabled];
     }
 }
 

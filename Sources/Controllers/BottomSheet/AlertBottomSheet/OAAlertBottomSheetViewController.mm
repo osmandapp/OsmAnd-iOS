@@ -16,6 +16,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "OATextLineViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kVerticalMargin 18.
 #define kHorizontalMargin 20.
@@ -214,7 +215,7 @@
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : title,
                 @"img" : image,
-                @"tintColor" : UIColor.iconColorActive,
+                @"tintColor" : [UIColor colorNamed:ACColorNameIconColorActive],
                 @"key" : [NSString stringWithFormat:@"%d", i]
             }];
         }
@@ -246,7 +247,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.textColorPrimary;
+            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -269,7 +270,7 @@
                 }
             }
             cell.separatorView.hidden = indexPath.row == _data[indexPath.section].count - 1;
-            cell.separatorView.backgroundColor = UIColor.separatorColor;
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         return cell;
     }
@@ -286,7 +287,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor textColorPrimary]];
+            [cell.textView setTextColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
             [cell.textView setText:item[@"title"]];
         }
         return cell;

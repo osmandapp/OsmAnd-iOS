@@ -31,6 +31,7 @@
 #import "OARouteStatisticsModeCell.h"
 #import "OAStatisticsSelectionBottomSheetViewController.h"
 #import "OAGPXDatabase.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <Charts/Charts-Swift.h>
 
@@ -196,7 +197,7 @@
     [self generateData];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    _tableView.backgroundColor = UIColor.groupBgColor;
+    _tableView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     [_tableView setScrollEnabled:NO];
     _tableView.rowHeight = UITableViewAutomaticDimension;

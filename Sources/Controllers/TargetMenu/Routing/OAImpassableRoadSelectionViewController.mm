@@ -19,6 +19,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -84,7 +85,7 @@
     [_tableView setScrollEnabled:NO];
     [_tableView setAllowsSelectionDuringEditing:YES];
     
-    UIColor *eleTint = UIColor.iconColorDefault;
+    UIColor *eleTint = [UIColor colorNamed:ACColorNameIconColorDefault];
     _eleUpImageView.image = [_eleUpImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _eleDownImageView.image = [_eleDownImageView.image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     _eleUpImageView.tintColor = eleTint;
@@ -138,8 +139,8 @@
     rightBtnFrame.size.width = leftBtnFrame.size.width;
     _selectButton.frame = rightBtnFrame;
     
-    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:UIColor.buttonTextColorSecondary];
-    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:UIColor.buttonTextColorPrimary];
+    [self setupButtonAppearance:_clearAllButton iconName:@"ic_custom_clear_list" color:[UIColor colorNamed:ACColorNameButtonTextColorSecondary]];
+    [self setupButtonAppearance:_selectButton iconName:@"ic_custom_add" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color

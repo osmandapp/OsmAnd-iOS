@@ -33,6 +33,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
@@ -135,8 +136,8 @@
 - (void) setupView
 {
     self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
-    self.tableView.tableHeaderView.backgroundColor = UIColor.viewBgColor;
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:OALocalizedString(@"select_avoid_descr") font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     [self.tableView reloadData];
 }
 

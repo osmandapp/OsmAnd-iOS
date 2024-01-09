@@ -33,6 +33,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAFoldersCollectionView.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAllFoldersIndex 0
 #define kVerticalMargin 16.
@@ -314,10 +315,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAGPXTrackCell getCellIdentifier] owner:self options:nil];
             cell = (OAGPXTrackCell *)[nib objectAtIndex:0];
-            cell.separatorView.backgroundColor = UIColor.separatorColor;
-            cell.distanceImageView.tintColor = UIColor.textColorSecondary;
-            cell.timeImageView.tintColor = UIColor.textColorSecondary;
-            cell.wptImageView.tintColor = UIColor.textColorSecondary;
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         if (cell)
         {
@@ -357,7 +358,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = UIColor.separatorColor;
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 0.5;
         }

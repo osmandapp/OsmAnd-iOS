@@ -23,9 +23,9 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="AUI-Xp-W80">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <color key="tintColor" name="iconColorActive"/>
-                    <color key="separatorColor" name="separatorColor"/>
+                    <color key="separatorColor" name="customSeparator"/>
                 </tableView>
                 <wkWebView hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7OW-mp-1he">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
@@ -37,7 +37,7 @@
                 </wkWebView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="90n-Yy-Nq3"/>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="90n-Yy-Nq3" firstAttribute="trailing" secondItem="7OW-mp-1he" secondAttribute="trailing" id="2uJ-cE-Cad"/>
                 <constraint firstAttribute="bottom" secondItem="7OW-mp-1he" secondAttribute="bottom" id="7H4-Rp-nq2"/>
@@ -52,14 +52,14 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

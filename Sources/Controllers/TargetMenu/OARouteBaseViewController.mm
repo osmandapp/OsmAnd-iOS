@@ -22,7 +22,7 @@
 #import "OATransportRoutingHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OAGPXDatabase.h"
-
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <Charts/Charts-Swift.h>
 
@@ -484,7 +484,7 @@
 + (NSAttributedString *) getFormattedElevationString:(OAGPXTrackAnalysis *)analysis
 {
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
-    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: UIColor.textColorSecondary };
+    NSDictionary *textAttrs = @{ NSFontAttributeName: textFont, NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary] };
     if (analysis)
     {
         NSMutableAttributedString *res = [NSMutableAttributedString new];
@@ -494,21 +494,21 @@
         arrowUpAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *uphillIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                  [NSAttributedString attributedStringWithAttachment:arrowUpAttachment]];
-        [uphillIcon setColor:UIColor.iconColorDefault forString:uphillIcon.string];
+        [uphillIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:uphillIcon.string];
 
         NSTextAttachment *arrowDownAttachment = [[NSTextAttachment alloc] init];
         arrowDownAttachment.image = [UIImage templateImageNamed:@"ic_small_downhill"];
         arrowDownAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *downhilIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:arrowDownAttachment]];
-        [downhilIcon setColor:UIColor.iconColorDefault forString:downhilIcon.string];
+        [downhilIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:downhilIcon.string];
 
         NSTextAttachment *rangeAttachment = [[NSTextAttachment alloc] init];
         rangeAttachment.image = [UIImage templateImageNamed:@"ic_small_altitude_range"];
         rangeAttachment.bounds = CGRectMake(0., roundf(textFont.capHeight - 18.)/2.f, 18., 18.);
         NSMutableAttributedString *elevationIcon = [[NSMutableAttributedString alloc] initWithAttributedString:
                                                   [NSAttributedString attributedStringWithAttachment:rangeAttachment]];
-        [elevationIcon setColor:UIColor.iconColorDefault forString:elevationIcon.string];
+        [elevationIcon setColor:[UIColor colorNamed:ACColorNameIconColorDefault] forString:elevationIcon.string];
 
         [res appendAttributedString:uphillIcon];
         [res appendAttributedString:[[NSAttributedString alloc] initWithString:
@@ -537,8 +537,8 @@
 {
     OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
 
-    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.textColorPrimary};
-    NSDictionary *alphabeticAttributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3], NSForegroundColorAttributeName : UIColor.textColorSecondary };
+    NSDictionary *numericAttributes = @{NSFontAttributeName: [UIFont scaledSystemFontOfSize:20 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
+    NSDictionary *alphabeticAttributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] };
     NSString *dist = [OAOsmAndFormatter getFormattedDistance:[routingHelper getLeftDistance]];
     NSAttributedString *distance = [self formatDistance:dist numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];
     NSAttributedString *time = [self getFormattedTimeInterval:[routingHelper getLeftTime] numericAttributes:numericAttributes alphabeticAttributes:alphabeticAttributes];

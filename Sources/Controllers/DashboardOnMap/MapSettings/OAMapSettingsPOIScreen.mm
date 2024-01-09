@@ -17,6 +17,7 @@
 #import "OARootViewController.h"
 #import "OAQuickSearchTableController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     EOAPoiRowTypeButton,
@@ -148,9 +149,9 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
         {
             cell.leftIconView.image = [item.icon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
             cell.leftIconView.contentMode = UIViewContentModeCenter;
-            cell.leftIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.text = item.title ? title : @"";
-            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
         return cell;
     }
@@ -169,7 +170,7 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
             icon = [OAUtilities getMxIcon:@"user_defined"];
         OASimpleTableViewCell *cell = [OAQuickSearchTableController getIconTextDescCell:name tableView:self.tblView typeName:@"" icon:icon];
         [self prepareCell:cell uiFilter:filter];
-        cell.titleLabel.textColor = UIColor.textColorPrimary;
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         return cell;
     }
     return nil;

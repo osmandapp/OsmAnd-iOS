@@ -17,6 +17,7 @@
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kDescriptionImageCell 0
 #define kInfoCreatedOnCell 0
@@ -243,7 +244,7 @@
     return [OAUtilities createAttributedString:
                     [[OAWikiArticleHelper getFirstParagraph:_description] componentsSeparatedByCharactersInSet:[NSCharacterSet newlineCharacterSet]][0]
                                           font:[UIFont preferredFontForTextStyle:UIFontTextStyleBody]
-                                         color:UIColor.textColorPrimary
+                                         color:[UIColor colorNamed:ACColorNameTextColorPrimary]
                                    strokeColor:nil
                                    strokeWidth:0
                                      alignment:NSTextAlignmentNatural];
@@ -307,7 +308,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"add_description"),
             kCellToggle: @YES,
-            kCellTintColor: UIColor.iconColorActive
+            kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 }
 
@@ -328,7 +329,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"context_menu_edit_descr"),
             kCellToggle: @YES,
-            kCellTintColor: UIColor.iconColorActive
+            kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 }
 
@@ -340,7 +341,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellTitle: OALocalizedString(@"read_full_description"),
             kCellToggle: @YES,
-            kCellTintColor: UIColor.iconColorActive
+            kCellTintColor: [UIColor colorNamed:ACColorNameIconColorActive]
     }];
 }
 

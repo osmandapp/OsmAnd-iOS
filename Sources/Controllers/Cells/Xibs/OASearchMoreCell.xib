@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -28,7 +28,7 @@
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>
-                <color key="backgroundColor" name="groupBgColor"/>
+                <color key="backgroundColor" name="groupBg"/>
                 <constraints>
                     <constraint firstAttribute="trailingMargin" secondItem="CLf-0t-OfS" secondAttribute="trailing" id="7So-8J-uYt"/>
                     <constraint firstItem="CLf-0t-OfS" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="15" id="Fpr-5y-hc3"/>
@@ -37,7 +37,7 @@
                     <constraint firstAttribute="bottom" secondItem="CLf-0t-OfS" secondAttribute="bottom" constant="15" id="fW7-hB-YxI"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="textView" destination="CLf-0t-OfS" id="RaC-NQ-r1E"/>
             </connections>
@@ -45,6 +45,9 @@
         </tableViewCell>
     </objects>
     <resources>
+        <namedColor name="groupBg">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="groupBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

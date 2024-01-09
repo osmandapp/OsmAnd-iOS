@@ -8,6 +8,7 @@
 
 #import "OATableViewCustomHeaderView.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define defaultXOffset 16.0
 #define defaultYOffset 17.0
@@ -68,14 +69,14 @@
     _label.scrollEnabled = NO;
     _label.userInteractionEnabled = YES;
     _label.selectable = YES;
-    _label.textColor = UIColor.textColorSecondary;
+    _label.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     _label.dataDetectorTypes = UIDataDetectorTypeLink;
     _label.textContainerInset = UIEdgeInsetsZero;
     _label.textContainer.lineFragmentPadding = 0;
     _label.textContainer.maximumNumberOfLines = 0;
     _label.textContainer.lineBreakMode = NSLineBreakByWordWrapping;
     
-    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
+    NSDictionary *linkAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive]};
     _label.linkTextAttributes = linkAttributes;
     
     [self.contentView addSubview:_label];

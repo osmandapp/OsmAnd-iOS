@@ -26,6 +26,7 @@
 #import "OADestinationItemsListViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -80,7 +81,7 @@
     [arr addObject:@{
         @"title" : OALocalizedString(@"favorites_item"),
         @"key" : @"favorites",
-        @"color" : UIColor.iconColorActive,
+        @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"img" : @"ic_custom_favorites"
     }];
     if ([_pointsHelper getHomePoint] && _type != EOADestinationTypeHome)
@@ -89,7 +90,7 @@
         [arr addObject:@{
             @"title" : OALocalizedString(@"favorite_home_category"),
             @"descr" : home.pointDescription.name,
-            @"color" : UIColor.iconColorActive,
+            @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"img" : @"ic_custom_home",
             @"point" : home
         }];
@@ -101,7 +102,7 @@
         [arr addObject:@{
             @"title" : OALocalizedString(@"work_button"),
             @"descr" : work.pointDescription.name,
-            @"color" : UIColor.iconColorActive,
+            @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
             @"img" : @"ic_custom_work",
             @"point" : work
         }];
@@ -128,7 +129,7 @@
     [arr addObject:@{
         @"title" : OALocalizedString(@"map_markers"),
         @"key" : @"markers",
-        @"color" : UIColor.iconColorActive,
+        @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"img" : @"ic_custom_marker"
     }];
     NSArray *markers = [_destinationsHelper sortedDestinationsWithoutParking];
@@ -332,7 +333,7 @@
             if (![item[@"skip_tint"] boolValue])
             {
                 [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-                cell.iconView.tintColor = UIColor.iconColorActive;
+                cell.iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             }
             else
             {
@@ -340,7 +341,7 @@
             }
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorView.hidden = [item[@"round_bottom"] boolValue];
-            cell.separatorView.backgroundColor = UIColor.separatorColor;
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         return cell;
@@ -624,8 +625,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColor.viewBgColor;
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColor.viewBgColor;
+    self.tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.buttonsView.subviews.firstObject.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     [self hideDoneButton];
 }
 

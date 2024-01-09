@@ -28,8 +28,8 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="YtK-gC-49g">
                     <rect key="frame" x="0.0" y="48" width="414" height="848"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
-                    <color key="separatorColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="separatorColor" name="customSeparator"/>
                 </tableView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="yiK-79-oTe" userLabel="Navigation Bar View">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="92"/>
@@ -74,13 +74,13 @@
                         </button>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cu8-8z-YEC" userLabel="Separator View">
                             <rect key="frame" x="0.0" y="91" width="414" height="1"/>
-                            <color key="backgroundColor" name="separatorColor"/>
+                            <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="HGs-j4-hgF"/>
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <constraints>
                         <constraint firstItem="b00-Ny-oNg" firstAttribute="centerY" secondItem="mid-CQ-zi3" secondAttribute="centerY" id="32U-vB-Sxk"/>
                         <constraint firstItem="mid-CQ-zi3" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="hGa-Ro-vvH" secondAttribute="trailing" constant="10" id="7Cj-jt-Tjx"/>
@@ -95,7 +95,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="yH7-8w-lGh"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="YtK-gC-49g" secondAttribute="bottom" id="3hm-fE-1yb"/>
                 <constraint firstItem="yH7-8w-lGh" firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="mid-CQ-zi3" secondAttribute="trailing" constant="16" id="5yv-YA-m2P"/>
@@ -115,14 +115,17 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="viewBg">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

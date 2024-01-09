@@ -64,6 +64,7 @@
 #import "OATrackMenuTabSegments.h"
 #import "OAGPXAppearanceCollection.h"
 #import "MBProgressHUD.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <SafariServices/SafariServices.h>
 #import <Charts/Charts-Swift.h>
@@ -227,7 +228,7 @@
 
     UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
-    self.groupsButton.imageView.tintColor = UIColor.iconColorActive;
+    self.groupsButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.groupsButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     BOOL isRTL = [self.groupsButton isDirectionRTL];
     self.groupsButton.titleEdgeInsets = UIEdgeInsetsMake(0., isRTL ? -4. : 0., 0., isRTL ? 0. : -4.);
@@ -2110,7 +2111,7 @@
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.selectionStyle = cellData.toggle ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = cellData.title;
-            cell.titleLabel.textColor = cellData.tintColor ?: UIColor.textColorPrimary;;
+            cell.titleLabel.textColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];;
         }
         outCell = cell;
     }
@@ -2129,7 +2130,7 @@
             cell.separatorInset =
                     UIEdgeInsetsMake(0., _selectedTab == EOATrackMenuHudSegmentsTab ? self.tableView.frame.size.width : 20., 0., 0.);
 
-            UIColor *tintColor = cellData.tintColor ?: UIColor.textColorPrimary;
+            UIColor *tintColor = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
 
             cell.textLabel.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
@@ -2140,9 +2141,9 @@
             cell.valueLabel.text = cellData.desc;
             
             if (isWebsite)
-                cell.valueLabel.textColor = UIColor.textColorActive;
+                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             else
-                cell.valueLabel.textColor = UIColor.textColorSecondary;
+                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
 
             if (cellData.rightIconName)
             {
@@ -2172,7 +2173,7 @@
         if (cell)
         {
             cell.textView.attributedText = cellData.values[@"attr_string_value"];
-            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive]};
             [cell.textView sizeToFit];
         }
         return cell;
@@ -2189,7 +2190,7 @@
         if (cell)
         {
             cell.textView.text = cellData.title;
-            cell.textView.textColor = UIColor.textColorActive;
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
         outCell = cell;
     }
@@ -2204,16 +2205,16 @@
             cell = (OATitleIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.separatorView.backgroundColor = UIColor.separatorColor;
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
             cell.titleView.font = [cellData.values.allKeys containsObject:@"font_value"]
                     ? cellData.values[@"font_value"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             cell.titleView.text = cellData.title;
-            cell.textColorNormal = cellData.tintColor ?: UIColor.textColorPrimary;
+            cell.textColorNormal = cellData.tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
 
-            cell.iconColorNormal = cellData.tintColor ?: UIColor.iconColorActive;
+            cell.iconColorNormal = cellData.tintColor ?: [UIColor colorNamed:ACColorNameIconColorActive];
             cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
 
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
@@ -2233,8 +2234,8 @@
             cell = (OATitleDescriptionIconRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.textColorPrimary;
-            cell.iconColorNormal = UIColor.iconColorActive;
+            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.iconColorNormal = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -2258,8 +2259,8 @@
             cell = (OATitleSwitchRoundCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
-            cell.textColorNormal = UIColor.textColorActive;
-            cell.separatorView.backgroundColor = UIColor.separatorColor;
+            cell.textColorNormal = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.separatorView.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -2330,9 +2331,9 @@
 
             [cell.optionsButton setImage:[UIImage templateImageNamed:@"ic_custom_overflow_menu"]
                                 forState:UIControlStateNormal];
-            cell.optionsButton.imageView.tintColor = UIColor.iconColorActive;
+            cell.optionsButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
-            cell.arrowIconView.tintColor = UIColor.iconColorActive;
+            cell.arrowIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.arrowIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
             if (!cellData.toggle && [cell isDirectionRTL])
                 cell.arrowIconView.image = cell.arrowIconView.image.imageFlippedForRightToLeftLayoutDirection;
@@ -2433,10 +2434,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARadiusCellEx getCellIdentifier] owner:self options:nil];
             cell = (OARadiusCellEx *) nib[0];
             cell.buttonRight.imageView.layer.cornerRadius = 12;
-            cell.buttonRight.imageView.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:0.1];
-            cell.buttonRight.tintColor = UIColor.iconColorActive;
-            [cell.buttonRight setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
-            [cell.buttonLeft setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
+            cell.buttonRight.imageView.backgroundColor = [[UIColor colorNamed:ACColorNameIconColorActive] colorWithAlphaComponent:0.1];
+            cell.buttonRight.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            [cell.buttonRight setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateNormal];
+            [cell.buttonLeft setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateNormal];
         }
         if (cell)
         {
@@ -2457,7 +2458,7 @@
                 [cell.buttonRight setImage:[OAUtilities getTintableImage:rightIcon] forState:UIControlStateNormal];
                 cell.buttonRight.contentHorizontalAlignment = UIControlContentHorizontalAlignmentRight;
                 cell.buttonRight.imageView.backgroundColor = UIColor.clearColor;
-                cell.buttonRight.imageView.tintColor = UIColor.iconColorActive;
+                cell.buttonRight.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 
                 CGFloat buttonWidth = ((![self isLandscape] ? tableView.frame.size.width
                         : tableView.frame.size.width - [OAUtilities getLeftMargin]) - 40) / 2;
@@ -2487,7 +2488,7 @@
             cell.separatorInset = UIEdgeInsetsZero;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
 
-            UIColor *tintColor = UIColor.iconColorSecondary;
+            UIColor *tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
             cell.topLeftIcon.tintColor = tintColor;
             cell.topRightIcon.tintColor = tintColor;
             cell.bottomLeftIcon.tintColor = tintColor;
@@ -2730,7 +2731,7 @@
         else if (_isHeaderBlurred && scrollView.contentOffset.y <= 0)
         {
             [_headerView removeBlurEffect];
-            _headerView.backgroundColor = UIColor.groupBgColor;
+            _headerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             _isHeaderBlurred = NO;
         }
         if (_selectedTab == EOATrackMenuHudPointsTab && _waypointSortedGroupNames.count > 0)

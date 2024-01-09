@@ -15,6 +15,7 @@
 #import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 
@@ -165,11 +166,11 @@
 {
     NSDictionary *nameAttributes = @{
             NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
-            NSForegroundColorAttributeName : UIColor.textColorPrimary
+            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     NSDictionary *unitAttributes = @{
             NSFontAttributeName : [UIFont scaledSystemFontOfSize:17.0],
-            NSForegroundColorAttributeName : UIColor.textColorSecondary
+            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]
     };
 
     NSMutableAttributedString *attributedString = [NSMutableAttributedString new];

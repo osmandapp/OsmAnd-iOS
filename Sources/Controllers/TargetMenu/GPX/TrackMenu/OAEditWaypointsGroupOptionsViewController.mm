@@ -18,6 +18,7 @@
 #import "OAFavoritesHelper.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAEditWaypointsGroupOptionsViewController() <UITextFieldDelegate, OAColorsTableViewCellDelegate>
 
@@ -176,7 +177,7 @@
                 kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
                 kCellRightIconName: [_tableData.values[@"visible_groups_count"] integerValue] == 0
                 ? @"ic_custom_show" : @"ic_custom_hide",
-                kCellTintColor:UIColor.iconColorActive
+                kCellTintColor:[UIColor colorNamed:ACColorNameIconColorActive]
             }];
             [_tableData.subjects addObject:hideShowAllCellData];
 
@@ -204,7 +205,7 @@
                     kCellType: [OASwitchTableViewCell getCellIdentifier],
                     kCellTitle: groupName,
                     kCellLeftIcon: [UIImage templateImageNamed:visible ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-                    kCellTintColor: visible ? UIColorFromRGB(color) : UIColor.iconColorDisabled,
+                    kCellTintColor: visible ? UIColorFromRGB(color) : [UIColor colorNamed:ACColorNameIconColorDisabled],
                     kTableValues: @{
                         @"visible": @(visible),
                         @"color": UIColorFromRGB(color)
@@ -237,7 +238,7 @@
         [self changeButtonAvailability:_doneBarButton isEnabled:YES];
         [tableData setData:@{
             kCellLeftIcon: [UIImage templateImageNamed:[tableData.values[@"visible"] boolValue] ? @"ic_custom_folder" : @"ic_custom_folder_hidden"],
-            kCellTintColor: [tableData.values[@"visible"] boolValue] ? tableData.values[@"color"] : UIColor.iconColorDisabled
+            kCellTintColor: [tableData.values[@"visible"] boolValue] ? tableData.values[@"color"] : [UIColor colorNamed:ACColorNameIconColorDisabled]
         }];
     }
     else if ([tableData.key isEqualToString:@"hide_show_all"])
@@ -328,7 +329,7 @@
         {
             cell.titleLabel.text = cellData.title;
             cell.valueLabel.text = cellData.desc;
-            cell.valueLabel.tintColor = UIColor.textColorSecondary;
+            cell.valueLabel.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.currentColor = [arrayValue indexOfObject:cellData.values[@"int_value"]];
 
             [cell.collectionView reloadData];

@@ -26,6 +26,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "GeneratedAssetSymbols.h"
 
 #include <QSet>
 
@@ -278,7 +279,7 @@ static NSInteger kButtonsSection;
 - (void)tableView:(UITableView *)tableView willDisplayHeaderView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColor.textColorSecondary];
+    [header.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
@@ -294,7 +295,7 @@ static NSInteger kButtonsSection;
 - (void)tableView:(UITableView *)tableView willDisplayFooterView:(UIView *)view forSection:(NSInteger)section
 {
     UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *)view;
-    [header.textLabel setTextColor:UIColor.textColorSecondary];
+    [header.textLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 }
 
 - (UITableViewCell*) tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -316,7 +317,7 @@ static NSInteger kButtonsSection;
 
             NSString *imgName = _isEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = _isEnabled ? UIColor.iconColorSelected: UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = _isEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_isEnabled];
@@ -351,7 +352,7 @@ static NSInteger kButtonsSection;
                 caption = onlineSource.mapSource.name;
                 description = OALocalizedString(@"online_map");
                 cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map_online"];
-                cell.leftIconView.tintColor = UIColor.iconColorSelected;
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             }
         }
         
@@ -363,7 +364,7 @@ static NSInteger kButtonsSection;
             description = sqlite.isOnline ? OALocalizedString(@"online_raster_map") : OALocalizedString(@"offline_raster_map");
             size = [NSByteCountFormatter stringFromByteCount:sqlite.size countStyle:NSByteCountFormatterCountStyleFile];
             cell.leftIconView.image = [UIImage templateImageNamed:@"ic_custom_map"];
-            cell.leftIconView.tintColor = UIColor.iconColorSelected;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         }
         
         cell.titleLabel.text = caption;
@@ -439,7 +440,7 @@ static NSInteger kButtonsSection;
                 cell.sliderView.value = _app.data.overlayAlpha;
             else if (_mapSettingType == EMapSettingUnderlay)
                 cell.sliderView.value = _app.data.underlayAlpha;
-            cell.valueLabel.textColor = UIColor.textColorSecondary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
         }
         return cell;

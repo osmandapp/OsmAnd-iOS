@@ -14,6 +14,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -122,7 +123,7 @@
                title:(NSString *)title
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
-            ? UIColor.groupBgColor : UIColor.viewBgColor;
+    ? [UIColor colorNamed:ACColorNameGroupBg] : [UIColor colorNamed:ACColorNameViewBg];
 
     self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab;
 
@@ -130,7 +131,7 @@
     {
         [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
         self.titleIconView.image = icon;
-        self.titleIconView.tintColor = UIColor.iconColorSecondary;
+        self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     }
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
@@ -147,8 +148,8 @@
         if (!self.directionContainerView.hidden)
         {
             self.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-            self.directionIconView.tintColor = UIColor.iconColorActive;
-            self.directionTextView.textColor = UIColor.textColorActive;
+            self.directionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
 
         if (gpxLocation.latitude != DBL_MAX)
@@ -156,9 +157,9 @@
             OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:gpxLocation.latitude
                                                                  lon:gpxLocation.longitude];
             self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
-            self.regionIconView.tintColor = UIColor.iconColorSecondary;
+            self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
             [self.regionTextView setText:worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName];
-            self.regionTextView.textColor = UIColor.textColorSecondary;
+            self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else
         {
@@ -587,7 +588,7 @@
     {
         [cell.valueView setText:cellData.values[@"string_value"]];
         cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-        cell.iconView.tintColor = UIColor.iconColorSecondary;
+        cell.iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
         [cell.titleView setText:cellData.title];
 
         cell.separatorView.hidden = [cell isDirectionRTL]

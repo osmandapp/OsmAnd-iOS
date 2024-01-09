@@ -14,6 +14,7 @@
 #import "OATrackMenuTabPoints.h"
 #import "OATrackMenuTabActions.h"
 #import "OATrackMenuTabSegments.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OATrackMenuUIBuilder ()
 
@@ -105,12 +106,12 @@
                                                              image:[tab getTabIcon]
                                                                tag:[tab getTabMode]];
     [tabBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColor.textColorSecondary,
+            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary],
             NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]
     } forState:UIControlStateNormal];
 
     [tabBarItem setTitleTextAttributes:@{
-            NSForegroundColorAttributeName: UIColor.textColorActive,
+            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive],
             NSFontAttributeName: [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1]
     } forState:UIControlStateSelected];
 

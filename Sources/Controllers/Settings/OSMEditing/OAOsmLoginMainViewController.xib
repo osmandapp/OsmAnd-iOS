@@ -45,7 +45,7 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <constraints>
                         <constraint firstItem="k1E-d8-DFj" firstAttribute="leading" secondItem="AsI-Ne-V1n" secondAttribute="leadingMargin" constant="8" id="dmE-Bn-XV3"/>
                         <constraint firstAttribute="bottom" secondItem="k1E-d8-DFj" secondAttribute="bottom" constant="10" id="zqf-s5-mT0"/>
@@ -160,7 +160,7 @@ You can log in using the safe OAuth method or use your login and password.</stri
                 </scrollView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="bdg-7Y-Gdc"/>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="Ntb-xu-L5o" firstAttribute="trailing" secondItem="NVL-sV-vRh" secondAttribute="trailing" id="0DE-3K-CCT"/>
                 <constraint firstItem="AsI-Ne-V1n" firstAttribute="bottom" secondItem="bdg-7Y-Gdc" secondAttribute="top" constant="44" id="4IV-h3-USp"/>
@@ -193,7 +193,7 @@ You can log in using the safe OAuth method or use your login and password.</stri
         <namedColor name="buttonTextColorSecondary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">

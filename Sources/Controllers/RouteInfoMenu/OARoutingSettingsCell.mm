@@ -15,6 +15,7 @@
 #import "OARoutingHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OARoutingSettingsCell
 {
@@ -43,7 +44,7 @@
 {
     btn.layer.cornerRadius = 6.;
     btn.layer.borderWidth = 1.;
-    btn.layer.borderColor = UIColor.separatorColor.CGColor;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 }
 - (void) layoutSubviews
 {

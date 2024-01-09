@@ -197,11 +197,11 @@
 
             cell.titleView.text = item[@"title"];
             cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.iconColorNormal = [vwController.types isEqual:types] ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+            cell.iconColorNormal = [UIColor colorNamed:[vwController.types isEqual:types] ? ACColorNameIconColorActive : ACColorNameIconColorDisabled];
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
 
             BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSpeed)] || [types containsObject:@(GPXDataSetTypeSensorSpeed)];
-            cell.textColorNormal = [item[@"hasData"] boolValue] && ((isSpeed && vwController.analysis.hasSpeedData) || !isSpeed) ? UIColor.textColorPrimary : UIColor.buttonBgColorTertiary;
+            cell.textColorNormal = [UIColor colorNamed:[item[@"hasData"] boolValue] && ((isSpeed && vwController.analysis.hasSpeedData) || !isSpeed) ? ACColorNameTextColorPrimary : ACColorNameButtonBgColorTertiary];
         }
         return cell;
     }

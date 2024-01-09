@@ -14,6 +14,7 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
@@ -507,21 +508,21 @@
     switch (dst)
     {
         case GPXDataSetTypeAltitude:
-            return UIColor.chartTextColorElevation;
+            return [UIColor colorNamed:ACColorNameChartTextColorElevation];
         case GPXDataSetTypeSpeed:
-            return UIColor.chartTextColorSpeed;
+            return [UIColor colorNamed:ACColorNameChartTextColorSpeed];
         case GPXDataSetTypeSlope:
-            return UIColor.chartTextColorSlope;
+            return [UIColor colorNamed:ACColorNameChartTextColorSlope];
         case GPXDataSetTypeSensorSpeed:
-            return UIColor.chartTextColorSpeedSensor;
+            return [UIColor colorNamed:ACColorNameChartTextColorSpeedSensor];
         case GPXDataSetTypeSensorHeartRate:
-            return UIColor.chartTextColorHeartRate;
+            return [UIColor colorNamed:ACColorNameChartTextColorHeartRate];
         case GPXDataSetTypeSensorBikePower:
-            return UIColor.chartTextColorBicyclePower;
+            return [UIColor colorNamed:ACColorNameChartTextColorBicyclePower];
         case GPXDataSetTypeSensorBikeCadence:
-            return UIColor.chartTextColorBicycleCadence;
+            return [UIColor colorNamed:ACColorNameChartTextColorBicycleCadence];
         case GPXDataSetTypeSensorTemperature:
-            return UIColor.chartTextColorTemperature;
+            return [UIColor colorNamed:ACColorNameChartTextColorTemperature];
         default:
             return nil;
     }
@@ -532,21 +533,21 @@
     switch (dst)
     {
         case GPXDataSetTypeAltitude:
-            return UIColor.chartLineColorElevation;
+            return [UIColor colorNamed:ACColorNameChartLineColorElevation];
         case GPXDataSetTypeSpeed:
-            return UIColor.chartLineColorSpeed;
+            return [UIColor colorNamed:ACColorNameChartLineColorSpeed];
         case GPXDataSetTypeSlope:
-            return UIColor.chartLineColorSlope;
+            return [UIColor colorNamed:ACColorNameChartLineColorSlope];
         case GPXDataSetTypeSensorSpeed:
-            return UIColor.chartLineColorSpeedSensor;
+            return [UIColor colorNamed:ACColorNameChartLineColorSpeedSensor];
         case GPXDataSetTypeSensorHeartRate:
-            return UIColor.chartLineColorHeartRate;
+            return [UIColor colorNamed:ACColorNameChartLineColorHeartRate];
         case GPXDataSetTypeSensorBikePower:
-            return UIColor.chartLineColorBicyclePower;
+            return [UIColor colorNamed:ACColorNameChartLineColorBicyclePower];
         case GPXDataSetTypeSensorBikeCadence:
-            return UIColor.chartLineColorBicycleCadence;
+            return [UIColor colorNamed:ACColorNameChartLineColorBicycleCadence];
         case GPXDataSetTypeSensorTemperature:
-            return UIColor.chartLineColorTemperature;
+            return [UIColor colorNamed:ACColorNameChartLineColorTemperature];
         default:
             return nil;
     }

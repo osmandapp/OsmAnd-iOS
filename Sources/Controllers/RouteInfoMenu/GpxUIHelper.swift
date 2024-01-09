@@ -975,7 +975,7 @@ import Charts
         let yAxis: YAxis = useRightAxis ? chart.rightAxis : chart.leftAxis
         yAxis.enabled = true
         yAxis.labelTextColor = textColor
-        yAxis.labelBackgroundColor = UIColor.chartAxisValueBgColor
+        yAxis.labelBackgroundColor = UIColor.chartAxisValueBg
         return yAxis
     }
 
@@ -1053,7 +1053,7 @@ import Charts
                 dataSet.highlightEnabled = true
                 dataSet.drawVerticalHighlightIndicatorEnabled = true
                 dataSet.drawHorizontalHighlightIndicatorEnabled = false
-                dataSet.highlightColor = UIColor.chartSliderLineColor
+                dataSet.highlightColor = UIColor.chartSliderLine
             }
             if useRightAxis {
                 dataSet.axisDependency = YAxis.AxisDependency.right

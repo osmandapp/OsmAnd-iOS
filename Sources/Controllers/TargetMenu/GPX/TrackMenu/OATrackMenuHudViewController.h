@@ -18,9 +18,9 @@
 
 @required
 
-- (void)openAnalysis:(EOARouteStatisticsMode)modeType;
+- (void)openAnalysis:(NSArray<NSNumber *> *)types;
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
-            withMode:(EOARouteStatisticsMode)mode;
+            withTypes:(NSArray<NSNumber *> *)types;
 - (OAGPXTrackAnalysis *)getGeneralAnalysis;
 
 - (OATrkSegment *)getGeneralSegment;
@@ -99,7 +99,7 @@
 
 @property (nonatomic, assign) EOATrackMenuHudTab lastSelectedTab;
 @property (nonatomic, assign) EOATrackMenuHudSegmentsStatisticsTab selectedStatisticsTab;
-@property (nonatomic, assign) EOARouteStatisticsMode routeStatistics;
+@property (nonatomic, assign) NSArray<NSNumber *> *routeStatistics;
 @property (nonatomic) UIImage *trackIcon;
 @property (nonatomic) NSString *gpxFilePath;
 @property (nonatomic, assign) CLLocationCoordinate2D pinLocation;

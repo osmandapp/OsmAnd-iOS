@@ -41,7 +41,6 @@
 {
     OsmAndAppInstance _app;
     OAStatisticsSelectionBottomSheetViewController *vwController;
-    OATargetPointsHelper *_pointsHelper;
     NSArray* _data;
 }
 
@@ -78,50 +77,47 @@
                      @"description" : @""
                      }];
 
-    [arr addObject:@{
-        @"type" : [OATitleIconRoundCell getCellIdentifier],
-        @"title" : OALocalizedString(@"altitude"),
-        @"img" : @"ic_custom_altitude",
-        @"mode" : @(EOARouteStatisticsModeAltitude),
-        @"round_bottom" : @(NO),
-        @"round_top" : @(YES)
-    }];
+    NSMutableArray<NSArray<NSNumber *> *> *allTypes = [NSMutableArray array];
+    [allTypes addObject:@[@(GPXDataSetTypeAltitude)]];
+    [allTypes addObject:@[@(GPXDataSetTypeSlope)]];
+    [allTypes addObject:@[@(GPXDataSetTypeSpeed)]];
+    [allTypes addObject:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
+    [allTypes addObject:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]];
+    [OAPlugin getAvailableGPXDataSetTypes:vwController.analysis availableTypes:allTypes];
 
-    [arr addObject:@{
-        @"type" : [OATitleIconRoundCell getCellIdentifier],
-        @"title" : OALocalizedString(@"shared_string_slope"),
-        @"img" : @"ic_custom_ascent",
-        @"mode" : @(EOARouteStatisticsModeSlope),
-        @"round_bottom" : @(NO),
-        @"round_top" : @(NO)
-    }];
-
-    [arr addObject:@{
+    for (NSInteger i = 0; i < allTypes.count; i++)
+    {
+        NSArray<NSNumber *> *types = allTypes[i];
+        NSString *title = @"";
+        NSString *iconName = @"";
+        BOOL hasData = NO;
+        BOOL roundTop = i == 0;
+        BOOL roundBottom = i == allTypes.count;
+        if (types.count == 2)
+        {
+            title = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_slash"),
+                     [OAGPXDataSetType getTitle:types.firstObject.integerValue],
+                     [OAGPXDataSetType getTitle:types.lastObject.integerValue]];
+            iconName = @"ic_custom_altitude_and_slope";
+            hasData = [vwController.analysis hasData:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]]
+                    || [vwController.analysis hasData:[OAGPXDataSetType getDataKey:types.lastObject.integerValue]];
+        }
+        else
+        {
+            title = [OAGPXDataSetType getTitle:types.firstObject.integerValue];
+            iconName = [OAGPXDataSetType getIconName:types.firstObject.integerValue];
+            hasData = [vwController.analysis hasData:[OAGPXDataSetType getDataKey:types.firstObject.integerValue]];
+        }
+        [arr addObject:@{
             @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : OALocalizedString(@"shared_string_speed"),
-            @"img" : @"ic_action_speed",
-            @"mode" : @(EOARouteStatisticsModeSpeed),
-            @"round_bottom" : @(NO),
-            @"round_top" : @(NO)
-    }];
-
-    [arr addObject:@{
-            @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")],
-            @"img" : @"ic_custom_altitude_and_slope",
-            @"mode" : @(EOARouteStatisticsModeAltitudeSlope),
-            @"round_bottom" : @(NO),
-            @"round_top" : @(NO)
-    }];
-
-    [arr addObject:@{
-            @"type" : [OATitleIconRoundCell getCellIdentifier],
-            @"title" : [NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_speed")],
-            @"img" : @"ic_custom_altitude_and_slope",
-            @"mode" : @(EOARouteStatisticsModeAltitudeSpeed),
-            @"round_bottom" : @(YES),
-            @"round_top" : @(NO)
-    }];
+            @"title" : title,
+            @"img" : iconName,
+            @"types" : types,
+            @"hasData" : @(hasData),
+            @"round_top" : @(roundTop),
+            @"round_bottom" : @(roundBottom)
+        }];
+    }
 
     _data = [NSArray arrayWithArray:arr];
 }
@@ -191,21 +187,21 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleIconRoundCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleIconRoundCell *)[nib objectAtIndex:0];
+            cell.backgroundColor = UIColor.clearColor;
+            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
         {
-            EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [item[@"mode"] integerValue];
-            cell.backgroundColor = UIColor.clearColor;
+            NSArray<NSNumber *> *types = item[@"types"];
 
             cell.titleView.text = item[@"title"];
-            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? [UIColor colorNamed:ACColorNameButtonBgColorTertiary] : [UIColor colorNamed:ACColorNameTextColorPrimary];
-
-            [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            cell.iconColorNormal = vwController.mode == mode ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
-
+            cell.iconView.image = [UIImage templateImageNamed:item[@"img"]];
+            cell.iconColorNormal = [UIColor colorNamed:[vwController.types isEqual:types] ? ACColorNameIconColorActive : ACColorNameIconColorDisabled];
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
-            cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+            BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSpeed)] || [types containsObject:@(GPXDataSetTypeSensorSpeed)];
+            cell.textColorNormal = [UIColor colorNamed:[item[@"hasData"] boolValue] && ((isSpeed && vwController.analysis.hasSpeedData) || !isSpeed) ? ACColorNameTextColorPrimary : ACColorNameButtonBgColorTertiary];
         }
         return cell;
     }
@@ -250,11 +246,12 @@
 {
     if (vwController.delegate)
     {
-        EOARouteStatisticsMode mode = (EOARouteStatisticsMode) [[self getItem:indexPath][@"mode"] integerValue];
-        BOOL isSpeed = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed);
-        if ((isSpeed && vwController.hasSpeed) || !isSpeed)
+        NSDictionary *item = [self getItem:indexPath];
+        NSArray<NSNumber *> *types = item[@"types"];
+        BOOL isSpeed = [types containsObject:@(GPXDataSetTypeSpeed)] || [types containsObject:@(GPXDataSetTypeSensorSpeed)];
+        if ([item[@"hasData"] boolValue] && ((isSpeed && vwController.analysis.hasSpeedData) || !isSpeed))
         {
-            [vwController.delegate onNewModeSelected:mode];
+            [vwController.delegate onTypesSelected:types];
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
             [self.vwController dismiss];
         }
@@ -271,10 +268,10 @@
 
 @implementation OAStatisticsSelectionBottomSheetViewController
 
-- (instancetype)initWithMode:(EOARouteStatisticsMode)mode hasSpeed:(BOOL)hasSpeed
+- (instancetype)initWithTypes:(NSArray<NSNumber *> *)types analysis:(OAGPXTrackAnalysis *)analysis;
 {
-    _mode = mode;
-    _hasSpeed = hasSpeed;
+    _types = types;
+    _analysis = analysis;
     return [super initWithParam:nil];
 }
 

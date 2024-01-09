@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -64,13 +64,13 @@
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="1" estimatedSectionFooterHeight="-1" id="rnN-AE-pZ6">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="772"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <color key="tintColor" name="iconColorActive"/>
-                            <color key="separatorColor" name="separatorColor"/>
+                            <color key="separatorColor" name="customSeparator"/>
                             <color key="sectionIndexBackgroundColor" name="viewBgColor"/>
                         </tableView>
                     </subviews>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="w85-oe-bd8" userLabel="Bottom Toolbar View">
                     <rect key="frame" x="0.0" y="836" width="414" height="60"/>
@@ -79,7 +79,7 @@
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="olN-PV-UVk">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="1"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="separatorColor"/>
+                            <color key="backgroundColor" name="customSeparator"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Il-WM-9Fy">
                             <rect key="frame" x="16" y="9" width="183" height="42"/>
@@ -106,10 +106,10 @@
                             </connections>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <point key="canvasLocation" x="-13.043478260869566" y="826.33928571428567"/>
         </view>
     </objects>
@@ -127,7 +127,10 @@
         <namedColor name="buttonTextColorSecondary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
@@ -139,8 +142,8 @@
         <namedColor name="navBarTextColorPrimary">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="viewBg">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBgColor">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

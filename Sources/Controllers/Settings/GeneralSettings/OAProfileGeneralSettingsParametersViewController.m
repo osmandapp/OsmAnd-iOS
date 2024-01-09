@@ -18,6 +18,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAProfileGeneralSettingsParametersViewController
 {
@@ -467,7 +468,7 @@
             else if (_settingsType != EOAProfileGeneralSettingsMapOrientation)
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = [item[@"selected"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
             else
             {

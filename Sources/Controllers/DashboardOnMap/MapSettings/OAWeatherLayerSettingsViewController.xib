@@ -41,12 +41,12 @@
                         <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="egl-9r-P4T">
                             <rect key="frame" x="0.0" y="198" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fZR-k6-6OL">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                         </view>
                         <view contentMode="scaleToFill" id="MS4-i5-G2V">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="406"/>
@@ -55,14 +55,14 @@
                                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" scrollEnabled="NO" style="grouped" separatorStyle="none" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="d0a-Es-2iQ">
                                     <rect key="frame" x="0.0" y="6" width="414" height="400"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="backgroundColor" name="viewBg"/>
                                     <color key="tintColor" name="iconColorActive"/>
-                                    <color key="separatorColor" name="separatorColor"/>
+                                    <color key="separatorColor" name="customSeparator"/>
                                 </tableView>
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eP3-dk-RgC">
                                     <rect key="frame" x="191" y="4" width="19" height="2"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="separatorColor"/>
+                                    <color key="backgroundColor" name="customSeparator"/>
                                     <userDefinedRuntimeAttributes>
                                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                             <integer key="value" value="1"/>
@@ -72,14 +72,14 @@
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ln3-1G-Qw8">
                                     <rect key="frame" x="0.0" y="6" width="414" height="0.0"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="backgroundColor" name="viewBg"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="48V-qY-OhY"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                 </view>
                 <view opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jnh-4L-tHW" userLabel="Back Button Container">
                     <rect key="frame" x="10" y="58" width="62" height="50"/>
@@ -159,13 +159,13 @@
         <namedColor name="buttonBgColorTertiary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

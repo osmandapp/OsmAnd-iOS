@@ -18,6 +18,7 @@
 #import "OATableRowData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OANavigationTypeViewController
 {
@@ -112,7 +113,7 @@
             BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
             BOOL isSelected = [profile.stringKey isEqual:[self.appMode getRoutingProfile]] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
             cell.accessoryType = isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }

@@ -30,13 +30,13 @@
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VcS-Fc-pad">
                             <rect key="frame" x="0.0" y="139" width="414" height="1"/>
-                            <color key="backgroundColor" name="separatorColor"/>
+                            <color key="backgroundColor" name="customSeparator"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="1" id="Gcm-5q-fYm"/>
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <constraints>
                         <constraint firstItem="VcS-Fc-pad" firstAttribute="leading" secondItem="jz1-Tz-5hg" secondAttribute="leading" id="8Su-o5-qTH"/>
                         <constraint firstAttribute="trailing" secondItem="VcS-Fc-pad" secondAttribute="trailing" id="kGL-d3-Vk9"/>
@@ -46,8 +46,8 @@
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" layoutMarginsFollowReadableWidth="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" bouncesZoom="NO" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="NxV-j7-K2q" customClass="OATableView">
                     <rect key="frame" x="0.0" y="140" width="414" height="756"/>
                     <viewLayoutGuide key="safeArea" id="0I3-dE-M3s"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
-                    <color key="separatorColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="separatorColor" name="customSeparator"/>
                 </tableView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iTI-rR-y60">
                     <rect key="frame" x="10" y="56" width="28" height="28"/>
@@ -77,7 +77,7 @@
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </imageView>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <constraints>
                         <constraint firstItem="lJc-jQ-AR9" firstAttribute="leading" secondItem="Sxc-je-zsT" secondAttribute="leading" constant="5" id="DAY-Tg-th7"/>
                         <constraint firstItem="lJc-jQ-AR9" firstAttribute="top" secondItem="Sxc-je-zsT" secondAttribute="top" constant="5" id="PCV-3g-W8h"/>
@@ -103,7 +103,7 @@
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fdS-FX-c7v"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="NxV-j7-K2q" firstAttribute="leading" secondItem="aGf-14-Bz7" secondAttribute="leading" id="7b8-Ze-agv"/>
                 <constraint firstAttribute="bottom" secondItem="NxV-j7-K2q" secondAttribute="bottom" id="CHp-BO-DmH"/>
@@ -129,19 +129,19 @@
     </objects>
     <resources>
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

@@ -21,6 +21,7 @@
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kIconsAtRestRow 0
 #define kIconsWhileMovingRow 1
@@ -553,7 +554,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.valueLabel.text = item[@"value"];
-            cell.valueLabel.tintColor = UIColor.textColorSecondary;
+            cell.valueLabel.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.currentColor = [_colors indexOfObject:@(_changedProfile.color)];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -623,7 +624,7 @@
 {
     if([view isKindOfClass:[UITableViewHeaderFooterView class]]){
         UITableViewHeaderFooterView * headerView = (UITableViewHeaderFooterView *) view;
-        headerView.textLabel.textColor  = UIColor.textColorSecondary;
+        headerView.textLabel.textColor  = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 

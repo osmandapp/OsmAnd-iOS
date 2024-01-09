@@ -11,6 +11,7 @@
 #import "OALinks.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMarginHor 6.0
 #define kMarginVert 0.0
@@ -56,14 +57,14 @@
 - (void) commonInit
 {
     self.containerView = [[UIView alloc] init];
-    self.containerView.backgroundColor = UIColor.groupBgColor;
+    self.containerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     self.imageView = [[UIImageView alloc] init];
     self.imageView.image = [UIImage templateImageNamed:@"ic_action_message"];
-    self.imageView.tintColor = UIColor.iconColorActive;
+    self.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.imageView sizeToFit];
     
     self.lbTitle = [[OACustomTextView alloc] init];
-    self.lbTitle.backgroundColor = UIColor.groupBgColor;
+    self.lbTitle.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     self.lbTitle.userInteractionEnabled = YES;
     self.lbTitle.editable = NO;
     self.lbTitle.textContainerInset = UIEdgeInsetsZero;
@@ -74,13 +75,13 @@
                                                                              NSCharacterEncodingDocumentAttribute: @(NSUTF8StringEncoding)}
                                                         documentAttributes:nil error:nil];
     [titleStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline] range:NSMakeRange(0, titleStr.length)];
-    [titleStr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:NSMakeRange(0, titleStr.length)];
+    [titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:NSMakeRange(0, titleStr.length)];
     [titleStr enumerateAttributesInRange:NSMakeRange(0, titleStr.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
         if (attrs[@"NSLink"])
         {
             [titleStr removeAttribute:attrs[@"NSLink"] range:range];
             [titleStr addAttribute:NSLinkAttributeName value:kOsmAndGiveaway range:range];
-            [titleStr addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:range];
+            [titleStr addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:range];
             *stop = YES;
         }
     }];
@@ -88,7 +89,7 @@
     self.lbTitle.adjustsFontForContentSizeCategory = YES;
     
     self.btnSubscribe = [UIButton buttonWithType:UIButtonTypeSystem];
-    [self.btnSubscribe setTintColor:UIColor.iconColorActive];
+    [self.btnSubscribe setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     [self.btnSubscribe setTitle:OALocalizedString(@"osm_live_subscribe_btn") forState:UIControlStateNormal];
     self.btnSubscribe.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
     self.btnSubscribe.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
@@ -106,7 +107,7 @@
     self.containerView.layer.shadowOffset = CGSizeMake(0.0, 0.5);
     
     _div = [[CALayer alloc] init];
-    _div.backgroundColor = UIColor.separatorColor.CGColor;
+    _div.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
     [self.containerView.layer addSublayer:_div];
     [self addSubview:self.containerView];
 }
@@ -153,7 +154,7 @@
 
 - (void) updateColorForCALayer
 {
-    _div.backgroundColor = UIColor.separatorColor.CGColor;
+    _div.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 }
 
 @end

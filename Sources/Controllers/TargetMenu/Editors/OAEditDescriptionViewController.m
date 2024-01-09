@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAWebViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAEditDescriptionViewController () <UITableViewDelegate, UITableViewDataSource, UITextViewDelegate>
 
@@ -72,7 +73,7 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     self.tableView.tableFooterView = [[UIView alloc] init];
-    self.tableView.backgroundColor = UIColor.viewBgColor;
+    self.tableView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     
     [self setupView];
 }
@@ -119,16 +120,16 @@
     self.navigationItem.title = _isEditing ? OALocalizedString(@"context_menu_edit_descr") : _isComment ? OALocalizedString(@"poi_dialog_comment") : OALocalizedString(@"shared_string_description");
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = _isEditing ? self.tableView.backgroundColor : UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = _isEditing ? self.tableView.backgroundColor : [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : _isEditing ? UIColor.textColorPrimary : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : _isEditing ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = _isEditing ? UIColor.iconColorActive : UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = _isEditing ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     if (_isEditing)
@@ -195,7 +196,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return _isEditing ? UIStatusBarStyleBlackOpaque : UIStatusBarStyleLightContent;
+    return UIStatusBarStyleLightContent;
 }
 
 // keyboard notifications register+process

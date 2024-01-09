@@ -23,7 +23,7 @@
 #import "OARadiusCellEx.h"
 #import "OAWaypointHeaderCell.h"
 #import "OAWaypointCell.h"
-
+#import "GeneratedAssetSymbols.h"
 #import "OAWaypointHelper.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -711,7 +711,7 @@
         UIImage *deviationImg = nil;
         if (dist > 0 && p.deviationDistance > 0) {
             deviationStr = [NSString stringWithFormat:@"+%@", [OAOsmAndFormatter getFormattedDistance:p.deviationDistance]];
-            UIColor *color = UIColor.textColorSecondary;
+            UIColor *color = [UIColor colorNamed:ACColorNameTextColorSecondary];
             if (p.deviationDirectionRight)
                 deviationImg = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_small_turn_right"] color:color];
             else
@@ -722,7 +722,7 @@
         if (distStr)
         {
             distAttrStr = [[NSMutableAttributedString alloc] initWithString:distStr];
-            UIColor *color =  UIColor.iconColorActive;
+            UIColor *color =  [UIColor colorNamed:ACColorNameIconColorActive];
             [distAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, distStr.length)];
             [distAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, distAttrStr.length)];
         }
@@ -784,7 +784,7 @@
         }
         if (descAttrStr.length > 0)
         {
-            UIColor *color = UIColor.textColorSecondary;
+            UIColor *color = [UIColor colorNamed:ACColorNameTextColorSecondary];
             [descAttrStr addAttribute:NSForegroundColorAttributeName value:color range:NSMakeRange(0, descAttrStr.length)];
             [descAttrStr addAttribute:NSFontAttributeName value:[UIFont preferredFontForTextStyle:UIFontTextStyleCaption1] range:NSMakeRange(0, descAttrStr.length)];
         }

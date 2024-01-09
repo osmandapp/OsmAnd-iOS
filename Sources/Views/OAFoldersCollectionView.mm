@@ -11,6 +11,7 @@
 #import "OACollectionViewCellState.h"
 #import "OACollectionViewFlowLayout.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kCellHeight 36
 #define kImageWidth 38
@@ -229,15 +230,15 @@
         [destCell showImage:hasIcon];
         [destCell.imageView setImage:hasIcon ? [UIImage templateImageNamed:item[@"img"]] : nil];
 
-        UIColor *backgroundColor = UIColor.buttonBgColorTertiary;
+        UIColor *backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
         BOOL selected = [item.allKeys containsObject:@"selected"]
                 ? [item[@"selected"] boolValue]
                 : indexPath.row == _selectionIndex;
         if (selected)
         {
-            backgroundColor = UIColor.buttonBgColorPrimary;
-            destCell.titleLabel.textColor = UIColor.buttonTextColorPrimary;
-            destCell.imageView.tintColor = UIColor.buttonIconColorPrimary;
+            backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+            destCell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonTextColorPrimary];
+            destCell.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonIconColorPrimary];
             destCell.layer.borderWidth = 0.;
             destCell.layer.borderColor = UIColor.clearColor.CGColor;
         }
@@ -246,14 +247,14 @@
             if (available && !enabled)
                 backgroundColor = UIColor.clearColor;
             else if (!available && enabled)
-                backgroundColor = UIColor.buttonBgColorSecondary;
+                backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
 
             destCell.titleLabel.textColor = available
-                    ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary;
+            ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
             destCell.imageView.tintColor = available
-                    ? UIColor.buttonIconColorSecondary : UIColor.textColorSecondary;
+                    ? [UIColor colorNamed:ACColorNameButtonIconColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
             destCell.layer.borderWidth = enabled ? 0. : 1.;
-            destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : UIColor.buttonBgColorSecondary.CGColor;
+            destCell.layer.borderColor = enabled ? UIColor.clearColor.CGColor : [UIColor colorNamed:ACColorNameButtonBgColorSecondary].CGColor;
         }
 
         [cell setBackgroundColor:backgroundColor];
@@ -278,7 +279,7 @@
                               delay:0
                             options:(UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
-                             [cell setBackgroundColor:UIColor.buttonBgColorSecondary];
+                             [cell setBackgroundColor:[UIColor colorNamed:ACColorNameButtonBgColorSecondary]];
                          }
                          completion:nil];
     }
@@ -296,8 +297,8 @@
                             options:(UIViewAnimationOptionAllowUserInteraction)
                          animations:^{
                              [cell setBackgroundColor:indexPath.row == _selectionIndex
-                                     ? UIColor.buttonBgColorPrimary
-                                     : UIColor.buttonBgColorTertiary];
+                                     ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary]
+                                                     : [UIColor colorNamed:ACColorNameButtonBgColorTertiary]];
                          }
                          completion:nil];
     }

@@ -21,6 +21,7 @@
 #import "OASegmentTableViewCell.h"
 #import "OAGPXDocument.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -105,7 +106,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
     [super viewDidLoad];
 
     _sortingMode = EOADistance;
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
 }
 
 #pragma mark - Base UI

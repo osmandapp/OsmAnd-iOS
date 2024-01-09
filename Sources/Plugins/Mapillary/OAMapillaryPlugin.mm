@@ -126,13 +126,11 @@
 
 + (void) installOrOpenMapillary
 {
-    if ([[UIApplication sharedApplication] canOpenURL:[NSURL URLWithString:MAPILLARY_URL_BASE]])
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:MAPILLARY_URL_BASE]];
+    NSURL *url = [NSURL URLWithString:MAPILLARY_URL_BASE];
+    if ([[UIApplication sharedApplication] canOpenURL:url])
+        [[UIApplication sharedApplication] openURL:url options:@{} completionHandler:nil];
     else
-    {
-        OAInstallMapillaryBottomSheetViewController *bottomSheet = [[OAInstallMapillaryBottomSheetViewController alloc] init];
-        [bottomSheet show];
-    }
+        [[[OAInstallMapillaryBottomSheetViewController alloc] init] show];
 }
 
 - (NSArray *)getQuickActionTypes

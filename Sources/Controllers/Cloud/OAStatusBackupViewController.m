@@ -25,6 +25,7 @@
 #import "OABackupError.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAStatusBackupViewController () <UIPageViewControllerDataSource, UIPageViewControllerDelegate, OAOnPrepareBackupListener>
 
@@ -150,15 +151,15 @@
     self.leftBottomButton.userInteractionEnabled = isSyncing && !isPreparing;
     self.leftBottomButton.hidden = !isSyncing;
     [self.leftBottomButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
-    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? UIColor.iconColorActive : UIColor.textColorSecondary];
-    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? UIColor.iconColorActive : UIColor.textColorSecondary
+    [self.leftBottomButton setTintColor:isSyncing && !isPreparing ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [self.leftBottomButton setTitleColor:isSyncing && !isPreparing ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]
                               forState:UIControlStateNormal];
 
     BOOL isEnabled = !isSyncing && !isPreparing && self.rightButtonEnabled;
     self.rightBottomButton.userInteractionEnabled = isEnabled;
     [self.rightBottomButton setTitle:self.rightButtonTitle forState:UIControlStateNormal];
-    [self.rightBottomButton setTintColor:isEnabled ? UIColor.iconColorActive : UIColor.textColorSecondary];
-    [self.rightBottomButton setTitleColor:isEnabled ? UIColor.iconColorActive : UIColor.textColorSecondary
+    [self.rightBottomButton setTintColor:isEnabled ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]];
+    [self.rightBottomButton setTitleColor:isEnabled ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]
                                forState:UIControlStateNormal];
 }
 

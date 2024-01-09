@@ -22,12 +22,12 @@
             <subviews>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsMultipleSelection="YES" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="YtK-gC-49g">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
-                    <color key="separatorColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
+                    <color key="separatorColor" name="customSeparator"/>
                 </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="yH7-8w-lGh"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="YtK-gC-49g" firstAttribute="trailing" secondItem="K3o-j2-Txl" secondAttribute="trailing" id="Fcc-20-cN8"/>
                 <constraint firstItem="YtK-gC-49g" firstAttribute="leading" secondItem="K3o-j2-Txl" secondAttribute="leading" id="ZhN-eX-WSi"/>
@@ -38,10 +38,10 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="separatorColor">
+        <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

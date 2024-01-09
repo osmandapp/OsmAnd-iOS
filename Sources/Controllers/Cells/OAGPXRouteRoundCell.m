@@ -9,6 +9,7 @@
 #import "OAGPXRouteRoundCell.h"
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAGPXRouteRoundCell
 {
@@ -25,10 +26,10 @@
     _timeImageView.image = [UIImage templateImageNamed:@"ic_small_time_start"];
     _wptImageView.image = [UIImage templateImageNamed:@"ic_small_waypoints"];
     
-    _rightIconImageVIew.tintColor = UIColor.iconColorActive;
-    _distanceImageView.tintColor = UIColor.iconColorSecondary;
-    _timeImageView.tintColor = UIColor.iconColorSecondary;
-    _wptImageView.tintColor = UIColor.iconColorSecondary;
+    _rightIconImageVIew.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+    _distanceImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _timeImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
+    _wptImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
 }
 
 - (void) setSelected:(BOOL)selected animated:(BOOL)animated
@@ -40,15 +41,15 @@
 {
     if (highlighted)
     {
-        _contentContainer.backgroundColor = UIColor.iconColorActive;
+        _contentContainer.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
         _fileName.textColor = UIColor.whiteColor;
         [_rightIconImageVIew setTintColor:UIColor.whiteColor];
     }
     else
     {
-        _contentContainer.backgroundColor = UIColor.groupBgColor;
-        _fileName.textColor = UIColor.textColorPrimary;
-        [_rightIconImageVIew setTintColor: UIColor.iconColorActive];
+        _contentContainer.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _fileName.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        [_rightIconImageVIew setTintColor: [UIColor colorNamed:ACColorNameIconColorActive]];
     }
 }
 

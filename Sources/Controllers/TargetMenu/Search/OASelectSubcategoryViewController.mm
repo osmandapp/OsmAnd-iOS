@@ -20,6 +20,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OACustomPOIViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OASelectSubcategoryViewController () <UISearchBarDelegate, OATableViewCellDelegate>
 
@@ -207,13 +208,13 @@
             [cell leftEditButtonVisibility:YES];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.delegate = self;
-            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
             
             UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
             conf.contentInsets = NSDirectionalEdgeInsetsMake(0., -6.5, 0., 0.);
             cell.leftEditButton.configuration = conf;
-            cell.leftEditButton.layer.shadowColor = UIColor.iconColorDefault.CGColor;
+            cell.leftEditButton.layer.shadowColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
             cell.leftEditButton.layer.shadowOffset = CGSizeMake(0., 0.);
             cell.leftEditButton.layer.shadowOpacity = 1.;
             cell.leftEditButton.layer.shadowRadius = 1.;
@@ -243,7 +244,7 @@
             cell = nib[0];
             [cell rightIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.tintColor = UIColor.iconColorActive;
+            cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             UIView *bgColorView = [[UIView alloc] init];
             bgColorView.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.0];
             [cell setSelectedBackgroundView:bgColorView];
@@ -253,7 +254,7 @@
             OAPOIType *poiType = _searchMode && _searchResult.count > indexPath.row ? _searchResult[indexPath.row] : _items[indexPath.row - 1];
             BOOL selected = [_selectedItems containsObject:poiType];
             
-            UIColor *selectedColor = selected ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            UIColor *selectedColor = selected ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.image = self.delegate ? [self.delegate getPoiIcon:poiType] : [UIImage templateImageNamed:@"ic_custom_search_categories"];
             cell.leftIconView.tintColor = selectedColor;
             if (cell.leftIconView.image.size.width < cell.leftIconView.frame.size.width && cell.leftIconView.image.size.height < cell.leftIconView.frame.size.height)

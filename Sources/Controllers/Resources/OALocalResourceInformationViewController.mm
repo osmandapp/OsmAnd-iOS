@@ -19,6 +19,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #include "Localization.h"
 
@@ -45,7 +46,7 @@
     [super viewDidLoad];
 
     _horizontalLine = [CALayer layer];
-    _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+    _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     self.navigationItem.title = OALocalizedString(@"shared_string_details");
 }
 
@@ -63,27 +64,26 @@
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
-    appearance.shadowColor = UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     blurAppearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     if (self.regionTitle)
         self.navigationItem.title = self.regionTitle;
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self applySafeAreaMargins];
 }
 
@@ -92,7 +92,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _horizontalLine.backgroundColor = [UIColor.separatorColor CGColor];
+        _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
 }
 
 -(UIView *) getMiddleView

@@ -83,7 +83,7 @@ final class SensorTextWidget: OATextInfoWidget {
                 settingRow.descr = sensor.device.deviceName
             }
         } else {
-            settingRow.descr = localizedString("shared_string_none")
+            settingRow.descr = localizedString(shouldUseAnyDevice ? "external_device_any_connected" : "shared_string_none")
         }
 
         return data

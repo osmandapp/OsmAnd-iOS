@@ -12,6 +12,13 @@ class SearchDeviceTableViewCell: UITableViewCell {
     @IBOutlet private weak var deviceImageView: UIImageView!
     @IBOutlet private weak var signalIndicatorImageView: UIImageView!
     @IBOutlet private weak var connectStatusLabel: UILabel!
+    @IBOutlet private weak var separatorBottomInsetLeftConstraint: NSLayoutConstraint!
+    
+    var separatorBottomInsetLeft: CGFloat = 0 {
+        didSet {
+            separatorBottomInsetLeftConstraint.constant = separatorBottomInsetLeft
+        }
+    }
     
     func configure(item: Device) {
         deviceNameLabel.text = item.deviceName

@@ -19,6 +19,7 @@
 #import "OAWeatherToolbar.h"
 #import "OAWeatherBandSettingsViewController.h"
 #import "OAMapLayers.h"
+#import "GeneratedAssetSymbols.h"
 
 #import "OASwitchTableViewCell.h"
 #import "OATextLineViewCell.h"
@@ -604,7 +605,7 @@
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = _layerEnabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = _layerEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:_layerEnabled];
@@ -621,7 +622,7 @@
             cell = (OATextLineViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.textView.textAlignment = NSTextAlignmentCenter;
-            cell.textView.textColor = UIColor.textColorSecondary;
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.backgroundColor = UIColor.clearColor;
         }
         if (cell)
@@ -657,9 +658,9 @@
                 else
                     cell.accessoryType = UITableViewCellAccessoryNone;
             }
-            cell.accessoryView.tintColor = isUnitsCell ? UIColor.iconColorDefault: UIColor.iconColorActive;
+            cell.accessoryView.tintColor = isUnitsCell ? [UIColor colorNamed:ACColorNameIconColorDefault]: [UIColor colorNamed:ACColorNameIconColorActive];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"image"]];
-            cell.leftIconView.tintColor = isSelected ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = isSelected ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             [cell leftIconVisibility:!isUnitsCell];
         }
         return cell;
@@ -672,7 +673,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.textColorSecondary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         if (cell)
         {
@@ -693,7 +694,7 @@
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.backgroundColor = UIColor.clearColor;
         }
-        cell.dividerColor = UIColor.separatorColor;
+        cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         CGFloat leftInset = [item[@"inset"] floatValue];
         cell.dividerInsets = UIEdgeInsetsMake(0., leftInset, 0., 0.);
         cell.dividerHight = _dividerHeight;

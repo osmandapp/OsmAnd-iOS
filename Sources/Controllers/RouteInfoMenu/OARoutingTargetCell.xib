@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -66,7 +66,7 @@
                     <constraint firstItem="ydg-mJ-q0N" firstAttribute="leading" secondItem="Hst-uV-aFh" secondAttribute="trailing" constant="16" id="zmp-ix-q7N"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="addressLabel" destination="zCw-eJ-azf" id="ncV-6X-Nez"/>
                 <outlet property="imgView" destination="Hst-uV-aFh" id="ukP-V7-jcm"/>
@@ -78,7 +78,7 @@
     </objects>
     <resources>
         <image name="ic_custom_swap.png" width="30" height="30"/>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">

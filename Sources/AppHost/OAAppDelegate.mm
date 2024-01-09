@@ -227,9 +227,10 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     BOOL isReviewed = [userDefaults boolForKey:@"isReviewed"];
     if (appInstalledDays < 15 || appInstalledDays > 45)
         return;
-    if (!isReviewed)
+    UIScene *windowScene = UIApplication.sharedApplication.mainScene;
+    if (!isReviewed && windowScene)
     {
-        [SKStoreReviewController requestReview];
+        [SKStoreReviewController requestReviewInScene:(UIWindowScene *) windowScene];
         [userDefaults setBool:true forKey:@"isReviewed"];
     }
 }

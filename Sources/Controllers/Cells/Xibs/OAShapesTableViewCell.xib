@@ -19,8 +19,8 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" contentInsetAdjustmentBehavior="never" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="wsy-HV-1Sf">
-                        <rect key="frame" x="16" y="52" width="288" height="48"/>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <rect key="frame" x="16" y="50.5" width="288" height="49.5"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" priority="999" constant="48" id="LB5-pK-a5G"/>
                         </constraints>
@@ -35,13 +35,13 @@
                         </collectionViewFlowLayout>
                     </collectionView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OF6-fQ-ieg">
-                        <rect key="frame" x="16" y="11" width="140" height="22"/>
+                        <rect key="frame" x="16" y="11" width="140" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RwZ-P1-H2W">
-                        <rect key="frame" x="164" y="11" width="140" height="22"/>
+                        <rect key="frame" x="164" y="11" width="140" height="20.5"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -62,7 +62,7 @@
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="aW0-zy-SZf"/>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="collectionView" destination="wsy-HV-1Sf" id="C8R-ZS-k9j"/>
                 <outlet property="collectionViewHeight" destination="LB5-pK-a5G" id="nlg-dJ-CFe"/>
@@ -73,7 +73,7 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">

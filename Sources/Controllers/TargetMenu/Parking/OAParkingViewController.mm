@@ -19,6 +19,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -293,7 +294,7 @@
                 [cell leftIconVisibility:NO];
                 [cell descriptionVisibility:NO];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.valueLabel.textColor = UIColor.iconColorSelected;
+                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             }
             if (cell)
             {

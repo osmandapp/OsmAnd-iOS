@@ -9,7 +9,7 @@
 #import "OARadiusCellEx.h"
 #import "OAColors.h"
 #import "OAUtilities.h"
-
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OARadiusCellEx
@@ -64,8 +64,8 @@
 {
     NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, description]];
     
-    [str addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:NSMakeRange(0, title.length)];
-    [str addAttribute:NSForegroundColorAttributeName value:UIColor.iconColorActive range:NSMakeRange(title.length + 1, description.length)];
+    [str addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:NSMakeRange(0, title.length)];
+    [str addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameIconColorActive] range:NSMakeRange(title.length + 1, description.length)];
     [str addAttribute:NSFontAttributeName value:_fontRegular range:NSMakeRange(0, title.length)];
     [str addAttribute:NSFontAttributeName value:_fontBold range:NSMakeRange(title.length + 1, description.length)];
     [button setAttributedTitle:str forState:UIControlStateNormal];

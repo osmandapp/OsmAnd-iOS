@@ -15,6 +15,7 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OABenefitsOsmContributorsViewController () <OAAccountSettingDelegate>
 
@@ -79,7 +80,7 @@
                                   value:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]
                                   range:NSMakeRange(0, signInAttributed.length)];
     [signInAttributed addAttribute:NSForegroundColorAttributeName
-                                  value:UIColor.textColorSecondary
+                                  value:[UIColor colorNamed:ACColorNameTextColorSecondary]
                                   range:NSMakeRange(0, signInAttributed.length)];
     [descriptionAttributed appendAttributedString:signInAttributed];
 
@@ -133,8 +134,8 @@
                     @"key" : @"email_login_button",
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"use_login_and_password"),
-                    @"background_color": UIColor.buttonBgColorDisabled,
-                    @"tint_color": UIColor.buttonTextColorSecondary,
+                    @"background_color": [UIColor colorNamed:ACColorNameButtonBgColorDisabled],
+                    @"tint_color": [UIColor colorNamed:ACColorNameButtonTextColorSecondary],
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)
             },
@@ -208,8 +209,8 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.groupBgColor;
-            cell.dividerColor = UIColor.separatorColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         }
         if (cell)
         {
@@ -226,7 +227,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
             cell = (OAFilledButtonCell *) nib[0];
-            cell.backgroundColor = UIColor.groupBgColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             cell.button.layer.cornerRadius = 9;
             cell.heightConstraint.constant = 42.;
         }

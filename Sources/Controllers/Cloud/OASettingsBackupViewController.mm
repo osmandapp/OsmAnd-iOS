@@ -21,6 +21,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OASettingsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OACloudAccountLogoutDelegate, OADeleteAllVersionsBackupDelegate, OABackupTypesDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener>
 
@@ -82,22 +83,22 @@
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
-    appearance.shadowColor = UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     blurAppearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
 }
 
@@ -160,14 +161,14 @@
     deleteAllData[@"key"] = @"delete_all_cell";
     deleteAllData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     deleteAllData[@"title"] = OALocalizedString(@"backup_delete_all_data");
-    deleteAllData[@"text_color"] = UIColor.buttonBgColorDisruptive;
+    deleteAllData[@"text_color"] = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
     [dangerZoneCells addObject:deleteAllData];
 
     NSMutableDictionary *removeVersionsData = [NSMutableDictionary dictionary];
     removeVersionsData[@"key"] = @"remove_versions_cell";
     removeVersionsData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
-    removeVersionsData[@"text_color"] = UIColor.buttonBgColorDisruptive;
+    removeVersionsData[@"text_color"] = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
     [dangerZoneCells addObject:removeVersionsData];
 
     _data = data;
@@ -345,7 +346,7 @@
             cell.descriptionLabel.text = item[@"description"];
 
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = [item.allKeys containsObject:@"text_color"] ? item[@"text_color"] : [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         return cell;
     }

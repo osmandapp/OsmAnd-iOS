@@ -17,6 +17,7 @@
 #import "OAPOIBaseType.h"
 #import "OAPOIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAActionAddCategoryViewController () <UITextFieldDelegate, UISearchBarDelegate>
 
@@ -171,7 +172,7 @@
             cell.leftIconView.image = ((OAPOIBaseType *)category).icon;
         else if ([category isKindOfClass:OAPOIUIFilter.class])
             cell.leftIconView.image = [OAPOIHelper getCustomFilterIcon:(OAPOIUIFilter *)category];
-        cell.leftIconView.tintColor = UIColor.iconColorSelected;
+        cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
         if ([_initialValues containsObject:name])
         {
             [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];

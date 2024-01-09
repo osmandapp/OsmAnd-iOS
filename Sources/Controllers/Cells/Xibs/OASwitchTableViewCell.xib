@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -95,7 +95,7 @@
                                                     </view>
                                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="qL5-Kw-vcy" userLabel="Divider View">
                                                         <rect key="frame" x="0.0" y="4" width="1" height="22"/>
-                                                        <color key="backgroundColor" name="separatorColor"/>
+                                                        <color key="backgroundColor" name="customSeparator"/>
                                                         <constraints>
                                                             <constraint firstAttribute="width" constant="1" id="lPf-1Y-UTh"/>
                                                             <constraint firstAttribute="height" constant="22" id="sYk-SI-Mgz"/>
@@ -158,7 +158,7 @@
                     <constraint firstItem="AMO-6X-s1L" firstAttribute="top" secondItem="rhj-6g-ATW" secondAttribute="top" id="rOO-qV-KMh"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="bottomContentSpaceView" destination="5RR-lW-ZAF" id="SSJ-Ec-B2p"/>
                 <outlet property="contentInsideStackView" destination="T3V-h7-n3i" id="ebh-95-apn"/>
@@ -178,11 +178,11 @@
         </tableViewCell>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
-            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="separatorColor">
+        <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

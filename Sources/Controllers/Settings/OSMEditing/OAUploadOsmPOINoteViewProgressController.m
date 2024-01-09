@@ -18,6 +18,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OARootViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kUploadingValueCell @"kUploadingValueCell"
 
@@ -140,8 +141,8 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadViewConrollerMode) {
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAProgressBarCell getCellIdentifier] owner:self options:nil];
     OAProgressBarCell *resultCell = (OAProgressBarCell *)[nib objectAtIndex:0];
     [resultCell.progressBar setProgress:0.0 animated:NO];
-    [resultCell.progressBar setProgressTintColor:UIColor.iconColorActive];
-    resultCell.backgroundColor = [UIColor groupBgColor];
+    [resultCell.progressBar setProgressTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+    resultCell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     resultCell.selectionStyle = UITableViewCellSelectionStyleNone;
     return resultCell;
 }

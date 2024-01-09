@@ -19,6 +19,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAPointDescription.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAAddWaypointViewController () <OAChangePositionModeDelegate>
 
@@ -77,7 +78,7 @@
     [super viewDidLoad];
 
     _iconView.image = [UIImage templateImageNamed:@"ic_custom_location_marker"];
-    _iconView.tintColor = UIColor.iconColorSecondary;
+    _iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
 
     if (![OAUtilities isLandscapeIpadAware])
         [OAUtilities setMaskTo:self.contentView byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight];

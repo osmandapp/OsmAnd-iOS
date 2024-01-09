@@ -19,6 +19,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <AudioToolbox/AudioServices.h>
 
@@ -214,7 +215,7 @@
     {
         [cell.textView setText:action.getName];
         [cell.iconView setImage:[UIImage templateImageNamed:action.getIconResName]];
-        [cell.iconView setTintColor:UIColor.iconColorSelected];
+        [cell.iconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
         
@@ -223,7 +224,7 @@
             CGRect frame = CGRectMake(0., 0., cell.iconView.frame.size.width, cell.iconView.frame.size.height);
             UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
             UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-            [background setTintColor:UIColor.groupBgColor];
+            [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
             [cell.iconView addSubview:background];
             UIImage *img = [UIImage imageNamed:action.getSecondaryIconName];
             UIImageView *view = [[UIImageView alloc] initWithImage:img];
@@ -233,10 +234,10 @@
         cell.delegate = self;
         cell.allowsSwipeWhenEditing = NO;
         [cell.overflowButton setImage:[UIImage templateImageNamed:@"menu_cell_pointer"] forState:UIControlStateNormal];
-        [cell.overflowButton setTintColor:UIColor.iconColorSecondary];
+        [cell.overflowButton setTintColor:[UIColor colorNamed:ACColorNameIconColorSecondary]];
         [cell.overflowButton.imageView setContentMode:UIViewContentModeCenter];
         cell.separatorInset = UIEdgeInsetsMake(0.0, 62.0, 0.0, 0.0);
-        cell.tintColor = UIColor.iconColorActive;
+        cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         
         [cell updateConstraintsIfNeeded];
     }

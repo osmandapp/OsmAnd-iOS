@@ -110,7 +110,7 @@
                     <constraint firstAttribute="bottom" secondItem="Pde-Gp-UrD" secondAttribute="bottom" id="lli-Jz-ss7"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="bottomMarginStackView" destination="ao7-vZ-qL2" id="UiJ-Hz-Brs"/>
                 <outlet property="collectionStackView" destination="NS9-5f-FoA" id="fzo-0U-cx9"/>
@@ -128,7 +128,7 @@
         <namedColor name="buttonBgColorTertiary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.15000000596046448" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">

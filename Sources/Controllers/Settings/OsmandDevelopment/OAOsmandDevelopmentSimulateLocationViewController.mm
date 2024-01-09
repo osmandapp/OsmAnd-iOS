@@ -24,6 +24,7 @@
 #import "OAValueTableViewCell.h"
 #import "OARightIconTableViewCell.h"
 #import "OAAutoObserverProxy.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAOsmandDevelopmentSimulateLocationViewController () <OAOpenAddTrackDelegate, OAOsmandDevelopmentSimulateSpeedSelectorDelegate>
 
@@ -68,7 +69,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
     [super viewDidLoad];
 
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -114,11 +115,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kTrackSelectKey,
         @"titleText" : OALocalizedString(@"shared_string_gpx_track"),
-        @"titleColor" : isRouteAnimating ? UIColor.textColorSecondary : UIColor.textColorPrimary,
+        @"titleColor" : isRouteAnimating ? [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorPrimary],
         @"descText" : trackNameText,
-        @"descColor" : UIColor.textColorSecondary,
+        @"descColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
         @"icon" : @"ic_custom_trip",
-        @"iconColor" : isRouteAnimating ? UIColor.iconColorDisabled : UIColor.iconColorActive,
+        @"iconColor" : isRouteAnimating ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorActive],
         @"actionBlock" : (^void(){ [self openGpxTrackSelector]; }),
         @"isActionEnabled" : @(!isRouteAnimating),
         @"headerTitle" : @" ",
@@ -130,11 +131,11 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"key" : kMovementSpeedKey,
         @"titleText" : OALocalizedString(@"simulate_location_movement_speed"),
-        @"titleColor" : isMovementSpeedButtonActive ? UIColor.textColorPrimary : UIColor.textColorSecondary,
+        @"titleColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary],
         @"descText" : [OASimulateNavigationSpeed toTitle:_selectedSpeedMode],
-        @"descColor" : UIColor.textColorSecondary,
+        @"descColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
         @"icon" : @"ic_action_max_speed",
-        @"iconColor" : isMovementSpeedButtonActive ? UIColor.iconColorActive : UIColor.iconColorDisabled,
+        @"iconColor" : isMovementSpeedButtonActive ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
         @"actionBlock" : (^void(){ [self openMovementSpeedSelector]; }),
         @"isActionEnabled" : @(isMovementSpeedButtonActive),
     }];
@@ -151,7 +152,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         @"key" : kStartStopButtonKey,
         @"titleText" : isRouteAnimating ? OALocalizedString(@"shared_string_control_stop") : OALocalizedString(@"shared_string_control_start"),
         @"icon" : isRouteAnimating ? @"ic_custom_stop" : @"ic_custom_play",
-        @"color" : isGpxTrackSelected ? UIColor.iconColorActive : UIColor.iconColorDisabled,
+        @"color" : isGpxTrackSelected ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
         @"actionBlock" : (^void(){ [self setTrackAnimationEnabled:!isRouteAnimating]; }),
         @"isActionEnabled" : @(isGpxTrackSelected),
         @"headerTitle" : @" ",
@@ -258,7 +259,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
 
 - (void)onRotation
 {
-    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:UIColor.textColorSecondary isBigTitle:NO parentViewWidth:self.view.frame.size.width];
+    self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:_headerDescription font:kHeaderDescriptionFont textColor:[UIColor colorNamed:ACColorNameTextColorSecondary] isBigTitle:NO parentViewWidth:self.view.frame.size.width];
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 16.0 + OAUtilities.getLeftMargin, 0., 0.);
 }
 

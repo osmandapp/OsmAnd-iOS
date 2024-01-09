@@ -11,7 +11,7 @@
 
 @implementation OAOcbfHelper
 
-+ (void) downloadOcbfIfUpdated
++ (void) downloadOcbfIfUpdated:(void (^)(void))completionHandler
 {
     NSString *urlString = @"https://creator.osmand.net/basemap/regions.ocbf";
     
@@ -19,10 +19,10 @@
     NSURL *url = [NSURL URLWithString:urlString];
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-
+    
     NSString *cachedPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *cachedPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];
-
+    
     if (![fileManager fileExistsAtPath:cachedPathLib])
     {
         NSError *error = nil;
@@ -30,16 +30,28 @@
         if (error)
             NSLog(@"Error copying file: %@ to %@ - %@", cachedPathBundle, cachedPathLib, [error localizedDescription]);
     }
-    
-    BOOL downloadFromServer = NO;
-    NSString *lastModifiedString = nil;
+
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
     [request setHTTPMethod:@"HEAD"];
-    NSHTTPURLResponse *response;
-    [NSURLConnection sendSynchronousRequest:request returningResponse:&response error: NULL];
-    if ([response respondsToSelector:@selector(allHeaderFields)])
-        lastModifiedString = [[response allHeaderFields] objectForKey:@"Last-Modified"];
+    [[[NSURLSession sharedSession] dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *) response;
+        NSInteger responseCode = httpResponse.statusCode;
+        if (!error && (responseCode >= 200 && responseCode < 300))
+        {
+            [self downloadOcbfIfUpdated:url
+                     lastModifiedString:httpResponse.allHeaderFields[@"Last-Modified"]
+                          cachedPathLib:cachedPathLib];
+        }
+        if (completionHandler)
+            completionHandler();
+    }] resume];
+}
 
++ (void)downloadOcbfIfUpdated:(NSURL *)url
+           lastModifiedString:(NSString *)lastModifiedString
+                cachedPathLib:(NSString *)cachedPathLib
+{
+    BOOL downloadFromServer = NO;
     NSDate *lastModifiedServer = nil;
     @try
     {
@@ -56,6 +68,7 @@
     NSLog(@"lastModifiedServer: %@", lastModifiedServer);
     
     NSDate *lastModifiedLocal = nil;
+    NSFileManager *fileManager = [NSFileManager defaultManager];
     if ([fileManager fileExistsAtPath:cachedPathLib])
     {
         NSError *error = nil;

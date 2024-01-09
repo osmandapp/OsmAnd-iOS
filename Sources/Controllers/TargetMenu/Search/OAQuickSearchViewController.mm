@@ -186,6 +186,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [super viewDidLoad];
 
+    self.tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     _tableController = [[OAQuickSearchTableController alloc] initWithTableView:self.tableView];
     _tableController.delegate = self;
     _tableController.searchType = self.searchType;

@@ -196,7 +196,7 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return _isEditing ? UIStatusBarStyleBlackOpaque : UIStatusBarStyleLightContent;
+    return UIStatusBarStyleLightContent;
 }
 
 // keyboard notifications register+process

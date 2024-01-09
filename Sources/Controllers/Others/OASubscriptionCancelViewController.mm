@@ -81,7 +81,7 @@ static const NSArray <OAFeature *> *osmLiveFeatures = @[[[OAFeature alloc] initW
     else if (!secondTimeShown)
         [settings.liveUpdatesPurchaseCancelledSecondDlgShown set:YES];
     
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.edgesForExtendedLayout = UIRectEdgeNone;
     
     self.titleView.textColor = UIColorFromRGB(color_dialog_title_color_light);

@@ -129,9 +129,7 @@ typedef enum : NSUInteger {
     self.shouldDelegateAutorotateToVisiblePanel = NO;
     
     self.navigationController.navigationBarHidden = YES;
-    
-    //[[UIApplication sharedApplication] setStatusBarHidden:NO];
-    
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseFailed:) name:OAIAPProductPurchaseFailedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchaseDeferred:) name:OAIAPProductPurchaseDeferredNotification object:nil];

@@ -84,7 +84,6 @@
     if (self.regionTitle)
         self.navigationItem.title = self.regionTitle;
 
-    [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [self applySafeAreaMargins];
 }
 

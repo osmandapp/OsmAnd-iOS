@@ -533,7 +533,6 @@ static NSArray<OAFeature *> * MAPS_PLUS_PREVIEW_FEATURES;
 {
     UINavigationController *modalController = [[UINavigationController alloc] initWithRootViewController:viewController];
     modalController.navigationBarHidden = YES;
-    modalController.automaticallyAdjustsScrollViewInsets = NO;
     modalController.edgesForExtendedLayout = UIRectEdgeNone;
     [navController presentViewController:modalController animated:YES completion:nil];
 }

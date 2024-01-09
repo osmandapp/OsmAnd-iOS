@@ -31,6 +31,7 @@
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import "GeneratedAssetSymbols.h"
 
 @interface OAMainSettingsViewController () <UIDocumentPickerDelegate>
@@ -393,7 +394,8 @@
 
 - (void)onRestoreFromFilePressed
 {
-    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.osf"] inMode:UIDocumentPickerModeImport];
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"net.osmand.osf" conformingToType:UTTypeArchive]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     documentPickerVC.allowsMultipleSelection = NO;
     documentPickerVC.delegate = self;
     [self presentViewController:documentPickerVC animated:YES completion:nil];

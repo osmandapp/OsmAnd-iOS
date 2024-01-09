@@ -10,7 +10,7 @@
 
 @interface OAOcbfHelper : NSObject
 
-+ (void) downloadOcbfIfUpdated;
++ (void) downloadOcbfIfUpdated:(void (^)(void))completionHandler;
 + (BOOL) isBundledOcbfNewer;
 
 @end

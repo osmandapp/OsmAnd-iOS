@@ -411,8 +411,8 @@ static NSString * const kLinkExternalType = @"ext_link";
     NSString *appBuild = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
     NSString *deviceInfo = [NSString stringWithFormat:@"Device: %@\nOS: %@\nOS Version: %@\nOsmAnd Build: %@", deviceName, osName, osVersion, appBuild];
-    NSString *encodedDeviceInfo = [deviceInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-    NSString *mailtoUrlString = [NSString stringWithFormat:@"%@?subject=Support Request&body=%@", kContactEmail, encodedDeviceInfo];
+    NSString *encodedDeviceInfo = [deviceInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *mailtoUrlString = [NSString stringWithFormat:@"%@?body=%@", kContactEmail, encodedDeviceInfo];
     
     return mailtoUrlString;
 }

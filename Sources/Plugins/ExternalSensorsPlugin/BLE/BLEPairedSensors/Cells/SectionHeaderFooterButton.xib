@@ -17,7 +17,7 @@
             <subviews>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H21-Vd-Lip">
                     <rect key="frame" x="0.0" y="0.0" width="375" height="149"/>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <inset key="titleEdgeInsets" minX="20" minY="0.0" maxX="20" maxY="0.0"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
@@ -38,8 +38,8 @@
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
             <constraints>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="H21-Vd-Lip" secondAttribute="trailing" id="FuZ-lo-0Ox"/>
-                <constraint firstItem="H21-Vd-Lip" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="HA9-av-Klw"/>
+                <constraint firstAttribute="trailing" secondItem="H21-Vd-Lip" secondAttribute="trailing" id="FuZ-lo-0Ox"/>
+                <constraint firstItem="H21-Vd-Lip" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="HA9-av-Klw"/>
                 <constraint firstItem="H21-Vd-Lip" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="UpC-Ek-XIH"/>
                 <constraint firstAttribute="bottom" secondItem="H21-Vd-Lip" secondAttribute="bottom" id="b3B-Pg-Kx9"/>
                 <constraint firstItem="AYX-pK-pQb" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="gzU-kX-fpF"/>
@@ -54,7 +54,7 @@
         </view>
     </objects>
     <resources>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">

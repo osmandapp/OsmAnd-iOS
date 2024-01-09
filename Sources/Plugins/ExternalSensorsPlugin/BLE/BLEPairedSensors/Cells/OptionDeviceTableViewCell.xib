@@ -50,7 +50,7 @@
                 <constraint firstItem="dJi-6c-xLK" firstAttribute="leading" secondItem="VP6-qR-MKM" secondAttribute="trailing" constant="16" id="6qU-MV-F6m"/>
                 <constraint firstItem="wQu-gh-Vai" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="AJs-rG-wba"/>
                 <constraint firstItem="VP6-qR-MKM" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="ATY-HK-H2y"/>
-                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="7Pi-Dk-jYc" secondAttribute="trailing" id="PcS-ll-GDH"/>
+                <constraint firstAttribute="trailing" secondItem="7Pi-Dk-jYc" secondAttribute="trailing" id="PcS-ll-GDH"/>
                 <constraint firstItem="dJi-6c-xLK" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="RM4-Ru-jbG"/>
                 <constraint firstItem="7Pi-Dk-jYc" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="fUr-Sj-3LB"/>
                 <constraint firstItem="VP6-qR-MKM" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" id="ihB-lb-tCH"/>

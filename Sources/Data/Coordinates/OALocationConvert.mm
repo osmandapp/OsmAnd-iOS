@@ -153,6 +153,21 @@
     return coordinate;
 }
 
++ (NSString *) formatCoordinateSeconds:(double)coordinate
+{
+    NSNumberFormatter *formatter = [[NSNumberFormatter alloc] init];
+    formatter.decimalSeparator = @".";
+    formatter.numberStyle = NSNumberFormatterDecimalStyle;
+    formatter.minimumIntegerDigits = 2;
+    formatter.minimumFractionDigits = 1;
+    formatter.maximumFractionDigits = 1;
+    
+    NSMutableString *result = [NSMutableString string];
+    [result appendString:[formatter stringFromNumber:@(coordinate)]];
+    [result appendString:DELIMITER_SECONDS];
+    return result;
+}
+
 + (NSString *) getUTMCoordinateString:(double)lat lon:(double)lon
 {
     try{
@@ -252,13 +267,13 @@
     [df setLocale:[NSLocale localeWithLocaleIdentifier:@"en-US"]];
     if (outputType == MAP_GEO_FORMAT_DEGREES)
     {
-        [df setPositiveFormat:@"##0.0000"];
+        [df setPositiveFormat:@"##0.00000"];
         [string appendString:[df stringFromNumber:@(coordinate)]];
         [string appendString:DELIMITER_DEGREES];
     }
     else if (outputType == MAP_GEO_FORMAT_MINUTES)
     {
-        [df setPositiveFormat:@"##0.00"];
+        [df setPositiveFormat:@"##0.000"];
         coordinate = [self.class formatCoordinate:coordinate string:string delimeter:DELIMITER_DEGREES];
         [string appendString:DELIMITER_SPACE];
         [string appendString:[df stringFromNumber:@(coordinate)]];
@@ -270,7 +285,7 @@
         [string appendString:DELIMITER_SPACE];
         coordinate = [self.class formatCoordinate:coordinate string:string delimeter:DELIMITER_MINUTES];
         [string appendString:DELIMITER_SPACE];
-        [self.class formatCoordinate:coordinate string:string delimeter:DELIMITER_SECONDS];
+        [string appendString:[self.class formatCoordinateSeconds:coordinate]];
     }
     return [NSString stringWithString:string];
 }

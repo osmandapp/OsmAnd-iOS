@@ -21,7 +21,7 @@
 #import <MBProgressHUD.h>
 #import "OALinks.h"
 #import "OsmAnd_Maps-Swift.h"
-
+#import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #include <CommonCrypto/CommonDigest.h>
@@ -2577,7 +2577,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor
 {
     if (!textColor)
-        textColor = UIColor.textColorPrimary;
+        textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
 
     CGFloat red, green, blue, alpha;
     [textColor.currentThemeColor getRed:&red green:&green blue:&blue alpha:&alpha];

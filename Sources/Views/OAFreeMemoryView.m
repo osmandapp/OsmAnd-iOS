@@ -9,6 +9,7 @@
 #import "OAFreeMemoryView.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAFreeMemoryView
 {
@@ -46,14 +47,14 @@
 {
     self.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.clipsToBounds = YES;
-    self.backgroundColor = [UIColor groupBgColor];
+    self.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     
     _sysVal = 0;
     _appVal = 0;
     _freeVal = 0;
     
     _titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
-    _titleLabel.textColor = [UIColor textColorPrimary];
+    _titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _titleLabel.font = [UIFont scaledSystemFontOfSize:14.0];;
     _titleLabel.adjustsFontForContentSizeCategory = YES;
     _titleLabel.numberOfLines = 1;
@@ -61,7 +62,7 @@
     [self addSubview:_titleLabel];
     
     _freeMemLabel = [[UILabel alloc] initWithFrame:CGRectMake(15.0, 10.0, 240.0, 20.0)];
-    _freeMemLabel.textColor = [UIColor textColorPrimary];
+    _freeMemLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _freeMemLabel.font = [UIFont scaledSystemFontOfSize:14.0];;
     _freeMemLabel.adjustsFontForContentSizeCategory = YES;
     _freeMemLabel.numberOfLines = 1;

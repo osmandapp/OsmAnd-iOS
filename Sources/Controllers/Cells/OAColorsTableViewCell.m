@@ -10,6 +10,7 @@
 #import "OAColorsCollectionViewCell.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kWhiteColor 0x44FFFFFF
 
@@ -86,7 +87,7 @@
         if (indexPath.row == _currentColor)
         {
             cell.backView.layer.borderWidth = 2;
-            cell.backView.layer.borderColor = UIColor.buttonBgColorTertiary.CGColor;
+            cell.backView.layer.borderColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary].CGColor;
         }
         else
         {

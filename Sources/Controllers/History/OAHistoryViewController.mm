@@ -22,7 +22,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
-
+#import "GeneratedAssetSymbols.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore.h>
@@ -428,7 +428,7 @@
         cell.leftIcon.image = [dataItem.item icon];
         
         [cell.descLabel setText:dataItem.distance];
-        cell.descLabel.textColor = UIColor.textColorSecondary;
+        cell.descLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         cell.descIcon.transform = CGAffineTransformMakeRotation(dataItem.direction);
     }
     

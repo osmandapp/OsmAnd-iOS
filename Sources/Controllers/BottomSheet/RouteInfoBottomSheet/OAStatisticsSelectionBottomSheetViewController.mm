@@ -24,6 +24,7 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OADestinationItemsListViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -68,7 +69,7 @@
 
 - (void) setupView
 {
-    tblView.separatorColor = UIColor.separatorColor;
+    tblView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
     [arr addObject:@{
@@ -197,10 +198,10 @@
             cell.backgroundColor = UIColor.clearColor;
 
             cell.titleView.text = item[@"title"];
-            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? UIColor.buttonBgColorTertiary : UIColor.textColorPrimary;
+            cell.textColorNormal = (mode == EOARouteStatisticsModeSpeed || mode == EOARouteStatisticsModeAltitudeSpeed) && !vwController.hasSpeed ? [UIColor colorNamed:ACColorNameButtonBgColorTertiary] : [UIColor colorNamed:ACColorNameTextColorPrimary];
 
             [cell.iconView setImage:[UIImage templateImageNamed:item[@"img"]]];
-            cell.iconColorNormal = vwController.mode == mode ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+            cell.iconColorNormal = vwController.mode == mode ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             [cell roundCorners:[item[@"round_top"] boolValue] bottomCorners:[item[@"round_bottom"] boolValue]];
             cell.separatorInset = UIEdgeInsetsMake(0., 32., 0., 16.);
@@ -295,8 +296,8 @@
 - (void)additionalSetup
 {
     [super additionalSetup];
-    self.tableBackgroundView.backgroundColor = UIColor.viewBgColor;
-    self.buttonsView.subviews.firstObject.backgroundColor = UIColor.viewBgColor;
+    self.tableBackgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    self.buttonsView.subviews.firstObject.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     [self hideDoneButton];
 }
 

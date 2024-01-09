@@ -25,6 +25,7 @@
 #import "OALabel.h"
 #import "OAWikiArticleHelper.h"
 #import "OANativeUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
@@ -227,7 +228,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         if ([vl hasPrefix:@"http://"] || [vl hasPrefix:@"https://"] || [vl hasPrefix:@"HTTP://"] || [vl hasPrefix:@"HTTPS://"])
         {
             isUrl = YES;
-            textColor = UIColor.textColorActive;
+            textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
         else if (needLinks)
         {
@@ -235,7 +236,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             if (socialMediaUrl)
             {
                 isUrl = YES;
-                textColor =UIColor.textColorActive;
+                textColor =[UIColor colorNamed:ACColorNameTextColorActive];
             }
         }
 
@@ -307,7 +308,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         else if ([kContactPhoneTags containsObject:convertedKey])
         {
             iconId = @"ic_phone_number";
-            textColor = UIColor.textColorActive;
+            textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             isPhoneNumber = YES;
         }
         else if ([convertedKey isEqualToString:WEBSITE_TAG] || [convertedKey isEqualToString:URL_TAG] || [kContactUrlTags containsObject:convertedKey])
@@ -319,7 +320,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                     icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:convertedKey]]];
             }
             iconId = @"ic_website";
-            textColor = UIColor.textColorActive;
+            textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             isUrl = YES;
         }
         else if ([convertedKey isEqualToString:CUISINE_TAG])
@@ -634,7 +635,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                                   icon:[UIImage imageNamed:@"ic_custom_osm_edits"]
                                             textPrefix:nil
                                                   text:[NSString stringWithFormat:@"%@%llu", link, entityId]
-                                             textColor:UIColor.textColorActive
+                                             textColor:[UIColor colorNamed:ACColorNameTextColorActive]
                                                 isText:YES
                                              needLinks:YES
                                                  order:10000

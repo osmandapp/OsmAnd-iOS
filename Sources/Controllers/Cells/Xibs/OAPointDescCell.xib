@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -80,7 +80,7 @@
                                 </constraints>
                             </imageView>
                         </subviews>
-                        <color key="backgroundColor" name="groupBgColor"/>
+                        <color key="backgroundColor" name="groupBg"/>
                         <constraints>
                             <constraint firstItem="Fh0-qX-kCt" firstAttribute="leading" secondItem="YCJ-00-gnu" secondAttribute="trailing" constant="16" id="13p-NE-rTU"/>
                             <constraint firstAttribute="bottom" secondItem="i56-bD-Brz" secondAttribute="bottom" constant="5" id="6kK-1u-Jwf"/>
@@ -104,7 +104,7 @@
                         </constraints>
                     </view>
                 </subviews>
-                <color key="backgroundColor" name="groupBgColor"/>
+                <color key="backgroundColor" name="groupBg"/>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="fPw-My-pBG" secondAttribute="bottom" id="MgN-ir-We9"/>
                     <constraint firstItem="fPw-My-pBG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="QZw-WV-YZA"/>
@@ -112,7 +112,7 @@
                     <constraint firstAttribute="trailingMargin" secondItem="fPw-My-pBG" secondAttribute="trailing" id="heh-Zc-bIH"/>
                 </constraints>
             </tableViewCellContentView>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <connections>
                 <outlet property="cellView" destination="fPw-My-pBG" id="Vq7-3K-3YI"/>
                 <outlet property="descView" destination="5F1-dQ-ckE" id="Pkw-E9-UEd"/>
@@ -130,7 +130,7 @@
     <resources>
         <image name="ic_small_time.png" width="12" height="12"/>
         <image name="icon_favorite_direction.png" width="8" height="9"/>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorSelected">

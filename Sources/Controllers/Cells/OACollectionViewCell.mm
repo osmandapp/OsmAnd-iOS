@@ -10,6 +10,7 @@
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OADestinationCollectionViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define defaultCellHeight 60.0
 #define titleTextWidthDelta 50.0
@@ -119,10 +120,10 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = UIColor.groupBgColor;
-        cell.descrLabel.textColor = UIColor.groupBgColor;
-        cell.backgroundColor = UIColor.iconColorActive;
-        cell.imageView.tintColor = UIColor.groupBgColor;
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.descrLabel.textColor = [UIColor colorNamed:ACColorNameGroupBg];
+        cell.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.imageView.tintColor =[UIColor colorNamed:ACColorNameGroupBg];
     }];
 }
 
@@ -131,9 +132,9 @@
     OADestinationCollectionViewCell *cell = (OADestinationCollectionViewCell *) [collectionView cellForItemAtIndexPath:indexPath];
     NSDictionary *item = _data[indexPath.row];
     [UIView animateWithDuration:.2 animations:^{
-        cell.titleLabel.textColor = UIColor.textColorPrimary;
-        cell.descrLabel.textColor  = UIColor.textColorSecondary;
-        cell.backgroundColor = UIColor.groupBgColor;
+        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.descrLabel.textColor  = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         cell.imageView.tintColor = item[@"color"];
     }];
 }

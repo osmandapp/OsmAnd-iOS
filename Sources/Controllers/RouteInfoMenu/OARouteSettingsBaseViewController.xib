@@ -23,13 +23,13 @@
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="38" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="SeR-ar-f6w">
                     <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                     <viewLayoutGuide key="safeArea" id="0I3-dE-M3s"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <color key="tintColor" name="iconColorActive"/>
-                    <color key="separatorColor" name="separatorColor"/>
+                    <color key="separatorColor" name="customSeparator"/>
                 </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="S3n-Nf-j9A"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstAttribute="bottom" secondItem="SeR-ar-f6w" secondAttribute="bottom" id="B2C-mO-yN6"/>
                 <constraint firstItem="SeR-ar-f6w" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="SgV-YC-D0h"/>
@@ -40,13 +40,13 @@
         </view>
     </objects>
     <resources>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

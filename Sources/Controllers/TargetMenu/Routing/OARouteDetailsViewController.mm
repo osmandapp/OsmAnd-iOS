@@ -33,6 +33,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAEmissionHelper.h"
 #import <Charts/Charts-Swift.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
@@ -72,8 +73,8 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
         [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
-        cell.button.backgroundColor = UIColor.buttonBgColorPrimary;
-        [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateNormal];
+        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
     }
     return cell;
 }
@@ -267,7 +268,7 @@
     {
         NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
         [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
-        [attrDescription setColor:UIColor.textColorSecondary forString:emission];
+        [attrDescription setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:emission];
     }
     return attrDescription;
 }
@@ -336,7 +337,7 @@
     }
     
     _cancelButton.layer.cornerRadius = 9.;
-    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:UIColor.buttonTextColorPrimary];
+    [self setupButtonAppearance:_startButton iconName:@"ic_custom_navigation_arrow.png" color:[UIColor colorNamed:ACColorNameButtonTextColorPrimary]];
 }
 
 - (void) setupButtonAppearance:(UIButton *) button iconName:(NSString *)iconName color:(UIColor *)color

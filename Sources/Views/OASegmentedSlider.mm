@@ -10,6 +10,7 @@
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMarkTag 1000
 #define kAdditionalMarkTag 2000
@@ -122,7 +123,7 @@
                     kMarkWidth,
                     kCurrentMarkHeight
             )];
-            _currentMarkView.backgroundColor = UIColor.iconColorActive;
+            _currentMarkView.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
             _currentMarkView.layer.cornerRadius = kMarkWidth / 2.;
             [self addSubview:_currentMarkView];
         }
@@ -378,7 +379,7 @@
 
 - (void)layoutSelectingTitle
 {
-    _selectingMarkTitle.textColor = self.userInteractionEnabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
+    _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     NSInteger index = [self getIndex];
     NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
     _selectingMarkTitle.text = !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
@@ -431,7 +432,7 @@
     }
     for (UILabel *titleLabel in _titleViews)
     {
-        titleLabel.textColor = self.userInteractionEnabled ? UIColor.textColorPrimary : UIColor.textColorSecondary;
+        titleLabel.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 
@@ -535,7 +536,7 @@
     {
         _selectingMarkTitleBackground = [[UIView alloc] initWithFrame:CGRectMake(0., 0., 0., 0.)];
         _selectingMarkTitleBackground.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        _selectingMarkTitleBackground.backgroundColor = UIColor.weatherSliderLabelBgColor;
+        _selectingMarkTitleBackground.backgroundColor = [UIColor colorNamed:ACColorNameWeatherSliderLabelBg];
 
         _selectingMarkTitleBackground.layer.masksToBounds = NO;
         _selectingMarkTitleBackground.layer.shadowColor = [UIColor.blackColor colorWithAlphaComponent:.2].CGColor;

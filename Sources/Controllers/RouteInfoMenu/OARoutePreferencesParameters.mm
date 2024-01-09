@@ -22,6 +22,7 @@
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OALocalRoutingParameter
 {
@@ -274,7 +275,7 @@
 
 - (UIColor *) getTintColor
 {
-    return UIColor.iconColorActive;
+    return [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 @end

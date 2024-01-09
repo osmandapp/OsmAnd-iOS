@@ -9,6 +9,7 @@
 #import "OAGPXTrackCell.h"
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAGPXTrackCell
 
@@ -21,10 +22,10 @@
     _timeImageView.image = [UIImage templateImageNamed:@"ic_small_time_start"];
     _wptImageView.image = [UIImage templateImageNamed:@"ic_small_waypoints"];
     
-    _leftIconImageView.tintColor = UIColor.iconColorSelected;
-    _distanceImageView.tintColor = UIColor.textColorSecondary;
-    _timeImageView.tintColor = UIColor.textColorSecondary;
-    _wptImageView.tintColor = UIColor.textColorSecondary;
+    _leftIconImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+    _distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    _wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     
     _separatorHeightConstraint.constant = 0.5;
     

@@ -18,6 +18,7 @@
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAQuickSearchCoordinateFormatsViewController() <UITableViewDelegate, UITableViewDataSource>
 
@@ -107,8 +108,8 @@
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
     [self.tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-    self.tableView.separatorColor = UIColor.separatorColor;
-    self.tableView.tintColor = UIColor.iconColorActive;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+    self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 - (void) viewWillAppear:(BOOL)animated
@@ -124,16 +125,16 @@
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = UIColor.separatorColor;
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.textColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
@@ -165,7 +166,7 @@
     text = [text stringByAppendingString:@" > "];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:text
                                                                                 attributes:@{NSFontAttributeName : textFont,
-                                                                                            NSForegroundColorAttributeName : UIColor.textColorSecondary}];
+                                                                                            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
     [textStr appendAttributedString:str];
     vw.label.attributedText = textStr;
     return vw;

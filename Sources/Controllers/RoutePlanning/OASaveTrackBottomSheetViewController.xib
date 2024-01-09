@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -36,7 +36,7 @@
                         <view contentMode="scaleToFill" id="2kF-Xn-Q9X">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="0.0"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                         </view>
                         <view contentMode="scaleToFill" id="peB-wc-MNf">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="338"/>
@@ -99,7 +99,7 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <constraints>
                                 <constraint firstItem="ron-Uj-aI4" firstAttribute="top" secondItem="peB-wc-MNf" secondAttribute="top" constant="24" id="31q-W8-2ZO"/>
                                 <constraint firstItem="pgk-1G-ZD5" firstAttribute="centerX" secondItem="peB-wc-MNf" secondAttribute="centerX" id="Izl-lQ-zCS"/>
@@ -135,7 +135,7 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <constraints>
                                 <constraint firstItem="B5O-pm-t5C" firstAttribute="leading" secondItem="W5A-wO-sxs" secondAttribute="leading" constant="16" id="9fS-v6-5Jl"/>
                                 <constraint firstItem="B5O-pm-t5C" firstAttribute="top" secondItem="W5A-wO-sxs" secondAttribute="top" constant="9" id="hKS-TJ-rog"/>
@@ -144,7 +144,7 @@
                         </view>
                     </subviews>
                     <viewLayoutGuide key="safeArea" id="7Jz-Hi-s81"/>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <constraints>
                         <constraint firstItem="7Jz-Hi-s81" firstAttribute="bottom" secondItem="W5A-wO-sxs" secondAttribute="top" priority="750" constant="60" id="7B5-xh-hdF"/>
                         <constraint firstItem="W5A-wO-sxs" firstAttribute="bottom" secondItem="1FR-X2-INg" secondAttribute="bottom" id="EG8-0J-ZYF"/>
@@ -182,7 +182,7 @@
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

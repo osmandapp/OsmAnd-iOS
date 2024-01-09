@@ -45,6 +45,7 @@
 #import "OATargetMenuViewController.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kNameKey @"kNameKey"
 #define kDescKey @"kDescKey"
@@ -377,7 +378,7 @@
         for (NSDictionary<NSString *, NSString *> *group in [(OAGpxWptEditingHandler *) _pointHandler getGroups])
         {
             [names addObject:group[@"title"]];
-            [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : UIColor.iconColorActive];
+            [colors addObject:group[@"color"] ? [UIColor colorFromString:group[@"color"]] : [UIColor colorNamed:ACColorNameIconColorActive]];
             [sizes addObject:group[@"count"]];
         }
     }
@@ -526,7 +527,7 @@
         @"key" : @"all_colors",
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_all_colors"),
-        @"titleTintColor" :UIColor.textColorActive
+        @"titleTintColor" :[UIColor colorNamed:ACColorNameTextColorActive]
     }];
     _allColorsRowIndex = section.count - 1;
 
@@ -550,7 +551,7 @@
         @"type" : [OARightIconTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"update_existing"),
         @"img" : @"ic_custom_replace",
-        @"color" : UIColor.iconColorActive,
+        @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"key" : kReplaceKey
     }];
     _replaceIndexPath = [NSIndexPath indexPathForRow:section.count - 1 inSection:section.count];
@@ -560,7 +561,7 @@
             @"type" : [OARightIconTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_delete"),
             @"img" : @"ic_custom_remove_outlined",
-            @"color" : UIColor.buttonBgColorDisruptive,
+            @"color" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
             @"key" : kDeleteKey
         }];
     }
@@ -575,7 +576,7 @@
     OATextInputFloatingCell *resultCell = (OATextInputFloatingCell *)[nib objectAtIndex:0];
     
     MDCMultilineTextField *textField = resultCell.inputField;
-    textField.textColor = [UIColor textColorPrimary];
+    textField.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     [textField.underline removeFromSuperview];
     textField.placeholder = hint;
     [textField.textView setText:text];
@@ -587,7 +588,7 @@
     [textField.clearButton addTarget:self action:@selector(clearButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     textField.adjustsFontForContentSizeCategory = YES;
-    textField.clearButton.imageView.tintColor = UIColor.iconColorDefault;
+    textField.clearButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateNormal];
     [textField.clearButton setImage:[UIImage templateImageNamed:@"ic_custom_clear_field.png"] forState:UIControlStateHighlighted];
 
@@ -595,8 +596,8 @@
         _floatingTextFieldControllers = [NSMutableArray new];
     MDCTextInputControllerUnderline *fieldController = [[MDCTextInputControllerUnderline alloc] initWithTextInput:textField];
     fieldController.inlinePlaceholderFont = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
-    fieldController.inlinePlaceholderColor = UIColor.textColorSecondary;
-    [fieldController setFloatingPlaceholderNormalColor:UIColor.textColorSecondary];
+    fieldController.inlinePlaceholderColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    [fieldController setFloatingPlaceholderNormalColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
     fieldController.floatingPlaceholderActiveColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.floatingPlaceholderNormalColor = fieldController.floatingPlaceholderNormalColor;
     fieldController.textInput.textInsetsMode = MDCTextInputTextInsetsModeIfContent;
@@ -811,7 +812,7 @@
 
             UIColor *tintColor = item[@"titleTintColor"];
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = tintColor ?: UIColor.textColorPrimary;
+            cell.titleLabel.textColor = tintColor ?: [UIColor colorNamed:ACColorNameTextColorPrimary];
         }
         return cell;
     }

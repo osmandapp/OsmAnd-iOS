@@ -33,7 +33,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="35g-Ec-YaE">
                                     <rect key="frame" x="191" y="7" width="32" height="3"/>
-                                    <color key="backgroundColor" name="separatorColor"/>
+                                    <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="3" id="DKC-Ba-tOz"/>
                                         <constraint firstAttribute="width" constant="32" id="SxB-nd-jNL"/>
@@ -69,7 +69,7 @@
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="backgroundColor" name="viewBg"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="E5l-P8-lOD" secondAttribute="bottom" constant="17" id="08Z-Vk-Gnk"/>
                                         <constraint firstAttribute="bottom" secondItem="MYf-5X-Eur" secondAttribute="bottom" constant="13" id="DnI-95-cgC"/>
@@ -82,13 +82,13 @@
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uri-VU-2iv">
                                     <rect key="frame" x="0.0" y="56" width="414" height="1"/>
-                                    <color key="backgroundColor" name="separatorColor"/>
+                                    <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="2c8-l0-Wan"/>
                                     </constraints>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <constraints>
                                 <constraint firstItem="vUX-o5-qve" firstAttribute="top" secondItem="35g-Ec-YaE" secondAttribute="bottom" id="03c-r6-49x"/>
                                 <constraint firstItem="vUX-o5-qve" firstAttribute="leading" secondItem="9KH-Oe-Bsr" secondAttribute="leading" id="0oW-3H-VL7"/>
@@ -104,12 +104,12 @@
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="0LQ-wU-CWL">
                             <rect key="frame" x="0.0" y="57" width="414" height="212"/>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <color key="separatorColor" name="separatorColor"/>
                         </tableView>
                     </subviews>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <constraints>
                         <constraint firstItem="0LQ-wU-CWL" firstAttribute="leading" secondItem="CfP-pT-gLi" secondAttribute="leading" id="5AW-dF-C3z"/>
                         <constraint firstAttribute="trailing" secondItem="0LQ-wU-CWL" secondAttribute="trailing" id="6Za-rQ-fRY"/>
@@ -150,7 +150,7 @@
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="bpV-yl-rt5" secondAttribute="trailing" constant="20" id="MY9-uj-Da2"/>
                         <constraint firstItem="bpV-yl-rt5" firstAttribute="top" secondItem="OpM-9D-PZT" secondAttribute="top" constant="9" id="cFH-j0-FwC"/>
@@ -159,7 +159,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="6TG-KX-JXg"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="6TG-KX-JXg" firstAttribute="bottom" secondItem="OpM-9D-PZT" secondAttribute="top" priority="750" constant="60" id="1nT-5U-Us9"/>
                 <constraint firstItem="OpM-9D-PZT" firstAttribute="top" secondItem="CfP-pT-gLi" secondAttribute="bottom" id="3RX-vz-8dc"/>
@@ -191,6 +191,9 @@
         <namedColor name="buttonTextColorSecondary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -200,7 +203,7 @@
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

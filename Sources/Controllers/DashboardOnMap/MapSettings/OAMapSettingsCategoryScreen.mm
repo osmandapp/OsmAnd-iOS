@@ -15,6 +15,7 @@
 #import "Localization.h"
 #import "OAMapStyleSettings.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 typedef void(^OAMapSettingsCategoryCellDataOnSwitch)(BOOL is, NSIndexPath *indexPath);
 typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
@@ -234,7 +235,7 @@ typedef void(^OAMapSettingsCategoryCellDataOnSelect)();
                 else
                     icon = [UIImage templateImageNamed:item[@"icon"]];
                 cell.leftIconView.image = icon;
-                cell.leftIconView.tintColor = isOn ? UIColor.iconColorSelected: UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = isOn ? [UIColor colorNamed:ACColorNameIconColorSelected]: [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
             [cell.switchView setOn:isOn];
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];

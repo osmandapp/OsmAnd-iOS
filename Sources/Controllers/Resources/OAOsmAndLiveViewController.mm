@@ -28,6 +28,7 @@
 #import "OAWorldRegion.h"
 #import "OAOsmAndLiveHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/IncrementalChangesManager.h>
 
@@ -98,22 +99,22 @@ static const NSInteger sectionCount = 2;
     [self.navigationController setNavigationBarHidden:NO animated:NO];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
-    appearance.shadowColor = UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     blurAppearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     [self prefersStatusBarHidden];
@@ -144,13 +145,13 @@ static const NSInteger sectionCount = 2;
 {
     _titleLabel = [[UILabel alloc] init];
     _titleLabel.backgroundColor = UIColor.clearColor;
-    _titleLabel.textColor = UIColor.navBarTextColorPrimary;
+    _titleLabel.textColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     _titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightSemibold maximumSize:22.];
     _titleLabel.text = OALocalizedString(@"live_updates");
     
     _timeLabel = [[UILabel alloc] init];
     _timeLabel.backgroundColor = UIColor.clearColor;
-    _timeLabel.textColor = UIColor.navBarTextColorPrimary;
+    _timeLabel.textColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     _timeLabel.font = [UIFont scaledSystemFontOfSize:13. maximumSize:18.];
     
     _stackView = [[UIStackView alloc] initWithArrangedSubviews:@[_titleLabel, _timeLabel]];
@@ -550,7 +551,7 @@ static const NSInteger sectionCount = 2;
                 button.frame = buttonFrame;
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
                 label.tag = kEnabledLabelTag;
-                label.textColor = [[UIColor textColorPrimary] colorWithAlphaComponent:0.5];
+                label.textColor = [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
                 label.adjustsFontForContentSizeCategory = YES;
                 [label setText:[OALocalizedString(@"live_updates") upperCase]];
@@ -569,7 +570,7 @@ static const NSInteger sectionCount = 2;
                 UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 55.0)];
                 UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(kLeftMarginTextLabel + leftMargin, 50 - 18, tableView.frame.size.width, 18)];
                 label.tag = kAvailableLabelTag;
-                label.textColor = [[UIColor textColorPrimary] colorWithAlphaComponent:0.5];
+                label.textColor = [[UIColor colorNamed:ACColorNameTextColorPrimary] colorWithAlphaComponent:0.5];
                 [label setFont:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote]];
                 label.adjustsFontForContentSizeCategory = YES;
                 [label setText:[OALocalizedString(@"available_maps") upperCase]];

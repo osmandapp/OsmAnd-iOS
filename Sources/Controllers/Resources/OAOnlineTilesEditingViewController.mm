@@ -18,6 +18,7 @@
 #import "OAResourcesBaseViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAMapCreatorHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -377,7 +378,7 @@
             {
                 cell.userInteractionEnabled = YES;
                 cell.textView.text = isURL ? _itemURL : _itemName;
-                cell.textView.textColor = [UIColor textColorPrimary];
+                cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
                 [cell clearButtonVisibility:YES];
             }
         }
@@ -433,7 +434,7 @@
                 else
                     cell.valueLabel.text = @"";
                 
-                cell.valueLabel.textColor = UIColor.textColorPrimary;
+                cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
                 cell.selectionStyle = UITableViewCellSelectionStyleDefault;
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
@@ -454,7 +455,7 @@
                     else
                     {
                         cell.userInteractionEnabled = YES;
-                        cell.titleLabel.textColor = [UIColor textColorPrimary];
+                        cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
                     }
                 }
                 cell.valueLabel.textColor = UIColor.lightGrayColor;

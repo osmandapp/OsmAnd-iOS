@@ -34,6 +34,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAMapActions.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAFollowTrackBottomSheetViewController () <UITableViewDelegate, UITableViewDataSource, OAOpenAddTrackDelegate>
 
@@ -85,7 +86,7 @@
     self.tableView.separatorInset = UIEdgeInsetsMake(0., 20., 0., 0.);
     [self.rightButton removeFromSuperview];
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_arrow_back"]];
-    self.leftIconView.tintColor = UIColor.iconColorActive;
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.closeButton removeFromSuperview];
     [self.headerDividerView removeFromSuperview];
     
@@ -314,7 +315,7 @@
             cell.segmentControl.selectedSegmentTintColor = UIColorFromRGB(color_primary_purple);
             UIFont *font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
             [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.whiteColor, NSFontAttributeName : font} forState:UIControlStateSelected];
-            [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : UIColor.buttonTextColorSecondary, NSFontAttributeName : font} forState:UIControlStateNormal];
+            [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameButtonTextColorSecondary], NSFontAttributeName : font} forState:UIControlStateNormal];
         }
         if (cell)
         {
@@ -348,10 +349,10 @@
             [cell setRightButtonVisibility:YES];
             [cell.editButton removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
             [cell.editButton addTarget:self action:@selector(openPlanRoute) forControlEvents:UIControlEventTouchUpInside];
-            cell.editButton.imageView.tintColor = UIColor.iconColorActive;
-            cell.distanceImageView.tintColor = UIColor.textColorSecondary;
-            cell.timeImageView.tintColor = UIColor.textColorSecondary;
-            cell.wptImageView.tintColor = UIColor.textColorSecondary;
+            cell.editButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            cell.distanceImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.timeImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.wptImageView.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         if (cell)
         {
@@ -376,7 +377,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             cell.titleLabel.lineBreakMode = NSLineBreakByWordWrapping;
-            [cell.leftIconView setTintColor:UIColor.iconColorActive];
+            [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
             [cell descriptionVisibility:NO];
         }
         if (cell)
@@ -396,7 +397,7 @@
             cell = (OASwitchTableViewCell *) nib[0];
             [cell descriptionVisibility:NO];
             cell.separatorInset = UIEdgeInsetsMake(0., 66., 0., 0.);
-            cell.leftIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -509,7 +510,7 @@
         case UIGestureRecognizerStateBegan:
         {
             [UIView animateWithDuration:.1 animations:^{
-                self.leftIconView.tintColor = UIColor.iconColorDisabled;
+                self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             }];
             break;
         }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -37,7 +37,7 @@
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hDT-Xv-tZT">
                                     <rect key="frame" x="191" y="7" width="32" height="3"/>
-                                    <color key="backgroundColor" name="separatorColor"/>
+                                    <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="3" id="Pns-wp-Ubm"/>
                                         <constraint firstAttribute="width" constant="32" id="epF-RU-Cat"/>
@@ -73,7 +73,7 @@
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="backgroundColor" name="viewBg"/>
                                     <constraints>
                                         <constraint firstAttribute="bottom" secondItem="A82-Si-Nre" secondAttribute="bottom" constant="13" id="4sa-n9-7hf"/>
                                         <constraint firstAttribute="bottom" secondItem="lfT-nN-zar" secondAttribute="bottom" constant="17" id="I9d-i7-ZUJ"/>
@@ -86,13 +86,13 @@
                                 </view>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0YQ-hO-f8m">
                                     <rect key="frame" x="0.0" y="56" width="414" height="1"/>
-                                    <color key="backgroundColor" name="separatorColor"/>
+                                    <color key="backgroundColor" name="customSeparator"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="1" id="rGP-D6-kNy"/>
                                     </constraints>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <constraints>
                                 <constraint firstItem="MBb-eo-8Tb" firstAttribute="top" secondItem="hDT-Xv-tZT" secondAttribute="bottom" id="23w-qc-2dz"/>
                                 <constraint firstItem="hDT-Xv-tZT" firstAttribute="top" secondItem="dV9-7p-AIK" secondAttribute="top" constant="7" id="3jY-7X-AZ1"/>
@@ -108,12 +108,12 @@
                         </view>
                         <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="1" sectionFooterHeight="1" translatesAutoresizingMaskIntoConstraints="NO" id="LmH-OX-TLM">
                             <rect key="frame" x="0.0" y="57" width="414" height="212"/>
-                            <color key="backgroundColor" name="viewBgColor"/>
+                            <color key="backgroundColor" name="viewBg"/>
                             <color key="tintColor" name="iconColorActive"/>
-                            <color key="separatorColor" name="separatorColor"/>
+                            <color key="separatorColor" name="customSeparator"/>
                         </tableView>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <constraints>
                         <constraint firstItem="dV9-7p-AIK" firstAttribute="leading" secondItem="n55-xU-JmH" secondAttribute="leading" id="7sW-nc-JbQ"/>
                         <constraint firstItem="LmH-OX-TLM" firstAttribute="top" secondItem="dV9-7p-AIK" secondAttribute="bottom" id="Mtw-mF-rmU"/>
@@ -158,7 +158,7 @@
                             </constraints>
                         </stackView>
                     </subviews>
-                    <color key="backgroundColor" name="viewBgColor"/>
+                    <color key="backgroundColor" name="viewBg"/>
                     <constraints>
                         <constraint firstAttribute="trailing" secondItem="7rM-Jb-2NN" secondAttribute="trailing" constant="20" id="7ak-iP-erd"/>
                         <constraint firstItem="7rM-Jb-2NN" firstAttribute="top" secondItem="HhA-1G-fA2" secondAttribute="top" constant="9" id="Los-tb-S9G"/>
@@ -167,7 +167,7 @@
                 </view>
             </subviews>
             <viewLayoutGuide key="safeArea" id="LaD-HO-cQF"/>
-            <color key="backgroundColor" name="viewBgColor"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstItem="n55-xU-JmH" firstAttribute="top" secondItem="maG-Em-0zE" secondAttribute="top" id="95C-3V-jEU"/>
                 <constraint firstItem="HhA-1G-fA2" firstAttribute="bottom" secondItem="maG-Em-0zE" secondAttribute="bottom" id="BgC-Ml-Uwr"/>
@@ -199,19 +199,19 @@
         <namedColor name="buttonTextColorSecondary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <namedColor name="textColorPrimary">
             <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

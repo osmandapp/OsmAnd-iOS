@@ -15,6 +15,7 @@
 #import "OAWeatherHelper.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAWeatherCacheSettingsViewController () <UIViewControllerTransitioningDelegate>
 
@@ -251,14 +252,14 @@
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-            cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         }
         if (cell)
         {
             BOOL isClear = [item[@"key"] isEqualToString:@"clear"];
             cell.selectionStyle = isClear && _clearButtonActive ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isClear ? _clearButtonActive ? UIColor.buttonBgColorDisruptive : UIColor.textColorSecondary : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = isClear ? _clearButtonActive ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.textStackView.alignment = isClear && _type == EOAWeatherOnlineData ? UIStackViewAlignmentCenter : UIStackViewAlignmentLeading;
         }
         return cell;
@@ -271,7 +272,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OARightIconTableViewCell *) nib[0];
             [cell leftIconVisibility:NO];
-            cell.rightIconView.tintColor = UIColor.buttonBgColorDisruptive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
             cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_remove_outlined"];
         }
         if (cell)

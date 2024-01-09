@@ -9,6 +9,7 @@
 #import "OASelectionCollapsableCell.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OASelectionCollapsableCell
 
@@ -18,7 +19,7 @@
 
     self.selectionButtonContainer.layer.cornerRadius = 10.75;
     self.selectionButtonContainer.layer.borderWidth = 1.5;
-    self.selectionButtonContainer.layer.borderColor = UIColor.iconColorDefault.CGColor;
+    self.selectionButtonContainer.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
 
     self.checkboxHeightContainer.constant = 21.5;
     self.checkboxWidthContainer.constant = 21.5;
@@ -29,7 +30,7 @@
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        self.selectionButtonContainer.layer.borderColor = UIColor.iconColorDefault.CGColor;
+        self.selectionButtonContainer.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorDefault].CGColor;
 }
 
 - (void)updateConstraints

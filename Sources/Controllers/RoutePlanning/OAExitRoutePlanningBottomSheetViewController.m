@@ -12,6 +12,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OATextLineViewCell.h"
 #import "OAFilledButtonCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -106,16 +107,16 @@
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_exit"),
-        @"buttonColor" : UIColor.buttonBgColorSecondary,
-        @"textColor" : UIColor.buttonTextColorSecondary,
+        @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
+        @"textColor" : [UIColor colorNamed:ACColorNameButtonTextColorSecondary],
         @"action": @"exitButtonPressed"
     }];
 
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_save"),
-        @"buttonColor" : UIColor.buttonBgColorPrimary,
-        @"textColor" : UIColor.buttonTextColorPrimary,
+        @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorPrimary],
+        @"textColor" : [UIColor colorNamed:ACColorNameButtonTextColorPrimary],
         @"action": @"saveButtonPressed"
     }];
 }
@@ -171,7 +172,7 @@
         if (cell)
         {
             cell.backgroundColor = UIColor.clearColor;
-            [cell.textView setTextColor:[UIColor textColorSecondary]];
+            [cell.textView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
             [cell.textView setText:item[@"title"]];
         }
         return cell;

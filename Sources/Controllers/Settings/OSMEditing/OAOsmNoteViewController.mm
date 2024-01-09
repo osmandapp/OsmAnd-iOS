@@ -22,6 +22,7 @@
 #import "OAUploadOsmPointsAsyncTask.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMappersViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAOsmNoteViewController () <UITextViewDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
 
@@ -143,7 +144,7 @@
             [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
             [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
             [accountCell setIconName:@"ic_custom_user_profile"];
-            [accountCell setObj:(_isAuthorised ? UIColor.textColorPrimary : UIColor.iconColorActive) forKey:@"title_color"];
+            [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive]) forKey:@"title_color"];
             [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
             [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
             [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
@@ -242,7 +243,7 @@
             cell.titleLabel.textColor = [item objForKey:@"title_color"];
             cell.titleLabel.font = [item objForKey:@"title_font"];
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
             cell.accessibilityTraits = UIAccessibilityTraitButton;
         }

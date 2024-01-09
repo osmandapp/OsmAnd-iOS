@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACloudAccountLogoutViewController
 {
@@ -80,10 +81,10 @@
             [cell leftIconVisibility:!isLogoutCell];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isLogoutCell ? UIFontWeightMedium : UIFontWeightRegular];
             cell.titleLabel.text = item[@"title"];
-            cell.titleLabel.textColor = isLogoutCell ? UIColor.buttonBgColorDisruptive : UIColor.textColorPrimary;
+            cell.titleLabel.textColor = isLogoutCell ? [UIColor colorNamed:ACColorNameButtonBgColorDisruptive] : [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.titleLabel.textAlignment = isLogoutCell ? NSTextAlignmentCenter : NSTextAlignmentNatural;
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = UIColor.iconColorDefault;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         }
         outCell = cell;
     }

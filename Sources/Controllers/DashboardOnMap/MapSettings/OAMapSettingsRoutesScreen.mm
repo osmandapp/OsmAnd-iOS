@@ -17,6 +17,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OASizes.h"
 #import "OAMapStyleSettings.h"
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsRoutesSection)
 {
@@ -293,7 +294,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
             }
             
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? UIColor.iconColorActive : UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = enabled ? isMountain || isDifficultyClassification ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             [cell.switchView setOn:enabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -371,7 +372,7 @@ typedef NS_ENUM(NSInteger, ERoutesSettingType)
     if (section == EOAMapSettingsRoutesSectionValues && _routesEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColor.textColorSecondary;
+        header.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 

@@ -330,7 +330,7 @@
         id <IChartDataSet> dataSet = dataSets.firstObject;
 
         GPXDataSetAxisType axisType = [GpxUIHelper getDataSetAxisTypeWithDataSet:dataSet];
-        if (axisType == GPXDataSetAxisTypeTime || axisType == GPXDataSetAxisTypeTimeofday)
+        if (axisType == GPXDataSetAxisTypeTime || axisType == GPXDataSetAxisTypeTimeOfDay)
         {
             float startTime = startPos * 1000;
             float endTime = endPos * 1000;

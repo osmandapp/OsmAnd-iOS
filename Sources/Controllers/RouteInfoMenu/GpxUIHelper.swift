@@ -48,7 +48,7 @@ import Charts
 @objc public enum GPXDataSetAxisType: Int {
     case distance = 0
     case time = 1
-    case timeofday = 2
+    case timeOfDay = 2
 
     public func getName() -> String {
         switch self {
@@ -56,7 +56,7 @@ import Charts
             return OAUtilities.getLocalizedString("shared_string_distance");
         case .time:
             return OAUtilities.getLocalizedString("shared_string_time");
-        case .timeofday:
+        case .timeOfDay:
             return OAUtilities.getLocalizedString("time_of_day");
         }
     }
@@ -67,7 +67,7 @@ import Charts
             return ""
         case .time:
             return ""
-        case .timeofday:
+        case .timeOfDay:
             return ""
         }
     }
@@ -632,7 +632,7 @@ import Charts
                                       useRightAxis: Bool,
                                       drawFilled: Bool,
                                       calcWithoutGaps: Bool) -> OrderedLineDataSet? {
-        if (axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeofday) {
+        if (axisType == GPXDataSetAxisType.time || axisType == GPXDataSetAxisType.timeOfDay) {
             return nil;
         }
         let mc: EOAMetricsConstant = OAAppSettings.sharedManager().metricSystem.get()
@@ -829,7 +829,7 @@ import Charts
         var x: Double
         for e in elevationData {
             i += 1;
-            if (axisType == .time || axisType == .timeofday) {
+            if (axisType == .time || axisType == .timeOfDay) {
                 x = Double(e.time);
             } else {
                 x = e.distance;
@@ -964,7 +964,7 @@ import Charts
         let xAxis: XAxis = lineChart.xAxis
         if axisType == .time && analysis.isTimeSpecified() {
             return setupXAxisTime(xAxis: xAxis, timeSpan: Int64(calcWithoutGaps ? analysis.timeSpanWithoutGaps : analysis.timeSpan))
-        } else if axisType == .timeofday && analysis.isTimeSpecified() {
+        } else if axisType == .timeOfDay && analysis.isTimeSpecified() {
             return setupXAxisTimeOfDay(xAxis: xAxis, startTime: Int64(analysis.startTime))
         } else {
             return setupAxisDistance(axisBase: xAxis, meters: Double(calcWithoutGaps ? analysis.totalDistanceWithoutGaps : analysis.totalDistance))
@@ -991,7 +991,7 @@ import Charts
 
         for i in 0..<pointAttributes.count {
             let attribute: PointAttributes = pointAttributes[i]
-            let stepX: Double = Double(axisType == .time || axisType == .timeofday ? attribute.timeDiff : attribute.distance)
+            let stepX: Double = Double(axisType == .time || axisType == .timeOfDay ? attribute.timeDiff : attribute.distance)
             if i == 0 || stepX > 0 {
                 if !(calcWithoutGaps && attribute.firstPoint) {
                     currentX += stepX / divX

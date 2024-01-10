@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -14,36 +15,91 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="346"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oBU-WU-gcY">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="346"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Ozp-l2-heC" userLabel="Bottom sheet header">
+                    <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
+                    <subviews>
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="myJ-te-VaF">
+                            <rect key="frame" x="20" y="19" width="96" height="22"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="22" id="cJ1-j2-xDs"/>
+                            </constraints>
+                            <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="17"/>
+                            <color key="textColor" name="textColorPrimary"/>
+                            <nil key="highlightedColor"/>
+                        </label>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3kl-lL-bKO">
+                            <rect key="frame" x="270" y="15" width="30" height="30"/>
+                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="30" id="j60-Q8-Qhx"/>
+                                <constraint firstAttribute="width" constant="30" id="nfo-sx-XOv"/>
+                            </constraints>
+                            <color key="tintColor" name="iconColorSecondary"/>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain" image="ic_custom_close.png"/>
+                            <connections>
+                                <action selector="onCloseButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="OKK-uk-WP6"/>
+                            </connections>
+                        </button>
+                    </subviews>
+                    <color key="backgroundColor" name="groupBg"/>
+                    <constraints>
+                        <constraint firstItem="myJ-te-VaF" firstAttribute="centerY" secondItem="Ozp-l2-heC" secondAttribute="centerY" id="2CQ-wA-OeT"/>
+                        <constraint firstAttribute="trailing" secondItem="3kl-lL-bKO" secondAttribute="trailing" constant="20" symbolic="YES" id="5Tp-DS-HqZ"/>
+                        <constraint firstAttribute="height" constant="60" id="LuA-nL-9cO"/>
+                        <constraint firstItem="myJ-te-VaF" firstAttribute="leading" secondItem="Ozp-l2-heC" secondAttribute="leadingMargin" constant="12" id="o3D-dA-6N0"/>
+                        <constraint firstItem="3kl-lL-bKO" firstAttribute="centerY" secondItem="Ozp-l2-heC" secondAttribute="centerY" id="qZ1-5L-ZcQ"/>
+                    </constraints>
+                </view>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oBU-WU-gcY">
+                    <rect key="frame" x="0.0" y="60" width="320" height="286"/>
                     <color key="backgroundColor" name="groupBg"/>
                     <color key="tintColor" name="iconColorActive"/>
-                    <color key="separatorColor" name="customSeparator"/>
+                    <color key="separatorColor" name="widgetSeparatorColor"/>
                     <connections>
                         <outlet property="dataSource" destination="iN0-l3-epB" id="xZg-ft-w0L"/>
                         <outlet property="delegate" destination="iN0-l3-epB" id="fxn-AJ-d4a"/>
                     </connections>
                 </tableView>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <viewLayoutGuide key="safeArea" id="8iZ-h4-jSI"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+            <constraints>
+                <constraint firstItem="Ozp-l2-heC" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="AY7-G8-4uL"/>
+                <constraint firstAttribute="trailing" secondItem="Ozp-l2-heC" secondAttribute="trailing" id="EVe-PI-6wo"/>
+                <constraint firstItem="oBU-WU-gcY" firstAttribute="top" secondItem="Ozp-l2-heC" secondAttribute="bottom" id="cDg-XZ-ag3"/>
+                <constraint firstItem="Ozp-l2-heC" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="mjx-Ol-jzJ"/>
+                <constraint firstAttribute="bottom" secondItem="oBU-WU-gcY" secondAttribute="bottom" id="qkE-NA-6vq"/>
+                <constraint firstAttribute="trailing" secondItem="oBU-WU-gcY" secondAttribute="trailing" id="svg-19-etA"/>
+                <constraint firstItem="oBU-WU-gcY" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="zkA-zP-oWg"/>
+            </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
+                <outlet property="headerCloseButton" destination="3kl-lL-bKO" id="CJx-o8-wJd"/>
+                <outlet property="headerLabel" destination="myJ-te-VaF" id="sD3-ar-NWr"/>
+                <outlet property="headerView" destination="Ozp-l2-heC" id="TJG-9j-zaW"/>
                 <outlet property="tableView" destination="oBU-WU-gcY" id="a5V-K5-kaV"/>
             </connections>
             <point key="canvasLocation" x="46.875" y="-62.323943661971832"/>
         </view>
     </objects>
     <resources>
-        <namedColor name="customSeparator">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
+        <image name="ic_custom_close.png" width="30" height="30"/>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorSecondary">
+            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorPrimary">
+            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="widgetSeparatorColor">
+            <color red="0.89803921568627454" green="0.8901960784313725" blue="0.90980392156862744" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

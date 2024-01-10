@@ -35,6 +35,15 @@ class WidgetType: NSObject {
         self.defaultPanel = defaultPanel
         self.special = special
     }
+    
+    var isComplex: Bool {
+        [.elevationProfile,
+         .coordinatesMapCenter,
+         .coordinatesCurrentLocation,
+         .streetName,
+         .markersTopBar,
+         .lanes].contains(self)
+    }
 
     func getGroup() -> WidgetGroup? {
         if (group == .altitude) {
@@ -47,7 +56,7 @@ class WidgetType: NSObject {
     }
 
     func getGroupDescription() -> String {
-        if (self == .magneticBearing) {
+        if self == .magneticBearing {
             return localizedString("magnetic_bearing_widget_desc")
         }
 //        else if (self == AV_NOTES_ON_REQUEST) {
@@ -57,19 +66,19 @@ class WidgetType: NSObject {
     }
 
     func getSecondaryDescription() -> String? {
-        if (self == .coordinatesCurrentLocation || self == .coordinatesMapCenter) {
+        if self == .coordinatesCurrentLocation || self == .coordinatesMapCenter {
             let configureProfile = localizedString("configure_profile")
             let generalSettings = localizedString("general_settings_2")
             let coordinatesFormat = localizedString("coordinates_format")
             return String(format: localizedString("coordinates_widget_secondary_desc"), configureProfile, generalSettings, coordinatesFormat)
-        } else if (self == .devFps) {
+        } else if self == .devFps {
             return WidgetGroup.getPartOfPluginDesc(plugin: OAOsmandDevelopmentPlugin.self)
-        } else if (self == .mapillary) {
+        } else if self == .mapillary {
             return WidgetGroup.getPartOfPluginDesc(plugin: OAMapillaryPlugin.self)
-        } else if (self == .parking) {
+        } else if self == .parking {
             return WidgetGroup.getPartOfPluginDesc(plugin: OAParkingPositionPlugin.self)
         } else if let group {
-            if (group == .weather) {
+            if group == .weather {
                 return localizedString("weather_widgets_secondary_desc")
             } else {
                 return group.getSecondaryDescription()

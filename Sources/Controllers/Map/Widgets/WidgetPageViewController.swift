@@ -8,6 +8,36 @@
 
 import UIKit
 
+enum WidgetSizeStyle {
+    case regular, small, medium, large
+    
+    var labelFont: UIFont {
+        switch self {
+#warning("regular")
+        case .regular: UIFont.systemFont(ofSize: 20)
+        case .small: UIFont.systemFont(ofSize: 22)
+        case .medium: UIFont.systemFont(ofSize: 33)
+        case .large: UIFont.systemFont(ofSize: 55)
+        }
+    }
+    
+    var valueFont: UIFont {
+        switch self {
+#warning("regular")
+        case .regular: UIFont.systemFont(ofSize: 20)
+        case .small, .medium, .large: UIFont.systemFont(ofSize: 11)
+        }
+    }
+    
+    var unitsFont: UIFont {
+        switch self {
+#warning("regular")
+        case .regular: UIFont.systemFont(ofSize: 20)
+        case .small, .medium, .large: UIFont.systemFont(ofSize: 11)
+        }
+    }
+}
+
 @objc(OAWidgetPageViewController)
 @objcMembers
 final class WidgetPageViewController: UIViewController {
@@ -20,19 +50,19 @@ final class WidgetPageViewController: UIViewController {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.alignment = .fill
-        stackView.spacing = 0
+        stackView.spacing = 1
         stackView.distribution = .fillEqually
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
     
-    private lazy var verticalDivider: UIView = {
-        let view = UIView()
-        view.backgroundColor = UIColor.lightGray
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.widthAnchor.constraint(equalToConstant: 0.5).isActive = true
-        return view
-    }()
+//    private lazy var verticalDivider: UIView = {
+//        let view = UIView()
+//        view.backgroundColor = UIColor.lightGray
+//        view.translatesAutoresizingMaskIntoConstraints = false
+//        view.widthAnchor.constraint(equalToConstant: 0.5).isActive = true
+//        return view
+//    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,12 +74,12 @@ final class WidgetPageViewController: UIViewController {
         stackView.spacing = 0
         
         // Add the widget views to the stack view
-        var index = 0
+  //      var index = 0
         for widgetView in widgetViews {
             if isMultipleWidgetsInRow {
-                if index > 0 {
-                    multipleWidgetsInRowStackView.addArrangedSubview(verticalDivider)
-                }
+//                if index > 0 {
+//                    multipleWidgetsInRowStackView.addArrangedSubview(verticalDivider)
+//                }
                 multipleWidgetsInRowStackView.addArrangedSubview(widgetView)
             } else {
                 widgetView.adjustSize()
@@ -58,7 +88,7 @@ final class WidgetPageViewController: UIViewController {
                 constraint.isActive = true
                 stackView.addArrangedSubview(widgetView)
             }
-            index += 1
+         //   index += 1
         }
         if isMultipleWidgetsInRow {
             stackView.addArrangedSubview(multipleWidgetsInRowStackView)

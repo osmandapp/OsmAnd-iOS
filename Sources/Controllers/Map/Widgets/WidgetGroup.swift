@@ -22,9 +22,6 @@ class WidgetGroup: NSObject {
     static let altitude = WidgetGroup(title: localizedString("altitude"), descr: localizedString("map_widget_altitude_desc"), iconName: "widget_altitude")
     static let weather = WidgetGroup(title: localizedString("shared_string_weather"), descr:localizedString("weather_widget_group_desc"), iconName: "widget_weather_umbrella")
     static let sunriseSunset = WidgetGroup(title: localizedString("map_widget_group_sunrise_sunset"), descr:localizedString("map_widget_group_sunrise_sunset_desc"), iconName: "widget_sunset")
-//        ANT_PLUS(R.string.external_sensor_widgets, 0, R.drawable.widget_sensor_external_day, R.drawable.widget_sensor_external_night, 0),
-    //        AUDIO_VIDEO_NOTES(R.string.map_widget_av_notes, R.string.audio_video_notes_desc, R.drawable.widget_av_photo_day, R.drawable.widget_av_photo_night, R.string.docs_widget_av_notes),
-    
     static let externalSensors = WidgetGroup(title: localizedString("external_sensors_plugin_name"), descr:localizedString("external_sensors_plugin_description"), iconName: "widget_sensor_external")
     
     static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors]

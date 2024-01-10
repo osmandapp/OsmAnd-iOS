@@ -301,7 +301,7 @@
 "prefer_in_routing_title" = "선호…";
 "nav_type_descr" = "이 프로필의 경로를 계산하는 방법 선택";
 "nav_type_osmand" = "OsmAnd(오프라인 라우팅)";
-"routing_profile_straightline" = "직선";
+"routing_profile_straightline" = "스트라이트 라인";
 "routing_profile_ski" = "스키";
 "routing_profile_geocoding" = "지오코딩";
 "fast_route_mode_descr" = "\"가장 빠른 경로를 활성화하거나 or 가장 짧은 경로를 비활성화합니다 \"";
@@ -386,7 +386,7 @@
 "speed_limit_exceed" = "속도 제한 공차";
 "si_mi_yard" = "마일스/야드";
 "snap_to_road" = "도로로 스냅";
-"snap_to_road_descr" = "항법 중 도로에 스냅 위치";
+"snap_to_road_descr" = "현재 위치 아이콘이 현재 내비게이션 경로로 스냅하기";
 "show_warnings_descr" = "트래픽 경고(속도 제한, 강제 정지, 속도 범프), 속도 카메라 경고 및 차선 정보를 구성합니다";
 "srtm_download_list_help_message" = "osmand는 미터와 피트 단위로 윤곽선 데이터를 제공한다. 형식을 변경하려면 파일을 다시 다운로드해야 한다.";
 "traffic_warning_stop" = "정지 기호";
@@ -481,7 +481,7 @@
 "osm_note_upload_immediately" = "즉시 업로드";
 "configure_profile" = "프로파일 구성";
 "default_speed_setting_title" = "기본 속도";
-"save_global_track_interval_descr" = "(지도의 GPX 기록 위젯을 통해 활성화) 일반 트랙 기록에 대한 기록 간격을 선택합니다.";
+"save_global_track_interval_descr" = "일반 트랙 기록에 대한 로깅 간격을 지정합니다(지도의 '여행 기록' 위젯을 통해 켜짐).";
 "save_track_interval" = "운행중 로깅 간격";
 "map_widget_transparent" = "투명 위젯";
 "map_widget_compass" = "나침반";
@@ -1494,3 +1494,12 @@
 "save_track_logging_accuracy" = "로깅정확도";
 "cloud_email_not_registered" = "이 이메일 주소는 OsmAnd Cloud에 등록되어 있지 않음";
 "login_account" = "계정";
+"save_track_to_gpx_descrp" = "탐색하는 동안 트랙 녹음을 자동으로 시작하고 나중에 자동 저장합니다.";
+"whole_track" = "전체 트랙";
+"next_segment" = "다음 세그먼트";
+"simulation_real_mode_desc" = "똑바른 도로 단면도에, 속도는 최대 허용한 속도에 대략적일 것입니다.\n교차로에서 시뮬레이션이 느리게됩니다.\n여분 penalties는 교통 신호, 정지 표시, 등에 적용될 것입니다.";
+"recalc_angle_dialog_descr" = "내 위치와 계산 된 경로 사이의 여분 직선 세그먼트는 경로가 재 계산 될 때까지 표시됩니다";
+"recalc_angle_dialog_title" = "내 위치와 경로 사이의 최소 각도";
+"help_article_navigation_setup_route_details_name" = "경로 세부 정보";
+"help_article_navigation_setup_route_navigation_name" = "경로 준비";
+"shared_string_cache" = "캐시";

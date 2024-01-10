@@ -38,7 +38,19 @@
                             <state key="normal" title="Button"/>
                             <buttonConfiguration key="configuration" style="plain" image="ic_custom_close.png"/>
                             <connections>
-                                <action selector="onCloseButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="OKK-uk-WP6"/>
+                                <action selector="onCloseButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="GkH-SY-0uu"/>
+                            </connections>
+                        </button>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3f-pT-2CE" userLabel="Invisible big tap area">
+                            <rect key="frame" x="263" y="8" width="44" height="44"/>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="44" id="RGq-yy-ipe"/>
+                                <constraint firstAttribute="width" constant="44" id="iTq-kH-axx"/>
+                            </constraints>
+                            <state key="normal" title="Button"/>
+                            <buttonConfiguration key="configuration" style="plain"/>
+                            <connections>
+                                <action selector="onCloseButtonClicked:" destination="iN0-l3-epB" eventType="touchUpInside" id="cfa-9h-Ogc"/>
                             </connections>
                         </button>
                     </subviews>
@@ -47,8 +59,10 @@
                         <constraint firstItem="myJ-te-VaF" firstAttribute="centerY" secondItem="Ozp-l2-heC" secondAttribute="centerY" id="2CQ-wA-OeT"/>
                         <constraint firstAttribute="trailing" secondItem="3kl-lL-bKO" secondAttribute="trailing" constant="20" symbolic="YES" id="5Tp-DS-HqZ"/>
                         <constraint firstAttribute="height" constant="60" id="LuA-nL-9cO"/>
+                        <constraint firstItem="J3f-pT-2CE" firstAttribute="centerX" secondItem="3kl-lL-bKO" secondAttribute="centerX" id="b2w-WU-oVG"/>
                         <constraint firstItem="myJ-te-VaF" firstAttribute="leading" secondItem="Ozp-l2-heC" secondAttribute="leadingMargin" constant="12" id="o3D-dA-6N0"/>
                         <constraint firstItem="3kl-lL-bKO" firstAttribute="centerY" secondItem="Ozp-l2-heC" secondAttribute="centerY" id="qZ1-5L-ZcQ"/>
+                        <constraint firstItem="J3f-pT-2CE" firstAttribute="centerY" secondItem="3kl-lL-bKO" secondAttribute="centerY" id="w02-4f-j1u"/>
                     </constraints>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="oBU-WU-gcY">

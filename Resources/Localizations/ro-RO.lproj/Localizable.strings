@@ -3042,3 +3042,10 @@
 "help_article_navigation_routing_name" = "Parametrii rutei";
 "help_article_navigation_routing_bicycle_based_routing_name" = "Rutare pentru biciclete (MTB)";
 "help_article_navigation_routing_boat_navigation_name" = "Rutare pentru bărci";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_guidance_map_during_navigation_name" = "Ecranul hărții în timpul navigației";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"help_article_navigation_routing_car_based_routing_name" = "Rută auto (camion, motocicletă)";
+"help_article_navigation_routing_direct_to_point_routing_name" = "Rutare directă la punct (Barca)";
+"help_article_navigation_routing_horse_routing_name" = "Drumeție călare";
+"help_article_navigation_routing_pedestrian_routing_name" = "Traseul pietonilor";

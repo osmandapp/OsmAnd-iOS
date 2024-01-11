@@ -8233,7 +8233,6 @@
 			children = (
 				327D68A72A8FB6EB0076D1E0 /* cells */,
 				32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */,
-				327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */,
 			);
 			path = explore;
 			sourceTree = "<group>";
@@ -12388,10 +12387,15 @@
 			isa = PBXGroup;
 			children = (
 				DA5A7DC426C563A300F274C7 /* MyPlaces.storyboard */,
+				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
+				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
 				DA5A7DC326C563A300F274C7 /* OAFavoritesTabBarViewController.h */,
 				DA5A7DC526C563A300F274C7 /* OAFavoritesTabBarViewController.m */,
+				DA5A7E8026C563A400F274C7 /* OAGPXListViewController.h */,
+				DA5A7E7C26C563A400F274C7 /* OAGPXListViewController.mm */,
 				DA5A7DC726C563A300F274C7 /* OAOsmEditsListViewController.h */,
 				DA5A7DC626C563A300F274C7 /* OAOsmEditsListViewController.mm */,
+				327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */,
 			);
 			path = MyPlaces;
 			sourceTree = "<group>";
@@ -12512,8 +12516,6 @@
 				327B4AB3288F508E00AF71AF /* OAFavoriteViewController.xib */,
 				DA5A7E0926C563A300F274C7 /* OAFavoriteImportViewController.h */,
 				DA5A7E0426C563A300F274C7 /* OAFavoriteImportViewController.mm */,
-				DA5A7E0126C563A300F274C7 /* OAFavoriteListViewController.h */,
-				DA5A7E0C26C563A300F274C7 /* OAFavoriteListViewController.mm */,
 				DA5A7E0A26C563A300F274C7 /* OAReplaceFavoriteViewController.h */,
 				DA5A7E0026C563A300F274C7 /* OAReplaceFavoriteViewController.mm */,
 				DA5A7E0826C563A300F274C7 /* OASelectFavoriteGroupViewController.h */,
@@ -12675,8 +12677,6 @@
 				DA5A7E8426C563A400F274C7 /* OAGPXEditWptViewController.h */,
 				DA5A7E7D26C563A400F274C7 /* OAGPXEditWptViewController.mm */,
 				DA5A7E6D26C563A400F274C7 /* OAGPXEditWptViewController.xib */,
-				DA5A7E8026C563A400F274C7 /* OAGPXListViewController.h */,
-				DA5A7E7C26C563A400F274C7 /* OAGPXListViewController.mm */,
 				DA5A7E7626C563A400F274C7 /* OAGPXWptListViewController.h */,
 				DA5A7E8626C563A400F274C7 /* OAGPXWptListViewController.mm */,
 				DA5A7E6C26C563A400F274C7 /* OAGPXWptListViewController.xib */,

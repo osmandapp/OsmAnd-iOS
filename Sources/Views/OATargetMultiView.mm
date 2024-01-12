@@ -12,8 +12,7 @@
 #import "OARootViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OAUtilities.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
+#import "Localization.h"
 
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointViewCellHeight 60.0

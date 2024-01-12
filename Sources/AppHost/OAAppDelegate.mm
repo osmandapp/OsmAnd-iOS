@@ -127,13 +127,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         [_app initializeCore];
 
         // Initialize application in background
-        //[_app initialize];
+        [_app initialize];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             
             // Initialize application in main thread
-            [_app initialize];
-            
+            //[_app initialize];
+            [[OAScreenOrientationHelper sharedInstance] updateSettings];
+
             // Configure ThemeManager
             OAAppSettings *appSettings = [OAAppSettings sharedManager];
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?

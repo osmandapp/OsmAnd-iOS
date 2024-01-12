@@ -1668,7 +1668,7 @@
 "product_desc_track_recording" = "Înregistrați și salvați călătoriile ca piese GPX";
 "plugin_ski_descr" = "Conceput pentru a naviga în zonele de sporturi de iarnă: vedeți piste de schi și teleschiuri, precum și pârtii de schi fond, cu linii colorate indicând gradele de dificultate. Pentru a-l utiliza, activați acest plugin, mergeți la \"Configurare hartă\" și alegeți stilul de hartă \"Iarnă și schi\".";
 "product_desc_skimap" = "Harta actualizată a pârtiilor de schi cu teleschiuri și pârtii";
-"plugin_ski_name" = "Vedere ca hartă de schi";
+"plugin_ski_name" = "Hartă de schi";
 "osmand_parking_plugin_description" = "Marcați locul în care este parcată mașina dumneavoastră și anunțați calendarul când va expira parcometrul. Pentru a plasa marcajul, alegeți un loc pe hartă, mergeți la \"Acțiuni\" și atingeți \"Adaugă parcare\".";
 "product_desc_parking" = "Urmăriți timpul de parcare și locația mașinii dumneavoastră";
 "osmand_parking_plugin_name" = "Poziție parcare";
@@ -1676,7 +1676,7 @@
 "product_desc_nautical" = "Hărți vectoriale adecvate pentru navigația pe rutele de navigație";
 
 //inapps
-"plugin_nautical_name" = "Vedere ca hartă nautică";
+"plugin_nautical_name" = "Hartă nautică";
 "reminder_not_set_text" = "Memento-ul nu a fost setat deoarece nu vi se permite accesul la Calendar";
 "cannot_access_calendar" = "Nu se poate accesa Calendarul";
 
@@ -2545,7 +2545,7 @@
 "shared_string_leave" = "Lăsați";
 "backup_delete_all_data" = "Șterge toate datele mele";
 "manage_storage" = "Gestionați stocarea";
-"contact_support" = "Contactează asistența";
+"contact_support" = "Contactează suportul tehnic";
 "map_widget_rendering_fps" = "FPS randare hartă";
 "shared_string_contributions" = "Contribuții";
 "shared_string_profile" = "Profil";
@@ -3045,7 +3045,9 @@
 "help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_guidance_map_during_navigation_name" = "Ecranul hărții în timpul navigației";
 "help_article_navigation_routing_brouter_name" = "BRouter";
-"help_article_navigation_routing_car_based_routing_name" = "Rută auto (camion, motocicletă)";
-"help_article_navigation_routing_direct_to_point_routing_name" = "Rutare directă la punct (Barca)";
-"help_article_navigation_routing_horse_routing_name" = "Drumeție călare";
-"help_article_navigation_routing_pedestrian_routing_name" = "Traseul pietonilor";
+"help_article_navigation_routing_car_based_routing_name" = "Rutare auto (camion, motocicletă)";
+"help_article_navigation_routing_direct_to_point_routing_name" = "Rutare directă la punct (Barcă)";
+"help_article_navigation_routing_horse_routing_name" = "Rutare pentru călărie";
+"help_article_navigation_routing_pedestrian_routing_name" = "Rutare pietonală";
+"help_article_plan_route_name" = "Planificare traseu";
+"help_article_troubleshooting_crash_logs_name" = "Jurnale de erori";

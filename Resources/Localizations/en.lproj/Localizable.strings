@@ -959,7 +959,7 @@
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "Issues found with a GPX file.\n\nYou may contact OsmAnd support to investigate.";
-"tracks_on_map" = "Displayed tracks";
+"tracks_on_map" = "Visible on map";
 
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
@@ -1605,6 +1605,7 @@
 
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
+"folder_tracks_count" = "%d tracks";
 
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";

@@ -9,6 +9,29 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--My Places Tab Bar View Controller-->
+        <scene sceneID="hST-i3-dBw">
+            <objects>
+                <tabBarController id="pFL-rP-JjP" customClass="OAMyPlacesTabBarViewController" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ybk-iZ-4Ie">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="iconColorActive"/>
+                        <color key="selectedImageTintColor" name="iconColorActive"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="o7u-wO-gzA" kind="relationship" relationship="viewControllers" id="OcE-ny-Hd2"/>
+                        <segue destination="rfa-sK-jEQ" kind="relationship" relationship="viewControllers" id="IJb-N9-Klj"/>
+                        <segue destination="Pg1-zp-xNx" kind="relationship" relationship="viewControllers" id="XZx-7g-Nyl"/>
+                        <segue destination="5lf-ib-SY3" kind="relationship" relationship="viewControllers" id="WSt-yO-vwE"/>
+                        <segue destination="77n-Dz-gqh" kind="relationship" relationship="viewControllers" id="Qis-bF-hq5"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YDZ-w2-u08" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-642.38999999999999" y="-126.93333333333334"/>
+        </scene>
         <!--Travel guides-->
         <scene sceneID="H4P-Zr-3tv">
             <objects>
@@ -44,7 +67,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oC1-Yt-9sM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-749" y="605"/>
+            <point key="canvasLocation" x="971" y="730"/>
         </scene>
         <!--OSM Edits-->
         <scene sceneID="TNK-ML-Wew">
@@ -104,7 +127,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b2Q-rI-WY7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="21.739130434782609" y="604.6875"/>
+            <point key="canvasLocation" x="-70" y="730"/>
         </scene>
         <!--My Favorites-->
         <scene sceneID="Icp-hR-oHC">
@@ -187,7 +210,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJy-cP-WK8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="173.91304347826087" y="-500.22321428571428"/>
+            <point key="canvasLocation" x="-2346" y="730"/>
         </scene>
         <!--Trips-->
         <scene sceneID="F1F-kK-NRw">
@@ -269,29 +292,44 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KmP-0y-Zhp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876.81159420289862" y="-3.3482142857142856"/>
+            <point key="canvasLocation" x="-1309" y="730"/>
         </scene>
-        <!--Favorites Tab Bar View Controller-->
-        <scene sceneID="hST-i3-dBw">
+        <!--My Tracks New-->
+        <scene sceneID="qRA-WP-GOP">
             <objects>
-                <tabBarController id="pFL-rP-JjP" customClass="OAFavoritesTabBarViewController" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ybk-iZ-4Ie">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" name="iconColorActive"/>
-                        <color key="selectedImageTintColor" name="iconColorActive"/>
-                    </tabBar>
+                <viewController restorationIdentifier="TracksViewController" storyboardIdentifier="TracksViewController" id="77n-Dz-gqh" userLabel="My Tracks New" customClass="TracksViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MuT-fW-w07">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="npH-mS-lH3">
+                                <rect key="frame" x="0.0" y="48" width="414" height="765"/>
+                                <color key="backgroundColor" name="viewBg"/>
+                                <color key="tintColor" name="iconColorActive"/>
+                                <color key="separatorColor" name="customSeparator"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="77n-Dz-gqh" id="eAJ-a9-mcq"/>
+                                    <outlet property="delegate" destination="77n-Dz-gqh" id="8Xg-6O-K2L"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="041-i2-uHy"/>
+                        <color key="backgroundColor" name="viewBg"/>
+                        <constraints>
+                            <constraint firstItem="npH-mS-lH3" firstAttribute="leading" secondItem="041-i2-uHy" secondAttribute="leading" id="loL-Cv-Gvs"/>
+                            <constraint firstItem="041-i2-uHy" firstAttribute="bottom" secondItem="npH-mS-lH3" secondAttribute="bottom" id="tNh-aa-VSa"/>
+                            <constraint firstItem="npH-mS-lH3" firstAttribute="top" secondItem="041-i2-uHy" secondAttribute="top" id="tQZ-7x-iuZ"/>
+                            <constraint firstItem="041-i2-uHy" firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_travel" id="3Z5-lB-D9o"/>
                     <connections>
-                        <segue destination="o7u-wO-gzA" kind="relationship" relationship="viewControllers" id="OcE-ny-Hd2"/>
-                        <segue destination="rfa-sK-jEQ" kind="relationship" relationship="viewControllers" id="IJb-N9-Klj"/>
-                        <segue destination="Pg1-zp-xNx" kind="relationship" relationship="viewControllers" id="XZx-7g-Nyl"/>
-                        <segue destination="5lf-ib-SY3" kind="relationship" relationship="viewControllers" id="WSt-yO-vwE"/>
+                        <outlet property="tableView" destination="npH-mS-lH3" id="0dn-Dh-NsZ"/>
                     </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YDZ-w2-u08" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3nt-sp-HhW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-642.38999999999999" y="-126.93333333333334"/>
+            <point key="canvasLocation" x="1796" y="730"/>
         </scene>
     </scenes>
     <resources>

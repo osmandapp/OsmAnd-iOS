@@ -7,6 +7,8 @@
 //
 
 #import <UIKit/UIKit.h>
+//#import <Foundation/Foundation.h>
+//#import "OsmAnd_Maps-Swift.h"
 
 @class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState;
 
@@ -25,6 +27,7 @@
 
 @property (nonatomic) OAWidgetType * _Nullable widgetType;
 @property (nonatomic, readonly, assign) BOOL nightMode;
+@property (nonatomic, assign) BOOL isSimpleLayout;
 
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
@@ -36,6 +39,8 @@
 - (BOOL)isNightMode;
 - (BOOL)isTopText;
 - (BOOL)isTextInfo;
+- (void)updateSimpleLayout;
+//- (CGFloat)getHeightSimpleLayout;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;

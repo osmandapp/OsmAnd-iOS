@@ -109,6 +109,15 @@
     return NO;
 }
 
+- (void)updateSimpleLayout
+{
+}
+
+//- (CGFloat)getHeightSimpleLayout
+//{
+//    return 44;
+//}
+
 - (void)showSeparator:(BOOL)show
 {
     _separatorView.hidden = !show;

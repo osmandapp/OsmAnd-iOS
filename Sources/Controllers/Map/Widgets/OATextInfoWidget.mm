@@ -11,12 +11,23 @@
 #import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define textHeight 22
 #define imageSide 30
 #define minTextWidth 64
 #define fullTextWidth 90
 #define minWidgetHeight 32
+
+@interface OATextInfoWidget ()
+
+@property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
+@property (nonatomic, strong, nullable) UILabel *nameLabel;
+@property (nonatomic, strong, nullable) UILabel *unitLabel;
+@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
+@property (nonatomic, strong, nullable) UILabel *valueLabel;
+
+@end
 
 
 @implementation OATextInfoWidget
@@ -44,6 +55,7 @@
     NSLayoutConstraint *_leadingTextAnchor;
 }
 
+
 - (instancetype) init
 {
     self = [super init];
@@ -69,22 +81,160 @@
     return self;
 }
 
-- (void) commonInit
+- (void)updateSimpleLayout
 {
-    _textView = [[UILabel alloc] init];
-    _textView.adjustsFontForContentSizeCategory = YES;
-    _textView.translatesAutoresizingMaskIntoConstraints = NO;
-    _textShadowView = [[UILabel alloc] init];
-    _textShadowView.adjustsFontForContentSizeCategory = YES;
-    _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
-    _imageView = [UIImageView new];
-    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self addSubview:_textShadowView];
-    [self addSubview:_textView];
-    [self addSubview:_imageView];
+    NSArray *viewsToRemove = [self subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
     
-   
+    UIStackView *verticalStackView = [UIStackView new];
+    verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    verticalStackView.axis = UILayoutConstraintAxisVertical;
+    verticalStackView.alignment = UIStackViewAlignmentFill;
+    verticalStackView.distribution = UIStackViewDistributionEqualSpacing;
+    [self addSubview:verticalStackView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [verticalStackView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0],
+        [verticalStackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16],
+        [verticalStackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16],
+        [verticalStackView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0],
+    ]];
+    
+    // Create the topNameUnitStackView
+    self.topNameUnitStackView = [UIStackView new];
+    self.topNameUnitStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
+    self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
+    self.topNameUnitStackView.distribution = UIStackViewDistributionFillEqually;
+    self.topNameUnitStackView.backgroundColor = [UIColor yellowColor];
+    [verticalStackView addArrangedSubview:self.topNameUnitStackView];
+    
+    auto nameView = [UIView new];
+    nameView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topNameUnitStackView addArrangedSubview:nameView];
+    [NSLayoutConstraint activateConstraints:@[
+        [nameView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
+    ]];
+    
+    // Create the name label ("SPEED")
+    self.nameLabel = [UILabel new];
+    self.nameLabel.text = @"SPEED";
+    self.nameLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.nameLabel.backgroundColor = [UIColor greenColor];
+    
+    self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.nameLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    [nameView addSubview:self.nameLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.nameLabel.topAnchor constraintEqualToAnchor:nameView.topAnchor constant:10],
+        [self.nameLabel.leadingAnchor constraintEqualToAnchor:nameView.leadingAnchor constant:0],
+        [self.nameLabel.trailingAnchor constraintEqualToAnchor:nameView.trailingAnchor constant:0],
+        [self.nameLabel.bottomAnchor constraintEqualToAnchor:nameView.bottomAnchor constant:0]
+    ]];
+    
+    auto unitView = [UIView new];
+    unitView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topNameUnitStackView addArrangedSubview:unitView];
+    [NSLayoutConstraint activateConstraints:@[
+        [unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
+    ]];
+    
+    // Create the unit label ("KM/H")
+    self.unitLabel = [UILabel new];
+    self.unitLabel.text = @"KM/H";
+    self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.unitLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    self.unitLabel.textAlignment = NSTextAlignmentRight;
+    self.unitLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.nameLabel.backgroundColor = [UIColor grayColor];
+    [unitView addSubview:self.unitLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.unitLabel.topAnchor constraintEqualToAnchor:unitView.topAnchor constant:10],
+        [self.unitLabel.leadingAnchor constraintEqualToAnchor:unitView.leadingAnchor constant:0],
+        [self.unitLabel.trailingAnchor constraintEqualToAnchor:unitView.trailingAnchor constant:0],
+        [self.unitLabel.bottomAnchor constraintEqualToAnchor:unitView.bottomAnchor constant:0]
+    ]];
+    
+    // Create the contentStackView
+    UIStackView *contentStackView = [UIStackView new];
+    contentStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    contentStackView.axis = UILayoutConstraintAxisHorizontal;
+    contentStackView.alignment = UIStackViewAlignmentFill;
+    contentStackView.distribution = UIStackViewDistributionFill;
+    [verticalStackView addArrangedSubview:contentStackView];
+    
+    auto iconWidgetView = [UIView new];
+    iconWidgetView.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentStackView addArrangedSubview:iconWidgetView];
+    [NSLayoutConstraint activateConstraints:@[
+        [iconWidgetView.heightAnchor constraintGreaterThanOrEqualToConstant:30],
+        [iconWidgetView.widthAnchor constraintEqualToConstant:30]
+    ]];
+    
+    _imageView = [UIImageView new];
+    //_imageView.image = [UIImage imageNamed:@"widget_speed"];
+    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [iconWidgetView addSubview:_imageView];
+    [NSLayoutConstraint activateConstraints:@[
+        [_imageView.heightAnchor constraintEqualToConstant:30],
+        [_imageView.widthAnchor constraintEqualToConstant:30],
+        [_imageView.centerXAnchor constraintEqualToAnchor:iconWidgetView.centerXAnchor],
+        [_imageView.centerYAnchor constraintEqualToAnchor:iconWidgetView.centerYAnchor]
+    ]];
+    
+    auto valueUnitOrEmptyView = [UIView new];
+    valueUnitOrEmptyView.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentStackView addArrangedSubview:valueUnitOrEmptyView];
+    
+    // Create the unit label ("150")
+    self.valueLabel = [UILabel new];
+    self.valueLabel.text = @"150";
+    self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.valueLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    self.valueLabel.backgroundColor = [UIColor redColor];
+    self.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.valueLabel.textAlignment = NSTextAlignmentNatural;
+    [valueUnitOrEmptyView addSubview:self.valueLabel];
+    
+    // Create the unitOrEmptyLabel  ("KM/H")
+    self.unitOrEmptyLabel = [UILabel new];
+    self.unitOrEmptyLabel.text = @"KM/H";
+    self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.unitOrEmptyLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.unitOrEmptyLabel.textAlignment = NSTextAlignmentNatural;
+    self.unitOrEmptyLabel.backgroundColor = [UIColor grayColor];
+    [valueUnitOrEmptyView addSubview:self.unitOrEmptyLabel];
+    [self.valueLabel setContentHuggingPriority:UILayoutPriorityDefaultLow
+                                             forAxis:UILayoutConstraintAxisHorizontal];
+    [self.unitOrEmptyLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh
+                                             forAxis:UILayoutConstraintAxisHorizontal];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor constant:0],
+        [self.valueLabel.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor constant:0],
+       // [self.valueLabel.trailingAnchor constraintEqualToAnchor: valueUnitOrEmptyView.trailingAnchor constant:0],
+        [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor constant:0],
+        [self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+    ]];
+    
+//    [self.unitOrEmptyLabel setContentHuggingPriority:UILayoutPriorityDefaultLow + 2 // 252
+//                                     forAxis:UILayoutConstraintAxisHorizontal];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.unitOrEmptyLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor constant:0],
+        [self.unitOrEmptyLabel.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor constant:0],
+        [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor constant:0],
+        [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor constant:0],
+        [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+    ]];
+}
+
+- (void)commonLayout
+{
     [NSLayoutConstraint activateConstraints:@[
         [_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
         [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
@@ -127,7 +277,44 @@
     _subtext = @"";
     _textShadowView.textAlignment = NSTextAlignmentNatural;
     _textView.textAlignment = NSTextAlignmentNatural;
+}
 
+- (void)commonInit
+{
+//    if (self.isSimpleLayout)
+//    {
+//        NSArray *viewsToRemove = [self subviews];
+//        for (UIView *v in viewsToRemove) {
+//            [v removeFromSuperview];
+//        }
+//        _textView = [[UILabel alloc] init];
+//        _textView.adjustsFontForContentSizeCategory = YES;
+//        _textView.translatesAutoresizingMaskIntoConstraints = NO;
+//        _imageView = [UIImageView new];
+//        _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+//
+//        [self addSubview:_textView];
+//        
+//        [self simpleLayout];
+//    }
+//    else
+//    {
+        _textView = [[UILabel alloc] init];
+        _textView.adjustsFontForContentSizeCategory = YES;
+        _textView.translatesAutoresizingMaskIntoConstraints = NO;
+        _imageView = [UIImageView new];
+        _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+
+        [self addSubview:_textView];
+        [self addSubview:_imageView];
+        
+        _textShadowView = [[UILabel alloc] init];
+        _textShadowView.adjustsFontForContentSizeCategory = YES;
+        _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
+        [self addSubview:_textShadowView];
+        
+        [self commonLayout];
+  //  }
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -144,7 +331,7 @@
     return YES;
 }
 
-- (void) onWidgetClicked:(id)sender
+- (void)onWidgetClicked:(id)sender
 {
     if (self.onClickFunction)
         self.onClickFunction(self);
@@ -153,28 +340,28 @@
         [self.delegate widgetClicked:self];
 }
 
-- (void) setImage:(UIImage *)image
+- (void)setImage:(UIImage *)image
 {
     [_imageView setImage:image];
 }
 
-- (void) setImage:(UIImage *)image withColor:(UIColor *)color
+- (void)setImage:(UIImage *)image withColor:(UIColor *)color
 {
     [self setImage:image];
     _imageView.tintColor = color;
 }
 
-- (void) setImageHidden:(BOOL)hidden
+- (void)setImageHidden:(BOOL)hidden
 {
     _imageView.hidden = hidden;
 }
 
-- (BOOL) setIconForWidgetType:(OAWidgetType *)widgetType
+- (BOOL)setIconForWidgetType:(OAWidgetType *)widgetType
 {
     return [self setIcon:widgetType.iconName];
 }
 
-- (BOOL) setIcon:(NSString *)widgetIcon
+- (BOOL)setIcon:(NSString *)widgetIcon
 {
     if (![_icon isEqualToString:widgetIcon])
     {
@@ -316,6 +503,17 @@
 {
     return self.frame.size.height;
 }
+
+//- (CGFloat)getHeightSimpleLayout
+//{
+//    // TODO:
+//    [self.nameLabel sizeToFit];
+//    [self.valueLabel sizeToFit];
+//    
+//    CGFloat height = self.nameLabel.frame.size.height + self.valueLabel.frame.size.height + 10.0;
+//    return height;
+//    
+//}
 
 - (void) adjustViewSize
 {

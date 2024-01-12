@@ -120,13 +120,13 @@ class WidgetsPanel: NSObject, NSCopying {
 
     func getOrderPreference() -> OACommonListOfStringList {
         let settings = OAAppSettings.sharedManager()!
-        if (self == .leftPanel) {
+        if self == .leftPanel {
             return settings.leftWidgetPanelOrder
-        } else if (self == .rightPanel) {
+        } else if self == .rightPanel {
             return settings.rightWidgetPanelOrder
-        } else if (self == .topPanel) {
+        } else if self == .topPanel {
             return settings.topWidgetPanelOrder
-        } else if (self == .bottomPanel) {
+        } else if self == .bottomPanel {
             return settings.bottomWidgetPanelOrder
         }
         fatalError("Unsupported panel")
@@ -136,7 +136,7 @@ class WidgetsPanel: NSObject, NSCopying {
         if self == .leftPanel || self == .rightPanel {
             return [.leftPanel, .rightPanel]
         } else if self == .topPanel || self == .bottomPanel {
-            return [.topPanel, .bottomPanel]
+            return [.topPanel, .bottomPanel, .leftPanel, .rightPanel] // , .leftPanel, .rightPanel
         }
         fatalError("Unsupported widgets panel")
     }

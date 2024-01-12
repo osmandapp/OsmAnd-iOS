@@ -69,8 +69,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    [self.tableView reloadData];
-    
     if (OAUtilities.isPortrait || OAUtilities.isIPad)
         [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
     else
@@ -147,6 +145,7 @@
 - (void) transitionToSize
 {
     self.frame = [self getFrame];
+    [self.tableView reloadData];
 }
 
 - (CGRect)getFrame {

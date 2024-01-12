@@ -68,12 +68,12 @@ sk_sp<SkImage> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::share
     QString iconName = isFullSize ? fav->getIcon() : QStringLiteral("");
     QString backgroundIconName = backgroundImageNameByType(fav->getBackground());
     QString size = isFullSize ? QStringLiteral("_full") : QStringLiteral("_small");
-    QString iconId = QString::number(fav->getColor().a + fav->getColor().r + fav->getColor().g + fav->getColor().b) + QStringLiteral("_") + iconName + QStringLiteral("_") + backgroundIconName + size;
+    QString iconId = QString::number(fav->getColor().a + fav->getColor().r + fav->getColor().g + fav->getColor().b) + QStringLiteral("_") + iconName + QStringLiteral("_") + backgroundIconName + size + QString("_%1").arg(_symbolsScaleFactor, 0, 'f', 2);
     const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;
     if (bitmapIt == _iconsCache.end())
     {
-        bitmap = [OACompoundIconUtils createCompositeBitmapFromFavorite:fav isFullSize:isFullSize];
+        bitmap = [OACompoundIconUtils createCompositeBitmapFromFavorite:fav isFullSize:isFullSize scale:_symbolsScaleFactor];
         _iconsCache[iconId] = bitmap;
     }
     else
@@ -81,7 +81,7 @@ sk_sp<SkImage> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::share
         bitmap = bitmapIt.value();
     }
 
-    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_symbolsScaleFactor];
+    return bitmap;
 }
 
 QString OAFavoritesMapLayerProvider::backgroundImageNameByType(const QString& type) const

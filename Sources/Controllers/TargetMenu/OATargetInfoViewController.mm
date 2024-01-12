@@ -8,6 +8,7 @@
 
 #import "OATargetInfoViewController.h"
 #import "OsmAndApp.h"
+#import "OANativeUtilities.h"
 #import "OATargetInfoViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
@@ -109,17 +110,32 @@
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
     {
-        img = [UIImage imageNamed:[OAUtilities drawablePath:fileName]];
-        if (img)
-        {
-            img = [OAUtilities applyScaleFactorToImage:img];
-        }
+        const auto skImg = [OANativeUtilities skImageFromSvgResource:fileName scale:[[UIScreen mainScreen] scale]];
+        img = [OANativeUtilities skImageToUIImage:skImg];
     }
     else
     {
         img = [UIImage imageNamed:fileName];
     }
     
+    return img;
+}
+
++ (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size
+{
+    UIImage *img = nil;
+    if ([fileName hasPrefix:@"mx_"])
+    {
+        CGFloat scale = [[UIScreen mainScreen] scale];
+        const auto skImg = [OANativeUtilities skImageFromSvgResource:fileName width:size.width * scale height:size.height * scale];
+        if (skImg)
+        	img = [OANativeUtilities skImageToUIImage:skImg];
+    }
+    else
+    {
+        img = [UIImage imageNamed:fileName];
+    }
+
     return img;
 }
 

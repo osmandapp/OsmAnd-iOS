@@ -93,15 +93,15 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     if (!shapeName)
         shapeName = @"circle";
     if (!iconName)
-        iconName = @"mm_special_star";
+        iconName = @"mx_special_star";
     
-    QString iconId = QString([NSString stringWithFormat:@"%@_%@_%@_%@", [color toHexString], iconName, shapeName, size].UTF8String);
+    QString iconId = QString([NSString stringWithFormat:@"%@_%@_%@_%@_%.2f", [color toHexString], iconName, shapeName, size, _symbolsScaleFactor].UTF8String);
 
     const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;
     if (bitmapIt == _iconsCache.end())
     {
-        bitmap = [OACompoundIconUtils createCompositeBitmapFromWpt:point isFullSize:isFullSize];
+        bitmap = [OACompoundIconUtils createCompositeBitmapFromWpt:point isFullSize:isFullSize scale:_symbolsScaleFactor];
         _iconsCache[iconId] = bitmap;
     }
     else
@@ -109,7 +109,7 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
         bitmap = bitmapIt.value();
     }
 
-    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_symbolsScaleFactor];
+    return bitmap;
 }
 
 QString OAWaypointsMapLayerProvider::backgroundImageNameByType(const QString& type) const

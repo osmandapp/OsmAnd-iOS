@@ -79,12 +79,12 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             if (!type)
                 continue;
             
-            auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name);
+            auto iconId = isSmallIcon ? QStringLiteral("small_ic") : QString::fromNSString(type.name) + QString("_%1").arg(textScaleFactor, 0, 'f', 2);;
             const auto bitmapIt = _iconsCache.find(iconId);
             sk_sp<SkImage> bitmap;
             if (bitmapIt == _iconsCache.end())
             {
-                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:type.name isFullSize:!isSmallIcon icon:type.icon];
+                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:type.name isFullSize:!isSmallIcon icon:type.icon scale:textScaleFactor];
                 _iconsCache[iconId] = bitmap;
             }
             else
@@ -92,7 +92,7 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
                 bitmap = bitmapIt.value();
             }
 
-            return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:textScaleFactor];
+            return bitmap;
         }
         
         return nullptr;

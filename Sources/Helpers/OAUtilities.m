@@ -1307,7 +1307,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 
 + (NSString *) drawablePath:(NSString *)resId
 {
-    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"poi-icons-png" : @"map-icons-png", [OAUtilities drawablePostfix], resId];
+    return [NSString stringWithFormat:@"map-icons-svg/%@", resId];
 }
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners

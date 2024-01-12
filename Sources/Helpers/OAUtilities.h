@@ -83,6 +83,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (UIImage *) templateImageNamed:(NSString *)imageName;
 + (UIImage *) rtlImageNamed:(NSString *)imageName;
++ (nullable UIImage *)imageNamed:(NSString *)name;
 
 @end
 

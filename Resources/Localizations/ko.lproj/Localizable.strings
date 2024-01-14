@@ -1003,7 +1003,7 @@
 // Route planning
 "plan_route" = "계획경로";
 "plan_route_open_existing_track" = "기존 트랙 열기";
-"sort_last_modified" = "마지막 수정";
+"sort_last_modified" = "최종 수정됨";
 "proceed_q" = "진행할까요?";
 "route_descr_select_destination" = "도착지 선택";
 "profile_type_custom_string" = "맞춤 프로필";
@@ -1555,3 +1555,4 @@
 "rendering_value_caiScale_description" = "이탈리안 알파인 클럽";
 "help_article_widgets_markers_name" = "마커 위젯";
 "perform_oauth_authorization" = "OAuth를 통해 로그인";
+"visible_in_3d_mode" = "3D 모드에서 볼 수 있음";

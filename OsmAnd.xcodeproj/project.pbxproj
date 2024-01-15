@@ -73,8 +73,6 @@
 		0A8F544E263949FC0020F5CF /* ic_custom_search_categories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */; };
 		0A9BCF17272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A9BCF16272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib */; };
 		0A9ED66C27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */; };
-		0AA2F04327356B91008EAF35 /* ic_custom_graph@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA2F04127356B90008EAF35 /* ic_custom_graph@3x.png */; };
-		0AA2F04427356B91008EAF35 /* ic_custom_graph@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA2F04227356B91008EAF35 /* ic_custom_graph@2x.png */; };
 		0AA2F04727356BC7008EAF35 /* ic_custom_folder_points@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA2F04527356BC6008EAF35 /* ic_custom_folder_points@2x.png */; };
 		0AA2F04827356BC7008EAF35 /* ic_custom_folder_points@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA2F04627356BC6008EAF35 /* ic_custom_folder_points@3x.png */; };
 		0AA396A827597126006A9EC6 /* bg_color_chessboard_pattern@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0AA396A627597126006A9EC6 /* bg_color_chessboard_pattern@3x.png */; };
@@ -3504,8 +3502,6 @@
 		0A8F544C263949FB0020F5CF /* ic_custom_search_categories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_search_categories@3x.png"; path = "Resources/Icons/ic_custom_search_categories@3x.png"; sourceTree = "<group>"; };
 		0A9BCF16272AF7C5002F1EA6 /* OAQuadItemsWithTitleDescIconCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuadItemsWithTitleDescIconCell.xib; sourceTree = "<group>"; };
 		0A9ED66B27012444000DB410 /* OATrackMenuAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATrackMenuAppearanceHudViewController.xib; sourceTree = "<group>"; };
-		0AA2F04127356B90008EAF35 /* ic_custom_graph@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_graph@3x.png"; path = "Resources/Icons/ic_custom_graph@3x.png"; sourceTree = "<group>"; };
-		0AA2F04227356B91008EAF35 /* ic_custom_graph@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_graph@2x.png"; path = "Resources/Icons/ic_custom_graph@2x.png"; sourceTree = "<group>"; };
 		0AA2F04527356BC6008EAF35 /* ic_custom_folder_points@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_folder_points@2x.png"; path = "Resources/Icons/ic_custom_folder_points@2x.png"; sourceTree = "<group>"; };
 		0AA2F04627356BC6008EAF35 /* ic_custom_folder_points@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_folder_points@3x.png"; path = "Resources/Icons/ic_custom_folder_points@3x.png"; sourceTree = "<group>"; };
 		0AA396A627597126006A9EC6 /* bg_color_chessboard_pattern@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_color_chessboard_pattern@3x.png"; path = "Resources/Icons/bg_color_chessboard_pattern@3x.png"; sourceTree = "<group>"; };
@@ -8866,8 +8862,6 @@
 				0AD6B8CF273BF0C800D68E0B /* ic_custom_location_marker@3x.png */,
 				0AA2F04527356BC6008EAF35 /* ic_custom_folder_points@2x.png */,
 				0AA2F04627356BC6008EAF35 /* ic_custom_folder_points@3x.png */,
-				0AA2F04227356B91008EAF35 /* ic_custom_graph@2x.png */,
-				0AA2F04127356B90008EAF35 /* ic_custom_graph@3x.png */,
 				847F8FC41EDFF7AF00CF5EA5 /* ic_action_postcode@2x.png */,
 				847F8FC51EDFF7AF00CF5EA5 /* ic_action_postcode@3x.png */,
 				842431C81AEFDD1900925821 /* ic_action_rec_start@2x.png */,
@@ -15357,7 +15351,6 @@
 				8AE0197024505C8B00DA5C33 /* ic_custom_parking@3x.png in Resources */,
 				46453AE42835235C001F9A3A /* ic_custom_backpack_colored_day@3x.png in Resources */,
 				DAC0279522A1566600D1689E /* ic_custom_overlay_map@2x.png in Resources */,
-				0AA2F04327356B91008EAF35 /* ic_custom_graph@3x.png in Resources */,
 				DA5A843C26C563A800F274C7 /* OAParkingViewController.xib in Resources */,
 				C5735AF62AFE9CB500638715 /* InfoPlist.strings in Resources */,
 				DA52CDF724AE087F00CC309D /* ic_custom_angular_unit@3x.png in Resources */,
@@ -15682,7 +15675,6 @@
 				DA8EE8172470154500069A6D /* osm-editing-plugin.html in Resources */,
 				46453AED28352375001F9A3A /* ic_custom_carplay_colored_big@3x.png in Resources */,
 				C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */,
-				0AA2F04427356B91008EAF35 /* ic_custom_graph@2x.png in Resources */,
 				843E5DAA1AB341E000BE14BE /* three_dots@3x.png in Resources */,
 				DA45DA86230EE05A0083DFA2 /* img_mapstyle_topo@2x.png in Resources */,
 				DA5A820226C563A700F274C7 /* OAFeatureCardRow.xib in Resources */,

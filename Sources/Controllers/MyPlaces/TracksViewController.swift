@@ -400,8 +400,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, appearenceAction, navigationAction])
                 
-                // TODO: find icon ic_custom_graph
-                let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: UIImage.icCustomInfoOutlined) { _ in
+                let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: UIImage.icCustomGraph) { _ in
                     self.onTrackAnalyzeClicked()
                 }
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])

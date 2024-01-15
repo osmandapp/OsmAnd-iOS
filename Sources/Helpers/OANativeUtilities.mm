@@ -122,7 +122,7 @@
 
 + (sk_sp<SkImage>) skImageFromSvgResourcePath:(NSString *)resourcePath width:(float)width height:(float)height
 {
-    if (resourcePath == nil)
+    if (!resourcePath)
         return nullptr;
 
     NSData* resourceData = [NSData dataWithContentsOfFile:resourcePath];
@@ -167,8 +167,9 @@
         return nil;
     SkBitmap bmp;
     image->asLegacyBitmap(&bmp);
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
     CGImageRef img = SkCreateCGImageRef(bmp);
-    UIImage *res = img != nil ? [[UIImage alloc] initWithCGImage:img] : nil;
+    UIImage *res = img != nil ? [[UIImage alloc] initWithCGImage:img scale:scaleFactor orientation:UIImageOrientationUp] : nil;
     if (img)
         CGImageRelease(img);
     return res;

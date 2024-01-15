@@ -16,6 +16,8 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
+#import "OASvgHelper.h"
+
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
@@ -193,6 +195,40 @@
 {
     return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
+
++ (UIImage *) svgImageNamed:(NSString *)name
+{
+    return [OASvgHelper imageNamed:name];
+}
+
++ (UIImage *) mapSvgImageNamed:(NSString *)name
+{
+    UIImage *img = [OASvgHelper mapImageNamed:name];
+    if (img)
+        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+
+    return img;
+}
+
++ (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale
+{
+    UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
+    if (img)
+        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+
+    return img;
+}
+
++ (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height
+{
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
+    if (img)
+        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+
+    return img;
+}
+
 
 @end
 
@@ -1238,13 +1274,6 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return NO;
 }
 
-+ (UIImage *) applyScaleFactorToImage:(UIImage *)image
-{
-    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
-    CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
-    return [self.class resizeImage:image newSize:newSize];
-}
-
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize
 {
     if (!image)
@@ -1288,26 +1317,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     }
 }
 
-+ (NSString *) drawablePostfix
++ (BOOL) hasMapImage:(NSString *)resId
 {
-    int scale = (int)[UIScreen mainScreen].scale;
-    
-    switch (scale) {
-        case 1:
-            return @"mdpi";
-        case 2:
-            return @"xhdpi";
-        case 3:
-            return @"xxhdpi";
-            
-        default:
-            return @"xxhdpi";
-    }
-}
-
-+ (NSString *) drawablePath:(NSString *)resId
-{
-    return [NSString stringWithFormat:@"map-icons-svg/%@", resId];
+    return [[NSBundle mainBundle] pathForResource:resId
+                                           ofType:@"svg"
+                                      inDirectory:@"map-icons-svg"] != nil;
 }
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
@@ -1849,12 +1863,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     if (![fullIconName hasPrefix:@"mx_"])
         fullIconName = [@"mx_" stringByAppendingString:name];
 
-    UIImage *iconImgOrig = [UIImage imageNamed:[self drawablePath:fullIconName]];
-    if (iconImgOrig)
-    {
-        return [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-    }
-    return nil;
+    return [UIImage mapSvgImageNamed:fullIconName];
 }
 
 + (UIImage *) getTintableImage:(UIImage *)image

@@ -27,10 +27,8 @@
 {
     UIImage *img = [super icon];
     if (!img)
-    {
-        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", self.category.name]]];
-        return [OAUtilities applyScaleFactorToImage:img];
-    }
+        img = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", self.category.name]];
+
     return img;
 }
 

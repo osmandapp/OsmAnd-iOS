@@ -255,7 +255,7 @@
         }
     }
     
-    return [UIImage imageNamed:[OAUtilities drawablePath:@"mx_special_information"]];
+    return [UIImage mapSvgImageNamed:@"mx_special_information"];
 }
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -330,8 +330,7 @@
 
 - (void)getOsmNoteBitmap:(sk_sp<SkImage> &)bitmap
 {
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_special_information"]];
-    img = [OAUtilities applyScaleFactorToImage:img];
+    UIImage *img = [UIImage mapSvgImageNamed:@"mx_special_information"];
     bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"special_information" isFullSize:YES icon:img];
 }
 

@@ -84,7 +84,7 @@ sk_sp<SkImage> OACoreResourcesAmenityIconProvider::getIcon(
             sk_sp<SkImage> bitmap;
             if (bitmapIt == _iconsCache.end())
             {
-                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:type.name isFullSize:!isSmallIcon icon:type.icon scale:textScaleFactor];
+                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_poi_orange) shapeName:@"circle" iconName:type.iconName isFullSize:!isSmallIcon icon:nil scale:textScaleFactor];
                 _iconsCache[iconId] = bitmap;
             }
             else

@@ -109,15 +109,10 @@
 {
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
-    {
-        const auto skImg = [OANativeUtilities skImageFromSvgResource:fileName scale:[[UIScreen mainScreen] scale]];
-        img = [OANativeUtilities skImageToUIImage:skImg];
-    }
+        img = [UIImage mapSvgImageNamed:fileName];
     else
-    {
         img = [UIImage imageNamed:fileName];
-    }
-    
+
     return img;
 }
 
@@ -125,16 +120,9 @@
 {
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
-    {
-        CGFloat scale = [[UIScreen mainScreen] scale];
-        const auto skImg = [OANativeUtilities skImageFromSvgResource:fileName width:size.width * scale height:size.height * scale];
-        if (skImg)
-        	img = [OANativeUtilities skImageToUIImage:skImg];
-    }
+        img = [UIImage mapSvgImageNamed:fileName width:size.width height:size.height];
     else
-    {
         img = [UIImage imageNamed:fileName];
-    }
 
     return img;
 }
@@ -240,7 +228,7 @@
 
         if (nearest.count > 0)
         {
-            UIImage *icon = isWiki ? [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]] : poi.icon;
+            UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;

@@ -12,12 +12,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASvgHelper : NSObject
 
-+ (UIImage *) imageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height;
-+ (UIImage *) imageFromSvgResourcePath:(NSString *)resourcePath width:(float)width height:(float)height;
-+ (UIImage *) imageFromSvgData:(const NSData *)data width:(float)width height:(float)height;
-+ (UIImage *) imageFromSvgResource:(NSString *)resourceName scale:(float)scale;
-+ (UIImage *) imageFromSvgResourcePath:(NSString *)resourcePath scale:(float)scale;
-+ (UIImage *) imageFromSvgData:(const NSData *)data scale:(float)scale;
++ (nullable UIImage *) mapImageNamed:(NSString *)name;
++ (nullable UIImage *) mapImageNamed:(NSString *)name scale:(float)scale;
++ (nullable UIImage *) imageNamed:(NSString *)name;
+
++ (nullable UIImage *) mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height;
++ (nullable UIImage *) mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale;
++ (nullable UIImage *) imageFromSvgResourcePath:(NSString *)resourcePath width:(float)width height:(float)height;
++ (nullable UIImage *) imageFromSvgResourcePath:(NSString *)resourcePath scale:(float)scale;
++ (nullable UIImage *) imageFromSvgData:(const NSData *)data width:(float)width height:(float)height;
++ (nullable UIImage *) imageFromSvgData:(const NSData *)data scale:(float)scale;
 
 @end
 

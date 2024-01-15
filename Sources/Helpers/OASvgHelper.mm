@@ -11,20 +11,40 @@
 
 #include <OsmAndCore/SkiaUtilities.h>
 
+const static float kDefaultIconSize = 24.0f;
+
 @implementation OASvgHelper
 
-+ (UIImage *) imageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
++ (nullable UIImage *) mapImageNamed:(NSString *)name
 {
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"svg"
-                                                         inDirectory:@"map-icons-svg"];
-    if (resourcePath == nil)
-        return nil;
-
-    return [OANativeUtilities skImageToUIImage:[self.class skImageFromSvgResourcePath:resourcePath width:width height:height]];
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    float scaledSize = kDefaultIconSize * scaleFactor;
+    return [self.class mapImageFromSvgResource:name width:scaledSize height:scaledSize];
 }
 
-+ (UIImage *) imageFromSvgResource:(NSString *)resourceName scale:(float)scale
++ (nullable UIImage *) mapImageNamed:(NSString *)name scale:(float)scale
+{
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    float scaledSize = kDefaultIconSize * scaleFactor * scale;
+    return [self.class mapImageFromSvgResource:name width:scaledSize height:scaledSize];
+}
+
++ (nullable UIImage *) imageNamed:(NSString *)name
+{
+    NSString *resourceName = [name lastPathComponent];
+    NSString *subpath = [name stringByDeletingLastPathComponent];
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
+                                                              ofType:@"svg"
+                                                         inDirectory:subpath];
+    if (resourcePath == nil)
+        return nil;
+
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
+    float scaledSize = kDefaultIconSize * scaleFactor;
+    return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:scaledSize height:scaledSize]];
+}
+
++ (UIImage *) mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
 {
     const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
                                                               ofType:@"svg"
@@ -32,7 +52,18 @@
     if (resourcePath == nil)
         return nil;
 
-    return [OANativeUtilities skImageToUIImage:[self.class skImageFromSvgResourcePath:resourcePath scale:scale]];
+    return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:width height:height]];
+}
+
++ (UIImage *) mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale
+{
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
+                                                              ofType:@"svg"
+                                                         inDirectory:@"map-icons-svg"];
+    if (resourcePath == nil)
+        return nil;
+
+    return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath scale:scale]];
 }
 
 + (UIImage *) imageFromSvgResourcePath:(NSString *)resourcePath width:(float)width height:(float)height
@@ -44,7 +75,7 @@
     if (!resourceData)
         return nil;
 
-    return [OANativeUtilities skImageToUIImage:[self.class skImageFromSvgData:resourceData width:width height:height]];
+    return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgData:resourceData width:width height:height]];
 }
 
 + (UIImage *) imageFromSvgResourcePath:(NSString *)resourcePath scale:(float)scale
@@ -56,7 +87,7 @@
     if (!resourceData)
         return nil;
 
-    return [OANativeUtilities skImageToUIImage:[self.class skImageFromSvgData:resourceData scale:scale]];
+    return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgData:resourceData scale:scale]];
 }
 
 + (UIImage *) imageFromSvgData:(const NSData *)data width:(float)width height:(float)height

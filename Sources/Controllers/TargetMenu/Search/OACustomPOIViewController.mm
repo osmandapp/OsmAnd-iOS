@@ -202,11 +202,11 @@
 
 - (UIImage *)getPoiIcon:(OAPOIType *)poiType
 {
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", poiType.name]]];
+    UIImage *img = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", poiType.name]];
     if (!img)
-        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", [poiType getOsmTag], [poiType getOsmValue]]]];
+        img = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@_%@", [poiType getOsmTag], [poiType getOsmValue]]];
     if (img)
-        return [[OAUtilities applyScaleFactorToImage:img] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        return [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
     else
         return [UIImage templateImageNamed:@"ic_custom_search_categories"];
 }

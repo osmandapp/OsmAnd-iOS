@@ -8,12 +8,12 @@
 
 import Foundation
 
-fileprivate class GpxFolder {
-    var subfolders: [String : GpxFolder] = [:]
-    var files: [String : OAGPX] = [:]
+private class GpxFolder {
+    var subfolders: [String: GpxFolder] = [:]
+    var files: [String: OAGPX] = [:]
 }
 
-fileprivate enum SortingOptions {
+private enum SortingOptions {
     case name
     case lastModified
     case nearest
@@ -22,11 +22,12 @@ fileprivate enum SortingOptions {
     case longestDurationFirst
 }
 
-class TracksViewController : OACompoundViewController, UITableViewDelegate, UITableViewDataSource {
+class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource {
     
-    let visibleTracksKey = "visibleTracksKey"
-    let tracksFolderKey = "tracksFolderKey"
-    let trackKey = "trackKey"
+    private let visibleTracksKey = "visibleTracksKey"
+    private let tracksFolderKey = "tracksFolderKey"
+    private let trackKey = "trackKey"
+    private let colorKey = "colorKey"
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -36,6 +37,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
     fileprivate var folderName = ""
+    fileprivate var currentSubfolderPath = ""   // in format: "rec/new folder/"
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -52,7 +54,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
-        if (allTracksFolder.files.count == 0 && allTracksFolder.subfolders.count == 0) {
+        if allTracksFolder.files.count == 0 && allTracksFolder.subfolders.count == 0 {
             buildFilesTree()
         }
         generateData()
@@ -68,7 +70,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
             visibleTracksRow.key = visibleTracksKey
             visibleTracksRow.title = localizedString("tracks_on_map")
             visibleTracksRow.iconName = "ic_custom_map_pin"
-            visibleTracksRow.setObj(UIColor.iconColorActive, forKey: "color")
+            visibleTracksRow.setObj(UIColor.iconColorActive, forKey: colorKey)
             var descr = String(format: localizedString("folder_tracks_count"), visibleTracksFolder.files.count)
             visibleTracksRow.descr = descr
         }
@@ -82,10 +84,16 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
                 folderRow.key = tracksFolderKey
                 folderRow.title = folderName
                 folderRow.iconName = "ic_custom_folder"
-                folderRow.setObj(UIColor.iconColorSelected, forKey: "color")
+                folderRow.setObj(UIColor.iconColorSelected, forKey: colorKey)
                 let tracksCount = calculateFolderTracksCount(folder)
                 var descr = String(format: localizedString("folder_tracks_count"), tracksCount)
                 folderRow.descr = descr
+                if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentSubfolderPath + folderName) {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "dd.MM.yyyy"
+                    let lastModified = dateFormatter.string(from: lastModifiedDate)
+                    folderRow.descr = lastModified + " • " + descr
+                }
             }
         }
         
@@ -96,16 +104,28 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
                 var trackRow = section.createNewRow()
                 trackRow.cellType = OARightIconTableViewCell.getIdentifier()
                 trackRow.key = trackKey
-                trackRow.title = fileName
+                trackRow.title = (fileName as NSString).deletingPathExtension
                 trackRow.iconName = "ic_custom_trip"
-                trackRow.setObj(UIColor.iconColorDefault, forKey: "color")
-                //trackRow.descr = descr
+                trackRow.setObj(UIColor.iconColorDefault, forKey: colorKey)
+                
+                let waypointsCount = String(track.wptPoints)
+                if let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) {
+                    if let time = OAOsmAndFormatter.getFormattedTimeInterval(Double(track.timeSpan), shortFormat: true) {
+                        if let lastModifiedDate = OAUtilities.getFileLastModificationDate(track.gpxFilePath) {
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "dd.MM.yyyy"
+                            let lastModified = dateFormatter.string(from: lastModifiedDate)
+                            trackRow.descr = lastModified + " | " + distance + " • " + time + " • " + waypointsCount
+                        }
+                    }
+                }
             }
         }
     }
     
     private func sortWithOptions(_ list: [String], options: SortingOptions) -> [String] {
-        return list.sorted {$0 < $1}
+        // TODO: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
+        return list.sorted { $0 < $1 }
     }
     
     // MARK: - Data
@@ -125,7 +145,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
             
             let pathComponents = track.gpxFilePath.split(separator: "/")
             if pathComponents.count == 1 {
-                //add to track to root folder
+                // add to track to root folder
                 allTracksFolder.files[track.gpxFilePath] = track
             } else {
                 // create all needed subfolders
@@ -141,7 +161,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
                     }
                     i += 1
                 }
-                //add track file to last subfolder
+                // add track file to last subfolder
                 if let filename = pathComponents.last {
                     currentFolder.files[String(filename)] = track
                 }
@@ -192,7 +212,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
                 cell.descriptionLabel.text = item.descr
                 cell.rightIconView.image = UIImage.templateImageNamed("ic_custom_arrow_right")
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                if let color = item.obj(forKey: "color") as? UIColor {
+                if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
                 }
                 outCell = cell
@@ -220,6 +240,7 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
                     if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
                         vc.allTracksFolder = subfolder
                         vc.folderName = subfolderName
+                        vc.currentSubfolderPath = currentSubfolderPath + subfolderName + "/"
                         vc.isRootFolder = false
                         show(vc)
                     }
@@ -235,5 +256,4 @@ class TracksViewController : OACompoundViewController, UITableViewDelegate, UITa
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-    
 }

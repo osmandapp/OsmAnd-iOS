@@ -82,7 +82,7 @@
 + (NSString *) getPreselectedIconName:(OAPOI *)poi
 {
     NSString *poiIcon = [poi.iconName lastPathComponent];
-    NSString *preselectedIconName = ([self isExistsIcon:poiIcon]) ? poiIcon : [self getIconNameForPOI:poi];
+    NSString *preselectedIconName = ([OAUtilities hasMapImage:poiIcon]) ? poiIcon : [self getIconNameForPOI:poi];
     return preselectedIconName;
 }
 
@@ -91,17 +91,11 @@
     OAPOIType *poiType = poi.type;
     if (!poiType)
         return nil;
-    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@", poiType.value]])
+    else if ([OAUtilities hasMapImage:[NSString stringWithFormat:@"mx_%@", poiType.value]])
         return [NSString stringWithFormat:@"mx_%@", poiType.value];
-    else if ([self isExistsIcon:[NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value]])
+    else if ([OAUtilities hasMapImage:[NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value]])
         return [NSString stringWithFormat:@"mx_%@_%@", poiType.tag, poiType.value];
     return nil;
-}
-
-+ (BOOL) isExistsIcon:(NSString *)iconName
-{
-    NSString *path = [[NSBundle mainBundle] pathForResource:[@"poi-icons-png/drawable-xhdpi/" stringByAppendingPathComponent:iconName] ofType:@"png"];
-    return [[NSFileManager defaultManager] fileExistsAtPath:path];
 }
 
 @end

@@ -41,10 +41,17 @@
 
 @interface OANativeUtilities : NSObject
 
-+ (sk_sp<SkImage>) skImageFromMmPngResource:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath;
 + (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data;
+
++ (sk_sp<SkImage>) skImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height;
++ (sk_sp<SkImage>) skImageFromSvgResourcePath:(NSString *)resourcePath width:(float)width height:(float)height;
++ (sk_sp<SkImage>) skImageFromSvgData:(const NSData *)data width:(float)width height:(float)height;
++ (sk_sp<SkImage>) skImageFromSvgResource:(NSString *)resourceName scale:(float)scale;
++ (sk_sp<SkImage>) skImageFromSvgResourcePath:(NSString *)resourcePath scale:(float)scale;
++ (sk_sp<SkImage>) skImageFromSvgData:(const NSData *)data scale:(float)scale;
+
 + (sk_sp<SkImage>) getScaledSkImage:(sk_sp<SkImage>)skImage scaleFactor:(float)scaleFactor;
 
 + (NSArray<NSString *> *) QListOfStringsToNSArray:(const QList<QString> &)list;

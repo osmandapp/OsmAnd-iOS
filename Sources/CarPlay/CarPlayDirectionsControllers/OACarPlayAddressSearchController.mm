@@ -141,7 +141,7 @@
             OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
             CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName
                                                        detailText:[self generateDescription:qsItem]
-                                                            image:[UIImage imageNamed:[OAQuickSearchListItem getIconName:sr]]
+                                                            image:[UIImage mapSvgImageNamed:[OAQuickSearchListItem getIconName:sr]]
                                                    accessoryImage:nil
                                                     accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
             cpItem.userInfo = @(i);

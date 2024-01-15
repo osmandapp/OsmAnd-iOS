@@ -732,6 +732,7 @@
 "shared_string_delete" = "Delete";
 "shared_string_upload" = "Upload";
 "shared_string_remove" = "Remove";
+"shared_string_move" = "Move";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
 "buy" = "Buy";
@@ -2208,6 +2209,7 @@
 "white_color_undefined" = "Parts without data are white.";
 "analyze_on_map" = "Analyze on map";
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
+"upload_to_osm" = "Upload to OSM";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Enter name";

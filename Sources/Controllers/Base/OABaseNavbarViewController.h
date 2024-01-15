@@ -51,6 +51,11 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
                               systemIconName:(NSString *)iconName
                                       action:(SEL)action
                                         menu:(UIMenu *)menu;
++ (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                                    icon:(UIImage *)icon
+                                       color:(UIColor *)color
+                                      action:(SEL)action
+                                        menu:(UIMenu *)menu;
 - (void)changeButtonAvailability:(UIBarButtonItem *)barButtonItem isEnabled:(BOOL)isEnabled;
 
 - (NSString *)getTitle;

@@ -1107,6 +1107,7 @@ static UIViewController *parentController;
             [self presentViewController:alert animated:YES completion:nil];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+        deleteAction.attributes = UIMenuElementAttributesDestructive;
         [menuElements addObject:[UIMenu menuWithTitle:@""
                                            image:nil
                                       identifier:nil

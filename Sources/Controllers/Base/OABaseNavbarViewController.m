@@ -522,14 +522,23 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
+    return [self.class createRightNavbarButton:title icon:icon color:[self getNavbarButtonsTintColor] action:action menu:menu];
+}
+
++ (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                                    icon:(UIImage *)icon
+                                       color:(UIColor *)color
+                                      action:(SEL)action
+                                        menu:(UIMenu *)menu
+{
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonSize, 30.)];
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;
     button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    [button setTintColor:[self getNavbarButtonsTintColor]];
-    [button setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-    [button setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+    [button setTintColor:color];
+    [button setTitleColor:color forState:UIControlStateNormal];
+    [button setTitleColor:[color colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
     [button setTitle:title forState:UIControlStateNormal];
     [button setImage:icon forState:UIControlStateNormal];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];

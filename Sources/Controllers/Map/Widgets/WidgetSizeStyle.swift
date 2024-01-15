@@ -9,43 +9,52 @@
 import Foundation
 
 extension OABaseWidgetView {
-    var widgetSizeStyle: WidgetSizeStyle {
-        return .medium
+    @objc var widgetSizeStyle: WidgetSizeStyle {
+        // TODO: save
+        .large
     }
 }
 
-@objc enum WidgetSizeStyle: Int {
-    case regular, small, medium, large
+@objcMembers final class WidgetSizeStyleObjWrapper: NSObject {
     
-    var labelFont: UIFont {
+    func getLabelFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
+        type.labelFontSize
+    }
+    
+    func getValueFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
+        type.valueFontSize
+    }
+    
+    func getUnitsFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
+        type.unitsFontSize
+    }
+}
+
+@objc enum WidgetSizeStyle: NSInteger {
+    case small, medium, large
+    
+    var labelFontSize: CGFloat {
         switch self {
-#warning("regular")
-        case .regular: UIFont.systemFont(ofSize: 20)
-        case .small: UIFont.systemFont(ofSize: 22)
-        case .medium: UIFont.systemFont(ofSize: 33)
-        case .large: UIFont.systemFont(ofSize: 55)
+        case .small, .medium, .large: 11
         }
     }
     
-    var valueFont: UIFont {
+    var valueFontSize: CGFloat {
         switch self {
-#warning("regular")
-        case .regular: UIFont.systemFont(ofSize: 20)
-        case .small, .medium, .large: UIFont.systemFont(ofSize: 11)
+        case .small: 22
+        case .medium: 33
+        case .large: 55
         }
     }
     
-    var unitsFont: UIFont {
+    var unitsFontSize: CGFloat {
         switch self {
-#warning("regular")
-        case .regular: UIFont.systemFont(ofSize: 20)
-        case .small, .medium, .large: UIFont.systemFont(ofSize: 11)
+        case .small, .medium, .large: 11
         }
     }
     
     var minHeight: CGFloat {
         switch self {
-        case .regular: 44
         case .small: 44
         case .medium: 66
         case .large: 88

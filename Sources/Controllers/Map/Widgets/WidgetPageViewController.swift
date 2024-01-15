@@ -96,6 +96,7 @@ final class WidgetPageViewController: UIViewController {
                 if items.count > 1 {
                     let multipleWidgetsInRowStackView = createMultipleWidgetsInRowStackView()
                     for (idx, widget) in items.enumerated() {
+                        widget.isFullRow = false
                         configureSimple(widget: widget)
                         widget.translatesAutoresizingMaskIntoConstraints = false
                         
@@ -107,6 +108,7 @@ final class WidgetPageViewController: UIViewController {
                     stackView.addArrangedSubview(multipleWidgetsInRowStackView)
                 } else {
                     if let widget = items.first {
+                        widget.isFullRow = true
                         configureSimple(widget: widget)
                         widget.translatesAutoresizingMaskIntoConstraints = false
                        // widget.layoutIfNeeded()

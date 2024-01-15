@@ -24,6 +24,7 @@
 @property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
 @property (nonatomic, strong, nullable) UILabel *nameLabel;
 @property (nonatomic, strong, nullable) UILabel *unitLabel;
+@property (nonatomic, strong, nullable) UIView *unitView;
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 
@@ -107,9 +108,12 @@
     self.topNameUnitStackView.translatesAutoresizingMaskIntoConstraints = NO;
     self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
     self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
-    self.topNameUnitStackView.distribution = UIStackViewDistributionFillEqually;
+    self.topNameUnitStackView.distribution = UIStackViewDistributionFillProportionally;//UIStackViewDistributionFillEqually;
     self.topNameUnitStackView.backgroundColor = [UIColor yellowColor];
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
+    
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
+    
     
     auto nameView = [UIView new];
     nameView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -118,14 +122,16 @@
         [nameView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
     ]];
     
+    WidgetSizeStyleObjWrapper *fontStyle = [WidgetSizeStyleObjWrapper new];
+    
     // Create the name label ("SPEED")
     self.nameLabel = [UILabel new];
-    self.nameLabel.text = @"SPEED";
-    self.nameLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.nameLabel.text = _contentTitle;
+    self.nameLabel.textColor = [UIColor colorNamed:ACColorNameWidgetLabelColor];
     self.nameLabel.backgroundColor = [UIColor greenColor];
     
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.nameLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     [nameView addSubview:self.nameLabel];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -135,28 +141,28 @@
         [self.nameLabel.bottomAnchor constraintEqualToAnchor:nameView.bottomAnchor constant:0]
     ]];
     
-    auto unitView = [UIView new];
-    unitView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self.topNameUnitStackView addArrangedSubview:unitView];
+    self.unitView = [UIView new];
+    self.unitView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topNameUnitStackView addArrangedSubview:self.unitView];
     [NSLayoutConstraint activateConstraints:@[
-        [unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
+        [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
     ]];
+    self.unitView.hidden = _subtext.length == 0;
     
     // Create the unit label ("KM/H")
     self.unitLabel = [UILabel new];
-    self.unitLabel.text = @"KM/H";
+    self.unitLabel.text = _subtext;
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.unitLabel.textAlignment = NSTextAlignmentRight;
-    self.unitLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-    self.nameLabel.backgroundColor = [UIColor grayColor];
-    [unitView addSubview:self.unitLabel];
+    self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
+    [self.unitView addSubview:self.unitLabel];
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.unitLabel.topAnchor constraintEqualToAnchor:unitView.topAnchor constant:10],
-        [self.unitLabel.leadingAnchor constraintEqualToAnchor:unitView.leadingAnchor constant:0],
-        [self.unitLabel.trailingAnchor constraintEqualToAnchor:unitView.trailingAnchor constant:0],
-        [self.unitLabel.bottomAnchor constraintEqualToAnchor:unitView.bottomAnchor constant:0]
+        [self.unitLabel.topAnchor constraintEqualToAnchor:self.unitView.topAnchor constant:10],
+        [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor constant:0],
+        [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor constant:0],
+        [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor constant:0]
     ]];
     
     // Create the contentStackView
@@ -176,7 +182,7 @@
     ]];
     
     _imageView = [UIImageView new];
-    //_imageView.image = [UIImage imageNamed:@"widget_speed"];
+    [self setImage:[UIImage imageNamed:_icon]];
     _imageView.translatesAutoresizingMaskIntoConstraints = NO;
     [iconWidgetView addSubview:_imageView];
     [NSLayoutConstraint activateConstraints:@[
@@ -192,20 +198,29 @@
     
     // Create the unit label ("150")
     self.valueLabel = [UILabel new];
-    self.valueLabel.text = @"150";
+    self.valueLabel.text = _text;//@"150";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.valueLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+    
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.valueLabel.backgroundColor = [UIColor redColor];
-    self.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-    self.valueLabel.textAlignment = NSTextAlignmentNatural;
+    self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+    self.valueLabel.textAlignment =  self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
     [valueUnitOrEmptyView addSubview:self.valueLabel];
     
     // Create the unitOrEmptyLabel  ("KM/H")
     self.unitOrEmptyLabel = [UILabel new];
-    self.unitOrEmptyLabel.text = @"KM/H";
+    if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+    {
+        self.unitOrEmptyLabel.text = _subtext;
+    }
+    else
+    {
+        self.unitOrEmptyLabel.text = @"";
+    }
+    
     self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitOrEmptyLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-    self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
     self.unitOrEmptyLabel.textAlignment = NSTextAlignmentNatural;
     self.unitOrEmptyLabel.backgroundColor = [UIColor grayColor];
     [valueUnitOrEmptyView addSubview:self.unitOrEmptyLabel];
@@ -259,7 +274,7 @@
         [_textShadowView.leadingAnchor constraintEqualToAnchor:_textView.leadingAnchor]
     ]];
     
-    self.backgroundColor = [UIColor whiteColor];
+    self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
 
     _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
@@ -281,40 +296,21 @@
 
 - (void)commonInit
 {
-//    if (self.isSimpleLayout)
-//    {
-//        NSArray *viewsToRemove = [self subviews];
-//        for (UIView *v in viewsToRemove) {
-//            [v removeFromSuperview];
-//        }
-//        _textView = [[UILabel alloc] init];
-//        _textView.adjustsFontForContentSizeCategory = YES;
-//        _textView.translatesAutoresizingMaskIntoConstraints = NO;
-//        _imageView = [UIImageView new];
-//        _imageView.translatesAutoresizingMaskIntoConstraints = NO;
-//
-//        [self addSubview:_textView];
-//        
-//        [self simpleLayout];
-//    }
-//    else
-//    {
-        _textView = [[UILabel alloc] init];
-        _textView.adjustsFontForContentSizeCategory = YES;
-        _textView.translatesAutoresizingMaskIntoConstraints = NO;
-        _imageView = [UIImageView new];
-        _imageView.translatesAutoresizingMaskIntoConstraints = NO;
-
-        [self addSubview:_textView];
-        [self addSubview:_imageView];
-        
-        _textShadowView = [[UILabel alloc] init];
-        _textShadowView.adjustsFontForContentSizeCategory = YES;
-        _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
-        [self addSubview:_textShadowView];
-        
-        [self commonLayout];
-  //  }
+    _textView = [[UILabel alloc] init];
+    _textView.adjustsFontForContentSizeCategory = YES;
+    _textView.translatesAutoresizingMaskIntoConstraints = NO;
+    _imageView = [UIImageView new];
+    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addSubview:_textView];
+    [self addSubview:_imageView];
+    
+    _textShadowView = [[UILabel alloc] init];
+    _textShadowView.adjustsFontForContentSizeCategory = YES;
+    _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addSubview:_textShadowView];
+    
+    [self commonLayout];
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -405,10 +401,12 @@
     _contentTitle = text;
     [self setContentDescription:_textView.text];
     _shadowButton.accessibilityLabel = _contentTitle;
+    _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
 }
 
 - (void) setText:(NSString *)text subtext:(NSString *)subtext
 {
+    NSLog(@"setText: %@ subtext %@", text, subtext);
     [self setTextNoUpdateVisibility:text subtext:subtext];
     [self updateVisibility:text != nil];
 }
@@ -417,12 +415,16 @@
 {
     if ([_text isEqualToString:text] && [subtext isEqualToString:subtext])
         return;
-    //        if(this.text != null && this.text.length() > 7) {
-    //            this.text = this.text.substring(0, 6) +"..";
-    //        }
     if (text.length == 0 && subtext.length == 0)
     {
-        _textView.text = @"";
+        if (self.isSimpleLayout) {
+            self.valueLabel.text = @"";
+        }
+        else
+        {
+            _textView.text = @"";
+        }
+       
         _text = @"";
         _subtext = @"";
         _shadowButton.accessibilityValue = nil;
@@ -437,54 +439,74 @@
 
 - (void) refreshLabel
 {
-    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-    if (_imageView.hidden)
+    if (self.isSimpleLayout)
     {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.alignment = NSTextAlignmentCenter;
-        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        self.valueLabel.text = _text;
+        _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
+        if (_subtext.length == 0) {
+            self.unitView.hidden = YES;
+        } else {
+            if (self.widgetSizeStyle == WidgetSizeStyleSmall) {
+                self.unitView.hidden = YES;
+                self.unitOrEmptyLabel.text = _subtext;
+            } else {
+                self.unitView.hidden = NO;
+                self.unitLabel.text = _subtext;
+            }
+        }
     }
     else
     {
-        NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
-        ps.firstLineHeadIndent = 2.0;
-        ps.tailIndent = -2.0;
-        attributes[NSParagraphStyleAttributeName] = ps;
-    }
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
-    NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
+        NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+        if (_imageView.hidden)
+        {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+            attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        }
+        else
+        {
+            NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
+            ps.firstLineHeadIndent = 2.0;
+            ps.tailIndent = -2.0;
+            attributes[NSParagraphStyleAttributeName] = ps;
+        }
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
+        NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
 
-    NSRange valueRange = NSMakeRange(0, _text.length);
-    NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
-    
-    if (valueRange.length > 0)
-    {
-        [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
-        [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
-        if (_primaryShadowColor && _shadowRadius > 0)
+        NSRange valueRange = NSMakeRange(0, _text.length);
+        NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
+        
+        if (valueRange.length > 0)
         {
-            [shadowString addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
-            [shadowString addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
-            [shadowString addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
-            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
+            [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+            [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
+            if (_primaryShadowColor && _shadowRadius > 0)
+            {
+                [shadowString addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+                [shadowString addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
+                [shadowString addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
+                [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
+            }
         }
-    }
-    if (unitRange.length > 0)
-    {
-        [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
-        [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
-        if (_unitsShadowColor && _shadowRadius > 0)
+        if (unitRange.length > 0)
         {
-            [shadowString addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
-            [shadowString addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
-            [shadowString addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
-            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
+            [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+            [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
+            if (_unitsShadowColor && _shadowRadius > 0)
+            {
+                [shadowString addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+                [shadowString addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
+                [shadowString addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
+                [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
+            }
         }
+        
+        _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
+        _textView.attributedText = string;
+        _shadowButton.accessibilityValue = string.string;
+        
     }
-    
-    _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
-    _textView.attributedText = string;
-    _shadowButton.accessibilityValue = string.string;
     [self refreshLayout];
 }
 

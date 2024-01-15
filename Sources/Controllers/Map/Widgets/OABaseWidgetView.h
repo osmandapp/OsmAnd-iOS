@@ -28,6 +28,7 @@
 @property (nonatomic) OAWidgetType * _Nullable widgetType;
 @property (nonatomic, readonly, assign) BOOL nightMode;
 @property (nonatomic, assign) BOOL isSimpleLayout;
+@property (nonatomic, assign) BOOL isFullRow;
 
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 

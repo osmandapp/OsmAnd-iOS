@@ -1321,7 +1321,7 @@
 "routing_attr_avoid_share_taxi_description" = "Evita táxis partilhados";
 "rendering_attr_surface_wood_name" = "Madeira";
 "rendering_attr_surface_mud_name" = "Lama";
-"rendering_attr_showRoadMaps_name" = "Mapas de estradas";
+"rendering_attr_showRoadMaps_name" = "Mapas só de estradas";
 "rendering_attr_pisteGrooming_name" = "Preparação de pista";
 "routing_attr_no_new_routing_description" = "Não usar as regras de roteamento introduzidas na versão 1.9.";
 "routing_attr_driving_style_speed_name" = "Percursos mais curtos";

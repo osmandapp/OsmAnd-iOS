@@ -30,10 +30,17 @@
 @property (nonatomic, assign) BOOL isSimpleLayout;
 @property (nonatomic, assign) BOOL isFullRow;
 
+@property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
+@property (nonatomic, strong, nullable) UILabel *nameLabel;
+@property (nonatomic, strong, nullable) UILabel *unitLabel;
+@property (nonatomic, strong, nullable) UIView *unitView;
+@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
+@property (nonatomic, strong, nullable) UILabel *valueLabel;
+
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
-- (void)initSeparatorView;
+- (void)initSeparatorsView;
 
 - (BOOL)updateInfo;
 - (void)updateColors:(OATextState * _Nonnull)textState;
@@ -41,7 +48,6 @@
 - (BOOL)isTopText;
 - (BOOL)isTextInfo;
 - (void)updateSimpleLayout;
-//- (CGFloat)getHeightSimpleLayout;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
@@ -50,7 +56,8 @@
 - (BOOL)isExternal;
 - (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
 
-- (void)showSeparator:(BOOL)show;
+- (void)showBottomSeparator:(BOOL)show;
+- (void)showRightSeparator:(BOOL)show;
 - (void)adjustViewSize;
 - (void)attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
 - (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;

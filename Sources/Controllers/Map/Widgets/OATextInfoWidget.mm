@@ -20,16 +20,7 @@
 #define minWidgetHeight 32
 
 @interface OATextInfoWidget ()
-
-@property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
-@property (nonatomic, strong, nullable) UILabel *nameLabel;
-@property (nonatomic, strong, nullable) UILabel *unitLabel;
-@property (nonatomic, strong, nullable) UIView *unitView;
-@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
-@property (nonatomic, strong, nullable) UILabel *valueLabel;
-
 @end
-
 
 @implementation OATextInfoWidget
 {
@@ -64,7 +55,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
-        [self initSeparatorView];
+        [self initSeparatorsView];
     }
     return self;
 }
@@ -75,7 +66,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
-        [self initSeparatorView];
+        [self initSeparatorsView];
         [self commonInit];
     }
     
@@ -88,6 +79,7 @@
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+    [self initSeparatorsView];
     
     UIStackView *verticalStackView = [UIStackView new];
     verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -97,10 +89,10 @@
     [self addSubview:verticalStackView];
     
     [NSLayoutConstraint activateConstraints:@[
-        [verticalStackView.topAnchor constraintEqualToAnchor:self.topAnchor constant:0],
+        [verticalStackView.topAnchor constraintEqualToAnchor:self.topAnchor],
         [verticalStackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16],
         [verticalStackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16],
-        [verticalStackView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:0],
+        [verticalStackView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
     ]];
     
     // Create the topNameUnitStackView
@@ -108,7 +100,7 @@
     self.topNameUnitStackView.translatesAutoresizingMaskIntoConstraints = NO;
     self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
     self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
-    self.topNameUnitStackView.distribution = UIStackViewDistributionFillProportionally;//UIStackViewDistributionFillEqually;
+    self.topNameUnitStackView.distribution = UIStackViewDistributionFillProportionally; //UIStackViewDistributionFillProportionally;//UIStackViewDistributionFillEqually;
     self.topNameUnitStackView.backgroundColor = [UIColor yellowColor];
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
     
@@ -122,8 +114,6 @@
         [nameView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
     ]];
     
-    WidgetSizeStyleObjWrapper *fontStyle = [WidgetSizeStyleObjWrapper new];
-    
     // Create the name label ("SPEED")
     self.nameLabel = [UILabel new];
     self.nameLabel.text = _contentTitle;
@@ -131,14 +121,14 @@
     self.nameLabel.backgroundColor = [UIColor greenColor];
     
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     [nameView addSubview:self.nameLabel];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.nameLabel.topAnchor constraintEqualToAnchor:nameView.topAnchor constant:10],
-        [self.nameLabel.leadingAnchor constraintEqualToAnchor:nameView.leadingAnchor constant:0],
-        [self.nameLabel.trailingAnchor constraintEqualToAnchor:nameView.trailingAnchor constant:0],
-        [self.nameLabel.bottomAnchor constraintEqualToAnchor:nameView.bottomAnchor constant:0]
+        [self.nameLabel.leadingAnchor constraintEqualToAnchor:nameView.leadingAnchor],
+        [self.nameLabel.trailingAnchor constraintEqualToAnchor:nameView.trailingAnchor],
+        [self.nameLabel.bottomAnchor constraintEqualToAnchor:nameView.bottomAnchor]
     ]];
     
     self.unitView = [UIView new];
@@ -153,16 +143,16 @@
     self.unitLabel = [UILabel new];
     self.unitLabel.text = _subtext;
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.unitLabel.textAlignment = NSTextAlignmentRight;
     self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
     [self.unitView addSubview:self.unitLabel];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.unitLabel.topAnchor constraintEqualToAnchor:self.unitView.topAnchor constant:10],
-        [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor constant:0],
-        [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor constant:0],
-        [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor constant:0]
+        [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor],
+        [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor],
+        [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor]
     ]];
     
     // Create the contentStackView
@@ -198,13 +188,13 @@
     
     // Create the unit label ("150")
     self.valueLabel = [UILabel new];
-    self.valueLabel.text = _text;//@"150";
+    self.valueLabel.text = _text;
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     
-    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.valueLabel.backgroundColor = [UIColor redColor];
     self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
-    self.valueLabel.textAlignment =  self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
+    self.valueLabel.textAlignment = self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
     [valueUnitOrEmptyView addSubview:self.valueLabel];
     
     // Create the unitOrEmptyLabel  ("KM/H")
@@ -219,7 +209,7 @@
     }
     
     self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[fontStyle getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
     self.unitOrEmptyLabel.textAlignment = NSTextAlignmentNatural;
     self.unitOrEmptyLabel.backgroundColor = [UIColor grayColor];
@@ -230,22 +220,36 @@
                                              forAxis:UILayoutConstraintAxisHorizontal];
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor constant:0],
-        [self.valueLabel.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor constant:0],
-       // [self.valueLabel.trailingAnchor constraintEqualToAnchor: valueUnitOrEmptyView.trailingAnchor constant:0],
-        [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor constant:0],
+        [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [self.valueLabel.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor],
+        [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
         [self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
     
-//    [self.unitOrEmptyLabel setContentHuggingPriority:UILayoutPriorityDefaultLow + 2 // 252
-//                                     forAxis:UILayoutConstraintAxisHorizontal];
     [NSLayoutConstraint activateConstraints:@[
-        [self.unitOrEmptyLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor constant:0],
-        [self.unitOrEmptyLabel.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor constant:0],
-        [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor constant:0],
-        [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor constant:0],
+        [self.unitOrEmptyLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [self.unitOrEmptyLabel.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
+        [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
+        [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
         [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
+    
+    _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    _shadowButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_shadowButton];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_shadowButton.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [_shadowButton.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor],
+        [_shadowButton.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
+        [_shadowButton.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor]
+    ]];
+    
+    _metricSystemDepended = NO;
+    _angularUnitsDepended = NO;
+    _cachedMetricSystem = -1;
+    _cachedAngularUnits = -1;
 }
 
 - (void)commonLayout
@@ -525,17 +529,6 @@
 {
     return self.frame.size.height;
 }
-
-//- (CGFloat)getHeightSimpleLayout
-//{
-//    // TODO:
-//    [self.nameLabel sizeToFit];
-//    [self.valueLabel sizeToFit];
-//    
-//    CGFloat height = self.nameLabel.frame.size.height + self.valueLabel.frame.size.height + 10.0;
-//    return height;
-//    
-//}
 
 - (void) adjustViewSize
 {

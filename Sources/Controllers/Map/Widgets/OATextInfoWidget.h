@@ -66,6 +66,5 @@
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
-- (void)showSeparator:(BOOL)show;
 
 @end

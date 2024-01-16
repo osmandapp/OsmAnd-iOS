@@ -11,21 +11,21 @@ import Foundation
 extension OABaseWidgetView {
     @objc var widgetSizeStyle: WidgetSizeStyle {
         // TODO: save
-        .large
+        .medium
     }
 }
 
 @objcMembers final class WidgetSizeStyleObjWrapper: NSObject {
     
-    func getLabelFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
+    static func getLabelFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
         type.labelFontSize
     }
     
-    func getValueFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
+    static func getValueFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
         type.valueFontSize
     }
     
-    func getUnitsFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
+    static func getUnitsFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
         type.unitsFontSize
     }
 }

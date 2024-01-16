@@ -1993,6 +1993,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
+"whats_here" = "What's here";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";

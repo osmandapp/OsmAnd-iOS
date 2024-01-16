@@ -564,6 +564,11 @@
     }
 }
 
++ (BOOL)shouldUseFeet:(EOAMetricsConstant)mc
+{
+    return mc == MILES_AND_FEET || mc == MILES_AND_YARDS || mc == NAUTICAL_MILES_AND_FEET;
+}
+
 @end
 
 @interface OASpeedConstant ()

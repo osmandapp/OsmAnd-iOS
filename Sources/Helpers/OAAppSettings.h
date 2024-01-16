@@ -113,6 +113,7 @@ typedef NS_ENUM(NSInteger, EOAMetricsConstant)
 
 + (NSString *) toHumanString:(EOAMetricsConstant)mc;
 + (NSString *) toTTSString:(EOAMetricsConstant)mc;
++ (BOOL)shouldUseFeet:(EOAMetricsConstant)mc;
 
 @end
 

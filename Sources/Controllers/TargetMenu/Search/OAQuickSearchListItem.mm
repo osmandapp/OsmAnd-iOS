@@ -158,7 +158,7 @@
                 if ((!iconName || iconName.length == 0) && [searchResult.object isKindOfClass:OAPOIType.class])
                     iconName = ((OAPOIBaseType *) searchResult.object).iconName;
                 if (!iconName || iconName.length == 0)
-                    iconName = [OAUtilities drawablePath:[@"mx_" stringByAppendingString:@"craft_default"]];
+                    iconName = [@"mx_" stringByAppendingString:@"craft_default"];
                 return iconName;
             }
             else if ([searchResult.object isKindOfClass:OACustomSearchPoiFilter.class])
@@ -176,7 +176,7 @@
             OAPOI *amenity = (OAPOI *) searchResult.object;
             NSString *iconName = [amenity iconName];
             if (!iconName)
-                iconName = [OAUtilities drawablePath:[@"mx_" stringByAppendingString:@"craft_default"]];
+                iconName = [@"mx_" stringByAppendingString:@"craft_default"];
             return iconName;
         }
         case GPX_TRACK:

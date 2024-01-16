@@ -37,10 +37,10 @@
     UIImage *img = [super icon];
     if (!img)
     {
-        img = [UIImage imageNamed:[self iconName]];
+        img = [UIImage mapSvgImageNamed:[self iconName]];
         if (img)
         {
-            return [OAUtilities applyScaleFactorToImage:img];
+            return img;
         }
         else if (self.parentType)
         {
@@ -60,14 +60,13 @@
 
 - (NSString *) iconName
 {
-    UIImage *img = [super icon];
-    if (!img)
+    NSString *iconName = [super iconName];
+    if (![OAUtilities hasMapImage:iconName])
     {
-        NSString *iconName = [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue]];
-        img = [UIImage imageNamed:iconName];
-        if (img)
+        NSString *tvName = [NSString stringWithFormat:@"mx_%@_%@", self.getOsmTag, self.getOsmValue];
+        if ([OAUtilities hasMapImage:tvName])
         {
-            return iconName;
+            return tvName;
         }
         else if (self.parentType)
         {
@@ -82,15 +81,7 @@
             return [self.category iconName];
         }
     }
-    return [super iconName];
-}
-
-- (UIImage *) mapIcon
-{
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [self.name stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
-    if (!img)
-        img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@_%@", self.getOsmTag, self.getOsmValue]]];
-    return [OAUtilities applyScaleFactorToImage:img];
+    return iconName;
 }
 
 - (BOOL) isEqual:(id)object

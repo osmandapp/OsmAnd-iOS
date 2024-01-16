@@ -1109,8 +1109,7 @@
 
 + (UIImage *) getUserIcon
 {
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:@"mx_user_defined"]];
-    return [OAUtilities applyScaleFactorToImage:img];
+    return [UIImage svgImageNamed:@"mx_user_defined"];
 }
 
 + (NSString *)getCustomFilterIconName:(OAPOIUIFilter *)filter

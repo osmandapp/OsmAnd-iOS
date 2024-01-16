@@ -13,6 +13,7 @@
 #import "OAWeatherWidget.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OAGPXDocumentPrimitives.h"
 #import "OAIAPHelper.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
@@ -191,6 +192,43 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
     if ([dataType isEqual:OAWidgetType.temperature])
         return _temperatureSensorWriteToTrackDeviceID;
     return nil;
+}
+
+- (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+                     availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
+{
+    [OASensorAttributesUtils getAvailableGPXDataSetTypesWithAnalysis:analysis availableTypes:availableTypes];
+}
+
+- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
+{
+    if ([point isKindOfClass:OAWptPt.class])
+    {
+        for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
+        {
+            CGFloat defaultValue = [OAPointAttributes.sensorTagTemperature isEqualToString:tag] ?  NAN : 0;
+            
+            CGFloat value = defaultValue;
+            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:@"trackpointextension"];
+            if (trackpointextension)
+            {
+                for (OAGpxExtension *subextension in trackpointextension.subextensions)
+                {
+                    if ([subextension.name isEqualToString:tag])
+                    {
+                        NSNumber *val = [[[NSNumberFormatter alloc] init] numberFromString:subextension.value];
+                        if (val)
+                            value = val.floatValue;
+                    }
+                }
+            }
+            
+            [attribute setAttributeValueFor:tag value:value];
+            
+            if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)
+                [analysis setTag:tag hasData:YES];
+        }
+    }
 }
 
 @end

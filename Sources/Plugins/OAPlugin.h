@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -75,12 +75,17 @@
 + (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters;
 - (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
 + (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
+- (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;
+- (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+                     availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
 + (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId;
 - (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 + (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
-
++ (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;
++ (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
+                     availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 - (void) onInstall;
 - (void) updateLayers;
 - (void) registerLayers;

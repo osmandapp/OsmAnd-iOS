@@ -143,3 +143,6 @@
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 
+// Enums
+#import "OAGPXDataSetType.h"
+

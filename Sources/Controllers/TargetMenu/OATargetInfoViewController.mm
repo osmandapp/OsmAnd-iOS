@@ -8,6 +8,7 @@
 
 #import "OATargetInfoViewController.h"
 #import "OsmAndApp.h"
+#import "OANativeUtilities.h"
 #import "OATargetInfoViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
@@ -108,18 +109,21 @@
 {
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
-    {
-        img = [UIImage imageNamed:[OAUtilities drawablePath:fileName]];
-        if (img)
-        {
-            img = [OAUtilities applyScaleFactorToImage:img];
-        }
-    }
+        img = [UIImage mapSvgImageNamed:fileName];
     else
-    {
         img = [UIImage imageNamed:fileName];
-    }
-    
+
+    return img;
+}
+
++ (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size
+{
+    UIImage *img = nil;
+    if ([fileName hasPrefix:@"mx_"])
+        img = [UIImage mapSvgImageNamed:fileName width:size.width height:size.height];
+    else
+        img = [UIImage imageNamed:fileName];
+
     return img;
 }
 
@@ -224,7 +228,7 @@
 
         if (nearest.count > 0)
         {
-            UIImage *icon = isWiki ? [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]] : poi.icon;
+            UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;

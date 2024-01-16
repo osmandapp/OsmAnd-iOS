@@ -55,13 +55,12 @@ static NSMutableSet<NSString *> *nullTypeSetInstance;
 
 - (UIImage *)icon
 {
-    UIImage *img = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", self.name]]];
-    return [OAUtilities applyScaleFactorToImage:img];
+    return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", self.name]];
 }
 
 - (NSString *)iconName
 {
-    return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", self.name]];
+    return [NSString stringWithFormat:@"mx_%@", self.name];
 }
 
 -(BOOL)isEqual:(id)object

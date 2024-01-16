@@ -121,7 +121,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
-    func setupNavBarMenuButton() {
+    private func setupNavBarMenuButton() {
         let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { _ in
             self.onNavbarSelectButtonClicked()
         }
@@ -197,87 +197,87 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     // MARK: - Actions
     
-    @objc func onNavbarOptionsButtonClicked() {
+    @objc private func onNavbarOptionsButtonClicked() {
         // Do nothing
     }
     
-    func onNavbarSelectButtonClicked() {
+    private func onNavbarSelectButtonClicked() {
         print("onNavbarOptionsButtonClicked")
     }
     
-    func onNavbarAddFolderButtonClicked() {
+    private func onNavbarAddFolderButtonClicked() {
         print("onNavbarAddFolderButtonClicked")
     }
     
-    func onNavbarImportButtonClicked() {
+    private func onNavbarImportButtonClicked() {
         print("onNavbarImportButtonClicked")
     }
     
-    func onFolderDetailsButtonClicked() {
+    private func onFolderDetailsButtonClicked() {
         print("onFolderDetailsButtonClicked")
     }
     
-    func onFolderRenameButtonClicked() {
+    private func onFolderRenameButtonClicked() {
         print("onFolderRenameButtonClicked")
     }
     
-    func onFolderAppearenceButtonClicked() {
+    private func onFolderAppearenceButtonClicked() {
         print("onFolderAppearenceButtonClicked")
     }
     
-    func onFolderExportButtonClicked() {
+    private func onFolderExportButtonClicked() {
         print("onFolderExportButtonClicked")
     }
     
-    func onFolderMoveButtonClicked() {
+    private func onFolderMoveButtonClicked() {
         print("onFolderMoveButtonClicked")
     }
     
-    func onFolderDeleteButtonClicked() {
+    private func onFolderDeleteButtonClicked() {
         print("onFolderDeleteButtonClicked")
     }
     
-    func onTrackShowOnMapClicked() {
+    private func onTrackShowOnMapClicked() {
         print("onTrackShowOnMapClicked")
     }
     
-    func onTrackAppearenceClicked() {
+    private func onTrackAppearenceClicked() {
         print("onTrackAppearenceClicked")
     }
     
-    func onTrackNavigationClicked() {
+    private func onTrackNavigationClicked() {
         print("onTrackNavigationClicked")
     }
     
-    func onTrackAnalyzeClicked() {
+    private func onTrackAnalyzeClicked() {
         print("onTrackAnalyzeClicked")
     }
     
-    func onTrackShareClicked() {
+    private func onTrackShareClicked() {
         print("onTrackShareClicked")
     }
     
-    func onTrackUploadToOsmClicked() {
+    private func onTrackUploadToOsmClicked() {
         print("onTrackUploadToOsmClicked")
     }
     
-    func onTrackEditClicked() {
+    private func onTrackEditClicked() {
         print("onTrackEditClicked")
     }
     
-    func onTrackDuplicateClicked() {
+    private func onTrackDuplicateClicked() {
         print("onTrackDuplicateClicked")
     }
     
-    func onTrackRenameClicked() {
+    private func onTrackRenameClicked() {
         print("onTrackRenameClicked")
     }
     
-    func onTrackMoveClicked() {
+    private func onTrackMoveClicked() {
         print("onTrackMoveClicked")
     }
     
-    func onTrackDeleteClicked() {
+    private func onTrackDeleteClicked() {
         print("onTrackDeleteClicked")
     }
     

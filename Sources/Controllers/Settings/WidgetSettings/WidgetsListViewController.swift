@@ -19,7 +19,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kPageNumberKey = "page_number"
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
-    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled)
+    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
     let panels = WidgetsPanel.values
     
@@ -162,7 +162,24 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
-        createWidgetItem(newWidget, lastSectionData)
+        var createNewSection: Bool = false
+        if isVerticalPanel() {
+            if WidgetType.isComplexWidget(newWidget.key) {
+                createNewSection = true
+                OAUtilities.showToast(newWidget.getTitle() + " widget can only be placed on its own row.", details: nil, duration: 4, in: self.view)
+            } else if lastSectionData.rowCount() > 1 {
+                var lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
+                createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
+                if createNewSection, let lastWidget {
+                    OAUtilities.showToast(lastWidget.getTitle() + " widget can only be placed on its own row.", details: nil, duration: 4, in: self.view)
+                }
+            }
+        }
+        if createNewSection {
+            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
+        } else {
+            createWidgetItem(newWidget, lastSectionData)
+        }
         if editMode {
             DispatchQueue.main.async { [weak self] in
                 self?.tableView.reloadData()
@@ -193,7 +210,11 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     // MARK: - Additions
-    
+
+    private func isVerticalPanel() -> Bool {
+        widgetPanel == WidgetsPanel.topPanel || widgetPanel == WidgetsPanel.bottomPanel
+    }
+
     private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
@@ -239,7 +260,9 @@ extension WidgetsListViewController {
             }
             if let cell {
                 let isPageCell = item.key == kPageKey
-                cell.titleLabel.text = isPageCell ? String(format: localizedString("shared_string_page_number"), item.integer(forKey: kPageNumberKey) + 1) : item.title
+                cell.titleLabel.text = isPageCell ? String(format: localizedString(isVerticalPanel() ? "shared_string_row_number" : "shared_string_page_number"),
+                                                           item.integer(forKey: kPageNumberKey) + 1)
+                                                : item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
@@ -505,7 +528,7 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel])!
-        return editMode || enabledWidgets.count > 0 ? localizedString(editMode ? "add_page" : "shared_string_edit") : ""
+        return enabledWidgets.count == 0 ? "" : editMode ? localizedString(isVerticalPanel() ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {

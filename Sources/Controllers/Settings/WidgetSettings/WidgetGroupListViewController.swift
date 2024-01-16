@@ -17,7 +17,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     
     private var filteredSection: OATableSectionData!
     
-    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled)
+    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
     var widgetPanel: WidgetsPanel!

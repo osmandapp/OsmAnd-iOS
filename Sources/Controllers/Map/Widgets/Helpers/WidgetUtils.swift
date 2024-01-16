@@ -14,7 +14,7 @@ final class WidgetUtils {
         guard let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry else {
             return
         }
-        let filter = KWidgetModeAvailable | kWidgetModeEnabled
+        let filter = kWidgetModeEnabled | kWidgetModeMatchingPanels
         let mergedPanels = panel.getMergedPanels().filter { $0 != panel }
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
         var mergedWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode,

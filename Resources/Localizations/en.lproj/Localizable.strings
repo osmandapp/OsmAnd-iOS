@@ -333,6 +333,7 @@
 "shared_string_light" = "Light";
 "shared_string_system_default" = "System default";
 "shared_string_page_number" = "Page %d";
+"shared_string_row_number" = "Row %d";
 "compass_on_circles" = "Compass on circles";
 "add_widget" = "Add widget";
 "add_page" = "Add page";

@@ -30,7 +30,7 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func resetConfigureScreenSettings() {
-        let allWidgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: 0, panels: WidgetsPanel.values)
+        let allWidgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: Int(kWidgetModeMatchingPanels), panels: WidgetsPanel.values)
         for widgetInfo in allWidgetInfos! {
             widgetRegistry.enableDisableWidget(for: appMode, widgetInfo: widgetInfo as? MapWidgetInfo, enabled: nil, recreateControls: false)
         }
@@ -58,7 +58,7 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) {
-        let filter = kWidgetModeEnabled | KWidgetModeAvailable
+        let filter = kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels
         let panels = [panel]
         let widgetInfosToCopy = widgetRegistry.getWidgetsForPanel(fromAppMode, filterModes: Int(filter), panels: panels)
 
@@ -156,7 +156,7 @@ class WidgetsSettingsHelper: NSObject {
 
     func resetWidgetsForPanel(panel: WidgetsPanel) {
         let panels = [panel]
-        let widgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: 0, panels: panels)
+        let widgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: Int(kWidgetModeMatchingPanels), panels: panels)
         for widgetInfo in widgetInfos! {
             guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
             // Disable "false" (not reset "nil"), because visible by default widget should be disabled in non-default panel

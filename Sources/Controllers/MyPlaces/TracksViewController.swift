@@ -39,6 +39,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
     private let trackKey = "trackKey"
+    private let tracksCountKey = "tracksCountKey"
     private let colorKey = "colorKey"
     private let buttonTitleKey = "buttonTitleKey"
     
@@ -50,7 +51,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
     fileprivate var folderName = ""
-    fileprivate var currentSubfolderPath = ""   // in format: "rec/new folder/"
+    fileprivate var currentSubfolderPath = ""   // in format: "rec/new folder"
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -107,9 +108,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     folderRow.iconName = "ic_custom_folder"
                     folderRow.setObj(UIColor.iconColorSelected, forKey: colorKey)
                     let tracksCount = folder.allTrackCount()
+                    folderRow.setObj(tracksCount, forKey: tracksCountKey)
                     var descr = String(format: localizedString("folder_tracks_count"), tracksCount)
                     folderRow.descr = descr
-                    if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentSubfolderPath + folderName) {
+                    if let lastModifiedDate = OAUtilities.getFileLastModificationDate(currentSubfolderPath + "/" + folderName) {
                         let dateFormatter = DateFormatter()
                         dateFormatter.dateFormat = "dd.MM.yyyy"
                         let lastModified = dateFormatter.string(from: lastModifiedDate)
@@ -168,6 +170,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func sortWithOptions(_ list: [String], options: SortingOptions) -> [String] {
         // TODO: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
         return list.sorted { $0 < $1 }
+    }
+    
+    private func showErrorAlert(_ text: String) {
+        let alert = UIAlertController(title: text, message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
+        present(alert, animated: true)
     }
     
     // MARK: - Data
@@ -230,11 +238,24 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func onNavbarSelectButtonClicked() {
-        print("onNavbarOptionsButtonClicked")
+        print("onNavbarSelectButtonClicked")
     }
     
     private func onNavbarAddFolderButtonClicked() {
-        print("onNavbarAddFolderButtonClicked")
+        let alert = UIAlertController(title: localizedString("add_folder"), message: localizedString("access_hint_enter_name"), preferredStyle: .alert)
+        alert.addTextField()
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_add"), style: .default) { [weak self] _ in
+            guard let self else { return }
+            if let folderName = alert.textFields?.first?.text {
+                if OAUtilities.isValidFileName(folderName) {
+                    self.addFolder(folderName)
+                } else {
+                    self.showErrorAlert(localizedString("incorrect_symbols"))
+                }
+            }
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
     }
     
     @objc private func onNavbarImportButtonClicked() {
@@ -245,8 +266,21 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         print("onFolderDetailsButtonClicked")
     }
     
-    private func onFolderRenameButtonClicked() {
-        print("onFolderRenameButtonClicked")
+    private func onFolderRenameButtonClicked(_ oldFolderName: String) {
+        let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
+        alert.addTextField()
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self] _ in
+            guard let self else { return }
+            if let newFolderName = alert.textFields?.first?.text {
+                if OAUtilities.isValidFileName(newFolderName) {
+                    self.renameFolder(oldName: oldFolderName, newName: newFolderName)
+                } else {
+                    self.showErrorAlert(localizedString("incorrect_symbols"))
+                }
+            }
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
     }
     
     private func onFolderAppearenceButtonClicked() {
@@ -260,9 +294,16 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func onFolderMoveButtonClicked() {
         print("onFolderMoveButtonClicked")
     }
-    
-    private func onFolderDeleteButtonClicked() {
-        print("onFolderDeleteButtonClicked")
+        
+    private func onFolderDeleteButtonClicked(folderName: String, tracksCount: Int) {
+        let message = String(format: localizedString("remove_folder_with_files_descr"), arguments: [folderName, tracksCount])
+        let alert = UIAlertController(title: localizedString("delete_folder"), message: message, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
+            guard let self else { return }
+            self.deleteFolder(folderName)
+        })
+        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+        present(alert, animated: true)
     }
     
     private func onTrackShowOnMapClicked() {
@@ -307,6 +348,61 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onTrackDeleteClicked() {
         print("onTrackDeleteClicked")
+    }
+    
+    // MARK: - Files operations
+    
+    private func currentFolderAbsolutePath() -> String {
+        var path = OsmAndApp.swiftInstance().gpxPath ?? ""
+        if !currentSubfolderPath.isEmpty {
+            path = path + "/" + currentSubfolderPath
+        }
+        return path
+    }
+    
+    private func addFolder(_ name: String) {
+        let newFolderPath = currentFolderAbsolutePath() + "/" + name
+        if !FileManager.default.fileExists(atPath: newFolderPath) {
+            do {
+                try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
+                currentTracksFolderContent.subfolders[name] = GpxFolder()
+                generateData()
+                tableView.reloadData()
+            } catch {
+            }
+        } else {
+            showErrorAlert(localizedString("folder_already_exsists"))
+        }
+    }
+    
+    private func renameFolder(oldName: String, newName: String) {
+        let oldFolderPath = currentFolderAbsolutePath() + "/" + oldName
+        let newFolderPath = currentFolderAbsolutePath() + "/" + newName
+        if let newFolderUrl = URL(string: newFolderPath) {
+            if !FileManager.default.fileExists(atPath: newFolderPath) {
+                do {
+                    try FileManager.default.moveItem(atPath: oldFolderPath, toPath: newFolderPath)
+                    currentTracksFolderContent.subfolders[newName] = currentTracksFolderContent.subfolders[oldName]
+                    currentTracksFolderContent.subfolders[oldName] = nil
+                    generateData()
+                    tableView.reloadData()
+                } catch {
+                }
+            } else {
+                showErrorAlert(localizedString("folder_already_exsists"))
+            }
+        }
+    }
+    
+    private func deleteFolder(_ folderName: String) {
+        let folderPath = currentFolderAbsolutePath() + "/" + folderName
+        do {
+            try FileManager.default.removeItem(atPath: folderPath)
+            currentTracksFolderContent.subfolders[folderName] = nil
+            generateData()
+            tableView.reloadData()
+        } catch {
+        }
     }
     
     // MARK: - TableView
@@ -391,7 +487,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
                         vc.currentTracksFolderContent = subfolder
                         vc.folderName = subfolderName
-                        vc.currentSubfolderPath = currentSubfolderPath + subfolderName + "/"
+                        vc.currentSubfolderPath = currentSubfolderPath + "/" + subfolderName
                         vc.isRootFolder = false
                         show(vc)
                     }
@@ -418,7 +514,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [detailsAction])
                 
                 let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage.icCustomEdit) { _ in
-                    self.onFolderRenameButtonClicked()
+                    if let selectedFolderName = item.title {
+                        self.onFolderRenameButtonClicked(selectedFolderName)
+                    }
                 }
                 let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
                     self.onFolderAppearenceButtonClicked()
@@ -434,7 +532,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [exportAction, moveAction])
                 
                 let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage.icCustomTrashOutlined, attributes: .destructive) { _ in
-                    self.onFolderDeleteButtonClicked()
+                    if let selectedFolderName = item.title {
+                        let folderTracksCount = item.integer(forKey: self.tracksCountKey)
+                        self.onFolderDeleteButtonClicked(folderName: selectedFolderName, tracksCount: folderTracksCount)
+                    }
                 }
                 let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
                 return UIMenu(title: "", image: nil, children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])

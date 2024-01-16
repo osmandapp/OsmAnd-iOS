@@ -2256,6 +2256,7 @@
 "select_wpt_on_map" = "Select point on map to add to the track";
 "rename_track" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
+"enter_new_name" = "Enter new name";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
@@ -3575,3 +3576,5 @@
 "my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
+"delete_folder" = "Delete folder";
+"remove_folder_with_files_descr" = "Are you sure you want to remove “%@” folder and all %d tracks?";

@@ -81,6 +81,8 @@
                 <outlet property="descriptionLabel" destination="vcc-Q7-1eu" id="vzh-Qs-4Q1"/>
                 <outlet property="descriptionNoButtonConstraint" destination="JaM-2E-s4s" id="Lnz-0l-7an"/>
                 <outlet property="descriptionWithButtonConstraint" destination="MWe-q9-rnf" id="fdh-FS-XuC"/>
+                <outlet property="imageHeightConstraint" destination="F6w-FF-lnA" id="X8J-Zv-xl2"/>
+                <outlet property="imageWidthConstraint" destination="RdE-5e-t1u" id="vEi-h7-QE8"/>
                 <outlet property="titleLabel" destination="rXB-MR-CH3" id="r6a-jH-n5l"/>
             </connections>
             <point key="canvasLocation" x="131.8840579710145" y="134.26339285714286"/>

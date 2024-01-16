@@ -3570,3 +3570,8 @@
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+
+"my_places_no_tracks_title_root" = "You don’t have track files";
+"my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
+"my_places_no_tracks_title" = "Empty folder";
+"my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";

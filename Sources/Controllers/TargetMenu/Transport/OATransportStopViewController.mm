@@ -54,14 +54,14 @@
 - (UIImage *) getIcon
 {
     if (!_stopType)
-        return [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
+        return [OATargetInfoViewController getIcon:@"mx_public_transport"];
     else
     {
         NSString *resId = _stopType.topResId;
         if (resId.length > 0)
-            return [OATargetInfoViewController getIcon:[resId stringByAppendingString:@".png"]];
+            return [OATargetInfoViewController getIcon:resId];
         else
-            return [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
+            return [OATargetInfoViewController getIcon:@"mx_public_transport"];
     }
 }
 

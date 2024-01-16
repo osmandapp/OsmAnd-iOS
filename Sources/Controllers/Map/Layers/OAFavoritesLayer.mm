@@ -155,6 +155,12 @@
 
 + (UIImage *) getImageWithColor:(UIColor *)color background:(NSString *)background icon:(NSString *)icon
 {
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    CGFloat outerImageSide = 36 * scale;
+    CGFloat innerImageSide = 27. / 2 * scale;
+    CGRect outerImageRect = CGRectMake(0, 0, outerImageSide, outerImageSide);
+    CGRect innerImageCenterRect = CGRectMake(((outerImageSide / 2) - (innerImageSide / 2)), ((outerImageSide / 2) - (innerImageSide / 2)), innerImageSide, innerImageSide);
+
     UIImage *shadowImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom", background]];
     if (!shadowImage)
         shadowImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
@@ -163,20 +169,14 @@
     if (!colorFilledImage)
         colorFilledImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"circle"] color:color];
     
-    UIImage *innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:icon] color:UIColor.whiteColor];
+    UIImage *innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:icon size:innerImageCenterRect.size] color:UIColor.whiteColor];
     if (!innerImage)
-        innerImage = [OAUtilities tintImageWithColor:[UIImage imageNamed:@"mx_special_star"] color:UIColor.whiteColor];
-    
+        innerImage = [OAUtilities tintImageWithColor:[OATargetInfoViewController getIcon:@"mx_special_star" size:innerImageCenterRect.size] color:UIColor.whiteColor];
+
     UIImage *topImage = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"ic_bg_point_%@_top", background]];
     if (!topImage)
-        topImage = [OATargetInfoViewController getIcon:@"mx_special_star"];
-    
-    CGFloat scale = [[UIScreen mainScreen] scale];
-    CGFloat outerImageSide = 36 * scale;
-    CGFloat innerImageSide = 27. / 2 * scale;
-    CGRect outerImageRect = CGRectMake(0, 0, outerImageSide, outerImageSide);
-    CGRect innerImageCenterRect = CGRectMake(((outerImageSide / 2) - (innerImageSide / 2)), ((outerImageSide / 2) - (innerImageSide / 2)), innerImageSide, innerImageSide);
-    
+        topImage = [OATargetInfoViewController getIcon:@"mx_special_star" size:outerImageRect.size];
+
     UIGraphicsBeginImageContext(outerImageRect.size);
     [shadowImage drawInRect:outerImageRect];
     [colorFilledImage drawInRect:outerImageRect];

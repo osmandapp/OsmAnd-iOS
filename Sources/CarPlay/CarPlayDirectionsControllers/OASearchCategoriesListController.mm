@@ -77,7 +77,7 @@
         NSString *name = [item getName];
         NSString *typeName = [OAQuickSearchTableController applySynonyms:res];
         UIImage *icon = [((OAPOIBaseType *)res.object) icon];
-        
+
         listItem = [[CPListItem alloc] initWithText:name detailText:typeName image:icon accessoryImage:nil accessoryType:CPListItemAccessoryTypeDisclosureIndicator];
     }
     else if ([res.object isKindOfClass:[OAPOICategory class]])

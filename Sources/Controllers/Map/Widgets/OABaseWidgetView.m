@@ -9,11 +9,13 @@
 #import "OABaseWidgetView.h"
 #import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OABaseWidgetView
 {
     BOOL _nightMode;
-    UIView *_separatorView;
+    UIView *_separatorBottomView;
+    UIView *_separatorRightView;
 }
 
 - (instancetype)initWithType:(OAWidgetType *)type
@@ -21,7 +23,8 @@
     self = [super init];
     if (self) {
         _widgetType = type;
-        [self initSeparatorView];
+        self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
+        [self initSeparatorsView];
     }
     return self;
 }
@@ -31,24 +34,37 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.frame = frame;
-        [self initSeparatorView];
+        [self initSeparatorsView];
     }
     return self;
 }
 
-- (void)initSeparatorView
+- (void)initSeparatorsView
 {
-    _separatorView = [[UIView alloc] init];
-    _separatorView.hidden = YES;
-    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-    [self addSubview:_separatorView];
+    _separatorBottomView = [[UIView alloc] init];
+    _separatorBottomView.hidden = YES;
+    _separatorBottomView.backgroundColor = UIColorFromRGB(color_tint_gray);
+    [self addSubview:_separatorBottomView];
     
-    _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    _separatorBottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [_separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-        [_separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
-        [_separatorView.heightAnchor constraintEqualToConstant:.5]
+        [_separatorBottomView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_separatorBottomView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorBottomView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
+        [_separatorBottomView.heightAnchor constraintEqualToConstant:.5]
+    ]];
+    
+    _separatorRightView = [UIView new];
+    _separatorRightView.hidden = YES;
+    _separatorRightView.backgroundColor = [UIColor lightGrayColor];
+    [self addSubview:_separatorRightView];
+    
+    _separatorRightView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_separatorRightView.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [_separatorRightView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+        [_separatorRightView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorRightView.widthAnchor constraintEqualToConstant:.5]
     ]];
 }
 
@@ -111,16 +127,16 @@
 
 - (void)updateSimpleLayout
 {
+    NSLog(@"");
 }
 
-//- (CGFloat)getHeightSimpleLayout
-//{
-//    return 44;
-//}
-
-- (void)showSeparator:(BOOL)show
+- (void)showBottomSeparator:(BOOL)show
 {
-    _separatorView.hidden = !show;
+    _separatorBottomView.hidden = !show;
+}
+
+- (void)showRightSeparator:(BOOL)show {
+    _separatorRightView.hidden = !show;
 }
 
 - (void)adjustViewSize

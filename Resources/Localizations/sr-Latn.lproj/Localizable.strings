@@ -672,7 +672,7 @@
 "map_transparency" = "Prozirnost osnovne mape";
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapilari";
-"street_level_imagery" = "Slike na stupnju ulice";
+"street_level_imagery" = "Slike na nivou ulice";
 "shared_string_terrain" = "Tlo";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
@@ -1025,7 +1025,7 @@
 "track_is_saved" = "%@\nis saved!";
 "plan_route_open_existing_track" = "Otvori postojeću rutu";
 "sort_last_modified" = "poslednjoj izmeni";
-"route_between_points_add_track_desc" = "Izaberi datoteku zapisa kojoj će se dodati novi članak.";
+"route_between_points_add_track_desc" = "Izaberi datoteku zapisa kojoj će se dodati novi segment.";
 "route_between_points_warning_desc" = "Zatim pomoću jednog od vaših navigacionih profila prislonite stazu na najbliži dozvoljeni put da biste koristili ovu opciju.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
@@ -1037,11 +1037,11 @@
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Podeli pre";
 "plan_route_split_after" = "Posle podeli";
-"follow_track" = "Sledi ruta";
+"follow_track" = "Sledi trag";
 "shared_string_gpx_track" = "Putanja";
-"select_another_track" = "Izaberi drugi ruta";
+"select_another_track" = "Izaberi drugu ruta";
 "select_track_to_follow" = "Select track to follow";
-"attach_to_the_roads" = "Vođica uvek na putevu";
+"attach_to_the_roads" = "Vođica uvek na ruti";
 "point_to_navigate" = "Navigate to";
 "start_of_the_track" = "Početak rute";
 "nearest_point" = "Najbliža tačka";
@@ -1330,7 +1330,7 @@
 "quick_action_navigation_voice_on" = "Isključi glas";
 "quick_action_navigation_voice_off" = "Uključi glas";
 "show_hide_gpx" = "Show/hide tracks";
-"show_gpx" = "Rute";
+"show_gpx" = "Snimljene rute";
 "hide_gpx" = "Hide track";
 "show_notes" = "Show OSM notes";
 "hide_notes" = "Hide OSM notes";

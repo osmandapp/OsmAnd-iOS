@@ -87,6 +87,7 @@
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapActions.h"
 #import "OABaseNavbarViewController.h"
 #import "OABaseButtonsViewController.h"
 #import "OABaseNavbarSubviewViewController.h"
@@ -108,6 +109,7 @@
 #import "OACarPlayMapDashboardViewController.h"
 #import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
+#import "OATrackSegmentsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

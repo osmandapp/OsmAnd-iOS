@@ -325,17 +325,30 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func onTrackAppearenceClicked(_ filePath: String) {
-        if let track = currentTracksFolderContent.files[filePath] {
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            state.gpxFilePath = filePath
-            OARootViewController.instance().mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
-            dismiss()
-        }
+        guard let track = currentTracksFolderContent.files[filePath] else { return }
+        let state = OATrackMenuViewControllerState()
+        state.openedFromTracksList = true
+        state.gpxFilePath = filePath
+        OARootViewController.instance().mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
+        dismiss()
     }
     
-    private func onTrackNavigationClicked() {
-        print("onTrackNavigationClicked")
+    private func onTrackNavigationClicked(_ filePath: String) {
+        guard let track = currentTracksFolderContent.files[filePath] else { return }
+        if track.totalTracks > 1 {
+            let absolutePath = (OsmAndApp.swiftInstance().gpxPath as NSString).appendingPathComponent(track.gpxFilePath)
+            if let vc = OATrackSegmentsViewController(filepath: absolutePath) {
+                vc.startNavigationOnSelect = true
+                OARootViewController.instance().present(vc, animated: true)
+                dismiss()
+            }
+        } else {
+            if OARoutingHelper.sharedInstance().isFollowingMode() {
+                OARootViewController.instance().mapPanel.mapActions.stopNavigationActionConfirm()
+            }
+            OARootViewController.instance().mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
+            dismiss()
+        }
     }
     
     private func onTrackAnalyzeClicked() {
@@ -575,7 +588,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     self.onTrackAppearenceClicked(selectedTrackFilename)
                 }
                 let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: UIImage.icCustomNavigationOutlined) { _ in
-                    self.onTrackNavigationClicked()
+                    self.onTrackNavigationClicked(selectedTrackFilename)
                 }
                 let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, appearenceAction, navigationAction])
                 

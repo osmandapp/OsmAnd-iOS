@@ -1036,6 +1036,7 @@
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "show_borders_of_downloaded_maps" = "Show borders of downloaded maps";
 "shared_string_show_on_map" = "Show on map";
+"shared_string_hide_from_map" = "Hide from map";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
 "map_magnifier" = "Map magnifier";

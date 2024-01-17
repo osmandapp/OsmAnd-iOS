@@ -40,8 +40,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let tracksFolderKey = "tracksFolderKey"
     private let trackKey = "trackKey"
     private let tracksCountKey = "tracksCountKey"
+    private let pathKey = "pathKey"
+    private let filenameKey = "filenameKey"
     private let colorKey = "colorKey"
     private let buttonTitleKey = "buttonTitleKey"
+    private let isVisibleKey = "isVisibleKey"
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -124,12 +127,16 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             fileNames = sortWithOptions(fileNames, options: .name)
             for fileName in fileNames {
                 if let track = currentTracksFolderContent.files[fileName] {
-                    var trackRow = section.createNewRow()
+                    let trackRow = section.createNewRow()
                     trackRow.cellType = OARightIconTableViewCell.getIdentifier()
                     trackRow.key = trackKey
                     trackRow.title = (fileName as NSString).deletingPathExtension
+                    trackRow.setObj(track.gpxFilePath, forKey: pathKey)
+                    trackRow.setObj(fileName, forKey: filenameKey)
                     trackRow.iconName = "ic_custom_trip"
-                    trackRow.setObj(UIColor.iconColorDefault, forKey: colorKey)
+                    let isVisible = OAAppSettings.sharedManager().mapSettingVisibleGpx.contains(track.gpxFilePath)
+                    trackRow.setObj(isVisible, forKey: isVisibleKey)
+                    trackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
                     
                     let waypointsCount = String(track.wptPoints)
                     if let distance = OAOsmAndFormatter.getFormattedDistance(track.totalDistance) {
@@ -203,7 +210,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             var currentFolder = currentTracksFolderContent
             let pathComponents = track.gpxFilePath.split(separator: "/")
             for i in 0..<pathComponents.count - 1 {
-                var folderName = String(pathComponents[i])
+                let folderName = String(pathComponents[i])
                 if let nextSubfolder = currentFolder.subfolders[folderName] {
                     currentFolder = nextSubfolder
                 }
@@ -222,7 +229,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let subfoldersUrls = allFolderContentUrls.filter{ $0.hasDirectoryPath }
             
             for subfolderUrl in subfoldersUrls {
-                var newSubfolderNode = GpxFolder()
+                let newSubfolderNode = GpxFolder()
                 let subfolderName = subfolderUrl.lastPathComponent
                 currentFolderNode.subfolders[subfolderName] = newSubfolderNode
                 recursiveFillFolderInfo(subfolderUrl, currentFolderNode: newSubfolderNode)
@@ -306,8 +313,15 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         present(alert, animated: true)
     }
     
-    private func onTrackShowOnMapClicked() {
-        print("onTrackShowOnMapClicked")
+    private func onTrackShowOnMapClicked(_ filePath: String) {
+        guard let settings = OAAppSettings.sharedManager() else { return }
+        if settings.mapSettingVisibleGpx.get().contains(filePath) {
+            settings.hideGpx([filePath], update: true)
+        } else {
+            settings.showGpx([filePath], update: true)
+        }
+        generateData()
+        tableView.reloadData()
     }
     
     private func onTrackAppearenceClicked() {
@@ -332,6 +346,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onTrackEditClicked() {
         print("onTrackEditClicked")
+        // [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
     }
     
     private func onTrackDuplicateClicked() {
@@ -378,19 +393,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func renameFolder(oldName: String, newName: String) {
         let oldFolderPath = currentFolderAbsolutePath() + "/" + oldName
         let newFolderPath = currentFolderAbsolutePath() + "/" + newName
-        if let newFolderUrl = URL(string: newFolderPath) {
-            if !FileManager.default.fileExists(atPath: newFolderPath) {
-                do {
-                    try FileManager.default.moveItem(atPath: oldFolderPath, toPath: newFolderPath)
-                    currentTracksFolderContent.subfolders[newName] = currentTracksFolderContent.subfolders[oldName]
-                    currentTracksFolderContent.subfolders[oldName] = nil
-                    generateData()
-                    tableView.reloadData()
-                } catch {
-                }
-            } else {
-                showErrorAlert(localizedString("folder_already_exsists"))
+        if !FileManager.default.fileExists(atPath: newFolderPath) {
+            do {
+                try FileManager.default.moveItem(atPath: oldFolderPath, toPath: newFolderPath)
+                currentTracksFolderContent.subfolders[newName] = currentTracksFolderContent.subfolders[oldName]
+                currentTracksFolderContent.subfolders[oldName] = nil
+                generateData()
+                tableView.reloadData()
+            } catch {
             }
+        } else {
+            showErrorAlert(localizedString("folder_already_exsists"))
         }
     }
     
@@ -417,7 +430,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
+        var outCell: UITableViewCell?
         
         if item.cellType == OARightIconTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
@@ -494,7 +507,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             }
         } else if item.key == trackKey {
-            if let filename = item.title {
+            if let filename = item.string(forKey: filenameKey) {
                 if let track = currentTracksFolderContent.files[filename] {
                     OARootViewController.instance().mapPanel.openTargetView(with: track)
                     OARootViewController.instance().navigationController?.popToRootViewController(animated: true)
@@ -507,16 +520,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
         if item.key == tracksFolderKey {
+            
+            let selectedFolderName = item.title ?? ""
+            
             let menuProvider: UIContextMenuActionProvider = { _ in
+                
                 let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
                     self.onFolderDetailsButtonClicked()
                 }
                 let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [detailsAction])
                 
                 let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage.icCustomEdit) { _ in
-                    if let selectedFolderName = item.title {
-                        self.onFolderRenameButtonClicked(selectedFolderName)
-                    }
+                    self.onFolderRenameButtonClicked(selectedFolderName)
                 }
                 let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
                     self.onFolderAppearenceButtonClicked()
@@ -532,19 +547,23 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [exportAction, moveAction])
                 
                 let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage.icCustomTrashOutlined, attributes: .destructive) { _ in
-                    if let selectedFolderName = item.title {
-                        let folderTracksCount = item.integer(forKey: self.tracksCountKey)
-                        self.onFolderDeleteButtonClicked(folderName: selectedFolderName, tracksCount: folderTracksCount)
-                    }
+                    let folderTracksCount = item.integer(forKey: self.tracksCountKey)
+                    self.onFolderDeleteButtonClicked(folderName: selectedFolderName, tracksCount: folderTracksCount)
                 }
                 let lastButtonsSection = UIMenu(title: "", options: .displayInline, children: [deleteAction])
                 return UIMenu(title: "", image: nil, children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         } else if item.key == trackKey {
+            
+            let selectedTrackPath = item.string(forKey: self.pathKey) ?? ""
+            let selectedTrackFilename = item.string(forKey: self.filenameKey) ?? ""
+            let isTrackVisible = item.bool(forKey: isVisibleKey)
+           
             let menuProvider: UIContextMenuActionProvider = { _ in
-                let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { _ in
-                    self.onTrackShowOnMapClicked()
+               
+                let showOnMapAction = UIAction(title: localizedString(isTrackVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { _ in
+                    self.onTrackShowOnMapClicked(selectedTrackPath)
                 }
                 let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
                     self.onTrackAppearenceClicked()

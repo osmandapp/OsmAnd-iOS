@@ -12,6 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAMaxSpeedWidget : OATextInfoWidget
 
+- (instancetype _Nonnull)initWithCustomId:(NSString *_Nullable)customId
+                                  appMode:(OAApplicationMode * _Nonnull)appMode;
+
 @end
 
 NS_ASSUME_NONNULL_END

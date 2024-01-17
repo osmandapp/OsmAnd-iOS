@@ -34,6 +34,16 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     override func generateData() {
         tableData.clearAllData()
+        // Add section for simple widgets
+        if let widgetType = widgetInfo.widget.widgetType,
+           !widgetType.isComplex, widgetPanel == .topPanel || widgetPanel == .bottomPanel {
+            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode) {
+                for i in 0 ..< settingsData.sectionCount() {
+                    tableData.addSection(settingsData.sectionData(for: i))
+                }
+            }
+        }
+        
         if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
             for i in 0 ..< settingsData.sectionCount() {
                 tableData.addSection(settingsData.sectionData(for: i))

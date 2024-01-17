@@ -12,9 +12,10 @@
 
 @interface OASunriseSunsetWidget : OATextInfoWidget
 
-- (instancetype) initWithState:(OASunriseSunsetWidgetState *)state;
-+ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-+ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-- (OACommonInteger *) getPreference;
+- (instancetype _Nonnull)initWithState:(OASunriseSunsetWidgetState *_Nonnull)state
+                      appMode:(OAApplicationMode * _Nonnull)appMode;
++ (NSString *)getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
++ (NSString *)getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
+- (OACommonInteger *)getPreference;
 
 @end

@@ -132,11 +132,15 @@ extension WidgetPageViewController {
             // text Alignment for visibleWidgets
             let visibleWidgets = items.filter { !$0.isHidden }
             if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
-                firstWidget.valueLabel?.textAlignment = .center
+                if let widget = firstWidget as? OATextInfoWidget {
+                    widget.valueLabel?.textAlignment = .center
+                }
                 firstWidget.isFullRow = true
             } else {
                 visibleWidgets.forEach {
-                    $0.valueLabel?.textAlignment = .natural
+                    if let widget = $0 as? OATextInfoWidget {
+                        widget.valueLabel?.textAlignment = .natural
+                    }
                     $0.isFullRow = false
                 }
             }

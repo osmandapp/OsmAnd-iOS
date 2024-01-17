@@ -3567,3 +3567,6 @@
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+
+"show_icon" = "Show icon";
+"simple_widget_footer" = "Widget can take full row width or just one column.";

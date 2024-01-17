@@ -15,7 +15,10 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     private let intermediate: Bool
     private let arrivalTimeOrTimeToGo: OACommonBoolean
     
+    var customId: String?
+    
     init(customId: String?, intermediate: Bool) {
+        self.customId = customId
         self.intermediate = intermediate
         self.arrivalTimeOrTimeToGo = TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId, intermediate: intermediate)
     }

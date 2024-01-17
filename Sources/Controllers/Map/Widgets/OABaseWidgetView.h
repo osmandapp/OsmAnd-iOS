@@ -30,14 +30,6 @@
 @property (nonatomic, assign) BOOL isSimpleLayout;
 @property (nonatomic, assign) BOOL isFullRow;
 
-@property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
-@property (nonatomic, strong, nullable) UILabel *nameLabel;
-@property (nonatomic, strong, nullable) UILabel *unitLabel;
-@property (nonatomic, strong, nullable) UIView *unitView;
-@property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
-@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
-@property (nonatomic, strong, nullable) UILabel *valueLabel;
-
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
@@ -55,7 +47,8 @@
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
 - (OAWidgetState *_Nullable) getWidgetState;
 - (BOOL)isExternal;
-- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
+- (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode * _Nonnull)appMode;
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode;
 
 - (void)showBottomSeparator:(BOOL)show;
 - (void)showRightSeparator:(BOOL)show;

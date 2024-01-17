@@ -21,8 +21,9 @@ typedef NS_ENUM(NSInteger, EOABearingType) {
 
 @interface OABearingWidget : OATextInfoWidget
 
-- (instancetype)initWithBearingType:(EOABearingType)bearingType;
-
+- (instancetype _Nonnull)initWithBearingType:(EOABearingType)bearingType
+                           customId:(NSString *_Nullable)customId
+                            appMode:(OAApplicationMode * _Nonnull)appMode;
 - (int)getBearing;
 - (CLLocation *) getDestinationLocation;
 - (int)getRelativeBearing:(CLLocation *)myLocation magneticBearingToDest:(float)magneticBearingToDest;

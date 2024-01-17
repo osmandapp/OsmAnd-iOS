@@ -1256,7 +1256,7 @@
 "map_settings_slopes_legend" = "Wikipedia에서 슬로프에 대한 자세한 내용을 읽을 수 있습니다.";
 "shared_string_turn_off" = "끄기";
 "shared_string_clear_offline_cache" = "오프라인 캐시 지우기";
-"shared_string_last_used" = "마지막으로 사용";
+"shared_string_last_used" = "마지막으로 사용한 날짜";
 "no_purchases" = "구매한 항목이 없습니다.";
 "promo_subscription" = "판촉가입";
 "recording_delete_confirm" = "이 기록을 삭제하시겠습니까 ?";
@@ -1571,3 +1571,8 @@
 "routing_attr_avoid_train_name" = "열차 없음";
 "angular_measeurement" = "각도 단위";
 "public_transport_try_change_settings" = "설정을 변경해 보세요.";
+"routing_attr_allow_streams_name" = "스트림 및 드레인 허용";
+"routing_attr_allow_intermittent_name" = "간헐적인 수로 허용";
+"routing_attr_prefer_hiking_routes_name" = "하이킹 경로 선호";
+"routing_attr_allow_intermittent_description" = "간헐적인 수로 허용";
+"routing_attr_allow_streams_description" = "스트림 및 드레인 허용";

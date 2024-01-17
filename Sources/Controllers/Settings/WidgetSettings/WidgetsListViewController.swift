@@ -163,15 +163,15 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
         var createNewSection: Bool = false
-        if isVerticalPanel() {
+        if widgetPanel.isPanelVertical() {
             if WidgetType.isComplexWidget(newWidget.key) {
                 createNewSection = true
-                OAUtilities.showToast(newWidget.getTitle() + " widget can only be placed on its own row.", details: nil, duration: 4, in: self.view)
+                OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [newWidget.getTitle()]), details: nil, duration: 4, in: self.view)
             } else if lastSectionData.rowCount() > 1 {
-                var lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
+                var lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo ?? nil
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
                 if createNewSection, let lastWidget {
-                    OAUtilities.showToast(lastWidget.getTitle() + " widget can only be placed on its own row.", details: nil, duration: 4, in: self.view)
+                    OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [lastWidget.getTitle()]), details: nil, duration: 4, in: self.view)
                 }
             }
         }
@@ -210,10 +210,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     // MARK: - Additions
-
-    private func isVerticalPanel() -> Bool {
-        widgetPanel == WidgetsPanel.topPanel || widgetPanel == WidgetsPanel.bottomPanel
-    }
 
     private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
@@ -260,7 +256,7 @@ extension WidgetsListViewController {
             }
             if let cell {
                 let isPageCell = item.key == kPageKey
-                cell.titleLabel.text = isPageCell ? String(format: localizedString(isVerticalPanel() ? "shared_string_row_number" : "shared_string_page_number"),
+                cell.titleLabel.text = isPageCell ? String(format: localizedString(widgetPanel.isPanelVertical() ? "shared_string_row_number" : "shared_string_page_number"),
                                                            item.integer(forKey: kPageNumberKey) + 1)
                                                 : item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
@@ -386,7 +382,7 @@ extension WidgetsListViewController {
             row.iconTintColor = UIColor.iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
-            if widgetPanel.isPagingAllowed() {
+            if widgetPanel.isPanelVertical() {
                 let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
                 tableData.clearAllData()
                 tableData.createNewSection()
@@ -528,7 +524,7 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel])!
-        return enabledWidgets.count == 0 ? "" : editMode ? localizedString(isVerticalPanel() ? "add_row" : "add_page") : localizedString("shared_string_edit")
+        return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical() ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {

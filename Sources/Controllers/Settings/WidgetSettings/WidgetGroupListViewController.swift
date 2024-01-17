@@ -45,7 +45,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         
         let filter = Int(KWidgetModeAvailable | kWidgetModeDefault)
         
-        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: filter, panels: widgetPanel.getMergedPanels())!
+        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: filter, panels: [widgetPanel])!
         let hasAvailableWidgets = availableWidgets.count > 0
         
         if hasAvailableWidgets {

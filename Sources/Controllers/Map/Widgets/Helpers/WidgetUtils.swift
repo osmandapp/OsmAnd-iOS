@@ -15,11 +15,10 @@ final class WidgetUtils {
             return
         }
         let filter = kWidgetModeEnabled | kWidgetModeMatchingPanels
-        let mergedPanels = panel.getMergedPanels().filter { $0 != panel }
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
         var mergedWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                                        filterModes: Int(filter),
-                                                                                       panels: mergedPanels)
+                                                                                       panels: [panel])
         var currentWidgetInfos: NSMutableOrderedSet = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                                         filterModes: Int(filter),
                                                                                         panels: [panel])
@@ -31,7 +30,7 @@ final class WidgetUtils {
                                         panel: panel)
         mergedWidgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                               filterModes: Int(filter),
-                                                              panels: mergedPanels)
+                                                              panels: [panel])
         currentWidgetInfos = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Int(filter),
                                                                panels: [panel])
@@ -95,7 +94,7 @@ final class WidgetUtils {
     private static func getDefaultWidgetInfos(widgetRegistry: OAMapWidgetRegistry,
                                               selectedAppMode: OAApplicationMode,
                                               panel: WidgetsPanel) -> [MapWidgetInfo] {
-        widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: 0, panels: panel.getMergedPanels()).array as? [MapWidgetInfo] ?? []
+        widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: 0, panels: [panel]).array as? [MapWidgetInfo] ?? []
             .filter { !$0.key.contains(MapWidgetInfo.DELIMITER) }
     }
     

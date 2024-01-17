@@ -120,7 +120,7 @@ class WidgetsSettingsHelper: NSObject {
     }
 
     private func getDefaultWidgetInfos(panel: WidgetsPanel) -> [MapWidgetInfo] {
-        let widgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: 0, panels: panel.getMergedPanels())
+        let widgetInfos = widgetRegistry.getWidgetsForPanel(appMode, filterModes: 0, panels: [panel])
         for widgetInfo in widgetInfos! {
             guard let widgetInfo = widgetInfo as? MapWidgetInfo else { continue }
             if widgetInfo.widgetPanel == panel {

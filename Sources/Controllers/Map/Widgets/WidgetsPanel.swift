@@ -114,10 +114,6 @@ class WidgetsPanel: NSObject, NSCopying {
         return getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
-    func isPagingAllowed() -> Bool {
-        self == .leftPanel || self == .rightPanel || self == .topPanel || self == .bottomPanel
-    }
-
     func getOrderPreference() -> OACommonListOfStringList {
         let settings = OAAppSettings.sharedManager()!
         if self == .leftPanel {
@@ -131,14 +127,9 @@ class WidgetsPanel: NSObject, NSCopying {
         }
         fatalError("Unsupported panel")
     }
-
-    func getMergedPanels() -> [WidgetsPanel] {
-        if self == .leftPanel || self == .rightPanel {
-            return [.leftPanel, .rightPanel]
-        } else if self == .topPanel || self == .bottomPanel {
-            return [.topPanel, .bottomPanel, .leftPanel, .rightPanel] // , .leftPanel, .rightPanel
-        }
-        fatalError("Unsupported widgets panel")
+    
+    func isPanelVertical() -> Bool {
+        return self == .topPanel || self == .bottomPanel
     }
     
     func copy(with zone: NSZone? = nil) -> Any {

@@ -55,61 +55,44 @@
     NSMutableArray<NSMutableArray<OABaseWidgetView *> *> *widgetsToShow = [NSMutableArray array];
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;
-    if (widgetPanel.isPagingAllowed)
+
+    NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)];
+    if (weatherToolbarVisible && widgetPanel == OAWidgetsPanel.rightPanel)
     {
-        NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *pagedWidgets = [self getPagedWidgetsForPanel:mode panel:widgetPanel filterModes:(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)];
-        if (weatherToolbarVisible && widgetPanel == OAWidgetsPanel.rightPanel)
-        {
-            NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
-            NSMutableOrderedSet<OAMapWidgetInfo *> *pageWeatherWidget = [NSMutableOrderedSet orderedSet];
-            int priority = 0;
-            for (NSString *key in weatherWidgets) {
-                NSPredicate *keyPredicate = [NSPredicate predicateWithFormat:@"key = %@", key];
-                NSArray<OAMapWidgetInfo *> *filteredWidgets = [[self getAllWidgets] filteredArrayUsingPredicate:keyPredicate];
-                if (filteredWidgets.count > 0)
-                {
-                    OAMapWidgetInfo *item = filteredWidgets.firstObject;
-                    item.priority = priority;
-                    priority ++;
-                    [pageWeatherWidget addObject:filteredWidgets.firstObject];
-                }
-            }
-            if (pageWeatherWidget.count > 0)
+        NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
+        NSMutableOrderedSet<OAMapWidgetInfo *> *pageWeatherWidget = [NSMutableOrderedSet orderedSet];
+        int priority = 0;
+        for (NSString *key in weatherWidgets) {
+            NSPredicate *keyPredicate = [NSPredicate predicateWithFormat:@"key = %@", key];
+            NSArray<OAMapWidgetInfo *> *filteredWidgets = [[self getAllWidgets] filteredArrayUsingPredicate:keyPredicate];
+            if (filteredWidgets.count > 0)
             {
-                pagedWidgets = @[pageWeatherWidget];
+                OAMapWidgetInfo *item = filteredWidgets.firstObject;
+                item.priority = priority;
+                priority ++;
+                [pageWeatherWidget addObject:filteredWidgets.firstObject];
             }
         }
-        for (NSOrderedSet<OAMapWidgetInfo *> *page in pagedWidgets)
+        if (pageWeatherWidget.count > 0)
         {
-            NSArray<OAMapWidgetInfo *> *sortedWidgets =
-                [page.array sortedArrayUsingComparator:^NSComparisonResult(OAMapWidgetInfo * _Nonnull w1, OAMapWidgetInfo * _Nonnull w2) {
-                    return [OAUtilities compareInt:(int) w1.priority y:(int) w2.priority];
-                }];
-            for (OAMapWidgetInfo *widgetInfo in sortedWidgets)
-            {
-                if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
-                    [currentPage addObject:widgetInfo.widget];
-                else
-                    [widgetInfo.widget detachView:widgetPanel];
-            }
-            [widgetsToShow addObject:currentPage];
-            currentPage = [NSMutableArray array];
+            pagedWidgets = @[pageWeatherWidget];
         }
     }
-    else
+    for (NSOrderedSet<OAMapWidgetInfo *> *page in pagedWidgets)
     {
         NSArray<OAMapWidgetInfo *> *sortedWidgets =
-            [widgets sortedArrayUsingComparator:^NSComparisonResult(OAMapWidgetInfo * _Nonnull w1, OAMapWidgetInfo * _Nonnull w2) {
-                return [OAUtilities compareInt:(int) w1.priority y:(int) w2.priority];
-            }];
+        [page.array sortedArrayUsingComparator:^NSComparisonResult(OAMapWidgetInfo * _Nonnull w1, OAMapWidgetInfo * _Nonnull w2) {
+            return [OAUtilities compareInt:(int) w1.priority y:(int) w2.priority];
+        }];
         for (OAMapWidgetInfo *widgetInfo in sortedWidgets)
         {
-            if ([widgetInfo isEnabledForAppMode:mode])
+            if ([widgetInfo isEnabledForAppMode:mode] || weatherToolbarVisible)
                 [currentPage addObject:widgetInfo.widget];
             else
                 [widgetInfo.widget detachView:widgetPanel];
         }
         [widgetsToShow addObject:currentPage];
+        currentPage = [NSMutableArray array];
     }
 
     for (int i = 0; i < currentPage.count; i++)

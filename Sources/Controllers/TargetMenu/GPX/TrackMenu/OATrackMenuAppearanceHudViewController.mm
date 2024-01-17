@@ -648,9 +648,19 @@
                 [self.doc setColoringType:_oldColoringType];
                 [self.doc setColor:_oldColor];
             }
-            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
-                                                  trackHudMode:EOATrackMenuHudMode
-                                                         state:_reopeningTrackMenuState];
+            if (_reopeningTrackMenuState.openedFromTracksList)
+            {
+                UITabBarController *myPlacesViewController =
+                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                [myPlacesViewController setSelectedIndex:1];
+                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+            }
+            else
+            {
+                [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                                      trackHudMode:EOATrackMenuHudMode
+                                                             state:_reopeningTrackMenuState];
+            }
         }
 
         if (self.isCurrentTrack)

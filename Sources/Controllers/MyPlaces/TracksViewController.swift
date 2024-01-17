@@ -324,8 +324,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         tableView.reloadData()
     }
     
-    private func onTrackAppearenceClicked() {
-        print("onTrackAppearenceClicked")
+    private func onTrackAppearenceClicked(_ filePath: String) {
+        if let track = currentTracksFolderContent.files[filePath] {
+            let state = OATrackMenuViewControllerState()
+            state.openedFromTracksList = true
+            state.gpxFilePath = filePath
+            OARootViewController.instance().mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
+            dismiss()
+        }
     }
     
     private func onTrackNavigationClicked() {
@@ -566,7 +572,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     self.onTrackShowOnMapClicked(selectedTrackPath)
                 }
                 let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
-                    self.onTrackAppearenceClicked()
+                    self.onTrackAppearenceClicked(selectedTrackFilename)
                 }
                 let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: UIImage.icCustomNavigationOutlined) { _ in
                     self.onTrackNavigationClicked()

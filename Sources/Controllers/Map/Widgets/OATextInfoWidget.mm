@@ -100,12 +100,11 @@
     self.topNameUnitStackView.translatesAutoresizingMaskIntoConstraints = NO;
     self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
     self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
-    self.topNameUnitStackView.distribution = UIStackViewDistributionFillProportionally; //UIStackViewDistributionFillProportionally;//UIStackViewDistributionFillEqually;
+    self.topNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;//UIStackViewDistributionFillProportionally; //UIStackViewDistributionFillProportionally;//UIStackViewDistributionFillEqually;
     self.topNameUnitStackView.backgroundColor = [UIColor yellowColor];
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
     
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
-    
     
     auto nameView = [UIView new];
     nameView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -135,7 +134,8 @@
     self.unitView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.topNameUnitStackView addArrangedSubview:self.unitView];
     [NSLayoutConstraint activateConstraints:@[
-        [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
+        [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11],
+        [self.unitView.widthAnchor constraintGreaterThanOrEqualToConstant:20]
     ]];
     self.unitView.hidden = _subtext.length == 0;
     
@@ -152,7 +152,8 @@
         [self.unitLabel.topAnchor constraintEqualToAnchor:self.unitView.topAnchor constant:10],
         [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor],
         [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor],
-        [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor]
+        [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor],
+       // [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:20]
     ]];
     
     // Create the contentStackView
@@ -190,23 +191,21 @@
     self.valueLabel = [UILabel new];
     self.valueLabel.text = _text;
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    
+    self.valueLabel.adjustsFontSizeToFitWidth = YES;
+    self.valueLabel.minimumScaleFactor = 0.3;
+
     self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.valueLabel.backgroundColor = [UIColor redColor];
     self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
     self.valueLabel.textAlignment = self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
     [valueUnitOrEmptyView addSubview:self.valueLabel];
     
-    // Create the unitOrEmptyLabel  ("KM/H")
+    // Create the unitOrEmptyLabel ("KM/H")
     self.unitOrEmptyLabel = [UILabel new];
     if (self.widgetSizeStyle == WidgetSizeStyleSmall)
-    {
         self.unitOrEmptyLabel.text = _subtext;
-    }
     else
-    {
         self.unitOrEmptyLabel.text = @"";
-    }
     
     self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
@@ -231,25 +230,39 @@
         [self.unitOrEmptyLabel.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
         [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
         [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
-        [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+        [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30],
+       // [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
     
+    self.emptyViewRightPlaceholderFullRow = [UIView new];
+    self.emptyViewRightPlaceholderFullRow.translatesAutoresizingMaskIntoConstraints = NO;
+    self.emptyViewRightPlaceholderFullRow.hidden = YES;
+    self.emptyViewRightPlaceholderFullRow.backgroundColor = [UIColor blueColor];
+    [contentStackView addArrangedSubview:self.emptyViewRightPlaceholderFullRow];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.emptyViewRightPlaceholderFullRow.widthAnchor constraintEqualToAnchor:_imageView.widthAnchor],
+        [self.emptyViewRightPlaceholderFullRow.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+    ]];
+
     _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
     _shadowButton.translatesAutoresizingMaskIntoConstraints = NO;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:_shadowButton];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_shadowButton.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
-        [_shadowButton.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor],
-        [_shadowButton.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
-        [_shadowButton.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor]
+        [_shadowButton.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [_shadowButton.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_shadowButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_shadowButton.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
     ]];
     
     _metricSystemDepended = NO;
     _angularUnitsDepended = NO;
     _cachedMetricSystem = -1;
     _cachedAngularUnits = -1;
+    
+    [self refreshLabel];
 }
 
 - (void)commonLayout
@@ -457,6 +470,11 @@
                 self.unitView.hidden = NO;
                 self.unitLabel.text = _subtext;
             }
+        }
+        if (self.isFullRow) {
+            self.emptyViewRightPlaceholderFullRow.hidden = NO;
+        } else {
+            self.emptyViewRightPlaceholderFullRow.hidden = YES;
         }
     }
     else

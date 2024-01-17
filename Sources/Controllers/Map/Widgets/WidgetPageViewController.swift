@@ -49,26 +49,19 @@ final class WidgetPageViewController: UIViewController {
                 if items.count > 1 {
                     let multipleWidgetsInRowStackView = createMultipleWidgetsInRowStackView()
                     items.forEach {
-                   // for (idx, widget) in items.enumerated() {
-                       // widget.translatesAutoresizingMaskIntoConstraints = false
                         $0.isFullRow = false
                         configureSimple(widget: $0)
                         multipleWidgetsInRowStackView.addArrangedSubview($0)
-//                        if idx != items.count - 1, !widget.isHidden {
-//                        //    widget.showRightSeparator(true)
-////                            multipleWidgetsInRowStackView.addSeparators(at: [multipleWidgetsInRowStackView.subviews.count])
-//                        }
                     }
                     stackView.addArrangedSubview(multipleWidgetsInRowStackView)
                 } else {
                     if let widget = items.first {
-                      //  widget.translatesAutoresizingMaskIntoConstraints = false
                         widget.isFullRow = true
                         configureSimple(widget: widget)
                         stackView.addArrangedSubview(widget)
                     }
                 }
-                if index != 0, index != simpleWidgetViews.count - 1 {
+                if index != simpleWidgetViews.count - 1 {
                     stackView.addSeparators(at: [stackView.subviews.count])
                 }
             }
@@ -99,19 +92,7 @@ final class WidgetPageViewController: UIViewController {
         var width: CGFloat = 0
         var height: CGFloat = 0
         if isMultipleWidgetsInRow {
-            simpleWidgetViews.forEach { items in
-                // text Alignment for visibleWidgets
-                let visibleWidgets = items.filter { !$0.isHidden }
-                if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
-                    firstWidget.valueLabel?.textAlignment = .center
-                } else {
-                    visibleWidgets.forEach { $0.valueLabel?.textAlignment = .natural }
-                }
-                // show Right Separator
-                items.enumerated().forEach { idx, widget in
-                    widget.showRightSeparator(idx != items.count - 1)
-                }
-            }
+            updateSimpleWidget()
             
             let fittingSize = stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
             height = fittingSize.height
@@ -134,7 +115,9 @@ final class WidgetPageViewController: UIViewController {
         }
         return (width, height)
     }
-    
+}
+
+extension WidgetPageViewController {
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
         widget.isSimpleLayout = true
@@ -142,5 +125,25 @@ final class WidgetPageViewController: UIViewController {
         widget.showBottomSeparator(false)
         widget.showRightSeparator(false)
         widget.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+    }
+    
+    private func updateSimpleWidget() {
+        simpleWidgetViews.forEach { items in
+            // text Alignment for visibleWidgets
+            let visibleWidgets = items.filter { !$0.isHidden }
+            if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
+                firstWidget.valueLabel?.textAlignment = .center
+                firstWidget.isFullRow = true
+            } else {
+                visibleWidgets.forEach {
+                    $0.valueLabel?.textAlignment = .natural
+                    $0.isFullRow = false
+                }
+            }
+            // show Right Separator
+            items.enumerated().forEach { idx, widget in
+                widget.showRightSeparator(idx != items.count - 1)
+            }
+        }
     }
 }

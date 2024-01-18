@@ -205,15 +205,7 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
         resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"map-shaders-png";
-        if (displayDensityFactor >= 3.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-xxhdpi"];
-        else if (displayDensityFactor >= 2.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-xhdpi"];
-        else if (displayDensityFactor >= 1.5f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-hdpi"];
-        else // if (displayDensityFactor >= 1.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-mdpi"];
+        resourceDir = @"map-shaders-svg";
     }
     else if (name.startsWith(QLatin1String("map/shaders/")))
     {
@@ -223,33 +215,17 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
         resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"map-shaders-png";
-        if (displayDensityFactor >= 3.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-xxhdpi"];
-        else if (displayDensityFactor >= 2.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-xhdpi"];
-        else if (displayDensityFactor >= 1.5f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-hdpi"];
-        else // if (displayDensityFactor >= 1.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-mdpi"];
+        resourceDir = @"map-shaders-svg";
     }
     else if (name.startsWith(QLatin1String("map/icons/")))
     {
         auto resourceFileName = name;
-        resourceFileName = resourceFileName.replace(QLatin1String("map/icons/"), QLatin1String("mm_"));
+        resourceFileName = resourceFileName.replace(QLatin1String("map/icons/"), QLatin1String("mx_"));
         const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
         resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"map-icons-png";
-        if (displayDensityFactor >= 3.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-xxhdpi"];
-        else if (displayDensityFactor >= 2.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-xhdpi"];
-        else if (displayDensityFactor >= 1.5f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-hdpi"];
-        else // if (displayDensityFactor >= 1.0f)
-            resourceDir = [resourceDir stringByAppendingString:@"/drawable-mdpi"];
+        resourceDir = @"map-icons-svg";
     }
     else if (name.startsWith(QLatin1String("map/stubs/")))
     {

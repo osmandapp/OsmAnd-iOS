@@ -72,14 +72,14 @@
     }
     else if (self.iconName.length > 0)
     {
-        UIImage *img = [UIImage imageNamed:self.iconName];
-        if (img)
+        UIImage *img;
+        if (self.hType == OAHistoryTypePOI)
+            img = [UIImage mapSvgImageNamed:self.iconName];
+
+        if (!img)
         {
-            if (self.hType == OAHistoryTypePOI)
-            {
-                return [OAUtilities applyScaleFactorToImage:img];
-            }
-            else
+            img = [UIImage imageNamed:self.iconName];
+            if (img)
             {
                 if (self.hType == OAHistoryTypeAddress)
                     return [OAUtilities getTintableImage:img];

@@ -118,14 +118,14 @@ static OATransportRouteToolbarViewController *toolbarController;
 - (UIImage *) getIcon
 {
     if (!_transportRoute.type)
-        return [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
+        return [OATargetInfoViewController getIcon:@"mx_public_transport"];
     else
     {
         NSString *resId = _transportRoute.type.topResId;
         if (resId.length > 0)
-            return [OATargetInfoViewController getIcon:[resId stringByAppendingString:@".png"]];
+            return [OATargetInfoViewController getIcon:resId];
         else
-            return [OATargetInfoViewController getIcon:@"mx_public_transport.png"];
+            return [OATargetInfoViewController getIcon:@"mx_public_transport"];
     }
 }
 
@@ -213,7 +213,7 @@ static OATransportRouteToolbarViewController *toolbarController;
 {
     const auto& stops = _transportRoute.route->forwardStops;
     int currentStop = [_transportRoute getStopIndex];
-    UIImage *defaultIcon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"%@.png", !_transportRoute.type ? @"mx_route_bus_ref" : _transportRoute.type.resId]];
+    UIImage *defaultIcon = [OATargetInfoViewController getIcon:!_transportRoute.type ? @"mx_route_bus_ref" : _transportRoute.type.resId];
     int startPosition = 0;
     if (!_transportRoute.showWholeRoute && currentStop > 1)
     {

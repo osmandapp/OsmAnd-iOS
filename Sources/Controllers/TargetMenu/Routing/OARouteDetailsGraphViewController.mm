@@ -47,7 +47,7 @@
 {
     NSArray *_data;
 
-    EOARouteStatisticsMode _currentMode;
+    NSArray<NSNumber *> *_types;
     
     BOOL _hasTranslated;
     double _highlightDrawX;
@@ -87,11 +87,15 @@
                         useGesturesAndScale:YES
     ];
 
+    
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.gpx.path]];
+    BOOL calcWithoutGaps = !gpx.joinSegments && (self.gpx.tracks.count > 0 && self.gpx.tracks.firstObject.generalTrack);
     [GpxUIHelper refreshLineChartWithChartView:routeStatsCell.lineChartView
                                       analysis:self.analysis
                            useGesturesAndScale:YES
-                                     firstType:GPXDataSetTypeALTITUDE
-                                    secondType:GPXDataSetTypeSLOPE];
+                                     firstType:GPXDataSetTypeAltitude
+                                    secondType:GPXDataSetTypeSlope
+                               calcWithoutGaps:calcWithoutGaps];
 
     BOOL hasSlope = routeStatsCell.lineChartView.lineData.dataSetCount > 1;
     
@@ -131,7 +135,7 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _currentMode = _trackMenuControlState ? _trackMenuControlState.routeStatistics : EOARouteStatisticsModeAltitudeSlope;
+    _types = _trackMenuControlState ? _trackMenuControlState.routeStatistics : @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     _cachedYViewPort = _mapView.viewportYScale;
@@ -326,7 +330,7 @@
 
 - (void) onStatsModeButtonPressed:(id)sender
 {
-    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithMode:_currentMode hasSpeed:self.analysis.hasSpeedData];
+    OAStatisticsSelectionBottomSheetViewController *statsModeBottomSheet = [[OAStatisticsSelectionBottomSheetViewController alloc] initWithTypes:_types analysis:self.analysis];
     statsModeBottomSheet.delegate = self;
     [statsModeBottomSheet show];
 }
@@ -476,9 +480,9 @@
 
 #pragma mark - OAStatisticsSelectionDelegate
 
-- (void)onNewModeSelected:(EOARouteStatisticsMode)mode
+- (void)onTypesSelected:(NSArray<NSNumber *> *)types
 {
-    _currentMode = mode;
+    _types = types;
     [self updateRouteStatisticsGraph];
 }
 
@@ -489,10 +493,10 @@
         OARouteStatisticsModeCell *statsModeCell = _data[0];
         OALineChartCell *graphCell = _data[1];
 
-        [self.routeLineChartHelper changeChartMode:_currentMode
-                                             chart:graphCell.lineChartView
-                                          analysis:self.analysis
-                                          modeCell:statsModeCell];
+        [self.routeLineChartHelper changeChartTypes:_types
+                                              chart:graphCell.lineChartView
+                                           analysis:self.analysis
+                                           modeCell:statsModeCell];
     }
 }
 

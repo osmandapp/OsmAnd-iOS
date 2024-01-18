@@ -34,5 +34,6 @@
 - (void) setRows:(NSMutableArray<OARowInfo *> *)rows;
 
 + (UIImage *) getIcon:(NSString *)fileName;
++ (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size;
 
 @end

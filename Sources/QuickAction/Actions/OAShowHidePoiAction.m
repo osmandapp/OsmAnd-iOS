@@ -72,13 +72,9 @@ static OAQuickActionType *TYPE;
     
     id iconRes = [filter getIconResource];
     if ([iconRes isKindOfClass:NSString.class])
-    {
-        return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", (NSString *)iconRes]];
-    }
+        return [NSString stringWithFormat:@"mx_%@", (NSString *)iconRes];
     else
-    {
         return [super getIconResName];
-    }
 }
 
 - (BOOL)isActionWithSlash

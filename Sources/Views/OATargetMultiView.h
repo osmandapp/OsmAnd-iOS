@@ -11,6 +11,10 @@
 
 @interface OATargetMultiView : UIView
 
+@property (weak, nonatomic) IBOutlet UIView *headerView;
+@property (weak, nonatomic) IBOutlet UIButton *headerCloseButton;
+@property (weak, nonatomic) IBOutlet UILabel *headerLabel;
+
 @property (nonatomic) NSArray<OATargetPoint *> *targetPoints;
 @property (nonatomic) OATargetPointType activeTargetType;
 - (void)show:(BOOL)animated onComplete:(void (^)(void))onComplete;

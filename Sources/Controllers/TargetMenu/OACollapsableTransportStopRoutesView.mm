@@ -47,7 +47,7 @@
         NSString *resId = route.type.topResId;
         UIImage *img;
         if (resId.length > 0)
-            img = [UIImage imageNamed:[OAUtilities drawablePath:resId]];
+            img = [UIImage mapSvgImageNamed:resId];
         if (!img)
             img = [OATargetInfoViewController getIcon:@"mx_public_transport"];
         

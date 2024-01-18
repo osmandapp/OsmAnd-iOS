@@ -28,7 +28,7 @@
 
 @implementation OACompoundIconUtils
 
-+ (sk_sp<SkImage>) createCompositeBitmapFromWpt:(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &)point isFullSize:(BOOL)isFullSize
++ (sk_sp<SkImage>) createCompositeBitmapFromWpt:(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &)point isFullSize:(BOOL)isFullSize scale:(float)scale
 {
     UIColor* color = nil;
     NSString *shapeName = nil;
@@ -51,12 +51,12 @@
     if (!shapeName)
         shapeName = @"circle";
     if (!iconName)
-        iconName = @"mm_special_star";
+        iconName = @"mx_special_star";
 
-    return [self createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:nil];
+    return [self createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:nil scale:scale];
 }
 
-+ (sk_sp<SkImage>) createCompositeBitmapFromFavorite:(const std::shared_ptr<OsmAnd::IFavoriteLocation> &)fav isFullSize:(BOOL)isFullSize
++ (sk_sp<SkImage>) createCompositeBitmapFromFavorite:(const std::shared_ptr<OsmAnd::IFavoriteLocation> &)fav isFullSize:(BOOL)isFullSize scale:(float)scale
 {
     UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:fav->getColor().a/255.0];
     if (!color)
@@ -66,13 +66,19 @@
         shapeName = @"circle";
     NSString *iconName = fav->getIcon().toNSString();
     if (!iconName || iconName.length == 0)
-        iconName = @"mm_special_star";
-    
-    return [self createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:nil];
+        iconName = @"mx_special_star";
+
+    return [self createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:nil scale:scale];
 }
 
 + (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon
 {
+    return [self.class createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:icon scale:1.0f];
+}
+
++ (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon scale:(float)scale
+{
+    CGFloat screenScale = [[UIScreen mainScreen] scale];
     NSString *sizeName = isFullSize ? @"" : @"_small";
     sk_sp<SkImage> result;
 
@@ -95,13 +101,31 @@
     if (isFullSize)
     {
         UIImage *origImage = icon;
+        CGSize imgSize = {14 * screenScale * scale, 14 * screenScale * scale};
         if (!origImage)
-            origImage = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""]]]];
-        if (!origImage)
-            origImage = [UIImage imageNamed:[OAUtilities drawablePath:@"mm_special_star"]];
+        {
+            NSString *name = [iconName stringByReplacingOccurrencesOfString:@"osmand_" withString:@""];
+            int mxIndex = [name indexOf:@"mx_"];
+            if (mxIndex > 0)
+                name = [name substringFromIndex:mxIndex];
+            if (![name hasPrefix:@"mx_"])
+                name = [@"mx_" stringByAppendingString:name];
 
-        // xhdpi & xxhdpi do not directly correspond to @2x & @3x therefore a correction is needed to fit the background icon
-        UIImage *resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
+            const auto skImg = [OANativeUtilities skImageFromSvgResource:name width:imgSize.width height:imgSize.height];
+            if (skImg)
+            	origImage = [OANativeUtilities skImageToUIImage:skImg];
+        }
+        if (!origImage)
+        {
+            const auto skImg = [OANativeUtilities skImageFromSvgResource:@"mx_special_star" width:14 * scale height:14 * scale];
+            if (skImg)
+                origImage = [OANativeUtilities skImageToUIImage:skImg];
+        }
+
+        UIImage *resizedImage = origImage;
+        //if (!CGSizeEqualToSize(origImage.size, imgSize))
+            //resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
+
         UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
         poiIcon = [OANativeUtilities skImageFromCGImage:coloredImage.CGImage];
         if (!poiIcon)
@@ -117,12 +141,19 @@
     
     if (isFullSize && shadowIcon && backgroundIcon && poiIcon && highlightIcon)
     {
-        const QList<sk_sp<const SkImage>> toMerge({shadowIcon, backgroundIcon, poiIcon, highlightIcon});
+        const QList<sk_sp<const SkImage>> toMerge({
+            [OANativeUtilities getScaledSkImage:shadowIcon scaleFactor:scale], 
+            [OANativeUtilities getScaledSkImage:backgroundIcon scaleFactor:scale],
+            poiIcon,
+            [OANativeUtilities getScaledSkImage:highlightIcon scaleFactor:scale]});
         result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     else if (!isFullSize && shadowIcon && backgroundIcon && highlightIcon)
     {
-        const QList<sk_sp<const SkImage>> toMerge({shadowIcon, backgroundIcon, highlightIcon});
+        const QList<sk_sp<const SkImage>> toMerge({
+            [OANativeUtilities getScaledSkImage:shadowIcon scaleFactor:scale],
+            [OANativeUtilities getScaledSkImage:backgroundIcon scaleFactor:scale],
+            [OANativeUtilities getScaledSkImage:highlightIcon scaleFactor:scale]});
         result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     return result;

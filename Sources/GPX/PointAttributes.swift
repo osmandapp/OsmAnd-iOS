@@ -12,7 +12,7 @@ final class PointAttributes : NSObject {
 
     static let pointElevation = "ele"
     static let pointSpeed = "speed"
-    static let sensorTagHartRate = "hr"
+    static let sensorTagHeartRate = "hr"
     static let sensorTagSpeed = "speed_sensor"
     static let sensorTagCadence = "cad"
     static let sensorTagBikePower = "power"
@@ -45,7 +45,7 @@ final class PointAttributes : NSObject {
             return speed
         case Self.pointElevation:
             return elevation
-        case Self.sensorTagHartRate:
+        case Self.sensorTagHeartRate:
             return heartRate
         case Self.sensorTagSpeed:
             return sensorSpeed
@@ -66,7 +66,7 @@ final class PointAttributes : NSObject {
             speed = value
         case Self.pointElevation:
             elevation = value
-        case Self.sensorTagHartRate:
+        case Self.sensorTagHeartRate:
             heartRate = value
         case Self.sensorTagSpeed:
             sensorSpeed = value

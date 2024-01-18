@@ -45,7 +45,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (UIImage *)icon
 {
     if (_mapIconName && _mapIconName.length > 0)
-        return [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", _mapIconName]]];
+        return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
     else if (_type)
         return [_type icon];
     else
@@ -55,7 +55,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (NSString *)iconName
 {
     if (_mapIconName && _mapIconName.length > 0)
-        return [OAUtilities drawablePath:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
+        return [NSString stringWithFormat:@"mx_%@", _mapIconName];
     else if (_type)
         return [_type iconName];
     else

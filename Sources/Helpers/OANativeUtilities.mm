@@ -55,17 +55,6 @@
 
 @implementation OANativeUtilities
 
-+ (sk_sp<SkImage>) skImageFromMmPngResource:(NSString *)resourceName
-{
-    resourceName = [OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", resourceName]];
-    
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"png"];
-    if (resourcePath == nil)
-        return nullptr;
-
-    return [self.class skImageFromResourcePath:resourcePath];
-}
-
 + (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName
 {
     if ([UIScreen mainScreen].scale > 2.0f)
@@ -109,6 +98,62 @@
          ));
 }
 
++ (sk_sp<SkImage>) skImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
+{
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
+                                                              ofType:@"svg"
+                                                         inDirectory:@"map-icons-svg"];
+    if (resourcePath == nil)
+        return nullptr;
+
+    return [self.class skImageFromSvgResourcePath:resourcePath width:width height:height];
+}
+
++ (sk_sp<SkImage>) skImageFromSvgResource:(NSString *)resourceName scale:(float)scale
+{
+    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
+                                                              ofType:@"svg"
+                                                         inDirectory:@"map-icons-svg"];
+    if (resourcePath == nil)
+        return nullptr;
+
+    return [self.class skImageFromSvgResourcePath:resourcePath scale:scale];
+}
+
++ (sk_sp<SkImage>) skImageFromSvgResourcePath:(NSString *)resourcePath width:(float)width height:(float)height
+{
+    if (!resourcePath)
+        return nullptr;
+
+    NSData* resourceData = [NSData dataWithContentsOfFile:resourcePath];
+    if (!resourceData)
+        return nullptr;
+
+    return [self.class skImageFromSvgData:resourceData width:width height:height];
+}
+
++ (sk_sp<SkImage>) skImageFromSvgResourcePath:(NSString *)resourcePath scale:(float)scale
+{
+    if (resourcePath == nil)
+        return nullptr;
+
+    NSData* resourceData = [NSData dataWithContentsOfFile:resourcePath];
+    if (!resourceData)
+        return nullptr;
+
+    return [self.class skImageFromSvgData:resourceData scale:scale];
+}
+
++ (sk_sp<SkImage>) skImageFromSvgData:(const NSData *)data width:(float)width height:(float)height
+{
+    return data ? OsmAnd::SkiaUtilities::createImageFromVectorData(QByteArray::fromRawNSData(data), width, height) : nullptr;
+}
+
++ (sk_sp<SkImage>) skImageFromSvgData:(const NSData *)data scale:(float)scale
+{
+    return data ? OsmAnd::SkiaUtilities::createImageFromVectorData(QByteArray::fromRawNSData(data), scale) : nullptr;
+}
+
 + (sk_sp<SkImage>) getScaledSkImage:(sk_sp<SkImage>)skImage scaleFactor:(float)scaleFactor
 {
     if (!qFuzzyCompare(scaleFactor, 1.0f) && skImage)
@@ -122,8 +167,9 @@
         return nil;
     SkBitmap bmp;
     image->asLegacyBitmap(&bmp);
+    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
     CGImageRef img = SkCreateCGImageRef(bmp);
-    UIImage *res = img != nil ? [[UIImage alloc] initWithCGImage:img] : nil;
+    UIImage *res = img != nil ? [[UIImage alloc] initWithCGImage:img scale:scaleFactor orientation:UIImageOrientationUp] : nil;
     if (img)
         CGImageRelease(img);
     return res;

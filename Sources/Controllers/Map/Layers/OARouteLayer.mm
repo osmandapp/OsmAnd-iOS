@@ -171,11 +171,10 @@
     
     OATransportStopType *type = [OATransportStopType findType:[NSString stringWithUTF8String:routeSegment->route->type.c_str()]];
     NSString *resId = type != nil ? type.resId : [OATransportStopType getResId:TST_BUS];
-    UIImage *origIcon = [UIImage imageNamed:[OAUtilities drawablePath:resId]];
+    UIImage *origIcon = [UIImage mapSvgImageNamed:resId];
     sk_sp<SkImage> stopImg = nullptr;
     if (origIcon)
     {
-        origIcon = [OAUtilities applyScaleFactorToImage:origIcon];
         UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor blackColor]];
         stopImg = SkMakeImageFromCGImage(tintedIcon.CGImage);
     }

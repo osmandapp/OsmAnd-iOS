@@ -1576,3 +1576,7 @@
 "routing_attr_prefer_hiking_routes_name" = "하이킹 경로 선호";
 "routing_attr_allow_intermittent_description" = "간헐적인 수로 허용";
 "routing_attr_allow_streams_description" = "스트림 및 드레인 허용";
+"telegram_chats" = "텔레그램 채팅";
+"free_favorites_backup" = "무료 즐겨찾기 백업";
+"help_article_navigation_routing_direct_to_point_routing_name" = "Direct-to-point 라우팅(보트)";
+"help_article_navigation_setup_markers_navigation_name" = "마커로 탐색";

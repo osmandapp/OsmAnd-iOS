@@ -689,7 +689,6 @@
         [OAApplicationMode valueOfStringKey:[settings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] :
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
-    [[OAScreenOrientationHelper sharedInstance] updateSettings];
 
     [OAPlugin initPlugins];
     [OAPOIHelper sharedInstance];

@@ -336,7 +336,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func onTrackNavigationClicked(_ filePath: String) {
         guard let track = currentTracksFolderContent.files[filePath] else { return }
         if track.totalTracks > 1 {
-            let absolutePath = (OsmAndApp.swiftInstance().gpxPath as NSString).appendingPathComponent(track.gpxFilePath)
+            let absolutePath = getAbsoluteTrackPath(track.gpxFilePath)
             if let vc = OATrackSegmentsViewController(filepath: absolutePath) {
                 vc.startNavigationOnSelect = true
                 OARootViewController.instance().present(vc, animated: true)
@@ -351,8 +351,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
-    private func onTrackAnalyzeClicked() {
-        print("onTrackAnalyzeClicked")
+    private func onTrackAnalyzeClicked(_ fileName: String) {
+        guard let track = currentTracksFolderContent.files[fileName] else { return }
+        let absolutePath = getAbsoluteTrackPath(track.gpxFilePath)
+        OARootViewController.instance().mapPanel.openTargetViewWithRouteDetailsGraph(forFilepath: absolutePath, isCurrentTrack: false)
+        dismiss()
     }
     
     private func onTrackShareClicked() {
@@ -385,6 +388,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     // MARK: - Files operations
+    
+    private func getAbsoluteTrackPath(_ relativeFilepath: String) -> String {
+        return (OsmAndApp.swiftInstance().gpxPath as NSString).appendingPathComponent(relativeFilepath)
+    }
     
     private func currentFolderAbsolutePath() -> String {
         var path = OsmAndApp.swiftInstance().gpxPath ?? ""
@@ -593,7 +600,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, appearenceAction, navigationAction])
                 
                 let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: UIImage.icCustomGraph) { _ in
-                    self.onTrackAnalyzeClicked()
+                    self.onTrackAnalyzeClicked(selectedTrackFilename)
                 }
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])
                 

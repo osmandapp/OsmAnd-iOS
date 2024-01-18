@@ -2969,6 +2969,20 @@ typedef enum
     }];
 }
 
+- (void) openTargetViewWithRouteDetailsGraphForFilepath:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
+{
+    OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
+    if (doc)
+    {
+        OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
+            ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
+            : [doc getAnalysis:0];
+        OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+        state.openedFromTracksList = true;
+        [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
+    }
+}
+
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState

@@ -150,6 +150,7 @@
 - (void) openTargetViewWithRouteTargetSelection:(OATargetPointType)type;
 - (void) openTargetViewWithImpassableRoad:(unsigned long long)roadId pushed:(BOOL)pushed;
 - (void) openTargetViewWithImpassableRoadSelection;
+- (void) openTargetViewWithRouteDetailsGraphForFilepath:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack;
 - (void) openTargetViewWithRouteDetails:(OAGPXDocument *)gpx analysis:(OAGPXTrackAnalysis *)analysis;
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx
                                     analysis:(OAGPXTrackAnalysis *)analysis

@@ -23,7 +23,6 @@
     self = [super init];
     if (self) {
         _widgetType = type;
-        self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
         [self initSeparatorsView];
     }
     return self;
@@ -95,7 +94,12 @@
     return self.widgetType == nil;
 }
 
-- (OATableDataModel *) getSettingsData:(OAApplicationMode *)appMode
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+{
+    return nil;
+}
+
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode
 {
     return nil;
 }

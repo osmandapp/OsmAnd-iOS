@@ -22,7 +22,8 @@
     NSArray<NSString *> *_items;
 }
 
-- (instancetype) initWithState:(OASunriseSunsetWidgetState *)state
+- (instancetype)initWithState:(OASunriseSunsetWidgetState *)state
+                      appMode:(OAApplicationMode *)appMode
 {
     self = [super init];
     if (self)
@@ -30,6 +31,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _state = state;
+        [self configurePrefsWithId:state.customId appMode:appMode];
         self.widgetType = state.isSunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
         
         __weak OASunriseSunsetWidget *selfWeak = self;

@@ -16,6 +16,8 @@ typedef NS_ENUM(NSInteger, EOAAltitudeWidgetType) {
 
 @interface OAAltitudeWidget : OASimpleWidget
 
-- (instancetype)initWithType:(EOAAltitudeWidgetType)widgetType;
+- (instancetype _Nonnull)initWithType:(EOAAltitudeWidgetType)widgetType
+                    customId:(NSString *_Nullable)customId
+                     appMode:(OAApplicationMode * _Nonnull)appMode;
 
 @end

@@ -25,6 +25,7 @@
     self = [super init];
     if (self)
     {
+        self.customId = customId;
         _settings = [OAAppSettings sharedManager];
         _type = sunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
         _preference = [self registerPreference:customId];

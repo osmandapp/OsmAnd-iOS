@@ -23,10 +23,13 @@
 }
 
 - (instancetype)initWithType:(EOAAltitudeWidgetType)widgetType
+                    customId:(NSString *)customId
+                     appMode:(OAApplicationMode *)appMode
 {
     self = [super init];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode];
         // TODO: refactor widget type
         self.widgetType = widgetType == EOAAltitudeWidgetTypeMapCenter ? OAWidgetType.altitudeMapCenter : OAWidgetType.altitudeMyLocation;
         _widgetType = widgetType;

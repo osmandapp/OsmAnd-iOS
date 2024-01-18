@@ -27,10 +27,13 @@ static float MIN_SPEED_FOR_HEADING = 1.f;
 static const float MIN_SPEED = 1.0f;
 static const int INVALID_BEARING = -1000;
 
-- (instancetype) initWithBearingType:(EOABearingType)bearingType
+- (instancetype)initWithBearingType:(EOABearingType)bearingType
+                           customId:(NSString *)customId
+                            appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithType:[self widgetByBearingType:bearingType]];
     if (self) {
+        [self configurePrefsWithId:customId appMode:appMode];
         [self setAngularUnitsDepended:YES];
         _cachedAngularUnits = DEGREES;
         _locationProvider = OsmAndApp.instance.locationServices;

@@ -27,7 +27,7 @@ final class AverageSpeedWidget: OASimpleWidget {
 
     private static var availableIntervals: [Int: String] = getAvailableIntervals()
 
-    convenience init(customId: String?, widgetParams: [String: Any]? = nil) {
+    convenience init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
         self.init(frame: .zero)
         
         widgetType = .averageSpeed
@@ -35,6 +35,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         setMetricSystemDepended(true)
         
         self.customId = customId
+        configurePrefs(withId: customId, appMode: appMode)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
         

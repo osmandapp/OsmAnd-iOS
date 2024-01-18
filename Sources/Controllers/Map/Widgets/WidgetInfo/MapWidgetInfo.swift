@@ -120,6 +120,10 @@ class MapWidgetInfo: NSObject, Comparable {
         widget.getSettingsData(appMode)
     }
     
+    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        widget.getSettingsData(forSimpleWidget: appMode)
+    }
+    
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {
         var widgetsVisibility: [String] = getWidgetsVisibility(appMode)
         widgetsVisibility.removeAll(where: { $0 == key })

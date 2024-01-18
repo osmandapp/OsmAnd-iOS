@@ -14,9 +14,10 @@ class BatteryWidget: OASimpleWidget {
     
     var cachedLeftTime: TimeInterval = 0
     
-    init() {
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .battery)
         setIcons(charging: false)
+        configurePrefs(withId: customId, appMode: appMode)
     }
     
     override init(frame: CGRect) {
@@ -53,5 +54,4 @@ class BatteryWidget: OASimpleWidget {
             setIconFor(.battery)
         }
     }
-    
 }

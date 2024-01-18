@@ -14,10 +14,11 @@ class CurrentTimeWidget: OASimpleWidget {
     
     var cachedTime: TimeInterval = 0
     
-    init() {
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .currentTime)
         setIconFor(.currentTime)
         setText(nil, subtext: nil)
+        configurePrefs(withId: customId, appMode: appMode)
     }
     
     override init(frame: CGRect) {

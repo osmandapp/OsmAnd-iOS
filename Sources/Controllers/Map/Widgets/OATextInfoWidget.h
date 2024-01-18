@@ -33,6 +33,16 @@
 
 @property (nonatomic) NSLayoutConstraint *topTextAnchor;
 
+// Simple Widget Layout
+@property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
+@property (nonatomic, strong, nullable) UILabel *nameLabel;
+@property (nonatomic, strong, nullable) UILabel *unitLabel;
+@property (nonatomic, strong, nullable) UIView *unitView;
+@property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
+@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
+@property (nonatomic, strong, nullable) UILabel *valueLabel;
+@property (nonatomic, strong, nullable) UIView *iconWidgetView;
+
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
@@ -66,5 +76,7 @@
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
+
+- (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode * _Nonnull)appMode;
 
 @end

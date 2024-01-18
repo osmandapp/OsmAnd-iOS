@@ -12,8 +12,16 @@
 #define kTrackNoHeading -1.0
 
 @class OAGPXMutableDocument;
+@class OAGPXDocument;
 @class OAGPX;
 @class OAWptPt;
+
+@protocol OASavingTrackHelperDelegate <NSObject>
+
+- (void) onSharingScreenClosed;
+
+@end
+
 
 @interface OASavingTrackHelper : NSObject
 
@@ -36,6 +44,14 @@
 - (void) saveDataToGpx;
 - (void) startNewSegment;
 - (BOOL) saveCurrentTrack:(NSString *)fileName;
+
+- (void)openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate;
+- (void) copyGPXToNewFolder:(NSString *)newFolderName
+           renameToNewName:(NSString *)newFileName
+        deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
+                       gpx:(OAGPX *)gpx
+                        doc:(OAGPXDocument *)doc;
 
 - (BOOL) saveIfNeeded;
 

@@ -34,7 +34,7 @@ private enum SortingOptions {
     case longestDurationFirst
 }
 
-class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource {
+class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OASavingTrackHelperDelegate {
     
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -358,8 +358,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         dismiss()
     }
     
-    private func onTrackShareClicked() {
-        print("onTrackShareClicked")
+    private func onTrackShareClicked(_ fileName: String) {
+        guard let track = currentTracksFolderContent.files[fileName] else { return }
+        let absolutePath = getAbsoluteTrackPath(track.gpxFilePath)
+        OASavingTrackHelper.sharedInstance().openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self)
     }
     
     private func onTrackUploadToOsmClicked() {
@@ -605,7 +607,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])
                 
                 let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage.icCustomExportOutlined) { _ in
-                    self.onTrackShareClicked()
+                    self.onTrackShareClicked(selectedTrackFilename)
                 }
                 let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { _ in
                     self.onTrackUploadToOsmClicked()
@@ -635,5 +637,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
         }
         return nil
+    }
+    
+    
+    // MARK: - OASavingTrackHelperDelegate
+    
+    func onSharingScreenClosed() {
+        buildFilesTree()
+        generateData()
+        tableView.reloadData()
     }
 }

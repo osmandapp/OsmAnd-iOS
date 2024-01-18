@@ -20,6 +20,10 @@
 #import "OAPlugin.h"
 #import "Localization.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGPXUIHelper.h"
+#import "OASaveTrackViewController.h"
+#import "OASelectedGPXHelper.h"
+#import "OARootViewController.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -55,6 +59,11 @@
 
 #define recordedTrackFolder @"/rec/"
 
+@interface OASavingTrackHelper() <UIDocumentInteractionControllerDelegate, OASaveTrackViewControllerDelegate>
+
+@end
+
+
 @implementation OASavingTrackHelper
 {
     OsmAndAppInstance _app;
@@ -65,6 +74,15 @@
     dispatch_queue_t syncQueue;
     
     CLLocationCoordinate2D lastPoint;
+    
+    NSString *_exportFileName;
+    NSString *_exportFilePath;
+    OAGPX *_exportingGpx;
+    OAGPXDocument *_exportingGpxDoc;
+    BOOL _isExportingCurrentTrack;
+    UIDocumentInteractionController *_exportController;
+    UIViewController *_exportingHostVC;
+    id<OASavingTrackHelperDelegate> _exportingHostVCDelegate;
 }
 
 @synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackIndex;
@@ -419,6 +437,56 @@
     });
     
     return res;
+}
+
+- (void)openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
+{
+    _isExportingCurrentTrack = isCurrentTrack;
+    _exportingHostVC = hostViewController;
+    _exportingHostVCDelegate = hostViewControllerDelegate;
+    _exportingGpx = gpx;
+    _exportingGpxDoc = gpxDoc;
+    if (isCurrentTrack)
+    {
+        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
+        [fmt setDateFormat:@"yyyy-MM-dd"];
+
+        NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
+        [simpleFormat setDateFormat:@"HH-mm_EEE"];
+
+        _exportFileName = [NSString stringWithFormat:@"%@_%@",
+                                                     [fmt stringFromDate:[NSDate date]],
+                                                     [simpleFormat stringFromDate:[NSDate date]]];
+        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx",
+                                                     NSTemporaryDirectory(),
+                                                     _exportFileName];
+
+        [self saveCurrentTrack:_exportFilePath];
+        _exportingGpxDoc = currentTrack;
+        _exportingGpx = [self getCurrentGPX];
+    }
+    else
+    {
+        _exportFileName = gpx.gpxFileName;
+        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:gpx.gpxFileName];
+        if (!_exportingGpxDoc || ![_exportingGpxDoc isKindOfClass:OAGPXDocument.class])
+        {
+            NSString *absoluteGpxFilepath = [OsmAndApp.instance.gpxPath stringByAppendingPathComponent:_exportFileName];
+            _exportingGpxDoc = [[OAGPXDocument alloc] initWithGpxFile:absoluteGpxFilepath];
+        }
+        else
+        {
+            _exportingGpxDoc = gpxDoc;
+        }
+        [OAGPXUIHelper addAppearanceToGpx:_exportingGpxDoc gpxItem:_exportingGpx];
+        [_exportingGpxDoc saveTo:_exportFilePath];
+    }
+
+    _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
+    _exportController.UTI = @"com.topografix.gpx";
+    _exportController.delegate = self;
+    _exportController.name = _exportFileName;
+    [_exportController presentOptionsMenuFromRect:CGRectZero inView:_exportingHostVC.view animated:YES];
 }
 
 - (NSDictionary *) collectRecordedData:(BOOL)fillCurrentTrack
@@ -1085,6 +1153,147 @@
 {
     [currentTrack applyBounds];
     return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack];
+}
+
+- (void)copyGPXToNewFolder:(NSString *)newFolderName
+           renameToNewName:(NSString *)newFileName
+        deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
+                       gpx:(OAGPX *)gpx
+                       doc:(OAGPXDocument *)doc
+{
+    NSString *oldPath = gpx.gpxFilePath;
+    NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
+
+    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
+    NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
+    NSString *newName = gpx.gpxFileName;
+
+    if (newFileName)
+    {
+        if ([[NSFileManager defaultManager]
+                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newFileName]])
+            newName = [OAUtilities createNewFileName:newFileName];
+        else
+            newName = newFileName;
+    }
+
+    NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
+    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
+
+    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
+
+    OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
+    if (deleteOriginalFile)
+    {
+        [gpx updateFolderName:newStoringPath];
+        doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+        [gpxDatabase save];
+        [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
+
+        [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
+    }
+    else
+    {
+        OAGPXMutableDocument *gpxDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:sourcePath];
+        [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
+                          title:newName
+                           desc:gpxDoc.metadata.desc
+                         bounds:gpxDoc.bounds
+                       document:gpxDoc];
+
+        
+        if ([OAAppSettings.sharedManager.mapSettingVisibleGpx.get containsObject:oldPath])
+            [OAAppSettings.sharedManager showGpx:@[newStoringPath]];
+    }
+    if (openTrack)
+    {
+        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
+        if (gpx)
+        {
+            
+            [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
+                [OARootViewController.instance.mapPanel targetHideContextPinMarker];
+                [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
+            }];
+        }
+    }
+}
+
+- (void) onCloseShareMenu
+{
+    _exportFileName = nil;
+    _exportFilePath = nil;
+    _exportingGpx = nil;
+    _exportingGpxDoc = nil;
+    _exportingHostVC = nil;
+    _exportController = nil;
+    if (_exportingHostVCDelegate)
+    {
+        [_exportingHostVCDelegate onSharingScreenClosed];
+        _exportingHostVCDelegate = nil;
+    }
+}
+
+#pragma mark - UIDocumentInteractionControllerDelegate
+
+- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
+{
+    if (controller == _exportController)
+        _exportController = nil;
+}
+
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller
+            didEndSendingToApplication:(NSString *)application
+{
+    if (_isExportingCurrentTrack && _exportFilePath)
+    {
+        [[NSFileManager defaultManager] removeItemAtPath:_exportFilePath error:nil];
+        _exportFilePath = nil;
+    }
+}
+
+- (void)documentInteractionController:(UIDocumentInteractionController *)controller
+        willBeginSendingToApplication:(NSString *)application
+{
+    if ([application isEqualToString:@"net.osmand.maps"])
+    {
+        [_exportController dismissMenuAnimated:YES];
+        _exportFilePath = nil;
+        _exportController = nil;
+
+        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
+                initWithFileName:_exportFileName
+                        filePath:_exportFilePath
+                       showOnMap:YES
+                 simplifiedTrack:YES
+                       duplicate:NO];
+
+        saveTrackViewController.delegate = self;
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
+        [_exportingHostVC presentViewController:navigationController animated:YES completion:nil];
+    }
+}
+
+- (void)documentInteractionControllerDidDismissOptionsMenu:(UIDocumentInteractionController *)controller
+{
+    [self onCloseShareMenu];
+}
+
+#pragma mark - OASaveTrackViewControllerDelegate
+
+- (void)onSaveAsNewTrack:(NSString *)fileName
+               showOnMap:(BOOL)showOnMap
+         simplifiedTrack:(BOOL)simplifiedTrack
+               openTrack:(BOOL)openTrack
+{
+    [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
+             renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"] 
+          deleteOriginalFile:NO
+                   openTrack:YES
+                         gpx:_exportingGpx
+                         doc:_exportingGpxDoc];
+    [self onCloseShareMenu];
 }
 
 @end

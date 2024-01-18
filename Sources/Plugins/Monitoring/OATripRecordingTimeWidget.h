@@ -6,11 +6,11 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
 @class OAMonitoringPlugin;
 
-@interface OATripRecordingTimeWidget : OATextInfoWidget
+@interface OATripRecordingTimeWidget : OASimpleWidget
 
 + (NSString *) getName;
 

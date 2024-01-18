@@ -53,7 +53,7 @@
 
 @implementation OAParkingPositionPlugin
 {
-    OATextInfoWidget *_parkingPlaceControl;
+    OASimpleWidget *_parkingPlaceControl;
     
     OACommonDouble *_parkingLat;
     OACommonDouble *_parkingLon;
@@ -221,7 +221,7 @@
 
 - (OATextInfoWidget *) createParkingPlaceInfoControl
 {
-    _parkingPlaceControl = [[OATextInfoWidget alloc] init];
+    _parkingPlaceControl = [[OASimpleWidget alloc] init];
     _parkingPlaceControl.widgetType = OAWidgetType.parking;
     __weak OATextInfoWidget *parkingPlaceControlWeak = _parkingPlaceControl;
     __weak OAParkingPositionPlugin *pluginWeak = self;

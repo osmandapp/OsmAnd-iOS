@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAAverageSpeedWidget)
 @objcMembers
-final class AverageSpeedWidget: OATextInfoWidget {
+final class AverageSpeedWidget: OASimpleWidget {
     static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
     static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
     

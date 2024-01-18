@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAMapillaryWidget)
 @objcMembers
-class MapillaryWidget: OATextInfoWidget {
+class MapillaryWidget: OASimpleWidget {
     
     init() {
         super.init(type: .mapillary)

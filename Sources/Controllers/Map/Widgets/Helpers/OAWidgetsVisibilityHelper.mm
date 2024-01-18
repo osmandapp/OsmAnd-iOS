@@ -163,8 +163,10 @@
                                                                                     filterModes:kWidgetModeEnabled
                                                                                          panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
     for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
-        if ([widgetInfo.key containsString:@"map_markers_top"])
+    {
+        if ([widgetInfo.key hasPrefix:OAWidgetType.markersTopBar.id])
             return YES;
+    }
 
     return NO;
 }

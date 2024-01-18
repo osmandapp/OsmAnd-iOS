@@ -6,8 +6,8 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
-@interface OACameraTiltWidget : OATextInfoWidget
+@interface OACameraTiltWidget : OASimpleWidget
 
 @end

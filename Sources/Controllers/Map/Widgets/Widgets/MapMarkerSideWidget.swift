@@ -11,7 +11,7 @@ import CoreLocation
 
 @objc(OAMapMarkerSideWidget)
 @objcMembers
-class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
+class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private static let DASH = "—"
     
     private var mapMarkersHelper: OADestinationsHelper = OADestinationsHelper.instance()!

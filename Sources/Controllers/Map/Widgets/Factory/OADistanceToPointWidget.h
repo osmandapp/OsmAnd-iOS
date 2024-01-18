@@ -8,12 +8,12 @@
 //  OsmAnd-java/src/net/osmand/plus/views/mapwidgets/widgets/DistanceToPointWidget.java
 //  git revision 2966d87dd5e7515f2356cd3d2646ccdffd311849
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 #import <CoreLocation/CoreLocation.h>
 
 @class OAWidgetType;
 
-@interface OADistanceToPointWidget : OATextInfoWidget
+@interface OADistanceToPointWidget : OASimpleWidget
 
 - (instancetype) initWithIcon:(NSString *)iconId widgetType:(OAWidgetType *)widgetType;
 

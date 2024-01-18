@@ -51,7 +51,6 @@
 
 - (void) populateControlsContainer:(OAWidgetPanelViewController *)stack mode:(OAApplicationMode *)mode widgetPanel:(OAWidgetsPanel *)widgetPanel
 {
-    NSOrderedSet<OAMapWidgetInfo *> *widgets = [self getWidgetsForPanel:widgetPanel];
     NSMutableArray<NSMutableArray<OABaseWidgetView *> *> *widgetsToShow = [NSMutableArray array];
     NSMutableArray<OABaseWidgetView *> *currentPage = [NSMutableArray array];
     BOOL weatherToolbarVisible = self.isWeatherToolbarVisible;

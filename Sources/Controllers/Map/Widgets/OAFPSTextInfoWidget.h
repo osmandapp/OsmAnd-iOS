@@ -6,8 +6,8 @@
 //  Copyright © 2022 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
-@interface OAFPSTextInfoWidget : OATextInfoWidget
+@interface OAFPSTextInfoWidget : OASimpleWidget
 
 @end

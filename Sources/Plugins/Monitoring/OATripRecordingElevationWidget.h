@@ -6,9 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
-@interface OATripRecordingElevationWidget : OATextInfoWidget
+@interface OATripRecordingElevationWidget : OASimpleWidget
 
 + (NSString *) getName;
 - (double) getElevationDiff;

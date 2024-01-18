@@ -10,7 +10,7 @@ import Foundation
 import CoreBluetooth
 
 @objcMembers
-final class SensorTextWidget: OATextInfoWidget {
+final class SensorTextWidget: OASimpleWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
     
     private(set) var externalDeviceId: String?

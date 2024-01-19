@@ -10,6 +10,9 @@ import Foundation
 
 extension OATextInfoWidget {
     @objc var widgetSizeStyle: WidgetSizeStyle {
+        if sizeStylePref == nil {
+            return .medium
+        }
         guard let style = WidgetSizeStyle(rawValue: NSInteger(sizeStylePref.get(OAAppSettings.sharedManager()!.applicationMode.get()!))) else {
             return .medium
         }

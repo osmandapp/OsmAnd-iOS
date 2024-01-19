@@ -20,7 +20,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
-    
+    private var editingComplexWidget: MapWidgetInfo?
+
     let panels = WidgetsPanel.values
     
     private var widgetPanel: WidgetsPanel! {
@@ -311,6 +312,14 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.row == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
+        
+        if item.key == kPageKey, tableData.rowCount(UInt(indexPath.section)) > indexPath.row + 1 {
+            let nextItem = tableData.item(for: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+            if let mapWidgetInfo = nextItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                return false
+            }
+        }
+        
         return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
     
@@ -329,6 +338,10 @@ extension WidgetsListViewController {
         updatePageNumbers()
         tableView.reloadData()
         updateBottomButtons()
+        if let editingComplexWidget {
+            OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [editingComplexWidget.getTitle()]), details: nil, duration: 4, in: self.view)
+            self.editingComplexWidget = nil
+        }
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -348,6 +361,39 @@ extension WidgetsListViewController {
     override func tableView(_ tableView: UITableView,
                             targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                             toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        let sourceItem = tableData.item(for: sourceIndexPath)
+        if let mapWidgetInfo = sourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+            editingComplexWidget = mapWidgetInfo
+            return sourceIndexPath
+        }
+        if sourceItem.key == kPageKey {
+            let prevSourceItem = tableData.item(for: IndexPath(row: sourceIndexPath.row - 1, section: sourceIndexPath.section))
+            if let mapWidgetInfo = prevSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                editingComplexWidget = mapWidgetInfo
+                return sourceIndexPath
+            }
+        }
+
+        let destinationItem = tableData.item(for: proposedDestinationIndexPath)
+        if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+            editingComplexWidget = mapWidgetInfo
+            return sourceIndexPath
+        }
+        if destinationItem.key == kPageKey {
+            if !self.tableView(tableView, canMoveRowAt: proposedDestinationIndexPath), self.tableView(tableView, canEditRowAt: proposedDestinationIndexPath), tableData.rowCount(UInt(proposedDestinationIndexPath.section)) > proposedDestinationIndexPath.row + 1 {
+                let destinationComplexItem = tableData.item(for: IndexPath(row: proposedDestinationIndexPath.row + 1, section: proposedDestinationIndexPath.section))
+                if let mapWidgetInfo = destinationComplexItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                    editingComplexWidget = mapWidgetInfo
+                    return sourceIndexPath
+                }
+            }
+            let prevDestinationItem = tableData.item(for: IndexPath(row: proposedDestinationIndexPath.row - 1, section: proposedDestinationIndexPath.section))
+            if let mapWidgetInfo = prevDestinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                editingComplexWidget = mapWidgetInfo
+                return sourceIndexPath
+            }
+        }
+
         if proposedDestinationIndexPath.row == 0 && proposedDestinationIndexPath.section == 0 {
             return IndexPath(row: 1, section: 0)
         }
@@ -376,20 +422,11 @@ extension WidgetsListViewController {
             row.iconTintColor = UIColor.iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
-            if widgetPanel.isPanelVertical() {
-                let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
-                tableData.clearAllData()
-                tableData.createNewSection()
-                for i in 0..<pagedWidgets.count {
-                    createWidgetItems(pagedWidgets[i], i)
-                }
-            } else {
-                let widgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])
-                if let widgets {
-                    tableData.clearAllData()
-                    tableData.createNewSection()
-                    createWidgetItems(widgets, 0)
-                }
+            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
+            tableData.clearAllData()
+            tableData.createNewSection()
+            for i in 0..<pagedWidgets.count {
+                createWidgetItems(pagedWidgets[i], i)
             }
         }
     }

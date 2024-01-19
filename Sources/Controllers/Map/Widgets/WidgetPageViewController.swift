@@ -142,7 +142,7 @@ extension WidgetPageViewController {
     
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
-        if widget.widgetType?.isComplex == false {
+        if !WidgetType.isComplexWidget(widget.widgetType!.id) {
             widget.isSimpleLayout = true
             widget.updateSimpleLayout()
             widget.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true

@@ -91,16 +91,15 @@
                 [widgetInfo.widget detachView:widgetPanel];
         }
         [widgetsToShow addObject:currentPage];
+        for (int i = 0; i < currentPage.count; i++)
+        {
+            OABaseWidgetView *widget = currentPage[i];
+            NSArray<OABaseWidgetView *> *followingWidgets = i + 1 == currentPage.count
+                ? @[]
+                : [currentPage subarrayWithRange:NSMakeRange(i + 1, currentPage.count - (i + 1))];
+            [widget attachView:stack.view specialContainer:stack.specialPanelController.view order:i followingWidgets:followingWidgets];
+        }
         currentPage = [NSMutableArray array];
-    }
-
-    for (int i = 0; i < currentPage.count; i++)
-    {
-        OABaseWidgetView *widget = currentPage[i];
-        NSArray<OABaseWidgetView *> *followingWidgets = i + 1 == currentPage.count
-            ? @[]
-            : [currentPage subarrayWithRange:NSMakeRange(i + 1, currentPage.count - (i + 1))];
-        [widget attachView:stack.view specialContainer:stack.specialPanelController.view order:i followingWidgets:followingWidgets];
     }
 
     if (widgetsToShow.count == 1)

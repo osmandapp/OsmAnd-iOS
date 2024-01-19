@@ -17,11 +17,14 @@
 
 @implementation OATripRecordingDistanceWidget
 
-- (instancetype) initWithPlugin:(OAMonitoringPlugin *)plugin
+- (instancetype)initWithPlugin:(OAMonitoringPlugin *)plugin
+                               customId:(NSString *_Nullable)customId
+                                appMode:(OAApplicationMode * _Nonnull)appMode
 {
     self = [super initWithType:OAWidgetType.tripRecordingDistance];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode];
         __weak OATextInfoWidget *distanceWidgetWeak = self;
         __weak OAMonitoringPlugin *pluginWeak = plugin;
         long __block cachedLastUpdateTime;

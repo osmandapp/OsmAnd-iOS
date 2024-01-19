@@ -204,14 +204,16 @@
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    _parkingPlaceControl = [self createMapWidgetForParams:OAWidgetType.parking customId:nil];
+    _parkingPlaceControl = [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_parkingPlaceControl]];
 }
 
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+                                      customId:(NSString *)customId
+                                       appMode:(OAApplicationMode *)appMode
 {
     if (widgetType == OAWidgetType.parking)
-        return [self createParkingPlaceInfoControl];
+        return [self createParkingPlaceInfoControlWithAppMode:appMode];
     return nil;
 }
 
@@ -219,10 +221,12 @@
 {
 }
 
-- (OATextInfoWidget *) createParkingPlaceInfoControl
+- (OATextInfoWidget *)createParkingPlaceInfoControlWithAppMode:(OAApplicationMode *)appMode
 {
     _parkingPlaceControl = [[OATextInfoWidget alloc] init];
     _parkingPlaceControl.widgetType = OAWidgetType.parking;
+    [_parkingPlaceControl configurePrefsWithId:@"" appMode:appMode];
+
     __weak OATextInfoWidget *parkingPlaceControlWeak = _parkingPlaceControl;
     __weak OAParkingPositionPlugin *pluginWeak = self;
     

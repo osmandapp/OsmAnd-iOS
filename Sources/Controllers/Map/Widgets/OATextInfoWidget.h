@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
+#import "OAAppSettings.h"
 
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 32
@@ -42,6 +43,7 @@
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
+@property (nonatomic) OACommonInteger *sizeStylePref;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
@@ -77,6 +79,6 @@
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
-- (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode * _Nonnull)appMode;
+- (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode;
 
 @end

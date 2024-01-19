@@ -22,7 +22,8 @@
 
 @implementation OATripRecordingTimeWidget
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                                  appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithType:OAWidgetType.tripRecordingTime];
     if (self)

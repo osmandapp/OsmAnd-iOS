@@ -24,11 +24,13 @@
     int _lastUpdatingFrameId;
 }
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                         appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithType:OAWidgetType.devFps];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode];
         _lastUpdatingMs = 0;
         _lastUpdatingFrameId = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;

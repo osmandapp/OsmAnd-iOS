@@ -19,11 +19,13 @@
     int _cachedMapTilt;
 }
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                         appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithType:OAWidgetType.devCameraTilt];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode];
         _cachedMapTilt = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@"°"];

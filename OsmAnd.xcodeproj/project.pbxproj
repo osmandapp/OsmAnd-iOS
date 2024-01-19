@@ -3292,6 +3292,8 @@
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
 		FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */; };
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
+		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */; };
+		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
@@ -7910,6 +7912,8 @@
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSizeStyle.swift; sourceTree = "<group>"; };
 		FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
+		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLableTableViewCell.swift; sourceTree = "<group>"; };
+		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLableTableViewCell.xib; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
@@ -12070,6 +12074,7 @@
 				467DFD7F297F172C008A9830 /* OACardTableViewCell.m */,
 				461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */,
 				461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */,
+				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -12188,6 +12193,7 @@
 				465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */,
 				467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */,
 				461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */,
+				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -15635,6 +15641,7 @@
 				DA134110243DC5A80039D214 /* map_action_taxi@2x.png in Resources */,
 				DA8EE7FF2470122C00069A6D /* osmand_purchases.html in Resources */,
 				DAB172C42229221F00041307 /* ic_custom_edit@2x.png in Resources */,
+				FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib in Resources */,
 				DA5A83A526C563A800F274C7 /* OAOsmEditingViewController.xib in Resources */,
 				84F3A9601B4ECF2700D16EBC /* ic_trip_visitedpoint@2x.png in Resources */,
 				84F3A8CB1B4DA93100D16EBC /* ic_map_pin_small@2x.png in Resources */,
@@ -17191,6 +17198,7 @@
 				DA5A812726C563A700F274C7 /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				DA5A856C26C563A900F274C7 /* OARouteImporter.mm in Sources */,
 				DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */,
+				FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift in Sources */,
 				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,

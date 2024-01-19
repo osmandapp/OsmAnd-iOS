@@ -17,20 +17,10 @@ final class WidgetPageViewController: UIViewController {
     var isMultipleWidgetsInRow = false
     var simpleWidgetViews: [[OABaseWidgetView]] = []
     var stackView: UIStackView!
-    
-    private func createMultipleWidgetsInRowStackView() -> UIStackView {
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.alignment = .fill
-        stackView.spacing = 0
-           // .fillProportionally/
-        stackView.distribution = .fillEqually
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }
-    
+            
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerObservers()
         
         // Create the stack view
         stackView = UIStackView()
@@ -40,11 +30,6 @@ final class WidgetPageViewController: UIViewController {
         
         if isMultipleWidgetsInRow {
             stackView.distribution = .equalSpacing
-            /*
-             stackView.translatesAutoresizingMaskIntoConstraints = false
-             stackView.setContentHuggingPriority(.required, for: .vertical)
-             stackView.setContentCompressionResistancePriority(.required, for: .vertical)
-             */
             for (index, items) in simpleWidgetViews.enumerated() {
                 if items.count > 1 {
                     let multipleWidgetsInRowStackView = createMultipleWidgetsInRowStackView()
@@ -93,7 +78,6 @@ final class WidgetPageViewController: UIViewController {
         var height: CGFloat = 0
         if isMultipleWidgetsInRow {
             updateSimpleWidget()
-            
             let fittingSize = stackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
             height = fittingSize.height
         } else {
@@ -115,9 +99,47 @@ final class WidgetPageViewController: UIViewController {
         }
         return (width, height)
     }
+    
+    private func registerObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(onSimpleWidgetStyleUpdated),
+                                               name: .SimpleWidgetStyleUpdated,
+                                               object: nil)
+    }
+    
+    private func getWidgetsInRowWithoutCurrent(widget: OABaseWidgetView) -> [OABaseWidgetView]? {
+        for widgetViews in simpleWidgetViews {
+            for view in widgetViews where view === widget {
+                return widgetViews.filter { $0 != view }
+            }
+        }
+        return nil
+    }
+    
+    @objc private func onSimpleWidgetStyleUpdated(notification: Notification) {
+        guard isMultipleWidgetsInRow else { return }
+        guard let widget = (notification.object as? MapWidgetInfo)?.widget as? OATextInfoWidget else { return }
+        // update widgetSizeStyle by currentwidget for all items in row
+        if let widgetsInRow = getWidgetsInRowWithoutCurrent(widget: widget) {
+            widgetsInRow.compactMap { $0 as? OATextInfoWidget }
+                .forEach {
+                    $0.sizeStylePref.set(Int32(widget.widgetSizeStyle.rawValue), mode: OAAppSettings.sharedManager().applicationMode.get())
+                }
+        }
+    }
 }
 
 extension WidgetPageViewController {
+    private func createMultipleWidgetsInRowStackView() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.spacing = 0
+        stackView.distribution = .fillEqually
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        return stackView
+    }
+    
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
         widget.isSimpleLayout = true

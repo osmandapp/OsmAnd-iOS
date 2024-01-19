@@ -10,4 +10,8 @@
 
 @interface OAFPSTextInfoWidget : OATextInfoWidget
 
+- (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
+                                  appMode:(OAApplicationMode * _Nonnull)appMode;
+
+
 @end

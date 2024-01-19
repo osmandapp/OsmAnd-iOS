@@ -8,6 +8,10 @@
 
 import Foundation
 
+extension Notification.Name {
+    static let SimpleWidgetStyleUpdated = NSNotification.Name("SimpleWidgetStyleUpdated")
+}
+
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
 class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
@@ -26,6 +30,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
+        
+        tableView.register(UINib(nibName: SegmentImagesWithRightLableTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
         
         if isCreateNewAndSimilarAlreadyExist {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
@@ -162,6 +168,27 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     cell.leftIconVisibility(false)
                 }
                 cell.titleLabel.text = item.title
+            }
+            outCell = cell
+        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
+            cell.selectionStyle = .none
+            if let icons = item.obj(forKey: "values") as? [String],
+               let pref = item.obj(forKey: "pref") as? OACommonInteger {
+                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: Int(pref.get(selectedAppMode)))
+            }
+            if let title = item.string(forKey: "title") {
+                cell.configureTitle(title: title)
+            }
+            cell.didSelectSegmentIndex = { [weak self] index in
+                guard let self,
+                      let pref = item.obj(forKey: "pref") as? OACommonInteger else { return }
+                pref.set(Int32(index), mode: selectedAppMode)
+                if item.string(forKey: "behaviour") == "simpleWidget" {
+                    NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
+                                                    object: widgetInfo,
+                                                    userInfo: nil)
+                }
             }
             outCell = cell
         }

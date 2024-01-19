@@ -20,11 +20,13 @@
     float _cachedTargetDistance;
 }
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                         appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithType:OAWidgetType.devTargetDistance];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode];
         _cachedTargetDistance = -1;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];

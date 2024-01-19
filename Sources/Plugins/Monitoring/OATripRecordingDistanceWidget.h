@@ -12,7 +12,9 @@
 
 @interface OATripRecordingDistanceWidget : OATextInfoWidget
 
-- (instancetype) initWithPlugin:(OAMonitoringPlugin *)plugin;
+- (instancetype _Nonnull)initWithPlugin:(OAMonitoringPlugin *)plugin
+                               customId:(NSString *_Nullable)customId
+                                appMode:(OAApplicationMode * _Nonnull)appMode;
 
 + (NSString *) getName;
 

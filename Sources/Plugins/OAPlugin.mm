@@ -424,7 +424,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode
 {
     return nil;
 }
@@ -918,11 +918,11 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
 }
  */
 
-+ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode
 {
     for (OAPlugin *plugin in [self getEnabledPlugins])
     {
-        OABaseWidgetView *widget = [plugin createMapWidgetForParams:widgetType customId:customId];
+        OABaseWidgetView *widget = [plugin createMapWidgetForParams:widgetType customId:customId appMode:appMode];
         if (widget)
             return widget;
     }

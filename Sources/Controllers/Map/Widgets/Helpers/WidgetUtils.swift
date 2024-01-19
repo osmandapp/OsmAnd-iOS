@@ -19,7 +19,7 @@ final class WidgetUtils {
         let enabledWidgets: [String] = orderedWidgetPages.flatMap { $0 }
         removeUnusedWidgets(enabledWidgets: enabledWidgets, panel: panel, appMode: selectedAppMode, widgetRegistry: widgetRegistry)
 
-        var newOrders = createNewOrders(enabledWidgets: enabledWidgets,
+        let newOrders = createNewOrders(enabledWidgets: enabledWidgets,
                                         orderedWidgetPages: orderedWidgetPages,
                                         panel: panel,
                                         appMode: selectedAppMode,

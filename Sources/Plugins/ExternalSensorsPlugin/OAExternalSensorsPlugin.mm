@@ -110,13 +110,13 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
                              OAWidgetType.temperature];
     for (OAWidgetType *widgetType in widgetTypeArray)
     {
-        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType appMode:appMode]]];
+        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode]]];
     }
 }
 
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType appMode:(OAApplicationMode *)appMode
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode
 {
-    return [[SensorTextWidget alloc] initWithCustomId:@"" widgetType:widgetType appMode:appMode widgetParams:nil];
+    return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:widgetType appMode:appMode widgetParams:nil];
 }
 
 - (NSString *) getName

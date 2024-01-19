@@ -168,7 +168,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 createNewSection = true
                 OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [newWidget.getTitle()]), details: nil, duration: 4, in: self.view)
             } else if lastSectionData.rowCount() > 1 {
-                var lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo ?? nil
+                let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo ?? nil
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
                 if createNewSection, let lastWidget {
                     OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [lastWidget.getTitle()]), details: nil, duration: 4, in: self.view)
@@ -336,12 +336,6 @@ extension WidgetsListViewController {
             let item = tableData.item(for: indexPath)
             tableData.removeRow(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            if let widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
-                widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
-            }
-            if !editMode {
-                reorderWidgets()
-            }
             let isPageCell = item.key == kPageKey
             if isPageCell {
                 updatePageNumbers()

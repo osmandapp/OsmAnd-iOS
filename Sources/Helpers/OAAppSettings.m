@@ -2041,9 +2041,7 @@
 - (void) remove:(NSString *)string
 {
     if ([self contains:string])
-    {
-        [[self get] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", string]];
-    }
+        [self set:[[self get] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", string]]];
 }
 
 - (BOOL) contains:(NSString *)string

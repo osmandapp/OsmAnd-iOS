@@ -35,8 +35,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     override func generateData() {
         tableData.clearAllData()
         // Add section for simple widgets
-        if let widgetType = widgetInfo.widget.widgetType,
-           !widgetType.isComplex, widgetPanel == .topPanel || widgetPanel == .bottomPanel {
+        if !WidgetType.isComplexWidget(widgetInfo.key), widgetPanel == .topPanel || widgetPanel == .bottomPanel {
             if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode) {
                 for i in 0 ..< settingsData.sectionCount() {
                     tableData.addSection(settingsData.sectionData(for: i))
@@ -86,11 +85,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell?.descriptionVisibility(false)
             }
             if let cell {
-                let pref = item.obj(forKey: "pref") as! OACommonBoolean
+                let pref = item.obj(forKey: "pref") as? OACommonBoolean
                 let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                var selected = pref.get(selectedAppMode)
+                var selected = pref?.get(selectedAppMode) ?? false
                 if isCreateNewAndSimilarAlreadyExist {
                     if widgetKey == WidgetType.averageSpeed.id {
                         if isFirstGenerateData {

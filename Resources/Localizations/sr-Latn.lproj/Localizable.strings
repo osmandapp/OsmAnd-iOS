@@ -376,7 +376,7 @@
 "traffic_warning_railways" = "Pružni prelaz";
 "traffic_warning_pedestrian" = "Pešački prelaz";
 "traffic_warning_hazard" = "Opasnost";
-"tunnel_warning" = "Tunel ispred";
+"tunnel_warning" = "Tunel je ispred";
 "accessibility_announce" = "Objavi";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Sjedinjene Američke Države";
@@ -1268,7 +1268,7 @@
 "copied_to_clipboard" = "Umnoženo je u ostavu isečaka";
 // Quick action
 "no_overlay" = "Bez sloja nad kartom";
-"quick_action_map_overlay_action" = "Dodaj nivo nad kartom";
+"quick_action_map_overlay_action" = "Dodaj nivo iznad mape";
 "no_underlay" = "Bez podvlačenja";
 "quick_action_map_underlay_action" = "Dodaj nivo ispod mape";
 "quick_action_list_descr" = "Tapping this action button pages through the list below";
@@ -1305,7 +1305,7 @@
 "quick_action_add_poi" = "Dodaj tačku zanimanja";
 "quick_action_map_style" = "Izmeni način prikaza mape";
 "quick_action_map_source" = "Izmeni izvor mape";
-"quick_action_map_overlay" = "Izmeni nivo nad kartom";
+"quick_action_map_overlay" = "Izmeni nivo iznad mape";
 "quick_action_map_underlay" = "Izmeni nivo ispod mape";
 "quick_action_replace_destination" = "Zameni odredište";
 "add_destination" = "Add destination";
@@ -1408,7 +1408,7 @@
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
-"add_waypoint" = "Dodaj prolaznu tačku";
+"add_waypoint" = "Dodaj međuodredište";
 "add_waypoint_short" = "Add waypoint";
 "delete_waypoints" = "Obriši prolaznu tačku";
 "delete_group_confirm_short" = "Delete group?";
@@ -1941,7 +1941,7 @@
 "routing_attr_freeride_policy_description" = "Spuštanje izvan staze neslužbenim rutama, obično su neuređena, neodržavana i nisi sigurna noću. Ulazite na sopstveni rizik.";
 "rendering_attr_highway_class_street_name" = "Ulica";
 "rendering_attr_surface_grass_name" = "Trava";
-"routing_attr_piste_type_skitour_description" = "Putanje skijaške.";
+"routing_attr_piste_type_skitour_description" = "Skijaške putanje.";
 "rendering_attr_surface_fine_gravel_name" = "Sitan šljunak";
 "rendering_value_orange_name" = "Narandžasta";
 "rendering_value_medium_w_name" = "Srednja";
@@ -1979,7 +1979,7 @@
 "rendering_value_walkingRoutesScopeOSMC_name" = "Bojenje prema pripadnosti mreži puteva";
 "rendering_attr_smoothness_excellent_name" = "Izvrsno";
 "rendering_value_pink_name" = "Ružičasta";
-"routing_attr_allow_expert_name" = "Dozvoli stručnjačke puteve";
+"routing_attr_allow_expert_name" = "Dozvoli stručne rute";
 "rendering_attr_showCycleNodeNetworkRoutes_name" = "Prikaži čvorove mreže biciklističkih puteva";
 "rendering_attr_hideText_name" = "Pismo";
 "rendering_attr_contourDensity_name" = "Gustina linije izohipse";
@@ -2090,7 +2090,7 @@
 "rendering_attr_hideAccess_name" = "Zabrane pristupa";
 "rendering_value__name" = "Podrazumevano";
 "rendering_attr_smoothness_very_horrible_name" = "Vrlo strašno";
-"routing_attr_allow_intermediate_name" = "Dozvoli usputne puteve";
+"routing_attr_allow_intermediate_name" = "Dopusti srednje rute";
 "rendering_attr_trolleybusRoutes_name" = "Putevi trolejbusa";
 "rendering_attr_hideWaterPolygons_description" = "Voda";
 "rendering_attr_piste_difficulty_extreme_name" = "Krajnje složena";
@@ -2348,7 +2348,7 @@
 "expired" = "Isteklo";
 "start_point" = "Početak";
 "altitude_descent" = "Nizbrdo";
-"toast_empty_name_error" = "Neimenovani lokaciju";
+"toast_empty_name_error" = "Neimenovana lokacija";
 "cloud_email_already_registered" = "Ova adresa e-pošte je već registrovana.";
 "backup_error_user_is_not_registered" = "Nijedan korisnik nije registrovan sa tom adresom e-pošte";
 "set_up_backup" = "Postavi skladište za čuvanje";

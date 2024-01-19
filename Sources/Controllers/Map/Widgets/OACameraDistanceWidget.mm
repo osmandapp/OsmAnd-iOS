@@ -22,11 +22,13 @@
     int _cachedCameraDistance;
 }
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                         appMode:(OAApplicationMode *)appMode
 {
     self = [super initWithType:OAWidgetType.devCameraDistance];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode];
         _cachedCameraDistance = -1;
         _settings = [OAAppSettings sharedManager];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;

@@ -15,7 +15,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAWeatherWidget : OASimpleWidget
 
-- (instancetype) initWithType:(OAWidgetType *)type band:(EOAWeatherBand)band;
+- (instancetype _Nonnull)initWithType:(OAWidgetType *)type
+                         band:(EOAWeatherBand)band
+                     customId:(NSString *_Nullable)customId
+                      appMode:(OAApplicationMode * _Nonnull)appMode;
 
 @end
 

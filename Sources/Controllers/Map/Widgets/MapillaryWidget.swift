@@ -12,8 +12,9 @@ import Foundation
 @objcMembers
 class MapillaryWidget: OASimpleWidget {
     
-    init() {
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .mapillary)
+        configurePrefs(withId: customId, appMode: appMode)
         setText(localizedString("mapillary"), subtext: "")
         setIcon("widget_mapillary")
         onClickFunction = { _ in

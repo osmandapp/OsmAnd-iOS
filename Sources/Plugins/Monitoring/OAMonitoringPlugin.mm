@@ -102,29 +102,29 @@
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance];
+    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];
 
-    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime];
+    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:timeWidget]];
 
-    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill];
+    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:uphillWidget]];
 
-    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill];
+    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:downhillWidget]];
 }
 
-- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType appMode:(OAApplicationMode *)appMode
 {
     if (widgetType == OAWidgetType.tripRecordingDistance) {
-        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self];
+        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self customId:@"" appMode:appMode];
     } else if (widgetType == OAWidgetType.tripRecordingTime) {
-        return [[OATripRecordingTimeWidget alloc] init];
+        return [[OATripRecordingTimeWidget alloc] initWithСustomId:@"" appMode:appMode];
     } else if (widgetType == OAWidgetType.tripRecordingUphill) {
-        return [[OATripRecordingUphillWidget alloc] init];
+        return [[OATripRecordingUphillWidget alloc] initWithСustomId:@"" appMode:appMode];
     } else if (widgetType == OAWidgetType.tripRecordingDownhill) {
-        return [[OATripRecordingDownhillWidget alloc] init];
+        return [[OATripRecordingDownhillWidget alloc] initWithСustomId:@"" appMode:appMode];
     }
     return nil;
 }

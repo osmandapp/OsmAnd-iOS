@@ -10,6 +10,10 @@
 
 @interface OATripRecordingElevationWidget : OASimpleWidget
 
+- (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
+                                  appMode:(OAApplicationMode * _Nonnull)appMode;
+
+
 + (NSString *) getName;
 - (double) getElevationDiff;
 

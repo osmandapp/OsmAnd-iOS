@@ -587,7 +587,7 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-"gpx_parse_error" = "Pronađen je problem sa datotekom GPX-a \n \nMožete se obratiti podršci OsmAnda radi istrage.";
+"gpx_parse_error" = "Pronađen je problem sa datotekom GPX-a\n\nMožeš se obratiti podršci OsmAnda radi istrage.";
 "tracks_on_map" = "Prikazane rute";
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
@@ -1259,7 +1259,7 @@
 "mapil_filter_user_descr" = "Filter images by user";
 "mapil_filter_date" = "Filter images by date";
 "mapil_usernames" = "Usernames";
-"mapillary_menu_title_pano" = "Prikaži samo slike od 360°";
+"mapillary_menu_title_pano" = "Prikaži samo 360° slike";
 "mapil_select_user" = "Select user";
 
 // Coordinate widget
@@ -2220,9 +2220,9 @@
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
 "travel_routes" = "Putanje putovanja";
-"walking_route_osmc_description" = "Boji rute po njihovim pojedinačnim mestnim bojama (ukoliko je prisutno na mapama Openstritmap) i vrsti (međunarodne, oblastne, mestne).";
-"rendering_value_walkingRoutesOSMCNodes_description" = "Oboji puteve prema njihovim vrstama saobraćajnih čvorišta (međunarodni, oblastni, mesni).";
-"rendering_value_walkingRoutesScopeOSMC_description" = "Oboji po pripadnosti mreži.";
+"walking_route_osmc_description" = "Boji rute po njihovim pojedinačnim mesnim bojama (ukoliko je prisutno na mapama OpenStreetMap) i vrsti (međunarodne, oblastne, mesne).";
+"rendering_value_walkingRoutesOSMCNodes_description" = "Oboji puteve prema njihovim vrstama (međunarodni, oblastni, mesni).";
+"rendering_value_walkingRoutesScopeOSMC_description" = "Oboj po vrsti.";
 "rendering_value_walkingRoutesOSMC_description" = "Boji rute po njihovim mesnim bojama (ako postoje na OpenStritMapama) i bojama znakova oznaka.";
 "routes_color_by_type" = "Oboj rute po…";
 
@@ -2908,7 +2908,7 @@
 "map_widget_ant_bicycle_speed_desc" = "Prikazuje brzinu putovanja";
 "map_widget_ant_bicycle_dist" = "Rastojanje bicikla";
 "map_widget_ant_bicycle_dist_desc" = "Prikazuje pređeni ruta";
-"depth_contours" = "Dubinski obrisi";
+"depth_contours" = "Konture dubine";
 "speak_route_recalculation" = "Obaveštava o preračunavanju rute";
 "external_sensors_plugin_name" = "Spoljašnji senzori";
 "external_sensors_plugin_description" = "Pristup spoljnim prijemnicima, npr. otkucajima srca, brzini bicikla, snazi kretanja bicikla, ili taktu. Zahteva da uređaj bude povezan sa odgovarajućim prijemnicima preko ANT + protokola lične bežične mreže.";

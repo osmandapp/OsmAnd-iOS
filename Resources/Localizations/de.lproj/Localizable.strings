@@ -3057,7 +3057,7 @@
 "ios_release_4_5" = "- Neu gestaltete Widgets: Möglichkeit, die Position der Widgets zu ändern, Gruppierung nach Seiten, eine Liste von Widgets für das linke und rechte Panel\n- Neu gestalteter Konfigurationsbildschirm\n- Kostenlose Sicherung von Favoriten, Einstellungen und OSM-Bearbeitungen in der OsmAnd Cloud\n- \"CAI\"-Skala für die Schwierigkeitsklassifizierung von Routen hinzugefügt\n- Modul \"Konturlinien\" umbenannt in \"Topographie\", Unterstützung für das neue Geländekartenformat zugefügt\n- 3D-Relief hinzugefügt\n- OAuth-Autorisierung für OpenStreetMap Bearbeitungs-Modul hinzugefügt\n- Separate Schaltfläche zum Umschalten zwischen 2D- und 3D-Modus hinzugefügt\n- Richtung der Kippgesten geändert\n- Fehler beim Export von Favoriten behoben, der zu Datenverlusten führen konnte\n";
 "shared_string_system_default" = "Systemvorgabe";
 "upload_poi" = "POI hochladen";
-"ios_release_4_6" = "• Jetzt kannst du die Karte direkt auf deinem CarPlay-Dashboard anzeigen\n• Wechsele zum Nacht-Thema für eine komfortablere Anzeige bei schlechten Lichtverhältnissen\n• Verbesserte Dialoge zum Hinzufügen von Notizen und Hochladen von Notizen und POIs zu OpenStreetMap\n• Einfache Wiederherstellung der Plugin-Einstellungen auf die Installationsvorgaben mit einer neuen Option \"Auf Standard zurücksetzen\"\n";
+"ios_release_4_6" = "- Aufzeichnung und Verfolgung von Messwerten mit externen Sensoren, einschließlich Fahrradgeschwindigkeit, Trittfrequenz, Fahrraddistanz, Herzfrequenz und Temperatur\n- Jetzt können Sie die Karte direkt auf Ihrem CarPlay-Dashboard anzeigen\n- Nacht-Thema hinzugefügt für eine komfortable Anzeige bei schlechten Lichtverhältnissen\n- Entdecken Sie Reiseführer von \"Wikivoyage\"\n- Verbesserte Dialoge zum Hinzufügen von Notizen und Hochladen von Notizen und POIs zu OpenStreetMap\n- Mit der neuen Option \"Auf Standard zurücksetzen\" können Sie Ihre Plugin-Einstellungen ganz einfach auf die Installationsvorgaben zurücksetzen\n- Option \"Bildschirmausrichtung\" hinzugefügt, um die bevorzugte Ausrichtung ohne automatische Umschaltung einzustellen\n- Neue separaten Schaltfläche hinzugefügt zum Umschalten des 3D-Modus direkt auf dem CarPlay-Bildschirm\n- Zusätzlich zu den Informationen über Steigungen und Gefälle wurden Informationen über minimale und maximale Höhenunterschiede zu den Navigationsrouten hinzugefügt\n- Verbesserte Streckeneinfärbung im Modus \"Steigung\" mit neuem symmetrischen Gefälle\n- In den Favoriten-Ordnern werden nun Standardaussehen gespeichert, die automatisch auf jeden hinzugefügten Punkt angewendet werden\n- Mittelpunkt des \"Radiuslineals\" stimmt nun mit dem Kartenmittelpunkt überein\n- Schaltfläche \"Artikel lesen\" für das Kontextmenü von Wikipedia POIs hinzugefügt\n- Problem mit dem Importieren von GPX-Dateien in die Favoriten behoben\n- Problem mit dem Kalenderereignis für die Parkposition behoben\n- Absturz beim Entfernen von Farben aus der Palette behoben\n";
 "shared_string_uploading" = "Hochladen";
 "shared_string_discard_changes" = "Änderungen verwerfen";
 "article_has_no_points" = "Artikel hat keine Punkte";
@@ -3259,3 +3259,21 @@
 "shared_string_keywords" = "Schlagwörter";
 "shared_string_any" = "Alles";
 "paired_sensors" = "Verbundene Sensoren";
+"calendar_new_event_message" = "Neuer Kalendereintrag hinzugefügt: Fahrzeug abholen bei %@";
+"calendar_new_event_title" = "Neues Ereignis";
+"bicycle_scd_device_name" = "Fahrradcomputer";
+"whats_here" = "Was es hier gibt";
+"travel_guides_no_file_error" = "Fehler: Keine Daten in der Regionsdatei";
+"popular_articles_not_found_title" = "Beliebte Artikel nicht gefunden";
+
+
+//"device_disconnected">%1$s disconnected"
+//"device_connected">%1$s connected"
+"running_scds_device_name" = "Laufgerät";
+"popular_articles_not_found_descr" = "Es sind keine Artikel in der Nähe der Kartenmitte vorhanden. Verwenden Sie die Suche, um Artikel zu finden.";
+"external_device_unpair_description" = "Verbinden Sie den Sensor mit Ihrem Gerät, um Informationen zu erhalten.";
+"help_article_search_search_poi_name" = "POI suchen";
+"help_article_widgets_radius_ruler_name" = "Radius-Maßstab und Lineal";
+"shared_string_setup_route" = "Route aufsetzen";
+"testFlight" = "TestFlight";
+"beats_per_minute_short" = "HF";

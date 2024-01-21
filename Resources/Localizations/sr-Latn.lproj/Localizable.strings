@@ -993,7 +993,7 @@
 "route_between_points" = "Ruta između tačaka";
 "profile_alert_need_save_title" = "Snimi izmene";
 "save_as_new_track" = "Sačuvaj kao novu rutu";
-"add_to_a_track" = "Dodaj stazi";
+"add_to_a_track" = "Dodaj stazu";
 "move_point" = "Pomeri tačku";
 "move_point_descr" = "Move map to change the position of this point.";
 "add_point_before" = "Dodaj tačku pre";

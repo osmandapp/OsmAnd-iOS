@@ -96,7 +96,7 @@ final class BLEHeartRateSensor: Sensor {
     override func writeSensorDataToJson(json: NSMutableData, widgetDataFieldType: WidgetType) {
         if let lastHeartRateData {
             do {
-                let data = try JSONEncoder().encode([PointAttributes.sensorTagHartRate: String(lastHeartRateData.heartRate)])
+                let data = try JSONEncoder().encode([PointAttributes.sensorTagHeartRate: String(lastHeartRateData.heartRate)])
                 json.append(data)
             } catch {
                 debugPrint("BLE failed writeSensorDataToJson: heartRate - \(lastHeartRateData.heartRate) | error: \(error.localizedDescription)")

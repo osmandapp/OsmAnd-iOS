@@ -284,11 +284,8 @@
     {
         OAPoiCollectionViewCell* cell = nil;
         cell = (OAPoiCollectionViewCell *)[collectionView dequeueReusableCellWithReuseIdentifier:[OAPoiCollectionViewCell getCellIdentifier] forIndexPath:indexPath];
-        UIImage *img = nil;
         NSString *imgName = _poiData[indexPath.row];
-        img = [OAUtilities applyScaleFactorToImage:[UIImage imageNamed:[OAUtilities drawablePath:imgName]]];
-        
-        cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName]] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+        cell.iconImageView.image = [[OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:imgName] size:cell.iconImageView.bounds.size] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         cell.iconImageView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
         
         if ([_poiData[indexPath.row] isEqualToString:_currentIcon])

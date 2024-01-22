@@ -152,6 +152,7 @@ typedef enum
     OAAutoObserverProxy* _destinationRemoveObserver;
     OAAutoObserverProxy* _mapillaryChangeObserver;
     OAAutoObserverProxy *_weatherSettingsChangeObserver;
+    OAAutoObserverProxy *_wikipediaChangeObserver;
 
     BOOL _mapNeedsRestore;
     OAMapMode _mainMapMode;
@@ -228,6 +229,10 @@ typedef enum
     _weatherSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                withHandler:@selector(onWeatherSettingsChange:withKey:andValue:)
                                                                 andObserve:_app.data.weatherSettingsChangeObservable];
+
+    _wikipediaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onWikipediaChange:withKey:andValue:)
+                                                          andObserve:_app.data.wikipediaChangeObservable];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onMapGestureAction:) name:kNotificationMapGestureAction object:nil];
 
@@ -474,7 +479,19 @@ typedef enum
 {
     NSString *operation = (NSString *) key;
     if ([operation isEqualToString:kWeatherSettingsChanging])
-        _activeTargetType = self.hudViewController.mapInfoController.weatherToolbarVisible ? OATargetWeatherToolbar : OATargetNone;
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            _activeTargetType = self.hudViewController.mapInfoController.weatherToolbarVisible ? OATargetWeatherToolbar : OATargetNone;
+        });
+    }
+}
+
+- (void) onWikipediaChange:(id)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [_mapViewController updatePoiLayer];
+        [self refreshMap];
+    });
 }
 
 - (void) onAddonsSwitch:(id)observable withKey:(id)key andValue:(id)value

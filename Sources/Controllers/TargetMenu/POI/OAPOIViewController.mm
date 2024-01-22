@@ -181,6 +181,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
 
     BOOL osmEditingEnabled = [OAPlugin isEnabled:OAOsmEditingPlugin.class];
+    CGSize iconSize = {20, 20}; // TODO: Hardcoded size
 
     for (NSString *key in [self.poi getAdditionalInfo].allKeys)
     {
@@ -208,6 +209,8 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         BOOL isCuisine = NO;
         int poiTypeOrder = 0;
         NSString *poiTypeKeyName = @"";
+        NSString *categoryIconId;
+        UIImage *categoryIcon;
 
         OAPOIType *poiType = [self.poi.type.category getPoiTypeByKeyName:convertedKey];
         OAPOIBaseType *pt = [_poiHelper getAnyPoiAdditionalTypeByKey:convertedKey];
@@ -315,9 +318,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         {
             if ([kContactUrlTags containsObject:convertedKey])
             {
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:convertedKey]];
-                if (!icon)
-                    icon = [OATargetInfoViewController getIcon:[OAUtilities drawablePath:[@"mm_" stringByAppendingString:convertedKey]]];
+                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:convertedKey] size:iconSize];
             }
             iconId = @"ic_website";
             textColor = [UIColor colorNamed:ACColorNameTextColorActive];
@@ -377,19 +378,19 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             }
             if (pType)
             {
-                NSString *cat = [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"];
-                if (cat && cat.length > 0)
+                NSString *category = [pType.tag stringByReplacingOccurrencesOfString:@":" withString:@"_"];
+                if (category && category.length > 0)
                 {
-                    NSString *catIconId = [NSString stringWithFormat:@"mx_%@", cat];
-                    UIImage *img = [OATargetInfoViewController getIcon:catIconId];
-                    iconId = img ? catIconId : iconId;
+                    categoryIconId = [NSString stringWithFormat:@"mx_%@", category];
+                    categoryIcon = [OATargetInfoViewController getIcon:categoryIconId size:iconSize];
+                    iconId = categoryIcon ? categoryIconId : iconId;
                 }
                 
                 poiTypeOrder = pType.order;
                 poiTypeKeyName = pType.name;
                 if (pType.parentType && [pType.parentType isKindOfClass:OAPOIType.class])
                 {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, cat, pType.value]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@_%@_%@", ((OAPOIType *) pType.parentType).tag, category, pType.value] size:iconSize];
                 }
                 if (!pType.isText)
                 {
@@ -411,7 +412,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 }
                 if (!isDescription && !icon)
                 {
-                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                    icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]] size:iconSize];
                     if (isText && icon && ![kPrefixTags containsObject:convertedKey])
                         textPrefix = @"";
                 }
@@ -466,8 +467,16 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         }
         else
         {
+            UIImage *rowIcon;
+            if (icon)
+                rowIcon = icon;
+            else if ([iconId isEqualToString:categoryIconId] && categoryIcon)
+                rowIcon = categoryIcon;
+            else
+                rowIcon = [OATargetInfoViewController getIcon:iconId size:iconSize];
+
             row = [[OARowInfo alloc] initWithKey:convertedKey
-                                            icon:icon ? icon : [OATargetInfoViewController getIcon:iconId]
+                                            icon:rowIcon
                                       textPrefix:textPrefix
                                             text:vl
                                        textColor:textColor
@@ -507,11 +516,11 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
             NSString *poiAdditionalCategoryName = pType.poiAdditionalCategory;
             NSString *poiAdditionalIconName = [_poiHelper getPoiAdditionalCategoryIcon:poiAdditionalCategoryName];
             if (poiAdditionalIconName)
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalIconName]];
+                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalIconName] size:iconSize];
             if (!icon)
-                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalCategoryName]];
+                icon = [OATargetInfoViewController getIcon:[@"mx_" stringByAppendingString:poiAdditionalCategoryName] size:iconSize];
             if (!icon)
-                icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]]];
+                icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", [pType.name stringByReplacingOccurrencesOfString:@":" withString:@"_"]] size:iconSize];
             if (!icon)
                 icon = [UIImage imageNamed:@"ic_description"];
 
@@ -561,7 +570,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                  isPoiAdditional:NO
                          textRow:nil];
         OAPOIType *poiCategory = self.poi.type;
-        UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name]];
+        UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name] size:iconSize];
         NSMutableString *sb = [NSMutableString new];
         for (OAPOIType *pt in collectedPoiTypes)
         {

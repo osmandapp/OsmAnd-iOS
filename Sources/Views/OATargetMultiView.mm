@@ -11,6 +11,8 @@
 #import "OATargetPointViewCell.h"
 #import "OARootViewController.h"
 #import "OATargetPointsHelper.h"
+#import "OAUtilities.h"
+#import "Localization.h"
 
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointViewCellHeight 60.0
@@ -59,6 +61,17 @@
     [self.layer setShadowOpacity:0.3];
     [self.layer setShadowRadius:3.0];
     [self.layer setShadowOffset:CGSizeMake(0.0, 0.0)];
+    
+    self.headerLabel.text = OALocalizedString(@"whats_here");
+}
+
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    if (OAUtilities.isPortrait || OAUtilities.isIPad)
+        [OAUtilities setMaskTo:self byRoundingCorners:UIRectCornerTopLeft|UIRectCornerTopRight];
+    else
+        self.layer.mask = nil;
 }
 
 -(CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -87,6 +100,7 @@
         cell = (OATargetPointViewCell *)[nib objectAtIndex:0];
     }
     cell.targetPoint = targetPoint;
+    cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + 60, 0., 0.);
     return cell;
 }
 
@@ -130,6 +144,7 @@
 - (void) transitionToSize
 {
     self.frame = [self getFrame];
+    [self.tableView reloadData];
 }
 
 - (CGRect)getFrame {
@@ -147,7 +162,7 @@
     {
         frame.origin.x = 0.0;
         frame.origin.y = DeviceScreenHeight + 10.0;
-        frame.size.height = MIN(self.targetPoints.count, kMaxRowCount) * kOATargetPointViewCellHeight + [OAUtilities getBottomMargin];
+        frame.size.height = (MIN(self.targetPoints.count, kMaxRowCount) + 1) * kOATargetPointViewCellHeight + [OAUtilities getBottomMargin];
         frame.size.width = DeviceScreenWidth;
         self.frame = frame;
         frame.origin.y = DeviceScreenHeight - frame.size.height;
@@ -235,6 +250,10 @@
                 onComplete();
         }
     }
+}
+
+- (IBAction)onCloseButtonClicked:(id)sender {
+    [self hide:YES duration:0.2 onComplete:nil];
 }
 
 @end

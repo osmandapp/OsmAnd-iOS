@@ -16,6 +16,6 @@
 - (instancetype)initWithGpxData:(NSDictionary *)data
           trackMenuControlState:(OATargetMenuViewControllerState *)trackMenuControlState;
 
-- (void)onNewModeSelected:(EOARouteStatisticsMode)mode;
+- (void)onTypesSelected:(NSArray<NSNumber *> *)types;
 
 @end

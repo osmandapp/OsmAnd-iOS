@@ -653,11 +653,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
             if (_needChartUpdate)
             {
+                OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+                BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView
                                                   analysis:trackAnalysis
                                        useGesturesAndScale:NO
-                                                 firstType:GPXDataSetTypeALTITUDE
-                                                secondType:GPXDataSetTypeSLOPE];
+                                                 firstType:GPXDataSetTypeAltitude
+                                                secondType:GPXDataSetTypeSlope
+                                           calcWithoutGaps:calcWithoutGaps];
                 _needChartUpdate = NO;
             }
         }

@@ -288,6 +288,12 @@
         _subtitle.text = [self getTitle];
 }
 
+- (void)updateNavbar
+{
+    [super updateNavbar];
+    [self setupNavbarButtons];
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle

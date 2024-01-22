@@ -1224,10 +1224,7 @@
         [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
     
     if ([item[@"key"] isEqualToString:@"tracks"])
-    {
-        OAMapSettingsGpxViewController *gpxViewController = [[OAMapSettingsGpxViewController alloc] init];
-        [self.vwController.navigationController pushViewController:gpxViewController animated:YES];
-    }
+        [self.vwController.navigationController pushViewController:[OAMapSettingsGpxViewController new] animated:YES];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

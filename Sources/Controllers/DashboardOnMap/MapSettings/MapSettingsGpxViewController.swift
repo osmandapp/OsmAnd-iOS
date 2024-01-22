@@ -12,7 +12,7 @@ import UniformTypeIdentifiers
 @objc(OAMapSettingsGpxViewController)
 @objcMembers
 final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
-    private let previouslyVisibleTracksKey: String = "PreviouslyVisibleGpxFilePaths"
+    private let previouslyVisibleTracksKey = "PreviouslyVisibleGpxFilePaths"
     private var searchController: UISearchController?
     private var segmentedControl: UISegmentedControl?
     private var allGpxList: [OAGPX] = []
@@ -21,11 +21,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var filteredGpxList: [OAGPX] = []
     private var selectedGpxTracks: [OAGPX] = []
     private var previousSelectedSegmentIndex: Int = 0
-    private var isShowingVisibleTracks: Bool = true
-    private var isSearchActive: Bool = false
-    private var isSearchFilteringActive: Bool = false
-    private var isTracksAvailable: Bool = false
-    private var isVisibleTracksAvailable: Bool = false
+    private var isShowingVisibleTracks = true
+    private var isSearchActive = false
+    private var isSearchFilteringActive = false
+    private var isTracksAvailable = false
+    private var isVisibleTracksAvailable = false
     
     override func commonInit() {
         loadGpxTracks()
@@ -40,18 +40,20 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.setEditing(true, animated: false)
-        self.tableView.allowsMultipleSelectionDuringEditing = true
-        self.navigationItem.hidesSearchBarWhenScrolling = true
+        tableView.register(UINib(nibName: OASimpleTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.getIdentifier())
+        tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier())
+        tableView.setEditing(true, animated: false)
+        tableView.allowsMultipleSelectionDuringEditing = true
+        navigationItem.hidesSearchBarWhenScrolling = true
         self.definesPresentationContext = true
         updateSelectedRows()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        if let searchController = searchController, searchController.isActive {
+        if let searchController, searchController.isActive {
             searchController.isActive = false
-            self.navigationItem.searchController = nil
+            navigationItem.searchController = nil
         }
     }
     
@@ -73,8 +75,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func createSubview() -> UIView? {
+        segmentedControl = UISegmentedControl(items: [localizedString("shared_string_visible"), localizedString("shared_string_all")])
         if !isSearchActive {
-            segmentedControl = UISegmentedControl(items: [localizedString("shared_string_visible"), localizedString("shared_string_all")])
             segmentedControl?.selectedSegmentIndex = 0
             isShowingVisibleTracks = true
             segmentedControl?.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
@@ -97,7 +99,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             return localizedString("shared_string_select_all")
         }
         
-        return areAllTracksSelected() ? localizedString("shared_string_deselect_all") : localizedString("shared_string_select_all")
+        return localizedString(areAllTracksSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
     }
     
     override func getBottomButtonTitle() -> String? {
@@ -105,7 +107,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        return (!isTracksAvailable || (isShowingVisibleTracks && !isVisibleTracksAvailable && recentlyVisibleGpxList.isEmpty)) ? .inactive : .graySimple
+        return shouldUseInactiveColorScheme() ? .inactive : .graySimple
     }
     
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
@@ -158,7 +160,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                     gpxRow.setObj(time, forKey: "time")
                     gpxRow.setObj(waypointCount, forKey: "waypointCount")
                     gpxRow.iconName = "ic_custom_trip"
-                    gpxRow.iconTintColor = UIColor.iconColorDisabled
+                    gpxRow.iconTintColor = .iconColorDisabled
                 }
             }
         } else {
@@ -169,70 +171,46 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             noTracksRow.title = localizedString("no_track_files")
             noTracksRow.descr = localizedString("import_create_track_files")
             noTracksRow.iconName = "ic_custom_folder_open"
-            noTracksRow.iconTintColor = UIColor.iconColorDefault
+            noTracksRow.iconTintColor = .iconColorDefault
             noTracksRow.setObj(localizedString("shared_string_import"), forKey: "buttonTitle")
         }
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
-        guard let indexPath else { return nil }
+        guard let indexPath = indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell?
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASimpleTableViewCell
-            }
-            
-            if let cell {
-                let distance = item.obj(forKey: "distance") as? String ?? ""
-                let time = item.obj(forKey: "time") as? String ?? ""
-                let waypointCount = item.obj(forKey: "waypointCount") as? String ?? ""
-                cell.titleLabel.text = item.title
-                cell.descriptionLabel.text = [distance, time, waypointCount].filter { !$0.isEmpty }.joined(separator: " · ")
-                let iconImage: UIImage
-                if let iconName = item.iconName, let image = UIImage(named: iconName) {
-                    iconImage = image
-                } else {
-                    iconImage = UIImage(named: "ic_custom_trip") ?? UIImage()
-                }
-                
-                cell.leftIconView.image = iconImage.withRenderingMode(.alwaysTemplate)
-                cell.leftIconView.tintColor = item.iconTintColor
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
+            let distance = item.obj(forKey: "distance") as? String ?? ""
+            let time = item.obj(forKey: "time") as? String ?? ""
+            let waypointCount = item.obj(forKey: "waypointCount") as? String ?? ""
+            cell.titleLabel.text = item.title
+            cell.descriptionLabel.text = [distance, time, waypointCount].filter { !$0.isEmpty }.joined(separator: " · ")
+            let iconName = item.iconName ?? "ic_custom_trip"
+            let iconImage = UIImage(named: iconName) ?? UIImage()
+            cell.leftIconView.image = iconImage.withRenderingMode(.alwaysTemplate)
+            cell.leftIconView.tintColor = item.iconTintColor
             return cell
         } else if item.cellType == OALargeImageTitleDescrTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier()) as? OALargeImageTitleDescrTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OALargeImageTitleDescrTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OALargeImageTitleDescrTableViewCell
-                cell?.selectionStyle = .none
-            }
-            
-            if let cell = cell {
-                cell.titleLabel?.text = item.title
-                cell.titleLabel?.accessibilityLabel = item.title
-                cell.descriptionLabel?.text = item.descr
-                cell.descriptionLabel?.accessibilityLabel = item.descr
-                cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
-                cell.cellImageView?.contentMode = .scaleAspectFill
-                cell.cellImageView?.clipsToBounds = true
-                cell.cellImageView?.tintColor = item.iconTintColor
-                cell.button?.setTitle(item.obj(forKey: "buttonTitle") as? String, for: .normal)
-                cell.button?.accessibilityLabel = item.obj(forKey: "buttonTitle") as? String
-                cell.button?.removeTarget(nil, action: nil, for: .allEvents)
-                cell.button?.tag = indexPath.section << 10 | indexPath.row
-                cell.button?.addTarget(self, action: #selector(onCellButtonClicked(sender:)), for: .touchUpInside)
-            }
-            
-            outCell = cell
-            let update: Bool = outCell?.needsUpdateConstraints() ?? false
-            if update {
-                outCell?.setNeedsUpdateConstraints()
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier(), for: indexPath) as! OALargeImageTitleDescrTableViewCell
+            cell.selectionStyle = .none
+            cell.titleLabel?.text = item.title
+            cell.titleLabel?.accessibilityLabel = item.title
+            cell.descriptionLabel?.text = item.descr
+            cell.descriptionLabel?.accessibilityLabel = item.descr
+            cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)
+            cell.cellImageView?.contentMode = .scaleAspectFill
+            cell.cellImageView?.clipsToBounds = true
+            cell.cellImageView?.tintColor = item.iconTintColor
+            cell.button?.setTitle(item.obj(forKey: "buttonTitle") as? String, for: .normal)
+            cell.button?.accessibilityLabel = item.obj(forKey: "buttonTitle") as? String
+            cell.button?.removeTarget(nil, action: nil, for: .allEvents)
+            cell.button?.tag = indexPath.section << 10 | indexPath.row
+            cell.button?.addTarget(self, action: #selector(onCellButtonClicked(sender:)), for: .touchUpInside)
+            return cell
         }
-        return outCell
+        
+        return nil
     }
     
     override func onRowSelected(_ indexPath: IndexPath?) {
@@ -255,11 +233,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         let item = tableData.item(for: indexPath)
-        if item.key == "noVisibleTracks" || item.key == "noTracks" {
-            return false
-        }
-        
-        return true
+        return !(item.key == "noVisibleTracks" || item.key == "noTracks")
     }
     
     override func onLeftNavbarButtonPressed() {
@@ -311,7 +285,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     @objc private func segmentChanged(_ control: UISegmentedControl) {
         isShowingVisibleTracks = control.selectedSegmentIndex == 0
         generateData()
-        self.tableView.reloadData()
+        tableView.reloadData()
         if isTracksAvailable {
             updateSelectedRows()
             updateBottomButtons()
@@ -349,7 +323,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         let documentPickerVC = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes, asCopy: true)
         documentPickerVC.allowsMultipleSelection = false
         documentPickerVC.delegate = self
-        self.present(documentPickerVC, animated: true, completion: nil)
+        present(documentPickerVC, animated: true, completion: nil)
     }
     
     @objc private func onCellButtonClicked(sender: UIButton) {
@@ -408,7 +382,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func onDoneButtonPressed() {
         if hasSelectionChanged() {
             let currentVisibleTrackPaths = visibleGpxList.map { $0.gpxFilePath }
-            let selectedTrackPaths = selectedGpxTracks.map { $0.gpxFilePath }
+            let selectedTrackPaths = getSelectedTrackPaths()
             let tracksToShow = selectedTrackPaths.compactMap { $0 }.filter { !currentVisibleTrackPaths.contains($0) }
             let tracksToHide = currentVisibleTrackPaths.compactMap { $0 }.filter { !selectedTrackPaths.contains($0) }
             for trackPath in tracksToHide {
@@ -468,7 +442,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func loadRecentlyVisibleTracks() {
-        if allGpxList.isEmpty {
+        guard !allGpxList.isEmpty else {
             UserDefaults.standard.removeObject(forKey: previouslyVisibleTracksKey)
             recentlyVisibleGpxList.removeAll()
             return
@@ -481,6 +455,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
         
         recentlyVisibleGpxList = recentlyVisibleTracks
+    }
+    
+    private func shouldUseInactiveColorScheme() -> Bool {
+        return !isTracksAvailable || (isShowingVisibleTracks && !isVisibleTracksAvailable && recentlyVisibleGpxList.isEmpty)
     }
     
     private func getGpxForSelectedRow(at indexPath: IndexPath) -> OAGPX? {
@@ -498,6 +476,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
+    private func getSelectedTrackPaths() -> [String] {
+        selectedGpxTracks.map { $0.gpxFilePath }
+    }
+    
     private func updateSelectedRows() {
         guard let visibleGpxFilePaths = OAAppSettings.sharedManager()?.mapSettingVisibleGpx.get() else { return }
         let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
@@ -511,22 +493,22 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         for (index, gpx) in gpxListToShow.enumerated() {
             let indexPath = IndexPath(row: index, section: 0)
             if selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
-                self.tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
             } else {
-                self.tableView.deselectRow(at: indexPath, animated: false)
+                tableView.deselectRow(at: indexPath, animated: false)
             }
         }
     }
     
     private func hasSelectionChanged() -> Bool {
         let currentVisibleTrackPaths = visibleGpxList.map { $0.gpxFilePath }
-        let selectedTrackPaths = selectedGpxTracks.map { $0.gpxFilePath }
+        let selectedTrackPaths = getSelectedTrackPaths()
         return Set(currentVisibleTrackPaths) != Set(selectedTrackPaths)
     }
     
     private func areAllTracksSelected() -> Bool {
         let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
-        let selectedTrackPaths = Set(selectedGpxTracks.map { $0.gpxFilePath })
+        let selectedTrackPaths = Set(getSelectedTrackPaths())
         if isSearchActive {
             return gpxListToShow.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
         } else {
@@ -545,27 +527,23 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
         isSearchFilteringActive = false
         filteredGpxList.removeAll()
         updateNavbar()
-        guard let segmentedControl = segmentedControl else { return }
+        guard let segmentedControl else { return }
         segmentedControl.selectedSegmentIndex = previousSelectedSegmentIndex
         segmentChanged(segmentedControl)
         generateData()
-        self.tableView.reloadData()
+        tableView.reloadData()
         updateSelectedRows()
         updateBottomButtons()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         isSearchFilteringActive = !searchText.isEmpty
-        if searchText.isEmpty {
-            filteredGpxList = allGpxList
-        } else {
-            filteredGpxList = allGpxList.filter { gpx in
-                return gpx.getNiceTitle().localizedCaseInsensitiveContains(searchText)
-            }
+        filteredGpxList = searchText.isEmpty ? allGpxList : allGpxList.filter {
+            $0.getNiceTitle().localizedCaseInsensitiveContains(searchText)
         }
         
         generateData()
-        self.tableView.reloadData()
+        tableView.reloadData()
         updateSelectedRows()
         updateBottomButtons()
     }

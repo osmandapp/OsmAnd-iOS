@@ -45,7 +45,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         tableView.setEditing(true, animated: false)
         tableView.allowsMultipleSelectionDuringEditing = true
         navigationItem.hidesSearchBarWhenScrolling = true
-        self.definesPresentationContext = true
+        definesPresentationContext = true
         updateSelectedRows()
     }
     
@@ -519,7 +519,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
 extension MapSettingsGpxViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchController = nil
-        self.navigationItem.searchController = nil
+        navigationItem.searchController = nil
         isSearchActive = false
         isSearchFilteringActive = false
         filteredGpxList.removeAll()
@@ -551,16 +551,16 @@ extension MapSettingsGpxViewController: UIDocumentPickerDelegate {
         guard let url = urls.first, ["gpx", "kml", "kmz"].contains(url.pathExtension.lowercased()) else { return }
         let gpxListViewController = OAGPXListViewController()
         gpxListViewController.prepareProcessUrl(url, showAlerts: true, openGpxView: false) { success in
-            DispatchQueue.main.async {
-                if success {
+            if success {
+                DispatchQueue.main.async {
                     self.loadGpxTracks()
                     self.generateData()
                     self.tableView.reloadData()
                     self.updateSelectedRows()
                     self.updateBottomButtons()
-                } else {
-                    debugPrint("Error processing URL: \(url)")
                 }
+            } else {
+                debugPrint("Error processing URL: \(url)")
             }
         }
     }

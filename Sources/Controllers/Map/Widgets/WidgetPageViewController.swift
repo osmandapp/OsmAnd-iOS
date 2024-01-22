@@ -17,7 +17,7 @@ final class WidgetPageViewController: UIViewController {
     var isMultipleWidgetsInRow = false
     var simpleWidgetViews: [[OABaseWidgetView]] = []
     var stackView: UIStackView!
-            
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         registerObservers()
@@ -149,7 +149,7 @@ extension WidgetPageViewController {
         } else {
             widget.isSimpleLayout = false
             // NOTE: not isComplex widget has static height (waiting redesign)
-            widget.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            widget.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
         }
         widget.showBottomSeparator(false)
         widget.showRightSeparator(false)
@@ -162,6 +162,11 @@ extension WidgetPageViewController {
             if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
                 if let widget = firstWidget as? OATextInfoWidget {
                     widget.valueLabel?.textAlignment = .center
+                }
+                // NOTE: use adjustSize for Complex widget
+                if firstWidget.widgetType?.isComplex == true {
+                    firstWidget.adjustSize()
+                    firstWidget.heightConstraint?.constant = firstWidget.frame.height
                 }
                 firstWidget.isFullRow = true
             } else {

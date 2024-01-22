@@ -1627,7 +1627,7 @@
 "gpx_split_interval_none_descr" = "Dewis yr opsiwn hollti a ddymunir: ynôl amser neu bellter.";
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
 "analyze_on_map" = "Dadansoddi ar y map";
-"upload_to_openstreetmap" = "Uchwlwytho i OpenStreetMap";
+"upload_to_openstreetmap" = "Uwchlwytho i OpenStreetMap";
 "edit_track" = "Golygu trac";
 "duplicate_track" = "Dyblygu trac";
 "access_hint_enter_name" = "Rhowch enw";

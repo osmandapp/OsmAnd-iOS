@@ -26,7 +26,8 @@
 
 - (void) main
 {
-    if ([_app initializeCore] && [_app initialize])
+    //if ([_app initializeCore] && [_app initialize])
+    if (_app.initialized)
     {
         [self performUpdatesCheck];
     }

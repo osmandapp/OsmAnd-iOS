@@ -578,6 +578,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (void) adjustViewSize
 {
+    if (self.isSimpleLayout)
+        return;
     CGFloat leadingOffset = _imageView.hidden ? 4 : 31;
     _leadingTextAnchor.constant = leadingOffset;
     

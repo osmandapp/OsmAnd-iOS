@@ -107,7 +107,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {
-        return shouldUseInactiveColorScheme() ? .inactive : .graySimple
+        shouldUseInactiveColorScheme() ? .inactive : .graySimple
     }
     
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
@@ -177,7 +177,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
-        guard let indexPath = indexPath else { return nil }
+        guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
@@ -214,7 +214,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func onRowSelected(_ indexPath: IndexPath?) {
-        guard let indexPath = indexPath, let gpx = getGpxForSelectedRow(at: indexPath) else { return }
+        guard let indexPath, let gpx = getGpxForSelectedRow(at: indexPath) else { return }
         if !selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
             selectedGpxTracks.append(gpx)
         }
@@ -223,7 +223,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     override func onRowDeselected(_ indexPath: IndexPath?) {
-        guard let indexPath = indexPath, let gpx = getGpxForSelectedRow(at: indexPath) else { return }
+        guard let indexPath, let gpx = getGpxForSelectedRow(at: indexPath) else { return }
         if let index = selectedGpxTracks.firstIndex(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
             selectedGpxTracks.remove(at: index)
         }
@@ -298,7 +298,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             searchController?.searchBar.delegate = self
             searchController?.obscuresBackgroundDuringPresentation = false
             searchController?.searchBar.placeholder = localizedString("shared_string_search")
-            self.navigationItem.searchController = searchController
+            navigationItem.searchController = searchController
             searchController?.isActive = true
         }
         
@@ -393,10 +393,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 }
             }
             
-            recentlyVisibleGpxList.removeAll { track in
-                tracksToShow.contains(track.gpxFilePath)
-            }
-            
+            recentlyVisibleGpxList.removeAll { tracksToShow.contains($0.gpxFilePath) }
             let hiddenTracksPaths = recentlyVisibleGpxList.map { $0.gpxFilePath }
             UserDefaults.standard.set(hiddenTracksPaths, forKey: previouslyVisibleTracksKey)
             OAAppSettings.sharedManager()?.showGpx(tracksToShow)
@@ -414,11 +411,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         actionSheet.addAction(destructiveAction)
         actionSheet.addAction(cancelAction)
         if let popoverController = actionSheet.popoverPresentationController {
-            popoverController.barButtonItem = self.navigationItem.leftBarButtonItem
+            popoverController.barButtonItem = navigationItem.leftBarButtonItem
             popoverController.permittedArrowDirections = .any
         }
         
-        self.present(actionSheet, animated: true, completion: nil)
+        present(actionSheet, animated: true, completion: nil)
     }
     
     private func loadGpxTracks() {
@@ -458,7 +455,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func shouldUseInactiveColorScheme() -> Bool {
-        return !isTracksAvailable || (isShowingVisibleTracks && !isVisibleTracksAvailable && recentlyVisibleGpxList.isEmpty)
+        !isTracksAvailable || (isShowingVisibleTracks && !isVisibleTracksAvailable && recentlyVisibleGpxList.isEmpty)
     }
     
     private func getGpxForSelectedRow(at indexPath: IndexPath) -> OAGPX? {

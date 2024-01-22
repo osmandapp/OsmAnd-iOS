@@ -63,6 +63,23 @@
     return [[CLLocation alloc] initWithLatitude:prlat longitude:prlon];
 }
 
++ (double) getProjectionCoeff:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation
+{
+    double lat = location.coordinate.latitude;
+    double lon = location.coordinate.longitude;
+    double fromLat = fromLocation.coordinate.latitude;
+    double fromLon = fromLocation.coordinate.longitude;
+    double toLat = toLocation.coordinate.latitude;
+    double toLon = toLocation.coordinate.longitude;
+    
+    double mDist = (fromLat - toLat) * (fromLat - toLat) + (fromLon - toLon) * (fromLon - toLon);
+    double projection = [self.class scalarMultiplication:fromLat yA:fromLon xB:toLat yB:toLon xC:lat yC:lon];
+    if (projection < 0)
+        return 0;
+    else 
+        return projection >= mDist ? 1 : projection / mDist;
+}
+
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation
 {
     return [[self.class getProjection:location fromLocation:fromLocation toLocation:toLocation] distanceFromLocation:location];
@@ -78,15 +95,30 @@
     return sa < 0;
 }
 
-+ (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing
++ (CLLocationDirection) normalizeDegrees360:(CLLocationDirection)bearing
 {
-    CLLocationDirection b = bearing;
-    if (b < 0)
-        b += 360;
-    else if (b > 360)
-        b -= 360;
+    CLLocationDirection degrees = bearing;
+    if (degrees < 0)
+        degrees += 360;
+    else if (degrees > 360)
+        degrees -= 360;
     
-    return b;
+    return degrees;
+}
+
++ (double) unifyRotationDiff:(double)rotate targetRotate:(double)targetRotate
+{
+    double d;
+    for(d = targetRotate - rotate; d >= 180.0; d -= 360.0) 
+    {
+    }
+    
+    while(d < -180.0) 
+    {
+        d += 360.0;
+    }
+    
+    return d;
 }
 
 + (CLLocation *) calculateMidPoint:(CLLocation *) s1 s2:(CLLocation *) s2

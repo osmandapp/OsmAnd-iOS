@@ -443,16 +443,32 @@ static BOOL _isDeviatedFromRoute = false;
                 // but you have not yet turned (could be checked bearing)
                 if (currentLocation.course >= 0 || _lastFixedLocation)
                 {
-                    float bearingToRoute = [currentLocation bearingTo:routeNodes[currentRoute]];
-                    float bearingRouteNext = [routeNodes[newCurrentRoute] bearingTo:routeNodes[newCurrentRoute + 1]];
-                    float bearingMotion = currentLocation.course >= 0 ? currentLocation.course : [_lastFixedLocation bearingTo:currentLocation];
-                    double diff = ABS(degreesDiff(bearingMotion, bearingToRoute));
-                    double diffToNext = ABS(degreesDiff(bearingMotion, bearingRouteNext));
-                    if (diff > diffToNext)
+//                    float bearingToRoute = [currentLocation bearingTo:routeNodes[currentRoute]];
+//                    float bearingRouteNext = [routeNodes[newCurrentRoute] bearingTo:routeNodes[newCurrentRoute + 1]];
+//                    float bearingMotion = currentLocation.course >= 0 ? currentLocation.course : [_lastFixedLocation bearingTo:currentLocation];
+//                    double diff = ABS(degreesDiff(bearingMotion, bearingToRoute));
+//                    double diffToNext = ABS(degreesDiff(bearingMotion, bearingRouteNext));
+//                    if (diff > diffToNext)
+//                    {
+//                        NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
+//                        processed = true;
+//                    }
+                    
+                    if (currentRoute > 0)
                     {
-                        NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
-                        processed = true;
+                        
+                        CLLocation *previousRouteLocation = routeNodes[currentRoute - 1];
+                        CLLocation *currentRouteLocation = routeNodes[currentRoute];
+                        _lastProjection = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
+                        if (_settings.snapToRoad.get && currentRoute + 1 < routeNodes.count)
+                        {
+                            CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
+                            _lastProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:_lastProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
+                            
+                            processed = true;
+                        }
                     }
+
                 }
             }
         }
@@ -708,7 +724,7 @@ static BOOL _isDeviatedFromRoute = false;
                 CLLocation *nextLocation = routeNodes[currentRoute];
                 CLLocation *project = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
                 // we need to update bearing too
-                float bearingTo = [OAMapUtils adjustBearing:[project bearingTo:nextLocation]];
+                float bearingTo = [OAMapUtils normalizeDegrees360:[project bearingTo:nextLocation]];
                 locationProjection = [[CLLocation alloc] initWithCoordinate:project.coordinate altitude:currentLocation.altitude horizontalAccuracy:0 verticalAccuracy:currentLocation.verticalAccuracy course:bearingTo speed:currentLocation.speed timestamp:[NSDate date]];
             }
         }
@@ -1051,6 +1067,12 @@ static BOOL _isDeviatedFromRoute = false;
         return POSITION_TOLERANCE / 2 + accuracy;
     }
     return POSITION_TOLERANCE;
+}
+
+- (double) getMaxAllowedProjectDist:(CLLocation *)location
+{
+    double posTolerance = [self.class getPosTolerance:location.horizontalAccuracy];
+    return _mode && _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
 }
 
 @end

@@ -11,8 +11,10 @@
 #import "OAApplicationMode.h"
 #import "OAMapUtils.h"
 #import "OALocationServices.h"
+#import "OARoutingHelper.h"
 
 #define CACHE_RADIUS 100000
+#define MAX_BEARING_DEVIATION 45
 
 @implementation OARoutingHelperUtils
 
@@ -113,6 +115,35 @@
     }
     //wrongMovementDetected = 0;
     return false;
+}
+
++ (CLLocation *) approximateBearingIfNeeded:(OARoutingHelper *)helper projection:(CLLocation *)projection location:(CLLocation *)location previousRouteLocation:(CLLocation *)previousRouteLocation currentRouteLocation:(CLLocation *)currentRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation
+{
+    double maxDist = [helper getMaxAllowedProjectDist:currentRouteLocation];
+    if ([location distanceFromLocation:projection] >= maxDist)
+        return projection;
+    
+    double projectionOffsetN = [OAMapUtils getProjectionCoeff:location fromLocation:previousRouteLocation toLocation:currentRouteLocation];
+    double currentSegmentBearing = [OAMapUtils normalizeDegrees360:[previousRouteLocation bearingTo:currentRouteLocation]];
+    double nextSegmentBearing = [OAMapUtils normalizeDegrees360:[currentRouteLocation bearingTo:nextRouteLocation]];
+    double approximatedBearing = currentSegmentBearing * (1.0 - projectionOffsetN) + nextSegmentBearing * projectionOffsetN;
+    
+    BOOL setApproximated;
+    if (location.course != 0)
+    {
+        double rotationDiff = [OAMapUtils unifyRotationDiff:location.course targetRotate:approximatedBearing];
+        setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;
+    }
+    else
+    {
+        setApproximated = YES;
+    }
+    
+    if (setApproximated)
+    {
+        return [[CLLocation alloc] initWithCoordinate:projection.coordinate altitude:projection.altitude horizontalAccuracy:projection.horizontalAccuracy verticalAccuracy:projection.verticalAccuracy course:approximatedBearing speed:projection.speed timestamp:projection.timestamp];
+    }
+    return projection;
 }
 
 @end

@@ -769,6 +769,10 @@
                 CLLocation *floc = [[CLLocation alloc] initWithLatitude:seg->getStart().lat longitude:seg->getStart().lon];
                 [self addWalkRoute:prev s2:seg start:p end:floc sync:sync];
                 p = [[CLLocation alloc] initWithLatitude:seg->getEnd().lat longitude:seg->getEnd().lon];
+//                p = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(seg->getEnd().lat, seg->getEnd().lon) altitude:0 horizontalAccuracy:0 verticalAccuracy:0 course:90 courseAccuracy:0 speed:0 speedAccuracy:0 timestamp:NSDate.now];
+                
+                
+            
                 prev = seg;
             }
             [self addWalkRoute:prev s2:nullptr start:p end:end sync:sync];
@@ -844,7 +848,9 @@
         CLLocationCoordinate2D coord = self.mapViewController.mapLayers.myPositionLayer.getActiveMarkerLocation;
         if (!initState && CLLocationCoordinate2DIsValid(coord))
         {
-            CLLocation *currentLocation = [[CLLocation alloc] initWithCoordinate:coord altitude:lastFixedLocation.altitude horizontalAccuracy:lastFixedLocation.horizontalAccuracy verticalAccuracy:lastFixedLocation.verticalAccuracy course:lastFixedLocation.course speed:lastFixedLocation.speed timestamp:lastFixedLocation.timestamp];
+//            CLLocation *currentLocation = [[CLLocation alloc] initWithCoordinate:coord altitude:lastFixedLocation.altitude horizontalAccuracy:lastFixedLocation.horizontalAccuracy verticalAccuracy:lastFixedLocation.verticalAccuracy course:lastFixedLocation.course speed:lastFixedLocation.speed timestamp:lastFixedLocation.timestamp];
+            
+            CLLocation *currentLocation = [[CLLocation alloc] initWithCoordinate:coord altitude:lastFixedLocation.altitude horizontalAccuracy:lastFixedLocation.horizontalAccuracy verticalAccuracy:lastFixedLocation.verticalAccuracy course:-90 speed:lastFixedLocation.speed timestamp:lastFixedLocation.timestamp];
 
             double posTolerance = [OARoutingHelper getPosTolerance:currentLocation.horizontalAccuracy];
             currentRoute = MIN(currentRoute, [_routingHelper calculateCurrentRoute:currentLocation posTolerance:posTolerance routeNodes:locations currentRoute:_currentAnimatedRoute updateAndNotify:NO]);

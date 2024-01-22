@@ -30,7 +30,6 @@
 #import "Localization.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAReverseGeocoder.h"
-#import "OADayNightHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kButtonWidth 50.0

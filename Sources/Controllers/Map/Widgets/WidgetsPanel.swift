@@ -131,6 +131,29 @@ class WidgetsPanel: NSObject, NSCopying {
         fatalError("Unsupported panel")
     }
 
+    static func getPagedWidgetIdsWithPages(_ pages: [[String]]) -> [[String]] {
+       var newPages: [[String]] = []
+       var currentPage: [String] = []
+
+       for page in pages {
+           for id in page {
+               if WidgetType.isComplexWidget(id) {
+                   if !currentPage.isEmpty {
+                       newPages.append(currentPage)
+                       currentPage = []
+                   }
+                   newPages.append([id])
+               } else {
+                   currentPage.append(id)
+               }
+           }
+           if !currentPage.isEmpty {
+               newPages.append(currentPage)
+           }
+       }
+       return newPages
+    }
+
     func copy(with zone: NSZone? = nil) -> Any {
         self
     }

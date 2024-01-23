@@ -157,7 +157,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
     }
 
-    private func showAlertForComplexWidget(_ widgetTitle: String) {
+    private func showToastForComplexWidget(_ widgetTitle: String) {
         OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: self.view)
     }
     
@@ -171,12 +171,12 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         if widgetPanel.isPanelVertical {
             if WidgetType.isComplexWidget(newWidget.key) {
                 createNewSection = true
-                showAlertForComplexWidget(newWidget.getTitle())
+                showToastForComplexWidget(newWidget.getTitle())
             } else if lastSectionData.rowCount() > 1 {
                 let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
                 if createNewSection, let lastWidget {
-                    showAlertForComplexWidget(lastWidget.getTitle())
+                    showToastForComplexWidget(lastWidget.getTitle())
                 }
             }
         }
@@ -343,7 +343,7 @@ extension WidgetsListViewController {
         tableView.reloadData()
         updateBottomButtons()
         if let editingComplexWidget {
-            showAlertForComplexWidget(editingComplexWidget.getTitle())
+            showToastForComplexWidget(editingComplexWidget.getTitle())
             self.editingComplexWidget = nil
         }
     }

@@ -52,7 +52,7 @@ class WidgetType: NSObject {
         self.special = special
     }
     
-    public static func isComplexWidget(_ widgetId: String) -> Bool {
+    static func isComplexWidget(_ widgetId: String) -> Bool {
         Self.complexWidgetIds.contains(widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId.substring(to: widgetId.find(MapWidgetInfo.DELIMITER)) : widgetId)
     }
 

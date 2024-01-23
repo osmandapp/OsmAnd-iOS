@@ -25,8 +25,7 @@ class SimpleWidgetInfo: MapWidgetInfo {
     }
 
     override func getUpdatedPanel() -> WidgetsPanel {
-        let widgetType = getWidgetType()
-        if let widgetType = widgetType {
+        if let widgetType = getWidgetType() {
             return widgetType.getPanel(key, appMode: OAAppSettings.sharedManager().applicationMode.get())
         }
         return widgetPanel

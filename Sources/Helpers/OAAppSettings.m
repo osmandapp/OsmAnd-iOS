@@ -2102,8 +2102,7 @@
     if (value)
     {
         NSArray<NSArray<NSString *> *> *values = (NSArray<NSArray<NSString *> *> *) value;
-        if (values.count > 0)
-        if (self.key == [OAAppSettings sharedManager].topWidgetPanelOrder.key || self.key == [OAAppSettings sharedManager].bottomWidgetPanelOrder.key)
+        if (values.count > 0 && (self.key == [OAAppSettings sharedManager].topWidgetPanelOrder.key || self.key == [OAAppSettings sharedManager].bottomWidgetPanelOrder.key))
             return [self getPagedWidgetIdsWithPages:values];
         return values;
     }

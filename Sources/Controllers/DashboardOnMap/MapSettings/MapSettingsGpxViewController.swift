@@ -282,62 +282,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    @objc private func segmentChanged(_ control: UISegmentedControl) {
-        isShowingVisibleTracks = control.selectedSegmentIndex == 0
-        generateData()
-        tableView.reloadData()
-        if isTracksAvailable {
-            updateSelectedRows()
-            updateBottomButtons()
-        }
-    }
-    
-    @objc private func onSearchButtonClicked() {
-        if searchController == nil {
-            searchController = UISearchController(searchResultsController: nil)
-            searchController?.searchBar.delegate = self
-            searchController?.obscuresBackgroundDuringPresentation = false
-            searchController?.searchBar.placeholder = localizedString("shared_string_search")
-            navigationItem.searchController = searchController
-            searchController?.isActive = true
-        }
-        
-        isSearchActive = true
-        isShowingVisibleTracks = false
-        previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
-        filteredGpxList = allGpxList
-        DispatchQueue.main.async {
-            self.updateNavbar()
-            self.updateBottomButtons()
-            self.searchController?.searchBar.becomeFirstResponder()
-            self.generateData()
-            self.tableView.reloadData()
-            self.updateSelectedRows()
-        }
-    }
-    
-    @objc private func onImportButtonClicked() {
-        let contentTypes: [UTType] = [UTType(filenameExtension: "gpx") ?? .item,
-                                      UTType(filenameExtension: "kmz") ?? .item,
-                                      UTType(filenameExtension: "kml") ?? .item]
-        let documentPickerVC = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes, asCopy: true)
-        documentPickerVC.allowsMultipleSelection = false
-        documentPickerVC.delegate = self
-        present(documentPickerVC, animated: true, completion: nil)
-    }
-    
-    @objc private func onCellButtonClicked(sender: UIButton) {
-        let indexPath: IndexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
-        let item: OATableRowData = tableData.item(for: indexPath)
-        if item.key == "noTracks" {
-            onImportButtonClicked()
-        } else {
-            guard let segmentedControl = segmentedControl else { return }
-            segmentedControl.selectedSegmentIndex = 1
-            segmentChanged(segmentedControl)
-        }
-    }
-    
     private func handleSelectDeselectAllTracks() {
         guard isTracksAvailable else { return }
         let isSelectAll = !areAllTracksSelected()
@@ -512,6 +456,62 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
             let allTracks = gpxListToShow + recentlyVisibleTracks
             return allTracks.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+        }
+    }
+    
+    @objc private func segmentChanged(_ control: UISegmentedControl) {
+        isShowingVisibleTracks = control.selectedSegmentIndex == 0
+        generateData()
+        tableView.reloadData()
+        if isTracksAvailable {
+            updateSelectedRows()
+            updateBottomButtons()
+        }
+    }
+    
+    @objc private func onSearchButtonClicked() {
+        if searchController == nil {
+            searchController = UISearchController(searchResultsController: nil)
+            searchController?.searchBar.delegate = self
+            searchController?.obscuresBackgroundDuringPresentation = false
+            searchController?.searchBar.placeholder = localizedString("shared_string_search")
+            navigationItem.searchController = searchController
+            searchController?.isActive = true
+        }
+        
+        isSearchActive = true
+        isShowingVisibleTracks = false
+        previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
+        filteredGpxList = allGpxList
+        DispatchQueue.main.async {
+            self.updateNavbar()
+            self.updateBottomButtons()
+            self.searchController?.searchBar.becomeFirstResponder()
+            self.generateData()
+            self.tableView.reloadData()
+            self.updateSelectedRows()
+        }
+    }
+    
+    @objc private func onImportButtonClicked() {
+        let contentTypes: [UTType] = [UTType(filenameExtension: "gpx") ?? .item,
+                                      UTType(filenameExtension: "kmz") ?? .item,
+                                      UTType(filenameExtension: "kml") ?? .item]
+        let documentPickerVC = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes, asCopy: true)
+        documentPickerVC.allowsMultipleSelection = false
+        documentPickerVC.delegate = self
+        present(documentPickerVC, animated: true, completion: nil)
+    }
+    
+    @objc private func onCellButtonClicked(sender: UIButton) {
+        let indexPath: IndexPath = IndexPath(row: sender.tag & 0x3FF, section: sender.tag >> 10)
+        let item: OATableRowData = tableData.item(for: indexPath)
+        if item.key == "noTracks" {
+            onImportButtonClicked()
+        } else {
+            guard let segmentedControl = segmentedControl else { return }
+            segmentedControl.selectedSegmentIndex = 1
+            segmentChanged(segmentedControl)
         }
     }
 }

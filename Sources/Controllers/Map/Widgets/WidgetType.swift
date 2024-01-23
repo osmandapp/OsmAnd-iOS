@@ -12,13 +12,13 @@ import Foundation
 @objcMembers
 class WidgetType: NSObject {
 
-    public static let complexWidgetIds: [String] = [WidgetType.elevationProfile.id,
-                                                    WidgetType.coordinatesMapCenter.id,
-                                                    WidgetType.coordinatesCurrentLocation.id,
-                                                    WidgetType.streetName.id,
-                                                    WidgetType.markersTopBar.id,
-                                                    WidgetType.lanes.id]
-    
+    static let complexWidgetIds: [String] = [WidgetType.elevationProfile.id,
+                                             WidgetType.coordinatesMapCenter.id,
+                                             WidgetType.coordinatesCurrentLocation.id,
+                                             WidgetType.streetName.id,
+                                             WidgetType.markersTopBar.id,
+                                             WidgetType.lanes.id]
+
     let ordinal: Int
     let id: String
     let title: String
@@ -29,6 +29,15 @@ class WidgetType: NSObject {
     let group: WidgetGroup?
     let defaultPanel: WidgetsPanel
     let special: Bool
+
+    var isAllowed: Bool {
+        if self == .altitudeMapCenter {
+            if let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
+                return plugin.is3DMapsEnabled()
+            }
+        }
+        return true;
+    }
 
     private init(ordinal: Int, id: String, title: String, descr: String, iconName: String, disabledIconName: String? = nil, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
         self.ordinal = ordinal
@@ -43,17 +52,8 @@ class WidgetType: NSObject {
         self.special = special
     }
     
-    public static func isComplexWidget(_ widgetId: String) -> Bool {
-        return Self.complexWidgetIds.contains(widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId.substring(to: widgetId.find(MapWidgetInfo.DELIMITER)) : widgetId)
-    }
-
-    public func isAllowed() -> Bool {
-        if self == .altitudeMapCenter {
-            if let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
-                return plugin.is3DMapsEnabled()
-            }
-        }
-        return true;
+    static func isComplexWidget(_ widgetId: String) -> Bool {
+        Self.complexWidgetIds.contains(widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId.substring(to: widgetId.find(MapWidgetInfo.DELIMITER)) : widgetId)
     }
 
     func getGroup() -> WidgetGroup? {
@@ -146,16 +146,12 @@ class WidgetType: NSObject {
             }
         }
 
-        for panel in setPanels {
-            if panel.contains(widgetId: widgetId, appMode: appMode) {
-                return panel
-            }
+        for panel in setPanels where panel.contains(widgetId: widgetId, appMode: appMode) {
+            return panel
         }
 
-        for panel in unsetPanels {
-            if panel.contains(widgetId: widgetId, appMode: appMode) {
-                return panel
-            }
+        for panel in unsetPanels where panel.contains(widgetId: widgetId, appMode: appMode) {
+            return panel
         }
 
         return nil

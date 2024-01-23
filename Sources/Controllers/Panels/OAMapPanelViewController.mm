@@ -456,6 +456,8 @@ typedef enum
         return UIStatusBarStyleDefault;
     else if (_scrollableHudViewController)
         return _scrollableHudViewController.preferredStatusBarStyle;
+    else if ([self isRouteInfoVisible] && [_routeInfoView isFullScreen])
+        return [[ThemeManager shared] isLightTheme] ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
 
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;

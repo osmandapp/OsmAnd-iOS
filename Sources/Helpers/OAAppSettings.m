@@ -2102,41 +2102,11 @@
     if (value)
     {
         NSArray<NSArray<NSString *> *> *values = (NSArray<NSArray<NSString *> *> *) value;
-        if (values.count > 0)
-        if (self.key == [OAAppSettings sharedManager].topWidgetPanelOrder.key || self.key == [OAAppSettings sharedManager].bottomWidgetPanelOrder.key)
-            return [self getPagedWidgetIdsWithPages:values];
+        if (values.count > 0 && (self.key == [OAAppSettings sharedManager].topWidgetPanelOrder.key || self.key == [OAAppSettings sharedManager].bottomWidgetPanelOrder.key))
+            return [OAWidgetsPanel getPagedWidgetIdsWithPages:values];
         return values;
     }
     return self.defValue;
-}
-
-- (NSArray<NSArray<NSString *> *> *)getPagedWidgetIdsWithPages:(NSArray<NSArray<NSString *> *> *)pages
-{
-    NSMutableArray<NSMutableArray<NSString *> *> *newPages = [NSMutableArray array];
-    NSMutableArray<NSString *> *currentPage = [NSMutableArray array];
-    
-    for (NSArray<NSString *> *page in pages)
-    {
-        for (NSString *id in page)
-        {
-            if ([OAWidgetType isComplexWidget:id])
-            {
-                if (currentPage.count > 0)
-                {
-                    [newPages addObject:currentPage];
-                    currentPage = [NSMutableArray array];
-                }
-                [newPages addObject:[NSMutableArray arrayWithObject:id]];
-            }
-            else
-            {
-                [currentPage addObject:id];
-            }
-        }
-        if (currentPage.count > 0)
-            [newPages addObject:currentPage];
-    }
-    return newPages;
 }
 
 - (void) set:(NSArray<NSArray<NSString *> *> *)arr

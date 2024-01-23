@@ -156,6 +156,10 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             editMode = true
         }
     }
+
+    private func showToastForComplexWidget(_ widgetTitle: String) {
+        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: self.view)
+    }
     
     private func updateWidgetStyleForRow(_ newWidget: MapWidgetInfo, _ sectionData: OATableSectionData) {
         let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
@@ -190,15 +194,15 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
         var createNewSection: Bool = false
-        if widgetPanel.isPanelVertical() {
+        if widgetPanel.isPanelVertical {
             if WidgetType.isComplexWidget(newWidget.key) {
                 createNewSection = true
-                OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [newWidget.getTitle()]), details: nil, duration: 4, in: self.view)
+                showToastForComplexWidget(newWidget.getTitle())
             } else if lastSectionData.rowCount() > 1 {
                 let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
                 if createNewSection, let lastWidget {
-                    OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [lastWidget.getTitle()]), details: nil, duration: 4, in: self.view)
+                    showToastForComplexWidget(lastWidget.getTitle())
                 }
             }
         }
@@ -284,7 +288,7 @@ extension WidgetsListViewController {
             }
             if let cell {
                 let isPageCell = item.key == kPageKey
-                cell.titleLabel.text = isPageCell ? String(format: localizedString(widgetPanel.isPanelVertical() ? "shared_string_row_number" : "shared_string_page_number"),
+                cell.titleLabel.text = isPageCell ? String(format: localizedString(widgetPanel.isPanelVertical ? "shared_string_row_number" : "shared_string_page_number"),
                                                            item.integer(forKey: kPageNumberKey) + 1)
                                                 : item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
@@ -366,7 +370,7 @@ extension WidgetsListViewController {
         tableView.reloadData()
         updateBottomButtons()
         if let editingComplexWidget {
-            OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [editingComplexWidget.getTitle()]), details: nil, duration: 4, in: self.view)
+            showToastForComplexWidget(editingComplexWidget.getTitle())
             self.editingComplexWidget = nil
         }
     }
@@ -446,7 +450,7 @@ extension WidgetsListViewController {
             row.title = localizedString("no_widgets_here_yet")
             row.descr = localizedString("no_widgets_descr")
             row.iconName = iconName
-            row.iconTintColor = UIColor.iconColorDefault
+            row.iconTintColor = .iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
             let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
@@ -582,7 +586,7 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel])!
-        return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical() ? "add_row" : "add_page") : localizedString("shared_string_edit")
+        return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {

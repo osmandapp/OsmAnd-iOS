@@ -395,6 +395,20 @@ extension WidgetsListViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = tableData.item(for: indexPath)
+            if item.key == kPageKey {
+                let prevSourceItem = tableData.item(for: IndexPath(row: indexPath.row - 1, section: indexPath.section))
+                if let mapWidgetInfo = prevSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                    showToastForComplexWidget(mapWidgetInfo.getTitle())
+                    return
+                }
+                if tableData.rowCount(UInt(indexPath.section)) > indexPath.row + 1 {
+                    let nextSourceItem = tableData.item(for: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+                    if let mapWidgetInfo = nextSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                        showToastForComplexWidget(mapWidgetInfo.getTitle())
+                        return
+                    }
+                }
+            }
             tableData.removeRow(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .automatic)
             let isPageCell = item.key == kPageKey
@@ -443,7 +457,15 @@ extension WidgetsListViewController {
         }
 
         if proposedDestinationIndexPath.row == 0 && proposedDestinationIndexPath.section == 0 {
-            return IndexPath(row: 1, section: 0)
+            var indexPath = IndexPath(row: 1, section: 0)
+            if tableData.rowCount(0) > 1 {
+                let destinationItem = tableData.item(for: indexPath)
+                if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key), sourceItem.key != kPageKey {
+                    editingComplexWidget = mapWidgetInfo
+                    return sourceIndexPath
+                }
+            }
+            return indexPath
         }
         return proposedDestinationIndexPath
     }

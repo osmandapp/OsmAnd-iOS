@@ -35,6 +35,10 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
         return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getTitle()
     }
     
+    override func getWidgetTitle() -> String? {
+        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getWidgetTitle()
+    }
+    
     func getPrefValue() -> String {
         TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).title
     }
@@ -98,12 +102,6 @@ class TimeToNavigationPointState: NSObject {
         self.intermediate = intermediate
     }
 
-    func getTitle() -> String {
-        intermediate
-            ? localizedString("map_widget_time_to_intermediate")
-            : localizedString("map_widget_time_to_destination")
-    }
-
     static func getState(intermediate: Bool, arrivalOtherwiseTimeToGo: Bool) -> TimeToNavigationPointState {
         if intermediate {
             return arrivalOtherwiseTimeToGo ? intermediateArrivalTime : intermediateTimeToGo
@@ -111,6 +109,16 @@ class TimeToNavigationPointState: NSObject {
             return arrivalOtherwiseTimeToGo ? destinationArrivalTime : destinationTimeToGo
         }
     }
-
+    
+    func getTitle() -> String {
+        intermediate
+            ? localizedString("map_widget_time_to_intermediate")
+            : localizedString("map_widget_time_to_destination")
+    }
+    
+    func getWidgetTitle() -> String {
+        intermediate
+            ? localizedString("rendering_attr_smoothness_intermediate_name")
+            : localizedString("route_descr_destination")
+    }
 }
-

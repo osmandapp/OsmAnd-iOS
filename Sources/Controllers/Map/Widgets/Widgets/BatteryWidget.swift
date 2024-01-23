@@ -8,6 +8,11 @@
 
 import Foundation
 
+class SimpleMegaWidget: OATextInfoWidget {
+    
+}
+
+
 @objc(OABatteryWidget)
 @objcMembers
 class BatteryWidget: OASimpleWidget {

@@ -136,7 +136,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     }
     
     private func updateContentTitle() {
-        let title = getCurrentState().getTitle()
+        let title = getCurrentState().getWidgetTitle()
         setContentTitle(title)
     }
     

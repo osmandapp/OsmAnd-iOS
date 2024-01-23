@@ -157,6 +157,32 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
     }
     
+    private func updateWidgetStyleForRow(_ newWidget: MapWidgetInfo, _ sectionData: OATableSectionData) {
+        let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
+        if sectionData.rowCount() > 1 {
+            // first item (index 0) already kPageKey
+            let firstWidgetInRow = sectionData.getRow(1)
+            if let simpleWidget = (firstWidgetInRow.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
+                if simpleWidget.widgetSizeStyle != addWidgetSizeStyle {
+                    // apply the current style of widget for all row
+                    if addWidgetSizeStyle != .medium {
+                        for row in 0..<sectionData.rowCount() {
+                            let rowData = sectionData.getRow(row)
+                            if rowData.key != kPageKey {
+                                if let widgetInRow = (rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
+                                    widgetInRow.sizeStylePref.set(Int32(addWidgetSizeStyle.rawValue), mode: selectedAppMode)
+                                }
+                            }
+                        }
+                    } else {
+                        // apply row style for added widget
+                        (newWidget.widget as? OATextInfoWidget)?.sizeStylePref.set(Int32(simpleWidget.widgetSizeStyle.rawValue), mode: selectedAppMode)
+                    }
+                }
+            }
+        }
+    }
+    
     @objc private func onWidgetAdded(notification: NSNotification) {
         guard let newWidget = notification.object as? MapWidgetInfo else {
             return
@@ -169,7 +195,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
                 createNewSection = true
                 OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [newWidget.getTitle()]), details: nil, duration: 4, in: self.view)
             } else if lastSectionData.rowCount() > 1 {
-                let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo ?? nil
+                let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
                 if createNewSection, let lastWidget {
                     OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [lastWidget.getTitle()]), details: nil, duration: 4, in: self.view)
@@ -179,6 +205,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         if createNewSection {
             createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
         } else {
+            updateWidgetStyleForRow(newWidget, lastSectionData)
             createWidgetItem(newWidget, lastSectionData)
         }
         if editMode {

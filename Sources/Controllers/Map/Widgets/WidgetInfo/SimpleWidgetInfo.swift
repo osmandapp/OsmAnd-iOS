@@ -21,7 +21,7 @@ class SimpleWidgetInfo: MapWidgetInfo {
          widgetPanel: WidgetsPanel) {
         super.init(key: key, widget: simpleWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel)
 
-        simpleWidget.setContentTitle(getMessage())
+        simpleWidget.setContentTitle(getWidgetTitle())
     }
 
     override func getUpdatedPanel() -> WidgetsPanel {

@@ -16,9 +16,9 @@
 @class OAGPX;
 @class OAWptPt;
 
-@protocol OASavingTrackHelperDelegate <NSObject>
+@protocol OAUpdatableDelegate <NSObject>
 
-- (void) onSharingScreenClosed;
+- (void) onNeedUpdateHostData;
 
 @end
 
@@ -57,6 +57,9 @@
                  openTrack:(BOOL)openTrack
                        gpx:(OAGPX *)gpx
                         doc:(OAGPXDocument *)doc;
+
+- (void)renameTrack:(OAGPX *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
+- (void)renameTrack:(OAGPX *)gpx doc:(OAGPXMutableDocument *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
 
 - (BOOL) saveIfNeeded;
 

@@ -34,11 +34,4 @@
                   simplifiedTrack:(BOOL)simplifiedTrack
                         duplicate:(BOOL)duplicate;
 
-- (instancetype) initWithFileName:(NSString *)fileName
-                         filePath:(NSString *)filePath
-                        showOnMap:(BOOL)showOnMap
-                  simplifiedTrack:(BOOL)simplifiedTrack
-                        duplicate:(BOOL)duplicate
-                   dissmissOnSave:(BOOL)dissmissOnSave;
-
 @end

@@ -611,75 +611,6 @@
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void)renameTrack:(NSString *)newName
-{
-    if (newName.length > 0)
-    {
-        NSString *oldFilePath = self.gpx.gpxFilePath;
-        NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:oldFilePath];
-        NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
-        NSString *newFilePath = [[self.gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
-        NSString *newPath = [_app.gpxPath stringByAppendingPathComponent:newFilePath];
-        if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
-        {
-            self.gpx.gpxTitle = newName;
-            self.gpx.gpxFileName = newFileName;
-            self.gpx.gpxFilePath = newFilePath;
-            [[OAGPXDatabase sharedDb] save];
-
-            OAMetadata *metadata;
-            if (self.doc.metadata)
-            {
-                metadata = self.doc.metadata;
-            }
-            else
-            {
-                metadata = [[OAMetadata alloc] init];
-                long time = 0;
-                if (self.doc.points.count > 0)
-                    time = self.doc.points[0].time;
-                if (self.doc.tracks.count > 0)
-                {
-                    OATrack *track = self.doc.tracks[0];
-                    track.name = newName;
-                    if (track.segments.count > 0)
-                    {
-                        OATrkSegment *seg = track.segments[0];
-                        if (seg.points.count > 0)
-                         {
-                            OAWptPt *p = seg.points[0];
-                            if (time > p.time)
-                                time = p.time;
-                        }
-                    }
-                }
-                metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
-            }
-            metadata.name = newFileName;
-
-            if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
-                [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
-
-            BOOL saveFailed = ![self.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
-            self.doc.path = newPath;
-            self.doc.metadata = metadata;
-
-            if (saveFailed)
-                [self.doc saveTo:newPath];
-
-            [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
-        }
-        else
-        {
-            [self showAlertWithText:OALocalizedString(@"gpx_already_exsists")];
-        }
-    }
-    else
-    {
-        [self showAlertWithText:OALocalizedString(@"empty_filename")];
-    }
-}
-
 - (OATrackMenuViewControllerState *)getCurrentState
 {
     OATrackMenuViewControllerState *state = _reopeningState ? _reopeningState : [[OATrackMenuViewControllerState alloc] init];
@@ -1728,7 +1659,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction *_Nonnull action) {
-                                                [weakSelf renameTrack:alert.textFields[0].text];
+        [OASavingTrackHelper.sharedInstance renameTrack:weakSelf.gpx doc:weakSelf.doc newName:alert.textFields[0].text hostVC:weakSelf];
                                             }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {

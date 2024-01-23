@@ -82,7 +82,7 @@
     BOOL _isExportingCurrentTrack;
     UIDocumentInteractionController *_exportController;
     UIViewController *_exportingHostVC;
-    id<OASavingTrackHelperDelegate> _exportingHostVCDelegate;
+    id<OAUpdatableDelegate> _exportingHostVCDelegate;
 }
 
 @synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackIndex;
@@ -1234,6 +1234,82 @@
     }
 }
 
+- (void)renameTrack:(OAGPX *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC
+{
+    NSString *docPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:gpx.gpxFilePath];
+    OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] initWithGpxFile:docPath];
+    [self renameTrack:gpx doc:doc newName:newName hostVC:hostVC];
+}
+
+- (void)renameTrack:(OAGPX *)gpx doc:(OAGPXMutableDocument *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC
+{
+    if (newName.length > 0)
+    {
+        NSString *oldFilePath = gpx.gpxFilePath;
+        NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:oldFilePath];
+        NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
+        NSString *newFilePath = [[gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
+        NSString *newPath = [_app.gpxPath stringByAppendingPathComponent:newFilePath];
+        if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
+        {
+            gpx.gpxTitle = newName;
+            gpx.gpxFileName = newFileName;
+            gpx.gpxFilePath = newFilePath;
+            [[OAGPXDatabase sharedDb] save];
+
+            OAMetadata *metadata;
+            if (doc.metadata)
+            {
+                metadata = doc.metadata;
+            }
+            else
+            {
+                metadata = [[OAMetadata alloc] init];
+                long time = 0;
+                if (doc.points.count > 0)
+                    time = doc.points[0].time;
+                if (doc.tracks.count > 0)
+                {
+                    OATrack *track = doc.tracks[0];
+                    track.name = newName;
+                    if (track.segments.count > 0)
+                    {
+                        OATrkSegment *seg = track.segments[0];
+                        if (seg.points.count > 0)
+                         {
+                            OAWptPt *p = seg.points[0];
+                            if (time > p.time)
+                                time = p.time;
+                        }
+                    }
+                }
+                metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
+            }
+            metadata.name = newFileName;
+
+            if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
+                [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
+
+            BOOL saveFailed = ![OARootViewController.instance.mapPanel.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
+            doc.path = newPath;
+            doc.metadata = metadata;
+
+            if (saveFailed)
+                [doc saveTo:newPath];
+
+            [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
+        }
+        else
+        {
+            [self showAlertWithText:OALocalizedString(@"gpx_already_exsists") inViewController:hostVC];
+        }
+    }
+    else
+    {
+        [self showAlertWithText:OALocalizedString(@"empty_filename") inViewController:hostVC];
+    }
+}
+
 - (void) onCloseShareMenu
 {
     _exportFileName = nil;
@@ -1244,10 +1320,22 @@
     _exportController = nil;
     if (_exportingHostVCDelegate)
     {
-        [_exportingHostVCDelegate onSharingScreenClosed];
+        [_exportingHostVCDelegate onNeedUpdateHostData];
         _exportingHostVCDelegate = nil;
     }
 }
+
+- (void)showAlertWithText:(NSString *)text inViewController:(UIViewController *)viewController
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                   message:text
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
+                                              style:UIAlertActionStyleDefault
+                                            handler:nil]];
+    [viewController presentViewController:alert animated:YES completion:nil];
+}
+
 
 #pragma mark - UIDocumentInteractionControllerDelegate
 

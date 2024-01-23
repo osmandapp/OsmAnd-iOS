@@ -255,7 +255,7 @@ extension WidgetType {
     static let tripRecordingDownhill = WidgetType(ordinal: 27, id: "trip_recording_downhill", title: localizedString("map_widget_trip_recording_downhill"), descr: localizedString("trip_recording_downhill_widget_desc"), iconName: "widget_track_recording_downhill", group: .tripRecording, defaultPanel: .rightPanel)
 
     static let currentTime = WidgetType(ordinal: 28, id: "plain_time", title: localizedString("map_widget_plain_time"), descr: localizedString("current_time_widget_desc"), iconName: "widget_time", docsUrl:docs_widget_current_time, defaultPanel: .rightPanel)
-    static let battery = WidgetType(ordinal: 29, id: "battery", title: localizedString("map_widget_battery"), descr: localizedString("battery_widget_desc"), iconName: "widget_battery", docsUrl:docs_widget_battery, defaultPanel: .bottomPanel)
+    static let battery = WidgetType(ordinal: 29, id: "battery", title: localizedString("map_widget_battery"), descr: localizedString("battery_widget_desc"), iconName: "widget_battery", docsUrl:docs_widget_battery, defaultPanel: .rightPanel)
 
     static let radiusRuler = WidgetType(ordinal: 30, id: "ruler", title: localizedString("map_widget_ruler_control"), descr: localizedString("radius_rules_widget_desc"), iconName: "widget_ruler_circle", docsUrl:docs_widget_radius_ruler, defaultPanel: .rightPanel)
 

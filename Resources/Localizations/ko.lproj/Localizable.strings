@@ -1687,3 +1687,36 @@
 "ios_release_4_2" = "• 노선 모양: 너비 및 색상\n설정 기능 추가• 트랙: 여러 트랙을 한 번에\n삭제할 수 있는 옵션 추가• 트랙 컨텍스트 메뉴: 웨이포인트 그룹이\n있는 스크롤 막대 추가• 지도 모양: 각 카테고리에서 하나를 개별적으로\n활성화할 수 있는 기능으로 유형별로 추가 경로 구분• 승마: 새로운 내비게이션 유형 및 앱 프로필\n추가• OsmAnd 이제 \"파일\" 응용 프로그램에서\n파일을 볼 수 있습니다.• \"고도 데이터 사용\" 및 \"고도 변동 선택\" 옵션의 UX가 개선되어 현재 \"자전거\" 및 \"보행자\" 프로필에 사용할 수 있는 \"기본 지형\"으로 이름이 변경되었습니다.\n• 트랙 녹화\n를 위한 새로운 옵션 \"제목 포함\"• 거리 이름 위젯: 이제 내비게이션\n중 도로 방패 및 출구 번호 표시• 지도\n에 새로운 피트니스 및 달리기 경로• CarPlay 버그 수정, 터치스크린 제스처 추가• OSF 패키지\n에서 GPX 파일 가져오기 수정\n• 포함된 파일이\n포함된 사용자 정의 플러그인 가져오기 수정• 경로 계획 모드에서\n발생하는 다양한 충돌 문제 수정• 탐색 중 발생하는 충돌 문제 수정\n";
 "ios_release_4_3" = "• 이동\n중 위치 변경에 대한 부드러운 애니메이션• CarPlay: 차선 추가, 2.5D 뷰, 블루투스\n연결 시 사운드 문제 수정• 새로운 구매 요금제 소개: 모든 기능을 이용할 수 있는 \"OsmAnd Pro\" 구독 및 무제한 지도 다운로드 및 유료 플러그인 액세스가 가능한 \"Maps+\" 구매.\n• OsmAnd Pro 사용자를\n위한 클라우드 백업 및 오프라인 일기 예보 추가• 모든 구매 목록이 포함된 편리한 새로운 \"구매\" 화면• 적극적인 OpenStreetMap.org 참여자를\n위한 혜택• 이제 고도, 속도 또는 경사\n에 따라 트랙에 색상을 지정할 수 있습니다.• 이제 파일 앱을\n통해 오프라인 지도에 접근할 수 있습니다.\n• 즐겨찾기: 각 변경 후 로컬 백업 생성 추가, 파일 앱에서\n액세스할 수 있는 백업• 즐겨찾기에 저장된 POI는 오프라인 지도\n없이도 모든 POI 데이터를 저장하고 표시합니다.• GPX는 링크, cmt, desc 태그 및 모든 사용자 정의 확장자에 대한 지원을 추가했습니다\n.• 나침반 버튼\n에 대한 모드 추가• UTM 좌표 형식\n문제 수정• 탐색의 중간 지점 문제 수정\n";
 "ios_release_4_0" = "•새로운! 사용자 지정 아이콘, 색상 및 모양을\n선택할 수 있는 옵션이 있는 \"즐겨찾기 추가\" 화면• 현재 위치\n의 좌표가 포함된 새로운 \"좌표 위젯\" 추가• 사용자 정의 사용자 정의 플러그인 가져오기 기능 추가\n• 가져오기/내보내기 기능\n대폭 확장• 탭에 의한 거리가 반경 눈금자에서 별도의 옵션\n으로 이동• iPhone 화면이 꺼\n져 있을 때 CarPlay 앱이 멈추는 문제 수정• 플러그인 화면이 맵 & 리소스에서 메인 메뉴\n로 이동• 핀란드어 현지화\n추가• \"경로 계획\" 화면\n의 가로 방향 UI 수정• 사용자 지정 경로 및 렌더링 파일에\n대한 지원 추가• 마커 방향선\n의 성능 수정• 대문자 확장자를 가진 GPX 파일 가져오기 문제 수정\n• \"팔로우\" 문제 수정 트랙\" 메뉴\n• OBF 파일 가져오기 수정\n";
+"trip_recording_uphill_widget_desc" = "현재 기록된 여행의 모든 등반의 합계를 표시합니다.";
+"trip_recording_downhill_widget_desc" = "현재 기록된 여행의 모든 내리막의 합계를 표시합니다.";
+"map_widget_trip_recording_downhill" = "내리막길";
+"map_widget_trip_recording_uphill" = "오르막길";
+"shared_string_hand" = "손";
+"shared_string_ear_lobe" = "귓불";
+"trip_name" = "트랙 이름";
+"trip_hint" = "트랙 이름 입력";
+"true_bearing_widget_desc" = "진북과 현재 위치에서 관찰한 대상 지점 사이의 각도입니다.";
+"ant_plus_pair_bluetooth_prompt" = "Bluetooth Low Energy(BLE) 센서를 OsmAnd와 페어링할 수 있습니다.";
+"shared_string_foot" = "도보";
+"bicycle_scd_device_name" = "자전거 장치";
+"map_widget_trip_recording_distance" = "거리";
+"menu_my_trips" = "내 트랙";
+"menu_all_trips" = "모든 트랙";
+"private_access_routing_req" = "목적지는 개인 출입이 가능한 지역에 있습니다. 이 여행에 사유 도로를 사용할 수 있습니까?";
+"average_speed_widget_desc" = "현재 이동의 평균 속도를 표시합니다.";
+
+
+//"device_disconnected">%1$s disconnected"
+//"device_connected">%1$s connected"
+"running_scds_device_name" = "실행 중인 장치";
+"planning_trip_item" = "여행 계획하기";
+"external_device_blood_pressure" = "혈압";
+"map_widget_trip_recording_duration" = "경과시간";
+"product_desc_track_recording" = "여행을GPX 트랙으로 기록하고 저장하기";
+"announcement_time_descr" = "다른 음성 프롬프트의 발표 타이밍은 프롬프트유형, 현재 탐색 속도 및 기본 탐색 속도에 따라 다릅니다.";
+"next_turn_widget_desc" = "위젯은 기동 및 거리의 그림과 함께 다음 턴에 대한 정보를 보여줍니다.";
+"map_widget_target_distance" = "카메라에서 대상까지의 거리";
+"gpx_trip_groups" = "트랙 그룹";
+"shared_string_chest" = "가슴";
+"shared_string_wrist" = "손목";
+"shared_string_finger" = "손가락";

@@ -842,7 +842,7 @@
     if (_toolbarViewController && _toolbarViewController.view.alpha > 0.5)
         return [_toolbarViewController getPreferredStatusBarStyle];
     else
-        return _settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+        return _settings.nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
 }
 
 - (void) setToolbar:(OAToolbarViewController *)toolbarController

@@ -50,6 +50,11 @@
            renameToNewName:(NSString *)newFileName
         deleteOriginalFile:(BOOL)deleteOriginalFile
                  openTrack:(BOOL)openTrack
+                       gpx:(OAGPX *)gpx;
+- (void) copyGPXToNewFolder:(NSString *)newFolderName
+           renameToNewName:(NSString *)newFileName
+        deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
                        gpx:(OAGPX *)gpx
                         doc:(OAGPXDocument *)doc;
 

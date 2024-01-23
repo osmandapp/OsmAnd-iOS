@@ -34,7 +34,7 @@ private enum SortingOptions {
     case longestDurationFirst
 }
 
-class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OASavingTrackHelperDelegate {
+class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OASavingTrackHelperDelegate, OASaveTrackViewControllerDelegate {
     
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -55,6 +55,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate var isVisibleOnMapFolder = false
     fileprivate var folderName = ""
     fileprivate var currentSubfolderPath = ""   // in format: "rec/new folder"
+    private var currentTrackname = ""
+    private var openedMenuVC : UIViewController?
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -73,6 +75,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             buildFilesTree()
         }
         generateData()
+    }
+    
+    private func updateData() {
+        buildFilesTree()
+        generateData()
+        tableView.reloadData()
     }
     
     private func generateData() {
@@ -364,17 +372,32 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         OASavingTrackHelper.sharedInstance().openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self)
     }
     
-    private func onTrackUploadToOsmClicked() {
-        print("onTrackUploadToOsmClicked")
+    private func onTrackUploadToOsmClicked(_ fileName: String) {
+        guard let track = currentTracksFolderContent.files[fileName] else { return }
+        let vc = OAOsmUploadGPXViewConroller(gpxItems: [track])
+        show(vc)
     }
     
-    private func onTrackEditClicked() {
-        print("onTrackEditClicked")
-        // [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
+    private func onTrackEditClicked(_ fileName: String) {
+        guard let track = currentTracksFolderContent.files[fileName] else { return }
+        OARootViewController.instance().mapPanel.mapViewController.hideContextPinMarker()
+        let state = OATrackMenuViewControllerState()
+        state.openedFromTracksList = true
+        state.gpxFilePath = track.gpxFilePath
+        let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
+        OARootViewController.instance().mapPanel.showScrollableHudViewController(vc)
+        dismiss()
     }
     
-    private func onTrackDuplicateClicked() {
-        print("onTrackDuplicateClicked")
+    private func onTrackDuplicateClicked(_ fileName: String) {
+        guard let track = currentTracksFolderContent.files[fileName] else { return }
+        currentTrackname = fileName
+        let trimmedFilename = (track.gpxFileName as NSString).deletingPathExtension
+        if let vc = OASaveTrackViewController(fileName: trimmedFilename, filePath: track.gpxFilePath, showOnMap: true, simplifiedTrack: false, duplicate: true, dissmissOnSave: true) {
+            openedMenuVC = vc
+            vc.delegate = self
+            show(openedMenuVC)
+        }
     }
     
     private func onTrackRenameClicked() {
@@ -610,15 +633,15 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     self.onTrackShareClicked(selectedTrackFilename)
                 }
                 let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { _ in
-                    self.onTrackUploadToOsmClicked()
+                    self.onTrackUploadToOsmClicked(selectedTrackFilename)
                 }
                 let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [shareAction, uploadToOsmAction])
                 
                 let editAction = UIAction(title: localizedString("shared_string_edit"), image: UIImage.icCustomTrackEdit) { _ in
-                    self.onTrackEditClicked()
+                    self.onTrackEditClicked(selectedTrackFilename)
                 }
                 let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage.icCustomCopy) { _ in
-                    self.onTrackDuplicateClicked()
+                    self.onTrackDuplicateClicked(selectedTrackFilename)
                 }
                 let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage.icCustomEdit) { _ in
                     self.onTrackRenameClicked()
@@ -643,8 +666,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - OASavingTrackHelperDelegate
     
     func onSharingScreenClosed() {
-        buildFilesTree()
-        generateData()
-        tableView.reloadData()
+        updateData()
+    }
+    
+    
+    // MARK: - OASaveTrackViewControllerDelegate
+    
+    func onSave(asNewTrack fileName: String!, showOnMap: Bool, simplifiedTrack: Bool, openTrack: Bool) {
+        let newFolderName = (fileName as NSString).deletingLastPathComponent
+        let newFileName = ((fileName as NSString).lastPathComponent as NSString).appendingPathExtension("gpx")
+        guard let track = currentTracksFolderContent.files[currentTrackname] else { return }
+        currentTrackname = ""
+        OASavingTrackHelper.sharedInstance().copyGPX(toNewFolder: newFolderName, renameToNewName: newFileName, deleteOriginalFile: false, openTrack: false, gpx: track)
+        updateData()
     }
 }

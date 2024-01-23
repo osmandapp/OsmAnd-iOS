@@ -110,6 +110,9 @@
 #import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
 #import "OATrackSegmentsViewController.h"
+#import "OAOsmUploadGPXViewConroller.h"
+#import "OARoutePlanningHudViewController.h"
+#import "OASaveTrackViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

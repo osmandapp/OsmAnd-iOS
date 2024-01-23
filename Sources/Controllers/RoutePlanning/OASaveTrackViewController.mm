@@ -42,6 +42,7 @@
     BOOL _duplicate;
     BOOL _simplifiedTrack;
     BOOL _showOnMap;
+    BOOL _dissmissOnSave;
     
     NSString *_inputFieldError;
     NSInteger _selectedFolderIndex;
@@ -70,6 +71,21 @@
         _simplifiedTrack = NO;
         
         [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype) initWithFileName:(NSString *)fileName
+                         filePath:(NSString *)filePath
+                        showOnMap:(BOOL)showOnMap
+                  simplifiedTrack:(BOOL)simplifiedTrack
+                        duplicate:(BOOL)duplicate
+                   dissmissOnSave:(BOOL)dissmissOnSave
+{
+    self = [self initWithFileName:fileName filePath:(NSString *)filePath showOnMap:showOnMap simplifiedTrack:simplifiedTrack duplicate:duplicate];
+    if (self)
+    {
+        _dissmissOnSave = dissmissOnSave;
     }
     return self;
 }
@@ -305,6 +321,8 @@
                             simplifiedTrack:_simplifiedTrack
                                   openTrack:YES];
         }
+        if (_dissmissOnSave)
+            [self dismissViewController];
     }
 }
 

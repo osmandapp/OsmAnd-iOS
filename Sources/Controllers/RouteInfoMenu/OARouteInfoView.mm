@@ -929,6 +929,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
 }
 
+- (BOOL)isFullScreen
+{
+    return _currentState == EOARouteInfoMenuStateFullScreen;
+}
+
 - (void) onHistoryButtonPressed:(id) sender
 {
     _historyItemsLimit += 10;

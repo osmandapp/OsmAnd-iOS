@@ -21,7 +21,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
         let section = tableData.createNewSection()
         let sortedWidgets = widgetGroup.getWidgets().sorted { $0.ordinal < $1.ordinal }
         for widget in sortedWidgets {
-            let widgetInfo = widgetRegistry.getWidgetInfo(for: widget).first
+            let widgetInfo = widgetRegistry.getWidgetInfo(for: widget).first { !$0.key.contains(MapWidgetInfo.DELIMITER) }
             guard let widgetInfo else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()

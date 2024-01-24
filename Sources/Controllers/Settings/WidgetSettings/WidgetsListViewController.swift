@@ -451,8 +451,8 @@ extension WidgetsListViewController {
         }
 
         if proposedDestinationIndexPath.row == 0 && proposedDestinationIndexPath.section == 0 {
-            var indexPath = IndexPath(row: 1, section: 0)
-            if tableData.rowCount(0) > 1 {
+            let indexPath = IndexPath(row: 1, section: 0)
+            if tableData.rowCount(UInt(indexPath.section)) > 1 {
                 let destinationItem = tableData.item(for: indexPath)
                 if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key), sourceItem.key != kPageKey {
                     editingComplexWidget = mapWidgetInfo

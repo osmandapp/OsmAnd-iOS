@@ -849,8 +849,8 @@
 "lang_sk" = "Slovački";
 "lang_sl" = "Slovenački";
 "lang_sq" = "Albanski";
-"lang_sr" = "Srpska ćirilica";
-"lang_sr_latn" = "Srpska latinica";
+"lang_sr" = "Српски";
+"lang_sr_latn" = "Srpski";
 "lang_sv" = "Švedski";
 "lang_sw" = "Svahili";
 "lang_ta" = "Tamilski";
@@ -2637,7 +2637,7 @@
 "weather_online_cache" = "Online keš";
 "weather_pressure_inches_of_mercury" = "Inči žive";
 "exit_number" = "Putni broj izlaza";
-"announcement_time_passing" = "Prolaženje";
+"announcement_time_passing" = "Prolazak";
 "announcement_time_approach" = "Dostupno";
 "app_mode_moped" = "Moped";
 "modified_file" = "Izmenjena datoteka";
@@ -2920,3 +2920,6 @@
 "map_widget_altitude_map_center" = "Nadmorska visina: centar mape";
 "map_widget_altitude_desc" = "Prikazuje nadmorsku visinu trenutne lokacije ili visinu trenutnog centra mape";
 "upload_poi" = "Učitaj TOI";
+"shared_string_license" = "Licenca";
+"shared_string_link" = "Link";
+"shared_string_author" = "Autor";

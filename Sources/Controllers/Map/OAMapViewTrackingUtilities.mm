@@ -186,6 +186,13 @@
                     
 
                     _mapView.mapAnimator->resume();
+
+                    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+                    if (mapViewController.needToSwitchTo3DMode && ![self isIn3dMode])
+                    {
+                        mapViewController.needToSwitchTo3DMode = NO;
+                        [self switchMap3dMode];
+                    }
                 }
                 break;
             }

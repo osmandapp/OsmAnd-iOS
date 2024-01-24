@@ -133,6 +133,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void) enterRoutePreviewMode
 {
+    [OARootViewController instance].mapPanel.mapViewController.needToSwitchTo3DMode = YES;
     [OAOsmAndFormatter getFormattedTimeHM:_routingHelper.getLeftTime];
     CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
     

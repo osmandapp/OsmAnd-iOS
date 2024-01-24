@@ -106,6 +106,7 @@
 
 @property (nonatomic, assign) BOOL isCarPlayActive;
 @property (nonatomic, assign) BOOL isCarPlayDashboardActive;
+@property (nonatomic, assign) BOOL needToSwitchTo3DMode;
 
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;

@@ -3579,3 +3579,7 @@
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
 "remove_folder_with_files_descr" = "Are you sure you want to remove “%@” folder and all %d tracks?";
+"new_track" = "New track";
+"not_recorded" = "Not recorded";
+"start_recording" = "Start recording";
+"recorded_track" = "Recorded track";

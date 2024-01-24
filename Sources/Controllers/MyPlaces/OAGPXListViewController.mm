@@ -1061,6 +1061,7 @@ static UIViewController *parentController;
                     [_settings.mapSettingSaveTrackIntervalApproved set:YES];
 
                 [_settings.mapSettingShowRecordingTrack set:showOnMap];
+                
 
                 _settings.mapSettingTrackRecording = YES;
                 dispatch_async(dispatch_get_main_queue(), ^{

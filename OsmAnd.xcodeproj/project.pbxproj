@@ -368,6 +368,8 @@
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
+		3241BC872B611D6000101894 /* OATwoButtonsTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3241BC862B611D6000101894 /* OATwoButtonsTableViewCell.m */; };
+		3241BC8B2B613F0D00101894 /* OATwoButtonsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
 		3245133A2AAB714200A5F715 /* TravelGuidesState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 324513392AAB714200A5F715 /* TravelGuidesState.swift */; };
 		3245D96C2AF014BE000AA660 /* TravelGuidesSettingsCacheViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245D96B2AF014BE000AA660 /* TravelGuidesSettingsCacheViewController.swift */; };
@@ -3852,6 +3854,9 @@
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
+		3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoButtonsTableViewCell.xib; sourceTree = "<group>"; };
+		3241BC862B611D6000101894 /* OATwoButtonsTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATwoButtonsTableViewCell.m; sourceTree = "<group>"; };
+		3241BC8A2B611D7300101894 /* OATwoButtonsTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATwoButtonsTableViewCell.h; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
 		324513392AAB714200A5F715 /* TravelGuidesState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesState.swift; sourceTree = "<group>"; };
@@ -12075,6 +12080,8 @@
 				46E9AD9B28DC8F4C00CC55F9 /* OAValueTableViewCell.m */,
 				46E9AD9F28DC9F8300CC55F9 /* OAButtonTableViewCell.h */,
 				46E9ADA028DC9FD000CC55F9 /* OAButtonTableViewCell.m */,
+				3241BC8A2B611D7300101894 /* OATwoButtonsTableViewCell.h */,
+				3241BC862B611D6000101894 /* OATwoButtonsTableViewCell.m */,
 				4663AB3D2951C92C00D9781E /* OAInputTableViewCell.h */,
 				4663AB3E2951C94700D9781E /* OAInputTableViewCell.m */,
 				465D7E1E295493DF0099B206 /* OATextMultilineTableViewCell.h */,
@@ -12197,6 +12204,7 @@
 				46E9AD9328DC89DD00CC55F9 /* OASwitchTableViewCell.xib */,
 				46E9AD9828DC8E8C00CC55F9 /* OAValueTableViewCell.xib */,
 				46E9AD9D28DC9EDF00CC55F9 /* OAButtonTableViewCell.xib */,
+				3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */,
 				4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */,
 				465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */,
 				467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */,
@@ -15925,6 +15933,7 @@
 				FA44BF3E2A71123D000D2F5F /* ic_payment_label_pro@3x.png in Resources */,
 				15B4E4B124AB401C00119365 /* ic_custom_length_limit@3x.png in Resources */,
 				0AA2F04727356BC7008EAF35 /* ic_custom_folder_points@2x.png in Resources */,
+				3241BC8B2B613F0D00101894 /* OATwoButtonsTableViewCell.xib in Resources */,
 				0CF5858D2440745F0081238D /* ic_custom_direction_device@3x.png in Resources */,
 				0AD6B8D0273BF0C900D68E0B /* ic_custom_location_marker@2x.png in Resources */,
 				DA5A828C26C563A700F274C7 /* OAGPXTableViewCell.xib in Resources */,
@@ -17455,6 +17464,7 @@
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,
 				DA5A849926C563A900F274C7 /* OAInfoBottomView.mm in Sources */,
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,
+				3241BC872B611D6000101894 /* OATwoButtonsTableViewCell.m in Sources */,
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,

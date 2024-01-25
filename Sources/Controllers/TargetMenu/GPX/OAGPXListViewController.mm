@@ -383,12 +383,13 @@ static UIViewController *parentController;
     }
 }
 
-- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
-{
-    if ([url isFileURL])
-    {
+- (void)prepareProcessUrl:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView completion:(void (^)(BOOL success))completion {
+    if ([url isFileURL]) {
         [self prepareProcessUrl:^{
             [self processUrl:url showAlerts:showAlerts openGpxView:openGpxView];
+            if (completion) {
+                completion(YES);
+            }
         }];
     }
 }

@@ -30,7 +30,7 @@
                 </button>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AYX-pK-pQb" userLabel="dividerBottomView">
                     <rect key="frame" x="0.0" y="148.66666666666666" width="375" height="0.33333333333334281"/>
-                    <color key="backgroundColor" name="widgetSeparatorColor"/>
+                    <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="ubh-OB-dOE"/>
                     </constraints>
@@ -54,14 +54,14 @@
         </view>
     </objects>
     <resources>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="widgetSeparatorColor">
-            <color red="0.89803921568627454" green="0.8901960784313725" blue="0.90980392156862744" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

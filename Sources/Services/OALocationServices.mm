@@ -572,7 +572,7 @@
 
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc
 {
-    return loc && (loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3 / 2);
+    return loc && loc.horizontalAccuracy >= 0 && loc.horizontalAccuracy < ACCURACY_FOR_GPX_AND_ROUTING * 3 / 2;
 }
 
 - (void) onLocationLost

@@ -2600,8 +2600,15 @@ static const double d180PI = 180.0 / M_PI_2;
     @" <p>%@</p>";
     
     modifiedFontHtml = [NSString stringWithFormat:modifiedFontHtml, fontSize, textColorString, html];
-    
-    return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+
+    @try {
+        @autoreleasepool {
+            return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"Failed to attributedStringFromHtmlString from: %@ %@", html, exception);
+        return [[NSAttributedString alloc] initWithString:@""];
+    }
 }
 
 + (NSString *) createNewFileName:(NSString *)oldName

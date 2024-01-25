@@ -2414,3 +2414,48 @@
 "route_maneuvers_desc" = "Navigačné nástroje sa zapnú počas navigácie pre zobrazenie informácií ako vzdialenosť, čas príjazdu, nasledujúce odbočenia, smerovanie (azimut), názov ulice, jazdné pruhy, maximálna rýchlosť, blížiace sa varovania, body záujmu, body trasy.";
 "rendering_attr_alpineHiking_name" = "Klasifikácia obtiažnosti";
 "bearing_desc" = "Zobrazuje absolútne (azimut) alebo relatívne smerovanie k cieľu v uhlových jednotkách (v režime 180 stupňov, 360 stupňov, alebo miliradiánov).";
+"external_device_blood_pressure" = "Krvný tlak";
+"write_data_from_sensor_to_track" = "Zapísať údaje z externých snímačov do GPX počas záznamu výletu.";
+"external_sensors_not_found" = "Snímače nenájdené";
+"external_sensors_source_of_data" = "Zdroj údajov";
+"map_3d_mode_hint" = "Dlhým stlačením tlačidla môžete zmeniť polohu tlačidla.";
+"shared_string_chest" = "Hruď";
+"shared_string_wrist" = "Zápästie";
+"no_bt_permission" = "Oprávnenie na Bluetooth nebolo udelené";
+"bluetooth_found_title" = "Nájdené: %d";
+"external_device_menu_forget" = "Zabudnúť";
+"shared_string_foot" = "Noha";
+"free_favorites_backup" = "Bezplatné zálohovanie obľúbených bodov";
+"ant_plus_nothing_found_text" = "Nepodarilo sa nájsť žiadne snímače";
+"ant_plus_nothing_found_description" = "Uistite sa, že:\n– Bluetooth je zapnutý\n– Snímač je aktívny\n– Toto zariadenie je umiestnené blízko snímača";
+"ble_search_again" = "Hľadať znovu";
+"ant_plus_searching" = "Hľadanie";
+"ant_plus_pair_new_sensor" = "Spárovať nový snímač";
+"external_device_forget_sensor_description" = "Snímač bude odstránený zo zoznamu. Tento senzor budete môcť kedykoľvek spárovať znovu.";
+"external_device_details_information" = "Informácie";
+"external_device_details_received_data" = "Prijaté údaje";
+"external_device_details_battery" = "Batéria";
+"get_osmand_cloud" = "Získajte OsmAnd Cloud";
+"visible_in_3d_mode" = "Viditeľné v režime 3D";
+"external_device_characteristic_speed" = "Rýchlosť";
+"external_device_characteristic_distance" = "Vzdialenosť";
+"external_device_characteristic_total_distance" = "Celková vzdialenosť";
+"external_device_characteristic_cadence" = "Otáčky";
+"external_device_characteristic_stride_length" = "Dĺžka kroku";
+"free_account" = "Bezplatný účet";
+"beats_per_minute_short" = "tep";
+"there_are_no_connected_sensors_of_this_type" = "Nie sú pripojené žiadne snímače tohto typu";
+
+
+//"device_disconnected">%1$s disconnected"
+//"device_connected">%1$s connected"
+"running_scds_device_name" = "Bežecké zariadenie";
+"bicycle_scd_device_name" = "Cyklistické zariadenie";
+"shared_string_finger" = "Prst";
+"shared_string_hand" = "Ruka";
+"shared_string_ear_lobe" = "Ušný lalok";
+"external_device_forget_sensor" = "Zabudnúť snímač";
+"ant_plus_bluetooth_off" = "Bluetooth je vypnutý";
+"ant_plus_bluetooth_off_description" = "Zapnite vyhľadávanie cez Bluetooth a spárujte snímače.";
+"ant_plus_searching_text" = "Hľadanie snímačov";
+"ant_plus_open_settings" = "Otvoriť nastavenia";

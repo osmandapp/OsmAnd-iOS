@@ -417,9 +417,11 @@
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
         NSParagraphStyleAttributeName : titleParagraphStyle
     };
-    CGFloat titleWidth = [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title
-                                                                                          attributes:titleAttributes]
-                                                    width:freeSpaceForTitle].width;
+
+    UIImage *centerIcon = [self getCenterIconAboveTitle];
+    CGFloat titleWidth = centerIcon
+        ? centerIcon.size.width
+        : [OAUtilities calculateTextBounds:[[NSAttributedString alloc] initWithString:self.title attributes:titleAttributes] width:freeSpaceForTitle].width;
     freeSpaceForNavbarButton -= titleWidth;
     freeSpaceForNavbarButton /= 2;
     freeSpaceForNavbarButton -= 12.;

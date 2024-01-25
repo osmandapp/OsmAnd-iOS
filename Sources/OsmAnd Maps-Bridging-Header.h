@@ -116,6 +116,7 @@
 #import "OASelectTrackFolderViewController.h"
 #import "OARecordSettingsBottomSheetViewController.h"
 #import "OAAlertBottomSheetViewController.h"
+#import "OAGPXListViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

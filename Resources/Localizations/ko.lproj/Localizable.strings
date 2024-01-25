@@ -1782,3 +1782,6 @@
 "external_device_details_battery" = "배터리";
 "external_device_menu_forget" = "지움";
 "external_device_details_received_data" = "수신된 데이터";
+"ble_search_again" = "다시보기";
+"ant_plus_nothing_found_text" = "어떤 센서를 찾을 수 없습니다";
+"bluetooth_found_title" = "설립자: %d";

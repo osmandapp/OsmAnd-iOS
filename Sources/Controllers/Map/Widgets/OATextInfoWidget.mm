@@ -218,7 +218,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
-    self.unitOrEmptyLabel.textAlignment = NSTextAlignmentNatural;
+    self.unitOrEmptyLabel.textAlignment = NSTextAlignmentRight;
     [valueUnitOrEmptyView addSubview:self.unitOrEmptyLabel];
     [self.valueLabel setContentHuggingPriority:UILayoutPriorityDefaultLow
                                              forAxis:UILayoutConstraintAxisHorizontal];
@@ -240,7 +240,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30],
        // [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
-    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:30];
+    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:10];
     _unitOrEmptyLabelWidthConstraint.active = YES;
     
    // self.unitOrEmptyLabel.backgroundColor = [UIColor yellowColor];
@@ -248,7 +248,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.emptyViewRightPlaceholderFullRow = [UIView new];
     self.emptyViewRightPlaceholderFullRow.translatesAutoresizingMaskIntoConstraints = NO;
     self.emptyViewRightPlaceholderFullRow.hidden = YES;
-  //  self.emptyViewRightPlaceholderFullRow.backgroundColor = [UIColor blueColor];
+   // self.emptyViewRightPlaceholderFullRow.backgroundColor = [UIColor blueColor];
     [contentStackView addArrangedSubview:self.emptyViewRightPlaceholderFullRow];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -495,7 +495,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         {
             self.unitView.hidden = YES;
             self.unitOrEmptyLabel.text = _subtext;
-            _unitOrEmptyLabelWidthConstraint.constant = 30;
+            _unitOrEmptyLabelWidthConstraint.constant = 10;
         }
         else
         {
@@ -508,17 +508,20 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     
     if (self.isFullRow)
     {
-        self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
         if (self.widgetSizeStyle == WidgetSizeStyleSmall) {
+            self.emptyViewRightPlaceholderFullRow.hidden = YES;
             if (_subtext.length == 0)
             {
+                self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
                 self.valueLabel.textAlignment = NSTextAlignmentCenter;
             }
             else
             {
+                self.emptyViewRightPlaceholderFullRow.hidden = YES;
                 self.valueLabel.textAlignment = NSTextAlignmentNatural;
             }
         } else {
+            self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
             self.valueLabel.textAlignment = NSTextAlignmentCenter;
         }
     }

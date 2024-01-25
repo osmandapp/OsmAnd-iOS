@@ -92,9 +92,9 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     }
     
     private func createCustomWidgets() {
-        let settings = OAAppSettings.sharedManager()!
-        let widgetKeys = settings.customWidgetKeys.get(appMode)
+        let widgetKeys = OAAppSettings.sharedManager().customWidgetKeys.get(appMode)
         if let widgetKeys, !widgetKeys.isEmpty {
+            checkAndResetCustomIdsIfNeeded()
             for key in widgetKeys {
                 if let widgetType = WidgetType.getById(key) {
                     if let widgetInfo = creator.createCustomWidgetInfo(factory: factory, key: key, widgetType: widgetType) {
@@ -104,7 +104,31 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
             }
         }
     }
-    
+
+    private func checkAndResetCustomIdsIfNeeded() {
+        let customWidgetKeys = OAAppSettings.sharedManager().customWidgetKeys
+        let widgetKeys = customWidgetKeys?.get(appMode)
+        if let widgetKeys, !widgetKeys.isEmpty {
+            var checkedWidgetKeys = [String]()
+            let hasDuplicates: Bool = hasDuplicates(widgetKeys, checkedKeys: &checkedWidgetKeys)
+            if hasDuplicates {
+                customWidgetKeys?.set(checkedWidgetKeys, mode: appMode)
+            }
+        }
+    }
+
+    private func hasDuplicates(_ checkingKeys: [String], checkedKeys: inout [String]) -> Bool {
+        var hasDuplicates = false
+        for checkingKey in checkingKeys {
+            if checkedKeys.contains(checkingKey) {
+                hasDuplicates = true
+            } else {
+                checkedKeys.append(checkingKey)
+            }
+        }
+        return hasDuplicates
+    }
+
     static func createAllControls(appMode: OAApplicationMode) -> [MapWidgetInfo] {
         let initializer = WidgetsInitializer(appMode)
         return initializer.createAllControls()

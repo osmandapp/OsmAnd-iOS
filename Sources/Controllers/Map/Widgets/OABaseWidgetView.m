@@ -55,7 +55,7 @@
     
     _separatorRightView = [UIView new];
     _separatorRightView.hidden = YES;
-    _separatorRightView.backgroundColor = [UIColor lightGrayColor];
+    _separatorRightView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
     [self addSubview:_separatorRightView];
     
     _separatorRightView.translatesAutoresizingMaskIntoConstraints = NO;

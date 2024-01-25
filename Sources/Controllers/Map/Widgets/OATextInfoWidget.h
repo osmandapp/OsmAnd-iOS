@@ -80,5 +80,6 @@
 - (void) adjustViewSize;
 
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode;
+- (void)configureSimpleLayout;
 
 @end

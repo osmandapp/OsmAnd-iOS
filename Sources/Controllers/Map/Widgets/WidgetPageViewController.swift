@@ -20,7 +20,6 @@ final class WidgetPageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        registerObservers()
         
         // Create the stack view
         stackView = UIStackView()
@@ -99,34 +98,6 @@ final class WidgetPageViewController: UIViewController {
         }
         return (width, height)
     }
-    
-    private func registerObservers() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(onSimpleWidgetStyleUpdated),
-                                               name: .SimpleWidgetStyleUpdated,
-                                               object: nil)
-    }
-    
-    private func getWidgetsInRowWithoutCurrent(widget: OABaseWidgetView) -> [OABaseWidgetView]? {
-        for widgetViews in simpleWidgetViews {
-            for view in widgetViews where view === widget {
-                return widgetViews.filter { $0 != view }
-            }
-        }
-        return nil
-    }
-    
-    @objc private func onSimpleWidgetStyleUpdated(notification: Notification) {
-        guard isMultipleWidgetsInRow else { return }
-        guard let widget = (notification.object as? MapWidgetInfo)?.widget as? OATextInfoWidget else { return }
-        // update widgetSizeStyle by currentwidget for all items in row
-        if let widgetsInRow = getWidgetsInRowWithoutCurrent(widget: widget) {
-            widgetsInRow.compactMap { $0 as? OATextInfoWidget }
-                .forEach {
-                    $0.sizeStylePref.set(Int32(widget.widgetSizeStyle.rawValue), mode: OAAppSettings.sharedManager().applicationMode.get())
-                }
-        }
-    }
 }
 
 extension WidgetPageViewController {
@@ -160,21 +131,21 @@ extension WidgetPageViewController {
             // text Alignment for visibleWidgets
             let visibleWidgets = items.filter { !$0.isHidden }
             if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
-                if let widget = firstWidget as? OATextInfoWidget {
-                    widget.valueLabel?.textAlignment = .center
-                }
                 // NOTE: use adjustSize for Complex widget
                 if WidgetType.isComplexWidget(firstWidget.widgetType?.id ?? "") {
                     firstWidget.adjustSize()
                     firstWidget.heightConstraint?.constant = firstWidget.frame.height
                 }
                 firstWidget.isFullRow = true
+                if let widget = firstWidget as? OATextInfoWidget {
+                    widget.configureSimpleLayout()
+                }
             } else {
                 visibleWidgets.forEach {
-                    if let widget = $0 as? OATextInfoWidget {
-                        widget.valueLabel?.textAlignment = .natural
-                    }
                     $0.isFullRow = false
+                    if let widget = $0 as? OATextInfoWidget {
+                       widget.configureSimpleLayout()
+                    }
                 }
             }
             // show Right Separator

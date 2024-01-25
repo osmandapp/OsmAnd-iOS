@@ -49,6 +49,7 @@
     NSString *_customId;
     OACommonBoolean *_hideIconPref;
     OAApplicationMode *_appMode;
+    NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
 }
 
 NSString *const kHideIconPref = @"kHideIconPref";
@@ -159,7 +160,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor],
         [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor],
         [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor],
-       // [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:20]
+        [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:20]
     ]];
     
     // Create the contentStackView
@@ -199,11 +200,12 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.adjustsFontSizeToFitWidth = YES;
     self.valueLabel.minimumScaleFactor = 0.3;
+   // self.valueLabel.backgroundColor = [UIColor greenColor];
 
     self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-    //self.valueLabel.backgroundColor = [UIColor redColor];
+   // self.valueLabel.backgroundColor = [UIColor redColor];
     self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
-    self.valueLabel.textAlignment = self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
+   // self.valueLabel.textAlignment = self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
     [valueUnitOrEmptyView addSubview:self.valueLabel];
     
     // Create the unitOrEmptyLabel ("KM/H")
@@ -238,11 +240,15 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30],
        // [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
+    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:30];
+    _unitOrEmptyLabelWidthConstraint.active = YES;
+    
+   // self.unitOrEmptyLabel.backgroundColor = [UIColor yellowColor];
     
     self.emptyViewRightPlaceholderFullRow = [UIView new];
     self.emptyViewRightPlaceholderFullRow.translatesAutoresizingMaskIntoConstraints = NO;
     self.emptyViewRightPlaceholderFullRow.hidden = YES;
-   // self.emptyViewRightPlaceholderFullRow.backgroundColor = [UIColor blueColor];
+  //  self.emptyViewRightPlaceholderFullRow.backgroundColor = [UIColor blueColor];
     [contentStackView addArrangedSubview:self.emptyViewRightPlaceholderFullRow];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -459,51 +465,75 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     }
 }
 
-- (void) refreshLabel
+- (void)configureSimpleLayout
 {
-    if (self.isSimpleLayout)
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    
+    self.valueLabel.text = _text;
+    self.nameLabel.text = _contentTitle;
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
+            
+    BOOL isVisibleIcon = false;
+    if (_appMode && _hideIconPref)
     {
-        self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-        self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-        self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-        self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-        
-        self.valueLabel.text = _text;
-        self.nameLabel.text = _contentTitle;
-        self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
-                
-        BOOL isVisibleIcon = false;
-        if (_appMode && _hideIconPref)
-        {
-            isVisibleIcon = [_hideIconPref get:_appMode];
-            self.iconWidgetView.hidden = !isVisibleIcon;
-        }
-        _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
-        if (_subtext.length == 0)
+        isVisibleIcon = [_hideIconPref get:_appMode];
+        self.iconWidgetView.hidden = !isVisibleIcon;
+    }
+    _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
+    if (_subtext.length == 0)
+    {
+        self.unitView.hidden = YES;
+        self.unitOrEmptyLabel.text = @"";
+        _unitOrEmptyLabelWidthConstraint.constant = 0;
+    }
+    else
+    {
+        if (self.widgetSizeStyle == WidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
+            self.unitOrEmptyLabel.text = _subtext;
+            _unitOrEmptyLabelWidthConstraint.constant = 30;
         }
         else
         {
-            if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+            _unitOrEmptyLabelWidthConstraint.constant = 0;
+            self.unitOrEmptyLabel.text = @"";
+            self.unitView.hidden = NO;
+            self.unitLabel.text = _subtext;
+        }
+    }
+    
+    if (self.isFullRow)
+    {
+        self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
+        if (self.widgetSizeStyle == WidgetSizeStyleSmall) {
+            if (_subtext.length == 0)
             {
-                self.unitView.hidden = YES;
-                self.unitOrEmptyLabel.text = _subtext;
+                self.valueLabel.textAlignment = NSTextAlignmentCenter;
             }
             else
             {
-                self.unitView.hidden = NO;
-                self.unitLabel.text = _subtext;
+                self.valueLabel.textAlignment = NSTextAlignmentNatural;
             }
+        } else {
+            self.valueLabel.textAlignment = NSTextAlignmentCenter;
         }
-        if (self.isFullRow && isVisibleIcon)
-        {
-            self.emptyViewRightPlaceholderFullRow.hidden = NO;
-        }
-        else
-        {
-            self.emptyViewRightPlaceholderFullRow.hidden = YES;
-        }
+    }
+    else
+    {
+        self.valueLabel.textAlignment = NSTextAlignmentNatural;
+    }
+}
+
+- (void)refreshLabel
+{
+    if (self.isSimpleLayout)
+    {
+        NSLog(@"refreshLabel isSimpleLayout %@", _text);
+        [self configureSimpleLayout];
     }
     else
     {

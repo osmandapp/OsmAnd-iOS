@@ -75,7 +75,7 @@
                                                 </imageView>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Wvy-CM-dFA" userLabel="bottomSeparatorView">
                                                     <rect key="frame" x="0.0" y="72.666666666666671" width="393" height="0.3333333333333286"/>
-                                                    <color key="backgroundColor" name="widgetSeparatorColor"/>
+                                                    <color key="backgroundColor" name="customSeparator"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="0.5" id="urB-JK-cPK"/>
                                                     </constraints>
@@ -134,6 +134,9 @@
         <namedColor name="active">
             <color red="0.32899999618530273" green="0.32400000095367432" blue="0.4779999852180481" alpha="0.33000001311302185" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -142,9 +145,6 @@
         </namedColor>
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="widgetSeparatorColor">
-            <color red="0.89803921568627454" green="0.8901960784313725" blue="0.90980392156862744" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

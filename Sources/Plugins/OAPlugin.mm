@@ -959,7 +959,7 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
 
 + (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute
 {
-    for (OAPlugin *plugin in [self getEnabledPlugins])
+    for (OAPlugin *plugin in [self getAvailablePlugins])
     {
         [plugin onAnalysePoint:analysis point:point attribute:attribute];
     }
@@ -972,7 +972,7 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
 + (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes
 {
-    for (OAPlugin *plugin : [self getEnabledPlugins])
+    for (OAPlugin *plugin : [self getAvailablePlugins])
     {
         [plugin getAvailableGPXDataSetTypes:analysis availableTypes:availableTypes];
     }

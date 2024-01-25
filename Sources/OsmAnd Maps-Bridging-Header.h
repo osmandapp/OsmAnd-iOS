@@ -108,6 +108,7 @@
 #import "OACarPlayMapDashboardViewController.h"
 #import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
+#import "OAGPXListViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

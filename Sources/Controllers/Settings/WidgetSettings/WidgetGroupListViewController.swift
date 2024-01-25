@@ -298,7 +298,7 @@ extension WidgetGroupListViewController {
             show(vc)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
-                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first else {
+                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType) else {
                 return
             }
             if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: Self.enabledWidgetsFilter, panels: WidgetsPanel.values).array as? [MapWidgetInfo] {

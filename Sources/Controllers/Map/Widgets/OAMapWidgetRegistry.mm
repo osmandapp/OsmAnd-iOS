@@ -286,15 +286,14 @@
     _allWidgets = newAllWidgets;
 }
 
-- (NSArray<OAMapWidgetInfo *> *)getWidgetInfoForType:(OAWidgetType *)widgetType
+- (OAMapWidgetInfo *)getWidgetInfoForType:(OAWidgetType *)widgetType
 {
-    NSMutableArray<OAMapWidgetInfo *> *widgets = [NSMutableArray array];
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        if (widgetInfo.getWidgetType == widgetType)
-            [widgets addObject:widgetInfo];
+        if (widgetInfo.getWidgetType == widgetType && ![widgetInfo.key containsString:OAMapWidgetInfo.DELIMITER])
+            return widgetInfo;
     }
-    return widgets;
+    return nil;
 }
 
 - (NSArray<NSOrderedSet<OAMapWidgetInfo *> *> *)getPagedWidgetsForPanel:(OAApplicationMode *)appMode

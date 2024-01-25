@@ -101,6 +101,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
+#import "OAGPXMutableDocument.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -2661,6 +2662,11 @@ typedef enum
     }];
 }
 
+- (void)openRecordingTrackTargetView
+{
+    [self openTargetViewWithGPX:nil];
+}
+
 - (void)openTargetViewWithGPX:(OAGPX *)item
 {
     [self openTargetViewWithGPX:item
@@ -2971,7 +2977,7 @@ typedef enum
 
 - (void) openTargetViewWithRouteDetailsGraphForFilepath:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
 {
-    OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
+    OAGPXMutableDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFilepath];
     if (doc)
     {
         OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]

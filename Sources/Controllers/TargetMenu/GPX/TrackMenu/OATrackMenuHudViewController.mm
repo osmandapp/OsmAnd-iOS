@@ -197,7 +197,7 @@
 
 - (void)setupUIBuilder
 {
-    _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
+    _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab isCurrentTrack:self.isCurrentTrack];
     _uiBuilder.trackMenuDelegate = self;
 }
 
@@ -2023,6 +2023,10 @@
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
+            
+            cell.userInteractionEnabled = cellData.isDisabled ? YES : NO;
+            cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
+            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -2050,6 +2054,10 @@
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
+            
+            cell.userInteractionEnabled = cellData.isDisabled ? YES : NO;
+            cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
+            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
         }
         outCell = cell;
     }

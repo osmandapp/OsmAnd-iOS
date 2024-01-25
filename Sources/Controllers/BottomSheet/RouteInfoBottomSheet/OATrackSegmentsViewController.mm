@@ -31,6 +31,7 @@
 #import "OATargetPointsHelper.h"
 #import "OAGPXUIHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OASavingTrackHelper.h"
 
 @interface OATrackSegmentsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -57,12 +58,15 @@
     return self;
 }
 
-- (instancetype) initWithFilepath:(NSString *)filepath
+- (instancetype) initWithFilepath:(NSString *)filepath isCurrentTrack:(BOOL)isCurrentTrack
 {
     self = [super init];
     if (self)
     {
-        _gpx = [[OAGPXDocument alloc] initWithGpxFile:filepath];
+        if (isCurrentTrack)
+            _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
+        else
+            _gpx = [[OAGPXDocument alloc] initWithGpxFile:filepath];
         [self generateData];
     }
     return self;

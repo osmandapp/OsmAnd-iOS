@@ -23,15 +23,17 @@
 @implementation OATrackMenuUIBuilder
 {
     EOATrackMenuHudTab _selectedTab;
+    BOOL _isCurrentTrack;
     NSArray<OABaseTrackMenuTabItem *> *_tabs;
 }
 
-- (instancetype)initWithSelectedTab:(EOATrackMenuHudTab)selectedTab
+- (instancetype)initWithSelectedTab:(EOATrackMenuHudTab)selectedTab isCurrentTrack:(BOOL)isCurrentTrack
 {
     self = [super init];
     if (self)
     {
         _selectedTab = selectedTab;
+        _isCurrentTrack = isCurrentTrack;
         [self commonInit];
     }
     return self;
@@ -43,7 +45,7 @@
             [[OATrackMenuTabOverview alloc] init],
             [[OATrackMenuTabSegments alloc] init],
             [[OATrackMenuTabPoints alloc] init],
-            [[OATrackMenuTabActions alloc] init]
+            [[OATrackMenuTabActions alloc] initWithIsCurrentTrack:_isCurrentTrack]
     ];
 }
 

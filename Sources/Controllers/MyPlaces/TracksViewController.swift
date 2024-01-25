@@ -45,6 +45,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
     private let trackKey = "trackKey"
+    private let recordingTrackKey = "recordingTrackKey"
     private let tracksCountKey = "tracksCountKey"
     private let pathKey = "pathKey"
     private let filenameKey = "filenameKey"
@@ -69,6 +70,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private var currentTrack: OAGPX?
     private var recCell: OATwoButtonsTableViewCell?
     private var trackRecordingObserver: OAAutoObserverProxy?
+    private var trackStartStopObserver: OAAutoObserverProxy?
     
     private var app: OsmAndAppProtocol
     private var settings: OAAppSettings
@@ -100,6 +102,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         tabBarController?.navigationItem.searchController = nil
         setupNavBarMenuButton()
         trackRecordingObserver = OAAutoObserverProxy.init(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable)
+        trackStartStopObserver = OAAutoObserverProxy.init(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable)
     }
     
     override func viewDidLoad() {
@@ -134,27 +137,53 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             if settings.mapSettingTrackRecording {
                 let currentRecordingTrackRow = section.createNewRow()
                 currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.getIdentifier()
+                currentRecordingTrackRow.key = recordingTrackKey
                 currentRecordingTrackRow.title = localizedString("recorded_track")
                 let trackDistance = OAOsmAndFormatter.getFormattedDistance(savingHelper.distance) ?? ""
                 let trackDuration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(savingHelper.getCurrentGPX().timeSpan), shortFormat: true) ?? ""
                 let waypointsCount = String(savingHelper.points)
                 currentRecordingTrackRow.descr = trackDistance + " • " + trackDuration + " • " + waypointsCount
+                let isVisible = settings.mapSettingShowRecordingTrack.get()
+                currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
                 currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
-                currentRecordingTrackRow.iconTintColor = UIColor.iconColorActive
-                currentRecordingTrackRow.setObj(localizedString("ic_custom_pause"), forKey: buttonIconKey)
+                currentRecordingTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
+                currentRecordingTrackRow.setObj(localizedString("ic_custom_stop"), forKey: buttonIconKey)
                 currentRecordingTrackRow.setObj(ButtonActionNumberTag.pause.rawValue, forKey: buttonActionNumberTagKey)
                 currentRecordingTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
                 currentRecordingTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
             } else {
-                let recordNewTrackRow = section.createNewRow()
-                recordNewTrackRow.cellType = OAButtonTableViewCell.getIdentifier()
-                recordNewTrackRow.title = localizedString("new_track")
-                recordNewTrackRow.descr = localizedString("not_recorded")
-                recordNewTrackRow.iconName = "ic_custom_trip"
-                recordNewTrackRow.iconTintColor = UIColor.iconColorDefault
-                recordNewTrackRow.setObj(localizedString("start_recording"), forKey: buttonTitleKey)
-                recordNewTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
-                recordNewTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
+                if savingHelper.hasData() {
+                    let currentPausedTrackRow = section.createNewRow()
+                    currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.getIdentifier()
+                    currentPausedTrackRow.key = recordingTrackKey
+                    currentPausedTrackRow.title = localizedString("recorded_track")
+                    let trackDistance = OAOsmAndFormatter.getFormattedDistance(savingHelper.distance) ?? ""
+                    let trackDuration = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(savingHelper.getCurrentGPX().timeSpan), shortFormat: true) ?? ""
+                    let waypointsCount = String(savingHelper.points)
+                    currentPausedTrackRow.descr = trackDistance + " • " + trackDuration + " • " + waypointsCount
+                    let isVisible = settings.mapSettingShowRecordingTrack.get()
+                    currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
+                    currentPausedTrackRow.iconName = "ic_custom_track_recordable"
+                    currentPausedTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
+                    currentPausedTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
+                    currentPausedTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
+                    currentPausedTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
+                    currentPausedTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
+                } else {
+                    let recordNewTrackRow = section.createNewRow()
+                    recordNewTrackRow.cellType = OAButtonTableViewCell.getIdentifier()
+                    recordNewTrackRow.key = recordingTrackKey
+                    recordNewTrackRow.title = localizedString("new_track")
+                    recordNewTrackRow.descr = localizedString("not_recorded")
+                    recordNewTrackRow.iconName = "ic_custom_trip"
+                    recordNewTrackRow.iconTintColor = UIColor.iconColorDefault
+                    recordNewTrackRow.setObj(localizedString("start_recording"), forKey: buttonTitleKey)
+                    recordNewTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
+                    recordNewTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
+                    let isVisible = settings.mapSettingShowRecordingTrack.get()
+                    recordNewTrackRow.setObj(isVisible, forKey: isVisibleKey)
+                    recordNewTrackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
+                }
             }
         }
         
@@ -401,100 +430,127 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     // MARK: - Tracks Actions
     
-    private func onTrackShowOnMapClicked(_ filePath: String) {
-        if settings.mapSettingVisibleGpx.get().contains(filePath) {
-            settings.hideGpx([filePath], update: true)
+    private func onTrackShowOnMapClicked(trackPath: String, isVisible: Bool, isCurrentTrack: Bool) {
+        if isCurrentTrack {
+            if isVisible {
+                settings.mapSettingShowRecordingTrack.set(false)
+                rootVC.mapPanel.mapViewController.hideRecGpxTrack()
+            } else {
+                settings.mapSettingShowRecordingTrack.set(true)
+                rootVC.mapPanel.mapViewController.showRecGpxTrack(true)
+            }
         } else {
-            settings.showGpx([filePath], update: true)
+            if isVisible {
+                settings.hideGpx([trackPath], update: true)
+            } else {
+                settings.showGpx([trackPath], update: true)
+            }
         }
         updateData()
     }
     
-    private func onTrackAppearenceClicked(track: OAGPX, filePath: String) {
-        let state = OATrackMenuViewControllerState()
-        state.openedFromTracksList = true
-        state.gpxFilePath = filePath
-        rootVC.mapPanel.openTargetView(with: track, trackHudMode: .appearanceHudMode, state: state)
-        dismiss()
-    }
-    
-    private func onTrackNavigationClicked(_ track: OAGPX) {
-        if track.totalTracks > 1 {
-            let absolutePath = getAbsolutePath(track.gpxFilePath)
-            if let vc = OATrackSegmentsViewController(filepath: absolutePath) {
-                vc.startNavigationOnSelect = true
-                rootVC.present(vc, animated: true)
-                dismiss()
-            }
-        } else {
-            if routingHelper.isFollowingMode() {
-                rootVC.mapPanel.mapActions.stopNavigationActionConfirm()
-            }
-            rootVC.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
+    private func onTrackAppearenceClicked(track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            let state = OATrackMenuViewControllerState()
+            state.openedFromTracksList = true
+            state.gpxFilePath = track?.gpxFilePath
+            rootVC.mapPanel.openTargetView(with: gpx, trackHudMode: .appearanceHudMode, state: state)
             dismiss()
         }
     }
     
-    private func onTrackAnalyzeClicked(_ track: OAGPX) {
-        let absolutePath = getAbsolutePath(track.gpxFilePath)
-        rootVC.mapPanel.openTargetViewWithRouteDetailsGraph(forFilepath: absolutePath, isCurrentTrack: false)
-        dismiss()
-    }
-    
-    private func onTrackShareClicked(_ track: OAGPX) {
-        let absolutePath = getAbsolutePath(track.gpxFilePath)
-        savingHelper.openExport(forTrack: track, gpxDoc: nil, isCurrentTrack: false, in: self, hostViewControllerDelegate: self)
-    }
-    
-    private func onTrackUploadToOsmClicked(_ track: OAGPX) {
-        let vc = OAOsmUploadGPXViewConroller(gpxItems: [track])
-        show(vc)
-    }
-    
-    private func onTrackEditClicked(_ track: OAGPX) {
-        rootVC.mapPanel.mapViewController.hideContextPinMarker()
-        let state = OATrackMenuViewControllerState()
-        state.openedFromTracksList = true
-        state.gpxFilePath = track.gpxFilePath
-        let vc = OARoutePlanningHudViewController(fileName: track.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
-        rootVC.mapPanel.showScrollableHudViewController(vc)
-        dismiss()
-    }
-    
-    private func onTrackDuplicateClicked(track: OAGPX, fileName: String) {
-        guard let track = currentTracksFolderContent.files[fileName] else { return }
-        currentTrack = track
-        let trimmedFilename = (track.gpxFileName as NSString).deletingPathExtension
-        if let vc = OASaveTrackViewController(fileName: trimmedFilename, filePath: track.gpxFilePath, showOnMap: true, simplifiedTrack: false, duplicate: true) {
-            vc.delegate = self
-            present(vc, animated: true)
-        }
-    }
-    
-    private func onTrackRenameClicked(_ track: OAGPX) {
-        let message = localizedString("gpx_enter_new_name") + " " + track.gpxTitle
-        let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
-        alert.addTextField()
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
-            guard let self else { return }
-            if let newName = alert.textFields?.first?.text {
-                savingHelper.renameTrack(track, newName: newName, hostVC: self)
-                hardUpdateData()
+    private func onTrackNavigationClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            if gpx.totalTracks > 1 {
+                let absolutePath = getAbsolutePath(gpx.gpxFilePath)
+                if let vc = OATrackSegmentsViewController(filepath: absolutePath, isCurrentTrack: isCurrentTrack) {
+                    vc.startNavigationOnSelect = true
+                    rootVC.present(vc, animated: true)
+                    dismiss()
+                }
+            } else {
+                if routingHelper.isFollowingMode() {
+                    rootVC.mapPanel.mapActions.stopNavigationActionConfirm()
+                }
+                rootVC.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
+                dismiss()
             }
-        })
-        alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-        present(alert, animated: true)
-    }
-    
-    private func onTrackMoveClicked(_ track: OAGPX) {
-        currentTrack = track
-        if let vc = OASelectTrackFolderViewController(gpx: track) {
-            vc.delegate = self
-            present(vc, animated: true)
         }
     }
     
-    private func onTrackDeleteClicked(track: OAGPX, isCurrentTrack: Bool) {
+    private func onTrackAnalyzeClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            let absolutePath = getAbsolutePath(gpx.gpxFilePath)
+            rootVC.mapPanel.openTargetViewWithRouteDetailsGraph(forFilepath: absolutePath, isCurrentTrack: isCurrentTrack)
+            dismiss()
+        }
+    }
+    
+    private func onTrackShareClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            let absolutePath = getAbsolutePath(gpx.gpxFilePath)
+            savingHelper.openExport(forTrack: gpx, gpxDoc: nil, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self)
+        }
+    }
+    
+    private func onTrackUploadToOsmClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            let vc = OAOsmUploadGPXViewConroller(gpxItems: [gpx])
+            show(vc)
+        }
+    }
+    
+    private func onTrackEditClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            rootVC.mapPanel.mapViewController.hideContextPinMarker()
+            let state = OATrackMenuViewControllerState()
+            state.openedFromTracksList = true
+            state.gpxFilePath = gpx.gpxFilePath
+            let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
+            rootVC.mapPanel.showScrollableHudViewController(vc)
+            dismiss()
+        }
+    }
+    
+    private func onTrackDuplicateClicked(track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            currentTrack = track
+            let trimmedFilename = (gpx.gpxFileName as NSString).deletingPathExtension
+            if let vc = OASaveTrackViewController(fileName: trimmedFilename, filePath: gpx.gpxFilePath, showOnMap: true, simplifiedTrack: false, duplicate: true) {
+                vc.delegate = self
+                present(vc, animated: true)
+            }
+        }
+    }
+    
+    private func onTrackRenameClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            let message = localizedString("gpx_enter_new_name") + " " + gpx.gpxTitle
+            let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
+            alert.addTextField()
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
+                guard let self else { return }
+                if let newName = alert.textFields?.first?.text {
+                    savingHelper.renameTrack(gpx, newName: newName, hostVC: self)
+                    hardUpdateData()
+                }
+            })
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+            present(alert, animated: true)
+        }
+    }
+    
+    private func onTrackMoveClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
+            currentTrack = gpx
+            if let vc = OASelectTrackFolderViewController(gpx: gpx) {
+                vc.delegate = self
+                present(vc, animated: true)
+            }
+        }
+    }
+    
+    private func onTrackDeleteClicked(track: OAGPX?, isCurrentTrack: Bool) {
         let message = isCurrentTrack ? localizedString("track_clear_q") : localizedString("gpx_remove")
         let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
@@ -507,12 +563,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 updateData()
             } else {
-                let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
-                if isVisible {
-                    settings.hideGpx([track.gpxFilePath])
+                if let gpx = track {
+                    let isVisible = settings.mapSettingVisibleGpx.contains(gpx.gpxFilePath)
+                    if isVisible {
+                        settings.hideGpx([gpx.gpxFilePath])
+                    }
+                    gpxDB.removeGpxItem(gpx.gpxFilePath)
+                    hardUpdateData()
                 }
-                OAGPXDatabase.sharedDb().removeGpxItem(track.gpxFilePath)
-                hardUpdateData()
             }
         })
         alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
@@ -533,7 +591,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func startRecordingClicked() {
-        if !settings.mapSettingSaveTrackIntervalApproved.get() && savingHelper.hasData() {
+        if !settings.mapSettingSaveTrackIntervalApproved.get() && !savingHelper.hasData() {
             let bottomSheet = OARecordSettingsBottomSheetViewController { [weak self] recordingInterval, rememberChoice, showOnMap in
                 if let interval = self?.settings.trackIntervalArray[0] as? Int32 {
                     self?.settings.mapSettingSaveTrackIntervalGlobal.set(interval)
@@ -719,7 +777,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 cell.descriptionLabel.text = item.descr
                 if let iconName = item.iconName {
                     cell.leftIconView.image = UIImage(named:iconName)
-                    cell.leftIconView.tintColor = UIColor.iconColorDefault
+                }
+                if let tintColor = item.iconTintColor {
+                    cell.leftIconView.tintColor = tintColor
                 }
                 
                 cell.leftButton.setTitle("", for: .normal)
@@ -826,6 +886,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     rootVC.navigationController?.popToRootViewController(animated: true)
                 }
             }
+        } else if item.key == recordingTrackKey {
+            if savingHelper.hasData() {
+                rootVC.mapPanel.openRecordingTrackTargetView()
+                rootVC.navigationController?.popToRootViewController(animated: true)
+            }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -867,51 +932,53 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 return UIMenu(title: "", image: nil, children: [firstButtonsSection, secondButtonsSection, thirdButtonsSection, lastButtonsSection])
             }
             return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
-        } else if item.key == trackKey {
-            
+        } else if item.key == trackKey || item.key == recordingTrackKey {
+            let isCurrentTrack = item.key == recordingTrackKey
+            if isCurrentTrack && !savingHelper.hasData() {
+                return nil
+            }
+            let isTrackVisible = item.bool(forKey: isVisibleKey)
             let selectedTrackPath = item.string(forKey: self.pathKey) ?? ""
             let selectedTrackFilename = item.string(forKey: self.filenameKey) ?? ""
-            let isTrackVisible = item.bool(forKey: isVisibleKey)
-            let isCurrentTrack = false
-            guard let track = currentTracksFolderContent.files[selectedTrackFilename] else { return nil}
+            let track = currentTracksFolderContent.files[selectedTrackFilename]
            
             let menuProvider: UIContextMenuActionProvider = { _ in
                
                 let showOnMapAction = UIAction(title: localizedString(isTrackVisible ? "shared_string_hide_from_map" : "shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { _ in
-                    self.onTrackShowOnMapClicked(selectedTrackPath)
+                    self.onTrackShowOnMapClicked(trackPath: selectedTrackPath, isVisible: isTrackVisible, isCurrentTrack: isCurrentTrack)
                 }
                 let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
-                    self.onTrackAppearenceClicked(track: track, filePath: selectedTrackFilename)
+                    self.onTrackAppearenceClicked(track: track, isCurrentTrack: isCurrentTrack)
                 }
                 let navigationAction = UIAction(title: localizedString("shared_string_navigation"), image: UIImage.icCustomNavigationOutlined) { _ in
-                    self.onTrackNavigationClicked(track)
+                    self.onTrackNavigationClicked(track, isCurrentTrack: isCurrentTrack)
                 }
                 let firstButtonsSection = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, appearenceAction, navigationAction])
                 
                 let analyzeAction = UIAction(title: localizedString("gpx_analyze"), image: UIImage.icCustomGraph) { _ in
-                    self.onTrackAnalyzeClicked(track)
+                    self.onTrackAnalyzeClicked(track, isCurrentTrack: isCurrentTrack)
                 }
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])
                 
                 let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage.icCustomExportOutlined) { _ in
-                    self.onTrackShareClicked(track)
+                    self.onTrackShareClicked(track, isCurrentTrack: isCurrentTrack)
                 }
                 let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { _ in
-                    self.onTrackUploadToOsmClicked(track)
+                    self.onTrackUploadToOsmClicked(track, isCurrentTrack: isCurrentTrack)
                 }
                 let thirdButtonsSection = UIMenu(title: "", options: .displayInline, children: [shareAction, uploadToOsmAction])
                 
-                let editAction = UIAction(title: localizedString("shared_string_edit"), image: UIImage.icCustomTrackEdit) { _ in
-                    self.onTrackEditClicked(track)
+                let editAction = UIAction(title: localizedString("shared_string_edit"), image: UIImage.icCustomTrackEdit, attributes: isCurrentTrack ? .disabled : []) { _ in
+                    self.onTrackEditClicked(track, isCurrentTrack: isCurrentTrack)
                 }
-                let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage.icCustomCopy) { _ in
-                    self.onTrackDuplicateClicked(track: track, fileName: selectedTrackFilename)
+                let duplicateAction = UIAction(title: localizedString("shared_string_duplicate"), image: UIImage.icCustomCopy, attributes: isCurrentTrack ? .disabled : []) { _ in
+                    self.onTrackDuplicateClicked(track: track, isCurrentTrack: isCurrentTrack)
                 }
-                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage.icCustomEdit) { _ in
-                    self.onTrackRenameClicked(track)
+                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage.icCustomEdit, attributes: isCurrentTrack ? .disabled : []) { _ in
+                    self.onTrackRenameClicked(track, isCurrentTrack: isCurrentTrack)
                 }
-                let moveAction = UIAction(title: localizedString("shared_string_move"), image: UIImage.icCustomFolderMoveOutlined) { _ in
-                    self.onTrackMoveClicked(track)
+                let moveAction = UIAction(title: localizedString("shared_string_move"), image: UIImage.icCustomFolderMoveOutlined, attributes: isCurrentTrack ? .disabled : []) { _ in
+                    self.onTrackMoveClicked(track, isCurrentTrack: isCurrentTrack)
                 }
                 let fourthButtonsSection = UIMenu(title: "", options: .displayInline, children: [editAction, duplicateAction, renameAction, moveAction])
                 

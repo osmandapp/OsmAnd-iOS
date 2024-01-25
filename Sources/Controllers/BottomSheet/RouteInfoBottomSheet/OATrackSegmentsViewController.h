@@ -22,6 +22,6 @@
 @property (nonatomic) BOOL startNavigationOnSelect;
 
 - (instancetype) initWithFile:(OAGPXDocument *)gpx;
-- (instancetype) initWithFilepath:(NSString *)filepath;
+- (instancetype) initWithFilepath:(NSString *)filepath isCurrentTrack:(BOOL)isCurrentTrack;
 
 @end

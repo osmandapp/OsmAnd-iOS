@@ -279,11 +279,11 @@
         [self dismissViewControllerAnimated:YES completion:^{
             NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
             if ([item.key isEqualToString:@"uploadLocal"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload errorToast:[self.delegate showErrorToast]];
             else if ([item.key isEqualToString:@"downloadCloud"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload errorToast:[self.delegate showErrorToast]];
             else if ([item.key isEqualToString:@"deleteItem"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete errorToast:[self.delegate showErrorToast]];
         }];
     }
 }

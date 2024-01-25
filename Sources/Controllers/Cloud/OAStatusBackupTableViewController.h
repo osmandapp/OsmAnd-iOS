@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, EOARecentChangesType)
 - (void)setRowIcon:(OATableRowData *)rowData item:(OASettingsItem *)item;
 - (NSString *)getDescriptionForItemType:(EOASettingsItemType)type fileName:(NSString *)fileName summary:(NSString *)summary;
 - (NSString *)generateTimeString:(long)timeMs summary:(NSString *)summary;
+- (void (^)(NSString *message, NSString *details))showErrorToast;
 
 @end
 

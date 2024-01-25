@@ -358,7 +358,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - Navbar Actions
     
     private func onNavbarSelectButtonClicked() {
-        print("onNavbarSelectButtonClicked")
+        OAUtilities.showToast("", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
     
     private func onNavbarAddFolderButtonClicked() {
@@ -380,17 +380,21 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     @objc private func onNavbarImportButtonClicked() {
         print("onNavbarImportButtonClicked")
+        OAUtilities.showToast("", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
     
     // MARK: - Folders Actions
     
     private func onFolderDetailsButtonClicked() {
         print("onFolderDetailsButtonClicked")
+        OAUtilities.showToast("Folder Details", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
     
     private func onFolderRenameButtonClicked(_ oldFolderName: String) {
         let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
-        alert.addTextField()
+        alert.addTextField { textField in
+            textField.text = oldFolderName
+        }
         alert.addAction(UIAlertAction(title: localizedString("shared_string_apply"), style: .default) { [weak self] _ in
             guard let self else { return }
             if let newFolderName = alert.textFields?.first?.text {
@@ -407,14 +411,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onFolderAppearenceButtonClicked() {
         print("onFolderAppearenceButtonClicked")
+        OAUtilities.showToast("Folder Appearence", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
     
     private func onFolderExportButtonClicked() {
         print("onFolderExportButtonClicked")
+        OAUtilities.showToast("Folder Export", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
     
     private func onFolderMoveButtonClicked() {
         print("onFolderMoveButtonClicked")
+        OAUtilities.showToast("Folder Move", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
         
     private func onFolderDeleteButtonClicked(folderName: String, tracksCount: Int) {
@@ -527,7 +534,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
             let message = localizedString("gpx_enter_new_name") + " " + gpx.gpxTitle
             let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
-            alert.addTextField()
+            alert.addTextField { textField in
+                textField.text = track?.gpxTitle
+            }
             alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
                 guard let self else { return }
                 if let newName = alert.textFields?.first?.text {

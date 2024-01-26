@@ -92,9 +92,8 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     }
     
     private func createCustomWidgets() {
-        let widgetKeys = OAAppSettings.sharedManager().customWidgetKeys.get(appMode)
-        if let widgetKeys, !widgetKeys.isEmpty {
-            checkAndResetCustomIdsIfNeeded()
+        updateUniqueKeys()
+        if let widgetKeys = OAAppSettings.sharedManager().customWidgetKeys.get(appMode), !widgetKeys.isEmpty {
             for key in widgetKeys {
                 if let widgetType = WidgetType.getById(key) {
                     if let widgetInfo = creator.createCustomWidgetInfo(factory: factory, key: key, widgetType: widgetType) {
@@ -105,28 +104,14 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         }
     }
 
-    private func checkAndResetCustomIdsIfNeeded() {
+    private func updateUniqueKeys() {
         let customWidgetKeys = OAAppSettings.sharedManager().customWidgetKeys
-        let widgetKeys = customWidgetKeys?.get(appMode)
-        if let widgetKeys, !widgetKeys.isEmpty {
-            var checkedWidgetKeys = [String]()
-            let hasDuplicates: Bool = hasDuplicates(widgetKeys, checkedKeys: &checkedWidgetKeys)
-            if hasDuplicates {
-                customWidgetKeys?.set(checkedWidgetKeys, mode: appMode)
+        if let widgetKeys = customWidgetKeys?.get(appMode), !widgetKeys.isEmpty {
+            let uniqueKeys = Array(Set(widgetKeys))
+            if uniqueKeys.count != widgetKeys.count {
+                customWidgetKeys?.set(uniqueKeys, mode: appMode)
             }
         }
-    }
-
-    private func hasDuplicates(_ checkingKeys: [String], checkedKeys: inout [String]) -> Bool {
-        var hasDuplicates = false
-        for checkingKey in checkingKeys {
-            if checkedKeys.contains(checkingKey) {
-                hasDuplicates = true
-            } else {
-                checkedKeys.append(checkingKey)
-            }
-        }
-        return hasDuplicates
     }
 
     static func createAllControls(appMode: OAApplicationMode) -> [MapWidgetInfo] {

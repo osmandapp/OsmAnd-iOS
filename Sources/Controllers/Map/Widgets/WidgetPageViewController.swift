@@ -127,8 +127,7 @@ extension WidgetPageViewController {
     }
     
     private func updateSimpleWidget() {
-        simpleWidgetViews.forEach { items in
-            // text Alignment for visibleWidgets
+        simpleWidgetViews.enumerated().forEach { index, items in
             let visibleWidgets = items.filter { !$0.isHidden }
             if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
                 // NOTE: use adjustSize for Complex widget
@@ -148,7 +147,12 @@ extension WidgetPageViewController {
                     }
                 }
             }
-            // show Right Separator
+            // show horizontal separator for visible items in row
+            if index != simpleWidgetViews.count - 1, stackView.subviews.count - 1 > index {
+                let horizontalSeparator = stackView.subviews[index + 1]
+                horizontalSeparator.isHidden = visibleWidgets.isEmpty
+            }
+            // show right separator
             items.enumerated().forEach { idx, widget in
                 widget.showRightSeparator(idx != items.count - 1)
             }

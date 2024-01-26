@@ -8,7 +8,8 @@
 
 extension UIStackView {
     
-    func addSeparators(at positions: [Int], color: UIColor = UIColor.widgetSeparator) {
+    func addSeparators(at positions: [Int],
+                       color: UIColor = UIColor.widgetSeparator) {
         for position in positions {
             let separator = UIView()
             separator.backgroundColor = color

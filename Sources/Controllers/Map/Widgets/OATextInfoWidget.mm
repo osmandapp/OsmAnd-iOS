@@ -108,7 +108,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
     self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
     self.topNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
-   // self.topNameUnitStackView.backgroundColor = [UIColor yellowColor];
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
     
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
@@ -124,7 +123,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.nameLabel = [UILabel new];
     self.nameLabel.text = _contentTitle;
     self.nameLabel.textColor = [UIColor colorNamed:ACColorNameWidgetLabelColor];
-   // self.nameLabel.backgroundColor = [UIColor greenColor];
     
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
@@ -200,12 +198,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.adjustsFontSizeToFitWidth = YES;
     self.valueLabel.minimumScaleFactor = 0.3;
-   // self.valueLabel.backgroundColor = [UIColor greenColor];
 
     self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-   // self.valueLabel.backgroundColor = [UIColor redColor];
     self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
-   // self.valueLabel.textAlignment = self.isFullRow ? NSTextAlignmentCenter : NSTextAlignmentNatural;
     [valueUnitOrEmptyView addSubview:self.valueLabel];
     
     // Create the unitOrEmptyLabel ("KM/H")
@@ -238,17 +233,13 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
         [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
         [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30],
-       // [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
-    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:10];
+    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:15];
     _unitOrEmptyLabelWidthConstraint.active = YES;
-    
-   // self.unitOrEmptyLabel.backgroundColor = [UIColor yellowColor];
     
     self.emptyViewRightPlaceholderFullRow = [UIView new];
     self.emptyViewRightPlaceholderFullRow.translatesAutoresizingMaskIntoConstraints = NO;
     self.emptyViewRightPlaceholderFullRow.hidden = YES;
-   // self.emptyViewRightPlaceholderFullRow.backgroundColor = [UIColor blueColor];
     [contentStackView addArrangedSubview:self.emptyViewRightPlaceholderFullRow];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -375,6 +366,12 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     _imageView.tintColor = color;
 }
 
+- (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName
+{
+    _icon = iconName;
+    [self setImage:image withColor:color];
+}
+
 - (void)setImageHidden:(BOOL)hidden
 {
     _imageView.hidden = hidden;
@@ -491,15 +488,14 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     }
     else
     {
+        _unitOrEmptyLabelWidthConstraint.constant = (self.isFullRow || self.widgetSizeStyle != WidgetSizeStyleSmall) ? 0 : 20;
         if (self.widgetSizeStyle == WidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
             self.unitOrEmptyLabel.text = _subtext;
-            _unitOrEmptyLabelWidthConstraint.constant = 10;
         }
         else
         {
-            _unitOrEmptyLabelWidthConstraint.constant = 0;
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
             self.unitLabel.text = _subtext;

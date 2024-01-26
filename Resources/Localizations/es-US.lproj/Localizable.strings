@@ -3271,3 +3271,10 @@
 "shared_string_keywords" = "Palabras clave";
 "help_article_map_legend_ski_map_name" = "Estilo del mapa invernal";
 "help_article_navigation_routing_osmand_routing_name" = "Sobre la navegación en OsmAnd";
+"no_track_files" = "No tienes archivos de trazas";
+"import_create_track_files" = "Puedes importar, crear o grabar archivos de trazas, usando OsmAnd.";
+"no_tracks_on_map" = "Sin trazas en el mapa";
+"select_tracks_to_display" = "Marca las trazas a mostrar en el mapa.";
+"show_all_tracks" = "Mostrar todas las trazas";
+"recently_visible" = "Visibles recientemente";
+"whats_here" = "¿Qué hay aquí?";

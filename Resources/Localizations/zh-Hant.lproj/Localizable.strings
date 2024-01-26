@@ -3017,3 +3017,6 @@
 "average_speed_skip_stops" = "考慮停止時間";
 "average_speed_time_interval_desc" = "指定平均速度的時間區間。";
 "shared_string_system_default" = "系統預設";
+"shared_string_license" = "授權條款";
+"shared_string_link" = "連結";
+"shared_string_author" = "作者";

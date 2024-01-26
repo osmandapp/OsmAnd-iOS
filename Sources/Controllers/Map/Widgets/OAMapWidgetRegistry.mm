@@ -290,7 +290,7 @@
 {
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
     {
-        if (widgetInfo.getWidgetType == widgetType && ![widgetInfo.key containsString:OAMapWidgetInfo.DELIMITER])
+        if (widgetInfo.getWidgetType == widgetType && ![widgetInfo isCustomWidget])
             return widgetInfo;
     }
     return nil;

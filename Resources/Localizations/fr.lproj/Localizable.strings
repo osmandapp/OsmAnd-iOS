@@ -3262,3 +3262,9 @@
 "help_article_map_legend_ski_map_name" = "Style de carte Ski";
 "help_article_navigation_routing_osmand_routing_name" = "À propos des guidages OsmAnd";
 "whats_here" = "Ce qu'il y a ici";
+"no_tracks_on_map" = "Aucune trace sur la carte";
+"show_all_tracks" = "Afficher toutes les traces";
+"recently_visible" = "Visibles récemment";
+"no_track_files" = "Vous n'avez pas de fichier trace";
+"import_create_track_files" = "Vous pouvez importer, créer, ou enregistrer des fichiers traces en utilisant OsmAnd.";
+"select_tracks_to_display" = "Sélectionnez des traces pour les afficher sur la carte.";

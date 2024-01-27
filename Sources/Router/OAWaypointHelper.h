@@ -34,6 +34,7 @@ struct RouteDataObject;
 - (void) removeVisibleLocationPoints:(NSMutableArray<OALocationPointWrapper *> *)points;
 
 - (OALocationPointWrapper *) getMostImportantLocationPoint:(NSMutableArray<OALocationPointWrapper *> *)list;
+- (BOOL) beforeTunnelEntrance:(int) currentRoute alarm:(OAAlarmInfo *)alarm
 - (OAAlarmInfo *) getMostImportantAlarm:(EOASpeedConstant)sc showCameras:(BOOL)showCameras;
 - (void) enableWaypointType:(int)type enable:(BOOL)enable;
 

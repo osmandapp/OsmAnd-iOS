@@ -412,6 +412,18 @@
     return nil;
 }
 
+- (int) getDistanceToPoint:(CLLocation *)lastKnownLocation locationIndex:(int)locationIndex
+{
+    int dist = [self getDistanceToPoint:locationIndex];
+    CLLocation *next = [self getNextRouteLocation];
+    
+    if (lastKnownLocation && next)
+        dist += getDistance(lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.latitude
+                            next.coordinate.latitude, next.coordinate.longitude);
+
+    return dist;
+}
+
 - (int) getDistanceToPoint:(int)locationIndex
 {
     if (_listDistance && _currentRoute < _listDistance.count

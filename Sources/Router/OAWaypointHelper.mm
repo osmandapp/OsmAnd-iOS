@@ -353,7 +353,7 @@
                                 break;
                             
                             id<OALocationPoint> point = lwp.point;
-                            double d1 = MAX(0.0, [_route getDistanceToPoint:lastKnownLocation, locationIndex:lpw.routeIndex] - lwp.deviationDistance);
+                            double d1 = MAX(0.0, [_route getDistanceToPoint:lastKnownLocation locationIndex:lwp.routeIndex] - lwp.deviationDistance);
                             NSNumber *state = [_locationPointsStates objectForKey:point];
                             if (state && state.intValue == ANNOUNCED_ONCE && [atd isTurnStateActive:atdSpeed dist:d1 turnType:kStateShortPntApproach])
                             {

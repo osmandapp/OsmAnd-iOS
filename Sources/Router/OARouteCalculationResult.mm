@@ -418,7 +418,7 @@
     CLLocation *next = [self getNextRouteLocation];
     
     if (lastKnownLocation && next)
-        dist += getDistance(lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.latitude
+        dist += getDistance(lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.latitude,
                             next.coordinate.latitude, next.coordinate.longitude);
 
     return dist;

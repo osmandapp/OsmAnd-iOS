@@ -40,7 +40,7 @@ private enum ButtonActionNumberTag : Int {
     case save = 2
 }
 
-class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OAUpdatableDelegate, OASaveTrackViewControllerDelegate, OASelectTrackFolderDelegate {
+class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OAUpdatableDelegate, OASaveTrackViewControllerDelegate, OASelectTrackFolderDelegate, OAGPXImportHelperDelegate {
     
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -79,6 +79,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private var routingHelper: OARoutingHelper
     private var gpxDB: OAGPXDatabase
     private var rootVC: OARootViewController
+    private var importHelper: OAGPXImportHelper
     
     required init?(coder: NSCoder) {
         app = OsmAndApp.swiftInstance()
@@ -88,7 +89,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         rootVC = OARootViewController.instance()
         routingHelper = OARoutingHelper.sharedInstance()
         gpxDB = OAGPXDatabase.sharedDb()
+        importHelper = OAGPXImportHelper()
         super.init(coder: coder)
+        importHelper = OAGPXImportHelper(hostViewController: self)
+        importHelper.delegate = self
     }
     
     // MARK: - Base UI settings
@@ -379,8 +383,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     @objc private func onNavbarImportButtonClicked() {
-        print("onNavbarImportButtonClicked")
-        OAUtilities.showToast("", details: "This function is not implemented yet", duration: 4, in: self.view)
+        importHelper.onImportClicked(withDestinationFolderPath: currentSubfolderPath)
     }
     
     // MARK: - Folders Actions
@@ -1040,4 +1043,15 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             }
         }
     }
+    
+    // MARK: - OAGPXImportHelperDelegate
+    
+    func updateVCData() {
+        hardUpdateData()
+    }
+    
+    func dissmissDelegateVC() {
+        dismiss()
+    }
+    
 }

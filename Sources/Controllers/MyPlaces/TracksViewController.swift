@@ -276,13 +276,16 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { _ in
             self.onNavbarImportButtonClicked()
         }
-        let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
+        // TODO: Implement Select navbar action in text task
+        //let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
         let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
         let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
-        let menu = UIMenu(title: "", image: nil, children: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
+        //let menu = UIMenu(title: "", image: nil, children: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
+        let menu = UIMenu(title: "", image: nil, children: [addFolderActionWithDivider, importActionWithDivider])
         
         if let navBarButtontem = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: UIColor.navBarTextColorPrimary, action: nil, menu: menu) {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButtontem], animated: false)
+            navigationItem.setRightBarButtonItems([navBarButtontem], animated: false)
         }
     }
     

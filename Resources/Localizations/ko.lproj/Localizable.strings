@@ -1821,3 +1821,6 @@
 "weather_pressure_inches_of_mercury" = "수은의 인치";
 "map_widget_ant_bicycle_dist_desc" = "여행 거리보기";
 "learn_more_about_sensors_link" = "센서에 대해 더 알아보기.";
+"rendering_attr_weatherCloudContours_name" = "클라우드 격리";
+"checking_progress" = "확인 중…";
+"cloud_conflict" = "충돌";

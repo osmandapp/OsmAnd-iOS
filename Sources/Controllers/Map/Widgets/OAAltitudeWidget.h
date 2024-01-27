@@ -5,7 +5,7 @@
 //  Created by Skalii on 19.04.2023.
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
 #define ALTITUDE_MAP_CENTER @"altitude_map_center"
 
@@ -14,7 +14,7 @@ typedef NS_ENUM(NSInteger, EOAAltitudeWidgetType) {
     EOAAltitudeWidgetTypeMapCenter
 };
 
-@interface OAAltitudeWidget : OATextInfoWidget
+@interface OAAltitudeWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithType:(EOAAltitudeWidgetType)widgetType
                     customId:(NSString *_Nullable)customId

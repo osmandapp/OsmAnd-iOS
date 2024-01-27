@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OATimeToNavigationPointWidget)
 @objcMembers
-class TimeToNavigationPointWidget: OATextInfoWidget {
+class TimeToNavigationPointWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_SECONDS: Int64 = 30
     
     private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!

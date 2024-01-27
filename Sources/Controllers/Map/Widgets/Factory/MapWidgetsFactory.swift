@@ -108,7 +108,7 @@ class MapWidgetsFactory: NSObject {
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
             return SensorTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
         default:
-            return OAPlugin.createMapWidget(widgetType, customId: customId)
+            return OAPlugin.createMapWidget(widgetType, customId: customId, appMode: appMode)
         }
     }
     

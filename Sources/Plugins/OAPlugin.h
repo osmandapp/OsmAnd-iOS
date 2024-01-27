@@ -80,7 +80,7 @@
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
-+ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId;
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode;
 - (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 + (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 + (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;

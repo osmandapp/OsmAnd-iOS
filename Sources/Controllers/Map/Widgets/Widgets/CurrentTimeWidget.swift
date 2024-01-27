@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OACurrentTimeWidget)
 @objcMembers
-final class CurrentTimeWidget: OATextInfoWidget {
+final class CurrentTimeWidget: OASimpleWidget {
     
     var cachedTime: TimeInterval = 0
     

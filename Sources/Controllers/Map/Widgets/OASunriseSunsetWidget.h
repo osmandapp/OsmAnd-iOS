@@ -6,11 +6,11 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 #import "OAAppSettings.h"
 #import "OASunriseSunsetWidgetState.h"
 
-@interface OASunriseSunsetWidget : OATextInfoWidget
+@interface OASunriseSunsetWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithState:(OASunriseSunsetWidgetState *_Nonnull)state
                       appMode:(OAApplicationMode * _Nonnull)appMode;

@@ -157,15 +157,16 @@
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     OAApplicationMode *appMode = [settings.applicationMode get];
-    NSArray<OAWidgetsPanel *> *panels = [OAWidgetsPanel.topPanel getMergedPanels];
 
     OAMapWidgetRegistry *widgetRegistry = [OAMapWidgetRegistry sharedInstance];
     NSMutableOrderedSet<OAMapWidgetInfo *> *enabledWidgets = [widgetRegistry getWidgetsForPanel:appMode
                                                                                     filterModes:kWidgetModeEnabled
-                                                                                         panels:panels];
+                                                                                         panels:@[OAWidgetsPanel.topPanel, OAWidgetsPanel.bottomPanel]];
     for (OAMapWidgetInfo *widgetInfo in enabledWidgets)
-        if ([widgetInfo.key containsString:@"map_markers_top"])
+    {
+        if ([widgetInfo.key hasPrefix:OAWidgetType.markersTopBar.id])
             return YES;
+    }
 
     return NO;
 }

@@ -2041,9 +2041,7 @@
 - (void) remove:(NSString *)string
 {
     if ([self contains:string])
-    {
-        [[self get] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", string]];
-    }
+        [self set:[[self get] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"SELF != %@", string]]];
 }
 
 - (BOOL) contains:(NSString *)string
@@ -2101,7 +2099,14 @@
 - (NSArray<NSArray<NSString *> *> *) get:(OAApplicationMode *)mode
 {
     NSObject *value = [self getValue:mode];
-    return value ? (NSArray<NSArray<NSString *> *> *)value : self.defValue;
+    if (value)
+    {
+        NSArray<NSArray<NSString *> *> *values = (NSArray<NSArray<NSString *> *> *) value;
+        if (values.count > 0 && (self.key == [OAAppSettings sharedManager].topWidgetPanelOrder.key || self.key == [OAAppSettings sharedManager].bottomWidgetPanelOrder.key))
+            return [OAWidgetsPanel getPagedWidgetIdsWithPages:values];
+        return values;
+    }
+    return self.defValue;
 }
 
 - (void) set:(NSArray<NSArray<NSString *> *> *)arr

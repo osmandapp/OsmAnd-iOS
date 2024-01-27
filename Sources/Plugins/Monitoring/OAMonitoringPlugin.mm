@@ -102,29 +102,29 @@
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance appMode:appMode];
+    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];
 
-    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime appMode:appMode];
+    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime customId:nil appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:timeWidget]];
 
-    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill appMode:appMode];
+    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill customId:nil appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:uphillWidget]];
 
-    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill appMode:appMode];
+    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill customId:nil appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:downhillWidget]];
 }
 
-- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType appMode:(OAApplicationMode *)appMode
+- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode
 {
     if (widgetType == OAWidgetType.tripRecordingDistance) {
-        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self customId:@"" appMode:appMode];
+        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self customId:customId appMode:appMode];
     } else if (widgetType == OAWidgetType.tripRecordingTime) {
-        return [[OATripRecordingTimeWidget alloc] initWithСustomId:@"" appMode:appMode];
+        return [[OATripRecordingTimeWidget alloc] initWithСustomId:customId appMode:appMode];
     } else if (widgetType == OAWidgetType.tripRecordingUphill) {
-        return [[OATripRecordingUphillWidget alloc] initWithСustomId:@"" appMode:appMode];
+        return [[OATripRecordingUphillWidget alloc] initWithСustomId:customId appMode:appMode];
     } else if (widgetType == OAWidgetType.tripRecordingDownhill) {
-        return [[OATripRecordingDownhillWidget alloc] initWithСustomId:@"" appMode:appMode];
+        return [[OATripRecordingDownhillWidget alloc] initWithСustomId:customId appMode:appMode];
     }
     return nil;
 }

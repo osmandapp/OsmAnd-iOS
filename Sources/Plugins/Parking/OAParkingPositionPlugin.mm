@@ -53,7 +53,7 @@
 
 @implementation OAParkingPositionPlugin
 {
-    OATextInfoWidget *_parkingPlaceControl;
+    OASimpleWidget *_parkingPlaceControl;
     
     OACommonDouble *_parkingLat;
     OACommonDouble *_parkingLon;
@@ -204,7 +204,7 @@
 - (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    _parkingPlaceControl = [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode];
+    _parkingPlaceControl = (OASimpleWidget *) [self createMapWidgetForParams:OAWidgetType.parking customId:nil appMode:appMode];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_parkingPlaceControl]];
 }
 
@@ -221,9 +221,9 @@
 {
 }
 
-- (OATextInfoWidget *)createParkingPlaceInfoControlWithAppMode:(OAApplicationMode *)appMode
+- (OASimpleWidget *)createParkingPlaceInfoControlWithAppMode:(OAApplicationMode *)appMode
 {
-    _parkingPlaceControl = [[OATextInfoWidget alloc] init];
+    _parkingPlaceControl = [[OASimpleWidget alloc] init];
     _parkingPlaceControl.widgetType = OAWidgetType.parking;
     [_parkingPlaceControl configurePrefsWithId:@"" appMode:appMode];
 

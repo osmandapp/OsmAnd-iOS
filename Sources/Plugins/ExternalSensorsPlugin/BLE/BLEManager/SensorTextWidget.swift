@@ -10,7 +10,7 @@ import Foundation
 import CoreBluetooth
 
 @objcMembers
-final class SensorTextWidget: OATextInfoWidget {
+final class SensorTextWidget: OASimpleWidget {
     static let externalDeviceIdConst = "externalDeviceIdConst"
     
     private(set) var externalDeviceId: String?
@@ -70,7 +70,7 @@ final class SensorTextWidget: OATextInfoWidget {
         let settingRow = section.createNewRow()
         settingRow.cellType = OAValueTableViewCell.getIdentifier()
         settingRow.iconName = "ic_custom_sensor"
-        settingRow.iconTintColor = UIColor.iconColorDefault
+        settingRow.iconTintColor = .iconColorDefault
         settingRow.key = "external_sensor_key"
         settingRow.title = localizedString("external_sensors_source_of_data")
         

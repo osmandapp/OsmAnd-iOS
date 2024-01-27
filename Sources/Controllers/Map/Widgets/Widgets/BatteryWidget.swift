@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OABatteryWidget)
 @objcMembers
-final class BatteryWidget: OATextInfoWidget {
+final class BatteryWidget: OASimpleWidget {
     
     var cachedLeftTime: TimeInterval = 0
     

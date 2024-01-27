@@ -142,7 +142,7 @@ extension WidgetPageViewController {
     
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
-        if widget.widgetType?.isComplex == false {
+        if !WidgetType.isComplexWidget(widget.widgetType?.id ?? "") {
             widget.isSimpleLayout = true
             widget.updateSimpleLayout()
             widget.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
@@ -164,7 +164,7 @@ extension WidgetPageViewController {
                     widget.valueLabel?.textAlignment = .center
                 }
                 // NOTE: use adjustSize for Complex widget
-                if firstWidget.widgetType?.isComplex == true {
+                if WidgetType.isComplexWidget(firstWidget.widgetType?.id ?? "") {
                     firstWidget.adjustSize()
                     firstWidget.heightConstraint?.constant = firstWidget.frame.height
                 }

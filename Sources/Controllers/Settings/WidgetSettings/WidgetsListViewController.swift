@@ -19,8 +19,9 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kPageNumberKey = "page_number"
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
-    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled)
-    
+    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
+    private var editingComplexWidget: MapWidgetInfo?
+
     let panels = WidgetsPanel.values
     
     private var widgetPanel: WidgetsPanel! {
@@ -155,6 +156,10 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             editMode = true
         }
     }
+
+    private func showToastForComplexWidget(_ widgetTitle: String) {
+        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: self.view)
+    }
     
     @objc private func onWidgetAdded(notification: NSNotification) {
         guard let newWidget = notification.object as? MapWidgetInfo else {
@@ -162,7 +167,24 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         }
         let lastSection = tableData.sectionCount() - 1
         let lastSectionData = tableData.sectionData(for: lastSection)
-        createWidgetItem(newWidget, lastSectionData)
+        var createNewSection: Bool = false
+        if widgetPanel.isPanelVertical {
+            if WidgetType.isComplexWidget(newWidget.key) {
+                createNewSection = true
+                showToastForComplexWidget(newWidget.getTitle())
+            } else if lastSectionData.rowCount() > 1 {
+                let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
+                createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
+                if createNewSection, let lastWidget {
+                    showToastForComplexWidget(lastWidget.getTitle())
+                }
+            }
+        }
+        if createNewSection {
+            createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
+        } else {
+            createWidgetItem(newWidget, lastSectionData)
+        }
         if editMode {
             DispatchQueue.main.async { [weak self] in
                 self?.tableView.reloadData()
@@ -193,7 +215,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     // MARK: - Additions
-    
+
     private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
@@ -239,7 +261,9 @@ extension WidgetsListViewController {
             }
             if let cell {
                 let isPageCell = item.key == kPageKey
-                cell.titleLabel.text = isPageCell ? String(format: localizedString("shared_string_page_number"), item.integer(forKey: kPageNumberKey) + 1) : item.title
+                cell.titleLabel.text = isPageCell ? String(format: localizedString(widgetPanel.isPanelVertical ? "shared_string_row_number" : "shared_string_page_number"),
+                                                           item.integer(forKey: kPageNumberKey) + 1)
+                                                : item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
@@ -292,6 +316,14 @@ extension WidgetsListViewController {
         let item = tableData.item(for: indexPath)
         let isFirstPageCell = item.key == kPageKey && indexPath.row == 0
         let isNoWidgetsCell = item.key == kNoWidgetsKey
+        
+        if item.key == kPageKey, tableData.rowCount(UInt(indexPath.section)) > indexPath.row + 1 {
+            let nextItem = tableData.item(for: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+            if let mapWidgetInfo = nextItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                return false
+            }
+        }
+        
         return editMode && !isNoWidgetsCell && !isFirstPageCell
     }
     
@@ -310,19 +342,31 @@ extension WidgetsListViewController {
         updatePageNumbers()
         tableView.reloadData()
         updateBottomButtons()
+        if let editingComplexWidget {
+            showToastForComplexWidget(editingComplexWidget.getTitle())
+            self.editingComplexWidget = nil
+        }
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = tableData.item(for: indexPath)
+            if item.key == kPageKey {
+                let prevSourceItem = tableData.item(for: IndexPath(row: indexPath.row - 1, section: indexPath.section))
+                if let mapWidgetInfo = prevSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                    showToastForComplexWidget(mapWidgetInfo.getTitle())
+                    return
+                }
+                if tableData.rowCount(UInt(indexPath.section)) > indexPath.row + 1 {
+                    let nextSourceItem = tableData.item(for: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+                    if let mapWidgetInfo = nextSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                        showToastForComplexWidget(mapWidgetInfo.getTitle())
+                        return
+                    }
+                }
+            }
             tableData.removeRow(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            if let widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
-                widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
-            }
-            if !editMode {
-                reorderWidgets()
-            }
             let isPageCell = item.key == kPageKey
             if isPageCell {
                 updatePageNumbers()
@@ -335,8 +379,49 @@ extension WidgetsListViewController {
     override func tableView(_ tableView: UITableView,
                             targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath,
                             toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
+        let sourceItem = tableData.item(for: sourceIndexPath)
+        if let mapWidgetInfo = sourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+            editingComplexWidget = mapWidgetInfo
+            return sourceIndexPath
+        }
+        if sourceItem.key == kPageKey {
+            let prevSourceItem = tableData.item(for: IndexPath(row: sourceIndexPath.row - 1, section: sourceIndexPath.section))
+            if let mapWidgetInfo = prevSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                editingComplexWidget = mapWidgetInfo
+                return sourceIndexPath
+            }
+        }
+
+        let destinationItem = tableData.item(for: proposedDestinationIndexPath)
+        if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+            editingComplexWidget = mapWidgetInfo
+            return sourceIndexPath
+        }
+        if destinationItem.key == kPageKey {
+            if !self.tableView(tableView, canMoveRowAt: proposedDestinationIndexPath), self.tableView(tableView, canEditRowAt: proposedDestinationIndexPath), tableData.rowCount(UInt(proposedDestinationIndexPath.section)) > proposedDestinationIndexPath.row + 1 {
+                let destinationComplexItem = tableData.item(for: IndexPath(row: proposedDestinationIndexPath.row + 1, section: proposedDestinationIndexPath.section))
+                if let mapWidgetInfo = destinationComplexItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                    editingComplexWidget = mapWidgetInfo
+                    return sourceIndexPath
+                }
+            }
+            let prevDestinationItem = tableData.item(for: IndexPath(row: proposedDestinationIndexPath.row - 1, section: proposedDestinationIndexPath.section))
+            if let mapWidgetInfo = prevDestinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                editingComplexWidget = mapWidgetInfo
+                return sourceIndexPath
+            }
+        }
+
         if proposedDestinationIndexPath.row == 0 && proposedDestinationIndexPath.section == 0 {
-            return IndexPath(row: 1, section: 0)
+            let indexPath = IndexPath(row: 1, section: 0)
+            if tableData.rowCount(UInt(indexPath.section)) > 1 {
+                let destinationItem = tableData.item(for: indexPath)
+                if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key), sourceItem.key != kPageKey {
+                    editingComplexWidget = mapWidgetInfo
+                    return sourceIndexPath
+                }
+            }
+            return indexPath
         }
         return proposedDestinationIndexPath
     }
@@ -360,23 +445,14 @@ extension WidgetsListViewController {
             row.title = localizedString("no_widgets_here_yet")
             row.descr = localizedString("no_widgets_descr")
             row.iconName = iconName
-            row.iconTintColor = UIColor.iconColorDefault
+            row.iconTintColor = .iconColorDefault
             row.setObj(localizedString("add_widget"), forKey: "buttonTitle")
         } else {
-            if widgetPanel.isPagingAllowed() {
-                let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
-                tableData.clearAllData()
-                tableData.createNewSection()
-                for i in 0..<pagedWidgets.count {
-                    createWidgetItems(pagedWidgets[i], i)
-                }
-            } else {
-                let widgets = widgetRegistry.getWidgetsForPanel(selectedAppMode, filterModes: Self.enabledWidgetsFilter, panels: [widgetPanel])
-                if let widgets {
-                    tableData.clearAllData()
-                    tableData.createNewSection()
-                    createWidgetItems(widgets, 0)
-                }
+            let pagedWidgets = widgetRegistry.getPagedWidgets(forPanel: selectedAppMode, panel: widgetPanel, filterModes: Self.enabledWidgetsFilter)!
+            tableData.clearAllData()
+            tableData.createNewSection()
+            for i in 0..<pagedWidgets.count {
+                createWidgetItems(pagedWidgets[i], i)
             }
         }
     }
@@ -505,7 +581,7 @@ extension WidgetsListViewController {
         let enabledWidgets = widgetRegistry.getWidgetsForPanel(selectedAppMode,
                                                                filterModes: Self.enabledWidgetsFilter,
                                                                panels: [widgetPanel])!
-        return editMode || enabledWidgets.count > 0 ? localizedString(editMode ? "add_page" : "shared_string_edit") : ""
+        return enabledWidgets.count == 0 ? "" : editMode ? localizedString(widgetPanel.isPanelVertical ? "add_row" : "add_page") : localizedString("shared_string_edit")
     }
     
     override func getTopButtonColorScheme() -> EOABaseButtonColorScheme {

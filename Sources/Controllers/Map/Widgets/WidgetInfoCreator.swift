@@ -80,6 +80,9 @@ class WidgetInfoCreator: NSObject {
     }
     
     func createWidgetInfo(widgetId: String, widget: OABaseWidgetView, iconName: String, message: String?, page: Int, order: Int, widgetPanel: WidgetsPanel) -> MapWidgetInfo {
+        if let simpleWidget = widget as? OASimpleWidget {
+            return SimpleWidgetInfo(key: widgetId, simpleWidget: simpleWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
+        }
         if let textInfoWidget = widget as? OATextInfoWidget {
             return SideWidgetInfo(key: widgetId, textWidget: textInfoWidget, settingsIconId: iconName, message: message ?? "", page: page, order: order, widgetPanel: widgetPanel)
         } else {

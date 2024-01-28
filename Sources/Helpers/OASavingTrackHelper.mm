@@ -82,7 +82,7 @@
     BOOL _isExportingCurrentTrack;
     UIDocumentInteractionController *_exportController;
     UIViewController *_exportingHostVC;
-    id<OAUpdatableDelegate> _exportingHostVCDelegate;
+    id<OATrackSavingHelperUpdatableDelegate> _exportingHostVCDelegate;
 }
 
 @synthesize lastTimeUpdated, points, isRecording, distance, currentTrack, currentTrackIndex;

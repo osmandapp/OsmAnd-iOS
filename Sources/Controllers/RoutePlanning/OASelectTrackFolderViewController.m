@@ -29,6 +29,7 @@
 {
     OAGPX *_gpx;
     NSString *_selectedFolderName;
+    NSString *_prefixToHide;
     NSArray<NSArray<NSDictionary *> *> *_data;
 }
 
@@ -58,6 +59,18 @@
     return self;
 }
 
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName prefixToHide:(NSString*)prefixToHide
+{
+    self = [super init];
+    if (self)
+    {
+        _selectedFolderName = selectedFolderName;
+        _prefixToHide = prefixToHide;
+        [self reloadData];
+    }
+    return self;
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
@@ -67,6 +80,13 @@
     self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    if (_delegate && [_delegate respondsToSelector:@selector(onFolderSelectCancelled)])
+        [_delegate onFolderSelectCancelled];
+    [super viewWillDisappear:animated];
 }
 
 #pragma mark - Base UI
@@ -97,14 +117,18 @@
     NSMutableArray *cellFoldersData = [NSMutableArray new];
     for (NSString *folderName in allFolderNames)
     {
+        if (_prefixToHide && [folderName hasPrefix:_prefixToHide])
+            continue;
+        
         NSArray *folderItems = foldersData[folderName];
         int tracksCount = folderItems ? folderItems.count : 0;
+        NSString *selectedFolderName = _selectedFolderName.length == 0 ? OALocalizedString(@"shared_string_gpx_tracks") : _selectedFolderName;
         [cellFoldersData addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"header" : OALocalizedString(@"plan_route_folder"),
             @"title" : folderName,
             @"description" : [NSString stringWithFormat:@"%i", tracksCount],
-            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: _selectedFolderName]],
+            @"isSelected" : [NSNumber numberWithBool:[folderName isEqualToString: selectedFolderName]],
             @"img" : @"ic_custom_folder"
         }];
     }
@@ -115,7 +139,7 @@
 
 - (void)reloadData
 {
-    NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
+    NSArray<NSString *> *allFoldersNames = [OAUtilities getGpxFoldersListSorted:YES shouldAddRootTracksFolder:YES];
         
     OALoadGpxTask *task = [[OALoadGpxTask alloc] init];
     [task execute:^(NSDictionary<NSString *, NSArray<OAGpxInfo *> *>* gpxFolders) {

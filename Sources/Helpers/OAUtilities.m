@@ -2559,28 +2559,83 @@ static const double d180PI = 180.0 / M_PI_2;
     return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
 }
 
-+ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
 {
-    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
-    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
-    for (NSString *name in filesList)
+    NSMutableArray<NSString *> *allFoldersFullPathes = [self.class getSubfoldersList:OsmAndApp.instance.gpxPath];
+    NSMutableArray<NSString *> *allFoldersShortPathes = [NSMutableArray array];
+    for (NSString *path in allFoldersFullPathes)
     {
-        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
-            [allFoldersNames addObject:name];
+        NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+        [allFoldersShortPathes addObject:[path stringByReplacingOccurrencesOfString:pathToDelete withString:@""]];
     }
-    if (shouldAddTracksFolder)
-        [allFoldersNames addObject:OALocalizedString(@"shared_string_gpx_tracks")];
+    
+    if (shouldAddRootTracksFolder)
+        [allFoldersShortPathes addObject:OALocalizedString(@"shared_string_gpx_tracks")];
     
     if (shouldSort)
     {
-        return [allFoldersNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-            return [obj1 compare:obj2];
+        return [allFoldersShortPathes sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            if ([obj1 isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
+                return NSOrderedAscending;
+            else if ([obj2 isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
+                return NSOrderedDescending;
+            else
+                return [obj1 compare:obj2];
         }];
     }
     else
     {
-        return [NSArray arrayWithArray:allFoldersNames];
+        return [NSArray arrayWithArray:allFoldersShortPathes];
     }
+}
+
++ (NSMutableArray<NSString *> *) getSubfoldersList:(NSString *)path
+{
+    NSMutableArray<NSString *> *allSubfolderPathes = [NSMutableArray new];
+    
+    NSString *currentFolderPath = path;
+    if (!currentFolderPath || currentFolderPath.length == 0)
+        currentFolderPath = OsmAndApp.instance.documentsPath;
+    
+    NSURL *currentFolderUrl = [NSURL fileURLWithPath:currentFolderPath];
+    if (currentFolderUrl)
+    {
+        NSArray<NSURL *> *subfolderUrls =  [[NSFileManager defaultManager] contentsOfDirectoryAtURL:currentFolderUrl includingPropertiesForKeys:@[NSURLNameKey, NSURLIsDirectoryKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+        for (NSURL *subfolderUrl in subfolderUrls)
+        {
+            if([subfolderUrl.lastPathComponent hasPrefix:@"."])
+                continue;
+            
+            if ([self.class isDirByUrl:subfolderUrl])
+            {
+                NSString *subfolderPath = [path stringByAppendingPathComponent:subfolderUrl.lastPathComponent];
+                [allSubfolderPathes addObject:subfolderPath];
+                
+                NSMutableArray<NSString *> *recursiveFoundSubfolderPathes = [self.class getSubfoldersList:subfolderPath];
+                if (recursiveFoundSubfolderPathes.count > 0)
+                    [allSubfolderPathes addObjectsFromArray:recursiveFoundSubfolderPathes];
+            }
+        }
+    }
+    return allSubfolderPathes;
+}
+
++ (BOOL) isDirByUrl:(NSURL *)url
+{
+    if (url)
+    {
+        NSNumber *isDirectory;
+        [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
+        if (isDirectory && [isDirectory boolValue])
+            return YES;
+    }
+    return NO;
+}
+
++ (BOOL) isDirByPath:(NSString *)path
+{
+    NSURL *url = [NSURL fileURLWithPath:path];
+    return [self.class isDirByUrl:url];
 }
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor

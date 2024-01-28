@@ -14,6 +14,9 @@
 - (void) onFolderSelected:(NSString *)selectedFolderName;
 - (void) onFolderAdded:(NSString *)addedFolderName;
 
+@optional
+- (void) onFolderSelectCancelled;
+
 @end
 
 @interface OASelectTrackFolderViewController : OABaseNavbarViewController
@@ -22,5 +25,6 @@
 
 - (instancetype) initWithGPX:(OAGPX *)gpx;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName prefixToHide:(NSString*)prefixToHide;
 
 @end

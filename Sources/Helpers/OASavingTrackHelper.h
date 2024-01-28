@@ -16,7 +16,7 @@
 @class OAGPX;
 @class OAWptPt;
 
-@protocol OAUpdatableDelegate <NSObject>
+@protocol OATrackSavingHelperUpdatableDelegate <NSObject>
 
 - (void) onNeedUpdateHostData;
 

@@ -11,7 +11,6 @@
 @protocol OAGPXImportHelperDelegate <NSObject>
 
 - (void) updateDelegateVCData;
-- (void) dissmissDelegateVC;
 
 @end
 

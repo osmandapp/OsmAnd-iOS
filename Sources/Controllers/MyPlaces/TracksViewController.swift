@@ -1137,8 +1137,4 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     func updateVCData() {
         hardUpdateData()
     }
-    
-    func dissmissDelegateVC() {
-        dismiss()
-    }
 }

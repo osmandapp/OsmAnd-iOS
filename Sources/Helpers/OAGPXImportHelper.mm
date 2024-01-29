@@ -96,7 +96,8 @@ static UIViewController *parentController;
     UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     documentPickerVC.allowsMultipleSelection = NO;
     documentPickerVC.delegate = self;
-    [_hostVC presentViewController:documentPickerVC animated:YES completion:nil];
+    if (_hostVC)
+        [_hostVC presentViewController:documentPickerVC animated:YES completion:nil];
 }
 
 - (NSString *)trim:(NSString *)path
@@ -437,7 +438,7 @@ static UIViewController *parentController;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self hideProgressHUD];
         if (_delegate)
-            [_delegate dissmissDelegateVC];
+            [_delegate updateDelegateVCData];
     });
 }
 

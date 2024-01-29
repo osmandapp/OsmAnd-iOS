@@ -26,11 +26,14 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
+    private var importHelper = OAGPXImportHelper()
     
     override func commonInit() {
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
+        importHelper = OAGPXImportHelper(hostViewController: self)
+        importHelper.delegate = self
     }
     
     override func registerNotifications() {
@@ -494,13 +497,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onImportButtonClicked() {
-        let contentTypes: [UTType] = [UTType(filenameExtension: "gpx") ?? .item,
-                                      UTType(filenameExtension: "kmz") ?? .item,
-                                      UTType(filenameExtension: "kml") ?? .item]
-        let documentPickerVC = UIDocumentPickerViewController(forOpeningContentTypes: contentTypes, asCopy: true)
-        documentPickerVC.allowsMultipleSelection = false
-        documentPickerVC.delegate = self
-        present(documentPickerVC, animated: true, completion: nil)
+        importHelper.onImportClicked()
     }
     
     @objc private func onCellButtonClicked(sender: UIButton) {
@@ -546,22 +543,14 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
     }
 }
 
-extension MapSettingsGpxViewController: UIDocumentPickerDelegate {
-    func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
-        guard let url = urls.first, ["gpx", "kml", "kmz"].contains(url.pathExtension.lowercased()) else { return }
-        let gpxListViewController = OAGPXListViewController()
-        gpxListViewController.prepareProcessUrl(url, showAlerts: true, openGpxView: false) { success in
-            if success {
-                DispatchQueue.main.async {
-                    self.loadGpxTracks()
-                    self.generateData()
-                    self.tableView.reloadData()
-                    self.updateSelectedRows()
-                    self.updateBottomButtons()
-                }
-            } else {
-                debugPrint("Error processing URL: \(url)")
-            }
-        }
+extension MapSettingsGpxViewController: OAGPXImportHelperDelegate {
+    func updateVCData() {
+        DispatchQueue.main.async {
+           self.loadGpxTracks()
+           self.generateData()
+           self.tableView.reloadData()
+           self.updateSelectedRows()
+           self.updateBottomButtons()
+       }
     }
 }

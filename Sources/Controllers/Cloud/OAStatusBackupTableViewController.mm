@@ -609,6 +609,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     return [self generateTimeString:info.uploadTime summary:summary];
 }
 
+- (void (^_Nonnull)(NSString * _Nonnull message, NSString * _Nonnull details))showErrorToast
+{
+    return ^(NSString *message, NSString *details) {
+        [OAUtilities showToast:message details:details duration:4 inView:self.view];
+    };
+}
+
 // MARK: UITableViewDataSoure
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

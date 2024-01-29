@@ -3277,3 +3277,9 @@
 "shared_string_setup_route" = "Route aufsetzen";
 "testFlight" = "TestFlight";
 "beats_per_minute_short" = "HF";
+"no_track_files" = "Sie haben keine Track-Dateien";
+"no_tracks_on_map" = "Keine Tracks auf der Karte";
+"select_tracks_to_display" = "Tracks auswählen, um sie auf der Karte anzuzeigen.";
+"show_all_tracks" = "Alle Tracks anzeigen";
+"import_create_track_files" = "Sie können mit OsmAnd Track-Dateien importieren, erstellen oder aufzeichnen.";
+"recently_visible" = "Kürzlich sichtbar";

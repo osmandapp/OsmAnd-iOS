@@ -89,6 +89,7 @@ struct RouteSegmentResult;
 - (CLLocation *) getRouteLocationByDistance:(int)meters;
 - (BOOL) directionsAvailable;
 - (OARouteDirectionInfo *) getCurrentDirection;
+- (int) getDistanceToPoint:(CLLocation *)lastKnownLocation locationIndex:(int)locationIndex;
 - (int) getDistanceToPoint:(int)locationIndex;
 - (int) getDistanceFromStart;
 - (int) getDistanceToFinish:(CLLocation *)fromLoc;

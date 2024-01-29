@@ -1819,7 +1819,7 @@
 "toast_empty_name_error" = "Névtelen hely";
 "shared_string_purchased" = "Megvásárolva";
 "private_access_routing_req" = "A célpont korlátozott hozzáférésű területen található. Engedélyezi a magánutak használatát ennél az útvonaltervnél\?";
-"nautical_depth" = "Tengermélységek";
+"nautical_depth" = "Vízmélység";
 "transport_hazmat_yes_desc" = "Válassza ki a megfelelő kategóriát.";
 "not_available_with" = "Ezzel együtt nem áll rendelkezésre: %@";
 "annual_subscription" = "Éves előfizetés";
@@ -2378,3 +2378,7 @@
 "rotate_map_manual_opt" = "Kézzel forgatva (rögzített)";
 "shared_string_cache" = "Gyorsítótár";
 "add_row" = "Sor hozzáadása";
+"shared_string_link" = "Hivatkozás";
+"shared_string_author" = "Szerző";
+"shared_string_license" = "Licenc";
+"help_article_map_legend_nautical_map_name" = "Hajózásitérkép-stílus";

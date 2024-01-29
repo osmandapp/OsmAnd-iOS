@@ -3262,3 +3262,9 @@
 "external_device_details_information" = "Informação";
 "help_article_navigation_routing_osmand_routing_name" = "Sobre o roteamento do OsmAnd";
 "whats_here" = "O que há aqui";
+"no_tracks_on_map" = "Sem trilhos no mapa";
+"select_tracks_to_display" = "Selecione os trilhos a mostrar no mapa.";
+"recently_visible" = "Visível recentemente";
+"no_track_files" = "Não tem ficheiros de trilhos";
+"import_create_track_files" = "Pode importar, criar ou gravar ficheiros de trilhos usando o OsmAnd.";
+"show_all_tracks" = "Mostrar todos os trilhos";

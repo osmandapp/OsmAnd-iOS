@@ -66,7 +66,11 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 - (void) updateImportListener:(id<OAImportListener>)listener;
 
 - (void) syncSettingsItems:(NSString *)key operation:(EOABackupSyncOperationType)operation;
-- (void) syncSettingsItems:(NSString *)key localFile:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile operation:(EOABackupSyncOperationType)operation;
+- (void) syncSettingsItems:(NSString *)key
+                 localFile:(OALocalFile *)localFile
+                remoteFile:(OARemoteFile *)remoteFile
+                 operation:(EOABackupSyncOperationType)operation
+                errorToast:(void (^)(NSString *message, NSString *detail))errorToast;
 
 - (void) finishImport:(id<OAImportListener>)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;
 

@@ -373,6 +373,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    private func recursiveFillTracks(_ folder: GpxFolder) -> [OAGPX] {
+        var tracks = [OAGPX]()
+        for track in folder.files.values {
+            tracks.append(track)
+        }
+        for subfolder in folder.subfolders.values {
+            let subfolderTracks = recursiveFillTracks(subfolder)
+            tracks.append(contentsOf: subfolderTracks)
+        }
+        return tracks
+    }
+    
     private func recursiveFillFilepathces(_ folder: GpxFolder) -> [String] {
         var filePathces = [String]()
         for file in folder.files.values {
@@ -438,17 +450,31 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         present(alert, animated: true)
     }
     
-    private func onFolderAppearenceButtonClicked() {
-        print("onFolderAppearenceButtonClicked")
-        OAUtilities.showToast("Folder Appearence", details: "This function is not implemented yet", duration: 4, in: self.view)
+    private func onFolderAppearenceButtonClicked(_ selectedFolderName: String) {
+        if let currentFolder = getCurrentFolder() {
+            if let selectedFolder = currentFolder.subfolders[selectedFolderName] {
+                let subfolderTracks = recursiveFillTracks(selectedFolder)
+                if !subfolderTracks.isEmpty {
+                    let randomTrack = subfolderTracks[0]
+                    let state = OATrackMenuViewControllerState()
+                    state.openedFromTracksList = true;
+                    rootVC.mapPanel.openTargetView(with: randomTrack, items: subfolderTracks, trackHudMode: .appearanceHudMode,  state: state)
+                    dismiss()
+                } else {
+                    OAUtilities.showToast(localizedString("shared_string_error"), details: localizedString("my_places_no_tracks_title"), duration: 4, in: self.view)
+                }
+            }
+        }
     }
     
     private func onFolderExportButtonClicked(_ selectedFolderName: String) {
         if let currentFolder = getCurrentFolder() {
-            if let selectedDolder = currentFolder.subfolders[selectedFolderName] {
-                let exportFilePathes = recursiveFillFilepathces(selectedDolder)
+            if let selectedFolder = currentFolder.subfolders[selectedFolderName] {
+                let exportFilePathes = recursiveFillFilepathces(selectedFolder)
+                let state = OATrackMenuViewControllerState()
+                state.openedFromTracksList = true;
                 let vc = OAExportItemsViewController(tracks: exportFilePathes)
-                self.navigationController?.pushViewController(vc, animated: true)
+                navigationController?.pushViewController(vc, animated: true)
             }
         }
     }
@@ -1006,7 +1032,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     self.onFolderRenameButtonClicked(selectedFolderName)
                 }
                 let appearenceAction = UIAction(title: localizedString("shared_string_appearance"), image: UIImage.icCustomAppearanceOutlined) { _ in
-                    self.onFolderAppearenceButtonClicked()
+                    self.onFolderAppearenceButtonClicked(selectedFolderName)
                 }
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction, appearenceAction])
                 

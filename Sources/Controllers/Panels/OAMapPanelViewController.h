@@ -145,6 +145,11 @@
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;
 
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                        items:(NSArray<OAGPX *> *)items
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                        state:(OATrackMenuViewControllerState *)state;
+
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;

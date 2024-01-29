@@ -119,6 +119,7 @@
 #import "OAAlertBottomSheetViewController.h"
 #import "OAGPXListViewController.h"
 #import "OAExportItemsViewController.h"
+#import "OATrackMenuAppearanceHudViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

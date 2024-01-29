@@ -316,10 +316,10 @@
                         <viewLayoutGuide key="safeArea" id="041-i2-uHy"/>
                         <color key="backgroundColor" name="viewBg"/>
                         <constraints>
-                            <constraint firstItem="npH-mS-lH3" firstAttribute="leading" secondItem="041-i2-uHy" secondAttribute="leading" id="loL-Cv-Gvs"/>
+                            <constraint firstItem="npH-mS-lH3" firstAttribute="leading" secondItem="MuT-fW-w07" secondAttribute="leading" id="loL-Cv-Gvs"/>
                             <constraint firstItem="041-i2-uHy" firstAttribute="bottom" secondItem="npH-mS-lH3" secondAttribute="bottom" id="tNh-aa-VSa"/>
                             <constraint firstItem="npH-mS-lH3" firstAttribute="top" secondItem="041-i2-uHy" secondAttribute="top" id="tQZ-7x-iuZ"/>
-                            <constraint firstItem="041-i2-uHy" firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
+                            <constraint firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_travel" id="3Z5-lB-D9o"/>

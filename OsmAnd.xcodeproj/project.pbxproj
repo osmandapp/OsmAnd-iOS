@@ -14282,7 +14282,6 @@
 			buildConfigurationList = BBA3AFEB197FC4BB0039D991 /* Build configuration list for PBXNativeTarget "OsmAnd Maps" */;
 			buildPhases = (
 				3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */,
-				322DE0B12B63A3CF00BBA876 /* ShellScript */,
 				8401FCFC1EE4723B00238915 /* Copy phrases */,
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
@@ -16678,23 +16677,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		322DE0B12B63A3CF00BBA876 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Type a script or drag a script file from your workspace to insert its path.\nkillall Simulator || echo \"Simulator app already closed\"\n";
-		};
 		32EAF9FC2AE14BD300646807 /* Download Default_wikivoyage.travel.obf */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

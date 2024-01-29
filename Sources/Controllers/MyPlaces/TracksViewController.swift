@@ -372,6 +372,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         } catch {
         }
     }
+    
+    private func recursiveFillFilepathces(_ folder: GpxFolder) -> [String] {
+        var filePathces = [String]()
+        for file in folder.files.values {
+            filePathces.append(getAbsolutePath(file.gpxFilePath))
+        }
+        for subfolder in folder.subfolders.values {
+            let subfolderFilePathces = recursiveFillFilepathces(subfolder)
+            filePathces.append(contentsOf: subfolderFilePathces)
+        }
+        return filePathces
+    }
         
     // MARK: - Navbar Actions
     
@@ -431,9 +443,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         OAUtilities.showToast("Folder Appearence", details: "This function is not implemented yet", duration: 4, in: self.view)
     }
     
-    private func onFolderExportButtonClicked() {
-        print("onFolderExportButtonClicked")
-        OAUtilities.showToast("Folder Export", details: "This function is not implemented yet", duration: 4, in: self.view)
+    private func onFolderExportButtonClicked(_ selectedFolderName: String) {
+        if let currentFolder = getCurrentFolder() {
+            if let selectedDolder = currentFolder.subfolders[selectedFolderName] {
+                let exportFilePathes = recursiveFillFilepathces(selectedDolder)
+                let vc = OAExportItemsViewController(tracks: exportFilePathes)
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
     }
     
     private func onFolderMoveButtonClicked(_ selectedFolderName: String) {
@@ -994,7 +1011,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction, appearenceAction])
                 
                 let exportAction = UIAction(title: localizedString("shared_string_export"), image: UIImage.icCustomExportOutlined) { _ in
-                    self.onFolderExportButtonClicked()
+                    self.onFolderExportButtonClicked(selectedFolderName)
                 }
                 let moveAction = UIAction(title: localizedString("shared_string_move"), image: UIImage.icCustomFolderMoveOutlined) { _ in
                     self.onFolderMoveButtonClicked(selectedFolderName)

@@ -118,6 +118,7 @@
 #import "OARecordSettingsBottomSheetViewController.h"
 #import "OAAlertBottomSheetViewController.h"
 #import "OAGPXListViewController.h"
+#import "OAExportItemsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

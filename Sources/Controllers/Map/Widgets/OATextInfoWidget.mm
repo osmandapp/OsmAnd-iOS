@@ -50,6 +50,7 @@
     OACommonBoolean *_hideIconPref;
     OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
+    UIColor *_iconColor;
 }
 
 NSString *const kHideIconPref = @"kHideIconPref";
@@ -178,7 +179,14 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     ]];
     
     _imageView = [UIImageView new];
-    [self setImage:[UIImage imageNamed:_icon]];
+    UIImage *image = [UIImage imageNamed:_icon];
+    if (_iconColor) {
+        [self setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [_imageView setTintColor:_iconColor];
+        _iconColor = nil;
+    } else {
+        [self setImage:image];
+    }
     _imageView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.iconWidgetView addSubview:_imageView];
     [NSLayoutConstraint activateConstraints:@[
@@ -369,6 +377,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 - (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName
 {
     _icon = iconName;
+    _iconColor = color;
     [self setImage:image withColor:color];
 }
 

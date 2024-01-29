@@ -131,7 +131,7 @@
 
 - (void)updateSimpleLayout
 {
-    NSLog(@"");
+    NSLog(@"call base updateSimpleLayout");
 }
 
 - (void)showBottomSeparator:(BOOL)show

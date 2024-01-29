@@ -31,8 +31,8 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     convenience init(widgetState: MapMarkerSideWidgetState, appMode: OAApplicationMode) {
         
         self.init(frame: .zero)
-        configurePrefs(withId: widgetState.customId, appMode: appMode)
         self.widgetType = widgetState.isFirstMarker() ? WidgetType.sideMarker1 : WidgetType.sideMarker2
+        configurePrefs(withId: widgetState.customId, appMode: appMode)
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
         self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref

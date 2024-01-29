@@ -7,8 +7,6 @@
 //
 
 #import <UIKit/UIKit.h>
-//#import <Foundation/Foundation.h>
-//#import "OsmAnd_Maps-Swift.h"
 
 @class OABaseWidgetView, OAWidgetType, OAWidgetState, OAWidgetsPanel, OAApplicationMode, OACommonBoolean, OACommonPreference, OATableDataModel, OATextState;
 

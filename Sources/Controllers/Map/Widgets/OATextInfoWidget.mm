@@ -20,9 +20,6 @@
 #define fullTextWidth 90
 #define minWidgetHeight 32
 
-@interface OATextInfoWidget ()
-@end
-
 @implementation OATextInfoWidget
 {
     NSString *_contentTitle;
@@ -87,6 +84,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
+    self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
     [self initSeparatorsView];
     
     UIStackView *verticalStackView = [UIStackView new];
@@ -301,7 +299,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [_textShadowView.leadingAnchor constraintEqualToAnchor:_textView.leadingAnchor]
     ]];
     
-    self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
+    self.backgroundColor = [UIColor whiteColor];
 
     _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
@@ -440,7 +438,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (void) setText:(NSString *)text subtext:(NSString *)subtext
 {
-    NSLog(@"setText: %@ subtext %@", text, subtext);
     [self setTextNoUpdateVisibility:text subtext:subtext];
     [self updateVisibility:text != nil];
 }
@@ -540,7 +537,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 {
     if (self.isSimpleLayout)
     {
-        NSLog(@"refreshLabel isSimpleLayout %@", _text);
         [self configureSimpleLayout];
     }
     else
@@ -759,7 +755,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     OATableRowData *widgetStyleRow = section.createNewRow;
     widgetStyleRow.cellType = SegmentImagesWithRightLableTableViewCell.getCellIdentifier;
     widgetStyleRow.title = OALocalizedString(@"shared_string_height");
-    [widgetStyleRow setObj:self.sizeStylePref forKey:@"pref"];
+    [widgetStyleRow setObj:self.sizeStylePref forKey:@"prefSegment"];
     [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];
     [widgetStyleRow setObj:@[ACImageNameIcCustom20HeightS, ACImageNameIcCustom20HeightM, ACImageNameIcCustom20HeightL] forKey:@"values"];
     

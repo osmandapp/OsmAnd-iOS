@@ -31,8 +31,8 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _state = state;
-        [self configurePrefsWithId:state.customId appMode:appMode];
         self.widgetType = state.isSunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
+        [self configurePrefsWithId:state.customId appMode:appMode];
         
         __weak OASunriseSunsetWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{

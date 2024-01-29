@@ -21,7 +21,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     private let kWidgetsInfoKey = "widget_info"
     private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     private var editingComplexWidget: MapWidgetInfo?
-
+    
     let panels = WidgetsPanel.values
     
     private var widgetPanel: WidgetsPanel! {
@@ -35,7 +35,9 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         didSet {
             tableView.setEditing(editMode, animated: true)
             if tableData.hasChanged || tableData.sectionCount() == 0 {
-                updateUIAnimated(nil)
+                updateUIAnimated { [weak self] _ in
+                    self?.applyRowStyle()
+                }
             } else {
                 updateWithoutData()
             }
@@ -75,7 +77,8 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         
         rows.lazy
             .compactMap { $0.widget as? OATextInfoWidget }
-            .forEach { $0.sizeStylePref.set(Int32(widget.widgetSizeStyle.rawValue), mode: selectedAppMode)
+            .forEach { 
+                $0.updateWith(style: widget.widgetSizeStyle, appMode: selectedAppMode)
             }
     }
     
@@ -145,7 +148,6 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func onRightNavbarButtonPressed() {
         if editMode {
             reorderWidgets()
-            applyRowStyle()
             editMode = false
         }
     }
@@ -169,7 +171,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             editMode = true
         }
     }
-
+    
     private func showToastForComplexWidget(_ widgetTitle: String) {
         OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: self.view)
     }
@@ -229,7 +231,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     // MARK: - Additions
-
+    
     private func reorderWidgets(with widgetParams: [String: Any]? = nil) {
         var orders = [[String]]()
         var currPage = [String]()
@@ -277,7 +279,7 @@ extension WidgetsListViewController {
                 let isPageCell = item.key == kPageKey
                 cell.titleLabel.text = isPageCell ? String(format: localizedString(widgetPanel.isPanelVertical ? "shared_string_row_number" : "shared_string_page_number"),
                                                            item.integer(forKey: kPageNumberKey) + 1)
-                                                : item.title
+                : item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
                 cell.leftIconVisibility(!isPageCell)
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
@@ -353,7 +355,7 @@ extension WidgetsListViewController {
         tableData.removeRow(at: sourceIndexPath)
         let movedIndexPath = destinationIndexPath.row == 0 ? IndexPath(row: 1, section: destinationIndexPath.section) : destinationIndexPath
         tableData.addRow(at: movedIndexPath, row: item)
-
+        
         updatePageNumbers()
         print("destinationIndexPath after \(destinationIndexPath.row)")
         tableView.reloadData()
@@ -407,7 +409,7 @@ extension WidgetsListViewController {
                 return sourceIndexPath
             }
         }
-
+        
         let destinationItem = tableData.item(for: proposedDestinationIndexPath)
         if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
             editingComplexWidget = mapWidgetInfo
@@ -427,7 +429,7 @@ extension WidgetsListViewController {
                 return sourceIndexPath
             }
         }
-
+        
         if proposedDestinationIndexPath.row == 0 && proposedDestinationIndexPath.section == 0 {
             let indexPath = IndexPath(row: 1, section: 0)
             if tableData.rowCount(UInt(indexPath.section)) > 1 {
@@ -652,21 +654,7 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
 extension WidgetsListViewController {
     
     private func applyRowStyle() {
-        var orders = [[MapWidgetInfo]]()
-        var currPage = [MapWidgetInfo]()
-        for i in 0..<tableData.sectionData(for: 0).rowCount() {
-            let rowData = tableData.sectionData(for: 0).getRow(i)
-            if rowData.key == kPageKey && i != 0 {
-                orders.append(currPage)
-                currPage = [MapWidgetInfo]()
-            }
-            if let row = rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
-                currPage.append(row)
-            }
-        }
-        orders.append(currPage)
-        
-        for widgets in orders {
+        for widgets in getPagesWithMapWidgetInfo() {
             var widgetsInfoInRow = [OATextInfoWidget]()
             for widget in widgets {
                 guard let id = widget.widget.widgetType?.id, !WidgetType.isComplexWidget(id) else {
@@ -679,7 +667,7 @@ extension WidgetsListViewController {
             widgetsInfoInRow.updateWithMostFrequentStyle(with: selectedAppMode)
         }
     }
-        
+    
     private func getRowsInLastPage(dataArray: [OATableRowData]) -> [OATableRowData] {
         var result: [OATableRowData] = []
         
@@ -715,19 +703,23 @@ extension WidgetsListViewController {
                     dataArray.append(sectionData.getRow(row))
                 }
                 let itemsInLastPage = getRowsInLastPage(dataArray: dataArray)
-                itemsInLastPage.forEach({
+                itemsInLastPage.forEach {
                     if let widgetInRow = ($0.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
-                        widgetInRow.sizeStylePref.set(Int32(addWidgetSizeStyle.rawValue), mode: selectedAppMode)
+                        widgetInRow.updateWith(style: addWidgetSizeStyle, appMode: selectedAppMode)
                     }
-                })
+                }
             } else {
                 // Apply row style for the added widget
-                (newWidget.widget as? OATextInfoWidget)?.sizeStylePref.set(Int32(simpleWidget.widgetSizeStyle.rawValue), mode: selectedAppMode)
+                (newWidget.widget as? OATextInfoWidget)?.updateWith(style: simpleWidget.widgetSizeStyle, appMode: selectedAppMode)
             }
         }
     }
     
     private func getRowsInPageFor(key: String) -> [MapWidgetInfo]? {
+        getPagesWithMapWidgetInfo().first { $0.contains { $0.key == key } }
+    }
+    
+    private func getPagesWithMapWidgetInfo() -> [[MapWidgetInfo]] {
         var orders = [[MapWidgetInfo]]()
         var currPage = [MapWidgetInfo]()
         for i in 0..<tableData.sectionData(for: 0).rowCount() {
@@ -742,21 +734,6 @@ extension WidgetsListViewController {
         }
         orders.append(currPage)
         
-        return orders.first { $0.contains { $0.key == key } }
-    }
-}
-
-extension Array where Element == OATextInfoWidget {
-    func updateWithMostFrequentStyle(with appMode: OAApplicationMode) {
-        var styleCounts: [WidgetSizeStyle: Int] = [:]
-    
-        for widget in self {
-            let style = widget.widgetSizeStyle
-            styleCounts[style] = (styleCounts[style] ?? 0) + 1
-        }
-        guard let mostFrequentStyle = styleCounts.max(by: { $0.value < $1.value })?.key else {
-            return
-        }
-        forEach { $0.sizeStylePref.set(Int32(mostFrequentStyle.rawValue), mode: appMode) }
+        return orders
     }
 }

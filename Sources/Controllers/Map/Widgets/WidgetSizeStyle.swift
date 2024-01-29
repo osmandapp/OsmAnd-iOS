@@ -8,18 +8,6 @@
 
 import Foundation
 
-extension OATextInfoWidget {
-    @objc var widgetSizeStyle: WidgetSizeStyle {
-        if sizeStylePref == nil {
-            return .medium
-        }
-        guard let style = WidgetSizeStyle(rawValue: NSInteger(sizeStylePref.get(OAAppSettings.sharedManager()!.applicationMode.get()!))) else {
-            return .medium
-        }
-        return style
-    }
-}
-
 @objcMembers final class WidgetSizeStyleObjWrapper: NSObject {
     
     static func getLabelFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
@@ -55,14 +43,6 @@ extension OATextInfoWidget {
     var unitsFontSize: CGFloat {
         switch self {
         case .small, .medium, .large: 11
-        }
-    }
-    
-    var minHeight: CGFloat {
-        switch self {
-        case .small: 44
-        case .medium: 66
-        case .large: 88
         }
     }
 }

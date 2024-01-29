@@ -173,7 +173,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: "values") as? [String],
-               let pref = item.obj(forKey: "pref") as? OACommonInteger {
+               let pref = item.obj(forKey: "prefSegment") as? OACommonInteger {
                 cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: Int(pref.get(selectedAppMode)))
             }
             if let title = item.string(forKey: "title") {
@@ -181,7 +181,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self,
-                      let pref = item.obj(forKey: "pref") as? OACommonInteger else { return }
+                      let pref = item.obj(forKey: "prefSegment") as? OACommonInteger else { return }
                 pref.set(Int32(index), mode: selectedAppMode)
                 if item.string(forKey: "behaviour") == "simpleWidget" {
                     NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,

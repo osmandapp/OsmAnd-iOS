@@ -98,6 +98,10 @@ class MapWidgetInfo: NSObject, Comparable {
         return widgetState?.getMenuTitle() ?? message
     }
     
+    func getWidgetTitle() -> String {
+        widgetState?.getWidgetTitle() ?? getMessage()
+    }
+    
     func getExternalProviderPackage() -> String? {
         return nil
     }

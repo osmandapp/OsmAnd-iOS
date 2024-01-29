@@ -65,6 +65,18 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func registerNotifications() {
         addNotification(NSNotification.Name(kWidgetVisibilityChangedMotification), selector: #selector(onWidgetStateChanged))
         addNotification(NSNotification.Name(Self.kWidgetAddedNotification), selector: #selector(onWidgetAdded(notification:)))
+        addNotification(.SimpleWidgetStyleUpdated, selector: #selector(onSimpleWidgetStyleUpdated))
+    }
+    
+    @objc private func onSimpleWidgetStyleUpdated(notification: Notification) {
+        guard let widgetInfo = notification.object as? MapWidgetInfo,
+              let widget = widgetInfo.widget as? OATextInfoWidget else { return }
+        guard let rows = getRowsInPageFor(key: widgetInfo.key) else { return }
+        
+        rows.lazy
+            .compactMap { $0.widget as? OATextInfoWidget }
+            .forEach { $0.sizeStylePref.set(Int32(widget.widgetSizeStyle.rawValue), mode: selectedAppMode)
+            }
     }
     
     // MARK: - Base setup UI
@@ -183,6 +195,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         if createNewSection {
             createWidgetItems(NSOrderedSet(object: newWidget), Int(tableData.sectionCount()))
         } else {
+            updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
             createWidgetItem(newWidget, lastSectionData)
         }
         if editMode {
@@ -339,7 +352,9 @@ extension WidgetsListViewController {
         tableData.removeRow(at: sourceIndexPath)
         let movedIndexPath = destinationIndexPath.row == 0 ? IndexPath(row: 1, section: destinationIndexPath.section) : destinationIndexPath
         tableData.addRow(at: movedIndexPath, row: item)
+
         updatePageNumbers()
+        print("destinationIndexPath after \(destinationIndexPath.row)")
         tableView.reloadData()
         updateBottomButtons()
         if let editingComplexWidget {
@@ -630,5 +645,73 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
         widgetsSettingsHelper.copyWidgetsForPanel(fromAppMode: fromAppMode, panel: widgetPanel)
         OARootViewController.instance().mapPanel.recreateAllControls()
         updateUIAnimated(nil)
+    }
+}
+
+extension WidgetsListViewController {  
+        
+    private func getRowsInLastPage(dataArray: [OATableRowData]) -> [OATableRowData] {
+        var result: [OATableRowData] = []
+        
+        var lastPageIndex = -1
+        for i in (0..<dataArray.count).reversed() {
+            let rowData = dataArray[i]
+            if rowData.key == kPageKey {
+                lastPageIndex = i
+                break
+            }
+        }
+        if lastPageIndex >= 0 && lastPageIndex < dataArray.count - 1 {
+            result = Array(dataArray[lastPageIndex + 1..<dataArray.count])
+        }
+        
+        return result
+    }
+    
+    private func updateWidgetStyleForRowsInLastPage(_ newWidget: MapWidgetInfo,
+                                                    _ sectionData: OATableSectionData) {
+        let addWidgetSizeStyle = (newWidget.widget as? OATextInfoWidget)?.widgetSizeStyle ?? .medium
+        
+        let lastWidgetInRow = sectionData.getRow(sectionData.rowCount() - 1)
+        guard let simpleWidget = (lastWidgetInRow.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget else {
+            return
+        }
+        
+        if simpleWidget.widgetSizeStyle != addWidgetSizeStyle {
+            if addWidgetSizeStyle != .medium {
+                // Apply the current style of widget for all rows in page
+                var dataArray = [OATableRowData]()
+                for row in 0..<sectionData.rowCount() {
+                    dataArray.append(sectionData.getRow(row))
+                }
+                let itemsInLastPage = getRowsInLastPage(dataArray: dataArray)
+                itemsInLastPage.forEach({
+                    if let widgetInRow = ($0.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo)?.widget as? OATextInfoWidget {
+                        widgetInRow.sizeStylePref.set(Int32(addWidgetSizeStyle.rawValue), mode: selectedAppMode)
+                    }
+                })
+            } else {
+                // Apply row style for the added widget
+                (newWidget.widget as? OATextInfoWidget)?.sizeStylePref.set(Int32(simpleWidget.widgetSizeStyle.rawValue), mode: selectedAppMode)
+            }
+        }
+    }
+    
+    private func getRowsInPageFor(key: String) -> [MapWidgetInfo]? {
+        var orders = [[MapWidgetInfo]]()
+        var currPage = [MapWidgetInfo]()
+        for i in 0..<tableData.sectionData(for: 0).rowCount() {
+            let rowData = tableData.sectionData(for: 0).getRow(i)
+            if rowData.key == kPageKey && i != 0 {
+                orders.append(currPage)
+                currPage = [MapWidgetInfo]()
+            }
+            if let row = rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
+                currPage.append(row)
+            }
+        }
+        orders.append(currPage)
+        
+        return orders.first { $0.contains { $0.key == key } }
     }
 }

@@ -151,7 +151,7 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
             cachedMarkerColor = marker.color
             cachedNightMode = isNightMode()
             if let cachedMarkerColor = cachedMarkerColor {
-                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor)
+                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor, iconName: iconName)
             }
         }
     }

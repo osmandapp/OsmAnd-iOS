@@ -50,6 +50,8 @@
 
 - (void) setImage:(UIImage *)image;
 - (void) setImage:(UIImage *)image withColor:(UIColor *)color;
+- (void)setImage:(UIImage *_Nonnull)image withColor:(UIColor *_Nonnull)color iconName:(NSString *_Nonnull)iconName;
+
 - (void) setImageHidden:(BOOL)visible;
 - (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
@@ -80,5 +82,6 @@
 - (void) adjustViewSize;
 
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode;
+- (void)configureSimpleLayout;
 
 @end

@@ -49,6 +49,8 @@
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)interval;
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
 + (NSString *)getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def;
++ (NSString *)getFormattedDateTime:(NSTimeInterval)time;
++ (NSString *)getFormattedDate:(NSTimeInterval)time;
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedSpeed:(float)metersperseconds drive:(BOOL)drive;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;

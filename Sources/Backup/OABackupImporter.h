@@ -32,8 +32,14 @@
 
 @property (nonatomic, assign) BOOL cancelled;
 
-- (void) importItems:(NSArray<OASettingsItem *> *)items forceReadData:(BOOL)forceReadData;
-- (OACollectItemsResult *) collectItems:(NSArray<OASettingsItem *> *)settingsItems readItems:(BOOL)readItems;
+- (void) importItems:(NSArray<OASettingsItem *> *)items
+         remoteFiles:(NSArray<OARemoteFile *> *)remoteFiles
+       forceReadData:(BOOL)forceReadData
+      restoreDeleted:(BOOL)restoreDeleted;
+
+- (OACollectItemsResult *) collectItems:(NSArray<OASettingsItem *> *)settingsItems
+                              readItems:(BOOL)readItems
+                         restoreDeleted:(BOOL)restoreDeleted;
 
 @end
 

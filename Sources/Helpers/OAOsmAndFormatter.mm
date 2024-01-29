@@ -100,6 +100,14 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
+    return [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
+}
+
++ (NSString *)getFormattedDateTime:(NSTimeInterval)time
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     return [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
 }

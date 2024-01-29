@@ -3574,3 +3574,6 @@
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+
+"shared_string_deleted" = "Deleted";
+"duration_moment_ago" = "a moment ago";

@@ -638,6 +638,9 @@
 		464C9B4528E49793006F57B7 /* ic_custom_device_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4128E49792006F57B7 /* ic_custom_device_download@2x.png */; };
 		464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FF36A2B309488001D855E /* SensorAttributesUtils.swift */; };
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
+		4657490E2B6803710006046B /* TrashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490D2B6803710006046B /* TrashItem.swift */; };
+		465749102B68129B0006046B /* BackupUiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490F2B68129B0006046B /* BackupUiUtils.swift */; };
+		465749122B681E620006046B /* TrashGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465749112B681E620006046B /* TrashGroup.swift */; };
 		465B935229BF7805008F476F /* ic_carplay_history_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */; };
 		465B935329BF7805008F476F /* ic_carplay_history_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */; };
 		465B935429BF7805008F476F /* ic_carplay_favorites_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */; };
@@ -4177,6 +4180,9 @@
 		464FF36A2B309488001D855E /* SensorAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorAttributesUtils.swift; sourceTree = "<group>"; };
 		4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupConflictDetailsViewController.h; sourceTree = "<group>"; };
 		4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAStatusBackupConflictDetailsViewController.m; sourceTree = "<group>"; };
+		4657490D2B6803710006046B /* TrashItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashItem.swift; sourceTree = "<group>"; };
+		4657490F2B68129B0006046B /* BackupUiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUiUtils.swift; sourceTree = "<group>"; };
+		465749112B681E620006046B /* TrashGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashGroup.swift; sourceTree = "<group>"; };
 		465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@3x.png"; path = "Resources/Icons/ic_carplay_history_night@3x.png"; sourceTree = "<group>"; };
 		465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@2x.png"; path = "Resources/Icons/ic_carplay_history_night@2x.png"; sourceTree = "<group>"; };
 		465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_favorites_night@2x.png"; path = "Resources/Icons/ic_carplay_favorites_night@2x.png"; sourceTree = "<group>"; };
@@ -13914,48 +13920,51 @@
 		DACF784127E343FF00A8A218 /* Backup */ = {
 			isa = PBXGroup;
 			children = (
-				DA4ABED22876D98D00B996EF /* LocalBackup */,
 				DAA9F44B27EC9E99002BB1A8 /* Commands */,
-				DACF784227E3441600A8A218 /* OABackupHelper.h */,
-				DACF784327E3441600A8A218 /* OABackupHelper.mm */,
-				DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */,
-				DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */,
-				DA775B8827E6109F0081B9C1 /* OALocalFile.h */,
-				DA775B8927E6109F0081B9C1 /* OALocalFile.m */,
-				DA775B8B27E618070081B9C1 /* OABackupInfo.h */,
-				DA775B8C27E618070081B9C1 /* OABackupInfo.mm */,
-				DAA612E327E9E934003317BD /* OAPrepareBackupResult.h */,
-				DAA612E427E9E934003317BD /* OAPrepareBackupResult.m */,
-				DAA9F44F27ECA5F6002BB1A8 /* OABackupError.h */,
-				DAA9F45027ECA5F6002BB1A8 /* OABackupError.m */,
-				DAA9F45227ECADF8002BB1A8 /* OABackupListeners.h */,
-				DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */,
-				DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */,
-				DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */,
+				DA4ABED22876D98D00B996EF /* LocalBackup */,
+				4657490F2B68129B0006046B /* BackupUiUtils.swift */,
 				DA1A886227FC66DA00A82DF6 /* OABackupDbHelper.h */,
 				DA1A886327FC66DA00A82DF6 /* OABackupDbHelper.m */,
-				DA8B8D5827FEFF4100957D12 /* OACollectLocalFilesTask.h */,
-				DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */,
-				DAAC0EB828006D2500867D35 /* OANetworkSettingsHelper.h */,
-				DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */,
-				DAAC0EBB2801807200867D35 /* OAImportBackupTask.h */,
-				DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */,
-				DAAC0EC12801885800867D35 /* OABackupImporter.h */,
-				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
+				DAA9F44F27ECA5F6002BB1A8 /* OABackupError.h */,
+				DAA9F45027ECA5F6002BB1A8 /* OABackupError.m */,
 				DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */,
 				DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */,
-				DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */,
-				DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */,
+				DACF784227E3441600A8A218 /* OABackupHelper.h */,
+				DACF784327E3441600A8A218 /* OABackupHelper.mm */,
+				DAAC0EC12801885800867D35 /* OABackupImporter.h */,
+				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
+				DA775B8B27E618070081B9C1 /* OABackupInfo.h */,
+				DA775B8C27E618070081B9C1 /* OABackupInfo.mm */,
 				DAEDAA9F2865A0F100CE54D0 /* OABackupInfoGenerationTask.h */,
 				DAEDAAA02865A0F100CE54D0 /* OABackupInfoGenerationTask.m */,
+				DAA9F45227ECADF8002BB1A8 /* OABackupListeners.h */,
+				DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */,
 				DA5F77B428742E85000A2BFF /* OABackupStatus.h */,
 				DA5F77B528742E85000A2BFF /* OABackupStatus.m */,
+				DA8B8D5827FEFF4100957D12 /* OACollectLocalFilesTask.h */,
+				DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */,
 				DA4ABECF2876D71300B996EF /* OAExportBackupTask.h */,
 				DA4ABED02876D71300B996EF /* OAExportBackupTask.m */,
+				DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */,
+				DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */,
+				DAAC0EBB2801807200867D35 /* OAImportBackupTask.h */,
+				DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */,
+				DA775B8827E6109F0081B9C1 /* OALocalFile.h */,
+				DA775B8927E6109F0081B9C1 /* OALocalFile.m */,
+				DAAC0EB828006D2500867D35 /* OANetworkSettingsHelper.h */,
+				DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */,
 				DA4E72B128784767007A894D /* OANetworkWriter.h */,
 				DA4E72B228784768007A894D /* OANetworkWriter.mm */,
+				DAA612E327E9E934003317BD /* OAPrepareBackupResult.h */,
+				DAA612E427E9E934003317BD /* OAPrepareBackupResult.m */,
+				DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */,
+				DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */,
+				DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */,
+				DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */,
 				DA9901B12918F14700A3C732 /* OASyncBackupTask.h */,
 				DA9901B22918F14700A3C732 /* OASyncBackupTask.mm */,
+				465749112B681E620006046B /* TrashGroup.swift */,
+				4657490D2B6803710006046B /* TrashItem.swift */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -17281,6 +17290,7 @@
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
+				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,
 				DA2EC7B329FBCD0300ECEB37 /* WidgetGroup.swift in Sources */,
@@ -17374,6 +17384,7 @@
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
+				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
@@ -17834,6 +17845,7 @@
 				DA9901B32918F14700A3C732 /* OASyncBackupTask.mm in Sources */,
 				B0D6159DC886AF2419676731 /* OATitleSwitchRoundCell.mm in Sources */,
 				B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */,
+				465749102B68129B0006046B /* BackupUiUtils.swift in Sources */,
 				B0D61A10E033AC2150A5354F /* OADeleteWaypointsViewController.mm in Sources */,
 				B0D610E5238BE2C6D15D23EC /* OAPointWithRegionTableViewCell.mm in Sources */,
 				B0D61831F16BA2B502597852 /* OASelectionCollapsableCell.mm in Sources */,

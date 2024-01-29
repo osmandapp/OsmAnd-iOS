@@ -294,7 +294,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let menu = UIMenu(title: "", image: nil, children: [addFolderActionWithDivider, importActionWithDivider])
         // let menu = UIMenu(title: "", image: nil, children: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
         
-        if let navBarButtontem = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: UIColor.navBarTextColorPrimary, action: nil, menu: menu) {
+        if let navBarButtontem = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: UIColor.navBarTextColorPrimary, action: nil, target: self, menu: menu) {
             navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButtontem], animated: false)
             navigationItem.setRightBarButtonItems([navBarButtontem], animated: false)
         }

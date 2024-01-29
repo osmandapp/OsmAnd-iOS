@@ -9,7 +9,7 @@
 import Foundation
 
 private protocol TrackListUpdatableDelegate {
-    func updateHostVCWith(newFilesTree: GpxFolder)
+    func updateHostVCWith(newFilesTree: GpxFolder, visibleFiles: GpxFolder)
 }
 
 private class GpxFolder {
@@ -135,7 +135,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         buildFilesTree()
         updateData()
         if let hostVCDelegate {
-            hostVCDelegate.updateHostVCWith(newFilesTree: rootTracksFolderContent)
+            hostVCDelegate.updateHostVCWith(newFilesTree: rootTracksFolderContent, visibleFiles: visibleTracksFolderContent)
         }
     }
     
@@ -315,7 +315,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func buildFilesTree() {
         guard let allTracks = gpxDB.gpxList as? [OAGPX] else {return}
-        guard let visibleTrackPatches = settings.mapSettingVisibleGpx else {return}
+        guard let visibleTrackPatches = settings.mapSettingVisibleGpx.get() else {return}
         
         rootTracksFolderContent = GpxFolder()
         visibleTracksFolderContent = GpxFolder()
@@ -521,7 +521,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 settings.showGpx([trackPath], update: true)
             }
         }
-        updateData()
+        hardUpdateData()
     }
     
     private func onTrackAppearenceClicked(track: OAGPX?, isCurrentTrack: Bool) {
@@ -989,6 +989,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
                 if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
                     vc.rootTracksFolderContent = rootTracksFolderContent
+                    vc.visibleTracksFolderContent = visibleTracksFolderContent
                     vc.folderName = subfolderName
                     vc.currentVCSubfolderPath = currentVCSubfolderPath + "/" + subfolderName
                     vc.isRootFolder = false
@@ -1117,11 +1118,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     // MARK: - TrackListUpdatableDelegate
     
-    fileprivate func updateHostVCWith(newFilesTree: GpxFolder) {
+    fileprivate func updateHostVCWith(newFilesTree: GpxFolder, visibleFiles: GpxFolder) {
         rootTracksFolderContent = newFilesTree
+        visibleTracksFolderContent = visibleFiles
         updateData()
         if let hostVCDelegate {
-            hostVCDelegate.updateHostVCWith(newFilesTree: rootTracksFolderContent)
+            hostVCDelegate.updateHostVCWith(newFilesTree: rootTracksFolderContent, visibleFiles: visibleFiles)
         }
     }
     

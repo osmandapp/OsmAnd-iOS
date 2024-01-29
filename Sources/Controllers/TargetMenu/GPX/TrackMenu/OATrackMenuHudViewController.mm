@@ -18,7 +18,6 @@
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OARouteBaseViewController.h"
-#import "OAGPXListViewController.h"
 #import "OARootViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARouteKey.h"
@@ -391,11 +390,9 @@
                         [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
                 [myPlacesViewController setSelectedIndex:1];
     
-                OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+                TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
                 if (gpxController == nil)
                     return;
-    
-                [gpxController setShouldPopToParent:YES];
     
                 [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
             }

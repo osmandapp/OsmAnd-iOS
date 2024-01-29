@@ -104,7 +104,7 @@ static UIViewController *parentController;
 {
     if ([path hasPrefix:@"/"])
         return [path substringFromIndex:1];
-    return nil;
+    return path;
 }
 
 - (void)doPush

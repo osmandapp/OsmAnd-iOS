@@ -16,7 +16,6 @@
 #import "OAMenuViewControllerProtocol.h"
 #import "OAFavoriteImportViewController.h"
 #import "OAOptionsPanelBlackViewController.h"
-#import "OAGPXListViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAIAPHelper.h"
 #import "OADonationSettingsViewController.h"
@@ -391,12 +390,8 @@ typedef enum : NSUInteger {
 
 - (void)importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
-    UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-    [myPlacesViewController setSelectedIndex:1];
-    OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
-    if (gpxController == nil)
-        return;
-    [gpxController prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView completion:nil];
+    OAGPXImportHelper *impertHelper = [[OAGPXImportHelper alloc] initWithHostViewController:self];
+    [impertHelper prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView completion:nil];
     [self closeMenuAndPanelsAnimated:NO];
 }
 

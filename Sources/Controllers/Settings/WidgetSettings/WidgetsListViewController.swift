@@ -145,6 +145,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     override func onRightNavbarButtonPressed() {
         if editMode {
             reorderWidgets()
+            applyRowStyle()
             editMode = false
         }
     }
@@ -648,7 +649,36 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
     }
 }
 
-extension WidgetsListViewController {  
+extension WidgetsListViewController {
+    
+    private func applyRowStyle() {
+        var orders = [[MapWidgetInfo]]()
+        var currPage = [MapWidgetInfo]()
+        for i in 0..<tableData.sectionData(for: 0).rowCount() {
+            let rowData = tableData.sectionData(for: 0).getRow(i)
+            if rowData.key == kPageKey && i != 0 {
+                orders.append(currPage)
+                currPage = [MapWidgetInfo]()
+            }
+            if let row = rowData.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo {
+                currPage.append(row)
+            }
+        }
+        orders.append(currPage)
+        
+        for widgets in orders {
+            var widgetsInfoInRow = [OATextInfoWidget]()
+            for widget in widgets {
+                guard let id = widget.widget.widgetType?.id, !WidgetType.isComplexWidget(id) else {
+                    continue
+                }
+                if let item = widget.widget as? OATextInfoWidget {
+                    widgetsInfoInRow.append(item)
+                }
+            }
+            widgetsInfoInRow.updateWithMostFrequentStyle(with: selectedAppMode)
+        }
+    }
         
     private func getRowsInLastPage(dataArray: [OATableRowData]) -> [OATableRowData] {
         var result: [OATableRowData] = []
@@ -713,5 +743,20 @@ extension WidgetsListViewController {
         orders.append(currPage)
         
         return orders.first { $0.contains { $0.key == key } }
+    }
+}
+
+extension Array where Element == OATextInfoWidget {
+    func updateWithMostFrequentStyle(with appMode: OAApplicationMode) {
+        var styleCounts: [WidgetSizeStyle: Int] = [:]
+    
+        for widget in self {
+            let style = widget.widgetSizeStyle
+            styleCounts[style] = (styleCounts[style] ?? 0) + 1
+        }
+        guard let mostFrequentStyle = styleCounts.max(by: { $0.value < $1.value })?.key else {
+            return
+        }
+        forEach { $0.sizeStylePref.set(Int32(mostFrequentStyle.rawValue), mode: appMode) }
     }
 }

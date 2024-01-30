@@ -17,4 +17,8 @@
                          indexPaths:(NSArray<NSIndexPath *> *)indexPaths
                             itemKey:(NSString *)itemKey;
 
++ (CGFloat)getDirectionAngleFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude;
+
++ (CGFloat)getDistanceFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude;
+
 @end

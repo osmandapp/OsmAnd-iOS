@@ -55,4 +55,28 @@
     }
 }
 
++ (CGFloat)getDirectionAngleFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude
+{
+    if (!currentLocation)
+        return 0;
+    
+    OsmAndAppInstance app = [OsmAndApp instance];
+    CLLocation *newLocation = currentLocation;
+    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+    CLLocationDirection newDirection = (newLocation.speed >= 1 && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
+    CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:destinationLatitude longitude:destinationLongitude]];
+    CGFloat directionAngle = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+    return directionAngle;
+}
+
++ (CGFloat)getDistanceFromLocation:(CLLocation *)currentLocation toDestinationLatitude:(CGFloat)destinationLatitude destinationLongitude:(CGFloat)destinationLongitude
+{
+    if (!currentLocation)
+        return 0;
+    
+    CLLocation *destinationLocation = [[CLLocation alloc] initWithLatitude:destinationLatitude longitude:destinationLongitude];
+    CLLocationDistance distance = [currentLocation distanceFromLocation:destinationLocation];
+    return distance;
+}
+
 @end

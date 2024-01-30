@@ -59,6 +59,12 @@
     
     NSTimeInterval _startChangingMapModeTime;
     NSTimeInterval _compassRequest;
+    
+    NSTimeInterval _switchMap3dModeButtonTapTime;
+    NSTimeInterval _is2DAnimating;
+    NSTimeInterval _is3DAnimating;
+    dispatch_block_t _2DAnimatingWorkItem;
+    dispatch_block_t _3DAnimatingWorkItem;
 }
 
 + (OAMapViewTrackingUtilities *)instance
@@ -203,32 +209,77 @@
     return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle < 89;
 }
 
-- (void) switchMap3dMode
+- (void)switchTo3dMode {
+    if (_is3DAnimating) {
+        dispatch_block_cancel(_3DAnimatingWorkItem);
+        _is3DAnimating = NO;
+        [self switchTo2dMode];
+        return;
+    }
+    _is3DAnimating = YES;;
+    _3DAnimatingWorkItem = dispatch_block_create(DISPATCH_BLOCK_NO_QOS_CLASS, ^{
+        _is3DAnimating = NO;
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kFastAnimationTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_3DAnimatingWorkItem && !dispatch_block_testcancel(_3DAnimatingWorkItem)) {
+            _3DAnimatingWorkItem();
+        }
+        _3DAnimatingWorkItem = nil;
+    });
+    if (_lastElevationAngle < 1 || _lastElevationAngle > 89)
+        _lastElevationAngle = kMapModeFollowDefaultElevationAngle;
+
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
+    _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle: _lastElevationAngle],
+                                               kFastAnimationTime,
+                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                               kLocationServicesAnimationKey);
+    _mapView.mapAnimator->resume();
+}
+
+- (void)switchTo2dMode {
+    if (_is2DAnimating) {
+        dispatch_block_cancel(_2DAnimatingWorkItem);
+        _is2DAnimating = NO;
+        [self switchTo3dMode];
+        return;
+    }
+    _is2DAnimating = YES;
+    _2DAnimatingWorkItem = dispatch_block_create(DISPATCH_BLOCK_NO_QOS_CLASS, ^{
+        _is2DAnimating = NO;
+    });
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kFastAnimationTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (_2DAnimatingWorkItem && !dispatch_block_testcancel(_2DAnimatingWorkItem)) {
+            _2DAnimatingWorkItem();
+        }
+        _2DAnimatingWorkItem = nil;
+    });
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
+    _mapView.mapAnimator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
+                                               kFastAnimationTime,
+                                               OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
+                                               kLocationServicesAnimationKey);
+    _mapView.mapAnimator->resume();
+}
+
+- (void)switchMap3dMode
 {
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval elapsedTime = currentTime - _switchMap3dModeButtonTapTime;
     if ([self isIn3dMode])
     {
-        _lastElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
-        _mapView.mapAnimator->pause();
-        _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
-                                                   kFastAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kLocationServicesAnimationKey);
-        _mapView.mapAnimator->resume();
+        if (elapsedTime > kFastAnimationTime) {
+            _lastElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
+        }
+        [self switchTo2dMode];
     }
     else
     {
-        if (_lastElevationAngle < 1 || _lastElevationAngle > 89)
-            _lastElevationAngle = kMapModeFollowDefaultElevationAngle;
-
-        _mapView.mapAnimator->pause();
-        _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle: _lastElevationAngle],
-                                                   kFastAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kLocationServicesAnimationKey);
-        _mapView.mapAnimator->resume();
+        [self switchTo3dMode];
     }
+    _switchMap3dModeButtonTapTime = currentTime;
 }
 
 - (void) onLocationServicesStatusChanged

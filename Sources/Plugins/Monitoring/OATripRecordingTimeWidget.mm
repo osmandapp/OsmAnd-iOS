@@ -24,10 +24,12 @@
 
 - (instancetype)initWithСustomId:(NSString *)customId
                                   appMode:(OAApplicationMode *)appMode
+                             widgetParams:(NSDictionary * _Nullable)widgetParams;
 {
     self = [super initWithType:OAWidgetType.tripRecordingTime];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         __weak OATextInfoWidget *weakSelf = self;
         long __block cachedTimeSpan = -1;
         

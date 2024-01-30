@@ -26,7 +26,8 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
 }
 
 - (instancetype)initWithCustomId:(NSString *)customId
-                                  appMode:(OAApplicationMode *)appMode;
+                                  appMode:(OAApplicationMode *)appMode
+                             widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetType *type = OAWidgetType.currentSpeed;
     self = [super initWithType:type];
@@ -34,7 +35,7 @@ const static CLLocationSpeed LOW_SPEED_UPDATE_THRESHOLD_MPS = .015f; // Update m
     {
         _app = OsmAndApp.instance;
         _currentPositionHelper = OACurrentPositionHelper.instance;
-        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         [self setIconForWidgetType:type];
         [self setText:nil subtext:nil];
         [self setMetricSystemDepended:YES];

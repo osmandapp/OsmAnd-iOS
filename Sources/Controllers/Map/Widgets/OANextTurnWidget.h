@@ -15,6 +15,7 @@
 - (instancetype _Nonnull)initWithHorisontalMini:(BOOL)horisontalMini
                                        nextNext:(BOOL)nextNext
                     customId:(NSString *_Nullable)customId
-                     appMode:(OAApplicationMode * _Nonnull)appMode;
+                     appMode:(OAApplicationMode * _Nonnull)appMode
+                widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end

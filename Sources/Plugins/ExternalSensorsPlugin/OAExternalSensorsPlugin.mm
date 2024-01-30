@@ -100,7 +100,7 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
              OAWidgetType.temperature];
 }
 
-- (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+- (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
     auto widgetTypeArray = @[OAWidgetType.heartRate,
@@ -110,22 +110,25 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
                              OAWidgetType.temperature];
     for (OAWidgetType *widgetType in widgetTypeArray)
     {
-        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode]]];
+        [delegate addWidget:[creator createWidgetInfoWithWidget:(SensorTextWidget *) [self createMapWidgetForParams:widgetType customId:nil appMode:appMode widgetParams:widgetParams]]];
     }
 }
 
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+                                      customId:(NSString *)customId
+                                       appMode:(OAApplicationMode *)appMode
+                                  widgetParams:(NSDictionary *)widgetParams
 {
     if (widgetType == OAWidgetType.heartRate)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.heartRate appMode:appMode widgetParams:nil];
+        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.heartRate appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.bicycleCadence)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleCadence appMode:appMode widgetParams:nil];
+        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleCadence appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.bicycleSpeed)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleSpeed appMode:appMode widgetParams:nil];
+        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleSpeed appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.bicycleDistance)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleDistance appMode:appMode widgetParams:nil];
+        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.bicycleDistance appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.temperature)
-        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.temperature appMode:appMode widgetParams:nil];
+        return [[SensorTextWidget alloc] initWithCustomId:customId widgetType:OAWidgetType.temperature appMode:appMode widgetParams:widgetParams];
     return nil;
 }
 

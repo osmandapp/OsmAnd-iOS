@@ -105,19 +105,20 @@
     return @[OAWidgetType.mapillary.id];
 }
 
-- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
-    OABaseWidgetView *widget = [self createMapWidgetForParams:OAWidgetType.mapillary customId:nil appMode:appMode];
+    OABaseWidgetView *widget = [self createMapWidgetForParams:OAWidgetType.mapillary customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:widget]];
 }
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
                                       customId:(NSString *)customId
                                        appMode:(OAApplicationMode *)appMode
+                                  widgetParams:(NSDictionary *)widgetParams;
 {
     if (widgetType == OAWidgetType.mapillary)
-        return [[OAMapillaryWidget alloc] initWithCustomId:customId appMode:appMode widgetParams:nil];
+        return [[OAMapillaryWidget alloc] initWithCustomId:customId appMode:appMode widgetParams:widgetParams];
     return nil;
 }
 

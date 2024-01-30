@@ -82,40 +82,43 @@
     return @[OAWidgetType.weatherTemperatureWidget.id, OAWidgetType.weatherAirPressureWidget.id, OAWidgetType.weatherWindWidget.id, OAWidgetType.weatherCloudsWidget.id, OAWidgetType.weatherPrecipitationWidget.id];
 }
 
-- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate
+               appMode:(OAApplicationMode *)appMode
+          widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil appMode:appMode];
+    _weatherTempControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherTemperatureWidget customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherTempControl]];
 
-    _weatherPressureControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget customId:nil appMode:appMode];
+    _weatherPressureControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherAirPressureWidget customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPressureControl]];
 
-    _weatherWindSpeedControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherWindWidget customId:nil appMode:appMode];
+    _weatherWindSpeedControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherWindWidget customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherWindSpeedControl]];
 
-    _weatherCloudControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget customId:nil appMode:appMode];
+    _weatherCloudControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherCloudsWidget customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherCloudControl]];
 
-    _weatherPrecipControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget customId:nil appMode:appMode];
+    _weatherPrecipControl = (OAWeatherWidget *) [self createMapWidgetForParams:OAWidgetType.weatherPrecipitationWidget customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:_weatherPrecipControl]];
 }
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
                                       customId:(NSString *)customId
                                        appMode:(OAApplicationMode *)appMode
+                                  widgetParams:(NSDictionary *)widgetParams
 {
     if (widgetType == OAWidgetType.weatherTemperatureWidget)
-        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_TEMPERATURE customId:customId appMode:appMode];
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_TEMPERATURE customId:customId appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.weatherAirPressureWidget)
-        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRESSURE customId:customId appMode:appMode];
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRESSURE customId:customId appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.weatherWindWidget)
-        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_WIND_SPEED customId:customId appMode:appMode];
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_WIND_SPEED customId:customId appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.weatherCloudsWidget)
-        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_CLOUD customId:customId appMode:appMode];
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_CLOUD customId:customId appMode:appMode widgetParams:widgetParams];
     else if (widgetType == OAWidgetType.weatherPrecipitationWidget)
-        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRECIPITATION customId:customId appMode:appMode];
+        return [[OAWeatherWidget alloc] initWithType:widgetType band:WEATHER_BAND_PRECIPITATION customId:customId appMode:appMode widgetParams:widgetParams];
     return nil;
 }
 

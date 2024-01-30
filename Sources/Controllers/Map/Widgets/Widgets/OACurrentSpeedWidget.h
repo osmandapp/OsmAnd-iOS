@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OACurrentSpeedWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithCustomId:(NSString *_Nullable)customId
-                                  appMode:(OAApplicationMode * _Nonnull)appMode;
+                                  appMode:(OAApplicationMode * _Nonnull)appMode
+                             widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end
 

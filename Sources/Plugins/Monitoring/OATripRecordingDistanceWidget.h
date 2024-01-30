@@ -14,7 +14,8 @@
 
 - (instancetype _Nonnull)initWithPlugin:(OAMonitoringPlugin *)plugin
                                customId:(NSString *_Nullable)customId
-                                appMode:(OAApplicationMode * _Nonnull)appMode;
+                                appMode:(OAApplicationMode * _Nonnull)appMode
+                           widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 + (NSString *) getName;
 

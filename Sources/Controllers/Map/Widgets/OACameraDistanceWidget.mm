@@ -24,11 +24,12 @@
 
 - (instancetype)initWithСustomId:(NSString *)customId
                          appMode:(OAApplicationMode *)appMode
+                    widgetParams:(NSDictionary *)widgetParams;
 {
     self = [super initWithType:OAWidgetType.devCameraDistance];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         _cachedCameraDistance = -1;
         _settings = [OAAppSettings sharedManager];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;

@@ -30,10 +30,11 @@ static const int INVALID_BEARING = -1000;
 - (instancetype)initWithBearingType:(EOABearingType)bearingType
                            customId:(NSString *)customId
                             appMode:(OAApplicationMode *)appMode
+                       widgetParams:(NSDictionary *)widgetParams
 {
     self = [super initWithType:[self widgetByBearingType:bearingType]];
     if (self) {
-        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         [self setAngularUnitsDepended:YES];
         _cachedAngularUnits = DEGREES;
         _locationProvider = OsmAndApp.instance.locationServices;

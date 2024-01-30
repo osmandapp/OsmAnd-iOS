@@ -28,11 +28,11 @@ class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     
     private var customLatLon: CLLocation?
     
-    convenience init(widgetState: MapMarkerSideWidgetState, appMode: OAApplicationMode) {
+    convenience init(widgetState: MapMarkerSideWidgetState, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         
         self.init(frame: .zero)
         self.widgetType = widgetState.isFirstMarker() ? WidgetType.sideMarker1 : WidgetType.sideMarker2
-        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: nil)
+        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: widgetParams)
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
         self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref

@@ -26,11 +26,11 @@ class MapWidgetsFactory: NSObject {
         let appMode = OAAppSettings.sharedManager().applicationMode.get()!
         switch widgetType {
         case .nextTurn:
-            return OANextTurnWidget(horisontalMini: false, nextNext: false, customId: customId, appMode: appMode)
+            return OANextTurnWidget(horisontalMini: false, nextNext: false, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .smallNextTurn:
-            return OANextTurnWidget(horisontalMini: true, nextNext: false, customId: customId, appMode: appMode)
+            return OANextTurnWidget(horisontalMini: true, nextNext: false, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .secondNextTurn:
-            return OANextTurnWidget(horisontalMini: true, nextNext: true, customId: customId, appMode: appMode)
+            return OANextTurnWidget(horisontalMini: true, nextNext: true, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .coordinatesCurrentLocation:
             let widget = CoordinatesCurrentLocationWidget()
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
@@ -52,29 +52,29 @@ class MapWidgetsFactory: NSObject {
             widget.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
             return widget
         case .distanceToDestination:
-            return DistanceToDestinationWidget(customId: customId, appMode: appMode)
+            return DistanceToDestinationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .intermediateDestination:
-            return DistanceToIntermediateDestinationWidget(customId: customId, appMode: appMode)
+            return DistanceToIntermediateDestinationWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .timeToIntermediate:
             let state = TimeToNavigationPointWidgetState(customId: customId, intermediate: true)
-            return TimeToNavigationPointWidget(widgetState: state, appMode: appMode)
+            return TimeToNavigationPointWidget(widgetState: state, appMode: appMode, widgetParams: widgetParams)
         case .timeToDestination:
             let widgetState = TimeToNavigationPointWidgetState(customId: customId, intermediate: false)
-            return TimeToNavigationPointWidget(widgetState: widgetState, appMode: appMode)
+            return TimeToNavigationPointWidget(widgetState: widgetState, appMode: appMode, widgetParams: widgetParams)
         case .sideMarker1:
             let firstMarkerState = MapMarkerSideWidgetState(customId: customId, firstMarker: true)
-            return MapMarkerSideWidget(widgetState: firstMarkerState, appMode: appMode)
+            return MapMarkerSideWidget(widgetState: firstMarkerState, appMode: appMode, widgetParams: widgetParams)
         case .sideMarker2:
             let secondMarkerState = MapMarkerSideWidgetState(customId: customId, firstMarker: false)
-            return MapMarkerSideWidget(widgetState: secondMarkerState, appMode: appMode)
+            return MapMarkerSideWidget(widgetState: secondMarkerState, appMode: appMode, widgetParams: widgetParams)
         case .relativeBearing:
-            return OABearingWidget(bearingType: .relative, customId: customId, appMode: appMode)
+            return OABearingWidget(bearingType: .relative, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .magneticBearing:
-            return OABearingWidget(bearingType: .magnetic, customId: customId, appMode: appMode)
+            return OABearingWidget(bearingType: .magnetic, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .trueBearing:
-            return OABearingWidget(bearingType: .true, customId: customId, appMode: appMode)
+            return OABearingWidget(bearingType: .true, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .currentSpeed:
-            return OACurrentSpeedWidget(customId: customId, appMode: appMode)
+            return OACurrentSpeedWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .averageSpeed:
             if let widgetParams {
                 return AverageSpeedWidget(customId: customId,
@@ -84,31 +84,31 @@ class MapWidgetsFactory: NSObject {
                 return AverageSpeedWidget(customId: customId, appMode: appMode)
             }
         case .maxSpeed:
-            return OAMaxSpeedWidget(customId: customId, appMode: appMode)
+            return OAMaxSpeedWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .altitudeMyLocation:
-            return OAAltitudeWidget(type: .myLocation, customId: customId, appMode: appMode)
+            return OAAltitudeWidget(type: .myLocation, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .altitudeMapCenter:
-            return OAAltitudeWidget(type: .mapCenter, customId: customId, appMode: appMode)
+            return OAAltitudeWidget(type: .mapCenter, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .gpsInfo:
             return /*GpsInfoWidget(mapActivity: mapActivity)*/nil
         case .currentTime:
-            return CurrentTimeWidget(customId: customId, appMode: appMode)
+            return CurrentTimeWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .battery:
             return BatteryWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .radiusRuler:
-            return RulerDistanceWidget(customId: customId, appMode: appMode)
+            return RulerDistanceWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .sunrise:
             let sunriseState = OASunriseSunsetWidgetState(type: true, customId: customId)
-            return OASunriseSunsetWidget(state: sunriseState, appMode: appMode)
+            return OASunriseSunsetWidget(state: sunriseState, appMode: appMode, widgetParams: widgetParams)
         case .sunset:
             let sunsetState = OASunriseSunsetWidgetState(type: false, customId: customId)
-            return OASunriseSunsetWidget(state: sunsetState, appMode: appMode)
+            return OASunriseSunsetWidget(state: sunsetState, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
             return SensorTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
         default:
-            return OAPlugin.createMapWidget(widgetType, customId: customId, appMode: appMode)
+            return OAPlugin.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
         }
     }
     

@@ -33,7 +33,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
         
         tableView.register(UINib(nibName: SegmentImagesWithRightLableTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
         
-        if isCreateNewAndSimilarAlreadyExist {
+        if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
         }
     }
@@ -107,6 +107,9 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                         fatalError("You need implement value handler for widgetKey")
                     }
                 }
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                    widgetConfigurationParams?["isVisibleIcon"] = selected
+                }
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
                 cell.leftIconView.image = UIImage.templateImageNamed(selected ? item.iconName : item.string(forKey: "hide_icon"))
@@ -174,7 +177,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: "values") as? [String],
                let pref = item.obj(forKey: "prefSegment") as? OACommonInteger {
-                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: Int(pref.get(selectedAppMode)))
+                let widgetSizeStyle = pref.get(selectedAppMode)
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                    widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle
+                }
+                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: Int(widgetSizeStyle))
             }
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
@@ -184,9 +191,6 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                       let pref = item.obj(forKey: "prefSegment") as? OACommonInteger else { return }
                 pref.set(Int32(index), mode: selectedAppMode)
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-                    if widgetConfigurationParams == nil {
-                        widgetConfigurationParams = [:]
-                    }
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }
                 if item.string(forKey: "behaviour") == "simpleWidget" {
@@ -223,9 +227,6 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             pref.set(sw.isOn, mode: selectedAppMode)
         }
         if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-            if widgetConfigurationParams == nil {
-                widgetConfigurationParams = [:]
-            }
             widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
         }
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {

@@ -73,40 +73,41 @@
     return @[OAWidgetType.devFps.id, OAWidgetType.devCameraTilt.id, OAWidgetType.devCameraDistance, OAWidgetType.devZoomLevel.id, OAWidgetType.devTargetDistance.id];
 }
 
-- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps customId:nil appMode:appMode];
+    OABaseWidgetView *fpsWidget = [self createMapWidgetForParams:OAWidgetType.devFps customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:fpsWidget]];
     
-    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt customId:nil appMode:appMode];
+    OABaseWidgetView *cameraTiltWidget = [self createMapWidgetForParams:OAWidgetType.devCameraTilt customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:cameraTiltWidget]];
     
-    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance customId:nil appMode:appMode];
+    OABaseWidgetView *cameraDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devCameraDistance customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:cameraDistanceWidget]];
     
-    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel customId:nil appMode:appMode];
+    OABaseWidgetView *zoomLevelWidget = [self createMapWidgetForParams:OAWidgetType.devZoomLevel customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:zoomLevelWidget]];
     
-    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance customId:nil appMode:appMode];
+    OABaseWidgetView *targetDistanceWidget = [self createMapWidgetForParams:OAWidgetType.devTargetDistance customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:targetDistanceWidget]];
 }
 
 - (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
                                       customId:(NSString *)customId
                                        appMode:(OAApplicationMode *)appMode
+                                  widgetParams:(NSDictionary *)widgetParams
 {
     if (widgetType == OAWidgetType.devFps) {
-        return [[OAFPSTextInfoWidget alloc] initWithСustomId:customId appMode:appMode];
+        return [[OAFPSTextInfoWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.devCameraTilt) {
-        return [[OACameraTiltWidget alloc] initWithСustomId:customId appMode:appMode];
+        return [[OACameraTiltWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.devCameraDistance) {
-        return [[OACameraDistanceWidget alloc]initWithСustomId:customId appMode:appMode];
+        return [[OACameraDistanceWidget alloc]initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.devZoomLevel) {
-        return [[OAZoomLevelWidget alloc] initWithСustomId:customId appMode:appMode];
+        return [[OAZoomLevelWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.devTargetDistance) {
-        return [[OATargetDistanceWidget alloc]initWithСustomId:customId appMode:appMode];
+        return [[OATargetDistanceWidget alloc]initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     }
     return nil;
 }

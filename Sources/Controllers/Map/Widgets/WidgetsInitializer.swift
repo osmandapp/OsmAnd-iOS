@@ -29,12 +29,11 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
     
     private func createAllControls() -> [MapWidgetInfo] {
         createCommonWidgets()
-        OAPlugin.createMapWidgets(self, appMode: appMode)
+        OAPlugin.createMapWidgets(self, appMode: appMode, widgetParams: nil)
 //        app.getAidlApi().createWidgetControls(mapActivity, mapWidgetsCache, appMode)
         createCustomWidgets()
         return mapWidgetsCache
     }
-    
     
     private func createCommonWidgets() {
         createTopWidgets()

@@ -24,6 +24,7 @@
 
 - (instancetype)initWithState:(OASunriseSunsetWidgetState *)state
                       appMode:(OAApplicationMode *)appMode
+                 widgetParams:(NSDictionary *)widgetParams
 {
     self = [super init];
     if (self)
@@ -32,7 +33,7 @@
         _settings = [OAAppSettings sharedManager];
         _state = state;
         self.widgetType = state.isSunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
-        [self configurePrefsWithId:state.customId appMode:appMode widgetParams:nil];
+        [self configurePrefsWithId:state.customId appMode:appMode widgetParams:widgetParams];
         
         __weak OASunriseSunsetWidget *selfWeak = self;
         self.updateInfoFunction = ^BOOL{

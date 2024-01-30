@@ -47,10 +47,11 @@
                          band:(EOAWeatherBand)band
                      customId:(NSString *)customId
                       appMode:(OAApplicationMode *)appMode
+                widgetParams:(NSDictionary *)widgetParams;
 {
     self = [super initWithType:type];
     if (self) {
-        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         [self setIconForWidgetType:type];
         _app = OsmAndApp.instance;
         _band = band;

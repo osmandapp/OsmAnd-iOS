@@ -20,7 +20,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
     private var cachedArrivalTimeOtherwiseTimeToGo: Bool
     private var cachedLeftSeconds: Int
     
-    convenience init(widgetState: TimeToNavigationPointWidgetState, appMode: OAApplicationMode) {
+    convenience init(widgetState: TimeToNavigationPointWidgetState, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         
         self.init(frame: .zero)
         
@@ -29,7 +29,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
         self.cachedLeftSeconds = 0
         self.widgetType = widgetState.isIntermediate() ? WidgetType.timeToIntermediate : WidgetType.timeToDestination
-        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: nil)
+        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: widgetParams)
         setText(nil, subtext: nil)
         updateIcons()
         updateContentTitle()

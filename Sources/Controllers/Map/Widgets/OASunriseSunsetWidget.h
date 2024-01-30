@@ -13,7 +13,9 @@
 @interface OASunriseSunsetWidget : OASimpleWidget
 
 - (instancetype _Nonnull)initWithState:(OASunriseSunsetWidgetState *_Nonnull)state
-                      appMode:(OAApplicationMode * _Nonnull)appMode;
+                      appMode:(OAApplicationMode * _Nonnull)appMode
+                 widgetParams:(NSDictionary * _Nullable)widgetParams;
+
 + (NSString *)getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
 + (NSString *)getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
 - (OACommonInteger *)getPreference;

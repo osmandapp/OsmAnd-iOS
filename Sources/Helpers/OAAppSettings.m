@@ -2098,7 +2098,9 @@
 
 - (NSArray<NSArray<NSString *> *> *) get:(OAApplicationMode *)mode
 {
-    NSObject *value = [self getValue:mode];
+    NSArray<NSArray<NSString *> *> *value = (NSArray<NSArray<NSString *> *> *) [self getValue:mode];
+    if (!value)
+        value = self.defValue;
     if (value)
     {
         NSArray<NSArray<NSString *> *> *values = (NSArray<NSArray<NSString *> *> *) value;
@@ -2106,7 +2108,7 @@
             return [OAWidgetsPanel getPagedWidgetIdsWithPages:values];
         return values;
     }
-    return self.defValue;
+    return value;
 }
 
 - (void) set:(NSArray<NSArray<NSString *> *> *)arr

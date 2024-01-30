@@ -35,7 +35,7 @@ final class AverageSpeedWidget: OASimpleWidget {
         setMetricSystemDepended(true)
         
         self.customId = customId
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
         

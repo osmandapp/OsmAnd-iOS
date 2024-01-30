@@ -33,7 +33,7 @@ static const int INVALID_BEARING = -1000;
 {
     self = [super initWithType:[self widgetByBearingType:bearingType]];
     if (self) {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         [self setAngularUnitsDepended:YES];
         _cachedAngularUnits = DEGREES;
         _locationProvider = OsmAndApp.instance.locationServices;

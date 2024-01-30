@@ -14,7 +14,7 @@ class MapillaryWidget: OASimpleWidget {
     
     init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .mapillary)
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         setText(localizedString("mapillary"), subtext: "")
         setIcon("widget_mapillary")
         onClickFunction = { _ in

@@ -15,7 +15,7 @@ class DistanceToIntermediateDestinationWidget: OADistanceToPointWidget {
     
     init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(icon: "widget_intermediate", widgetType: .intermediateDestination)
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
     
     override init(frame: CGRect) {

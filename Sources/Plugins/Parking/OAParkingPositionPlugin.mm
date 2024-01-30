@@ -225,7 +225,7 @@
 {
     _parkingPlaceControl = [[OASimpleWidget alloc] init];
     _parkingPlaceControl.widgetType = OAWidgetType.parking;
-    [_parkingPlaceControl configurePrefsWithId:@"" appMode:appMode];
+    [_parkingPlaceControl configurePrefsWithId:@"" appMode:appMode widgetParams:nil];
 
     __weak OATextInfoWidget *parkingPlaceControlWeak = _parkingPlaceControl;
     __weak OAParkingPositionPlugin *pluginWeak = self;

@@ -28,7 +28,7 @@
 {
     self = [super initWithType:OAWidgetType.maxSpeed];
     if (self) {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         [self setIconForWidgetType:OAWidgetType.maxSpeed];
         [self setText:nil subtext:nil];
         _trackingUtilities = OAMapViewTrackingUtilities.instance;

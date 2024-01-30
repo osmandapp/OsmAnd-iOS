@@ -86,7 +86,7 @@
     self = [super initWithType:OAWidgetType.tripRecordingUphill];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         _diffElevationUp = 0.0;
         [self setIcon:@"widget_track_recording_uphill"];
     }
@@ -122,7 +122,7 @@
     self = [super initWithType:OAWidgetType.tripRecordingDownhill];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         _diffElevationDown = 0.0;
         [self setIcon:@"widget_track_recording_downhill"];
     }

@@ -94,7 +94,7 @@ class MapWidgetsFactory: NSObject {
         case .currentTime:
             return CurrentTimeWidget(customId: customId, appMode: appMode)
         case .battery:
-            return BatteryWidget(customId: customId, appMode: appMode)
+            return BatteryWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .radiusRuler:
             return RulerDistanceWidget(customId: customId, appMode: appMode)
         case .sunrise:

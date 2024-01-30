@@ -30,7 +30,7 @@
     self = [super initWithType:OAWidgetType.devFps];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         _lastUpdatingMs = 0;
         _lastUpdatingFrameId = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;

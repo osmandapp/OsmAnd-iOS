@@ -18,7 +18,7 @@ final class CurrentTimeWidget: OASimpleWidget {
         super.init(type: .currentTime)
         setIconFor(.currentTime)
         setText(nil, subtext: nil)
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
     
     override init(frame: CGRect) {

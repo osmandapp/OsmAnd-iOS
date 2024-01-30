@@ -33,7 +33,7 @@ class RulerDistanceWidget: OATextInfoWidget {
             }
             self?.onRulerUpdate()
         }
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
 
     override init(frame: CGRect) {

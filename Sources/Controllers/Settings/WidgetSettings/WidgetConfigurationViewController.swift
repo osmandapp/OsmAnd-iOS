@@ -183,6 +183,12 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 guard let self,
                       let pref = item.obj(forKey: "prefSegment") as? OACommonInteger else { return }
                 pref.set(Int32(index), mode: selectedAppMode)
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                    if widgetConfigurationParams == nil {
+                        widgetConfigurationParams = [:]
+                    }
+                    widgetConfigurationParams?["widgetSizeStyle"] = index
+                }
                 if item.string(forKey: "behaviour") == "simpleWidget" {
                     NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
                                                     object: widgetInfo,
@@ -216,7 +222,12 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             let pref = data.obj(forKey: "pref") as! OACommonBoolean
             pref.set(sw.isOn, mode: selectedAppMode)
         }
-        
+        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+            if widgetConfigurationParams == nil {
+                widgetConfigurationParams = [:]
+            }
+            widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
+        }
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))

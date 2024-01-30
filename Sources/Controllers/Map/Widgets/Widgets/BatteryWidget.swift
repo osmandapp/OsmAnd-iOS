@@ -22,7 +22,7 @@ final class BatteryWidget: OASimpleWidget {
     init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .battery)
         setIcons(charging: false)
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
     
     override init(frame: CGRect) {

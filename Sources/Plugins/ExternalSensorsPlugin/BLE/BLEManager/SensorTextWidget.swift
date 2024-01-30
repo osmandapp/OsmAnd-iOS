@@ -30,7 +30,7 @@ final class SensorTextWidget: OASimpleWidget {
         setIconFor(widgetType)
         self.widgetType = widgetType
         self.appMode = appMode
-        configurePrefs(withId: customId, appMode: appMode)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         deviceIdPref = registerSensorDevicePref(customId: customId)
         useAnyDevicePref = registerUseAnyDevicePref(customId: customId)
         

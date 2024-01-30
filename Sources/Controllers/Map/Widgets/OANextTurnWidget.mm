@@ -63,7 +63,7 @@
     self = [super initWithType:type];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
         _leftView = [[UIView alloc] initWithFrame:CGRectMake(2., 84., kLeftViewSide, kLeftViewSide)];

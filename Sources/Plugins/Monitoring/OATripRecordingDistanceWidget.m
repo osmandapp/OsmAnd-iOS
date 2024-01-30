@@ -24,7 +24,7 @@
     self = [super initWithType:OAWidgetType.tripRecordingDistance];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         __weak OATextInfoWidget *distanceWidgetWeak = self;
         __weak OAMonitoringPlugin *pluginWeak = plugin;
         long __block cachedLastUpdateTime;

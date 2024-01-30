@@ -767,11 +767,23 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     return data;
 }
 
-- (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode
+- (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
 {
     _appMode = appMode;
     _hideIconPref = [self registerHideIconPrefWith:id];
     self.sizeStylePref = [self registerSizeStylePrefWith:id];
+    
+    if (widgetParams) {
+        NSString *param = widgetParams[@"widgetSizeStyle"];
+        if (param) {
+            [self.sizeStylePref set:[param intValue] mode:appMode];
+        }
+        NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
+        if (isVisibleIconNumber) {
+            BOOL isVisibleIcon = [isVisibleIconNumber boolValue];
+            [_hideIconPref set:isVisibleIcon mode:appMode];
+        }
+    }
 }
 
 - (OACommonInteger *)registerSizeStylePrefWith:(NSString *)customId

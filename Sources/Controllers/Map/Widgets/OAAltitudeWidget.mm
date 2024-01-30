@@ -32,7 +32,7 @@
         // TODO: refactor widget type
         self.widgetType = widgetType == EOAAltitudeWidgetTypeMapCenter ? OAWidgetType.altitudeMapCenter : OAWidgetType.altitudeMyLocation;
         _widgetType = widgetType;
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         _app = [OsmAndApp instance];
         _cachedAltitude = 0;
 

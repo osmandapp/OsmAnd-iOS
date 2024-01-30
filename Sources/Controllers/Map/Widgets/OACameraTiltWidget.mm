@@ -25,7 +25,7 @@
     self = [super initWithType:OAWidgetType.devCameraTilt];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         _cachedMapTilt = 0;
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@"°"];

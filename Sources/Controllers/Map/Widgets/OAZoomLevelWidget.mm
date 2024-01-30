@@ -25,7 +25,7 @@
     self = [super initWithType:OAWidgetType.devZoomLevel];
     if (self)
     {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         _rendererView = [OARootViewController instance].mapPanel.mapViewController.mapView;
         [self setText:@"-" subtext:@""];
         [self setIcon:@"widget_developer_map_zoom"];

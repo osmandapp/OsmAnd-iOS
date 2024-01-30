@@ -29,7 +29,7 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
         self.cachedLeftSeconds = 0
         self.widgetType = widgetState.isIntermediate() ? WidgetType.timeToIntermediate : WidgetType.timeToDestination
-        configurePrefs(withId: widgetState.customId, appMode: appMode)
+        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: nil)
         setText(nil, subtext: nil)
         updateIcons()
         updateContentTitle()

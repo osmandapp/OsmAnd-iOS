@@ -50,7 +50,7 @@
 {
     self = [super initWithType:type];
     if (self) {
-        [self configurePrefsWithId:customId appMode:appMode];
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:nil];
         [self setIconForWidgetType:type];
         _app = OsmAndApp.instance;
         _band = band;

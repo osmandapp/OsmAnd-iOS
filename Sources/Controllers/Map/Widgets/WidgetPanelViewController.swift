@@ -150,7 +150,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageViewController.dataSource = nil
         pageViewController.delegate = nil
         self.widgetPages = widgetPages
-        // ? !isHorizontal
         widgetPages.forEach { $0.forEach { $0.delegate = self } }
         if isHorizontal {
             let vc = WidgetPageViewController()

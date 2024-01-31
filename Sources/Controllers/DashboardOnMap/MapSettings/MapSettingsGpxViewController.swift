@@ -78,7 +78,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private let previouslyVisibleTracksKey = "PreviouslyVisibleGpxFilePaths"
     private var searchController: UISearchController?
     private var segmentedControl: UISegmentedControl?
-    private var sortButton: UIButton?
     private var lastUpdate: TimeInterval?
     private var currentSortType: TrackSortType = .lastModified
     private var sortTypeForAllTracks: TrackSortType = .lastModified
@@ -95,6 +94,19 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
+    private lazy var sortButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.imagePadding = 16
+        config.imagePlacement = .leading
+        config.baseForegroundColor = .iconColorActive
+        let button = UIButton(configuration: config, primaryAction: nil)
+        button.setImage(UIImage(resource: .icCustomLastModified), for: .normal)
+        button.menu = createSortMenu()
+        button.showsMenuAsPrimaryAction = true
+        button.changesSelectionAsPrimaryAction = true
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
     
     override func commonInit() {
         loadGpxTracks()
@@ -463,9 +475,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     private func updateSelectedRows() {
         let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
-        let recentlyVisible = isShowingVisibleTracks ? recentlyVisibleGpxList : []
-        let sections = [gpxListToShow, recentlyVisible]
-        for (sectionIndex, section) in sections.enumerated() {
+        let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
+        for (sectionIndex, section) in [gpxListToShow, recentlyVisibleTracks].enumerated() {
             for (rowIndex, gpx) in section.enumerated() {
                 let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
                 if selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
@@ -498,34 +509,15 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func setupHeaderView() -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 44))
         headerView.backgroundColor = .groupBg
-        if let button = createSortButton() {
-            sortButton = button
-            headerView.addSubview(button)
-            button.translatesAutoresizingMaskIntoConstraints = false
-            NSLayoutConstraint.activate([
-                button.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
-                button.topAnchor.constraint(equalTo: headerView.topAnchor),
-                button.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
-            ])
-        } else {
-            return nil
-        }
+        headerView.addSubview(sortButton)
+        sortButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            sortButton.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
+            sortButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+            sortButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
+        ])
         
         return headerView
-    }
-    
-    private func createSortButton() -> UIButton? {
-        var config = UIButton.Configuration.plain()
-        config.imagePadding = 16
-        config.imagePlacement = .leading
-        config.baseForegroundColor = .iconColorActive
-        let button = UIButton(configuration: config, primaryAction: nil)
-        button.setImage(UIImage(resource: .icCustomLastModified), for: .normal)
-        button.menu = createSortMenu()
-        button.showsMenuAsPrimaryAction = true
-        button.changesSelectionAsPrimaryAction = true
-        button.contentHorizontalAlignment = .left
-        return button
     }
     
     private func createSortMenu() -> UIMenu {
@@ -554,7 +546,15 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func createAction(for sortType: TrackSortType) -> UIAction {
-        let isCurrentSortType = isSearchActive ? sortType == sortTypeForSearch : sortType == (isShowingVisibleTracks ? sortTypeForVisibleTracks : sortTypeForAllTracks)
+        let isCurrentSortType: Bool
+        if isSearchActive {
+            isCurrentSortType = sortType == sortTypeForSearch
+        } else if isShowingVisibleTracks {
+            isCurrentSortType = sortType == sortTypeForVisibleTracks
+        } else {
+            isCurrentSortType = sortType == sortTypeForAllTracks
+        }
+        
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
         return UIAction(title: sortType.title, image: UIImage(resource: sortType.iconImage), state: actionState) { [weak self] _ in
             guard let self else { return }
@@ -567,7 +567,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             }
             
             self.currentSortType = sortType
-            sortButton?.setImage(UIImage(resource: currentSortType.iconImage), for: .normal)
+            self.sortButton.setImage(UIImage(resource: self.currentSortType.iconImage), for: .normal)
             self.sortTracks()
             self.generateData()
             self.tableView.reloadData()
@@ -576,8 +576,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func updateSortButtonAndMenu() {
-        sortButton?.setImage(UIImage(resource: currentSortType.iconImage), for: .normal)
-        sortButton?.menu = createSortMenu()
+        sortButton.setImage(UIImage(resource: currentSortType.iconImage), for: .normal)
+        sortButton.menu = createSortMenu()
     }
     
     private func sortTracks() {
@@ -689,7 +689,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return fullString
     }
     
-    private func createImageAttributedString(named imageName: String, tintColor: UIColor, defaultAttributes: [NSAttributedString.Key: Any], rotate: Bool = false, rotationAngle: CGFloat = 0) -> NSAttributedString? {
+    private func createImageAttributedString(
+        named imageName: String,
+        tintColor: UIColor,
+        defaultAttributes: [NSAttributedString.Key: Any],
+        rotate: Bool = false,
+        rotationAngle: CGFloat = 0
+    ) -> NSAttributedString? {
         guard let image = UIImage(systemName: imageName)?.withTintColor(tintColor, renderingMode: .alwaysTemplate) else { return nil }
         let attachment = NSTextAttachment()
         var finalImage = image
@@ -723,10 +729,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         lastUpdate = Date.now.timeIntervalSince1970
         sortTracks()
         generateData()
-        DispatchQueue.main.async { [weak self] in
-            if let visibleIndexPaths = self?.tableView.indexPathsForVisibleRows {
-                self?.tableView.reloadRows(at: visibleIndexPaths, with: .none)
-                self?.updateSelectedRows()
+        DispatchQueue.main.async {
+            if let visibleIndexPaths = self.tableView.indexPathsForVisibleRows {
+                self.tableView.reloadRows(at: visibleIndexPaths, with: .none)
+                self.updateSelectedRows()
             }
         }
     }
@@ -794,31 +800,31 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-           let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-           let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
-            let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
-            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-            UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-                self.tableView.contentInset = contentInsets
-                self.tableView.scrollIndicatorInsets = contentInsets
-                self.buttonsBottomOffsetConstraint.constant = keyboardHeight
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-        }
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+        let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
+            self.tableView.contentInset = contentInsets
+            self.tableView.scrollIndicatorInsets = contentInsets
+            self.buttonsBottomOffsetConstraint.constant = keyboardHeight
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     @objc private func keyboardWillHide(_ notification: Notification) {
-        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-           let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
-            let contentInsets = UIEdgeInsets.zero
-            UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-                self.tableView.contentInset = contentInsets
-                self.tableView.scrollIndicatorInsets = contentInsets
-                self.buttonsBottomOffsetConstraint.constant = 0
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-        }
+        guard let userInfo = notification.userInfo,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+        let contentInsets = UIEdgeInsets.zero
+        UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
+            self.tableView.contentInset = contentInsets
+            self.tableView.scrollIndicatorInsets = contentInsets
+            self.buttonsBottomOffsetConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: nil)
     }
     
     @objc private func updateDistanceAndDirection() {

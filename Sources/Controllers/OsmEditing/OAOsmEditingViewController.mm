@@ -27,6 +27,7 @@
 #import "Localization.h"
 #import "OAPOIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -140,22 +141,22 @@ typedef NS_ENUM(NSInteger, EditingTab)
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
-    appearance.backgroundColor = UIColor.navBarBgColorPrimary;
-    appearance.shadowColor = UIColor.navBarBgColorPrimary;
+    appearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     blurAppearance.backgroundEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleRegular];
-    blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary;
+    blurAppearance.backgroundColor = [UIColor colorNamed:ACColorNameNavBarBgColorPrimary];
     blurAppearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.navBarTextColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameNavBarTextColorPrimary]
     };
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.navBarTextColorPrimary;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameNavBarTextColorPrimary];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     _backButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] style:UIBarButtonItemStylePlain target:self action:@selector(onBackPressed)];
@@ -237,7 +238,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     _buttonDelete.layer.cornerRadius = 9.0;
     
     _buttonDelete.userInteractionEnabled = ![_editPoiData.getEntity isKindOfClass:OAWay.class];
-    [_buttonDelete setTitleColor:_buttonDelete.userInteractionEnabled ? UIColor.buttonTextColorSecondary : UIColor.textColorSecondary forState:UIControlStateNormal];
+    [_buttonDelete setTitleColor:_buttonDelete.userInteractionEnabled ? [UIColor colorNamed:ACColorNameButtonTextColorSecondary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateNormal];
     
     _basicEditingController = [[OABasicEditingViewController alloc] initWithFrame:_pageController.view.bounds];
     [_basicEditingController setDataProvider:self];

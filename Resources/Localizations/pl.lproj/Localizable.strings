@@ -2706,3 +2706,7 @@
 "about_osmAnd" = "O OsmAnd";
 "troubleshooting" = "Rozwiązywanie problemów";
 "ask_question_propose_features" = "Zadaj pytanie, zaproponuj zmiany";
+"preferred_languages" = "Preferowane języki";
+"available_languages" = "Dostępne języki";
+"shared_string_author" = "Autor";
+"shared_string_license" = "Licencja";

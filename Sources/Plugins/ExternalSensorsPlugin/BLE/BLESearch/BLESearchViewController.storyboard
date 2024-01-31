@@ -67,21 +67,32 @@
                                                         </stackView>
                                                     </subviews>
                                                 </stackView>
+                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3ts-LM-zXG" userLabel="bottomSeparatorView">
+                                                    <rect key="frame" x="0.0" y="71.666666666666671" width="399.66666666666669" height="0.3333333333333286"/>
+                                                    <color key="backgroundColor" name="widgetSeparatorColor"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="height" constant="0.5" id="mS0-oP-mif"/>
+                                                    </constraints>
+                                                </view>
                                             </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstItem="e3W-AM-f2R" firstAttribute="centerY" secondItem="LNJ-lH-ZnF" secondAttribute="centerY" id="BVa-vH-LxJ"/>
                                                 <constraint firstItem="lKe-KR-MQG" firstAttribute="leading" secondItem="LNJ-lH-ZnF" secondAttribute="leading" constant="20" id="EmT-5L-Obq"/>
                                                 <constraint firstAttribute="trailing" secondItem="e3W-AM-f2R" secondAttribute="trailing" constant="16" id="ZWy-YX-j2a"/>
+                                                <constraint firstItem="3ts-LM-zXG" firstAttribute="leading" secondItem="LNJ-lH-ZnF" secondAttribute="leading" id="hpQ-Dv-PFH"/>
+                                                <constraint firstAttribute="bottom" secondItem="3ts-LM-zXG" secondAttribute="bottom" id="mr4-z7-GHd"/>
                                                 <constraint firstItem="e3W-AM-f2R" firstAttribute="leading" secondItem="lKe-KR-MQG" secondAttribute="trailing" constant="16" id="to9-BP-d6r"/>
                                                 <constraint firstItem="lKe-KR-MQG" firstAttribute="centerY" secondItem="LNJ-lH-ZnF" secondAttribute="centerY" id="uxT-Ul-s7W"/>
+                                                <constraint firstAttribute="trailing" secondItem="3ts-LM-zXG" secondAttribute="trailing" id="xCt-yO-GtI"/>
                                             </constraints>
                                         </tableViewCellContentView>
-                                        <color key="backgroundColor" name="groupBgColor"/>
+                                        <color key="backgroundColor" name="groupBg"/>
                                         <connections>
                                             <outlet property="connectStatusLabel" destination="Fdj-ZX-izt" id="pb5-IN-rXj"/>
                                             <outlet property="deviceImageView" destination="lKe-KR-MQG" id="ulN-oa-UvA"/>
                                             <outlet property="deviceNameLabel" destination="OlY-23-VYj" id="Fjj-IG-9tR"/>
+                                            <outlet property="separatorBottomInsetLeftConstraint" destination="hpQ-Dv-PFH" id="VHd-C4-kEn"/>
                                             <outlet property="signalIndicatorImageView" destination="y93-4G-CBO" id="QeJ-Ez-P74"/>
                                         </connections>
                                     </tableViewCell>
@@ -310,7 +321,7 @@ You need to activate the sensor so OsmAnd can find it.</string>
         <namedColor name="buttonSecondary">
             <color red="0.87800002098083496" green="0.86699998378753662" blue="0.88999998569488525" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
@@ -321,6 +332,9 @@ You need to activate the sensor so OsmAnd can find it.</string>
         </namedColor>
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="widgetSeparatorColor">
+            <color red="0.89803921568627454" green="0.8901960784313725" blue="0.90980392156862744" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>

@@ -17,6 +17,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAImagesTableViewCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -114,7 +115,7 @@
     
     if (_item.descriptionInfo.getLocalizedDescription.length > 0)
     {
-        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:UIColor.textColorPrimary];
+        NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:_item.descriptionInfo.getLocalizedDescription fontSize:17 textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
         [data addObject:@{
                 @"type" : [OATextMultilineTableViewCell getCellIdentifier],
                 @"attrText" : attrString
@@ -183,8 +184,8 @@
     _downloadButton = downloadButton;
     BOOL active = downloadButton != nil;
     [self.actionButton setTitle:active ? downloadButton.name : OALocalizedString(@"map_downloaded") forState:UIControlStateNormal];
-    self.actionButton.backgroundColor = active ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorSecondary;
-    [self.actionButton setTitleColor:active ? UIColor.buttonTextColorPrimary : UIColor.textColorSecondary forState:UIControlStateNormal];
+    self.actionButton.backgroundColor = active ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
+    [self.actionButton setTitleColor:active ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary] forState:UIControlStateNormal];
     [self.actionButton setUserInteractionEnabled:active];
 }
 
@@ -254,7 +255,7 @@
         if (cell)
         {
             cell.textView.attributedText = item[@"attrText"];
-            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: UIColor.textColorActive};
+            cell.textView.linkTextAttributes = @{NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive]};
             [cell.textView sizeToFit];
         }
         return cell;

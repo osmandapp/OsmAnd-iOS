@@ -14,6 +14,7 @@
 #import "OACloudBackupViewController.h"
 #import "OAInputTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define VERIFICATION_CODE_EXPIRATION_TIME_MIN (10 * 60)
 
@@ -79,7 +80,7 @@
         @"type" : [OASimpleTableViewCell getCellIdentifier],
         @"title" : [NSString stringWithFormat:OALocalizedString(@"verify_email_address_descr"), _email],
         @"boldPart" : _email ? _email : @"",
-        @"color" : UIColor.textColorSecondary,
+        @"color" : [UIColor colorNamed:ACColorNameTextColorSecondary],
         @"spacing" : @6
     },
     @{ @"type" : [OADividerCell getCellIdentifier] },
@@ -98,7 +99,7 @@
         [otherCells addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : self.errorMessage,
-            @"color" : UIColor.buttonBgColorDisruptive,
+            @"color" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
             @"spacing" : @1
         }];
     }
@@ -106,7 +107,7 @@
     [otherCells addObject:@{
         @"type" : [OAButtonTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"verification_code_missing"),
-        @"color" : UIColor.iconColorActive,
+        @"color" : [UIColor colorNamed:ACColorNameIconColorActive],
         @"action" : @"unfoldButtonPressed",
     }];
     
@@ -115,15 +116,15 @@
         [otherCells addObject:@{
             @"type" : [OASimpleTableViewCell getCellIdentifier],
             @"title" : OALocalizedString(@"verification_code_missing_description"),
-            @"color" : UIColor.textColorSecondary,
+            @"color" : [UIColor colorNamed:ACColorNameTextColorSecondary],
             @"spacing" : @1
         }];
 
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"resend_verification_code"),
-            @"buttonColor" : UIColor.buttonBgColorSecondary,
-            @"textColor" : UIColor.buttonTextColorSecondary,
+            @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
+            @"textColor" : [UIColor colorNamed:ACColorNameButtonTextColorSecondary],
             @"action": @"resendButtonPressed",
             @"inteactive" : @YES,
             @"topMargin" : @0
@@ -136,8 +137,8 @@
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
-            @"buttonColor" : UIColor.buttonBgColorPrimary,
-            @"textColor" : UIColor.buttonTextColorPrimary,
+            @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorPrimary],
+            @"textColor" : [UIColor colorNamed:ACColorNameButtonTextColorPrimary],
             @"action" : @"continueButtonPressed",
             @"inteactive" : @YES,
             @"topMargin" : continueButtonTopMargin,
@@ -148,8 +149,8 @@
         [otherCells addObject: @{
             @"type" : [OAFilledButtonCell getCellIdentifier],
             @"title" : OALocalizedString(@"shared_string_continue"),
-            @"buttonColor" : UIColor.buttonBgColorSecondary,
-            @"textColor" : UIColor.textColorSecondary,
+            @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorSecondary],
+            @"textColor" : [UIColor colorNamed:ACColorNameTextColorSecondary],
             @"action": @"continueButtonPressed",
             @"inteactive" : @NO,
             @"topMargin" : continueButtonTopMargin,

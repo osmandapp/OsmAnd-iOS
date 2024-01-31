@@ -19,6 +19,7 @@
 #import "OAFeatureCardRow.h"
 #import "OALinks.h"
 #import <SafariServices/SafariServices.h>
+#import "GeneratedAssetSymbols.h"
 
 #define kMargin 16.
 #define kSeparatorHeight .5
@@ -112,6 +113,7 @@
     [super viewDidLoad];
 
     self.scrollView.delegate = self;
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
 
     self.labelNavigationTitle.text = _type == EOAChoosePlan ? [_selectedFeature getListTitle] : _product.localizedTitle;
     self.labelNavigationTitle.hidden = YES;
@@ -139,7 +141,7 @@
         _subscriptionManagement = [[UILabel alloc] init];
         _subscriptionManagement.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         _subscriptionManagement.adjustsFontForContentSizeCategory = YES;
-        _subscriptionManagement.textColor = UIColor.textColorPrimary;
+        _subscriptionManagement.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         _subscriptionManagement.numberOfLines = 0;
 
         NSMutableAttributedString *attributedSubscriptionManagement =
@@ -166,13 +168,13 @@
                                      aboveSubview:self.buttonRestore];
 
         _viewIncludesSeparator = [[UIView alloc] init];
-        _viewIncludesSeparator.backgroundColor = UIColor.separatorColor;
+        _viewIncludesSeparator.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
         [self.scrollView insertSubview:_viewIncludesSeparator belowSubview:self.buttonRestore];
 
         _labelIncludes = [[UILabel alloc] init];
         _labelIncludes.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         _labelIncludes.adjustsFontForContentSizeCategory = YES;
-        _labelIncludes.textColor = UIColor.textColorPrimary;
+        _labelIncludes.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         _labelIncludes.numberOfLines = 0;
         _labelIncludes.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
                 OALocalizedString(@"shared_string_includes"), @""];
@@ -199,7 +201,7 @@
             _labelNotIncluded = [[UILabel alloc] init];
             _labelNotIncluded.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             _labelNotIncluded.adjustsFontForContentSizeCategory = YES;
-            _labelNotIncluded.textColor = UIColor.textColorPrimary;
+            _labelNotIncluded.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             _labelNotIncluded.numberOfLines = 0;
             _labelNotIncluded.text = [NSString stringWithFormat:OALocalizedString(@"ltr_or_rtl_combine_via_colon"),
                                                                 OALocalizedString(@"shared_string_not_included"), @""];
@@ -224,7 +226,7 @@
     }
 
     _backgroundAboveScrollViewContainer = [[UIView alloc] initWithFrame:CGRectMake(0., -self.scrollView.contentInset.top, DeviceScreenWidth, self.scrollView.contentInset.top)];
-    _backgroundAboveScrollViewContainer.backgroundColor = UIColor.groupBgColor;
+    _backgroundAboveScrollViewContainer.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     [self.scrollView insertSubview:_backgroundAboveScrollViewContainer aboveSubview:self.scrollViewContainerView];
 
     NSInteger index1 = [self.scrollView.subviews indexOfObject:_buttonTermsOfUse];
@@ -234,9 +236,9 @@
     _buttonPrivacyPolicy.tag = index2;
     _buttonPrivacyPolicy.labelTitle.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 
-    [self.buttonNavigationBack setTintColor:UIColor.iconColorActive];
+    [self.buttonNavigationBack setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     [self.buttonNavigationBack setImage:[UIImage templateImageNamed:@"ic_navbar_chevron"] forState:UIControlStateNormal];
-    [self.buttonNavigationRestore setTintColor:UIColor.iconColorActive];
+    [self.buttonNavigationRestore setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
     UIImage *image = [UIImage templateImageNamed:_type == EOAChoosePlan ? @"ic_custom_reset" : @"ic_navbar_help"];
     [self.buttonNavigationRestore setImage:image
                                   forState:UIControlStateNormal];
@@ -466,7 +468,7 @@
         self.buttonRestore.transform = CGAffineTransformMakeScale(-1.0, 1.0);
     }
     
-    [button setTitleColor:UIColor.buttonTextColorSecondary forState:UIControlStateNormal];
+    [button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
     button.titleLabel.font = [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold];
 }
 
@@ -576,7 +578,7 @@
     else if (_isHeaderBlurred && y <= 0.)
     {
         [self.viewNavigationBar removeBlurEffect];
-        self.viewNavigationBar.backgroundColor = UIColor.groupBgColor;
+        self.viewNavigationBar.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         self.labelNavigationTitle.hidden = YES;
         self.viewNavigationSeparator.hidden = YES;
         _isHeaderBlurred = NO;
@@ -607,7 +609,7 @@
 
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = UIColor.buttonBgColorTertiary;
+                row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:^(BOOL finished) {
                 [UIView animateWithDuration:0.2 animations:^{
                     OAFeatureCardRow *row = self.scrollView.subviews[tag];
@@ -624,7 +626,7 @@
         {
             [UIView animateWithDuration:0.2 animations:^{
                 OAFeatureCardRow *row = self.scrollView.subviews[tag];
-                row.backgroundColor = UIColor.buttonBgColorTertiary;
+                row.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             }                completion:nil];
         }
     }

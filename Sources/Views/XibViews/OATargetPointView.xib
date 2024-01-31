@@ -21,13 +21,13 @@
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1w-gW-NrP">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="100"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <color key="tintColor" name="iconColorActive"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HzX-Jk-g5N">
                     <rect key="frame" x="0.0" y="32" width="320" height="100"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <color key="tintColor" name="iconColorActive"/>
                 </view>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="HuO-xr-hkX">
@@ -72,7 +72,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" name="groupBgColor"/>
+                                    <color key="backgroundColor" name="groupBg"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                 </view>
                                 <textView opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Open 24/7" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0vP-Vz-W7S">
@@ -97,11 +97,11 @@
                                 <view hidden="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Fmg-B6-MZH">
                                     <rect key="frame" x="150" y="3" width="34" height="3"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="separatorColor"/>
+                                    <color key="backgroundColor" name="customSeparator"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                 </view>
                             </subviews>
-                            <color key="backgroundColor" name="groupBgColor"/>
+                            <color key="backgroundColor" name="groupBg"/>
                             <color key="tintColor" name="iconColorActive"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="QKF-tt-A3Z">
@@ -168,7 +168,7 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" name="groupBgColor"/>
+                            <color key="backgroundColor" name="groupBg"/>
                             <color key="tintColor" name="iconColorActive"/>
                         </view>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fz2-Bo-hKc">
@@ -178,7 +178,7 @@
                                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="cIC-rU-YaN">
                                     <rect key="frame" x="0.0" y="53" width="320" height="40"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="backgroundColor" name="viewBg"/>
                                     <color key="tintColor" name="iconColorActive"/>
                                 </view>
                                 <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="anZ-cB-J69">
@@ -188,7 +188,7 @@
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gGt-3L-A3v" customClass="OAButton">
                                             <rect key="frame" x="6" y="6" width="67" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                             <color key="tintColor" name="iconColorActive"/>
                                             <inset key="titleEdgeInsets" minX="-23" minY="33" maxX="0.0" maxY="0.0"/>
@@ -234,7 +234,7 @@
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MS8-UJ-8Y2" customClass="OAButton">
                                             <rect key="frame" x="13" y="10" width="53" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                             <color key="tintColor" name="iconColorActive"/>
                                             <inset key="titleEdgeInsets" minX="-24" minY="33" maxX="0.0" maxY="0.0"/>
@@ -280,7 +280,7 @@
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C1L-y5-El0" customClass="OAButton">
                                             <rect key="frame" x="8" y="6" width="55" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                             <color key="tintColor" name="iconColorActive"/>
                                             <inset key="titleEdgeInsets" minX="-20" minY="33" maxX="0.0" maxY="0.0"/>
@@ -326,7 +326,7 @@
                                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WaX-6E-FvP" customClass="OAButton">
                                             <rect key="frame" x="8" y="6" width="55" height="40"/>
                                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                             <color key="tintColor" name="iconColorActive"/>
                                             <inset key="titleEdgeInsets" minX="-20" minY="33" maxX="0.0" maxY="0.0"/>
@@ -394,14 +394,14 @@
                                             </connections>
                                         </button>
                                     </subviews>
-                                    <color key="backgroundColor" name="viewBgColor"/>
+                                    <color key="backgroundColor" name="viewBg"/>
                                 </view>
                             </subviews>
                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <color key="tintColor" name="iconColorActive"/>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <color key="tintColor" name="iconColorActive"/>
                 </view>
             </subviews>
@@ -464,10 +464,13 @@
         <namedColor name="buttonTextColorSecondary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="contextMenuButtonBgColor">
+        <namedColor name="contextMenuButtonBg">
             <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
@@ -475,9 +478,6 @@
         </namedColor>
         <namedColor name="iconColorSelected">
             <color red="1" green="0.53333333333333333" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -488,7 +488,7 @@
         <namedColor name="textColorSecondary">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="viewBgColor">
+        <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>

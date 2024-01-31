@@ -22,6 +22,7 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kAccountSectionIndex 0
 #define kOfflineEditingSectionIndex 1
@@ -114,7 +115,7 @@
         kCellTitleKey : _isAuthorised ? userName : OALocalizedString(@"login_open_street_map_org"),
         kCellIconNameKey : @"ic_custom_user_profile",
         kCellAccessoryType : _isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone),
-        @"titleColor" : _isAuthorised ? UIColor.textColorPrimary : UIColor.textColorActive,
+        @"titleColor" : _isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive],
         @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]
     }];
     _credentialIndexPath = [NSIndexPath indexPathForRow:[credentialSection rowCount] - 1 inSection:[_data sectionCount] - 1];
@@ -136,7 +137,7 @@
         kCellTitleKey : OALocalizedString(@"map_updates_for_mappers"),
         kCellDescrKey : [self getMappersDescription],
         kCellAccessoryType : @(UITableViewCellAccessoryDisclosureIndicator),
-        @"titleColor" : UIColor.textColorPrimary,
+        @"titleColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],
         @"titleFont" : [UIFont preferredFontForTextStyle:UIFontTextStyleBody]
     }];
     _mappersIndexPath = [NSIndexPath indexPathForRow:[mappersSection rowCount] - 1 inSection:[_data sectionCount] - 1];
@@ -150,7 +151,7 @@
     NSMutableAttributedString *actionsDescrAttr =
             [[NSMutableAttributedString alloc] initWithString:actionsDescr
                                                    attributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                                                 NSForegroundColorAttributeName : UIColor.textColorSecondary }];
+                                                                 NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }];
     [actionsDescrAttr addAttributes:@{ NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold] }
                               range:[actionsDescr rangeOfString:menuPath]];
     
@@ -164,7 +165,7 @@
         kCellTypeKey : [OASimpleTableViewCell getCellIdentifier],
         kCellAccessoryType : @(UITableViewCellAccessoryNone),
         @"descriptionAttributed" : actionsDescrAttr,
-        @"titleColor" : UIColor.textColorPrimary,
+        @"titleColor" : [UIColor colorNamed:ACColorNameTextColorPrimary],
         @"titleFont" : [UIFont preferredFontForTextStyle:UIFontTextStyleBody]
     }];
 
@@ -173,7 +174,7 @@
         kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
         kCellTitleKey : OALocalizedString(@"osm_edits_title"),
         kCellSecondaryIconName : @"ic_custom_folder",
-        kCellIconTintColor : UIColor.iconColorActive,
+        kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorActive],
         @"titleFont" : [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium]
     }];
 }
@@ -203,7 +204,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            cell.leftIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -370,7 +371,7 @@
             OATableRowData *credentialRow = [_data itemForIndexPath:_credentialIndexPath];
             credentialRow.title = _isAuthorised ? [_settings.osmUserDisplayName get] : OALocalizedString(@"login_open_street_map_org");
             credentialRow.accessoryType = _isAuthorised ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
-            [credentialRow setObj:_isAuthorised ? UIColor.textColorPrimary : UIColor.textColorActive forKey:@"titleColor"];
+            [credentialRow setObj:_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorActive] forKey:@"titleColor"];
             [credentialRow setObj:[UIFont scaledSystemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium] forKey:@"titleFont"];
             
             OATableRowData *mappersRow = [_data itemForIndexPath:_mappersIndexPath];

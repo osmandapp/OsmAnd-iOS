@@ -61,6 +61,7 @@
 #import "OARouteBaseViewController.h"
 #import "OAEmissionHelper.h"
 #import "OAAutoObserverProxy.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -249,8 +250,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) setupGoButton
 {
     BOOL isActive = _app.data.pointToNavigate != nil;
-    _goButton.backgroundColor = isActive ? UIColor.buttonBgColorPrimary : UIColor.buttonBgColorSecondary;
-    UIColor *color = isActive ? UIColor.buttonTextColorPrimary : UIColor.buttonTextColorSecondary;
+    _goButton.backgroundColor = isActive ? [UIColor colorNamed:ACColorNameButtonBgColorPrimary] : [UIColor colorNamed:ACColorNameButtonBgColorSecondary];
+    UIColor *color = isActive ? [UIColor colorNamed:ACColorNameButtonTextColorPrimary] : [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
     [_goButton setTintColor:color];
     [_goButton setTitleColor:color forState:UIControlStateNormal];
     [_goButton.imageView setTintColor:_goButton.tintColor];
@@ -652,11 +653,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
             OAGPXTrackAnalysis *trackAnalysis = [self getTrackAnalysis];
             if (_needChartUpdate)
             {
+                OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:_gpx.path]];
+                BOOL calcWithoutGaps = !gpx.joinSegments && (_gpx.tracks.count > 0 && _gpx.tracks.firstObject.generalTrack);
                 [GpxUIHelper refreshLineChartWithChartView:_routeStatsCell.lineChartView
                                                   analysis:trackAnalysis
                                        useGesturesAndScale:NO
-                                                 firstType:GPXDataSetTypeALTITUDE
-                                                secondType:GPXDataSetTypeSLOPE];
+                                                 firstType:GPXDataSetTypeAltitude
+                                                secondType:GPXDataSetTypeSlope
+                                           calcWithoutGaps:calcWithoutGaps];
                 _needChartUpdate = NO;
             }
         }
@@ -733,8 +737,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     vector<SHARED_PTR<TransportRouteResultSegment>> segments = res->segments;
     NSString *name = [NSString stringWithUTF8String:segments[0]->getStart().name.c_str()];
     
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.textColorPrimary};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
     
     [attributedStr appendAttributedString:[[NSAttributedString alloc] initWithString:[OALocalizedString(@"route_from") stringByAppendingString:@" "] attributes:secondaryAttributes]];
     
@@ -751,8 +755,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (NSAttributedString *) getSecondLineDescrAttributed:(SHARED_PTR<TransportRouteResult>)res
 {
     NSMutableAttributedString *attributedStr = [NSMutableAttributedString new];
-    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary};
-    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : UIColor.textColorPrimary};
+    NSDictionary *secondaryAttributes = @{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]};
+    NSDictionary *mainAttributes = @{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15.0 weight:UIFontWeightSemibold], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]};
     auto& segments = res->segments;
     NSInteger walkTimeReal = [_transportHelper getWalkingTime:segments];
     NSInteger walkTimePT = (NSInteger) res->getWalkTime();
@@ -925,6 +929,11 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     }
 }
 
+- (BOOL)isFullScreen
+{
+    return _currentState == EOARouteInfoMenuStateFullScreen;
+}
+
 - (void) onHistoryButtonPressed:(id) sender
 {
     _historyItemsLimit += 10;
@@ -937,7 +946,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     button.layer.cornerRadius = 42 / 2;
     button.layer.borderWidth = 1.0;
-    button.layer.borderColor = UIColor.separatorColor.CGColor;
+    button.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
 }
 
 - (CGPoint) calculateInitialPoint
@@ -1401,7 +1410,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 cell.finishPoint = NO;
                 [cell setDividerVisibility:self.isFinishPointFromTrack];
                 [cell.imgView setImage:[UIImage templateImageNamed:@"ic_custom_trip"]];
-                cell.imgView.tintColor = UIColor.iconColorDisabled;
+                cell.imgView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
                 cell.titleLabel.text = OALocalizedString(@"follow_track");
                 cell.addressLabel.text = fileName;
                 if (self.isGpxTrackFollowingMode && !self.isFinishPointFromTrack)
@@ -1439,7 +1448,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 if ([key isEqualToString:@"pedestrian_short"])
                 {
                     cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-                    cell.leftIconView.tintColor = UIColor.iconColorDisabled;
+                    cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
                     cell.descriptionLabel.text = nil;
                     cell.descriptionLabel.font = nil;
                     cell.descriptionLabel.textColor = nil;
@@ -1451,12 +1460,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                     cell.descriptionLabel.attributedText = nil;
                     cell.descriptionLabel.text = item[@"title"];
                     cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                    cell.descriptionLabel.textColor = UIColor.textColorPrimary;
+                    cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
                 }
                 cell.titleLabel.attributedText = nil;
                 cell.titleLabel.text = item[@"descr"];
                 cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
-                cell.titleLabel.textColor = UIColor.textColorSecondary;
+                cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             }
             else if (indexPath == _routingInfoIndexPath)
             {
@@ -1472,7 +1481,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                 {
                     NSString *emission = [NSString stringWithFormat:@"    |    %@", _emission];
                     [attrDescription addString:emission fontWeight:UIFontWeightRegular size:15.];
-                    [attrDescription setColor:UIColor.textColorSecondary forString:emission];
+                    [attrDescription setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:emission];
                 }
                 cell.descriptionLabel.text = nil;
                 cell.descriptionLabel.font = nil;
@@ -1570,8 +1579,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
         if (cell)
         {
-            cell.backgroundColor = UIColor.groupBgColor;
-            cell.dividerColor = UIColor.separatorColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             CGFloat leftInset = [cell isDirectionRTL] ? 0. : 62.0;
             CGFloat rightInset = [cell isDirectionRTL] ? 62.0 : 0.;
             cell.dividerInsets = [item[@"custom_insets"] boolValue] ? UIEdgeInsetsMake(0., leftInset, 0., rightInset) : UIEdgeInsetsZero;
@@ -1649,7 +1658,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAPublicTransportShieldCell getCellIdentifier] owner:self options:nil];
             cell = (OAPublicTransportShieldCell *)[nib objectAtIndex:0];
-            cell.backgroundColor = UIColor.groupBgColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         }
         
         if (cell)
@@ -1862,7 +1871,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     NSString *mainText = OALocalizedString(@"public_transport_empty_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_try_change_settings");
     NSString *settingName = OALocalizedString(@"avoid_transport_type");
-    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary };
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] };
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@\n%@", mainText, additionalText, settingName] attributes:attributes];
     
@@ -1870,7 +1879,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     if (settingRange.location != NSNotFound)
     {
         [res addAttributes:@{NSLinkAttributeName: @"osmand://open_transport_settings",
-                             NSForegroundColorAttributeName: UIColor.textColorActive,
+                             NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive],
                              NSFontAttributeName: [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
         } range:settingRange];
     }
@@ -1881,12 +1890,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     NSString *mainText = OALocalizedString(@"public_transport_warning_title");
     NSString *additionalText = OALocalizedString(@"public_transport_warning_descr_blog");
-    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary };
+    NSDictionary *attributes = @{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] };
     
     NSMutableAttributedString *res = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n\n%@", mainText, additionalText] attributes:attributes];
     
     [res addAttributes:@{NSLinkAttributeName: kBlogGuideline,
-                         NSForegroundColorAttributeName: UIColor.textColorActive,
+                         NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorActive],
                          NSFontAttributeName: [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]
     } range:NSMakeRange(mainText.length + 2, additionalText.length)];
     return [[NSAttributedString alloc] initWithAttributedString:res];

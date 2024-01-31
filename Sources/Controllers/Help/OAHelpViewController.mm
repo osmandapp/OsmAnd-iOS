@@ -16,6 +16,7 @@
 #import "OATableRowData.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppVersionDependentConstants.h"
+#import "GeneratedAssetSymbols.h"
 
 static NSString * const kLinkInternalType = @"internal_link";
 static NSString * const kLinkExternalType = @"ext_link";
@@ -311,7 +312,7 @@ static NSString * const kLinkExternalType = @"ext_link";
         else
         {
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = UIColor.iconColorDefault;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         }
         
         cell.accessoryType = isCellAccessoryNone ? UITableViewCellAccessoryNone : UITableViewCellAccessoryDisclosureIndicator;
@@ -410,8 +411,8 @@ static NSString * const kLinkExternalType = @"ext_link";
     NSString *appBuild = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
     
     NSString *deviceInfo = [NSString stringWithFormat:@"Device: %@\nOS: %@\nOS Version: %@\nOsmAnd Build: %@", deviceName, osName, osVersion, appBuild];
-    NSString *encodedDeviceInfo = [deviceInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLHostAllowedCharacterSet]];
-    NSString *mailtoUrlString = [NSString stringWithFormat:@"%@?subject=Support Request&body=%@", kContactEmail, encodedDeviceInfo];
+    NSString *encodedDeviceInfo = [deviceInfo stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSString *mailtoUrlString = [NSString stringWithFormat:@"%@?body=%@", kContactEmail, encodedDeviceInfo];
     
     return mailtoUrlString;
 }

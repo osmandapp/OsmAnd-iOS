@@ -14,7 +14,6 @@ typedef NS_ENUM(NSInteger, EMapSettingsScreen)
 {
     EMapSettingsScreenUndefined = -1,
     EMapSettingsScreenMain = 0,
-    EMapSettingsScreenGpx,
     EMapSettingsScreenPOI,
     EMapSettingsScreenMapType,
     EMapSettingsScreenCategory,

@@ -23,6 +23,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OADownloadingCellHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kCellTypeMap @"MapCell"
 
@@ -241,7 +242,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
             NSString *imgName = _wikipediaEnabled ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = _wikipediaEnabled ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = _wikipediaEnabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             [cell.switchView setOn:_wikipediaEnabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -263,7 +264,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         {
             cell.titleLabel.text = item[@"title"];
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"img"]];
-            cell.leftIconView.tintColor = UIColor.iconColorSelected;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             cell.valueLabel.text = [_wikiPlugin getLanguagesSummary];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
@@ -303,7 +304,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     if (section == EOAMapSettingsWikipediaSectionAvailable && _mapItems.count > 0 && _wikipediaEnabled)
     {
         UITableViewHeaderFooterView *header = (UITableViewHeaderFooterView *) view;
-        header.textLabel.textColor = UIColor.textColorSecondary;
+        header.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 

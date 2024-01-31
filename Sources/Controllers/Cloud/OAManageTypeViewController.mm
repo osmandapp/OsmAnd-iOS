@@ -15,6 +15,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAManageTypeViewController
 {
@@ -105,7 +106,7 @@
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
-            cell.titleLabel.textColor = UIColor.buttonBgColorDisruptive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
@@ -124,7 +125,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAValueTableViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.valueLabel.textColor = UIColor.textColorPrimary;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
         }

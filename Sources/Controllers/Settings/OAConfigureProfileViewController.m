@@ -44,6 +44,7 @@
 #import "OACloudIntroductionViewController.h"
 #import "OABackupHelper.h"
 #import "OAChoosePlanHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -404,7 +405,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            [cell.leftIconView setTintColor:UIColor.iconColorDefault];
+            [cell.leftIconView setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
         }
         if (cell)
         {
@@ -422,8 +423,8 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if (cell)
@@ -520,7 +521,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         UIFont *labelFont = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         [style setLineSpacing:6];
-        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : UIColor.textColorSecondary}];
+        vw.label.attributedText = [[NSAttributedString alloc] initWithString:title attributes:@{NSParagraphStyleAttributeName : style, NSFontAttributeName : labelFont, NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
         [vw sizeToFit];
         return vw;
     }
@@ -577,7 +578,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) addUnderlay
 {
     _cpyProfileViewUnderlay = [[UIView alloc] initWithFrame:CGRectMake(0., 0., self.view.frame.size.width, self.view.frame.size.height)];
-    [_cpyProfileViewUnderlay setBackgroundColor:UIColor.viewBgColor];
+    [_cpyProfileViewUnderlay setBackgroundColor:[UIColor colorNamed:ACColorNameViewBg]];
     [_cpyProfileViewUnderlay setAlpha:0.2];
     
     UITapGestureRecognizer *underlayTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(onUnderlayTapped)];

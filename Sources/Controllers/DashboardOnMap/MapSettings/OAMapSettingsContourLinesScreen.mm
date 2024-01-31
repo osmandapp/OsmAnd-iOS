@@ -34,6 +34,7 @@
 #import "OASegmentedSlider.h"
 #import "OALinks.h"
 #import "OADownloadingCellHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/QKeyValueIterator.h>
@@ -487,7 +488,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
             NSString *imgName = [self isContourLinesOn] ? @"ic_custom_show.png" : @"ic_custom_hide.png";
             cell.leftIconView.image = [UIImage templateImageNamed:imgName];
-            cell.leftIconView.tintColor = [self isContourLinesOn] ? UIColor.iconColorSelected : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = [self isContourLinesOn] ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
             [cell.switchView setOn:[self isContourLinesOn]];
@@ -623,8 +624,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             cell.rightIconView.image = [UIImage templateImageNamed:item[@"img"]];
             cell.titleLabel.text = item[@"title"];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-            cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         return cell;
     }
@@ -650,7 +651,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = UIColor.textColorSecondary;
+        v.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 
@@ -659,7 +660,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     if ([view isKindOfClass:[UITableViewHeaderFooterView class]])
     {
         UITableViewHeaderFooterView *v = (UITableViewHeaderFooterView *) view;
-        v.textLabel.textColor = UIColor.textColorSecondary;
+        v.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
 }
 

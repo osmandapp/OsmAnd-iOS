@@ -41,6 +41,7 @@
 #import "OAProducts.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kColorDayMode OALocalizedString(@"day")
 #define kColorNightMode OALocalizedString(@"daynight_mode_night")
@@ -504,14 +505,14 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
     [self.backButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    self.backButton.imageView.tintColor = UIColor.iconColorActive;
+    self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
     backImage = [UIImage templateImageNamed:@"ic_navbar_chevron"];
 
     [self.backNavBarButton setImage:isRTL ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                            forState:UIControlStateNormal];
-    self.backNavBarButton.imageView.tintColor = UIColor.iconColorActive;
+    self.backNavBarButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     [self.backNavBarButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_back")
                                                     attributes:@{ NSFontAttributeName:[UIFont preferredFontForTextStyle:UIFontTextStyleBody] }]
@@ -797,10 +798,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     if (!isAvailable)
         [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Advanced_Widgets];
     self.applyButton.userInteractionEnabled = isAvailable;
-    [self.applyButton setTitleColor:isAvailable ? UIColor.iconColorActive : UIColor.textColorSecondary
+    [self.applyButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]
                            forState:UIControlStateNormal];
     self.applyNavBarButton.userInteractionEnabled = isAvailable;
-    [self.applyNavBarButton setTitleColor:isAvailable ? UIColor.iconColorActive : UIColor.textColorSecondary
+    [self.applyNavBarButton setTitleColor:isAvailable ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary]
                            forState:UIControlStateNormal];
 }
 
@@ -1347,7 +1348,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell.delegate = self;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             [cell showLabels:NO];
-            cell.valueLabel.tintColor = UIColor.textColorSecondary;
+            cell.valueLabel.tintColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         if (cell)
         {
@@ -1392,8 +1393,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OAImageTextViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
-            cell.descView.textColor = UIColor.textColorSecondary;
-            cell.extraDescView.textColor = UIColor.textColorSecondary;
+            cell.descView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            cell.extraDescView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         if (cell)
         {
@@ -1426,7 +1427,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OATextLineViewCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.textView.textColor = UIColor.textColorSecondary;
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         if (cell)
         {
@@ -1447,8 +1448,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             cell = (OASegmentedControlCell *) nib[0];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
-            cell.backgroundColor = UIColor.groupBgColor;
-            cell.segmentedControl.backgroundColor = [UIColor.iconColorActive colorWithAlphaComponent:.1];
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.segmentedControl.backgroundColor = [[UIColor colorNamed:ACColorNameIconColorActive] colorWithAlphaComponent:.1];
             [cell changeHeight:YES];
             UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             [cell.segmentedControl setTitleTextAttributes:@{
@@ -1456,11 +1457,11 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 NSFontAttributeName : font }
                                                  forState:UIControlStateSelected];
             [cell.segmentedControl setTitleTextAttributes:@{
-                NSForegroundColorAttributeName : UIColor.textColorActive,
+                NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive],
                 NSFontAttributeName : font }
                                                  forState:UIControlStateNormal];
 
-            cell.segmentedControl.selectedSegmentTintColor = UIColor.iconColorActive;
+            cell.segmentedControl.selectedSegmentTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -1517,7 +1518,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentSliderTableViewCell getCellIdentifier]
                                                          owner:self options:nil];
             cell = (OASegmentSliderTableViewCell *) nib[0];
-            cell.topRightLabel.textColor = UIColor.textColorActive;
+            cell.topRightLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.topRightLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         }
         if (cell)
@@ -1547,13 +1548,13 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
             cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
         if (cell)
         {
             cell.titleLabel.text = cellData.title;
             cell.rightIconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -1608,7 +1609,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     UIFont *textFont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     NSMutableAttributedString *textStr = [[NSMutableAttributedString alloc] initWithString:footer attributes:@{
             NSFontAttributeName: textFont,
-            NSForegroundColorAttributeName: UIColor.textColorSecondary
+            NSForegroundColorAttributeName: [UIColor colorNamed:ACColorNameTextColorSecondary]
     }];
     vw.label.attributedText = textStr;
     return vw;

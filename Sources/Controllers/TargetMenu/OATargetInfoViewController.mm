@@ -8,6 +8,7 @@
 
 #import "OATargetInfoViewController.h"
 #import "OsmAndApp.h"
+#import "OANativeUtilities.h"
 #import "OATargetInfoViewCell.h"
 #import "OATargetInfoCollapsableViewCell.h"
 #import "OATargetInfoCollapsableCoordinatesViewCell.h"
@@ -44,6 +45,7 @@
 #import "OATextMultilineTableViewCell.h"
 #import "OAEditDescriptionViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -107,18 +109,21 @@
 {
     UIImage *img = nil;
     if ([fileName hasPrefix:@"mx_"])
-    {
-        img = [UIImage imageNamed:[OAUtilities drawablePath:fileName]];
-        if (img)
-        {
-            img = [OAUtilities applyScaleFactorToImage:img];
-        }
-    }
+        img = [UIImage mapSvgImageNamed:fileName];
     else
-    {
         img = [UIImage imageNamed:fileName];
-    }
-    
+
+    return img;
+}
+
++ (UIImage *) getIcon:(NSString *)fileName size:(CGSize)size
+{
+    UIImage *img = nil;
+    if ([fileName hasPrefix:@"mx_"])
+        img = [UIImage mapSvgImageNamed:fileName width:size.width height:size.height];
+    else
+        img = [UIImage imageNamed:fileName];
+
     return img;
 }
 
@@ -223,7 +228,7 @@
 
         if (nearest.count > 0)
         {
-            UIImage *icon = isWiki ? [UIImage imageNamed:[OAUtilities drawablePath:@"mx_wiki_place"]] : poi.icon;
+            UIImage *icon = isWiki ? [UIImage mapSvgImageNamed:@"mx_wiki_place"] : poi.icon;
             OARowInfo *rowInfo = [[OARowInfo alloc] initWithKey:nil icon:icon textPrefix:nil text:rowText textColor:nil isText:NO needLinks:NO order:0 typeName:@"" isPhoneNumber:NO isUrl:NO];
             rowInfo.collapsable = YES;
             rowInfo.collapsed = YES;
@@ -330,9 +335,9 @@
 {
     [super viewDidLoad];
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     UIView *view = [[UIView alloc] init];
-    view.backgroundColor = UIColor.groupBgColor;
+    view.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
     self.tableView.backgroundView = view;
     self.tableView.scrollEnabled = NO;
     _calculatedWidth = 0;
@@ -524,6 +529,7 @@
     NSInteger cardsCount = cards.count;
     NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
     NSURLSession *aSession = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    NSMutableArray<OAAbstractCard *> *newCards = [NSMutableArray arrayWithArray:cards];
     [[aSession dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
@@ -538,7 +544,7 @@
                     if (features.count == 0)
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
-                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                         });
                     }
                     else
@@ -550,15 +556,15 @@
                                 [self getCard:dict onComplete:^(OAAbstractCard *card) {
                                     if (card)
                                     {
-                                        [cards addObject:card];
-                                        if (cards.count == count + cardsCount)
-                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                                        [newCards addObject:card];
+                                        if (newCards.count == count + cardsCount)
+                                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                                     }
                                     else
                                     {
                                         count--;
-                                        if (cards.count == count + cardsCount)
-                                            [self onOtherCardsReady:cards rowInfo:nearbyImagesRowInfo];
+                                        if (newCards.count == count + cardsCount)
+                                            [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
                                     }
                                 }];
                             });
@@ -673,10 +679,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            cell.backgroundColor = UIColor.separatorColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
             [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
             [cell anchorContent:EOATableViewCellContentTopStyle];
@@ -703,12 +709,12 @@
         {
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCallout];
             cell.textView.text = info.textPrefix;
-            cell.textView.textColor = [UIColor textColorSecondary];
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else
         {
             cell.textView.font = [UIFont scaledSystemFontOfSize:14.0];
-            cell.textView.textColor = [UIColor textColorPrimary];
+            cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.textView.text = label;
             
             CGSize s = [OAUtilities calculateTextBounds:info.text width:self.tableView.bounds.size.width - 38.0 font:[UIFont scaledSystemFontOfSize:14.0]];

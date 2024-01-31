@@ -1663,7 +1663,7 @@
 "replace_all" = "Erstatt alle";
 "gpx_parse_error" = "Funnet problemer med en GPX-fil.\n\nDu kan kontakte OsmAnd-brukerstøtte for å undersøke det.";
 "shared_string_min" = "Min";
-"public_transport_warning_title" = "Offentlige transportnavigasjon er nå i betatestingsstadie, forvent feil og unøyaktigheter.";
+"public_transport_warning_title" = "Offentlig transportnavigasjon er nå i betatestingsstadie. Forvent feil og unøyaktigheter.";
 "profile_prefs_reset_successful" = "Alle profilinnstillinger gjenopprettet til forvalg.";
 "shared_string_nothing_selected" = "Ingenting valgt";
 "save_track_logging_accuracy" = "Loggingsnøyaktighet";
@@ -2609,3 +2609,9 @@
 "street_name_widget_desc" = "Gatenavnmodulen viser det aktuelle gatenavnet med en rett posisjonspil eller det neste gatenavnet med en pil som indikerer en kommende sving.";
 "shared_string_cache" = "Hurtiglager";
 "map_markers_bar_widget_desc" = "Topplinjemodulen viser avstanden og retningen til den neste kartmarkøren fra din nåværende posisjon. Modulen kan stilles inn til å vise 1 eller 2 markører.";
+"copy_build_version" = "Kopier byggversjon";
+"shared_string_author" = "Utvikler";
+"shared_string_license" = "Lisens";
+"shared_string_link" = "Lenke";
+"add_row" = "Legg til rad";
+"telegram_chats" = "Telegram-sludringer";

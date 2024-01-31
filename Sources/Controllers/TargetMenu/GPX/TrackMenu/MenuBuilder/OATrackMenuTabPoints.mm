@@ -18,6 +18,7 @@
 #import "OAGpxWptItem.h"
 #import "QuadRect.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <OsmAndCore/Utilities.h>
 
@@ -123,7 +124,7 @@
                     }
             }];
             waypointsSectionData.values[@"tint_color"] = [waypointsSectionData.values[@"is_hidden"] boolValue]
-                    ? UIColor.iconColorDisabled
+                    ? [UIColor colorNamed:ACColorNameIconColorDisabled]
                     : self.trackMenuDelegate
                             ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:groupName])
                             : [OADefaultFavorite getDefaultColor];
@@ -170,7 +171,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellToggle: @(hasWaypoints),
-            kCellTintColor: hasWaypoints ? UIColor.iconColorActive : UIColor.iconColorDisabled,
+            kCellTintColor: hasWaypoints ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled],
     }];
     [actionsSectionData.subjects addObject:deleteCellData];
 
@@ -181,7 +182,7 @@
             kCellTitle: OALocalizedString(@"add_waypoint"),
             kCellRightIconName: @"ic_custom_add_gpx_waypoint",
             kCellToggle: @YES,
-            kCellTintColor:UIColor.iconColorActive
+            kCellTintColor:[UIColor colorNamed:ACColorNameIconColorActive]
     }];
     [actionsSectionData.subjects addObject:addWaypointCellData];
 
@@ -213,7 +214,7 @@
                         : @"",
                 kCellLeftIcon: !isRte ? [waypoint getCompositeIcon]
                         : [OAUtilities tintImageWithColor:[UIImage imageNamed:@"ic_custom_location_marker"]
-                                                    color:UIColor.iconColorDisabled],
+                                                    color:[UIColor colorNamed:ACColorNameIconColorDisabled]],
                 kTableValues: @{
                         @"waypoint": waypoint,
                         @"quad_rect_value_point_area": [[QuadRect alloc] initWithLeft:waypoint.point.position.longitude
@@ -288,7 +289,7 @@
                             [self.trackMenuDelegate isDefaultGroup:cellData.title] ? @"" : cellData.title]
                     : NO);
             sectionData.values[@"tint_color"] = [sectionData.values[@"is_hidden"] boolValue]
-                    ? UIColor.iconColorDisabled
+                    ? [UIColor colorNamed:ACColorNameIconColorDisabled]
                     : self.trackMenuDelegate
                             ? UIColorFromRGB([self.trackMenuDelegate getWaypointsGroupColor:cellData.title])
                             : [OADefaultFavorite getDefaultColor];
@@ -321,7 +322,7 @@
         BOOL hasWaypoints = [self hasWaypoints];
         [tableData setData:@{
                 kCellToggle: @(hasWaypoints),
-                kCellTintColor: hasWaypoints ? UIColor.iconColorActive : UIColor.buttonBgColorTertiary
+                kCellTintColor: hasWaypoints ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameButtonBgColorTertiary]
         }];
     }
     else if ([tableData.key hasPrefix:@"actions_section"])

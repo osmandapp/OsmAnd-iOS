@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kSidePadding 16
 
@@ -47,7 +48,7 @@
     {
         _tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:label
                                                                           font:kHeaderBigTitleFont
-                                                                     textColor:UIColor.textColorSecondary
+                                                                     textColor:[UIColor colorNamed:ACColorNameTextColorSecondary]
                                                                     isBigTitle:YES
                                                                parentViewWidth:self.view.frame.size.width];
     }
@@ -109,7 +110,7 @@
 
 - (UIColor *)navBarBackgroundColor
 {
-    return UIColor.viewBgColor;
+    return [UIColor colorNamed:ACColorNameViewBg];
 }
 
 - (void)onScrollViewDidScroll:(UIScrollView *)scrollView

@@ -591,6 +591,12 @@
 "route_is_too_long_v2" = "For long distances: Please add intermediate destinations if no route is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "Use shown track for navigation?";
+"no_track_files" = "You don’t have track files";
+"import_create_track_files" = "You can import, create, or record track files using OsmAnd.";
+"no_tracks_on_map" = "No tracks on map";
+"select_tracks_to_display" =  "Select tracks to display them on the map.";
+"show_all_tracks" = "Show all tracks";
+"recently_visible" = "Recently visible";
 "previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
@@ -1992,6 +1998,7 @@
 "facebook" = "Facebook";
 "twitter" = "Twitter";
 "reddit" = "Reddit";
+"whats_here" = "What's here";
 
 // Map
 "map_inst_det_map_q" = "Install detailed map overview to get more information about your locations.";

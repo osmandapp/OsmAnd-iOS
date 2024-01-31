@@ -12,6 +12,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OATextLineViewCell.h"
 #import "OAFilledButtonCell.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kOABottomSheetWidth 320.
 #define kOABottomSheetWidthIPad (DeviceScreenWidth / 2)
@@ -58,7 +59,7 @@
     self.headerDividerView.hidden = YES;
     [self hideSliderView];
     
-    self.leftIconView.tintColor = UIColor.buttonBgColorDisruptive;
+    self.leftIconView.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
     [self.leftIconView setImage:[UIImage templateImageNamed:@"ic_custom_remove_outlined.png"]];
     
     self.exitButton.layer.cornerRadius = 9.;
@@ -114,8 +115,8 @@
     [_data addObject: @{
         @"type" : [OAFilledButtonCell getCellIdentifier],
         @"title" : OALocalizedString(@"shared_string_delete"),
-        @"buttonColor" : UIColor.buttonBgColorDisruptive,
-        @"textColor" : UIColor.buttonTextColorPrimary,
+        @"buttonColor" : [UIColor colorNamed:ACColorNameButtonBgColorDisruptive],
+        @"textColor" : [UIColor colorNamed:ACColorNameButtonTextColorPrimary],
         @"action": @"deleteButtonPressed"
     }];
 }

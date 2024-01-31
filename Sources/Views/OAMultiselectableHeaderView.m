@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMargin 16.0
 #define kHeight 28.0
@@ -51,7 +52,7 @@ static UIFont *_btnFont;
     _selectAllBtn.frame = CGRectMake(width - textSize.width - OAUtilities.getLeftMargin - kMargin, 12.0, textSize.width, 30.0);
     [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_select") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateNormal];
     [_selectAllBtn setTitle:[OALocalizedString(@"shared_string_deselect") uppercaseStringWithLocale:[NSLocale currentLocale]] forState:UIControlStateSelected];
-    [_selectAllBtn setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
+    [_selectAllBtn setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateNormal];
     [_selectAllBtn.titleLabel setFont:_btnFont];
     [_selectAllBtn addTarget:self action:@selector(checkPress:) forControlEvents:UIControlEventTouchUpInside];
     [self addSubview:self.selectAllBtn];

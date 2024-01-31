@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OABaseWebViewController ()
 
@@ -46,7 +47,7 @@
 
     self.webView.navigationDelegate = self;
     self.webView.scrollView.delegate = self;
-    self.webView.backgroundColor = UIColor.viewBgColor;
+    self.webView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
 
     self.webView.hidden = YES;
     [self.webView.scrollView setContentInsetAdjustmentBehavior: UIScrollViewContentInsetAdjustmentNever];

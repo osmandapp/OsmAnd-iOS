@@ -37,7 +37,7 @@
 
 @property (nonatomic, weak) id<OARouteLineChartHelperDelegate> delegate;
 
-- (void)changeChartMode:(EOARouteStatisticsMode)mode
+- (void)changeChartTypes:(NSArray<NSNumber *> *)types
                   chart:(LineChartView *)chart
                analysis:(OAGPXTrackAnalysis *)analysis
                modeCell:(OARouteStatisticsModeCell *)statsModeCell;

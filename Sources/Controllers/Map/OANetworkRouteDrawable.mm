@@ -44,7 +44,7 @@
     const auto tag = QStringLiteral("route_") + _routeKey.routeKey.getTag();
     const auto text = _routeKey.routeKey.getValue(QStringLiteral("osmc_text"));
     const auto &env = _env.mapPresentationEnvironment;
-    OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, _env.mapPresentationEnvironment->displayDensityFactor);
+    OsmAnd::MapStyleEvaluator textEvaluator(env->mapStyle, env->displayDensityFactor);
     env->applyTo(textEvaluator);
     OsmAnd::MapStyleEvaluationResult evaluationResult(env->mapStyle->getValueDefinitionsCount());
 
@@ -68,7 +68,7 @@
     {
         QString shieldName = QStringLiteral("osmc_") + background + QStringLiteral("_bg");
         sk_sp<const SkImage> shield;
-        env->obtainTextShield(shieldName, shield);
+        env->obtainTextShield(shieldName, 1.0f, shield);
         if (shield)
             layers << shield;
     }
@@ -78,7 +78,7 @@
     {
         QString shieldName = QStringLiteral("osmc_") + foreground;
         sk_sp<const SkImage> shield;
-        env->obtainMapIcon(shieldName, shield);
+        env->obtainMapIcon(shieldName, 1.0f, shield);
         if (shield)
             layers << shield;
     }

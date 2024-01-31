@@ -36,6 +36,7 @@
 #import "OAPOI.h"
 #import "OAWikiMenuViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kMargin 16.0
 #define kButtonsViewHeight 44.0
@@ -222,10 +223,10 @@ static const NSInteger _buttonsCount = 4;
     self.buttonShadow.hidden = YES;
 
     _horizontalRouteLine = [CALayer layer];
-    _horizontalRouteLine.backgroundColor = [UIColor.separatorColor CGColor];
+    _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
     [_backViewRoute.layer addSublayer:_horizontalRouteLine];
 
-    _nearbyLabel.textColor = UIColor.textColorPrimary;
+    _nearbyLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
     _descriptionLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightMedium];
     _buttonShadow.titleLabel.font = [UIFont scaledSystemFontOfSize:18.];
     _buttonRoute.titleLabel.font = [UIFont scaledSystemFontOfSize:13. weight:UIFontWeightSemibold];
@@ -253,7 +254,7 @@ static const NSInteger _buttonsCount = 4;
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        _horizontalRouteLine.backgroundColor = [UIColor.separatorColor CGColor];
+        _horizontalRouteLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
         [self setupControlButton:self.controlButtonLeft];
         [self setupControlButton:self.controlButtonRight];
         [self setupControlButton:self.controlButtonDownload];
@@ -311,8 +312,8 @@ static const NSInteger _buttonsCount = 4;
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColor.iconColorActive.CGColor;
-    btn.tintColor = UIColor.iconColorActive;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
+    btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
 }
 
 - (void) updateDirectionButton
@@ -685,19 +686,19 @@ static const NSInteger _buttonsCount = 4;
     if (self.customController.hasDismissButton)
     {
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_marker_remove"];
-        _buttonDirectionIcon.tintColor = [UIColor buttonBgColorDisruptive];
+        _buttonDirectionIcon.tintColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         _buttonDirectionLabel.text = OALocalizedString(@"shared_string_dismiss");
         _buttonDirection.accessibilityLabel = OALocalizedString(@"shared_string_dismiss");
-        _buttonDirectionLabel.textColor = [UIColor buttonBgColorDisruptive];
+        _buttonDirectionLabel.textColor = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
         _buttonDirectionIcon.transform = CGAffineTransformIdentity;
     }
     else
     {
         _buttonDirectionIcon.image = [UIImage templateImageNamed:@"ic_custom_arrow_direction"];
-        _buttonDirectionIcon.tintColor = UIColor.iconColorActive;
+        _buttonDirectionIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         _buttonDirectionLabel.text = OALocalizedString(@"map_marker");
         _buttonDirection.accessibilityLabel = OALocalizedString(@"quick_action_add_marker");
-        _buttonDirectionLabel.textColor = UIColor.textColorActive;
+        _buttonDirectionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
     }
     
     if (self.activeTargetType == OATargetGPX)
@@ -731,7 +732,7 @@ static const NSInteger _buttonsCount = 4;
         }
     }
     
-    _buttonFavoriteIcon.tintColor = UIColor.iconColorActive;
+    _buttonFavoriteIcon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     
     _imageView.hidden = NO;
     
@@ -875,11 +876,11 @@ static const NSInteger _buttonsCount = 4;
     
     if (_targetPoint.type == OATargetImpassableRoadSelection)
     {
-        self.topView.backgroundColor = UIColor.viewBgColor;
+        self.topView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     }
     else
     {
-        self.topView.backgroundColor = UIColor.groupBgColor;
+        self.topView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         //if (![self.gestureRecognizers containsObject:_panGesture])
         //    [self addGestureRecognizer:_panGesture];
     }
@@ -1685,7 +1686,7 @@ static const NSInteger _buttonsCount = 4;
         {
             [_coordinateLabel setAttributedText:attributedTypeStr];
             if (_targetPoint.type != OATargetRouteDetails)
-                [_coordinateLabel setTextColor:UIColor.textColorSecondary];
+                [_coordinateLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
             return;
         }
         else
@@ -1718,7 +1719,7 @@ static const NSInteger _buttonsCount = 4;
             }
             self.addressStr = [attributedStr string];
             [_coordinateLabel setAttributedText:attributedStr];
-            [_coordinateLabel setTextColor:UIColor.textColorSecondary];
+            [_coordinateLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
             return;
         }
     }
@@ -1728,7 +1729,7 @@ static const NSInteger _buttonsCount = 4;
     }
         
     [_coordinateLabel setText:self.addressStr];
-    [_coordinateLabel setTextColor:UIColor.textColorSecondary];
+    [_coordinateLabel setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
 }
 
 - (void) updateDescriptionLabel
@@ -1850,7 +1851,7 @@ static const NSInteger _buttonsCount = 4;
     _customController = customController;
     self.customController.delegate = self;
     self.customController.navController = self.navController;
-    [self.customController setContentBackgroundColor:UIColor.groupBgColor];
+    [self.customController setContentBackgroundColor:[UIColor colorNamed:ACColorNameGroupBg]];
     self.customController.location = self.targetPoint.location;
     
     self.customController.view.frame = self.frame;

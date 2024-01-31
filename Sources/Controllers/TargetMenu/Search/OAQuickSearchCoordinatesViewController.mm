@@ -37,7 +37,7 @@
 #import "OASearchResult.h"
 #import "OASearchCoreFactory.h"
 #import "QuadRect.h"
-
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <OsmAndCore/Utilities.h>
 
@@ -159,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
 
     self.navigationItem.title = OALocalizedString(@"coords_search");
     
@@ -181,16 +181,16 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
     appearance.backgroundColor = self.tableView.backgroundColor;
-    appearance.shadowColor = UIColor.separatorColor;
+    appearance.shadowColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.textColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
     
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = NO;
     
     UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"shared_string_back") style:UIBarButtonItemStylePlain target:self action:@selector(onLeftNavbarButtonPressed)];
@@ -996,8 +996,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
             cell = (OAQuickSearchResultTableViewCell *)[nib objectAtIndex:0];
             cell.directionIcon.image = [UIImage templateImageNamed:@"ic_small_direction"];
             cell.directionIcon.tintColor = UIColorFromRGB(color_active_light);
-            cell.distanceLabel.textColor = UIColor.textColorActive;
-            cell.coordinateLabel.textColor = UIColor.textColorSecondary;
+            cell.distanceLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.coordinateLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
         if (cell)
@@ -1009,7 +1009,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.coordinateLabel.text = @"";
                 [cell setDesriptionLablesVisible:NO];
                 cell.icon.image = [UIImage templateImageNamed:@"ic_custom_alert"];
-                cell.icon.tintColor = UIColor.iconColorSelected;
+                cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             }
             else
             {
@@ -1018,7 +1018,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
                 cell.coordinateLabel.text = [NSString stringWithFormat:@"  •  %@", item[@"coordinates"]];
                 [cell setDesriptionLablesVisible:YES];
                 cell.icon.image = [UIImage templateImageNamed:@"ic_custom_map_pin"];
-                cell.icon.tintColor = UIColor.iconColorActive;
+                cell.icon.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
                 cell.directionIcon.transform = CGAffineTransformMakeRotation([item[@"direction"] doubleValue]);
             }
         }
@@ -1202,8 +1202,8 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
     self.scrollView.contentSize = CGSizeMake(margin, self.toolbarView.frame.size.height);
-    self.scrollView.backgroundColor = UIColor.viewBgColor;
-    _toolbarView.backgroundColor = UIColor.textColorSecondary;
+    self.scrollView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
+    _toolbarView.backgroundColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     
     if (!_shouldHideHintBar)
     {
@@ -1211,14 +1211,14 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
         {
             UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
             btn.frame = CGRectMake(xPosition + margin, 6, 0, 0);
-            btn.backgroundColor = UIColor.buttonBgColorTertiary;
+            btn.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             btn.layer.masksToBounds = YES;
             btn.layer.cornerRadius = 6.0;
             btn.titleLabel.numberOfLines = 1;
             btn.titleLabel.font = [UIFont scaledMonospacedSystemFontOfSize:17 weight:UIFontWeightSemibold];
 
             [btn setTitle:hint forState:UIControlStateNormal];
-            [btn setTitleColor:UIColor.textColorActive forState:UIControlStateNormal];
+            [btn setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateNormal];
             [btn sizeToFit];
             [btn addTarget:self action:@selector(tagHintTapped:) forControlEvents:UIControlEventTouchUpInside];
             

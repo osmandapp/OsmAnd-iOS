@@ -22,6 +22,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <generalRouter.h>
 
@@ -285,7 +286,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
             NSString *menuPath = [NSString stringWithFormat:@"%@ — %@ — %@", OALocalizedString(@"shared_string_menu"), OALocalizedString(@"shared_string_my_places"), OALocalizedString(@"menu_my_trips")];
             NSString *actionsDescr = [NSString stringWithFormat:OALocalizedString(@"trip_rec_actions_descr"), menuPath];
-            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : UIColor.textColorSecondary}];
+            NSMutableAttributedString *str = [[NSMutableAttributedString alloc] initWithString:actionsDescr attributes:@{NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline], NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary]}];
             [str addAttributes:@{NSFontAttributeName : [UIFont scaledSystemFontOfSize:15 weight:UIFontWeightSemibold]} range:[actionsDescr rangeOfString:menuPath]];
             
             [dataArr addObject:@[
@@ -469,7 +470,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
 
             NSString *iconName = item[@"img"];
             [cell leftIconVisibility:iconName && iconName.length > 0];
-            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = cell.switchView.isOn ? UIColorFromRGB(self.appMode.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.image = [UIImage templateImageNamed:iconName];
             cell.separatorInset = UIEdgeInsetsMake(0., iconName && iconName.length > 0 ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent, 0., 0.);
 
@@ -498,7 +499,7 @@ static NSArray<NSString *> *minTrackSpeedNames;
                 for (UIView *vw in cell.subviews)
                     vw.alpha = 0.4;
                 cell.userInteractionEnabled = NO;
-                cell.leftIconView.tintColor = UIColor.iconColorDisabled;
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             }
             else
             {
@@ -545,8 +546,8 @@ static NSArray<NSString *> *minTrackSpeedNames;
             cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if (cell)

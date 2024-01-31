@@ -16,12 +16,14 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
+#import "OASvgHelper.h"
+
 #import <UIKit/UIDevice.h>
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
 #import "OALinks.h"
 #import "OsmAnd_Maps-Swift.h"
-
+#import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>
 #include <CommonCrypto/CommonDigest.h>
@@ -193,6 +195,40 @@
 {
     return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
+
++ (UIImage *) svgImageNamed:(NSString *)name
+{
+    return [OASvgHelper imageNamed:name];
+}
+
++ (UIImage *) mapSvgImageNamed:(NSString *)name
+{
+    UIImage *img = [OASvgHelper mapImageNamed:name];
+    if (img)
+        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+
+    return img;
+}
+
++ (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale
+{
+    UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
+    if (img)
+        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+
+    return img;
+}
+
++ (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height
+{
+    CGFloat scale = [[UIScreen mainScreen] scale];
+    UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
+    if (img)
+        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+
+    return img;
+}
+
 
 @end
 
@@ -528,12 +564,10 @@
 
 - (NSString *) escapeUrl
 {
-    return (NSString *)CFBridgingRelease(CFURLCreateStringByAddingPercentEscapes(
-         NULL,
-         (__bridge CFStringRef) self,
-         NULL,
-         CFSTR("!*'();:@&=+$,/?%#[]\" "),
-         kCFStringEncodingUTF8));
+    NSMutableCharacterSet *charset = [[NSCharacterSet URLQueryAllowedCharacterSet] mutableCopy];
+    [charset removeCharactersInString:@"!*'();:@&=+$,/?%#[]\" "];
+    NSString *encodedValue = [self stringByAddingPercentEncodingWithAllowedCharacters:charset];
+    return encodedValue;
 }
 
 - (NSString *) sanitizeFileName
@@ -1240,13 +1274,6 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return NO;
 }
 
-+ (UIImage *) applyScaleFactorToImage:(UIImage *)image
-{
-    CGFloat scaleFactor = [[UIScreen mainScreen] scale];
-    CGSize newSize = CGSizeMake(image.size.width / scaleFactor, image.size.height / scaleFactor);
-    return [self.class resizeImage:image newSize:newSize];
-}
-
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize
 {
     if (!image)
@@ -1290,26 +1317,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     }
 }
 
-+ (NSString *) drawablePostfix
++ (BOOL) hasMapImage:(NSString *)resId
 {
-    int scale = (int)[UIScreen mainScreen].scale;
-    
-    switch (scale) {
-        case 1:
-            return @"mdpi";
-        case 2:
-            return @"xhdpi";
-        case 3:
-            return @"xxhdpi";
-            
-        default:
-            return @"xxhdpi";
-    }
-}
-
-+ (NSString *) drawablePath:(NSString *)resId
-{
-    return [NSString stringWithFormat:@"%@/drawable-%@/%@", [resId hasPrefix:@"mx_"] ? @"poi-icons-png" : @"map-icons-png", [OAUtilities drawablePostfix], resId];
+    return [[NSBundle mainBundle] pathForResource:resId
+                                           ofType:@"svg"
+                                      inDirectory:@"map-icons-svg"] != nil;
 }
 
 + (void) setMaskTo:(UIView*)view byRoundingCorners:(UIRectCorner)corners
@@ -1802,7 +1814,9 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
 
 + (void) callUrl:(NSString *)url
 {
-    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[url stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]
+                                       options:@{}
+                             completionHandler:nil];
 }
 
 + (NSString *) stripNonDigits:(NSString *)input
@@ -1836,7 +1850,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
                                                 if (selectedIndex == i)
                                                 {
                                                     NSString *p = parsedPhones[i];
-                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]]];
+                                                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[@"tel://" stringByAppendingString:p]] options:@{} completionHandler:nil];
                                                     break;
                                                 }
                                             }
@@ -1849,12 +1863,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     if (![fullIconName hasPrefix:@"mx_"])
         fullIconName = [@"mx_" stringByAppendingString:name];
 
-    UIImage *iconImgOrig = [UIImage imageNamed:[self drawablePath:fullIconName]];
-    if (iconImgOrig)
-    {
-        return [UIImage imageWithCGImage:iconImgOrig.CGImage scale:[UIScreen mainScreen].scale orientation:UIImageOrientationUp];
-    }
-    return nil;
+    return [UIImage mapSvgImageNamed:fullIconName];
 }
 
 + (UIImage *) getTintableImage:(UIImage *)image
@@ -2577,7 +2586,7 @@ static const double d180PI = 180.0 / M_PI_2;
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor
 {
     if (!textColor)
-        textColor = UIColor.textColorPrimary;
+        textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
 
     CGFloat red, green, blue, alpha;
     [textColor.currentThemeColor getRed:&red green:&green blue:&blue alpha:&alpha];
@@ -2591,8 +2600,15 @@ static const double d180PI = 180.0 / M_PI_2;
     @" <p>%@</p>";
     
     modifiedFontHtml = [NSString stringWithFormat:modifiedFontHtml, fontSize, textColorString, html];
-    
-    return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+
+    @try {
+        @autoreleasepool {
+            return [[NSMutableAttributedString alloc] initWithData:[modifiedFontHtml dataUsingEncoding:NSUTF8StringEncoding] options:@{NSDocumentTypeDocumentAttribute:NSHTMLTextDocumentType, NSCharacterEncodingDocumentAttribute:@(NSUTF8StringEncoding)} documentAttributes:nil error:nil];
+        }
+    } @catch (NSException *exception) {
+        NSLog(@"Failed to attributedStringFromHtmlString from: %@ %@", html, exception);
+        return [[NSAttributedString alloc] initWithString:@""];
+    }
 }
 
 + (NSString *) createNewFileName:(NSString *)oldName

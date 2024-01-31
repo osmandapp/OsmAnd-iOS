@@ -1286,7 +1286,7 @@
 "rendering_value_brown_name" = "Castanho";
 "routing_attr_allow_intermediate_description" = "Rotas mais difíceis com secções mais íngremes. Geralmente, contém alguns obstáculos que deviam ser evitados.";
 "routeInfo_tracktype_name" = "Dureza da superfície";
-"rendering_attr_showLez_description" = "Mostrar zonas de baixas emissões (proibida circulação de veículos poluentes) no mapa. Não afeta o roteamento.";
+"rendering_attr_showLez_description" = "Mostrar no mapa zonas onde é proibida a circulação de veículos muito poluentes. Não afeta o roteamento.";
 "routing_attr_driving_style_prefer_unpaved_description" = "Preferir estradas não pavimentadas em vez das pavimentadas para o roteamento.";
 "rendering_attr_depthContours_description" = "Mostrar pontos e contornos de profundidade.";
 "rendering_attr_noPolygons_description" = "Tornar transparentes todas as características do terreno no mapa.";
@@ -1321,7 +1321,7 @@
 "routing_attr_avoid_share_taxi_description" = "Evita táxis partilhados";
 "rendering_attr_surface_wood_name" = "Madeira";
 "rendering_attr_surface_mud_name" = "Lama";
-"rendering_attr_showRoadMaps_name" = "Mapas de estradas";
+"rendering_attr_showRoadMaps_name" = "Mapas só de estradas";
 "rendering_attr_pisteGrooming_name" = "Preparação de pista";
 "routing_attr_no_new_routing_description" = "Não usar as regras de roteamento introduzidas na versão 1.9.";
 "routing_attr_driving_style_speed_name" = "Percursos mais curtos";
@@ -1394,7 +1394,7 @@
 "rendering_value_white_name" = "Branco";
 "routing_attr_piste_type_nordic_description" = "Trilhos para esqui nórdico ou cross-country.";
 "routing_attr_avoid_shuttle_train_name" = "Evitar comboios vaivém";
-"rendering_attr_showLez_name" = "Mostrar zonas de baixas emissões poluentes";
+"rendering_attr_showLez_name" = "Mostrar zonas de emissões reduzidas";
 "routing_attr_difficulty_preference_description" = "Preferir rotas desta dificuldade, embora seja possível o roteamento sobre pistas mais difíceis ou mais fáceis se forem mais curtas.";
 "rendering_value_light_brown_name" = "Castanho claro";
 "rendering_attr_surface_ice_name" = "Gelo";
@@ -2063,7 +2063,7 @@
 "attribute" = "Atributo";
 
 // Shared Strings
-"shared_string_custom" = "Personalizado";
+"shared_string_custom" = "Ajustado";
 "regions" = "Regiões";
 "shared_string_width" = "Largura";
 "shared_string_interval" = "Intervalo";
@@ -3261,3 +3261,10 @@
 "help_article_map_legend_ski_map_name" = "Estilo de mapa de esqui";
 "external_device_details_information" = "Informação";
 "help_article_navigation_routing_osmand_routing_name" = "Sobre o roteamento do OsmAnd";
+"whats_here" = "O que há aqui";
+"no_tracks_on_map" = "Sem trilhos no mapa";
+"select_tracks_to_display" = "Selecione os trilhos a mostrar no mapa.";
+"recently_visible" = "Visível recentemente";
+"no_track_files" = "Não tem ficheiros de trilhos";
+"import_create_track_files" = "Pode importar, criar ou gravar ficheiros de trilhos usando o OsmAnd.";
+"show_all_tracks" = "Mostrar todos os trilhos";

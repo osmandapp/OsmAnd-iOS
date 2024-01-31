@@ -29,6 +29,7 @@
 #import "OAMultiselectableHeaderView.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
+#import "GeneratedAssetSymbols.h"
 
 typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
@@ -70,7 +71,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
-    self.segmentContainerView.backgroundColor = [UIColor.navBarBgColorPrimary colorWithAlphaComponent:1.0];
+    self.segmentContainerView.backgroundColor = [[UIColor colorNamed:ACColorNameNavBarBgColorPrimary] colorWithAlphaComponent:1.0];
     
     _headerView = [[OAMultiselectableHeaderView alloc] initWithFrame:CGRectMake(0.0, 1.0, 100.0, 55.0)];
     _headerView.delegate = self;
@@ -209,16 +210,16 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     }
     else if (isFiltered)
     {
-        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:UIColor.textColorTertiary}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorNamed:ACColorNameTextColorTertiary]}];
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"search_activity") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
 }
 
@@ -262,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
         cell = (OAButtonTableViewCell *)[nib objectAtIndex:0];
         [cell.button setTitle:nil forState:UIControlStateNormal];
-        [cell.button setTintColor:UIColor.iconColorDefault];
+        [cell.button setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
         [cell.button.imageView setContentMode:UIViewContentModeCenter];
     }
     
@@ -338,10 +339,19 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     BOOL shouldEdit = ![self.tableView isEditing];
     
     if (shouldEdit)
-        [_uploadButton setHidden:YES];
+    {
+        if (@available(iOS 16.0, *))
+            [_uploadButton setHidden:YES];
+        else
+            [_uploadButton setEnabled:NO];
+    }
     else
     {
-        [_uploadButton setHidden:NO];
+        if (@available(iOS 16.0, *))
+            [_uploadButton setHidden:NO];
+        else
+            [_uploadButton setEnabled:YES];
+
         NSArray *indexes = [self.tableView indexPathsForSelectedRows];
         if (indexes.count > 0)
         {
@@ -378,10 +388,19 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     BOOL shouldEdit = ![self.tableView isEditing];
 
     if (shouldEdit)
-        [_deleteButton setHidden:YES];
+    {
+        if (@available(iOS 16.0, *))
+            [_deleteButton setHidden:YES];
+        else
+            [_deleteButton setEnabled:NO];
+    }
     else
     {
-        [_deleteButton setHidden:NO];
+        if (@available(iOS 16.0, *))
+            [_deleteButton setHidden:NO];
+        else
+            [_deleteButton setEnabled:YES];
+
         NSArray *indexes = [self.tableView indexPathsForSelectedRows];
         NSMutableArray *edits = [NSMutableArray new];
         NSMutableArray *notes = [NSMutableArray new];
@@ -572,7 +591,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     if (scrollView.contentOffset.y > 0)
         self.segmentContainerView.backgroundColor = self.navigationController.navigationBar.scrollEdgeAppearance.backgroundColor;
     else if (scrollView.contentOffset.y <= 0)
-        self.segmentContainerView.backgroundColor = [UIColor.navBarBgColorPrimary colorWithAlphaComponent:1.0];
+        self.segmentContainerView.backgroundColor = [[UIColor colorNamed:ACColorNameNavBarBgColorPrimary] colorWithAlphaComponent:1.0];
 }
 
 @end

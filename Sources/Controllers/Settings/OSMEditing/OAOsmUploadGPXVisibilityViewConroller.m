@@ -13,6 +13,7 @@
 #import "OATableRowData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAOsmUploadGPXVisibilityViewConroller
 {
@@ -141,7 +142,7 @@
             cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             [cell leftIconVisibility:NO];
-            cell.tintColor = UIColor.iconColorActive;
+            cell.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {

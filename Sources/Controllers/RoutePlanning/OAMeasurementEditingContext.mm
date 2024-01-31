@@ -509,7 +509,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (BOOL) isLastPointSelected
 {
-    return _selectedPointPosition == (NSInteger) [self getPoints].count - 1;
+    return _selectedPointPosition == self.getPointsCount - 1;
 }
 
 - (BOOL) isFirstPointSelected:(BOOL)outer
@@ -533,14 +533,18 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 - (BOOL) isLastPointSelected:(NSInteger)selectedPointPosition outer:(BOOL)outer
 {
     if (outer)
-        return _selectedPointPosition == (NSInteger) [self getPoints].count - 1;
+        return _selectedPointPosition == self.getPointsCount - 1;
     else
         return [self isBorderPointSelected:selectedPointPosition first:NO];
 }
 
 - (BOOL) isBorderPointSelected:(NSInteger) selectedPointPosition first:(BOOL)first
 {
-    OAWptPt *selectedPoint = [self getPoints][selectedPointPosition];
+    NSArray<OAWptPt *> *points = [self getPoints];
+    if (selectedPointPosition < 0 || points.count < selectedPointPosition)
+        return NO;
+
+    OAWptPt *selectedPoint = points[selectedPointPosition];
     NSArray <OATrkSegment *> *segments = [NSArray arrayWithArray: [self getBeforeSegments]];
     NSInteger count = 0;
     for (OATrkSegment *segment in segments)
@@ -961,7 +965,11 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (BOOL) canSplit:(BOOL)after
 {
-    OAWptPt *selectedPoint = [self getPoints][self.selectedPointPosition];
+    NSArray<OAWptPt *> *points = [self getPoints];
+    if (self.selectedPointPosition < 0 || points.count < self.selectedPointPosition)
+        return NO;
+
+    OAWptPt *selectedPoint = points[self.selectedPointPosition];
     NSArray<OATrkSegment *> *segments = [self getBeforeSegments];
     for (OATrkSegment *segment in segments)
     {
@@ -1195,7 +1203,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 #pragma mark - OARouteCalculationResultListener
 
-- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment
+- (void)onRouteCalculated:(OARouteCalculationResult *)route segment:(OAWalkingRouteSegment *)segment start:(CLLocation *)start end:(CLLocation *)end
 {
     NSArray<CLLocation *> *locations = route.getRouteLocations;
     NSMutableArray<OAWptPt *> *pts = [NSMutableArray arrayWithCapacity:locations.count];

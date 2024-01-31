@@ -1107,7 +1107,7 @@ static OASubscriptionState *EXPIRED;
         {
             case SKPaymentTransactionStatePurchased:
             {
-                dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
+                dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
                     [self completeTransaction:transaction];
                 });
                 validateProducts |= YES;
@@ -1121,7 +1121,7 @@ static OASubscriptionState *EXPIRED;
             }
             case SKPaymentTransactionStateRestored:
             {
-                dispatch_group_async(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
+                dispatch_group_async(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
                     [self restoreTransaction:transaction];
                 });
                 validateProducts |= YES;
@@ -1137,7 +1137,7 @@ static OASubscriptionState *EXPIRED;
             }
         }
     }
-    dispatch_group_notify(group,dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
+    dispatch_group_notify(group, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^ {
         if (validateProducts)
         {
             _settings.lastReceiptValidationDate = [NSDate dateWithTimeIntervalSince1970:0];
@@ -1167,69 +1167,77 @@ static OASubscriptionState *EXPIRED;
 
 - (void) completeTransaction:(SKPaymentTransaction *)transaction
 {
-    if (transaction)
-    {
-        if (transaction.payment && transaction.payment.productIdentifier)
+    @synchronized (self) {
+        if (transaction)
         {
-            if (![self productsLoaded])
+            if (transaction.payment && transaction.payment.productIdentifier)
             {
-                NSLog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
+                if (![self productsLoaded])
+                {
+                    NSLog(@"Cannot completeTransaction - %@. Products are not loaded yet.", transaction.payment.productIdentifier);
+                }
+                else
+                {
+                    NSLog(@"completeTransaction - %@", transaction.payment.productIdentifier);
+                    [self provideContentForProductIdentifier:transaction.payment.productIdentifier transactionId:transaction.originalTransaction ? transaction.originalTransaction.transactionIdentifier : transaction.transactionIdentifier];
+                }
             }
-            else
-            {
-                NSLog(@"completeTransaction - %@", transaction.payment.productIdentifier);
-                [self provideContentForProductIdentifier:transaction.payment.productIdentifier transactionId:transaction.originalTransaction ? transaction.originalTransaction.transactionIdentifier : transaction.transactionIdentifier];
-            }
+            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
         }
-        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
 }
 
 - (void) restoreTransaction:(SKPaymentTransaction *)transaction
 {
-    if (transaction)
-    {
-        if (transaction.originalTransaction && transaction.originalTransaction.payment && transaction.originalTransaction.payment.productIdentifier)
+    @synchronized (self) {
+        if (transaction)
         {
-            if (![self productsLoaded])
+            if (transaction.originalTransaction && transaction.originalTransaction.payment && transaction.originalTransaction.payment.productIdentifier)
             {
-                NSLog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
+                if (![self productsLoaded])
+                {
+                    NSLog(@"Cannot restoreTransaction - %@. Products are not loaded yet.", transaction.originalTransaction.payment.productIdentifier);
+                }
+                else
+                {
+                    NSLog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
+                }
             }
-            else
-            {
-                NSLog(@"restoreTransaction - %@", transaction.originalTransaction.payment.productIdentifier);
-            }
+            [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
         }
-        [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
     }
 }
 
 - (void) deferredTransaction:(SKPaymentTransaction *)transaction
 {
-    NSLog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
-    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseDeferredNotification object:transaction.payment.productIdentifier userInfo:nil];
+    @synchronized (self) {
+        NSLog(@"Transaction deferred state: %@", transaction.payment.productIdentifier);
+        [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseDeferredNotification object:transaction.payment.productIdentifier userInfo:nil];
+    }
 }
 
 - (void) failedTransaction:(SKPaymentTransaction *)transaction
 {
-    if (transaction)
-    {
-        if (transaction.payment && transaction.payment.productIdentifier)
+    @synchronized (self) {
+        if (transaction)
         {
-            NSString *productIdentifier = transaction.payment.productIdentifier;
-            NSLog(@"failedTransaction - %@", productIdentifier);
-            [self logTransactionType:@"failed" productIdentifier:productIdentifier];
-            if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
+            if (transaction.payment && transaction.payment.productIdentifier)
             {
-                NSLog(@"Transaction error: %@", transaction.error.localizedDescription);
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error.localizedDescription]}];
+                NSString *productIdentifier = transaction.payment.productIdentifier;
+                NSLog(@"failedTransaction - %@", productIdentifier);
+                [self logTransactionType:@"failed" productIdentifier:productIdentifier];
+                if (transaction.error && transaction.error.code != SKErrorPaymentCancelled)
+                {
+                    NSLog(@"Transaction error: %@", transaction.error.localizedDescription);
+                    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:productIdentifier userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error.localizedDescription]}];
+                }
+                else
+                {
+                    [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error ? transaction.error.localizedDescription : @"Unknown error"]}];
+                }
             }
-            else
-            {
-                [[NSNotificationCenter defaultCenter] postNotificationName:OAIAPProductPurchaseFailedNotification object:nil userInfo:@{@"error" : [NSString stringWithFormat:@"failedTransaction %@ - %@", productIdentifier, transaction.error ? transaction.error.localizedDescription : @"Unknown error"]}];
-            }
+            [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
         }
-        [[SKPaymentQueue defaultQueue] finishTransaction: transaction];
     }
 }
 

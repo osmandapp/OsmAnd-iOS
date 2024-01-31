@@ -100,7 +100,7 @@
     if ([self isShowAllLanguages] || [self hasLanguagesFilter])
         [self refreshWikiOnMap];
     else
-        [self toggleWikipediaPoi:NO];
+        [[OsmAndApp instance].data setWikipedia:NO];
 }
 
 - (BOOL)hasCustomSettings
@@ -175,9 +175,6 @@
         [self showWikiOnMap];
     else
         [self hideWikiFromMap];
-
-    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
-    [[OARootViewController instance].mapPanel refreshMap];
 }
 
 - (void)refreshWikiOnMap

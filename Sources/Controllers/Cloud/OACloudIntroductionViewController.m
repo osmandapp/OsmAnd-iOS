@@ -16,6 +16,7 @@
 #import "OACloudAccountLoginViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OACloudIntroductionViewController
 {
@@ -38,8 +39,8 @@
     
     [self setupTableHeaderView];
     self.tableView.tableHeaderView = _headerView;
-    self.tableView.backgroundColor = UIColor.groupBgColor;
-    self.bottomButton.backgroundColor = UIColor.buttonBgColorTertiary;
+    self.tableView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    self.bottomButton.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -174,7 +175,7 @@
             cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         if (cell)

@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
@@ -101,13 +102,13 @@
     appearance.shadowColor = self.tableView.backgroundColor;
     appearance.titleTextAttributes = @{
         NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline],
-        NSForegroundColorAttributeName : UIColor.textColorPrimary
+        NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary]
     };
     UINavigationBarAppearance *blurAppearance = [[UINavigationBarAppearance alloc] init];
 
     self.navigationController.navigationBar.standardAppearance = blurAppearance;
     self.navigationController.navigationBar.scrollEdgeAppearance = appearance;
-    self.navigationController.navigationBar.tintColor = UIColor.iconColorActive;
+    self.navigationController.navigationBar.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     self.navigationController.navigationBar.prefersLargeTitles = YES;
     self.navigationItem.largeTitleDisplayMode = UINavigationItemLargeTitleDisplayModeAlways;
 }
@@ -121,8 +122,8 @@
     NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:fullText];
     UIFont *font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
     [attributedString addAttribute:NSFontAttributeName value:font range:fullRange];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorSecondary range:fullRange];
-    [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorActive range:coloredRange];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:fullRange];
+    [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorActive] range:coloredRange];
     UIView *footer = [OAUtilities setupTableHeaderViewWithText:attributedString tintColor:nil icon:nil iconFrameSize:0. iconBackgroundColor:nil iconContentMode:UIViewContentModeCenter];
     [footer addGestureRecognizer:_tapRecognizer];
     for (UIView *vw in footer.subviews)
@@ -243,7 +244,7 @@
             {
                 NSRange boldRange = [text rangeOfString:boldPart];
                 [attributedString addAttribute:NSFontAttributeName value:[UIFont scaledSystemFontOfSize:fontSize weight:UIFontWeightSemibold] range:boldRange];
-                [attributedString addAttribute:NSForegroundColorAttributeName value:UIColor.textColorPrimary range:boldRange];
+                [attributedString addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:boldRange];
             }
             
             cell.titleLabel.attributedText = attributedString;
@@ -266,7 +267,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"placeholder"];
-            cell.titleLabel.textColor = UIColor.textColorSecondary;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             NSString *text =  item[@"title"];
             cell.inputField.text = text;
             cell.inputField.textContentType = UITextContentTypeEmailAddress;
@@ -314,7 +315,7 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *)[nib objectAtIndex:0];
             cell.backgroundColor = UIColor.clearColor;
-            cell.dividerColor = UIColor.separatorColor;
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.dividerHight = 1.0 / [UIScreen mainScreen].scale;
         }

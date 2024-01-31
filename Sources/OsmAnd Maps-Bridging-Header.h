@@ -107,6 +107,7 @@
 #import "OACarPlayMapDashboardViewController.h"
 #import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
+#import "OAGPXListViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -142,4 +143,7 @@
 #import "SceneDelegate.h"
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
+
+// Enums
+#import "OAGPXDataSetType.h"
 

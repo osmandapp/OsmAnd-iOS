@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OATrackMenuTabActions ()
 
@@ -151,7 +152,7 @@
             kTableValues: @{ @"font_value": [UIFont scaledBoldSystemFontOfSize:17] },
             kCellRightIconName: @"ic_custom_remove_outlined",
             kCellTitle: OALocalizedString(@"shared_string_delete"),
-            kCellTintColor: UIColor.buttonBgColorDisruptive
+            kCellTintColor: [UIColor colorNamed:ACColorNameButtonBgColorDisruptive]
     }];
     [deleteSectionData.subjects addObject:deleteCellData];
 
@@ -214,7 +215,7 @@
     else if ([tableData.key isEqualToString:@"control_navigation"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openNavigation];
     else if ([tableData.key isEqualToString:@"analyze"] && self.trackMenuDelegate)
-        [self.trackMenuDelegate openAnalysis:EOARouteStatisticsModeAltitudeSlope];
+        [self.trackMenuDelegate openAnalysis:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
     else if ([tableData.key isEqualToString:@"share"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openExport];
     else if ([tableData.key isEqualToString:@"edit"] && self.trackMenuDelegate)

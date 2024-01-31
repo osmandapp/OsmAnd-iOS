@@ -51,17 +51,16 @@ sk_sp<const SkImage> OACoreResourcesTransportRouteIconProvider::getIcon(
             if (backgroundBmp)
             {
                 OATransportStopType *type = [OATransportStopType findType:transportRoute->type.toNSString()];
-                UIImage *origIcon = [UIImage imageNamed:[OAUtilities drawablePath:[NSString stringWithFormat:@"mm_%@", type.resName]]];
+                UIImage *origIcon = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", type.resName] scale:symbolsScaleFactor];
                 if (origIcon)
                 {
-                    origIcon = [OAUtilities applyScaleFactorToImage:origIcon];
                     UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];
                     auto stopBmp = SkMakeImageFromCGImage(tintedIcon.CGImage);
                     if (stopBmp)
                     {
                         const QList< sk_sp<const SkImage>> composition({
                             OsmAnd::SkiaUtilities::scaleImage(backgroundBmp, symbolsScaleFactor, symbolsScaleFactor),
-                            OsmAnd::SkiaUtilities::scaleImage(stopBmp, symbolsScaleFactor, symbolsScaleFactor)
+                            stopBmp
                         });
                         return OsmAnd::SkiaUtilities::mergeImages(composition);
                     }

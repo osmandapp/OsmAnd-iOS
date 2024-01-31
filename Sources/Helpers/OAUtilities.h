@@ -83,6 +83,10 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (UIImage *) templateImageNamed:(NSString *)imageName;
 + (UIImage *) rtlImageNamed:(NSString *)imageName;
++ (UIImage *) svgImageNamed:(NSString *)name;
++ (UIImage *) mapSvgImageNamed:(NSString *)name;
++ (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
++ (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
 
 @end
 
@@ -265,9 +269,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (UIImage *) getMxIcon:(NSString *)name;
 + (UIImage *) resizeImage:(UIImage *)image newSize:(CGSize)newSize;
-+ (UIImage *) applyScaleFactorToImage:(UIImage *)image;
-+ (NSString *) drawablePostfix;
-+ (NSString *) drawablePath:(NSString *)resId;
++ (BOOL) hasMapImage:(NSString *)resId;
 + (void) layoutComplexButton:(UIButton*)button;
 
 + (UIImage *) imageWithColor:(UIColor *)color;

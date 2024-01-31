@@ -26,6 +26,7 @@
 #import "OASearchHistoryTableItem.h"
 #import "OASearchHistoryTableGroup.h"
 #import "OAHistorySettingsViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -474,7 +475,7 @@
                 cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
                 [cell showButton:NO];
-                cell.cellImageView.tintColor = UIColor.iconColorDefault;
+                cell.cellImageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
             }
             if (cell)
             {
@@ -494,8 +495,8 @@
             {
                 NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
                 cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-                cell.button.backgroundColor = [UIColor.buttonBgColorPrimary colorWithAlphaComponent:0.1];
-                [cell.button setTitleColor:UIColor.buttonTextColorPrimary forState:UIControlStateHighlighted];
+                cell.button.backgroundColor = [[UIColor colorNamed:ACColorNameButtonBgColorPrimary] colorWithAlphaComponent:0.1];
+                [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateHighlighted];
                 cell.button.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
                 cell.button.layer.cornerRadius = 9.;
                 cell.topMarginConstraint.constant = 9.;

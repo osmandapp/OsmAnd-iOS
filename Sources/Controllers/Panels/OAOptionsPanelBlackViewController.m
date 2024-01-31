@@ -19,6 +19,7 @@
 #import "OAMapHudViewController.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
+#import "GeneratedAssetSymbols.h"
 
 #import "OARoutePlanningHudViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
@@ -212,13 +213,13 @@
 
 - (void)applyingAppTheme
 {
-    UIColor *divColor = UIColor.separatorColor;
+    UIColor *divColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     for (CALayer *item in _menuButtonDivArray) {
         item.backgroundColor = divColor.CGColor;
     }
     
     for (UIButton *button in _menuButtonsArray) {
-        [button setTintColor:UIColor.iconColorDefault];
+        [button setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
     }
 }
 
@@ -258,7 +259,7 @@
 {
     [super viewDidLoad];
 
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
     self.navigationController.delegate = self;
 
     _menuButtonMapsDiv = [[CALayer alloc] init];

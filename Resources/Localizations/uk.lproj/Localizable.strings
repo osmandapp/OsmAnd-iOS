@@ -3269,3 +3269,10 @@
 "shared_string_keywords" = "Ключові слова";
 "help_article_map_legend_ski_map_name" = "Стиль гірськолижної мапи";
 "help_article_navigation_routing_osmand_routing_name" = "Про маршрутизацію OsmAnd";
+"whats_here" = "Що тут у нас";
+"no_track_files" = "У вас немає файлів треків";
+"import_create_track_files" = "За допомогою OsmAnd ви можете імпортувати, створювати або записувати файли треків.";
+"no_tracks_on_map" = "На мапі немає треків";
+"select_tracks_to_display" = "Виберіть треки, щоб показати їх на мапі.";
+"show_all_tracks" = "Показати всі треки";
+"recently_visible" = "Нещодавно переглянуті";

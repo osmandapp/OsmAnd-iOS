@@ -2393,3 +2393,6 @@
 "trip_recording_distance_widget_desc" = "Toont de afgelegde afstand van deze opgenomen rit.";
 "true_bearing_widget_desc" = "Hoek tussen het ware noorden en het doelpunt gezien van uw locatie.";
 "relative_bearing_widget_desc" = "Toont de hoek tussen de richting van uw voorwaartse beweging en het doelpunt.";
+"shared_string_license" = "Licentie";
+"shared_string_link" = "Link";
+"shared_string_author" = "Auteur";

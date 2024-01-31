@@ -13,6 +13,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OATargetInfoViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonHeight 36.0
 #define kDefaultZoomOnShow 16.0f
@@ -77,7 +78,7 @@
         OAButton *btn = [self createButton:_textRow];
         btn.tag = _textRowButtonIndex;
         [btn setBackgroundImage:nil forState:UIControlStateNormal];
-        btn.tintColor = UIColor.textColorPrimary;
+        btn.tintColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
         btn.titleLabel.numberOfLines = 0;
         [self addSubview:btn];
         [buttons addObject:btn];
@@ -101,9 +102,9 @@
     btn.layer.cornerRadius = 4.0;
     btn.layer.masksToBounds = YES;
     btn.layer.borderWidth = 0.8;
-    btn.layer.borderColor = UIColor.separatorColor.CGColor;
+    btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
     [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.clearColor] forState:UIControlStateNormal];
-    btn.tintColor = UIColor.iconColorActive;
+    btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     btn.delegate = self;
     return btn;
 }

@@ -3263,3 +3263,10 @@
 "shared_string_keywords" = "Nøgleord";
 "help_article_map_legend_ski_map_name" = "Skikort-stil";
 "help_article_navigation_routing_osmand_routing_name" = "Om OsmAnd-ruteberegning";
+"whats_here" = "Hvad er der her";
+"import_create_track_files" = "Du kan importere, oprette eller optage sporfiler ved hjælp af OsmAnd.";
+"no_tracks_on_map" = "Ingen spor på kort";
+"select_tracks_to_display" = "Vælg spor for at få dem vist på kortet.";
+"show_all_tracks" = "Vis alle spor";
+"recently_visible" = "Senest synlig";
+"no_track_files" = "Du har ingen sporfiler";

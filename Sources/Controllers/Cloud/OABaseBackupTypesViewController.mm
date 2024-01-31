@@ -23,6 +23,7 @@
 #import "OASizes.h"
 #import "OAButtonTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OABaseBackupTypesViewController ()
 
@@ -124,7 +125,7 @@
             cell.switchView.on = [_selectedItems.allKeys containsObject:settingsType];
             cell.titleLabel.text = settingsType.title;
             cell.leftIconView.image = settingsType.icon;
-            cell.leftIconView.tintColor = cell.switchView.on ? UIColor.iconColorActive : UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = cell.switchView.on ? [UIColor colorNamed:ACColorNameIconColorActive] : [UIColor colorNamed:ACColorNameIconColorDisabled];
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
             [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
@@ -149,7 +150,7 @@
             cell.valueLabel.text = [item.allKeys containsObject:@"description"] ? item[@"description"] : @"";
 
             [cell leftIconVisibility:!emptyCell];
-            cell.leftIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             if (!(emptyCell || hasEmptyIcon))
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 
@@ -210,7 +211,7 @@
             [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
             [cell.button setTitle:@"" forState:UIControlStateNormal];
             cell.button.imageView.tintColor = [UIColor clearColor];
-            cell.leftIconView.tintColor = UIColor.iconColorDisabled;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             [cell.button addTarget:self action:NSSelectorFromString(item[@"action"]) forControlEvents:UIControlEventTouchUpInside];
         }
         cell.titleLabel.text = settingsType.title;

@@ -13,6 +13,7 @@
 #import "OALocationConvert.h"
 #import "OAPointDescription.h"
 #import "OAButton.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonHeight 32.0
 #define kDefaultZoomOnShow 16.0f
@@ -74,7 +75,7 @@
     _viewLabel.lineBreakMode = NSLineBreakByWordWrapping;
     _viewLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     _viewLabel.adjustsFontForContentSizeCategory = YES;
-    _viewLabel.textColor = UIColor.textColorSecondary;
+    _viewLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     _viewLabel.backgroundColor = [UIColor clearColor];
     _viewLabel.text = OALocalizedString(@"coordinates_copy_descr");
     
@@ -103,10 +104,10 @@
         btn.layer.cornerRadius = 4.0;
         btn.layer.masksToBounds = YES;
         btn.layer.borderWidth = 0.8;
-        btn.layer.borderColor = UIColor.separatorColor.CGColor;
-        btn.tintColor = UIColor.iconColorActive;
+        btn.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+        btn.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         btn.tag = i++;
-        [btn setBackgroundImage:[OAUtilities imageWithColor:UIColor.iconColorActive] forState:UIControlStateHighlighted];
+        [btn setBackgroundImage:[OAUtilities imageWithColor:[UIColor colorNamed:ACColorNameIconColorActive]] forState:UIControlStateHighlighted];
         btn.delegate = self;
 
         [self addSubview:btn];
@@ -183,14 +184,14 @@
     {
         OAButton *button = _buttons[_selectedButtonIndex];
         [UIView animateWithDuration:0.2 animations:^{
-            button.layer.backgroundColor = UIColor.iconColorActive.CGColor;
+            button.layer.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
             button.layer.borderColor = UIColor.clearColor.CGColor;
             button.tintColor = UIColor.whiteColor;
         }                completion:^(BOOL finished) {
             [UIView animateWithDuration:0.2 animations:^{
                 button.layer.backgroundColor = UIColor.clearColor.CGColor;
-                button.layer.borderColor = UIColor.separatorColor.CGColor;
-                button.tintColor = UIColor.iconColorActive;
+                button.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
+                button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             }];
         }];
         [OAUtilities showMenuInView:self fromView:button];

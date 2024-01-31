@@ -14,6 +14,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -122,7 +123,7 @@
                title:(NSString *)title
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
-            ? UIColor.groupBgColor : UIColor.viewBgColor;
+    ? [UIColor colorNamed:ACColorNameGroupBg] : [UIColor colorNamed:ACColorNameViewBg];
 
     self.bottomDividerView.hidden = _selectedTab == EOATrackMenuHudSegmentsTab || _selectedTab == EOATrackMenuHudPointsTab;
 
@@ -130,7 +131,7 @@
     {
         [self.titleView setText:currentTrack ? OALocalizedString(@"shared_string_currently_recording_track") : title];
         self.titleIconView.image = icon;
-        self.titleIconView.tintColor = UIColor.iconColorSecondary;
+        self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
     }
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
@@ -147,8 +148,8 @@
         if (!self.directionContainerView.hidden)
         {
             self.directionIconView.image = [UIImage templateImageNamed:@"ic_small_direction"];
-            self.directionIconView.tintColor = UIColor.iconColorActive;
-            self.directionTextView.textColor = UIColor.textColorActive;
+            self.directionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
 
         if (gpxLocation.latitude != DBL_MAX)
@@ -156,9 +157,9 @@
             OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:gpxLocation.latitude
                                                                  lon:gpxLocation.longitude];
             self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
-            self.regionIconView.tintColor = UIColor.iconColorSecondary;
+            self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
             [self.regionTextView setText:worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName];
-            self.regionTextView.textColor = UIColor.textColorSecondary;
+            self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else
         {
@@ -258,7 +259,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedDistance:totalDistance],
-                            @"int_value": @(EOARouteStatisticsModeAltitude)
+                            @"int_value": @[@(GPXDataSetTypeAltitude)]
                     },
                     kCellTitle: OALocalizedString(@"shared_string_distance"),
                     kCellRightIconName: @"ic_small_distance"
@@ -270,7 +271,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationUp],
-                            @"int_value": @(EOARouteStatisticsModeSlope)
+                            @"int_value": @[@(GPXDataSetTypeSlope)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_ascent"),
                     kCellRightIconName: @"ic_small_ascent"
@@ -278,7 +279,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedAlt:analysis.diffElevationDown],
-                            @"int_value": @(EOARouteStatisticsModeSlope)
+                            @"int_value": @[@(GPXDataSetTypeSlope)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_descent"),
                     kCellRightIconName: @"ic_small_descent"
@@ -288,7 +289,7 @@
                             @"string_value": [NSString stringWithFormat:@"%@ - %@",
                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.minElevation],
                                                                         [OAOsmAndFormatter getFormattedAlt:analysis.maxElevation]],
-                            @"int_value": @(EOARouteStatisticsModeAltitude)
+                            @"int_value": @[@(GPXDataSetTypeAltitude)]
                     },
                     kCellTitle: OALocalizedString(@"altitude_range"),
                     kCellRightIconName: @"ic_small_altitude_range"
@@ -300,7 +301,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedSpeed:analysis.avgSpeed],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"map_widget_average_speed"),
                     kCellRightIconName: @"ic_small_speed"
@@ -308,7 +309,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedSpeed:analysis.maxSpeed],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"gpx_max_speed"),
                     kCellRightIconName: @"ic_small_max_speed"
@@ -321,7 +322,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeSpan shortFormat:YES],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"total_time"),
                     kCellRightIconName: @"ic_small_time_interval"
@@ -334,7 +335,7 @@
             [statisticCells addObject:[OAGPXTableCellData withData:@{
                     kTableValues: @{
                             @"string_value": [OAOsmAndFormatter getFormattedTimeInterval:timeMoving shortFormat:YES],
-                            @"int_value": @(EOARouteStatisticsModeSpeed)
+                            @"int_value": @[@(GPXDataSetTypeSpeed)]
                     },
                     kCellTitle: OALocalizedString(@"moving_time"),
                     kCellRightIconName: @"ic_small_time_moving"
@@ -587,7 +588,7 @@
     {
         [cell.valueView setText:cellData.values[@"string_value"]];
         cell.iconView.image = [UIImage templateImageNamed:cellData.rightIconName];
-        cell.iconView.tintColor = UIColor.iconColorSecondary;
+        cell.iconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
         [cell.titleView setText:cellData.title];
 
         cell.separatorView.hidden = [cell isDirectionRTL]
@@ -637,9 +638,9 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     OAGPXTableCellData *cellData = _statisticsCells[indexPath.row];
-    EOARouteStatisticsMode modeType = (EOARouteStatisticsMode) [cellData.values[@"int_value"] intValue];
+    NSArray<NSNumber *> *types = cellData.values[@"int_value"];
     if (self.trackMenuDelegate)
-        [self.trackMenuDelegate openAnalysis:modeType];
+        [self.trackMenuDelegate openAnalysis:types];
 }
 
 @end

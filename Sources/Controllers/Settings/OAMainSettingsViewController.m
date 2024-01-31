@@ -31,6 +31,8 @@
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "GeneratedAssetSymbols.h"
 
 @interface OAMainSettingsViewController () <UIDocumentPickerDelegate>
 
@@ -276,7 +278,7 @@
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColor.iconColorActive;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         if (cell)
         {
@@ -306,9 +308,9 @@
             cell.descriptionLabel.text = [self getProfileDescription:am];
             cell.contentView.backgroundColor = UIColor.clearColor;
             if ([item[@"isColored"] boolValue])
-                cell.backgroundColor = UIColor.cellBgColorSelected;
+                cell.backgroundColor = [UIColor colorNamed:ACColorNameCellBgColorSelected];
             else
-                cell.backgroundColor = UIColor.groupBgColor;
+                cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         }
         return cell;
     }
@@ -326,7 +328,7 @@
         cell.separatorInset = UIEdgeInsetsMake(0.0, indexPath.row < OAApplicationMode.allPossibleValues.count - 1 ? kPaddingToLeftOfContentWithIcon : 0.0, 0.0, 0.0);
         UIImage *img = am.getIcon;
         cell.leftIconView.image = [img imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : UIColor.iconColorDisabled;
+        cell.leftIconView.tintColor = isEnabled ? UIColorFromRGB(am.getIconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
         cell.titleLabel.text = am.toHumanString;
         cell.descriptionLabel.text = [self getProfileDescription:am];
         cell.switchView.tag = indexPath.row;
@@ -350,18 +352,18 @@
             cell = (OARightIconTableViewCell *)[nib objectAtIndex:0];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColor.textColorActive;
-            cell.rightIconView.tintColor = UIColor.iconColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         if ([item[@"regular_text"] boolValue])
         {
-            cell.titleLabel.textColor = UIColor.textColorPrimary;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else
         {
-            cell.titleLabel.textColor = UIColor.textColorActive;
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
         }
         cell.titleLabel.text = item[@"title"];
@@ -392,7 +394,8 @@
 
 - (void)onRestoreFromFilePressed
 {
-    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initWithDocumentTypes:@[@"net.osmand.osf"] inMode:UIDocumentPickerModeImport];
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"net.osmand.osf" conformingToType:UTTypeArchive]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
     documentPickerVC.allowsMultipleSelection = NO;
     documentPickerVC.delegate = self;
     [self presentViewController:documentPickerVC animated:YES completion:nil];

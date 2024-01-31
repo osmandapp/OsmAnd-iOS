@@ -224,7 +224,7 @@
         _mapView.mapAnimator->pause();
         _mapView.mapAnimator->cancelAllAnimations();
         _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle: _lastElevationAngle],
-                                                   kHalfSecondAnimatonTime,
+                                                   kFastAnimationTime,
                                                    OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
                                                    kLocationServicesAnimationKey);
         _mapView.mapAnimator->resume();

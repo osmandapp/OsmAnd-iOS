@@ -15,6 +15,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 const static CGFloat kMapSettingsInitialPosKoeff = 0.35;
 const static CGFloat kMapSettingsLandscapeWidth = 320.0;
@@ -470,7 +471,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.tableView.tableFooterView = footerView;
     [self.tableView registerClass:[FreeBackupBannerCell class] forCellReuseIdentifier:[FreeBackupBannerCell getCellIdentifier]];
     _backgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _backgroundView.backgroundColor = UIColor.groupTableViewBackgroundColor;
+    _backgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     _backgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColor.clearColor;
@@ -481,7 +482,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     [self updateBackgroundViewLayout:{0, 0}];
 
     //self.tableView.separatorInset = UIEdgeInsetsMake(0, 60, 0, 0);
-    self.tableView.separatorColor = UIColor.separatorColor;
+    self.tableView.separatorColor = [UIColor colorNamed:ACColorNameCustomSeparator];
     
     [self setupView];
     

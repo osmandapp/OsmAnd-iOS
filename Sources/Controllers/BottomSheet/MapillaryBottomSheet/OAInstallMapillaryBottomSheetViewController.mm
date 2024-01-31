@@ -81,7 +81,7 @@
 
 -(void) doneButtonPressed
 {
-    [[UIApplication sharedApplication] openURL: [NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id757286802?mt=8"]];
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"itms-apps://itunes.apple.com/app/id757286802?mt=8"] options:@{} completionHandler:nil];
     [vwController dismiss];
 }
 

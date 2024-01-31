@@ -23,6 +23,7 @@
 #import "OACollapsableCoordinatesView.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAPOIHelper.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -106,7 +107,7 @@
     if (favoriteGroup && favoriteGroup.points.count > 0)
     {
         UIColor *color = favoriteGroup.color ? favoriteGroup.color : [OADefaultFavorite getDefaultColor];
-        UIColor *disabledColor = UIColor.textColorSecondary;
+        UIColor *disabledColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         color = favoriteGroup.isVisible ? color : disabledColor;
         UIImage *icon = [UIImage templateImageNamed:@"ic_custom_folder"];
         NSString *name = [self.favorite getCategoryDisplayName];
@@ -170,7 +171,7 @@
         [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
     }
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
-                                           NSForegroundColorAttributeName : UIColor.textColorSecondary }
+                                           NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
     return mutAttributedTypeStr;
 }

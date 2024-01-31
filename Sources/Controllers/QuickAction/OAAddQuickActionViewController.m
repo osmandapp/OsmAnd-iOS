@@ -16,6 +16,7 @@
 #import "OASizes.h"
 #import "OAQuickActionType.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAAddQuickActionViewController () <UISearchBarDelegate>
 
@@ -82,15 +83,15 @@
     if (isFiltered)
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
-        _searchController.searchBar.searchTextField.backgroundColor = UIColor.groupBgColor;
-        _searchController.searchBar.searchTextField.leftView.tintColor = UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+        _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
     else
     {
         _searchController.searchBar.searchTextField.attributedPlaceholder = [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_search") attributes:@{NSForegroundColorAttributeName:[UIColor colorWithWhite:1.0 alpha:0.5]}];
         _searchController.searchBar.searchTextField.backgroundColor = [UIColor colorWithWhite:1.0 alpha:0.3];
         _searchController.searchBar.searchTextField.leftView.tintColor = [UIColor colorWithWhite:1.0 alpha:0.5];
-        _searchController.searchBar.searchTextField.tintColor = UIColor.textColorTertiary;
+        _searchController.searchBar.searchTextField.tintColor = [UIColor colorNamed:ACColorNameTextColorTertiary];
     }
 }
 
@@ -169,7 +170,7 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
             cell.titleLabel.text = action.name;
             cell.leftIconView.image = [UIImage templateImageNamed:action.iconName];
-            cell.leftIconView.tintColor = UIColor.iconColorSelected;
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
             if (cell.leftIconView.subviews.count > 0)
                 [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
@@ -179,7 +180,7 @@
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
-                [background setTintColor:UIColor.groupBgColor];
+                [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
                 [cell.leftIconView addSubview:background];
                 UIImage *img = [UIImage imageNamed:act.getSecondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];

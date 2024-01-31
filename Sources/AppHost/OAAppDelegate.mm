@@ -63,18 +63,23 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     BOOL _didFinishLaunching;
     NSTimer *_checkUpdatesTimer;
     NSOperationQueue *_dataFetchQueue;
+    dispatch_queue_t initializeQueue;
 }
-
-- (void)configureAppLaunchEvent:(AppLaunchEvent)event
-{
-    _appLaunchEvent = event;
-    [[NSNotificationCenter defaultCenter] postNotificationName:
-     OALaunchUpdateStateNotification object:nil userInfo:@{@"event": @(_appLaunchEvent)}];
-}
-
 
 @synthesize rootViewController = _rootViewController;
 @synthesize appLaunchEvent = _appLaunchEvent;
+
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        NSLog(@"AppDelegate initialized");
+        initializeQueue = dispatch_queue_create("OAAppDelegateInitializeQueue", dispatch_queue_attr_make_with_qos_class(DISPATCH_QUEUE_CONCURRENT, QOS_CLASS_USER_INTERACTIVE, 0));
+    }
+    return self;
+}
 
 - (BOOL)initialize
 {
@@ -114,7 +119,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         _appInitTask = UIBackgroundTaskInvalid;
     }];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(initializeQueue, ^{
         
         NSLog(@"OAAppDelegate beginBackgroundTask");
 
@@ -122,13 +127,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         [_app initializeCore];
 
         // Initialize application in background
-        //[_app initialize];
+        [_app initialize];
 
         dispatch_async(dispatch_get_main_queue(), ^{
             
             // Initialize application in main thread
-            [_app initialize];
-            
+            //[_app initialize];
+            [[OAScreenOrientationHelper sharedInstance] updateSettings];
+
             // Configure ThemeManager
             OAAppSettings *appSettings = [OAAppSettings sharedManager];
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?
@@ -191,6 +197,13 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     return YES;
 }
 
+- (void)configureAppLaunchEvent:(AppLaunchEvent)event
+{
+    _appLaunchEvent = event;
+    [[NSNotificationCenter defaultCenter] postNotificationName:
+     OALaunchUpdateStateNotification object:nil userInfo:@{@"event": @(_appLaunchEvent)}];
+}
+
 - (void)requestUpdatesOnNetworkReachable
 {
     [AFNetworkReachabilityManager.sharedManager startMonitoring];
@@ -215,9 +228,10 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     BOOL isReviewed = [userDefaults boolForKey:@"isReviewed"];
     if (appInstalledDays < 15 || appInstalledDays > 45)
         return;
-    if (!isReviewed)
+    UIScene *windowScene = UIApplication.sharedApplication.mainScene;
+    if (!isReviewed && windowScene)
     {
-        [SKStoreReviewController requestReview];
+        [SKStoreReviewController requestReviewInScene:(UIWindowScene *) windowScene];
         [userDefaults setBool:true forKey:@"isReviewed"];
     }
 }
@@ -298,12 +312,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationWillResignActive
 {
+    NSLog(@"OAAppDelegate applicationWillResignActive %d", _appInitDone);
     if (_appInitDone)
         [_app onApplicationWillResignActive];
 }
 
 - (void)applicationDidEnterBackground
 {
+    NSLog(@"OAAppDelegate applicationDidEnterBackground %d", _appInitDone);
     if (_checkUpdatesTimer)
     {
         [_checkUpdatesTimer invalidate];
@@ -318,12 +334,14 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationWillEnterForeground
 {
+    NSLog(@"OAAppDelegate applicationWillEnterForeground %d", _appInitDone);
     if (_appInitDone)
         [_app onApplicationWillEnterForeground];
 }
 
 - (void)applicationDidBecomeActive
 {
+    NSLog(@"OAAppDelegate applicationDidBecomeActive %d", _appInitDone);
     if (_appInitDone)
     {
         _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
@@ -333,6 +351,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)applicationWillTerminate:(UIApplication *)application
 {
+    NSLog(@"OAAppDelegate applicationWillTerminate");
     [_app shutdown];
     OAMapViewController *mapVc = OARootViewController.instance.mapPanel.mapViewController;
     [mapVc onApplicationDestroyed];
@@ -345,9 +364,24 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     [device endGeneratingDeviceOrientationNotifications];
 }
 
+- (void)applicationDidReceiveMemoryWarning:(UIApplication *)application
+{
+    NSLog(@"OAAppDelegate applicationDidReceiveMemoryWarning");
+}
+
 - (void)application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
 {
     [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
+}
+
+- (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application
+{
+    NSLog(@"OAAppDelegate applicationProtectedDataWillBecomeUnavailable");
+}
+
+- (void)applicationProtectedDataDidBecomeAvailable:(UIApplication *)application
+{
+    NSLog(@"OAAppDelegate applicationProtectedDataDidBecomeAvailable");
 }
 
 #pragma mark - UISceneSession Lifecycle

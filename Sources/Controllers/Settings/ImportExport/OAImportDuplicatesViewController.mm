@@ -32,6 +32,7 @@
 #import "OATileSource.h"
 #import "OAPOIHelper.h"
 #import "OASizes.h"
+#import "GeneratedAssetSymbols.h"
 
 @interface OAHeaderType : NSObject
 
@@ -139,10 +140,10 @@
     NSString *title = OALocalizedString(@"keep_both");
     NSString *subtitle = OALocalizedString(@"keep_both_desc");
     NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, subtitle]];
-    [buttonTitle setColor:UIColor.buttonTextColorSecondary forString:title];
+    [buttonTitle setColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forString:title];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.] forString:title];
     [buttonTitle setMinLineHeight:18. alignment:NSTextAlignmentCenter forString:title];
-    [buttonTitle setColor:UIColor.textColorSecondary forString:subtitle];
+    [buttonTitle setColor:[UIColor colorNamed:ACColorNameTextColorSecondary] forString:subtitle];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:13. maximumSize:18.] forString:subtitle];
     [buttonTitle setMinLineHeight:17. alignment:NSTextAlignmentCenter forString:subtitle];
     return buttonTitle;
@@ -156,7 +157,7 @@
     NSString *title = OALocalizedString(@"replace_all");
     NSString *subtitle = OALocalizedString(@"replace_all_desc");
     NSMutableAttributedString *buttonTitle = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@\n%@", title, subtitle]];
-    [buttonTitle setColor:UIColor.buttonTextColorPrimary forString:title];
+    [buttonTitle setColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forString:title];
     [buttonTitle setFont:[UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.] forString:title];
     [buttonTitle setMinLineHeight:18. alignment:NSTextAlignmentCenter forString:title];
     [buttonTitle setColor:[UIColor.whiteColor colorWithAlphaComponent:.5] forString:subtitle];
@@ -265,7 +266,7 @@
                     item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_map"];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
-                    item[@"iconColor"] = UIColor.iconColorDefault;
+                    item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorDefault];
                 }
                 else if ([currentItem isKindOfClass:NSString.class])
                 {
@@ -302,7 +303,7 @@
                         item[@"label"] = [OAFileNameTranslationHelper getMapName:fileName];
                         item[@"icon"] = [UIImage imageNamed:@"ic_custom_map"];
                     }
-                    item[@"iconColor"] = UIColor.iconColorDefault;
+                    item[@"iconColor"] = [UIColor colorNamed:ACColorNameIconColorDefault];
                     item[@"description"] = @"";
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }

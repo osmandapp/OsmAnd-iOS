@@ -9,6 +9,7 @@
 #import "OARouteSegmentShieldView.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OATargetInfoViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 static UIFont *_shieldFont;
 
@@ -57,11 +58,11 @@ static UIFont *_shieldFont;
     
     if (_type == EOATransportShiledPedestrian)
     {
-        UIColor *primaryColor = UIColor.iconColorActive;
+        UIColor *primaryColor = [UIColor colorNamed:ACColorNameIconColorActive];
         _contentView.layer.borderColor = primaryColor.CGColor;
         _contentView.layer.borderWidth = 2.0;
         _shieldLabel.textColor = primaryColor;
-        _contentView.backgroundColor = UIColor.groupBgColor;
+        _contentView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         _shieldImage.image = [UIImage templateImageNamed:_iconName];
         _shieldImage.tintColor = primaryColor;
     }
@@ -82,7 +83,7 @@ static UIFont *_shieldFont;
     [super traitCollectionDidChange:previousTraitCollection];
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
-        _contentView.layer.borderColor = UIColor.iconColorActive.CGColor;
+        _contentView.layer.borderColor = [UIColor colorNamed:ACColorNameIconColorActive].CGColor;
 }
 
 - (CGSize)intrinsicContentSize
@@ -94,9 +95,9 @@ static UIFont *_shieldFont;
     [UIView animateWithDuration:.2 animations:^{
         if (_type == EOATransportShiledPedestrian)
         {
-            [_shieldImage setTintColor:UIColor.iconColorActive];
-            _shieldLabel.textColor = UIColor.textColorActive;
-            _contentView.backgroundColor = UIColor.groupBgColor;
+            [_shieldImage setTintColor:[UIColor colorNamed:ACColorNameIconColorActive]];
+            _shieldLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            _contentView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
         }
         else
         {
@@ -114,14 +115,14 @@ static UIFont *_shieldFont;
     [UIView animateWithDuration:.2 animations:^{
         if (_type == EOATransportShiledPedestrian)
         {
-            [_shieldImage setTintColor:UIColor.groupBgColor];
-            _shieldLabel.textColor = UIColor.groupBgColor;
-            _contentView.backgroundColor = UIColor.iconColorActive;
+            [_shieldImage setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
+            _shieldLabel.textColor = [UIColor colorNamed:ACColorNameGroupBg];
+            _contentView.backgroundColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
         else
         {
-            [_shieldImage setTintColor:UIColor.iconColorDefault];
-            _shieldLabel.textColor = UIColor.iconColorDefault;
+            [_shieldImage setTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+            _shieldLabel.textColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         }
     } completion:^(BOOL finished) {
         if (!longPress)

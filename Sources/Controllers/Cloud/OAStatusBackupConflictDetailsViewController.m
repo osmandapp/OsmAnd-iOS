@@ -25,6 +25,7 @@
 #import "OAColors.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OAStatusBackupConflictDetailsViewController
 {
@@ -147,7 +148,7 @@
         kCellTypeKey: [OASimpleTableViewCell getCellIdentifier],
         kCellKeyKey: @"itemInfo",
         kCellTitleKey: name,
-        kCellIconTintColor: UIColor.iconColorDefault
+        kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorDefault]
     }];
     [itemInfoSection addRow:itemInfoRow];
 
@@ -259,11 +260,11 @@
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);
             BOOL enabled = [item boolForKey:@"enabled"];
             cell.selectionStyle = enabled ? UITableViewCellSelectionStyleDefault : UITableViewCellSelectionStyleNone;
-            cell.titleLabel.textColor = enabled ? UIColor.textColorActive : UIColor.textColorSecondary;
+            cell.titleLabel.textColor = enabled ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorSecondary];
             cell.titleLabel.text = item.title;
             cell.descriptionLabel.text = item.descr;
             cell.rightIconView.image = [UIImage templateImageNamed:item.secondaryIconName];
-            cell.rightIconView.tintColor = enabled ? item.iconTintColor : UIColor.textColorSecondary;
+            cell.rightIconView.tintColor = enabled ? item.iconTintColor : [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         return cell;
     }
@@ -278,11 +279,11 @@
         [self dismissViewControllerAnimated:YES completion:^{
             NSString *fileName = [OABackupHelper getItemFileName:_settingsItem];
             if ([item.key isEqualToString:@"uploadLocal"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationUpload errorToast:[self.delegate showErrorToast]];
             else if ([item.key isEqualToString:@"downloadCloud"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDownload errorToast:[self.delegate showErrorToast]];
             else if ([item.key isEqualToString:@"deleteItem"])
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete];
+                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile operation:EOABackupSyncOperationDelete errorToast:[self.delegate showErrorToast]];
         }];
     }
 }
@@ -327,7 +328,7 @@
         kCellTitleKey: title,
         kCellDescrKey: description,
         kCellSecondaryIconName: @"ic_custom_cloud_upload_outline",
-        kCellIconTintColor: UIColor.iconColorActive,
+        kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
         @"enabled": @(enabled)
     }];
 }
@@ -383,7 +384,7 @@
         kCellTitleKey: OALocalizedString(@"dowload_cloud_version"),
         kCellDescrKey: description,
         kCellSecondaryIconName: @"ic_custom_cloud_download_outline",
-        kCellIconTintColor: UIColor.iconColorActive,
+        kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorActive],
         @"enabled": @(enabled)
     }];
 }

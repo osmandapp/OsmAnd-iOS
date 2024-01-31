@@ -3260,3 +3260,10 @@
 "shared_string_keywords" = "Palabras clave";
 "help_article_map_legend_ski_map_name" = "Estilo del mapa de esquí";
 "help_article_navigation_routing_osmand_routing_name" = "Acerca del cálculo de rutas de OsmAnd";
+"whats_here" = "¿Qué hay aquí?";
+"import_create_track_files" = "Puede importar, crear o grabar archivos de pistas utilizando OsmAnd.";
+"select_tracks_to_display" = "Seleccione las vías para verlas en el mapa.";
+"show_all_tracks" = "Mostrar todas las vías";
+"recently_visible" = "Visto recientemente";
+"no_track_files" = "No tienes archivos de seguimiento";
+"no_tracks_on_map" = "No hay pistas en el mapa";

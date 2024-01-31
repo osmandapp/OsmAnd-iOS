@@ -129,7 +129,8 @@
     double approximatedBearing = currentSegmentBearing * (1.0 - projectionOffsetN) + nextSegmentBearing * projectionOffsetN;
     
     BOOL setApproximated;
-    if (location.course != 0)
+    BOOL hasBearing = location.course != -1 && location.course != 0;
+    if (hasBearing)
     {
         double rotationDiff = [OAMapUtils unifyRotationDiff:location.course targetRotate:approximatedBearing];
         setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;

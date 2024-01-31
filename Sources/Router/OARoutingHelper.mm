@@ -721,11 +721,14 @@ static BOOL _isDeviatedFromRoute = false;
             // calculate projection of current location
             if (currentRoute > 0 && !inRecalc)
             {
-                CLLocation *nextLocation = routeNodes[currentRoute];
-                CLLocation *project = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
-                // we need to update bearing too
-                float bearingTo = [OAMapUtils normalizeDegrees360:[project bearingTo:nextLocation]];
-                locationProjection = [[CLLocation alloc] initWithCoordinate:project.coordinate altitude:currentLocation.altitude horizontalAccuracy:0 verticalAccuracy:currentLocation.verticalAccuracy course:bearingTo speed:currentLocation.speed timestamp:[NSDate date]];
+                CLLocation *previousRouteLocation = routeNodes[currentRoute - 1];
+                CLLocation *currentRouteLocation = routeNodes[currentRoute];
+                CLLocation *locationProjection = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
+                if ([_settings.snapToRoad get] && currentRoute + 1 < routeNodes.count)
+                {
+                    CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
+                    locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
+                }
             }
         }
         _lastFixedLocation = currentLocation;

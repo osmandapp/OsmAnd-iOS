@@ -60,7 +60,7 @@
         prlat = fromLat + (toLat - fromLat) * (projection / mDist);
         prlon = fromLon + (toLon - fromLon) * (projection / mDist);
     }
-    return [[CLLocation alloc] initWithLatitude:prlat longitude:prlon];
+    return [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(prlat, prlon) altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:location.course speed:location.speed timestamp:location.timestamp];
 }
 
 + (double) getProjectionCoeff:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation

@@ -383,10 +383,21 @@
                 _mapView.mapAnimator->resume();
             }
             _showViewAngle = (newLocation.course < 0 || [self.class isSmallSpeedForCompass:newLocation]);
-            [_mapViewController updateLocation:newLocation heading:newHeading];
 
             OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
             _followingMode = [routingHelper isFollowingMode];
+            
+            if (_followingMode && [routingHelper getLastProjection])
+            {
+                CLLocation *loc = [routingHelper getLastProjection];
+                if (loc.course != -1 && loc.course != 0)
+                    [_mapViewController updateLocation:[routingHelper getLastProjection] heading:[routingHelper getLastProjection].course];
+            }
+            else
+            {
+                [_mapViewController updateLocation:newLocation heading:newHeading];
+            }
+            
             if (_routePlanningMode != [routingHelper isRoutePlanningMode])
                 [self switchToRoutePlanningMode];
         }

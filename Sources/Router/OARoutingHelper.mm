@@ -443,20 +443,8 @@ static BOOL _isDeviatedFromRoute = false;
                 // but you have not yet turned (could be checked bearing)
                 if (currentLocation.course >= 0 || _lastFixedLocation)
                 {
-//                    float bearingToRoute = [currentLocation bearingTo:routeNodes[currentRoute]];
-//                    float bearingRouteNext = [routeNodes[newCurrentRoute] bearingTo:routeNodes[newCurrentRoute + 1]];
-//                    float bearingMotion = currentLocation.course >= 0 ? currentLocation.course : [_lastFixedLocation bearingTo:currentLocation];
-//                    double diff = ABS(degreesDiff(bearingMotion, bearingToRoute));
-//                    double diffToNext = ABS(degreesDiff(bearingMotion, bearingRouteNext));
-//                    if (diff > diffToNext)
-//                    {
-//                        NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
-//                        processed = true;
-//                    }
-                    
                     if (currentRoute > 0)
                     {
-                        
                         CLLocation *previousRouteLocation = routeNodes[currentRoute - 1];
                         CLLocation *currentRouteLocation = routeNodes[currentRoute];
                         _lastProjection = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
@@ -468,7 +456,6 @@ static BOOL _isDeviatedFromRoute = false;
                             processed = true;
                         }
                     }
-
                 }
             }
         }

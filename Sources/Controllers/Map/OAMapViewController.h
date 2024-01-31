@@ -109,6 +109,7 @@
 
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
+- (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;

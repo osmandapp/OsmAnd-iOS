@@ -72,7 +72,8 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
                  localFile:(OALocalFile *)localFile
                 remoteFile:(OARemoteFile *)remoteFile
                  filesType:(EOARemoteFilesType)filesType
-                 operation:(EOABackupSyncOperationType)operation;
+                 operation:(EOABackupSyncOperationType)operation
+                errorToast:(void (^)(NSString *message, NSString *detail))errorToast;
 
 - (void) syncSettingsItems:(NSString *)key
                  localFile:(OALocalFile *)localFile
@@ -80,7 +81,8 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
                  filesType:(EOARemoteFilesType)filesType
                  operation:(EOABackupSyncOperationType)operation
              shouldReplace:(BOOL)shouldReplace
-            restoreDeleted:(BOOL)restoreDeleted;
+            restoreDeleted:(BOOL)restoreDeleted
+                errorToast:(void (^)(NSString *message, NSString *detail))errorToast;
 
 - (void) finishImport:(id<OAImportListener>)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;
 

@@ -19,6 +19,7 @@
 #import "OABackupHelper.h"
 #import "OAPrepareBackupResult.h"
 #import "OARootViewController.h"
+#import "OALog.h"
 
 @implementation OANetworkSettingsHelper
 {
@@ -194,8 +195,16 @@
                 remoteFile:(OARemoteFile *)remoteFile
                  filesType:(EOARemoteFilesType)filesType
                  operation:(EOABackupSyncOperationType)operation
+                errorToast:(void (^)(NSString *message, NSString *details))errorToast
 {
-    [self syncSettingsItems:key localFile:localFile remoteFile:remoteFile filesType:filesType operation:operation shouldReplace:YES restoreDeleted:NO];
+    [self syncSettingsItems:key
+                  localFile:localFile
+                 remoteFile:remoteFile
+                  filesType:filesType
+                  operation:operation
+              shouldReplace:YES
+             restoreDeleted:NO
+                 errorToast:errorToast];
 }
 
 - (void) syncSettingsItems:(NSString *)key
@@ -205,11 +214,29 @@
                  operation:(EOABackupSyncOperationType)operation
              shouldReplace:(BOOL)shouldReplace
             restoreDeleted:(BOOL)restoreDeleted
+                errorToast:(void (^)(NSString *message, NSString *details))errorToast
 {
-    if (!_syncBackupTasks[key])
+    NSString *fileKey = key;
+    if (!fileKey)
+        fileKey = localFile.fileName;
+    if (!fileKey)
+        fileKey = remoteFile.name;
+    if (!fileKey)
     {
-        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:key operation:operation];
-        _syncBackupTasks[key] = syncTask;
+        if (errorToast)
+            errorToast(OALocalizedString(@"shared_string_unexpected_error"), OALocalizedString(@"empty_filename"));
+        OALog([NSString stringWithFormat:@"Sync item with cloud error: item key nil - [OANetworkSettingsHelper syncSettingsItems:%@ localFile:%@ remoteFile:%@ operation:%ld]",
+               key,
+               localFile.fileName,
+               remoteFile.name,
+               operation]);
+        return;
+    }
+
+    if (!_syncBackupTasks[fileKey])
+    {
+        OASyncBackupTask *syncTask = [[OASyncBackupTask alloc] initWithKey:fileKey operation:operation];
+        _syncBackupTasks[fileKey] = syncTask;
         
         switch (operation)
         {
@@ -239,7 +266,7 @@
     }
     else
     {
-        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[@"Already syncing " stringByAppendingString:key] userInfo:nil];
+        @throw [NSException exceptionWithName:@"IllegalStateException" reason:[@"Already syncing " stringByAppendingString:fileKey] userInfo:nil];
     }
 }
 

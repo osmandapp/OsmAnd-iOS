@@ -286,7 +286,14 @@
             else if ([item.key isEqualToString:@"deleteItem"])
                 operation = EOABackupSyncOperationDelete;
             if (operation != EOABackupSyncOperationNone)
-                [_settingsHelper syncSettingsItems:fileName localFile:_localFile remoteFile:_remoteFile filesType:EOARemoteFilesTypeUnique operation:operation];
+            {
+                [_settingsHelper syncSettingsItems:fileName
+                                         localFile:_localFile
+                                        remoteFile:_remoteFile
+                                         filesType:EOARemoteFilesTypeUnique
+                                         operation:operation
+                                        errorToast:self.delegate ? [self.delegate showErrorToast] : nil];
+            }
         }];
     }
 }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,7 +16,7 @@
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="19G-L5-8Rc" userLabel="Slider View">
                     <rect key="frame" x="197.5" y="6" width="19" height="2"/>
-                    <color key="backgroundColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="19" id="GUT-Aj-Jqi"/>
                         <constraint firstAttribute="height" constant="2" id="O1u-4G-sNQ"/>
@@ -50,7 +50,7 @@
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" id="Uvg-4A-Ywj">
                     <rect key="frame" x="0.0" y="64" width="414" height="60"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="12" id="LoU-9Z-Tan">
                         <size key="itemSize" width="120" height="40"/>
                         <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -84,7 +84,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" name="groupBgColor"/>
+                            <color key="backgroundColor" name="groupBg"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="snd-9X-hbz" secondAttribute="trailing" id="3J0-AF-iQb"/>
                                 <constraint firstAttribute="bottom" secondItem="snd-9X-hbz" secondAttribute="bottom" constant="3.5" id="5Mb-RW-T70"/>
@@ -103,7 +103,7 @@
                                 <constraint firstAttribute="height" constant="20" id="Pqb-b5-3Sh"/>
                             </constraints>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                            <color key="textColor" name="separatorColor"/>
+                            <color key="textColor" name="customSeparator"/>
                             <nil key="highlightedColor"/>
                         </label>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WEo-uC-2EY" userLabel="Region Container">
@@ -126,7 +126,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
-                            <color key="backgroundColor" name="groupBgColor"/>
+                            <color key="backgroundColor" name="groupBg"/>
                             <constraints>
                                 <constraint firstAttribute="bottom" secondItem="XVR-ZX-2dk" secondAttribute="bottom" constant="2" id="7mv-F5-EqT"/>
                                 <constraint firstAttribute="bottom" secondItem="wVj-5r-123" secondAttribute="bottom" constant="3.5" id="dCu-An-sqU"/>
@@ -139,7 +139,7 @@
                             </constraints>
                         </view>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                     <constraints>
                         <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="WEo-uC-2EY" secondAttribute="trailing" id="3vB-s8-MLK"/>
                         <constraint firstItem="Iio-8u-at5" firstAttribute="leading" secondItem="VTD-C4-FFB" secondAttribute="leading" id="DZ9-XE-uD7"/>
@@ -160,7 +160,7 @@
                     <subviews>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3Ev-Ap-uIN" customClass="OAButton">
                             <rect key="frame" x="0.0" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="v5j-1s-w6D"/>
                             </constraints>
@@ -180,7 +180,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="vDF-Mt-jg2" customClass="OAButton">
                             <rect key="frame" x="97" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="kfs-vL-D2q"/>
                             </constraints>
@@ -200,7 +200,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="41j-Jh-0aW" customClass="OAButton">
                             <rect key="frame" x="194" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="hcS-sK-07n"/>
                             </constraints>
@@ -220,7 +220,7 @@
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="pbl-cu-esO" customClass="OAButton">
                             <rect key="frame" x="291" y="0.0" width="91" height="57"/>
-                            <color key="backgroundColor" name="contextMenuButtonBgColor"/>
+                            <color key="backgroundColor" name="contextMenuButtonBg"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="57" id="Vow-zd-Iwz"/>
                             </constraints>
@@ -239,7 +239,7 @@
                             </userDefinedRuntimeAttributes>
                         </button>
                     </subviews>
-                    <color key="backgroundColor" name="groupBgColor"/>
+                    <color key="backgroundColor" name="groupBg"/>
                 </stackView>
                 <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="none" id="8XG-hO-pN3" customClass="OAFoldersCollectionView">
                     <rect key="frame" x="16" y="68" width="382" height="48"/>
@@ -254,13 +254,13 @@
                 </collectionView>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="77c-3b-9tk" userLabel="Bottom Divider View">
                     <rect key="frame" x="0.0" y="230.5" width="414" height="0.5"/>
-                    <color key="backgroundColor" name="separatorColor"/>
+                    <color key="backgroundColor" name="customSeparator"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="0.5" id="jDd-9D-qD8"/>
                     </constraints>
                 </view>
             </subviews>
-            <color key="backgroundColor" name="groupBgColor"/>
+            <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="77c-3b-9tk" secondAttribute="trailing" id="17g-lT-Ouu"/>
                 <constraint firstItem="77c-3b-9tk" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="8PT-lJ-hr0"/>
@@ -308,10 +308,13 @@
         <image name="ic_custom_trip.png" width="30" height="30"/>
         <image name="ic_small_direction.png" width="20" height="20"/>
         <image name="ic_small_map_point.png" width="20" height="20"/>
-        <namedColor name="contextMenuButtonBgColor">
+        <namedColor name="contextMenuButtonBg">
             <color red="0.93725490196078431" green="0.90980392156862744" blue="0.99215686274509807" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <namedColor name="groupBgColor">
+        <namedColor name="customSeparator">
+            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="groupBg">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
@@ -319,9 +322,6 @@
         </namedColor>
         <namedColor name="iconColorSecondary">
             <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="separatorColor">
-            <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

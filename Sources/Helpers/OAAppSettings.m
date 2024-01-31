@@ -2098,17 +2098,8 @@
 
 - (NSArray<NSArray<NSString *> *> *) get:(OAApplicationMode *)mode
 {
-    NSArray<NSArray<NSString *> *> *value = (NSArray<NSArray<NSString *> *> *) [self getValue:mode];
-    if (!value)
-        value = self.defValue;
-    if (value)
-    {
-        NSArray<NSArray<NSString *> *> *values = (NSArray<NSArray<NSString *> *> *) value;
-        if (values.count > 0 && (self.key == [OAAppSettings sharedManager].topWidgetPanelOrder.key || self.key == [OAAppSettings sharedManager].bottomWidgetPanelOrder.key))
-            return [OAWidgetsPanel getPagedWidgetIdsWithPages:values];
-        return values;
-    }
-    return value;
+    NSObject *value = [self getValue:mode];
+    return value ? (NSArray<NSArray<NSString *> *> *)value : self.defValue;
 }
 
 - (void) set:(NSArray<NSArray<NSString *> *> *)arr

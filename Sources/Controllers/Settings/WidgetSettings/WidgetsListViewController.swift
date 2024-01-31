@@ -184,7 +184,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         let lastSectionData = tableData.sectionData(for: lastSection)
         var createNewSection: Bool = false
         if widgetPanel.isPanelVertical {
-            if WidgetType.isComplexWidget(newWidget.key) {
+            if WidgetType.isComplexWidget(newWidget.key), lastSectionData.getRow(lastSectionData.rowCount() - 1).key != kPageKey {
                 createNewSection = true
                 showToastForComplexWidget(newWidget.getTitle())
             } else if lastSectionData.rowCount() > 1 {
@@ -369,15 +369,17 @@ extension WidgetsListViewController {
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let item = tableData.item(for: indexPath)
-            if item.key == kPageKey {
+            if item.key == kPageKey, indexPath.row != tableData.rowCount(UInt(indexPath.section)) - 1 {
                 let prevSourceItem = tableData.item(for: IndexPath(row: indexPath.row - 1, section: indexPath.section))
-                if let mapWidgetInfo = prevSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                let nextSourceItem = tableData.item(for: IndexPath(row: indexPath.row + 1, section: indexPath.section))
+                if let mapWidgetInfo = prevSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key), nextSourceItem.key != kPageKey {
                     showToastForComplexWidget(mapWidgetInfo.getTitle())
                     return
                 }
                 if tableData.rowCount(UInt(indexPath.section)) > indexPath.row + 1 {
+                    let prevSourceItem = tableData.item(for: IndexPath(row: indexPath.row - 1, section: indexPath.section))
                     let nextSourceItem = tableData.item(for: IndexPath(row: indexPath.row + 1, section: indexPath.section))
-                    if let mapWidgetInfo = nextSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
+                    if let mapWidgetInfo = nextSourceItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key), prevSourceItem.key != kPageKey {
                         showToastForComplexWidget(mapWidgetInfo.getTitle())
                         return
                     }

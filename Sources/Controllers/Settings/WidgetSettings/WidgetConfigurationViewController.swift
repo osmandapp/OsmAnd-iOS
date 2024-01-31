@@ -368,6 +368,9 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
+        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+                                        object: self.widgetInfo,
+                                        userInfo: self.widgetConfigurationParams)
         UIView.animate(withDuration: 0) {
             if let viewControllers = self.navigationController?.viewControllers {
                 for viewController in viewControllers {
@@ -377,10 +380,6 @@ extension WidgetConfigurationViewController {
                     }
                 }
             }
-        } completion: { Bool in
-            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-                                            object: self.widgetInfo,
-                                            userInfo: self.widgetConfigurationParams)
         }
     }
 

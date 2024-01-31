@@ -93,7 +93,7 @@ class WidgetsPanel: NSObject, NSCopying {
 
     private func getReorderedPages(_ appMode: OAApplicationMode) -> [[String]]? {
         let pref: OACommonListOfStringList = getOrderPreference()
-        var pages = pref.get(appMode)
+        let pages: [[String]]? = pref.get(appMode)
         guard let pages, !pages.isEmpty, (pref.key == OAAppSettings.sharedManager().topWidgetPanelOrder.key || pref.key == OAAppSettings.sharedManager().bottomWidgetPanelOrder.key) else {
             return pages
         }

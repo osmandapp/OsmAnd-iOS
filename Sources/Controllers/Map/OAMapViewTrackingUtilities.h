@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapViewController;
+@class OAMapViewController, OAObservable;
 
 @interface OAMapViewTrackingUtilities : NSObject
 
@@ -17,6 +17,8 @@
 @property (nonatomic, readonly) CLLocationDirection heading;
 @property (nonatomic, readonly) BOOL showViewAngle;
 @property (nonatomic, readonly) BOOL movingToMyLocation;
+
+@property (readonly) OAObservable *mapTrackingAnimatedObservable;
 
 + (OAMapViewTrackingUtilities *)instance;
 

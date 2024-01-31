@@ -101,6 +101,8 @@
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:_app.locationServices.updateObserver];
 
+        _mapTrackingAnimatedObservable = [[OAObservable alloc] init];
+
         //addTargetPointListener(app);
         //addMapMarkersListener(app);
         //[[OARoutingHelper sharedInstance] addListener:self];
@@ -187,12 +189,7 @@
 
                     _mapView.mapAnimator->resume();
 
-                    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
-                    if (mapViewController.needToSwitchTo3DMode && ![self isIn3dMode])
-                    {
-                        mapViewController.needToSwitchTo3DMode = NO;
-                        [self switchMap3dMode];
-                    }
+                    [_mapTrackingAnimatedObservable notifyEvent];
                 }
                 break;
             }

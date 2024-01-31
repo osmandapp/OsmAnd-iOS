@@ -156,7 +156,6 @@
         [_mapVc.view removeFromSuperview];
 
         _mapVc.isCarPlayActive = NO;
-        _mapVc.needToSwitchTo3DMode = NO;
         OAMapPanelViewController *mapPanel = OARootViewController.instance.mapPanel;
 
         [mapPanel addChildViewController:_mapVc];

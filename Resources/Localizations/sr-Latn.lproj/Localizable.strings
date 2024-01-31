@@ -407,12 +407,12 @@
 "select_street" = "Izaberi ulicu";
 "shared_string_in_name" = "u %@";
 "select_city" = "Izaberi grad";
-"type_city_town" = "Ukucajte grad/naselje/lokalitet";
+"type_city_town" = "Ukucaj grad/naselje/lokalitet";
 "select_postcode" = "Pretraga po poštanskom broju";
-"type_postcode" = "Ukucajte poštanski broj";
+"type_postcode" = "Ukucaj poštanski broj";
 "coords_search" = "Pretraga koordinata";
 "nearest_cities" = "Najbliži gradovi";
-"type_address" = "Ukucajte adresu";
+"type_address" = "Ukucaj adresu";
 "search_poi_category_hint" = "Kucajte za pretragu";
 "poi_categories" = "POI categories";
 "shared_string_search_history" = "Pretraga";
@@ -1316,7 +1316,7 @@
 "favorite_home_category" = "Kuća";
 "work_button" = "Posao";
 "map_widget_parking" = "Parking";
-"quick_action_add_first_intermediate" = "Dodaj prvu prolaznu međuodredište";
+"quick_action_add_first_intermediate" = "Dodaj prvo prolazno međuodredište";
 "quick_action_auto_zoom" = "Uključiti/isključiti automatsko uvećanje mape";
 "auto_zoom_on" = "Auto zoom on";
 "auto_zoom_off" = "Auto zoom off";

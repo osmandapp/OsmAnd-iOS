@@ -679,10 +679,10 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             cell.separatorInset = UIEdgeInsetsMake(0, 0, 0, 0);
-            cell.backgroundColor = [UIColor colorNamed:ACColorNameCustomSeparator];
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
             [cell leftIconVisibility:NO];
             [cell descriptionVisibility:NO];
-            cell.titleLabel.textColor = UIColorFromRGB(color_dialog_buttons_light);
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:13 weight:UIFontWeightSemibold];
             [cell textIndentsStyle:EOATableViewCellTextIncreasedTopCenterIndentStyle];
             [cell anchorContent:EOATableViewCellContentTopStyle];

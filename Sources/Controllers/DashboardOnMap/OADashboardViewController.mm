@@ -471,7 +471,7 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
     self.tableView.tableFooterView = footerView;
     [self.tableView registerClass:[FreeBackupBannerCell class] forCellReuseIdentifier:[FreeBackupBannerCell getCellIdentifier]];
     _backgroundView = [[UIView alloc] initWithFrame:{0, -1, 1, 1}];
-    _backgroundView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBgColorSecondary];
+    _backgroundView.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
     _backgroundView.autoresizingMask = UIViewAutoresizingNone;
     UIView *view = [[UIView alloc] init];
     view.backgroundColor = UIColor.clearColor;

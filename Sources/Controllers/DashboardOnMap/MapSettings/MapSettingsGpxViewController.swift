@@ -46,28 +46,28 @@ private enum TrackSortType {
         }
     }
     
-    var iconImage: ImageResource {
+    var image: UIImage? {
         switch self {
         case .nearest:
-            return .icCustomNearby
+            return UIImage(named: "ic_custom_nearby")
         case .lastModified:
-            return .icCustomLastModified
+            return UIImage(named: "ic_custom_last_modified")
         case .nameAZ:
-            return .icCustomSortNameAscending
+            return UIImage(named: "ic_custom_sort_name_ascending")
         case .nameZA:
-            return .icCustomSortNameDescending
+            return UIImage(named: "ic_custom_sort_name_descending")
         case .newestDateFirst:
-            return .icCustomSortDateNewest
+            return UIImage(named: "ic_custom_sort_date_newest")
         case .oldestDateFirst:
-            return .icCustomSortDateOldest
+            return UIImage(named: "ic_custom_sort_date_oldest")
         case .longestDistanceFirst:
-            return .icCustomSortLongToShort
+            return UIImage(named: "ic_custom_sort_long_to_short")
         case .shortestDistanceFirst:
-            return .icCustomSortShortToLong
+            return UIImage(named: "ic_custom_sort_short_to_long")
         case .longestDurationFirst:
-            return .icCustomSortDurationLongToShort
+            return UIImage(named: "ic_custom_sort_duration_long_to_short")
         case .shorterDurationFirst:
-            return .icCustomSortDurationShortToLong
+            return UIImage(named: "ic_custom_sort_duration_short_to_long")
         }
     }
 }
@@ -507,7 +507,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func setupHeaderView() -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 44))
+        let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
         headerView.backgroundColor = .groupBg
         headerView.addSubview(sortButton)
         sortButton.translatesAutoresizingMaskIntoConstraints = false
@@ -556,7 +556,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
         
         let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
-        return UIAction(title: sortType.title, image: UIImage(resource: sortType.iconImage), state: actionState) { [weak self] _ in
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
             guard let self else { return }
             if self.isSearchActive {
                 self.sortTypeForSearch = sortType
@@ -567,7 +567,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             }
             
             self.currentSortType = sortType
-            self.sortButton.setImage(UIImage(resource: self.currentSortType.iconImage), for: .normal)
+            self.sortButton.setImage(self.currentSortType.image, for: .normal)
             self.sortTracks()
             self.generateData()
             self.tableView.reloadData()
@@ -576,7 +576,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func updateSortButtonAndMenu() {
-        sortButton.setImage(UIImage(resource: currentSortType.iconImage), for: .normal)
+        sortButton.setImage(currentSortType.image, for: .normal)
         sortButton.menu = createSortMenu()
     }
     
@@ -689,13 +689,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         return fullString
     }
     
-    private func createImageAttributedString(
-        named imageName: String,
-        tintColor: UIColor,
-        defaultAttributes: [NSAttributedString.Key: Any],
-        rotate: Bool = false,
-        rotationAngle: CGFloat = 0
-    ) -> NSAttributedString? {
+    private func createImageAttributedString(named imageName: String,
+                                                                                                               tintColor: UIColor,
+                                                                                                               defaultAttributes: [NSAttributedString.Key: Any],
+                                                                                                               rotate: Bool = false,
+                                                                                                               rotationAngle: CGFloat = 0) -> NSAttributedString? {
         guard let image = UIImage(systemName: imageName)?.withTintColor(tintColor, renderingMode: .alwaysTemplate) else { return nil }
         let attachment = NSTextAttachment()
         var finalImage = image

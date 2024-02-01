@@ -371,13 +371,11 @@ extension WidgetConfigurationViewController {
         NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
                                         object: self.widgetInfo,
                                         userInfo: self.widgetConfigurationParams)
-        UIView.animate(withDuration: 0) {
-            if let viewControllers = self.navigationController?.viewControllers {
-                for viewController in viewControllers {
-                    if let targetViewController = viewController as? WidgetsListViewController {
-                        self.navigationController?.popToViewController(targetViewController, animated: true)
-                        break
-                    }
+        if let viewControllers = self.navigationController?.viewControllers {
+            for viewController in viewControllers {
+                if let targetViewController = viewController as? WidgetsListViewController {
+                    self.navigationController?.popToViewController(targetViewController, animated: true)
+                    break
                 }
             }
         }

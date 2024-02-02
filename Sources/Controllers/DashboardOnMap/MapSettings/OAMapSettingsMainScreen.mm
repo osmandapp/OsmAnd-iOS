@@ -189,7 +189,8 @@
     [showSectionData addObject:@{
         @"name": OALocalizedString(@"shared_string_gpx_tracks"),
         @"image": @"ic_custom_trip",
-        @"type": [OASimpleTableViewCell getCellIdentifier],
+        @"value": [NSString stringWithFormat:@"%lu", (unsigned long)_settings.mapSettingVisibleGpx.get.count],
+        @"type": [OAValueTableViewCell getCellIdentifier],
         @"key": @"tracks"
     }];
     

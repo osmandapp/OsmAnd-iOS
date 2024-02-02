@@ -49,25 +49,25 @@ private enum TrackSortType {
     var image: UIImage? {
         switch self {
         case .nearest:
-            return UIImage(named: "ic_custom_nearby")
+            return .icCustomNearby
         case .lastModified:
-            return UIImage(named: "ic_custom_last_modified")
+            return .icCustomLastModified
         case .nameAZ:
-            return UIImage(named: "ic_custom_sort_name_ascending")
+            return .icCustomSortNameAscending
         case .nameZA:
-            return UIImage(named: "ic_custom_sort_name_descending")
+            return .icCustomSortNameDescending
         case .newestDateFirst:
-            return UIImage(named: "ic_custom_sort_date_newest")
+            return .icCustomSortDateNewest
         case .oldestDateFirst:
-            return UIImage(named: "ic_custom_sort_date_oldest")
+            return .icCustomSortDateOldest
         case .longestDistanceFirst:
-            return UIImage(named: "ic_custom_sort_long_to_short")
+            return .icCustomSortLongToShort
         case .shortestDistanceFirst:
-            return UIImage(named: "ic_custom_sort_short_to_long")
+            return .icCustomSortShortToLong
         case .longestDurationFirst:
-            return UIImage(named: "ic_custom_sort_duration_long_to_short")
+            return .icCustomSortDurationLongToShort
         case .shorterDurationFirst:
-            return UIImage(named: "ic_custom_sort_duration_short_to_long")
+            return .icCustomSortDurationShortToLong
         }
     }
 }

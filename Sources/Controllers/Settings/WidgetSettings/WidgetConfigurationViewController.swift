@@ -368,19 +368,16 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        UIView.animate(withDuration: 0) {
-            if let viewControllers = self.navigationController?.viewControllers {
-                for viewController in viewControllers {
-                    if let targetViewController = viewController as? WidgetsListViewController {
-                        self.navigationController?.popToViewController(targetViewController, animated: true)
-                        break
-                    }
+        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+                                        object: self.widgetInfo,
+                                        userInfo: self.widgetConfigurationParams)
+        if let viewControllers = self.navigationController?.viewControllers {
+            for viewController in viewControllers {
+                if let targetViewController = viewController as? WidgetsListViewController {
+                    self.navigationController?.popToViewController(targetViewController, animated: true)
+                    break
                 }
             }
-        } completion: { Bool in
-            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-                                            object: self.widgetInfo,
-                                            userInfo: self.widgetConfigurationParams)
         }
     }
 

@@ -91,10 +91,17 @@ class WidgetsPanel: NSObject, NSCopying {
         return getPagedOrder(widgetId, appMode: appMode).1
     }
 
+    private func getReorderedPages(_ appMode: OAApplicationMode) -> [[String]]? {
+        let pref: OACommonListOfStringList = getOrderPreference()
+        let pages: [[String]]? = pref.get(appMode)
+        guard let pages, !pages.isEmpty, (pref.key == OAAppSettings.sharedManager().topWidgetPanelOrder.key || pref.key == OAAppSettings.sharedManager().bottomWidgetPanelOrder.key) else {
+            return pages
+        }
+        return WidgetsPanel.getPagedWidgetIdsWithPages(pages)
+    }
+
     private func getPagedOrder(_ widgetId: String, appMode: OAApplicationMode) -> (Int, Int) {
-        let orderPreference = getOrderPreference()
-        let pages = orderPreference.get(appMode)
-        guard let pages, !pages.isEmpty else {
+        guard let pages = getReorderedPages(appMode), !pages.isEmpty else {
             return (0, WidgetsPanel.DEFAULT_ORDER)
         }
 

@@ -945,9 +945,13 @@
 
 @implementation UITableViewCell (util)
 
-+ (NSString *) getCellIdentifier
++ (nonnull NSString *) getCellIdentifier
 {
-    return NSStringFromClass(self.class);
+    NSString *name = NSStringFromClass(self.class);
+    NSString *swiftClassPrefix = @"OsmAnd_Maps.";
+    if ([name hasPrefix:swiftClassPrefix])
+        name = [name substringFromIndex:swiftClassPrefix.length];
+    return name;
 }
 
 @end

@@ -132,7 +132,6 @@
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OATitleDescriptionBigIconCell.h"
 #import "OASearchMoreCell.h"
-#import "OATwoButtonsTableViewCell.h"
 
 // Other
 #import "OAIndexConstants.h"

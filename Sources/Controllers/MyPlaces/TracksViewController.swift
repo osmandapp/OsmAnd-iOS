@@ -729,9 +729,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     @objc func onObservedRecordedTrackChanged() {
         if isRootFolder {
-            generateData()
             DispatchQueue.main.async { [weak self] in
+                self?.generateData()
                 let recordingTrackRowIndexPath = IndexPath(row: 0, section: 0)
+                print(self?.tableData.rowCount(0))
                 self?.tableView.reloadRows(at: [recordingTrackRowIndexPath], with: .none)
             }
         }

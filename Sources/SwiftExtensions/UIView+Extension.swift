@@ -119,3 +119,16 @@ extension UIView {
         return nil
     }
 }
+
+extension UIView {
+    var heightConstraint: NSLayoutConstraint? {
+        get {
+            constraints.first(where: {
+                $0.firstAttribute == .height && $0.relation == .greaterThanOrEqual
+            })
+        }
+        set {
+            setNeedsLayout()
+        }
+    }
+}

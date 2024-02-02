@@ -11,15 +11,18 @@ import UIKit
 @objc(OAMapMarkerSideWidgetState)
 @objcMembers
 class MapMarkerSideWidgetState: OAWidgetState {
+    static let availableIntervals: [Int: String] = getAvailableIntervals()
     
     let settings = OAAppSettings.sharedManager()!
     let mapMarkerModePref: OACommonString
     let markerClickBehaviourPref: OACommonString
     let averageSpeedIntervalPref: OACommonLong
     let firstMarker: Bool
-    static let availableIntervals: [Int: String] = getAvailableIntervals()
+    
+    var customId: String?
     
     init(customId: String?, firstMarker: Bool) {
+        self.customId = customId
         self.firstMarker = firstMarker
         self.mapMarkerModePref = MapMarkerSideWidgetState.registerModePref(customId, settings: settings, firstMarker: firstMarker)
         self.markerClickBehaviourPref = MapMarkerSideWidgetState.registerMarkerClickBehaviourPref(customId, settings: settings, firstMarker: firstMarker)

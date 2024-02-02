@@ -6,15 +6,18 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 #import "OAAppSettings.h"
 #import "OASunriseSunsetWidgetState.h"
 
-@interface OASunriseSunsetWidget : OATextInfoWidget
+@interface OASunriseSunsetWidget : OASimpleWidget
 
-- (instancetype) initWithState:(OASunriseSunsetWidgetState *)state;
-+ (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-+ (NSString *) getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-- (OACommonInteger *) getPreference;
+- (instancetype _Nonnull)initWithState:(OASunriseSunsetWidgetState *_Nonnull)state
+                      appMode:(OAApplicationMode * _Nonnull)appMode
+                 widgetParams:(NSDictionary * _Nullable)widgetParams;
+
++ (NSString *)getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
++ (NSString *)getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
+- (OACommonInteger *)getPreference;
 
 @end

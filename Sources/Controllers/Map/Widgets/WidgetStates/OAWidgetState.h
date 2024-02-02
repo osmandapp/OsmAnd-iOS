@@ -13,6 +13,7 @@
 @interface OAWidgetState : NSObject
 
 - (NSString *) getMenuTitle;
+- (NSString *_Nullable)getWidgetTitle;
 
 - (NSString *) getMenuDescription;
 

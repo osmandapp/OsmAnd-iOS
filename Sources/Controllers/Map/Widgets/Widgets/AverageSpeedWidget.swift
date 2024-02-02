@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OAAverageSpeedWidget)
 @objcMembers
-final class AverageSpeedWidget: OATextInfoWidget {
+final class AverageSpeedWidget: OASimpleWidget {
     static let MEASURED_INTERVAL_PREF_ID = "average_speed_measured_interval_millis"
     static let SKIP_STOPS_PREF_ID = "average_speed_skip_stops"
     
@@ -27,7 +27,7 @@ final class AverageSpeedWidget: OATextInfoWidget {
 
     private static var availableIntervals: [Int: String] = getAvailableIntervals()
 
-    convenience init(customId: String?, widgetParams: [String: Any]? = nil) {
+    convenience init(customId: String?, appMode: OAApplicationMode, widgetParams: [String: Any]? = nil) {
         self.init(frame: .zero)
         
         widgetType = .averageSpeed
@@ -35,6 +35,7 @@ final class AverageSpeedWidget: OATextInfoWidget {
         setMetricSystemDepended(true)
         
         self.customId = customId
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         skipStopsPref = Self.registerSkipStopsPref(customId)
         

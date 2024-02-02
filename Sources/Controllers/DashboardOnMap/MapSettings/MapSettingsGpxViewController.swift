@@ -9,12 +9,80 @@
 import UIKit
 import UniformTypeIdentifiers
 
+private enum TrackSortType {
+    case nearest
+    case lastModified
+    case nameAZ
+    case nameZA
+    case newestDateFirst
+    case oldestDateFirst
+    case longestDistanceFirst
+    case shortestDistanceFirst
+    case longestDurationFirst
+    case shorterDurationFirst
+    
+    var title: String {
+        switch self {
+        case .nearest:
+            return localizedString("shared_string_nearest")
+        case .lastModified:
+            return localizedString("sort_last_modified")
+        case .nameAZ:
+            return localizedString("track_sort_az")
+        case .nameZA:
+            return localizedString("track_sort_za")
+        case .newestDateFirst:
+            return localizedString("newest_date_first")
+        case .oldestDateFirst:
+            return localizedString("oldest_date_first")
+        case .longestDistanceFirst:
+            return localizedString("longest_distance_first")
+        case .shortestDistanceFirst:
+            return localizedString("shortest_distance_first")
+        case .longestDurationFirst:
+            return localizedString("longest_duration_first")
+        case .shorterDurationFirst:
+            return localizedString("shorter_duration_first")
+        }
+    }
+    
+    var image: UIImage? {
+        switch self {
+        case .nearest:
+            return .icCustomNearby
+        case .lastModified:
+            return .icCustomLastModified
+        case .nameAZ:
+            return .icCustomSortNameAscending
+        case .nameZA:
+            return .icCustomSortNameDescending
+        case .newestDateFirst:
+            return .icCustomSortDateNewest
+        case .oldestDateFirst:
+            return .icCustomSortDateOldest
+        case .longestDistanceFirst:
+            return .icCustomSortLongToShort
+        case .shortestDistanceFirst:
+            return .icCustomSortShortToLong
+        case .longestDurationFirst:
+            return .icCustomSortDurationLongToShort
+        case .shorterDurationFirst:
+            return .icCustomSortDurationShortToLong
+        }
+    }
+}
+
 @objc(OAMapSettingsGpxViewController)
 @objcMembers
 final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private let previouslyVisibleTracksKey = "PreviouslyVisibleGpxFilePaths"
     private var searchController: UISearchController?
     private var segmentedControl: UISegmentedControl?
+    private var lastUpdate: TimeInterval?
+    private var currentSortType: TrackSortType = .lastModified
+    private var sortTypeForAllTracks: TrackSortType = .lastModified
+    private var sortTypeForVisibleTracks: TrackSortType = .lastModified
+    private var sortTypeForSearch: TrackSortType = .nameAZ
     private var allGpxList: [OAGPX] = []
     private var visibleGpxList: [OAGPX] = []
     private var recentlyVisibleGpxList: [OAGPX] = []
@@ -26,6 +94,19 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
+    private lazy var sortButton: UIButton = {
+        var config = UIButton.Configuration.plain()
+        config.imagePadding = 16
+        config.imagePlacement = .leading
+        config.baseForegroundColor = .iconColorActive
+        let button = UIButton(configuration: config, primaryAction: nil)
+        button.setImage(UIImage(resource: .icCustomLastModified), for: .normal)
+        button.menu = createSortMenu()
+        button.showsMenuAsPrimaryAction = true
+        button.changesSelectionAsPrimaryAction = true
+        button.contentHorizontalAlignment = .left
+        return button
+    }()
     
     override func commonInit() {
         loadGpxTracks()
@@ -38,6 +119,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
+    override func registerObservers() {
+        let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
+        let updateDistanceAndDirectionSelector = #selector(updateDistanceAndDirection as () -> Void)
+        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateObserver))
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.register(UINib(nibName: OASimpleTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.getIdentifier())
@@ -46,6 +133,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         tableView.allowsMultipleSelectionDuringEditing = true
         navigationItem.hidesSearchBarWhenScrolling = true
         definesPresentationContext = true
+        tableView.tableHeaderView = setupHeaderView()
         updateSelectedRows()
     }
     
@@ -90,6 +178,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         true
     }
     
+    override func useCustomTableViewHeader() -> Bool {
+        true
+    }
+    
     override func getBottomAxisMode() -> NSLayoutConstraint.Axis {
         .horizontal
     }
@@ -131,16 +223,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 let visibleGpxFilePaths = OAAppSettings.sharedManager()?.mapSettingVisibleGpx.get() ?? []
                 let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
                 for gpx in gpxListToShow {
-                    let title = gpx.getNiceTitle()
-                    let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? "N/A"
-                    let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
-                    let waypointCount = "\(gpx.wptPoints)"
                     let gpxRow = tracksSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
-                    gpxRow.title = title
-                    gpxRow.setObj(distance, forKey: "distance")
-                    gpxRow.setObj(time, forKey: "time")
-                    gpxRow.setObj(waypointCount, forKey: "waypointCount")
+                    gpxRow.title = gpx.getNiceTitle()
+                    gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
                     gpxRow.iconTintColor = visibleGpxFilePaths.contains(gpx.gpxFilePath) ? .iconColorActive : .iconColorDisabled
                 }
@@ -149,16 +235,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 let recentlyVisibleSection = tableData.createNewSection()
                 recentlyVisibleSection.headerText = localizedString("recently_visible") + " (\(recentlyVisibleGpxList.count))"
                 for gpx in recentlyVisibleGpxList {
-                    let title = gpx.getNiceTitle()
-                    let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? "N/A"
-                    let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
-                    let waypointCount = "\(gpx.wptPoints)"
                     let gpxRow = recentlyVisibleSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
-                    gpxRow.title = title
-                    gpxRow.setObj(distance, forKey: "distance")
-                    gpxRow.setObj(time, forKey: "time")
-                    gpxRow.setObj(waypointCount, forKey: "waypointCount")
+                    gpxRow.title = gpx.getNiceTitle()
+                    gpxRow.setObj(gpx, forKey: "gpx")
                     gpxRow.iconName = "ic_custom_trip"
                     gpxRow.iconTintColor = .iconColorDisabled
                 }
@@ -181,11 +261,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         let item = tableData.item(for: indexPath)
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
-            let distance = item.obj(forKey: "distance") as? String ?? ""
-            let time = item.obj(forKey: "time") as? String ?? ""
-            let waypointCount = item.obj(forKey: "waypointCount") as? String ?? ""
             cell.titleLabel.text = item.title
-            cell.descriptionLabel.text = [distance, time, waypointCount].filter { !$0.isEmpty }.joined(separator: " · ")
+            if let gpx = item.obj(forKey: "gpx") as? OAGPX {
+                cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx))
+            }
+            
             let iconName = item.iconName ?? "ic_custom_trip"
             let iconImage = UIImage(named: iconName) ?? UIImage()
             cell.leftIconView.image = iconImage.withRenderingMode(.alwaysTemplate)
@@ -252,34 +332,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     override func onBottomButtonPressed() {
         onDoneButtonPressed()
         dismiss()
-    }
-    
-    @objc func keyboardWillShow(_ notification: Notification) {
-        if let keyboardFrame = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
-           let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-           let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
-            let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
-            let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
-            UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-                self.tableView.contentInset = contentInsets
-                self.tableView.scrollIndicatorInsets = contentInsets
-                self.buttonsBottomOffsetConstraint.constant = keyboardHeight
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-        }
-    }
-    
-    @objc func keyboardWillHide(_ notification: Notification) {
-        if let duration = notification.userInfo?[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
-           let curve = notification.userInfo?[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt {
-            let contentInsets = UIEdgeInsets.zero
-            UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
-                self.tableView.contentInset = contentInsets
-                self.tableView.scrollIndicatorInsets = contentInsets
-                self.buttonsBottomOffsetConstraint.constant = 0
-                self.view.layoutIfNeeded()
-            }, completion: nil)
-        }
     }
     
     private func handleSelectDeselectAllTracks() {
@@ -422,21 +474,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func updateSelectedRows() {
-        guard let visibleGpxFilePaths = OAAppSettings.sharedManager()?.mapSettingVisibleGpx.get() else { return }
         let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
-        if !isSearchFilteringActive {
-            selectedGpxTracks.removeAll()
-            for gpx in gpxListToShow where visibleGpxFilePaths.contains(gpx.gpxFilePath) {
-                selectedGpxTracks.append(gpx)
-            }
-        }
-        
-        for (index, gpx) in gpxListToShow.enumerated() {
-            let indexPath = IndexPath(row: index, section: 0)
-            if selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
-                tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-            } else {
-                tableView.deselectRow(at: indexPath, animated: false)
+        let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
+        for (sectionIndex, section) in [gpxListToShow, recentlyVisibleTracks].enumerated() {
+            for (rowIndex, gpx) in section.enumerated() {
+                let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
+                if selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
+                    tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
+                } else {
+                    tableView.deselectRow(at: indexPath, animated: false)
+                }
             }
         }
     }
@@ -459,8 +506,239 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
+    private func setupHeaderView() -> UIView? {
+        let headerView = UIView(frame: .init(x: 0, y: 0, width: tableView.frame.width, height: 44))
+        headerView.backgroundColor = .groupBg
+        headerView.addSubview(sortButton)
+        sortButton.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            sortButton.leadingAnchor.constraint(equalTo: headerView.layoutMarginsGuide.leadingAnchor),
+            sortButton.topAnchor.constraint(equalTo: headerView.topAnchor),
+            sortButton.bottomAnchor.constraint(equalTo: headerView.bottomAnchor)
+        ])
+        
+        return headerView
+    }
+    
+    private func createSortMenu() -> UIMenu {
+        let sortingOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nearest),
+            createAction(for: .lastModified)
+        ])
+        let alphabeticalOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .nameAZ),
+            createAction(for: .nameZA)
+        ])
+        let dateOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .newestDateFirst),
+            createAction(for: .oldestDateFirst)
+        ])
+        let distanceOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDistanceFirst),
+            createAction(for: .shortestDistanceFirst)
+        ])
+        let durationOptions = UIMenu(options: .displayInline, children: [
+            createAction(for: .longestDurationFirst),
+            createAction(for: .shorterDurationFirst)
+        ])
+        
+        return UIMenu(title: "", children: [sortingOptions, alphabeticalOptions, dateOptions, distanceOptions, durationOptions])
+    }
+    
+    private func createAction(for sortType: TrackSortType) -> UIAction {
+        let isCurrentSortType: Bool
+        if isSearchActive {
+            isCurrentSortType = sortType == sortTypeForSearch
+        } else if isShowingVisibleTracks {
+            isCurrentSortType = sortType == sortTypeForVisibleTracks
+        } else {
+            isCurrentSortType = sortType == sortTypeForAllTracks
+        }
+        
+        let actionState: UIMenuElement.State = isCurrentSortType ? .on : .off
+        return UIAction(title: sortType.title, image: sortType.image, state: actionState) { [weak self] _ in
+            guard let self else { return }
+            if self.isSearchActive {
+                self.sortTypeForSearch = sortType
+            } else if self.isShowingVisibleTracks {
+                self.sortTypeForVisibleTracks = sortType
+            } else {
+                self.sortTypeForAllTracks = sortType
+            }
+            
+            self.currentSortType = sortType
+            self.sortButton.setImage(self.currentSortType.image, for: .normal)
+            self.sortTracks()
+            self.generateData()
+            self.tableView.reloadData()
+            self.updateSelectedRows()
+        }
+    }
+    
+    private func updateSortButtonAndMenu() {
+        sortButton.setImage(currentSortType.image, for: .normal)
+        sortButton.menu = createSortMenu()
+    }
+    
+    private func sortTracks() {
+        func sortList(_ list: inout [OAGPX], by sortType: TrackSortType) {
+            switch sortType {
+            case .nearest:
+                list.sort { distanceToGPX(gpx: $0) < distanceToGPX(gpx: $1) }
+            case .lastModified, .newestDateFirst:
+                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
+            case .nameAZ:
+                list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
+            case .nameZA:
+                list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
+            case .oldestDateFirst:
+                list.sort { $0.importDate ?? Date.distantFuture < $1.importDate ?? Date.distantFuture }
+            case .longestDistanceFirst:
+                list.sort { $0.totalDistance > $1.totalDistance }
+            case .shortestDistanceFirst:
+                list.sort { $0.totalDistance < $1.totalDistance }
+            case .longestDurationFirst:
+                list.sort { $0.timeSpan > $1.timeSpan }
+            case .shorterDurationFirst:
+                list.sort { $0.timeSpan < $1.timeSpan }
+            }
+        }
+        
+        if isSearchActive {
+            sortList(&filteredGpxList, by: sortTypeForSearch)
+        } else if isShowingVisibleTracks {
+            sortList(&visibleGpxList, by: sortTypeForVisibleTracks)
+            sortList(&recentlyVisibleGpxList, by: sortTypeForVisibleTracks)
+        } else {
+            sortList(&allGpxList, by: sortTypeForAllTracks)
+        }
+    }
+    
+    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd.MM.yyyy"
+        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? "N/A"
+        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? "N/A"
+        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
+        let waypointCount = "\(gpx.wptPoints)"
+        let folderName: String
+        if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(gpx.gpxFolderName), !capitalizedFolderName.isEmpty {
+            folderName = capitalizedFolderName
+        } else {
+            folderName = localizedString("shared_string_gpx_tracks")
+        }
+        
+        let distanceToTrack: String
+        let calculatedDistance = distanceToGPX(gpx: gpx)
+        if calculatedDistance != CGFloat.greatestFiniteMagnitude {
+            distanceToTrack = OAOsmAndFormatter.getFormattedDistance(Float(calculatedDistance))
+        } else {
+            distanceToTrack = "N/A"
+        }
+        
+        let regionName: String
+        let gpxLocation = gpx.bounds.center
+        if gpxLocation.latitude != Double.greatestFiniteMagnitude,
+           let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: gpxLocation.latitude, lon: gpxLocation.longitude) {
+            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? "N/A"
+        } else {
+            regionName = "N/A"
+        }
+        
+        let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: gpxLocation.latitude, destinationLongitude: gpxLocation.longitude)
+        return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle)
+    }
+    
+    private func getDescriptionAttributedText(with formattedData: (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat)) -> NSAttributedString {
+        let fullString = NSMutableAttributedString()
+        let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
+        let detailsText = "\(formattedData.distance) • \(formattedData.time) • \(formattedData.waypointCount)"
+        let detailsString = NSAttributedString(string: detailsText, attributes: defaultAttributes)
+        switch currentSortType {
+        case .nearest:
+            if let locationAttributedString = createImageAttributedString(named: "location.north.fill", tintColor: UIColor.iconColorActive, defaultAttributes: defaultAttributes, rotate: true, rotationAngle: formattedData.directionAngle) {
+                fullString.append(locationAttributedString)
+                fullString.append(NSAttributedString(string: " "))
+            }
+            
+            let directionString = formattedData.distanceToTrack + ", "
+            let directionAttributedString = NSAttributedString(string: directionString, attributes: [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.iconColorActive])
+            let regionString = NSAttributedString(string: "\(formattedData.regionName) | ", attributes: defaultAttributes)
+            fullString.append(directionAttributedString)
+            fullString.append(regionString)
+            fullString.append(detailsString)
+        case .lastModified, .newestDateFirst, .oldestDateFirst:
+            let dateString = NSAttributedString(string: "\(formattedData.date) | ", attributes: defaultAttributes)
+            fullString.append(dateString)
+            fullString.append(detailsString)
+        case .nameAZ, .nameZA:
+            fullString.append(detailsString)
+            fullString.append(NSAttributedString(string: " | ", attributes: defaultAttributes))
+            if let folderAttributedString = createImageAttributedString(named: "folder", tintColor: UIColor.textColorSecondary, defaultAttributes: defaultAttributes, rotate: false) {
+                fullString.append(folderAttributedString)
+                fullString.append(NSAttributedString(string: " \(formattedData.folderName)", attributes: defaultAttributes))
+            }
+            
+        case .longestDistanceFirst, .shortestDistanceFirst:
+            fullString.append(detailsString)
+        case .longestDurationFirst, .shorterDurationFirst:
+            let durationFirstDetailsString = NSAttributedString(string: "\(formattedData.time) • \(formattedData.distance) • \(formattedData.waypointCount)", attributes: defaultAttributes)
+            fullString.append(durationFirstDetailsString)
+        }
+        
+        return fullString
+    }
+    
+    private func createImageAttributedString(named imageName: String,
+                                                                                                               tintColor: UIColor,
+                                                                                                               defaultAttributes: [NSAttributedString.Key: Any],
+                                                                                                               rotate: Bool = false,
+                                                                                                               rotationAngle: CGFloat = 0) -> NSAttributedString? {
+        guard let image = UIImage(systemName: imageName)?.withTintColor(tintColor, renderingMode: .alwaysTemplate) else { return nil }
+        let attachment = NSTextAttachment()
+        var finalImage = image
+        if rotate {
+            finalImage = image.rotateWithDiagonalSize(radians: rotationAngle) ?? image
+        }
+        
+        attachment.image = finalImage
+        if let font = defaultAttributes[.font] as? UIFont {
+            let fontHeight = font.capHeight
+            let scaleFactor: CGFloat = 1.2
+            let adjustedHeight = fontHeight * scaleFactor
+            let adjustedYPosition = (fontHeight - adjustedHeight) / 2
+            attachment.bounds = CGRect(x: 0, y: adjustedYPosition, width: adjustedHeight + 2, height: rotate ? adjustedHeight + 2 : adjustedHeight)
+        }
+        
+        return NSAttributedString(attachment: attachment)
+    }
+    
+    private func distanceToGPX(gpx: OAGPX) -> CGFloat {
+        guard let currentLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation,
+              CLLocationCoordinate2DIsValid(gpx.bounds.center) else {
+            return CGFloat.greatestFiniteMagnitude
+        }
+        
+        return OADistanceAndDirectionsUpdater.getDistanceFrom(currentLocation, toDestinationLatitude: gpx.bounds.center.latitude, destinationLongitude: gpx.bounds.center.longitude)
+    }
+    
+    func updateDistanceAndDirection(_ forceUpdate: Bool) {
+        guard isTracksAvailable, currentSortType == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else { return }
+        lastUpdate = Date.now.timeIntervalSince1970
+        sortTracks()
+        generateData()
+        DispatchQueue.main.async {
+            if let visibleIndexPaths = self.tableView.indexPathsForVisibleRows {
+                self.tableView.reloadRows(at: visibleIndexPaths, with: .none)
+                self.updateSelectedRows()
+            }
+        }
+    }
+    
     @objc private func segmentChanged(_ control: UISegmentedControl) {
         isShowingVisibleTracks = control.selectedSegmentIndex == 0
+        currentSortType = isShowingVisibleTracks ? sortTypeForVisibleTracks : sortTypeForAllTracks
+        updateSortButtonAndMenu()
         generateData()
         tableView.reloadData()
         if isTracksAvailable {
@@ -482,8 +760,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
+        currentSortType = .nameAZ
+        sortTypeForSearch = .nameAZ
         filteredGpxList = allGpxList
+        sortTracks()
         DispatchQueue.main.async {
+            self.updateSortButtonAndMenu()
             self.updateNavbar()
             self.updateBottomButtons()
             self.searchController?.searchBar.becomeFirstResponder()
@@ -514,6 +796,38 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             segmentChanged(segmentedControl)
         }
     }
+    
+    @objc private func keyboardWillShow(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+        let keyboardHeight = keyboardFrame.height - view.safeAreaInsets.bottom
+        let contentInsets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardHeight, right: 0)
+        UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
+            self.tableView.contentInset = contentInsets
+            self.tableView.scrollIndicatorInsets = contentInsets
+            self.buttonsBottomOffsetConstraint.constant = keyboardHeight
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let duration = userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? TimeInterval,
+              let curve = userInfo[UIResponder.keyboardAnimationCurveUserInfoKey] as? UInt else { return }
+        let contentInsets = UIEdgeInsets.zero
+        UIView.animate(withDuration: duration, delay: 0, options: UIView.AnimationOptions(rawValue: curve), animations: {
+            self.tableView.contentInset = contentInsets
+            self.tableView.scrollIndicatorInsets = contentInsets
+            self.buttonsBottomOffsetConstraint.constant = 0
+            self.view.layoutIfNeeded()
+        }, completion: nil)
+    }
+    
+    @objc private func updateDistanceAndDirection() {
+        updateDistanceAndDirection(false)
+    }
 }
 
 extension MapSettingsGpxViewController: UISearchBarDelegate {
@@ -523,6 +837,7 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
         isSearchActive = false
         isSearchFilteringActive = false
         filteredGpxList.removeAll()
+        currentSortType = segmentedControl?.selectedSegmentIndex == 0 ? sortTypeForVisibleTracks : sortTypeForAllTracks
         updateNavbar()
         guard let segmentedControl else { return }
         segmentedControl.selectedSegmentIndex = previousSelectedSegmentIndex
@@ -539,6 +854,7 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
             $0.getNiceTitle().localizedCaseInsensitiveContains(searchText)
         }
         
+        sortTracks()
         generateData()
         tableView.reloadData()
         updateSelectedRows()

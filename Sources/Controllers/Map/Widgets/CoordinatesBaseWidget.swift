@@ -6,41 +6,35 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objc(OACoordinatesBaseWidget)
 @objcMembers
 class CoordinatesBaseWidget: OABaseWidgetView {
 
     private static let widgetHeight: CGFloat = 44
 
-    @IBOutlet var divider: UIView!
-    @IBOutlet var secondContainer: UIStackView!
-    @IBOutlet var firstCoordinate: UILabel! {
+    @IBOutlet private var divider: UIView!
+    @IBOutlet private var secondContainer: UIStackView!
+    @IBOutlet private var firstCoordinate: UILabel! {
         didSet {
-            firstCoordinate.adjustsFontForContentSizeCategory = true
             firstCoordinate.textAlignment = isDirectionRTL() ? .right : .left
         }
     }
-    @IBOutlet var secondCoordinate: UILabel! {
+    @IBOutlet private var secondCoordinate: UILabel! {
         didSet {
-            secondCoordinate.adjustsFontForContentSizeCategory = true
             secondCoordinate.textAlignment = isDirectionRTL() ? .right : .left
         }
     }
 
-    @IBOutlet var firstIcon: UIImageView!
+    @IBOutlet private var firstIcon: UIImageView!
 
     var lastLocation: CLLocation?
     var coloredUnit = false
 
     override init(type: WidgetType) {
-        super.init(frame: CGRect(x: 0, y: 0, width: 360, height: Self.widgetHeight))
+        super.init(frame: .zero)
         self.widgetType = type
         commonInit()
-
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(copyCoordinates))
-        self.addGestureRecognizer(gesture)
+        addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(copyCoordinates)))
 
         updateVisibility(visible: false)
     }
@@ -56,13 +50,20 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     private func commonInit() {
-        let view = Bundle.main.loadNibNamed("OACoordinatesBaseWidget", owner: self, options: nil)![0] as! UIView
-        self.addSubview(view)
-        view.frame = self.bounds
+        let widgetview = Bundle.main.loadNibNamed("OACoordinatesBaseWidget", owner: self, options: nil)![0] as! UIView
+        widgetview.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(widgetview)
+       
+        NSLayoutConstraint.activate([
+            widgetview.leadingAnchor.constraint(equalTo: leadingAnchor),
+            widgetview.trailingAnchor.constraint(equalTo: trailingAnchor),
+            widgetview.topAnchor.constraint(equalTo: topAnchor),
+            widgetview.bottomAnchor.constraint(equalTo: bottomAnchor)
+        ])
     }
 
     func copyCoordinates() {
-        guard let lastLocation = lastLocation else {
+        guard lastLocation != nil else {
             return
         }
 
@@ -112,13 +113,13 @@ class CoordinatesBaseWidget: OABaseWidgetView {
 
     private func showMgrsCoordinates(lat: Double, lon: Double) {
         setupForNonStandardFormat()
-        let mgrsPoint = OALocationConvert.getMgrsCoordinateString(lat, lon:lon)
+        let mgrsPoint = OALocationConvert.getMgrsCoordinateString(lat, lon: lon)
         firstCoordinate.text = mgrsPoint
     }
 
     private func showOlcCoordinates(lat: Double, lon: Double) {
         setupForNonStandardFormat()
-        let olcCoordinates = OALocationConvert.getLocationOlcName(lat, lon:lon)
+        let olcCoordinates = OALocationConvert.getLocationOlcName(lat, lon: lon)
         firstCoordinate.text = olcCoordinates
     }
 
@@ -154,9 +155,9 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     private func showStandardCoordinates(lat: Double, lon: Double, format: Int) {
-        self.firstIcon.isHidden = false
-        self.divider.isHidden = false
-        self.secondContainer.isHidden = false
+        firstIcon.isHidden = false
+        divider.isHidden = false
+        secondContainer.isHidden = false
         coloredUnit = true
 
         firstIcon.image = getCoordinateIcon()
@@ -164,10 +165,10 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         var latitude = OALocationConvert.convertLatitude(lat, outputType: format, addCardinalDirection: true)
         var longitude = OALocationConvert.convertLongitude(lon, outputType: format, addCardinalDirection: true)
 
-        if (latitude == nil) {
+        if latitude == nil {
             latitude = ""
         }
-        if (longitude == nil) {
+        if longitude == nil {
             longitude = ""
         }
 
@@ -175,13 +176,13 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         let unitColor = UIColor(rgb: 0x7D738C)
 
             let attributedLat = NSMutableAttributedString(string: latitude!)
-        if (latitude!.length > 2) {
+        if latitude!.length > 2 {
             attributedLat.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: latitude!.length - 2))
             attributedLat.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: latitude!.length - 1, length: 1))
         }
 
         let attributedLon = NSMutableAttributedString(string: longitude!)
-        if (longitude!.length > 2) {
+        if longitude!.length > 2 {
             attributedLon.addAttribute(.foregroundColor, value: coordColor, range: NSRange(location: 0, length: longitude!.length - 2))
             attributedLon.addAttribute(.foregroundColor, value: unitColor, range: NSRange(location: longitude!.length - 1, length: 1))
         }
@@ -195,11 +196,10 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     func updateVisibility(visible: Bool) -> Bool {
-        if (visible == self.isHidden)
-        {
-            self.isHidden = !visible;
-            if self.delegate != nil {
-                self.delegate!.widgetVisibilityChanged(self, visible: visible)
+        if visible == isHidden {
+            isHidden = !visible
+            if delegate != nil {
+                delegate!.widgetVisibilityChanged(self, visible: visible)
             }
             return true
         }
@@ -222,7 +222,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
         secondCoordinate.font = UIFont.scaledSystemFont(ofSize: secondCoordinate.font.pointSize, weight: typefaceStyle)
 
         let lastLocation = lastLocation
-        if (coloredUnit && lastLocation != nil) {
+        if coloredUnit && lastLocation != nil {
             showFormattedCoordinates(lat: lastLocation!.coordinate.latitude, lon: lastLocation!.coordinate.longitude)
         }
     }

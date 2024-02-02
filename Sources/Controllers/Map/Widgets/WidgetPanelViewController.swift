@@ -134,7 +134,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         }
         for viewController in pages {
             if let pageViewController = viewController as? WidgetPageViewController {
-                pageViewController.widgetViews = [];
+                pageViewController.widgetViews = []
             }
         }
         pages.removeAll()
@@ -151,11 +151,19 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageViewController.delegate = nil
         self.widgetPages = widgetPages
         widgetPages.forEach { $0.forEach { $0.delegate = self } }
-        for page in widgetPages {
+        if isHorizontal {
             let vc = WidgetPageViewController()
-            vc.widgetViews = page
+            vc.simpleWidgetViews = widgetPages
+            vc.isMultipleWidgetsInRow = true
             pages.append(vc)
+        } else {
+            for page in widgetPages {
+                let vc = WidgetPageViewController()
+                vc.widgetViews = page
+                pages.append(vc)
+            }
         }
+
         if pages.isEmpty {
             pages.append(UIViewController())
         }
@@ -168,7 +176,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         // Set up the page control
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = currentIndex
-        pageControl.isHidden = pages.count <= 1;
+        pageControl.isHidden = pages.count <= 1 || isHorizontal
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
 
@@ -243,12 +251,12 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         let contentSize = calculateContentSize()
         let mapHudViewController = OARootViewController.instance().mapPanel.hudViewController
         if self == mapHudViewController?.mapInfoController?.leftPanelController {
-            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width;
+            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width
         } else if self == mapHudViewController?.mapInfoController?.rightPanelController {
-            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width;
+            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width
         } else if self == mapHudViewController?.mapInfoController?.topPanelController.specialPanelController {
-            mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width;
-            mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height;
+            mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width
+            mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height
         }
 
         // Update the height constraint of the container view

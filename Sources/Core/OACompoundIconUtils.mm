@@ -123,8 +123,8 @@
         }
 
         UIImage *resizedImage = origImage;
-        //if (!CGSizeEqualToSize(origImage.size, imgSize))
-            //resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
+        if (icon)
+            resizedImage = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
 
         UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
         poiIcon = [OANativeUtilities skImageFromCGImage:coloredImage.CGImage];

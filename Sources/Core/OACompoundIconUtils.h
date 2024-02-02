@@ -18,7 +18,6 @@
 
 + (sk_sp<SkImage>) createCompositeBitmapFromWpt:(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &)point isFullSize:(BOOL)isFullSize scale:(float)scale;
 + (sk_sp<SkImage>) createCompositeBitmapFromFavorite:(const std::shared_ptr<OsmAnd::IFavoriteLocation> &)fav isFullSize:(BOOL)isFullSize scale:(float)scale;
-+ (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon;
 + (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon scale:(float)scale;
 
 @end

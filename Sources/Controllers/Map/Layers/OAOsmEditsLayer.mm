@@ -95,12 +95,15 @@
     [super updateLayer];
     
     CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
-    if (self.showCaptions != _showCaptionsCache || _textSize != textSize)
+    BOOL textSizeChanged = _textSize != textSize;
+    if (self.showCaptions != _showCaptionsCache || textSizeChanged)
     {
         _showCaptionsCache = self.showCaptions;
         _textSize = textSize;
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hide];
+            if (textSizeChanged)
+                _iconsCache.clear();
             [self refreshOsmEditsCollection];
             [self show];
         });
@@ -154,7 +157,7 @@
             const auto bitmapIt = _iconsCache.find(iconId);
             if (bitmapIt == _iconsCache.end())
             {
-                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:type.name isFullSize:YES icon:type.icon];
+                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:type.name isFullSize:YES icon:type.icon scale:_textSize];
                 _iconsCache[iconId] = bitmap;
             }
             else
@@ -164,7 +167,7 @@
         }
         else
         {
-            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"ic_custom_poi" isFullSize:YES icon:[UIImage imageNamed:@"ic_custom_poi"]];
+            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"ic_custom_poi" isFullSize:YES icon:[UIImage imageNamed:@"ic_custom_poi"] scale:_textSize];
         }
     }
     else
@@ -182,7 +185,7 @@
         }
     }
 
-    return [OANativeUtilities getScaledSkImage:bitmap scaleFactor:_textSize];
+    return bitmap;
 }
 
 - (NSString *) getPointDescription:(OAOsmPoint *)point
@@ -331,7 +334,7 @@
 - (void)getOsmNoteBitmap:(sk_sp<SkImage> &)bitmap
 {
     UIImage *img = [UIImage mapSvgImageNamed:@"mx_special_information"];
-    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"special_information" isFullSize:YES icon:img];
+    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"special_information" isFullSize:YES icon:img scale:_textSize];
 }
 
 - (UIImage *) getPointIcon:(id)point

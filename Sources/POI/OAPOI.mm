@@ -44,7 +44,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (UIImage *)icon
 {
-    if (_mapIconName && _mapIconName.length > 0)
+    if (_mapIconName && _mapIconName.length > 0 && ![@"highway_bus_stop_small" isEqualToString:_mapIconName])
         return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
     else if (_type)
         return [_type icon];

@@ -165,7 +165,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @"";
 }
 
-- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams;
 {
     // Override
 }
@@ -424,7 +424,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode  widgetParams:(NSDictionary *)widgetParams;
 {
     return nil;
 }
@@ -733,11 +733,13 @@ public static void onMapActivityScreenOff(MapActivity activity) {
     }
 }
 
-+ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
++ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate
+                  appMode:(OAApplicationMode *)appMode
+             widgetParams:(NSDictionary *)widgetParams;
 {
     for (OAPlugin *plugin in [self getEnabledPlugins])
     {
-        [plugin createWidgets:delegate appMode:appMode];
+        [plugin createWidgets:delegate appMode:appMode widgetParams:widgetParams];
     }
 }
 
@@ -918,11 +920,14 @@ public static void addMyPlacesTabPlugins(FavoritesActivity favoritesActivity, Li
 }
  */
 
-+ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType
+                             customId:(NSString *)customId
+                              appMode:(OAApplicationMode *)appMode
+                         widgetParams:(NSDictionary *)widgetParams;
 {
     for (OAPlugin *plugin in [self getEnabledPlugins])
     {
-        OABaseWidgetView *widget = [plugin createMapWidgetForParams:widgetType customId:customId];
+        OABaseWidgetView *widget = [plugin createMapWidgetForParams:widgetType customId:customId appMode:appMode widgetParams:widgetParams];
         if (widget)
             return widget;
     }

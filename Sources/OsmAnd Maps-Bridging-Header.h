@@ -50,6 +50,7 @@
 // Widgets
 #import "OAMapWidgetRegistry.h"
 #import "OAWidgetState.h"
+#import "OASimpleWidget.h"
 #import "OATextInfoWidget.h"
 #import "OABaseWidgetView.h"
 #import "OANextTurnWidget.h"

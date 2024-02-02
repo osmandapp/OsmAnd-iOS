@@ -62,7 +62,7 @@
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
-+ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode;
++ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 + (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
 
 + (NSArray<OACustomPlugin *> *) getCustomPlugins;
@@ -80,7 +80,7 @@
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
-+ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId;
++ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 + (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 + (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;

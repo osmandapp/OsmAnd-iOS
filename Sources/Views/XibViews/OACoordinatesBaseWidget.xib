@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -24,10 +25,10 @@
                 <userLayoutGuide location="16" affinity="minX"/>
             </userGuides>
             <subviews>
-                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cqd-gT-Q5M">
+                <stackView opaque="NO" contentMode="scaleToFill" distribution="equalCentering" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="cqd-gT-Q5M" userLabel="Content Stack View">
                     <rect key="frame" x="16" y="0.0" width="382" height="44"/>
                     <subviews>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5xi-bM-D4g">
+                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="5xi-bM-D4g" userLabel="First Stack View">
                             <rect key="frame" x="0.0" y="0.0" width="191" height="44"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="widget_coordinates_latitude_north_day.png" translatesAutoresizingMaskIntoConstraints="NO" id="b9H-Om-Xsm">
@@ -37,25 +38,18 @@
                                         <constraint firstAttribute="width" constant="30" id="xfk-WY-f7H"/>
                                     </constraints>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63Z-z7-sCH">
-                                    <rect key="frame" x="38" y="9" width="153" height="26"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50.43612° N" textAlignment="justified" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="63Z-z7-sCH">
+                                    <rect key="frame" x="38" y="10" width="153" height="24"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="YwH-mO-QhQ"/>
                                     </constraints>
-                                    <attributedString key="attributedText">
-                                        <fragment content="50.43612° N">
-                                            <attributes>
-                                                <color key="NSColor" name="textColor" catalog="System" colorSpace="catalog"/>
-                                                <font key="NSFont" size="22" name="SFMono-Semibold"/>
-                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                            </attributes>
-                                        </fragment>
-                                    </attributedString>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                    <color key="textColor" name="widgetValueColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                         </stackView>
-                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="faZ-Rl-1GW">
+                        <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="12" translatesAutoresizingMaskIntoConstraints="NO" id="faZ-Rl-1GW" userLabel="Second Stack View">
                             <rect key="frame" x="191" y="0.0" width="191" height="44"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="23q-Pe-aeA">
@@ -66,20 +60,13 @@
                                         <constraint firstAttribute="height" constant="30" id="pVk-CF-tpN"/>
                                     </constraints>
                                 </view>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xFa-pf-k7x">
-                                    <rect key="frame" x="13" y="9" width="178" height="26"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="50.43612° E" textAlignment="justified" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xFa-pf-k7x">
+                                    <rect key="frame" x="13" y="10" width="178" height="24"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="22" id="D7S-Ci-mqF"/>
                                     </constraints>
-                                    <attributedString key="attributedText">
-                                        <fragment content="50.43612° E">
-                                            <attributes>
-                                                <color key="NSColor" red="0.90195999999999998" green="0.90195999999999998" blue="0.90195999999999998" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
-                                                <font key="NSFont" size="22" name="SFMono-Semibold"/>
-                                                <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
-                                            </attributes>
-                                        </fragment>
-                                    </attributedString>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
+                                    <color key="textColor" name="widgetValueColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
@@ -90,7 +77,7 @@
                         <constraint firstItem="faZ-Rl-1GW" firstAttribute="leading" secondItem="5xi-bM-D4g" secondAttribute="trailing" id="KFr-Vg-5T8"/>
                         <constraint firstItem="faZ-Rl-1GW" firstAttribute="width" secondItem="5xi-bM-D4g" secondAttribute="width" id="Sly-DB-qVa"/>
                         <constraint firstItem="5xi-bM-D4g" firstAttribute="top" secondItem="faZ-Rl-1GW" secondAttribute="top" id="b0j-Oh-KV1"/>
-                        <constraint firstAttribute="height" constant="44" id="yrl-1K-7gu"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="yrl-1K-7gu"/>
                     </constraints>
                 </stackView>
             </subviews>
@@ -109,5 +96,8 @@
     </objects>
     <resources>
         <image name="widget_coordinates_latitude_north_day.png" width="24" height="24"/>
+        <namedColor name="widgetValueColor">
+            <color red="0.0" green="0.0" blue="0.0" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
     </resources>
 </document>

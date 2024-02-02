@@ -17,7 +17,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     
     private var filteredSection: OATableSectionData!
     
-    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled)
+    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
     var widgetPanel: WidgetsPanel!
@@ -45,7 +45,7 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         
         let filter = Int(KWidgetModeAvailable | kWidgetModeDefault)
         
-        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: filter, panels: widgetPanel.getMergedPanels())!
+        let availableWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: filter, panels: [widgetPanel])!
         let hasAvailableWidgets = availableWidgets.count > 0
         
         if hasAvailableWidgets {
@@ -298,7 +298,7 @@ extension WidgetGroupListViewController {
             show(vc)
         } else if let widgetType = item.obj(forKey: "widget_type") as? WidgetType {
             guard let vc = WidgetConfigurationViewController(),
-                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType).first else {
+                  let widgetInfo = widgetRegistry.getWidgetInfo(for: widgetType) else {
                 return
             }
             if let enabledWidgets = widgetRegistry.getWidgetsForPanel(OAAppSettings.sharedManager().applicationMode.get(), filterModes: Self.enabledWidgetsFilter, panels: WidgetsPanel.values).array as? [MapWidgetInfo] {

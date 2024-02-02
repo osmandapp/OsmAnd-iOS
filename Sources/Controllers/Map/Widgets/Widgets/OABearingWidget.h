@@ -6,8 +6,7 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OABaseWidgetView.h"
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -19,10 +18,12 @@ typedef NS_ENUM(NSInteger, EOABearingType) {
 
 @class OAGeomagneticField;
 
-@interface OABearingWidget : OATextInfoWidget
+@interface OABearingWidget : OASimpleWidget
 
-- (instancetype)initWithBearingType:(EOABearingType)bearingType;
-
+- (instancetype _Nonnull)initWithBearingType:(EOABearingType)bearingType
+                           customId:(NSString *_Nullable)customId
+                            appMode:(OAApplicationMode * _Nonnull)appMode
+                       widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (int)getBearing;
 - (CLLocation *) getDestinationLocation;
 - (int)getRelativeBearing:(CLLocation *)myLocation magneticBearingToDest:(float)magneticBearingToDest;

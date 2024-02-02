@@ -118,6 +118,7 @@
         }
 
         UIImage *resizedImage = origImage;
+        
         CGSize imgPtSize = {14 * scale, 14 * scale};
         if (!CGSizeEqualToSize(origImage.size, imgPtSize))
             resizedImage  = [OAUtilities resizeImage:origImage newSize:imgPtSize];

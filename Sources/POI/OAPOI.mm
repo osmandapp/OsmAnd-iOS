@@ -44,7 +44,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (UIImage *)icon
 {
-    if (_mapIconName && _mapIconName.length > 0)
+    if (_mapIconName && _mapIconName.length > 0 && ![_mapIconName hasSuffix:@"_small"])
         return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
     else if (_type)
         return [_type icon];

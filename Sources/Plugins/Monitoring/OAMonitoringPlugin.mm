@@ -98,33 +98,38 @@
     return @[OAWidgetType.tripRecordingDistance.id, OAWidgetType.tripRecordingTime.id, OAWidgetType.tripRecordingUphill.id, OAWidgetType.tripRecordingDownhill.id];
 }
 
-- (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode
+- (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate
+              appMode:(OAApplicationMode *)appMode
+         widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetInfoCreator *creator = [[OAWidgetInfoCreator alloc] initWithAppMode:appMode];
 
-    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance];
+    OABaseWidgetView *distanceWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDistance customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:distanceWidget]];
 
-    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime];
+    OABaseWidgetView *timeWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingTime customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:timeWidget]];
 
-    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill];
+    OABaseWidgetView *uphillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingUphill customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:uphillWidget]];
 
-    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill];
+    OABaseWidgetView *downhillWidget = [self createMapWidgetForParams:OAWidgetType.tripRecordingDownhill customId:nil appMode:appMode widgetParams:widgetParams];
     [delegate addWidget:[creator createWidgetInfoWithWidget:downhillWidget]];
 }
 
 - (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType
+                                               customId:(NSString *)customId
+                                                appMode:(OAApplicationMode *)appMode
+                                           widgetParams:(NSDictionary *)widgetParams
 {
     if (widgetType == OAWidgetType.tripRecordingDistance) {
-        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self];
+        return [[OATripRecordingDistanceWidget alloc] initWithPlugin:self customId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.tripRecordingTime) {
-        return [[OATripRecordingTimeWidget alloc] init];
+        return [[OATripRecordingTimeWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.tripRecordingUphill) {
-        return [[OATripRecordingUphillWidget alloc] init];
+        return [[OATripRecordingUphillWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     } else if (widgetType == OAWidgetType.tripRecordingDownhill) {
-        return [[OATripRecordingDownhillWidget alloc] init];
+        return [[OATripRecordingDownhillWidget alloc] initWithСustomId:customId appMode:appMode widgetParams:widgetParams];
     }
     return nil;
 }

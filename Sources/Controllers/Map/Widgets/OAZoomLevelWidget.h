@@ -6,8 +6,12 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
-@interface OAZoomLevelWidget : OATextInfoWidget
+@interface OAZoomLevelWidget : OASimpleWidget
+
+- (instancetype _Nonnull)initWithСustomId:(NSString *_Nullable)customId
+                                  appMode:(OAApplicationMode * _Nonnull)appMode
+                             widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end

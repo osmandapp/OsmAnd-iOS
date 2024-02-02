@@ -41,6 +41,7 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .nextTurn, appModes: navigationSet1)
         regWidgetVisibility(widgetType: .smallNextTurn, appModes: navigationSet2)
         regWidgetVisibility(widgetType: .secondNextTurn, appModes: navigationSet1 + [.pedestrian()])
+        
         regWidgetAvailability(widgetType: .nextTurn, appModes: exceptDefault)
         regWidgetAvailability(widgetType: .smallNextTurn, appModes: exceptDefault)
         regWidgetAvailability(widgetType: .secondNextTurn, appModes: exceptDefault)
@@ -54,6 +55,7 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .maxSpeed, appModes: [.car(), .truck(), .motorcycle(), .moped()])
         regWidgetVisibility(widgetType: .altitudeMapCenter, appModes: [.pedestrian(), .bicycle()])
         regWidgetVisibility(widgetType: .altitudeMyLocation, appModes: [.pedestrian(), .bicycle()])
+        
         regWidgetAvailability(widgetType: .intermediateDestination)
         regWidgetAvailability(widgetType: .distanceToDestination)
         regWidgetAvailability(widgetType: .timeToIntermediate)

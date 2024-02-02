@@ -23,6 +23,9 @@
 }
 
 - (instancetype)initWithType:(EOAAltitudeWidgetType)widgetType
+                    customId:(NSString *)customId
+                     appMode:(OAApplicationMode *)appMode
+                widgetParams:(NSDictionary *)widgetParams
 {
     self = [super init];
     if (self)
@@ -30,6 +33,7 @@
         // TODO: refactor widget type
         self.widgetType = widgetType == EOAAltitudeWidgetTypeMapCenter ? OAWidgetType.altitudeMapCenter : OAWidgetType.altitudeMyLocation;
         _widgetType = widgetType;
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         _app = [OsmAndApp instance];
         _cachedAltitude = 0;
 

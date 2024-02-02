@@ -14,8 +14,8 @@ class RulerDistanceWidget: OATextInfoWidget {
 
     let updateRulerObservable = OAObservable()
     private var updateRulerObserver: OAAutoObserverProxy?
-
-    init() {
+    
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .radiusRuler)
         self.updateRulerObserver = OAAutoObserverProxy(self,
                                                        withHandler: #selector(onRulerUpdate),
@@ -33,6 +33,7 @@ class RulerDistanceWidget: OATextInfoWidget {
             }
             self?.onRulerUpdate()
         }
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
 
     override init(frame: CGRect) {

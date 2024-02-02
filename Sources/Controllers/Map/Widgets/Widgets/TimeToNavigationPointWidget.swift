@@ -10,7 +10,7 @@ import Foundation
 
 @objc(OATimeToNavigationPointWidget)
 @objcMembers
-class TimeToNavigationPointWidget: OATextInfoWidget {
+class TimeToNavigationPointWidget: OASimpleWidget {
     private static let UPDATE_INTERVAL_SECONDS: Int64 = 30
     
     private let routingHelper: OARoutingHelper = OARoutingHelper.sharedInstance()!
@@ -20,7 +20,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
     private var cachedArrivalTimeOtherwiseTimeToGo: Bool
     private var cachedLeftSeconds: Int
     
-    convenience init(widgetState: TimeToNavigationPointWidgetState) {
+    convenience init(widgetState: TimeToNavigationPointWidgetState, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         
         self.init(frame: .zero)
         
@@ -29,7 +29,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
         self.cachedArrivalTimeOtherwiseTimeToGo = arrivalTimeOtherwiseTimeToGoPref.get()
         self.cachedLeftSeconds = 0
         self.widgetType = widgetState.isIntermediate() ? WidgetType.timeToIntermediate : WidgetType.timeToDestination
-        
+        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: widgetParams)
         setText(nil, subtext: nil)
         updateIcons()
         updateContentTitle()
@@ -136,7 +136,7 @@ class TimeToNavigationPointWidget: OATextInfoWidget {
     }
     
     private func updateContentTitle() {
-        let title = getCurrentState().getTitle()
+        let title = getCurrentState().getWidgetTitle()
         setContentTitle(title)
     }
     

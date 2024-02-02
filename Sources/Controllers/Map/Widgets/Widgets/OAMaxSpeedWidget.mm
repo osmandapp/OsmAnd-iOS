@@ -23,10 +23,13 @@
     float _cachedSpeed;
 }
 
-- (instancetype)init
+- (instancetype _Nonnull)initWithCustomId:(NSString *)customId
+                                  appMode:(OAApplicationMode *)appMode
+                             widgetParams:(NSDictionary *)widgetParams;
 {
     self = [super initWithType:OAWidgetType.maxSpeed];
     if (self) {
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         [self setIconForWidgetType:OAWidgetType.maxSpeed];
         [self setText:nil subtext:nil];
         _trackingUtilities = OAMapViewTrackingUtilities.instance;

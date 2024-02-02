@@ -11,13 +11,14 @@
 #import "OAColors.h"
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
+#import "OASegmentTableViewCell.h"
 
 #define textHeight 22
 #define imageSide 30
 #define minTextWidth 64
 #define fullTextWidth 90
 #define minWidgetHeight 32
-
 
 @implementation OATextInfoWidget
 {
@@ -42,7 +43,15 @@
     int _cachedMetricSystem;
     int _cachedAngularUnits;
     NSLayoutConstraint *_leadingTextAnchor;
+    NSString *_customId;
+    OACommonBoolean *_hideIconPref;
+    OAApplicationMode *_appMode;
+    NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
+    UIColor *_iconColor;
 }
+
+NSString *const kHideIconPref = @"kHideIconPref";
+NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (instancetype) init
 {
@@ -51,7 +60,7 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
-        [self initSeparatorView];
+        [self initSeparatorsView];
     }
     return self;
 }
@@ -62,29 +71,210 @@
     if (self)
     {
         self.frame = CGRectMake(0, 0, kTextInfoWidgetWidth, kTextInfoWidgetHeight);
-        [self initSeparatorView];
+        [self initSeparatorsView];
         [self commonInit];
     }
     
     return self;
 }
 
-- (void) commonInit
+- (void)updateSimpleLayout
 {
-    _textView = [[UILabel alloc] init];
-    _textView.adjustsFontForContentSizeCategory = YES;
-    _textView.translatesAutoresizingMaskIntoConstraints = NO;
-    _textShadowView = [[UILabel alloc] init];
-    _textShadowView.adjustsFontForContentSizeCategory = YES;
-    _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
-    _imageView = [UIImageView new];
-    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
-
-    [self addSubview:_textShadowView];
-    [self addSubview:_textView];
-    [self addSubview:_imageView];
+    NSArray *viewsToRemove = [self subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
+    [self initSeparatorsView];
     
-   
+    UIStackView *verticalStackView = [UIStackView new];
+    verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    verticalStackView.axis = UILayoutConstraintAxisVertical;
+    verticalStackView.alignment = UIStackViewAlignmentFill;
+    verticalStackView.distribution = UIStackViewDistributionEqualSpacing;
+    [self addSubview:verticalStackView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [verticalStackView.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [verticalStackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:16],
+        [verticalStackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-16],
+        [verticalStackView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
+    ]];
+    
+    // Create the topNameUnitStackView
+    self.topNameUnitStackView = [UIStackView new];
+    self.topNameUnitStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
+    self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
+    self.topNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
+    [verticalStackView addArrangedSubview:self.topNameUnitStackView];
+    
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
+    
+    auto nameView = [UIView new];
+    nameView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topNameUnitStackView addArrangedSubview:nameView];
+    [NSLayoutConstraint activateConstraints:@[
+        [nameView.heightAnchor constraintGreaterThanOrEqualToConstant:11]
+    ]];
+    
+    // Create the name label ("SPEED")
+    self.nameLabel = [UILabel new];
+    self.nameLabel.text = _contentTitle;
+    self.nameLabel.textColor = [UIColor colorNamed:ACColorNameWidgetLabelColor];
+    
+    self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    [nameView addSubview:self.nameLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.nameLabel.topAnchor constraintEqualToAnchor:nameView.topAnchor constant:10],
+        [self.nameLabel.leadingAnchor constraintEqualToAnchor:nameView.leadingAnchor],
+        [self.nameLabel.trailingAnchor constraintEqualToAnchor:nameView.trailingAnchor],
+        [self.nameLabel.bottomAnchor constraintEqualToAnchor:nameView.bottomAnchor]
+    ]];
+    
+    self.unitView = [UIView new];
+    self.unitView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.topNameUnitStackView addArrangedSubview:self.unitView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11],
+        [self.unitView.widthAnchor constraintGreaterThanOrEqualToConstant:20]
+    ]];
+    self.unitView.hidden = _subtext.length == 0;
+    
+    // Create the unit label ("KM/H")
+    self.unitLabel = [UILabel new];
+    self.unitLabel.text = _subtext;
+    self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitLabel.textAlignment = NSTextAlignmentRight;
+    self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
+    [self.unitView addSubview:self.unitLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.unitLabel.topAnchor constraintEqualToAnchor:self.unitView.topAnchor constant:10],
+        [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor],
+        [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor],
+        [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor],
+        [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:20]
+    ]];
+    
+    // Create the contentStackView
+    UIStackView *contentStackView = [UIStackView new];
+    contentStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    contentStackView.axis = UILayoutConstraintAxisHorizontal;
+    contentStackView.alignment = UIStackViewAlignmentFill;
+    contentStackView.distribution = UIStackViewDistributionFill;
+    [verticalStackView addArrangedSubview:contentStackView];
+    
+    self.iconWidgetView = [UIView new];
+    self.iconWidgetView.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentStackView addArrangedSubview:self.iconWidgetView];
+    [NSLayoutConstraint activateConstraints:@[
+        [self.iconWidgetView.heightAnchor constraintGreaterThanOrEqualToConstant:30],
+        [self.iconWidgetView.widthAnchor constraintEqualToConstant:30]
+    ]];
+    
+    _imageView = [UIImageView new];
+    UIImage *image = [UIImage imageNamed:_icon];
+    if (_iconColor) {
+        [self setImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
+        [_imageView setTintColor:_iconColor];
+        _iconColor = nil;
+    } else {
+        [self setImage:image];
+    }
+    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.iconWidgetView addSubview:_imageView];
+    [NSLayoutConstraint activateConstraints:@[
+        [_imageView.heightAnchor constraintEqualToConstant:30],
+        [_imageView.widthAnchor constraintEqualToConstant:30],
+        [_imageView.centerXAnchor constraintEqualToAnchor:self.iconWidgetView.centerXAnchor],
+        [_imageView.centerYAnchor constraintEqualToAnchor:self.iconWidgetView.centerYAnchor]
+    ]];
+    
+    auto valueUnitOrEmptyView = [UIView new];
+    valueUnitOrEmptyView.translatesAutoresizingMaskIntoConstraints = NO;
+    [contentStackView addArrangedSubview:valueUnitOrEmptyView];
+    
+    // Create the unit label ("150")
+    self.valueLabel = [UILabel new];
+    self.valueLabel.text = _text;
+    self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.valueLabel.adjustsFontSizeToFitWidth = YES;
+    self.valueLabel.minimumScaleFactor = 0.3;
+
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+    [valueUnitOrEmptyView addSubview:self.valueLabel];
+    
+    // Create the unitOrEmptyLabel ("KM/H")
+    self.unitOrEmptyLabel = [UILabel new];
+    if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+        self.unitOrEmptyLabel.text = _subtext;
+    else
+        self.unitOrEmptyLabel.text = @"";
+    
+    self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
+    self.unitOrEmptyLabel.textAlignment = NSTextAlignmentRight;
+    [valueUnitOrEmptyView addSubview:self.unitOrEmptyLabel];
+    [self.valueLabel setContentHuggingPriority:UILayoutPriorityDefaultLow
+                                             forAxis:UILayoutConstraintAxisHorizontal];
+    [self.unitOrEmptyLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh
+                                             forAxis:UILayoutConstraintAxisHorizontal];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [self.valueLabel.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor],
+        [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
+        [self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+    ]];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.unitOrEmptyLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [self.unitOrEmptyLabel.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
+        [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
+        [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
+        [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30],
+    ]];
+    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:15];
+    _unitOrEmptyLabelWidthConstraint.active = YES;
+    
+    self.emptyViewRightPlaceholderFullRow = [UIView new];
+    self.emptyViewRightPlaceholderFullRow.translatesAutoresizingMaskIntoConstraints = NO;
+    self.emptyViewRightPlaceholderFullRow.hidden = YES;
+    [contentStackView addArrangedSubview:self.emptyViewRightPlaceholderFullRow];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.emptyViewRightPlaceholderFullRow.widthAnchor constraintEqualToAnchor:_imageView.widthAnchor],
+        [self.emptyViewRightPlaceholderFullRow.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+    ]];
+
+    _shadowButton = [[UIButton alloc] initWithFrame:CGRectZero];
+    _shadowButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
+    [self addSubview:_shadowButton];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_shadowButton.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [_shadowButton.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_shadowButton.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_shadowButton.bottomAnchor constraintEqualToAnchor:self.bottomAnchor]
+    ]];
+    
+    _metricSystemDepended = NO;
+    _angularUnitsDepended = NO;
+    _cachedMetricSystem = -1;
+    _cachedAngularUnits = -1;
+    
+    [self refreshLabel];
+}
+
+- (void)commonLayout
+{
     [NSLayoutConstraint activateConstraints:@[
         [_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
         [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
@@ -127,7 +317,25 @@
     _subtext = @"";
     _textShadowView.textAlignment = NSTextAlignmentNatural;
     _textView.textAlignment = NSTextAlignmentNatural;
+}
 
+- (void)commonInit
+{
+    _textView = [[UILabel alloc] init];
+    _textView.adjustsFontForContentSizeCategory = YES;
+    _textView.translatesAutoresizingMaskIntoConstraints = NO;
+    _imageView = [UIImageView new];
+    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addSubview:_textView];
+    [self addSubview:_imageView];
+    
+    _textShadowView = [[UILabel alloc] init];
+    _textShadowView.adjustsFontForContentSizeCategory = YES;
+    _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addSubview:_textShadowView];
+    
+    [self commonLayout];
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
     _shadowButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [_shadowButton addTarget:self action:@selector(onWidgetClicked:) forControlEvents:UIControlEventTouchUpInside];
@@ -144,7 +352,7 @@
     return YES;
 }
 
-- (void) onWidgetClicked:(id)sender
+- (void)onWidgetClicked:(id)sender
 {
     if (self.onClickFunction)
         self.onClickFunction(self);
@@ -153,28 +361,35 @@
         [self.delegate widgetClicked:self];
 }
 
-- (void) setImage:(UIImage *)image
+- (void)setImage:(UIImage *)image
 {
     [_imageView setImage:image];
 }
 
-- (void) setImage:(UIImage *)image withColor:(UIColor *)color
+- (void)setImage:(UIImage *)image withColor:(UIColor *)color
 {
     [self setImage:image];
     _imageView.tintColor = color;
 }
 
-- (void) setImageHidden:(BOOL)hidden
+- (void)setImage:(UIImage *)image withColor:(UIColor *)color iconName:(NSString *)iconName
+{
+    _icon = iconName;
+    _iconColor = color;
+    [self setImage:image withColor:color];
+}
+
+- (void)setImageHidden:(BOOL)hidden
 {
     _imageView.hidden = hidden;
 }
 
-- (BOOL) setIconForWidgetType:(OAWidgetType *)widgetType
+- (BOOL)setIconForWidgetType:(OAWidgetType *)widgetType
 {
     return [self setIcon:widgetType.iconName];
 }
 
-- (BOOL) setIcon:(NSString *)widgetIcon
+- (BOOL)setIcon:(NSString *)widgetIcon
 {
     if (![_icon isEqualToString:widgetIcon])
     {
@@ -218,6 +433,7 @@
     _contentTitle = text;
     [self setContentDescription:_textView.text];
     _shadowButton.accessibilityLabel = _contentTitle;
+    _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
 }
 
 - (void) setText:(NSString *)text subtext:(NSString *)subtext
@@ -230,12 +446,16 @@
 {
     if ([_text isEqualToString:text] && [subtext isEqualToString:subtext])
         return;
-    //        if(this.text != null && this.text.length() > 7) {
-    //            this.text = this.text.substring(0, 6) +"..";
-    //        }
     if (text.length == 0 && subtext.length == 0)
     {
-        _textView.text = @"";
+        if (self.isSimpleLayout) {
+            self.valueLabel.text = @"";
+        }
+        else
+        {
+            _textView.text = @"";
+        }
+       
         _text = @"";
         _subtext = @"";
         _shadowButton.accessibilityValue = nil;
@@ -248,56 +468,129 @@
     }
 }
 
-- (void) refreshLabel
+- (void)configureSimpleLayout
 {
-    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-    if (_imageView.hidden)
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    
+    self.valueLabel.text = _text;
+    self.nameLabel.text = _contentTitle;
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
+            
+    BOOL isVisibleIcon = false;
+    if (_appMode && _hideIconPref)
     {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.alignment = NSTextAlignmentCenter;
-        attributes[NSParagraphStyleAttributeName] = paragraphStyle;
+        isVisibleIcon = [_hideIconPref get:_appMode];
+        self.iconWidgetView.hidden = !isVisibleIcon;
+    }
+    _shadowButton.accessibilityValue = [self combine:_text subtext:_subtext];
+    if (_subtext.length == 0)
+    {
+        self.unitView.hidden = YES;
+        self.unitOrEmptyLabel.text = @"";
+        _unitOrEmptyLabelWidthConstraint.constant = 0;
     }
     else
     {
-        NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
-        ps.firstLineHeadIndent = 2.0;
-        ps.tailIndent = -2.0;
-        attributes[NSParagraphStyleAttributeName] = ps;
+        _unitOrEmptyLabelWidthConstraint.constant = (self.isFullRow || self.widgetSizeStyle != WidgetSizeStyleSmall) ? 0 : 20;
+        if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+        {
+            self.unitView.hidden = YES;
+            self.unitOrEmptyLabel.text = _subtext;
+        }
+        else
+        {
+            self.unitOrEmptyLabel.text = @"";
+            self.unitView.hidden = NO;
+            self.unitLabel.text = _subtext;
+        }
     }
-    NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
-    NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
+    
+    if (self.isFullRow)
+    {
+        if (self.widgetSizeStyle == WidgetSizeStyleSmall) {
+            self.emptyViewRightPlaceholderFullRow.hidden = YES;
+            if (_subtext.length == 0)
+            {
+                self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
+                self.valueLabel.textAlignment = NSTextAlignmentCenter;
+            }
+            else
+            {
+                self.emptyViewRightPlaceholderFullRow.hidden = YES;
+                self.valueLabel.textAlignment = NSTextAlignmentNatural;
+            }
+        } else {
+            self.emptyViewRightPlaceholderFullRow.hidden = !isVisibleIcon;
+            self.valueLabel.textAlignment = NSTextAlignmentCenter;
+        }
+    }
+    else
+    {
+        self.valueLabel.textAlignment = NSTextAlignmentNatural;
+    }
+}
 
-    NSRange valueRange = NSMakeRange(0, _text.length);
-    NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
-    
-    if (valueRange.length > 0)
+- (void)refreshLabel
+{
+    if (self.isSimpleLayout)
     {
-        [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
-        [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
-        if (_primaryShadowColor && _shadowRadius > 0)
-        {
-            [shadowString addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
-            [shadowString addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
-            [shadowString addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
-            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
-        }
+        [self configureSimpleLayout];
     }
-    if (unitRange.length > 0)
+    else
     {
-        [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
-        [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
-        if (_unitsShadowColor && _shadowRadius > 0)
+        NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
+        if (_imageView.hidden)
         {
-            [shadowString addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
-            [shadowString addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
-            [shadowString addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
-            [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.alignment = NSTextAlignmentCenter;
+            attributes[NSParagraphStyleAttributeName] = paragraphStyle;
         }
+        else
+        {
+            NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
+            ps.firstLineHeadIndent = 2.0;
+            ps.tailIndent = -2.0;
+            attributes[NSParagraphStyleAttributeName] = ps;
+        }
+        NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
+        NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
+
+        NSRange valueRange = NSMakeRange(0, _text.length);
+        NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
+        
+        if (valueRange.length > 0)
+        {
+            [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+            [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
+            if (_primaryShadowColor && _shadowRadius > 0)
+            {
+                [shadowString addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
+                [shadowString addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
+                [shadowString addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
+                [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
+            }
+        }
+        if (unitRange.length > 0)
+        {
+            [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+            [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
+            if (_unitsShadowColor && _shadowRadius > 0)
+            {
+                [shadowString addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
+                [shadowString addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
+                [shadowString addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
+                [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
+            }
+        }
+        
+        _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
+        _textView.attributedText = string;
+        _shadowButton.accessibilityValue = string.string;
+        
     }
-    
-    _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
-    _textView.attributedText = string;
-    _shadowButton.accessibilityValue = string.string;
     [self refreshLayout];
 }
 
@@ -319,6 +612,8 @@
 
 - (void) adjustViewSize
 {
+    if (self.isSimpleLayout)
+        return;
     CGFloat leadingOffset = _imageView.hidden ? 4 : 31;
     _leadingTextAnchor.constant = leadingOffset;
     
@@ -449,6 +744,77 @@
     _shadowRadius = shadowRadius;
 
     [self refreshLabel];
+}
+
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode
+{
+    OATableDataModel *data = [[OATableDataModel alloc] init];
+    OATableSectionData *section = [data createNewSection];
+    section.footerText = OALocalizedString(@"simple_widget_footer");
+    
+    OATableRowData *widgetStyleRow = section.createNewRow;
+    widgetStyleRow.cellType = SegmentImagesWithRightLableTableViewCell.getCellIdentifier;
+    widgetStyleRow.title = OALocalizedString(@"shared_string_height");
+    [widgetStyleRow setObj:self.sizeStylePref forKey:@"prefSegment"];
+    [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];
+    [widgetStyleRow setObj:@[ACImageNameIcCustom20HeightS, ACImageNameIcCustom20HeightM, ACImageNameIcCustom20HeightL] forKey:@"values"];
+    
+    OATableRowData *showIconRow = section.createNewRow;
+    showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
+    showIconRow.title = OALocalizedString(@"show_icon");
+    [showIconRow setObj:_hideIconPref forKey:@"pref"];
+
+    return data;
+}
+
+- (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
+{
+    _appMode = appMode;
+    _hideIconPref = [self registerHideIconPrefWith:id];
+    self.sizeStylePref = [self registerSizeStylePrefWith:id];
+    
+    if (widgetParams)
+    {
+        OAApplicationMode *selectedAppMode = (OAApplicationMode *)widgetParams[@"selectedAppMode"];
+        if (selectedAppMode)
+        {
+            NSString *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
+            if (widgetSizeStyle)
+            {
+                [self.sizeStylePref set:[widgetSizeStyle intValue] mode:selectedAppMode];
+            }
+            NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
+            if (isVisibleIconNumber)
+            {
+                BOOL isVisibleIcon = [isVisibleIconNumber boolValue];
+                [_hideIconPref set:isVisibleIcon mode:selectedAppMode];
+            }
+        }
+    }
+}
+
+- (OACommonInteger *)registerSizeStylePrefWith:(NSString *)customId
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefId = self.widgetType.title;
+    if (customId.length > 0)
+        prefId = [prefId stringByAppendingFormat:@"%@_%@",kSizeStylePref,customId];
+    else
+        prefId = [prefId stringByAppendingFormat:@"%@",kSizeStylePref];
+    
+    return [settings registerIntPreference:prefId defValue:WidgetSizeStyleMedium];
+}
+
+- (OACommonBoolean *)registerHideIconPrefWith:(NSString *)customId
+{
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    NSString *prefId = self.widgetType.title;
+    if (customId.length > 0)
+        prefId = [prefId stringByAppendingFormat:@"%@_%@",kHideIconPref,customId];
+    else
+        prefId = [prefId stringByAppendingFormat:@"%@",kHideIconPref];
+    
+    return [settings registerBooleanPreference:prefId defValue:YES];
 }
 
 @end

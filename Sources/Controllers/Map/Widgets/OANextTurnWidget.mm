@@ -43,7 +43,11 @@
     OANextDirectionInfo *_calc1;
 }
 
-- (instancetype) initWithHorisontalMini:(BOOL)horisontalMini nextNext:(BOOL)nextNext
+- (instancetype)initWithHorisontalMini:(BOOL)horisontalMini
+                              nextNext:(BOOL)nextNext
+                              customId:(NSString *)customId
+                               appMode:(OAApplicationMode *)appMode
+                          widgetParams:(NSDictionary *)widgetParams
 {
     OAWidgetType *type;
     if (horisontalMini)
@@ -60,6 +64,8 @@
     self = [super initWithType:type];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
+        
         _topView = [[UIView alloc] initWithFrame:CGRectMake(11., 6., kTopViewSide, kTopViewSide)];
         _leftView = [[UIView alloc] initWithFrame:CGRectMake(2., 84., kLeftViewSide, kLeftViewSide)];
         _leftView.translatesAutoresizingMaskIntoConstraints = NO;

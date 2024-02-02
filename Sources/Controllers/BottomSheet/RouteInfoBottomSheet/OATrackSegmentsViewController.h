@@ -19,7 +19,7 @@
 @interface OATrackSegmentsViewController : OABaseTableViewController
 
 @property (nonatomic, weak) id<OASegmentSelectionDelegate> delegate;
-@property (nonatomic) BOOL startNavigationOnSelect;
+@property (nonatomic, assign) BOOL startNavigationOnSelect;
 
 - (instancetype) initWithFile:(OAGPXDocument *)gpx;
 - (instancetype) initWithFilepath:(NSString *)filepath isCurrentTrack:(BOOL)isCurrentTrack;

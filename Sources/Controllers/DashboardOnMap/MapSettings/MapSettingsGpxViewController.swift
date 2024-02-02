@@ -26,14 +26,14 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
-    private var importHelper = OAGPXImportHelper()
+    private var importHelper: OAGPXImportHelper?
     
     override func commonInit() {
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
         importHelper = OAGPXImportHelper(hostViewController: self)
-        importHelper.delegate = self
+        importHelper?.delegate = self
     }
     
     override func registerNotifications() {
@@ -497,7 +497,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onImportButtonClicked() {
-        importHelper.onImportClicked()
+        importHelper?.onImportClicked()
     }
     
     @objc private func onCellButtonClicked(sender: UIButton) {

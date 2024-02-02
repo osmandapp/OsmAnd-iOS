@@ -21,8 +21,17 @@ private class GpxFolder {
     }
     
     private func calculateFolderTracksCount(_ folder: GpxFolder) -> Int {
-        return folder.files.count + folder.subfolders.values.reduce(0) { result, subfolder in
-            return result + calculateFolderTracksCount(subfolder)
+        var count = 0
+        performForEach { _ in count += 1 }
+        return count
+    }
+    
+    func performForEach(action: (_ gpx: OAGPX) -> Void) {
+        for file in files.values {
+            action(file)
+        }
+        for subfolder in subfolders.values {
+            subfolder.performForEach(action: action)
         }
     }
 }
@@ -768,15 +777,19 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func renameFolder(oldName: String, newName: String) {
-        let oldFolderPath = currentFolderAbsolutePath() + "/" + oldName
-        let newFolderPath = currentFolderAbsolutePath() + "/" + newName
+        
+        let oldFolderPath = (currentFolderAbsolutePath() as NSString).appendingPathComponent(oldName)
+        let newFolderPath = (currentFolderAbsolutePath() as NSString).appendingPathComponent(newName)
+        let oldFolderShortPath = (currentVCSubfolderPath as NSString).appendingPathComponent(oldName)
+        let newFolderShortPath = (currentVCSubfolderPath as NSString).appendingPathComponent(newName)
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.moveItem(atPath: oldFolderPath, toPath: newFolderPath)
-                if let currentFolder = getCurrentFolder() {
-                    currentFolder.subfolders[newName] = rootTracksFolderContent.subfolders[oldName]
-                    currentFolder.subfolders[oldName] = nil
-                }
+                guard let currentFolder = getCurrentFolder() else { return }
+                currentFolder.subfolders[newName] = rootTracksFolderContent.subfolders[oldName]
+                currentFolder.subfolders[oldName] = nil
+                guard let renamedFolder = currentFolder.subfolders[newName] else { return }
+                changeGpxDBSubfolderTags(folderContent: renamedFolder, srcPath: oldFolderShortPath, destPath: newFolderShortPath)
                 updateData()
             } catch let error {
                 debugPrint(error)
@@ -789,10 +802,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func deleteFolder(_ folderName: String) {
         let folderPath = currentFolderAbsolutePath() + "/" + folderName
         do {
-            try FileManager.default.removeItem(atPath: folderPath)
             if let currentFolder = getCurrentFolder() {
+                currentFolder.subfolders[folderName]?.performForEach() { gpxDB.removeGpxItem($0.gpxFilePath) }
                 currentFolder.subfolders[folderName] = nil
             }
+            try FileManager.default.removeItem(atPath: folderPath)
             updateData()
         } catch let error {
             debugPrint(error)
@@ -820,7 +834,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     {
         for gpxFile in folderContent.files.values {
             var path = gpxFile.gpxFilePath ?? ""
-            path = path.replacingOccurrences(of: (srcPath as NSString).deletingLastPathComponent, with: "")
+            let rootSrcPath = (srcPath as NSString).deletingLastPathComponent
+            path = path.substring(from: rootSrcPath.length)
             path = (destPath as NSString).appendingPathComponent(path)
             gpxFile.updateFolderName(path)
         }

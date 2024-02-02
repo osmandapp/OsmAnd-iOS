@@ -2021,7 +2021,7 @@
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
             
-            cell.userInteractionEnabled = cellData.isDisabled ? YES : NO;
+            cell.userInteractionEnabled = !cellData.isDisabled;
             cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
             cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
         }
@@ -2052,7 +2052,7 @@
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
             
-            cell.userInteractionEnabled = cellData.isDisabled ? YES : NO;
+            cell.userInteractionEnabled = !cellData.isDisabled;
             cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
             cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
         }

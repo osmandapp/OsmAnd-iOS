@@ -1182,6 +1182,16 @@
     NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
     NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
     NSString *newName = gpx.gpxFileName;
+    
+    NSString *subfolderPath = _app.gpxPath;
+    for (NSString *component in [newFolderName pathComponents])
+    {
+        subfolderPath = [subfolderPath stringByAppendingPathComponent:component];
+        if (![[NSFileManager defaultManager] fileExistsAtPath:subfolderPath])
+        {
+            [[NSFileManager defaultManager] createDirectoryAtPath:subfolderPath withIntermediateDirectories:YES attributes:nil error:nil];
+        }
+    }
 
     if (newFileName)
     {

@@ -58,7 +58,7 @@
 "first_intermediate_dest_description" = "Dodaje prvo stajanje";
 "add_as_last_destination_point" = "Dodaj kao završno prolazno odredište";
 "last_intermediate_dest_description" = "Dodaje prolazno stajanje";
-"show_poi_over_map" = "Prikaži nivo TOI iznad mape";
+"show_poi_over_map" = "TOI vidljivi na mapi";
 "shared_string_search" = "Traži";
 "address_search_desc" = "Pretraga adresa";
 "search_radius" = "Search radius";
@@ -427,7 +427,7 @@
 "shared_string_select" = "Označi";
 "shared_string_back" = "Nazad";
 "shared_string_ok" = "U redu";
-"shared_string_cancel" = "Otkaži";
+"shared_string_cancel" = "Prekid";
 "shared_string_exit" = "Izlaz";
 "shared_string_close" = "Zatvori";
 "shared_string_no" = "Ne";
@@ -1585,7 +1585,7 @@
 "some_articles_may_not_available_in_lang" = "Neki članci sa Vikipedija su možda dostupni na tvom jeziku.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-"srtm_plugin_name" = "Izohipse";
+"srtm_plugin_name" = "Topografija";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "Ovaj dodatak omogućava prikaz sloja izohipsi i reljefa iznad standardnih OsmAnd karti. Ovu funkcionalnost će najviše znati da cene sportisti, planinari, trekeri i svako koga zanima reljefna struktura predela (primetite da su izohipse i reljefni podaci odvojeni, posebna skidanja za njih su dostupna kada se ovaj dodatak aktivira.)\n\nGlobalni podaci (između 70° severno i 70° južno) se bazirani na SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), instrumentima za slikanje na vodećem NASA-inom satelitu Terra. ASTER je zajednički napor NASA-e, japanskog ministarstva ekonomije, trgovine i industrije (METI), i japanskog svemirskog sistema (J-spacesystems).";
 "wikivoyage_travel_guide" = "Turistički vodiči";
@@ -2284,7 +2284,7 @@
 "copy_address" = "Kopiraj adresu";
 "purchases_feature_desc_nautical" = "Pristupi informacijama o nautičkoj dubini";
 "osmand_pro_tagline" = "Dobavite maksimalne funkcije";
-"wikipedia_and_wikivoyage_offline" = "Vikipedia i Vikivojaž bez interneta";
+"wikipedia_and_wikivoyage_offline" = "Vikipedia i Wikivoyage offline";
 "ltr_or_rtl_combine_via_or" = "%@ ili %@";
 "backup_restore_now" = "Vrati sada";
 "manage_subscription" = "Upravljaj članarinom";
@@ -2358,7 +2358,7 @@
 "simulation_preview_mode_desc" = "Brzina oponašanja će biti najveća na pravim deonicama i usporiti samo na raskrsnicama.";
 "purchases_feature_desc_unlimited_map_download" = "Nabavite neograničena preuzimanja oflajn mapa za sve kontinente i regione.";
 "backup_error_subscription_was_expired_descr" = "Vaša pretplata OsmAnd Pro je istekla, obnovite je radi pravljenja umnožaka za čuvanje. I dalje možete povratiti podatke iz oblaka.";
-"purchases_feature_desc_wikivoyage" = "Istražite Vikiputovanje bez interneta. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
+"purchases_feature_desc_wikivoyage" = "Istražite offline Wikivoyage. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
 "debugging_and_development" = "Razvoj OsmAnd-a";
 "backup_error_user_is_already_registered" = "Ova adresa e-pošte se koristi na drugom profilu";
 "backup_and_restore" = "Rezervna kopija i vraćanje";
@@ -2405,7 +2405,7 @@
 "shared_string_not_included" = "Ne uključuje";
 "contact_support_description" = "Ako imate ikakvih pitanja, kontaktirajte nas na %@.";
 "backup_version_history" = "Istorija verzija";
-"upload_local_version" = "Otpremi lokalnu verziju";
+"upload_local_version" = "Preuzeti lokalnu verziju";
 "pro_features" = "Profesionalne funkcije";
 "download_all" = "Preuzmi sve";
 "backup_complete" = "Rezervna kopija završena";
@@ -2588,8 +2588,8 @@
 "shared_string_duplicate" = "Udvostruči";
 "map_settings_weather_temp" = "Toplota";
 "shared_string_layers" = "Slojevi";
-"generate_hillshade_from_3d_maps" = "Obrazuj okvirne mape senčenih padina iz prostornih, 3D mapa";
-"offline_wikivoyage" = "bez interneta Vikivojaž";
+"generate_hillshade_from_3d_maps" = "Kreiranje senčenja reljefa na temelju 3D mape";
+"offline_wikivoyage" = "Offline Wikivoyage";
 "shared_string_explore" = "Istraži";
 "rendering_attr_depthContourColorScheme_description" = "Obrazac boja linija obrisa dubine";
 "map_widget_ant_bicycle_power" = "Snaga bicikla";
@@ -2676,7 +2676,7 @@
 "bicycle_scd_device_name" = "Uređaj bicikla";
 "learn_more_about_sensors_link" = "Saznaj podrobnije o prijemnicima.";
 "ant_plus_nothing_found_text" = "Nisam uspeo da pronađem ni jedan senzor";
-"ant_plus_bluetooth_off" = "Blutut je isključen";
+"ant_plus_bluetooth_off" = "Bluetooth je isključen";
 "ant_plus_searching_text" = "Pretražujem senzore";
 "ant_plus_open_settings" = "Otvori podešavanja";
 "ant_plus_nothing_found_description" = "Proveri da li je: \n- Blutut uključen \n- Prijemnik uključen \n- Ovaj uređaj smešten blizu senzora";
@@ -2684,7 +2684,7 @@
 "external_device_forget_sensor" = "Zaboravi senzor";
 "external_device_details_battery" = "Baterija";
 "external_device_forget_sensor_description" = "Prijemnik će biti uklonjen sa spiska. Moći ćete da uparite ovaj senzor kad god poželite.";
-"ant_plus_bluetooth_off_description" = "Uključi pretragu Blututa i uparite senzore.";
+"ant_plus_bluetooth_off_description" = "Uključi Bluetooth i upari senzore.";
 "external_device_characteristic_speed" = "Brzina";
 "wheel_circumference" = "Obim točka";
 "map_orientation_portrait" = "Uspravno";
@@ -2841,7 +2841,7 @@
 "external_device_details_received_data" = "Primljeni podaci";
 "ant_plus_searching" = "Pretražujem";
 "ant_plus_pair_new_sensor" = "Uparite novi senzor";
-"generate_slope_from_3d_maps" = "Obrazuj okvire mapa nagiba iz prostornih, 3D mapa";
+"generate_slope_from_3d_maps" = "Stvaranje rasterskih mapa nagiba na temelju 3D mapa";
 "si_nm_ft" = "Nautičke milje/stope";
 "shared_string_uploaded" = "Otpremljeno";
 "local_changes" = "Mestne izmene";
@@ -2889,7 +2889,7 @@
 "true_bearing_wdiget_desc" = "Ugao između pravog Severa i ciljane tačke gledano sa tvoje lokacije.";
 "relative_bearing_widget_desc" = "Prikazuje ugao između pravca tvog kretanja i ciljane tačke.";
 "press_again_to_change_the_map_orientation" = "Tapni ponovo za promenu rotacije mape";
-"travel_card_download_descr" = "Preuzmite turističke vodiče Vikivojažaradi čitanja članaka o mestima po celom svetu bez veze sa internetom.";
+"travel_card_download_descr" = "Preuzmi turističke vodiče Wikivoyage čitanja članaka o mestima po celom svetu bez interneta.";
 "download_file" = "Preuzmi datoteku";
 "saved_articles" = "Zabeleženi članci";
 "context_menu_read_article" = "Čitanje članka";

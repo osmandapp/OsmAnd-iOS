@@ -598,6 +598,15 @@
 "select_tracks_to_display" =  "Select tracks to display them on the map.";
 "show_all_tracks" = "Show all tracks";
 "recently_visible" = "Recently visible";
+"shared_string_nearest" = "Nearest";
+"track_sort_az" = "Name A - Z";
+"track_sort_za" = "Name Z - A";
+"newest_date_first" = "Newest date first";
+"oldest_date_first" = "Oldest date first";
+"longest_distance_first" = "Longest distance first";
+"shortest_distance_first" = "Shortest distance first";
+"longest_duration_first" = "Longest duration first";
+"shorter_duration_first" = "Shorter duration first";
 "previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";

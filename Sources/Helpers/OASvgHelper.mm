@@ -29,10 +29,10 @@ const static float kDefaultIconSize = 24.0f;
     return [self.class mapImageFromSvgResource:name width:scaledSize height:scaledSize];
 }
 
-+ (nullable UIImage *) imageNamed:(NSString *)name
++ (nullable UIImage *) imageNamed:(NSString *)path
 {
-    NSString *resourceName = [name lastPathComponent];
-    NSString *subpath = [name stringByDeletingLastPathComponent];
+    NSString *resourceName = [path lastPathComponent];
+    NSString *subpath = [path stringByDeletingLastPathComponent];
     const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
                                                               ofType:@"svg"
                                                          inDirectory:subpath];

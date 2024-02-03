@@ -196,9 +196,9 @@
     return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
 
-+ (UIImage *) svgImageNamed:(NSString *)name
++ (UIImage *) svgImageNamed:(NSString *)path
 {
-    return [OASvgHelper imageNamed:name];
+    return [OASvgHelper imageNamed:path];
 }
 
 + (UIImage *) mapSvgImageNamed:(NSString *)name

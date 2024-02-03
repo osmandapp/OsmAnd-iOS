@@ -2044,7 +2044,7 @@
 "product_desc_mapillary" = "Bilder auf Straßenebene, um die Umgebung zu erkunden";
 "shared_string_turn_off" = "Ausschalten";
 "suggested_maps_descr" = "Diese Karten werden für das Plugin benötigt.";
-"plugin_mapillary_descr" = "Bildmaterial von Straßenansichten. Sie können auch selbst einen Beitrag leisten. Um die vorhandenen Daten als Kartenebene zu sehen, aktivieren Sie \"Straßenbilder\" im Menü \"Karte konfigurieren\".";
+"plugin_mapillary_descr" = "Bildmaterial von Straßenansichten. Sie können auch selbst einen Beitrag leisten. Um die vorhandenen Daten als Kartenebene zu sehen, aktivieren Sie „Bilder auf Straßenebene“ im Menü „Karte konfigurieren“.";
 "suggested_maps" = "Vorgeschlagene Karten";
 "welmode_download_maps" = "Kartenverwaltung";
 "shared_strings_all_regions" = "Alle Regionen";

@@ -2560,7 +2560,7 @@
 "add_row" = "Dodaj liniju";
 "go_to_marker_location" = "Idi na lokaciju oznake";
 "map_widget_time_to_destination" = "Vreme do odredišta";
-"map_widget_distance_to_intermediate" = "Udaljenost do posredne tačke";
+"map_widget_distance_to_intermediate" = "Udaljenost do međuodredišta";
 "shared_string_weather" = "Vremenska prognoza";
 "coordinates_widget_current_location_desc" = "Prikazuje zemljopisne koordinate trenutnog zemaljskog lokacija";
 "av_notes_photo_widget_desc" = "Tapni na widget za slikanje.";
@@ -2752,7 +2752,7 @@
 "elevation_profile_widget_desc" = "Widget prikazuje visinu i presek nagiba trenutne rute.";
 "navigation_points" = "Tačke navođenja";
 "radius_rules_widget_desc" = "Alatka za merni šestar prikazuje kružnice rastojanja oko izabrane tačke na mapi.";
-"battery_widget_desc" = "Prikazuje popunjenost baterije tvog uređaja.";
+"battery_widget_desc" = "Prikazuje nivo popunjenosti baterije.";
 "gps_info_widget_desc" = "Prikazuje broj satelita trenutno vidljivih i korišćenih.";
 "current_speed_widget_desc" = "Prikazuje trenutnu brzinu prijavljenu GPS-om.";
 "magnetic_bearing_widget_desc" = "Ugao između magnetnog Severa i ciljne tačke posmatrano sa tvoje lokacije.";

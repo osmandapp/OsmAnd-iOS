@@ -3270,3 +3270,16 @@
 "show_all_tracks" = "Vis alle spor";
 "recently_visible" = "Senest synlig";
 "no_track_files" = "Du har ingen sporfiler";
+"shared_string_nearest" = "Nærmeste";
+"track_sort_za" = "Navn Z - A";
+"newest_date_first" = "Nyeste dato først";
+"longest_distance_first" = "Længste distance først";
+"longest_duration_first" = "Længste varighed først";
+"shorter_duration_first" = "Kortere varighed først";
+"simple_widget_footer" = "Modul kan bruge fuld rækkebredde eller kun en kolonne.";
+"complex_widget_alert" = "%@ modul kan kun placeres på sin egen række.";
+"shared_string_row_number" = "Række %d";
+"track_sort_az" = "Navn A - Z";
+"oldest_date_first" = "Ældste dato først";
+"shortest_distance_first" = "Korteste distance først";
+"show_icon" = "Vis ikon";

@@ -480,7 +480,7 @@
 "shared_string_max" = "Najviši";
 "shared_string_wifi_only" = "Samo bežično";
 "shared_string_turn_off" = "Isključi";
-"shared_strings_all_regions" = "Sve oblasti";
+"shared_strings_all_regions" = "Svi regioni";
 "regions" = "Regioni";
 "shared_string_width" = "Širina";
 "shared_string_interval" = "Međuvreme";
@@ -933,7 +933,7 @@
 "profile_appearance" = "Izgled profila";
 "profile_appearance_descr" = "Icon, color, and name";
 "ui_customization" = "Prilagođavanje korisničkog interfejsa";
-"ui_customization_short_descr" = "Podešavanje glavnog, kontext meni i odeljku «Podešavanje mape».";
+"ui_customization_short_descr" = "Elementi glavnog i kontekstnog menija";
 "reorder_profiles" = "Izmeni spisak profila";
 "profile_alert_need_profile_name_title" = "Unesi ime profil";
 "select_color" = "Odaberi boju";
@@ -1578,7 +1578,7 @@
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Vikipedija";
 "product_desc_wiki" = "Wikipedia data";
-"purchases_feature_desc_wikipedia" = "Prikazuje sve članke povezanih mesta Vikipedije bez interneta, pomažući Vam da saznate nešto o tim mestima koje ćete posetiti na proputovanju jednostavnim tapkanjem na mapi. Ne zaboravite da preuzmete datoteke mapa Vikipedije za odgovarajuće oblasti.";
+"purchases_feature_desc_wikipedia" = "Pruža sve članke na Wikipedia, povezane s mesta, u offline modu, pomažući da saznaš o mestima koja možeš posetiti tokom putovanja, jednostavnim dodirom mape. Ne zaboravite da preumeš Wikipedija mape za odgovarajuće regione.";
 "shared_string_all_languages" = "Svi jezici";
 "select_wikipedia_article_langs" = "Odaberite jezik za Vikipedijinečlanke na karti. Prebacite na bilo koji drugi dostupni jezik dok čitate članak.";
 "wiki_menu_download_descr" = "Za prikaz Vikipedijinih TOI su potrebne dodatne mape.";
@@ -1850,7 +1850,7 @@
 "purchase_dialog_title" = "Odaberi plan";
 "purchase_dialog_travel_description" = "Kupite jedno od sledećeg radi čitanja turističkih članaka bez interneta:";
 "free_version_message" = "%@ karta(i) za skidanje ili ažuriranje.";
-"get_osmand_live" = "Nabavite OsmAnd uživo radi okljićavanja ovih mogućnosti: dnevna osvežavanja mapa sa neograničenim brojem preuzimanja, svi i plaćeni i besplatni dodaci, Vikipedija, Vikivuajaž i još mnogo toga.";
+"get_osmand_live" = "Nabavi OsmAnd Live radi korišćenja ovih mogućnosti: dnevna ažuriranja mapa sa neograničenim brojem preuzimanja, svi plaćeni i besplatni dodaci, Wikipedia, Wikivoyage i još mnogo toga.";
 "osm_live_subscription" = "Članarina na OsmAnd uživo";
 "cancel_subscription" = "Poništi članarinu";
 "wikivoyage_offline" = "Vikivojaž bez interneta";
@@ -1891,13 +1891,13 @@
 "routing_attr_height_description" = "Odredi visinu vozila koja je dozvoljena na putevima.";
 "touting_specified_vehicle_parameters_descr" = "Specified vehicle parameters may affect routing.";
 "routing_attr_height_obstacles_name" = "Koristi podatke o visini";
-"routing_attr_avoid_toll_name" = "Nema putarina";
+"routing_attr_avoid_toll_name" = "Bez putarina";
 "rendering_attr_appMode_description" = "Prilagodi mapu za";
 "routing_attr_avoid_ice_roads_fords_name" = "Izbegavati puteve sa poledicama ili plićacima";
 "rendering_value_germanRoadAtlas_name" = "Nemački atlas puteva";
 "rendering_attr_hikingRoutesOSMC_name" = "Planinske staze";
 "rendering_attr_showRoadMaps_name" = "Samo putne mape";
-"routing_attr_avoid_ferries_description" = "Izbegavati trajekte";
+"routing_attr_avoid_ferries_description" = "Bez trajekta";
 "rendering_attr_contourWidth_description" = "Debljina linije izohipse";
 "routing_attr_driving_style_name" = "Način vožnje";
 "rendering_attr_surface_pebblestone_name" = "Kamenčići";
@@ -1967,7 +1967,7 @@
 "routeInfo_road_types_name" = "Vrste puteva";
 "rendering_attr_showRoadMaps_description" = "Odaberi kada će se prikazivati samo putne mape:";
 "rendering_value_translucent_blue_name" = "Prozirna plava";
-"routing_attr_avoid_bus_description" = "Izbegavati autobusa i trolejbusa";
+"routing_attr_avoid_bus_description" = "Bez autobusa i trolejbusa";
 "rendering_attr_hideOverground_name" = "Nadzemne građevine";
 "rendering_attr_hideProposed_name" = "Predložene objekte";
 "routeInfo_smoothness_name" = "Uglačanost";
@@ -1975,7 +1975,7 @@
 "rendering_value_translucent_green_name" = "Prozirna zelena";
 "rendering_value_translucent_yellow_name" = "Prozirna žuta";
 "rendering_attr_OSMMapperAssistant_name" = "Pomoćnik mapa OSM-a";
-"routing_attr_avoid_borders_name" = "Nema graničnih prelaza";
+"routing_attr_avoid_borders_name" = "Bez graničnih prelaza";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Bojenje prema pripadnosti mreži puteva";
 "rendering_attr_smoothness_excellent_name" = "Izvrsno";
 "rendering_value_pink_name" = "Ružičasta";
@@ -1984,7 +1984,7 @@
 "rendering_attr_hideText_name" = "Pismo";
 "rendering_attr_contourDensity_name" = "Gustina linije izohipse";
 "routing_attr_avoid_motorway_description" = "Izbegavati autoputeve";
-"routing_attr_avoid_motorway_name" = "Nema autoputeva";
+"routing_attr_avoid_motorway_name" = "Bez autoputeva";
 "rendering_attr_hideWoodScrubs_name" = "Šume i šumarke";
 "rendering_attr_surface_wood_name" = "Drvo";
 "rendering_attr_smoothness_horrible_name" = "Užasno";
@@ -2003,9 +2003,9 @@
 "routing_attr_avoid_sett_description" = "Izbegavaj kaldrme";
 "rendering_attr_hikingRoutesOSMC_description" = "Prikazuj puteve prema putanjama OSMC-a.";
 "rendering_value_car_name" = "Auto";
-"routing_attr_avoid_unpaved_name" = "Nema makadama";
+"routing_attr_avoid_unpaved_name" = "Bez makadama";
 "rendering_attr_lessDetailed_name" = "Manje detalja";
-"routing_attr_avoid_borders_description" = "Izbegavati prelaženje državnih granica";
+"routing_attr_avoid_borders_description" = "Bez prelaženja državnih granica";
 "rendering_attr_highway_class_steps_name" = "Stepenice";
 "routing_attr_avoid_tram_name" = "Izbegavati tramvaje";
 "rendering_attr_piste_type_downhill_name" = "Nizbrdo";
@@ -2023,14 +2023,14 @@
 "rendering_attr_highway_class_cycleway_name" = "Biciklistička staza";
 "routing_attr_piste_type_downhill_description" = "Padine alpskog skijanja ili spuštanja i pristup skijaštim žičarama.";
 "rendering_attr_hideWaterPolygons_name" = "Sakrij vodu";
-"routing_attr_avoid_stairs_name" = "Nema stepenica";
+"routing_attr_avoid_stairs_name" = "Bez stepenica";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skijaška tura";
 "routing_attr_avoid_unpaved_description" = "Izbegavati makadame";
 "routing_attr_prefer_unpaved_description" = "Prednost neasfaltiranim putevima.";
 "rendering_attr_roadStyle_description" = "Izgled puteva";
 "routing_attr_prefer_motorway_description" = "Prednost putevima za motorna vozila";
-"routing_attr_avoid_ferries_name" = "Nema trajekta";
+"routing_attr_avoid_ferries_name" = "Bez trajekta";
 "rendering_attr_highway_class_track_name" = "Staza";
 "rendering_attr_tracktype_grade4_name" = "Uglavnom mekana";
 "rendering_value_disabled_name" = "Isključeno";
@@ -2128,7 +2128,7 @@
 "routing_attr_avoid_shuttle_train_description" = "Izbegavati autovozove";
 "routing_attr_driving_style_balance_name" = "Uravnoteženo";
 "routing_attr_piste_type_nordic_name" = "Skijaško trčanje i nordijske discipline";
-"routing_attr_avoid_bus_name" = "Izbegavati autobuse";
+"routing_attr_avoid_bus_name" = "Bez autobusa";
 "rendering_value_highContrastRoads_name" = "Putevi sa velikim kontrastom";
 "rendering_attr_highway_class_service_name" = "Pristupni ruta";
 "rendering_attr_showCycleRoutes_name" = "Biciklističke staze";
@@ -2356,9 +2356,9 @@
 "simulation_constant_mode_title" = "Jednaka brzina";
 "make_backup" = "Napravite rezervnu kopiju";
 "simulation_preview_mode_desc" = "Brzina oponašanja će biti najveća na pravim deonicama i usporiti samo na raskrsnicama.";
-"purchases_feature_desc_unlimited_map_download" = "Nabavite neograničena preuzimanja oflajn mapa za sve kontinente i regione.";
-"backup_error_subscription_was_expired_descr" = "Vaša pretplata OsmAnd Pro je istekla, obnovite je radi pravljenja umnožaka za čuvanje. I dalje možete povratiti podatke iz oblaka.";
-"purchases_feature_desc_wikivoyage" = "Istražite offline Wikivoyage. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
+"purchases_feature_desc_unlimited_map_download" = "Nabavi neograničena preuzimanja offline mapa za sve kontinente i regione.";
+"backup_error_subscription_was_expired_descr" = "Pretplata OsmAnd je istekla, obnovi je za korištenje sigurnosne kopije.";
+"purchases_feature_desc_wikivoyage" = "Istraži offline Wikivoyage. Članci su podeljeni po zemljama i regionima i dostupni na svim jezicima.";
 "debugging_and_development" = "Razvoj OsmAnd-a";
 "backup_error_user_is_already_registered" = "Ova adresa e-pošte se koristi na drugom profilu";
 "backup_and_restore" = "Rezervna kopija i vraćanje";
@@ -2372,7 +2372,7 @@
 "in_grace_period" = "U grejs periodu";
 "shared_string_delete_all" = "Obriši sve";
 "shared_string_logout" = "Odjava";
-"enough_contributions_descr" = "Čestitamo, stekli ste dovoljno doprinosa Openstritmap-ama i sada možete uživati neograničeno u osvežavanju mapa OsmAnda!";
+"enough_contributions_descr" = "Čestitamo, stekao si dovoljno doprinosa OpenStritMap-ama i sada možete uživati neograničeno u osvežavanju mapa OsmAnda!";
 "animate_my_location" = "Omogući animirano pomeranje mape do \"Moje lokacije\" tokom navigacije.";
 "shared_string_status" = "Stanje";
 "backup_data" = "Sačuvaj rezervu podataka";
@@ -2397,7 +2397,7 @@
 "tts_title" = "TTS";
 "save_heading_descr" = "Sačuvaj zaglavlje svakoj tački praćenja prilikom snimanja.";
 "routing_attr_motor_type_lpg_name" = "Plin (TNG)";
-"sign_in_with_open_street_map" = "Prijavite se pomoću OpenStreetMap-a";
+"sign_in_with_open_street_map" = "Prijavi se pomoću OpenStreetMap-a";
 "recalc_angle_dialog_descr" = "Potpuno pravi odsečak između mojeg lokacija i izračunatog puta biće prikazan dok se ruta ne izračuna";
 "promo_subscription" = "Promotivna pretplata";
 "are_you_sure" = "Da li ste sigurni?";
@@ -2462,7 +2462,7 @@
 "routing_attr_prefer_tactile_paving_name" = "Radije popločavaj dodirno";
 "rendering_value_omit_name" = "Izostaviti";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Skijanje izvan staza";
-"routing_attr_avoid_4wd_only_description" = "Izbegavati puteve za 4WD vozila";
+"routing_attr_avoid_4wd_only_description" = "Bez puteva za 4WD vozila";
 "routing_attr_avoid_highway_description" = "Izbegavati autoputeve";
 "rendering_attr_horse_scale_difficult_name" = "Teža";
 "rendering_value_all_name" = "Sve";
@@ -2483,7 +2483,7 @@
 "rendering_attr_horse_scale_impossible_name" = "Nemoguća";
 "rendering_attr_horseScale_name" = "Težina konjskih staza";
 "rendering_attr_horse_scale_dangerous_name" = "Opasna";
-"routing_attr_avoid_4wd_only_name" = "Izbegavati puteve s pogonom na 4 točka - 4WD";
+"routing_attr_avoid_4wd_only_name" = "Bez puteva za 4WD vozila";
 "routing_attr_difficulty_preference_intermediate_name" = "Srednji";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Sličice pri malom uvećanju";
 "routing_attr_difficulty_preference_expert_name" = "Stručnjak";
@@ -2571,7 +2571,7 @@
 "lang_ckb" = "Srednjekurdski";
 "telegram_chats" = "Ćaskanja Telegramom";
 "map_widget_target_distance_desc" = "Prikazuje rastojanje između kamere i odredišta.";
-"second_marker_widget_desc" = "Možete podesiti widget da prikazuje rastojanje ili procenjeno preostalo vreme dolaska na drugoj oznaci mape.";
+"second_marker_widget_desc" = "Možeš podesiti widžet da prikazuje rastojanje ili procenjeno preostalo vreme dolaska na drugoj oznaci mape.";
 "current_time_widget_desc" = "Prikazuje trenutno vreme tvog uređaja.";
 "max_speed_widget_desc" = "Prikazuje ograničenje brzine puta kojim se trenutno vozi.";
 "time_to_go_desc" = "Vreme u minutima ili satima potrebno da stignete na odredište.";
@@ -2656,7 +2656,7 @@
 "announcement_time_title" = "Vreme objave";
 "click_on_widget" = "Klikni na widget";
 "no_widgets_descr" = "Dodaj jednu ili više widget sa spiska dostupnih widget.";
-"no_widgets_here_yet" = "Ovde još nema widget";
+"no_widgets_here_yet" = "Još nema widžeta";
 "map_widget_altitude_map_center_desc" = "Prikazuje nadmorsku visinu na trenutnom centru mape.";
 "map_widget_ant_bicycle_power_desc" = "Prikazuje izlaznu snagu bicikliste, koja se koristi da pogoni bicikl";
 "map_widget_ant_bicycle_cadence" = "Takt pedalanja";
@@ -2734,7 +2734,7 @@
 "help_article_map_point_layers_on_map_name" = "TOI na mapi";
 "weather_widget_group_desc" = "Skup widget koje prikazuju razne podatke o vremenskim prilikama.";
 "map_widget_zoom_level_desc" = "Prikazuje trenutnu razinu uvećanja mape.";
-"first_marker_widget_desc" = "Možete podesiti widget da prikazuje rastojanje ili procenjeno preostalo vreme dolaska na prvoj oznaci mape.";
+"first_marker_widget_desc" = "Možeš podesiti widget da prikazuje rastojanje ili procenjeno preostalo vreme dolaska na prvoj oznaci mape.";
 "time_to_destination_widget_desc" = "Ova widget prikazuje „Vreme pristizanja“ ili „Preostalo vreme“ na poslednjoj dolaznoj tački. Vreme se stalno osvežava prilikom navođenja i jednako je vremenu rute iz trenutnog lokacija.";
 "time_to_intermediate_widget_desc" = "Widget prikazuje „Breme pristizanja“ ili „Preostalo vreme“ na prvoj prolaznoj tački. Vreme se stalno osvežava prilikom navođenja, a kada se prolazne tačke prođu, vreme će biti osveženo na sledećoj prolaznoj tački.";
 "distance_to_intermediate_widget_desc" = "Widget prikazuje preostalo rastojanje na prvoj prolaznoj tački. Kada se prolazna tačka prođe, rastojanje će se osvežiti na sledećoj prolaznoj tački.";
@@ -2764,7 +2764,7 @@
 "route_maneuvers" = "Skretanja rute";
 "route_maneuvers_desc" = "Spravice navođenja su omogućene tokom navođenja za prikaz podataka kao što su rastojanje, vreme dolaska ili preostalo vreme, sledeća skretanja, smer, trenutni naziv ulice, podaci o trakama, najveća dozvoljena brzina, upozorenja o približavanju, TOI, tačke puta.";
 "shared_string_symbol" = "Znak";
-"history_preferences_descr" = "Možete da onemogućite beleženje istorije pojedinačno za svaku vrstu istorije.";
+"history_preferences_descr" = "Možeš onemogućiti beleženje istorije pojedinačno za svaku vrstu istorije.";
 "user_points" = "Sopstvene TOI";
 "quick_action_coordinates_widget_descr" = "Prekidač da na mapi pokaže ili sakrije widget sa koordinatama.";
 "activity_type_motorbike_name" = "Motocikl";

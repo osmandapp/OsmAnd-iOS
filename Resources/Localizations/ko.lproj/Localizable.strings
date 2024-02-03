@@ -1824,3 +1824,6 @@
 "rendering_attr_weatherCloudContours_name" = "클라우드 격리";
 "checking_progress" = "확인 중…";
 "cloud_conflict" = "충돌";
+"today" = "오늘";
+"monitoring_min_accuracy" = "최소 정확도";
+"monitoring_min_distance" = "공급 능력";

@@ -3276,3 +3276,16 @@
 "select_tracks_to_display" = "Виберіть треки, щоб показати їх на мапі.";
 "show_all_tracks" = "Показати всі треки";
 "recently_visible" = "Нещодавно переглянуті";
+"shared_string_row_number" = "Рядок %d";
+"shared_string_nearest" = "Найближчі";
+"track_sort_az" = "За назвою А - Я";
+"track_sort_za" = "За назвою Я - А";
+"oldest_date_first" = "Спочатку найдавніші";
+"shortest_distance_first" = "Спочатку найкоротші";
+"newest_date_first" = "Спочатку найновіші";
+"show_icon" = "Показати піктограму";
+"longest_distance_first" = "Спочатку найдовші";
+"longest_duration_first" = "Спочатку більш тривалі";
+"shorter_duration_first" = "Спочатку менш тривалі";
+"simple_widget_footer" = "Віджет може заповнювати всю ширину рядка або тільки один стовпчик.";
+"complex_widget_alert" = "Віджет %@ можна розмістити лише в окремому рядку.";

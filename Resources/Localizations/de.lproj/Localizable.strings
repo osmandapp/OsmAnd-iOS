@@ -433,7 +433,7 @@
 "shared_string_select_all" = "Alle markieren";
 "create_custom_poi" = "Benutzerdefinierten Filter erstellen";
 "selected_categories" = "Ausgewählte Kategorien";
-"new_filter_desc" = "Bitte geben Sie einen Namen für den neuen Filter ein. Dieser wird zur Liste der \'Kategorien\' hinzugefügt.";
+"new_filter_desc" = "Bitte geben Sie einen Namen für den neuen Filter ein. Dieser wird zur Liste der „Kategorien“ hinzugefügt.";
 "shared_string_filters" = "Filter";
 "edit_filter" = "Kategorien bearbeiten";
 "edit_filter_save_as_menu_item" = "Speichern als";
@@ -665,7 +665,7 @@
 "coords_format_descr" = "Format geografischer Koordinaten.";
 "do_not_show_discount_desc" = "Unterdrückt Meldungen zu App-Sonderangeboten und besonderen lokalen Ereignissen.";
 "save_global_track_interval" = "Intervall für generelle Aufzeichnung";
-"save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Track-Aufzeichnung festlegen (wird über die Schaltfläche \'Routenaufzeichnung\' auf dem Kartenbildschirm angeschaltet).";
+"save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Track-Aufzeichnung festlegen (wird über die Schaltfläche „Routenaufzeichnung“ auf dem Kartenbildschirm angeschaltet).";
 "rotate_map_to" = "Kartenausrichtung";
 "rotate_map_to_bearing_descr" = "Art der Kartenausrichtung wählen.";
 "rotate_map_compass_opt" = "Kompassrichtung";
@@ -2053,7 +2053,7 @@
 "download_suggestion" = "Detaillierte %@ Karte herunterladen, um dieses Gebiet zu sehen";
 "dialogs_and_notifications_descr" = "Steuern Sie Pop-ups, Dialoge und Benachrichtigungen.";
 "routes_color_by_type" = "Routen einfärben nach …";
-"rendering_value_walkingRoutesOSMC_description" = "Einfärbung von Routen nach Ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und der Wandermarkierungen.";
+"rendering_value_walkingRoutesOSMC_description" = "Einfärbung von Routen nach ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und Wandermarkierungen.";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Einfärbung gemäß Routennetzwerk.";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Einfärbung von Routen nach dem Typ Ihres Knotennetzes (international, regional, lokal).";
 "walking_route_osmc_description" = "Einfärbung von Routen nach Ihrer individuellen lokalen Farbe (falls in OpenStreetMap vorhanden) und Ihrem Typ (international, regional, lokal).";

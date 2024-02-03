@@ -92,7 +92,7 @@
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto centriranje mape tokom pregleda.";
 "unknown_location" = "Pozicija još nije poznata.";
-"animate_routing_route_not_calculated" = "Molimo prvo izračunaj rutu";
+"animate_routing_route_not_calculated" = "Prvo izračunaj rutu";
 "settings_preset" = "Glavni profil";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications_title" = "Prozor i obaveštenja";
@@ -480,8 +480,8 @@
 "shared_string_max" = "Najviši";
 "shared_string_wifi_only" = "Samo bežično";
 "shared_string_turn_off" = "Isključi";
-"shared_strings_all_regions" = "Svi regioni";
-"regions" = "Regioni";
+"shared_strings_all_regions" = "Svi regije";
+"regions" = "Oblasti";
 "shared_string_width" = "Širina";
 "shared_string_interval" = "Međuvreme";
 "shared_string_none" = "Ništa";
@@ -660,7 +660,7 @@
 "map_magnifier" = "Uvećanje mape";
 "text_size" = "Veličina slova";
 "daynight_mode_night" = "Noć";
-"map_widget_renderer" = "Način prikaza mape";
+"map_widget_renderer" = "Stil mape";
 "map_settings_overunder" = "Overlay / Underlay";
 "map_settings_over" = "Overlay";
 "map_settings_under" = "Underlay";
@@ -673,7 +673,7 @@
 "map_settings_avail_lay" = "Available layers";
 "mapillary" = "Mapilari";
 "street_level_imagery" = "Slike na nivou ulice";
-"shared_string_terrain" = "Tlo";
+"shared_string_terrain" = "Teren";
 "map_settings_layer_transparency" = "Layer transparency";
 "map_settings_slopes_legend" = "You can read more about the slopes on Wikipedia";
 "map_settings_slopes_description" = "Slope maps use different colors to visualize the terrain";
@@ -938,7 +938,7 @@
 "profile_alert_need_profile_name_title" = "Unesi ime profil";
 "select_color" = "Odaberi boju";
 "select_icon_profile_dialog_title" = "Odaberi ikonu";
-"select_map_icon" = "lokaciju sličice pri mirovanju";
+"select_map_icon" = "Ikona pozicije pri mirovanju";
 "select_navigation_icon" = "Sličica lokacija prilikom kretanja";
 "will_be_show_while_moving" = "It will be show while moving";
 "base_profile_descr_car" = "Auta, kamion, motor";
@@ -1280,8 +1280,8 @@
 "quick_action_map_underlay_title" = "Slojevi ispod mape";
 "vector_data" = "Vektorske mape bez interneta";
 "quick_action_map_source_action" = "Dodaj izvor mape";
-"quick_action_map_style_action" = "Dodaj način prikaza mape";
-"quick_action_map_styles" = "Načini prikaza mape";
+"quick_action_map_style_action" = "Dodaj stil mape";
+"quick_action_map_styles" = "Stil mape";
 "quick_action_new_action" = "Dodaj radnju";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Napravi stavke";
@@ -1303,7 +1303,7 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Dodaj tačku zanimanja";
-"quick_action_map_style" = "Izmeni način prikaza mape";
+"quick_action_map_style" = "Izmeni stil mape";
 "quick_action_map_source" = "Izmeni izvor mape";
 "quick_action_map_overlay" = "Izmeni nivo iznad mape";
 "quick_action_map_underlay" = "Izmeni nivo ispod mape";
@@ -1552,7 +1552,7 @@
 "record_plugin_name" = "Snimanje putovanja";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Ovaj dodatak aktivira funkcionalnost snimanja ičuvanja Vaših putanja kada se pritisne GPX spravica za beleženje na karti, a može i da automatski beleži sve Vaše puteve kojima ste navođeni u GPX fajl.\n\nSnimljene putanje se mogu deliti sa prijateljima ili slati na OSM. Sportisti mogu da koriste snimljene putanje da prate svoje treninge.Direktno u OsmAnd-u može da se radi osnovna analiza putanja, kao što su računanje brzine kruga, prosečna brzina itd. Naravno, putanje se dalje mogu analizirati u drugim specijalnim alatima za analizu.";
-"osm_editing_plugin_name" = "Openstritmapsko uređivanje";
+"osm_editing_plugin_name" = "Uređivanje OSM mapa";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Doprinosite OSM-u, preko pravljenja i izmena OSM objekata tačaka od interesa, otvaranja ili komentarisanja OSM beleški, i prilaganjem snimljenih GPX fajlova iz OsmAnd-a tako što date Vaše korisničko ime i lozinku. OpenStreetMap.org je globalni projekat mapiranja sveta u javnom domenu, vođen zajednicom.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
@@ -1607,7 +1607,7 @@
 "enter_fav_name" = "Enter favorite name";
 "res_installing" = "Installing…";
 "roads" = "Putevi";
-"shared_string_hillshade" = "Senke brda";
+"shared_string_hillshade" = "Senke reljefa";
 "download_regular_maps" = "Uobičajena mapa";
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1621,7 +1621,7 @@
 "gpx_split_interval_descr" = "Izaberi međuvreme na kome će se prikazivati oznake sa razdaljinom ili vremenom na stazi.";
 "gpx_join_gaps" = "Spoj razmake";
 "gpx_join_gaps_descr" = "Gaps between segments will be connected.";
-"track_show_start_finish_icons" = "Prikaži početne i krajne sličice";
+"track_show_start_finish_icons" = "Prikaži ikonu za početak i kraj";
 "reset_to_original" = "Vrati na početne vrednosti";
 "route_line_color_elevation_description" = "Route line will be colorized depending on the elevation profile of the route.";
 "gpx_split_interval_none_descr" = "Izaberi željenu mogućnost podele: po vremenu ili po udaljenosti.";
@@ -2162,7 +2162,7 @@
 "rendering_attr_subwayMode_name" = "Linije metroa";
 "rendering_attr_highway_class_motorway_name" = "Auto-ruta";
 "rendering_value_brown_name" = "Smeđa";
-"rendering_attr_hideIcons_name" = "Sličice TOI";
+"rendering_attr_hideIcons_name" = "TOI ikone";
 "rendering_attr_roadColors_description" = "Izaberi obrazac boja puteva:";
 "rendering_value_browse_map_name" = "Pregledaj mapu";
 "rendering_attr_surface_asphalt_name" = "Asfalt";
@@ -2438,7 +2438,7 @@
 "select_another_colorization" = "Odaberi drugi tip bojenja.";
 "shared_string_contributions" = "Doprinos";
 "use_login_and_password" = "Koristi svoje korisničko ime i lozinku";
-"offline_edition_descr" = "Ako je omogućeno uređivanje bez interneta, tada će se promene prvo sačuvati mestno i otpremiti po zahtevu, u suprotnom će se promene odmah otpremiti.";
+"offline_edition_descr" = "Ako je omogućeno uređivanje bez interneta, tada će se promene prvo sačuvati masto i otpremiti po zahtevu, u suprotnom će se promene odmah otpremiti.";
 "shared_string_recorded" = "Snimljeno";
 "backup_delete_types_descr" = "Da li želite da izbrišete podatke za onesposobljene tipove iz oblaka?";
 "position_on_map_bottom" = "Na dnu";
@@ -2452,7 +2452,7 @@
 "duration_ago" = "Pre %@";
 "shared_string_angle_param" = "Ugao: %@°";
 "routing_attr_motor_type_electric_name" = "Električna";
-"logout_from_osmand_cloud_decsr" = "Odjavljujete se? \nMoraćete da se prijavite ponovo da napravite umnožak za čuvanje ili da povratite podatke.";
+"logout_from_osmand_cloud_decsr" = "Odjavljuješ se?\nMoraćeš da se prijaviš ponovo da napraviš kopiju ili da povratiš podatke.";
 "simulation_real_mode_desc" = "Na pravim deonicama puta brzina će biti približena najvećoj dozvoljenoj brzini. \nNa raskrsnicama, simuliranje će se usporiti. \nDodatne kazne će biti primenjivane na saobraćajne znake, znake za zaustavljanje, itd.";
 "backup_into_file" = "Pravljenje rezervne kopije u datoteci";
 "routing_attr_motor_type_description" = "Odredite vrstu goriva vozila, potrebno je radi procene količine izduva CO2.";
@@ -2485,7 +2485,7 @@
 "rendering_attr_horse_scale_dangerous_name" = "Opasna";
 "routing_attr_avoid_4wd_only_name" = "Bez puteva za 4WD vozila";
 "routing_attr_difficulty_preference_intermediate_name" = "Srednji";
-"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Sličice pri malom uvećanju";
+"rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Ikone pri malom uvećanju";
 "routing_attr_difficulty_preference_expert_name" = "Stručnjak";
 "rendering_attr_showTramRoutes_name" = "Tramvajske rute";
 "rendering_attr_seabedDetail_description" = "Dodatni pismena obavetenja o kakvoći morskog dna, vrstama podloge, vrstama korova ili morske trave";
@@ -2588,7 +2588,7 @@
 "shared_string_duplicate" = "Udvostruči";
 "map_settings_weather_temp" = "Toplota";
 "shared_string_layers" = "Slojevi";
-"generate_hillshade_from_3d_maps" = "Kreiranje senčenja reljefa na temelju 3D mape";
+"generate_hillshade_from_3d_maps" = "Kreiranje rasterskog osenčavanja reljefa iz 3D mapa";
 "offline_wikivoyage" = "Offline Wikivoyage";
 "shared_string_explore" = "Istraži";
 "rendering_attr_depthContourColorScheme_description" = "Obrazac boja linija obrisa dubine";
@@ -2624,10 +2624,10 @@
 "map_widget_distance_to_destination" = "Udaljenost do odredišta";
 "map_markers_bar" = "Traka oznaka na mapi";
 "shared_string_result" = "Nalaz";
-"disable_vertex_hillshade_3d" = "Onemogući vrtložno senčenje u prostornom pregledu 3D";
+"disable_vertex_hillshade_3d" = "Onemogući senčenje vrhova u 3D";
 "coordinates_widget_map_center" = "Koordinate: središte mape";
 "shared_string_view" = "Pregled";
-"cache_size" = "Veličina zahvata";
+"cache_size" = "Veličina podataka";
 "activity_type_offroad_name" = "Vožnja van puta";
 "activity_type_walking_name" = "Pešačenje";
 "deleted_file" = "Izbrisana datoteka";

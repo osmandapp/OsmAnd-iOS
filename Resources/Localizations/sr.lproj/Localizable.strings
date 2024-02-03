@@ -2684,3 +2684,7 @@
 "free_favorites_backup" = "Бесплатно складиште омиљених";
 "rendering_value_sacScale_description" = "Швајцарско планинарско удружење";
 "free_account" = "Бесплатни налог";
+"shared_string_author" = "Аутор";
+"shared_string_license" = "Лиценца";
+"shared_string_link" = "Линк";
+"add_row" = "Додај ред";

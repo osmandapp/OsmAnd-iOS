@@ -1021,9 +1021,9 @@
 "simplified_track" = "Pojednostavljeni ruta";
 "simplified_track_description" = "Samo linija rute će biti sačuvana, a putne tačke će biti izbrisane.";
 "open_saved_track" = "Otvori sačuvanu";
-"plan_route_create_new_route" = "Kreiraj novu rutu";
+"plan_route_create_new_route" = "Nova ruta";
 "track_is_saved" = "%@\nis saved!";
-"plan_route_open_existing_track" = "Otvori postojeću rutu";
+"plan_route_open_existing_track" = "Snimljene rute";
 "sort_last_modified" = "poslednjoj izmeni";
 "route_between_points_add_track_desc" = "Izaberi datoteku zapisa kojoj će se dodati novi segment.";
 "route_between_points_warning_desc" = "Zatim pomoću jednog od vaših navigacionih profila prislonite stazu na najbliži dozvoljeni put da biste koristili ovu opciju.";
@@ -1285,7 +1285,7 @@
 "quick_action_new_action" = "Dodaj radnju";
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Napravi stavke";
-"configure_map" = "Podesi mapu";
+"configure_map" = "Podešavanje mape";
 "map_look_descr" = "Izgled mape";
 "quick_action_add_marker" = "Dodaj oznaku na mapi";
 "select_map_marker" = "Odaberi marker";
@@ -2688,8 +2688,8 @@
 "external_device_characteristic_speed" = "Brzina";
 "wheel_circumference" = "Obim točka";
 "map_orientation_portrait" = "Uspravno";
-"map_orientation_landscape" = "Položeno";
-"map_orientation_default" = "Kao i uređaj";
+"map_orientation_landscape" = "Vodoravno";
+"map_orientation_default" = "Sistem";
 "apply_to_existing_favorites_descr" = "Primeniti promene na postojeće Favoriti grupe ili samo na nove?";
 "map_screen_orientation" = "Orijentacija ekrana";
 "rendering_value_sacScale_description" = "Švajcarsko planinarsko udruženje";
@@ -2707,7 +2707,7 @@
 "cloud_recent_changes" = "Izmene";
 "activity_type_car_name" = "Automobil";
 "shared_string_markers" = "Oznake";
-"audionotes_plugin_name" = "Zabeleške zvuka i snimaka";
+"audionotes_plugin_name" = "Zvučni i video zapisi";
 "shared_string_accessibility" = "Pristupačnost";
 "compass_on_circles" = "Kompas na krugovima";
 "arrival_time_widget_desc" = "Vreme dolaska na odredišnu tačku.";
@@ -2874,7 +2874,7 @@
 "weather_pressure_millimeters_of_mercury" = "Milimetri žive";
 "weather_temperature_celsius" = "Celzijusi";
 "weather_temperature_fahrenheit" = "Farenhajt";
-"show_map_symbols" = "Prikazuj znamenja mapa";
+"show_map_symbols" = "Prikazati oznake na mapi";
 "purchases_feature_desc_external_sensors" = "Prikazuj i snimaj podatke iz spoljašnjih senzora: brzinu bicikla, snagu bicikla, brzinu i broj otkucaja srca.";
 "external_sensors_support" = "Podrška spoljnih senzora";
 "map_markers_desc" = "Widget pokazuje rastojanje ili predviđeno vreme dolaska (ETA) prve dve oznake na spisku oznaka.";

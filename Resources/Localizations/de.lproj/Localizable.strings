@@ -3283,3 +3283,16 @@
 "show_all_tracks" = "Alle Tracks anzeigen";
 "import_create_track_files" = "Sie können mit OsmAnd Track-Dateien importieren, erstellen oder aufzeichnen.";
 "recently_visible" = "Kürzlich sichtbar";
+"shared_string_row_number" = "Reihe %d";
+"shared_string_nearest" = "Am nächsten";
+"track_sort_az" = "Name A - Z";
+"track_sort_za" = "Name Z - A";
+"newest_date_first" = "Neuestes Datum zuerst";
+"oldest_date_first" = "Ältestes Datum zuerst";
+"shortest_distance_first" = "Kürzeste Entfernung zuerst";
+"longest_duration_first" = "Längste Dauer zuerst";
+"complex_widget_alert" = "%@ Widget kann nur in eigener Zeile platziert werden.";
+"longest_distance_first" = "Längste Entfernung zuerst";
+"show_icon" = "Symbol anzeigen";
+"shorter_duration_first" = "Kürzere Dauer zuerst";
+"simple_widget_footer" = "Widget kann gesamte Zeilenbreite oder nur eine Spalte einnehmen.";

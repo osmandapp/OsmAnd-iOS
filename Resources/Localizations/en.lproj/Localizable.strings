@@ -852,6 +852,7 @@
 "shared_string_link" = "Link";
 "shared_string_license" = "License";
 "shared_string_keywords" = "Keywords";
+"shared_string_trash" = "Trash";
 
 "restart" = "Restart";
 
@@ -3577,3 +3578,8 @@
 
 "shared_string_deleted" = "Deleted";
 "duration_moment_ago" = "a moment ago";
+"trash_is_empty" = "Trash is empty";
+"trash_is_empty_banner_desc" = "Files removed from OsmAnd Cloud will be available here for %d days after.";
+"delete_all_items" = "Delete all items";
+"delete_all_items_desc" = "Are you sure you want to permanently delete all items in the Trash? This action can't be undone.";
+"subscribe_email_error" = "Error";

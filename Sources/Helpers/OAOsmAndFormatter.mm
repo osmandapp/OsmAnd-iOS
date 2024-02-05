@@ -702,4 +702,27 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
       }
 }
 
++ (NSString *)getFormattedDuration:(NSTimeInterval)seconds
+{
+    NSInteger secondsInt = (NSInteger) seconds;
+    NSInteger hours = secondsInt / (60 * 60);
+    NSInteger minutes = (secondsInt / 60) % 60;
+    
+    if (hours > 0)
+    {
+        NSString *durationString = [NSString stringWithFormat:@"%ld %@", hours, OALocalizedString(@"int_hour")];
+        if (minutes > 0)
+            durationString = [durationString stringByAppendingFormat:@" %ld %@", minutes, OALocalizedString(@"int_min")];
+        return durationString;
+    }
+    else if (minutes > 0)
+    {
+        return [NSString stringWithFormat:@"%ld %@", minutes, OALocalizedString(@"int_min")];
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"int_min")];
+    }
+}
+
 @end

@@ -381,6 +381,19 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             };
             [backupRows addRowFromDictionary:purchaseCell];
         }
+
+        OATableSectionData *storageRows = [OATableSectionData sectionData];
+        storageRows.headerText = OALocalizedString(@"help_article_personal_storage_name");
+        [_data addSection:storageRows];
+
+        NSDictionary *purchaseCell = @{
+            kCellTypeKey: [OAButtonTableViewCell getCellIdentifier],
+            kCellKeyKey: @"onTrashPressed",
+            kCellTitleKey: OALocalizedString(@"shared_string_trash"),
+            kCellIconNameKey: @"ic_custom_remove",
+            kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorSecondary]
+        };
+        [storageRows addRowFromDictionary:purchaseCell];
     }
 }
 
@@ -585,14 +598,33 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [cell.button setTitle:nil forState:UIControlStateNormal];
             cell.button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
-        BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
-        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        cell.titleLabel.text = item.title;
-        cell.descriptionLabel.text = item.descr;
-        [cell.leftIconView setImage:[UIImage templateImageNamed:item.iconName]];
-        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : [UIColor colorNamed:ACColorNameIconColorActive];
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.descriptionLabel.text = item.descr;
+            [cell descriptionVisibility:item.descr && item.descr.length > 0];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([item.key isEqualToString:@"lastBackup"])
+            {
+                BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
+                [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+                [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([item.key isEqualToString:@"onTrashPressed"])
+            {
+                [cell.button setImage:nil forState:UIControlStateNormal];
+            }
+
+            UIColor *leftIconTintColor;
+            if (item.iconTintColor)
+                leftIconTintColor = item.iconTintColor;
+            else if (item.iconTint != -1)
+                leftIconTintColor = UIColorFromRGB(item.iconTint);
+            else
+                leftIconTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            cell.leftIconView.tintColor = leftIconTintColor;
+        }
         return cell;
     }
     else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
@@ -692,13 +724,18 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     {
         statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts];
     }
+    else if ([item.key isEqualToString:@"onTrashPressed"])
+    {
+        OACloudTrashViewController *cloudTrashController = [[OACloudTrashViewController alloc] init];
+        [self showViewController:cloudTrashController];
+    }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
         if (![self isActionButtonDisabled:item] && [self respondsToSelector:NSSelectorFromString(item.key)])
             [self performSelector:NSSelectorFromString(item.key) withObject:nil afterDelay:0.];
     }
     if (statusBackupViewController)
-        [self.navigationController pushViewController:statusBackupViewController animated:YES];
+        [self showViewController:statusBackupViewController];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 

@@ -554,6 +554,7 @@
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
 		461F4523283E370C00796360 /* ic_custom_arrow_down_short@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */; };
 		461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */ = {isa = PBXBuildFile; fileRef = 461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */; };
+		462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462148712B6BEF44003DA10C /* CloudTrashViewController.swift */; };
 		46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */; };
 		46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B782AD70AF9006C3248 /* OAGroupEditorViewController.mm */; };
 		462545A828D3688900637964 /* ic_custom_cross_buy_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A428D3688700637964 /* ic_custom_cross_buy_colored_day@2x.png */; };
@@ -4091,6 +4092,7 @@
 		461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@2x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@2x.png"; sourceTree = "<group>"; };
 		461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAnnounceTimeDistances.h; sourceTree = "<group>"; };
 		461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAnnounceTimeDistances.m; sourceTree = "<group>"; };
+		462148712B6BEF44003DA10C /* CloudTrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashViewController.swift; sourceTree = "<group>"; };
 		46220B6E2AD6D6A8006C3248 /* OABaseEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseEditorViewController.h; sourceTree = "<group>"; };
 		46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseEditorViewController.mm; sourceTree = "<group>"; };
 		46220B772AD70A7B006C3248 /* OAGroupEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGroupEditorViewController.h; sourceTree = "<group>"; };
@@ -10145,11 +10147,11 @@
 		B247453027E35B1D00C18C3F /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
-				DA2483E22927916500189AF2 /* OAStatusBackupTableViewController.h */,
-				DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */,
-				DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */,
-				DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */,
-				DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */,
+				462148712B6BEF44003DA10C /* CloudTrashViewController.swift */,
+				CA4ED9A9B869BE77FB56498A /* OABackupTypesViewController.h */,
+				CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */,
+				CA4ED93E26C370980B8C9B7A /* OABaseBackupTypesViewController.h */,
+				CA4ED1A332DC853B31E87B5F /* OABaseBackupTypesViewController.mm */,
 				32D253A727F336C000324717 /* OABaseCloudBackupViewController.h */,
 				32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */,
 				32D253A627F336C000324717 /* OACloudAccountBaseViewController.h */,
@@ -10159,6 +10161,8 @@
 				32D253A327F336BF00324717 /* OACloudAccountCreateViewController.m */,
 				32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */,
 				32D253A927F336C100324717 /* OACloudAccountLoginViewController.m */,
+				CA4ED39ED05396B169EED79D /* OACloudAccountLogoutViewController.h */,
+				CA4ED4F1EA15E640EDA6F8F3 /* OACloudAccountLogoutViewController.mm */,
 				32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */,
 				32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */,
 				32D2539D27F336BE00324717 /* OACloudBackupViewController.h */,
@@ -10166,23 +10170,22 @@
 				32D253A127F336BF00324717 /* OACloudBackupViewController.xib */,
 				32D253A827F336C000324717 /* OACloudIntroductionViewController.h */,
 				32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */,
-				CA4EDA35667F7F2BAF8B6C93 /* OASettingsBackupViewController.mm */,
-				CA4ED10A47C294C3F6672F2F /* OASettingsBackupViewController.h */,
-				46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */,
-				CA4ED4F1EA15E640EDA6F8F3 /* OACloudAccountLogoutViewController.mm */,
-				CA4ED39ED05396B169EED79D /* OACloudAccountLogoutViewController.h */,
-				CA4ED156B139FD22BFBFBBF1 /* OADeleteAllVersionsBackupViewController.mm */,
 				CA4ED42ACE3C33552E3D40F2 /* OADeleteAllVersionsBackupViewController.h */,
-				CA4ED1A332DC853B31E87B5F /* OABaseBackupTypesViewController.mm */,
-				CA4ED93E26C370980B8C9B7A /* OABaseBackupTypesViewController.h */,
-				CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */,
-				CA4ED9A9B869BE77FB56498A /* OABackupTypesViewController.h */,
-				CA4EDAB5C5B40EC4B61AED59 /* OAManageStorageViewController.mm */,
+				CA4ED156B139FD22BFBFBBF1 /* OADeleteAllVersionsBackupViewController.mm */,
 				CA4ED86D6650C8C9F5AE0383 /* OAManageStorageViewController.h */,
-				CA4ED2B11CC769AB33E5FC53 /* OAManageTypeViewController.mm */,
+				CA4EDAB5C5B40EC4B61AED59 /* OAManageStorageViewController.mm */,
 				CA4ED85F9DC3CF716E0B4312 /* OAManageTypeViewController.h */,
+				CA4ED2B11CC769AB33E5FC53 /* OAManageTypeViewController.mm */,
+				CA4ED10A47C294C3F6672F2F /* OASettingsBackupViewController.h */,
+				CA4EDA35667F7F2BAF8B6C93 /* OASettingsBackupViewController.mm */,
+				46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */,
 				4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */,
 				4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */,
+				DA2483E22927916500189AF2 /* OAStatusBackupTableViewController.h */,
+				DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */,
+				DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */,
+				DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */,
+				DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */,
 			);
 			path = Cloud;
 			sourceTree = "<group>";
@@ -17112,6 +17115,7 @@
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
 				325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */,
+				462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */,
 				DA5A833426C563A800F274C7 /* OAShapesCollectionViewCell.m in Sources */,
 				DA5A847826C563A900F274C7 /* OADestinationsLineWidget.mm in Sources */,
 				DA5A855026C563A900F274C7 /* OAResourcesInstaller.mm in Sources */,

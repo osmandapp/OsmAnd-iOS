@@ -21,40 +21,40 @@ final class TrashItem: NSObject {
         self.deletedFile = deletedFile
     }
 
-    func getTime() -> Int {
-        deletedFile?.updatetimems ?? oldFile.updatetimems
+    var time: Int {
+        (deletedFile?.updatetimems ?? oldFile.updatetimems) / 1000
     }
 
-    func getName() -> String {
-        if let item = getSettingsItem() {
-            return BackupUiUtils.getItemName(item)
+    var name: String {
+        if let settingsItem {
+            return BackupUiUtils.getItemName(settingsItem)
         } else {
             return oldFile.name
         }
     }
 
-    func getDescription() -> String {
+    var descr: String {
         let deleted = localizedString("shared_string_deleted")
-        let formattedTime = BackupUiUtils.formatPassedTime(time: getTime(), longPattern: "MMM d, HH:mm", shortPattern: "HH:mm", def: "")
+        let formattedTime = BackupUiUtils.formatPassedTime(time: time, longPattern: "MMM d, HH:mm", shortPattern: "HH:mm", def: "")
         return String(format: localizedString("ltr_or_rtl_combine_via_colon"), deleted, formattedTime)
     }
 
-    func getIconName() -> UIImage? {
-        if let item: OASettingsItem = getSettingsItem() {
-            return BackupUiUtils.getIcon(item)
+    var icon: UIImage? {
+        if let settingsItem {
+            return BackupUiUtils.getIcon(settingsItem)
         }
         return nil
     }
 
-    func getSettingsItem() -> OASettingsItem? {
+    var settingsItem: OASettingsItem? {
         deletedFile?.item ?? oldFile.item
     }
 
-    func isLocalDeletion() -> Bool {
+    var isLocalDeletion: Bool {
         deletedFile == nil
     }
 
-    func getRemoteFiles() -> [OARemoteFile] {
+    var remoteFiles: [OARemoteFile] {
         var files = [oldFile]
         if let deletedFile {
             files.append(deletedFile)

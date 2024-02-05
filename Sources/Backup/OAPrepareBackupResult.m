@@ -53,7 +53,7 @@
         NSString *typeNamePath = file.getTypeNamePath;
         if (!remoteFilesMap[typeNamePath])
             remoteFilesMap[typeNamePath] = file;
-        else if ([oldRemoteFiles.allKeys containsObject: typeNamePath] && !file.isInfoFile && !file.isDeleted)
+        else if (![oldRemoteFiles.allKeys containsObject:typeNamePath] && !file.isInfoFile && !file.isDeleted)
             oldRemoteFiles[typeNamePath] = file;
     }
     NSMutableDictionary<NSString *, OARemoteFile *> *uniqueRemoteFiles = [NSMutableDictionary dictionary];

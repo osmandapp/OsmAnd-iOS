@@ -2493,7 +2493,7 @@
 "choose_what_to_restore" = "Alegeți ce să restaurați.";
 "renew_subscription" = "Reînnoiește abonamentul";
 "backup_complete" = "Backup complet";
-"duration_ago" = "%@în urmă";
+"duration_ago" = "%@ în urmă";
 "weather_offline_forecast_only" = "Numai prognoza offline";
 "weather_data_provider" = "Furnizorul de date GFS.";
 "weather_clear_online_cache" = "Acest lucru va șterge toată memoria cache pentru panoul meteo online.";

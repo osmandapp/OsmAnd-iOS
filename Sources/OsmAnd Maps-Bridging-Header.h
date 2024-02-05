@@ -148,6 +148,11 @@
 #import "OAGPXDataSetType.h"
 
 // Backup
+#import "OABackupHelper.h"
+#import "OABackupInfo.h"
+#import "OANetworkSettingsHelper.h"
+#import "OAPrepareBackupResult.h"
+#import "OASyncBackupTask.h"
 #import "OASettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OAFileSettingsItem.h"

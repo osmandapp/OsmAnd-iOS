@@ -60,5 +60,6 @@
 + (NSString *)getFormattedDistanceInterval:(double)interval;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
++ (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
 
 @end

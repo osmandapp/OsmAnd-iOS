@@ -78,7 +78,7 @@
 "starting_point" = "Početna tačka";
 "shared_string_select_avoid_road_on_map" = "Select a road to be avoided during the routing";
 "shared_string_road" = "Ruta";
-"avoid_roads_msg" = "Izaberete zamenske rute izborom puteva za izbegavanje";
+"avoid_roads_msg" = "Izabere alternativnu rutu izborom puteva za izbegavanje";
 "shared_string_go" = "Idi";
 "info_button" = "Obaveštenja";
 "simulate_your_location" = "Simuliraj poziciju";
@@ -90,7 +90,7 @@
 "day_night_info" = "Podaci o danu/noći";
 "daynight_mode_auto" = "Automatski";
 "route_simulation" = "Route simulation";
-"auto_follow_location_enabled" = "Auto centriranje mape tokom pregleda.";
+"auto_follow_location_enabled" = "Auto centriranje mape";
 "unknown_location" = "Pozicija još nije poznata.";
 "animate_routing_route_not_calculated" = "Prvo izračunaj rutu";
 "settings_preset" = "Glavni profil";
@@ -185,7 +185,7 @@
 "speak_street_names" = "Nazivi ulica (TTS)";
 "speak_speed_limit" = "Ograničenje brzine";
 "speak_cameras" = "Prekršajne kamere";
-"speak_traffic_warnings" = "Saobraćajna upozorenja";
+"speak_traffic_warnings" = "Stanje na putevima";
 "shared_string_gpx_waypoints" = "Tačke na ruti";
 "speak_favorites" = "Favoriti u blizini";
 "speak_poi" = "TOI u blizini";
@@ -304,7 +304,7 @@
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Uključi i privremena ograničenja";
-"impassable_road_desc" = "Izaberi koje puteve želiš da izbegavaš tokom navođenja.";
+"impassable_road_desc" = "Izaberi koje puteve izbegavati tokom navođenja.";
 "interrupt_music_descr" = "Glasovna uputstva zaustavljaju muziku.";
 "interrupt_music" = "Zaustavi muziku";
 "shared_string_do_not_use" = "Ne koristi";
@@ -377,7 +377,7 @@
 "traffic_warning_pedestrian" = "Pešački prelaz";
 "traffic_warning_hazard" = "Opasnost";
 "tunnel_warning" = "Tunel je ispred";
-"accessibility_announce" = "Objavi";
+"accessibility_announce" = "Najavi";
 "driving_region_japan" = "Japan";
 "driving_region_us" = "Sjedinjene Američke Države";
 "driving_region_canada" = "Kanada";
@@ -1235,7 +1235,7 @@
 "local_openstreetmap_uploading" = "Otpremam…";
 "osm_upload_complete" = "Upload complete";
 "osm_tag_too_long_message" = "The maximum value length for tag %@ is 255 characters. \nPlease make it shorter to continue.";
-"save_poi_without_poi_type_message" = "Sačuvati tačku zanimanja bez vrste?";
+"save_poi_without_poi_type_message" = "Sačuvaćeš TOI bez vrste?";
 "save_poi_too_many_uppercase" = "Ime sadrži previše velikih slova. Ipak nastaviti?";
 "osm_editing_loading_poi" = "Loading POI information";
 "osm_editing_access_descr" = "You can view all your local edits and notes in %@. Already uploaded points are not listed in OsmAnd.";
@@ -1778,10 +1778,10 @@
 "create_custom_poi" = "Napravi proizvoljni filter";
 "selected_categories" = "Izabrane kategorije";
 "new_filter_desc" = "Molimo, upiši naziv za novi filter, koji će biti dodan u oznaku \"Kategorija\".";
-"rearrange_categories" = "Preuredi vrste";
+"rearrange_categories" = "Preuredi kategorije";
 "visible_categories" = "Visible categories";
 "hidden_categories" = "Hidden categories";
-"create_custom_categories_list_promo" = "Promenite redosled spiska i sakrijte vrste. Uvezite ili izvezite sve promene kao profile.";
+"create_custom_categories_list_promo" = "Promeni redosled spiska i sakrij kategorije. Uvezi ili izvezi sve promene kao profile.";
 "reset_to_default_category_button_promo" = "Povratak na podrazumevano će postaviti redosled razvrstavanja na podrazumevano stanje posle ugradnje programa.";
 "search_poi_types_descr" = "Združeno koristite tačake zanimanja različitih vrsti. Kliknite prekidač radi odabira svih, kliknite na levu stranu da odaberete vrstu.";
 "email_example_hint" = "user@example.com";
@@ -1893,11 +1893,11 @@
 "routing_attr_height_obstacles_name" = "Koristi podatke o visini";
 "routing_attr_avoid_toll_name" = "Bez putarina";
 "rendering_attr_appMode_description" = "Prilagodi mapu za";
-"routing_attr_avoid_ice_roads_fords_name" = "Izbegavati puteve sa poledicama ili plićacima";
+"routing_attr_avoid_ice_roads_fords_name" = "Bez puteva sa poledicama ili plićacima";
 "rendering_value_germanRoadAtlas_name" = "Nemački atlas puteva";
 "rendering_attr_hikingRoutesOSMC_name" = "Planinske staze";
 "rendering_attr_showRoadMaps_name" = "Samo putne mape";
-"routing_attr_avoid_ferries_description" = "Trajekti";
+"routing_attr_avoid_ferries_description" = "Izbegavati trajekte";
 "rendering_attr_contourWidth_description" = "Debljina linije izohipse";
 "routing_attr_driving_style_name" = "Način vožnje";
 "rendering_attr_surface_pebblestone_name" = "Kamenčići";
@@ -1958,7 +1958,7 @@
 "rendering_attr_piste_type_sleigh_name" = "Saonice";
 "rendering_attr_surface_paved_name" = "Asfaltirano";
 "routing_attr_difficulty_preference_name" = "Preferirana težina";
-"routing_attr_avoid_subway_name" = "Izbegavati podzemne železnice";
+"routing_attr_avoid_subway_name" = "Bez podzemne železnice";
 "rendering_attr_showLez_description" = "Prikaži oblasti niskog zagađenja. Ne utiče na navođenje.";
 "rendering_attr_surfaceIntegrity_name" = "Kvalitet puta";
 "routing_attr_allow_intermediate_description" = "Teži putevi sa strmijim delovima. Opšte gledano, neke prepreke koje treba izbegavati.";
@@ -1975,7 +1975,7 @@
 "rendering_value_translucent_green_name" = "Prozirna zelena";
 "rendering_value_translucent_yellow_name" = "Prozirna žuta";
 "rendering_attr_OSMMapperAssistant_name" = "Pomoćnik mapa OSM-a";
-"routing_attr_avoid_borders_name" = "Granični prelazi";
+"routing_attr_avoid_borders_name" = "Izbegavati granične prelaze";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Bojenje prema pripadnosti mreži puteva";
 "rendering_attr_smoothness_excellent_name" = "Izvrsno";
 "rendering_value_pink_name" = "Ružičasta";
@@ -1984,7 +1984,7 @@
 "rendering_attr_hideText_name" = "Pismo";
 "rendering_attr_contourDensity_name" = "Gustina linije izohipse";
 "routing_attr_avoid_motorway_description" = "Izbegavati autoputeve";
-"routing_attr_avoid_motorway_name" = "Autoputevi";
+"routing_attr_avoid_motorway_name" = "Bez autoputeva";
 "rendering_attr_hideWoodScrubs_name" = "Šume i šumarke";
 "rendering_attr_surface_wood_name" = "Drvo";
 "rendering_attr_smoothness_horrible_name" = "Užasno";
@@ -2003,11 +2003,11 @@
 "routing_attr_avoid_sett_description" = "Izbegavaj kaldrme";
 "rendering_attr_hikingRoutesOSMC_description" = "Prikazuj puteve prema putanjama OSMC-a.";
 "rendering_value_car_name" = "Auto";
-"routing_attr_avoid_unpaved_name" = "Makadami";
+"routing_attr_avoid_unpaved_name" = "Bez makadama";
 "rendering_attr_lessDetailed_name" = "Manje detalja";
 "routing_attr_avoid_borders_description" = "Državne granice";
 "rendering_attr_highway_class_steps_name" = "Stepenice";
-"routing_attr_avoid_tram_name" = "Izbegavati tramvaje";
+"routing_attr_avoid_tram_name" = "Bez tramvaja";
 "rendering_attr_piste_type_downhill_name" = "Nizbrdo";
 "rendering_attr_moreDetailed_name" = "Više detalja";
 "rendering_attr_piste_difficulty_undefined_name" = "Neodređeno";
@@ -2030,7 +2030,7 @@
 "routing_attr_prefer_unpaved_description" = "Prednost neasfaltiranim putevima.";
 "rendering_attr_roadStyle_description" = "Izgled puteva";
 "routing_attr_prefer_motorway_description" = "Prednost putevima za motorna vozila";
-"routing_attr_avoid_ferries_name" = "Trajekti";
+"routing_attr_avoid_ferries_name" = "Bez trajekta";
 "rendering_attr_highway_class_track_name" = "Staza";
 "rendering_attr_tracktype_grade4_name" = "Uglavnom mekana";
 "rendering_value_disabled_name" = "Isključeno";
@@ -2107,7 +2107,7 @@
 "rendering_attr_buildings15zoom_name" = "Prikaz zgrada je na uveličanju 15";
 "rendering_attr_tracktype_grade1_name" = "Čvrsta (popločana)";
 "routing_attr_avoid_train_description" = "Izbegavati vozove";
-"routing_attr_avoid_shuttle_train_name" = "Izbegavati autovoz";
+"routing_attr_avoid_shuttle_train_name" = "Bez autovoza";
 "rendering_attr_contourColorScheme_description" = "Obrazac boja linija izohipsi";
 "rendering_value_boldOutline_name" = "Zadebljaj obrisne linije";
 "routing_attr_avoid_toll_description" = "Izbegavati puteve sa putarinom";
@@ -2119,7 +2119,7 @@
 "routing_attr_allow_private_description" = "Dozvoli pristup oblastima privatnih poseda.";
 "rendering_attr_alpineHiking_description" = "Prikazuj puteve prema lestvici SAC-a.";
 "rendering_attr_highway_class_bridleway_name" = "Konjička staza";
-"routing_attr_avoid_share_taxi_name" = "Izbegavati deljene taksija";
+"routing_attr_avoid_share_taxi_name" = "Bez deljenja taksija";
 "rendering_attr_pisteRoutes_name" = "Skijališta";
 "rendering_attr_piste_type_sled_name" = "Saonice";
 "rendering_attr_noPolygons_description" = "Načini providnim sve vazdušne odlike terena.";
@@ -2169,18 +2169,18 @@
 "rendering_value_translucent_orange_name" = "Prozirna narandžasta";
 "rendering_attr_depthContours_description" = "Prikazuj tačke i izobate.";
 "rendering_value_thick_name" = "Debelo";
-"routing_attr_avoid_ferry_name" = "Trajekti";
+"routing_attr_avoid_ferry_name" = "Bez trajekta";
 "routing_attr_width_name" = "Ograničenje širine";
-"routing_attr_avoid_train_name" = "Izbegavati vozove";
-"routing_attr_allow_motorway_description" = "Omogućiti autoputeve";
+"routing_attr_avoid_train_name" = "Bez vozova";
+"routing_attr_allow_motorway_description" = "Omogući autoputeve";
 "rendering_attr_hmRendered_name" = "Prikaži više detalja na mapi";
 "rendering_attr_roadColors_name" = "Obrazac boja puteva";
 "weight_limit_description" = "Unesi težinu vozila, neka ograničenja puta mogu biti primenjena za teška vozila.";
 "height_limit_description" = "Unesi visinu vozila, neka ograničenja puta mogu biti primenjena za visoka vozila.";
 "lenght_limit_description" = "Unesi dužinu vozila, neka ograničenja puta mogu biti primenjena za duža vozila.";
 "width_limit_description" = "Unesi širinu vozila, neka ograničenja puta mogu biti primenjena za široka vozila.";
-"vessel_height_limit_description" = "Podesite visinu plovila radi izbegavanja niskih mostova. Imajte na umu da, ukoliko most može da se pomera, koristićemo njegovu visinu kada je otvoren.";
-"vessel_width_limit_description" = "Podesite širinu plovila i izbegnite uske mostove";
+"vessel_height_limit_description" = "Podesi visinu plovila zbog visine mostova. Ukoliko most se pomera, koristi se njegova visina kada je otvoren.";
+"vessel_width_limit_description" = "Podesi širinu plovila zbog uskih mostova";
 "default_speed_dialog_msg" = "Procenjuje vreme stizanja kod nepoznatih vrsta puteva, ograničava brzinu na svim putevima (može da promeni navođenje)";
 
 
@@ -2258,10 +2258,10 @@
 "transport_hazmat_yes_desc" = "Odaberi primenljivu vrstu.";
 "copy_to_map_favorites" = "Snimi u omiljene";
 "shared_string_learn_more" = "Saznaj više";
-"simulation_constant_mode_desc" = "Simuliranje će se izvoditi sa jednakom odabranom brzinom.";
+"simulation_constant_mode_desc" = "Simulacija istom brzinom. Podesi brzinu.";
 "unlimited_map_downloads" = "Neograničeno preuzimanje mapa";
 "cubic_m" = "m³";
-"simulation_real_mode_title" = "Stvarno simuliranje";
+"simulation_real_mode_title" = "Realistična simulacija";
 "speed_mode" = "Način rada brzine";
 "routeInfo_smoothness_description" = "Klasifikacija upravljivosti puta/pešačke staze za vozila na točkovima, posebno u pogledu pravilnosti/ravnosti površine.";
 "purchases_feature_desc_combined_wiki" = "Istražujte članke na Vikipediji u pokretu, bez internet veze. Oflajn podaci su podeljeni po zemljama i dostupni na svim jezicima.";
@@ -2318,7 +2318,7 @@
 "backup_error_size_is_exceeded" = "Premašena je maksimalna veličina OsmAnd oblaka %@";
 "shared_string_capacity" = "Opseg";
 "osmand_maps_plus_tagline" = "Nabavite proširene funkcije";
-"simulation_preview_mode_title" = "Način rada brzog pregleda";
+"simulation_preview_mode_title" = "Režim brzog pregleda";
 "routing_attr_only_permitted_streets_description" = "Koristi samo ulice koje su izričito dozvoljene";
 "backup_error_gzip_only_supported_upload" = "Datoteku treba poslati u .gzip formatu";
 "backup_welcome_back" = "Dobrodošli nazad!";
@@ -2353,7 +2353,7 @@
 "backup_error_user_is_not_registered" = "Nijedan korisnik nije registrovan sa tom adresom e-pošte";
 "set_up_backup" = "Postavi skladište za čuvanje";
 "osmand_development_plugin_description" = "Podešavanja za razvoj i otklanjanje grešaka kao što su Simuliranje navođenja, učinak iscrtavanja ili glasovni upiti. Namenjeno programerima, nepotrebno prilikom normalnog korišćenja.";
-"simulation_constant_mode_title" = "Jednaka brzina";
+"simulation_constant_mode_title" = "Ista brzina";
 "make_backup" = "Napravite rezervnu kopiju";
 "simulation_preview_mode_desc" = "Brzina oponašanja će biti najveća na pravim deonicama i usporiti samo na raskrsnicama.";
 "purchases_feature_desc_unlimited_map_download" = "Nabavi neograničena preuzimanja offline mapa za sve kontinente i regione.";
@@ -2453,7 +2453,7 @@
 "shared_string_angle_param" = "Ugao: %@°";
 "routing_attr_motor_type_electric_name" = "Električna";
 "logout_from_osmand_cloud_decsr" = "Odjavljuješ se?\nMoraćeš da se prijaviš ponovo da napraviš kopiju ili da povratiš podatke.";
-"simulation_real_mode_desc" = "Na pravim deonicama puta brzina će biti približena najvećoj dozvoljenoj brzini. \nNa raskrsnicama, simuliranje će se usporiti. \nDodatne kazne će biti primenjivane na saobraćajne znake, znake za zaustavljanje, itd.";
+"simulation_real_mode_desc" = "Na pravim deonicama puta brzina će biti približena najvećoj dozvoljenoj brzini.\nNa raskrsnicama, simuliranje će se usporiti.\nTakođe, semafori, znakovi zaustavljanja itd. utiču na brzinu.";
 "backup_into_file" = "Pravljenje rezervne kopije u datoteci";
 "routing_attr_motor_type_description" = "Odredite vrstu goriva vozila, potrebno je radi procene količine izduva CO2.";
 "not_enough_contributions_descr" = "Minimum od %@ izmena kroz period od poslednja dva meseca %@ je potreban da dobijete pristup neograničenim ažuriranjima karte svakih sat vremena.";

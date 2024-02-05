@@ -462,10 +462,6 @@
 
 - (IBAction)map3dModeButtonPressed:(id)sender
 {
-    _map3dModeFloatingButton.enabled = NO;
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(kFastAnimationTime * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        _map3dModeFloatingButton.enabled = YES;
-    });
     [OAMapViewTrackingUtilities.instance switchMap3dMode];
     [self updateColors:NO];
 }

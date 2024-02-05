@@ -80,11 +80,15 @@
     double _diffElevationUp;
 }
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                                  appMode:(OAApplicationMode *)appMode
+                             widgetParams:(NSDictionary *)widgetParams;
+
 {
     self = [super initWithType:OAWidgetType.tripRecordingUphill];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         _diffElevationUp = 0.0;
         [self setIcon:@"widget_track_recording_uphill"];
     }
@@ -114,11 +118,14 @@
     double _diffElevationDown;
 }
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                                  appMode:(OAApplicationMode *)appMode
+                             widgetParams:(NSDictionary *)widgetParams;
 {
     self = [super initWithType:OAWidgetType.tripRecordingDownhill];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         _diffElevationDown = 0.0;
         [self setIcon:@"widget_track_recording_downhill"];
     }

@@ -51,7 +51,6 @@
     OAMapMode _lastMapMode;
     float _lastAzimuthInPositionTrack;
     float _lastZoom;
-    float _lastElevationAngle;
     
     BOOL _forceZoom;
     
@@ -203,32 +202,38 @@
     return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle < 89;
 }
 
-- (void) switchMap3dMode
-{
-    if ([self isIn3dMode])
-    {
-        _lastElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
-        _mapView.mapAnimator->pause();
-        _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
-                                                   kFastAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kLocationServicesAnimationKey);
-        _mapView.mapAnimator->resume();
-    }
-    else
-    {
-        if (_lastElevationAngle < 1 || _lastElevationAngle > 89)
-            _lastElevationAngle = kMapModeFollowDefaultElevationAngle;
+- (BOOL)isDefaultElevationAngle {
+    return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle == kMapModePositionTrackingDefaultElevationAngle;
+}
 
-        _mapView.mapAnimator->pause();
-        _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle: _lastElevationAngle],
-                                                   kFastAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kLocationServicesAnimationKey);
-        _mapView.mapAnimator->resume();
+- (void)startTilting:(float)elevationAngle
+{
+    float initialElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
+    float elevationAngleDiff = elevationAngle - initialElevationAngle;
+    float animationTime = fabsf(elevationAngleDiff) * 5;
+    
+    _mapView.mapAnimator->pause();
+    
+    float duration = animationTime / 1000.0f;
+    const auto elevationAnimation = _mapView.mapAnimator->getCurrentAnimation(kUserInteractionAnimationKey,
+                                                                              OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
+    if (elevationAnimation)
+    {
+        _mapView.mapAnimator->cancelAnimation(elevationAnimation);
+        _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
     }
+    _mapView.mapAnimator->animateElevationAngleTo(elevationAngle,
+                                                  duration,
+                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                  kUserInteractionAnimationKey);
+    _mapView.mapAnimator->resume();
+}
+
+- (void)switchMap3dMode
+{
+    BOOL defaultElevationAngle = [self isDefaultElevationAngle];
+    float tiltAngle = defaultElevationAngle ? [_mapView normalizeElevationAngle : [[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle]] : kMapModePositionTrackingDefaultElevationAngle;
+    [self startTilting:tiltAngle];
 }
 
 - (void) onLocationServicesStatusChanged

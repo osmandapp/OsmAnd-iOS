@@ -20,12 +20,11 @@ class WidgetsPanel: NSObject, NSCopying {
     static let values: [WidgetsPanel] = [.leftPanel, .rightPanel, .topPanel, .bottomPanel]
     
     static let DEFAULT_ORDER = 1000
-    
     private static func getOrderIds(_ panel: WidgetsPanel) -> [String] {
         return WidgetType.values.reduce(into: [String]()) { result, type in
             let id = type.id
             let defaultPanel = type.defaultPanel
-            if (defaultPanel == panel) {
+            if defaultPanel == panel {
                 result.append(id)
             }
         }
@@ -38,7 +37,11 @@ class WidgetsPanel: NSObject, NSCopying {
     
     let title: String
     let iconName: String
-    
+
+    var isPanelVertical: Bool {
+        self == .topPanel || self == .bottomPanel
+    }
+
     internal required init(_ iconName: String, title: String) {
         self.title = title
         self.iconName = iconName
@@ -56,11 +59,11 @@ class WidgetsPanel: NSObject, NSCopying {
     }
 
     func getOriginalOrder() -> [String] {
-        if (self == .leftPanel) {
+        if self == .leftPanel {
             return WidgetsPanel.ORIGINAL_LEFT_ORDER
-        } else if (self == .rightPanel) {
+        } else if self == .rightPanel {
             return WidgetsPanel.ORIGINAL_RIGHT_ORDER
-        } else if (self == .topPanel) {
+        } else if self == .topPanel {
             return WidgetsPanel.ORIGINAL_TOP_ORDER
         } else {
             return WidgetsPanel.ORIGINAL_BOTTOM_ORDER
@@ -88,10 +91,17 @@ class WidgetsPanel: NSObject, NSCopying {
         return getPagedOrder(widgetId, appMode: appMode).1
     }
 
+    private func getReorderedPages(_ appMode: OAApplicationMode) -> [[String]]? {
+        let pref: OACommonListOfStringList = getOrderPreference()
+        let pages: [[String]]? = pref.get(appMode)
+        guard let pages, !pages.isEmpty, (pref.key == OAAppSettings.sharedManager().topWidgetPanelOrder.key || pref.key == OAAppSettings.sharedManager().bottomWidgetPanelOrder.key) else {
+            return pages
+        }
+        return WidgetsPanel.getPagedWidgetIdsWithPages(pages)
+    }
+
     private func getPagedOrder(_ widgetId: String, appMode: OAApplicationMode) -> (Int, Int) {
-        let orderPreference = getOrderPreference()
-        let pages = orderPreference.get(appMode)
-        guard let pages, !pages.isEmpty else {
+        guard let pages = getReorderedPages(appMode), !pages.isEmpty else {
             return (0, WidgetsPanel.DEFAULT_ORDER)
         }
 
@@ -114,33 +124,43 @@ class WidgetsPanel: NSObject, NSCopying {
         return getWidgetOrder(widgetId, appMode: appMode) != WidgetsPanel.DEFAULT_ORDER
     }
 
-    func isPagingAllowed() -> Bool {
-        return self == .leftPanel || self == .rightPanel
-    }
-
     func getOrderPreference() -> OACommonListOfStringList {
         let settings = OAAppSettings.sharedManager()!
-        if (self == .leftPanel) {
+        if self == .leftPanel {
             return settings.leftWidgetPanelOrder
-        } else if (self == .rightPanel) {
+        } else if self == .rightPanel {
             return settings.rightWidgetPanelOrder
-        } else if (self == .topPanel) {
+        } else if self == .topPanel {
             return settings.topWidgetPanelOrder
-        } else if (self == .bottomPanel) {
+        } else if self == .bottomPanel {
             return settings.bottomWidgetPanelOrder
         }
         fatalError("Unsupported panel")
     }
 
-    func getMergedPanels() -> [WidgetsPanel] {
-        if self == .leftPanel || self == .rightPanel {
-            return [.leftPanel, .rightPanel]
-        } else if self == .topPanel || self == .bottomPanel {
-            return [.topPanel, .bottomPanel]
-        }
-        fatalError("Unsupported widgets panel")
+    static func getPagedWidgetIdsWithPages(_ pages: [[String]]) -> [[String]] {
+       var newPages: [[String]] = []
+       var currentPage: [String] = []
+
+       for page in pages {
+           for id in page {
+               if WidgetType.isComplexWidget(id) {
+                   if !currentPage.isEmpty {
+                       newPages.append(currentPage)
+                       currentPage = []
+                   }
+                   newPages.append([id])
+               } else {
+                   currentPage.append(id)
+               }
+           }
+           if !currentPage.isEmpty {
+               newPages.append(currentPage)
+           }
+       }
+       return newPages
     }
-    
+
     func copy(with zone: NSZone? = nil) -> Any {
         self
     }

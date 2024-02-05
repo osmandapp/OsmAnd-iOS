@@ -11,7 +11,14 @@ import Foundation
 @objc(OAWidgetType)
 @objcMembers
 class WidgetType: NSObject {
-    
+
+    static let complexWidgetIds: [String] = [WidgetType.elevationProfile.id,
+                                             WidgetType.coordinatesMapCenter.id,
+                                             WidgetType.coordinatesCurrentLocation.id,
+                                             WidgetType.streetName.id,
+                                             WidgetType.markersTopBar.id,
+                                             WidgetType.lanes.id]
+
     let ordinal: Int
     let id: String
     let title: String
@@ -22,6 +29,15 @@ class WidgetType: NSObject {
     let group: WidgetGroup?
     let defaultPanel: WidgetsPanel
     let special: Bool
+
+    var isAllowed: Bool {
+        if self == .altitudeMapCenter {
+            if let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
+                return plugin.is3DMapsEnabled()
+            }
+        }
+        return true;
+    }
 
     private init(ordinal: Int, id: String, title: String, descr: String, iconName: String, disabledIconName: String? = nil, docsUrl: String? = nil, group: WidgetGroup? = nil, defaultPanel: WidgetsPanel, special: Bool = false) {
         self.ordinal = ordinal
@@ -35,6 +51,10 @@ class WidgetType: NSObject {
         self.defaultPanel = defaultPanel
         self.special = special
     }
+    
+    static func isComplexWidget(_ widgetId: String) -> Bool {
+        Self.complexWidgetIds.contains(widgetId.contains(MapWidgetInfo.DELIMITER) ? widgetId.substring(to: widgetId.find(MapWidgetInfo.DELIMITER)) : widgetId)
+    }
 
     func getGroup() -> WidgetGroup? {
         if (group == .altitude) {
@@ -47,7 +67,7 @@ class WidgetType: NSObject {
     }
 
     func getGroupDescription() -> String {
-        if (self == .magneticBearing) {
+        if self == .magneticBearing {
             return localizedString("magnetic_bearing_widget_desc")
         }
 //        else if (self == AV_NOTES_ON_REQUEST) {
@@ -57,19 +77,19 @@ class WidgetType: NSObject {
     }
 
     func getSecondaryDescription() -> String? {
-        if (self == .coordinatesCurrentLocation || self == .coordinatesMapCenter) {
+        if self == .coordinatesCurrentLocation || self == .coordinatesMapCenter {
             let configureProfile = localizedString("configure_profile")
             let generalSettings = localizedString("general_settings_2")
             let coordinatesFormat = localizedString("coordinates_format")
             return String(format: localizedString("coordinates_widget_secondary_desc"), configureProfile, generalSettings, coordinatesFormat)
-        } else if (self == .devFps) {
+        } else if self == .devFps {
             return WidgetGroup.getPartOfPluginDesc(plugin: OAOsmandDevelopmentPlugin.self)
-        } else if (self == .mapillary) {
+        } else if self == .mapillary {
             return WidgetGroup.getPartOfPluginDesc(plugin: OAMapillaryPlugin.self)
-        } else if (self == .parking) {
+        } else if self == .parking {
             return WidgetGroup.getPartOfPluginDesc(plugin: OAParkingPositionPlugin.self)
         } else if let group {
-            if (group == .weather) {
+            if group == .weather {
                 return localizedString("weather_widgets_secondary_desc")
             } else {
                 return group.getSecondaryDescription()
@@ -105,16 +125,36 @@ class WidgetType: NSObject {
     }
 
     func getPanel(_ widgetId: String, appMode: OAApplicationMode) -> WidgetsPanel {
-        if defaultPanel == .topPanel {
-            return WidgetsPanel.bottomPanel.contains(widgetId: widgetId, appMode: appMode) ? .bottomPanel : .topPanel
-        } else if defaultPanel == .bottomPanel {
-            return WidgetsPanel.topPanel.contains(widgetId: widgetId, appMode: appMode) ? .topPanel : .bottomPanel
-        } else if defaultPanel == .leftPanel {
-            return WidgetsPanel.rightPanel.contains(widgetId: widgetId, appMode: appMode) ? .rightPanel : .leftPanel
-        } else if defaultPanel == .rightPanel {
-            return WidgetsPanel.leftPanel.contains(widgetId: widgetId, appMode: appMode) ? .leftPanel : .rightPanel;
+        var widgetsPanel: WidgetsPanel? = Self.findWidgetPanel(widgetId: widgetId, mode: appMode)
+        if let widgetsPanel {
+            return widgetsPanel
         }
-        fatalError("Unsupported panel")
+        return defaultPanel
+    }
+
+    static func findWidgetPanel(widgetId: String, mode: OAApplicationMode? = nil) -> WidgetsPanel? {
+        let settings: OAAppSettings = OAAppSettings.sharedManager()
+        let appMode: OAApplicationMode = mode ?? settings.applicationMode.get()
+        var setPanels: [WidgetsPanel] = []
+        var unsetPanels: [WidgetsPanel] = []
+
+        for panel in [WidgetsPanel.leftPanel, WidgetsPanel.topPanel, WidgetsPanel.rightPanel, WidgetsPanel.bottomPanel] {
+            if panel.getOrderPreference().isSet(for: appMode) {
+                setPanels.append(panel)
+            } else {
+                unsetPanels.append(panel)
+            }
+        }
+
+        for panel in setPanels where panel.contains(widgetId: widgetId, appMode: appMode) {
+            return panel
+        }
+
+        for panel in unsetPanels where panel.contains(widgetId: widgetId, appMode: appMode) {
+            return panel
+        }
+
+        return nil
     }
 
 //    public WidgetSettingsBaseFragment getSettingsFragment(@NonNull Context ctx) {

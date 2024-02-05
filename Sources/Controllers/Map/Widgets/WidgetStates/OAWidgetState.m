@@ -16,6 +16,11 @@
     return nil;
 }
 
+- (NSString *)getWidgetTitle
+{
+    return nil;
+}
+
 - (NSString *) getMenuDescription
 {
     return nil;

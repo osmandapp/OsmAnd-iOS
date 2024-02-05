@@ -98,6 +98,10 @@ class MapWidgetInfo: NSObject, Comparable {
         return widgetState?.getMenuTitle() ?? message
     }
     
+    func getWidgetTitle() -> String {
+        widgetState?.getWidgetTitle() ?? getMessage()
+    }
+    
     func getExternalProviderPackage() -> String? {
         return nil
     }
@@ -118,6 +122,10 @@ class MapWidgetInfo: NSObject, Comparable {
     
     func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
         widget.getSettingsData(appMode)
+    }
+    
+    func getSettingsDataForSimpleWidget(_ appMode: OAApplicationMode) -> OATableDataModel? {
+        widget.getSettingsData(forSimpleWidget: appMode)
     }
     
     func enableDisable(appMode: OAApplicationMode, enabled: NSNumber?) {

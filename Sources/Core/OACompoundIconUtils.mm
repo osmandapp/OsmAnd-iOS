@@ -71,11 +71,6 @@
     return [self createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:nil scale:scale];
 }
 
-+ (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon
-{
-    return [self.class createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:icon scale:1.0f];
-}
-
 + (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon scale:(float)scale
 {
     CGFloat screenScale = [[UIScreen mainScreen] scale];
@@ -117,14 +112,16 @@
         }
         if (!origImage)
         {
-            const auto skImg = [OANativeUtilities skImageFromSvgResource:@"mx_special_star" width:14 * scale height:14 * scale];
+            const auto skImg = [OANativeUtilities skImageFromSvgResource:@"mx_special_star" width:imgSize.width height:imgSize.height];
             if (skImg)
                 origImage = [OANativeUtilities skImageToUIImage:skImg];
         }
 
         UIImage *resizedImage = origImage;
-        //if (!CGSizeEqualToSize(origImage.size, imgSize))
-            //resizedImage  = [OAUtilities resizeImage:origImage newSize:CGSizeMake(14, 14)];
+        
+        CGSize imgPtSize = {14 * scale, 14 * scale};
+        if (!CGSizeEqualToSize(origImage.size, imgPtSize))
+            resizedImage  = [OAUtilities resizeImage:origImage newSize:imgPtSize];
 
         UIImage *coloredImage = [OAUtilities tintImageWithColor:resizedImage color:UIColor.whiteColor];
         poiIcon = [OANativeUtilities skImageFromCGImage:coloredImage.CGImage];

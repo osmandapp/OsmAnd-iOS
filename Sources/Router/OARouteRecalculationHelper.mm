@@ -400,7 +400,6 @@
 - (void) showMessage:(NSString *)msg
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSLog(@"!!! %@", msg);
         [OAUtilities showToast:nil details:msg duration:4 inView:OARootViewController.instance.view];
     });
 }

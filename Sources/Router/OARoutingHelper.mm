@@ -713,7 +713,6 @@ static BOOL _isDeviatedFromRoute = false;
                 locationProjection = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
                 if ([_settings.snapToRoad get] && currentRoute + 1 < routeNodes.count)
                 {
-                    NSLog(@"!!! setCurrentLocation OK -  course %f", locationProjection.course);
                     CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
                     locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
                 }

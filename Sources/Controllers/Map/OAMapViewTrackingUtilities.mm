@@ -403,11 +403,6 @@
                         loc = [[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:_lastCourse speed:loc.speed timestamp:loc.timestamp];
                         [_mapViewController updateLocation:loc heading:_lastCourse];
                     }
-                    else
-                    {
-                        // Invalid data. Do nothing. Wait for recalculation.
-                        NSLog(@"");
-                    }
                 }
             }
             else

@@ -16,6 +16,8 @@
 #import "OARouteCalculationParams.h"
 #import "OARoutingHelperUtils.h"
 #import "Localization.h"
+#import "OAUtilities.h"
+#import "OARootViewController.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -398,8 +400,8 @@
 - (void) showMessage:(NSString *)msg
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        // TODO toast
-        // show message
+        NSLog(@"!!! %@", msg);
+        [OAUtilities showToast:nil details:msg duration:4 inView:OARootViewController.instance.view];
     });
 }
 

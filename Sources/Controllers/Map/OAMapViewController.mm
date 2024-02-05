@@ -3588,6 +3588,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
+//    if (newHeading == 90)
+//        return;
+    
     [_mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
     if (!OARoutingHelper.sharedInstance.isPublicTransportMode)
         [_mapLayers.routeMapLayer refreshRoute];

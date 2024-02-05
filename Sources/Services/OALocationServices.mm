@@ -633,7 +633,23 @@
 
 - (void) setLocationFromSimulation:(CLLocation *)location
 {
-    [self setLocation:location];
+    //    [self setLocation:location];
+    
+//    double fakeCourse = 90;
+//    double fakeCourse = 120;
+//    double time = [[NSDate date] timeIntervalSince1970];
+//    NSArray<NSString *>*numberParts = [@(time / 100).stringValue componentsSeparatedByString:@"."];
+//    double deviationPercent = [numberParts[1] substringToIndex:2].doubleValue / 100;
+//    double deviationAngle = 360 * deviationPercent;
+//    double fakeCourse = location.course + deviationAngle;
+//    fakeCourse = fakeCourse > 360 ? fakeCourse - 360 : fakeCourse;
+//    NSLog(@"!!! setLocationFromSimulation course %f   %f  %f", location.course, fakeCourse, time);
+    
+    double fakeCourse = location.course == 0 ? 0 : location.course + 30;
+    NSLog(@"!!! setLocationFromSimulation course %f   %f", location.course, fakeCourse);
+    
+    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:location.coordinate altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:fakeCourse speed:location.speed timestamp:location.timestamp];
+    [self setLocation:loc];
 }
 
 - (BOOL) isInLocationSimulation

@@ -52,6 +52,7 @@
     float _lastAzimuthInPositionTrack;
     float _lastZoom;
     float _lastElevationAngle;
+    double _lastCourse;
     
     BOOL _forceZoom;
     
@@ -388,14 +389,48 @@
             _followingMode = [routingHelper isFollowingMode];
             
             if (_followingMode && [routingHelper getLastProjection])
+//            if (_followingMode && [routingHelper getLastProjection] && [routingHelper getLastProjection].course != -1)
             {
                 CLLocation *loc = [routingHelper getLastProjection];
                 if (loc.course != -1 && loc.course != 0)
-                    [_mapViewController updateLocation:[routingHelper getLastProjection] heading:[routingHelper getLastProjection].course];
+                {
+//                    if (loc.course == 90)
+//                        NSLog(@"!!! onLocationServicesUpdate - Follow mode 90 - %f", loc.course);
+//                    
+//                    
+//                    NSLog(@"!!! onLocationServicesUpdate - Follow mode - %f", loc.course);
+//                    [_mapViewController updateLocation:[routingHelper getLastProjection] heading:[routingHelper getLastProjection].course];
+                    
+//                    if ([OARoutingHelper isDeviatedFromRoute] || loc.course == -1 || loc.course == 0 ||loc.course == 90)
+                    if ([OARoutingHelper isDeviatedFromRoute] && _lastCourse != -1 && _lastCourse != 0)
+                    {
+                        NSLog(@"!!! onLocationServicesUpdate - Follow mode Deviated - %f  %f  %f", loc.course, prevLocation.course, _lastCourse);
+                        
+                        CLLocation *locWithOldCourse = [[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:_lastCourse speed:loc.speed timestamp:loc.timestamp];
+                        
+                        [_mapViewController updateLocation:locWithOldCourse heading:_lastCourse];
+                    }
+                    else
+                    {
+                        NSLog(@"!!! onLocationServicesUpdate - Follow mode OK - %f", loc.course);
+                        CLLocation *loc = [routingHelper getLastProjection];
+                        [_mapViewController updateLocation:loc heading:loc.course];
+                        _lastCourse = loc.course;
+//                        [self setCourse:loc.course];
+                    }
+                    
+                }
+//                else
+//                {
+//                    NSLog(@"!!! onLocationServicesUpdate - Follow mode - Zero - %f", newHeading);
+//                }
             }
             else
             {
+                NSLog(@"!!! onLocationServicesUpdate - Regular mode - %f", newHeading);
                 [_mapViewController updateLocation:newLocation heading:newHeading];
+                _lastCourse = newHeading;
+//                [self setCourse:newHeading];
             }
             
             if (_routePlanningMode != [routingHelper isRoutePlanningMode])
@@ -403,6 +438,13 @@
         }
     });
 }
+
+//- (void) setCourse:(double)course
+//{
+//    if (course == -1 || course == 0 || course == 90)
+//        NSLog(@"!!! setCourse - %f", course);
+//    _lastCourse = course;
+//}
 
 - (void) detectDrivingRegion:(CLLocation *)location
 {

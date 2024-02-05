@@ -14,12 +14,14 @@ import SafariServices
 class WidgetsListViewController: OABaseNavbarSubviewViewController {
     
     static let kWidgetAddedNotification = "onWidgetAdded"
+    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
     
     private let kPageKey = "page_"
     private let kPageNumberKey = "page_number"
     private let kNoWidgetsKey = "noWidgets"
     private let kWidgetsInfoKey = "widget_info"
-    private static let enabledWidgetsFilter = Int(KWidgetModeAvailable | kWidgetModeEnabled | kWidgetModeMatchingPanels)
+    private let kIsLastWidgetInSection = "isLastWidgetInSection"
+    
     private var editingComplexWidget: MapWidgetInfo?
     
     let panels = WidgetsPanel.values
@@ -165,6 +167,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             row.key = kPageKey
             row.cellType = OASimpleTableViewCell.getIdentifier()
             updatePageNumbers()
+            configureWidgetsSeparatorForVerticalPanel()
             tableView.reloadData()
             updateBottomButtons()
         } else {
@@ -200,6 +203,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         } else {
             updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
             createWidgetItem(newWidget, lastSectionData)
+            configureWidgetsSeparatorForVerticalPanel()
         }
         if editMode {
             DispatchQueue.main.async { [weak self] in
@@ -285,6 +289,12 @@ extension WidgetsListViewController {
                 cell.accessoryType = isPageCell ? .none : .disclosureIndicator
                 cell.selectionStyle = !tableView.isEditing && isPageCell ? .none : .default
                 cell.titleLabel.textColor = isPageCell ? .textColorSecondary : .textColorPrimary
+                if !isPageCell, item.obj(forKey: kIsLastWidgetInSection) as? Bool == true {
+                    cell.setCustomLeftSeparatorInset(true)
+                    cell.separatorInset = .zero
+                } else {
+                    cell.setCustomLeftSeparatorInset(false)
+                }
             }
             return cell
         } else if item.cellType == OALargeImageTitleDescrTableViewCell.getIdentifier() {
@@ -357,7 +367,7 @@ extension WidgetsListViewController {
         tableData.addRow(at: movedIndexPath, row: item)
         
         updatePageNumbers()
-        print("destinationIndexPath after \(destinationIndexPath.row)")
+        configureWidgetsSeparatorForVerticalPanel()
         tableView.reloadData()
         updateBottomButtons()
         if let editingComplexWidget {
@@ -387,11 +397,12 @@ extension WidgetsListViewController {
             }
             tableData.removeRow(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .automatic)
+            configureWidgetsSeparatorForVerticalPanel()
             let isPageCell = item.key == kPageKey
             if isPageCell {
                 updatePageNumbers()
-                tableView.reloadData()
             }
+            tableView.reloadData()
             updateBottomButtons()
         }
     }
@@ -474,6 +485,7 @@ extension WidgetsListViewController {
             for i in 0..<pagedWidgets.count {
                 createWidgetItems(pagedWidgets[i], i)
             }
+            configureWidgetsSeparatorForVerticalPanel()
         }
     }
     
@@ -654,6 +666,21 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
 }
 
 extension WidgetsListViewController {
+    
+    private func configureWidgetsSeparatorForVerticalPanel() {
+        guard widgetPanel.isPanelVertical,
+              tableData.sectionCount() > 0 else { return }
+        
+        let section = tableData.sectionData(for: 0)
+        for i in 0..<section.rowCount() {
+            let row = section.getRow(i)
+            row.setObj(false, forKey: kIsLastWidgetInSection)
+            if row.key == kPageKey && i > 0 {
+                let previousRow = section.getRow(i - 1)
+                previousRow.setObj(true, forKey: kIsLastWidgetInSection)
+            }
+        }
+    }
     
     private func applyRowStyle() {
         for widgets in getPagesWithMapWidgetInfo() {

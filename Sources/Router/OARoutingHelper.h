@@ -119,4 +119,6 @@ struct RouteSegmentResult;
 
 - (double) getMaxAllowedProjectDist:(CLLocation *)location;
 
++ (BOOL) isValidCourseValue:(double)course;
+
 @end

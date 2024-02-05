@@ -14,7 +14,7 @@
 #import "OARoutingHelper.h"
 
 #define CACHE_RADIUS 100000
-#define MAX_BEARING_DEVIATION 45
+#define MAX_BEARING_DEVIATION 60
 
 @implementation OARoutingHelperUtils
 
@@ -92,7 +92,7 @@
 {
     // measuring without bearing could be really error prone (with last fixed location)
     // this code has an effect on route recalculation which should be detected without mistakes
-    if (currentLocation.course >= 0 && nextRouteLocation)
+    if ([OARoutingHelper isValidCourseValue:currentLocation.course]  && nextRouteLocation)
     {
         float bearingMotion = currentLocation.course;
         float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
@@ -129,20 +129,15 @@
     double approximatedBearing = currentSegmentBearing * (1.0 - projectionOffsetN) + nextSegmentBearing * projectionOffsetN;
     
     BOOL setApproximated;
-    BOOL hasBearing = location.course != -1 && location.course != 0;
-    if (hasBearing)
+    if ([OARoutingHelper isValidCourseValue:location.course])
     {
         double rotationDiff = [OAMapUtils unifyRotationDiff:location.course targetRotate:approximatedBearing];
-//        setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;
-        setApproximated = abs(rotationDiff) < 60;
+        setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;
     }
     else
     {
         setApproximated = YES;
     }
-    
-    //TODO: Delete after debug
-//    setApproximated = YES;
     
     if (setApproximated)
     {
@@ -150,5 +145,7 @@
     }
     return projection;
 }
+
+
 
 @end

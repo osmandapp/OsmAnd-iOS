@@ -717,14 +717,6 @@ static BOOL _isDeviatedFromRoute = false;
                     CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
                     locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
                 }
-//                else if ([_settings.snapToRoad get])
-//                {
-//                    double newCourse = [previousRouteLocation bearingTo:locationProjection];
-//                    if (newCourse == 0)
-//                        newCourse = [previousRouteLocation bearingTo:currentRouteLocation];
-//                    NSLog(@"!!! setCurrentLocation FAIL -  course %f", newCourse);
-//                    locationProjection = [[CLLocation alloc] initWithCoordinate:locationProjection.coordinate altitude:locationProjection.altitude horizontalAccuracy:locationProjection.horizontalAccuracy verticalAccuracy:locationProjection.verticalAccuracy course:newCourse speed:locationProjection.speed timestamp:locationProjection.timestamp];
-//                }
             }
         }
         _lastFixedLocation = currentLocation;
@@ -1072,6 +1064,11 @@ static BOOL _isDeviatedFromRoute = false;
 {
     double posTolerance = [self.class getPosTolerance:location.horizontalAccuracy];
     return _mode && _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
+}
+
++ (BOOL) isValidCourseValue:(double)course
+{
+    return course != -1 && course != 0;
 }
 
 @end

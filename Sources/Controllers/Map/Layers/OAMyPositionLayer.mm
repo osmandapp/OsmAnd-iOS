@@ -209,11 +209,6 @@ typedef enum {
 
 - (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading visible:(BOOL)visible
 {
-    NSLog(@"!!! updateLocation heading %f", heading);
-//    if (heading == -1 || heading == 0 || heading == 90)
-//        return;
-    
-    
     std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
     OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     if (marker)
@@ -576,9 +571,6 @@ typedef enum {
     CLLocation *newLocation = _lastLocation;
     CLLocationDirection newHeading = _lastHeading;
     CLLocation *prevLocation = _prevLocation;
-    
-//    if (newHeading == 0 || newHeading == 90)
-//        return;
 
     // In case there's no known location, do nothing and hide all markers
     if (!newLocation)
@@ -624,13 +616,6 @@ typedef enum {
 
 - (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading
 {
-    NSLog(@"!!! updateLocation newHeading %f", newHeading);
-    if (newHeading == 90)
-        NSLog(@"!!! updateLocation newHeading 90 111");
-    
-//    if (newHeading == 0 || newHeading == 90)
-//        return;
-    
     _prevLocation = _lastLocation;
     _lastLocation = newLocation;
     _lastHeading = newHeading;

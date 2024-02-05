@@ -633,7 +633,19 @@
 
 - (void) setLocationFromSimulation:(CLLocation *)location
 {
-    [self setLocation:location];
+    if (location.course == -1 || location.course == 0)
+        NSLog(@"");
+    
+    //    [self setLocation:location];
+    
+//    double fakeCourse = 90;
+//    double fakeCourse = 120;
+
+    double fakeCourse = location.course == 0 ? 0 : location.course + 70;
+    NSLog(@"!!! setLocationFromSimulation course %f   %f", location.course, fakeCourse);
+    
+    CLLocation *loc = [[CLLocation alloc] initWithCoordinate:location.coordinate altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:fakeCourse speed:location.speed timestamp:location.timestamp];
+    [self setLocation:loc];
 }
 
 - (BOOL) isInLocationSimulation

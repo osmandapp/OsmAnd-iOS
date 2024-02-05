@@ -141,7 +141,10 @@
                 if ((prev && [prev distanceFromLocation:current] > 3) || (realistic && speed >= 3))
                 {
                     course = [OAMapUtils normalizeDegrees360:[prev bearingTo:current]];
-                    _lastCourse = course;
+                    if ([OARoutingHelper isValidCourseValue:course])
+                        _lastCourse = course;
+                    else
+                        course = _lastCourse;
                 }
                 else if ([OARoutingHelper isValidCourseValue:current.course])
                 {

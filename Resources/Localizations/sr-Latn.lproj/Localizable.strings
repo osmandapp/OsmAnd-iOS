@@ -402,7 +402,7 @@
 "min_km" = "min/km";
 "m_s" = "m/s";
 "shared_string_tones" = "tona";
-"nothing_found" = "Nema ničeg pronađenog";
+"nothing_found" = "Nema ničeg";
 "nothing_found_descr" = "Promeni pretragu ili povećajte oblast pretrage.";
 "select_street" = "Izaberi ulicu";
 "shared_string_in_name" = "u %@";
@@ -1415,7 +1415,7 @@
 "delete_group_confirm" = "Are you sure you want to delete ”%@” group?";
 "edit_waypoint_short" = "Edit waypoint";
 "replace_waypoint_confirmation" = "Are you sure you want to replace Waypoint %@?";
-"no_waypoints_found" = "Nema pronađenih prolaznih tačaka";
+"no_waypoints_found" = "Nema međuodredišta";
 "poi_context_menu_modify" = "Izmena TOI";
 "context_menu_item_create_poi" = "Napravi tačku zanimanja";
 "poi_context_menu_modify_osm_change" = "Promeni izmenu OSM-a";
@@ -1897,7 +1897,7 @@
 "rendering_value_germanRoadAtlas_name" = "Nemački atlas puteva";
 "rendering_attr_hikingRoutesOSMC_name" = "Planinske staze";
 "rendering_attr_showRoadMaps_name" = "Samo putne mape";
-"routing_attr_avoid_ferries_description" = "Bez trajekta";
+"routing_attr_avoid_ferries_description" = "Trajekti";
 "rendering_attr_contourWidth_description" = "Debljina linije izohipse";
 "routing_attr_driving_style_name" = "Način vožnje";
 "rendering_attr_surface_pebblestone_name" = "Kamenčići";
@@ -1975,7 +1975,7 @@
 "rendering_value_translucent_green_name" = "Prozirna zelena";
 "rendering_value_translucent_yellow_name" = "Prozirna žuta";
 "rendering_attr_OSMMapperAssistant_name" = "Pomoćnik mapa OSM-a";
-"routing_attr_avoid_borders_name" = "Bez graničnih prelaza";
+"routing_attr_avoid_borders_name" = "Granični prelazi";
 "rendering_value_walkingRoutesScopeOSMC_name" = "Bojenje prema pripadnosti mreži puteva";
 "rendering_attr_smoothness_excellent_name" = "Izvrsno";
 "rendering_value_pink_name" = "Ružičasta";
@@ -1984,7 +1984,7 @@
 "rendering_attr_hideText_name" = "Pismo";
 "rendering_attr_contourDensity_name" = "Gustina linije izohipse";
 "routing_attr_avoid_motorway_description" = "Izbegavati autoputeve";
-"routing_attr_avoid_motorway_name" = "Bez autoputeva";
+"routing_attr_avoid_motorway_name" = "Autoputevi";
 "rendering_attr_hideWoodScrubs_name" = "Šume i šumarke";
 "rendering_attr_surface_wood_name" = "Drvo";
 "rendering_attr_smoothness_horrible_name" = "Užasno";
@@ -2003,9 +2003,9 @@
 "routing_attr_avoid_sett_description" = "Izbegavaj kaldrme";
 "rendering_attr_hikingRoutesOSMC_description" = "Prikazuj puteve prema putanjama OSMC-a.";
 "rendering_value_car_name" = "Auto";
-"routing_attr_avoid_unpaved_name" = "Bez makadama";
+"routing_attr_avoid_unpaved_name" = "Makadami";
 "rendering_attr_lessDetailed_name" = "Manje detalja";
-"routing_attr_avoid_borders_description" = "Bez prelaženja državnih granica";
+"routing_attr_avoid_borders_description" = "Državne granice";
 "rendering_attr_highway_class_steps_name" = "Stepenice";
 "routing_attr_avoid_tram_name" = "Izbegavati tramvaje";
 "rendering_attr_piste_type_downhill_name" = "Nizbrdo";
@@ -2023,14 +2023,14 @@
 "rendering_attr_highway_class_cycleway_name" = "Biciklistička staza";
 "routing_attr_piste_type_downhill_description" = "Padine alpskog skijanja ili spuštanja i pristup skijaštim žičarama.";
 "rendering_attr_hideWaterPolygons_name" = "Sakrij vodu";
-"routing_attr_avoid_stairs_name" = "Bez stepenica";
+"routing_attr_avoid_stairs_name" = "Stepenice";
 "rendering_value_walkingRoutesOSMC_name" = "OSMC";
 "rendering_attr_piste_type_skitour_name" = "Skijaška tura";
 "routing_attr_avoid_unpaved_description" = "Izbegavati makadame";
 "routing_attr_prefer_unpaved_description" = "Prednost neasfaltiranim putevima.";
 "rendering_attr_roadStyle_description" = "Izgled puteva";
 "routing_attr_prefer_motorway_description" = "Prednost putevima za motorna vozila";
-"routing_attr_avoid_ferries_name" = "Bez trajekta";
+"routing_attr_avoid_ferries_name" = "Trajekti";
 "rendering_attr_highway_class_track_name" = "Staza";
 "rendering_attr_tracktype_grade4_name" = "Uglavnom mekana";
 "rendering_value_disabled_name" = "Isključeno";
@@ -2169,7 +2169,7 @@
 "rendering_value_translucent_orange_name" = "Prozirna narandžasta";
 "rendering_attr_depthContours_description" = "Prikazuj tačke i izobate.";
 "rendering_value_thick_name" = "Debelo";
-"routing_attr_avoid_ferry_name" = "Bez trajekta";
+"routing_attr_avoid_ferry_name" = "Trajekti";
 "routing_attr_width_name" = "Ograničenje širine";
 "routing_attr_avoid_train_name" = "Izbegavati vozove";
 "routing_attr_allow_motorway_description" = "Omogućiti autoputeve";
@@ -2367,7 +2367,7 @@
 "on_hold" = "Na čekanju";
 "restore_from_osmand_cloud" = "Vrati sa OsmAnd oblaka";
 "shared_string_paused" = "Pauzirano";
-"routing_attr_hazmat_category_no_restrictions_name" = "A (nema ograničenja)";
+"routing_attr_hazmat_category_no_restrictions_name" = "A (nema restrikcija)";
 "data_settings" = "Podaci";
 "in_grace_period" = "U grejs periodu";
 "shared_string_delete_all" = "Obriši sve";
@@ -2462,7 +2462,7 @@
 "routing_attr_prefer_tactile_paving_name" = "Radije popločavaj dodirno";
 "rendering_value_omit_name" = "Izostaviti";
 "routing_attr_freeride_policy_prefer_offpiste_name" = "Skijanje izvan staza";
-"routing_attr_avoid_4wd_only_description" = "Bez puteva za 4WD vozila";
+"routing_attr_avoid_4wd_only_description" = "Putevi za 4WD vozila";
 "routing_attr_avoid_highway_description" = "Izbegavati autoputeve";
 "rendering_attr_horse_scale_difficult_name" = "Teža";
 "rendering_value_all_name" = "Sve";
@@ -2483,7 +2483,7 @@
 "rendering_attr_horse_scale_impossible_name" = "Nemoguća";
 "rendering_attr_horseScale_name" = "Težina konjskih staza";
 "rendering_attr_horse_scale_dangerous_name" = "Opasna";
-"routing_attr_avoid_4wd_only_name" = "Bez puteva za 4WD vozila";
+"routing_attr_avoid_4wd_only_name" = "Putevi za 4WD vozila";
 "routing_attr_difficulty_preference_intermediate_name" = "Srednji";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Ikone pri malom uvećanju";
 "routing_attr_difficulty_preference_expert_name" = "Stručnjak";
@@ -2642,7 +2642,7 @@
 "app_mode_moped" = "Moped";
 "modified_file" = "Izmenjena datoteka";
 "cloud_all_changes_uploaded_descr" = "Sve izmene učinjene na ovom uređaju su usklađene sa Oblakom OsmAnda.";
-"cloud_no_conflicts" = "Nema sukoba.";
+"cloud_no_conflicts" = "Nema konflikta.";
 "get_osmand_cloud" = "Dobavite Oblak OsmAnda";
 "popular_destinations" = "Omiljena odredišta";
 "shared_string_contents" = "Sadržaji";

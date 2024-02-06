@@ -116,6 +116,22 @@
     return [NSString stringWithFormat:@"%@ • %@", dist, wpts];
 }
 
++ (NSDate *) getCreationDate:(NSString *)filePath 
+{
+    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:filePath];
+    long time = gpxFile.metadata.time;
+    if (time > 0)
+        return [NSDate dateWithTimeIntervalSince1970:time];
+    
+    NSFileManager *manager = NSFileManager.defaultManager;
+    NSDictionary *attrs = [manager attributesOfItemAtPath:filePath error:nil];
+    NSDate *modificationDate = [attrs objectForKey:NSFileModificationDate];
+    if (modificationDate)
+        return modificationDate;
+    
+    return nil;
+}
+
 + (long) getSegmentTime:(OATrkSegment *)segment
 {
     long startTime = LONG_MAX;

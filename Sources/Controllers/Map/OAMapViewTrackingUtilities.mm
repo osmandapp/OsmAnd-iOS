@@ -398,10 +398,13 @@
                 }
                 else
                 {
-                    if ([OARoutingHelper isValidCourseValue:_lastCourse])
+                    if ([OARoutingHelper isValidCourseValue:newHeading])
                     {
-                        loc = [[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:_lastCourse speed:loc.speed timestamp:loc.timestamp];
-                        [_mapViewController updateLocation:loc heading:_lastCourse];
+                        [_mapViewController updateLocation:newLocation heading:newHeading];
+                    }
+                    else if ([OARoutingHelper isValidCourseValue:_lastCourse])
+                    {
+                        [_mapViewController updateLocation:[[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:_lastCourse speed:loc.speed timestamp:loc.timestamp] heading:_lastCourse];
                     }
                 }
             }

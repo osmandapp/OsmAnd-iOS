@@ -2728,3 +2728,12 @@
 "help_article_troubleshooting_general_name" = "Genel";
 "history_preferences_descr" = "Geçmiş kaydını her bir geçmiş türü için ayrı ayrı devre dışı bırakabilirsiniz.";
 "help_article_start_with_first_steps_name" = "İlk adımlar";
+"free_account" = "Ücretsiz hesap";
+"cache_size" = "Önbellek boyutu";
+"copy_build_version" = "Derleme sürümünü kopyala";
+"most_viewed" = "En çok görüntülenen";
+"telegram_chats" = "Telegram sohbetleri";
+"rendering_attr_alpineHiking_name" = "Zorluk sınıflandırması";
+"shared_string_keywords" = "Anahtar sözcükler";
+"help_article_navigation_guidance_map_during_navigation_name" = "Navigasyon sırasında harita ekranı";
+"help_article_navigation_guidance_voice_navigation_name" = "Sesli komutlar / Bildirimler";

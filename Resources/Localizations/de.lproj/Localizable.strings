@@ -3256,7 +3256,7 @@
 "shared_string_author" = "Autor";
 "shared_string_link" = "Verknüpfung";
 "shared_string_license" = "Lizenz";
-"shared_string_keywords" = "Schlagwörter";
+"shared_string_keywords" = "Schlüsselwörter";
 "shared_string_any" = "Alles";
 "paired_sensors" = "Verbundene Sensoren";
 "calendar_new_event_message" = "Neuer Kalendereintrag hinzugefügt: Fahrzeug abholen bei %@";

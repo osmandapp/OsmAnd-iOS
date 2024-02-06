@@ -2694,3 +2694,6 @@
 "shared_string_author" = "Автор";
 "shared_string_license" = "Лицензия";
 "shared_string_link" = "Ссылка";
+"shared_string_keywords" = "Ключевые слова";
+"bluetooth_found_title" = "Найдено: %d";
+"no_bt_permission" = "Разрешение Bluetooth не предоставлено";

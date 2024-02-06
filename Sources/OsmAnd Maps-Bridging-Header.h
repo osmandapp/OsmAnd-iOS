@@ -144,6 +144,7 @@
 #import "SceneDelegate.h"
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
+#import "FFCircularProgressView.h"
 
 // Enums
 #import "OAGPXDataSetType.h"
@@ -151,6 +152,7 @@
 // Backup
 #import "OABackupHelper.h"
 #import "OABackupInfo.h"
+#import "OABackupError.h"
 #import "OANetworkSettingsHelper.h"
 #import "OAPrepareBackupResult.h"
 #import "OASyncBackupTask.h"

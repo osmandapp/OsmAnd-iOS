@@ -863,6 +863,10 @@
 "shared_string_license" = "License";
 "shared_string_keywords" = "Keywords";
 "shared_string_trash" = "Trash";
+"shared_string_file_info" = "File info";
+"shared_string_delete_immediately" = "Delete immediately";
+"shared_string_delete_item" = "Delete item";
+"shared_string_is_deleted" = "%@ is deleted.";
 
 "restart" = "Restart";
 
@@ -3597,3 +3601,8 @@
 "delete_all_items" = "Delete all items";
 "delete_all_items_desc" = "Are you sure you want to permanently delete all items in the Trash? This action can't be undone.";
 "subscribe_email_error" = "Error";
+"restore_from_trash" = "Restore from trash";
+"download_to_device" = "Download to device";
+"permanent_delete_warning" = "%@ will be deleted permanently. Are you sure?";
+"action_cannot_be_undone" = "This action can't be undone.";
+"cloud_item_restored" = "%@ is restored into Cloud.";

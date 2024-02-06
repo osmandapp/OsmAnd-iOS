@@ -607,13 +607,29 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([item.key isEqualToString:@"lastBackup"])
             {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.button.configuration = nil;
                 BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
                 [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
                 [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
             }
             else if ([item.key isEqualToString:@"onTrashPressed"])
             {
-                [cell.button setImage:nil forState:UIControlStateNormal];
+                if ([OAIAPHelper isOsmAndProAvailable])
+                {
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    cell.button.configuration = nil;
+                    [cell.button setImage:nil forState:UIControlStateNormal];
+                }
+                else
+                {
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                    conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, 0, 0.);
+                    cell.button.configuration = conf;
+                    [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
+                    [cell.button addTarget:self action:@selector(onSubscriptionExpired) forControlEvents:UIControlEventTouchUpInside];
+                }
             }
 
             UIColor *leftIconTintColor;
@@ -726,8 +742,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     }
     else if ([item.key isEqualToString:@"onTrashPressed"])
     {
-        OACloudTrashViewController *cloudTrashController = [[OACloudTrashViewController alloc] init];
-        [self showViewController:cloudTrashController];
+        if ([OAIAPHelper isOsmAndProAvailable])
+        {
+            OACloudTrashViewController *cloudTrashController = [[OACloudTrashViewController alloc] init];
+            [self showViewController:cloudTrashController];
+        }
+        else
+        {
+            [self onSubscriptionExpired];
+        }
     }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {

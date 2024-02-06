@@ -413,40 +413,39 @@ extension WidgetsListViewController {
         }
         
         let sectionCount = tableData.sectionCount()
-        var correctedIndexPath = proposedDestinationIndexPath
         if proposedDestinationIndexPath.section >= sectionCount {
             let lastSectionIndex = Int(sectionCount) - 1
             let lastRowIndex = Int(tableData.rowCount(UInt(lastSectionIndex))) - 1
-            correctedIndexPath = IndexPath(row: lastRowIndex, section: lastSectionIndex)
-        } else {
-            let rowCount = tableData.rowCount(UInt(proposedDestinationIndexPath.section))
-            if proposedDestinationIndexPath.row >= rowCount {
-                let lastRowIndex = Int(rowCount) - 1
-                correctedIndexPath = IndexPath(row: lastRowIndex, section: proposedDestinationIndexPath.section)
-            }
+            return IndexPath(row: lastRowIndex, section: lastSectionIndex)
         }
-        
-        let destinationItem = tableData.item(for: correctedIndexPath)
+
+        let rowCount = tableData.rowCount(UInt(proposedDestinationIndexPath.section))
+        if proposedDestinationIndexPath.row >= rowCount {
+            let lastRowIndex = Int(rowCount) - 1
+            return IndexPath(row: lastRowIndex, section: proposedDestinationIndexPath.section)
+        }
+
+        let destinationItem = tableData.item(for: proposedDestinationIndexPath)
         if let mapWidgetInfo = destinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
             editingComplexWidget = mapWidgetInfo
             return sourceIndexPath
         }
         if destinationItem.key == kPageKey {
-            if !self.tableView(tableView, canMoveRowAt: correctedIndexPath), self.tableView(tableView, canEditRowAt: correctedIndexPath), tableData.rowCount(UInt(correctedIndexPath.section)) > correctedIndexPath.row + 1 {
-                let destinationComplexItem = tableData.item(for: IndexPath(row: correctedIndexPath.row + 1, section: correctedIndexPath.section))
+            if !self.tableView(tableView, canMoveRowAt: proposedDestinationIndexPath), self.tableView(tableView, canEditRowAt: proposedDestinationIndexPath), tableData.rowCount(UInt(proposedDestinationIndexPath.section)) > proposedDestinationIndexPath.row + 1 {
+                let destinationComplexItem = tableData.item(for: IndexPath(row: proposedDestinationIndexPath.row + 1, section: proposedDestinationIndexPath.section))
                 if let mapWidgetInfo = destinationComplexItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
                     editingComplexWidget = mapWidgetInfo
                     return sourceIndexPath
                 }
             }
-            let prevDestinationItem = tableData.item(for: IndexPath(row: correctedIndexPath.row - 1, section: correctedIndexPath.section))
+            let prevDestinationItem = tableData.item(for: IndexPath(row: proposedDestinationIndexPath.row - 1, section: proposedDestinationIndexPath.section))
             if let mapWidgetInfo = prevDestinationItem.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo, WidgetType.isComplexWidget(mapWidgetInfo.key) {
                 editingComplexWidget = mapWidgetInfo
                 return sourceIndexPath
             }
         }
         
-        if correctedIndexPath.row == 0 && correctedIndexPath.section == 0 {
+        if proposedDestinationIndexPath.row == 0 && proposedDestinationIndexPath.section == 0 {
             let indexPath = IndexPath(row: 1, section: 0)
             if tableData.rowCount(UInt(indexPath.section)) > 1 {
                 let destinationItem = tableData.item(for: indexPath)
@@ -457,7 +456,7 @@ extension WidgetsListViewController {
             }
             return indexPath
         }
-        return correctedIndexPath
+        return proposedDestinationIndexPath
     }
     
     private func updateEnabledWidgets() {

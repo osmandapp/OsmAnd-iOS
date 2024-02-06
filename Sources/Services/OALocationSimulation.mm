@@ -138,23 +138,20 @@
                     accuracy = 5;
                 }
 
-                if ((prev && [prev distanceFromLocation:current] > 3) || (realistic && speed >= 3))
+                if (prev || (realistic && speed >= 3))
                 {
                     course = [OAMapUtils normalizeDegrees360:[prev bearingTo:current]];
                     if ([OARoutingHelper isValidCourseValue:course])
                         _lastCourse = course;
-                    else
-                        course = _lastCourse;
                 }
                 else if ([OARoutingHelper isValidCourseValue:current.course])
                 {
                     course = current.course;
                     _lastCourse = course;
                 }
-                else
-                {
+                
+                if (!([OARoutingHelper isValidCourseValue:course]))
                     course = _lastCourse;
-                }
             }
             
             CLLocation *toset = [[CLLocation alloc] initWithCoordinate:current.coordinate altitude:current.altitude horizontalAccuracy:accuracy >= 0 ? accuracy : current.horizontalAccuracy verticalAccuracy:current.verticalAccuracy course:course speed:speed >= 0 ? speed : current.speed timestamp:[NSDate date]];

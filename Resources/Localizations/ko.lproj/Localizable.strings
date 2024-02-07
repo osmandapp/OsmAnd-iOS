@@ -1936,3 +1936,5 @@
 "rendering_attr_horse_scale_common_name" = "공통";
 "rendering_attr_weatherPrecipitationContours_name" = "강수 등고선";
 "rendering_attr_horse_scale_dangerous_name" = "위험하다";
+"copied_to_clipboard" = "클립보드에 복사되었습니다";
+"quick_action_new_action" = "액션 추가";

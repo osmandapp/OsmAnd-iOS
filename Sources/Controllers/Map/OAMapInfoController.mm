@@ -43,6 +43,7 @@
 #import "OAMapRendererView.h"
 
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kWidgetsTopPadding 10.0
 
@@ -297,15 +298,12 @@
         {
             [widgetInfo.widget updateColors:state];
         }
-
-        for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.leftPanel])
+        for (OAWidgetsPanel *panel in OAWidgetsPanel.values)
         {
-            [self updateColors:state sideWidget:widgetInfo.widget];
-        }
-
-        for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:OAWidgetsPanel.rightPanel])
-        {
-            [self updateColors:state sideWidget:widgetInfo.widget];
+            for (OAMapWidgetInfo *widgetInfo in [_mapWidgetRegistry getWidgetsForPanel:panel])
+            {
+                [self updateColors:state sideWidget:widgetInfo.widget];
+            }
         }
     }
 }
@@ -608,38 +606,33 @@
     BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
+    // FIXME: simple widgets
     ts.textBold = following;
     ts.night = nightMode;
-    ts.textColor = nightMode ? UIColorFromRGB(0xC8C8C8) : [UIColor blackColor];
+    
+    UIUserInterfaceStyle style = nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+    UITraitCollection *traitCollection = [UITraitCollection traitCollectionWithUserInterfaceStyle:style];
+    
+    UIColor *textColor = [[UIColor colorNamed:ACColorNameWidgetValueColor] resolvedColorWithTraitCollection:traitCollection];
+    UIColor *unitColor = [[UIColor colorNamed:ACColorNameWidgetUnitsColor] resolvedColorWithTraitCollection:traitCollection];
+    UIColor *titleColor = [[UIColor colorNamed:ACColorNameWidgetLabelColor] resolvedColorWithTraitCollection:traitCollection];
+    UIColor *dividerColor = [[UIColor colorNamed:ACColorNameWidgetSeparatorColor] resolvedColorWithTraitCollection:traitCollection];
+    
+    ts.textColor = textColor;
+    ts.unitColor = unitColor;
+    ts.titleColor = titleColor;
+    ts.dividerColor = dividerColor;
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
-    ts.textShadowColor = nightMode ? UIColorFromARGB(color_widgettext_shadow_night_argb) : [UIColor whiteColor];
+    ts.textShadowColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
     if (!transparent && !nightMode)
         ts.textShadowRadius = 0;
     else
-        ts.textShadowRadius = 16.0;
-
-    if (transparent)
-    {
-        //ts.boxTop = R.drawable.btn_flat_transparent;
-        ts.rightColor = [UIColor clearColor];
-        ts.leftColor = [UIColor clearColor];
-        //ts.boxFree = R.drawable.btn_round_transparent;
-    }
-    else if (nightMode)
-    {
-        //ts.boxTop = R.drawable.btn_flat_night;
-        ts.rightColor = UIColorFromRGBA(0x000000a0);
-        ts.leftColor = UIColorFromRGBA(0x000000a0);
-        //ts.boxFree = R.drawable.btn_round_night;
-    }
-    else
-    {
-        //ts.boxTop = R.drawable.btn_flat;
-        ts.rightColor = [UIColor whiteColor];
-        ts.leftColor = [UIColor whiteColor];
-        //ts.boxFree = R.drawable.btn_round;
-    }
+        ts.textShadowRadius = 4.0;
+    
+    ts.leftColor = transparent
+    ? [UIColor clearColor]
+    : [[UIColor colorNamed:ACColorNameWidgetBgColor] resolvedColorWithTraitCollection:traitCollection];
     
     return ts;
 }
@@ -649,9 +642,11 @@
     if ([sideWidget isKindOfClass:OATextInfoWidget.class])
     {
         OATextInfoWidget *widget = (OATextInfoWidget *) sideWidget;
+        NSLog(@"widget.backgroundColor: %@", state.leftColor );
         widget.backgroundColor = state.leftColor;
-        [widget updateTextColor:state.textColor textShadowColor:state.textShadowColor bold:state.textBold shadowRadius:state.textShadowRadius];
-        [widget updateIconMode:state.night];
+        [widget setNightMode:state.night];
+        [widget updateTextWitState:state];
+        [widget updateIcon];
     }
 }
 

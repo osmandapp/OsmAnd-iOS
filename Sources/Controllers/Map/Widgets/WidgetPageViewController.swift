@@ -148,19 +148,42 @@ extension WidgetPageViewController {
                 }
             }
             // show horizontal separator for visible items in row
-            if index != simpleWidgetViews.count - 1, stackView.subviews.count - 1 > index {
-                let horizontalSeparator = stackView.subviews[index + 1]
-                horizontalSeparator.isHidden = visibleWidgets.isEmpty
-                if !horizontalSeparator.isHidden {
-                    // update color for horizontal separator
-                    let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
-                    horizontalSeparator.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
-                }
-            }
+//            if index != simpleWidgetViews.count - 1, stackView.subviews.count - 1 > index {
+//                let horizontalSeparator = stackView.subviews[index + 1]
+//                if horizontalSeparator.tag != 100 {
+//                    print("")
+//                }
+//                horizontalSeparator.isHidden = visibleWidgets.isEmpty
+//                if !horizontalSeparator.isHidden {
+//                    // update color for horizontal separator
+//                    let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
+//                    horizontalSeparator.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
+//                }
+//            }
             // show right separator
             items.enumerated().forEach { idx, widget in
                 widget.showRightSeparator(idx != items.count - 1)
             }
         }
+      //  updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
     }
+    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> [widgetView] -> [horizontalSeparatorView] -> ... [widgetView]
+//    func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
+//        guard views.count >= 2 else { return }
+//        
+//        for (index, letter) in views where index.isMultiple(of: 2) {
+//           print(letter)
+//        }
+//
+//        for i in 1..<views.count {
+//            let horizontalSeparatorView = views[i]
+//            let widgetView = views[i - 1]
+//            horizontalSeparatorView.isHidden = widgetView.isHidden
+//            if !horizontalSeparatorView.isHidden {
+//                // update color for horizontal separator
+//                let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
+//                horizontalSeparatorView.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
+//            }
+//        }
+//    }
 }

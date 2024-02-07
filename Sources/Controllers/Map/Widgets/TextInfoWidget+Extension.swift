@@ -19,6 +19,7 @@ extension OATextInfoWidget {
             return
         }
         sizeStylePref.set(Int32(style.rawValue), mode: appMode)
+      //  refreshLayout()
     }
 }
 

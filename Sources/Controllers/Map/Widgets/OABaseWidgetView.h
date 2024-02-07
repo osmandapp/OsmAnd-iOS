@@ -39,6 +39,7 @@
 - (BOOL)isTopText;
 - (BOOL)isTextInfo;
 - (void)updateSimpleLayout;
+- (void)updatesSeparatorsColor:(UIColor *_Nonnull)color;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;

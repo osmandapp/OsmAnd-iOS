@@ -23,6 +23,7 @@
 @implementation OATextInfoWidget
 {
     NSString *_contentTitle;
+    UIColor *_contentTitleColor;
     NSString *_text;
     NSString *_subtext;
     BOOL _explicitlyVisible;
@@ -86,7 +87,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     for (UIView *v in viewsToRemove) {
         [v removeFromSuperview];
     }
-   // self.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor];
     [self initSeparatorsView];
     
     UIStackView *verticalStackView = [UIStackView new];
@@ -126,7 +126,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     // Create the name label ("SPEED")
     self.nameLabel = [UILabel new];
     self.nameLabel.text = [_contentTitle upperCase];
-    self.nameLabel.textColor = [UIColor colorNamed:ACColorNameWidgetLabelColor];
     
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
@@ -166,7 +165,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     ]];
     
     // Create the _contentStackViewSimpleWidget
-   _contentStackViewSimpleWidget = [UIStackView new];
+    _contentStackViewSimpleWidget = [UIStackView new];
     _contentStackViewSimpleWidget.translatesAutoresizingMaskIntoConstraints = NO;
     _contentStackViewSimpleWidget.axis = UILayoutConstraintAxisHorizontal;
     _contentStackViewSimpleWidget.alignment = UIStackViewAlignmentFill;
@@ -303,8 +302,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [_textShadowView.trailingAnchor constraintEqualToAnchor:_textView.trailingAnchor],
         [_textShadowView.leadingAnchor constraintEqualToAnchor:_textView.leadingAnchor]
     ]];
-    
-   // self.backgroundColor = [UIColor whiteColor];
 
     _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
@@ -476,7 +473,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 - (void)configureSimpleLayout
 {
     self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
-    self.nameLabel.textColor = _unitsColor;
+    self.nameLabel.textColor = _contentTitleColor;
     
     self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.valueLabel.textColor = _primaryColor;
@@ -737,17 +734,21 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     [self setText:timeStr subtext:nil];
 }
 
-- (void) updateIconMode:(BOOL)night
+- (void)setNightMode:(BOOL)night
 {
     _isNight = night;
-    _imageView.overrideUserInterfaceStyle = night ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+}
+
+- (void)updateIcon
+{
+    _imageView.overrideUserInterfaceStyle = _isNight ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
     if (_icon)
         [self setImage:[UIImage imageNamed:_icon]];
 }
 
-- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius
+- (void)updateTextWitState:(OATextState *)state
 {
-    if (bold)
+    if (state.textBold)
     {
         _primaryFont = _largeBoldFont;
         _unitsFont = _smallBoldFont;
@@ -758,12 +759,14 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         _unitsFont = _smallFont;
     }
     
-    _primaryColor = textColor;
-    _unitsColor = textColor;
-    _primaryShadowColor = textShadowColor;
-    _unitsShadowColor = textShadowColor;
-    _shadowRadius = shadowRadius;
-
+    _primaryColor = state.textColor;
+    _unitsColor = self.isSimpleLayout ? state.unitColor : state.textColor;
+    _primaryShadowColor = state.textShadowColor;
+    _unitsShadowColor = state.textShadowColor;
+    _shadowRadius = state.textShadowRadius;
+    _contentTitleColor = state.titleColor;
+    
+    [self updatesSeparatorsColor:state.dividerColor];
     [self refreshLabel];
 }
 

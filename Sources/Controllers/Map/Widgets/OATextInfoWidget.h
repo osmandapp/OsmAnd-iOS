@@ -75,13 +75,16 @@
 - (void) setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void) updateIconMode:(BOOL)night;
-- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
+- (void)updateIcon;
+- (void)setNightMode:(BOOL)night;
+
+- (void)updateTextWitState:(OATextState *_Nonnull)state;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)configureSimpleLayout;
+- (void)refreshLayout;
 
 @end

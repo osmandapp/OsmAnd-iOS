@@ -6,14 +6,12 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
-@objc(OACurrentTimeWidget)
 @objcMembers
 final class CurrentTimeWidget: OASimpleWidget {
     
-    var cachedTime: TimeInterval = 0
-    
+    let calendar = Calendar.current
+    var cachedDate: Date?
+
     init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(type: .currentTime)
         setIconFor(.currentTime)
@@ -30,14 +28,35 @@ final class CurrentTimeWidget: OASimpleWidget {
     }
     
     override func updateInfo() -> Bool {
-        let timeNow = Date.now.timeIntervalSince1970
-        let timeStart = Date.now.startOfDay.timeIntervalSince1970
-        let time = timeNow - timeStart
-        if (isUpdateNeeded() || time - cachedTime > TimeInterval(UPDATE_INTERVAL_MILLIS)) {
-            cachedTime = time
-            setTimeText(time)
+        let currentDate = Date()
+        if let cachedDate {
+            let cachedDateComponents = calendar.dateComponents([.hour, .minute], from: cachedDate)
+            let currentComponents = calendar.dateComponents([.hour, .minute], from: currentDate)
+            
+            guard let previousHour = cachedDateComponents.hour,
+               let currentHour = currentComponents.hour,
+               let previousMinute = cachedDateComponents.minute,
+               let currentMinute = currentComponents.minute else { 
+                return false
+            }
+            
+            if isUpdateNeeded() || (currentHour > previousHour || (currentHour == previousHour && currentMinute > previousMinute)) {
+                updateFormatedText(currentDate: currentDate, hour: currentHour, minute: currentMinute)
+                return true
+            }
+        } else {
+            let dateComponents = calendar.dateComponents([.hour, .minute], from: currentDate)
+            guard let hour = dateComponents.hour,
+                  let minute = dateComponents.minute else { return false }
+            updateFormatedText(currentDate: currentDate, hour: hour, minute: minute)
             return true
         }
         return false
+    }
+    
+    private func updateFormatedText(currentDate: Date, hour: Int, minute: Int) {
+        cachedDate = currentDate
+        let formattedTime = String(format: "%02d:%02d", hour, minute)
+        setText(formattedTime, subtext: nil)
     }
 }

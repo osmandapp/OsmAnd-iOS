@@ -826,6 +826,14 @@
             intX.push_back(get31TileNumberX(l.coordinate.longitude));
             intY.push_back(get31TileNumberY(l.coordinate.latitude));
         }
+        
+        bool hhRoutingOnly = [[OAAppSettings sharedManager].useHHRoutingOnly get];
+        bool hhRouting = [[OAAppSettings sharedManager].useHHRouting get];
+        if (hhRouting || hhRoutingOnly)
+        {
+            router->setDefaultRoutingConfig();
+            router->USE_ONLY_HH_ROUTING = hhRoutingOnly;
+        }
         if (complexCtx)
         {
             try

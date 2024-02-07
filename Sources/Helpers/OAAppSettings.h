@@ -1236,6 +1236,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *userUUID;
 @property (nonatomic) OACommonLong *lastUUIDChangeTimestamp;
 
+@property (nonatomic) OACommonBoolean *useHHRouting;
+@property (nonatomic) OACommonBoolean *useHHRoutingOnly;
+
 - (long) getLastGloblalSettingsModifiedTime;
 - (void) setLastGlobalModifiedTime:(long)timestamp;
 - (long) getLastProfileSettingsModifiedTime:(OAApplicationMode *)mode;

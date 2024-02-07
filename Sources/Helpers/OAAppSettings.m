@@ -425,6 +425,9 @@
 #define kTopWidgetPanelOrderKey @"top_widget_panel_order"
 #define kBottomWidgetPanelOrderKey @"bottom_widget_panel_order"
 
+#define useHHRoutingKey @"useHHRoutingKey"
+#define useHHRoutingOnlyKey @"useHHRoutingOnlyKey"
+
 @implementation OACompassMode
 
 + (NSString *) getTitle:(EOACompassMode)cm
@@ -4615,6 +4618,11 @@
         
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
+        
+        _useHHRouting = [[[OACommonBoolean withKey:useHHRoutingKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing"];
+        _useHHRoutingOnly = [[[OACommonBoolean withKey:useHHRoutingOnlyKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing_only"];
 
         [self fetchImpassableRoads];
 

@@ -54,9 +54,10 @@
         NSString *rf = n.directionInfo.ref;
         NSString *dn = n.directionInfo.destinationName;
         isSet = !(nm.length == 0 && rf.length == 0 && dn.length == 0);
-        streetName.text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"»"];
+        std::shared_ptr<RouteDataObject> rdo = n.directionInfo.routeDataObject;
+        streetName.shields = [RoadShield create:rdo];
+        streetName.text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"»" shields:streetName.shields];
         streetName.turnType = n.directionInfo.turnType;
-        streetName.shieldObject = n.directionInfo.routeDataObject;
         if (!streetName.turnType)
             streetName.turnType = TurnType::ptrValueOf(TurnType::C, false);
         if (n.directionInfo.exitInfo != nil)
@@ -87,7 +88,7 @@
                 isSet = YES;
             }
             streetName.showMarker = YES;
-            streetName.shieldObject = rs->object;
+            streetName.shields = [RoadShield create:rs->object];
         }
     }
     // 3. display next road street name if this one empty
@@ -98,7 +99,7 @@
         {
             streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:NO];
             streetName.turnType = TurnType::ptrValueOf(TurnType::C, false);
-            streetName.shieldObject = rs->object;
+            streetName.shields = [RoadShield create:rs->object];
         }
     }
     if (streetName.turnType)
@@ -121,7 +122,7 @@
         return NO;
     if (self.showMarker != otherName.showMarker)
         return NO;
-    if (self.shieldObject != otherName.shieldObject)
+    if (![self.shields isEqual: otherName.shields])
         return NO;
     if (self.exitRef && otherName.exitRef && ![self.exitRef isEqualToString:otherName.exitRef])
         return NO;
@@ -133,9 +134,73 @@
     NSUInteger result = [self.text hash];
     result = 31 * result + (self.turnType ? self.turnType->getValue() : 0.);
     result = 31 * result + (self.showMarker ? 1 : 0);
-    result = 31 * result + self.shieldObject->id;
+    result = 31 * result + [self.shields hash];
     result = 31 * result + [self.exitRef hash];
     return result;
 }
 
+@end
+
+@implementation RoadShield
+
+- (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value {
+    self = [super init];
+    if (self) {
+        _rdo = rdo;
+        _tag = [tag copy];
+        _value = [value copy];
+    }
+    return self;
+}
+
++ (NSArray<RoadShield *> *)create:(std::shared_ptr<RouteDataObject>)rdo {
+    NSMutableArray<RoadShield *> *shields = [NSMutableArray array];
+    NSMutableString *additional = [NSMutableString string];
+    
+    if (rdo && !rdo->namesIds.empty()) {
+        for (NSInteger i = 0; i < rdo->namesIds.size(); i++) {
+            NSString *tag = [NSString stringWithUTF8String:rdo->region->quickGetEncodingRule(rdo->namesIds[i].first).getTag().c_str()];
+
+            NSString *val = [NSString stringWithUTF8String:rdo->names[rdo->namesIds[i].first].c_str()];
+            if (![tag hasSuffix:@"_ref"] && ![tag hasPrefix:@"route_road"])
+            {
+                [additional appendFormat:@"%@=%@;", tag, val];
+            } else if ([tag hasPrefix:@"route_road"] && [tag hasSuffix:@"_ref"]) {
+                RoadShield *shield = [[RoadShield alloc] initWithRDO:rdo tag:tag value:val];
+                [shields addObject:shield];
+            }
+        }
+        if (shields.count > 0) {
+            for (RoadShield *shield in shields) {
+                shield.additional = additional;
+            }
+        }
+    }
+    
+    return [shields copy];
+}
+
+- (BOOL)isEqual:(id)object {
+    if (self == object) {
+        return YES;
+    }
+    
+    if (![object isKindOfClass:self.class]) {
+        return NO;
+    }
+    
+    RoadShield *shield = (RoadShield *)object;
+    
+    return [self.tag isEqualToString:shield.tag] &&
+           [self.value isEqualToString:shield.value];
+}
+
+- (NSUInteger) hash
+{
+    NSUInteger result = [self.tag hash];
+    result = 31 * result + [self.value hash];
+    result = 31 * result + (self.rdo ? self.rdo->id : 0);
+
+    return result;
+}
 @end

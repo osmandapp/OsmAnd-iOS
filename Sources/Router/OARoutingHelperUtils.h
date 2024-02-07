@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 #include <routingConfiguration.h>
-
+#import "OACurrentStreetName.h"
 NS_ASSUME_NONNULL_BEGIN
 
 @class OAApplicationMode;
@@ -22,6 +22,12 @@ struct RoutingParameter;
                             ref:(NSString *)ref
                     destination:(NSString *)destination
                         towards:(NSString *)towards;
+
++ (NSString *) formatStreetName:(NSString *)name
+                            ref:(NSString *)ref
+                    destination:(NSString *)destination
+                        towards:(NSString *)towards
+                        shields:(NSArray *)shields;
 
 + (RoutingParameter)getParameterForDerivedProfile:(NSString *)key appMode:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router;
 

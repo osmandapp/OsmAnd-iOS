@@ -151,6 +151,11 @@ extension WidgetPageViewController {
             if index != simpleWidgetViews.count - 1, stackView.subviews.count - 1 > index {
                 let horizontalSeparator = stackView.subviews[index + 1]
                 horizontalSeparator.isHidden = visibleWidgets.isEmpty
+                if !horizontalSeparator.isHidden {
+                    // update color for horizontal separator
+                    let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
+                    horizontalSeparator.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
+                }
             }
             // show right separator
             items.enumerated().forEach { idx, widget in

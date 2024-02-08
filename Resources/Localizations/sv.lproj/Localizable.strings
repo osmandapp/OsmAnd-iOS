@@ -3127,3 +3127,10 @@
 "shortest_distance_first" = "Kortast distans först";
 "longest_duration_first" = "Längsta tid först";
 "help_article_plan_route_web_name" = "Ruttplanering via internet";
+"quarterly_subscription" = "Kvartalsvis prenumeration";
+"backup_remove_old_versions_finished" = "Gamla versioner har raderats från OsmAnd Cloud.";
+"backup_delete_data_type_description" = "Detta kommer radera alla %@ data från OsmAnd Cloud. Åtgärden kan inte ångras.";
+"backup_empty_data_from_category" = "OsmAnd Cloud innehåller inga data från den här kategorin.";
+"backup_conflicts_descr" = "Nyare version av dessa filer finns på servern. Välj en åtgärd";
+"dowload_cloud_version" = "Ladda ner Cloud-versionen";
+"purchases_feature_weather" = "24h timvisa prognoser 7 dagar framåt färglagt på kartan";

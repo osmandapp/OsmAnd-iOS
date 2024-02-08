@@ -29,12 +29,12 @@
                             ref:(NSString *)originalRef
                     destination:(NSString *)destination
                         towards:(NSString *)towards
-                        shields:(NSArray *)shields
+                        shields:(NSArray<RoadShield *> *)shields
 {
     NSMutableString *formattedStreetName = [NSMutableString string];
     if (originalRef && originalRef.length > 0)
     {
-        NSArray *refs = [originalRef componentsSeparatedByString:@";"];
+        NSArray<NSString *> *refs = [originalRef componentsSeparatedByString:@";"];
         for (NSString *ref in refs)
         {
             if (!shields || ![self isRefEqualsShield:shields ref:ref])
@@ -62,10 +62,11 @@
 }
 
 + (BOOL)isRefEqualsShield:(NSArray<RoadShield *> *)shields ref:(NSString *)ref {
+    NSString * refNumber = [NSString stringWithFormat:@"%d", [OAUtilities extractIntegerNumber:ref]];
     for (RoadShield *shield in shields)
     {
         NSString *shieldValue = shield.value;
-        if ([ref isEqualToString:shieldValue] || [[NSString stringWithFormat:@"%d", [OAUtilities extractIntegerNumber:ref]] isEqualToString:shieldValue])
+        if ([ref isEqualToString:shieldValue] || [refNumber isEqualToString:shieldValue])
             return YES;
     }
     return NO;

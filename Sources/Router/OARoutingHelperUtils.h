@@ -27,7 +27,7 @@ struct RoutingParameter;
                             ref:(NSString *)ref
                     destination:(NSString *)destination
                         towards:(NSString *)towards
-                        shields:(NSArray *)shields;
+                        shields:(NSArray<RoadShield *> *)shields;
 
 + (RoutingParameter)getParameterForDerivedProfile:(NSString *)key appMode:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router;
 

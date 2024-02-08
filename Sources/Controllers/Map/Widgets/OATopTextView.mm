@@ -82,7 +82,7 @@
     
     std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
     OACurrentStreetName *_prevStreetName;
-    NSArray<RoadShield *> *cashedRoadShields;
+    NSArray<RoadShield *> *cachedRoadShields;
     NSString *_roadShieldName;
     
     UIFont *_textFont;
@@ -576,7 +576,7 @@
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
         _prevStreetName = streetName;
         NSArray<RoadShield *> *shields = streetName.shields;
-        if (shields.count != 0 && ![shields isEqual:cashedRoadShields]) //TODO cashedRoadShields
+        if (shields.count != 0 && ![shields isEqual:cachedRoadShields])
         {
             if([self setRoadShield:_shieldIcon shields:shields])
             {
@@ -585,12 +585,12 @@
                 if (idx > 0)
                     streetName.text = [streetName.text substringFromIndex:idx];
             }
-            cashedRoadShields = shields;
+            cachedRoadShields = shields;
         }
         else
         {
             _shieldIcon.hidden = YES;
-            cashedRoadShields = nil;
+            cachedRoadShields = nil;
         }
         if (streetName.exitRef.length > 0)
         {
@@ -677,7 +677,7 @@
     const auto& tps = object->types;
     NSString* nameTag = shield.tag;
     NSString* name = shield.value;
-    NSMutableString * additional = shield.additional;
+    NSMutableString * additional = [shield.additional mutableCopy];
     OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
     const auto& env = mapPres.mapPresentationEnvironment;
     if (!env)

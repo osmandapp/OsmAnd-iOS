@@ -54,8 +54,7 @@
         NSString *rf = n.directionInfo.ref;
         NSString *dn = n.directionInfo.destinationName;
         isSet = !(nm.length == 0 && rf.length == 0 && dn.length == 0);
-        std::shared_ptr<RouteDataObject> rdo = n.directionInfo.routeDataObject;
-        streetName.shields = [RoadShield create:rdo];
+        streetName.shields = [RoadShield createShields:n.directionInfo.routeDataObject];
         streetName.text = [OARoutingHelperUtils formatStreetName:nm ref:rf destination:dn towards:@"»" shields:streetName.shields];
         streetName.turnType = n.directionInfo.turnType;
         if (!streetName.turnType)
@@ -88,7 +87,7 @@
                 isSet = YES;
             }
             streetName.showMarker = YES;
-            streetName.shields = [RoadShield create:rs->object];
+            streetName.shields = [RoadShield createShields:rs->object];
         }
     }
     // 3. display next road street name if this one empty
@@ -99,7 +98,7 @@
         {
             streetName.text = [self.class getRouteSegmentStreetName:rs includeRef:NO];
             streetName.turnType = TurnType::ptrValueOf(TurnType::C, false);
-            streetName.shields = [RoadShield create:rs->object];
+            streetName.shields = [RoadShield createShields:rs->object];
         }
     }
     if (streetName.turnType)
@@ -153,7 +152,7 @@
     return self;
 }
 
-+ (NSArray<RoadShield *> *)create:(std::shared_ptr<RouteDataObject>)rdo {
++ (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo {
     NSMutableArray<RoadShield *> *shields = [NSMutableArray array];
     NSMutableString *additional = [NSMutableString string];
     
@@ -170,11 +169,8 @@
                 [shields addObject:shield];
             }
         }
-        if (shields.count > 0) {
-            for (RoadShield *shield in shields) {
-                shield.additional = additional;
-            }
-        }
+        for (RoadShield *shield in shields)
+            shield.additional = additional;
     }
     
     return [shields copy];

@@ -67,8 +67,7 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
 @objc(OATimeToNavigationPointState)
 @objcMembers
 class TimeToNavigationPointState: NSObject {
-   // return [_showArrival get] ? OALocalizedString(@"access_arrival_time") : OALocalizedString(@"map_widget_time");
-
+    
     static let intermediateTimeToGo = TimeToNavigationPointState(
         title: localizedString("map_widget_time"),
         iconName: "widget_intermediate_time_to_go",

@@ -14,7 +14,6 @@ extension UIStackView {
             let separator = UIView()
             separator.backgroundColor = color
             separator.translatesAutoresizingMaskIntoConstraints = false
-            separator.tag = 100
             insertArrangedSubview(separator, at: position)
             switch axis {
             case .horizontal:

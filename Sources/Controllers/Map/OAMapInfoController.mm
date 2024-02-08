@@ -606,7 +606,6 @@
     BOOL nightMode = _settings.nightMode;
     BOOL following = [routingHelper isFollowingMode];
     OATextState *ts = [[OATextState alloc] init];
-    // FIXME: simple widgets
     ts.textBold = following;
     ts.night = nightMode;
     
@@ -642,7 +641,6 @@
     if ([sideWidget isKindOfClass:OATextInfoWidget.class])
     {
         OATextInfoWidget *widget = (OATextInfoWidget *) sideWidget;
-        NSLog(@"widget.backgroundColor: %@", state.leftColor );
         widget.backgroundColor = state.leftColor;
         [widget setNightMode:state.night];
         [widget updateTextWitState:state];

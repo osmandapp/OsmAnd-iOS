@@ -22,7 +22,6 @@ class IntermediateTimeControlWidgetState: OAWidgetState {
     
     override func getWidgetTitle() -> String? {
         return showArrival.get() ? localizedString("access_intermediate_arrival_time") : localizedString("map_widget_intermediate_time")
-//        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getWidgetTitle()
     }
     
     override func getMenuIconId() -> String {

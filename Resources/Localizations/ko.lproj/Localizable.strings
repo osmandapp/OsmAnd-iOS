@@ -272,7 +272,7 @@
 "speak_traffic_warnings" = "교통 경고";
 "shared_string_gpx_waypoints" = "트랙 경유지";
 "update_existing" = "대체";
-"shared_string_gpx_tracks" = "경로";
+"shared_string_gpx_tracks" = "트랙";
 "shared_string_visible" = "정보";
 "carplay_profile" = "CarPlay 프로필";
 "carplay_profile_descr" = "CarPlay에 연결된 동안 사용할 프로필.";
@@ -2059,3 +2059,14 @@
 "shared_string_filters" = "필터";
 "download_wiki_region_placeholder" = "이 지역";
 "weather_precip_inches" = "인치";
+"lang_hu_formal" = "헝가리어 (formal)";
+"lang_sr_latn" = "세르비아어 (라틴)";
+"lang_be_by" = "벨라루스어 (라틴)";
+"lang_es_us" = "스페인어 (미국)";
+"lang_sat" = "산탈리어";
+"select_map_marker" = "지도 마커 선택";
+"lang_en_gb" = "영어 (영국)";
+"lang_oc" = "오크어";
+"routing_attr_driving_style_description" = "더 짧은, 더 빠른 또는 더 안전한 경로를 얻기 위해 운전 목적을 선택";
+"radius_rules_widget_desc" = "반경 바퀴 도구는지도에 선택한 지점 주변의 거리를 표시합니다.";
+"lang_zh_hk" = "중국어(홍콩)";

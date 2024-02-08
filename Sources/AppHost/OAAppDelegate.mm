@@ -369,11 +369,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     NSLog(@"OAAppDelegate applicationDidReceiveMemoryWarning");
 }
 
-- (void)application:(UIApplication *)application willChangeStatusBarFrame:(CGRect)newStatusBarFrame
-{
-    [OASharedVariables setStatusBarHeight:newStatusBarFrame.size.height];
-}
-
 - (void)applicationProtectedDataWillBecomeUnavailable:(UIApplication *)application
 {
     NSLog(@"OAAppDelegate applicationProtectedDataWillBecomeUnavailable");

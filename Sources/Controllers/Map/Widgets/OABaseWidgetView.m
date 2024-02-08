@@ -42,7 +42,6 @@
 {
     _separatorBottomView = [[UIView alloc] init];
     _separatorBottomView.hidden = YES;
-    _separatorBottomView.backgroundColor = UIColorFromRGB(color_tint_gray);
     [self addSubview:_separatorBottomView];
     
     _separatorBottomView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -55,7 +54,6 @@
     
     _separatorRightView = [UIView new];
     _separatorRightView.hidden = YES;
-    _separatorRightView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetSeparatorColor];
     [self addSubview:_separatorRightView];
     
     _separatorRightView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -65,6 +63,11 @@
         [_separatorRightView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
         [_separatorRightView.widthAnchor constraintEqualToConstant:.5]
     ]];
+}
+
+- (void)updatesSeparatorsColor:(UIColor *)color
+{
+    _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
 }
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref {

@@ -334,19 +334,23 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     return [self getFormattedAlt:alt mc:mc];
 }
 
-+ (NSString *) getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc
-{
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray {
     BOOL useFeet = mc == MILES_AND_FEET || mc == MILES_AND_YARDS || mc == NAUTICAL_MILES_AND_FEET;
     if (useFeet)
     {
         int feet = (int) (alt * FEET_IN_ONE_METER + 0.5);
-        return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:NO decimalPlacesNumber:0];
+        return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:NO decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
     else
     {
         int meters = (int) (alt + 0.5);
-        return [self formatValue:meters unit:_unitsM forceTrailingZeroes:NO decimalPlacesNumber:0];
+        return [self formatValue:meters unit:_unitsM forceTrailingZeroes:NO decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
+}
+
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc
+{
+    return [self getFormattedAlt:alt mc:mc valueUnitArray:nil];
 }
 
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray

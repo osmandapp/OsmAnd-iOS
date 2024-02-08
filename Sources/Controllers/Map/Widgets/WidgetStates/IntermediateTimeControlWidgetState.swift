@@ -8,7 +8,6 @@
 
 import Foundation
 
-//@objc(OAIntermediateTimeControlWidgetState)
 @objcMembers
 class IntermediateTimeControlWidgetState: OAWidgetState {
     
@@ -18,6 +17,10 @@ class IntermediateTimeControlWidgetState: OAWidgetState {
     private let showArrival: OACommonBoolean = OAAppSettings.sharedManager().showIntermediateArrivalTime
     
     override func getMenuTitle() -> String {
+        return showArrival.get() ? localizedString("access_intermediate_arrival_time") : localizedString("map_widget_intermediate_time")
+    }
+    
+    override func getWidgetTitle() -> String? {
         return showArrival.get() ? localizedString("access_intermediate_arrival_time") : localizedString("map_widget_intermediate_time")
     }
     

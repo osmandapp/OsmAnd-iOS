@@ -6,8 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 @objc(OAWidgetPageViewController)
 @objcMembers
 final class WidgetPageViewController: UIViewController {
@@ -159,7 +157,7 @@ extension WidgetPageViewController {
     private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
         guard views.count >= 2 else { return }
         
-        for i in 1..<(views.count - 1) where !i.isMultiple(of: 2) {
+        for i in 1..<views.count - 1 where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
             if !horizontalSeparatorView.isHidden {

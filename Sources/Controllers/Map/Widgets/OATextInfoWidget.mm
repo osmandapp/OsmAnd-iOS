@@ -48,6 +48,7 @@
     OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
     UIStackView *_contentStackViewSimpleWidget;
+    UIStackView *_contentUnitStackViewSimpleWidget;
     NSLayoutConstraint *_verticalStackViewSimpleWidgetTopConstraint;
     NSLayoutConstraint *_verticalStackViewSimpleWidgetBottomConstraint;
     UIColor *_iconColor;
@@ -208,27 +209,30 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.adjustsFontSizeToFitWidth = YES;
     self.valueLabel.minimumScaleFactor = 0.3;
-
-    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.valueLabel.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
     [valueUnitOrEmptyView addSubview:self.valueLabel];
     
+    _contentUnitStackViewSimpleWidget = [UIStackView new];
+    _contentUnitStackViewSimpleWidget.translatesAutoresizingMaskIntoConstraints = NO;
+    _contentUnitStackViewSimpleWidget.axis = UILayoutConstraintAxisVertical;
+    _contentUnitStackViewSimpleWidget.alignment = UIStackViewAlignmentFill;
+    _contentUnitStackViewSimpleWidget.distribution = UIStackViewDistributionEqualCentering;
+    [valueUnitOrEmptyView addSubview:_contentUnitStackViewSimpleWidget];
+    
+    self.titleOrEmptyLabel = [UILabel new];
+    self.titleOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.titleOrEmptyLabel.allowsDefaultTighteningForTruncation = YES;
+    self.titleOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
+    self.titleOrEmptyLabel.textAlignment = NSTextAlignmentRight;
+    [_contentUnitStackViewSimpleWidget addArrangedSubview:self.titleOrEmptyLabel];
+    
     // Create the unitOrEmptyLabel ("KM/H")
     self.unitOrEmptyLabel = [UILabel new];
-    if (self.widgetSizeStyle == WidgetSizeStyleSmall)
-        self.unitOrEmptyLabel.text = [_subtext upperCase];
-    else
-        self.unitOrEmptyLabel.text = @"";
-    
     self.unitOrEmptyLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.unitOrEmptyLabel.allowsDefaultTighteningForTruncation = YES;
     self.unitOrEmptyLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
     self.unitOrEmptyLabel.textAlignment = NSTextAlignmentRight;
-    [valueUnitOrEmptyView addSubview:self.unitOrEmptyLabel];
-    [self.valueLabel setContentHuggingPriority:UILayoutPriorityDefaultLow
-                                             forAxis:UILayoutConstraintAxisHorizontal];
-    [self.unitOrEmptyLabel setContentHuggingPriority:UILayoutPriorityDefaultHigh
-                                             forAxis:UILayoutConstraintAxisHorizontal];
+    [_contentUnitStackViewSimpleWidget addArrangedSubview:self.unitOrEmptyLabel];
     
     [NSLayoutConstraint activateConstraints:@[
         [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
@@ -238,13 +242,13 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     ]];
     
     [NSLayoutConstraint activateConstraints:@[
-        [self.unitOrEmptyLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
-        [self.unitOrEmptyLabel.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
-        [self.unitOrEmptyLabel.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
-        [self.unitOrEmptyLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
-        [self.unitOrEmptyLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30],
+        [_contentUnitStackViewSimpleWidget.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [_contentUnitStackViewSimpleWidget.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
+        [_contentUnitStackViewSimpleWidget.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
+        [_contentUnitStackViewSimpleWidget.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
+        [_contentUnitStackViewSimpleWidget.heightAnchor constraintGreaterThanOrEqualToConstant:30],
     ]];
-    _unitOrEmptyLabelWidthConstraint = [self.unitOrEmptyLabel.widthAnchor constraintGreaterThanOrEqualToConstant:15];
+    _unitOrEmptyLabelWidthConstraint = [_contentUnitStackViewSimpleWidget.widthAnchor constraintGreaterThanOrEqualToConstant:15];
     _unitOrEmptyLabelWidthConstraint.active = YES;
     
     self.emptyViewRightPlaceholderFullRow = [UIView new];
@@ -484,6 +488,11 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
     self.unitOrEmptyLabel.textColor = _unitsColor;
     
+    
+    self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightRegular];
+    self.titleOrEmptyLabel.textColor = _unitsColor;
+    
+    
     self.valueLabel.text = _text;
     self.nameLabel.text = [_contentTitle upperCase];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
@@ -504,6 +513,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     {
         self.unitView.hidden = YES;
         self.unitOrEmptyLabel.text = @"";
+        self.titleOrEmptyLabel.text = @"";
         _unitOrEmptyLabelWidthConstraint.constant = 0;
     }
     else
@@ -512,10 +522,12 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         if (self.widgetSizeStyle == WidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
+            self.titleOrEmptyLabel.text = [_contentTitle upperCase];
             self.unitOrEmptyLabel.text = [_subtext upperCase];
         }
         else
         {
+            self.titleOrEmptyLabel.text = @"";
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
             self.unitLabel.text = [_subtext upperCase];

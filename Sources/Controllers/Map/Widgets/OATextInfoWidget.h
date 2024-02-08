@@ -40,6 +40,7 @@
 @property (nonatomic, strong, nullable) UILabel *unitLabel;
 @property (nonatomic, strong, nullable) UIView *unitView;
 @property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
+@property (nonatomic, strong, nullable) UILabel *titleOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;

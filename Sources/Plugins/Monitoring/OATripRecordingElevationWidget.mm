@@ -18,6 +18,7 @@
 #import "OARootViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAOsmAndFormatter.h"
 
 @implementation OATripRecordingElevationWidget
 {
@@ -29,7 +30,7 @@
     self = [super initWithType:type];
     if (self)
     {
-        __weak OATextInfoWidget *weakSelf = self;
+        __weak OATripRecordingElevationWidget *weakSelf = self;
         double __block cachedElevationDiff = -1;
         
         self.updateInfoFunction = ^BOOL {
@@ -40,8 +41,12 @@
             {
                 cachedElevationDiff = elevationDiff;
                 EOAMetricsConstant metricsConstants = [[OAAppSettings sharedManager].metricSystem get];
-                NSString *formattedUphill = [OAOsmAndFormatter getFormattedAlt:elevationDiff mc:metricsConstants];
-                [weakSelf setText:formattedUphill subtext:nil];
+                NSMutableArray *valueUnitArray = [NSMutableArray array];
+                [OAOsmAndFormatter getFormattedAlt:elevationDiff mc:metricsConstants valueUnitArray:valueUnitArray];
+                NSDictionary<NSString *, NSString *> *result = [weakSelf getValueAndUnitWithArray:valueUnitArray];
+                if (result) {
+                    [weakSelf setText:result[@"value"] subtext:result[@"unit"]];
+                }
             }
             return YES;
         };
@@ -54,10 +59,25 @@
                 [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpxFile selectedTab:EOATrackMenuHudSegmentsTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsAlititudeTab openedFromMap:YES];
             }
         };
-        
         [self updateInfo];
     }
     return self;
+}
+
+- (nullable NSDictionary<NSString *, NSString *> *)getValueAndUnitWithArray:(NSMutableArray *)valueUnitArray
+{
+    if (valueUnitArray.count == 2)
+    {
+        NSString *value = [valueUnitArray objectAtIndex:0];
+        NSString *unit = [valueUnitArray objectAtIndex:1];
+        
+        if ([value isKindOfClass:[NSString class]] && [unit isKindOfClass:[NSString class]])
+        {
+            return @{@"value": value, @"unit": unit};
+        }
+    }
+    
+    return nil;
 }
 
 //Override

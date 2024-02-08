@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) std::shared_ptr<RouteDataObject> rdo;
 @property (nonatomic, readonly) NSString *tag;
 @property (nonatomic, readonly) NSString *value;
-@property (nonatomic, strong) NSString *additional;
+@property (nonatomic, copy) NSString *additional;
 
 - (instancetype)initWithRDO:(std::shared_ptr<RouteDataObject>)rdo tag:(NSString *)tag value:(NSString *)value;
 + (NSArray<RoadShield *> *)createShields:(std::shared_ptr<RouteDataObject>)rdo;

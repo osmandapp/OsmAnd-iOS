@@ -986,7 +986,7 @@
 "downloading" = "Downloading";
 
 // Route planning
-"plan_route" = "Nova ruta";
+"plan_route" = "Planiranje rute";
 "coord_input_add_point" = "Dodaj tačku";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -2372,7 +2372,7 @@
 "in_grace_period" = "U grejs periodu";
 "shared_string_delete_all" = "Obriši sve";
 "shared_string_logout" = "Odjava";
-"enough_contributions_descr" = "Čestitamo, stekao si dovoljno doprinosa OpenStritMap-ama i sada možete uživati neograničeno u osvežavanju mapa OsmAnda!";
+"enough_contributions_descr" = "Čestitamo, stekao si dovoljno doprinosa u uređivanji OpenStreetMap i sada možeš uživati neograničeno u ažuriranju mapa!";
 "animate_my_location" = "Omogući animirano pomeranje mape do \"Moje lokacije\" tokom navigacije.";
 "shared_string_status" = "Stanje";
 "backup_data" = "Sačuvaj rezervu podataka";

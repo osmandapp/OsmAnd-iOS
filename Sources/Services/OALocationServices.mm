@@ -564,10 +564,10 @@
     if (!manager)
         return;
 
-    if (enable)
-        manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
-    else
-        manager.distanceFilter = kCLDistanceFilterNone;
+    //if (enable)
+    //    manager.distanceFilter = [_settings.applicationMode.get getBackgroundDistanceFilter];
+    //else
+    //    manager.distanceFilter = kCLDistanceFilterNone;
 }
 
 + (BOOL) isPointAccurateForRouting:(CLLocation *)loc
@@ -688,6 +688,11 @@
     [[OAWaypointHelper sharedInstance] locationChanged:location];
     @synchronized(_lock)
     {
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+
+        NSLog(@"DEBUG NAV:  src = %@ %f, %f (%f km/h)", [dateFormatter stringFromDate: location.timestamp], location.coordinate.latitude, location.coordinate.longitude, location.speed * 3.6);
+
         _lastLocation = updatedLocation;
         [_updateObserver notifyEvent];
     }

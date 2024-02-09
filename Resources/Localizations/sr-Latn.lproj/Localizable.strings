@@ -724,7 +724,7 @@
 "sett_deg360" = "Degrees 360";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"shared_string_location" = "lokaciju";
+"shared_string_location" = "Lokacija";
 "sett_arr_map" = "Map center";
 "short_location_on_map" = "Šir %@\nDuž %@";
 "navigate_point_format_D" = "DDD.DDDDD";

@@ -600,9 +600,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
             case .newestDateFirst, .oldestDateFirst:
                 let tempItems: [GPXItemWithDate] = list.map {
-                    let creationDate = OAGPXUIHelper.getCreationDate($0.absolutePath ?? "")
-                                                            ?? $0.importDate
-                                                            ?? Date.distantPast
+                    guard let path = $0.absolutePath, let creationDate = OAGPXUIHelper.getCreationDate(path) ?? $0.importDate else {
+                        return (gpx: $0, creationDate: Date.distantPast)
+                    }
+
                     return (gpx: $0, creationDate: creationDate)
                 }
                 

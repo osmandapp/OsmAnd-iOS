@@ -145,7 +145,7 @@
 "map_widget_next_turn" = "Sledeće skretanje";
 "map_widget_next_turn_small" = "Sledeće skretanje (malo)";
 "map_widget_next_next_turn" = "Drugo sledeće skretanje";
-"always_center_position_on_map" = "Uvek prikazuj lokaciju u sredini";
+"always_center_position_on_map" = "Pozicija uvek u centru";
 "map_widget_appearance_rem" = "Ostale jedinice";
 "map_widget_compass" = "Kompas";
 "map_widget_intermediate_distance" = "Međuodredište";
@@ -242,7 +242,7 @@
 "prefer_in_routing_descr" = "Prednost putevima za motorna vozila.";
 "relief_smoothness_factor_descr" = "Omiljeno tlo: ravno ili brdovito.";
 "choose_auto_follow_route" = "Centriranje mape";
-"choose_auto_follow_route_descr" = "Vreme dok se pregled mape ne uskladi sa trenutnim lokacijuem.";
+"choose_auto_follow_route_descr" = "Vreme dok se pregled mape sinhronizuje sa trenutnom pozicijom.";
 "choose_auto_center_map_view_descr" = "Time until map view synchronizes with current position after moving";
 "auto_zoom_map" = "Auto zumiranje mape";
 "auto_zoom_map_descr" = "Nivo zumiranja u skladu sa brzinom (dok je mapa sinhronizovana sa trenutnom pozicijom).";
@@ -1362,7 +1362,7 @@
 "quick_action_poi_add_descr" = "Tapping this action button allows you to quickly add POI on the map with predefined type and tags.";
 "quick_action_day_night_descr" = "Tapping this action button switches between Day and Night map mode.";
 "quick_action_parking_descr" = "Tapping this action button adds a parking location at the map center point.";
-"quick_action_add_marker_descr" = "Dugme za dodavanje oznake na mapi na lokaciju na središtu ekrana.";
+"quick_action_add_marker_descr" = "Dugme za dodavanje oznake na mapi za lokaciju na sredini ekrana.";
 "quick_action_show_gpx_descr" = "Tapping this action button shows or hides currently displayed GPX tracks.";
 "quick_action_voice_descr" = "Tapping this action button disables or enables voice guidance during navigation.";
 "quick_action_add_dest_descr" = "Tapping this action button sets the destination to the map center. Any previously selected destination becomes the last intermediate destination.";
@@ -1543,7 +1543,7 @@
 "plugin_nautical_name" = "Pregled pomorske mape";
 "product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "Ovaj dodatak obogaćuje OsmAnd aplikaciju da prikazuje i pomorske karte za vožnju brodova, jedrenje i druge tipove vodenih sportova.\n\nFajl karte koja sadrži sve opšte pomorske znake je dostupna u vidu jednog preuzimanja i naziva se „Svetske pomorske karte“.\n\nPregled može da se vrati na stari njegovimisključivanjem ovde, ili izmenom „Načina prikaza karte“ pod „Podesite kartu“.";
-"osmand_parking_plugin_name" = "lokaciju parkiranja";
+"osmand_parking_plugin_name" = "Parking pozicija";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
 "osmand_parking_plugin_description" = "Označava gde su vam auta ostavljena, i obaveštava Vam kalendar kada će isteći vreme parkiranja. Radi smeštaja oznake, Izaberi mesto na mapi, Idi na „Radnje“ i tapnite na „Dodaj parking“.";
 "plugin_ski_name" = "Pregled skijaške mape";
@@ -2421,7 +2421,7 @@
 "service_is_not_available_please_try_later" = "Usluga nije dostupna. Molimo pokušajte ponovo kasnije.";
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
-"simulate_your_location_gpx_descr" = "Simulirajte svoj lokaciju koristeću snimljenu putanje GPX-a.";
+"simulate_your_location_gpx_descr" = "Simuliraj svoj lokaciju koristeću snimljenu putanje GPX-a.";
 "osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd, \ni svi vaši podaci će biti povezani sa njom.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";

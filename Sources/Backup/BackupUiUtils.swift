@@ -22,13 +22,13 @@ final class BackupUiUtils: NSObject {
         } else {
             name = item.getPublicName()
             if let fileItem = item as? OAFileSettingsItem {
-                let subtype = fileItem.subtype
-                if subtype == .subtypeVoiceTTS {
-                    let suffix = localizedString("tts_title")
-                    name = String(format: localizedString("ltr_or_rtl_combine_via_space"), name, suffix)
-                } else if subtype == .subtypeVoice {
-                    let suffix = localizedString("shared_string_record")
-                    name = String(format: localizedString("ltr_or_rtl_combine_via_space"), name, suffix)
+                switch fileItem.subtype {
+                case .subtypeVoiceTTS:
+                    name = String(format: localizedString("ltr_or_rtl_combine_via_space"), name, localizedString("tts_title"))
+                case .subtypeVoice:
+                    name = String(format: localizedString("ltr_or_rtl_combine_via_space"), name, localizedString("shared_string_record"))
+                default:
+                    break
                 }
             }
         }
@@ -49,16 +49,16 @@ final class BackupUiUtils: NSObject {
     }
 
     static func getFormattedPassedTime(time: Int, def: String, showTime: Bool) -> String {
-        if time > 0 {
-            let duration = Int((Date().timeIntervalSince1970 - Double(time)) / 1000)
-            if duration > minDurationForDateFormat {
-                return showTime ? OAOsmAndFormatter.getFormattedDateTime(TimeInterval(time)) : OAOsmAndFormatter.getFormattedDate(TimeInterval(time))
-            } else {
-                let formattedDuration: String = OAOsmAndFormatter.getFormattedDuration(TimeInterval(duration))
-                return formattedDuration.isEmpty ? localizedString("duration_moment_ago") : String(format: localizedString("duration_ago"), formattedDuration)
-            }
+        guard time > 0 else {
+            return def
         }
-        return def
+        let duration = Int((Date().timeIntervalSince1970 - Double(time)) / 1000)
+        if duration > minDurationForDateFormat {
+            return showTime ? OAOsmAndFormatter.getFormattedDateTime(TimeInterval(time)) : OAOsmAndFormatter.getFormattedDate(TimeInterval(time))
+        } else {
+            let formattedDuration: String = OAOsmAndFormatter.getFormattedDuration(TimeInterval(duration))
+            return formattedDuration.isEmpty ? localizedString("duration_moment_ago") : String(format: localizedString("duration_ago"), formattedDuration)
+        }
     }
 
     static func generateTimeString(summary: String, time: Int) -> String {
@@ -70,25 +70,25 @@ final class BackupUiUtils: NSObject {
     }
 
     static func formatPassedTime(time: Int, longPattern: String, shortPattern: String, def: String) -> String {
-        if time > 0 {
-            let duration = Int((Date().timeIntervalSince1970 - Double(time)))
-            if duration > minDurationForDateFormat {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = longPattern
-                dateFormatter.locale = Locale.current
-                let date = Date(timeIntervalSince1970: Double(time))
-                return dateFormatter.string(from: date)
-            } else if duration > minDurationForYesterdayDateFormat {
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = shortPattern
-                dateFormatter.locale = Locale.current
-                let date = Date(timeIntervalSince1970: Double(time))
-                return localizedString("yesterday") + ", " + dateFormatter.string(from: date)
-            } else {
-                let formattedDuration: String = OAOsmAndFormatter.getFormattedDuration(TimeInterval(duration))
-                return formattedDuration.isEmpty ? localizedString("duration_moment_ago") : String(format: localizedString("duration_ago"), formattedDuration)
-            }
+        guard time > 0 else {
+            return def
         }
-        return def
+        let duration = Int((Date().timeIntervalSince1970 - Double(time)))
+        if duration > minDurationForDateFormat {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = longPattern
+            dateFormatter.locale = Locale.current
+            let date = Date(timeIntervalSince1970: Double(time))
+            return dateFormatter.string(from: date)
+        } else if duration > minDurationForYesterdayDateFormat {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = shortPattern
+            dateFormatter.locale = Locale.current
+            let date = Date(timeIntervalSince1970: Double(time))
+            return localizedString("yesterday") + ", " + dateFormatter.string(from: date)
+        } else {
+            let formattedDuration: String = OAOsmAndFormatter.getFormattedDuration(TimeInterval(duration))
+            return formattedDuration.isEmpty ? localizedString("duration_moment_ago") : String(format: localizedString("duration_ago"), formattedDuration)
+        }
     }
 }

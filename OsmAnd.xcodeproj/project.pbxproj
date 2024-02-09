@@ -737,6 +737,7 @@
 		46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */; };
 		46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */; };
 		46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */; };
+		46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */; };
 		46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */; };
 		46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */; };
 		46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */; };
@@ -4306,6 +4307,7 @@
 		46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@3x.png"; path = "Resources/Icons/ic_action_mountain_bike@3x.png"; sourceTree = "<group>"; };
 		46BB3677294BE72100155EC8 /* OAEmissionHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEmissionHelper.h; sourceTree = "<group>"; };
 		46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEmissionHelper.mm; sourceTree = "<group>"; };
+		46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FFCircularProgressView+Extension.swift"; sourceTree = "<group>"; };
 		46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOrientationHelper.swift; sourceTree = "<group>"; };
 		46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@2x.png"; path = "Resources/Icons/ic_custom_user_profile@2x.png"; sourceTree = "<group>"; };
 		46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@3x.png"; path = "Resources/Icons/ic_custom_user_profile@3x.png"; sourceTree = "<group>"; };
@@ -13885,19 +13887,20 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
-				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
-				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
-				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
 				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
-				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
+				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
+				FA6439E82B04D81B00331006 /* Data+Extesnion.swift */,
+				46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */,
+				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
+				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
 				FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */,
 				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
 				FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */,
-				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
-				FA6439E82B04D81B00331006 /* Data+Extesnion.swift */,
-				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
+				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 				FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */,
+				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
+				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
+				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -17413,6 +17416,7 @@
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
+				46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */,
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,

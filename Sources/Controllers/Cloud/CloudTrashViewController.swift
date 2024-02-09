@@ -40,21 +40,21 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     private var backupHelper: OABackupHelper?
     private var settingsHelper: OANetworkSettingsHelper?
     private var selectedIndexPath: IndexPath?
+    private lazy var dateFormatter = DateFormatter()
+    private var emptyTrashIcon: UIImage?
 
     // MARK: - Initializing
 
     override func commonInit() {
         backupHelper = OABackupHelper.sharedInstance()
         settingsHelper = OANetworkSettingsHelper.sharedInstance()
+        dateFormatter.dateFormat = "LLLL yyyy"
+        emptyTrashIcon = OAUtilities.resize(UIImage(named: "ic_custom_trash_outlined"), newSize: CGSize(width: 60.0, height: 60.0)).withRenderingMode(.alwaysTemplate)
     }
 
     override func registerNotifications() {
         addNotification(NSNotification.Name(kBackupProgressUpdateNotification), selector: #selector(onBackupProgressUpdate(notification:)))
         addNotification(NSNotification.Name(kBackupSyncFinishedNotification), selector: #selector(onBackupSyncFinished(notification:)))
-    }
-
-    deinit {
-        backupHelper?.remove(self)
     }
 
     // MARK: - UIViewController
@@ -68,6 +68,10 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         if shouldPrepareBackup() {
             backupHelper?.prepareBackup()
         }
+    }
+
+    deinit {
+        backupHelper?.remove(self)
     }
 
     // MARK: - Base UI
@@ -86,6 +90,11 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     // MARK: - Table data
 
+    override func registerCells() {
+        addCell(OALargeImageTitleDescrTableViewCell.reuseIdentifier)
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+    }
+
     override func generateData() {
         tableData.clearAllData()
         let preparing = backupHelper?.isBackupPreparing()
@@ -93,11 +102,10 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         if groups.isEmpty, preparing == false {
             let emptySection = tableData.createNewSection()
             let emptyRow = emptySection.createNewRow()
-            emptyRow.cellType = OALargeImageTitleDescrTableViewCell.getIdentifier()
+            emptyRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
             emptyRow.key = "empty"
             emptyRow.title = localizedString("trash_is_empty")
             emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), Self.daysForTrashClearing)
-            emptyRow.iconName = "ic_custom_trash_outlined"
             emptyRow.iconTintColor = UIColor.iconColorDefault
         } else {
             for (name, group) in groups {
@@ -105,7 +113,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
                 section.headerText = name
                 for item in group.getItems() {
                     let row = section.createNewRow()
-                    row.cellType = OASimpleTableViewCell.getIdentifier()
+                    row.cellType = OASimpleTableViewCell.reuseIdentifier
                     row.setObj(item, forKey: "trashItem")
                 }
             }
@@ -139,16 +147,13 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         var groups: [String: TrashGroup] = [:]
         var items: [TrashItem] = collectTrashItems()
         if !items.isEmpty {
-            items.sort(by: { i1, i2 in
-                i1.time > i2.time
+            items.sort(by: {
+                $0.time > $1.time
             })
-            
+
             for item in items {
                 let time: Int = item.time
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "LLLL yyyy"
                 let name = dateFormatter.string(from: Date(timeIntervalSince1970: TimeInterval(time))).capitalized
-
                 var group: TrashGroup? = groups[name]
                 if group == nil {
                     group = TrashGroup(name: name)
@@ -162,51 +167,37 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item: OATableRowData = tableData.item(for: indexPath)
-        if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASimpleTableViewCell
-                cell?.accessoryType = .disclosureIndicator
-            }
-            if let cell {
-                if let trashItem = item.obj(forKey: "trashItem") as? TrashItem {
-                    cell.titleLabel.text = trashItem.name
-                    cell.titleLabel.accessibilityLabel = trashItem.name
-                    cell.descriptionLabel.text = trashItem.descr
-                    cell.descriptionLabel.accessibilityLabel = trashItem.descr
-                    cell.leftIconView.image = trashItem.icon
-
-                    var iconColor: UIColor
-                    if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
-                        iconColor = UIColor(rgb: profileItem.appMode.getIconColor())
-                    } else {
-                        iconColor = UIColor.iconColorDefault
-                    }
-                    cell.leftIconView.tintColor = iconColor
+        if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+            cell.accessoryType = .disclosureIndicator
+            if let trashItem = item.obj(forKey: "trashItem") as? TrashItem {
+                cell.titleLabel.text = trashItem.name
+                cell.titleLabel.accessibilityLabel = trashItem.name
+                cell.descriptionLabel.text = trashItem.descr
+                cell.descriptionLabel.accessibilityLabel = trashItem.descr
+                cell.leftIconView.image = trashItem.icon
+                
+                var iconColor: UIColor
+                if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
+                    iconColor = UIColor(rgb: profileItem.appMode.getIconColor())
+                } else {
+                    iconColor = UIColor.iconColorDefault
                 }
+                cell.leftIconView.tintColor = iconColor
             }
             return cell
-        } else if item.cellType == OALargeImageTitleDescrTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier()) as? OALargeImageTitleDescrTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OALargeImageTitleDescrTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OALargeImageTitleDescrTableViewCell
-                cell?.selectionStyle = .none
-                cell?.showButton(false)
-            }
-            if let cell {
-                cell.titleLabel?.text = item.title
-                cell.titleLabel?.accessibilityLabel = item.title
-                cell.descriptionLabel?.text = item.descr
-                cell.descriptionLabel?.accessibilityLabel = item.descr
-                cell.cellImageView?.tintColor = item.iconTintColor
-                if let icon = item.iconName {
-                    cell.cellImageView?.image = OAUtilities.resize(UIImage(named: icon), newSize: CGSize(width: 60.0, height: 60.0)).withRenderingMode(.alwaysTemplate)
-                }
-            }
-            if cell?.needsUpdateConstraints() == true {
-                cell?.setNeedsUpdateConstraints()
+        } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier, for: indexPath) as! OALargeImageTitleDescrTableViewCell
+            cell.selectionStyle = .none
+            cell.showButton(false)
+            cell.cellImageView?.image = emptyTrashIcon
+            cell.titleLabel?.text = item.title
+            cell.titleLabel?.accessibilityLabel = item.title
+            cell.descriptionLabel?.text = item.descr
+            cell.descriptionLabel?.accessibilityLabel = item.descr
+            cell.cellImageView?.tintColor = item.iconTintColor
+            if cell.needsUpdateConstraints() {
+                cell.setNeedsUpdateConstraints()
             }
             return cell
         }
@@ -303,7 +294,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
                 progressView?.startSpinProgressBackgroundLayer()
             } else if type == .done {
                 if let progressView {
-                    progressView.iconPath = tickPath(progressView)
+                    progressView.createTickPath()
                     progressView.stopSpinProgressBackgroundLayer()
                 }
                 cell.accessoryType = .none
@@ -312,44 +303,26 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         }
     }
 
-    private func tickPath(_ progressView: FFCircularProgressView) -> UIBezierPath {
-        let radius: CGFloat = min(progressView.frame.size.width, progressView.frame.size.height) / 2
-        let path = UIBezierPath()
-        let tickWidth: CGFloat = radius * 0.3
-        path.move(to: CGPoint(x: 0, y: 0))
-        path.addLine(to: CGPoint(x: 0, y: tickWidth * 2))
-        path.addLine(to: CGPoint(x: tickWidth * 3, y: tickWidth * 2))
-        path.addLine(to: CGPoint(x: tickWidth * 3, y: tickWidth))
-        path.addLine(to: CGPoint(x: tickWidth, y: tickWidth))
-        path.addLine(to: CGPoint(x: tickWidth, y: 0))
-        path.close()
-
-        path.apply(CGAffineTransformMakeRotation(-(.pi / 4)))
-        path.apply(CGAffineTransformMakeTranslation(radius * 0.46, 1.02 * radius))
-
-        return path
-    }
-
     // MARK: - OASyncBackupTask
 
     @objc private func onBackupProgressUpdate(notification: NSNotification) {
         if let selectedIndexPath {
-            DispatchQueue.main.async {
-                self.updateRowProgress(.inProgress, indexPath: selectedIndexPath)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                updateRowProgress(.inProgress, indexPath: selectedIndexPath)
             }
         }
     }
 
     @objc private func onBackupSyncFinished(notification: NSNotification) {
         if let error = notification.userInfo?["error"] as? String {
-            DispatchQueue.main.async {
-                OAUtilities.showToast(nil, details: OABackupError(error: error).getLocalizedError(), duration: 4, in: self.view)
-            }
+            OAUtilities.showToast(nil, details: OABackupError(error: error).getLocalizedError(), duration: 4, in: view)
         } else if settingsHelper?.isBackupSyncing() == false && backupHelper?.isBackupPreparing() == false {
             if let selectedIndexPath {
-                DispatchQueue.main.async {
-                    self.updateRowProgress(.done, indexPath: selectedIndexPath)
-                    self.resetSelectedIndexPath()
+                DispatchQueue.main.async { [weak self] in
+                    guard let self = self else { return }
+                    updateRowProgress(.done, indexPath: selectedIndexPath)
+                    resetSelectedIndexPath()
                 }
             }
             backupHelper?.prepareBackup()
@@ -359,18 +332,20 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     // MARK: - OAOnPrepareBackupListener
 
     func onBackupPreparing() {
-        DispatchQueue.main.async {
-            if self.tableView.refreshControl?.isRefreshing == false {
-                self.tableView.refreshControl?.beginRefreshing()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if tableView.refreshControl?.isRefreshing == false {
+                tableView.refreshControl?.beginRefreshing()
             }
-            self.reloadDataWith(animated: true, completion: nil)
+            reloadDataWith(animated: true, completion: nil)
         }
     }
 
     func onBackupPrepared(_ backupResult: OAPrepareBackupResult) {
-        DispatchQueue.main.async {
-            self.reloadDataWith(animated: true, completion: nil)
-            self.tableView.refreshControl?.endRefreshing()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            reloadDataWith(animated: true, completion: nil)
+            tableView.refreshControl?.endRefreshing()
         }
     }
 
@@ -422,19 +397,21 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     // MARK: - CloudTrashDeletionDelegate
 
     func onFilesDeleteStarted(_ deleteAll: Bool) {
-        DispatchQueue.main.async {
-            if !deleteAll, let indexPath = self.selectedIndexPath {
-                self.updateRowProgress(.started, indexPath: indexPath)
-            } else if self.tableView.refreshControl?.isRefreshing == false {
-                self.tableView.refreshControl?.beginRefreshing()
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            if !deleteAll, let selectedIndexPath {
+                updateRowProgress(.started, indexPath: selectedIndexPath)
+            } else if tableView.refreshControl?.isRefreshing == false {
+                tableView.refreshControl?.beginRefreshing()
             }
         }
     }
 
     func onFileDeleteProgress(_ deleteAll: Bool) {
-        if !deleteAll, let indexPath = self.selectedIndexPath {
-            DispatchQueue.main.async {
-                self.updateRowProgress(.inProgress, indexPath: indexPath)
+        if !deleteAll, let selectedIndexPath {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                updateRowProgress(.inProgress, indexPath: selectedIndexPath)
             }
         }
     }
@@ -442,26 +419,25 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     func onFilesDeleteDone(_ message: String, errors: [OARemoteFile: String], deleteAll: Bool) {
         let hasErrors = !errors.isEmpty
         if hasErrors || !message.isEmpty {
-            DispatchQueue.main.async {
-                if !deleteAll, let indexPath = self.selectedIndexPath {
-                    self.updateRowProgress(.done, indexPath: indexPath)
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                if !deleteAll, let selectedIndexPath {
+                    updateRowProgress(.done, indexPath: selectedIndexPath)
                 }
-                OAUtilities.showToast(hasErrors ? localizedString("subscribe_email_error") : message,
-                                      details: hasErrors ? errors.values.joined(separator: "\n") : nil,
-                                      duration: 4,
-                                      in: self.view)
             }
+            OAUtilities.showToast(hasErrors ? localizedString("subscribe_email_error") : message,
+                                  details: hasErrors ? errors.values.joined(separator: "\n") : nil,
+                                  duration: 4,
+                                  in: view)
         }
         backupHelper?.prepareBackup()
     }
 
     func onFilesDeleteError(_ message: String) {
-        DispatchQueue.main.async {
-            OAUtilities.showToast(localizedString("subscribe_email_error"),
-                                  details: OABackupError(error: message).getLocalizedError(),
-                                  duration: 4,
-                                  in: self.view)
-        }
+        OAUtilities.showToast(localizedString("subscribe_email_error"),
+                              details: OABackupError(error: message).getLocalizedError(),
+                              duration: 4,
+                              in: view)
         backupHelper?.prepareBackup()
     }
 }
@@ -470,7 +446,7 @@ private final class TrashDeletionListener: NSObject, OAOnDeleteFilesListener {
 
     weak var delegate: CloudTrashDeletionDelegate?
     private let messageDone: String
-    private var deleteAll: Bool = false
+    private var deleteAll = false
 
     init(with messageDone: String) {
         self.messageDone = messageDone

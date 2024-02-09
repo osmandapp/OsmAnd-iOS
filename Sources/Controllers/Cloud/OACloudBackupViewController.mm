@@ -743,14 +743,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     else if ([item.key isEqualToString:@"onTrashPressed"])
     {
         if ([OAIAPHelper isOsmAndProAvailable])
-        {
-            OACloudTrashViewController *cloudTrashController = [[OACloudTrashViewController alloc] init];
-            [self showViewController:cloudTrashController];
-        }
+            [self showViewController:[[OACloudTrashViewController alloc] init]];
         else
-        {
             [self onSubscriptionExpired];
-        }
     }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {

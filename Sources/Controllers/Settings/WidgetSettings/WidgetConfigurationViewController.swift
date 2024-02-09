@@ -29,13 +29,15 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
-        
-        tableView.register(UINib(nibName: SegmentImagesWithRightLableTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
-        
         if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
         }
+    }
+
+    override func registerCells() {
+        addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {

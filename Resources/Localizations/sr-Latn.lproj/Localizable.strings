@@ -124,7 +124,7 @@
 
 // Track recording settings
 "save_global_track_interval" = "Međuvreme opšteg beleženja";
-"save_global_track_interval_descr" = "Navedite međuvreme zavođenja opšteg snimanja ruta (uključeno pomoću widget-a „snimanje putovanja“ na mapi).";
+"save_global_track_interval_descr" = "Navedi interval zavođenja opšteg snimanja putanje (uključeno pomoću widžeta „snimanje putovanja“ na mapi).";
 "save_track_interval" = "Učastalost beleženja za vreme navođenja";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "monitoring_min_distance" = "Najmanji pomeraj";
@@ -186,7 +186,7 @@
 "speak_speed_limit" = "Ograničenje brzine";
 "speak_cameras" = "Prekršajne kamere";
 "speak_traffic_warnings" = "Stanje na putevima";
-"shared_string_gpx_waypoints" = "Tačke na ruti";
+"shared_string_gpx_waypoints" = "Međuodredišta putanje";
 "speak_favorites" = "Favoriti u blizini";
 "speak_poi" = "TOI u blizini";
 "speak_pedestrian" = "Pešački prelazi";
@@ -295,8 +295,8 @@
 "app_mode_boat" = "Brod";
 "app_mode_aircraft" = "Avion";
 "gpx_option_calculate_first_last_segment" = "Računaj od prvog do poslednjeg odsečka staze OsmAnda";
-"gpx_option_from_start_point" = "Postavi duž cele rute";
-"gpx_option_reverse_route" = "Obrni smer traga";
+"gpx_option_from_start_point" = "Postavi duž cele putanje";
+"gpx_option_reverse_route" = "Obrni smer putanje";
 "use_points_as_intermediates" = "Računaj ruta između tačaka";
 "calculate_osmand_route_without_internet" = "Računanje odsečaka rute OsmAnda bez interneta";
 "routing_settings_2" = "Podešavanja navođenja";
@@ -325,8 +325,8 @@
 "stop_routing_confirm" = "Zaustaviti navođenje?";
 "cancel_route" = "Odbaci rutu?";
 "route_is_too_long_v2" = "Za duža odredišta: Dodaj usputna odredišta ako nijedan ruta nije nađena za ovu dugačku rutu ni posle 10 minuta.";
-"navigation_over_track" = "Da započnem navođenje duž rute?";
-"use_displayed_track_for_navigation" = "Koristi prikazanu rutu za navođenje?";
+"navigation_over_track" = "Da započnem navođenje duž putanje?";
+"use_displayed_track_for_navigation" = "Koristi prikazanu putanju za navođenje?";
 "previous_route" = "Prethodni ruta";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Izaberi na mapi";
@@ -569,7 +569,7 @@
 
 // My Places
 "favorites_item" = "Omiljena mesta";
-"shared_string_gpx_tracks" = "Snimljene rute";
+"shared_string_gpx_tracks" = "Putanje";
 "personal_category_name" = "Moja mesta";
 "shared_string_visible" = "Prikazati";
 
@@ -582,13 +582,13 @@
 "gpx_selection_segment_title" = "Odsečak";
 "route_points" = "Tačke rute";
 "import_export" = "Uvoz/izvoz";
-"import_tracks" = "Uvezi rute";
+"import_tracks" = "Uvezi putanje";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "Pronađen je problem sa datotekom GPX-a\n\nMožeš se obratiti podršci OsmAnda radi istrage.";
-"tracks_on_map" = "Prikazane rute";
+"tracks_on_map" = "Prikazane putanje";
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
@@ -614,12 +614,12 @@
 "gpx_uphills_total" = "Uphills total";
 "distance_moving" = "Rastojanje je ispravljeno";
 "track_recording" = "Track recording";
-"shared_string_currently_recording_track" = "Ruta koja se trenutno snima";
+"shared_string_currently_recording_track" = "Putanja koja se trenutno snima";
 "track_stop_rec" = "Stop recording";
 "gpx_start_new_segment" = "Pokreni novi odsečak";
-"save_current_track" = "Sačuvaj trenutnu rutu";
+"save_current_track" = "Sačuvaj trenutnu putanju";
 "displayed_route_save" = "Save to OsmAnd Tracks";
-"save_current_track_descr" = "Sačuvaj odmah trenutnu rutu kao datoteku GPX-a.";
+"save_current_track_descr" = "Sačuvaj odmah trenutnu putanju kao datoteku GPX-a.";
 "track_continue_rec" = "Continue recording";
 "track_continue_rec_q" = "Do you want to continue recording?";
 "save_track_interval_globally" = "Učestalost beleženja";
@@ -639,10 +639,10 @@
 "gpxup_private" = "Privatno";
 "gpx_upload_public_visibility_descr" = "„Javno“ znači da je ruta javno prikazan u Vašim tragovima GPS-a i na javnim tragovima GPS-a, kao i na javnom spisku ruta sa vremenskim oznakama u sirovom obliku. Podaci koji se prikazuju putem API-ja ne upućuju na Vašu stranicu ruta. Vremenske oznake praćenja nisu dostupne putem javnog API-ja GPS-a i tačke praćenja nisu vremenski poređane.";
 "gpx_upload_identifiable_visibility_descr" = "„Prepoznatljiv“ znači da će se ruta javno prikazati u Vašim tragovima GPS-a i u javnim spiskovima ruta GPS-a, tj. drugi korisnici će moći da preuzmu neobrađeni ruta i povežu ga sa Vašim korisničkim imenom. Javni podaci o vremenskim tačkama staze iz API-ja GPS-a koji se služe putem API-ja za tačke praćenja imaće odnos na vašu izvornu stranicu praćenja.";
-"gpx_upload_trackable_visibility_descr" = "„Sledljivo“ znači da se ruta ne prikazuje nigde na javnim spiskovima, ali obrađene tačke praćenja sa vremenskim oznakama u njima (koje ne mogu biti neposredno povezane sa vama) idu kroz preuzimanja sa javnog API-ja GPS-a.";
+"gpx_upload_trackable_visibility_descr" = "„Praćenje“ znači da se ruta ne prikazuje nigde na javnim spiskovima, ali obrađene tačke praćenja sa vremenskim oznakama u njima (koje ne mogu biti neposredno povezane sa vama) idu kroz preuzimanja sa javnog API-ja GPS-a.";
 "gpx_upload_private_visibility_descr" = "„Privatno“ znači da se ruta ne pojavljuje ni na jednom javnom spisku, ali tačke praćenja u njemu u nisu u vremenskom redosledu dostupne putem javnog API-ja GPS-a bez vremenskih oznaka.";
-"save_track_to_gpx" = "Sam snimaj rutu za vreme navođenja";
-"save_track_to_gpx_descrp" = "Samostalno pokreni snimanje rute tokom navođenja i samostalno sačuvaj nakon toga.";
+"save_track_to_gpx" = "Sam snimaj putanju za vreme navođenja";
+"save_track_to_gpx_descrp" = "Autamatski pokreni snimanje putanje tokom navođenja i automatski sačuvaj nakon toga.";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "Brzina";
@@ -992,8 +992,8 @@
 "points_count" = "Points:";
 "route_between_points" = "Ruta između tačaka";
 "profile_alert_need_save_title" = "Snimi izmene";
-"save_as_new_track" = "Sačuvaj kao novu rutu";
-"add_to_a_track" = "Dodaj stazu";
+"save_as_new_track" = "Sačuvaj kao novu putanju";
+"add_to_a_track" = "Dodaj putanju";
 "move_point" = "Pomeri tačku";
 "move_point_descr" = "Move map to change the position of this point.";
 "add_point_before" = "Dodaj tačku pre";
@@ -1008,7 +1008,7 @@
 "next_seg_descr" = "The next segment will be recalculated using selected profile.";
 "whole_track_descr" = "The whole track will be recalculated using selected profile.";
 "next_segment" = "Sledeći članak";
-"whole_track" = "Cela ruta";
+"whole_track" = "Cela putanja";
 "next_seg_dist" = "Next segment %@";
 "next_segs_dist" = "All subsequent segments %@";
 "prev_seg_dist" = "Previous segment %@";
@@ -1018,14 +1018,14 @@
 "prev_segs_recalc_descr" = "All previous segments will be recalculated using the selected profile";
 "reverse_route" = "Obrnuta putanja";
 "join_segments" = "Spoji delove";
-"simplified_track" = "Pojednostavljeni ruta";
+"simplified_track" = "Pojednostavljene putanje";
 "simplified_track_description" = "Samo linija rute će biti sačuvana, a putne tačke će biti izbrisane.";
-"open_saved_track" = "Otvori sačuvanu";
+"open_saved_track" = "Otvori sačuvanu putanju";
 "plan_route_create_new_route" = "Nova ruta";
 "track_is_saved" = "%@\nis saved!";
-"plan_route_open_existing_track" = "Snimljene rute";
+"plan_route_open_existing_track" = "Otvori postojeću putanju";
 "sort_last_modified" = "poslednjoj izmeni";
-"route_between_points_add_track_desc" = "Izaberi datoteku zapisa kojoj će se dodati novi segment.";
+"route_between_points_add_track_desc" = "Izaberi datoteku putanje kojoj će se dodati novi segment.";
 "route_between_points_warning_desc" = "Zatim pomoću jednog od vaših navigacionih profila prislonite stazu na najbliži dozvoljeni put da biste koristili ovu opciju.";
 "plan_route_exit_message" = "Are you sure you want to close Plan route without saving? You will lose all changes.";
 "gpx_saved_successfully" = "GPX file saved to %@";
@@ -1037,13 +1037,13 @@
 "folder_already_exsists" = "Folder with this name already exists";
 "plan_route_split_before" = "Podeli pre";
 "plan_route_split_after" = "Posle podeli";
-"follow_track" = "Sledi trag";
+"follow_track" = "Sledi putanju";
 "shared_string_gpx_track" = "Putanja";
-"select_another_track" = "Izaberi drugu ruta";
+"select_another_track" = "Izaberi drugu putanju";
 "select_track_to_follow" = "Select track to follow";
 "attach_to_the_roads" = "Vođica uvek na ruti";
 "point_to_navigate" = "Navigate to";
-"start_of_the_track" = "Početak rute";
+"start_of_the_track" = "Početak putanje";
 "nearest_point" = "Najbliža tačka";
 "plan_route_folder" = "Folder";
 "change_folder" = "Izmeni folder";
@@ -1330,7 +1330,7 @@
 "quick_action_navigation_voice_on" = "Isključi glas";
 "quick_action_navigation_voice_off" = "Uključi glas";
 "show_hide_gpx" = "Show/hide tracks";
-"show_gpx" = "Snimljene rute";
+"show_gpx" = "Putanje";
 "hide_gpx" = "Hide track";
 "show_notes" = "Show OSM notes";
 "hide_notes" = "Hide OSM notes";
@@ -1548,7 +1548,7 @@
 "osmand_parking_plugin_description" = "Označava gde su vam auta ostavljena, i obaveštava Vam kalendar kada će isteći vreme parkiranja. Radi smeštaja oznake, Izaberi mesto na mapi, Idi na „Radnje“ i tapnite na „Dodaj parking“.";
 "plugin_ski_name" = "Pregled skijaške mape";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "Napravljeno za navođenje po oblastima zimskih sportova. Pregleda skijaške staze i skijaške žičare, poljske skijaške staze, sa obojenim linijama koje ukazujućim na težinu staza. Radi korišćenja ovog dodatka promeni izgled mape na „Podesi mapu“ pa izgled „Zima i skijanje“.";
+"plugin_ski_descr" = "Napravljeno za navođenje po oblastima zimskih sportova. Pregleda skijaške staze i skijaške žičare, poljske skijaške putanje, sa obojenim linijama koje ukazujućim na težinu staza. Radi korišćenja ovog dodatka promeni izgled mape na „Podesi mapu“ pa izgled „Zima i skijanje“.";
 "record_plugin_name" = "Snimanje putovanja";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Ovaj dodatak aktivira funkcionalnost snimanja ičuvanja Vaših putanja kada se pritisne GPX spravica za beleženje na karti, a može i da automatski beleži sve Vaše puteve kojima ste navođeni u GPX fajl.\n\nSnimljene putanje se mogu deliti sa prijateljima ili slati na OSM. Sportisti mogu da koriste snimljene putanje da prate svoje treninge.Direktno u OsmAnd-u može da se radi osnovna analiza putanja, kao što su računanje brzine kruga, prosečna brzina itd. Naravno, putanje se dalje mogu analizirati u drugim specijalnim alatima za analizu.";
@@ -1615,10 +1615,10 @@
 "no_other_translations" = "There are no other translations";
 "wpt_remove_q" = "Remove waypoint?";
 "gpx_select_track" = "Select track";
-"current_track" = "Trenutni ruta";
+"current_track" = "Trenutna putanja";
 "gpx_direction_arrows" = "Strelice smera";
 "gpx_split_interval" = "Vreme razdvajanja";
-"gpx_split_interval_descr" = "Izaberi međuvreme na kome će se prikazivati oznake sa razdaljinom ili vremenom na stazi.";
+"gpx_split_interval_descr" = "Izaberi međuvreme na kome će se prikazivati oznake sa razdaljinom ili vremenom na putanji.";
 "gpx_join_gaps" = "Spoj razmake";
 "gpx_join_gaps_descr" = "Gaps between segments will be connected.";
 "track_show_start_finish_icons" = "Prikaži ikonu za početak i kraj";
@@ -1628,7 +1628,7 @@
 "slope_grey_color_descr" = "Grey color is used when slope is undefined.";
 "analyze_on_map" = "Raščlani na mapi";
 "upload_to_openstreetmap" = "Otpremi na OpenStritMap";
-"edit_track" = "Uredi rutu";
+"edit_track" = "Uredi putanju";
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Unesi ime";
 "shared_string_not_selected" = "Nije označeno";
@@ -1666,7 +1666,7 @@
 "create_new_trip" = "Create new track";
 "editing_waypoints" = "Editing waypoints";
 "select_wpt_on_map" = "Select point on map to add to the track";
-"rename_track" = "Preimenuj rutu";
+"rename_track" = "Preimenuj putanju";
 "gpx_enter_new_name" = "Please enter new name for the track";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Tačke";
@@ -1954,7 +1954,7 @@
 "routing_attr_relief_smoothness_factor_hills_name" = "Brdovito";
 "rendering_attr_contourWidth_name" = "Debljina linije izohipsi";
 "routing_attr_piste_type_sled_description" = "Padine za sankanje.";
-"rendering_attr_currentTrackWidth_description" = "Širina traga GPX-a";
+"rendering_attr_currentTrackWidth_description" = "Širina GPX-a";
 "rendering_attr_piste_type_sleigh_name" = "Saonice";
 "rendering_attr_surface_paved_name" = "Asfaltirano";
 "routing_attr_difficulty_preference_name" = "Preferirana težina";
@@ -2031,7 +2031,7 @@
 "rendering_attr_roadStyle_description" = "Izgled puteva";
 "routing_attr_prefer_motorway_description" = "Prednost putevima za motorna vozila";
 "routing_attr_avoid_ferries_name" = "Bez trajekta";
-"rendering_attr_highway_class_track_name" = "Staza";
+"rendering_attr_highway_class_track_name" = "Putanja";
 "rendering_attr_tracktype_grade4_name" = "Uglavnom mekana";
 "rendering_value_disabled_name" = "Isključeno";
 "rendering_attr_contourColorScheme_name" = "Šema boja linija izohipsi";
@@ -2249,7 +2249,7 @@
 "altitude" = "Visina";
 "routeInfo_horse_scale_name" = "Staze za jahanje";
 "copy_coordinates" = "Kopiraj koordinate";
-"routeInfo_roadClass_description" = "Obojite rutu ili liniju rute prema klasifikaciji puteva.";
+"routeInfo_roadClass_description" = "Oboji rutu ili liniju putanju prema klasifikaciji puteva.";
 "routeInfo_surface_description" = "Dostavlja info o fizičkoj podlozi puta/pešačke staze.";
 "terrain_maps" = "Reljefne mape";
 "explore_osmnad_plans_to_find_suitable" = "Istraži informacije o pretplati OsmAnd i pronađi šta ti odgovara.";
@@ -2290,7 +2290,7 @@
 "manage_subscription" = "Upravljaj članarinom";
 "routing_attr_only_permitted_ways_name" = "Izričito dozvoljeni putevi";
 "routing_attr_prefer_horse_routes_description" = "Radije biraj konjske rute";
-"routing_attr_only_permitted_ways_description" = "Koristite samo puteve (rute, staze, itd.) koji su izričito dozvoljeni";
+"routing_attr_only_permitted_ways_description" = "Koristite samo puteve (putanje, staze, itd.) koji su izričito dozvoljeni";
 "route_line_use_map_style_width" = "Koristite zadanuširinu stila mape (%@).";
 "continue_with" = "Nastavi sa %@";
 "purchases_feature_desc_monthly_map_updates" = "Obezbedite pristup redovnim mesečnim ispravkama za oflajn mape.";
@@ -2300,7 +2300,7 @@
 "cloud_conflicts_descr" = "Neke datoteke nije moguće otpremiti na server jer na serveru novija verzija.";
 "rendering_attr_showFunicularRoutes_name" = "Putanje žičara";
 "restore_purchases" = "Vrati trgovinu";
-"routeInfo_tracktype_description" = "Obojite rutu ili liniju rute prema sastavu površine. Obično se primenjuje kada je putna mreža uglavnom nepresvučena.";
+"routeInfo_tracktype_description" = "Oboji rutu ili liniju putanje prema sastavu površine. Obično se primenjuje kada je putna mreža uglavnom nepresvučena.";
 "shared_string_min_height" = "Min. visina";
 "shared_string_open_street_map" = "OpenStritMap";
 "osm_live_banner_desc" = "Dobavi neograničeno preuzimanje mapa, uz sedmična, dnevna i čak časovna osvežavanja.";
@@ -2318,7 +2318,7 @@
 "backup_error_size_is_exceeded" = "Premašena je maksimalna veličina OsmAnd oblaka %@";
 "shared_string_capacity" = "Opseg";
 "osmand_maps_plus_tagline" = "Nabavite proširene funkcije";
-"simulation_preview_mode_title" = "Režim brzog pregleda";
+"simulation_preview_mode_title" = "Brzi pregled";
 "routing_attr_only_permitted_streets_description" = "Koristi samo ulice koje su izričito dozvoljene";
 "backup_error_gzip_only_supported_upload" = "Datoteku treba poslati u .gzip formatu";
 "backup_welcome_back" = "Dobrodošli nazad!";
@@ -2339,7 +2339,7 @@
 "turn_arrows" = "Strelice skretanja";
 "private_access_routing_req" = "Tvoje odredište se nalazi na privatnom posedu. Dozvoliti korišćenje privatnih puteva na ovom putovanju?";
 "routing_attr_allow_private_for_truck_name" = "Dozvoljen privatni pristup (teretno vozilo)";
-"routeInfo_winter_ice_road_description" = "Obojite rutu ili liniju rute prema njenoj zimskoj klasifikaciji puteva.";
+"routeInfo_winter_ice_road_description" = "Oboji rutu ili liniju putanje prema njenoj zimskoj klasifikaciji puteva.";
 "make_backup_descr" = "Na ovom uređaju ima mnogo promena, napravite rezervnu kopiju ovih podataka kako ih ne biste izgubili.";
 "shared_string_includes" = "Uključuje";
 "backup_error_subscription_was_expired" = "Istekla pretplata";
@@ -2381,7 +2381,7 @@
 "backup_danger_zone" = "Opasna zona";
 "empty_purchases_description" = "Ako se Vaša kupovina ne pojavi ovde, kliknite na „%@” ili kontaktirajte našu podršku.";
 "benefits_for_contributors_primary_descr" = "Trenutni doprinosioci OpenStritMapama mogu imati pravo na neograničena osvežavanja mape svakih sat vremena.";
-"track_has_no_needed_data" = "Staza ne sadrži potrebne podatke.";
+"track_has_no_needed_data" = "Putanja ne sadrži potrebne podatke.";
 "shared_string_selected" = "Izabrano";
 "routing_attr_motor_type_name" = "Tip motora";
 "position_on_map_center" = "Na sredini";
@@ -2395,7 +2395,7 @@
 "benefits_for_contributors" = "Korist doprinosiocima OSM-a";
 "routing_attr_avoid_tunnels_description" = "Izbegavati tunele";
 "tts_title" = "TTS";
-"save_heading_descr" = "Sačuvaj zaglavlje svakoj tački praćenja prilikom snimanja.";
+"save_heading_descr" = "Sačuvaj zaglavlje svakoj tački putanje prilikom snimanja.";
 "routing_attr_motor_type_lpg_name" = "Plin (TNG)";
 "sign_in_with_open_street_map" = "Prijavi se pomoću OpenStreetMap-a";
 "recalc_angle_dialog_descr" = "Potpuno pravi odsečak između mojeg lokacija i izračunatog puta biće prikazan dok se ruta ne izračuna";
@@ -2421,7 +2421,7 @@
 "service_is_not_available_please_try_later" = "Usluga nije dostupna. Molimo pokušajte ponovo kasnije.";
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
-"simulate_your_location_gpx_descr" = "Simulirajte svoj lokaciju koristeću snimljenu rutu GPX-a.";
+"simulate_your_location_gpx_descr" = "Simulirajte svoj lokaciju koristeću snimljenu putanje GPX-a.";
 "osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd, \ni svi vaši podaci će biti povezani sa njom.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";
@@ -2541,10 +2541,10 @@
 "shared_string_keep_active" = "Drži aktivnim";
 "icon_group_service" = "Servisi";
 "shared_string_cloud" = "Oblak";
-"help_article_navigation_setup_gpx_navigation_name" = "Navigacija pomoću rute";
+"help_article_navigation_setup_gpx_navigation_name" = "Navigacija pomoću putanja";
 "help_article_widgets_nav_widgets_name" = "Widgeti za navođenje";
 "help_article_widgets_markers_name" = "Markeri widgeta";
-"copy_build_version" = "Snimi broj izdanja";
+"copy_build_version" = "Kopiraj verziju izdanja";
 "send_log" = "Pošalji dnevnik";
 "troubleshooting" = "Rešavanje problema";
 "trip_recording_downhill_widget_desc" = "Prikazuje ukupno sve spustove na putu koji se trenutno snima.";
@@ -2569,7 +2569,7 @@
 "distance_to_destination_widget_desc" = "Widget prikazuje preostalo rastojanje do poslednje dolazne tačke.";
 "sync_now" = "Uskladi sada";
 "lang_ckb" = "Srednjekurdski";
-"telegram_chats" = "Ćaskanja Telegramom";
+"telegram_chats" = "Telegram ćaskanje";
 "map_widget_target_distance_desc" = "Prikazuje rastojanje između kamere i odredišta.";
 "second_marker_widget_desc" = "Možeš podesiti widžet da prikazuje rastojanje ili procenjeno preostalo vreme dolaska na drugoj oznaci mape.";
 "current_time_widget_desc" = "Prikazuje trenutno vreme tvog uređaja.";
@@ -2779,9 +2779,9 @@
 "help_article_map_legend_osmand_name" = "Stil OsmAnd mape";
 "help_article_map_legend_ski_map_name" = "Stil skijaške mape";
 "help_article_map_map_context_menu_name" = "Priručni meni mape";
-"help_article_map_track_context_menu_name" = "Priručni meni ruta";
+"help_article_map_track_context_menu_name" = "Priručni meni putanja";
 "help_article_map_raster_maps_name" = "Rasterske mape (online/ offline)";
-"help_article_map_tracks_on_map_name" = "Staze i rute";
+"help_article_map_tracks_on_map_name" = "Putanje i rute";
 "help_article_map_vector_maps_name" = "Vektorske mape (stil mape)";
 "help_article_navigation_auto_car_name" = "Android Auto";
 "help_article_navigation_guidance_map_during_navigation_name" = "Ekran prilikom navođenja";
@@ -2811,20 +2811,20 @@
 "help_article_personal_storage_name" = "Skladište";
 "help_article_plan_route_name" = "Planiranje rute";
 "help_article_plan_route_coordinate_input_name" = "Unos koordinata";
-"help_article_plan_route_web_name" = "Planiranje rute vebom";
+"help_article_plan_route_web_name" = "WEB planer rute";
 "help_article_search_search_all_name" = "Pretraži sve";
 "help_article_search_search_coordinates_name" = "Traži koordinate";
 "help_article_search_search_poi_name" = "Traži TOI";
 "help_article_start_with_name" = "Počni sa OsmAndom";
 "help_article_purchases_android_name" = "Kupovine Androidom";
-"help_article_purchases_giveaway_name" = "Darivanje";
+"help_article_purchases_giveaway_name" = "Poklon";
 "help_article_purchases_ios_name" = "Kupovina iOS-om";
 "help_article_start_with_first_steps_name" = "Početni koraci";
 "help_article_start_with_main_menu_name" = "Glavni meni";
 "help_article_troubleshooting_crash_logs_name" = "Dnevnik rušenja programa";
 "help_article_troubleshooting_general_name" = "Generalno";
-"help_article_troubleshooting_track_recording_issues_name" = "Snimanje traga";
-"help_article_widgets_name" = "Spravice mape";
+"help_article_troubleshooting_track_recording_issues_name" = "Snimanje putanja";
+"help_article_widgets_name" = "Widžeti mape";
 "help_article_widgets_map_buttons_name" = "Dugmad mape";
 "user_guide" = "Korisničko uputstvo";
 "most_viewed" = "Najpregledanije";
@@ -2927,3 +2927,4 @@
 "there_are_no_connected_sensors_of_this_type" = "Nema povezanih senzora ove vrste";
 "shared_string_keywords" = "Ključne reči";
 "write_data_from_sensor_to_track" = "Piši podatke s spoljnih senzora na GPX tokom snimanja putovanja.";
+"show_all_tracks" = "Prikaži sve putanje";

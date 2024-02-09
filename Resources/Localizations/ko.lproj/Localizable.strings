@@ -2070,3 +2070,4 @@
 "routing_attr_driving_style_description" = "더 짧은, 더 빠른 또는 더 안전한 경로를 얻기 위해 운전 목적을 선택";
 "radius_rules_widget_desc" = "반경 바퀴 도구는지도에 선택한 지점 주변의 거리를 표시합니다.";
 "lang_zh_hk" = "중국어(홍콩)";
+"mapillary_menu_title_pano" = "360° 이미지로만 표시";

@@ -308,7 +308,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     @objc private func onBackupProgressUpdate(notification: NSNotification) {
         if let selectedIndexPath {
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 updateRowProgress(.inProgress, indexPath: selectedIndexPath)
             }
         }
@@ -320,7 +320,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         } else if settingsHelper?.isBackupSyncing() == false && backupHelper?.isBackupPreparing() == false {
             if let selectedIndexPath {
                 DispatchQueue.main.async { [weak self] in
-                    guard let self = self else { return }
+                    guard let self else { return }
                     updateRowProgress(.done, indexPath: selectedIndexPath)
                     resetSelectedIndexPath()
                 }
@@ -333,7 +333,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     func onBackupPreparing() {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             if tableView.refreshControl?.isRefreshing == false {
                 tableView.refreshControl?.beginRefreshing()
             }
@@ -343,7 +343,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     func onBackupPrepared(_ backupResult: OAPrepareBackupResult) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             reloadDataWith(animated: true, completion: nil)
             tableView.refreshControl?.endRefreshing()
         }
@@ -398,7 +398,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     func onFilesDeleteStarted(_ deleteAll: Bool) {
         DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             if !deleteAll, let selectedIndexPath {
                 updateRowProgress(.started, indexPath: selectedIndexPath)
             } else if tableView.refreshControl?.isRefreshing == false {
@@ -410,7 +410,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     func onFileDeleteProgress(_ deleteAll: Bool) {
         if !deleteAll, let selectedIndexPath {
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 updateRowProgress(.inProgress, indexPath: selectedIndexPath)
             }
         }
@@ -420,7 +420,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         let hasErrors = !errors.isEmpty
         if hasErrors || !message.isEmpty {
             DispatchQueue.main.async { [weak self] in
-                guard let self = self else { return }
+                guard let self else { return }
                 if !deleteAll, let selectedIndexPath {
                     updateRowProgress(.done, indexPath: selectedIndexPath)
                 }

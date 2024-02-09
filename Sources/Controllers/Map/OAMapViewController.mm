@@ -2071,7 +2071,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     if (!self.mapViewLoaded)
         return;
     
-    [self showProgressHUD];
+    //[self showProgressHUD];
     
     @synchronized(_rendererSync)
     {
@@ -2360,7 +2360,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
 
-        [self hideProgressHUD];
+        //[self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
 }

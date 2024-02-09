@@ -78,8 +78,8 @@
 
 - (void) resetLayer
 {
-    _mapillaryMapProvider.reset();
     [self.mapView resetProviderFor:self.layerIndex];
+    _mapillaryMapProvider.reset();
 }
 
 - (BOOL) updateLayer
@@ -110,18 +110,19 @@
 - (void) clearCacheAndUpdate:(BOOL)vectorRasterOnly
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        auto mapillaryMapProvider = _mapillaryMapProvider;
-        if (mapillaryMapProvider)
-        {
-            mapillaryMapProvider->clearDiskCache(vectorRasterOnly);
-            if (!vectorRasterOnly)
-                mapillaryMapProvider->clearMemoryCache();
+        [self.mapViewController runWithRenderSync:^{
+            auto mapillaryMapProvider = _mapillaryMapProvider;
+            if (mapillaryMapProvider)
+            {
+                mapillaryMapProvider->clearDiskCache(vectorRasterOnly);
+                if (!vectorRasterOnly)
+                    mapillaryMapProvider->clearMemoryCache();
 
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self updateLayer];
-            });
-        }
-        
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateLayer];
+                });
+            }
+        }];
     });
 }
 
@@ -139,9 +140,9 @@
 
 - (void) updateMapillaryLayer
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self showProgressHUD];
-    });
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    //    [self showProgressHUD];
+    //});
     [self.mapViewController runWithRenderSync:^{
         if (![self updateLayer])
         {
@@ -149,9 +150,9 @@
             _mapillaryMapProvider.reset();
         }
     }];
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self hideProgressHUD];
-    });
+    //dispatch_async(dispatch_get_main_queue(), ^{
+    //    [self hideProgressHUD];
+    //});
 }
 
 - (void) onImageChanged:(id)sender withKey:(id)key

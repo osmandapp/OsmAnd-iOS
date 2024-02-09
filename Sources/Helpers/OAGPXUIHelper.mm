@@ -123,8 +123,7 @@
     if (time > 0)
         return [NSDate dateWithTimeIntervalSince1970:time];
     
-    NSFileManager *manager = NSFileManager.defaultManager;
-    NSDictionary *attrs = [manager attributesOfItemAtPath:filePath error:nil];
+    NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:filePath error:nil];
     NSDate *modificationDate = [attrs objectForKey:NSFileModificationDate];
     if (modificationDate)
         return modificationDate;

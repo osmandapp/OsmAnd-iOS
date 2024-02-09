@@ -24,6 +24,7 @@
 #import "OAProducts.h"
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
+#import "OASwitchTableViewCell.h"
 
 #define kCellSwitchIsOnKey @"kCellSwitchIsOnKey"
 
@@ -43,6 +44,8 @@ NSString *const kTestHeightmapKey = @"kTestHeightmapKey";
 NSString *const kDisableVertexHillshade = @"kDisableVertexHillshade";
 NSString *const kGenerateHillshadeKey = @"kGenerateHillshadeKey";
 NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
+NSString *const kUseHHRouting = @"kUseHHRouting";
+NSString *const kUseHHRoutingOnly = @"kUseHHRoutingOnly";
 
 #pragma mark - Initialization
 
@@ -90,6 +93,18 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
+    [simulationSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kUseHHRouting,
+        kCellTitleKey : @"Use special routing (HH + old)",
+        @"isOn" : @([[OAAppSettings sharedManager].useHHRouting get])
+    }];
+    [simulationSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kUseHHRoutingOnly,
+        kCellTitleKey : @"Use special routing (HH only)",
+        @"isOn" : @([[OAAppSettings sharedManager].useHHRoutingOnly get])
+    }];
     [_data addSection:simulationSection];
 }
 
@@ -136,7 +151,39 @@ NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
         }
         return cell;
     }
+    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
+    {
+        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
+        if (!cell)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASwitchTableViewCell *) nib[0];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.switchView.on = [item boolForKey:@"isOn"];
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
+            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
+            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];            
+        }
+        return cell;
+    }
     return nil;
+}
+
+- (void)onSwitchPressed:(UISwitch *)sender
+{
+    UISwitch *switchView = (UISwitch *) sender;
+    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    
+    if ([item.key isEqualToString:kUseHHRouting])
+        [[OAAppSettings sharedManager].useHHRouting set:sender.isOn];
+    else if ([item.key isEqualToString:kUseHHRoutingOnly])        
+        [[OAAppSettings sharedManager].useHHRoutingOnly set:sender.isOn];
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

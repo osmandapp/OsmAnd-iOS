@@ -259,6 +259,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSComparisonResult) compareInt:(int)x y:(int)y;
 + (NSComparisonResult) compareDouble:(double)x y:(double)y;
 + (int) extractFirstIntegerNumber:(NSString *)s;
++ (int) extractIntegerNumber:(NSString *)s;
 
 + (BOOL) isWordComplete:(NSString *)text;
 

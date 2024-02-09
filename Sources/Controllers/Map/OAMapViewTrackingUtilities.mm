@@ -339,18 +339,20 @@
                 // Update target
                 if (!sameLocation && !freeMapCenterMode)
                 {
+                    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+                    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm:ss.SSS"];
+                    NSLog(@"DEBUG NAV:  new = %@ %f, %f (%f km/h) %@", [dateFormatter stringFromDate: newLocation.timestamp], newLocation.coordinate.latitude, newLocation.coordinate.longitude, newLocation.speed * 3.6, (![self.class isSmallSpeedForAnimation:newLocation] ? @"ANIMATION" : @""));
+                    if (prevLocation)
+                    {
+                        NSLog(@"DEBUG NAV: prev = %@ %f, %f (%f km/h) %f", [dateFormatter stringFromDate: prevLocation.timestamp], prevLocation.coordinate.latitude, prevLocation.coordinate.longitude, prevLocation.speed * 3.6, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
+                    }
                     if (![self.class isSmallSpeedForAnimation:newLocation] && _settings.animateMyLocation.get)
                     {
+                        double duration = prevLocation ? [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp] : 0;
+                        duration = MAX(duration, kNavAnimatonTime / 4);
                         if (targetAnimation)
                         {
                             _mapView.mapAnimator->cancelAnimation(targetAnimation);
-                            
-                            double duration;
-                            if (prevLocation)
-                                duration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
-                            else
-                                duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-
                             _mapView.mapAnimator->animateTargetTo(newTarget31,
                                                                duration,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -358,12 +360,6 @@
                         }
                         else
                         {
-                            double duration;
-                            if (prevLocation)
-                                duration = MAX(1.0, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
-                            else
-                                duration = kHalfSecondAnimatonTime;
-
                             _mapView.mapAnimator->animateTargetTo(newTarget31,
                                                                duration,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,

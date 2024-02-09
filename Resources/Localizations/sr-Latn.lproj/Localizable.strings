@@ -217,9 +217,9 @@
 "auto_zoom_far" = "Na srednjim razdaljinama";
 "auto_zoom_farthest" = "Na velikoj razdaljini";
 "keep_informing_never" = "Samo ručno (klikom na strelicu)";
-"arrival_distance_factor_early" = "Rano";
+"arrival_distance_factor_early" = "Ranije";
 "arrival_distance_factor_normally" = "Normalno";
-"arrival_distance_factor_late" = "Kasno";
+"arrival_distance_factor_late" = "Kasnije";
 "arrival_distance_factor_at_last" = "U poslednjih par metara";
 "route_parameters" = "Parametri rute";
 "fast_route_mode" = "Najbrži ruta";
@@ -650,7 +650,7 @@
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
-"routing_engine_vehicle_type_driving" = "Vožnja automobila";
+"routing_engine_vehicle_type_driving" = "Vožnja";
 "poi_filter_public_transport" = "Javni prevoz";
 "shared_string_map" = "Mapa";
 "layer_amenity_label" = "Nazivi TOI i favorita";
@@ -986,7 +986,7 @@
 "downloading" = "Downloading";
 
 // Route planning
-"plan_route" = "Nova ruta";
+"plan_route" = "Planiranje rute";
 "coord_input_add_point" = "Dodaj tačku";
 "point_num" = "Point %d";
 "points_count" = "Points:";
@@ -1352,7 +1352,7 @@
 "quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
 "quick_action_fill_params_alert" = "Please fill out the parameters first";
 "quick_action_dialog" = "Dialog";
-"quick_action_edit_action" = "Uredi dejstvo";
+"quick_action_edit_action" = "Uredi akciju";
 "quick_action_add_tag" = "Add tag";
 "gpx_tags_txt" = "Oznake";
 "quick_action_get_info" = "Get info";
@@ -1399,7 +1399,7 @@
 "change_application_profile" = "Promeni profil programa";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Dodaj profil";
-"quick_action_switch_profile_descr" = "Dejstveno dugme menja između izabranih profila.";
+"quick_action_switch_profile_descr" = "Dugme menja između izabranih profila.";
 "profile_type_user_string" = "Korisnički profil";
 "profile_type_osmand_string" = "OsmAnd profil";
 "unsupported_action" = "Unsupported action";
@@ -2185,9 +2185,9 @@
 
 
 //Icon categories
-"icon_group_amenity" = "Prijatnost";
+"icon_group_amenity" = "Slobodno vreme";
 "icon_group_emergency" = "Hitna pomoć";
-"icon_group_special" = "Naročita";
+"icon_group_special" = "Specijalna";
 "icon_group_sport" = "Sport";
 "icon_group_symbols" = "Znamenja";
 "icon_group_transport" = "Prevoz";
@@ -2198,7 +2198,7 @@
 "transport" = "Prevoz";
 "settings_item_read_error" = "Ne mogu dačitam iz „%@”.";
 "app_mode_default" = "Pregled mape";
-"app_mode_car" = "Vožnja";
+"app_mode_car" = "Auto";
 "app_mode_bicycle" = "Bicikla";
 "app_mode_pedestrian" = "Pešačenje";
 "app_mode_taxi" = "Taksi";
@@ -2372,7 +2372,7 @@
 "in_grace_period" = "U grejs periodu";
 "shared_string_delete_all" = "Obriši sve";
 "shared_string_logout" = "Odjava";
-"enough_contributions_descr" = "Čestitamo, stekao si dovoljno doprinosa OpenStritMap-ama i sada možete uživati neograničeno u osvežavanju mapa OsmAnda!";
+"enough_contributions_descr" = "Čestitamo, stekao si dovoljno doprinosa u uređivanji OpenStreetMap i sada možeš uživati neograničeno u ažuriranju mapa!";
 "animate_my_location" = "Omogući animirano pomeranje mape do \"Moje lokacije\" tokom navigacije.";
 "shared_string_status" = "Stanje";
 "backup_data" = "Sačuvaj rezervu podataka";
@@ -2539,7 +2539,7 @@
 "privacy_and_security" = "Privatnost i bezbednost";
 "shared_string_height" = "Visina";
 "shared_string_keep_active" = "Drži aktivnim";
-"icon_group_service" = "Usluga";
+"icon_group_service" = "Servisi";
 "shared_string_cloud" = "Oblak";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigacija pomoću rute";
 "help_article_widgets_nav_widgets_name" = "Widgeti za navođenje";
@@ -2600,7 +2600,7 @@
 "new_file" = "Nova datoteka";
 "weather_forecast_is_outdated" = "Vremenska prognoza je zastarela.";
 "beats_per_minute_short" = "bpm";
-"default_appearance_desc" = "Podrazumevana boja, sličica i oblik će se primeniti na dodane Favoriti u grupi.";
+"default_appearance_desc" = "Podrazumevana boja, ikona i oblik će se primeniti na dodane favorite u grupi.";
 "external_device_characteristic_stride_length" = "Dužina koraka";
 "bluetooth_found_title" = "Pronađen: %d";
 "ble_search_again" = "Ponovo pretraži";
@@ -2663,7 +2663,7 @@
 "map_widget_ant_bicycle_cadence_desc" = "Prikazuje brzinu kojom biciklista pedala";
 "map_widget_ant_bicycle_speed" = "Brzina bicikla";
 "shared_string_temperature" = "Temperatura";
-"sensor_temperature_desc" = "Prikazuje toplotu izmerenu senzorom";
+"sensor_temperature_desc" = "Prikazuje temperaturu izmerenu senzorom";
 "shared_string_finger" = "Prst";
 "shared_string_hand" = "Ruka";
 "shared_string_ear_lobe" = "Ušna školjka";
@@ -2703,7 +2703,7 @@
 "map_widget_camera_tilt_desc" = "Prikazuje nagnutost kamere u pregledu prostora. Podrazumevana nagnutost je 90° (bez naginjanja).";
 "parking_widget_desc" = "Prikazuje udaljenost od središta ekrana do mesta parkiranja.";
 "mapillary_widget_desc" = "Omogućava brzi pristup programu Mapilari za dodavanje slika ulica.";
-"av_notes_choose_action_widget_desc" = "Izaberi dejstvo.";
+"av_notes_choose_action_widget_desc" = "Izaberi akciju.";
 "cloud_recent_changes" = "Izmene";
 "activity_type_car_name" = "Automobil";
 "shared_string_markers" = "Oznake";
@@ -2781,33 +2781,33 @@
 "help_article_map_map_context_menu_name" = "Priručni meni mape";
 "help_article_map_track_context_menu_name" = "Priručni meni ruta";
 "help_article_map_raster_maps_name" = "Rasterske mape (online/ offline)";
-"help_article_map_tracks_on_map_name" = "Rute i rute";
-"help_article_map_vector_maps_name" = "Vektorske mape (načini prikaza mape)";
+"help_article_map_tracks_on_map_name" = "Staze i rute";
+"help_article_map_vector_maps_name" = "Vektorske mape (stil mape)";
 "help_article_navigation_auto_car_name" = "Android Auto";
-"help_article_navigation_guidance_map_during_navigation_name" = "Zaslon mape prilikom navođenja";
+"help_article_navigation_guidance_map_during_navigation_name" = "Ekran prilikom navođenja";
 "help_article_navigation_guidance_voice_navigation_name" = "Glasovna uputstva / obaveštenja";
 "help_article_navigation_car_play_name" = "CarPlay";
-"help_article_navigation_routing_name" = "Odrednice rute";
-"help_article_navigation_routing_bicycle_based_routing_name" = "Putanja biciklom (MTB)";
-"help_article_navigation_routing_boat_navigation_name" = "Putanja plovilom";
-"help_article_navigation_routing_brouter_name" = "Bputanja";
-"help_article_navigation_routing_car_based_routing_name" = "Putanja kolima (teretnjakom, motociklom)";
-"help_article_navigation_routing_direct_to_point_routing_name" = "Putanja neposredno-u-tačku (plovilom)";
-"help_article_navigation_routing_horse_routing_name" = "Putanja jahanja konja";
-"help_article_navigation_routing_online_routing_name" = "Putanja mrežna";
-"help_article_navigation_routing_moped_routing_name" = "Putanja motociklom";
-"help_article_navigation_routing_osmand_routing_name" = "O putanji OsmAnda";
-"help_article_navigation_routing_pedestrian_routing_name" = "Putanja pešačenja";
-"help_article_navigation_routing_public_transport_navigation_name" = "Putanja javnog prevoza";
-"help_article_navigation_routing_ski_routing_name" = "Putanja skijanja";
-"help_article_navigation_routing_straight_line_routing_name" = "Putanja pravom linijom (letelicom)";
-"help_article_navigation_routing_train_routing_name" = "Putanja vozna";
-"help_article_navigation_setup_markers_navigation_name" = "Navodi pomoću oznaka";
-"help_article_navigation_setup_route_details_name" = "Pojedinosti rute";
+"help_article_navigation_routing_name" = "Parametri rute";
+"help_article_navigation_routing_bicycle_based_routing_name" = "Rutiranje biciklom (MTB)";
+"help_article_navigation_routing_boat_navigation_name" = "Rutiranje plovilom";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"help_article_navigation_routing_car_based_routing_name" = "Rutiranje autom (kamion, motor)";
+"help_article_navigation_routing_direct_to_point_routing_name" = "Rutiranje direktno-u-tačku (plovilom)";
+"help_article_navigation_routing_horse_routing_name" = "Rutiranje jahanjem";
+"help_article_navigation_routing_online_routing_name" = "Online rutiranje";
+"help_article_navigation_routing_moped_routing_name" = "Rutiranje mopedom";
+"help_article_navigation_routing_osmand_routing_name" = "O OsmAnd rutiranju";
+"help_article_navigation_routing_pedestrian_routing_name" = "Rutiranje hodanjem";
+"help_article_navigation_routing_public_transport_navigation_name" = "Rutiranje javnim prevozom";
+"help_article_navigation_routing_ski_routing_name" = "Ski rute";
+"help_article_navigation_routing_straight_line_routing_name" = "rutiranje pravom linijom (letelicom)";
+"help_article_navigation_routing_train_routing_name" = "Rutiranje vozom";
+"help_article_navigation_setup_markers_navigation_name" = "Navođenje pomoću oznaka";
+"help_article_navigation_setup_route_details_name" = "Detalji rute";
 "help_article_navigation_setup_route_navigation_name" = "Priprema rute";
 "help_article_personal_name" = "Moji podaci";
 "help_article_personal_import_export_name" = "Uvoz / izvoz";
-"help_article_personal_profiles_name" = "Preseci (podešavanja)";
+"help_article_personal_profiles_name" = "Profili (podešavanja)";
 "help_article_personal_storage_name" = "Skladište";
 "help_article_plan_route_name" = "Planiranje rute";
 "help_article_plan_route_coordinate_input_name" = "Unos koordinata";
@@ -2822,7 +2822,7 @@
 "help_article_start_with_first_steps_name" = "Početni koraci";
 "help_article_start_with_main_menu_name" = "Glavni meni";
 "help_article_troubleshooting_crash_logs_name" = "Dnevnik rušenja programa";
-"help_article_troubleshooting_general_name" = "Opšte";
+"help_article_troubleshooting_general_name" = "Generalno";
 "help_article_troubleshooting_track_recording_issues_name" = "Snimanje traga";
 "help_article_widgets_name" = "Spravice mape";
 "help_article_widgets_map_buttons_name" = "Dugmad mape";
@@ -2915,7 +2915,7 @@
 "map_widget_rendering_fps" = "Obrada mape u slikama po sekundi";
 "map_widget_rendering_fps_desc" = "Prikazuje brzinu osvežavanja mape i elemenata mape koji se prikazuju i osvežavaju, izraženo u sličicama po sekundi (FPS).";
 "map_widget_ant_heart_rate" = "Srčani otkucaji";
-"map_widget_ant_heart_rate_desc" = "Prikazuje trenutne korisnikove srčane otkucaje prilikom datog dejstva";
+"map_widget_ant_heart_rate_desc" = "Prikazuje korisnikove srčane otkucaje u realnom vremeni";
 "map_widget_target_distance" = "Rastojanje od kamere od cilja";
 "map_widget_altitude_map_center" = "Nadmorska visina: centar mape";
 "map_widget_altitude_desc" = "Prikazuje nadmorsku visinu trenutne lokacije ili visinu trenutnog centra mape";
@@ -2924,3 +2924,6 @@
 "shared_string_link" = "Link";
 "shared_string_author" = "Autor";
 "shared_string_cache" = "Keš";
+"there_are_no_connected_sensors_of_this_type" = "Nema povezanih senzora ove vrste";
+"shared_string_keywords" = "Ključne reči";
+"write_data_from_sensor_to_track" = "Piši podatke s spoljnih senzora na GPX tokom snimanja putovanja.";

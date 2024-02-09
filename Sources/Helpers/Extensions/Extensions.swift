@@ -9,12 +9,6 @@
 import Foundation
 import UIKit
 
-extension Date {
-    var startOfDay: Date {
-        return Calendar.current.startOfDay(for: self)
-    }
-}
-
 extension UIImage {
 
     func rotate(radians: CGFloat) -> UIImage {

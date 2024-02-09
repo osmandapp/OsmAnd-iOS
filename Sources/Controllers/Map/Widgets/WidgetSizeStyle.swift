@@ -21,6 +21,14 @@ import Foundation
     static func getUnitsFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
         type.unitsFontSize
     }
+    
+    static func getTopBottomPadding(type: WidgetSizeStyle) -> CGFloat {
+        type.topBottomPadding
+    }
+    
+    static func getPaddingBetweenIconAdndValue(type: WidgetSizeStyle) -> CGFloat {
+        type.paddingBetweenIconAdndValue
+    }
 }
 
 @objc enum WidgetSizeStyle: NSInteger {
@@ -43,6 +51,21 @@ import Foundation
     var unitsFontSize: CGFloat {
         switch self {
         case .small, .medium, .large: 11
+        }
+    }
+    
+    var topBottomPadding: CGFloat {
+        switch self {
+        case .small: 7
+        case .medium: 10
+        case .large: 12
+        }
+    }
+    
+    var paddingBetweenIconAdndValue: CGFloat {
+        switch self {
+        case .small: 6
+        case .medium, .large: 12
         }
     }
 }

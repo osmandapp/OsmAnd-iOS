@@ -40,6 +40,7 @@
 @property (nonatomic, strong, nullable) UILabel *unitLabel;
 @property (nonatomic, strong, nullable) UIView *unitView;
 @property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
+@property (nonatomic, strong, nullable) UILabel *titleOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
@@ -75,13 +76,16 @@
 - (void) setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void) updateIconMode:(BOOL)night;
-- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
+- (void)updateIcon;
+- (void)setNightMode:(BOOL)night;
+
+- (void)updateTextWitState:(OATextState *_Nonnull)state;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)configureSimpleLayout;
+- (void)refreshLayout;
 
 @end

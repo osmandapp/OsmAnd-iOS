@@ -1264,6 +1264,25 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return i;
 }
 
++ (int) extractIntegerNumber:(NSString *)s
+{
+    int i = 0;
+    int k;
+    for (k = 0; k < s.length; k++) {
+        if (isdigit([s characterAtIndex:k])) {
+            break;
+        }
+    }
+    for (; k < s.length; k++) {
+        if (isdigit([s characterAtIndex:k])) {
+            i = i * 10 + ([s characterAtIndex:k] - '0');
+        } else {
+            break;
+        }
+    }
+    return i;
+}
+
 + (BOOL) isWordComplete:(NSString *)text
 {
     if (text.length > 0 )

@@ -53,6 +53,11 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
 
     // MARK: - Table Data
 
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+        addCell(OARightIconTableViewCell.reuseIdentifier)
+    }
+
     override func generateData() {
         let fileSection = tableData.createNewSection()
         let fileRow = fileSection.createNewRow()
@@ -90,45 +95,33 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASimpleTableViewCell
-                cell?.selectionStyle = .none
-            }
-            if let cell {
-                if item.key == "trashItem" {
-                    cell.titleLabel.text = trashItem.name
-                    cell.titleLabel.accessibilityLabel = trashItem.name
-                    cell.descriptionLabel.text = trashItem.descr
-                    cell.descriptionLabel.accessibilityLabel = trashItem.descr
-                    cell.leftIconView.image = trashItem.icon
-
-                    var iconColor: UIColor
-                    if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
-                        iconColor = UIColor(rgb: profileItem.appMode.getIconColor())
-                    } else {
-                        iconColor = UIColor.iconColorDefault
-                    }
-                    cell.leftIconView.tintColor = iconColor
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+            cell.selectionStyle = .none
+            if item.key == "trashItem" {
+                cell.titleLabel.text = trashItem.name
+                cell.titleLabel.accessibilityLabel = trashItem.name
+                cell.descriptionLabel.text = trashItem.descr
+                cell.descriptionLabel.accessibilityLabel = trashItem.descr
+                cell.leftIconView.image = trashItem.icon
+                
+                var iconColor: UIColor
+                if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
+                    iconColor = UIColor(rgb: profileItem.appMode.getIconColor())
+                } else {
+                    iconColor = UIColor.iconColorDefault
                 }
+                cell.leftIconView.tintColor = iconColor
             }
             return cell
         } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OARightIconTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OARightIconTableViewCell
-                cell?.leftIconVisibility(false)
-                cell?.descriptionVisibility(false)
-            }
-            if let cell {
-                cell.titleLabel.text = item.title
-                cell.titleLabel.textColor = item.obj(forKey: "titleColor") as? UIColor ?? UIColor.black
-                cell.titleLabel.accessibilityLabel = item.title
-                cell.rightIconView.image = UIImage.templateImageNamed(item.secondaryIconName)
-                cell.rightIconView.tintColor = item.secondaryIconTintColor
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier, for: indexPath) as! OARightIconTableViewCell
+            cell.leftIconVisibility(false)
+            cell.descriptionVisibility(false)
+            cell.titleLabel.text = item.title
+            cell.titleLabel.textColor = item.obj(forKey: "titleColor") as? UIColor ?? UIColor.black
+            cell.titleLabel.accessibilityLabel = item.title
+            cell.rightIconView.image = UIImage.templateImageNamed(item.secondaryIconName)
+            cell.rightIconView.tintColor = item.secondaryIconTintColor
             return cell
         }
         return nil

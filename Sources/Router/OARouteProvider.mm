@@ -38,6 +38,7 @@
 #define ADDITIONAL_DISTANCE_FOR_START_POINT 300
 #define MIN_STRAIGHT_DIST 50000
 #define MIN_INTERMEDIATE_DIST 10
+#define NEAREST_POINT_EXTRA_SEARCH_DISTANCE 300
 
 #define GPX_CALC_DIST_THRESHOLD 1000000
 
@@ -1091,19 +1092,19 @@
     return closest;
 }
 
-- (NSMutableArray<OARouteDirectionInfo *> *) calcDirections:(NSMutableArray<NSNumber *> *)startI endI:(NSMutableArray<NSNumber *> *)endI inputDirections:(NSArray<OARouteDirectionInfo *> *)inputDirections
+- (NSMutableArray<OARouteDirectionInfo *> *) calcDirections:(NSNumber *)startI endI:(NSNumber *)endI inputDirections:(NSArray<OARouteDirectionInfo *> *)inputDirections
 {
     NSMutableArray<OARouteDirectionInfo *> *directions = [NSMutableArray array];
     if (inputDirections)
     {
         for (OARouteDirectionInfo *info in inputDirections)
         {
-            if (info.routePointOffset >= startI[0].intValue && info.routePointOffset < endI[0].intValue)
+            if (info.routePointOffset >= startI.intValue && info.routePointOffset < endI.intValue)
             {
                 OARouteDirectionInfo *ch = [[OARouteDirectionInfo alloc] initWithAverageSpeed:info.averageSpeed turnType:info.turnType];
-                ch.routePointOffset = info.routePointOffset - startI[0].intValue;
+                ch.routePointOffset = info.routePointOffset - startI.intValue;
                 if (info.routeEndPointOffset != 0)
-                    ch.routeEndPointOffset = info.routeEndPointOffset - startI[0].intValue;
+                    ch.routeEndPointOffset = info.routeEndPointOffset - startI.intValue;
                 
                 [ch setDescriptionRoute:[info getDescriptionRoutePart]];
                 ch.routeDataObject = info.routeDataObject;
@@ -1403,6 +1404,12 @@
         {
             newGpxRoute.insert(newGpxRoute.end(), lastSegmentRoute.begin(), lastSegmentRoute.end());
         }
+        
+        if ([routeParams recheckRouteNearestPoint])
+        {
+            newGpxRoute = [self checkNearestSegmentOnRecalculate:routeParams.previousToRecalculate segments:newGpxRoute startLocation:routeParams.start];
+        }
+        
         return [[OARouteCalculationResult alloc] initWithSegmentResults:newGpxRoute start:routeParams.start end:routeParams.end intermediates:routeParams.intermediates leftSide:routeParams.leftSide routingTime:0. waypoints:gpxParams.wpt mode:routeParams.mode calculateFirstAndLastPoint:YES initialCalculation:routeParams.initialCalculation];
     }
     
@@ -1421,10 +1428,20 @@
         gpxRoute = [NSMutableArray arrayWithArray:[self findStartAndEndLocationsFromRoute:gpxParams.points startLoc:routeParams.start endLoc:routeParams.end startI:startI endI:endI]];
     }
     NSArray<OARouteDirectionInfo *> *inputDirections = gpxParams.directions;
-    NSMutableArray<OARouteDirectionInfo *> *gpxDirections = [self calcDirections:startI endI:endI inputDirections:inputDirections];
+    NSMutableArray<OARouteDirectionInfo *> *gpxDirections = [self calcDirections:startI[0] endI:endI[0] inputDirections:inputDirections];
     [self insertIntermediateSegments:routeParams points:gpxRoute directions:gpxDirections segmentEndpoints:gpxParams.segmentEndPoints calculateOsmAndRouteParts:calculateOsmAndRouteParts];
     [self insertInitialSegment:routeParams points:gpxRoute directions:gpxDirections calculateOsmAndRouteParts:calculateOsmAndRouteParts];
     [self insertFinalSegment:routeParams points:gpxRoute directions:gpxDirections calculateOsmAndRouteParts:calculateOsmAndRouteParts];
+    
+    if ([routeParams recheckRouteNearestPoint])
+    {
+        auto index = [self findNearestPointIndexOnRecalculate:routeParams.previousToRecalculate routeLocations:gpxRoute startLocation:routeParams.start];
+        if (index > 0)
+        {
+            gpxDirections = [self calcDirections:[NSNumber numberWithInteger:index] endI:[NSNumber numberWithInteger:gpxRoute.count] inputDirections:gpxDirections];
+            gpxRoute = [NSMutableArray arrayWithArray:[gpxRoute subarrayWithRange:NSMakeRange(index, gpxRoute.count)]];
+        }
+    }
     
     for (OARouteDirectionInfo *info in gpxDirections)
     {
@@ -1557,7 +1574,7 @@
         NSMutableArray<NSNumber *> *startI = [NSMutableArray arrayWithObject:@(0)];
         NSMutableArray<NSNumber *> *endI = [NSMutableArray arrayWithObject:@(locs.count)];
         locs = [NSMutableArray arrayWithArray:[self findStartAndEndLocationsFromRoute:locs startLoc:params.start endLoc:params.end startI:startI endI:endI]];
-        NSMutableArray<OARouteDirectionInfo *> *directions = [self calcDirections:startI endI:endI inputDirections:[rcr getRouteDirections]];;
+        NSMutableArray<OARouteDirectionInfo *> *directions = [self calcDirections:startI[0] endI:endI[0] inputDirections:[rcr getRouteDirections]];;
         [self insertInitialSegment:params points:locs directions:directions calculateOsmAndRouteParts:YES];
         res = [[OARouteCalculationResult alloc] initWithLocations:locs directions:directions params:params waypoints:nil addMissingTurns:YES];
     }
@@ -1658,6 +1675,71 @@
         }
     }
     return [[OARouteCalculationResult alloc] initWithErrorMessage:nil];
+}
+
+- (std::vector<std::shared_ptr<RouteSegmentResult>>) checkNearestSegmentOnRecalculate:(OARouteCalculationResult *)previousRoute
+                                                                             segments:(std::vector<std::shared_ptr<RouteSegmentResult>>)segments
+                                                                        startLocation:(CLLocation *)startLocation
+{
+    CGFloat previousDistanceToFinish = [previousRoute getRouteDistanceToFinish:0];
+    CGFloat searchDistance = previousDistanceToFinish + NEAREST_POINT_EXTRA_SEARCH_DISTANCE;
+
+    CGFloat minDistance = CGFLOAT_MAX;
+    CGFloat checkedDistance = 0;
+
+    NSInteger nearestSegmentIndex = 0;
+
+    for (NSInteger segmentIndex = segments.size() - 1; segmentIndex >= 0 && checkedDistance < searchDistance; segmentIndex--) {
+        const auto& segment = segments[segmentIndex];
+        int step = segment->isForwardDirection() ? -1 : 1;
+        int startIndex = segment->getEndPointIndex() + step;
+        int endIndex = segment->getStartPointIndex() + step;
+
+        for (int index = startIndex; index != endIndex && checkedDistance < searchDistance; index += step) {
+            LatLon prevRoutePoint = segment->getPoint(index);
+            LatLon nextRoutePoint = segment->getPoint(index - step);
+            CLLocation *prevRouteLocation = [[CLLocation alloc] initWithLatitude:prevRoutePoint.lat longitude:prevRoutePoint.lon];
+            CLLocation *nextRouteLocation = [[CLLocation alloc] initWithLatitude:nextRoutePoint.lat longitude:nextRoutePoint.lon];
+            CGFloat distance = [OAMapUtils getOrthogonalDistance:startLocation fromLocation:prevRouteLocation toLocation:nextRouteLocation];
+            
+            if (distance < MIN(minDistance, MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT)) {
+                minDistance = distance;
+                nearestSegmentIndex = segmentIndex;
+            }
+
+            checkedDistance += [prevRouteLocation distanceFromLocation:nextRouteLocation];
+        }
+    }
+    
+    return nearestSegmentIndex == 0
+        ? segments
+        : std::vector<std::shared_ptr<RouteSegmentResult>>(segments.cbegin() + (int) nearestSegmentIndex, segments.cend());
+}
+
+- (NSInteger) findNearestPointIndexOnRecalculate:(OARouteCalculationResult *)previousRoute
+                                  routeLocations:(NSMutableArray<CLLocation *> *)routeLocations
+                                   startLocation:(CLLocation *)startLocation
+{
+    CGFloat prevDistanceToFinish = [previousRoute getRouteDistanceToFinish:0];
+    CGFloat searchDistance = prevDistanceToFinish + NEAREST_POINT_EXTRA_SEARCH_DISTANCE;
+    CGFloat checkedDistance = 0;
+    NSInteger newStartIndex = 0;
+    CGFloat minDistance = CGFLOAT_MAX;
+
+    for (NSInteger i = [routeLocations count] - 2; i >= 0 && checkedDistance < searchDistance; i--) {
+        const auto& prevRouteLocation = routeLocations[i];
+        const auto& nextRouteLocation = routeLocations[i + 1];
+        CGFloat distance = [OAMapUtils getOrthogonalDistance:startLocation fromLocation:prevRouteLocation toLocation:nextRouteLocation];
+        
+        if (distance < MIN(minDistance, MIN_DISTANCE_FOR_INSERTING_ROUTE_SEGMENT)) {
+            minDistance = distance;
+            newStartIndex = i + 1;
+        }
+
+        checkedDistance += [prevRouteLocation distanceFromLocation:nextRouteLocation];
+    }
+
+    return newStartIndex;
 }
 
 @end

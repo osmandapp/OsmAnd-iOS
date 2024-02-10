@@ -327,7 +327,7 @@
 "route_is_too_long_v2" = "Za duža odredišta: Dodaj usputna odredišta ako nijedan ruta nije nađena za ovu dugačku rutu ni posle 10 minuta.";
 "navigation_over_track" = "Da započnem navođenje duž putanje?";
 "use_displayed_track_for_navigation" = "Koristi prikazanu putanju za navođenje?";
-"previous_route" = "Prethodni ruta";
+"previous_route" = "Prethodna ruta";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Izaberi na mapi";
 "selected_roads" = "Selected roads";
@@ -1061,7 +1061,7 @@
 "res_mapsres" = "Maps & Resources";
 "download_tab_local" = "Lokalno";
 "osmand_live" = "OsmAnd uživo";
-"live_updates" = "Ažuriranje uživo";
+"live_updates" = "Trenutno ažuriranje";
 "available_maps" = "Dostupne mape";
 "osmand_live_last_changed" = "Last map change: %@";
 "last_update" = "Poslednje ažuriranje: %@";
@@ -1134,8 +1134,8 @@
 "edit_tilesource_elliptic_tile" = "Eliptična Merkator projekcija";
 "pseudo_mercator_projection" = "Pseudo-Projekcija Merkatora";
 "res_source_format" = "Source format";
-"sqlite_db_file" = "Datoteka SQLite";
-"one_image_per_tile" = "Jedna datoteka po sličici";
+"sqlite_db_file" = "SQLite fajl";
+"one_image_per_tile" = "Jedna slika na tajl";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "File name cannot be empty";
@@ -2308,7 +2308,7 @@
 "cloud_conflicts" = "Sukob";
 "cloud_email_not_registered" = "Ova adresa e-pošte nije registrovana za OsmAnd oblak";
 "horseback_riding" = "Jahanje";
-"backup_error_file_not_available" = "Datoteka nije dostupna";
+"backup_error_file_not_available" = "Fajl nije dostupan";
 "osm_live_subscriptions" = "Članarine";
 "osmand_cloud_login_descr" = "Unesite adresu e-pošte sa kojom ste se registrovali. Na tu adresu biće poslata jednokratna lozinka za sledeći.";
 "transport_hazmat_no_desc" = "Na nekim putevima i tunelima može biti zabranjen prevoz opasnih materije.";
@@ -2597,7 +2597,7 @@
 "depth_contour_lines" = "Dubina linija obrisa";
 "wiki_article_search_text" = "Pretražujem odgovarajući članak vikija";
 "weather_precip_inches" = "Inči";
-"new_file" = "Nova datoteka";
+"new_file" = "Novi fajl";
 "weather_forecast_is_outdated" = "Vremenska prognoza je zastarela.";
 "beats_per_minute_short" = "bpm";
 "default_appearance_desc" = "Podrazumevana boja, ikona i oblik će se primeniti na dodane favorite u grupi.";
@@ -2630,7 +2630,7 @@
 "cache_size" = "Veličina podataka";
 "activity_type_offroad_name" = "Vožnja van puta";
 "activity_type_walking_name" = "Pešačenje";
-"deleted_file" = "Izbrisana datoteka";
+"deleted_file" = "Obrisan fajl";
 "upload_change" = "Otpremi izmene";
 "local_changes_will_be_dismissed" = "Mestne izmene će biti otkazane";
 "weather_forecast" = "Vremenska prognoza";
@@ -2640,7 +2640,7 @@
 "announcement_time_passing" = "Prolazak";
 "announcement_time_approach" = "Dostupno";
 "app_mode_moped" = "Moped";
-"modified_file" = "Izmenjena datoteka";
+"modified_file" = "Izmenjen fajl";
 "cloud_all_changes_uploaded_descr" = "Sve izmene učinjene na ovom uređaju su usklađene sa Oblakom OsmAnda.";
 "cloud_no_conflicts" = "Nema konflikta.";
 "get_osmand_cloud" = "Dobavite Oblak OsmAnda";
@@ -2847,12 +2847,12 @@
 "local_changes" = "Mestne izmene";
 "cloud_version_will_be_removed" = "Izdanje na oblaku će biti uklonjeno";
 "cloud_changes_will_be_dismissed" = "Izmene na oblaku će biti otkazane";
-"local_file_will_be_restored" = "Mestna datoteka će biti povraćena";
+"local_file_will_be_restored" = "Lokalni fajl biće povraćen";
 "cloud_conflict" = "Sukob";
 "upload_all" = "Otpremi sve";
 "cloud_all_changes_uploaded" = "Sve izmene su otpremljene";
 "cloud_all_changes_downloaded" = "Sve izmene su preuzete";
-"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim spisak datoteka sa služitelja.";
+"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim spisak fajlova sa servera.";
 "last_sync" = "Poslednje usklađivanje";
 "mtb_imba_full" = "Međunarodno udruženje planinarskih biciklista";
 "rendering_attr_showMtbScale_name" = "Prikazuj lestvicu MTB-a";

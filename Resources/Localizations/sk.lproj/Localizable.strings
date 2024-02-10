@@ -2464,3 +2464,4 @@
 "shared_string_author" = "Autor";
 "purchases_feature_desc_external_sensors" = "Zobrazte a nahrajte údaje z externých senzorov: rýchlosť bicykla, výkon bicykla, frekvencia pedálovania a srdcový tep.";
 "external_sensors_plugin_description" = "Sprístupní externé senzory na čítanie napr. srdcového tepu, rýchlosti bicykla, výkonu bicykla a frekvencii šliapania. Vyžaduje zariadenie spojené so senzormi týchto parametrov s pomocou bezdrôtového sieťového protokolu ANT+.";
+"shared_string_keywords" = "Kľúčové slová";

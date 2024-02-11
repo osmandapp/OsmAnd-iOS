@@ -189,13 +189,9 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         if widgetPanel.isPanelVertical {
             if WidgetType.isComplexWidget(newWidget.key), lastSectionData.getRow(lastSectionData.rowCount() - 1).key != kPageKey {
                 createNewSection = true
-                showToastForComplexWidget(newWidget.getTitle())
             } else if lastSectionData.rowCount() > 1 {
                 let lastWidget: MapWidgetInfo? = lastSectionData.getRow(lastSectionData.rowCount() - 1).obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
                 createNewSection = WidgetType.isComplexWidget(lastWidget?.key ?? "")
-                if createNewSection, let lastWidget {
-                    showToastForComplexWidget(lastWidget.getTitle())
-                }
             }
         }
         if createNewSection {

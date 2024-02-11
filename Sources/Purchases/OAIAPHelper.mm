@@ -235,12 +235,12 @@ static OASubscriptionState *EXPIRED;
 
 + (BOOL) isOsmAndProAvailable
 {
-#if defined(DEBUG)
-    return YES;
-#else
+//#if defined(DEBUG)
+//    return YES;
+//#else
     return [self isSubscribedCrossPlatform]
             || [self isSubscribedToOsmAndPro];
-#endif
+//#endif
 }
 
 + (long) getInstallTime

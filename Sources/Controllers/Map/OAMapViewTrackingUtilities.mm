@@ -232,7 +232,12 @@
 - (void)switchMap3dMode
 {
     BOOL defaultElevationAngle = [self isDefaultElevationAngle];
-    float tiltAngle = defaultElevationAngle ? [_mapView normalizeElevationAngle : [[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle]] : kMapModePositionTrackingDefaultElevationAngle;
+    float tiltAngle = kMapModePositionTrackingDefaultElevationAngle;
+    if (defaultElevationAngle)
+    {
+        float elevationAngle = [[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle];
+        tiltAngle = elevationAngle != tiltAngle ? elevationAngle : kMapModeFollowDefaultElevationAngle;
+    }
     [self startTilting:tiltAngle];
 }
 

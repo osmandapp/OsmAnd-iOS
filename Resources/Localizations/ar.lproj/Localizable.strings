@@ -3260,9 +3260,9 @@
 "general_settings" = "عام";
 "shared_string_any" = "أي";
 "shared_string_author" = "المؤلف";
-"shared_string_link" = "رابط";
-"shared_string_license" = "الترخيص";
-"shared_string_keywords" = "كلامات دلالية";
+"shared_string_link" = "الرابط";
+"shared_string_license" = "الرخصة";
+"shared_string_keywords" = "الكلمات الدلالية";
 "calendar_new_event_title" = "تذكير جديد";
 "calendar_new_event_message" = "تم إضافة تذكير جديد في التقويم استلام السيارة في %@";
 "paired_sensors" = "أجهزة الاستشعار المقترنة";

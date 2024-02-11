@@ -126,7 +126,7 @@
         float bearingMotion = currentLocation.course;
         float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
         double diff = degreesDiff(bearingMotion, bearingToRoute);
-        if (ABS(diff) > 60.0)
+        if (ABS(diff) > 90.0)
         {
             // require delay interval since first detection, to avoid false positive
             //but leave out for now, as late detection is worse than false positive (it may reset voice router then cause bogus turn and u-turn prompting)

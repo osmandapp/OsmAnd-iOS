@@ -252,7 +252,7 @@
         params.intermediates = intermediates;
         params.gpxRoute = gpxRoute == nil ? nil : [gpxRoute build:start];
         params.onlyStartPointChanged = onlyStartPointChanged;
-        if (_recalculateCountInInterval < RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE || (gpxRoute && gpxRoute.passWholeRoute && OARoutingHelper.isDeviatedFromRoute))
+        if (_recalculateCountInInterval < RECALCULATE_THRESHOLD_COUNT_CAUSING_FULL_RECALCULATE || (gpxRoute && OARoutingHelper.isDeviatedFromRoute))
         {
             params.previousToRecalculate = previousRoute;
         }

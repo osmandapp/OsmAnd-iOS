@@ -393,7 +393,7 @@
             CLLocation *loc = _locations[_currentRoute + i];
             CLLocation *curloc = _locations[_currentRoute];
             double dist = [OAMapUtils getDistance:curloc.coordinate second:loc.coordinate];
-            if (abs(meters) >= dist) {
+            if (dist >= abs(meters)) {
                 return loc;
             }
         }

@@ -125,6 +125,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         trackRecordingObserver = OAAutoObserverProxy.init(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable)
         trackStartStopObserver = OAAutoObserverProxy.init(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable)
+        
+        tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OARightIconTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OARightIconTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
     }
     
     private func updateData() {
@@ -147,7 +152,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if isRootFolder && iapHelper.trackRecording.isActive() {
             if settings.mapSettingTrackRecording {
                 let currentRecordingTrackRow = section.createNewRow()
-                currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.getIdentifier()
+                currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                 currentRecordingTrackRow.key = recordingTrackKey
                 currentRecordingTrackRow.title = localizedString("recorded_track")
                 let trackDistance = OAOsmAndFormatter.getFormattedDistance(savingHelper.distance) ?? ""
@@ -165,7 +170,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             } else {
                 if savingHelper.hasData() {
                     let currentPausedTrackRow = section.createNewRow()
-                    currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.getIdentifier()
+                    currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
                     currentPausedTrackRow.key = recordingTrackKey
                     currentPausedTrackRow.title = localizedString("recorded_track")
                     let trackDistance = OAOsmAndFormatter.getFormattedDistance(savingHelper.distance) ?? ""
@@ -182,7 +187,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     currentPausedTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
                 } else {
                     let recordNewTrackRow = section.createNewRow()
-                    recordNewTrackRow.cellType = OAButtonTableViewCell.getIdentifier()
+                    recordNewTrackRow.cellType = OAButtonTableViewCell.reuseIdentifier
                     recordNewTrackRow.key = recordingTrackKey
                     recordNewTrackRow.title = localizedString("new_track")
                     recordNewTrackRow.descr = localizedString("not_recorded")
@@ -205,7 +210,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         if currentTracksFolderContent.subfolders.isEmpty && currentTracksFolderContent.files.isEmpty {
             var emptyFolderBannerRow = section.createNewRow()
-            emptyFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.getIdentifier()
+            emptyFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
             emptyFolderBannerRow.title = localizedString(isRootFolder ? "my_places_no_tracks_title_root" : "my_places_no_tracks_title")
             emptyFolderBannerRow.descr = localizedString(isRootFolder ? "my_places_no_tracks_descr_root" : "my_places_no_tracks_descr_root")
             emptyFolderBannerRow.iconName = "ic_custom_folder_open"
@@ -215,7 +220,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
             if isRootFolder {
                 var visibleTracksFolderRow = section.createNewRow()
-                visibleTracksFolderRow.cellType = OARightIconTableViewCell.getIdentifier()
+                visibleTracksFolderRow.cellType = OARightIconTableViewCell.reuseIdentifier
                 visibleTracksFolderRow.key = visibleTracksKey
                 visibleTracksFolderRow.title = localizedString("tracks_on_map")
                 visibleTracksFolderRow.iconName = "ic_custom_map_pin"
@@ -229,7 +234,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             for folderName in foldersNames {
                 if let folder = currentTracksFolderContent.subfolders[folderName] {
                     var folderRow = section.createNewRow()
-                    folderRow.cellType = OARightIconTableViewCell.getIdentifier()
+                    folderRow.cellType = OARightIconTableViewCell.reuseIdentifier
                     folderRow.key = tracksFolderKey
                     folderRow.title = folderName
                     folderRow.iconName = "ic_custom_folder"
@@ -252,7 +257,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             for fileName in fileNames {
                 if let track = currentTracksFolderContent.files[fileName] {
                     let trackRow = section.createNewRow()
-                    trackRow.cellType = OARightIconTableViewCell.getIdentifier()
+                    trackRow.cellType = OARightIconTableViewCell.reuseIdentifier
                     trackRow.key = trackKey
                     trackRow.title = (fileName as NSString).deletingPathExtension
                     trackRow.setObj(track.gpxFilePath, forKey: pathKey)
@@ -857,18 +862,15 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell?
         
-        if item.cellType == OAButtonTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.getIdentifier()) as? OAButtonTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OAButtonTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OAButtonTableViewCell
-                cell?.leftIconView.contentMode = .center
-                cell?.button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
-                cell?.button.layer.cornerRadius = 9
-                cell?.setCustomLeftSeparatorInset(true)
-                cell?.separatorInset = .zero
-            }
+        if item.cellType == OAButtonTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as? OAButtonTableViewCell
             if let cell {
+                cell.leftIconView.contentMode = .center
+                cell.button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
+                cell.button.layer.cornerRadius = 9
+                cell.setCustomLeftSeparatorInset(true)
+                cell.separatorInset = .zero
+                
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
                 if let iconName = item.iconName {
@@ -889,20 +891,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 cell.button.tag = item.integer(forKey: buttonActionNumberTagKey)
                 outCell = cell
             }
-        } else if item.cellType == OATwoButtonsTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OATwoButtonsTableViewCell.getIdentifier()) as? OATwoButtonsTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OATwoButtonsTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OATwoButtonsTableViewCell
-                cell?.leftIconView.contentMode = .center
-                cell?.leftButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
-                cell?.rightButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
-                cell?.leftButton.layer.cornerRadius = 9
-                cell?.rightButton.layer.cornerRadius = 9
-                cell?.setCustomLeftSeparatorInset(true)
-                cell?.separatorInset = .zero
-            }
+        } else if item.cellType == OATwoButtonsTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OATwoButtonsTableViewCell.reuseIdentifier) as? OATwoButtonsTableViewCell
             if let cell {
+                cell.leftIconView.contentMode = .center
+                cell.leftButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
+                cell.rightButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
+                cell.leftButton.layer.cornerRadius = 9
+                cell.rightButton.layer.cornerRadius = 9
+                cell.setCustomLeftSeparatorInset(true)
+                cell.separatorInset = .zero
+                
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
                 if let iconName = item.iconName {
@@ -931,20 +930,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 cell.rightButton.removeTarget(nil, action: nil, for: .allEvents)
                 cell.rightButton.addTarget(self, action: #selector(onCurrentTrackButtonClicked(_:)), for: .touchUpInside)
                 cell.rightButton.tag = item.integer(forKey: secondButtonActionNumberTagKey)
+                
                 recCell = cell
                 outCell = cell
             }
-        } else if item.cellType == OARightIconTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.getIdentifier()) as? OARightIconTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OARightIconTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OARightIconTableViewCell
-                cell?.selectionStyle = .none
-                cell?.titleLabel.textColor = UIColor.textColorPrimary
-                cell?.descriptionLabel.textColor = UIColor.textColorSecondary
-                cell?.rightIconView.tintColor = UIColor.iconColorDefault
-            }
+        } else if item.cellType == OARightIconTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier) as? OARightIconTableViewCell
             if let cell {
+                cell.selectionStyle = .none
+                cell.titleLabel.textColor = UIColor.textColorPrimary
+                cell.descriptionLabel.textColor = UIColor.textColorSecondary
+                cell.rightIconView.tintColor = UIColor.iconColorDefault
+                
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
                 cell.rightIconView.image = UIImage.templateImageNamed("ic_custom_arrow_right")
@@ -954,17 +951,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 outCell = cell
             }
-        } else if item.cellType == OALargeImageTitleDescrTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier()) as? OALargeImageTitleDescrTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OALargeImageTitleDescrTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OALargeImageTitleDescrTableViewCell
-                cell?.selectionStyle = .none
-                cell?.imageWidthConstraint.constant = 60
-                cell?.imageHeightConstraint.constant = 60
-                cell?.cellImageView?.contentMode = .scaleAspectFit
-            }
+        } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier) as? OALargeImageTitleDescrTableViewCell
             if let cell = cell {
+                cell.selectionStyle = .none
+                cell.imageWidthConstraint.constant = 60
+                cell.imageHeightConstraint.constant = 60
+                cell.cellImageView?.contentMode = .scaleAspectFit
+                
                 cell.titleLabel?.text = item.title
                 cell.descriptionLabel?.text = item.descr
                 cell.cellImageView?.image = UIImage.templateImageNamed(item.iconName)

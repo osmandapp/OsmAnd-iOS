@@ -8,7 +8,7 @@
 
 import Foundation
 
-class OATwoButtonsTableViewCell: OASimpleTableViewCell {
+final class OATwoButtonsTableViewCell: OASimpleTableViewCell {
     
     @IBOutlet weak var leftButton: UIButton!
     @IBOutlet weak var rightButton: UIButton!
@@ -19,8 +19,8 @@ class OATwoButtonsTableViewCell: OASimpleTableViewCell {
         updateMargins()
     }
     
-    func checkSubviewsToUpdateMargins() -> Bool {
-        return !leftButton.isHidden && !rightButton.isHidden
+    func shouldUpdateMarginsForVisibleButtons() -> Bool {
+        !leftButton.isHidden && !rightButton.isHidden
     }
     
 }

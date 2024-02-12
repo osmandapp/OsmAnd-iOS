@@ -442,6 +442,8 @@
 
         NSMutableArray<NSString *> *possibleAvailableLocale = [NSMutableArray array];
         NSMutableArray<NSString *> *possiblePreferredLocale = [NSMutableArray array];
+        __weak id<OAWikiLanguagesWebDelegate> weakDelegate = delegate;
+        
         for (NSString *contentLocale in availableLocales)
         {
             NSString *processedLocale = [contentLocale isEqualToString:@"en"] ? @"" : contentLocale;
@@ -453,7 +455,7 @@
                                                      handler:^(__kindof UIAction * _Nonnull action) {
                     
                     
-                    [delegate onLocaleSelected:contentLocale];
+                    [weakDelegate onLocaleSelected:contentLocale];
                     
                 }];
                 if ([contentLocale isEqualToString:selectedLocale])
@@ -477,8 +479,8 @@
                                                                            availableLocales:possibleAvailableLocale
                                                                            preferredLocales:possiblePreferredLocale];
 
-                wikiLanguagesViewController.delegate = delegate;
-                [delegate showLocalesVC:wikiLanguagesViewController];
+                wikiLanguagesViewController.delegate = weakDelegate;
+                [weakDelegate showLocalesVC:wikiLanguagesViewController];
             }];
             if (![preferredLocales containsObject:selectedLocale])
                 availableLanguagesAction.state = UIMenuElementStateOn;

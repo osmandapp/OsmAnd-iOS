@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -21,13 +21,13 @@
                 <outlet property="bottomView" destination="Imh-K6-6e1" id="EIM-6x-3dl"/>
                 <outlet property="btnCancel" destination="l2Q-Jt-wak" id="fnc-zm-DwP"/>
                 <outlet property="btnMyLocation" destination="nF8-WL-lIG" id="tWy-XG-95Q"/>
+                <outlet property="containerView" destination="Osh-DH-eE1" id="0af-nh-6aa"/>
                 <outlet property="lbSearchNearCenter" destination="i6j-Go-2PQ" id="OUX-6r-hyi"/>
-                <outlet property="leftImageButton" destination="Ibr-OJ-Zu5" id="C2r-qR-JSN"/>
                 <outlet property="searchNearCenterView" destination="5O8-Pt-l6E" id="KA4-oW-RvZ"/>
                 <outlet property="tableView" destination="o9I-Kc-Ruy" id="lMf-jY-L94"/>
                 <outlet property="tabs" destination="HUB-ml-bM7" id="yZV-xl-mWd"/>
+                <outlet property="tabsView" destination="1M3-hS-aF7" id="M5L-eF-1S7"/>
                 <outlet property="textField" destination="gwj-kj-eiW" id="bdy-hd-dxU"/>
-                <outlet property="topView" destination="4sr-KJ-Tkc" id="xSa-cG-dr7"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
             </connections>
         </placeholder>
@@ -36,59 +36,66 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <view clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4sr-KJ-Tkc">
-                    <rect key="frame" x="0.0" y="0.0" width="414" height="148"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="CQe-mD-tuU">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="224"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ibr-OJ-Zu5" userLabel="Left Img Button">
-                            <rect key="frame" x="0.0" y="18" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
-                            <color key="tintColor" name="navBarTextColorPrimary"/>
-                            <state key="normal" image="ic_close.png">
-                                <color key="titleColor" name="navBarTextColorPrimary"/>
-                            </state>
-                            <connections>
-                                <action selector="leftImgButtonPress:" destination="-1" eventType="touchUpInside" id="3Ma-Tz-6TJ"/>
-                            </connections>
-                        </button>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" adjustsFontForContentSizeCategory="YES" minimumFontSize="17" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="gwj-kj-eiW" userLabel="Search field">
-                            <rect key="frame" x="8" y="25" width="322" height="30"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
-                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
-                            <connections>
-                                <action selector="textFieldValueChanged:" destination="-1" eventType="editingChanged" id="zqD-yl-w8R"/>
-                                <outlet property="delegate" destination="-1" id="MDF-f7-86X"/>
-                            </connections>
-                        </textField>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2Q-Jt-wak" userLabel="Hide button">
-                            <rect key="frame" x="337" y="25" width="70" height="30"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
-                            <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
-                            <state key="normal" title="Hide">
-                                <color key="titleColor" name="navBarTextColorPrimary"/>
-                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                            </state>
-                            <connections>
-                                <action selector="btnCancelClicked:" destination="-1" eventType="touchUpInside" id="gcf-x2-mdG"/>
-                            </connections>
-                        </button>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5O8-Pt-l6E">
-                            <rect key="frame" x="0.0" y="60" width="414" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FZ4-Ze-9mZ">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="74"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="You are searching 200 km from you location" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i6j-Go-2PQ" userLabel="Map Center label">
-                                    <rect key="frame" x="10" y="3" width="364" height="37"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dxw-hc-M7H">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="74"/>
+                                    <subviews>
+                                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Type to search all" adjustsFontForContentSizeCategory="YES" minimumFontSize="18" clearButtonMode="always" translatesAutoresizingMaskIntoConstraints="NO" id="gwj-kj-eiW">
+                                            <rect key="frame" x="8" y="16" width="398" height="50"/>
+                                            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="50" id="43I-Qg-C0g"/>
+                                            </constraints>
+                                            <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="18"/>
+                                            <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="search"/>
+                                            <connections>
+                                                <action selector="textFieldValueChanged:" destination="-1" eventType="editingChanged" id="zqD-yl-w8R"/>
+                                                <outlet property="delegate" destination="-1" id="MDF-f7-86X"/>
+                                            </connections>
+                                        </textField>
+                                        <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l2Q-Jt-wak" userLabel="Back button">
+                                            <rect key="frame" x="8" y="26" width="30" height="30"/>
+                                            <constraints>
+                                                <constraint firstAttribute="height" constant="30" id="NIj-Ol-nph"/>
+                                                <constraint firstAttribute="width" constant="30" id="l3w-8I-dtG"/>
+                                            </constraints>
+                                            <color key="tintColor" name="textColorTertiary"/>
+                                            <state key="normal" image="chevron.backward" catalog="system">
+                                                <color key="titleColor" name="iconColorTertiary"/>
+                                                <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </state>
+                                            <connections>
+                                                <action selector="btnCancelClicked:" destination="-1" eventType="touchUpInside" id="gcf-x2-mdG"/>
+                                            </connections>
+                                        </button>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstAttribute="bottom" secondItem="gwj-kj-eiW" secondAttribute="bottom" constant="8" id="L8a-Mi-NFa"/>
+                                        <constraint firstItem="gwj-kj-eiW" firstAttribute="top" secondItem="dxw-hc-M7H" secondAttribute="top" constant="16" id="St3-6e-Hmg"/>
+                                        <constraint firstAttribute="trailing" secondItem="gwj-kj-eiW" secondAttribute="trailing" constant="8" id="XfL-Zd-rVp"/>
+                                        <constraint firstItem="l2Q-Jt-wak" firstAttribute="centerY" secondItem="gwj-kj-eiW" secondAttribute="centerY" id="gzy-Ja-wIU"/>
+                                        <constraint firstItem="l2Q-Jt-wak" firstAttribute="leading" secondItem="gwj-kj-eiW" secondAttribute="leading" id="oEX-jK-hgo"/>
+                                        <constraint firstItem="gwj-kj-eiW" firstAttribute="leading" secondItem="dxw-hc-M7H" secondAttribute="leading" constant="8" id="x98-8Z-lNA"/>
+                                    </constraints>
+                                </view>
+                            </subviews>
+                        </stackView>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="5O8-Pt-l6E">
+                            <rect key="frame" x="0.0" y="74" width="414" height="50"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You are searching 200 km from you location" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="i6j-Go-2PQ" userLabel="Map Center label">
+                                    <rect key="frame" x="10" y="3" width="360" height="44"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleFootnote"/>
                                     <color key="textColor" name="navBarTextColorPrimary"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nF8-WL-lIG" userLabel="My Location button">
-                                    <rect key="frame" x="370" y="0.0" width="44" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nF8-WL-lIG" userLabel="My Location button">
+                                    <rect key="frame" x="370" y="0.0" width="44" height="50"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
                                     <state key="normal" image="position_track_map_mode_button.png"/>
@@ -97,20 +104,30 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="i6j-Go-2PQ" firstAttribute="top" secondItem="5O8-Pt-l6E" secondAttribute="top" constant="3" id="67o-4z-Fpp"/>
+                                <constraint firstItem="i6j-Go-2PQ" firstAttribute="centerY" secondItem="5O8-Pt-l6E" secondAttribute="centerY" id="9i7-e4-xby"/>
+                                <constraint firstItem="nF8-WL-lIG" firstAttribute="centerY" secondItem="5O8-Pt-l6E" secondAttribute="centerY" id="EfM-Ob-wjO"/>
+                                <constraint firstItem="nF8-WL-lIG" firstAttribute="top" secondItem="5O8-Pt-l6E" secondAttribute="top" id="KZn-uQ-rnZ"/>
+                                <constraint firstAttribute="height" constant="50" id="VSd-wr-dRN"/>
+                                <constraint firstItem="nF8-WL-lIG" firstAttribute="leading" secondItem="i6j-Go-2PQ" secondAttribute="trailing" id="aEf-h8-nPT"/>
+                                <constraint firstAttribute="trailing" secondItem="nF8-WL-lIG" secondAttribute="trailing" id="gT7-sd-ieS"/>
+                                <constraint firstItem="i6j-Go-2PQ" firstAttribute="leading" secondItem="5O8-Pt-l6E" secondAttribute="leading" constant="10" id="nSK-Bf-nNp"/>
+                            </constraints>
                         </view>
-                        <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LwJ-HJ-apZ">
-                            <rect key="frame" x="0.0" y="60" width="414" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LwJ-HJ-apZ">
+                            <rect key="frame" x="0.0" y="124" width="414" height="50"/>
                             <subviews>
-                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="lkj-I7-Gca">
-                                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="lkj-I7-Gca">
+                                    <rect key="frame" x="0.0" y="3" width="44" height="44"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="44" id="Dwf-w7-2u3"/>
+                                        <constraint firstAttribute="height" constant="44" id="mRg-g2-VrA"/>
+                                    </constraints>
                                 </imageView>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t5P-96-kKl" userLabel="Bar Action Left Img Button">
-                                    <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="t5P-96-kKl" userLabel="Bar Action Left Img Button">
+                                    <rect key="frame" x="0.0" y="3" width="44" height="44"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
                                     <state key="normal" image="ic_close.png"/>
@@ -118,9 +135,8 @@
                                         <action selector="barActionLeftImgButtonPress:" destination="-1" eventType="touchUpInside" id="Vn6-zh-Pjq"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="un9-Ji-EfT">
-                                    <rect key="frame" x="44" y="0.0" width="328" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="system" lineBreakMode="tailTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="un9-Ji-EfT">
+                                    <rect key="frame" x="44" y="3" width="328" height="44"/>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                                     <state key="normal" title="Show on map">
                                         <color key="titleColor" name="navBarTextColorPrimary"/>
@@ -129,9 +145,11 @@
                                         <action selector="barActionTextButtonPress:" destination="-1" eventType="touchUpInside" id="4EE-9m-XqX"/>
                                     </connections>
                                 </button>
-                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xxr-Ry-7EI" userLabel="Bar Action Img Button">
-                                    <rect key="frame" x="370" y="0.0" width="44" height="44"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xxr-Ry-7EI" userLabel="Bar Action Img Button">
+                                    <rect key="frame" x="370" y="3" width="44" height="44"/>
+                                    <constraints>
+                                        <constraint firstAttribute="width" constant="44" id="qz9-mm-Nn7"/>
+                                    </constraints>
                                     <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                                     <color key="tintColor" name="navBarTextColorPrimary"/>
                                     <state key="normal" image="position_track_map_mode_button.png"/>
@@ -140,39 +158,79 @@
                                     </connections>
                                 </button>
                             </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <constraints>
+                                <constraint firstItem="un9-Ji-EfT" firstAttribute="centerY" secondItem="LwJ-HJ-apZ" secondAttribute="centerY" id="1Bs-98-vg2"/>
+                                <constraint firstItem="un9-Ji-EfT" firstAttribute="leading" secondItem="lkj-I7-Gca" secondAttribute="trailing" id="4W4-Dh-xTR"/>
+                                <constraint firstItem="lkj-I7-Gca" firstAttribute="centerY" secondItem="LwJ-HJ-apZ" secondAttribute="centerY" id="6Ki-4w-dri"/>
+                                <constraint firstItem="t5P-96-kKl" firstAttribute="width" secondItem="lkj-I7-Gca" secondAttribute="width" id="Bap-jX-VX1"/>
+                                <constraint firstItem="lkj-I7-Gca" firstAttribute="leading" secondItem="LwJ-HJ-apZ" secondAttribute="leading" id="EOm-5Q-Xd8"/>
+                                <constraint firstItem="un9-Ji-EfT" firstAttribute="top" secondItem="t5P-96-kKl" secondAttribute="top" id="G9I-SQ-eJj"/>
+                                <constraint firstItem="t5P-96-kKl" firstAttribute="height" secondItem="lkj-I7-Gca" secondAttribute="height" id="Gjc-nf-fa0"/>
+                                <constraint firstItem="un9-Ji-EfT" firstAttribute="firstBaseline" secondItem="t5P-96-kKl" secondAttribute="baseline" id="K3b-Ht-9jn"/>
+                                <constraint firstItem="un9-Ji-EfT" firstAttribute="top" secondItem="xxr-Ry-7EI" secondAttribute="top" id="YCK-ZR-bfO"/>
+                                <constraint firstItem="t5P-96-kKl" firstAttribute="centerY" secondItem="lkj-I7-Gca" secondAttribute="centerY" id="gm0-Tb-u1n"/>
+                                <constraint firstAttribute="trailing" secondItem="un9-Ji-EfT" secondAttribute="trailing" constant="42" id="grS-hv-Ud5"/>
+                                <constraint firstItem="t5P-96-kKl" firstAttribute="centerX" secondItem="lkj-I7-Gca" secondAttribute="centerX" id="o9w-wI-sMH"/>
+                                <constraint firstItem="xxr-Ry-7EI" firstAttribute="centerY" secondItem="LwJ-HJ-apZ" secondAttribute="centerY" id="oG0-Xt-dEU"/>
+                                <constraint firstAttribute="trailing" secondItem="xxr-Ry-7EI" secondAttribute="trailing" id="xc0-7h-WR5"/>
+                            </constraints>
                         </view>
-                        <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="HUB-ml-bM7">
-                            <rect key="frame" x="10" y="108" width="394" height="29"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                            <segments>
-                                <segment title="History"/>
-                                <segment title="Categories"/>
-                                <segment title="Address"/>
-                            </segments>
-                            <color key="tintColor" name="navBarTextColorPrimary"/>
-                            <connections>
-                                <action selector="tabChanged:" destination="-1" eventType="valueChanged" id="EA2-5C-oms"/>
-                            </connections>
-                        </segmentedControl>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="1M3-hS-aF7">
+                            <rect key="frame" x="0.0" y="174" width="414" height="50"/>
+                            <subviews>
+                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="HUB-ml-bM7">
+                                    <rect key="frame" x="8" y="8" width="398" height="35"/>
+                                    <segments>
+                                        <segment title="History"/>
+                                        <segment title="Categories"/>
+                                        <segment title="Address"/>
+                                    </segments>
+                                    <color key="tintColor" name="navBarTextColorPrimary"/>
+                                    <connections>
+                                        <action selector="tabChanged:" destination="-1" eventType="valueChanged" id="EA2-5C-oms"/>
+                                    </connections>
+                                </segmentedControl>
+                            </subviews>
+                            <constraints>
+                                <constraint firstAttribute="height" constant="50" id="1Gh-VW-3a9"/>
+                                <constraint firstItem="HUB-ml-bM7" firstAttribute="centerY" secondItem="1M3-hS-aF7" secondAttribute="centerY" id="Fe0-fg-OG1"/>
+                                <constraint firstItem="HUB-ml-bM7" firstAttribute="leading" secondItem="1M3-hS-aF7" secondAttribute="leading" constant="8" id="KsH-He-xxS"/>
+                                <constraint firstItem="HUB-ml-bM7" firstAttribute="centerX" secondItem="1M3-hS-aF7" secondAttribute="centerX" id="sGn-Uv-alf"/>
+                                <constraint firstItem="HUB-ml-bM7" firstAttribute="top" secondItem="1M3-hS-aF7" secondAttribute="top" constant="8" id="t5o-lE-yqc"/>
+                            </constraints>
+                        </view>
                     </subviews>
                     <color key="backgroundColor" name="navBarBgColorPrimary"/>
-                </view>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" style="grouped" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="o9I-Kc-Ruy">
-                    <rect key="frame" x="0.0" y="195" width="414" height="701"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                    <color key="backgroundColor" name="viewBg"/>
-                    <color key="tintColor" name="iconColorActive"/>
-                    <color key="separatorColor" name="customSeparator"/>
-                    <inset key="separatorInset" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
-                </tableView>
-                <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Imh-K6-6e1">
-                    <rect key="frame" x="0.0" y="839" width="414" height="57"/>
-                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                    <constraints>
+                        <constraint firstItem="nF8-WL-lIG" firstAttribute="width" secondItem="xxr-Ry-7EI" secondAttribute="width" id="48L-LN-JZD"/>
+                        <constraint firstItem="LwJ-HJ-apZ" firstAttribute="height" secondItem="1M3-hS-aF7" secondAttribute="height" id="TB1-zt-m8m"/>
+                        <constraint firstItem="5O8-Pt-l6E" firstAttribute="height" secondItem="LwJ-HJ-apZ" secondAttribute="height" id="gYJ-Sz-6ak"/>
+                    </constraints>
+                </stackView>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Osh-DH-eE1">
+                    <rect key="frame" x="0.0" y="224" width="414" height="672"/>
                     <subviews>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Pb-It-gb8" userLabel="Bottom Image Btn">
-                            <rect key="frame" x="364" y="6" width="44" height="44"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxY="YES"/>
+                        <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="18" sectionFooterHeight="18" translatesAutoresizingMaskIntoConstraints="NO" id="o9I-Kc-Ruy">
+                            <rect key="frame" x="0.0" y="0.0" width="414" height="672"/>
+                            <color key="backgroundColor" name="viewBg"/>
+                            <color key="tintColor" name="iconColorActive"/>
+                            <color key="separatorColor" name="customSeparator"/>
+                            <inset key="separatorInset" minX="50" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        </tableView>
+                    </subviews>
+                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    <constraints>
+                        <constraint firstItem="o9I-Kc-Ruy" firstAttribute="leading" secondItem="Osh-DH-eE1" secondAttribute="leading" id="Uq1-dn-oWe"/>
+                        <constraint firstAttribute="bottom" secondItem="o9I-Kc-Ruy" secondAttribute="bottom" id="b6r-1r-MZh"/>
+                        <constraint firstAttribute="trailing" secondItem="o9I-Kc-Ruy" secondAttribute="trailing" id="jjR-Je-Nzl"/>
+                        <constraint firstItem="o9I-Kc-Ruy" firstAttribute="top" secondItem="Osh-DH-eE1" secondAttribute="top" id="rpp-mH-9tV"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Imh-K6-6e1">
+                    <rect key="frame" x="0.0" y="839" width="414" height="57"/>
+                    <subviews>
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6Pb-It-gb8" userLabel="Bottom Image Btn">
+                            <rect key="frame" x="364" y="6" width="44" height="45"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCaption1"/>
                             <color key="tintColor" name="buttonTextColorPrimary"/>
                             <state key="normal" image="ic_close.png"/>
@@ -180,9 +238,8 @@
                                 <action selector="bottomImageButtonPress:" destination="-1" eventType="touchUpInside" id="AVo-b0-oEE"/>
                             </connections>
                         </button>
-                        <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xqh-Cv-Gkf">
+                        <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xqh-Cv-Gkf">
                             <rect key="frame" x="55" y="0.0" width="304" height="57"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleCallout"/>
                             <state key="normal" title="SAVE">
                                 <color key="titleColor" name="buttonTextColorPrimary"/>
@@ -193,14 +250,38 @@
                         </button>
                     </subviews>
                     <color key="backgroundColor" name="buttonBgColorPrimary"/>
+                    <constraints>
+                        <constraint firstItem="Xqh-Cv-Gkf" firstAttribute="leading" secondItem="Imh-K6-6e1" secondAttribute="leading" constant="55" id="1dd-bE-Mym"/>
+                        <constraint firstItem="6Pb-It-gb8" firstAttribute="top" secondItem="Imh-K6-6e1" secondAttribute="top" constant="6" id="4aK-1q-vcf"/>
+                        <constraint firstAttribute="height" constant="57" id="Qb9-Tc-Tar"/>
+                        <constraint firstAttribute="trailing" secondItem="6Pb-It-gb8" secondAttribute="trailing" constant="6" id="aMv-tg-jB0"/>
+                        <constraint firstItem="Xqh-Cv-Gkf" firstAttribute="centerY" secondItem="6Pb-It-gb8" secondAttribute="centerY" id="ahO-a9-ZCM"/>
+                        <constraint firstItem="Xqh-Cv-Gkf" firstAttribute="top" secondItem="Imh-K6-6e1" secondAttribute="top" id="cfB-hm-BgL"/>
+                        <constraint firstAttribute="bottom" secondItem="Xqh-Cv-Gkf" secondAttribute="bottom" id="daq-kg-15P"/>
+                        <constraint firstItem="6Pb-It-gb8" firstAttribute="leading" secondItem="Xqh-Cv-Gkf" secondAttribute="trailing" constant="5" id="qDp-MA-2Ey"/>
+                        <constraint firstItem="Xqh-Cv-Gkf" firstAttribute="centerX" secondItem="Imh-K6-6e1" secondAttribute="centerX" id="un2-nQ-K5x"/>
+                    </constraints>
                 </view>
             </subviews>
             <color key="backgroundColor" name="viewBg"/>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="Imh-K6-6e1" secondAttribute="trailing" id="4et-fD-WbT"/>
+                <constraint firstItem="CQe-mD-tuU" firstAttribute="trailing" secondItem="Imh-K6-6e1" secondAttribute="trailing" id="5lh-Mv-I43"/>
+                <constraint firstAttribute="bottom" secondItem="Osh-DH-eE1" secondAttribute="bottom" id="Dw7-aB-Rni"/>
+                <constraint firstAttribute="trailing" secondItem="Osh-DH-eE1" secondAttribute="trailing" id="Dyn-dD-sda"/>
+                <constraint firstItem="Osh-DH-eE1" firstAttribute="top" secondItem="CQe-mD-tuU" secondAttribute="bottom" id="GuH-3u-Ixy"/>
+                <constraint firstItem="CQe-mD-tuU" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="UNK-F3-NVH"/>
+                <constraint firstItem="CQe-mD-tuU" firstAttribute="leading" secondItem="Imh-K6-6e1" secondAttribute="leading" id="UhT-px-vYM"/>
+                <constraint firstAttribute="bottom" secondItem="Imh-K6-6e1" secondAttribute="bottom" id="eA6-XC-67U"/>
+                <constraint firstItem="Osh-DH-eE1" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="fjV-rK-cXd"/>
+                <constraint firstItem="Imh-K6-6e1" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="rai-aT-hKd"/>
+            </constraints>
             <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
             <point key="canvasLocation" x="34.782608695652179" y="10.044642857142856"/>
         </view>
     </objects>
     <resources>
+        <image name="chevron.backward" catalog="system" width="97" height="128"/>
         <image name="ic_close.png" width="10" height="10"/>
         <image name="position_track_map_mode_button.png" width="22" height="22"/>
         <namedColor name="buttonBgColorPrimary">
@@ -215,11 +296,17 @@
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
+        <namedColor name="iconColorTertiary">
+            <color red="0.53725490196078429" green="0.50588235294117645" blue="0.59607843137254901" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="navBarBgColorPrimary">
             <color red="1" green="0.53333333333333333" blue="0.0" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="navBarTextColorPrimary">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorTertiary">
+            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

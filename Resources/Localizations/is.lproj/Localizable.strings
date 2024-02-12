@@ -3024,3 +3024,5 @@
 "coordinates_widget_map_center_desc" = "Sýnir landfræðileg hnit núverandi miðju landakortsins";
 "ruler_circles" = "Mælihringir";
 "map_widget_rendering_fps_desc" = "Sýnir hve hratt landakort og kortaeiningar séu birtar og endurlesnar, í römmum á sekúndu (FPS).";
+"shared_string_author" = "Höfundur";
+"shared_string_cache" = "Skyndiminni";

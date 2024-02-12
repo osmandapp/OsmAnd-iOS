@@ -49,7 +49,7 @@
             if (cachedTimeSpan != timeSpan)
             {
                 cachedTimeSpan = timeSpan;
-                NSString *formattedTime = [OAOsmAndFormatter getFormattedDuration:timeSpan fullForm:NO];
+                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
                 [weakSelf setText:formattedTime subtext:nil];
             }
             return YES;

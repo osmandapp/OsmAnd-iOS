@@ -59,7 +59,7 @@
 + (NSString *)getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 + (NSString *)getFormattedDistanceInterval:(double)interval;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
-+ (NSString *)getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
++ (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
 
 @end

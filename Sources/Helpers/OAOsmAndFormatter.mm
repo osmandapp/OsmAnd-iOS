@@ -688,7 +688,7 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     return tagValue;
 }
 
-+ (NSString *) getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL) fullForm
++ (NSString *) getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL) fullForm
 {
     NSString *sec = [NSString stringWithFormat:@"%02ld", (long)seconds % 60];
     

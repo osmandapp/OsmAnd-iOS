@@ -863,12 +863,14 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
 extension MapSettingsGpxViewController: OAGPXImportHelperDelegate {
     func updateVCData() {
         DispatchQueue.main.async {
-           self.loadGpxTracks()
-           self.generateData()
-           self.tableView.reloadData()
-           self.updateSelectedRows()
-           self.updateBottomButtons()
-       }
+            self.loadGpxTracks()
+            self.generateData()
+            self.tableView.reloadData()
+            self.updateSelectedRows()
+            self.updateBottomButtons()
+        }
+    }
+}
 
 extension MapSettingsGpxViewController: UISearchControllerDelegate {
     func presentSearchController(_ searchController: UISearchController) {

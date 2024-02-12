@@ -452,7 +452,18 @@ static BOOL _isDeviatedFromRoute = false;
                         {
                             CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
                             _lastProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:_lastProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
-                            
+                            processed = true;
+                        }
+                    }
+                    else if (currentRoute == 0)
+                    {
+                        CLLocation *previousRouteLocation = routeNodes[currentRoute];
+                        CLLocation *currentRouteLocation = routeNodes[currentRoute + 1];
+                        _lastProjection = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
+                        if (_settings.snapToRoad.get && currentRoute + 2 < routeNodes.count)
+                        {
+                            CLLocation *nextRouteLocation = routeNodes[currentRoute + 2];
+                            _lastProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:_lastProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
                             processed = true;
                         }
                     }
@@ -622,7 +633,7 @@ static BOOL _isDeviatedFromRoute = false;
 {
     if (![self.class isValidCourseValue:currentLocation.course] && [self.class isValidCourseValue:_app.locationServices.lastKnownHeading])
     {
-        currentLocation = [[CLLocation alloc] initWithCoordinate:currentLocation.coordinate altitude:currentLocation.altitude horizontalAccuracy:currentLocation.horizontalAccuracy verticalAccuracy:currentLocation.verticalAccuracy course:_app.locationServices.lastKnownHeading speed:currentLocation.speed timestamp:currentLocation.timestamp];;
+        currentLocation = [[CLLocation alloc] initWithCoordinate:currentLocation.coordinate altitude:currentLocation.altitude horizontalAccuracy:currentLocation.horizontalAccuracy verticalAccuracy:currentLocation.verticalAccuracy course:_app.locationServices.lastKnownHeading speed:currentLocation.speed timestamp:currentLocation.timestamp];
     }
     
     CLLocation *locationProjection = currentLocation;
@@ -715,11 +726,19 @@ static BOOL _isDeviatedFromRoute = false;
             {
                 CLLocation *previousRouteLocation = routeNodes[currentRoute - 1];
                 CLLocation *currentRouteLocation = routeNodes[currentRoute];
-                locationProjection = [OAMapUtils getProjection:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
+                locationProjection = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
+                
                 if ([_settings.snapToRoad get] && currentRoute + 1 < routeNodes.count)
                 {
                     CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
                     locationProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:locationProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
+                }
+                else if ([_settings.snapToRoad get])
+                {
+                    // for snapping to road on start track
+                    CLLocation *nextLocation = routeNodes[currentRoute];
+                    float bearingTo = [locationProjection bearingTo:nextLocation];
+                    locationProjection = [[CLLocation alloc] initWithCoordinate:locationProjection.coordinate altitude:currentLocation.altitude horizontalAccuracy:currentLocation.horizontalAccuracy verticalAccuracy:currentLocation.verticalAccuracy course:bearingTo speed:currentLocation.speed timestamp:currentLocation.timestamp];
                 }
             }
         }
@@ -735,7 +754,7 @@ static BOOL _isDeviatedFromRoute = false;
     {
         [_recalcHelper stopCalculationIfParamsNotChanged];
     }
-    
+
     double projectDist = _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
     if (returnUpdatedLocation && locationProjection && [currentLocation distanceFromLocation:locationProjection] < projectDist)
         return locationProjection;

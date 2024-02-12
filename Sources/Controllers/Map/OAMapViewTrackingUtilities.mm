@@ -259,7 +259,7 @@
         
         bool sameLocation = newLocation && [newLocation isEqual:_myLocation];
         bool sameHeading = _heading == newHeading;
-
+        
         CLLocation* prevLocation = _myLocation;
         _myLocation = newLocation;
         _heading = newHeading;
@@ -384,35 +384,10 @@
                 _mapView.mapAnimator->resume();
             }
             _showViewAngle = (newLocation.course < 0 || [self.class isSmallSpeedForCompass:newLocation]);
+            [_mapViewController updateLocation:newLocation heading:newHeading];
 
             OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
             _followingMode = [routingHelper isFollowingMode];
-            CLLocation *loc = [routingHelper getLastProjection];
-            
-            if (_followingMode && loc && ![OARoutingHelper isDeviatedFromRoute])
-            {
-                if ([OARoutingHelper isValidCourseValue:loc.course])
-                {
-                    [_mapViewController updateLocation:loc heading:loc.course];
-                    _lastCourse = loc.course;
-                }
-                else
-                {
-                    if ([OARoutingHelper isValidCourseValue:newHeading])
-                    {
-                        [_mapViewController updateLocation:newLocation heading:newHeading];
-                    }
-                    else if ([OARoutingHelper isValidCourseValue:_lastCourse])
-                    {
-                        [_mapViewController updateLocation:[[CLLocation alloc] initWithCoordinate:loc.coordinate altitude:loc.altitude horizontalAccuracy:loc.horizontalAccuracy verticalAccuracy:loc.verticalAccuracy course:_lastCourse speed:loc.speed timestamp:loc.timestamp] heading:_lastCourse];
-                    }
-                }
-            }
-            else
-            {
-                [_mapViewController updateLocation:newLocation heading:newHeading];
-                _lastCourse = newHeading;
-            }
             
             if (_routePlanningMode != [routingHelper isRoutePlanningMode])
                 [self switchToRoutePlanningMode];
@@ -530,7 +505,7 @@
 
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location
 {
-    return isnan(location.speed) || location.speed < 1.5;
+    return isnan(location.speed) || location.speed < 0.4;
 }
 
 - (BOOL) isContextMenuVisible

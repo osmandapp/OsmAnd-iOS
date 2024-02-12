@@ -128,10 +128,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func updateData() {
-//        DispatchQueue.main.async { [weak self] in
-            self.generateData()
-            self.tableView.reloadData()
-//        }
+        self.generateData()
+        self.tableView.reloadData()
     }
     
     private func hardUpdateData() {
@@ -281,7 +279,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func setupNavbar() {
-        let title = folderName.length > 0 ? folderName : localizedString("menu_my_trips")
+        let title = !folderName.isEmpty ? folderName : localizedString("menu_my_trips")
         tabBarController?.navigationItem.title = title
         navigationItem.title = title
         navigationController?.setNavigationBarHidden(false, animated: false)

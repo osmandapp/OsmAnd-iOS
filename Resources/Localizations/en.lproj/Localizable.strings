@@ -862,6 +862,11 @@
 "shared_string_link" = "Link";
 "shared_string_license" = "License";
 "shared_string_keywords" = "Keywords";
+"shared_string_trash" = "Trash";
+"shared_string_file_info" = "File info";
+"shared_string_delete_immediately" = "Delete immediately";
+"shared_string_delete_item" = "Delete item";
+"shared_string_is_deleted" = "%@ is deleted.";
 
 "restart" = "Restart";
 
@@ -3588,3 +3593,16 @@
 "show_icon" = "Show icon";
 "simple_widget_footer" = "Widget can take full row width or just one column.";
 "complex_widget_alert" = "%@ widget can only be placed on its own row.";
+
+"shared_string_deleted" = "Deleted";
+"duration_moment_ago" = "a moment ago";
+"trash_is_empty" = "Trash is empty";
+"trash_is_empty_banner_desc" = "Files removed from OsmAnd Cloud will be available here for %d days after.";
+"delete_all_items" = "Delete all items";
+"delete_all_items_desc" = "Are you sure you want to permanently delete all items in the Trash? This action can't be undone.";
+"subscribe_email_error" = "Error";
+"restore_from_trash" = "Restore from trash";
+"download_to_device" = "Download to device";
+"permanent_delete_warning" = "%@ will be deleted permanently. Are you sure?";
+"action_cannot_be_undone" = "This action can't be undone.";
+"cloud_item_restored" = "%@ is restored into Cloud.";

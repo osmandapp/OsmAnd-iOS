@@ -633,10 +633,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     params[@"accessToken"] = [self getAccessToken];
     params[@"name"] = fileName;
     params[@"type"] = type;
-    NSMutableString *sb = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
+    params[@"updateTime"] = @(remoteFile.updatetimems).stringValue;
+    NSMutableString *builder = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
     __block BOOL firstParam = YES;
     [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [sb appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+        [builder appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
         firstParam = NO;
     }];
     
@@ -649,7 +650,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
     }];
     
-    bool sucseess = [OANetworkUtilities downloadFile:filePath url:sb progress:progress];
+    bool sucseess = [OANetworkUtilities downloadFile:filePath url:builder progress:progress];
     if (!sucseess)
         error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
     

@@ -530,6 +530,7 @@
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
+		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		460EC9E42B1F3104006BE95A /* btn_map_2d_mode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */; };
 		460EC9E52B1F3104006BE95A /* btn_map_3d_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */; };
 		460EC9E62B1F3104006BE95A /* btn_map_2d_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E22B1F3103006BE95A /* btn_map_2d_mode@2x.png */; };
@@ -554,6 +555,7 @@
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
 		461F4523283E370C00796360 /* ic_custom_arrow_down_short@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */; };
 		461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */ = {isa = PBXBuildFile; fileRef = 461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */; };
+		462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462148712B6BEF44003DA10C /* CloudTrashViewController.swift */; };
 		46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */; };
 		46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B782AD70AF9006C3248 /* OAGroupEditorViewController.mm */; };
 		462545A828D3688900637964 /* ic_custom_cross_buy_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A428D3688700637964 /* ic_custom_cross_buy_colored_day@2x.png */; };
@@ -640,6 +642,9 @@
 		464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 464CE4262B56C8E7001F4DAE /* OASimpleWidget.m */; };
 		464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FF36A2B309488001D855E /* SensorAttributesUtils.swift */; };
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
+		4657490E2B6803710006046B /* TrashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490D2B6803710006046B /* TrashItem.swift */; };
+		465749102B68129B0006046B /* BackupUiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490F2B68129B0006046B /* BackupUiUtils.swift */; };
+		465749122B681E620006046B /* TrashGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465749112B681E620006046B /* TrashGroup.swift */; };
 		465B935229BF7805008F476F /* ic_carplay_history_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */; };
 		465B935329BF7805008F476F /* ic_carplay_history_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */; };
 		465B935429BF7805008F476F /* ic_carplay_favorites_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */; };
@@ -732,6 +737,7 @@
 		46BA4849281C2F3500C04F14 /* ic_custom_poi_brand@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BA4845281C2F3500C04F14 /* ic_custom_poi_brand@2x.png */; };
 		46BAED9528204DF600090804 /* ic_action_mountain_bike@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9328204DF500090804 /* ic_action_mountain_bike@2x.png */; };
 		46BAED9628204DF600090804 /* ic_action_mountain_bike@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */; };
+		46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */; };
 		46BE1FFE2AF0317D005F952E /* ScreenOrientationHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */; };
 		46C2FD8328B38EF600771E6E /* ic_custom_user_profile@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */; };
 		46C2FD8428B38EF600771E6E /* ic_custom_user_profile@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */; };
@@ -4065,6 +4071,7 @@
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLoginMainViewController.xib; sourceTree = "<group>"; };
 		460767112A49F86400AF63F2 /* WikiAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiAlgorithms.swift; sourceTree = "<group>"; };
+		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_2d_mode@3x.png"; path = "Resources/Icons/btn_map_2d_mode@3x.png"; sourceTree = "<group>"; };
 		460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_3d_mode@2x.png"; path = "Resources/Icons/btn_map_3d_mode@2x.png"; sourceTree = "<group>"; };
 		460EC9E22B1F3103006BE95A /* btn_map_2d_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_2d_mode@2x.png"; path = "Resources/Icons/btn_map_2d_mode@2x.png"; sourceTree = "<group>"; };
@@ -4094,6 +4101,7 @@
 		461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@2x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@2x.png"; sourceTree = "<group>"; };
 		461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAnnounceTimeDistances.h; sourceTree = "<group>"; };
 		461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAnnounceTimeDistances.m; sourceTree = "<group>"; };
+		462148712B6BEF44003DA10C /* CloudTrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashViewController.swift; sourceTree = "<group>"; };
 		46220B6E2AD6D6A8006C3248 /* OABaseEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseEditorViewController.h; sourceTree = "<group>"; };
 		46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseEditorViewController.mm; sourceTree = "<group>"; };
 		46220B772AD70A7B006C3248 /* OAGroupEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGroupEditorViewController.h; sourceTree = "<group>"; };
@@ -4186,6 +4194,9 @@
 		464FF36A2B309488001D855E /* SensorAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorAttributesUtils.swift; sourceTree = "<group>"; };
 		4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupConflictDetailsViewController.h; sourceTree = "<group>"; };
 		4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAStatusBackupConflictDetailsViewController.m; sourceTree = "<group>"; };
+		4657490D2B6803710006046B /* TrashItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashItem.swift; sourceTree = "<group>"; };
+		4657490F2B68129B0006046B /* BackupUiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUiUtils.swift; sourceTree = "<group>"; };
+		465749112B681E620006046B /* TrashGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashGroup.swift; sourceTree = "<group>"; };
 		465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@3x.png"; path = "Resources/Icons/ic_carplay_history_night@3x.png"; sourceTree = "<group>"; };
 		465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@2x.png"; path = "Resources/Icons/ic_carplay_history_night@2x.png"; sourceTree = "<group>"; };
 		465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_favorites_night@2x.png"; path = "Resources/Icons/ic_carplay_favorites_night@2x.png"; sourceTree = "<group>"; };
@@ -4295,6 +4306,7 @@
 		46BAED9428204DF600090804 /* ic_action_mountain_bike@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_action_mountain_bike@3x.png"; path = "Resources/Icons/ic_action_mountain_bike@3x.png"; sourceTree = "<group>"; };
 		46BB3677294BE72100155EC8 /* OAEmissionHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAEmissionHelper.h; sourceTree = "<group>"; };
 		46BB3678294BE77200155EC8 /* OAEmissionHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAEmissionHelper.mm; sourceTree = "<group>"; };
+		46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "FFCircularProgressView+Extension.swift"; sourceTree = "<group>"; };
 		46BE1FFD2AF0317D005F952E /* ScreenOrientationHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenOrientationHelper.swift; sourceTree = "<group>"; };
 		46C2FD7D28B38EF400771E6E /* ic_custom_user_profile@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@2x.png"; path = "Resources/Icons/ic_custom_user_profile@2x.png"; sourceTree = "<group>"; };
 		46C2FD7E28B38EF500771E6E /* ic_custom_user_profile@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_user_profile@3x.png"; path = "Resources/Icons/ic_custom_user_profile@3x.png"; sourceTree = "<group>"; };
@@ -10151,11 +10163,12 @@
 		B247453027E35B1D00C18C3F /* Cloud */ = {
 			isa = PBXGroup;
 			children = (
-				DA2483E22927916500189AF2 /* OAStatusBackupTableViewController.h */,
-				DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */,
-				DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */,
-				DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */,
-				DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */,
+				460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */,
+				462148712B6BEF44003DA10C /* CloudTrashViewController.swift */,
+				CA4ED9A9B869BE77FB56498A /* OABackupTypesViewController.h */,
+				CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */,
+				CA4ED93E26C370980B8C9B7A /* OABaseBackupTypesViewController.h */,
+				CA4ED1A332DC853B31E87B5F /* OABaseBackupTypesViewController.mm */,
 				32D253A727F336C000324717 /* OABaseCloudBackupViewController.h */,
 				32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */,
 				32D253A627F336C000324717 /* OACloudAccountBaseViewController.h */,
@@ -10165,6 +10178,8 @@
 				32D253A327F336BF00324717 /* OACloudAccountCreateViewController.m */,
 				32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */,
 				32D253A927F336C100324717 /* OACloudAccountLoginViewController.m */,
+				CA4ED39ED05396B169EED79D /* OACloudAccountLogoutViewController.h */,
+				CA4ED4F1EA15E640EDA6F8F3 /* OACloudAccountLogoutViewController.mm */,
 				32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */,
 				32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */,
 				32D2539D27F336BE00324717 /* OACloudBackupViewController.h */,
@@ -10172,23 +10187,22 @@
 				32D253A127F336BF00324717 /* OACloudBackupViewController.xib */,
 				32D253A827F336C000324717 /* OACloudIntroductionViewController.h */,
 				32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */,
-				CA4EDA35667F7F2BAF8B6C93 /* OASettingsBackupViewController.mm */,
-				CA4ED10A47C294C3F6672F2F /* OASettingsBackupViewController.h */,
-				46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */,
-				CA4ED4F1EA15E640EDA6F8F3 /* OACloudAccountLogoutViewController.mm */,
-				CA4ED39ED05396B169EED79D /* OACloudAccountLogoutViewController.h */,
-				CA4ED156B139FD22BFBFBBF1 /* OADeleteAllVersionsBackupViewController.mm */,
 				CA4ED42ACE3C33552E3D40F2 /* OADeleteAllVersionsBackupViewController.h */,
-				CA4ED1A332DC853B31E87B5F /* OABaseBackupTypesViewController.mm */,
-				CA4ED93E26C370980B8C9B7A /* OABaseBackupTypesViewController.h */,
-				CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */,
-				CA4ED9A9B869BE77FB56498A /* OABackupTypesViewController.h */,
-				CA4EDAB5C5B40EC4B61AED59 /* OAManageStorageViewController.mm */,
+				CA4ED156B139FD22BFBFBBF1 /* OADeleteAllVersionsBackupViewController.mm */,
 				CA4ED86D6650C8C9F5AE0383 /* OAManageStorageViewController.h */,
-				CA4ED2B11CC769AB33E5FC53 /* OAManageTypeViewController.mm */,
+				CA4EDAB5C5B40EC4B61AED59 /* OAManageStorageViewController.mm */,
 				CA4ED85F9DC3CF716E0B4312 /* OAManageTypeViewController.h */,
+				CA4ED2B11CC769AB33E5FC53 /* OAManageTypeViewController.mm */,
+				CA4ED10A47C294C3F6672F2F /* OASettingsBackupViewController.h */,
+				CA4EDA35667F7F2BAF8B6C93 /* OASettingsBackupViewController.mm */,
+				46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */,
 				4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */,
 				4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */,
+				DA2483E22927916500189AF2 /* OAStatusBackupTableViewController.h */,
+				DA2483E42927916600189AF2 /* OAStatusBackupTableViewController.mm */,
+				DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */,
+				DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */,
+				DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */,
 			);
 			path = Cloud;
 			sourceTree = "<group>";
@@ -13868,19 +13882,20 @@
 		DAABE4EC2A16578A00569F71 /* SwiftExtensions */ = {
 			isa = PBXGroup;
 			children = (
-				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
-				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
-				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
-				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
 				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
-				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
+				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
+				FA6439E82B04D81B00331006 /* Data+Extesnion.swift */,
+				46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */,
+				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
+				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
 				FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */,
 				FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */,
 				FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */,
-				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
-				FA6439E82B04D81B00331006 /* Data+Extesnion.swift */,
-				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
+				FA5A21A72A9E17DB00319695 /* UIPageViewController+Extension.swift */,
 				FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */,
+				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
+				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
+				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -13932,48 +13947,51 @@
 		DACF784127E343FF00A8A218 /* Backup */ = {
 			isa = PBXGroup;
 			children = (
-				DA4ABED22876D98D00B996EF /* LocalBackup */,
 				DAA9F44B27EC9E99002BB1A8 /* Commands */,
-				DACF784227E3441600A8A218 /* OABackupHelper.h */,
-				DACF784327E3441600A8A218 /* OABackupHelper.mm */,
-				DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */,
-				DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */,
-				DA775B8827E6109F0081B9C1 /* OALocalFile.h */,
-				DA775B8927E6109F0081B9C1 /* OALocalFile.m */,
-				DA775B8B27E618070081B9C1 /* OABackupInfo.h */,
-				DA775B8C27E618070081B9C1 /* OABackupInfo.mm */,
-				DAA612E327E9E934003317BD /* OAPrepareBackupResult.h */,
-				DAA612E427E9E934003317BD /* OAPrepareBackupResult.m */,
-				DAA9F44F27ECA5F6002BB1A8 /* OABackupError.h */,
-				DAA9F45027ECA5F6002BB1A8 /* OABackupError.m */,
-				DAA9F45227ECADF8002BB1A8 /* OABackupListeners.h */,
-				DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */,
-				DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */,
-				DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */,
+				DA4ABED22876D98D00B996EF /* LocalBackup */,
+				4657490F2B68129B0006046B /* BackupUiUtils.swift */,
 				DA1A886227FC66DA00A82DF6 /* OABackupDbHelper.h */,
 				DA1A886327FC66DA00A82DF6 /* OABackupDbHelper.m */,
-				DA8B8D5827FEFF4100957D12 /* OACollectLocalFilesTask.h */,
-				DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */,
-				DAAC0EB828006D2500867D35 /* OANetworkSettingsHelper.h */,
-				DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */,
-				DAAC0EBB2801807200867D35 /* OAImportBackupTask.h */,
-				DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */,
-				DAAC0EC12801885800867D35 /* OABackupImporter.h */,
-				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
+				DAA9F44F27ECA5F6002BB1A8 /* OABackupError.h */,
+				DAA9F45027ECA5F6002BB1A8 /* OABackupError.m */,
 				DA05A6A1285B3DCE00D0AFAB /* OABackupExporter.h */,
 				DA05A6A2285B3DCE00D0AFAB /* OABackupExporter.m */,
-				DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */,
-				DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */,
+				DACF784227E3441600A8A218 /* OABackupHelper.h */,
+				DACF784327E3441600A8A218 /* OABackupHelper.mm */,
+				DAAC0EC12801885800867D35 /* OABackupImporter.h */,
+				DAAC0EC22801885800867D35 /* OABackupImporter.m */,
+				DA775B8B27E618070081B9C1 /* OABackupInfo.h */,
+				DA775B8C27E618070081B9C1 /* OABackupInfo.mm */,
 				DAEDAA9F2865A0F100CE54D0 /* OABackupInfoGenerationTask.h */,
 				DAEDAAA02865A0F100CE54D0 /* OABackupInfoGenerationTask.m */,
+				DAA9F45227ECADF8002BB1A8 /* OABackupListeners.h */,
+				DAA9F45327ECADF8002BB1A8 /* OABackupListeners.m */,
 				DA5F77B428742E85000A2BFF /* OABackupStatus.h */,
 				DA5F77B528742E85000A2BFF /* OABackupStatus.m */,
+				DA8B8D5827FEFF4100957D12 /* OACollectLocalFilesTask.h */,
+				DA8B8D5927FEFF4100957D12 /* OACollectLocalFilesTask.m */,
 				DA4ABECF2876D71300B996EF /* OAExportBackupTask.h */,
 				DA4ABED02876D71300B996EF /* OAExportBackupTask.m */,
+				DA12757C28631154007E2A0D /* OAImportBackupItemsTask.h */,
+				DA12757D28631154007E2A0D /* OAImportBackupItemsTask.m */,
+				DAAC0EBB2801807200867D35 /* OAImportBackupTask.h */,
+				DAAC0EBC2801807200867D35 /* OAImportBackupTask.m */,
+				DA775B8827E6109F0081B9C1 /* OALocalFile.h */,
+				DA775B8927E6109F0081B9C1 /* OALocalFile.m */,
+				DAAC0EB828006D2500867D35 /* OANetworkSettingsHelper.h */,
+				DAAC0EB928006D2500867D35 /* OANetworkSettingsHelper.m */,
 				DA4E72B128784767007A894D /* OANetworkWriter.h */,
 				DA4E72B228784768007A894D /* OANetworkWriter.mm */,
+				DAA612E327E9E934003317BD /* OAPrepareBackupResult.h */,
+				DAA612E427E9E934003317BD /* OAPrepareBackupResult.m */,
+				DA0C2BDB27EF4B3800B7CC4F /* OAPrepareBackupTask.h */,
+				DA0C2BDC27EF4B3800B7CC4F /* OAPrepareBackupTask.m */,
+				DA775B8527E5F30E0081B9C1 /* OARemoteFile.h */,
+				DA775B8627E5F30E0081B9C1 /* OARemoteFile.m */,
 				DA9901B12918F14700A3C732 /* OASyncBackupTask.h */,
 				DA9901B22918F14700A3C732 /* OASyncBackupTask.mm */,
+				465749112B681E620006046B /* TrashGroup.swift */,
+				4657490D2B6803710006046B /* TrashItem.swift */,
 			);
 			path = Backup;
 			sourceTree = "<group>";
@@ -17122,6 +17140,7 @@
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
 				325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */,
+				462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */,
 				DA5A833426C563A800F274C7 /* OAShapesCollectionViewCell.m in Sources */,
 				DA5A847826C563A900F274C7 /* OADestinationsLineWidget.mm in Sources */,
 				DA5A855026C563A900F274C7 /* OAResourcesInstaller.mm in Sources */,
@@ -17156,6 +17175,7 @@
 				DA5A815226C563A700F274C7 /* OABaseCarPlayListController.m in Sources */,
 				DA5A855D26C563A900F274C7 /* OARouteDirectionInfo.mm in Sources */,
 				DA842ECD2A0B998E0030866E /* WidgetInfoCreator.swift in Sources */,
+				460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */,
 				32388EE226E6AF770021F829 /* OAQuickSearchResultTableViewCell.m in Sources */,
 				DA5F77B628742E85000A2BFF /* OABackupStatus.m in Sources */,
 				DAABE4EE2A1657AF00569F71 /* Color+INT.swift in Sources */,
@@ -17302,6 +17322,7 @@
 				461A3F0A29F6E68F008EE079 /* OAColorCollectionHandler.m in Sources */,
 				DA5A84F226C563A900F274C7 /* OALocationConvert.mm in Sources */,
 				DA5A81DA26C563A700F274C7 /* OAFirstUsageWizardController.mm in Sources */,
+				465749122B681E620006046B /* TrashGroup.swift in Sources */,
 				DA5A83F326C563A800F274C7 /* OARearrangeCustomFiltersViewController.mm in Sources */,
 				DA5A820426C563A700F274C7 /* OABaseFeatureCardView.m in Sources */,
 				DA2EC7B329FBCD0300ECEB37 /* WidgetGroup.swift in Sources */,
@@ -17390,12 +17411,14 @@
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
+				46BD939B2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift in Sources */,
 				DA5A825926C563A700F274C7 /* OACreateProfileViewController.mm in Sources */,
 				DA5A831826C563A800F274C7 /* OATargetInfoViewCell.m in Sources */,
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
+				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
 				DA5A83F026C563A800F274C7 /* OAQuickSearchTableController.mm in Sources */,
 				DA5A819E26C563A700F274C7 /* NSData+CRC32.m in Sources */,
@@ -17856,6 +17879,7 @@
 				DA9901B32918F14700A3C732 /* OASyncBackupTask.mm in Sources */,
 				B0D6159DC886AF2419676731 /* OATitleSwitchRoundCell.mm in Sources */,
 				B0D610BD70EF0179933FD55C /* OAAddWaypointViewController.mm in Sources */,
+				465749102B68129B0006046B /* BackupUiUtils.swift in Sources */,
 				B0D61A10E033AC2150A5354F /* OADeleteWaypointsViewController.mm in Sources */,
 				B0D610E5238BE2C6D15D23EC /* OAPointWithRegionTableViewCell.mm in Sources */,
 				B0D61831F16BA2B502597852 /* OASelectionCollapsableCell.mm in Sources */,

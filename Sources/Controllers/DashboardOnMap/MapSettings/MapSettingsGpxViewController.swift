@@ -127,8 +127,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: OASimpleTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.getIdentifier())
-        tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier())
+
         tableView.setEditing(true, animated: false)
         tableView.allowsMultipleSelectionDuringEditing = true
         searchController = UISearchController(searchResultsController: nil)
@@ -209,7 +208,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
         .graySimple
     }
-    
+
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+        addCell(OALargeImageTitleDescrTableViewCell.reuseIdentifier)
+    }
+
     override func generateData() {
         tableData.clearAllData()
         if isTracksAvailable {

@@ -2542,7 +2542,7 @@
 "contact_support_description" = "Herhangi bir sorunuz varsa, lütfen %@ üzerinden bizimle iletişime geçin.";
 "routing_attr_motor_type_diesel_name" = "Dizel";
 "shared_string_angle" = "Açı";
-"duration_ago" = "%@önce";
+"duration_ago" = "%@ önce";
 "offline_edition_descr" = "Çevrim dışı düzenleme etkinleştirilirse, değişiklikler önce yerel olarak kaydedilecek ve istek üzerine karşıya yüklenecek, aksi takdirde değişiklikler hemen karşıya yüklenecek.";
 "rendering_attr_showMtbScale_name" = "MTBölçeğini göster";
 "map_updates_are_unavailable_yet" = "Henüz harita güncellemeleri yok. :-(";

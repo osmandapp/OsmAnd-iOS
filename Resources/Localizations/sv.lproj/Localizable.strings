@@ -368,7 +368,7 @@
 "no_address_found" = "Ingen adress angiven";
 "traffic_warning_speed_limit" = "Hastighetsbegränsning";
 "traffic_warning_border_control" = "Gränskontroll";
-"traffic_warning_payment" = "Vägtullshytt";
+"traffic_warning_payment" = "Betalstation";
 "traffic_warning_stop" = "Stopptecken";
 "traffic_warning_calming" = "Trafiksänkning";
 "traffic_warning_speed_camera" = "Fartkamera";
@@ -1891,7 +1891,7 @@
 "routing_attr_height_description" = "Ange tillåten fordonshöjd på rutter.";
 "touting_specified_vehicle_parameters_descr" = "Angivna fordonsparametrar kan påverka ruttberäkning.";
 "routing_attr_height_obstacles_name" = "Använd höjddata";
-"routing_attr_avoid_toll_name" = "Inga vägtullar";
+"routing_attr_avoid_toll_name" = "Inga betalvägar";
 "rendering_attr_appMode_description" = "Optimera karta för";
 "routing_attr_avoid_ice_roads_fords_name" = "Inga isvägar eller vadställen";
 "rendering_value_germanRoadAtlas_name" = "Tysk vägkarta";
@@ -2044,7 +2044,7 @@
 "rendering_value_bicycle_name" = "Cykel";
 "rendering_value_translucent_lightgreen_name" = "Genomskinlig ljusgrön";
 "rendering_attr_contourLines_name" = "Visa höjdkurvor";
-"rendering_attr_showAccess_name" = "Visaåtkomstbegränsningar och vägtull";
+"rendering_attr_showAccess_name" = "Visa åtkomstbegränsningar och betalvägar";
 "rendering_attr_surface_dirt_name" = "Jord";
 "routing_attr_piste_type_skitour_name" = "Turskidor";
 "routing_attr_driving_style_prefer_unpaved_name" = "Föredra obelagda vägar";
@@ -2110,7 +2110,7 @@
 "routing_attr_avoid_shuttle_train_name" = "Inget pendeltåg";
 "rendering_attr_contourColorScheme_description" = "Färgschema för höjdkurvor";
 "rendering_value_boldOutline_name" = "Fet kontur";
-"routing_attr_avoid_toll_description" = "Undviker vägtullar";
+"routing_attr_avoid_toll_description" = "Undviker betalvägar";
 "rendering_attr_noPolygons_name" = "Polygoner";
 "rendering_attr_piste_difficulty_easy_name" = "Lätt";
 "routing_attr_weight_description" = "Ange tillåten viktgräns för fordon på sträckorna.";

@@ -100,6 +100,14 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
     [formatter setDateStyle:NSDateFormatterMediumStyle];
+    return [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
+}
+
++ (NSString *)getFormattedDateTime:(NSTimeInterval)time
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setFormatterBehavior:NSDateFormatterBehavior10_4];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
     [formatter setTimeStyle:NSDateFormatterShortStyle];
     return [formatter stringFromDate:[NSDate dateWithTimeIntervalSince1970:time]];
 }
@@ -684,7 +692,7 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     return tagValue;
 }
 
-+ (NSString *) getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL) fullForm
++ (NSString *) getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL) fullForm
 {
     NSString *sec = [NSString stringWithFormat:@"%02ld", (long)seconds % 60];
     
@@ -696,6 +704,29 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
           long hours = minutes / 60;
           return [NSString stringWithFormat:@"%ld:%@:%@", hours, min, sec];
       }
+}
+
++ (NSString *)getFormattedDuration:(NSTimeInterval)seconds
+{
+    NSInteger secondsInt = (NSInteger) seconds;
+    NSInteger hours = secondsInt / (60 * 60);
+    NSInteger minutes = (secondsInt / 60) % 60;
+    
+    if (hours > 0)
+    {
+        NSString *durationString = [NSString stringWithFormat:@"%ld %@", hours, OALocalizedString(@"int_hour")];
+        if (minutes > 0)
+            durationString = [durationString stringByAppendingFormat:@" %ld %@", minutes, OALocalizedString(@"int_min")];
+        return durationString;
+    }
+    else if (minutes > 0)
+    {
+        return [NSString stringWithFormat:@"%ld %@", minutes, OALocalizedString(@"int_min")];
+    }
+    else
+    {
+        return [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"int_min")];
+    }
 }
 
 @end

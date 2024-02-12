@@ -407,7 +407,7 @@
 "select_street" = "Izaberi ulicu";
 "shared_string_in_name" = "u %@";
 "select_city" = "Izaberi grad";
-"type_city_town" = "Ukucaj grad/naselje/lokalitet";
+"type_city_town" = "Ukucaj grad/ mesto";
 "select_postcode" = "Pretraga po poštanskom broju";
 "type_postcode" = "Ukucaj poštanski broj";
 "coords_search" = "Pretraga koordinata";
@@ -1808,7 +1808,7 @@
 "city_type_suburb" = "Predgrađe";
 "city_type_hamlet" = "Zaseok";
 "city_type_village" = "Selo";
-"city_type_town" = "Grad";
+"city_type_town" = "Naseljeno mesto";
 "city_type_city" = "Grad";
 "city_type_district" = "Oblast";
 "city_type_neighbourhood" = "Sused";

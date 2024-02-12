@@ -15,6 +15,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAGPXUIHelper.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -152,13 +153,12 @@
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
 
-        if (gpxLocation.latitude != DBL_MAX)
+        OAPOI *nearestCity = [OAGPXUIHelper checkAndSearchNearestCity:self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil];
+        if (nearestCity)
         {
-            OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:gpxLocation.latitude
-                                                                 lon:gpxLocation.longitude];
             self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
             self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-            [self.regionTextView setText:worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName];
+            [self.regionTextView setText:nearestCity.nameLocalized];
             self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else

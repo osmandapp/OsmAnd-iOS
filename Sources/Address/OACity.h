@@ -39,4 +39,9 @@ typedef NS_ENUM(NSInteger, EOACitySubType)
 
 - (instancetype)initWithCity:(const std::shared_ptr<const OsmAnd::StreetGroup>&)city;
 
++ (NSString *)getLocalizedTypeStr:(EOACitySubType)type;
++ (NSString *)getTypeStr:(EOACitySubType)type;
++ (EOACitySubType)getType:(NSString *)typeStr;
++ (CGFloat)getRadius:(NSString *)typeStr;
+
 @end

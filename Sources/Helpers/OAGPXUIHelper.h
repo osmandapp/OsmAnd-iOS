@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAGPXDocument, OATrkSegment;
-@class OARouteCalculationResult;
-@class OAGPX;
+@class OAGPXDocument, OATrkSegment, OARouteCalculationResult, OAGPX, OAGPXTrackAnalysis, OAPOI;
 
 @interface OAGpxFileInfo : NSObject
 
@@ -47,6 +45,8 @@
                                     distanceToPoint:(double)distanceToPoint
                                     preciseLocation:(BOOL)preciseLocation
                                        joinSegments:(BOOL)joinSegments;
+
++ (OAPOI *)checkAndSearchNearestCity:(OAGPXTrackAnalysis *)analysis;
 
 @end
 

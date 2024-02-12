@@ -10,6 +10,7 @@
 #import "OARoutePreferencesParameters.h"
 #import "OAApplicationMode.h"
 #import "OAMapUtils.h"
+#import "OAUtilities.h"
 #import "OALocationServices.h"
 
 #define CACHE_RADIUS 100000
@@ -21,16 +22,36 @@
                     destination:(NSString *)destination
                         towards:(NSString *)towards
 {
+    return [self formatStreetName:name ref:ref destination:destination towards:towards shields:nil];
+}
+
++ (NSString *) formatStreetName:(NSString *)name
+                            ref:(NSString *)originalRef
+                    destination:(NSString *)destination
+                        towards:(NSString *)towards
+                        shields:(NSArray<RoadShield *> *)shields
+{
     NSMutableString *formattedStreetName = [NSMutableString string];
-    if (ref != nil && ref.length > 0)
-        [formattedStreetName appendString:ref];
-    if (name != nil && name.length > 0)
+    if (originalRef && originalRef.length > 0)
+    {
+        NSArray<NSString *> *refs = [originalRef componentsSeparatedByString:@";"];
+        for (NSString *ref in refs)
+        {
+            if (!shields || ![self isRefEqualsShield:shields ref:ref])
+            {
+                if (formattedStreetName.length > 0)
+                    [formattedStreetName appendString:@" "];
+                [formattedStreetName appendString:ref];
+            }
+        }
+    }
+    if (name && name.length > 0)
     {
         if (formattedStreetName.length > 0)
             [formattedStreetName appendString:@" "];
         [formattedStreetName appendString:name];
     }
-    if (destination != nil && destination.length > 0)
+    if (destination && destination.length > 0)
     {
         if (formattedStreetName.length > 0)
             [formattedStreetName appendString:@" "];
@@ -40,6 +61,16 @@
     return formattedStreetName;
 }
 
++ (BOOL)isRefEqualsShield:(NSArray<RoadShield *> *)shields ref:(NSString *)ref {
+    NSString * refNumber = [NSString stringWithFormat:@"%d", [OAUtilities extractIntegerNumber:ref]];
+    for (RoadShield *shield in shields)
+    {
+        NSString *shieldValue = shield.value;
+        if ([ref isEqualToString:shieldValue] || [refNumber isEqualToString:shieldValue])
+            return YES;
+    }
+    return NO;
+}
 
 + (RoutingParameter)getParameterForDerivedProfile:(NSString *)key appMode:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router
 {
@@ -95,7 +126,7 @@
         float bearingMotion = currentLocation.course;
         float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
         double diff = degreesDiff(bearingMotion, bearingToRoute);
-        if (ABS(diff) > 60.0)
+        if (ABS(diff) > 90.0)
         {
             // require delay interval since first detection, to avoid false positive
             //but leave out for now, as late detection is worse than false positive (it may reset voice router then cause bogus turn and u-turn prompting)

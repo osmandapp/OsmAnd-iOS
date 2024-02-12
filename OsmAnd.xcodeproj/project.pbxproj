@@ -2046,7 +2046,6 @@
 		DA5A816B26C563A700F274C7 /* OANoImagesCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79B126C563A000F274C7 /* OANoImagesCard.m */; };
 		DA5A816C26C563A700F274C7 /* OAAbstractCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79B226C563A000F274C7 /* OAAbstractCard.m */; };
 		DA5A816D26C563A700F274C7 /* OsmAndAppImpl.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BA26C563A000F274C7 /* OsmAndAppImpl.mm */; };
-		DA5A816E26C563A700F274C7 /* OASharedVariables.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BD26C563A000F274C7 /* OASharedVariables.m */; };
 		DA5A817126C563A700F274C7 /* OsmAndApp.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79C026C563A000F274C7 /* OsmAndApp.mm */; };
 		DA5A817226C563A700F274C7 /* OALog.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79C226C563A000F274C7 /* OALog.mm */; };
 		DA5A817326C563A700F274C7 /* OAFavoriteItem.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79C526C563A000F274C7 /* OAFavoriteItem.mm */; };
@@ -5981,14 +5980,12 @@
 		DA5A79B226C563A000F274C7 /* OAAbstractCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAbstractCard.m; sourceTree = "<group>"; };
 		DA5A79B326C563A000F274C7 /* OAImageCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAImageCard.h; sourceTree = "<group>"; };
 		DA5A79B526C563A000F274C7 /* Localization.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Localization.h; sourceTree = "<group>"; };
-		DA5A79B626C563A000F274C7 /* OASharedVariables.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASharedVariables.h; sourceTree = "<group>"; };
 		DA5A79B726C563A000F274C7 /* OsmAndApp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndApp.h; sourceTree = "<group>"; };
 		DA5A79B826C563A000F274C7 /* OsmAndAppPrivateProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppPrivateProtocol.h; sourceTree = "<group>"; };
 		DA5A79B926C563A000F274C7 /* OsmAndAppCppProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppCppProtocol.h; sourceTree = "<group>"; };
 		DA5A79BA26C563A000F274C7 /* OsmAndAppImpl.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndAppImpl.mm; sourceTree = "<group>"; };
 		DA5A79BB26C563A000F274C7 /* OALog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALog.h; sourceTree = "<group>"; };
 		DA5A79BC26C563A000F274C7 /* OsmAndAppProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OsmAndAppProtocol.h; sourceTree = "<group>"; };
-		DA5A79BD26C563A000F274C7 /* OASharedVariables.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASharedVariables.m; sourceTree = "<group>"; };
 		DA5A79BE26C563A000F274C7 /* OAAppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAppDelegate.mm; sourceTree = "<group>"; };
 		DA5A79BF26C563A000F274C7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		DA5A79C026C563A000F274C7 /* OsmAndApp.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OsmAndApp.mm; sourceTree = "<group>"; };
@@ -11209,8 +11206,6 @@
 				DA5A79BF26C563A000F274C7 /* main.m */,
 				DA5A79BB26C563A000F274C7 /* OALog.h */,
 				DA5A79C226C563A000F274C7 /* OALog.mm */,
-				DA5A79B626C563A000F274C7 /* OASharedVariables.h */,
-				DA5A79BD26C563A000F274C7 /* OASharedVariables.m */,
 				DA5A79B726C563A000F274C7 /* OsmAndApp.h */,
 				DA5A79C026C563A000F274C7 /* OsmAndApp.mm */,
 				DA5A79B926C563A000F274C7 /* OsmAndAppCppProtocol.h */,
@@ -17589,7 +17584,6 @@
 				DA5A81DC26C563A700F274C7 /* OABuilding.mm in Sources */,
 				DA5A849D26C563A900F274C7 /* OARemovePointCommand.mm in Sources */,
 				DA5A819926C563A700F274C7 /* OAGPXAction.mm in Sources */,
-				DA5A816E26C563A700F274C7 /* OASharedVariables.m in Sources */,
 				FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */,
 				320F71272A823FB20071C0E7 /* PopularArticles.swift in Sources */,
 				DA5A850B26C563A900F274C7 /* OAButton.m in Sources */,

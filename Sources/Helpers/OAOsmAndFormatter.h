@@ -54,6 +54,7 @@
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
 + (NSString *)getFormattedAlt:(double)alt;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc;
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 + (NSString *)getFormattedDistanceInterval:(double)interval;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;

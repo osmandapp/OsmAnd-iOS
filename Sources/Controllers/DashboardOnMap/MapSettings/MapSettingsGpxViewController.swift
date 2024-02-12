@@ -136,7 +136,11 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier())
         tableView.setEditing(true, animated: false)
         tableView.allowsMultipleSelectionDuringEditing = true
-        navigationItem.hidesSearchBarWhenScrolling = true
+        searchController = UISearchController(searchResultsController: nil)
+        searchController?.delegate = self
+        searchController?.searchBar.delegate = self
+        searchController?.obscuresBackgroundDuringPresentation = false
+        searchController?.searchBar.placeholder = localizedString("shared_string_search")
         definesPresentationContext = true
         tableView.tableHeaderView = setupHeaderView()
         updateSelectedRows()
@@ -266,6 +270,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         let item = tableData.item(for: indexPath)
         if item.cellType == OASimpleTableViewCell.getIdentifier() {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
+            cell.selectedBackgroundView = UIView()
+            cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
             cell.titleLabel.text = item.title
             if let gpx = item.obj(forKey: "gpx") as? OAGPX {
                 cell.descriptionLabel.attributedText = getDescriptionAttributedText(with: getFormattedData(for: gpx))
@@ -753,15 +759,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onSearchButtonClicked() {
-        if searchController == nil {
-            searchController = UISearchController(searchResultsController: nil)
-            searchController?.searchBar.delegate = self
-            searchController?.obscuresBackgroundDuringPresentation = false
-            searchController?.searchBar.placeholder = localizedString("shared_string_search")
-            navigationItem.searchController = searchController
-            searchController?.isActive = true
-        }
-        
+        navigationItem.searchController = navigationItem.searchController ?? searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+        searchController?.isActive = true
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
@@ -773,7 +773,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             self.updateSortButtonAndMenu()
             self.updateNavbar()
             self.updateBottomButtons()
-            self.searchController?.searchBar.becomeFirstResponder()
             self.generateData()
             self.tableView.reloadData()
             self.updateSelectedRows()
@@ -831,7 +830,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
 
 extension MapSettingsGpxViewController: UISearchBarDelegate {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        searchController = nil
+        searchController?.isActive = false
         navigationItem.searchController = nil
         isSearchActive = false
         isSearchFilteringActive = false
@@ -870,5 +869,13 @@ extension MapSettingsGpxViewController: OAGPXImportHelperDelegate {
            self.updateSelectedRows()
            self.updateBottomButtons()
        }
+
+extension MapSettingsGpxViewController: UISearchControllerDelegate {
+    func presentSearchController(_ searchController: UISearchController) {
+        DispatchQueue.main.async {
+            if !searchController.searchBar.isFirstResponder {
+                searchController.searchBar.becomeFirstResponder()
+            }
+        }
     }
 }

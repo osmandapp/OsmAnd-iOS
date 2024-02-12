@@ -19,20 +19,20 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="F0k-CK-Ddy">
-                        <rect key="frame" x="130" y="20" width="60" height="60"/>
+                        <rect key="frame" x="130" y="30" width="60" height="60"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="60" id="F6w-FF-lnA"/>
                             <constraint firstAttribute="width" constant="60" id="RdE-5e-t1u"/>
                         </constraints>
                     </imageView>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rXB-MR-CH3">
-                        <rect key="frame" x="16" y="110" width="288" height="20.5"/>
-                        <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                        <rect key="frame" x="16" y="120" width="288" height="11"/>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                         <color key="textColor" name="textColorPrimary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcc-Q7-1eu">
-                        <rect key="frame" x="16" y="136.5" width="288" height="18.5"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Label" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vcc-Q7-1eu">
+                        <rect key="frame" x="16" y="137" width="288" height="18"/>
                         <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
@@ -65,7 +65,7 @@
                     <constraint firstItem="6jr-Hj-OeB" firstAttribute="top" secondItem="vcc-Q7-1eu" secondAttribute="bottom" constant="20" id="MWe-q9-rnf"/>
                     <constraint firstItem="F0k-CK-Ddy" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="dCR-7i-9OF"/>
                     <constraint firstItem="6jr-Hj-OeB" firstAttribute="centerX" secondItem="H2p-sc-9uM" secondAttribute="centerX" id="fJM-Cf-v4r"/>
-                    <constraint firstItem="F0k-CK-Ddy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="20" id="iNw-iv-90f"/>
+                    <constraint firstItem="F0k-CK-Ddy" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="30" id="iNw-iv-90f"/>
                     <constraint firstItem="6jr-Hj-OeB" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="14" id="phZ-iQ-w6m"/>
                     <constraint firstAttribute="trailingMargin" secondItem="6jr-Hj-OeB" secondAttribute="trailing" constant="14" id="pv7-Kk-H0B"/>
                     <constraint firstAttribute="trailingMargin" secondItem="rXB-MR-CH3" secondAttribute="trailing" id="r4b-J7-Obv"/>

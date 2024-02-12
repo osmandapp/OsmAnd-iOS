@@ -2440,7 +2440,7 @@
 "external_device_characteristic_speed" = "Rýchlosť";
 "external_device_characteristic_distance" = "Vzdialenosť";
 "external_device_characteristic_total_distance" = "Celková vzdialenosť";
-"external_device_characteristic_cadence" = "Otáčky";
+"external_device_characteristic_cadence" = "Frekvencia šliapania";
 "external_device_characteristic_stride_length" = "Dĺžka kroku";
 "free_account" = "Bezplatný účet";
 "beats_per_minute_short" = "tep";
@@ -2459,3 +2459,9 @@
 "ant_plus_bluetooth_off_description" = "Zapnite vyhľadávanie cez Bluetooth a spárujte snímače.";
 "ant_plus_searching_text" = "Hľadanie snímačov";
 "ant_plus_open_settings" = "Otvoriť nastavenia";
+"shared_string_license" = "Licencia";
+"shared_string_link" = "Odkaz";
+"shared_string_author" = "Autor";
+"purchases_feature_desc_external_sensors" = "Zobrazte a nahrajte údaje z externých senzorov: rýchlosť bicykla, výkon bicykla, frekvencia pedálovania a srdcový tep.";
+"external_sensors_plugin_description" = "Sprístupní externé senzory na čítanie napr. srdcového tepu, rýchlosti bicykla, výkonu bicykla a frekvencii šliapania. Vyžaduje zariadenie spojené so senzormi týchto parametrov s pomocou bezdrôtového sieťového protokolu ANT+.";
+"shared_string_keywords" = "Kľúčové slová";

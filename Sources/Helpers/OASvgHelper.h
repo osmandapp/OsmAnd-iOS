@@ -14,7 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (nullable UIImage *) mapImageNamed:(NSString *)name;
 + (nullable UIImage *) mapImageNamed:(NSString *)name scale:(float)scale;
-+ (nullable UIImage *) imageNamed:(NSString *)name;
++ (nullable UIImage *) imageNamed:(NSString *)path;
 
 + (nullable UIImage *) mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height;
 + (nullable UIImage *) mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale;

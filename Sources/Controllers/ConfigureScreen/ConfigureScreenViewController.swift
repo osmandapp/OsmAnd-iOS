@@ -193,7 +193,7 @@ extension ConfigureScreenViewController {
             if let cell {
                 let isCustomLeftSeparatorInset = item.bool(forKey: "isCustomLeftSeparatorInset")
                 cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
-                cell.separatorInset = UIEdgeInsets.zero
+                cell.separatorInset = .zero
                 cell.valueLabel.text = item.descr
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 cell.leftIconView.tintColor = item.iconTintColor

@@ -1440,7 +1440,7 @@
 "routing_attr_avoid_motorway_name" = "Sin autopistas";
 "routing_attr_avoid_ice_roads_fords_description" = "Evitar caminos con hielo y vados.";
 "routeInfo_tracktype_name" = "Firmeza de la superficie";
-"rendering_attr_alpineHiking_name" = "Clasificación de la facilidad";
+"rendering_attr_alpineHiking_name" = "Clasificación de la dificultad";
 "routing_attr_avoid_bus_description" = "Evitar autobuses y trolebuses";
 "rendering_attr_surface_snow_name" = "Nieve";
 "rendering_attr_surface_sett_name" = "Adoquín";
@@ -3267,3 +3267,16 @@
 "recently_visible" = "Visto recientemente";
 "no_track_files" = "No tienes archivos de seguimiento";
 "no_tracks_on_map" = "No hay pistas en el mapa";
+"shared_string_row_number" = "Fila %d";
+"oldest_date_first" = "La fecha más antigua primero";
+"longest_distance_first" = "La mayor distancia primero";
+"shortest_distance_first" = "La distancia más corta primero";
+"longest_duration_first" = "Duración más larga primero";
+"shorter_duration_first" = "Duración más corta primero";
+"shared_string_nearest" = "Más cerca";
+"track_sort_za" = "Nombre de la Z a la A";
+"track_sort_az" = "Nombre de la A a la Z";
+"newest_date_first" = "La fecha más reciente primero";
+"show_icon" = "Mostrar icono";
+"simple_widget_footer" = "El widget puede ocupar todo el ancho de la fila o sólo una columna.";
+"complex_widget_alert" = "El widget %@ sólo puede colocarse en su propia fila.";

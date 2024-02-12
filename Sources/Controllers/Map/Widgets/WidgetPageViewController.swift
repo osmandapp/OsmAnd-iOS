@@ -6,8 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 @objc(OAWidgetPageViewController)
 @objcMembers
 final class WidgetPageViewController: UIViewController {
@@ -127,7 +125,7 @@ extension WidgetPageViewController {
     }
     
     private func updateSimpleWidget() {
-        simpleWidgetViews.enumerated().forEach { index, items in
+        simpleWidgetViews.forEach { items in
             let visibleWidgets = items.filter { !$0.isHidden }
             if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
                 // NOTE: use adjustSize for Complex widget
@@ -147,14 +145,25 @@ extension WidgetPageViewController {
                     }
                 }
             }
-            // show horizontal separator for visible items in row
-            if index != simpleWidgetViews.count - 1, stackView.subviews.count - 1 > index {
-                let horizontalSeparator = stackView.subviews[index + 1]
-                horizontalSeparator.isHidden = visibleWidgets.isEmpty
-            }
             // show right separator
             items.enumerated().forEach { idx, widget in
                 widget.showRightSeparator(idx != items.count - 1)
+            }
+        }
+        updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
+    }
+    
+    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> [widgetView] -> [horizontalSeparatorView] -> ... [widgetView]
+    private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
+        guard views.count >= 2 else { return }
+        
+        for i in 1..<views.count - 1 where !i.isMultiple(of: 2) {
+            let horizontalSeparatorView = views[i]
+            horizontalSeparatorView.isHidden = views[i - 1].isHidden
+            if !horizontalSeparatorView.isHidden {
+                // update color for horizontal separator
+                let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
+                horizontalSeparatorView.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
             }
         }
     }

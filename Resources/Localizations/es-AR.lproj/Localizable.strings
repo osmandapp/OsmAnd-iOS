@@ -3277,3 +3277,16 @@
 "recently_visible" = "Visibles recientemente";
 "no_track_files" = "No tienes archivos de trazas";
 "import_create_track_files" = "Puedes importar, crear o grabar archivos de trazas, usando OsmAnd.";
+"shared_string_row_number" = "Fila %d";
+"track_sort_az" = "Nombre A - Z";
+"newest_date_first" = "Fecha ascendente";
+"longest_duration_first" = "Duración descendente";
+"shorter_duration_first" = "Duración ascendente";
+"complex_widget_alert" = "El widget «%@» sólo puede colocarse en su propia fila.";
+"shared_string_nearest" = "Más cercano";
+"track_sort_za" = "Nombre Z - A";
+"oldest_date_first" = "Fecha descendente";
+"longest_distance_first" = "Distancia descendente";
+"shortest_distance_first" = "Distancia ascendente";
+"show_icon" = "Mostrar icono";
+"simple_widget_footer" = "El widget puede tomar el ancho de fila completo o sólo una columna.";

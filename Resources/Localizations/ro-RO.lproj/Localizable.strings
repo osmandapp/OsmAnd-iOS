@@ -81,7 +81,7 @@
 "gpx_start_new_segment" = "Începe un segment nou";
 "auto_zoom_close" = "La apropiere maximă";
 "versions_item" = "Versiuni";
-"route_tr" = "Virați la dreapta și continuați";
+"route_tr" = "Virați la dreapta și continuați drumul";
 "plugins_menu_group" = "Pluginuri";
 "map_widget_next_turn_small" = "Următoarea manevră (mic)";
 "angular_units_descr" = "Schimbați unitățile de măsură a azimutului.";
@@ -123,7 +123,7 @@
 "general_settings_2" = "Setări generale";
 "shared_string_never" = "Niciodată";
 "unit_of_length" = "Unități de lungime";
-"route_tsll" = "Virați ușor la stânga și continuați";
+"route_tsll" = "Virați ușor la stânga și continuați drumul";
 "cancel_route" = "Elimină ruta?";
 "select_street" = "Selectează strada";
 "int_min" = "min.";
@@ -137,7 +137,7 @@
 "shared_string_description" = "Descriere";
 "osm_live_active" = "Activ";
 "choose_auto_follow_route" = "Centrare automată hartă";
-"route_tshr" = "Virați puternic la dreapta și continuați";
+"route_tshr" = "Virați strâns la dreapta și continuați drumul";
 "rendering_category_transport" = "Transport";
 "filter_current_poiButton" = "Filtrează";
 "feedback" = "Părere";
@@ -195,7 +195,7 @@
 "postcode" = "Cod poștal";
 "unknown_location" = "Poziția nu este încă cunoscută.";
 "traffic_warning_hazard" = "Pericol";
-"route_tshl" = "Virați puternic la stânga și continuați";
+"route_tshl" = "Virați strâns la stânga și continuați drumul";
 "rendering_category_routes" = "Rute";
 "shared_string_skip" = "Omiteți";
 "in_app_purchase_desc" = "O singură plată";
@@ -263,7 +263,7 @@
 "city_type_village" = "Sat";
 "int_hour" = "h";
 "auto_zoom_map" = "Zoom automat hartă";
-"route_tl" = "Virați la stânga și continuați";
+"route_tl" = "Virați la stânga și continuați drumul";
 "shared_string_world" = "Lume";
 "shared_string_slope" = "Pantă";
 "no_address_found" = "Nu s-a determinat adresa";
@@ -297,7 +297,7 @@
 "voice_pref_title" = "Voce";
 "poi_filter_parking" = "Parcare";
 "simulate_your_location" = "Simulează poziția ta";
-"route_tslr" = "Virați ușor la dreapta și continuați";
+"route_tslr" = "Virați ușor la dreapta și continuați drumul";
 "map_widget_right" = "Panou dreapta";
 "osmand_parking_time_left" = "stânga";
 "map_widget_battery" = "Nivel baterie";

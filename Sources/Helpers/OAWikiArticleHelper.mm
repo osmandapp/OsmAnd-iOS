@@ -308,7 +308,10 @@
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:url message:OALocalizedString(@"online_webpage_warning") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAUtilities callUrl:url];
+        NSURL *urlObject = [NSURL URLWithString:url];
+        if ([[UIApplication sharedApplication] canOpenURL:urlObject]) {
+            [[UIApplication sharedApplication] openURL:urlObject options:@{} completionHandler:nil];
+        }
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
 

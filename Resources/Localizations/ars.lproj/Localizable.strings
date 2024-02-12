@@ -2531,7 +2531,7 @@
 "restore_from_file" = "استعادة من ملف";
 "fetching_from_server" = "جلب البيانات من الخادم";
 "backup_complete" = "النسخ الاحتياطي اكتمل";
-"duration_ago" = "%@منذ";
+"duration_ago" = "%@ منذ";
 "last_sync" = "آخر مزامنة";
 "last_synchronization" = "آخر مزامنة";
 "sync_now" = "المزامنة الآن";

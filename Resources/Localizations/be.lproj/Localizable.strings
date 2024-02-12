@@ -2363,7 +2363,7 @@
 "shared_string_angle_param" = "Вугал: %@°";
 "upload_local_version" = "Адправіць лакальную версію";
 "are_you_sure" = "Вы ўпэўненыя?";
-"duration_ago" = "%@таму";
+"duration_ago" = "%@ таму";
 "osmand_cloud_create_account_descr" = "Калі ласка, увядзіце свой адрас электроннай пошты, на яго будзе адпраўлены код праверкі,\nі ўсе вашы даныя будуць звязаныя з ім.";
 "backup_data" = "Рэзервовае капіяванне даных";
 "quick_action_showhide_mapillary_descr" = "Пераключальнік для паказу альбо хавання пласта Mapillary.";

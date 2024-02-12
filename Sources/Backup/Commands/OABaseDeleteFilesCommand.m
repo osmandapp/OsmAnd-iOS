@@ -52,13 +52,14 @@ static NSString *kQueueOperationsChanged = @"kQueueOperationsChanged";
 {
     OAOperationLog *operationLog = [[OAOperationLog alloc] initWithOperationName:@"deleteFile" debug:BACKUP_DEBUG_LOGS];
     [OANetworkUtilities sendRequest:_request async:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
-        if (((NSHTTPURLResponse *)response).statusCode == 200 && !error && !_byVersion)
+        NSInteger statusCode = ((NSHTTPURLResponse *) response).statusCode;
+        if (statusCode == 200 && !error && !_byVersion)
         {
             if (data)
                 _response = data;
             [OABackupDbHelper.sharedDatabase removeUploadedFileInfo:[[OAUploadedFileInfo alloc] initWithType:_remoteFile.type name:_remoteFile.name]];
         }
-        else
+        else if (statusCode != 200)
         {
             if (data)
                 _error = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];

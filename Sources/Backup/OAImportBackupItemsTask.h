@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAPrepareBackupResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -20,7 +21,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAImportBackupItemsTask : NSOperation
 
-- (instancetype) initWithImporter:(OABackupImporter *)importer items:(NSArray<OASettingsItem *> *)items listener:(id<OAImportItemsListener>)listener forceReadData:(BOOL)forceReadData;
+- (instancetype) initWithImporter:(OABackupImporter *)importer
+                            items:(NSArray<OASettingsItem *> *)items
+                        filesType:(EOARemoteFilesType)filesType
+                         listener:(id<OAImportItemsListener>)listener
+                    forceReadData:(BOOL)forceReadData
+                   restoreDeleted:(BOOL)restoreDeleted;
 
 @end
 

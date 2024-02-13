@@ -133,8 +133,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func updateData() {
-        self.generateData()
-        self.tableView.reloadData()
+        generateData()
+        tableView.reloadData()
     }
     
     private func hardUpdateData() {

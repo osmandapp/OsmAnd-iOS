@@ -503,7 +503,7 @@
 
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location
 {
-    return isnan(location.speed) || location.speed < 0.4;
+    return isnan(location.speed) || location.speed < 1.5;
 }
 
 - (BOOL) isContextMenuVisible

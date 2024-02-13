@@ -195,6 +195,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }
 }
 
+- (void)returnTo3dMode
+{
+    if (_wasIn3DBeforePreview && ![[OAMapViewTrackingUtilities instance] isIn3dMode])
+    {
+        _wasIn3DBeforePreview = NO;
+        [[OAMapViewTrackingUtilities instance] switchMap3dMode];
+    }
+}
+
 - (void)openSearch
 {
     OADirectionsGridController *directionsGrid = [[OADirectionsGridController alloc] initWithInterfaceController:self.interfaceController];
@@ -308,11 +317,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     [_delegate exitNavigationMode];
                 [_mapTemplate hideTripPreviews];
                 [self enterBrowsingState];
-                if (_wasIn3DBeforePreview && ![[OAMapViewTrackingUtilities instance] isIn3dMode])
-                {
-                    _wasIn3DBeforePreview = NO;
-                    [[OAMapViewTrackingUtilities instance] switchMap3dMode];
-                }
+                [self returnTo3dMode];
                 break;
             }
             default:
@@ -406,11 +411,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _isInRoutePreview = NO;
     
     _navigationSession = [_mapTemplate startNavigationSessionForTrip:trip];
-    if (_wasIn3DBeforePreview && ![[OAMapViewTrackingUtilities instance] isIn3dMode])
-    {
-        _wasIn3DBeforePreview = NO;
-        [[OAMapViewTrackingUtilities instance] switchMap3dMode];
-    }
+    [self returnTo3dMode];
     [[OARootViewController instance].mapPanel startNavigation];
 }
 

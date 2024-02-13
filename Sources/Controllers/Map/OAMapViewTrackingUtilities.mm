@@ -148,18 +148,10 @@
 
                     _mapView.mapAnimator->pause();
 
-                    if (_mapViewController.isCarPlayActive)
+                    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
                     {
-                        QList< std::shared_ptr<OsmAnd::IAnimation> > allAnimations = _mapView.mapAnimator->getAllAnimations();
-                        for (const auto &animation : allAnimations)
-                        {
-                            if (animation->getAnimatedValue() != OsmAnd::Animator::AnimatedValue::ElevationAngle)
-                                _mapView.mapAnimator->cancelAnimation(animation);
-                        }
-                    }
-                    else
-                    {
-                        _mapView.mapAnimator->cancelAllAnimations();
+                        if (animation->getAnimatedValue() != OsmAnd::Animator::AnimatedValue::ElevationAngle)
+                            _mapView.mapAnimator->cancelAnimation(animation);
                     }
 
                     OsmAnd::PointI newTarget31(

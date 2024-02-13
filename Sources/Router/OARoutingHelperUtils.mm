@@ -14,7 +14,7 @@
 #import "OARoutingHelper.h"
 
 #define CACHE_RADIUS 100000
-#define MAX_BEARING_DEVIATION 60 // 45 in android
+#define MAX_BEARING_DEVIATION 45
 
 @implementation OARoutingHelperUtils
 

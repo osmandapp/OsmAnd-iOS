@@ -871,7 +871,12 @@
         CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
                 ? newLocation.course : newHeading;
 
-        OsmAnd::LatLon latLon(self.gpx.bounds.center.latitude, self.gpx.bounds.center.longitude);
+        CLLocationCoordinate2D gpxLocation = kCLLocationCoordinate2DInvalid;
+        if ([self openedFromMap])
+            gpxLocation = [self getPinLocation];
+        if (!CLLocationCoordinate2DIsValid(gpxLocation))
+            gpxLocation = [self getCenterGpxLocation];
+        OsmAnd::LatLon latLon(gpxLocation.latitude, gpxLocation.longitude);
         const auto &trackPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
         const auto trackLon = OsmAnd::Utilities::get31LongitudeX(trackPosition31.x);
         const auto trackLat = OsmAnd::Utilities::get31LatitudeY(trackPosition31.y);

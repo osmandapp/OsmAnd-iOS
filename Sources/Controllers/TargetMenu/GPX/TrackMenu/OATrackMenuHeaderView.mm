@@ -137,10 +137,19 @@
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
-        CLLocationCoordinate2D gpxLocation = self.trackMenuDelegate ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
+        CLLocationCoordinate2D gpxLocation = kCLLocationCoordinate2DInvalid;
+        OAPOI *nearestCity;
+        if (self.trackMenuDelegate)
+        {
+            if ([self.trackMenuDelegate openedFromMap])
+                gpxLocation = [self.trackMenuDelegate getPinLocation];
+            if (!CLLocationCoordinate2DIsValid(gpxLocation))
+                gpxLocation = [self.trackMenuDelegate getCenterGpxLocation];
+            nearestCity = [OAGPXUIHelper checkAndSearchNearestCity:[self.trackMenuDelegate getGeneralAnalysis]];
+        }
 
         CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
-        NSString *direction = lastKnownLocation && gpxLocation.latitude != DBL_MAX ?
+        NSString *direction = lastKnownLocation && CLLocationCoordinate2DIsValid(gpxLocation) ?
                 [OAOsmAndFormatter getFormattedDistance:getDistance(
                         lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude,
                         gpxLocation.latitude, gpxLocation.longitude)] : @"";
@@ -153,7 +162,6 @@
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
 
-        OAPOI *nearestCity = [OAGPXUIHelper checkAndSearchNearestCity:self.trackMenuDelegate ? [self.trackMenuDelegate getGeneralAnalysis] : nil];
         if (nearestCity)
         {
             self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];

@@ -598,9 +598,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             case .nameZA:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
             case .newestDateFirst:
-                list.sort { ($0.creationDate ?? Date.distantPast) > ($1.creationDate ?? Date.distantPast) }
+                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
             case .oldestDateFirst:
-                list.sort { ($0.creationDate ?? Date.distantPast) < ($1.creationDate ?? Date.distantPast) }
+                list.sort { $0.importDate ?? Date.distantPast < $1.importDate ?? Date.distantPast }
             case .longestDistanceFirst:
                 list.sort { $0.totalDistance > $1.totalDistance }
             case .shortestDistanceFirst:
@@ -625,8 +625,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? "N/A"
-        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? "N/A"
+        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_gpx_tracks")
+        let creationDate = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_gpx_tracks")
+        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_gpx_tracks")
         let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
         let waypointCount = "\(gpx.wptPoints)"
         let folderName: String
@@ -634,13 +635,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             folderName = capitalizedFolderName
         } else {
             folderName = localizedString("shared_string_gpx_tracks")
-        }
-        
-        let creationDate: String
-        if let date = gpx.creationDate {
-            creationDate = dateFormatter.string(from: date)
-        } else {
-            creationDate = localizedString("shared_string_not_available")
         }
         
         let distanceToTrack: String

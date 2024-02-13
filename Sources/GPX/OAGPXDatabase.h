@@ -31,7 +31,6 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @property (nonatomic) NSString *gpxTitle;
 @property (nonatomic) NSString *gpxDescription;
 @property (nonatomic) NSDate   *importDate;
-@property (nonatomic) NSDate   *creationDate;
 
 @property (nonatomic, readonly) NSString *absolutePath;
 

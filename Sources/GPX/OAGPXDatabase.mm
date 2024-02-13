@@ -227,8 +227,6 @@
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
     
-    [self addGpxCreateDate:gpx];
-    
     return gpx;
 }
 
@@ -355,22 +353,6 @@
     return NO;
 }
 
--(void)addGpxCreateDate:(OAGPX *)gpx
-{
-    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:gpx.absolutePath];
-    if (gpxFile.metadata.time > 0)
-    {
-        gpx.creationDate = [NSDate dateWithTimeIntervalSince1970:gpxFile.metadata.time];
-    }
-    else
-    {
-        NSDictionary *attrs = [NSFileManager.defaultManager attributesOfItemAtPath:gpx.absolutePath error:nil];
-        NSDate *modificationDate = [attrs objectForKey:NSFileModificationDate];
-        if (modificationDate)
-            gpx.creationDate = modificationDate;
-    }
-}
-
 - (void)load
 {
     NSMutableArray *res = [NSMutableArray array];
@@ -408,7 +390,6 @@
     NSMutableArray *dbContent = [NSMutableArray array];
     for (OAGPX *gpx in gpxList)
     {
-        [self addGpxCreateDate:gpx];
         [dbContent addObject:[self generateGpxData:gpx]];
     }
     [dbContent writeToFile:self.dbFilePath atomically:YES];
@@ -475,7 +456,6 @@
     [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
     [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
     [d setObject:gpx.importDate forKey:@"importDate"];
-    [d setObject:gpx.creationDate forKey:@"creationDate"];
 
     [d setObject:@((int) gpx.color) forKey:@"color"];
 
@@ -575,8 +555,6 @@
             gpx.gpxDescription = value;
         } else if ([key isEqualToString:@"importDate"]) {
             gpx.importDate = value;
-        } else if ([key isEqualToString:@"creationDate"]) {
-            gpx.creationDate = value;
         } else if ([key isEqualToString:@"totalDistance"]) {
             gpx.totalDistance = [value floatValue];
         } else if ([key isEqualToString:@"totalTracks"]) {

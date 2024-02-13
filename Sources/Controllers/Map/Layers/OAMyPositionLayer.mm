@@ -74,7 +74,8 @@ typedef enum {
 - (instancetype) initWithMapView:(OAMapRendererView *)mapView;
 
 - (void) hideMarkers;
-- (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading visible:(BOOL)visible;
+- (void) updatePosition:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy visible:(BOOL)visible;
+- (void) updateDirection:(CLLocationDirection)heading;
 - (OsmAnd::PointI) getPosition;
 
 @end
@@ -207,32 +208,27 @@ typedef enum {
     }
 }
 
-- (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading visible:(BOOL)visible
+- (void) updatePosition:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy visible:(BOOL)visible
 {
     std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
-    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     if (marker)
     {
-        marker->setIsAccuracyCircleVisible(true);
-        marker->setAccuracyCircleRadius(horizontalAccuracy);
-
-        _mapView.mapMarkersAnimator->cancelAnimations(marker);
         if (animationDuration > 0)
-        {
             _mapView.mapMarkersAnimator->animatePositionTo(marker, target31, animationDuration,  OsmAnd::Animator::TimingFunction::Linear);
-            if (iconKey)
-                _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
-        }
         else
-        {
             marker->setPosition(target31);
-            if (iconKey)
-                marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
-        }
-
+        
         if (visible && marker->isHidden())
             marker->setIsHidden(false);
     }
+}
+
+- (void) updateDirection:(CLLocationDirection)heading
+{
+    std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
+    OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
+    if (marker && iconKey)
+        marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
 }
 
 - (void) updateOtherLocations:(OsmAnd::PointI)target31 horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading
@@ -582,34 +578,81 @@ typedef enum {
     const OsmAnd::PointI newTarget31 =
             OsmAnd::PointI(OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
                            OsmAnd::Utilities::get31TileNumberY(newLocation.coordinate.latitude));
-
-    float animationDuration = 0;
-    if (OAAppSettings.sharedManager.animateMyLocation.get && prevLocation && ![OAMapViewTrackingUtilities isSmallSpeedForAnimation:_lastLocation])
+    
+    
+    if (!prevLocation)
     {
-        animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
-        if (animationDuration > 5)
-            animationDuration = 0;
+        // on layer starting set position and heading immediately
+        [self updateVisibleMarkerPosition:c newLocation:newLocation newTarget31:newTarget31 animationDuration:0 visible:YES];
     }
-
-    [self updateCollectionLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:YES];
-
+    else
+    {
+        // regular mode
+        double distanceDiff = [_prevLocation distanceFromLocation:newLocation];
+        if (distanceDiff > 0)
+        {
+            // LatLon changes only 1 time per second. Launch animation on it if needed
+            double animationDuration = 0;
+            if (OAAppSettings.sharedManager.animateMyLocation.get)
+            {
+                animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
+                if (animationDuration < 0.1)
+                    animationDuration = 0.5;
+                if (animationDuration > 5)
+                    animationDuration = 5;
+            }
+            [self updateVisibleMarkerPosition:c newLocation:newLocation newTarget31:newTarget31 animationDuration:animationDuration visible:YES];
+            [self updateVisibleMarkerDirection:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading visible:YES];
+        }
+        else
+        {
+            // Heading changes very many times per second. Change it immediately without animation
+            [self updateVisibleMarkerDirection:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading visible:YES];
+        }
+    }
+    
+    // Update posioion for all invisible for now markers without animation
+    [self updateHiddenMarkersLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading];
     for (OAMarkerCollection *mc in _modeMarkers.objectEnumerator)
+    {
         if (mc != c)
-            [self updateCollectionLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:0 visible:NO];
+        {
+            [self updateVisibleMarkerPosition:mc newLocation:newLocation newTarget31:newTarget31 animationDuration:0 visible:YES];
+            [self updateVisibleMarkerDirection:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading visible:YES];
+            [self updateHiddenMarkersLocation:mc newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading];
+        }
+    }
 }
 
-- (void) updateCollectionLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading animationDuration:(float)animationDuration visible:(BOOL)visible
+- (void) updateVisibleMarkerPosition:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 animationDuration:(float)animationDuration visible:(BOOL)visible
+{
+    [c updatePosition:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy visible:visible];
+}
+
+- (void) updateVisibleMarkerDirection:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading visible:(BOOL)visible
 {
     if (newLocation.course >= 0)
     {
         c.state = OAMarkerColletionStateMove;
-        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90 visible:visible];
+        [c updateDirection:newLocation.course - 90];
+    }
+    else if (_mapViewTrackingUtilities.showViewAngle)
+    {
+        c.state = OAMarkerColletionStateStay;
+        [c updateDirection:newHeading];
+    }
+}
+
+- (void) updateHiddenMarkersLocation:(OAMarkerCollection *)c newLocation:(CLLocation *)newLocation newTarget31:(OsmAnd::PointI)newTarget31 newHeading:(CLLocationDirection)newHeading
+{
+    if (newLocation.course >= 0)
+    {
+        c.state = OAMarkerColletionStateMove;
         [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90];
     }
     else if (_mapViewTrackingUtilities.showViewAngle)
     {
         c.state = OAMarkerColletionStateStay;
-        [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading visible:visible];
         [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading];
     }
 }

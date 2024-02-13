@@ -68,8 +68,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     int _calculationProgress;
 
     CPMapButton *_3DModeMapButton;
-    BOOL _needToSwitchTo3DMode;
-    OAAutoObserverProxy *_mapTrackingAnimatedObserver;
+    BOOL _wasIn3DBeforePreview;
 
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     OAAutoObserverProxy *_map3DModeObserver;
@@ -87,10 +86,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [_routingHelper addCalculationProgressCallback:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
-
-    _mapTrackingAnimatedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                 withHandler:@selector(onMapTrackingAnimated)
-                                                  andObserve:[OAMapViewTrackingUtilities instance].mapTrackingAnimatedObservable];
 }
 
 - (void) stopNavigation
@@ -137,22 +132,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self onMap3dModeUpdated];
 }
 
-
-- (void)onMapTrackingAnimated
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (_needToSwitchTo3DMode && ![[OAMapViewTrackingUtilities instance] isIn3dMode])
-        {
-            _needToSwitchTo3DMode = NO;
-            [[OAMapViewTrackingUtilities instance] switchMap3dMode];
-        }
-    });
-}
-
 - (void) enterRoutePreviewMode
 {
     if ([[OAMapViewTrackingUtilities instance] isIn3dMode])
-        _needToSwitchTo3DMode = YES;
+        _wasIn3DBeforePreview = YES;
 
     [OAOsmAndFormatter getFormattedTimeHM:_routingHelper.getLeftTime];
     CPRouteChoice *routeChoice = [[CPRouteChoice alloc] initWithSummaryVariants:@[] additionalInformationVariants:@[] selectionSummaryVariants:@[]];
@@ -325,6 +308,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                     [_delegate exitNavigationMode];
                 [_mapTemplate hideTripPreviews];
                 [self enterBrowsingState];
+                if (_wasIn3DBeforePreview && ![[OAMapViewTrackingUtilities instance] isIn3dMode])
+                {
+                    _wasIn3DBeforePreview = NO;
+                    [[OAMapViewTrackingUtilities instance] switchMap3dMode];
+                }
                 break;
             }
             default:
@@ -418,6 +406,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     _isInRoutePreview = NO;
     
     _navigationSession = [_mapTemplate startNavigationSessionForTrip:trip];
+    if (_wasIn3DBeforePreview && ![[OAMapViewTrackingUtilities instance] isIn3dMode])
+    {
+        _wasIn3DBeforePreview = NO;
+        [[OAMapViewTrackingUtilities instance] switchMap3dMode];
+    }
     [[OARootViewController instance].mapPanel startNavigation];
 }
 

@@ -18,8 +18,6 @@
 @property (nonatomic, readonly) BOOL showViewAngle;
 @property (nonatomic, readonly) BOOL movingToMyLocation;
 
-@property (readonly) OAObservable *mapTrackingAnimatedObservable;
-
 + (OAMapViewTrackingUtilities *)instance;
 
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location;

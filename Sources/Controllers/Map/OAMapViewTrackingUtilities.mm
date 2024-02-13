@@ -100,8 +100,6 @@
                                                                     withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:_app.locationServices.updateObserver];
 
-        _mapTrackingAnimatedObservable = [[OAObservable alloc] init];
-
         //addTargetPointListener(app);
         //addMapMarkersListener(app);
         //[[OARoutingHelper sharedInstance] addListener:self];
@@ -149,7 +147,20 @@
                     // Fly to last-known position without changing anything but target
 
                     _mapView.mapAnimator->pause();
-                    _mapView.mapAnimator->cancelAllAnimations();
+
+                    if (_mapViewController.isCarPlayActive)
+                    {
+                        QList< std::shared_ptr<OsmAnd::IAnimation> > allAnimations = _mapView.mapAnimator->getAllAnimations();
+                        for (const auto &animation : allAnimations)
+                        {
+                            if (animation->getAnimatedValue() != OsmAnd::Animator::AnimatedValue::ElevationAngle)
+                                _mapView.mapAnimator->cancelAnimation(animation);
+                        }
+                    }
+                    else
+                    {
+                        _mapView.mapAnimator->cancelAllAnimations();
+                    }
 
                     OsmAnd::PointI newTarget31(
                                                OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
@@ -187,8 +198,6 @@
                     
 
                     _mapView.mapAnimator->resume();
-
-                    [_mapTrackingAnimatedObservable notifyEvent];
                 }
                 break;
             }

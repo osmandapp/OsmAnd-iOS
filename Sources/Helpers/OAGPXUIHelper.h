@@ -28,7 +28,6 @@
 
 + (OAGPXDocument *) makeGpxFromRoute:(OARouteCalculationResult *)route;
 + (NSString *) getDescription:(OAGPX *)gpx;
-+ (NSDate * _Nullable) getCreationDate:(NSString *_Nullable)filePath;
 
 + (long) getSegmentTime:(OATrkSegment *)segment;
 + (double) getSegmentDistance:(OATrkSegment *)segment;

@@ -75,7 +75,6 @@ private enum TrackSortType {
 @objc(OAMapSettingsGpxViewController)
 @objcMembers
 final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
-    typealias GPXItemWithDate = (gpx: OAGPX, creationDate: Date)
     private let previouslyVisibleTracksKey = "PreviouslyVisibleGpxFilePaths"
     private var searchController: UISearchController?
     private var segmentedControl: UISegmentedControl?
@@ -598,21 +597,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
             case .nameZA:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
-            case .newestDateFirst, .oldestDateFirst:
-                let tempItems: [GPXItemWithDate] = list.map {
-                    guard let path = $0.absolutePath, let creationDate = OAGPXUIHelper.getCreationDate(path) ?? $0.importDate else {
-                        return (gpx: $0, creationDate: Date.distantPast)
-                    }
-
-                    return (gpx: $0, creationDate: creationDate)
-                }
-                
-                if sortType == .newestDateFirst {
-                    list = tempItems.sorted { $0.creationDate > $1.creationDate }.map { $0.gpx }
-                } else {
-                    list = tempItems.sorted { $0.creationDate < $1.creationDate }.map { $0.gpx }
-                }
-                
+            case .newestDateFirst:
+                list.sort { ($0.creationDate ?? Date.distantPast) > ($1.creationDate ?? Date.distantPast) }
+            case .oldestDateFirst:
+                list.sort { ($0.creationDate ?? Date.distantPast) < ($1.creationDate ?? Date.distantPast) }
             case .longestDistanceFirst:
                 list.sort { $0.totalDistance > $1.totalDistance }
             case .shortestDistanceFirst:
@@ -649,10 +637,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
         
         let creationDate: String
-        if let path = gpx.absolutePath, let date = OAGPXUIHelper.getCreationDate(path) {
+        if let date = gpx.creationDate {
             creationDate = dateFormatter.string(from: date)
         } else {
-            creationDate = "N/A"
+            creationDate = localizedString("shared_string_not_available")
         }
         
         let distanceToTrack: String
@@ -660,16 +648,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         if calculatedDistance != CGFloat.greatestFiniteMagnitude {
             distanceToTrack = OAOsmAndFormatter.getFormattedDistance(Float(calculatedDistance))
         } else {
-            distanceToTrack = "N/A"
+            distanceToTrack = localizedString("shared_string_not_available")
         }
         
         let regionName: String
         let gpxLocation = gpx.bounds.center
         if gpxLocation.latitude != Double.greatestFiniteMagnitude,
            let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: gpxLocation.latitude, lon: gpxLocation.longitude) {
-            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? "N/A"
+            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? localizedString("shared_string_not_available")
         } else {
-            regionName = "N/A"
+            regionName = localizedString("shared_string_not_available")
         }
         
         let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: gpxLocation.latitude, destinationLongitude: gpxLocation.longitude)

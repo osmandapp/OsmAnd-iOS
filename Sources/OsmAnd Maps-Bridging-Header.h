@@ -28,7 +28,6 @@
 #import "AFNetworkReachabilityManagerWrapper.h"
 #import "OAChoosePlanHelper.h"
 #import "OAWebImagesCacheHelper.h"
-#import "OAGPXUIHelper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

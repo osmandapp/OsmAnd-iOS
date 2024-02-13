@@ -147,7 +147,12 @@
                     // Fly to last-known position without changing anything but target
 
                     _mapView.mapAnimator->pause();
-                    _mapView.mapAnimator->cancelAllAnimations();
+
+                    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+                    {
+                        if (animation->getAnimatedValue() != OsmAnd::Animator::AnimatedValue::ElevationAngle)
+                            _mapView.mapAnimator->cancelAnimation(animation);
+                    }
 
                     OsmAnd::PointI newTarget31(
                                                OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),

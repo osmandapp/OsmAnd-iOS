@@ -185,16 +185,14 @@
                 @"key": @"mapillary_layer"
         }];
     }
-
-    if ([[[OAGPXDatabase sharedDb] gpxList] count] > 0 || [[OASavingTrackHelper sharedInstance] hasData])
-    {
-        [showSectionData addObject:@{
-                @"name": OALocalizedString(@"shared_string_gpx_tracks"),
-                @"image": @"ic_custom_trip",
-                @"type": [OASimpleTableViewCell getCellIdentifier],
-                @"key": @"tracks"
-        }];
-    }
+    
+    [showSectionData addObject:@{
+        @"name": OALocalizedString(@"shared_string_gpx_tracks"),
+        @"image": @"ic_custom_trip",
+        @"value": [NSString stringWithFormat:@"%d", (int)_settings.mapSettingVisibleGpx.get.count],
+        @"type": [OAValueTableViewCell getCellIdentifier],
+        @"key": @"tracks"
+    }];
     
     [showSectionData addObject:@{
             @"name": OALocalizedString(@"show_borders_of_downloaded_maps"),
@@ -1166,8 +1164,6 @@
         [self openCloseGroup:indexPath];
     else if ([item[@"key"] isEqualToString:@"poi_layer"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenPOI];
-    else if ([item[@"key"] isEqualToString:@"tracks"])
-        mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenGpx];
     else if ([item[@"key"] isEqualToString:@"mapillary_layer"])
         mapSettingsViewController = [[OAMapSettingsViewController alloc] initWithSettingsScreen:EMapSettingsScreenMapillaryFilter];
     else if ([item[@"key"] isEqualToString:@"wikipedia_layer"] && !isPromoButton)
@@ -1227,6 +1223,9 @@
 
     if (mapSettingsViewController)
         [mapSettingsViewController show:vwController.parentViewController parentViewController:vwController animated:YES];
+    
+    if ([item[@"key"] isEqualToString:@"tracks"])
+        [self.vwController.navigationController pushViewController:[OAMapSettingsGpxViewController new] animated:YES];
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

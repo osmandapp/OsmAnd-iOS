@@ -12,8 +12,10 @@
 
 @interface OASunriseSunsetWidgetState : OAWidgetState
 
-- (instancetype) initWithType:(BOOL)sunriseMode customId:(NSString *)customId;
-- (BOOL) isSunriseMode;
-- (OACommonInteger *) getPreference;
+@property (nonatomic, strong, nullable) NSString *customId;
+
+- (instancetype _Nonnull)initWithType:(BOOL)sunriseMode customId:(NSString *_Nullable)customId;
+- (BOOL)isSunriseMode;
+- (OACommonInteger *)getPreference;
 
 @end

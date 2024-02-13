@@ -333,6 +333,7 @@
 "shared_string_light" = "Light";
 "shared_string_system_default" = "System default";
 "shared_string_page_number" = "Page %d";
+"shared_string_row_number" = "Row %d";
 "compass_on_circles" = "Compass on circles";
 "add_widget" = "Add widget";
 "add_page" = "Add page";
@@ -591,6 +592,21 @@
 "route_is_too_long_v2" = "For long distances: Please add intermediate destinations if no route is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "Use shown track for navigation?";
+"no_track_files" = "You don’t have track files";
+"import_create_track_files" = "You can import, create, or record track files using OsmAnd.";
+"no_tracks_on_map" = "No tracks on map";
+"select_tracks_to_display" =  "Select tracks to display them on the map.";
+"show_all_tracks" = "Show all tracks";
+"recently_visible" = "Recently visible";
+"shared_string_nearest" = "Nearest";
+"track_sort_az" = "Name A - Z";
+"track_sort_za" = "Name Z - A";
+"newest_date_first" = "Newest date first";
+"oldest_date_first" = "Oldest date first";
+"longest_distance_first" = "Longest distance first";
+"shortest_distance_first" = "Shortest distance first";
+"longest_duration_first" = "Longest duration first";
+"shorter_duration_first" = "Shorter duration first";
 "previous_route" = "Previous route";
 "shared_string_ellipsis" = "…";
 "shared_string_select_on_map" = "Select on map";
@@ -846,6 +862,11 @@
 "shared_string_link" = "Link";
 "shared_string_license" = "License";
 "shared_string_keywords" = "Keywords";
+"shared_string_trash" = "Trash";
+"shared_string_file_info" = "File info";
+"shared_string_delete_immediately" = "Delete immediately";
+"shared_string_delete_item" = "Delete item";
+"shared_string_is_deleted" = "%@ is deleted.";
 
 "restart" = "Restart";
 
@@ -3568,3 +3589,20 @@
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+
+"show_icon" = "Show icon";
+"simple_widget_footer" = "Widget can take full row width or just one column.";
+"complex_widget_alert" = "%@ widget can only be placed on its own row.";
+
+"shared_string_deleted" = "Deleted";
+"duration_moment_ago" = "a moment ago";
+"trash_is_empty" = "Trash is empty";
+"trash_is_empty_banner_desc" = "Files removed from OsmAnd Cloud will be available here for %d days after.";
+"delete_all_items" = "Delete all items";
+"delete_all_items_desc" = "Are you sure you want to permanently delete all items in the Trash? This action can't be undone.";
+"subscribe_email_error" = "Error";
+"restore_from_trash" = "Restore from trash";
+"download_to_device" = "Download to device";
+"permanent_delete_warning" = "%@ will be deleted permanently. Are you sure?";
+"action_cannot_be_undone" = "This action can't be undone.";
+"cloud_item_restored" = "%@ is restored into Cloud.";

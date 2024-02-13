@@ -8,6 +8,10 @@
 
 import Foundation
 
+extension Notification.Name {
+    static let SimpleWidgetStyleUpdated = NSNotification.Name("SimpleWidgetStyleUpdated")
+}
+
 @objc(OAWidgetConfigurationViewController)
 @objcMembers
 class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStateDelegate {
@@ -25,15 +29,28 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
-        
-        if isCreateNewAndSimilarAlreadyExist {
+        if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
         }
+    }
+
+    override func registerCells() {
+        addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
         tableData.clearAllData()
+        // Add section for simple widgets
+        if !WidgetType.isComplexWidget(widgetInfo.key), widgetPanel == .topPanel || widgetPanel == .bottomPanel {
+            if let settingsData = widgetInfo.getSettingsDataForSimpleWidget(selectedAppMode) {
+                for i in 0 ..< settingsData.sectionCount() {
+                    tableData.addSection(settingsData.sectionData(for: i))
+                }
+            }
+        }
+        
         if let settingsData = widgetInfo.getSettingsData(selectedAppMode) {
             for i in 0 ..< settingsData.sectionCount() {
                 tableData.addSection(settingsData.sectionData(for: i))
@@ -76,11 +93,11 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell?.descriptionVisibility(false)
             }
             if let cell {
-                let pref = item.obj(forKey: "pref") as! OACommonBoolean
+                let pref = item.obj(forKey: "pref") as? OACommonBoolean
                 let hasIcon = item.iconName != nil
                 cell.titleLabel.text = item.title
                 cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                var selected = pref.get(selectedAppMode)
+                var selected = pref?.get(selectedAppMode) ?? false
                 if isCreateNewAndSimilarAlreadyExist {
                     if widgetKey == WidgetType.averageSpeed.id {
                         if isFirstGenerateData {
@@ -91,6 +108,9 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     } else {
                         fatalError("You need implement value handler for widgetKey")
                     }
+                }
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                    widgetConfigurationParams?["isVisibleIcon"] = selected
                 }
                 cell.switchView.isOn = selected
                 cell.leftIconVisibility(hasIcon)
@@ -154,6 +174,34 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell.titleLabel.text = item.title
             }
             outCell = cell
+        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
+            cell.selectionStyle = .none
+            if let icons = item.obj(forKey: "values") as? [String],
+               let pref = item.obj(forKey: "prefSegment") as? OACommonInteger {
+                let widgetSizeStyle = pref.get(selectedAppMode)
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                    widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle
+                }
+                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: Int(widgetSizeStyle))
+            }
+            if let title = item.string(forKey: "title") {
+                cell.configureTitle(title: title)
+            }
+            cell.didSelectSegmentIndex = { [weak self] index in
+                guard let self,
+                      let pref = item.obj(forKey: "prefSegment") as? OACommonInteger else { return }
+                pref.set(Int32(index), mode: selectedAppMode)
+                if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+                    widgetConfigurationParams?["widgetSizeStyle"] = index
+                }
+                if item.string(forKey: "behaviour") == "simpleWidget" {
+                    NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
+                                                    object: widgetInfo,
+                                                    userInfo: nil)
+                }
+            }
+            outCell = cell
         }
         return outCell
     }
@@ -180,7 +228,9 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             let pref = data.obj(forKey: "pref") as! OACommonBoolean
             pref.set(sw.isOn, mode: selectedAppMode)
         }
-        
+        if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
+            widgetConfigurationParams?["isVisibleIcon"] = sw.isOn
+        }
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
                 cell.leftIconView.image = UIImage.templateImageNamed(sw.isOn ? data.iconName : data.string(forKey: "hide_icon"))
@@ -320,19 +370,16 @@ extension WidgetConfigurationViewController {
     }
     
     override func onBottomButtonPressed() {
-        UIView.animate(withDuration: 0) {
-            if let viewControllers = self.navigationController?.viewControllers {
-                for viewController in viewControllers {
-                    if let targetViewController = viewController as? WidgetsListViewController {
-                        self.navigationController?.popToViewController(targetViewController, animated: true)
-                        break
-                    }
+        NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
+                                        object: self.widgetInfo,
+                                        userInfo: self.widgetConfigurationParams)
+        if let viewControllers = self.navigationController?.viewControllers {
+            for viewController in viewControllers {
+                if let targetViewController = viewController as? WidgetsListViewController {
+                    self.navigationController?.popToViewController(targetViewController, animated: true)
+                    break
                 }
             }
-        } completion: { Bool in
-            NotificationCenter.default.post(name: NSNotification.Name(WidgetsListViewController.kWidgetAddedNotification),
-                                            object: self.widgetInfo,
-                                            userInfo: self.widgetConfigurationParams)
         }
     }
 

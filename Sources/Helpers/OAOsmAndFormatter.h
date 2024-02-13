@@ -49,14 +49,18 @@
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)interval;
 + (NSString *)getFormattedTimeInterval:(NSTimeInterval)timeInterval shortFormat:(BOOL)shortFormat;
 + (NSString *)getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def;
++ (NSString *)getFormattedDateTime:(NSTimeInterval)time;
++ (NSString *)getFormattedDate:(NSTimeInterval)time;
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedSpeed:(float)metersperseconds drive:(BOOL)drive;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
 + (NSString *)getFormattedAlt:(double)alt;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc;
++ (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
 + (NSString *)getFormattedDistanceInterval:(double)interval;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
-+ (NSString *)getFormattedDuration:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
++ (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
++ (NSString *)getFormattedDuration:(NSTimeInterval)seconds;
 
 @end

@@ -15,7 +15,10 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     private let intermediate: Bool
     private let arrivalTimeOrTimeToGo: OACommonBoolean
     
+    var customId: String?
+    
     init(customId: String?, intermediate: Bool) {
+        self.customId = customId
         self.intermediate = intermediate
         self.arrivalTimeOrTimeToGo = TimeToNavigationPointWidgetState.registerTimeTypePref(customId: customId, intermediate: intermediate)
     }
@@ -30,6 +33,10 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
     
     override func getMenuTitle() -> String {
         return TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getTitle()
+    }
+    
+    override func getWidgetTitle() -> String? {
+        TimeToNavigationPointState.getState(intermediate: intermediate, arrivalOtherwiseTimeToGo: arrivalTimeOrTimeToGo.get()).getWidgetTitle()
     }
     
     func getPrefValue() -> String {
@@ -60,45 +67,45 @@ class TimeToNavigationPointWidgetState: OAWidgetState {
 @objc(OATimeToNavigationPointState)
 @objcMembers
 class TimeToNavigationPointState: NSObject {
-
+    
     static let intermediateTimeToGo = TimeToNavigationPointState(
         title: localizedString("map_widget_time"),
         iconName: "widget_intermediate_time_to_go",
-        intermediate: true
+        intermediate: true,
+        value: localizedString("map_widget_time")
     )
 
     static let intermediateArrivalTime = TimeToNavigationPointState(
         title: localizedString("access_arrival_time"),
         iconName: "widget_intermediate_time",
-        intermediate: true
+        intermediate: true,
+        value: localizedString("access_arrival_time")
     )
 
     static let destinationTimeToGo = TimeToNavigationPointState(
         title: localizedString("map_widget_time"),
         iconName: "widget_destination_time_to_go",
-        intermediate: false
+        intermediate: false,
+        value: localizedString("map_widget_time")
     )
 
     static let destinationArrivalTime = TimeToNavigationPointState(
         title: localizedString("access_arrival_time"),
         iconName: "widget_time_to_distance",
-        intermediate: false
+        intermediate: false,
+        value: localizedString("access_arrival_time")
     )
 
     let title: String
     let iconName: String
     let intermediate: Bool
+    let value: String
 
-    init(title: String, iconName: String, intermediate: Bool) {
+    init(title: String, iconName: String, intermediate: Bool, value: String) {
         self.title = title
         self.iconName = iconName
         self.intermediate = intermediate
-    }
-
-    func getTitle() -> String {
-        intermediate
-            ? localizedString("map_widget_time_to_intermediate")
-            : localizedString("map_widget_time_to_destination")
+        self.value = value
     }
 
     static func getState(intermediate: Bool, arrivalOtherwiseTimeToGo: Bool) -> TimeToNavigationPointState {
@@ -108,6 +115,20 @@ class TimeToNavigationPointState: NSObject {
             return arrivalOtherwiseTimeToGo ? destinationArrivalTime : destinationTimeToGo
         }
     }
-
+    
+    func getTitle() -> String {
+        intermediate
+            ? localizedString("map_widget_time_to_intermediate")
+            : localizedString("map_widget_time_to_destination")
+    }
+    
+    func getWidgetTitle() -> String {
+        intermediate
+            ? appendValueTo(string: localizedString("rendering_attr_smoothness_intermediate_name"))
+            : appendValueTo(string: localizedString("route_descr_destination"))
+    }
+    
+    private func appendValueTo(string: String) -> String {
+        string + ", \(value)"
+    }
 }
-

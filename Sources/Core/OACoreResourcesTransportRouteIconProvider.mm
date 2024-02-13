@@ -51,7 +51,8 @@ sk_sp<const SkImage> OACoreResourcesTransportRouteIconProvider::getIcon(
             if (backgroundBmp)
             {
                 OATransportStopType *type = [OATransportStopType findType:transportRoute->type.toNSString()];
-                UIImage *origIcon = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", type.resName] scale:symbolsScaleFactor];
+                float size = 14.0f * symbolsScaleFactor;
+                UIImage *origIcon = [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", type.resName] width:size height:size];
                 if (origIcon)
                 {
                     UIImage *tintedIcon = [OAUtilities tintImageWithColor:origIcon color:[UIColor whiteColor]];

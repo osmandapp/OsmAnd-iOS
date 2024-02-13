@@ -99,6 +99,10 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     override func getCustomHeight(forFooter section: Int) -> CGFloat {
         48
     }
+
+    override func registerCells() {
+        addCell(OptionDeviceTableViewCell.reuseIdentifier)
+    }
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         if let devices, devices.count > indexPath.row {
@@ -267,7 +271,6 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         view.backgroundColor = UIColor.viewBg
         tableView.register(SectionHeaderFooterButton.nib,
                            forHeaderFooterViewReuseIdentifier: SectionHeaderFooterButton.getCellIdentifier())
-        tableView.register(UINib(nibName: OptionDeviceTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OptionDeviceTableViewCell.reuseIdentifier)
     }
         
     private func getPairedDevicesForCurrentWidgetType() -> [Device]? {

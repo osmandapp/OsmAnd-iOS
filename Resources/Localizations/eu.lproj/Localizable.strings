@@ -2551,3 +2551,7 @@
 "search_favorites" = "Gogokoenetan bilatu";
 "add_row" = "Gehitu errenkada";
 "shared_string_cache" = "Cache";
+"shared_string_link" = "Esteka";
+"shared_string_author" = "Egilea";
+"shared_string_keywords" = "Gako-hitzak";
+"shared_string_license" = "Lizentzia";

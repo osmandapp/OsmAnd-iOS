@@ -1109,7 +1109,7 @@
 
 + (UIImage *) getUserIcon
 {
-    return [UIImage svgImageNamed:@"mx_user_defined"];
+    return [UIImage svgImageNamed:@"map-icons-svg/mx_user_defined"];
 }
 
 + (NSString *)getCustomFilterIconName:(OAPOIUIFilter *)filter

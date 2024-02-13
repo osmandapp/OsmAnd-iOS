@@ -250,6 +250,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
     MBProgressHUD *_progressHUD;
     BOOL _rotationAnd3DViewDisabled;
+    // Stores the tilt angle of the map that the user made with a UIPanGestureRecognizer gesture (moving 2 fingers)
+    float _map3DModeElevationAngle;
 }
 
 - (instancetype) initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
@@ -531,6 +533,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
         float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
         _mapView.elevationAngle = isnan(elevationAngle) ? 90 : elevationAngle;
+        _map3DModeElevationAngle = _mapView.elevationAngle;
     }
     
     // Mark that map source is no longer valid
@@ -741,6 +744,11 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (float) getMapZoom
 {
     return _mapView.zoom;
+}
+
+- (float)getMap3DModeElevationAngle
+{
+    return _map3DModeElevationAngle;
 }
 
 - (void)setViewportScaleX:(double)x y:(double)y
@@ -1492,6 +1500,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     if (angle < kElevationMinAngle)
         angle = kElevationMinAngle;
     _mapView.elevationAngle = angle;
+    _map3DModeElevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
 
     if (recognizer.state == UIGestureRecognizerStateEnded ||
@@ -2054,6 +2063,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 - (void) resetViewAngle
 {
     _mapView.elevationAngle = 90.;
+    _map3DModeElevationAngle = _mapView.elevationAngle;
 }
 
 - (void) updateCurrentMapSource
@@ -2061,7 +2071,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     if (!self.mapViewLoaded)
         return;
     
-    [self showProgressHUD];
+    //[self showProgressHUD];
     
     @synchronized(_rendererSync)
     {
@@ -2350,7 +2360,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
 
-        [self hideProgressHUD];
+        //[self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
 }

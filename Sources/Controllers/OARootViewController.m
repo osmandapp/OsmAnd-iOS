@@ -396,7 +396,7 @@ typedef enum : NSUInteger {
     OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
     if (gpxController == nil)
         return;
-    [gpxController prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView];
+    [gpxController prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView completion:nil];
     [self closeMenuAndPanelsAnimated:NO];
 }
 

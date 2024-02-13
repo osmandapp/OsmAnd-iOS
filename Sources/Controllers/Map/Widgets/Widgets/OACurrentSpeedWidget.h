@@ -6,11 +6,15 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-#import "OATextInfoWidget.h"
+#import "OASimpleWidget.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OACurrentSpeedWidget : OATextInfoWidget
+@interface OACurrentSpeedWidget : OASimpleWidget
+
+- (instancetype _Nonnull)initWithCustomId:(NSString *_Nullable)customId
+                                  appMode:(OAApplicationMode * _Nonnull)appMode
+                             widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 @end
 

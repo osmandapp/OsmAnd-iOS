@@ -11,7 +11,7 @@ import CoreLocation
 
 @objc(OAMapMarkerSideWidget)
 @objcMembers
-class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
+class MapMarkerSideWidget: OASimpleWidget, CustomLatLonListener {
     private static let DASH = "—"
     
     private var mapMarkersHelper: OADestinationsHelper = OADestinationsHelper.instance()!
@@ -28,11 +28,11 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
     
     private var customLatLon: CLLocation?
     
-    convenience init(widgetState: MapMarkerSideWidgetState) {
+    convenience init(widgetState: MapMarkerSideWidgetState, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         
         self.init(frame: .zero)
-        
         self.widgetType = widgetState.isFirstMarker() ? WidgetType.sideMarker1 : WidgetType.sideMarker2
+        configurePrefs(withId: widgetState.customId, appMode: appMode, widgetParams: widgetParams)
         self.widgetState = widgetState
         self.markerModePref = widgetState.mapMarkerModePref
         self.averageSpeedIntervalPref = widgetState.averageSpeedIntervalPref
@@ -151,7 +151,7 @@ class MapMarkerSideWidget: OATextInfoWidget, CustomLatLonListener {
             cachedMarkerColor = marker.color
             cachedNightMode = isNightMode()
             if let cachedMarkerColor = cachedMarkerColor {
-                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor)
+                setImage(UIImage.templateImageNamed(iconName), with: cachedMarkerColor, iconName: iconName)
             }
         }
     }

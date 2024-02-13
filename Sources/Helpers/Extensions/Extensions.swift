@@ -9,12 +9,6 @@
 import Foundation
 import UIKit
 
-extension Date {
-    var startOfDay: Date {
-        return Calendar.current.startOfDay(for: self)
-    }
-}
-
 extension UIImage {
 
     func rotate(radians: CGFloat) -> UIImage {
@@ -37,6 +31,22 @@ extension UIImage {
         return self
     }
 
+    func rotateWithDiagonalSize(radians: CGFloat) -> UIImage? {
+        let diagonalSize = sqrt(size.width * size.width + size.height * size.height)
+        let newSize = CGSize(width: diagonalSize, height: diagonalSize)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = scale
+        let renderer = UIGraphicsImageRenderer(size: newSize, format: format)
+        let rotatedImage = renderer.image { context in
+            context.cgContext.translateBy(x: newSize.width / 2, y: newSize.height / 2)
+            context.cgContext.rotate(by: radians)
+            context.cgContext.translateBy(x: -size.width / 2, y: -size.height / 2)
+            let drawingRect = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+            self.draw(in: drawingRect)
+        }
+        
+        return rotatedImage
+    }
 }
 
 extension NSMutableAttributedString {

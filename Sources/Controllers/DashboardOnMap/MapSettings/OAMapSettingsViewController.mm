@@ -20,7 +20,6 @@
 #import "OAMapSettingsCategoryScreen.h"
 #import "OAMapSettingsParameterScreen.h"
 #import "OAMapSettingsSettingScreen.h"
-#import "OAMapSettingsGpxScreen.h"
 #import "OAMapSettingsPOIScreen.h"
 #import "OAMapSettingsOverlayUnderlayScreen.h"
 #import "OAMapSettingsLanguageScreen.h"
@@ -115,10 +114,6 @@
         case EMapSettingsScreenPOI:
             if (!self.screenObj)
                 self.screenObj = [[OAMapSettingsPOIScreen alloc] initWithTable:self.tableView viewController:self];
-            break;
-        case EMapSettingsScreenGpx:
-            if (!self.screenObj)
-                self.screenObj = [[OAMapSettingsGpxScreen alloc] initWithTable:self.tableView viewController:self];
             break;
         case EMapSettingsScreenMapType:
             if (!self.screenObj)

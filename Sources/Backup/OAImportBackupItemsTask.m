@@ -8,6 +8,8 @@
 
 #import "OAImportBackupItemsTask.h"
 #import "OABackupImporter.h"
+#import "OABackupHelper.h"
+#import "OAPrepareBackupResult.h"
 #import "OASettingsItem.h"
 
 @implementation OAImportBackupItemsTask
@@ -15,17 +17,26 @@
     OABackupImporter *_importer;
     __weak id<OAImportItemsListener> _listener;
     NSArray<OASettingsItem *> *_items;
+    EOARemoteFilesType _filesType;
     BOOL _foreceReadData;
+    BOOL _restoreDeleted;
 }
 
-- (instancetype) initWithImporter:(OABackupImporter *)importer items:(NSArray<OASettingsItem *> *)items listener:(id<OAImportItemsListener>)listener forceReadData:(BOOL)forceReadData
+- (instancetype) initWithImporter:(OABackupImporter *)importer
+                            items:(NSArray<OASettingsItem *> *)items
+                        filesType:(EOARemoteFilesType)filesType
+                         listener:(id<OAImportItemsListener>)listener
+                    forceReadData:(BOOL)forceReadData
+                   restoreDeleted:(BOOL)restoreDeleted
 {
     self = [super init];
     if (self) {
         _importer = importer;
         _items = items;
+        _filesType = filesType;
         _listener = listener;
         _foreceReadData = forceReadData;
+        _restoreDeleted = restoreDeleted;
     }
     return self;
 }
@@ -41,7 +52,9 @@
 - (BOOL) doInBackground
 {
     @try {
-        [_importer importItems:_items forceReadData:_foreceReadData];
+        OAPrepareBackupResult *backup = [OABackupHelper sharedInstance].backup;
+        NSArray<OARemoteFile *> *remoteFiles = [backup getRemoteFiles:_filesType].allValues;
+        [_importer importItems:_items remoteFiles:remoteFiles forceReadData:_foreceReadData restoreDeleted:_restoreDeleted];
         return YES;
     } @catch (NSException *exception) {
         NSLog(@"Failed to import items from backup");

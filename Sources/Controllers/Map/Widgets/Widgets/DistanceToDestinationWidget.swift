@@ -13,8 +13,9 @@ import CoreLocation
 @objcMembers
 class DistanceToDestinationWidget: OADistanceToPointWidget {
     
-    init() {
+    init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
         super.init(icon: "widget_target", widgetType: .distanceToDestination)
+        configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
     
     override init(frame: CGRect) {

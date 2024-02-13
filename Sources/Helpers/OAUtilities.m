@@ -196,9 +196,9 @@
     return [UIImage imageNamed:imageName].imageFlippedForRightToLeftLayoutDirection;
 }
 
-+ (UIImage *) svgImageNamed:(NSString *)name
++ (UIImage *) svgImageNamed:(NSString *)path
 {
-    return [OASvgHelper imageNamed:name];
+    return [OASvgHelper imageNamed:path];
 }
 
 + (UIImage *) mapSvgImageNamed:(NSString *)name
@@ -1255,6 +1255,25 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     int i = 0;
     for (int k = 0; k < s.length; k++)
     {
+        if (isdigit([s characterAtIndex:k])) {
+            i = i * 10 + ([s characterAtIndex:k] - '0');
+        } else {
+            break;
+        }
+    }
+    return i;
+}
+
++ (int) extractIntegerNumber:(NSString *)s
+{
+    int i = 0;
+    int k;
+    for (k = 0; k < s.length; k++) {
+        if (isdigit([s characterAtIndex:k])) {
+            break;
+        }
+    }
+    for (; k < s.length; k++) {
         if (isdigit([s characterAtIndex:k])) {
             i = i * 10 + ([s characterAtIndex:k] - '0');
         } else {

@@ -83,7 +83,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (UIImage *) templateImageNamed:(NSString *)imageName;
 + (UIImage *) rtlImageNamed:(NSString *)imageName;
-+ (UIImage *) svgImageNamed:(NSString *)name;
++ (UIImage *) svgImageNamed:(NSString *)path;
 + (UIImage *) mapSvgImageNamed:(NSString *)name;
 + (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
 + (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
@@ -259,6 +259,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSComparisonResult) compareInt:(int)x y:(int)y;
 + (NSComparisonResult) compareDouble:(double)x y:(double)y;
 + (int) extractFirstIntegerNumber:(NSString *)s;
++ (int) extractIntegerNumber:(NSString *)s;
 
 + (BOOL) isWordComplete:(NSString *)text;
 

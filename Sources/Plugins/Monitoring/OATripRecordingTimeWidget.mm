@@ -22,11 +22,14 @@
 
 @implementation OATripRecordingTimeWidget
 
-- (instancetype) init
+- (instancetype)initWithСustomId:(NSString *)customId
+                                  appMode:(OAApplicationMode *)appMode
+                             widgetParams:(NSDictionary * _Nullable)widgetParams;
 {
     self = [super initWithType:OAWidgetType.tripRecordingTime];
     if (self)
     {
+        [self configurePrefsWithId:customId appMode:appMode widgetParams:widgetParams];
         __weak OATextInfoWidget *weakSelf = self;
         long __block cachedTimeSpan = -1;
         
@@ -46,7 +49,7 @@
             if (cachedTimeSpan != timeSpan)
             {
                 cachedTimeSpan = timeSpan;
-                NSString *formattedTime = [OAOsmAndFormatter getFormattedDuration:timeSpan fullForm:NO];
+                NSString *formattedTime = [OAOsmAndFormatter getFormattedDurationShort:timeSpan fullForm:NO];
                 [weakSelf setText:formattedTime subtext:nil];
             }
             return YES;

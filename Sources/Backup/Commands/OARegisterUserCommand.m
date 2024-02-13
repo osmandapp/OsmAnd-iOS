@@ -46,6 +46,7 @@
     NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
     params[@"email"] = _email;
     params[@"login"] = _login ? @"true" : @"false";
+    params[@"lang"] = [OAUtilities currentLang];
     NSString *orderId = _promoCode.length == 0 ? backupHelper.getOrderId : _promoCode;
     if (orderId && orderId.length > 0)
         params[@"orderid"] = orderId;

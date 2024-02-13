@@ -56,4 +56,6 @@
 
 @property (nonatomic) OAWalkingRouteSegment *walkingRouteSegment;
 
+- (BOOL) recheckRouteNearestPoint;
+
 @end

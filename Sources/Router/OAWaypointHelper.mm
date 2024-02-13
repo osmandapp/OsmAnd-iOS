@@ -345,11 +345,6 @@
                     while (kIterator < lp.count)
                     {
                         OALocationPointWrapper *lwp = lp[kIterator];
-                        if (type == LPW_ALARMS && lwp.routeIndex < currentRoute)
-                        {
-                            kIterator++;
-                            continue;
-                        }
                         if (lwp.announce)
                         {
                             if (![atd isTurnStateActive:atdSpeed
@@ -358,7 +353,7 @@
                                 break;
                             
                             id<OALocationPoint> point = lwp.point;
-                            double d1 = MAX(0.0, [lastKnownLocation distanceFromLocation:[[CLLocation alloc] initWithLatitude:[point getLatitude] longitude:[point getLongitude]]] - lwp.deviationDistance);
+                            double d1 = MAX(0.0, [_route getDistanceToPoint:lastKnownLocation locationIndex:lwp.routeIndex] - lwp.deviationDistance);
                             NSNumber *state = [_locationPointsStates objectForKey:point];
                             if (state && state.intValue == ANNOUNCED_ONCE && [atd isTurnStateActive:atdSpeed dist:d1 turnType:kStateShortPntApproach])
                             {
@@ -373,6 +368,11 @@
                             else if (type == LPW_ALARMS && (!state || state.intValue == NOT_ANNOUNCED))
                             {
                                 OAAlarmInfo *alarm = (OAAlarmInfo *) point;
+                                if ([self beforeTunnelEntrance:currentRoute alarm:alarm])
+                                {
+                                    kIterator++;
+                                    continue;
+                                }
                                 EOAAlarmInfoType t = alarm.type;
                                 int announceRadius;
                                 BOOL filter = NO;
@@ -478,6 +478,11 @@
     }
 }
 
+- (BOOL) beforeTunnelEntrance:(int) currentRoute alarm:(OAAlarmInfo *)alarm
+{
+    return alarm.locationIndex > currentRoute && alarm.lastLocationIndex > currentRoute;
+}
+
 - (OAVoiceRouter *) getVoiceRouter
 {
     return [[OARoutingHelper sharedInstance] getVoiceRouter];
@@ -493,7 +498,7 @@
         [[self getVoiceRouter] announceSpeedAlarm:speedAlarm.intValue speed:lastProjection.speed];
     
     OAAlarmInfo *mostImportant = speedAlarm;
-    int value = speedAlarm ? [speedAlarm updateDistanceAndGetPriority:0 distance:0] : INT_MAX;
+    int mostPriority = speedAlarm ? [speedAlarm updateDistanceAndGetPriority:0 distance:0] : INT_MAX;
     if (LPW_ALARMS < _pointsProgress.count)
     {
         float speed = lastProjection && lastProjection.speed >= 0 ? lastProjection.speed : 0;
@@ -504,34 +509,35 @@
         {
             OAAlarmInfo *inf = (OAAlarmInfo *) lp[kIterator].point;
             int currentRoute = _route.currentRoute;
-            if (inf.locationIndex < currentRoute && inf.lastLocationIndex != -1 && inf.lastLocationIndex < currentRoute)
+            // lastLocationIndex  == -1 is always < currentRoute
+            if (inf.locationIndex <= currentRoute && inf.lastLocationIndex < currentRoute)
             {
-                // skip
+                // skip already passed alarms
             }
             else
             {
-                if (inf.type == AIT_TUNNEL && inf.lastLocationIndex != -1 && currentRoute > inf.locationIndex && currentRoute < inf.lastLocationIndex)
-                    inf.floatValue = [_route getDistanceToPoint:inf.lastLocationIndex];
-
+                int distanceByRoute = 0;
                 OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
                 CLLocation *lastKnownLocation = [routingHelper getLastProjection];
-
-                int d = (int) MAX(0.0, getDistance(lastKnownLocation.coordinate.latitude,
-                                                   lastKnownLocation.coordinate.longitude,
-                                                   [inf getLatitude],
-                                                   [inf getLongitude]) - lp[kIterator].deviationDistance);
-                if (inf.locationIndex == currentRoute && d > 10)
-                    return nil;
-
-                if (![atd isTurnStateActive:0 dist:d turnType:kStateLongPntApproach])
+                if (inf.locationIndex < currentRoute)
+                {
+                    // update remaining length
+                    inf.floatValue = [_route getDistanceToPoint:lastKnownLocation locationIndex:inf.lastLocationIndex];
+                }
+                else
+                {
+                    distanceByRoute = [_route getDistanceToPoint:lastKnownLocation locationIndex:inf.locationIndex - 1];
+                }
+                if (![atd isTurnStateActive:0 dist:distanceByRoute turnType:kStateLongPntApproach])
+                    // break once first future alarm is far away as others will be also far away
                     break;
 
-                float time = speed > 0 ? d / speed : INT_MAX;
-                int vl = [inf updateDistanceAndGetPriority:time distance:d];
-                if (vl < value && (showCameras || inf.type != AIT_SPEED_CAMERA))
+                float time = speed > 0 ? distanceByRoute / speed : INT_MAX;
+                int priority = [inf updateDistanceAndGetPriority:time distance:distanceByRoute];
+                if (priority < mostPriority && (showCameras || inf.type != AIT_SPEED_CAMERA))
                 {
                     mostImportant = inf;
-                    value = vl;
+                    mostPriority = priority;
                 }
             }
             kIterator++;

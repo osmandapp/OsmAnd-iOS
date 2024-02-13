@@ -155,7 +155,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     }
     
     func getWidgetsCount(panel: WidgetsPanel) -> Int {
-        let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable)
+        let filter = Int(kWidgetModeEnabled | KWidgetModeAvailable | kWidgetModeMatchingPanels)
         return widgetRegistry!.getWidgetsForPanel(appMode, filterModes: filter, panels: [panel]).count
     }
     
@@ -193,7 +193,7 @@ extension ConfigureScreenViewController {
             if let cell {
                 let isCustomLeftSeparatorInset = item.bool(forKey: "isCustomLeftSeparatorInset")
                 cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
-                cell.separatorInset = UIEdgeInsets.zero
+                cell.separatorInset = .zero
                 cell.valueLabel.text = item.descr
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 cell.leftIconView.tintColor = item.iconTintColor

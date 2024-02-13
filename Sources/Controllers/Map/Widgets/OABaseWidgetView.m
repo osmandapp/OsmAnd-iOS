@@ -9,11 +9,13 @@
 #import "OABaseWidgetView.h"
 #import "OAMapInfoController.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 @implementation OABaseWidgetView
 {
     BOOL _nightMode;
-    UIView *_separatorView;
+    UIView *_separatorBottomView;
+    UIView *_separatorRightView;
 }
 
 - (instancetype)initWithType:(OAWidgetType *)type
@@ -21,7 +23,7 @@
     self = [super init];
     if (self) {
         _widgetType = type;
-        [self initSeparatorView];
+        [self initSeparatorsView];
     }
     return self;
 }
@@ -31,25 +33,41 @@
     self = [super initWithFrame:frame];
     if (self) {
         self.frame = frame;
-        [self initSeparatorView];
+        [self initSeparatorsView];
     }
     return self;
 }
 
-- (void)initSeparatorView
+- (void)initSeparatorsView
 {
-    _separatorView = [[UIView alloc] init];
-    _separatorView.hidden = YES;
-    _separatorView.backgroundColor = UIColorFromRGB(color_tint_gray);
-    [self addSubview:_separatorView];
+    _separatorBottomView = [[UIView alloc] init];
+    _separatorBottomView.hidden = YES;
+    [self addSubview:_separatorBottomView];
     
-    _separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    _separatorBottomView.translatesAutoresizingMaskIntoConstraints = NO;
     [NSLayoutConstraint activateConstraints:@[
-        [_separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-        [_separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
-        [_separatorView.heightAnchor constraintEqualToConstant:.5]
+        [_separatorBottomView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+        [_separatorBottomView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorBottomView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
+        [_separatorBottomView.heightAnchor constraintEqualToConstant:.5]
     ]];
+    
+    _separatorRightView = [UIView new];
+    _separatorRightView.hidden = YES;
+    [self addSubview:_separatorRightView];
+    
+    _separatorRightView.translatesAutoresizingMaskIntoConstraints = NO;
+    [NSLayoutConstraint activateConstraints:@[
+        [_separatorRightView.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [_separatorRightView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+        [_separatorRightView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+        [_separatorRightView.widthAnchor constraintEqualToConstant:.5]
+    ]];
+}
+
+- (void)updatesSeparatorsColor:(UIColor *)color
+{
+    _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
 }
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref {
@@ -79,7 +97,12 @@
     return self.widgetType == nil;
 }
 
-- (OATableDataModel *) getSettingsData:(OAApplicationMode *)appMode
+- (OATableDataModel *)getSettingsData:(OAApplicationMode *)appMode
+{
+    return nil;
+}
+
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode
 {
     return nil;
 }
@@ -109,9 +132,18 @@
     return NO;
 }
 
-- (void)showSeparator:(BOOL)show
+- (void)updateSimpleLayout
 {
-    _separatorView.hidden = !show;
+    NSLog(@"call base updateSimpleLayout");
+}
+
+- (void)showBottomSeparator:(BOOL)show
+{
+    _separatorBottomView.hidden = !show;
+}
+
+- (void)showRightSeparator:(BOOL)show {
+    _separatorRightView.hidden = !show;
 }
 
 - (void)adjustViewSize

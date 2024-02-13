@@ -256,7 +256,6 @@ void OAMapillaryTilesProvider::drawLines(
 
 void OAMapillaryTilesProvider::clearDiskCache(bool vectorRasterOnly/* = false*/)
 {
-    QString rasterLocalCachePath;
     QString vectorLocalCachePath;
     {
         QMutexLocker scopedLocker(&_localCachePathMutex);
@@ -264,13 +263,14 @@ void OAMapillaryTilesProvider::clearDiskCache(bool vectorRasterOnly/* = false*/)
         vectorLocalCachePath = QString(_vectorLocalCachePath);
     }
     
+    if (vectorLocalCachePath.isEmpty())
+        return;
+
     QWriteLocker scopedLocker(&_localCacheLock);
 
     if (!vectorRasterOnly)
-    {
-        QDir(rasterLocalCachePath).removeRecursively();
         QDir(vectorLocalCachePath).removeRecursively();
-    }
+
     QDir(vectorLocalCachePath + QDir::separator() + QLatin1String("png")).removeRecursively();
 }
 

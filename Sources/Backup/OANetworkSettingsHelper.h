@@ -7,6 +7,7 @@
 //
 
 #import "OASettingsHelper.h"
+#import "OAPrepareBackupResult.h"
 
 #define kBackupItemsKey @"backup_items_key"
 #define kRestoreItemsKey @"restore_items_key"
@@ -66,7 +67,22 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 - (void) updateImportListener:(id<OAImportListener>)listener;
 
 - (void) syncSettingsItems:(NSString *)key operation:(EOABackupSyncOperationType)operation;
-- (void) syncSettingsItems:(NSString *)key localFile:(OALocalFile *)localFile remoteFile:(OARemoteFile *)remoteFile operation:(EOABackupSyncOperationType)operation;
+
+- (void) syncSettingsItems:(NSString *)key
+                 localFile:(OALocalFile *)localFile
+                remoteFile:(OARemoteFile *)remoteFile
+                 filesType:(EOARemoteFilesType)filesType
+                 operation:(EOABackupSyncOperationType)operation
+                errorToast:(void (^)(NSString *message, NSString *detail))errorToast;
+
+- (void) syncSettingsItems:(NSString *)key
+                 localFile:(OALocalFile *)localFile
+                remoteFile:(OARemoteFile *)remoteFile
+                 filesType:(EOARemoteFilesType)filesType
+                 operation:(EOABackupSyncOperationType)operation
+             shouldReplace:(BOOL)shouldReplace
+            restoreDeleted:(BOOL)restoreDeleted
+                errorToast:(void (^)(NSString *message, NSString *detail))errorToast;
 
 - (void) finishImport:(id<OAImportListener>)listener success:(BOOL)success items:(NSArray<OASettingsItem *> *)items;
 
@@ -81,7 +97,16 @@ typedef NS_ENUM(NSInteger, EOABackupSyncOperationType) {
 
 - (void) importSettings:(NSString *)key
                   items:(NSArray<OASettingsItem *> *)items
+              filesType:(EOARemoteFilesType)filesType
           forceReadData:(BOOL)forceReadData
+               listener:(id<OAImportListener>)listener;
+
+- (void) importSettings:(NSString *)key
+                  items:(NSArray<OASettingsItem *> *)items
+              filesType:(EOARemoteFilesType)filesType
+          forceReadData:(BOOL)forceReadData
+          shouldReplace:(BOOL)shouldReplace
+         restoreDeleted:(BOOL)restoreDeleted
                listener:(id<OAImportListener>)listener;
 
 - (void) exportSettings:(NSString *)key

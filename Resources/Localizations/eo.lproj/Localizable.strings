@@ -2620,3 +2620,7 @@
 "rendering_value_caiScale_description" = "laŭ skalo de Itala Alpisma Klubo";
 "shared_string_cache" = "Kaŝmemoro";
 "add_row" = "Aldoni vicon";
+"shared_string_link" = "Ligilo";
+"shared_string_author" = "Aŭtoro";
+"shared_string_license" = "Permesilo";
+"shared_string_keywords" = "Ŝlosilvortoj";

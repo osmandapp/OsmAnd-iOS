@@ -393,7 +393,7 @@
             CLLocation *loc = _locations[_currentRoute + i];
             CLLocation *curloc = _locations[_currentRoute];
             double dist = [OAMapUtils getDistance:curloc.coordinate second:loc.coordinate];
-            if (abs(meters) >= dist) {
+            if (dist >= abs(meters)) {
                 return loc;
             }
         }
@@ -410,6 +410,18 @@
     if (_currentDirectionInfo < _directions.count)
         return _directions[_currentDirectionInfo];
     return nil;
+}
+
+- (int) getDistanceToPoint:(CLLocation *)lastKnownLocation locationIndex:(int)locationIndex
+{
+    int dist = [self getDistanceToPoint:locationIndex];
+    CLLocation *next = [self getNextRouteLocation];
+    
+    if (lastKnownLocation && next)
+        dist += getDistance(lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude,
+                            next.coordinate.latitude, next.coordinate.longitude);
+
+    return dist;
 }
 
 - (int) getDistanceToPoint:(int)locationIndex

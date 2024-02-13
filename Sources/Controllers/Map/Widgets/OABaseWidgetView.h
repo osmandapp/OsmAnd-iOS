@@ -25,26 +25,32 @@
 
 @property (nonatomic) OAWidgetType * _Nullable widgetType;
 @property (nonatomic, readonly, assign) BOOL nightMode;
+@property (nonatomic, assign) BOOL isSimpleLayout;
+@property (nonatomic, assign) BOOL isFullRow;
 
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
 
 - (instancetype _Nonnull )initWithType:(OAWidgetType * _Nonnull)type;
-- (void)initSeparatorView;
+- (void)initSeparatorsView;
 
 - (BOOL)updateInfo;
 - (void)updateColors:(OATextState * _Nonnull)textState;
 - (BOOL)isNightMode;
 - (BOOL)isTopText;
 - (BOOL)isTextInfo;
+- (void)updateSimpleLayout;
+- (void)updatesSeparatorsColor:(UIColor *_Nonnull)color;
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;
 - (OAWidgetState *_Nullable) getWidgetState;
 - (BOOL)isExternal;
-- (OATableDataModel *_Nullable) getSettingsData:(OAApplicationMode * _Nonnull)appMode;
+- (OATableDataModel *_Nullable)getSettingsData:(OAApplicationMode * _Nonnull)appMode;
+- (OATableDataModel *_Nullable)getSettingsDataForSimpleWidget:(OAApplicationMode * _Nonnull)appMode;
 
-- (void)showSeparator:(BOOL)show;
+- (void)showBottomSeparator:(BOOL)show;
+- (void)showRightSeparator:(BOOL)show;
 - (void)adjustViewSize;
 - (void)attachView:(UIView *_Nonnull)container specialContainer:(UIView *_Nullable)specialContainer order:(NSInteger)order followingWidgets:(NSArray<OABaseWidgetView *> *_Nullable)followingWidgets;
 - (void)detachView:(OAWidgetsPanel * _Nonnull)widgetsPanel;

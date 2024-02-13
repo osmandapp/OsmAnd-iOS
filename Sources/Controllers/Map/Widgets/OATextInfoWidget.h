@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
+#import "OAAppSettings.h"
 
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 32
@@ -33,11 +34,25 @@
 
 @property (nonatomic) NSLayoutConstraint *topTextAnchor;
 
+// Simple Widget Layout
+@property (nonatomic, strong, nullable) UIStackView *topNameUnitStackView;
+@property (nonatomic, strong, nullable) UILabel *nameLabel;
+@property (nonatomic, strong, nullable) UILabel *unitLabel;
+@property (nonatomic, strong, nullable) UIView *unitView;
+@property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
+@property (nonatomic, strong, nullable) UILabel *titleOrEmptyLabel;
+@property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
+@property (nonatomic, strong, nullable) UILabel *valueLabel;
+@property (nonatomic, strong, nullable) UIView *iconWidgetView;
+@property (nonatomic) OACommonInteger *sizeStylePref;
+
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);
 
 - (void) setImage:(UIImage *)image;
 - (void) setImage:(UIImage *)image withColor:(UIColor *)color;
+- (void)setImage:(UIImage *_Nonnull)image withColor:(UIColor *_Nonnull)color iconName:(NSString *_Nonnull)iconName;
+
 - (void) setImageHidden:(BOOL)visible;
 - (void) setTimeText:(NSTimeInterval)time;
 - (BOOL) isNight;
@@ -61,11 +76,16 @@
 - (void) setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void) updateIconMode:(BOOL)night;
-- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
+- (void)updateIcon;
+- (void)setNightMode:(BOOL)night;
+
+- (void)updateTextWitState:(OATextState *_Nonnull)state;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
-- (void)showSeparator:(BOOL)show;
+
+- (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
+- (void)configureSimpleLayout;
+- (void)refreshLayout;
 
 @end

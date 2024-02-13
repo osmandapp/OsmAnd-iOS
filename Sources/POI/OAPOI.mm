@@ -44,7 +44,10 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 
 - (UIImage *)icon
 {
-    if (_mapIconName && _mapIconName.length > 0)
+    NSString *subwayRegion = [self getAdditionalInfo][@"subway_region"];
+	if (subwayRegion.length > 0)
+        return [UIImage svgImageNamed:[NSString stringWithFormat:@"map-icons-svg/mx_subway_%@", subwayRegion]];
+    else if (_mapIconName && _mapIconName.length > 0 && ![_mapIconName containsString:@"_small"])
         return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
     else if (_type)
         return [_type icon];

@@ -45,6 +45,7 @@
 #define kScreensToFlyWithAnimation 400000.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
+#define kNavAnimatonTime 1.0f
 
 #define CENTER_CONSTANT 0
 #define BOTTOM_CONSTANT 1
@@ -109,6 +110,7 @@
 
 - (CLLocation *) getMapLocation;
 - (float) getMapZoom;
+- (float)getMap3DModeElevationAngle;
 - (void) refreshMap;
 
 - (BOOL) hasWptAt:(CLLocationCoordinate2D)location;

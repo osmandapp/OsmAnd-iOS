@@ -22,7 +22,7 @@ class SideWidgetInfo: MapWidgetInfo {
          widgetPanel: WidgetsPanel) {
         super.init(key: key, widget: textWidget, settingsIconId: settingsIconId, message: message, page: page, order: order, widgetPanel: widgetPanel)
         
-        textWidget.setContentTitle(getMessage())
+        textWidget.setContentTitle(getWidgetTitle())
     }
     
     func setExternalProviderPackage(_ externalProviderPackage: String) {

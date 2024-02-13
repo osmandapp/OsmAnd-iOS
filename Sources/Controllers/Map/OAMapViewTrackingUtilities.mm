@@ -51,7 +51,6 @@
     OAMapMode _lastMapMode;
     float _lastAzimuthInPositionTrack;
     float _lastZoom;
-    float _lastElevationAngle;
     
     BOOL _forceZoom;
     
@@ -207,32 +206,43 @@
     return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle < 89;
 }
 
-- (void) switchMap3dMode
-{
-    if ([self isIn3dMode])
-    {
-        _lastElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
-        _mapView.mapAnimator->pause();
-        _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo(kMapModePositionTrackingDefaultElevationAngle,
-                                                   kFastAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kLocationServicesAnimationKey);
-        _mapView.mapAnimator->resume();
-    }
-    else
-    {
-        if (_lastElevationAngle < 1 || _lastElevationAngle > 89)
-            _lastElevationAngle = kMapModeFollowDefaultElevationAngle;
+- (BOOL)isDefaultElevationAngle {
+    return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle == kMapModePositionTrackingDefaultElevationAngle;
+}
 
-        _mapView.mapAnimator->pause();
-        _mapView.mapAnimator->cancelAllAnimations();
-        _mapView.mapAnimator->animateElevationAngleTo([_mapView normalizeElevationAngle: _lastElevationAngle],
-                                                   kFastAnimationTime,
-                                                   OsmAnd::MapAnimator::TimingFunction::EaseOutQuadratic,
-                                                   kLocationServicesAnimationKey);
-        _mapView.mapAnimator->resume();
+- (void)startTilting:(float)elevationAngle
+{
+    float initialElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
+    float elevationAngleDiff = elevationAngle - initialElevationAngle;
+    float animationTime = fabsf(elevationAngleDiff) * 5;
+    
+    _mapView.mapAnimator->pause();
+    
+    float duration = animationTime / 1000.0f;
+    const auto elevationAnimation = _mapView.mapAnimator->getCurrentAnimation(kUserInteractionAnimationKey,
+                                                                              OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
+    if (elevationAnimation)
+    {
+        _mapView.mapAnimator->cancelAnimation(elevationAnimation);
+        _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
     }
+    _mapView.mapAnimator->animateElevationAngleTo(elevationAngle,
+                                                  duration,
+                                                  OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                  kUserInteractionAnimationKey);
+    _mapView.mapAnimator->resume();
+}
+
+- (void)switchMap3dMode
+{
+    BOOL defaultElevationAngle = [self isDefaultElevationAngle];
+    float tiltAngle = kMapModePositionTrackingDefaultElevationAngle;
+    if (defaultElevationAngle)
+    {
+        float elevationAngle = [[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle];
+        tiltAngle = elevationAngle != tiltAngle ? elevationAngle : kMapModeFollowDefaultElevationAngle;
+    }
+    [self startTilting:tiltAngle];
 }
 
 - (void) onLocationServicesStatusChanged
@@ -335,16 +345,11 @@
                 {
                     if (![self.class isSmallSpeedForAnimation:newLocation] && _settings.animateMyLocation.get)
                     {
+                        double duration = prevLocation ? [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp] : 0;
+                        duration = MAX(duration, kNavAnimatonTime / 4);
                         if (targetAnimation)
                         {
                             _mapView.mapAnimator->cancelAnimation(targetAnimation);
-                            
-                            double duration;
-                            if (prevLocation)
-                                duration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
-                            else
-                                duration = targetAnimation->getDuration() - targetAnimation->getTimePassed();
-
                             _mapView.mapAnimator->animateTargetTo(newTarget31,
                                                                duration,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,
@@ -352,12 +357,6 @@
                         }
                         else
                         {
-                            double duration;
-                            if (prevLocation)
-                                duration = MAX(1.0, [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp]);
-                            else
-                                duration = kHalfSecondAnimatonTime;
-
                             _mapView.mapAnimator->animateTargetTo(newTarget31,
                                                                duration,
                                                                OsmAnd::MapAnimator::TimingFunction::Linear,

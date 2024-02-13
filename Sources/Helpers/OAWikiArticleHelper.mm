@@ -308,7 +308,10 @@
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:url message:OALocalizedString(@"online_webpage_warning") preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [OAUtilities callUrl:url];
+        NSURL *urlObject = [NSURL URLWithString:url];
+        if ([[UIApplication sharedApplication] canOpenURL:urlObject]) {
+            [[UIApplication sharedApplication] openURL:urlObject options:@{} completionHandler:nil];
+        }
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
 
@@ -442,6 +445,8 @@
 
         NSMutableArray<NSString *> *possibleAvailableLocale = [NSMutableArray array];
         NSMutableArray<NSString *> *possiblePreferredLocale = [NSMutableArray array];
+        __weak id<OAWikiLanguagesWebDelegate> weakDelegate = delegate;
+        
         for (NSString *contentLocale in availableLocales)
         {
             NSString *processedLocale = [contentLocale isEqualToString:@"en"] ? @"" : contentLocale;
@@ -453,7 +458,7 @@
                                                      handler:^(__kindof UIAction * _Nonnull action) {
                     
                     
-                    [delegate onLocaleSelected:contentLocale];
+                    [weakDelegate onLocaleSelected:contentLocale];
                     
                 }];
                 if ([contentLocale isEqualToString:selectedLocale])
@@ -477,8 +482,8 @@
                                                                            availableLocales:possibleAvailableLocale
                                                                            preferredLocales:possiblePreferredLocale];
 
-                wikiLanguagesViewController.delegate = delegate;
-                [delegate showLocalesVC:wikiLanguagesViewController];
+                wikiLanguagesViewController.delegate = weakDelegate;
+                [weakDelegate showLocalesVC:wikiLanguagesViewController];
             }];
             if (![preferredLocales containsObject:selectedLocale])
                 availableLanguagesAction.state = UIMenuElementStateOn;

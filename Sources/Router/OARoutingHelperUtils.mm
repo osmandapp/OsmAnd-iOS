@@ -14,7 +14,7 @@
 #import "OARoutingHelper.h"
 
 #define CACHE_RADIUS 100000
-#define MAX_BEARING_DEVIATION 60
+#define MAX_BEARING_DEVIATION 60 // 45 in android
 
 @implementation OARoutingHelperUtils
 
@@ -145,7 +145,5 @@
     }
     return projection;
 }
-
-
 
 @end

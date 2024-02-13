@@ -52,7 +52,6 @@
     float _lastAzimuthInPositionTrack;
     float _lastZoom;
     float _lastElevationAngle;
-    double _lastCourse;
     
     BOOL _forceZoom;
     
@@ -259,7 +258,7 @@
         
         bool sameLocation = newLocation && [newLocation isEqual:_myLocation];
         bool sameHeading = _heading == newHeading;
-        
+
         CLLocation* prevLocation = _myLocation;
         _myLocation = newLocation;
         _heading = newHeading;
@@ -388,7 +387,6 @@
 
             OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
             _followingMode = [routingHelper isFollowingMode];
-            
             if (_routePlanningMode != [routingHelper isRoutePlanningMode])
                 [self switchToRoutePlanningMode];
         }

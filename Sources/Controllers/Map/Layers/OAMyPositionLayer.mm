@@ -588,9 +588,7 @@ typedef enum {
     {
         animationDuration = [newLocation.timestamp timeIntervalSinceDate:prevLocation.timestamp];
         if (animationDuration > 5)
-            animationDuration = 5;
-        else if (animationDuration == 0)
-            animationDuration = 0.5;
+            animationDuration = 0;
     }
 
     [self updateCollectionLocation:c newLocation:newLocation newTarget31:newTarget31 newHeading:newHeading animationDuration:animationDuration visible:YES];

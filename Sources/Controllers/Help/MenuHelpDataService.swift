@@ -34,11 +34,15 @@ final class TelegramChat: NSObject {
 final class ArticleNode: NSObject {
     var title: String
     var url: String
+    var level: Int
+    var type: String
     var childArticles: [ArticleNode]
     
-    init(title: String, url: String, childArticles: [ArticleNode] = []) {
+    init(title: String, url: String, level: Int, type: String, childArticles: [ArticleNode] = []) {
         self.title = title
         self.url = url
+        self.level = level
+        self.type = type
         self.childArticles = childArticles
     }
 }
@@ -46,6 +50,7 @@ final class ArticleNode: NSObject {
 @objc enum HelperDataItems: Int {
     case popularArticles
     case telegramChats
+    case siteArticles
     
     var description: String {
         switch self {
@@ -53,6 +58,8 @@ final class ArticleNode: NSObject {
             return "popularArticles"
         case .telegramChats:
             return "telegramChats"
+        case .siteArticles:
+            return "siteArticles"
         }
     }
 }
@@ -63,11 +70,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     private let urlPrefix = "https://osmand.net"
     private var popularArticles: [PopularArticle] = []
     private var telegramChats: [TelegramChat] = []
-    private var currentArticleNode: ArticleNode?
-    private var rootNode: ArticleNode = ArticleNode(title: "Root", url: "")
     private var articles: [ArticleNode] = []
-    private var currentElement: String = ""
-    private var currentURL: String = ""
+    private var rootNode: ArticleNode = ArticleNode(title: "Root", url: "", level: 1, type: "root")
     static let shared = MenuHelpDataService()
     
     private override init() { }
@@ -78,6 +82,9 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return
         } else if dataItem == .telegramChats, !telegramChats.isEmpty {
             completion(telegramChats as NSArray, nil)
+            return
+        } else if dataItem == .siteArticles, !rootNode.childArticles.isEmpty {
+            completion(rootNode.childArticles as NSArray, nil)
             return
         }
         
@@ -98,8 +105,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             }
             
             do {
-                guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
-                      let jsonData = jsonDict[dataItem.description] as? [String: String] else {
+                guard let jsonDict = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] else {
                     DispatchQueue.main.async {
                         completion(nil, NSError(domain: "JSONConversionError", code: 2, userInfo: nil))
                     }
@@ -108,16 +114,51 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                 
                 switch dataItem {
                 case .popularArticles:
-                    let articles = self.processPopularArticles(jsonData)
-                    self.popularArticles = articles
-                    DispatchQueue.main.async {
-                        completion(articles as NSArray, nil)
+                    if let popularArticlesData = jsonDict["ios"] as? [String: Any],
+                       let articles = popularArticlesData["popularArticles"] as? [String: String] {
+                        var articlesArray: [PopularArticle] = []
+                        for (title, urlString) in articles {
+                            let article = PopularArticle(title: title, url: self.urlPrefix + urlString)
+                            articlesArray.append(article)
+                        }
+                        
+                        self.popularArticles = articlesArray
+                        DispatchQueue.main.async {
+                            completion(self.popularArticles as NSArray, nil)
+                        }
                     }
                 case .telegramChats:
-                    let chats = self.processTelegramChats(jsonData)
-                    self.telegramChats = chats
-                    DispatchQueue.main.async {
-                        completion(chats as NSArray, nil)
+                    if let telegramChatsData = jsonDict["ios"] as? [String: Any],
+                       let chats = telegramChatsData["telegramChats"] as? [String: String] {
+                        var chatsArray: [TelegramChat] = []
+                        for (title, urlString) in chats {
+                            let chat = TelegramChat(title: title, url: urlString)
+                            chatsArray.append(chat)
+                        }
+                        
+                        self.telegramChats = chatsArray
+                        DispatchQueue.main.async {
+                            completion(self.telegramChats as NSArray, nil)
+                        }
+                    }
+                case .siteArticles:
+                    if let articlesData = jsonDict["articles"] as? [[String: Any]] {
+                        self.articles.removeAll()
+                        for articleDict in articlesData {
+                            if let title = articleDict["label"] as? String,
+                               let url = articleDict["url"] as? String,
+                               url.hasPrefix("/docs/user/"),
+                               let level = articleDict["level"] as? Int,
+                               let type = articleDict["type"] as? String {
+                                let articleNode = ArticleNode(title: title, url: self.urlPrefix + url, level: level, type: type)
+                                self.addArticleNode(articleNode)
+                                self.articles.append(articleNode)
+                            }
+                        }
+                        
+                        DispatchQueue.main.async {
+                            completion(self.rootNode.childArticles as NSArray, nil)
+                        }
                     }
                 }
             } catch let error as NSError {
@@ -145,63 +186,6 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
         }
     }
     
-    func loadAndProcessSitemap(completion: @escaping ([ArticleNode]?, Error?) -> Void) {
-        let fileManager = FileManager.default
-        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else {
-            DispatchQueue.main.async {
-                completion(nil, NSError(domain: "DirectoryError", code: 1, userInfo: nil))
-            }
-            return
-        }
-        
-        let localFileURL = documentsDirectory.appendingPathComponent("sitemap.xml")
-        if fileManager.fileExists(atPath: localFileURL.path) {
-            processSitemapFile(at: localFileURL, completion: { articles, error in
-                DispatchQueue.main.async {
-                    completion(articles, error)
-                }
-            })
-        } else {
-            guard let url = URL(string: urlPrefix + "/sitemap.xml") else {
-                DispatchQueue.main.async {
-                    completion(nil, NSError(domain: "URLCreationError", code: 0, userInfo: nil))
-                }
-                return
-            }
-            
-            URLSession.shared.dataTask(with: url) { data, _, error in
-                guard let data, error == nil else {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
-                    return
-                }
-                
-                do {
-                    try data.write(to: localFileURL)
-                    self.processSitemapFile(at: localFileURL, completion: { articles, error in
-                        DispatchQueue.main.async {
-                            completion(articles, error)
-                        }
-                    })
-                } catch {
-                    DispatchQueue.main.async {
-                        completion(nil, error)
-                    }
-                }
-            }.resume()
-        }
-    }
-    
-    func prepareArticlesForDisplay(rootNode: ArticleNode) -> [ArticleNode] {
-        var items: [ArticleNode] = []
-        for node in rootNode.childArticles {
-            items.append(node)
-        }
-        
-        return items
-    }
-    
     func getArticleName(from url: String) -> String {
         let articleId = getArticlePropertyName(from: url)
         if let specialName = getSpecialArticleName(for: articleId) {
@@ -213,44 +197,28 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
         }
     }
     
-    private func processPopularArticles(_ data: [String: String]) -> [PopularArticle] {
-        let orderedData = data.map { ($0.key, $0.value) }.sorted { $0.0 < $1.0 }
-        return orderedData.map { PopularArticle(title: $0.0, url: urlPrefix + $0.1) }
-    }
-    
-    private func processTelegramChats(_ data: [String: String]) -> [TelegramChat] {
-        let orderedData = data.map { ($0.key, $0.value) }.sorted { $0.0 < $1.0 }
-        return orderedData.map { TelegramChat(title: $0.0, url: $0.1) }
-    }
-    
-    private func addArticleNode(_ node: ArticleNode, url: String) {
-        let parts = url.replacingOccurrences(of: kOsmAndUserBaseURL, with: "").split(separator: "/").map(String.init)
-        var currentNode = rootNode
-        for part in parts {
-            if let childNode = currentNode.childArticles.first(where: { $0.title == part }) {
-                currentNode = childNode
+    private func addArticleNode(_ node: ArticleNode) {
+        var parentNode: ArticleNode = rootNode
+        while true {
+            if let lastChild = parentNode.childArticles.last {
+                if lastChild.level < node.level {
+                    parentNode = lastChild
+                } else {
+                    break
+                }
             } else {
-                let newNode = ArticleNode(title: part, url: currentNode.url + part + "/")
-                currentNode.childArticles.append(newNode)
-                currentNode = newNode
-                debugPrint("Added new article node: Title: \(newNode.title), URL: \(newNode.url)")
+                break
             }
         }
-    }
-    
-    private func processSitemapFile(at fileURL: URL, completion: @escaping ([ArticleNode]?, Error?) -> Void) {
-        guard let xmlData = try? Data(contentsOf: fileURL) else {
-            completion(nil, NSError(domain: "XMLDataError", code: 2, userInfo: nil))
-            return
+        
+        let nodeAlreadyExists = parentNode.childArticles.contains { existingNode in
+            existingNode.title == node.title && existingNode.level == node.level
         }
         
-        let parser = XMLParser(data: xmlData)
-        parser.delegate = self
-        if parser.parse() {
-            let articles = prepareArticlesForDisplay(rootNode: rootNode)
-            completion(articles, nil)
+        if !nodeAlreadyExists {
+            parentNode.childArticles.append(node)
         } else {
-            completion(nil, NSError(domain: "XMLParsingError", code: 3, userInfo: nil))
+            debugPrint("Skipped adding duplicate article node: Title: \(node.title), Level: \(node.level)")
         }
     }
     
@@ -354,34 +322,6 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return localizedString("configure_screen_quick_action")
         default:
             return nil
-        }
-    }
-}
-
-extension MenuHelpDataService {
-    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String] = [:]) {
-        currentElement = elementName
-        if elementName == "url" {
-            currentArticleNode = ArticleNode(title: "", url: "")
-            currentURL = ""
-        }
-    }
-    
-    func parser(_ parser: XMLParser, foundCharacters string: String) {
-        if currentElement == "loc" {
-            currentURL += string.trimmingCharacters(in: .whitespacesAndNewlines)
-        }
-    }
-    
-    func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
-        if elementName == "loc" {
-            currentElement = ""
-        } else if elementName == "url" {
-            guard let node = currentArticleNode else { return }
-            if currentURL.starts(with: "\(urlPrefix)/docs/user/") {
-                node.url = currentURL
-                addArticleNode(node, url: currentURL)
-            }
         }
     }
 }

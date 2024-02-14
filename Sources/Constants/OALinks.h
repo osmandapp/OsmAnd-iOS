@@ -25,7 +25,7 @@
 #define kSupportEmail @"support@osmand.net"
 static NSString * const kContactEmail = @"mailto:support@osmand.net";
 
-static NSString * const kPopularArticlesAndTelegramChats =  @"https://raw.githubusercontent.com/osmandapp/web/main/main/static/help-links-ios.json";
+static NSString * const kPopularArticlesAndTelegramChats =  @"https://osmand.net/help-structure.json";
 static NSString * const kDocsMap = @"https://docs.osmand.net/docs/user/map/";
 static NSString * const kDocsNavigation = @"https://docs.osmand.net/docs/user/navigation/";
 static NSString * const kDocsSearch = @"https://docs.osmand.net/docs/user/search/";

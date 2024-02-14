@@ -106,8 +106,12 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
         tableData.clearAllData()
         let childArticlesSection = tableData.createNewSection()
         for article in childArticles {
+            if article.title == "Android Auto" || article.title == "Android purchases" {
+                continue
+            }
+            
             let title = MenuHelpDataService.shared.getArticleName(from: article.url)
-            let url = kDocsBaseURL + article.url
+            let url = article.url
             let articleRow = childArticlesSection.createNewRow()
             articleRow.cellType = OASimpleTableViewCell.getIdentifier()
             articleRow.key = "childArticle"

@@ -108,16 +108,10 @@
 
 + (double) unifyRotationDiff:(double)rotate targetRotate:(double)targetRotate
 {
-    double d;
-    for(d = targetRotate - rotate; d >= 180.0; d -= 360.0) 
-    {
+    double d = targetRotate - rotate;
+    while (d >= 180.0) {
+        d -= 360.0;
     }
-    
-    while(d < -180.0) 
-    {
-        d += 360.0;
-    }
-    
     return d;
 }
 

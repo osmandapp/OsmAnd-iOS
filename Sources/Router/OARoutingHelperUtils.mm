@@ -92,7 +92,7 @@
 {
     // measuring without bearing could be really error prone (with last fixed location)
     // this code has an effect on route recalculation which should be detected without mistakes
-    if ([OARoutingHelper isValidCourseValue:currentLocation.course]  && nextRouteLocation)
+    if ([currentLocation hasBearing]  && nextRouteLocation)
     {
         float bearingMotion = currentLocation.course;
         float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
@@ -126,10 +126,11 @@
     double projectionOffsetN = [OAMapUtils getProjectionCoeff:location fromLocation:previousRouteLocation toLocation:currentRouteLocation];
     double currentSegmentBearing = [OAMapUtils normalizeDegrees360:[previousRouteLocation bearingTo:currentRouteLocation]];
     double nextSegmentBearing = [OAMapUtils normalizeDegrees360:[currentRouteLocation bearingTo:nextRouteLocation]];
-    double approximatedBearing = currentSegmentBearing * (1.0 - projectionOffsetN) + nextSegmentBearing * projectionOffsetN;
+    double segmentsBearingDelta = [OAMapUtils unifyRotationDiff:currentSegmentBearing targetRotate:nextSegmentBearing] * projectionOffsetN;
+    double approximatedBearing = [OAMapUtils normalizeDegrees360:currentSegmentBearing + segmentsBearingDelta];
     
     BOOL setApproximated;
-    if ([OARoutingHelper isValidCourseValue:location.course])
+    if ([location hasBearing])
     {
         double rotationDiff = [OAMapUtils unifyRotationDiff:location.course targetRotate:approximatedBearing];
         setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;

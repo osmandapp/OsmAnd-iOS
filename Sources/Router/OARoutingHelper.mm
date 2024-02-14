@@ -74,6 +74,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
     NSTimeInterval _deviateFromRouteDetected;
     //long _wrongMovementDetected;
     BOOL _voiceRouterStopped;
+    BOOL _deviceHasBearing;
     
     OATransportRoutingHelper *_transportRoutingHelper;
 }
@@ -429,9 +430,9 @@ static BOOL _isDeviatedFromRoute = false;
                 processed = true;
             }
         }
-        else if (newDist < dist || newDist < (GPS_TOLERANCE / 2))
+        else if (newDist < dist || newDist < (posTolerance / 8))
         {
-            // newDist < GPS_TOLERANCE (avoid distance 0 till next turn)
+            // newDist < posTolerance / 8 - 4-8 m (avoid distance 0 till next turn)
             if (dist > posTolerance)
             {
                 processed = true;
@@ -439,34 +440,24 @@ static BOOL _isDeviatedFromRoute = false;
             }
             else
             {
-                // case if you are getting close to the next point after turn
-                // but you have not yet turned (could be checked bearing)
-                if (currentLocation.course >= 0 || _lastFixedLocation)
+                if ([currentLocation hasBearing] && !_deviceHasBearing)
                 {
-                    if (currentRoute > 0)
+                    _deviceHasBearing = YES;
+                }
+                // lastFixedLocation.bearingTo -  gives artefacts during u-turn, so we avoid for devices with bearing
+                if ([currentLocation hasBearing] || (!_deviceHasBearing && _lastFixedLocation))
+                {
+                    float bearingToRoute = [currentLocation bearingTo:routeNodes[currentRoute]];
+                    float bearingRouteNext = [routeNodes[newCurrentRoute] bearingTo:routeNodes[newCurrentRoute + 1]];
+                    float bearingMotion = [currentLocation hasBearing] ? currentLocation.course : [_lastFixedLocation bearingTo:currentLocation];
+                    double diff = ABS(degreesDiff(bearingMotion, bearingToRoute));
+                    double diffToNext = ABS(degreesDiff(bearingMotion, bearingRouteNext));
+                    if (diff > diffToNext)
                     {
-                        CLLocation *previousRouteLocation = routeNodes[currentRoute - 1];
-                        CLLocation *currentRouteLocation = routeNodes[currentRoute];
-                        _lastProjection = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
-                        if (_settings.snapToRoad.get && currentRoute + 1 < routeNodes.count)
-                        {
-                            CLLocation *nextRouteLocation = routeNodes[currentRoute + 1];
-                            _lastProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:_lastProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
-                            processed = true;
-                        }
+                        NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
+                                                processed = true;
                     }
-                    else if (currentRoute == 0)
-                    {
-                        CLLocation *previousRouteLocation = routeNodes[currentRoute];
-                        CLLocation *currentRouteLocation = routeNodes[currentRoute + 1];
-                        _lastProjection = [OAMapUtils getProjection:currentLocation fromLocation:previousRouteLocation toLocation:currentRouteLocation];
-                        if (_settings.snapToRoad.get && currentRoute + 2 < routeNodes.count)
-                        {
-                            CLLocation *nextRouteLocation = routeNodes[currentRoute + 2];
-                            _lastProjection = [OARoutingHelperUtils approximateBearingIfNeeded:self projection:_lastProjection location:currentLocation previousRouteLocation:previousRouteLocation currentRouteLocation:currentRouteLocation nextRouteLocation:nextRouteLocation];
-                            processed = true;
-                        }
-                    }
+                    processed = true;
                 }
             }
         }
@@ -631,7 +622,7 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
 {
-    if (![self.class isValidCourseValue:currentLocation.course] && [self.class isValidCourseValue:_app.locationServices.lastKnownHeading])
+    if (![currentLocation hasBearing] && _app.locationServices.lastKnownHeading > 0)
     {
         currentLocation = [[CLLocation alloc] initWithCoordinate:currentLocation.coordinate altitude:currentLocation.altitude horizontalAccuracy:currentLocation.horizontalAccuracy verticalAccuracy:currentLocation.verticalAccuracy course:_app.locationServices.lastKnownHeading speed:currentLocation.speed timestamp:currentLocation.timestamp];
     }
@@ -1087,11 +1078,6 @@ static BOOL _isDeviatedFromRoute = false;
 {
     double posTolerance = [self.class getPosTolerance:location.horizontalAccuracy];
     return _mode && _mode.hasFastSpeed ? posTolerance : posTolerance / 2;
-}
-
-+ (BOOL) isValidCourseValue:(double)course
-{
-    return course != -1 && course != 0;
 }
 
 @end

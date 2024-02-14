@@ -138,19 +138,19 @@
                     accuracy = 5;
                 }
 
-                if (prev || (realistic && speed >= 3))
+                if ((prev && [prev distanceFromLocation:current] > 3) || (realistic && speed >= 3))
                 {
                     course = [OAMapUtils normalizeDegrees360:[prev bearingTo:current]];
-                    if ([OARoutingHelper isValidCourseValue:course])
+                    if (course > 0)
                         _lastCourse = course;
                 }
-                else if ([OARoutingHelper isValidCourseValue:current.course])
+                else if ([current hasBearing])
                 {
                     course = current.course;
                     _lastCourse = course;
                 }
                 
-                if (!([OARoutingHelper isValidCourseValue:course]))
+                if (course < 0)
                     course = _lastCourse;
             }
             

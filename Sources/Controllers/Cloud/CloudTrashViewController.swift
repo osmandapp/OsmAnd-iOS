@@ -18,7 +18,6 @@ protocol CloudTrashDelegate: AnyObject {
 
 protocol CloudTrashDeletionDelegate: AnyObject {
     func onFilesDeleteStarted(_ deleteAll: Bool)
-    func onFileDeleteProgress(_ deleteAll: Bool)
     func onFilesDeleteDone(_ message: String, errors: [OARemoteFile: String], deleteAll: Bool)
     func onFilesDeleteError(_ message: String)
 }
@@ -53,7 +52,6 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     override func registerNotifications() {
-        addNotification(NSNotification.Name(kBackupProgressUpdateNotification), selector: #selector(onBackupProgressUpdate(notification:)))
         addNotification(NSNotification.Name(kBackupSyncFinishedNotification), selector: #selector(onBackupSyncFinished(notification:)))
     }
 
@@ -108,13 +106,18 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), Self.daysForTrashClearing)
             emptyRow.iconTintColor = UIColor.iconColorDefault
         } else {
-            for (name, group) in groups {
-                let section = tableData.createNewSection()
-                section.headerText = name
-                for item in group.getItems() {
-                    let row = section.createNewRow()
-                    row.cellType = OASimpleTableViewCell.reuseIdentifier
-                    row.setObj(item, forKey: "trashItem")
+            let orderedNames = groups.keys.sorted { key1, key2 in
+                return groups[key1]?.getItems().first?.time ?? 0 > groups[key2]?.getItems().first?.time ?? 0
+            }
+            for name in orderedNames {
+                if let group = groups[name] {
+                    let section = tableData.createNewSection()
+                    section.headerText = name
+                    for item in group.getItems() {
+                        let row = section.createNewRow()
+                        row.cellType = OASimpleTableViewCell.reuseIdentifier
+                        row.setObj(item, forKey: "trashItem")
+                    }
                 }
             }
         }
@@ -184,6 +187,12 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
                     iconColor = UIColor.iconColorDefault
                 }
                 cell.leftIconView.tintColor = iconColor
+
+                if indexPath == selectedIndexPath {
+                    addProgress(to: cell)
+                } else {
+                    removeProgress(from: cell)
+                }
             }
             return cell
         } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier {
@@ -266,7 +275,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
 
     private func downloadItem(_ trashItem: TrashItem, shouldReplace: Bool) {
         if let selectedIndexPath {
-            self.updateRowProgress(.started, indexPath: selectedIndexPath)
+            tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
         }
 
         settingsHelper?.syncSettingsItems(trashItem.oldFile.name,
@@ -280,51 +289,33 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         }
     }
 
-    private func updateRowProgress(_ type: TrashItemProcessType, indexPath: IndexPath?) {
-        if let indexPath, let cell = tableView.cellForRow(at: indexPath) {
-            var progressView = cell.accessoryView as? FFCircularProgressView
-            if progressView == nil, type == .started {
-                progressView = FFCircularProgressView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
-                progressView?.iconView = UIView()
-                progressView?.tintColor = UIColor.iconColorActive
-                cell.accessoryView = progressView
-            }
-            if type == .started {
-                progressView?.iconPath = UIBezierPath()
-                progressView?.startSpinProgressBackgroundLayer()
-            } else if type == .done {
-                if let progressView {
-                    progressView.createTickPath()
-                    progressView.stopSpinProgressBackgroundLayer()
-                }
-                cell.accessoryType = .none
-                cell.accessoryView = nil
-            }
+    private func addProgress(to cell: UITableViewCell) {
+        var progressView = cell.accessoryView as? FFCircularProgressView
+        if progressView == nil {
+            progressView = FFCircularProgressView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+            progressView?.iconView = UIView()
+            progressView?.tintColor = UIColor.iconColorActive
+            cell.accessoryView = progressView
+            progressView?.iconPath = UIBezierPath()
+            progressView?.startSpinProgressBackgroundLayer()
+        }
+    }
+
+    private func removeProgress(from cell: UITableViewCell) {
+        if let progressView = cell.accessoryView as? FFCircularProgressView {
+            progressView.createTickPath()
+            progressView.stopSpinProgressBackgroundLayer()
+            cell.accessoryView = nil
+            cell.accessoryType = .disclosureIndicator
         }
     }
 
     // MARK: - OASyncBackupTask
 
-    @objc private func onBackupProgressUpdate(notification: NSNotification) {
-        if let selectedIndexPath {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                updateRowProgress(.inProgress, indexPath: selectedIndexPath)
-            }
-        }
-    }
-
     @objc private func onBackupSyncFinished(notification: NSNotification) {
         if let error = notification.userInfo?["error"] as? String {
             OAUtilities.showToast(nil, details: OABackupError(error: error).getLocalizedError(), duration: 4, in: view)
         } else if settingsHelper?.isBackupSyncing() == false && backupHelper?.isBackupPreparing() == false {
-            if let selectedIndexPath {
-                DispatchQueue.main.async { [weak self] in
-                    guard let self else { return }
-                    updateRowProgress(.done, indexPath: selectedIndexPath)
-                    resetSelectedIndexPath()
-                }
-            }
             backupHelper?.prepareBackup()
         }
     }
@@ -344,6 +335,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     func onBackupPrepared(_ backupResult: OAPrepareBackupResult) {
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
+            resetSelectedIndexPath()
             reloadDataWith(animated: true, completion: nil)
             tableView.refreshControl?.endRefreshing()
         }
@@ -400,18 +392,9 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         DispatchQueue.main.async { [weak self] in
             guard let self else { return }
             if !deleteAll, let selectedIndexPath {
-                updateRowProgress(.started, indexPath: selectedIndexPath)
+                tableView.reloadRows(at: [selectedIndexPath], with: .automatic)
             } else if tableView.refreshControl?.isRefreshing == false {
                 tableView.refreshControl?.beginRefreshing()
-            }
-        }
-    }
-
-    func onFileDeleteProgress(_ deleteAll: Bool) {
-        if !deleteAll, let selectedIndexPath {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                updateRowProgress(.inProgress, indexPath: selectedIndexPath)
             }
         }
     }
@@ -419,12 +402,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     func onFilesDeleteDone(_ message: String, errors: [OARemoteFile: String], deleteAll: Bool) {
         let hasErrors = !errors.isEmpty
         if hasErrors || !message.isEmpty {
-            DispatchQueue.main.async { [weak self] in
-                guard let self else { return }
-                if !deleteAll, let selectedIndexPath {
-                    updateRowProgress(.done, indexPath: selectedIndexPath)
-                }
-            }
+            resetSelectedIndexPath()
             OAUtilities.showToast(hasErrors ? localizedString("subscribe_email_error") : message,
                                   details: hasErrors ? errors.values.joined(separator: "\n") : nil,
                                   duration: 4,
@@ -462,7 +440,6 @@ private final class TrashDeletionListener: NSObject, OAOnDeleteFilesListener {
     }
     
     func onFileDeleteProgress(_ file: OARemoteFile, progress: Int) {
-        delegate?.onFileDeleteProgress(deleteAll)
     }
     
     func onFilesDeleteDone(_ errors: [OARemoteFile: String]) {

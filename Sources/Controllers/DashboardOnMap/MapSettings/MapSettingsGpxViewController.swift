@@ -625,10 +625,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_gpx_tracks")
-        let creationDate = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_gpx_tracks")
-        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_gpx_tracks")
-        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
+        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let creationDate = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_not_available")
+        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(gpx.wptPoints)"
         let folderName: String
         if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(gpx.gpxFolderName), !capitalizedFolderName.isEmpty {

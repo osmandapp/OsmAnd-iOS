@@ -106,7 +106,7 @@ final class HelpDetailsViewController: OABaseNavbarViewController {
         tableData.clearAllData()
         let childArticlesSection = tableData.createNewSection()
         for article in childArticles {
-            if article.title == "Android Auto" || article.title == "Android purchases" {
+            if article.title.contains("Android") {
                 continue
             }
             

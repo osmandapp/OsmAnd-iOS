@@ -122,7 +122,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                             articlesArray.append(article)
                         }
                         
-                        self.popularArticles = articlesArray
+                        popularArticles = articlesArray
                         DispatchQueue.main.async {
                             completion(self.popularArticles as NSArray, nil)
                         }
@@ -136,14 +136,14 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                             chatsArray.append(chat)
                         }
                         
-                        self.telegramChats = chatsArray
+                        telegramChats = chatsArray
                         DispatchQueue.main.async {
                             completion(self.telegramChats as NSArray, nil)
                         }
                     }
                 case .siteArticles:
                     if let articlesData = jsonDict["articles"] as? [[String: Any]] {
-                        self.articles.removeAll()
+                        articles.removeAll()
                         for articleDict in articlesData {
                             if let title = articleDict["label"] as? String,
                                let url = articleDict["url"] as? String,
@@ -151,8 +151,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                                let level = articleDict["level"] as? Int,
                                let type = articleDict["type"] as? String {
                                 let articleNode = ArticleNode(title: title, url: self.urlPrefix + url, level: level, type: type)
-                                self.addArticleNode(articleNode)
-                                self.articles.append(articleNode)
+                                addArticleNode(articleNode)
+                                articles.append(articleNode)
                             }
                         }
                         
@@ -199,16 +199,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     
     private func addArticleNode(_ node: ArticleNode) {
         var parentNode: ArticleNode = rootNode
-        while true {
-            if let lastChild = parentNode.childArticles.last {
-                if lastChild.level < node.level {
-                    parentNode = lastChild
-                } else {
-                    break
-                }
-            } else {
-                break
-            }
+        while let lastChild = parentNode.childArticles.last, lastChild.level < node.level {
+            parentNode = lastChild
         }
         
         let nodeAlreadyExists = parentNode.childArticles.contains { existingNode in

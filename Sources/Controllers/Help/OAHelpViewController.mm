@@ -127,10 +127,10 @@ static NSString * const kLinkExternalType = @"ext_link";
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
     
     NSDictionary *specialIcons = @{
-        @"https://osmand.net/docs/user/troubleshooting/setup": @"ic_custom_device_download",
-        @"https://osmand.net/docs/user/troubleshooting/maps-data": @"ic_custom_overlay_map",
-        @"https://osmand.net/docs/user/troubleshooting/navigation": @"ic_custom_navigation",
-        @"https://osmand.net/docs/user/troubleshooting/track-recording-issues": @"ic_custom_track_recordable"
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/setup"]: @"ic_custom_device_download",
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/maps-data"]: @"ic_custom_overlay_map",
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/navigation"]: @"ic_custom_navigation",
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/track-recording-issues"]: @"ic_custom_track_recordable"
     };
     
     for (ArticleNode *childArticle in _troubleshootingChildArticles)

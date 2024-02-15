@@ -106,8 +106,8 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), Self.daysForTrashClearing)
             emptyRow.iconTintColor = UIColor.iconColorDefault
         } else {
-            let orderedNames = groups.keys.sorted { key1, key2 in
-                return groups[key1]?.getItems().first?.time ?? 0 > groups[key2]?.getItems().first?.time ?? 0
+            let orderedNames = groups.keys.sorted {
+                return groups[$0]?.getItems().first?.time ?? 0 > groups[$1]?.getItems().first?.time ?? 0
             }
             for name in orderedNames {
                 if let group = groups[name] {

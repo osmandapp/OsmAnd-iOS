@@ -3283,3 +3283,6 @@
 "delete_all_items_desc" = "Ertu viss um að þú viljir eyða endanlega öllum hlutum úr ruslinu? Þessi aðgerð er ekki afturkallanleg.";
 "there_are_no_connected_sensors_of_this_type" = "Það eru engir tengdir skynjarar af þessari gerð";
 "shared_string_foot" = "Fótur";
+"no_travel_guides_data_title" = "Þú ert ekki með nein ferðagögn";
+"clear_travel_search_history" = "Hreinsa leitarferil ferðagreina?";
+"article_has_no_points" = "Greinin er ekki með neina punkta";

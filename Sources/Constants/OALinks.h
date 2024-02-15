@@ -40,7 +40,7 @@ static NSString * const kTroubleshootingSetup = @"https://docs.osmand.net/docs/u
 static NSString * const kTroubleshootingMap = @"https://docs.osmand.net/docs/user/troubleshooting/maps-data/";
 static NSString * const kTroubleshootingNavigation = @"https://docs.osmand.net/docs/user/troubleshooting/navigation/";
 static NSString * const kTroubleshootingTrackRecording =  @"https://docs.osmand.net/docs/user/troubleshooting/track-recording-issues/";
-static NSString * const kDocsUserBaseURL = @"https://osmand.net/docs/user/troubleshooting/";
+static NSString * const kTroubleshootingBaseURL = @"https://osmand.net/docs/user/troubleshooting/";
 static NSString * const kOsmAndUserBaseURL = @"https://osmand.net/docs/user/";
 
 #define kDocsAddOnlineMaps  @"https://docs.osmand.net/docs/user/map/raster-maps#add-new-online-raster-map-source"

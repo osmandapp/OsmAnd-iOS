@@ -3286,3 +3286,9 @@
 "no_travel_guides_data_title" = "Þú ert ekki með nein ferðagögn";
 "clear_travel_search_history" = "Hreinsa leitarferil ferðagreina?";
 "article_has_no_points" = "Greinin er ekki með neina punkta";
+"travel_guides_no_file_error" = "Villa: Engin svæðisgögn í skrá";
+"calendar_new_event_message" = "Nýjum dagatalsatburði hefur verið bætt við: Ná í bílinn %@";
+"download_images_settings_header" = "Ónettengdar Wikipedia-skrár í OsmAnd innihalda ekki myndir. En hægt er að sækja þær þegar greinar eru skoðaðar.";
+"download_images_settings_footer" = "Hægt er að sækja myndir á hvaða netkerfi sem er. Notast má við farsímagögn.";
+"popular_articles_not_found_descr" = "Það eru engar greinar nálægt miðju kortsins. Notaðu leitina til að finna greinar.";
+"simple_widget_footer" = "Viðmótshluti getur tekið fulla breidd raðar eða bara einn dálk.";

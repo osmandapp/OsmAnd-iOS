@@ -116,13 +116,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                 case .popularArticles:
                     if let popularArticlesData = jsonDict["ios"] as? [String: Any],
                        let articles = popularArticlesData["popularArticles"] as? [String: String] {
-                        var articlesArray: [PopularArticle] = []
-                        for (title, urlString) in articles {
-                            let article = PopularArticle(title: title, url: self.urlPrefix + urlString)
-                            articlesArray.append(article)
-                        }
-                        
-                        popularArticles = articlesArray
+                        popularArticles = articles.map { PopularArticle(title: $0.key, url: self.urlPrefix + $0.value) }
                         DispatchQueue.main.async {
                             completion(self.popularArticles as NSArray, nil)
                         }
@@ -130,13 +124,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                 case .telegramChats:
                     if let telegramChatsData = jsonDict["ios"] as? [String: Any],
                        let chats = telegramChatsData["telegramChats"] as? [String: String] {
-                        var chatsArray: [TelegramChat] = []
-                        for (title, urlString) in chats {
-                            let chat = TelegramChat(title: title, url: urlString)
-                            chatsArray.append(chat)
-                        }
-                        
-                        telegramChats = chatsArray
+                        telegramChats = chats.map { TelegramChat(title: $0.key, url: $0.value) }
                         DispatchQueue.main.async {
                             completion(self.telegramChats as NSArray, nil)
                         }

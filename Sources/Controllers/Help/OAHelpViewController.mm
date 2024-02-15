@@ -127,10 +127,10 @@ static NSString * const kLinkExternalType = @"ext_link";
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
     
     NSDictionary *specialIcons = @{
-        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/setup"]: @"ic_custom_device_download",
-        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/maps-data"]: @"ic_custom_overlay_map",
-        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/navigation"]: @"ic_custom_navigation",
-        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"troubleshooting/track-recording-issues"]: @"ic_custom_track_recordable"
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"setup"]: @"ic_custom_device_download",
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"maps-data"]: @"ic_custom_overlay_map",
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"navigation"]: @"ic_custom_navigation",
+        [NSString stringWithFormat:@"%@%@", kDocsUserBaseURL, @"track-recording-issues"]: @"ic_custom_track_recordable"
     };
     
     for (ArticleNode *childArticle in _troubleshootingChildArticles)

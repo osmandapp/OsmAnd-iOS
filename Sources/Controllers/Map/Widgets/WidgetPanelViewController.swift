@@ -30,7 +30,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         }
     }
 
-    var specialPanelController: WidgetPanelViewController? = nil
+    var specialPanelController: WidgetPanelViewController?
 
     let isHorizontal: Bool
     let isSpecial: Bool
@@ -157,9 +157,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             vc.isMultipleWidgetsInRow = true
             pages.append(vc)
         } else {
+            let isHiddenPageControl = widgetPages.count <= 1
             for page in widgetPages {
                 let vc = WidgetPageViewController()
                 vc.widgetViews = page
+                vc.isHiddenPageControl = isHiddenPageControl
                 pages.append(vc)
             }
         }
@@ -177,6 +179,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = currentIndex
         pageControl.isHidden = pages.count <= 1 || isHorizontal
+        pageViewController.scrollView?.isScrollEnabled = !pageControl.isHidden
+        
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
 

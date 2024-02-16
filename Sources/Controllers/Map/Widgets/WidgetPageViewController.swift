@@ -14,7 +14,10 @@ final class WidgetPageViewController: UIViewController {
     // At the moment, it's for the top panel and bottom panel
     var isMultipleWidgetsInRow = false
     var simpleWidgetViews: [[OABaseWidgetView]] = []
-    var stackView: UIStackView!
+    var isHiddenPageControl = true
+    
+    private var stackView: UIStackView!
+    private var bottomStackViewConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +27,7 @@ final class WidgetPageViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = 0
-        
+
         if isMultipleWidgetsInRow {
             stackView.distribution = .equalSpacing
             for (index, items) in simpleWidgetViews.enumerated() {
@@ -65,9 +68,14 @@ final class WidgetPageViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
+        bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        if isMultipleWidgetsInRow {
+            bottomStackViewConstraint.isActive = true
+        } else {
+            bottomStackViewConstraint.isActive = isHiddenPageControl
+        }
     }
     
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {

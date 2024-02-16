@@ -386,10 +386,12 @@
     if (hasTopWidgets)
     {
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
+        _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
     }
     else
     {
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = 0.;
+        _mapHudViewController.topWidgetsView.layer.masksToBounds = YES;
     }
 
     if (hasTopSpecialWidgets)
@@ -418,7 +420,17 @@
     }
 
     _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
-    _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
+    if (hasBottomWidgets)
+    {
+        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
+        _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
+    }
+    else
+    {
+        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = 0;
+        _mapHudViewController.bottomWidgetsView.layer.masksToBounds = YES;
+    }
+
     
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;

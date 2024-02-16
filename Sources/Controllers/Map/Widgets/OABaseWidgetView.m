@@ -61,7 +61,7 @@
         [_separatorRightView.topAnchor constraintEqualToAnchor:self.topAnchor],
         [_separatorRightView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
         [_separatorRightView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_separatorRightView.widthAnchor constraintEqualToConstant:.5]
+        [_separatorRightView.widthAnchor constraintEqualToConstant:1]
     ]];
 }
 

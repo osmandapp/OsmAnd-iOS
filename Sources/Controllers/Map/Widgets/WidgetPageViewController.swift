@@ -43,7 +43,7 @@ final class WidgetPageViewController: UIViewController {
                         stackView.addArrangedSubview(widget)
                     }
                 }
-                if index != simpleWidgetViews.count - 1 {
+                if index != simpleWidgetViews.count {
                     stackView.addSeparators(at: [stackView.subviews.count])
                 }
             }
@@ -153,17 +153,16 @@ extension WidgetPageViewController {
         updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
     }
     
-    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> [widgetView] -> [horizontalSeparatorView] -> ... [widgetView]
+    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> ... [widgetView] -> [horizontalSeparatorView]
     private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
         guard views.count >= 2 else { return }
         
-        for i in 1..<views.count - 1 where !i.isMultiple(of: 2) {
+        for i in 1..<views.count where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
             if !horizontalSeparatorView.isHidden {
                 // update color for horizontal separator
-                let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
-                horizontalSeparatorView.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
+                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light
             }
         }
     }

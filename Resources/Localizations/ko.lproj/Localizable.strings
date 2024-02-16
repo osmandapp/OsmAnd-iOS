@@ -2341,3 +2341,4 @@
 "shared_string_delete_item" = "삭제 항목";
 "shared_string_delete_immediately" = "즉시 삭제";
 "shared_string_file_info" = "파일 정보";
+"quick_action_bug_descr" = "이 메시지는 댓글 필드에 포함되어 있습니다.";

@@ -784,6 +784,7 @@
 "shared_string_continue" = "Continue";
 "shared_string_deselect_all" = "Deselect all";
 "shared_string_preparing" = "Preparing";
+"shared_string_not_available" = "Not Available";
 "shared_string_min" = "Min";
 "shared_string_max" = "Max";
 "shared_string_wifi_only" = "Only on Wi-Fi";

@@ -30,7 +30,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchListItemType)
 - (EOAQuickSearchListItemType) getType;
 
 - (OASearchResult *) getSearchResult;
-+ (NSString *) getCityTypeStr:(EOACitySubType)type;
 - (NSString *) getName;
 + (NSString *) getName:(OASearchResult *)searchResult;
 + (NSString *) getIconName:(OASearchResult *)searchResult;

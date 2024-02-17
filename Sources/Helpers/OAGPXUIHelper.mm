@@ -12,9 +12,16 @@
 #import "OARoutingHelper.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDatabase.h"
+#import "OAGPXTrackAnalysis.h"
+#import "OAPOI.h"
+#import "OAPOIHelper.h"
+#import "OAPOIFiltersHelper.h"
+#import "OACity.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
+
+#include <OsmAndCore/Utilities.h>
 
 #define SECOND_IN_MILLIS 1000L
 
@@ -421,6 +428,59 @@
     double dLat = (currPoint.position.latitude - prevPoint.position.latitude) * percent;
     double dLon = (currPoint.position.longitude - prevPoint.position.longitude) * percent;
     return CLLocationCoordinate2DMake(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
+}
+
++ (OAPOI *)checkAndSearchNearestCity:(OAGPXTrackAnalysis *)analysis
+{
+    OAWptPt *startPoint = analysis ? analysis.locationStart : nil;
+    return startPoint ? [self searchNearestCity:startPoint.position] : nil;
+}
+
++ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
+{
+    OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    const auto rect = OsmAnd::Utilities::boundingBox31FromAreaInMeters(50 * 1000, pointI);
+    const auto top = OsmAnd::Utilities::get31LatitudeY(rect.top());
+    const auto left = OsmAnd::Utilities::get31LongitudeX(rect.left());
+    const auto bottom = OsmAnd::Utilities::get31LatitudeY(rect.bottom());
+    const auto right = OsmAnd::Utilities::get31LongitudeX(rect.right());
+
+    NSArray<NSString *> *cityTypes = @[
+        [OACity getTypeStr:CITY_SUBTYPE_CITY],
+        [OACity getTypeStr:CITY_SUBTYPE_TOWN],
+        [OACity getTypeStr:CITY_SUBTYPE_VILLAGE],
+        [OACity getTypeStr:CITY_SUBTYPE_HAMLET],
+        [OACity getTypeStr:CITY_SUBTYPE_SUBURB],
+        [OACity getTypeStr:CITY_SUBTYPE_DISTRICT],
+        [OACity getTypeStr:CITY_SUBTYPE_NEIGHBOURHOOD]
+    ];
+
+    OASearchPoiTypeFilter *filter = [[OASearchPoiTypeFilter alloc] initWithAcceptFunc:^BOOL(OAPOICategory *type, NSString *subcategory) {
+        return [cityTypes containsObject:subcategory];
+    } emptyFunction:^BOOL{
+        return NO;
+    } getTypesFunction:nil];
+
+    NSArray<OAPOI *> *amenities = [OAPOIHelper findPOIsByFilter:filter topLatitude:top leftLongitude:left bottomLatitude:bottom rightLongitude:right matcher:nil];
+    return amenities.count > 0 ? [self sortAmenities:amenities cityTypes:cityTypes latLon:latLon].firstObject : nil;
+}
+
++ (NSArray<OAPOI *> *)sortAmenities:(NSArray<OAPOI *> *)amenities cityTypes:(NSArray<NSString *> *)cityTypes latLon:(CLLocationCoordinate2D)latLon
+{
+    return [amenities sortedArrayUsingComparator:^NSComparisonResult(OAPOI * _Nonnull amenity1, OAPOI * _Nonnull amenity2) {
+        CGFloat rad1 = 1000.;
+        CGFloat rad2 = 1000.;
+        if ([cityTypes containsObject:amenity1.subType])
+            rad1 = [OACity getRadius:amenity1.subType];
+        if ([cityTypes containsObject:amenity2.subType])
+            rad2 = [OACity getRadius:amenity2.subType];
+        double distance1 = OsmAnd::Utilities::distance(amenity1.longitude, amenity1.latitude, latLon.longitude, latLon.latitude) / rad1;
+        double distance2 = OsmAnd::Utilities::distance(amenity2.longitude, amenity2.latitude, latLon.longitude, latLon.latitude) / rad2;
+        if (distance1 == distance2)
+            return NSOrderedSame;
+        else
+            return distance1 < distance2 ? NSOrderedAscending : NSOrderedDescending;
+    }];
 }
 
 @end

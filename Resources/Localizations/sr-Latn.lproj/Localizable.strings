@@ -90,7 +90,7 @@
 "day_night_info" = "Dan/noć info";
 "daynight_mode_auto" = "Automatski";
 "route_simulation" = "Route simulation";
-"auto_follow_location_enabled" = "Auto centriranje mape";
+"auto_follow_location_enabled" = "Auto centriranje mape.";
 "unknown_location" = "Pozicija još nije poznata.";
 "animate_routing_route_not_calculated" = "Prvo izračunaj rutu";
 "settings_preset" = "Osnovni profil";
@@ -144,7 +144,7 @@
 "shared_string_near" = "Blizu";
 "map_widget_next_turn" = "Sledeće skretanje";
 "map_widget_next_turn_small" = "Sledeće skretanje (malo)";
-"map_widget_next_next_turn" = "Drugo sledeće skretanje";
+"map_widget_next_next_turn" = "Drugo skretanje";
 "always_center_position_on_map" = "Pozicija uvek u centru";
 "map_widget_appearance_rem" = "Ostali elementi";
 "map_widget_compass" = "Kompas";
@@ -350,7 +350,7 @@
 "starting_point_too_far" = "Tačka polaska je previše daleko od najbližeg puta.";
 "ending_point_too_far" = "Odredište je previše daleko od najbližeg puta.";
 "intermediate_point_too_far" = "Prolazno odredište %@ je predaleko od najbližeg puta.";
-"arrived_at_destination" = "Stigao si na odredište";
+"arrived_at_destination" = "Stigao si na odredište.";
 "towards" = "prema";
 "route_roundabout" = "Kružni tok: Izađite na %d. izlazu i nastavite";
 "route_roundabout_short" = "Odredi %d izlaz i idi";

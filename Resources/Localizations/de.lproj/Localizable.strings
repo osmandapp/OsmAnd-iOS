@@ -3313,3 +3313,4 @@
 "download_to_device" = "Auf das Gerät herunterladen";
 "permanent_delete_warning" = "%@ wird dauerhaft gelöscht. Bist du sicher?";
 "cloud_item_restored" = "%@ wird in Cloud wiederhergestellt.";
+"shared_string_not_available" = "Nicht verfügbar";

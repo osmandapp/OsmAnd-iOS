@@ -65,29 +65,6 @@
     return _searchResult;
 }
 
-+ (NSString *) getCityTypeStr:(EOACitySubType)type
-{
-    switch (type)
-    {
-        case CITY_SUBTYPE_CITY:
-            return OALocalizedString(@"city_type_city");
-        case CITY_SUBTYPE_TOWN:
-            return OALocalizedString(@"city_type_town");
-        case CITY_SUBTYPE_VILLAGE:
-            return OALocalizedString(@"city_type_village");
-        case CITY_SUBTYPE_HAMLET:
-            return OALocalizedString(@"city_type_hamlet");
-        case CITY_SUBTYPE_SUBURB:
-            return OALocalizedString(@"city_type_suburb");
-        case CITY_SUBTYPE_DISTRICT:
-            return OALocalizedString(@"city_type_district");
-        case CITY_SUBTYPE_NEIGHBOURHOOD:
-            return OALocalizedString(@"city_type_neighbourhood");
-        default:
-            return OALocalizedString(@"city_type_city");
-    }
-}
-
 + (NSString *) getName:(OASearchResult *)searchResult
 {
     switch (searchResult.objectType)
@@ -258,7 +235,7 @@
         case CITY:
         {
             OACity *city = (OACity *)searchResult.object;
-            return [self.class getCityTypeStr:city.subType];
+            return [OACity getLocalizedTypeStr:city.subType];
         }
         case POSTCODE:
         {
@@ -271,16 +248,16 @@
             {
                 if (searchResult.distRelatedObjectName > 0)
                 {
-                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [self.class getCityTypeStr:city.subType], [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@ • %@ %@ %@", [OACity getLocalizedTypeStr:city.subType], [OAOsmAndFormatter getFormattedDistance:(float) searchResult.distRelatedObjectName], OALocalizedString(@"shared_string_from"), searchResult.localeRelatedObjectName];
                 }
                 else
                 {
-                    return [NSString stringWithFormat:@"%@, %@", [self getCityTypeStr:city.subType], searchResult.localeRelatedObjectName];
+                    return [NSString stringWithFormat:@"%@, %@", [OACity getLocalizedTypeStr:city.subType], searchResult.localeRelatedObjectName];
                 }
             }
             else
             {
-                return [self.class getCityTypeStr:city.subType];
+                return [OACity getLocalizedTypeStr:city.subType];
             }
         }
         case STREET:

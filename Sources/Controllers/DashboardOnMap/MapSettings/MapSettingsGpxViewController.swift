@@ -595,14 +595,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             switch sortType {
             case .nearest:
                 list.sort { distanceToGPX(gpx: $0) < distanceToGPX(gpx: $1) }
-            case .lastModified, .newestDateFirst:
+            case .lastModified:
                 list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
             case .nameAZ:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
             case .nameZA:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
+            case .newestDateFirst:
+                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
             case .oldestDateFirst:
-                list.sort { $0.importDate ?? Date.distantFuture < $1.importDate ?? Date.distantFuture }
+                list.sort { $0.importDate ?? Date.distantPast < $1.importDate ?? Date.distantPast }
             case .longestDistanceFirst:
                 list.sort { $0.totalDistance > $1.totalDistance }
             case .shortestDistanceFirst:
@@ -624,12 +626,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat) {
+    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? "N/A"
-        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? "N/A"
-        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
+        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let creationDate = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_not_available")
+        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(gpx.wptPoints)"
         let folderName: String
         if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(gpx.gpxFolderName), !capitalizedFolderName.isEmpty {
@@ -643,23 +646,23 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         if calculatedDistance != CGFloat.greatestFiniteMagnitude {
             distanceToTrack = OAOsmAndFormatter.getFormattedDistance(Float(calculatedDistance))
         } else {
-            distanceToTrack = "N/A"
+            distanceToTrack = localizedString("shared_string_not_available")
         }
         
         let regionName: String
         let gpxLocation = gpx.bounds.center
         if gpxLocation.latitude != Double.greatestFiniteMagnitude,
            let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: gpxLocation.latitude, lon: gpxLocation.longitude) {
-            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? "N/A"
+            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? localizedString("shared_string_not_available")
         } else {
-            regionName = "N/A"
+            regionName = localizedString("shared_string_not_available")
         }
         
         let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: gpxLocation.latitude, destinationLongitude: gpxLocation.longitude)
-        return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle)
+        return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle, creationDate)
     }
     
-    private func getDescriptionAttributedText(with formattedData: (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat)) -> NSAttributedString {
+    private func getDescriptionAttributedText(with formattedData: (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String)) -> NSAttributedString {
         let fullString = NSMutableAttributedString()
         let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
         let detailsText = "\(formattedData.distance) • \(formattedData.time) • \(formattedData.waypointCount)"
@@ -677,7 +680,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             fullString.append(directionAttributedString)
             fullString.append(regionString)
             fullString.append(detailsString)
-        case .lastModified, .newestDateFirst, .oldestDateFirst:
+        case .lastModified:
             let dateString = NSAttributedString(string: "\(formattedData.date) | ", attributes: defaultAttributes)
             fullString.append(dateString)
             fullString.append(detailsString)
@@ -689,6 +692,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 fullString.append(NSAttributedString(string: " \(formattedData.folderName)", attributes: defaultAttributes))
             }
             
+        case .newestDateFirst, .oldestDateFirst:
+            let dateString = NSAttributedString(string: "\(formattedData.creationDate) | ", attributes: defaultAttributes)
+            fullString.append(dateString)
+            fullString.append(detailsString)
         case .longestDistanceFirst, .shortestDistanceFirst:
             fullString.append(detailsString)
         case .longestDurationFirst, .shorterDurationFirst:

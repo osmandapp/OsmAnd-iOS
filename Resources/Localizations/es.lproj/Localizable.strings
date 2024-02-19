@@ -3297,3 +3297,4 @@
 "trash_is_empty_banner_desc" = "Los archivos eliminados de OsmAnd Cloud estarán disponibles aquí durante %d días.";
 "delete_all_items" = "Borrar todos los elementos";
 "delete_all_items_desc" = "¿Está seguro de que desea eliminar permanentemente todos los elementos de la Papelera? Esta acción no se puede deshacer.";
+"shared_string_not_available" = "No disponible";

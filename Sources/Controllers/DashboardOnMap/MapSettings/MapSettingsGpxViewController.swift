@@ -94,7 +94,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isSearchFilteringActive = false
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
-    private var importHelper: OAGPXImportHelper?
+    private var importHelper: OAGPXImportUIHelper?
 
     private lazy var sortButton: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -115,7 +115,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         loadGpxTracks()
         loadVisibleTracks()
         loadRecentlyVisibleTracks()
-        importHelper = OAGPXImportHelper(hostViewController: self)
+        importHelper = OAGPXImportUIHelper(hostViewController: self)
         importHelper?.delegate = self
     }
     
@@ -860,7 +860,7 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
     }
 }
 
-extension MapSettingsGpxViewController: OAGPXImportHelperDelegate {
+extension MapSettingsGpxViewController: OAGPXImportUIHelperDelegate {
     func updateVCData() {
         DispatchQueue.main.async {
             self.loadGpxTracks()

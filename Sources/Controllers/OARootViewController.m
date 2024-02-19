@@ -390,8 +390,8 @@ typedef enum : NSUInteger {
 
 - (void)importAsGPX:(NSURL *)url showAlerts:(BOOL)showAlerts openGpxView:(BOOL)openGpxView
 {
-    OAGPXImportHelper *impertHelper = [[OAGPXImportHelper alloc] initWithHostViewController:self];
-    [impertHelper prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView completion:nil];
+    OAGPXImportUIHelper *importHelper = [[OAGPXImportUIHelper alloc] initWithHostViewController:self];
+    [importHelper prepareProcessUrl:url showAlerts:showAlerts openGpxView:openGpxView completion:nil];
     [self closeMenuAndPanelsAnimated:NO];
 }
 

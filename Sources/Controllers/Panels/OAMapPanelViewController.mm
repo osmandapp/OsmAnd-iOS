@@ -3011,9 +3011,9 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteDetailsGraphForFilepath:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
+- (void) openTargetViewWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
 {
-    OAGPXMutableDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFilepath];
+    OAGPXDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
     if (doc)
     {
         OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]

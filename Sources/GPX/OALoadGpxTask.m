@@ -66,32 +66,33 @@
         onComplete(_gpxFolders);
 }
 
-- (void) loadGPXData:(NSString *)mapPath
+- (void) loadGPXData:(NSString *)gpxPath
 {
-    [self loadGPXFolder:mapPath scanningFolderShortPath:@""];
+    [self loadGPXFolder:gpxPath relativePath:@""];
 }
 
-- (void) loadGPXFolder:(NSString *)scanningFolderFullPath scanningFolderShortPath:(NSString *)scanningFolderShortPath
+- (void) loadGPXFolder:(NSString *)absolutePath relativePath:(NSString *)relativePath
 {
-    NSArray* folderContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:scanningFolderFullPath error:nil];
-    for (NSString *item in folderContent)
+    NSArray<NSString *> *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:absolutePath error:nil];
+    for (NSString *filename in fileNames)
     {
-        if([item hasPrefix:@"."])
+        if ([filename hasPrefix:@"."])
             continue;
         
-        NSString *itemPath = [scanningFolderFullPath stringByAppendingPathComponent:item];
-        if ([OAUtilities isDirByPath:itemPath])
+        NSString *filePath = [absolutePath stringByAppendingPathComponent:filename];
+        
+        BOOL isDir;
+        BOOL isFileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir];
+        if (isFileExists && isDir)
         {
-            NSString *subfolderShortPath = [scanningFolderShortPath stringByAppendingPathComponent:item];
-            NSString *subfolderFullPath = [scanningFolderFullPath stringByAppendingPathComponent:item];
-            [self loadGPXFolder:subfolderFullPath scanningFolderShortPath:subfolderShortPath];
+            [self loadGPXFolder:[absolutePath stringByAppendingPathComponent:filename] relativePath:[relativePath stringByAppendingPathComponent:filename]];
         }
-        else if ([[[item lowercaseString] pathExtension] isEqualToString:@"gpx"])
+        else if ([[[filename pathExtension] lowercaseString] isEqualToString:@"gpx"])
         {
-            NSString *gpxFilename = item;
-            NSString *gpxShortPath = [scanningFolderShortPath stringByAppendingPathComponent:item];
+            NSString *gpxFilename = filename;
+            NSString *gpxShortPath = [relativePath stringByAppendingPathComponent:filename];
             OAGpxInfo *info = [[OAGpxInfo alloc] init];
-            info.subfolder = scanningFolderShortPath;
+            info.subfolder = relativePath;
             info.file = gpxFilename;
             info.gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxShortPath];
             [_result addObject:info];

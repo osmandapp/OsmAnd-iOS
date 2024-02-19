@@ -1,5 +1,5 @@
 //
-//  OAGPXImportHelper.h
+//  OAGPXImportUIHelper.h
 //  OsmAnd
 //
 //  Created by Max Kojin on 27/01/24.
@@ -8,16 +8,16 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol OAGPXImportHelperDelegate <NSObject>
+@protocol OAGPXImportUIHelperDelegate <NSObject>
 
 - (void) updateDelegateVCData;
 
 @end
 
 
-@interface OAGPXImportHelper : NSObject
+@interface OAGPXImportUIHelper : NSObject
 
-@property (nonatomic, weak) id<OAGPXImportHelperDelegate> delegate;
+@property (nonatomic, weak) id<OAGPXImportUIHelperDelegate> delegate;
 
 - (instancetype) initWithHostViewController:(UIViewController *)hostVC;
 

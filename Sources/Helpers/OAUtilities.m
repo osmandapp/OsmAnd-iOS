@@ -2580,20 +2580,20 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
 {
-    NSMutableArray<NSString *> *allFoldersFullPathes = [self.class getSubfoldersList:OsmAndApp.instance.gpxPath];
-    NSMutableArray<NSString *> *allFoldersShortPathes = [NSMutableArray array];
-    for (NSString *path in allFoldersFullPathes)
+    NSMutableArray<NSString *> *flattenedFilePaths = [self.class getFlattenedFileList:OsmAndApp.instance.gpxPath];
+    NSMutableArray<NSString *> *flattenedRelativeFilePaths = [NSMutableArray array];
+    for (NSString *path in flattenedFilePaths)
     {
         NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
-        [allFoldersShortPathes addObject:[path stringByReplacingOccurrencesOfString:pathToDelete withString:@""]];
+        [flattenedRelativeFilePaths addObject:[path stringByReplacingOccurrencesOfString:pathToDelete withString:@""]];
     }
     
     if (shouldAddRootTracksFolder)
-        [allFoldersShortPathes addObject:OALocalizedString(@"shared_string_gpx_tracks")];
+        [flattenedRelativeFilePaths addObject:OALocalizedString(@"shared_string_gpx_tracks")];
     
     if (shouldSort)
     {
-        return [allFoldersShortPathes sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [flattenedRelativeFilePaths sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
             if ([obj1 isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
                 return NSOrderedAscending;
             else if ([obj2 isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
@@ -2604,11 +2604,11 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     else
     {
-        return [NSArray arrayWithArray:allFoldersShortPathes];
+        return [NSArray arrayWithArray:flattenedRelativeFilePaths];
     }
 }
 
-+ (NSMutableArray<NSString *> *) getSubfoldersList:(NSString *)path
++ (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path
 {
     NSMutableArray<NSString *> *allSubfolderPathes = [NSMutableArray new];
     
@@ -2616,45 +2616,26 @@ static const double d180PI = 180.0 / M_PI_2;
     if (!currentFolderPath || currentFolderPath.length == 0)
         currentFolderPath = OsmAndApp.instance.documentsPath;
     
-    NSURL *currentFolderUrl = [NSURL fileURLWithPath:currentFolderPath];
-    if (currentFolderUrl)
+    NSArray<NSString *> *subfolderPaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:currentFolderPath error:nil];
+    for (NSString *subfolderPath in subfolderPaths)
     {
-        NSArray<NSURL *> *subfolderUrls =  [[NSFileManager defaultManager] contentsOfDirectoryAtURL:currentFolderUrl includingPropertiesForKeys:@[NSURLNameKey, NSURLIsDirectoryKey] options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-        for (NSURL *subfolderUrl in subfolderUrls)
+        if([subfolderPath.lastPathComponent hasPrefix:@"."])
+            continue;
+        
+        BOOL isDir = NO;
+        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:subfolderPath isDirectory:&isDir];
+        if (exists && isDir)
         {
-            if([subfolderUrl.lastPathComponent hasPrefix:@"."])
-                continue;
+            NSString *subfolderPath = [path stringByAppendingPathComponent:subfolderPath.lastPathComponent];
+            [allSubfolderPathes addObject:subfolderPath];
             
-            if ([self.class isDirByUrl:subfolderUrl])
-            {
-                NSString *subfolderPath = [path stringByAppendingPathComponent:subfolderUrl.lastPathComponent];
-                [allSubfolderPathes addObject:subfolderPath];
-                
-                NSMutableArray<NSString *> *recursiveFoundSubfolderPathes = [self.class getSubfoldersList:subfolderPath];
-                if (recursiveFoundSubfolderPathes.count > 0)
-                    [allSubfolderPathes addObjectsFromArray:recursiveFoundSubfolderPathes];
-            }
+            NSMutableArray<NSString *> *foundSubfolderPaths = [self.class getFlattenedFileList:subfolderPath];
+            if (foundSubfolderPaths.count > 0)
+                [allSubfolderPathes addObjectsFromArray:foundSubfolderPaths];
         }
+        
     }
     return allSubfolderPathes;
-}
-
-+ (BOOL) isDirByUrl:(NSURL *)url
-{
-    if (url)
-    {
-        NSNumber *isDirectory;
-        [url getResourceValue:&isDirectory forKey:NSURLIsDirectoryKey error:nil];
-        if (isDirectory && [isDirectory boolValue])
-            return YES;
-    }
-    return NO;
-}
-
-+ (BOOL) isDirByPath:(NSString *)path
-{
-    NSURL *url = [NSURL fileURLWithPath:path];
-    return [self.class isDirByUrl:url];
 }
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor

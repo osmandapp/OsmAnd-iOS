@@ -1,17 +1,15 @@
 //
-//  OAGPXImportHelper.m
+//  OAGPXImportUIHelper.m
 //  OsmAnd Maps
 //
 //  Created by Max Kojin on 27/01/24.
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-#import "OAGPXImportHelper.h"
+#import "OAGPXImportUIHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
-#import "OASavingTrackHelper.h"
 #import "OARootViewController.h"
-#import "OAIAPHelper.h"
 #import "OAGPXDocument.h"
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"
@@ -32,24 +30,20 @@
 #define kImportFolderName @"import"
 
 
-@interface OAGPXImportHelper () <UIDocumentPickerDelegate>
+@interface OAGPXImportUIHelper () <UIDocumentPickerDelegate>
 @end
 
-@implementation OAGPXImportHelper
+@implementation OAGPXImportUIHelper
 {
     UIViewController *_hostVC;
     MBProgressHUD *_progressHUD;
+    OsmAndAppInstance _app;
     
     NSURL *_importUrl;
     NSString *_importGpxPath;
-    NSString *_importGpxShortPath;
+    NSString *_importGpxRelativePath;
     OAGPXDocument *_doc;
     NSString *_newGpxName;
-    
-    OsmAndAppInstance _app;
-    OASavingTrackHelper *_savingHelper;
-    OAIAPHelper *_iapHelper;
-    OAAppSettings *_settings;
 }
 
 static UIViewController *parentController;
@@ -62,10 +56,7 @@ static UIViewController *parentController;
         _hostVC = hostVC;
         _app = [OsmAndApp instance];
         _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:kImportFolderName];
-        _importGpxShortPath = kImportFolderName;
-        _iapHelper = [OAIAPHelper sharedInstance];
-        _savingHelper = [OASavingTrackHelper sharedInstance];
-        _settings = [OAAppSettings sharedManager];
+        _importGpxRelativePath = kImportFolderName;
     }
     return self;
 }
@@ -81,12 +72,12 @@ static UIViewController *parentController;
     {
         NSString *trimmedDestPath = [self trim:destPath];
         _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:trimmedDestPath];
-        _importGpxShortPath = trimmedDestPath;
+        _importGpxRelativePath = trimmedDestPath;
     }
     else
     {
         _importGpxPath = [_app.gpxPath stringByAppendingPathComponent:kImportFolderName];
-        _importGpxShortPath = kImportFolderName;
+        _importGpxRelativePath = kImportFolderName;
     }
     
     
@@ -309,7 +300,7 @@ static UIViewController *parentController;
     if (_doc)
     {
         NSString *fileName = [_importUrl.path lastPathComponent];
-        NSString *importDestFilepath = [_importGpxShortPath stringByAppendingPathComponent:fileName];
+        NSString *importDestFilepath = [_importGpxRelativePath stringByAppendingPathComponent:fileName];
         if ([[OAGPXDatabase sharedDb] containsGPXItem:importDestFilepath])
         {
             if (showAlerts)
@@ -390,13 +381,13 @@ static UIViewController *parentController;
 
     if (_newGpxName)
     {
-        NSString *storingPathInFolder = [_importGpxShortPath stringByAppendingPathComponent:_newGpxName];
+        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:_newGpxName];
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     }
     else
     {
         NSString *name = [self getCorrectedFilename:[_importUrl.path lastPathComponent]];
-        NSString *storingPathInFolder = [_importGpxShortPath stringByAppendingPathComponent:name];
+        NSString *storingPathInFolder = [_importGpxRelativePath stringByAppendingPathComponent:name];
         item = [[OAGPXDatabase sharedDb] addGpxItem:storingPathInFolder title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
     }
     [[OAGPXDatabase sharedDb] save];

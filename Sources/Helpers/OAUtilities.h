@@ -368,9 +368,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSString *) getGpxShortPath:(NSString *)fullFilePath;
 
 + (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddTracksFolder;
-+ (NSMutableArray<NSString *> *) getSubfoldersList:(NSString *)path;
-+ (BOOL) isDirByUrl:(NSURL *)url;
-+ (BOOL) isDirByPath:(NSString *)path;
++ (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path;
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor;
 

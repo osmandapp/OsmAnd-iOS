@@ -28,9 +28,9 @@
 @implementation OASelectTrackFolderViewController
 {
     OAGPX *_gpx;
-    NSString *_selectedFolderName;
-    NSString *_prefixToHide;
     NSArray<NSArray<NSDictionary *> *> *_data;
+    NSString *_selectedFolderName;
+    NSString *_hidingSubfolderPath; //if we're using this screen for move folder, then we're hide moving folder and all it's subfolders, to deny move folder inside itself
 }
 
 #pragma mark - Initialization
@@ -59,13 +59,13 @@
     return self;
 }
 
-- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName prefixToHide:(NSString*)prefixToHide
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName prefixToHide:(NSString*)hidingSubfolderPath
 {
     self = [super init];
     if (self)
     {
         _selectedFolderName = selectedFolderName;
-        _prefixToHide = prefixToHide;
+        _hidingSubfolderPath = hidingSubfolderPath;
         [self reloadData];
     }
     return self;
@@ -117,7 +117,7 @@
     NSMutableArray *cellFoldersData = [NSMutableArray new];
     for (NSString *folderName in allFolderNames)
     {
-        if (_prefixToHide && [folderName hasPrefix:_prefixToHide])
+        if (_hidingSubfolderPath && [folderName hasPrefix:_hidingSubfolderPath])
             continue;
         
         NSArray *folderItems = foldersData[folderName];

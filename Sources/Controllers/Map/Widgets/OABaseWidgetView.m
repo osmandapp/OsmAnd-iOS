@@ -48,8 +48,8 @@
     [NSLayoutConstraint activateConstraints:@[
         [_separatorBottomView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [_separatorBottomView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_separatorBottomView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-0.5],
-        [_separatorBottomView.heightAnchor constraintEqualToConstant:.5]
+        [_separatorBottomView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-1],
+        [_separatorBottomView.heightAnchor constraintEqualToConstant:1]
     ]];
     
     _separatorRightView = [UIView new];

@@ -24,6 +24,8 @@
 
 @implementation OACloudAccountLoginViewController
 {
+    EOACloudAccountScreenType _screenType;
+
     NSArray<NSArray<NSDictionary *> *> *_data;
     
     OABackupHelper *_backupHelper;
@@ -36,17 +38,29 @@
 - (instancetype)init
 {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _hasValidSub = YES;
     }
     return self;
 }
 
+- (instancetype)initWithScreenType:(EOACloudAccountScreenType)type
+{
+    self = [self init];
+    if (self)
+    {
+        _screenType = type;
+    }
+    return self;
+}
+
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = OALocalizedString(@"user_login");
+    self.navigationItem.title = OALocalizedString(_screenType == EOACloudAccountLoginScreenType ? @"user_login" : @"verify_account");
     self.lastTimeCodeSent = 0;
     
     _backupHelper = [OABackupHelper sharedInstance];
@@ -78,7 +92,7 @@
     
     [data addObject:@[@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"osmand_cloud_login_descr"),
+        @"title" : OALocalizedString(_screenType == EOACloudAccountLoginScreenType ? @"osmand_cloud_login_descr" : @"verify_account_deletion_descr"),
         @"color" : [UIColor colorNamed:ACColorNameIconColorSecondary],
         @"spacing" : @6
     },
@@ -190,8 +204,15 @@
         NSString *email = self.getTextFieldValue;
         if ([email isValidEmail])
         {
-            [OAAppSettings.sharedManager.backupUserEmail set:email];
-            [_backupHelper registerDevice:@""];
+            if (_screenType == EOACloudAccountLoginScreenType)
+            {
+                [OAAppSettings.sharedManager.backupUserEmail set:email];
+                [_backupHelper registerDevice:@""];
+            }
+            else
+            {
+                [_backupHelper sendCode:email action:@"delete"];
+            }
             _continuePressed = YES;
             [self updateScreen];
         }

@@ -13,6 +13,8 @@
     NSMutableArray<id<OAOnDeleteFilesListener>> *_deleteFilesListeners;
     NSMutableArray<id<OAOnRegisterUserListener>> *_registerUserListeners;
     NSMutableArray<id<OAOnRegisterDeviceListener>> *_registerDeviceListeners;
+    NSMutableArray<id<OAOnSendCodeListener>> *_sendCodeListeners;
+    NSMutableArray<id<OAOnDeleteAccountListener>> *_deleteAccountListeners;
 }
 
 - (instancetype) init
@@ -22,6 +24,8 @@
         _deleteFilesListeners = [NSMutableArray array];
         _registerUserListeners = [NSMutableArray array];
         _registerDeviceListeners = [NSMutableArray array];
+        _sendCodeListeners = [NSMutableArray array];
+        _deleteAccountListeners = [NSMutableArray array];
     }
     return self;
 }
@@ -69,6 +73,36 @@
 - (void) removeRegisterDeviceListener:(id<OAOnRegisterDeviceListener>)listener
 {
     [_registerDeviceListeners removeObject:listener];
+}
+
+- (NSArray<id<OAOnSendCodeListener>> *) getSendCodeListeners
+{
+    return _sendCodeListeners;
+}
+
+- (void) addSendCodeListener:(id<OAOnSendCodeListener>)listener
+{
+    [_sendCodeListeners addObject:listener];
+}
+
+- (void) removeSendCodeListener:(id<OAOnSendCodeListener>)listener
+{
+    [_sendCodeListeners removeObject:listener];
+}
+
+- (NSArray<id<OAOnDeleteAccountListener>> *) getDeleteAccountListeners
+{
+    return _deleteAccountListeners;
+}
+
+- (void) addDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener
+{
+    [_deleteAccountListeners addObject:listener];
+}
+
+- (void) removeDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener
+{
+    [_deleteAccountListeners removeObject:listener];
 }
 
 @end

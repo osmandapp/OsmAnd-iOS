@@ -22,6 +22,18 @@
 
 @end
 
+@protocol OAOnSendCodeListener <NSObject>
+
+- (void) onSendCode:(NSInteger)status message:(NSString *)message error:(OABackupError *)error;
+
+@end
+
+@protocol OAOnDeleteAccountListener <NSObject>
+
+- (void) onDeleteAccount:(NSInteger)status message:(NSString *)message error:(OABackupError *)error;
+
+@end
+
 @protocol OAOnRegisterUserListener <NSObject>
 
 - (void) onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error;
@@ -90,6 +102,12 @@
 - (NSArray<id<OAOnRegisterDeviceListener>> *) getRegisterDeviceListeners;
 - (void) addRegisterDeviceListener:(id<OAOnRegisterDeviceListener>)listener;
 - (void) removeRegisterDeviceListener:(id<OAOnRegisterDeviceListener>)listener;
+- (NSArray<id<OAOnSendCodeListener>> *) getSendCodeListeners;
+- (void) addSendCodeListener:(id<OAOnSendCodeListener>)listener;
+- (void) removeSendCodeListener:(id<OAOnSendCodeListener>)listener;
+- (NSArray<id<OAOnDeleteAccountListener>> *) getDeleteAccountListeners;
+- (void) addDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener;
+- (void) removeDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener;
 
 @end
 

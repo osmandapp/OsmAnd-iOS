@@ -32,6 +32,12 @@
 #define SERVER_ERROR_CODE_SUBSCRIPTION_WAS_EXPIRED_OR_NOT_PRESENT 110
 #define SERVER_ERROR_CODE_USER_IS_ALREADY_REGISTERED 111
 
+
+static inline BOOL backupDebugLogs()
+{
+    return BACKUP_DEBUG_LOGS;
+}
+
 @class OAExportSettingsType, OACommonBoolean, OAPrepareBackupResult, OABackupListeners, OASettingsItem, OAFileSettingsItem;
 
 @interface OABackupHelper : NSObject
@@ -48,6 +54,8 @@
 + (NSString *) LIST_FILES_URL;
 + (NSString *) DELETE_FILE_VERSION_URL;
 + (NSString *) DELETE_FILE_URL;
++ (NSString *) ACCOUNT_DELETE_URL;
++ (NSString *) SEND_CODE_URL;
 
 + (OABackupHelper *)sharedInstance;
 
@@ -84,6 +92,8 @@
 - (void) deleteAllFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
 - (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types;
 - (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
+- (void) deleteAccount:(NSString *)email token:(NSString *)token;
+- (void) sendCode:(NSString *)email action:(NSString *)action;
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile
                   listener:(id<OAOnDownloadFileListener>)listener;

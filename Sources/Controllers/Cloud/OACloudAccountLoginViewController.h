@@ -8,6 +8,15 @@
 
 #import "OACloudAccountBaseViewController.h"
 
+
+typedef NS_ENUM(NSInteger, EOACloudAccountScreenType)
+{
+    EOACloudAccountLoginScreenType = 0,
+    EOACloudAccountDeletionScreenType
+};
+
 @interface OACloudAccountLoginViewController : OACloudAccountBaseViewController
+
+- (instancetype)initWithScreenType:(EOACloudAccountScreenType)type;
 
 @end

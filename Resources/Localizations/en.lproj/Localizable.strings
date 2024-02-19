@@ -3606,3 +3606,6 @@
 "permanent_delete_warning" = "%@ will be deleted permanently. Are you sure?";
 "action_cannot_be_undone" = "This action can't be undone.";
 "cloud_item_restored" = "%@ is restored into Cloud.";
+"delete_account" = "Delete account";
+"verify_account" = "Verify your account";
+"verify_account_deletion_descr" = "We need to verify your account before delete it.\n\nPlease enter the e-mail address you registered with. A one-time password for the next step will be sent to it.";

@@ -31,6 +31,7 @@
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
 #import "OAURLSessionProgress.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kUpdateIdOperation @"Update order id"
 
@@ -38,14 +39,16 @@ static NSString *INFO_EXT = @"info";
 
 static NSString *SERVER_URL = @"https://osmand.net";
 
-static NSString *USER_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/user-register"];
-static NSString *DEVICE_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/device-register"];
-static NSString *UPDATE_ORDER_ID_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/user-update-orderid"];
-static NSString *UPLOAD_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/upload-file"];
-static NSString *LIST_FILES_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/list-files"];
-static NSString *DOWNLOAD_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/download-file"];
-static NSString *DELETE_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/delete-file"];
-static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/delete-file-version"];
+static NSString *USER_REGISTER_URL = [SERVER_URL stringByAppendingString:@"/userdata/user-register"];
+static NSString *DEVICE_REGISTER_URL = [SERVER_URL stringByAppendingString:@"/userdata/device-register"];
+static NSString *UPDATE_ORDER_ID_URL = [SERVER_URL stringByAppendingString:@"/userdata/user-update-orderid"];
+static NSString *UPLOAD_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/upload-file"];
+static NSString *LIST_FILES_URL = [SERVER_URL stringByAppendingString:@"/userdata/list-files"];
+static NSString *DOWNLOAD_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/download-file"];
+static NSString *DELETE_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file"];
+static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file-version"];
+static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-account"];
+static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
 
 static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
 static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
@@ -93,6 +96,16 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 + (NSString *) DELETE_FILE_URL
 {
     return DELETE_FILE_URL;
+}
+
++ (NSString *) ACCOUNT_DELETE_URL
+{
+    return ACCOUNT_DELETE_URL;
+}
+
++ (NSString *) SEND_CODE_URL
+{
+    return SEND_CODE_URL;
 }
 
 + (BOOL) isTokenValid:(NSString *)token
@@ -594,6 +607,18 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     [self checkRegistered];
     [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types listener:listener]];
+}
+
+- (void)deleteAccount:(NSString *)email token:(NSString *)token
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+}
+
+- (void)sendCode:(NSString *)email action:(NSString *)action
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OASendCodeCommand alloc] initWith:email action:action]];
 }
 
 - (NSInteger)calculateFileSize:(OARemoteFile *)remoteFile

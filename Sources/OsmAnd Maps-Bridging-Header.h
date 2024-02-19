@@ -162,3 +162,5 @@
 #import "OAExportSettingsType.h"
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
+#import "OAOperationLog.h"
+#import "OANetworkUtilities.h"

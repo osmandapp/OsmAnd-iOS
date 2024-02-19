@@ -377,8 +377,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             let tracksToShow = selectedTrackPaths.compactMap { $0 }.filter { !currentVisibleTrackPaths.contains($0) }
             let tracksToHide = currentVisibleTrackPaths.compactMap { $0 }.filter { !selectedTrackPaths.contains($0) }
             if !tracksToHide.isEmpty {
-                recentlyVisibleGpxList = recentlyVisibleGpxList.filter { track in
-                    !tracksToShow.contains(track.gpxFilePath) && tracksToHide.contains(track.gpxFilePath)
+                recentlyVisibleGpxList = recentlyVisibleGpxList.filter {
+                    !tracksToShow.contains($0.gpxFilePath) && tracksToHide.contains($0.gpxFilePath)
                 }
                 
                 for trackPath in tracksToHide {
@@ -870,12 +870,10 @@ extension MapSettingsGpxViewController: UISearchControllerDelegate {
     func presentSearchController(_ searchController: UISearchController) {
         // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
         // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        let searchBarActivationDelay = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
             if !searchController.searchBar.isFirstResponder {
-                debugPrint("Delayed retry: Making search bar first responder")
                 searchController.searchBar.becomeFirstResponder()
-            } else {
-                debugPrint("Search bar is already first responder after delay")
             }
         }
     }

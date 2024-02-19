@@ -1,5 +1,5 @@
 //
-//  HelpDataManager.swift
+//  MenuHelpDataService.swift
 //  OsmAnd Maps
 //
 //  Created by Dmitry Svetlichny on 05.12.2023.

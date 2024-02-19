@@ -622,11 +622,6 @@ static BOOL _isDeviatedFromRoute = false;
 
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
 {
-    if (![currentLocation hasBearing] && _app.locationServices.lastKnownHeading > 0)
-    {
-        currentLocation = [[CLLocation alloc] initWithCoordinate:currentLocation.coordinate altitude:currentLocation.altitude horizontalAccuracy:currentLocation.horizontalAccuracy verticalAccuracy:currentLocation.verticalAccuracy course:_app.locationServices.lastKnownHeading speed:currentLocation.speed timestamp:currentLocation.timestamp];
-    }
-    
     CLLocation *locationProjection = currentLocation;
     if (self.isPublicTransportMode && currentLocation != nil && _finalLocation != nil &&
         (targetPointsChanged || _transportRoutingHelper.startLocation == nil))

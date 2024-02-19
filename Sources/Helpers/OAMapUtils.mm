@@ -98,11 +98,12 @@
 + (CLLocationDirection) normalizeDegrees360:(CLLocationDirection)bearing
 {
     CLLocationDirection degrees = bearing;
-    if (degrees < 0)
-        degrees += 360;
-    else if (degrees > 360)
-        degrees -= 360;
-    
+    while (degrees < 0.0) {
+        degrees += 360.0;
+    }
+    while (degrees >= 360.0) {
+        degrees -= 360.0;
+    }
     return degrees;
 }
 
@@ -111,6 +112,9 @@
     double d = targetRotate - rotate;
     while (d >= 180.0) {
         d -= 360.0;
+    }
+    while (d < -180.0) {
+        d += 360.0;
     }
     return d;
 }

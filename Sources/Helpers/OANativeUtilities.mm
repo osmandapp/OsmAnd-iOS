@@ -312,4 +312,11 @@
     return OsmAnd::PointI();
 }
 
++ (double) getLocationHeightOrZero:(OsmAnd::PointI)location31
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    double height = [mapRenderer getLocationHeightInMeters:location31];
+    return height > kMinAltitudeValue ? height : 0;
+}
+
 @end

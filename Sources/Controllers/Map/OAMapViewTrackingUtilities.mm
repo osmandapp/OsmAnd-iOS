@@ -18,6 +18,7 @@
 #import "OATargetPointView.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
+//#import "OAAutoZoomBySpeedHelper.h"
 
 #include <commonOsmAndCore.h>
 
@@ -395,6 +396,16 @@
                 [self switchToRoutePlanningMode];
         }
     });
+}
+
+- (void) setMyLocationV2
+{
+    
+}
+
+- (void) setMyLocationV1
+{
+    
 }
 
 - (void) detectDrivingRegion:(CLLocation *)location

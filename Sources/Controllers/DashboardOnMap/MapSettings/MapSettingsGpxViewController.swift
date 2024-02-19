@@ -347,42 +347,27 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func handleSelectDeselectAllTracks() {
         guard isTracksAvailable else { return }
         let isSelectAll = !areAllTracksSelected()
-        let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
-        let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
-        let isFiltering = isSearchActive && !filteredGpxList.isEmpty
+        let gpxListToShow: [OAGPX]
+        if isSearchActive {
+            gpxListToShow = filteredGpxList
+        } else if isShowingVisibleTracks {
+            gpxListToShow = isVisibleTracksAvailable ? visibleGpxList : recentlyVisibleGpxList
+        } else {
+            gpxListToShow = allGpxList
+        }
         
         if isSelectAll {
-            if isFiltering {
-                for gpx in gpxListToShow where !selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
-                    selectedGpxTracks.append(gpx)
-                }
-            } else {
-                selectedGpxTracks = gpxListToShow + recentlyVisibleTracks
+            for gpx in gpxListToShow where !selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
+                selectedGpxTracks.append(gpx)
             }
         } else {
-            if isFiltering {
-                selectedGpxTracks.removeAll(where: { gpx in
-                    filteredGpxList.contains(where: { $0.gpxFilePath == gpx.gpxFilePath })
-                })
-            } else {
-                selectedGpxTracks.removeAll()
-            }
+            selectedGpxTracks.removeAll(where: { gpx in
+                gpxListToShow.contains(where: { $0.gpxFilePath == gpx.gpxFilePath })
+            })
         }
         
         tableView.reloadData()
-        for section in 0..<tableView.numberOfSections {
-            for row in 0..<tableView.numberOfRows(inSection: section) {
-                let indexPath = IndexPath(row: row, section: section)
-                let trackList = (section == 0 ? gpxListToShow : recentlyVisibleTracks)
-                if row < trackList.count {
-                    if isSelectAll {
-                        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-                    } else {
-                        tableView.deselectRow(at: indexPath, animated: false)
-                    }
-                }
-            }
-        }
+        updateSelectedRows()
     }
     
     private func onDoneButtonPressed() {
@@ -391,15 +376,19 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             let selectedTrackPaths = getSelectedTrackPaths()
             let tracksToShow = selectedTrackPaths.compactMap { $0 }.filter { !currentVisibleTrackPaths.contains($0) }
             let tracksToHide = currentVisibleTrackPaths.compactMap { $0 }.filter { !selectedTrackPaths.contains($0) }
-            for trackPath in tracksToHide {
-                if let track = allGpxList.first(where: { $0.gpxFilePath == trackPath }) {
-                    if !recentlyVisibleGpxList.contains(where: { $0.gpxFilePath == trackPath }) {
+            if !tracksToHide.isEmpty {
+                recentlyVisibleGpxList = recentlyVisibleGpxList.filter { track in
+                    !tracksToShow.contains(track.gpxFilePath) && tracksToHide.contains(track.gpxFilePath)
+                }
+                
+                for trackPath in tracksToHide {
+                    if let track = allGpxList.first(where: { $0.gpxFilePath == trackPath }),
+                       !recentlyVisibleGpxList.contains(where: { $0.gpxFilePath == trackPath }) {
                         recentlyVisibleGpxList.append(track)
                     }
                 }
             }
             
-            recentlyVisibleGpxList.removeAll { tracksToShow.contains($0.gpxFilePath) }
             let hiddenTracksPaths = recentlyVisibleGpxList.map { $0.gpxFilePath }
             UserDefaults.standard.set(hiddenTracksPaths, forKey: previouslyVisibleTracksKey)
             OAAppSettings.sharedManager()?.showGpx(tracksToShow)
@@ -505,13 +494,18 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func areAllTracksSelected() -> Bool {
-        let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
         let selectedTrackPaths = Set(getSelectedTrackPaths())
         if isSearchActive {
+            let gpxListToShow = filteredGpxList
             return gpxListToShow.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+        } else if isShowingVisibleTracks {
+            if isVisibleTracksAvailable {
+                return visibleGpxList.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+            } else {
+                return recentlyVisibleGpxList.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+            }
         } else {
-            let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
-            let allTracks = gpxListToShow + recentlyVisibleTracks
+            let allTracks = allGpxList + recentlyVisibleGpxList
             return allTracks.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
         }
     }
@@ -765,9 +759,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onSearchButtonClicked() {
-        navigationItem.searchController = navigationItem.searchController ?? searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController?.isActive = true
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
@@ -779,6 +770,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             self.updateSortButtonAndMenu()
             self.updateNavbar()
             self.updateBottomButtons()
+            self.navigationItem.searchController = self.navigationItem.searchController ?? self.searchController
+            self.navigationItem.hidesSearchBarWhenScrolling = false
+            self.searchController?.isActive = true
             self.generateData()
             self.tableView.reloadData()
             self.updateSelectedRows()
@@ -874,9 +868,14 @@ extension MapSettingsGpxViewController: UISearchBarDelegate {
 
 extension MapSettingsGpxViewController: UISearchControllerDelegate {
     func presentSearchController(_ searchController: UISearchController) {
-        DispatchQueue.main.async {
+        // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
+        // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             if !searchController.searchBar.isFirstResponder {
+                debugPrint("Delayed retry: Making search bar first responder")
                 searchController.searchBar.becomeFirstResponder()
+            } else {
+                debugPrint("Search bar is already first responder after delay")
             }
         }
     }

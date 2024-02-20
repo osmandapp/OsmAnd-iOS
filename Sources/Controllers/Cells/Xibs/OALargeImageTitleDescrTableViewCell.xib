@@ -37,7 +37,7 @@
                         <color key="textColor" name="textColorSecondary"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6jr-Hj-OeB">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6jr-Hj-OeB">
                         <rect key="frame" x="30" y="175" width="260" height="44"/>
                         <color key="backgroundColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
                         <constraints>

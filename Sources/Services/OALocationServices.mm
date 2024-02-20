@@ -936,4 +936,9 @@
     return bearing;
 }
 
+- (BOOL) hasBearing;
+{
+    return self.course != -1 && self.course != 0;
+}
+
 @end

@@ -1850,6 +1850,7 @@
 "quick_action_navigation_voice_on" = "Mute Voice";
 "quick_action_navigation_voice_off" = "Unmute Voice";
 "show_hide_gpx" = "Show/hide tracks";
+"shared_string_open_track" = "Open track";
 "show_gpx" = "Tracks";
 "hide_gpx" = "Hide track";
 "show_notes" = "Show OSM notes";

@@ -49,6 +49,7 @@ static NSString *DELETE_FILE_URL = [SERVER_URL stringByAppendingString:@"/userda
 static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file-version"];
 static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-account"];
 static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
+static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
 
 static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
 static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
@@ -106,6 +107,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 + (NSString *) SEND_CODE_URL
 {
     return SEND_CODE_URL;
+}
+
++ (NSString *) CHECK_CODE_URL
+{
+    return CHECK_CODE_URL;
 }
 
 + (BOOL) isTokenValid:(NSString *)token
@@ -613,6 +619,12 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 {
     [self checkRegistered];
     [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+}
+
+- (void)checkCode:(NSString *)email token:(NSString *)token
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OACheckCodeCommand alloc] initWith:email token:token]];
 }
 
 - (void)sendCode:(NSString *)email action:(NSString *)action

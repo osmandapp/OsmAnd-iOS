@@ -39,8 +39,9 @@ NS_ASSUME_NONNULL_BEGIN
                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 + (void) sendRequestWithUrl:(NSString *)url
-                     params:(NSDictionary<NSString *, NSString *> *)params
+                     params:(NSDictionary<NSString *, NSString *> * _Nullable)params
                        body:(NSString * _Nullable)body
+                contentType:(NSString *)contentType
                        post:(BOOL)post
                       async:(BOOL)async
                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;

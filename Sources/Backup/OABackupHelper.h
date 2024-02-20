@@ -56,6 +56,7 @@ static inline BOOL backupDebugLogs()
 + (NSString *) DELETE_FILE_URL;
 + (NSString *) ACCOUNT_DELETE_URL;
 + (NSString *) SEND_CODE_URL;
++ (NSString *) CHECK_CODE_URL;
 
 + (OABackupHelper *)sharedInstance;
 
@@ -93,6 +94,7 @@ static inline BOOL backupDebugLogs()
 - (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types;
 - (void) deleteOldFiles:(NSArray<OAExportSettingsType *> *)types listener:(id<OAOnDeleteFilesListener>)listener;
 - (void) deleteAccount:(NSString *)email token:(NSString *)token;
+- (void) checkCode:(NSString *)email token:(NSString *)token;
 - (void) sendCode:(NSString *)email action:(NSString *)action;
 - (NSString *)downloadFile:(NSString *)filePath
                 remoteFile:(OARemoteFile *)remoteFile

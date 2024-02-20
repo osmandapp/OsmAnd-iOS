@@ -28,6 +28,12 @@
 
 @end
 
+@protocol OAOnCheckCodeListener <NSObject>
+
+- (void) onCheckCode:(NSString *)token status:(NSInteger)status message:(NSString *)message error:(OABackupError *)error;
+
+@end
+
 @protocol OAOnDeleteAccountListener <NSObject>
 
 - (void) onDeleteAccount:(NSInteger)status message:(NSString *)message error:(OABackupError *)error;
@@ -105,6 +111,9 @@
 - (NSArray<id<OAOnSendCodeListener>> *) getSendCodeListeners;
 - (void) addSendCodeListener:(id<OAOnSendCodeListener>)listener;
 - (void) removeSendCodeListener:(id<OAOnSendCodeListener>)listener;
+- (NSArray<id<OAOnCheckCodeListener>> *) getCheckCodeListeners;
+- (void) addCheckCodeListener:(id<OAOnCheckCodeListener>)listener;
+- (void) removeCheckCodeListener:(id<OAOnCheckCodeListener>)listener;
 - (NSArray<id<OAOnDeleteAccountListener>> *) getDeleteAccountListeners;
 - (void) addDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener;
 - (void) removeDeleteAccountListener:(id<OAOnDeleteAccountListener>)listener;

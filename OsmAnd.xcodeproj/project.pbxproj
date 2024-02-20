@@ -678,6 +678,8 @@
 		467D7DC22ADDEAF10037A593 /* OAFavoriteGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 467D7DC12ADDE98C0037A593 /* OAFavoriteGroupEditorViewController.mm */; };
 		467DFD7D297EFDBB008A9830 /* OACardTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */; };
 		467DFD80297F172C008A9830 /* OACardTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 467DFD7F297F172C008A9830 /* OACardTableViewCell.m */; };
+		468443402B83C57A006B8E62 /* CheckCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4684433F2B83C57A006B8E62 /* CheckCodeCommand.swift */; };
+		468443422B83D22A006B8E62 /* DeleteAccountViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468443412B83D22A006B8E62 /* DeleteAccountViewController.swift */; };
 		4686F94F2954F07C000FC204 /* OATextMultilineTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 465D7E1F295493F00099B206 /* OATextMultilineTableViewCell.m */; };
 		468AADE328C77A6200BEC402 /* img_openstreetmap_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADDF28C77A6100BEC402 /* img_openstreetmap_logo@2x.png */; };
 		468AADE428C77A6200BEC402 /* img_openstreetmap_logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE028C77A6100BEC402 /* img_openstreetmap_logo@3x.png */; };
@@ -4240,6 +4242,8 @@
 		467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OACardTableViewCell.xib; sourceTree = "<group>"; };
 		467DFD7E297F16AF008A9830 /* OACardTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACardTableViewCell.h; sourceTree = "<group>"; };
 		467DFD7F297F172C008A9830 /* OACardTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OACardTableViewCell.m; sourceTree = "<group>"; };
+		4684433F2B83C57A006B8E62 /* CheckCodeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckCodeCommand.swift; sourceTree = "<group>"; };
+		468443412B83D22A006B8E62 /* DeleteAccountViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountViewController.swift; sourceTree = "<group>"; };
 		468AADDF28C77A6100BEC402 /* img_openstreetmap_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo@2x.png"; path = "Resources/Icons/img_openstreetmap_logo@2x.png"; sourceTree = "<group>"; };
 		468AADE028C77A6100BEC402 /* img_openstreetmap_logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_openstreetmap_logo@3x.png"; path = "Resources/Icons/img_openstreetmap_logo@3x.png"; sourceTree = "<group>"; };
 		468AADE128C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_download_map_unavailable@2x.png"; path = "Resources/Icons/ic_custom_download_map_unavailable@2x.png"; sourceTree = "<group>"; };
@@ -10207,6 +10211,7 @@
 				DA2483E32927916600189AF2 /* OAStatusBackupViewController.h */,
 				DA2483E02927916400189AF2 /* OAStatusBackupViewController.m */,
 				DA2483E12927916500189AF2 /* OAStatusBackupViewController.xib */,
+				468443412B83D22A006B8E62 /* DeleteAccountViewController.swift */,
 			);
 			path = Cloud;
 			sourceTree = "<group>";
@@ -13871,6 +13876,7 @@
 				DAA9F44C27EC9EB8002BB1A8 /* OARegisterUserCommand.h */,
 				DAA9F44D27EC9EB8002BB1A8 /* OARegisterUserCommand.m */,
 				468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */,
+				4684433F2B83C57A006B8E62 /* CheckCodeCommand.swift */,
 			);
 			path = Commands;
 			sourceTree = "<group>";
@@ -16856,6 +16862,7 @@
 				DA5A821326C563A700F274C7 /* OAPluginInstalledViewController.mm in Sources */,
 				461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */,
 				DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */,
+				468443402B83C57A006B8E62 /* CheckCodeCommand.swift in Sources */,
 				465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */,
 				FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */,
 				326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */,
@@ -17640,6 +17647,7 @@
 				DA5A852726C563A900F274C7 /* OAOverlayUnderlayView.m in Sources */,
 				46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */,
 				DA5A852526C563A900F274C7 /* OATableViewCellWithSwitch.m in Sources */,
+				468443422B83D22A006B8E62 /* DeleteAccountViewController.swift in Sources */,
 				DA5A81B226C563A700F274C7 /* OADownloadDescriptionInfo.m in Sources */,
 				468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */,
 				DA5A814126C563A700F274C7 /* OARelation.m in Sources */,

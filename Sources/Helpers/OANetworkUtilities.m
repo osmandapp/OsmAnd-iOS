@@ -41,12 +41,19 @@
                       async:(BOOL)async
                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
-    [self sendRequestWithUrl:url params:params body:nil post:post async:YES onComplete:onComplete];
+    [self sendRequestWithUrl:url
+                      params:params
+                        body:nil
+                 contentType:@"application/x-www-form-urlencoded;charset=UTF-8"
+                        post:post
+                       async:YES
+                  onComplete:onComplete];
 }
 
 + (void) sendRequestWithUrl:(NSString *)url
                      params:(NSDictionary<NSString *, NSString *> *)params
                        body:(NSString *)body
+                contentType:(NSString *)contentType
                        post:(BOOL)post
                       async:(BOOL)async
                  onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
@@ -55,7 +62,7 @@
     NSURL *urlObj;
     NSMutableString *paramsStr = nil;
     NSString *paramsSeparator = [url containsString:@"?"] ? @"&" : @"?";
-    if (params.count > 0)
+    if (params && params.count > 0)
     {
         paramsStr = [NSMutableString string];
         [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull value, BOOL * _Nonnull stop) {
@@ -80,21 +87,12 @@
     [request addValue:@"OsmAndiOS" forHTTPHeaderField:@"User-Agent"];
     if (post && (paramsStr || body))
     {
-        [request addValue:@"application/x-www-form-urlencoded;charset=UTF-8" forHTTPHeaderField:@"Content-Type"];
         [request setHTTPMethod:@"POST"];
-        if (body)
-        {
-            [request setHTTPShouldHandleCookies:NO];
-            NSData *bodyData = [body dataUsingEncoding:NSUTF8StringEncoding];
-            [request addValue:@(bodyData.length).stringValue forHTTPHeaderField:@"Content-Length"];
-            [request setHTTPBodyStream:[NSInputStream inputStreamWithData:bodyData]];
-        }
-        else
-        {
-            NSData *postData = [paramsStr dataUsingEncoding:NSUTF8StringEncoding];
-            [request addValue:@(postData.length).stringValue forHTTPHeaderField:@"Content-Length"];
-            [request setHTTPBody:postData];
-        }
+        [request addValue:contentType forHTTPHeaderField:@"Content-Type"];
+        NSString *httpBody = body ? body : paramsStr;
+        NSData *httpBodyData = [httpBody dataUsingEncoding:NSUTF8StringEncoding];
+        [request addValue:@(httpBodyData.length).stringValue forHTTPHeaderField:@"Content-Length"];
+        [request setHTTPBody:httpBodyData];
     }
     else
     {

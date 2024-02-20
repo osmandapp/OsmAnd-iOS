@@ -14,6 +14,7 @@
     NSMutableArray<id<OAOnRegisterUserListener>> *_registerUserListeners;
     NSMutableArray<id<OAOnRegisterDeviceListener>> *_registerDeviceListeners;
     NSMutableArray<id<OAOnSendCodeListener>> *_sendCodeListeners;
+    NSMutableArray<id<OAOnCheckCodeListener>> *_checkCodeListeners;
     NSMutableArray<id<OAOnDeleteAccountListener>> *_deleteAccountListeners;
 }
 
@@ -25,6 +26,7 @@
         _registerUserListeners = [NSMutableArray array];
         _registerDeviceListeners = [NSMutableArray array];
         _sendCodeListeners = [NSMutableArray array];
+        _checkCodeListeners = [NSMutableArray array];
         _deleteAccountListeners = [NSMutableArray array];
     }
     return self;
@@ -88,6 +90,21 @@
 - (void) removeSendCodeListener:(id<OAOnSendCodeListener>)listener
 {
     [_sendCodeListeners removeObject:listener];
+}
+
+- (NSArray<id<OAOnCheckCodeListener>> *) getCheckCodeListeners
+{
+    return _checkCodeListeners;
+}
+
+- (void) addCheckCodeListener:(id<OAOnCheckCodeListener>)listener
+{
+    [_checkCodeListeners addObject:listener];
+}
+
+- (void) removeCheckCodeListener:(id<OAOnCheckCodeListener>)listener
+{
+    [_checkCodeListeners removeObject:listener];
 }
 
 - (NSArray<id<OAOnDeleteAccountListener>> *) getDeleteAccountListeners

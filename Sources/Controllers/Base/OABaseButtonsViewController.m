@@ -221,6 +221,7 @@
 {
     switch (scheme)
     {
+        case EOABaseButtonColorSchemeBlank:
         case EOABaseButtonColorSchemeInactive:
             return [UIColor colorNamed:ACColorNameTextColorSecondary];
         case EOABaseButtonColorSchemeGrayAttn:
@@ -240,6 +241,8 @@
 
     switch (scheme)
     {
+        case EOABaseButtonColorSchemeBlank:
+            return UIColor.clearColor;
         case EOABaseButtonColorSchemePurple:
             return [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
         case EOABaseButtonColorSchemeRed:

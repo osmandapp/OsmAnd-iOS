@@ -18,7 +18,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
+@interface OACloudAccountLoginViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener, OAOnSendCodeListener>
 
 @end
 
@@ -60,7 +60,7 @@
 {
     [super viewDidLoad];
     
-    self.navigationItem.title = OALocalizedString(_screenType == EOACloudAccountLoginScreenType ? @"user_login" : @"verify_account");
+    self.navigationItem.title = OALocalizedString(_screenType == EOACloudAccountDeletionScreenType ? @"verify_account" : @"user_login");
     self.lastTimeCodeSent = 0;
     
     _backupHelper = [OABackupHelper sharedInstance];
@@ -72,6 +72,7 @@
     [super viewWillAppear:animated];
     [_backupHelper.backupListeners addRegisterUserListener:self];
     [_backupHelper.backupListeners addRegisterDeviceListener:self];
+    [_backupHelper.backupListeners addSendCodeListener:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -79,6 +80,7 @@
     [super viewWillDisappear:animated];
     [_backupHelper.backupListeners removeRegisterUserListener:self];
     [_backupHelper.backupListeners removeRegisterDeviceListener:self];
+    [_backupHelper.backupListeners removeSendCodeListener:self];
 }
 
 #pragma mark - Data section
@@ -92,7 +94,7 @@
     
     [data addObject:@[@{
         @"type" : [OASimpleTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(_screenType == EOACloudAccountLoginScreenType ? @"osmand_cloud_login_descr" : @"verify_account_deletion_descr"),
+        @"title" : OALocalizedString(_screenType == EOACloudAccountDeletionScreenType ? @"verify_account_deletion_descr" : @"osmand_cloud_login_descr"),
         @"color" : [UIColor colorNamed:ACColorNameIconColorSecondary],
         @"spacing" : @6
     },
@@ -235,6 +237,23 @@
     [self continueButtonPressed];
 }
 
+- (void)checkStatus:(NSInteger)status message:(NSString *)message error:(OABackupError *)error sourceType:(EOACloudScreenSourceType)sourceType
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (status == STATUS_SUCCESS)
+        {
+            self.lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
+            [self showViewController:[[OACloudAccountVerificationViewController alloc] initWithEmail:self.getTextFieldValue sourceType:sourceType]];
+        }
+        else
+        {
+            self.errorMessage = error != nil ? [error getLocalizedError] : message;
+            _continuePressed = NO;
+            [self updateScreen];
+        }
+    });
+}
+
 // MARK: OAOnRegisterDeviceListener
 
 - (void)onRegisterDevice:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
@@ -271,19 +290,14 @@
 
 - (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (status == STATUS_SUCCESS) {
-            self.lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
-            OACloudAccountVerificationViewController *verificationVc = [[OACloudAccountVerificationViewController alloc] initWithEmail:self.getTextFieldValue sourceType:EOACloudScreenSourceTypeSignIn];
-            [self.navigationController pushViewController:verificationVc animated:YES];
-        }
-        else
-        {
-            self.errorMessage = error != nil ? error.getLocalizedError : message;
-            _continuePressed = NO;
-            [self updateScreen];
-        }
-    });
+    [self checkStatus:status message:message error:error sourceType:EOACloudScreenSourceTypeSignIn];
+}
+
+// MARK: OAOnSendCodeListener
+
+- (void)onSendCode:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+{
+    [self checkStatus:status message:message error:error sourceType:EOACloudScreenSourceDeleteAccount];
 }
 
 @end

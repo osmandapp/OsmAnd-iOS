@@ -12,6 +12,7 @@
 {
     int _baseZoom;
     float _zoomFloatPart;
+    float _zoomAnimation;
     int _minZoom;
     int _maxZoom;
 }
@@ -34,9 +35,14 @@
     return _baseZoom;
 }
 
-- (int) getZoomFloatPart
+- (float) getZoomFloatPart
 {
     return _zoomFloatPart;
+}
+
+- (float) getZoomAnimation
+{
+    return _zoomAnimation;
 }
 
 - (BOOL) isZoomInAllowed
@@ -66,46 +72,125 @@
 
 - (void) calculateAnimatedZoom:(int)currentBaseZoom deltaZoom:(float)deltaZoom
 {
-    //TODO implement ?
+    while (_zoomFloatPart + deltaZoom >= 0.5 && _baseZoom + 1 <= _maxZoom)
+    {
+        deltaZoom--;
+        _baseZoom++;
+    }
+    
+    while (_zoomFloatPart + deltaZoom < -0.5 && _baseZoom - 1 >= _minZoom)
+    {
+        deltaZoom++;
+        _baseZoom--;
+    }
+    
+    // Extend zoom float part from [-0.5 ... +0.5) to [-0.6 ... +0.6)
+    // Example: previous zoom was 15 + 0.3f. With deltaZoom = 0.25f,
+    // zoom will become 15 + 0.55f, not 16 - 0.45f
+    if (_baseZoom + 1 == currentBaseZoom && _zoomFloatPart + deltaZoom >= 0.4f)
+    {
+        _baseZoom++;
+        float invertedZoomFloatPart = (_zoomFloatPart + deltaZoom) - 1.0f;
+        deltaZoom = invertedZoomFloatPart - _zoomFloatPart;
+    }
+    else if (_baseZoom - 1 == currentBaseZoom && _zoomFloatPart + deltaZoom < -0.4f)
+    {
+        _baseZoom--;
+        float invertedZoomFloatPart = 1.0f + (_zoomFloatPart + deltaZoom);
+        deltaZoom = invertedZoomFloatPart - _zoomFloatPart;
+    }
+
+    BOOL zoomInOverflow = _baseZoom == _maxZoom && _zoomFloatPart + deltaZoom > 0;
+    BOOL zoomOutOverflow = _baseZoom == _minZoom && _zoomFloatPart + deltaZoom < 0;
+    if (zoomInOverflow || zoomOutOverflow)
+    {
+        deltaZoom = -_zoomFloatPart;
+    }
+
+    _zoomAnimation = deltaZoom;
 }
 
 - (void) checkZoomBounds
 {
-    //TODO implement
+    if (_baseZoom == _maxZoom)
+    {
+        _zoomFloatPart = MIN(0, _zoomFloatPart);
+    }
+    else if (_baseZoom > _maxZoom) 
+    {
+        _baseZoom = _maxZoom;
+        _zoomFloatPart = 0;
+    }
+
+    if (_baseZoom == _minZoom)
+    {
+        _zoomFloatPart = MAX(0, _zoomFloatPart);
+    }
+    else if (_baseZoom < _minZoom)
+    {
+        _baseZoom = _minZoom;
+        _zoomFloatPart = 0;
+    }
 }
 
-+ (void) checkZoomBoundsWithZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom
++ (OAZoom *) checkZoomBoundsWithZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom
 {
-    //TODO implement
+    return [self.class checkZoomBoundsWithBaseZoom:((int)zoom) floatZoomPart:zoom - ((int)zoom) minZoom:minZoom maxZoom:maxZoom];
 }
 
-+ (void) checkZoomBoundsWithBaseZoom:(int)baseZoom floatZoomPart:(float)floatZoomPart minZoom:(int)minZoom maxZoom:(int)maxZoom
++ (OAZoom *) checkZoomBoundsWithBaseZoom:(int)baseZoom floatZoomPart:(float)floatZoomPart minZoom:(int)minZoom maxZoom:(int)maxZoom
 {
-    //TODO implement
+    OAZoom *zoom = [[OAZoom alloc] initWithBaseZoom:baseZoom zoomFloatPart:floatZoomPart minZoom:minZoom maxZoom:maxZoom];
+    [zoom checkZoomBounds];
+    return zoom;
 }
 
+// Example: getDistanceAfterZoom(100, 10, 11) == 50
 + (float) getDistanceAfterZoom:(float)distance startZoom:(float)startZoom endZoom:(float)endZoom
 {
-    //TODO implement
-    return 0;
+    int startZoomBase = ((int) startZoom);
+    float startZoomFloatPart = startZoom - startZoomBase;
+    
+    float distanceNoStartZoomFloatPart = distance * [self.class floatPartToVisual:startZoomFloatPart];
+    
+    float zoomDeltaFromStartZoomBase = endZoom - startZoomBase;
+    float zoomFactorFromStartIntZoom = (1 << ((int) ABS(zoomDeltaFromStartZoomBase))) * (ABS(zoomDeltaFromStartZoomBase - ((int) zoomDeltaFromStartZoomBase)) + 1.0);
+    
+    if (zoomDeltaFromStartZoomBase < 0.0)
+    {
+        zoomFactorFromStartIntZoom = 1.0 / zoomFactorFromStartIntZoom;
+    }
+    
+    return distanceNoStartZoomFloatPart / zoomFactorFromStartIntZoom;
 }
 
+// Example: fromDistanceRatio(100, 200, 15.5f) == 14.5f
 + (float) fromDistanceRatio:(double)startDistance endDistance:(double)endDistance startZoom:(float)startZoom
 {
-    //TODO implement
-    return 0;
+    int startIntZoom = ((int) startZoom);
+    float startZoomFloatPart = startZoom - startIntZoom;
+    double startDistanceIntZoom = startDistance * [self.class floatPartToVisual:startZoomFloatPart];
+    double log2 = log(startDistanceIntZoom / endDistance) / log(2);
+    int intZoomDelta = ((int) log(2));
+    double startDistanceIntZoomed = intZoomDelta >= 0
+        ? startDistanceIntZoom / (1 << intZoomDelta)
+        : startDistanceIntZoom * (1 << -intZoomDelta);
+    float zoomFloatPartDelta = [self visualToFloatPart:((float) (startDistanceIntZoomed / endDistance))];
+    return startIntZoom + intZoomDelta + zoomFloatPartDelta;
 }
 
 + (float) floatPartToVisual:(float)zoomFloatPart
 {
-    //TODO implement
-    return 0;
+    return zoomFloatPart >= 0
+        ? 1.0 + zoomFloatPart
+        : 1.0 + zoomFloatPart / 2.0;
 }
 
 + (float) visualToFloatPart:(float)visualZoom
 {
-    //TODO implement
-    return 0;
+    return visualZoom >= 1.0
+        ? visualZoom - 1.0
+        : (visualZoom - 1.0) * 2.0;
 }
 
 @end
@@ -113,5 +198,44 @@
 
 
 @implementation OAComplexZoom
+
+- (instancetype) initWithZoom:(float)zoom
+{
+    return [[OAComplexZoom alloc] initWithBase:round(zoom) floatPart:zoom - round(zoom)];
+}
+
+- (instancetype) initWithBase:(int)base floatPart:(float)floatPart
+{
+    self = [super init];
+    if (self)
+    {
+        _base = base;
+        _floatPart = floatPart;
+    }
+    return self;
+}
+
+- (float) fullZoom
+{
+    return _base + _floatPart;
+}
+
++ (OAComplexZoom *) fromPreferredBase:(float)zoom preferredZoomBase:(int)preferredZoomBase
+{
+    float floatPart = zoom - ((int) zoom);
+    if (floatPart >= 0.4 && ((int) zoom) + 1 == preferredZoomBase)
+    {
+        return [[OAComplexZoom alloc] initWithBase:preferredZoomBase floatPart:zoom - preferredZoomBase];
+    }
+    else if (floatPart < 0.6 && ((int) zoom) == preferredZoomBase)
+    {
+        return [[OAComplexZoom alloc] initWithBase:preferredZoomBase floatPart:zoom - preferredZoomBase];
+    } 
+    else
+    {
+        return [[OAComplexZoom alloc] initWithZoom:zoom];
+    }
+}
+
 
 @end

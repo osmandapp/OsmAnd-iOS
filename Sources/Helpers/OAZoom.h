@@ -10,8 +10,11 @@
 
 @interface OAZoom : NSObject
 
+- (instancetype) initWithBaseZoom:(int)baseZoom zoomFloatPart:(float)zoomFloatPart minZoom:(int)minZoom maxZoom:(int)maxZoom;
+
 - (int) getBaseZoom;
-- (int) getZoomFloatPart;
+- (float) getZoomFloatPart;
+- (float) getZoomAnimation;
 - (BOOL) isZoomInAllowed;
 
 - (void) zoomIn;
@@ -20,8 +23,8 @@
 
 - (void) calculateAnimatedZoom:(int)currentBaseZoom deltaZoom:(float)deltaZoom;
 
-+ (void) checkZoomBoundsWithZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom;
-+ (void) checkZoomBoundsWithBaseZoom:(int)baseZoom floatZoomPart:(float)floatZoomPart minZoom:(int)minZoom maxZoom:(int)maxZoom;
++ (OAZoom *) checkZoomBoundsWithZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom;
++ (OAZoom *) checkZoomBoundsWithBaseZoom:(int)baseZoom floatZoomPart:(float)floatZoomPart minZoom:(int)minZoom maxZoom:(int)maxZoom;
 
 + (float) getDistanceAfterZoom:(float)distance startZoom:(float)startZoom endZoom:(float)endZoom;
 + (float) fromDistanceRatio:(double)startDistance endDistance:(double)endDistance startZoom:(float)startZoom;
@@ -33,5 +36,14 @@
 
 
 @interface OAComplexZoom : NSObject
+
+@property (nonatomic) int base;
+@property (nonatomic) float floatPart;
+
+- (instancetype) initWithZoom:(float)zoom;
+- (instancetype) initWithBase:(int)base floatPart:(float)floatPart;
+
+- (float) fullZoom;
++ (OAComplexZoom *) fromPreferredBase:(float)zoom preferredZoomBase:(int)preferredZoomBase;
 
 @end

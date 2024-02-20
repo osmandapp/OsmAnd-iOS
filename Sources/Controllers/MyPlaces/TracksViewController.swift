@@ -40,7 +40,7 @@ private class GpxFolder {
     func insertFile(key: String, file: OAGPX) {
         files[key] = file
         performForSelfAndEachParents { folder in
-            flatenedTracks.insert(file)
+            folder.flatenedTracks.insert(file)
             folder.tracksCount += 1
         }
     }

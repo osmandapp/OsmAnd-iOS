@@ -136,6 +136,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate var rootTracksFolderContent = GpxFolder()
     fileprivate var isRootFolder = true
     fileprivate var isVisibleOnMapFolder = false
+    fileprivate var shouldReload = false
     fileprivate var currentFolderPath = ""   // in format: "rec/new folder"
     fileprivate var currentFolder = GpxFolder()
     private var recCell: OATwoButtonsTableViewCell?
@@ -181,6 +182,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setupNavbar()
+        if shouldReload {
+            updateData()
+            shouldReload = false
+        }
     }
     
     override func viewDidLoad() {
@@ -1138,7 +1143,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate func updateHostVCWith(newFilesTree: GpxFolder, visibleFiles: GpxFolder) {
         rootTracksFolderContent = newFilesTree
         visibleTracksFolderContent = visibleFiles
-        updateData()
+        shouldReload = true
         if let hostVCDelegate {
             hostVCDelegate.updateHostVCWith(newFilesTree: rootTracksFolderContent, visibleFiles: visibleFiles)
         }

@@ -31,7 +31,7 @@ final class SendCodeCommand: Operation {
     private func getBody() -> String? {
         var body: String?
         do {
-            body = String(data: try JSONSerialization.data(withJSONObject: ["email": email, "action": action, "lang": "en"],
+            body = String(data: try JSONSerialization.data(withJSONObject: ["email": email, "action": action, "lang": OAUtilities.currentLang()],
                                                            options: .withoutEscapingSlashes),
                           encoding: .utf8)
         } catch {

@@ -101,7 +101,7 @@
     @{ @"type" : [OADividerCell getCellIdentifier] },
     @{
         @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"title" : [self getTextFieldValue],
+        @"title" : _screenType == EOACloudAccountDeletionScreenType ? @"" : [self getTextFieldValue],
         @"placeholder" : OALocalizedString(@"shared_string_email")
     },
     @{ @"type" : [OADividerCell getCellIdentifier] } ]];

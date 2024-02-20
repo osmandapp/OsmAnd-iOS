@@ -46,7 +46,7 @@
                         body:nil
                  contentType:@"application/x-www-form-urlencoded;charset=UTF-8"
                         post:post
-                       async:YES
+                       async:async
                   onComplete:onComplete];
 }
 

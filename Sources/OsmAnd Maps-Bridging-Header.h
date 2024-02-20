@@ -109,6 +109,8 @@
 #import "OAWikipediaLanguagesViewController.h"
 #import "OAWebViewController.h"
 #import "OAGPXListViewController.h"
+#import "OAPurchasesViewController.h"
+#import "OAMainSettingsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -122,6 +124,8 @@
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OATitleDescriptionBigIconCell.h"
 #import "OASearchMoreCell.h"
+#import "OADividerCell.h"
+#import "OADownloadProgressBarCell.h"
 
 // Other
 #import "OAIndexConstants.h"
@@ -151,6 +155,7 @@
 
 // Backup
 #import "OABackupHelper.h"
+#import "OABackupListeners.h"
 #import "OABackupInfo.h"
 #import "OABackupError.h"
 #import "OANetworkSettingsHelper.h"

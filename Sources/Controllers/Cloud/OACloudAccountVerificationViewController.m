@@ -237,7 +237,7 @@
         {
             if (_sourceType == EOACloudScreenSourceDeleteAccount)
                 [self showViewController:[[OADeleteAccountViewController alloc] initWithToken:token]];
-            else if (status == EOACloudScreenSourceDeleteAccount)
+            else
                 [self showViewController:[[OACloudBackupViewController alloc] initWithSourceType:_sourceType]];
             [self.navigationController.transitionCoordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
                 NSMutableArray<UIViewController *> *viewControllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];

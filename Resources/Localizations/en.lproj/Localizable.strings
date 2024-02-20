@@ -870,6 +870,7 @@
 "shared_string_delete_item" = "Delete item";
 "shared_string_is_deleted" = "%@ is deleted.";
 "shared_string_deleting" = "Deleting";
+"shared_string_deleting_complete" = "Deleting complete";
 
 "restart" = "Restart";
 
@@ -3623,3 +3624,4 @@
 "osmand_cloud_deletion_subscriptions_warning" = "This will not cancel your OsmAnd Pro subscription.";
 "osmand_cloud_deleting_account_descr" = "In few moments all your data and account will be deleted from OsmAnd Cloud.\n\nAll data on the device remain untouched.";
 "osmand_cloud_deleted_account_descr" = "Account and all data was deleted from OsmAnd Cloud.";
+"osmand_cloud_deleting_account_descr" = "In few moments all your data and account will be deleted from OsmAnd Cloud.\n\nAll data on the device remain untouched.";

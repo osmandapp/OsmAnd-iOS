@@ -32,7 +32,7 @@
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _state = state;
-        self.widgetType = state.isSunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
+        self.widgetType = [state getWidgetType];
         [self configurePrefsWithId:state.customId appMode:appMode widgetParams:widgetParams];
         
         __weak OASunriseSunsetWidget *selfWeak = self;

@@ -3606,3 +3606,6 @@
 "permanent_delete_warning" = "%@ will be deleted permanently. Are you sure?";
 "action_cannot_be_undone" = "This action can't be undone.";
 "cloud_item_restored" = "%@ is restored into Cloud.";
+"shared_string_next_event" = "Next event";
+"map_widget_sun_position_desc" = "This widget shows the time until sunrise or sunset, depending on the current time.";
+"map_widget_sun_position" = "Sun position";

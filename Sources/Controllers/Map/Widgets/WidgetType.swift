@@ -157,29 +157,6 @@ class WidgetType: NSObject {
         return nil
     }
 
-//    public WidgetSettingsBaseFragment getSettingsFragment(@NonNull Context ctx) {
-//        if (this == ELEVATION_PROFILE) {
-//            return isPurchased(ctx) ? new ElevationProfileWidgetSettingsFragment() : null;
-//        } else if (this == MARKERS_TOP_BAR) {
-//            return new MapMarkersBarWidgetSettingFragment();
-//        } else if (this == RADIUS_RULER) {
-//            return new RadiusRulerWidgetSettingsFragment();
-//        } else if (this == TIME_TO_INTERMEDIATE || this == TIME_TO_DESTINATION) {
-//            return new TimeToNavigationPointSettingsFragment();
-//        } else if (this == SIDE_MARKER_1 || this == SIDE_MARKER_2) {
-//            return new MapMarkerSideWidgetSettingsFragment();
-//        } else if (this == AVERAGE_SPEED) {
-//            return new AverageSpeedWidgetSettingFragment();
-//        } else if (this == SUNRISE || this == SUNSET) {
-//            return new SunriseSunsetSettingsFragment();
-//        }
-//        return null;
-//    }
-
-    func isMainWidgetOfGroup() -> Bool {
-        return group != nil && self == group!.getMainWidget()
-    }
-
     static func getById(_ id: String) -> WidgetType? {
         for type in values {
             let defaultId = getDefaultWidgetId(id)
@@ -304,6 +281,14 @@ extension WidgetType {
     static let bicycleSpeed = WidgetType(ordinal: 49, id: "bicycleSpeed", title: localizedString("map_widget_ant_bicycle_speed"), descr: localizedString("map_widget_ant_bicycle_speed_desc"), iconName: "widget_sensor_speed", disabledIconName: "ic_custom_sensor_speed_outlined", group: .externalSensors, defaultPanel: .rightPanel)
     
     static let temperature = WidgetType(ordinal: 50, id: "temperature", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_weather_temperature", disabledIconName: "ic_custom_sensor_thermometer", group: .externalSensors, defaultPanel: .rightPanel)
+    
+    static let sunPosition = WidgetType(ordinal: 51,
+                                        id: "day_night_mode_sun_position",
+                                        title: localizedString("map_widget_sun_position"),
+                                        descr: localizedString("map_widget_sun_position_desc"),
+                                        iconName: "widget_sunrise",
+                                        group: .sunriseSunset,
+                                        defaultPanel: .rightPanel)
         
     static let values = [nextTurn,
                          smallNextTurn,
@@ -360,6 +345,7 @@ extension WidgetType {
                          weatherWindWidget,
                          weatherCloudsWidget,
                          weatherAirPressureWidget,
+                         sunPosition,
                          sunrise,
                          sunset,
                          // Bottom panel

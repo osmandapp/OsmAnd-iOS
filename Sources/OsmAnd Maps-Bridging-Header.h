@@ -30,6 +30,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAWebImagesCacheHelper.h"
 #import "OAGPXImportUIHelper.h"
+#import "OAGPXUIHelper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

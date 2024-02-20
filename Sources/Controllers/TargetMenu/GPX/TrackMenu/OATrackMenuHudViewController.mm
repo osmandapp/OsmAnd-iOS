@@ -112,6 +112,7 @@
     OsmAndAppInstance _app;
     OARouteLineChartHelper *_routeLineChartHelper;
     OATrackMenuUIBuilder *_uiBuilder;
+    OAGPXUIHelper *_gpxUIHelper;
 
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     NSTimeInterval _lastUpdate;
@@ -204,6 +205,7 @@
 {
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
+    _gpxUIHelper = [[OAGPXUIHelper alloc] init];
 
     [self setupUIBuilder];
 }
@@ -1442,7 +1444,7 @@
 
 - (void)openExport
 {
-    [self.savingHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil];
+    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil];
 }
 
 - (void)openNavigation
@@ -1656,7 +1658,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction *_Nonnull action) {
-        [OASavingTrackHelper.sharedInstance renameTrack:weakSelf.gpx doc:weakSelf.doc newName:alert.textFields[0].text hostVC:weakSelf];
+        [_gpxUIHelper renameTrack:weakSelf.gpx doc:weakSelf.doc newName:alert.textFields[0].text hostVC:weakSelf];
                                             }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -1725,7 +1727,7 @@
 
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
-    [self.savingHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO gpx:self.gpx doc:self.doc];
+    [_gpxUIHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO gpx:self.gpx doc:self.doc];
     [_uiBuilder resetDataInTab:EOATrackMenuHudOverviewTab];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
@@ -1766,7 +1768,7 @@
          simplifiedTrack:(BOOL)simplifiedTrack
                openTrack:(BOOL)openTrack
 {
-    [self.savingHelper copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
+    [_gpxUIHelper copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
              renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
           deleteOriginalFile:NO
                    openTrack:YES

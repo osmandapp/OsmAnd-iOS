@@ -3301,3 +3301,4 @@
 "download_to_device" = "Download til enhed";
 "permanent_delete_warning" = "%@ slettes permanent. Er du sikker på?";
 "shared_string_not_available" = "Ikke tilgængelig";
+"help_article_plugins_custom_name" = "Brugerdefineret pakke";

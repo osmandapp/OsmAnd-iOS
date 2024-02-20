@@ -373,24 +373,12 @@
     return col1 == col2;
 }
 
-- (UIColor *)lightThemeColor
-{
-    UITraitCollection *trait = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight];
-    return [self resolvedColorWithTraitCollection:trait];
-}
-
-- (UIColor *)darkThemeColor
-{
-    UITraitCollection *trait = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark];
-    return [self resolvedColorWithTraitCollection:trait];
-}
-
 - (UIColor *)currentThemeColor
 {
     if ([[ThemeManager shared] isLightTheme])
-        return [self lightThemeColor];
+        return [self light];
     else
-        return [self darkThemeColor];
+        return [self dark];
 }
 
 @end

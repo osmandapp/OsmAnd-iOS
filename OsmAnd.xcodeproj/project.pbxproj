@@ -3341,7 +3341,7 @@
 		FA63F24E2AF3DC550040A0CE /* SensorWidgetDataField.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */; };
 		FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */; };
 		FA6439E72B04D70A00331006 /* CyclingCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */; };
-		FA6439E92B04D81B00331006 /* Data+Extesnion.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E82B04D81B00331006 /* Data+Extesnion.swift */; };
+		FA6439E92B04D81B00331006 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439E82B04D81B00331006 /* Data+Extension.swift */; };
 		FA6439EB2B051A5300331006 /* MeasurementFormatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */; };
 		FA6797EF2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */; };
 		FA69F2852A73948B0044CFCA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79BF26C563A000F274C7 /* main.m */; };
@@ -7974,7 +7974,7 @@
 		FA63F24D2AF3DC550040A0CE /* SensorWidgetDataField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorWidgetDataField.swift; sourceTree = "<group>"; };
 		FA63F24F2AF3DFF60040A0CE /* SensorTextWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorTextWidget.swift; sourceTree = "<group>"; };
 		FA6439E62B04D70A00331006 /* CyclingCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CyclingCharacteristic.swift; sourceTree = "<group>"; };
-		FA6439E82B04D81B00331006 /* Data+Extesnion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extesnion.swift"; sourceTree = "<group>"; };
+		FA6439E82B04D81B00331006 /* Data+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Data+Extension.swift"; sourceTree = "<group>"; };
 		FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MeasurementFormatter+Extension.swift"; sourceTree = "<group>"; };
 		FA6797ED2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherAutoUpdateSettingsViewController.h; sourceTree = "<group>"; };
 		FA6797EE2A8502020022F2A9 /* OAWeatherAutoUpdateSettingsViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherAutoUpdateSettingsViewController.mm; sourceTree = "<group>"; };
@@ -13884,7 +13884,7 @@
 			children = (
 				FA5A21A12A9C7DE100319695 /* CALayer+Extension.swift */,
 				DAABE4ED2A1657AF00569F71 /* Color+INT.swift */,
-				FA6439E82B04D81B00331006 /* Data+Extesnion.swift */,
+				FA6439E82B04D81B00331006 /* Data+Extension.swift */,
 				46BD939A2B763CC8004BC4F5 /* FFCircularProgressView+Extension.swift */,
 				FA6439EA2B051A5300331006 /* MeasurementFormatter+Extension.swift */,
 				FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */,
@@ -17003,7 +17003,7 @@
 				DA5A812F26C563A700F274C7 /* OAOsmNotesMapLayerProvider.mm in Sources */,
 				DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */,
 				DA5A82F626C563A800F274C7 /* OALabelCollectionViewCell.m in Sources */,
-				FA6439E92B04D81B00331006 /* Data+Extesnion.swift in Sources */,
+				FA6439E92B04D81B00331006 /* Data+Extension.swift in Sources */,
 				DA0C2BDD27EF4B3800B7CC4F /* OAPrepareBackupTask.m in Sources */,
 				DA5A849526C563A900F274C7 /* OARoutePlanningHudViewController.mm in Sources */,
 				DA5A849C26C563A900F274C7 /* OAMeasurementModeCommand.mm in Sources */,

@@ -9,6 +9,6 @@
 import UIKit
 
 extension UIColor {
-    var dark: UIColor { resolvedColor(with: .init(userInterfaceStyle: .dark)) }
-    var light: UIColor { resolvedColor(with: .init(userInterfaceStyle: .light)) }
+   @objc var dark: UIColor { resolvedColor(with: .init(userInterfaceStyle: .dark)) }
+   @objc var light: UIColor { resolvedColor(with: .init(userInterfaceStyle: .light)) }
 }

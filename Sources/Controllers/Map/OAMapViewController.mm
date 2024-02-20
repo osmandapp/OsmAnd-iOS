@@ -143,6 +143,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionRight
 };
 
+static const CGFloat kDistanceBetweenFingers = 50.0;
+
 @interface OATouchLocation : NSObject
 
 @property (nonatomic) Point31 touchLocation31;
@@ -909,16 +911,62 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return loc;
 }
 
-- (CGPoint) getTouchPoint:(UIGestureRecognizer *)recognizer touchIndex:(NSUInteger)touchIndex
+- (CGPoint)getTouchPoint:(UIGestureRecognizer *)recognizer touchIndex:(NSUInteger)touchIndex
 {
-    if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
+    if ([OAUtilities isiOSAppOnMac])
     {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIndex inView:self.view];
-        touchPoint.x *= _mapView.contentScaleFactor;
-        touchPoint.y *= _mapView.contentScaleFactor;
-        return touchPoint;
+        if ([recognizer isKindOfClass:[UIPinchGestureRecognizer class]])
+        {
+            UIPinchGestureRecognizer *pinchRecognizer = (UIPinchGestureRecognizer *)recognizer;
+            CGPoint cursorCenter = [pinchRecognizer locationInView:pinchRecognizer.view];
+            CGFloat adjustedDistance = kDistanceBetweenFingers * pinchRecognizer.scale;
+            
+            if (touchIndex == 0)
+            {
+                return [self pointWithMapContentScaleFactor:CGPointMake(cursorCenter.x + adjustedDistance, cursorCenter.y)];
+            }
+            else if (touchIndex == 1)
+            {
+                return [self pointWithMapContentScaleFactor:CGPointMake(cursorCenter.x - adjustedDistance, cursorCenter.y)];
+            }
+        }
+        else if ([recognizer isKindOfClass:[UIRotationGestureRecognizer class]])
+        {
+            UIRotationGestureRecognizer *rotationRecognizer = (UIRotationGestureRecognizer *)recognizer;
+            CGPoint cursorCenter = [rotationRecognizer locationInView:rotationRecognizer.view];
+            CGFloat rotation = [rotationRecognizer rotation];
+            
+            if (touchIndex == 0)
+            {
+                CGFloat simulateFingerPointX = cursorCenter.x + kDistanceBetweenFingers * cos(rotation);
+                CGFloat simulateFingerPointY = cursorCenter.y + kDistanceBetweenFingers * sin(rotation);
+                
+                return [self pointWithMapContentScaleFactor:CGPointMake(simulateFingerPointX, simulateFingerPointY)];
+            }
+            else if (touchIndex == 1)
+            {
+                CGFloat simulateFingerPointX = cursorCenter.x + kDistanceBetweenFingers * (-1 * cos(rotation));
+                CGFloat simulateFingerPointY = cursorCenter.y + kDistanceBetweenFingers * (-1 * sin(rotation));
+                
+                return [self pointWithMapContentScaleFactor:CGPointMake(simulateFingerPointX, simulateFingerPointY)];
+            }
+        }
+    }
+    else
+    {
+        if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
+        {
+            return [self pointWithMapContentScaleFactor:[recognizer locationOfTouch:touchIndex inView:self.view]];
+        }
     }
     return CGPointZero;
+}
+
+- (CGPoint)pointWithMapContentScaleFactor:(CGPoint)point
+{
+    point.x *= _mapView.contentScaleFactor;
+    point.y *= _mapView.contentScaleFactor;
+    return point;
 }
 
 - (BOOL) isTargetChanged
@@ -1251,7 +1299,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if (pinchRecognizer || rotationRecognizer)
         {
             NSArray<OATouchLocation *> *touchLocations = [NSArray arrayWithArray:pinchRecognizer ? _zoomTouchLocations : _rotateTouchLocations];
-            if (touchLocations.count != recognizer.numberOfTouches)
+            if (touchLocations.count != recognizer.numberOfTouches && ![OAUtilities isiOSAppOnMac])
             {
                 [self reacquireMapTouchLocations:recognizer];
                 touchLocations = [NSArray arrayWithArray:pinchRecognizer ? _zoomTouchLocations : _rotateTouchLocations];

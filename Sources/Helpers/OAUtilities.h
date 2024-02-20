@@ -329,6 +329,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
 + (BOOL) isWindowed;
++ (BOOL)isiOSAppOnMac;
 + (BOOL) isIPhone;
 + (BOOL) isIPad;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView

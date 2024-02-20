@@ -3298,3 +3298,4 @@
 "delete_all_items" = "Borrar todos los elementos";
 "delete_all_items_desc" = "¿Está seguro de que desea eliminar permanentemente todos los elementos de la Papelera? Esta acción no se puede deshacer.";
 "shared_string_not_available" = "No disponible";
+"help_article_plugins_custom_name" = "Paquetes personalizados";

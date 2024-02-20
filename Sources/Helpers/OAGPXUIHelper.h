@@ -9,9 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAGPXDocument, OAGPXMutableDocument, OATrkSegment;
-@class OARouteCalculationResult;
-@class OAGPX;
+@class OAGPXDocument, OAGPXMutableDocument, OATrkSegment, OARouteCalculationResult, OAGPX, OAGPXTrackAnalysis, OAPOI;
 
 @protocol OATrackSavingHelperUpdatableDelegate <NSObject>
 
@@ -53,6 +51,8 @@
                                     distanceToPoint:(double)distanceToPoint
                                     preciseLocation:(BOOL)preciseLocation
                                        joinSegments:(BOOL)joinSegments;
+
++ (OAPOI *)checkAndSearchNearestCity:(OAGPXTrackAnalysis *)analysis;
 
 - (void) openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate;
 - (void) copyGPXToNewFolder:(NSString *)newFolderName

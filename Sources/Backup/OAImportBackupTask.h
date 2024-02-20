@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "OASettingsHelper.h"
 #import "OANetworkSettingsHelper.h"
+#import "OAPrepareBackupResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -46,8 +47,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype) initWithKey:(NSString *)key
                        items:(NSArray<OASettingsItem *> *)items
+                   filesType:(EOARemoteFilesType)filesType
               importListener:(id<OAImportListener>)importListener
-               forceReadData:(BOOL)forceReadData;
+               forceReadData:(BOOL)forceReadData
+               shouldReplace:(BOOL)shouldReplace
+              restoreDeleted:(BOOL)restoreDeleted;
 
 - (instancetype) initWithKey:(NSString *)key
                        items:(NSArray<OASettingsItem *> *)items

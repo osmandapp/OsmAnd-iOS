@@ -132,8 +132,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.register(UINib(nibName: OASimpleTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.getIdentifier())
-        tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.getIdentifier(), bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.getIdentifier())
+
         tableView.setEditing(true, animated: false)
         tableView.allowsMultipleSelectionDuringEditing = true
         searchController = UISearchController(searchResultsController: nil)
@@ -214,7 +213,12 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     override func getBottomButtonColorScheme() -> EOABaseButtonColorScheme {
         .graySimple
     }
-    
+
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+        addCell(OALargeImageTitleDescrTableViewCell.reuseIdentifier)
+    }
+
     override func generateData() {
         tableData.clearAllData()
         if isTracksAvailable {
@@ -348,42 +352,27 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private func handleSelectDeselectAllTracks() {
         guard isTracksAvailable else { return }
         let isSelectAll = !areAllTracksSelected()
-        let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
-        let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
-        let isFiltering = isSearchActive && !filteredGpxList.isEmpty
+        let gpxListToShow: [OAGPX]
+        if isSearchActive {
+            gpxListToShow = filteredGpxList
+        } else if isShowingVisibleTracks {
+            gpxListToShow = isVisibleTracksAvailable ? visibleGpxList : recentlyVisibleGpxList
+        } else {
+            gpxListToShow = allGpxList
+        }
         
         if isSelectAll {
-            if isFiltering {
-                for gpx in gpxListToShow where !selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
-                    selectedGpxTracks.append(gpx)
-                }
-            } else {
-                selectedGpxTracks = gpxListToShow + recentlyVisibleTracks
+            for gpx in gpxListToShow where !selectedGpxTracks.contains(where: { $0.gpxFilePath == gpx.gpxFilePath }) {
+                selectedGpxTracks.append(gpx)
             }
         } else {
-            if isFiltering {
-                selectedGpxTracks.removeAll(where: { gpx in
-                    filteredGpxList.contains(where: { $0.gpxFilePath == gpx.gpxFilePath })
-                })
-            } else {
-                selectedGpxTracks.removeAll()
-            }
+            selectedGpxTracks.removeAll(where: { gpx in
+                gpxListToShow.contains(where: { $0.gpxFilePath == gpx.gpxFilePath })
+            })
         }
         
         tableView.reloadData()
-        for section in 0..<tableView.numberOfSections {
-            for row in 0..<tableView.numberOfRows(inSection: section) {
-                let indexPath = IndexPath(row: row, section: section)
-                let trackList = (section == 0 ? gpxListToShow : recentlyVisibleTracks)
-                if row < trackList.count {
-                    if isSelectAll {
-                        tableView.selectRow(at: indexPath, animated: false, scrollPosition: .none)
-                    } else {
-                        tableView.deselectRow(at: indexPath, animated: false)
-                    }
-                }
-            }
-        }
+        updateSelectedRows()
     }
     
     private func onDoneButtonPressed() {
@@ -392,15 +381,19 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             let selectedTrackPaths = getSelectedTrackPaths()
             let tracksToShow = selectedTrackPaths.compactMap { $0 }.filter { !currentVisibleTrackPaths.contains($0) }
             let tracksToHide = currentVisibleTrackPaths.compactMap { $0 }.filter { !selectedTrackPaths.contains($0) }
-            for trackPath in tracksToHide {
-                if let track = allGpxList.first(where: { $0.gpxFilePath == trackPath }) {
-                    if !recentlyVisibleGpxList.contains(where: { $0.gpxFilePath == trackPath }) {
+            if !tracksToHide.isEmpty {
+                recentlyVisibleGpxList = recentlyVisibleGpxList.filter {
+                    !tracksToShow.contains($0.gpxFilePath) && tracksToHide.contains($0.gpxFilePath)
+                }
+                
+                for trackPath in tracksToHide {
+                    if let track = allGpxList.first(where: { $0.gpxFilePath == trackPath }),
+                       !recentlyVisibleGpxList.contains(where: { $0.gpxFilePath == trackPath }) {
                         recentlyVisibleGpxList.append(track)
                     }
                 }
             }
             
-            recentlyVisibleGpxList.removeAll { tracksToShow.contains($0.gpxFilePath) }
             let hiddenTracksPaths = recentlyVisibleGpxList.map { $0.gpxFilePath }
             UserDefaults.standard.set(hiddenTracksPaths, forKey: previouslyVisibleTracksKey)
             OAAppSettings.sharedManager()?.showGpx(tracksToShow)
@@ -506,13 +499,18 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     private func areAllTracksSelected() -> Bool {
-        let gpxListToShow = isSearchActive ? filteredGpxList : (isShowingVisibleTracks ? visibleGpxList : allGpxList)
         let selectedTrackPaths = Set(getSelectedTrackPaths())
         if isSearchActive {
+            let gpxListToShow = filteredGpxList
             return gpxListToShow.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+        } else if isShowingVisibleTracks {
+            if isVisibleTracksAvailable {
+                return visibleGpxList.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+            } else {
+                return recentlyVisibleGpxList.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
+            }
         } else {
-            let recentlyVisibleTracks = isShowingVisibleTracks ? recentlyVisibleGpxList : []
-            let allTracks = gpxListToShow + recentlyVisibleTracks
+            let allTracks = allGpxList + recentlyVisibleGpxList
             return allTracks.allSatisfy { selectedTrackPaths.contains($0.gpxFilePath) }
         }
     }
@@ -596,14 +594,16 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             switch sortType {
             case .nearest:
                 list.sort { distanceToGPX(gpx: $0) < distanceToGPX(gpx: $1) }
-            case .lastModified, .newestDateFirst:
+            case .lastModified:
                 list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
             case .nameAZ:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedAscending }
             case .nameZA:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
+            case .newestDateFirst:
+                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
             case .oldestDateFirst:
-                list.sort { $0.importDate ?? Date.distantFuture < $1.importDate ?? Date.distantFuture }
+                list.sort { $0.importDate ?? Date.distantPast < $1.importDate ?? Date.distantPast }
             case .longestDistanceFirst:
                 list.sort { $0.totalDistance > $1.totalDistance }
             case .shortestDistanceFirst:
@@ -625,12 +625,13 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         }
     }
     
-    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat) {
+    private func getFormattedData(for gpx: OAGPX) -> (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
-        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? "N/A"
-        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? "N/A"
-        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? "N/A"
+        let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let creationDate = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_not_available")
+        let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(gpx.wptPoints)"
         let folderName: String
         if let capitalizedFolderName = OAUtilities.capitalizeFirstLetter(gpx.gpxFolderName), !capitalizedFolderName.isEmpty {
@@ -644,23 +645,23 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         if calculatedDistance != CGFloat.greatestFiniteMagnitude {
             distanceToTrack = OAOsmAndFormatter.getFormattedDistance(Float(calculatedDistance))
         } else {
-            distanceToTrack = "N/A"
+            distanceToTrack = localizedString("shared_string_not_available")
         }
         
         let regionName: String
         let gpxLocation = gpx.bounds.center
         if gpxLocation.latitude != Double.greatestFiniteMagnitude,
            let worldRegion = OsmAndApp.swiftInstance().worldRegion.find(atLat: gpxLocation.latitude, lon: gpxLocation.longitude) {
-            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? "N/A"
+            regionName = worldRegion.localizedName ?? worldRegion.nativeName ?? localizedString("shared_string_not_available")
         } else {
-            regionName = "N/A"
+            regionName = localizedString("shared_string_not_available")
         }
         
         let directionAngle = OADistanceAndDirectionsUpdater.getDirectionAngle(from: OsmAndApp.swiftInstance().locationServices?.lastKnownLocation, toDestinationLatitude: gpxLocation.latitude, destinationLongitude: gpxLocation.longitude)
-        return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle)
+        return (date, distance, time, waypointCount, folderName, distanceToTrack, regionName, directionAngle, creationDate)
     }
     
-    private func getDescriptionAttributedText(with formattedData: (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat)) -> NSAttributedString {
+    private func getDescriptionAttributedText(with formattedData: (date: String, distance: String, time: String, waypointCount: String, folderName: String, distanceToTrack: String, regionName: String, directionAngle: CGFloat, creationDate: String)) -> NSAttributedString {
         let fullString = NSMutableAttributedString()
         let defaultAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.preferredFont(forTextStyle: .footnote), .foregroundColor: UIColor.textColorSecondary]
         let detailsText = "\(formattedData.distance) • \(formattedData.time) • \(formattedData.waypointCount)"
@@ -678,7 +679,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             fullString.append(directionAttributedString)
             fullString.append(regionString)
             fullString.append(detailsString)
-        case .lastModified, .newestDateFirst, .oldestDateFirst:
+        case .lastModified:
             let dateString = NSAttributedString(string: "\(formattedData.date) | ", attributes: defaultAttributes)
             fullString.append(dateString)
             fullString.append(detailsString)
@@ -690,6 +691,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 fullString.append(NSAttributedString(string: " \(formattedData.folderName)", attributes: defaultAttributes))
             }
             
+        case .newestDateFirst, .oldestDateFirst:
+            let dateString = NSAttributedString(string: "\(formattedData.creationDate) | ", attributes: defaultAttributes)
+            fullString.append(dateString)
+            fullString.append(detailsString)
         case .longestDistanceFirst, .shortestDistanceFirst:
             fullString.append(detailsString)
         case .longestDurationFirst, .shorterDurationFirst:
@@ -759,9 +764,6 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     @objc private func onSearchButtonClicked() {
-        navigationItem.searchController = navigationItem.searchController ?? searchController
-        navigationItem.hidesSearchBarWhenScrolling = false
-        searchController?.isActive = true
         isSearchActive = true
         isShowingVisibleTracks = false
         previousSelectedSegmentIndex = segmentedControl?.selectedSegmentIndex ?? 0
@@ -773,6 +775,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             self.updateSortButtonAndMenu()
             self.updateNavbar()
             self.updateBottomButtons()
+            self.navigationItem.searchController = self.navigationItem.searchController ?? self.searchController
+            self.navigationItem.hidesSearchBarWhenScrolling = false
+            self.searchController?.isActive = true
             self.generateData()
             self.tableView.reloadData()
             self.updateSelectedRows()
@@ -874,7 +879,10 @@ extension MapSettingsGpxViewController: OAGPXImportUIHelperDelegate {
 
 extension MapSettingsGpxViewController: UISearchControllerDelegate {
     func presentSearchController(_ searchController: UISearchController) {
-        DispatchQueue.main.async {
+        // The delay is introduced to allow UISearchController to fully initialize and become ready for interaction.
+        // Sometimes, immediate attempts to make the searchBar the first responder can fail due to ongoing animations or the controller's initialization process.
+        let searchBarActivationDelay = 0.1
+        DispatchQueue.main.asyncAfter(deadline: .now() + searchBarActivationDelay) {
             if !searchController.searchBar.isFirstResponder {
                 searchController.searchBar.becomeFirstResponder()
             }

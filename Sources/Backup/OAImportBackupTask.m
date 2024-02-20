@@ -44,11 +44,13 @@
 @implementation OAImportBackupTask
 {
     OANetworkSettingsHelper *_helper;
-    
-    
+
     __weak id<OABackupCollectListener> _collectListener;
     OABackupImporter *_importer;
-    
+    EOARemoteFilesType _filesType;
+    BOOL _shouldReplace;
+    BOOL _restoreDeleted;
+
     NSArray<OARemoteFile *> *_remoteFiles;
     
     NSString *_key;
@@ -64,24 +66,33 @@
     {
         [self commonInit];
         _key = key;
+        _filesType = EOARemoteFilesTypeUnique;
         _collectListener = collectListener;
         _importType = readData ? EOAImportTypeCollectAndRead : EOAImportTypeCollect;
+        _shouldReplace = YES;
+        _restoreDeleted = NO;
     }
     return self;
 }
 
 - (instancetype) initWithKey:(NSString *)key
                        items:(NSArray<OASettingsItem *> *)items
+                   filesType:(EOARemoteFilesType)filesType
               importListener:(id<OAImportListener>)importListener
                forceReadData:(BOOL)forceReadData
+               shouldReplace:(BOOL)shouldReplace
+              restoreDeleted:(BOOL)restoreDeleted
 {
     self = [super init];
     if (self)
     {
         [self commonInit];
         _key = key;
+        _filesType = filesType;
         _importListener = importListener;
         _items = items;
+        _shouldReplace = shouldReplace;
+        _restoreDeleted = restoreDeleted;
         _importType = forceReadData ? EOAImportTypeImportForceRead : EOAImportTypeImport;
     }
     return self;
@@ -98,9 +109,12 @@
         [self commonInit];
         _key = key;
         _items = items;
+        _filesType = EOARemoteFilesTypeUnique;
         _duplicatesListener = duplicatesListener;
         _selectedItems = selectedItems;
         _importType = EOAImportTypeCheckDuplicates;
+        _shouldReplace = YES;
+        _restoreDeleted = NO;
     }
     return self;
 }
@@ -178,7 +192,7 @@
         {
             @try
             {
-                OACollectItemsResult *result = [_importer collectItems:nil readItems:_importType == EOAImportTypeCollectAndRead];
+                OACollectItemsResult *result = [_importer collectItems:nil readItems:_importType == EOAImportTypeCollectAndRead restoreDeleted:_restoreDeleted];
                 _remoteFiles = result.remoteFiles;
                 return result.items;
             }
@@ -200,10 +214,10 @@
             {
                 @try
                 {
-                    OACollectItemsResult *result = [_importer collectItems:_items readItems:YES];
+                    OACollectItemsResult *result = [_importer collectItems:_items readItems:YES restoreDeleted:_restoreDeleted];
                     for (OASettingsItem *item in result.items)
                     {
-                        [item setShouldReplace:YES];
+                        [item setShouldReplace:_shouldReplace];
                     }
                     _items = result.items;
                 }
@@ -258,7 +272,12 @@
             if (items.count > 0)
             {
                 BOOL forceReadData = _importType == EOAImportTypeImportForceRead;
-                OAImportBackupItemsTask *task = [[OAImportBackupItemsTask alloc] initWithImporter:_importer items:items listener:self forceReadData:forceReadData];
+                OAImportBackupItemsTask *task = [[OAImportBackupItemsTask alloc] initWithImporter:_importer
+                                                                                            items:items
+                                                                                        filesType:_filesType
+                                                                                         listener:self
+                                                                                    forceReadData:forceReadData
+                                                                                   restoreDeleted:_restoreDeleted];
                 
                 [OABackupHelper.sharedInstance.executor addOperation:task];
             }

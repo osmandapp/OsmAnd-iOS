@@ -9,6 +9,8 @@
 #import "OAAddress.h"
 #include <OsmAndCore/Data/StreetGroup.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, EOACityType)
 {
     CITY_TYPE_UNKNOWN = 0,
@@ -39,4 +41,11 @@ typedef NS_ENUM(NSInteger, EOACitySubType)
 
 - (instancetype)initWithCity:(const std::shared_ptr<const OsmAnd::StreetGroup>&)city;
 
++ (NSString *)getLocalizedTypeStr:(EOACitySubType)type;
++ (NSString *)getTypeStr:(EOACitySubType)type;
++ (EOACitySubType)getType:(NSString *)typeStr;
++ (CGFloat)getRadius:(NSString *)typeStr;
+
 @end
+
+NS_ASSUME_NONNULL_END

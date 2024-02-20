@@ -39,16 +39,16 @@
                     </label>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6jr-Hj-OeB">
                         <rect key="frame" x="30" y="175" width="260" height="44"/>
-                        <color key="backgroundColor" red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="0.10000000000000001" colorSpace="custom" customColorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" name="buttonBgColorTertiary"/>
                         <constraints>
                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="90K-W3-X1r"/>
                         </constraints>
+                        <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                         <color key="tintColor" name="buttonTextColorSecondary"/>
-                        <state key="normal" title="Button"/>
-                        <buttonConfiguration key="configuration" style="tinted" title="Button">
-                            <fontDescription key="titleFontDescription" style="UICTFontTextStyleSubhead"/>
-                            <color key="baseBackgroundColor" name="buttonBgColorTertiary"/>
-                        </buttonConfiguration>
+                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                        <state key="normal" title="Button">
+                            <color key="titleColor" name="buttonTextColorSecondary"/>
+                        </state>
                         <userDefinedRuntimeAttributes>
                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                 <integer key="value" value="9"/>

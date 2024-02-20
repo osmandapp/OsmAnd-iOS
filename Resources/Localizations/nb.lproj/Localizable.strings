@@ -314,7 +314,7 @@
 "si_min_km" = "Minutter per kilometer";
 "si_min_m" = "Minutter per engelsk mil";
 "si_nm_h" = "Nautisk mil i timen (knop)";
-"nm" = "nmi";
+"nm" = "sjømil";
 "units_nm_h" = "nmi/t";
 "min_mile" = "min/m";
 "min_km" = "min/km";

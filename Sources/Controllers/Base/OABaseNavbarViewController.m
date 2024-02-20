@@ -74,6 +74,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self registerCells];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     NSString *tableFooterText = [self getTableFooterText];
     if (tableFooterText && tableFooterText.length > 0)
@@ -729,6 +730,18 @@
 }
 
 #pragma mark - Table data
+
+// use addCell: method here
+// cells will be automatically registerd in viewDidLoad:
+- (void)registerCells
+{
+}
+
+// do not override
+- (void)addCell:(NSString *)cellIdentifier
+{
+    [self.tableView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellReuseIdentifier:cellIdentifier];
+}
 
 - (void)generateData
 {

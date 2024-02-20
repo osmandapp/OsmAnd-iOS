@@ -147,7 +147,12 @@
                     // Fly to last-known position without changing anything but target
 
                     _mapView.mapAnimator->pause();
-                    _mapView.mapAnimator->cancelAllAnimations();
+
+                    for (const auto &animation : _mapView.mapAnimator->getAllAnimations())
+                    {
+                        if (animation->getAnimatedValue() != OsmAnd::Animator::AnimatedValue::ElevationAngle)
+                            _mapView.mapAnimator->cancelAnimation(animation);
+                    }
 
                     OsmAnd::PointI newTarget31(
                                                OsmAnd::Utilities::get31TileNumberX(newLocation.coordinate.longitude),
@@ -203,7 +208,7 @@
 }
 
 - (BOOL)isDefaultElevationAngle {
-    return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle == kMapModePositionTrackingDefaultElevationAngle;
+    return ceil([OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle) == kMapModePositionTrackingDefaultElevationAngle;
 }
 
 - (void)startTilting:(float)elevationAngle
@@ -235,7 +240,7 @@
     float tiltAngle = kMapModePositionTrackingDefaultElevationAngle;
     if (defaultElevationAngle)
     {
-        float elevationAngle = [[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle];
+        float elevationAngle = ceil([[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle]);
         tiltAngle = elevationAngle != tiltAngle ? elevationAngle : kMapModeFollowDefaultElevationAngle;
     }
     [self startTilting:tiltAngle];

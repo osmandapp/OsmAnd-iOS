@@ -2001,9 +2001,14 @@ static const double d180PI = 180.0 / M_PI_2;
     return result;
 }
 
++ (BOOL)isiOSAppOnMac
+{
+    return [NSProcessInfo processInfo].isiOSAppOnMac;
+}
+
 + (BOOL) isWindowed
 {
-    BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+    BOOL isiOSAppOnMac = [[self class] isiOSAppOnMac];
     return !isiOSAppOnMac && [self isIPad] && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 

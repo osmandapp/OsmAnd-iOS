@@ -25,7 +25,7 @@
 #define kSupportEmail @"support@osmand.net"
 static NSString * const kContactEmail = @"mailto:support@osmand.net";
 
-static NSString * const kPopularArticlesAndTelegramChats =  @"https://raw.githubusercontent.com/osmandapp/web/main/main/static/help-links-ios.json";
+static NSString * const kPopularArticlesAndTelegramChats =  @"https://osmand.net/help-structure.json";
 static NSString * const kDocsMap = @"https://docs.osmand.net/docs/user/map/";
 static NSString * const kDocsNavigation = @"https://docs.osmand.net/docs/user/navigation/";
 static NSString * const kDocsSearch = @"https://docs.osmand.net/docs/user/search/";
@@ -40,7 +40,7 @@ static NSString * const kTroubleshootingSetup = @"https://docs.osmand.net/docs/u
 static NSString * const kTroubleshootingMap = @"https://docs.osmand.net/docs/user/troubleshooting/maps-data/";
 static NSString * const kTroubleshootingNavigation = @"https://docs.osmand.net/docs/user/troubleshooting/navigation/";
 static NSString * const kTroubleshootingTrackRecording =  @"https://docs.osmand.net/docs/user/troubleshooting/track-recording-issues/";
-static NSString * const kDocsBaseURL = @"https://docs.osmand.net/docs/user/";
+static NSString * const kTroubleshootingBaseURL = @"https://osmand.net/docs/user/troubleshooting/";
 static NSString * const kOsmAndUserBaseURL = @"https://osmand.net/docs/user/";
 
 #define kDocsAddOnlineMaps  @"https://docs.osmand.net/docs/user/map/raster-maps#add-new-online-raster-map-source"

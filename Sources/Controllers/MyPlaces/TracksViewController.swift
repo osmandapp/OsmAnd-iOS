@@ -37,8 +37,8 @@ private class TrackFolder {
     }
     
     func insertTrack(fileName: String, track: OAGPX) {
+        tracks[fileName] = track
         performForSelfAndParent { folder in
-            folder.tracks[fileName] = track
             folder.tracksCount += 1
         }
     }

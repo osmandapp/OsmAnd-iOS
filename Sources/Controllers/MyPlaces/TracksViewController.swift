@@ -319,7 +319,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     trackRow.cellType = OARightIconTableViewCell.reuseIdentifier
                     trackRow.key = trackKey
                     trackRow.title = fileName.lastPathComponent().deletingPathExtension()
-                    trackRow.setObj(track.gpxFilePath, forKey: pathKey)
+                    trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
                     trackRow.setObj(fileName, forKey: fileNameKey)
                     trackRow.iconName = "ic_custom_trip"
                     let isVisible = settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
@@ -366,16 +366,16 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
 
     private func setupNavBarMenuButton() {
-        let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { _ in
-            self.onNavbarSelectButtonClicked()
-        }
+        // TODO: Implement Select navbar action in text task and uncomment
+        // let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { _ in
+        //     self.onNavbarSelectButtonClicked()
+        // }
         let addFolderAction = UIAction(title: localizedString("add_folder"), image: UIImage.icCustomFolderAddOutlined) { _ in
             self.onNavbarAddFolderButtonClicked()
         }
         let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { _ in
             self.onNavbarImportButtonClicked()
         }
-        // TODO: Implement Select navbar action in text task
         // let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
         let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
         let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
@@ -493,7 +493,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let state = OATrackMenuViewControllerState()
             state.openedFromTracksList = true
             rootVC.mapPanel.openTargetView(with: firstTrack, items: subfolderTracks, trackHudMode: .appearanceHudMode, state: state)
-            dismiss()
+            navigationController?.popToRootViewController(animated: true)
         } else {
             OAUtilities.showToast(localizedString("shared_string_error"), details: localizedString("my_places_no_tracks_title"), duration: 4, in: self.view)
         }
@@ -560,7 +560,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         state.openedFromTracksList = true
         state.gpxFilePath = track?.gpxFilePath
         rootVC.mapPanel.openTargetView(with: gpx, trackHudMode: .appearanceHudMode, state: state)
-        dismiss()
+        navigationController?.popToRootViewController(animated: true)
     }
     
     private func onTrackNavigationClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
@@ -570,14 +570,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             if let vc = OATrackSegmentsViewController(filepath: absolutePath, isCurrentTrack: isCurrentTrack) {
                 vc.startNavigationOnSelect = true
                 rootVC.present(vc, animated: true)
-                dismiss()
+                navigationController?.popToRootViewController(animated: true)
             }
         } else {
             if routingHelper.isFollowingMode() {
                 rootVC.mapPanel.mapActions.stopNavigationActionConfirm()
             }
             rootVC.mapPanel.mapActions.enterRoutePlanningMode(given: track, useIntermediatePointsByDefault: true, showDialog: true)
-            dismiss()
+            navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -585,7 +585,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
             let absolutePath = getAbsolutePath(gpx.gpxFilePath)
             rootVC.mapPanel.openTargetView(withRouteDetailsGraph: absolutePath, isCurrentTrack: isCurrentTrack)
-            dismiss()
+            navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -610,7 +610,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             state.gpxFilePath = gpx.gpxFilePath
             let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
             rootVC.mapPanel.showScrollableHudViewController(vc)
-            dismiss()
+            navigationController?.popToRootViewController(animated: true)
         }
     }
     
@@ -874,11 +874,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         var outCell: UITableViewCell?
         
         if item.cellType == OAButtonTableViewCell.reuseIdentifier {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as? OAButtonTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAButtonTableViewCell.reuseIdentifier) as? OAButtonTableViewCell
             if let cell {
                 cell.leftIconView.contentMode = .center
-                cell.button.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
-                cell.button.layer.cornerRadius = 9
                 cell.setCustomLeftSeparatorInset(true)
                 cell.separatorInset = .zero
                 
@@ -888,10 +886,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     cell.leftIconView.image = UIImage(named: iconName)
                     cell.leftIconView.tintColor = UIColor.iconColorDefault
                 }
+                
+                cell.button.layer.cornerRadius = 9
+                cell.button.configuration = getRecButtonConfig()
                 cell.button.backgroundColor = UIColor.contextMenuButtonBg
                 if let buttonTitle = item.string(forKey: buttonTitleKey) {
                     cell.button.setTitle(buttonTitle, for: .normal)
-                    cell.button.titleLabel?.font = UIFont.preferredFont(forTextStyle: .footnote)
                 }
                 if let buttonIconName = item.string(forKey: buttonIconKey) {
                     cell.button.setImage(UIImage.templateImageNamed(buttonIconName), for: .normal)
@@ -906,8 +906,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let cell = tableView.dequeueReusableCell(withIdentifier: OATwoButtonsTableViewCell.reuseIdentifier) as? OATwoButtonsTableViewCell
             if let cell {
                 cell.leftIconView.contentMode = .center
-                cell.leftButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
-                cell.rightButton.contentEdgeInsets = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7)
+                cell.leftButton.configuration = getRecButtonConfig()
+                cell.rightButton.configuration = getRecButtonConfig()
                 cell.leftButton.layer.cornerRadius = 9
                 cell.rightButton.layer.cornerRadius = 9
                 cell.setCustomLeftSeparatorInset(true)
@@ -989,6 +989,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         return outCell ?? UITableViewCell()
     }
     
+    private func getRecButtonConfig() -> UIButton.Configuration {
+        var buttonConfig = UIButton.Configuration.plain()
+        buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
+        buttonConfig.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
+             var outgoing = incoming
+             outgoing.font = UIFont.preferredFont(forTextStyle: .footnote)
+             return outgoing
+        }
+        return buttonConfig
+    }
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if item.key == visibleTracksKey {
@@ -1040,7 +1051,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             
             let menuProvider: UIContextMenuActionProvider = { _ in
                 
-                // TODO: implement Folder Details in next task
+                // TODO: implement Folder Details in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
                 // let detailsAction = UIAction(title: localizedString("shared_string_details"), image: UIImage.icCustomInfoOutlined) { _ in
                 //     self.onFolderDetailsButtonClicked()
                 // }

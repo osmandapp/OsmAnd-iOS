@@ -130,13 +130,14 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                         }
                     }
                 case .siteArticles:
+                    let urlDocsPrefix = "/docs/user/"
                     if let articlesData = jsonDict["articles"] as? [[String: Any]] {
                         articles.removeAll()
                         for articleDict in articlesData {
                             if let title = articleDict["label"] as? String,
-                               let url = articleDict["url"] as? String,
-                               url.hasPrefix("/docs/user/"),
                                let level = articleDict["level"] as? Int,
+                               let url  = (articleDict["url"] as? String) ?? (level > 1 ? urlDocsPrefix + title : nil),
+                               url.hasPrefix(urlDocsPrefix),
                                let type = articleDict["type"] as? String {
                                 let articleNode = ArticleNode(title: title, url: self.urlPrefix + url, level: level, type: type)
                                 addArticleNode(articleNode)
@@ -204,7 +205,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     
     private func getArticlePropertyName(from url: String) -> String {
         var propertyName = url.lowercased().replacingOccurrences(of: kOsmAndUserBaseURL, with: "")
-        propertyName = propertyName.replacingOccurrences(of: "-", with: "_").replacingOccurrences(of: "/", with: "_")
+        propertyName = propertyName.replacingOccurrences(of: "-", with: "_").replacingOccurrences(of: "/", with: "_").replacingOccurrences(of: " ", with: "_")
         guard !propertyName.isEmpty, propertyName.last == "_" else { return propertyName }
         propertyName.removeLast()
         return propertyName
@@ -292,7 +293,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
             return localizedString("welmode_download_maps")
         case "troubleshooting":
             return localizedString("troubleshooting")
-        case "navigation_setup":
+        case "setup_a_route":
             return localizedString("shared_string_setup_route")
         case "troubleshooting_setup":
             return localizedString("setup")

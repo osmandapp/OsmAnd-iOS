@@ -30,7 +30,7 @@
     OAGPX *_gpx;
     NSArray<NSArray<NSDictionary *> *> *_data;
     NSString *_selectedFolderName;
-    NSString *_hidingSubfolderPath; //if we're using this screen for move folder, then we're hide moving folder and all it's subfolders, to deny move folder inside itself
+    NSString *_excludedSubfolderPath;
 }
 
 #pragma mark - Initialization
@@ -59,13 +59,13 @@
     return self;
 }
 
-- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName prefixToHide:(NSString*)hidingSubfolderPath
+- (instancetype)initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath
 {
     self = [super init];
     if (self)
     {
         _selectedFolderName = selectedFolderName;
-        _hidingSubfolderPath = hidingSubfolderPath;
+        _excludedSubfolderPath = excludedSubfolderPath;
         [self reloadData];
     }
     return self;
@@ -117,7 +117,7 @@
     NSMutableArray *cellFoldersData = [NSMutableArray new];
     for (NSString *folderName in allFolderNames)
     {
-        if (_hidingSubfolderPath && [folderName hasPrefix:_hidingSubfolderPath])
+        if (_excludedSubfolderPath && [folderName hasPrefix:_excludedSubfolderPath])
             continue;
         
         NSArray *folderItems = foldersData[folderName];

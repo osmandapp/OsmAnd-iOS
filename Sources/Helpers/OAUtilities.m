@@ -2615,7 +2615,7 @@ static const double d180PI = 180.0 / M_PI_2;
 
 + (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path
 {
-    NSMutableArray<NSString *> *allSubfolderPathes = [NSMutableArray new];
+    NSMutableArray<NSString *> *allSubfolderPaths = [NSMutableArray new];
     
     NSString *currentFolderPath = path;
     if (!currentFolderPath || currentFolderPath.length == 0)
@@ -2632,15 +2632,15 @@ static const double d180PI = 180.0 / M_PI_2;
         if (exists && isDir)
         {
             NSString *subfolderPath = [path stringByAppendingPathComponent:subfolderPath.lastPathComponent];
-            [allSubfolderPathes addObject:subfolderPath];
+            [allSubfolderPaths addObject:subfolderPath];
             
             NSMutableArray<NSString *> *foundSubfolderPaths = [self.class getFlattenedFileList:subfolderPath];
             if (foundSubfolderPaths.count > 0)
-                [allSubfolderPathes addObjectsFromArray:foundSubfolderPaths];
+                [allSubfolderPaths addObjectsFromArray:foundSubfolderPaths];
         }
         
     }
-    return allSubfolderPathes;
+    return allSubfolderPaths;
 }
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor

@@ -25,6 +25,6 @@
 
 - (instancetype) initWithGPX:(OAGPX *)gpx;
 - (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName;
-- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName hidingSubfolderPath:(NSString*)hidingSubfolderPath;
+- (instancetype) initWithSelectedFolderName:(NSString *)selectedFolderName excludedSubfolderPath:(NSString *)excludedSubfolderPath;
 
 @end

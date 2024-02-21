@@ -105,6 +105,7 @@
 @property (nonatomic, assign) CLLocationCoordinate2D pinLocation;
 @property (nonatomic, assign) EOADraggableMenuState showingState;
 @property (nonatomic, assign) BOOL openedFromMap;
+@property (nonatomic, assign) BOOL openedFromTracksList;
 
 @end
 

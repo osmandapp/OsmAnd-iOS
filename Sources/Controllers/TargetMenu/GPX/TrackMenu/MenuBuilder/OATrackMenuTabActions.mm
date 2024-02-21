@@ -19,12 +19,21 @@
 
 @property (nonatomic) OAGPXTableData *tableData;
 @property (nonatomic) BOOL isGeneratedData;
+@property (nonatomic) BOOL isCurrentTrack;
 
 @end
 
 @implementation OATrackMenuTabActions
 
 @dynamic tableData, isGeneratedData;
+
+- (instancetype) initWithIsCurrentTrack:(BOOL)isCurrentTrack
+{
+    self = [super init];
+    if (self)
+        _isCurrentTrack = isCurrentTrack;
+    return self;
+}
 
 - (NSString *)getTabTitle
 {
@@ -108,7 +117,8 @@
             kTableKey: @"edit",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_trip_edit",
-            kCellTitle: OALocalizedString(@"edit_track")
+            kCellTitle: OALocalizedString(@"edit_track"),
+            kCellIsDisabled : @(_isCurrentTrack)
     }];
     [editSectionData.subjects addObject:editCellData];
 
@@ -116,7 +126,8 @@
             kTableKey: @"edit_create_duplicate",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_copy",
-            kCellTitle: OALocalizedString(@"duplicate_track")
+            kCellTitle: OALocalizedString(@"duplicate_track"),
+            kCellIsDisabled : @(_isCurrentTrack)
     }];
     [editSectionData.subjects addObject:duplicateCellData];
 
@@ -130,7 +141,8 @@
             kTableKey: @"change_rename",
             kCellType: [OATitleIconRoundCell getCellIdentifier],
             kCellRightIconName: @"ic_custom_edit",
-            kCellTitle: OALocalizedString(@"rename_track")
+            kCellTitle: OALocalizedString(@"rename_track"),
+            kCellIsDisabled : @(_isCurrentTrack)
     }];
     [changeSectionData.subjects addObject:renameCellData];
 
@@ -139,7 +151,8 @@
             kCellType: [OATitleDescriptionIconRoundCell getCellIdentifier],
             kCellDesc: [self generateDirName],
             kCellRightIconName: @"ic_custom_folder_move",
-            kCellTitle: OALocalizedString(@"change_folder")
+            kCellTitle: OALocalizedString(@"change_folder"),
+            kCellIsDisabled : @(_isCurrentTrack)
     }];
     [changeSectionData.subjects addObject:moveCellData];
 

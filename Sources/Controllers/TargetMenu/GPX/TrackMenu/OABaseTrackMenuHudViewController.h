@@ -15,6 +15,7 @@
 #define kCellRightIconName @"right_icon_name"
 #define kCellToggle @"toggle"
 #define kCellTintColor @"tint_color"
+#define kCellIsDisabled @"is_disabled"
 
 #define kSectionHeader @"header"
 #define kSectionHeaderHeight @"header_height"
@@ -54,6 +55,7 @@ typedef NS_ENUM(NSUInteger, EOATrackHudMode)
 @property (nonatomic, readonly) NSString *rightIconName;
 @property (nonatomic, readonly) BOOL toggle;
 @property (nonatomic, readonly) UIColor *tintColor;
+@property (nonatomic, readonly) BOOL isDisabled;
 @property (nonatomic, readonly) NSMutableArray<OAGPXTableCellData *> *subjects;
 
 + (instancetype)withData:(NSDictionary *)data;

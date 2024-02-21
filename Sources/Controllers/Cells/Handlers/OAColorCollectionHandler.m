@@ -68,6 +68,7 @@
             [self.delegate deleteItemFromContextMenu:indexPath];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete_color");
+        deleteAction.attributes = UIMenuElementAttributesDestructive;
         [menuElements addObject:[UIMenu menuWithTitle:@""
                                            image:nil
                                       identifier:nil

@@ -44,6 +44,24 @@
 
 #define kColorGridOrDescriptionCell 1
 
+@interface OABackupGpx : NSObject
+
+@property (nonatomic) NSInteger color;
+@property (nonatomic) BOOL showStartFinish;
+@property (nonatomic) BOOL joinSegments;
+@property (nonatomic) BOOL showArrows;
+@property (nonatomic) NSString *width;
+@property (nonatomic) NSString *coloringType;
+@property (nonatomic) EOAGpxSplitType splitType;
+@property (nonatomic) double splitInterval;
+
+@end
+
+@implementation OABackupGpx
+
+@end
+
+
 @implementation OATrackAppearanceItem
 
 - (instancetype)initWithColoringType:(OAColoringType *)coloringType
@@ -98,14 +116,8 @@
 
     OAGPXTrackSplitInterval *_selectedSplit;
 
-    NSInteger _oldColor;
-    BOOL _oldShowStartFinish;
-    BOOL _oldJoinSegments;
-    BOOL _oldShowArrows;
-    NSString *_oldWidth;
-    NSString *_oldColoringType;
-    EOAGpxSplitType _oldSplitType;
-    double _oldSplitInterval;
+    OABackupGpx *_backupGpxItem;
+    NSMutableArray<OABackupGpx *> *_backupGpxItems;
 
     OATrackMenuViewControllerState *_reopeningTrackMenuState;
     
@@ -114,6 +126,8 @@
     
     NSInteger _widthDataSectionIndex;
     NSInteger _splitDataSectionIndex;
+    
+    NSArray<OAGPX *> *_wholeFolderTracks;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state
@@ -122,6 +136,18 @@
     if (self)
     {
         _reopeningTrackMenuState = state;
+    }
+    return self;
+}
+
+- (instancetype)initWithGpx:(OAGPX *)gpx tracks:(NSArray<OAGPX *> *)tracks state:(OATrackMenuViewControllerState *)state
+{
+    self = [super initWithGpx:gpx];
+    if (self)
+    {
+        _wholeFolderTracks = tracks;
+        _reopeningTrackMenuState = state;
+        [self setOldValues];
     }
     return self;
 }
@@ -143,14 +169,79 @@
 
 - (void)setOldValues
 {
-    _oldShowArrows = self.gpx.showArrows;
-    _oldShowStartFinish = self.gpx.showStartFinish;
-    _oldColoringType = self.gpx.coloringType;
-    _oldColor = self.gpx.color;
-    _oldWidth = self.gpx.width;
-    _oldSplitType = self.gpx.splitType;
-    _oldSplitInterval = self.gpx.splitInterval;
-    _oldJoinSegments = self.gpx.joinSegments;
+    _backupGpxItem = [[OABackupGpx alloc] init];
+    _backupGpxItem.showArrows = self.gpx.showArrows;
+    _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
+    _backupGpxItem.coloringType = self.gpx.coloringType;
+    _backupGpxItem.color = self.gpx.color;
+    _backupGpxItem.width = self.gpx.width;
+    _backupGpxItem.splitType = self.gpx.splitType;
+    _backupGpxItem.splitInterval = self.gpx.splitInterval;
+    _backupGpxItem.joinSegments = self.gpx.joinSegments;
+    
+    if (_wholeFolderTracks)
+    {
+        _backupGpxItems = [NSMutableArray array];
+        for (OAGPX *track in _wholeFolderTracks)
+        {
+            OABackupGpx *backupItem = [[OABackupGpx alloc] init];
+            backupItem.showArrows = track.showArrows;
+            backupItem.showStartFinish = track.showStartFinish;
+            backupItem.coloringType = track.coloringType;
+            backupItem.color = track.color;
+            backupItem.width = track.width;
+            backupItem.splitType = track.splitType;
+            backupItem.splitInterval = track.splitInterval;
+            backupItem.joinSegments = track.joinSegments;
+            [_backupGpxItems addObject:backupItem];
+        }
+    }
+}
+
+- (void) restoreOldValues
+{
+    self.gpx.showArrows = _backupGpxItem.showArrows;
+    self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
+    self.gpx.coloringType = _backupGpxItem.coloringType;
+    self.gpx.color = _backupGpxItem.color;
+    self.gpx.width = _backupGpxItem.width;
+    self.gpx.splitType = _backupGpxItem.splitType;
+    self.gpx.splitInterval = _backupGpxItem.splitInterval;
+    self.gpx.joinSegments = _backupGpxItem.joinSegments;
+    
+    if (self.isCurrentTrack)
+    {
+        [self.settings.currentTrackWidth set:_backupGpxItem.width];
+        [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
+        [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
+        [self.settings.currentTrackColoringType set:_backupGpxItem.coloringType.length > 0
+                ? [OAColoringType getNonNullTrackColoringTypeByName:_backupGpxItem.coloringType]
+                : OAColoringType.TRACK_SOLID];
+        [self.settings.currentTrackColor set:_backupGpxItem.color];
+
+        [self.doc setWidth:_backupGpxItem.width];
+        [self.doc setShowArrows:_backupGpxItem.showArrows];
+        [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
+        [self.doc setColoringType:_backupGpxItem.coloringType];
+        [self.doc setColor:_backupGpxItem.color];
+    }
+    
+    if (_wholeFolderTracks)
+    {
+        for (int i = 0; i < _wholeFolderTracks.count; i++)
+        {
+            OAGPX *track = _wholeFolderTracks[i];
+            OABackupGpx *bakupItem = _backupGpxItems[i];
+            track.showArrows = bakupItem.showArrows;
+            track.showStartFinish = bakupItem.showStartFinish;
+            track.coloringType = bakupItem.coloringType;
+            track.color = bakupItem.color;
+            track.width = bakupItem.width;
+            track.splitType = bakupItem.splitType;
+            track.splitInterval = bakupItem.splitInterval;
+            track.joinSegments = bakupItem.joinSegments;
+        }
+    }
 }
 
 - (void)updateAllValues
@@ -624,33 +715,20 @@
     [self hide:YES duration:.2 onComplete:^{
         if (_reopeningTrackMenuState)
         {
-            self.gpx.color = _oldColor;
-            self.gpx.showStartFinish = _oldShowStartFinish;
-            self.gpx.joinSegments = _oldJoinSegments;
-            self.gpx.showArrows = _oldShowArrows;
-            self.gpx.width = _oldWidth;
-            self.gpx.coloringType = _oldColoringType;
-            self.gpx.splitType = _oldSplitType;
-            self.gpx.splitInterval = _oldSplitInterval;
-            if (self.isCurrentTrack)
+            [self restoreOldValues];
+            if (_reopeningTrackMenuState.openedFromTracksList)
             {
-                [self.settings.currentTrackWidth set:_oldWidth];
-                [self.settings.currentTrackShowArrows set:_oldShowArrows];
-                [self.settings.currentTrackShowStartFinish set:_oldShowStartFinish];
-                [self.settings.currentTrackColoringType set:_oldColoringType.length > 0
-                        ? [OAColoringType getNonNullTrackColoringTypeByName:_oldColoringType]
-                        : OAColoringType.TRACK_SOLID];
-                [self.settings.currentTrackColor set:_oldColor];
-
-                [self.doc setWidth:_oldWidth];
-                [self.doc setShowArrows:_oldShowArrows];
-                [self.doc setShowStartFinish:_oldShowStartFinish];
-                [self.doc setColoringType:_oldColoringType];
-                [self.doc setColor:_oldColor];
+                UITabBarController *myPlacesViewController =
+                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                [myPlacesViewController setSelectedIndex:1];
+                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
             }
-            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
-                                                  trackHudMode:EOATrackMenuHudMode
-                                                         state:_reopeningTrackMenuState];
+            else
+            {
+                [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                                      trackHudMode:EOATrackMenuHudMode
+                                                             state:_reopeningTrackMenuState];
+            }
         }
 
         if (self.isCurrentTrack)
@@ -698,9 +776,19 @@
         }
         if (_reopeningTrackMenuState)
         {
-            [self.mapPanelViewController openTargetViewWithGPX:self.gpx
-                                                  trackHudMode:EOATrackMenuHudMode
-                                                         state:_reopeningTrackMenuState];
+            if (_reopeningTrackMenuState.openedFromTracksList)
+            {
+                UITabBarController *myPlacesViewController =
+                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                [myPlacesViewController setSelectedIndex:1];
+                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+            }
+            else
+            {
+                [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                                      trackHudMode:EOATrackMenuHudMode
+                                                             state:_reopeningTrackMenuState];
+            }
         }
     }];
 }
@@ -1141,6 +1229,11 @@
     if ([tableData.key isEqualToString:@"direction_arrows"])
     {
         self.gpx.showArrows = toggle;
+        if (_wholeFolderTracks)
+        {
+            for (OAGPX *track in _wholeFolderTracks)
+                track.showArrows = toggle;
+        }
 
         if (self.isCurrentTrack)
         {
@@ -1155,6 +1248,11 @@
     else if ([tableData.key isEqualToString:@"start_finish_icons"])
     {
         self.gpx.showStartFinish = toggle;
+        if (_wholeFolderTracks)
+        {
+            for (OAGPX *track in _wholeFolderTracks)
+                track.showStartFinish = toggle;
+        }
 
         if (self.isCurrentTrack)
         {
@@ -1169,6 +1267,11 @@
     else if ([tableData.key isEqualToString:@"join_gaps"])
     {
         self.gpx.joinSegments = toggle;
+        if (_wholeFolderTracks)
+        {
+            for (OAGPX *track in _wholeFolderTracks)
+                track.joinSegments = toggle;
+        }
 
         if (self.isCurrentTrack)
             [[_app updateRecTrackOnMapObservable] notifyEvent];
@@ -1366,6 +1469,11 @@
         {
             _selectedWidth = [_appearanceCollection getAvailableWidth][[value intValue]];
             self.gpx.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
+            if (_wholeFolderTracks)
+            {
+                for (OAGPX *track in _wholeFolderTracks)
+                    track.width = [_selectedWidth isCustom] ? _selectedWidth.customValue : _selectedWidth.key;
+            }
 
             if (self.isCurrentTrack)
             {
@@ -1413,6 +1521,14 @@
 
                 self.gpx.splitType = _selectedSplit.type;
                 self.gpx.splitInterval = splitInterval;
+                if (_wholeFolderTracks)
+                {
+                    for (OAGPX *track in _wholeFolderTracks)
+                    {
+                        track.splitType = _selectedSplit.type;
+                        track.splitInterval = splitInterval;
+                    }
+                }
                 if (self.gpx.splitInterval > 0 && self.gpx.splitType != EOAGpxSplitTypeNone)
                 {
                     NSInteger indexOfValue = [_selectedSplit.values indexOfObject:@(self.gpx.splitInterval)];
@@ -1439,7 +1555,14 @@
         {
             NSString *selectedValue = _customWidthValues[[value intValue]];
             if (![_selectedWidth.customValue isEqualToString:selectedValue])
+            {
                 self.gpx.width = _selectedWidth.customValue = selectedValue;
+                if (_wholeFolderTracks)
+                {
+                    for (OAGPX *track in _wholeFolderTracks)
+                        track.width = _selectedWidth.customValue = selectedValue;
+                }
+            }
 
             if (self.isCurrentTrack)
             {
@@ -1461,6 +1584,11 @@
             {
                 _selectedSplit.customValue = customValue;
                 self.gpx.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
+                if (_wholeFolderTracks)
+                {
+                    for (OAGPX *track in _wholeFolderTracks)
+                        track.splitInterval = _selectedSplit.values[[value intValue]].doubleValue;
+                }
             }
 
             if (self.isCurrentTrack)
@@ -1540,7 +1668,13 @@
 - (void)onColoringTypeSelected:(OATrackAppearanceItem *)selectedItem
 {
     _selectedItem = selectedItem;
-    self.gpx.coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
+    NSString *coloringType = _selectedItem.coloringType == OAColoringType.ATTRIBUTE ? _selectedItem.attrName : _selectedItem.coloringType.name;
+    self.gpx.coloringType = coloringType;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.coloringType = coloringType;
+    }
 
     if (self.isCurrentTrack)
     {
@@ -1664,6 +1798,11 @@
     _isNewColorSelected = YES;
     _selectedColorItem = _sortedColorItems[indexPath.row];
     self.gpx.color = _selectedColorItem.value;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.color = _selectedColorItem.value;;
+    }
 
     if (self.isCurrentTrack)
     {

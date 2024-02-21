@@ -137,12 +137,18 @@
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu;
 - (void) openTargetViewWithWpt:(OAGpxWptItem *)item pushed:(BOOL)pushed showFullMenu:(BOOL)showFullMenu saveState:(BOOL)saveState;
 
+- (void) openRecordingTrackTargetView;
 - (void) openTargetViewWithGPX:(OAGPX *)item;
 - (void) openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap;
 
 - (void) openTargetViewWithGPX:(OAGPX *)item
                   trackHudMode:(EOATrackHudMode)trackHudMode
                          state:(OATrackMenuViewControllerState *)state;
+
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                        items:(NSArray<OAGPX *> *)items
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                        state:(OATrackMenuViewControllerState *)state;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
@@ -158,6 +164,7 @@
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                      isRoute:(BOOL)isRoute;
+- (void) openTargetViewWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;

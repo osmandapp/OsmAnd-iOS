@@ -8,6 +8,7 @@
 
 #import "OALoadGpxTask.h"
 #import "OsmAndApp.h"
+#import "OAUtilities.h"
 
 #import "Localization.h"
 
@@ -65,29 +66,35 @@
         onComplete(_gpxFolders);
 }
 
-- (void) loadGPXData:(NSString *) mapPath
+- (void) loadGPXData:(NSString *)gpxPath
 {
-    [self loadGPXFolder:mapPath gpxSubfolder:@""];
+    [self loadGPXFolder:gpxPath relativePath:@""];
 }
 
-- (void) loadGPXFolder:(NSString *)mapPath gpxSubfolder:(NSString *)gpxSubfolder
+- (void) loadGPXFolder:(NSString *)absolutePath relativePath:(NSString *)relativePath
 {
-    NSArray* listFiles = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:mapPath error:nil];
-    for (NSString *gpxFile in listFiles)
+    NSArray<NSString *> *fileNames = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:absolutePath error:nil];
+    for (NSString *filename in fileNames)
     {
-        if (![[[gpxFile pathExtension] lowerCase] isEqual:@"gpx"])
+        if ([filename hasPrefix:@"."])
+            continue;
+        
+        NSString *filePath = [absolutePath stringByAppendingPathComponent:filename];
+        
+        BOOL isDir;
+        BOOL isFileExists = [[NSFileManager defaultManager] fileExistsAtPath:filePath isDirectory:&isDir];
+        if (isFileExists && isDir)
         {
-            if([gpxFile hasPrefix:@"."])
-                continue;
-            NSString *sub = gpxFile;
-            [self loadGPXFolder:[mapPath stringByAppendingPathComponent:gpxFile] gpxSubfolder:sub];
+            [self loadGPXFolder:[absolutePath stringByAppendingPathComponent:filename] relativePath:[relativePath stringByAppendingPathComponent:filename]];
         }
-        else
+        else if ([[[filename pathExtension] lowercaseString] isEqualToString:@"gpx"])
         {
+            NSString *gpxFilename = filename;
+            NSString *gpxShortPath = [relativePath stringByAppendingPathComponent:filename];
             OAGpxInfo *info = [[OAGpxInfo alloc] init];
-            info.subfolder = gpxSubfolder;
-            info.file = gpxFile;
-            info.gpx = [OAGPXDatabase.sharedDb getGPXItem:[gpxSubfolder stringByAppendingPathComponent:gpxFile]];
+            info.subfolder = relativePath;
+            info.file = gpxFilename;
+            info.gpx = [OAGPXDatabase.sharedDb getGPXItem:gpxShortPath];
             [_result addObject:info];
         }
     }

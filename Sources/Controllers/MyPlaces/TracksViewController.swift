@@ -37,15 +37,13 @@ private class TrackFolder {
     }
     
     func insertTrack(fileName: String, track: OAGPX) {
-        tracks[fileName] = track
-        tracksCount += 1
         performForSelfAndParent { folder in
+            folder.tracks[fileName] = track
             folder.tracksCount += 1
         }
     }
     
     func insertToFlattenedFolders(path: String, subfolder: TrackFolder) {
-        flattenedFolders[path] = subfolder
         performForSelfAndParent { folder in
             folder.flattenedFolders[path] = subfolder
         }
@@ -515,7 +513,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let selectedFolderName = trimmedPath.deletingLastPathComponent()
         // hide from this screen moving folder and all it's subfolders, to deny move folder inside itself
         let sourceFolderPath = (selectedFolderPath ?? "") + "/"
-        if let vc = OASelectTrackFolderViewController(selectedFolderName: selectedFolderName, excludedSubfolderPath: sourceFolderPath) {
+        if let vc = OASelectTrackFolderViewController(selectedFolderName: selectedFolderName, excludedSubfolderPath: trimmedPath) {
             vc.delegate = self
             let navController = UINavigationController(rootViewController: vc)
             present(navController, animated: true)

@@ -2627,16 +2627,23 @@ static const double d180PI = 180.0 / M_PI_2;
         if([subfolderPath.lastPathComponent hasPrefix:@"."])
             continue;
         
+        NSString *fullSubfolderPath = [currentFolderPath stringByAppendingPathComponent:subfolderPath];
         BOOL isDir = NO;
-        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:subfolderPath isDirectory:&isDir];
+        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:fullSubfolderPath isDirectory:&isDir];
         if (exists && isDir)
         {
-            NSString *subfolderPath = [path stringByAppendingPathComponent:subfolderPath.lastPathComponent];
-            [allSubfolderPaths addObject:subfolderPath];
+            if (![allSubfolderPaths containsObject:fullSubfolderPath])
+                [allSubfolderPaths addObject:fullSubfolderPath];
             
-            NSMutableArray<NSString *> *foundSubfolderPaths = [self.class getFlattenedFileList:subfolderPath];
+            NSMutableArray<NSString *> *foundSubfolderPaths = [self.class getFlattenedFileList:fullSubfolderPath];
             if (foundSubfolderPaths.count > 0)
-                [allSubfolderPaths addObjectsFromArray:foundSubfolderPaths];
+            {
+                for (NSString *path in foundSubfolderPaths)
+                {
+                    if (![allSubfolderPaths containsObject:path])
+                        [allSubfolderPaths addObject:path];
+                }
+            }
         }
         
     }

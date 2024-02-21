@@ -13,6 +13,8 @@
 #import "OAMapRendererView.h"
 #import "OAZoom.h"
 #import "OARouteCalculationResult.h"
+#import "OARootViewController.h"
+#import "OANativeUtilities.h"
 
 const static int kShowDrivingSecondsV2 = 45;
 const static float kMinAutoZoomSpeed = 7.0 / 3.6;
@@ -50,6 +52,22 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
                                 || (_currentSpeed <= _speedToFilter && _speedToFilter <= oldSpeed);
         return monotonous ? _speedToFilter : NAN;
     }
+}
+
+@end
+
+
+@implementation OAAutoZoomDTO
+
+- (instancetype) initWithZoom:(OAComplexZoom *)zoomValue floatValue:(float)floatValue
+{
+    self = [super init];
+    if (self)
+    {
+        _zoomValue = zoomValue;
+        _floatValue = floatValue;
+    }
+    return self;
 }
 
 @end
@@ -138,37 +156,145 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     return zoomDelta;
 }
 
-- (OAComplexZoom *) calculateZoomBySpeedToAnimate:(OAMapRendererView *)mapView myLocation:(CLLocation *)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *)nextTurn
+- (OAComplexZoom *) calculateZoomBySpeedToAnimate:(OAMapRendererView *)mapRenderer myLocation:(CLLocation *)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *)nextTurn
 {
-    //TODO: implement
-    return nil;
+    float speed = myLocation.speed;
+    if (speed < kMinAutoZoomSpeed)
+        return nil;
+    
+    float filteredSpeed = [_speedFilter getFilteredSpeed:speed];
+    if (isnan(filteredSpeed))
+        return nil;
+    
+    EOAAutoZoomMap autoZoomScale = [_settings.autoZoomMapScale get];
+    
+    OsmAnd::LatLon myLocationLatLon = OsmAnd::LatLon(myLocation.coordinate.latitude, myLocation.coordinate.longitude);
+    OsmAnd::PointI myLocation31 = [OANativeUtilities getPoint31FromLatLon:myLocationLatLon];
+    float myLocationHeight = [OANativeUtilities getLocationHeightOrZero:myLocation31];
+    OsmAnd::PointI myLocationPixel = mapRenderer.renderer->getState().fixedPixel;
+    
+    float showDistanceToDrive = [self getShowDistanceToDrive:autoZoomScale nextTurn:nextTurn speed:filteredSpeed];
+    float rotation = !isnan(rotationToAnimate) ? rotationToAnimate : mapRenderer.azimuth;
+    OsmAnd::LatLon anotherLatLon = OsmAnd::Utilities::rhumbDestinationPoint(myLocationLatLon, showDistanceToDrive, rotation);
+    
+    OsmAnd::PointI anotherLocation31 = [OANativeUtilities getPoint31FromLatLon:anotherLatLon];
+    float anotherLocationHeight = [OANativeUtilities getLocationHeightOrZero:anotherLocation31];
+    OsmAnd::PointI windowSize = mapRenderer.renderer->getState().windowSize;
+    OsmAnd::PointI anotherPixel = [self getFocusPixel:windowSize.x pixHeight:windowSize.y];
+    
+    float expectedSurfaceZoom = mapRenderer.renderer->getSurfaceZoomAfterPinch(myLocation31, myLocationHeight, myLocationPixel, anotherLocation31, anotherLocationHeight, anotherPixel);
+    if (expectedSurfaceZoom == -1)
+        return nil;
+    
+    int minZoom = mapRenderer.minZoom;
+    int maxZoom = mapRenderer.maxZoom;
+    OAZoom *boundedZoom = [OAZoom checkZoomBoundsWithZoom:expectedSurfaceZoom minZoom:minZoom maxZoom:maxZoom];
+    
+    return [OAComplexZoom fromPreferredBase:[boundedZoom getBaseZoom] + [boundedZoom getZoomFloatPart]  preferredZoomBase:mapRenderer.zoom];
 }
 
-- (void) getAnimatedZoomParamsForChart
+- (OAAutoZoomDTO *) getAnimatedZoomParamsForChart:(OAMapRendererView *)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon heading:(float)heading speed:(float)speed
 {
-    //TODO: implement
+    if (speed < kMinAutoZoomSpeed)
+        return nil;
+    
+    float filteredSpeed = [_speedFilter getFilteredSpeed:speed];
+    if (isnan(filteredSpeed))
+        return nil;
+    
+    OAComplexZoom *autoZoom = [self calculateRawZoomBySpeedForChart:mapRenderer currentZoom:currentZoom lat:lat lon:lon rotation:heading speed:filteredSpeed];
+    if (!autoZoom)
+        return nil;
+    
+    return [self getAutoZoomParams:currentZoom autoZoom:autoZoom fixedDurationMillis:-1];
 }
 
-- (void) calculateRawZoomBySpeedForChart
+- (OAComplexZoom *) calculateRawZoomBySpeedForChart:(OAMapRendererView *)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon rotation:(float)rotation speed:(float)speed
 {
-    //TODO: implement
+    OsmAnd::MapRendererState state = mapRenderer.renderer->getState();
+    EOAAutoZoomMap autoZoomScale = [_settings.autoZoomMapScale get];
+    
+    OsmAnd::PointI fixedLocation31 = [OANativeUtilities getPoint31FromLatLon:lat lon:lon];
+    
+    OsmAnd::PointI firstLocation31 = fixedLocation31;
+    float firstHeightInMeters = [OANativeUtilities getLocationHeightOrZero:firstLocation31];
+    OsmAnd::PointI firstPixel = state.fixedPixel;
+    
+    float showDistanceToDrive = [self getShowDistanceToDrive:autoZoomScale nextTurn:nil speed:speed];
+    OsmAnd::LatLon secondLatLon = OsmAnd::Utilities::rhumbDestinationPoint(lat, lon, showDistanceToDrive, rotation);
+    OsmAnd::PointI secondLocation31 = [OANativeUtilities getPoint31FromLatLon:secondLatLon];
+    float secondHeightInMeters = [OANativeUtilities getLocationHeightOrZero:secondLocation31];
+    OsmAnd::PointI windowSize = state.windowSize;
+    OsmAnd::PointI secondPixel = [self getFocusPixel:windowSize.x pixHeight:windowSize.y];
+    
+    float expectedSurfaceZoom = mapRenderer.renderer->getSurfaceZoomAfterPinchWithParams(fixedLocation31, currentZoom, -rotation, firstLocation31, firstHeightInMeters, firstPixel, secondLocation31, secondHeightInMeters, secondPixel);
+    
+    if (expectedSurfaceZoom == -1)
+        return nil;
+    
+    int minZoom = mapRenderer.minZoom;
+    int maxZoom = mapRenderer.maxZoom;
+    OAZoom *boundedZoom = [OAZoom checkZoomBoundsWithZoom:expectedSurfaceZoom minZoom:minZoom maxZoom:maxZoom];
+    return [[OAComplexZoom alloc] initWithBase:[boundedZoom getBaseZoom] floatPart:[boundedZoom getZoomFloatPart]];
 }
 
-- (void) getAutoZoomParams
+- (OAAutoZoomDTO *) getAutoZoomParams:(float)currentZoom autoZoom:(OAComplexZoom *)autoZoom fixedDurationMillis:(float)fixedDurationMillis
 {
-    //TODO: implement
+    if (fixedDurationMillis > 0)
+        return [[OAAutoZoomDTO alloc] initWithZoom:autoZoom floatValue:fixedDurationMillis];
+    
+    float zoomDelta = [autoZoom fullZoom] - currentZoom;
+    float zoomDuration = abs(zoomDelta) / kZoomPerMillis;
+    
+    if (zoomDuration < kZoomDurationMillis)
+        return nil;
+    
+    return [[OAAutoZoomDTO alloc] initWithZoom:autoZoom floatValue:zoomDuration];
 }
 
-- (void) getShowDistanceToDrive
+- (float) getShowDistanceToDrive:(EOAAutoZoomMap)autoZoomScale nextTurn:(OANextDirectionInfo *)nextTurn speed:(float)speed
 {
-    //TODO: implement
+    float showDistanceToDrive = speed * kShowDrivingSecondsV2 / [OAAutoZoomMap getCoefficient:autoZoomScale];
+    if (nextTurn)
+    {
+        //TODO: check this comparation
+        if (_nextTurnInFocus && _nextTurnInFocus == nextTurn.directionInfo)
+        {
+            showDistanceToDrive = nextTurn.distanceTo;
+        }
+        else if (nextTurn.distanceTo < showDistanceToDrive)
+        {
+            showDistanceToDrive = nextTurn.distanceTo;
+            _nextTurnInFocus = nextTurn.directionInfo;
+        }
+        else
+        {
+            _nextTurnInFocus = nil;
+        }
+    }
+    
+    return max(showDistanceToDrive, [OAAutoZoomMap getMinDistanceToDrive:autoZoomScale]);
 }
 
-- (void) getFocusPixel
+- (OsmAnd::PointI) getFocusPixel:(int)pixWidth pixHeight:(int)pixHeight
 {
     //TODO: implement
+    return OsmAnd::PointI();
 }
 
+
+// onManualZoomChange()
+
+// onTouchEvent()
+
+// getTrackPointsAnalyser()
+
+// addAvailableGPXDataSetTypes()
+
+// getOrderedLineDataSet()
+
+// getZoomDataSet()
+
+// postProcessAttributes()
 
 @end
-

@@ -851,6 +851,7 @@
 @property (nonatomic) float coefficient;
 @property (nonatomic) NSString *name;
 @property (nonatomic) float maxZoom;
+@property (nonatomic) float minDistanceToDrive;
 
 @end
 
@@ -865,6 +866,7 @@
         obj.coefficient = [self.class getCoefficient:autoZoomMap];
         obj.name = [self.class getName:autoZoomMap];
         obj.maxZoom = [self.class getMaxZoom:autoZoomMap];
+        obj.minDistanceToDrive = [self.class getMinDistanceToDrive:autoZoomMap];
     }
     return obj;
 }
@@ -916,6 +918,21 @@
             return 17.f;
         case AUTO_ZOOM_MAP_CLOSE:
             return 19.f;
+        default:
+            return 0;
+    }
+}
+
++ (float) getMinDistanceToDrive:(EOAAutoZoomMap)autoZoomMap
+{
+    switch (autoZoomMap)
+    {
+        case AUTO_ZOOM_MAP_FARTHEST:
+            return 400.f;
+        case AUTO_ZOOM_MAP_FAR:
+            return 200.f;
+        case AUTO_ZOOM_MAP_CLOSE:
+            return 50.f;
         default:
             return 0;
     }

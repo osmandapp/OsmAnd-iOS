@@ -204,6 +204,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (nonatomic, readonly) float coefficient;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) float maxZoom;
+@property (nonatomic, readonly) float minDistanceToDrive;
 
 + (instancetype) withAutoZoomMap:(EOAAutoZoomMap)autoZoomMap;
 + (NSArray<OAAutoZoomMap *> *) values;
@@ -211,6 +212,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 + (float) getCoefficient:(EOAAutoZoomMap)autoZoomMap;
 + (NSString *) getName:(EOAAutoZoomMap)autoZoomMap;
 + (float) getMaxZoom:(EOAAutoZoomMap)autoZoomMap;
++ (float) getMinDistanceToDrive:(EOAAutoZoomMap)autoZoomMap;
 
 @end
 

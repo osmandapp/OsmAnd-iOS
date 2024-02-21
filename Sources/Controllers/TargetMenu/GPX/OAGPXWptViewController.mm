@@ -256,8 +256,7 @@
 
 - (void) leftControlButtonPressed
 {
-    OAGPXDocument *gpxFile = [[OAGPXDocument alloc] initWithGpxFile:self.wpt.docPath];
-    OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:self.wpt.docPath title:gpxFile.metadata.name desc:gpxFile.metadata.desc bounds:gpxFile.bounds document:gpxFile];
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
     [[OARootViewController instance].mapPanel openTargetViewWithGPX:gpx selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
 }
 

@@ -167,7 +167,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
             row.key = kPageKey
             row.cellType = OASimpleTableViewCell.getIdentifier()
             updatePageNumbers()
-            configureWidgetsSeparatorForVerticalPanel()
+            configureWidgetsSeparator()
             tableView.reloadData()
             updateBottomButtons()
         } else {
@@ -199,7 +199,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
         } else {
             updateWidgetStyleForRowsInLastPage(newWidget, lastSectionData)
             createWidgetItem(newWidget, lastSectionData)
-            configureWidgetsSeparatorForVerticalPanel()
+            configureWidgetsSeparator()
         }
         if editMode {
             DispatchQueue.main.async { [weak self] in
@@ -363,7 +363,7 @@ extension WidgetsListViewController {
         tableData.addRow(at: movedIndexPath, row: item)
         
         updatePageNumbers()
-        configureWidgetsSeparatorForVerticalPanel()
+        configureWidgetsSeparator()
         tableView.reloadData()
         updateBottomButtons()
         if let editingComplexWidget {
@@ -393,7 +393,7 @@ extension WidgetsListViewController {
             }
             tableData.removeRow(at: indexPath)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            configureWidgetsSeparatorForVerticalPanel()
+            configureWidgetsSeparator()
             let isPageCell = item.key == kPageKey
             if isPageCell {
                 updatePageNumbers()
@@ -495,7 +495,7 @@ extension WidgetsListViewController {
             for i in 0..<pagedWidgets.count {
                 createWidgetItems(pagedWidgets[i], i)
             }
-            configureWidgetsSeparatorForVerticalPanel()
+            configureWidgetsSeparator()
         }
     }
     
@@ -677,9 +677,8 @@ extension WidgetsListViewController: OACopyProfileBottomSheetDelegate {
 
 extension WidgetsListViewController {
     
-    private func configureWidgetsSeparatorForVerticalPanel() {
-        guard widgetPanel.isPanelVertical,
-              tableData.sectionCount() > 0 else { return }
+    private func configureWidgetsSeparator() {
+        guard tableData.sectionCount() > 0 else { return }
         
         let section = tableData.sectionData(for: 0)
         for i in 0..<section.rowCount() {

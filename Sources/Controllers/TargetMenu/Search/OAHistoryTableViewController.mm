@@ -81,7 +81,7 @@
 
 - (void)longTapHandler:(UILongPressGestureRecognizer *)gestureRecognizer
 {
-    if (![self.tableView isEditing])
+    if (![self.tableView isEditing] && gestureRecognizer.state == UIGestureRecognizerStateBegan)
     {
         CGPoint p = [gestureRecognizer locationInView:self.tableView];
         NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:p];
@@ -91,23 +91,13 @@
             if ([item.cellType isEqualToString:[OALargeImageTitleDescrTableViewCell getCellIdentifier]] || [item.cellType isEqualToString:[OAFilledButtonCell getCellIdentifier]])
                 return;
         }
-
-        _wasAnyDeleted = NO;
-
-        if (self.delegate)
-            [self.delegate enterHistoryEditingMode];
         
-        [self.tableView beginUpdates];
-        [self.tableView setEditing:YES animated:YES];
-        if (indexPath && gestureRecognizer.state == UIGestureRecognizerStateBegan)
-        {
-            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-            if (self.delegate)
-                [self.delegate historyItemsSelected:1];
-        }
-
-        [self.tableView endUpdates];
-        }
+        OASearchHistoryTableGroup *groupData = [self.groupsAndItems objectAtIndex:indexPath.section];
+        OASearchHistoryTableItem *dataItem = [groupData.groupItems objectAtIndex:indexPath.row];
+        BOOL isFromNavigation = dataItem.item.fromNavigation;
+        OAHistorySettingsViewController *historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:isFromNavigation ? EOAHistorySettingsTypeNavigation : EOAHistorySettingsTypeSearch editing:YES];
+        [self.navigationController pushViewController:historyViewController animated:YES];
+    }
 }
 
 - (void)editDone
@@ -359,7 +349,7 @@
 
 -(void)onHistorySettingsButtonPressed
 {
-    OAHistorySettingsViewController* historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch];
+    OAHistorySettingsViewController* historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch editing:NO];
     [self dismissViewControllerAnimated:YES completion:nil];
     [OARootViewController.instance.navigationController pushViewController:historyViewController animated:YES];
 }

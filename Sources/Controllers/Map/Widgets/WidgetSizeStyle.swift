@@ -44,7 +44,7 @@ import Foundation
         switch self {
         case .small: 22
         case .medium: 33
-        case .large: 55
+        case .large: 50
         }
     }
     

@@ -318,7 +318,7 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
         {
             [formattedValue deleteCharactersInRange:NSMakeRange(formattedValue.length - 1, 1)];
         }
-        if ([formattedValue hasSuffix:@"."])
+        if ([formattedValue hasSuffix:@","] || [formattedValue hasSuffix:@"."])
             [formattedValue deleteCharactersInRange:NSMakeRange(formattedValue.length - 1, 1)];
     }
     [valueUnitArray addObject:formattedValue];

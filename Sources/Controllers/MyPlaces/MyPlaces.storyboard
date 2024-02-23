@@ -9,6 +9,28 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
+        <!--My Places Tab Bar View Controller-->
+        <scene sceneID="hST-i3-dBw">
+            <objects>
+                <tabBarController id="pFL-rP-JjP" customClass="OAMyPlacesTabBarViewController" sceneMemberID="viewController">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ybk-iZ-4Ie">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="tintColor" name="iconColorActive"/>
+                        <color key="selectedImageTintColor" name="iconColorActive"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="o7u-wO-gzA" kind="relationship" relationship="viewControllers" id="OcE-ny-Hd2"/>
+                        <segue destination="77n-Dz-gqh" kind="relationship" relationship="viewControllers" id="Qis-bF-hq5"/>
+                        <segue destination="Pg1-zp-xNx" kind="relationship" relationship="viewControllers" id="XZx-7g-Nyl"/>
+                        <segue destination="5lf-ib-SY3" kind="relationship" relationship="viewControllers" id="WSt-yO-vwE"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YDZ-w2-u08" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-642.38999999999999" y="-126.93333333333334"/>
+        </scene>
         <!--Travel guides-->
         <scene sceneID="H4P-Zr-3tv">
             <objects>
@@ -44,7 +66,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="oC1-Yt-9sM" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-749" y="605"/>
+            <point key="canvasLocation" x="971" y="730"/>
         </scene>
         <!--OSM Edits-->
         <scene sceneID="TNK-ML-Wew">
@@ -75,7 +97,6 @@
                                     <segment title="Notes"/>
                                 </segments>
                                 <connections>
-                                    <action selector="onSegmentChanged:" destination="rfa-sK-jEQ" eventType="valueChanged" id="c29-TQ-LzE"/>
                                     <action selector="onSegmentChanged:" destination="Pg1-zp-xNx" eventType="valueChanged" id="kmy-67-FwR"/>
                                 </connections>
                             </segmentedControl>
@@ -104,7 +125,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b2Q-rI-WY7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="21.739130434782609" y="604.6875"/>
+            <point key="canvasLocation" x="-70" y="730"/>
         </scene>
         <!--My Favorites-->
         <scene sceneID="Icp-hR-oHC">
@@ -187,121 +208,50 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJy-cP-WK8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="173.91304347826087" y="-500.22321428571428"/>
+            <point key="canvasLocation" x="-2346" y="730"/>
         </scene>
-        <!--Trips-->
-        <scene sceneID="F1F-kK-NRw">
+        <!--My Tracks New-->
+        <scene sceneID="qRA-WP-GOP">
             <objects>
-                <viewController id="rfa-sK-jEQ" customClass="OAGPXListViewController" sceneMemberID="viewController">
-                    <view key="view" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="PSJ-dc-387">
+                <viewController restorationIdentifier="TracksViewController" storyboardIdentifier="TracksViewController" id="77n-Dz-gqh" userLabel="My Tracks New" customClass="TracksViewController" customModule="OsmAnd_Maps" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="MuT-fW-w07">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" allowsSelectionDuringEditing="YES" allowsMultipleSelectionDuringEditing="YES" rowHeight="-1" estimatedRowHeight="48" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="7U9-0B-5ap">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="npH-mS-lH3">
+                                <rect key="frame" x="0.0" y="48" width="414" height="765"/>
                                 <color key="backgroundColor" name="viewBg"/>
                                 <color key="tintColor" name="iconColorActive"/>
                                 <color key="separatorColor" name="customSeparator"/>
+                                <connections>
+                                    <outlet property="dataSource" destination="77n-Dz-gqh" id="eAJ-a9-mcq"/>
+                                    <outlet property="delegate" destination="77n-Dz-gqh" id="8Xg-6O-K2L"/>
+                                </connections>
                             </tableView>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2av-hy-ktm">
-                                <rect key="frame" x="-4" y="426" width="414" height="42"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
-                                <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MmQ-pe-oej">
-                                        <rect key="frame" x="0.0" y="0.0" width="89" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="tintColor" name="iconColorActive"/>
-                                        <inset key="titleEdgeInsets" minX="0.0" minY="0.0" maxX="0.0" maxY="-6"/>
-                                        <state key="normal" image="ic_custom_export.png"/>
-                                        <connections>
-                                            <action selector="exportButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="chj-B7-0rC"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nI5-sn-XKQ">
-                                        <rect key="frame" x="107" y="0.0" width="90" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="tintColor" name="iconColorActive"/>
-                                        <state key="normal" image="ic_custom_map_pin_outlined.png"/>
-                                        <connections>
-                                            <action selector="showOnMapButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="n6T-gV-vRN"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qrJ-Zz-Tr0">
-                                        <rect key="frame" x="323" y="0.0" width="91" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxY="YES"/>
-                                        <color key="tintColor" name="iconColorActive"/>
-                                        <state key="normal" image="ic_custom_remove.png"/>
-                                        <connections>
-                                            <action selector="deleteButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="Okn-LR-dhG"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0to-r4-yDh">
-                                        <rect key="frame" x="214" y="0.0" width="90" height="44"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <color key="tintColor" name="iconColorActive"/>
-                                        <state key="normal" image="ic_custom_upload_to_openstreetmap_outlined.png"/>
-                                        <connections>
-                                            <action selector="uploadToOSMButtonClicked:" destination="rfa-sK-jEQ" eventType="touchUpInside" id="JeJ-eQ-bs7"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                                <color key="backgroundColor" name="groupBg"/>
-                            </view>
                         </subviews>
-                        <viewLayoutGuide key="safeArea" id="JhS-I6-wi0"/>
+                        <viewLayoutGuide key="safeArea" id="041-i2-uHy"/>
                         <color key="backgroundColor" name="viewBg"/>
                         <constraints>
-                            <constraint firstItem="7U9-0B-5ap" firstAttribute="top" secondItem="PSJ-dc-387" secondAttribute="top" id="3Tp-6G-U0l"/>
-                            <constraint firstItem="7U9-0B-5ap" firstAttribute="trailing" secondItem="PSJ-dc-387" secondAttribute="trailing" id="Bdn-Uk-zB3"/>
-                            <constraint firstAttribute="bottom" secondItem="7U9-0B-5ap" secondAttribute="bottom" id="Uyp-ws-tJY"/>
-                            <constraint firstItem="7U9-0B-5ap" firstAttribute="leading" secondItem="PSJ-dc-387" secondAttribute="leading" id="jzh-jl-hBq"/>
+                            <constraint firstItem="npH-mS-lH3" firstAttribute="leading" secondItem="MuT-fW-w07" secondAttribute="leading" id="loL-Cv-Gvs"/>
+                            <constraint firstItem="041-i2-uHy" firstAttribute="bottom" secondItem="npH-mS-lH3" secondAttribute="bottom" id="tNh-aa-VSa"/>
+                            <constraint firstItem="npH-mS-lH3" firstAttribute="top" secondItem="041-i2-uHy" secondAttribute="top" id="tQZ-7x-iuZ"/>
+                            <constraint firstAttribute="trailing" secondItem="npH-mS-lH3" secondAttribute="trailing" id="xBy-Nf-hUz"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Trips" image="ic_tabbar_trips.png" id="7Q3-ud-f60"/>
+                    <tabBarItem key="tabBarItem" title="Travel guides" image="ic_tabbar_trips.png" id="3Z5-lB-D9o"/>
                     <connections>
-                        <outlet property="deleteButton" destination="qrJ-Zz-Tr0" id="VG1-Vb-St2"/>
-                        <outlet property="editToolbarView" destination="2av-hy-ktm" id="F4d-E7-huq"/>
-                        <outlet property="exportButton" destination="MmQ-pe-oej" id="fcJ-VX-S9O"/>
-                        <outlet property="gpxTableView" destination="7U9-0B-5ap" id="7Ac-fP-Z6r"/>
-                        <outlet property="showOnMapButton" destination="nI5-sn-XKQ" id="qXy-wY-p2u"/>
-                        <outlet property="uploadToOSMButton" destination="0to-r4-yDh" id="7cF-Jy-gCF"/>
+                        <outlet property="tableView" destination="npH-mS-lH3" id="0dn-Dh-NsZ"/>
                     </connections>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="KmP-0y-Zhp" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3nt-sp-HhW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="876.81159420289862" y="-3.3482142857142856"/>
-        </scene>
-        <!--Favorites Tab Bar View Controller-->
-        <scene sceneID="hST-i3-dBw">
-            <objects>
-                <tabBarController id="pFL-rP-JjP" customClass="OAFavoritesTabBarViewController" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ybk-iZ-4Ie">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="tintColor" name="iconColorActive"/>
-                        <color key="selectedImageTintColor" name="iconColorActive"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="o7u-wO-gzA" kind="relationship" relationship="viewControllers" id="OcE-ny-Hd2"/>
-                        <segue destination="rfa-sK-jEQ" kind="relationship" relationship="viewControllers" id="IJb-N9-Klj"/>
-                        <segue destination="Pg1-zp-xNx" kind="relationship" relationship="viewControllers" id="XZx-7g-Nyl"/>
-                        <segue destination="5lf-ib-SY3" kind="relationship" relationship="viewControllers" id="WSt-yO-vwE"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YDZ-w2-u08" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-642.38999999999999" y="-126.93333333333334"/>
+            <point key="canvasLocation" x="-1238" y="730"/>
         </scene>
     </scenes>
     <resources>
         <image name="change_item_color.png" width="25" height="25"/>
         <image name="delete_items.png" width="25" height="25"/>
         <image name="export_items.png" width="25" height="25"/>
-        <image name="ic_custom_export.png" width="30" height="30"/>
-        <image name="ic_custom_map_pin_outlined.png" width="30" height="30"/>
-        <image name="ic_custom_remove.png" width="30" height="30"/>
-        <image name="ic_custom_upload_to_openstreetmap_outlined.png" width="30" height="30"/>
         <image name="ic_tabbar_favorites.png" width="31" height="28"/>
         <image name="ic_tabbar_osm_edits.png" width="31" height="28"/>
         <image name="ic_tabbar_travel" width="31" height="28"/>

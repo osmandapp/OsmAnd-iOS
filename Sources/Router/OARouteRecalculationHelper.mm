@@ -16,6 +16,8 @@
 #import "OARouteCalculationParams.h"
 #import "OARoutingHelperUtils.h"
 #import "Localization.h"
+#import "OAUtilities.h"
+#import "OARootViewController.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 

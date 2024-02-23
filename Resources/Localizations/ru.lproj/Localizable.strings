@@ -467,7 +467,7 @@
 "traffic_warning_speed_limit" = "Ограничение скорости";
 "traffic_warning_border_control" = "Пограничный контроль";
 "traffic_warning_stop" = "Знак остановки";
-"traffic_warning_calming" = "Снизьте скорость";
+"traffic_warning_calming" = "Traffic calming";
 "traffic_warning_pedestrian" = "Пешеходный переход";
 "traffic_warning_hazard" = "Опасность";
 "driving_region_japan" = "Япония";
@@ -692,7 +692,7 @@
 "sett_wunderlinq_ext_input" = "WunderLINQ";
 // Shared Strings
 "shared_string_apply" = "Применить";
-"show_traffic_warnings" = "Ограничения скорости";
+"show_traffic_warnings" = "Traffic warnings";
 "show_lanes" = "Полосы движения";
 "configure_map" = "Настройки карты";
 "int_seconds" = "сек";

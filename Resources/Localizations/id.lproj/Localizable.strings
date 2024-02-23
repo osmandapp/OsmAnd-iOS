@@ -2619,3 +2619,14 @@
 "rendering_value_sacScale_description" = "Klub Alpen Swiss";
 "rendering_value_caiScale_description" = "Club Alpino Italiano (Klub Alpen Italia)";
 "shared_string_cache" = "Tembolok";
+"shared_string_author" = "Pembuat";
+"shared_string_keywords" = "Kata kunci";
+"delete_all_items" = "Hapus semua item";
+"add_row" = "Tambahkan baris";
+"shared_string_delete_item" = "Hapus item";
+"shared_string_trash" = "Sampah";
+"shared_string_license" = "Lisensi";
+"shared_string_link" = "Tautan";
+"shared_string_delete_immediately" = "Hapus segera";
+"restore_from_trash" = "Pulihkan dari sampah";
+"trash_is_empty" = "Sampah sudah kosong";

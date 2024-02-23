@@ -351,12 +351,24 @@
 - (NSString *) getTrackDescr:(NSString *)filePath appearanceInfo:(OAGpxAppearanceInfo *)appearanceInfo
 {
     NSString *folder = @"";
-    NSArray<NSString *> *pathComponents = filePath.pathComponents;
-    NSString *parent = pathComponents.count > 1 ? pathComponents[pathComponents.count - 2] : @"";
-    if ([[filePath stringByDeletingLastPathComponent] isEqualToString:OsmAndApp.instance.gpxPath])
-        parent = OALocalizedString(@"shared_string_gpx_tracks");
-    if (parent.length > 0)
-        folder = [OAUtilities capitalizeFirstLetter:parent];
+    NSString *shortPath = [filePath stringByReplacingOccurrencesOfString:OsmAndApp.instance.gpxPath withString:@""];
+    shortPath = [shortPath stringByDeletingLastPathComponent];
+    if ([shortPath hasPrefix:@"/"])
+        shortPath = [shortPath substringFromIndex:1];
+    folder = shortPath.length == 0 ? OALocalizedString(@"shared_string_gpx_tracks") : shortPath;
+
+    NSArray<NSString *> *components = [shortPath pathComponents];
+    if (components.count == 1)
+    {
+        folder = [OAUtilities capitalizeFirstLetter:components[0]];
+    }
+    else
+    {
+        for (NSString *component in components)
+        {
+            folder = [folder stringByAppendingPathComponent:[OAUtilities capitalizeFirstLetter:component]];
+        }
+    }
     
 //    if (exportMode) {
 //        GpxDataItem dataItem = getDataItem(file, gpxDataItemCallback);

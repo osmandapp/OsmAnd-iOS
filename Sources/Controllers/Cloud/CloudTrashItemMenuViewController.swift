@@ -118,7 +118,7 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
             cell.leftIconVisibility(false)
             cell.descriptionVisibility(false)
             cell.titleLabel.text = item.title
-            cell.titleLabel.textColor = item.obj(forKey: "titleColor") as? UIColor ?? UIColor.black
+            cell.titleLabel.textColor = item.obj(forKey: "titleColor") as? UIColor ?? UIColor.textColorPrimary
             cell.titleLabel.accessibilityLabel = item.title
             cell.rightIconView.image = UIImage.templateImageNamed(item.secondaryIconName)
             cell.rightIconView.tintColor = item.secondaryIconTintColor

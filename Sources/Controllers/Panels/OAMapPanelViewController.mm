@@ -66,7 +66,6 @@
 #import "OAGPXWptViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAUtilities.h"
-#import "OAGPXListViewController.h"
 #import "OAFavoriteListViewController.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryItem.h"
@@ -101,6 +100,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
+#import "OAGPXMutableDocument.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -1439,6 +1439,7 @@ typedef enum
     if (targetPoint.type == OATargetGPX)
     {
         [self openTargetViewWithGPX:targetPoint.targetObj
+                              items:nil
                            routeKey:nil
                        trackHudMode:EOATrackMenuHudMode
                               state:[OATrackMenuViewControllerState withPinLocation:targetPoint.location
@@ -1472,6 +1473,7 @@ typedef enum
                                                                                       openedFromMap:YES];
             state.trackIcon = targetPoint.icon;
             [weakSelf openTargetViewWithGPX:gpx
+                                      items:nil
                                routeKey:targetPoint.targetObj
                            trackHudMode:EOATrackMenuHudMode
                                   state:state];
@@ -2680,6 +2682,11 @@ typedef enum
     }];
 }
 
+- (void)openRecordingTrackTargetView
+{
+    [self openTargetViewWithGPX:nil];
+}
+
 - (void)openTargetViewWithGPX:(OAGPX *)item
 {
     [self openTargetViewWithGPX:item
@@ -2704,10 +2711,19 @@ typedef enum
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 {
-    [self openTargetViewWithGPX:item routeKey:nil trackHudMode:trackHudMode state:state];
+    [self openTargetViewWithGPX:item items:nil routeKey:nil trackHudMode:trackHudMode state:state];
 }
 
 - (void)openTargetViewWithGPX:(OAGPX *)item
+                        items:(NSArray<OAGPX *> *)items
+                 trackHudMode:(EOATrackHudMode)trackHudMode
+                        state:(OATrackMenuViewControllerState *)state;
+{
+    [self openTargetViewWithGPX:item items:items routeKey:nil trackHudMode:trackHudMode state:state];
+}
+
+- (void)openTargetViewWithGPX:(OAGPX *)item
+                        items:(NSArray<OAGPX *> *)items
                      routeKey:(OARouteKey *)routeKey
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
@@ -2716,15 +2732,16 @@ typedef enum
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             state.pinLocation = item.bounds.center;
-            [self doShowGpxItem:item routeKey:routeKey state:state trackHudMode:trackHudMode];
+            [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
         }];
         return;
     }
-    [self doShowGpxItem:item routeKey:routeKey state:state trackHudMode:trackHudMode];
+    [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
 }
 
 
 - (void)doShowGpxItem:(OAGPX *)item
+                items:(NSArray<OAGPX *> *)items
              routeKey:(OARouteKey *)routeKey
                 state:(OATrackMenuViewControllerState *)state
          trackHudMode:(EOATrackHudMode)trackHudMode
@@ -2789,8 +2806,14 @@ typedef enum
     {
         case EOATrackAppearanceHudMode:
         {
-            trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item
-                                                                                               state:state];
+            if (items)
+            {
+                trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item tracks:items state:state];
+            }
+            else
+            {
+                trackMenuHudViewController = [[OATrackMenuAppearanceHudViewController alloc] initWithGpx:item state:state];
+            }
             break;
         }
         default:
@@ -2986,6 +3009,20 @@ typedef enum
     [self showTargetPointMenu:NO showFullMenu:NO onComplete:^{
         _activeTargetActive = YES;
     }];
+}
+
+- (void) openTargetViewWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
+{
+    OAGPXDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
+    if (doc)
+    {
+        OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
+            ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
+            : [doc getAnalysis:0];
+        OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
+        state.openedFromTracksList = true;
+        [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
+    }
 }
 
 - (void) openTargetViewWithRouteDetailsGraph:(OAGPXDocument *)gpx

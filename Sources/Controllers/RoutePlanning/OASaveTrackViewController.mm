@@ -42,7 +42,7 @@
     BOOL _duplicate;
     BOOL _simplifiedTrack;
     BOOL _showOnMap;
-    
+
     NSString *_inputFieldError;
     NSInteger _selectedFolderIndex;
     NSIndexPath *_selectedFolderIndexPath;
@@ -76,7 +76,7 @@
 
 - (void) viewDidLoad
 {
-    [super viewDidLoad];
+        [super viewDidLoad];
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -181,7 +181,7 @@
 
 - (void) updateAllFoldersList
 {
-    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
+    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddRootTracksFolder:YES];
 }
 
 - (void) generateData

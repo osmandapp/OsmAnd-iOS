@@ -588,7 +588,7 @@
 "gpx_overwrite" = "Trosysgrifo";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "Nid yw OsmAnd GPX wedi\'i ffurfio\'n dda, cysylltaâ\'r tîm cymorth i ymchwilio ymhellach.";
-"tracks_on_map" = "Traciau sy\'n cael eu dangos";
+"tracks_on_map" = "Traciau sy'n cael eu dangos";
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";

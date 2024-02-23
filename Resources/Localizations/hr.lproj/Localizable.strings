@@ -86,8 +86,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Izlazak sunca: %@
-\nZalazak sunca: %@";
+"day_night_info_description" = "Izlazak sunca: %@\nZalazak sunca: %@";
 "day_night_info" = "Informacije dan/noć";
 "daynight_mode_auto" = "Izlazak/zalazak sunca";
 "route_simulation" = "Route simulation";

@@ -24,9 +24,12 @@
 + (NSArray<OAPOI *> *) sortPOI:(NSArray<OAPOI *> *)array lat:(double)lat lon:(double)lon;
 
 + (CLLocation *) getProjection:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation;
++ (double) getProjectionCoeff:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation;
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation;
 
-+ (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing;
++ (CLLocationDirection) normalizeDegrees360:(CLLocationDirection)bearing;
++ (double) unifyRotationDiff:(double)rotate targetRotate:(double)targetRotate;
+
 + (BOOL) rightSide:(double)lat lon:(double)lon aLat:(double)aLat aLon:(double)aLon bLat:(double)bLat bLon:(double)bLon;
 
 + (CLLocation *) calculateMidPoint:(CLLocation *) s1 s2:(CLLocation *) s2;

@@ -44,7 +44,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     [super viewDidLoad];
     
     [self loadAndParseJson];
-    [self loadAndProcessXML];
+    [self loadAndParseJsonForSiteArticles];
 }
 
 #pragma mark - Base UI
@@ -93,7 +93,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     for (PopularArticle *article in _mostViewedArticles)
     {
-        NSString *title = article.title;
+        NSString *title = [_helpDataManager getArticleNameFrom:article.url];
         NSString *url = article.url;
         OATableRowData *articleRow = [popularArticlesSection createNewRow];
         [articleRow setCellType:[OASimpleTableViewCell getCellIdentifier]];
@@ -127,15 +127,15 @@ static NSString * const kLinkExternalType = @"ext_link";
     troubleshootingSection.headerText = OALocalizedString(@"troubleshooting");
     
     NSDictionary *specialIcons = @{
-        @"troubleshooting/setup/": @"ic_custom_device_download",
-        @"troubleshooting/maps-data/": @"ic_custom_overlay_map",
-        @"troubleshooting/navigation/": @"ic_custom_navigation",
-        @"troubleshooting/track-recording-issues/": @"ic_custom_track_recordable"
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"setup"]: @"ic_custom_device_download",
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"maps-data"]: @"ic_custom_overlay_map",
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"navigation"]: @"ic_custom_navigation",
+        [NSString stringWithFormat:@"%@%@", kTroubleshootingBaseURL, @"track-recording-issues"]: @"ic_custom_track_recordable"
     };
     
     for (ArticleNode *childArticle in _troubleshootingChildArticles)
     {
-        if ([childArticle.url isEqualToString:@"troubleshooting/android_auto/"])
+        if ([childArticle.url isEqualToString:@"https://osmand.net/docs/user/troubleshooting/android_auto"])
             continue;
         
         NSString *title = [_helpDataManager getArticleNameFrom:childArticle.url];
@@ -143,10 +143,9 @@ static NSString * const kLinkExternalType = @"ext_link";
         [row setCellType:[OASimpleTableViewCell getCellIdentifier]];
         [row setKey:@"troubleshooting"];
         [row setTitle:title];
-        NSString *fullURL = [kDocsBaseURL stringByAppendingString:childArticle.url];
         NSString *iconName = specialIcons[childArticle.url] ?: @"ic_custom_book_info";
         [row setIconName:iconName];
-        [row setObj:fullURL forKey:@"url"];
+        [row setObj:childArticle.url forKey:@"url"];
         [row setObj:kLinkInternalType forKey:@"linkType"];
     }
     
@@ -254,14 +253,14 @@ static NSString * const kLinkExternalType = @"ext_link";
     }];
 }
 
-- (void)loadAndProcessXML
+- (void)loadAndParseJsonForSiteArticles
 {
-    [_helpDataManager loadAndProcessSitemapWithCompletion:^(NSArray *articles, NSError *error) {
+    [_helpDataManager loadAndParseJsonFrom:kPopularArticlesAndTelegramChats for:HelperDataItemsSiteArticles completion:^(NSArray *articles, NSError *error) {
         if (error)
         {
             NSLog(@"Error loading articles: %@", error.localizedDescription);
-        }
-        else
+        } 
+        else if (articles)
         {
             _parsedArticles = articles;
             [self generateData];

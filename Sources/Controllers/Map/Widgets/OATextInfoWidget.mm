@@ -131,7 +131,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
     verticalStackView.axis = UILayoutConstraintAxisVertical;
     verticalStackView.alignment = UIStackViewAlignmentFill;
-    verticalStackView.spacing = 2;
+    verticalStackView.spacing = 4;
     verticalStackView.distribution = UIStackViewDistributionEqualSpacing;
     [self addSubview:verticalStackView];
     
@@ -532,7 +532,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     
     CGFloat topBottomPadding = [WidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
     _verticalStackViewSimpleWidgetTopConstraint.constant = topBottomPadding;
-    _verticalStackViewSimpleWidgetBottomConstraint.constant = -topBottomPadding;
+    _verticalStackViewSimpleWidgetBottomConstraint.constant = -(topBottomPadding - 2);
             
     BOOL isVisibleIcon = false;
     if (_appMode && _hideIconPref)

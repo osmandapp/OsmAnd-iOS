@@ -82,7 +82,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     return self;
 }
 
-- (NSDictionary<NSAttributedStringKey, id> *)gettAttributes:(CGFloat)lineHeight
+- (NSDictionary<NSAttributedStringKey, id> *)getAttributes:(CGFloat)lineHeight
                                                       label:(UILabel *)label
                                             widgetSizeStyle:(WidgetSizeStyle)widgetSizeStyle
                                             isValue:(BOOL)isValue
@@ -524,9 +524,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightSemibold];
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
-    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self gettAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
                                       
-    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self gettAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
     
     CGFloat topBottomPadding = [WidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
@@ -562,7 +562,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
             self.titleOrEmptyLabel.text = @"";
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
-            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self gettAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
         }
     }
     

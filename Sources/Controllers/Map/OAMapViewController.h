@@ -120,7 +120,7 @@
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName;
-- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName;
+- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName;
 
 - (BOOL) canZoomIn;
 - (void) animatedZoomIn;

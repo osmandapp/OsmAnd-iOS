@@ -205,7 +205,8 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
     
     private func getArticlePropertyName(from url: String) -> String {
         var propertyName = url.lowercased().replacingOccurrences(of: kOsmAndUserBaseURL, with: "")
-        propertyName = propertyName.replacingOccurrences(of: "-", with: "_").replacingOccurrences(of: "/", with: "_").replacingOccurrences(of: " ", with: "_")
+        let charactersToReplace = CharacterSet(charactersIn: "-/ ")
+        propertyName = propertyName.components(separatedBy: charactersToReplace).joined(separator: "_")
         guard !propertyName.isEmpty, propertyName.last == "_" else { return propertyName }
         propertyName.removeLast()
         return propertyName

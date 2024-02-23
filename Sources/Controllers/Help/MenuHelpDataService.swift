@@ -136,7 +136,7 @@ final class MenuHelpDataService: NSObject, XMLParserDelegate {
                         for articleDict in articlesData {
                             if let title = articleDict["label"] as? String,
                                let level = articleDict["level"] as? Int,
-                               let url  = (articleDict["url"] as? String) ?? (level > 1 ? urlDocsPrefix + title : nil),
+                               let url = (articleDict["url"] as? String) ?? (level > 1 ? urlDocsPrefix + title : nil),
                                url.hasPrefix(urlDocsPrefix),
                                let type = articleDict["type"] as? String {
                                 let articleNode = ArticleNode(title: title, url: self.urlPrefix + url, level: level, type: type)

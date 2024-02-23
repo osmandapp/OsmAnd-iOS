@@ -50,7 +50,6 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAMapRendererView *_mapView;
-    BOOL _nightMode;
     BOOL _cachedVisibiliy;
     
     OARepositoryResourceItem *_resourceItem;
@@ -252,8 +251,7 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _nightMode = OAAppSettings.sharedManager.nightMode;
-        self.overrideUserInterfaceStyle = _nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
+        self.overrideUserInterfaceStyle = OAAppSettings.sharedManager.nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
         [self updateColors];
         [self updateWidgetInformation];
     });

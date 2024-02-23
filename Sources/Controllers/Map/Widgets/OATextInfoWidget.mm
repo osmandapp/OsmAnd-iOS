@@ -249,7 +249,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     _contentUnitStackViewSimpleWidget.translatesAutoresizingMaskIntoConstraints = NO;
     _contentUnitStackViewSimpleWidget.axis = UILayoutConstraintAxisVertical;
     _contentUnitStackViewSimpleWidget.alignment = UIStackViewAlignmentFill;
-    _contentUnitStackViewSimpleWidget.distribution = UIStackViewDistributionEqualCentering;
+    _contentUnitStackViewSimpleWidget.spacing = 2;
+    _contentUnitStackViewSimpleWidget.distribution = UIStackViewDistributionEqualSpacing;
     [valueUnitOrEmptyView addSubview:_contentUnitStackViewSimpleWidget];
     
     self.titleOrEmptyLabel = [UILabel new];
@@ -275,11 +276,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     ]];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_contentUnitStackViewSimpleWidget.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
+        [_contentUnitStackViewSimpleWidget.centerYAnchor constraintEqualToAnchor:valueUnitOrEmptyView.centerYAnchor],
         [_contentUnitStackViewSimpleWidget.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
         [_contentUnitStackViewSimpleWidget.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
-        [_contentUnitStackViewSimpleWidget.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
-        [_contentUnitStackViewSimpleWidget.heightAnchor constraintGreaterThanOrEqualToConstant:30],
     ]];
     _unitOrEmptyLabelWidthConstraint = [_contentUnitStackViewSimpleWidget.widthAnchor constraintGreaterThanOrEqualToConstant:15];
     _unitOrEmptyLabelWidthConstraint.active = YES;
@@ -545,8 +544,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     if (_subtext.length == 0)
     {
         self.unitView.hidden = YES;
-        self.unitOrEmptyLabel.attributedText = nil;
-        self.titleOrEmptyLabel.attributedText = nil;
+        self.unitOrEmptyLabel.text = @"";
+        self.titleOrEmptyLabel.text = @"";
         _unitOrEmptyLabelWidthConstraint.constant = 0;
     }
     else
@@ -555,13 +554,13 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         if (self.widgetSizeStyle == WidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
-            self.titleOrEmptyLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self gettAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.titleOrEmptyLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
-            self.unitOrEmptyLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self gettAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitOrEmptyLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.titleOrEmptyLabel.text = [_contentTitle upperCase];
+            self.unitOrEmptyLabel.text = [_subtext upperCase];
         }
         else
         {
-            self.titleOrEmptyLabel.attributedText = nil;
-            self.unitOrEmptyLabel.attributedText = nil;
+            self.titleOrEmptyLabel.text = @"";
+            self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
             self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self gettAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
         }

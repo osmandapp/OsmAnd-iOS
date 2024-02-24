@@ -1695,7 +1695,7 @@
 "importing_from" = "Import de données à partir de %@";
 "shared_string_rendering_style" = "Style de rendu";
 "select_data_to_import" = "Sélectionnez les données à importer.";
-"shared_string_import" = "Importer le profil";
+"shared_string_import" = "Importer";
 "shared_string_max" = "Max";
 "shared_string_min" = "Min";
 "road_max_speed_descr" = "Définit la vitesse maximale pour toutes les routes sur le trajet. Cela diminuera la priorité des routes dont la vitesse autorisée est supérieure à ce maximum.";

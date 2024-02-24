@@ -90,7 +90,7 @@
 "closing_changeset" = "Seînchide modificarea…";
 "subcategories" = "Subcategorii";
 "map_downloaded" = "Hartă descărcată";
-"shared_string_update" = "Actualizare";
+"shared_string_update" = "Actualizează";
 "select_city" = "Selectați orașul";
 "tab_title_basic" = "De bază";
 "osb_comment_dialog_message" = "Mesaj";
@@ -169,7 +169,7 @@
 "show_lanes" = "Benzi";
 "traffic_warning_calming" = "Calmarea traficului";
 "save_filter" = "Salvează filtru";
-"info_button" = "Info";
+"info_button" = "Informații";
 "map_viewing_item" = "Vizualizare hartă";
 "first_usage_item" = "Prima utilizare";
 "first_time_continue" = "Apoi";
@@ -891,7 +891,7 @@
 "show_compass_ruler" = "Afișați rigla busolei";
 "plan_route_create_new_route" = "Crează o nouă rută";
 "rearrange_categories" = "Rearanjare categorii";
-"shared_string_disable" = "Dezactivați";
+"shared_string_disable" = "Dezactivează";
 "osmand_settings" = "Setări OsmAnd";
 "none_point_error" = "Adăugați cel puțin un punct.";
 "access_default_color" = "Culoare implicită";
@@ -1430,7 +1430,7 @@
 "osmand_live_donations_enter_email" = "Introduceți adresa dumneavoastră de e-mail";
 "osmand_live_donation_switch_descr" = "O parte din donația dumneavoastră este distribuită între utilizatorii OSM care trimit modificări la OpenStreetMap. Costul abonamentului rămâne același";
 "osmand_live_wifi_only" = "Actualizare numai prin WiFi";
-"update_frequency" = "Frecvența de actualizare";
+"update_frequency" = "Frecvență de actualizare";
 "osmand_live_server_date" = "Ultima actualizare a serverului: %@";
 "osmand_live_reports" = "Rapoarte";
 "osmand_live_not_updated" = "Neactualizat încă";
@@ -1616,7 +1616,7 @@
 "open_url" = "Deschideți pagina în browser";
 "language_short" = "Limba";
 "select_language" = "Selectați limba";
-"shared_string_hillshade" = "Umbra dealului";
+"shared_string_hillshade" = "Relief umbrit";
 "res_installing" = "Instalare…";
 "enter_fav_name" = "Introduceți numele preferat";
 "enter_description" = "Introduceți descrierea";
@@ -1982,7 +1982,7 @@
 "hide_gpx" = "Ascundeți traseul";
 "show_gpx" = "Trasee";
 "show_hide_gpx" = "Afișați/ascundeți track-urile";
-"quick_action_navigation_voice_off" = "Dezactivați Vocea";
+"quick_action_navigation_voice_off" = "Activează Voce";
 "quick_action_navigation_voice_on" = "Dezactivare voce";
 "quick_action_switch_day_mode" = "Mod zi";
 "toggle_day_night" = "Comutarea modului zi/noapte";
@@ -2538,7 +2538,7 @@
 "shared_string_recorded" = "Înregistrat";
 "backup_pause_all" = "Pauză la toate";
 "shared_string_changed" = "Modificat";
-"shared_string_refresh" = "Reîmprospătare";
+"shared_string_refresh" = "Reîmprospătează";
 "upload_local_version" = "Încărcă versiunea locală";
 "shared_string_logout" = "Deconectează-te";
 "are_you_sure" = "Ești sigur\?";
@@ -2867,8 +2867,8 @@
 "perform_oauth_authorization" = "Conectați-vă folosind OAuth";
 "altitude_widget_desc" = "Arată înălțimea peste nivel mării a geolocației curente.";
 "test_heightmap" = "Harta înălțimii de testare";
-"disable_vertex_hillshade_3d" = "Dezactivare umbră vertexuri în 3D";
-"generate_hillshade_from_3d_maps" = "Generarea de hărți raster hillshade din hărți 3D";
+"disable_vertex_hillshade_3d" = "Dezactivare vertexuri relief umbrit în 3D";
+"generate_hillshade_from_3d_maps" = "Generare de hărți raster cu relief umbrit, din hărți 3D";
 "map_widget_altitude_current_location" = "Altitudine: locația curentă";
 "map_widget_altitude_map_center" = "Elevație: centrul hărții";
 "activity_type_racing_name" = "Cursă";

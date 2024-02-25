@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     _selectedFolderIndex = kAllFoldersIndex;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
-    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
+    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddRootTracksFolder:YES];
     [self generateData];
 }
 

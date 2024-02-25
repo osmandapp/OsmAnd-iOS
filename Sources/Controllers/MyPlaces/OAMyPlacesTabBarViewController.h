@@ -1,5 +1,5 @@
 //
-//  OAFavoritesTabBarViewController.h
+//  OAMyPlacesTabBarViewController.h
 //  OsmAnd
 //
 //  Created by Paul on 4/16/19.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface OAFavoritesTabBarViewController : UITabBarController
+@interface OAMyPlacesTabBarViewController : UITabBarController
 
 @end
 

@@ -867,4 +867,25 @@ extension String {
     let range = start..<end
     return String(self[range])
   }
+    
+    func appendingPathComponent(_ str: String) -> String {
+        (self as NSString).appendingPathComponent(str)
+    }
+    
+    func appendingPathExtension(_ str: String) -> String {
+        (self as NSString).appendingPathExtension(str) ?? self
+    }
+    
+    func lastPathComponent() -> String {
+        (self as NSString).lastPathComponent
+    }
+    
+    func deletingPathExtension() -> String {
+        (self as NSString).deletingPathExtension
+    }
+    
+    func deletingLastPathComponent() -> String {
+        (self as NSString).deletingLastPathComponent
+    }
+    
 }

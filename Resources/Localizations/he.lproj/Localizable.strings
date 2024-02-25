@@ -588,8 +588,8 @@
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "ה־GPX של OsmAnd אינו מסודר כראוי, נא ליצור קשר עם צוות התמיכה כדי להעמיק את המחקר.";
-"tracks_on_map" = "עקבות מוצגים";
-"gpx_export_title" = "Export track";
+"tracks_on_map" = "גלוי במפה";
+"gpx_export_title" = "ייצוא מסלול";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";

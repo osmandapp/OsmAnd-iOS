@@ -35,6 +35,7 @@
 #import "OAShareMenuActivity.h"
 #import "OAPOI.h"
 #import "OAWikiMenuViewController.h"
+#import "OAGPXWptViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -1519,7 +1520,7 @@ static const NSInteger _buttonsCount = 4;
         if (hasDownloadControls && needsSecondRow)
             controlButtonsHeight += kButtonsViewHeight;
         
-        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin && !hasDownloadControls && ![self.customController isKindOfClass:OAMapDownloadController.class] && ![self.customController isKindOfClass:OAWikiMenuViewController.class])
+        if (controlButtonsHeight > 0 && !_showFull && !_showFullScreen && !self.customController.hasBottomToolbar && self.customController.needsAdditionalBottomMargin && !hasDownloadControls && ![self.customController isKindOfClass:OAMapDownloadController.class] && ![self.customController isKindOfClass:OAWikiMenuViewController.class] && ![self.customController isKindOfClass:OAGPXWptViewController.class])
             controlButtonsHeight += OAUtilities.getBottomMargin;
     }
     

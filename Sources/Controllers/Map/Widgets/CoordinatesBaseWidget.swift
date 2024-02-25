@@ -209,9 +209,9 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     override func updateColors(_ textState: OATextState) {
         super.updateColors(textState)
 
-        backgroundColor = isNightMode() ? colorFromRGB(Int(nav_bar_night)) : .white
+        backgroundColor = isNightMode() ? .widgetBg.dark : .widgetBg.light
 
-        divider.backgroundColor = isNightMode() ? colorFromRGB(Int(divider_color_dark)) : colorFromRGB(Int(divider_color_light))
+        divider.backgroundColor = isNightMode() ? .widgetSeparator.dark : .widgetSeparator.light
 
         let textColor: UIColor = isNightMode() ? .white : .black
         firstCoordinate.textColor = textColor

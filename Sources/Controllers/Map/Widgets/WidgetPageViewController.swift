@@ -14,7 +14,10 @@ final class WidgetPageViewController: UIViewController {
     // At the moment, it's for the top panel and bottom panel
     var isMultipleWidgetsInRow = false
     var simpleWidgetViews: [[OABaseWidgetView]] = []
-    var stackView: UIStackView!
+    var isHiddenPageControl = true
+    
+    private var stackView: UIStackView!
+    private var bottomStackViewConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,7 +27,7 @@ final class WidgetPageViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = 0
-        
+
         if isMultipleWidgetsInRow {
             stackView.distribution = .equalSpacing
             for (index, items) in simpleWidgetViews.enumerated() {
@@ -43,7 +46,7 @@ final class WidgetPageViewController: UIViewController {
                         stackView.addArrangedSubview(widget)
                     }
                 }
-                if index != simpleWidgetViews.count - 1 {
+                if index != simpleWidgetViews.count {
                     stackView.addSeparators(at: [stackView.subviews.count])
                 }
             }
@@ -65,9 +68,14 @@ final class WidgetPageViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
+        bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        if isMultipleWidgetsInRow {
+            bottomStackViewConstraint.isActive = true
+        } else {
+            bottomStackViewConstraint.isActive = isHiddenPageControl
+        }
     }
     
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {
@@ -153,17 +161,16 @@ extension WidgetPageViewController {
         updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
     }
     
-    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> [widgetView] -> [horizontalSeparatorView] -> ... [widgetView]
+    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> ... [widgetView] -> [horizontalSeparatorView]
     private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
         guard views.count >= 2 else { return }
         
-        for i in 1..<views.count - 1 where !i.isMultiple(of: 2) {
+        for i in 1..<views.count where !i.isMultiple(of: 2) {
             let horizontalSeparatorView = views[i]
             horizontalSeparatorView.isHidden = views[i - 1].isHidden
             if !horizontalSeparatorView.isHidden {
                 // update color for horizontal separator
-                let traitCollection = UITraitCollection(userInterfaceStyle: OAAppSettings.sharedManager().nightMode ? .dark : .light)
-                horizontalSeparatorView.backgroundColor = .widgetSeparator.resolvedColor(with: traitCollection)
+                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light
             }
         }
     }

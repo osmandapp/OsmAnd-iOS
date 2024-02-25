@@ -9,7 +9,13 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAGPXDocument, OATrkSegment, OARouteCalculationResult, OAGPX, OAGPXTrackAnalysis, OAPOI;
+@class OAGPXDocument, OAGPXMutableDocument, OATrkSegment, OARouteCalculationResult, OAGPX, OAGPXTrackAnalysis, OAPOI;
+
+@protocol OATrackSavingHelperUpdatableDelegate <NSObject>
+
+- (void) onNeedUpdateHostData;
+
+@end
 
 @interface OAGpxFileInfo : NSObject
 
@@ -47,6 +53,22 @@
                                        joinSegments:(BOOL)joinSegments;
 
 + (OAPOI *)checkAndSearchNearestCity:(OAGPXTrackAnalysis *)analysis;
+
+- (void) openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate;
+- (void) copyGPXToNewFolder:(NSString *)newFolderName
+           renameToNewName:(NSString *)newFileName
+        deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
+                       gpx:(OAGPX *)gpx;
+- (void) copyGPXToNewFolder:(NSString *)newFolderName
+           renameToNewName:(NSString *)newFileName
+        deleteOriginalFile:(BOOL)deleteOriginalFile
+                 openTrack:(BOOL)openTrack
+                       gpx:(OAGPX *)gpx
+                        doc:(OAGPXDocument *)doc;
+
+- (void) renameTrack:(OAGPX *)gpx newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
+- (void) renameTrack:(OAGPX *)gpx doc:(OAGPXMutableDocument *)doc newName:(NSString *)newName hostVC:(UIViewController*)hostVC;
 
 @end
 

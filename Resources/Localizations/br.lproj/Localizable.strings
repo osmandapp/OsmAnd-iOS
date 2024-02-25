@@ -1,7 +1,5 @@
 "OsmAnd Maps" = "OsmAnd Maps";
-
 "download_depth_countours" = "Nautical depth contours";
-
 "day_short" = "D";
 "week_short" = "Wk";
 "weeks_short" = "Wks";
@@ -22,23 +20,19 @@
 "years_2_4" = "Years";
 "years_5" = "Years";
 "months_3" = "Three months";
-
 "price_free" = "Free";
-
 "get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
-
 "mapillary_image" = "Mapillary image";
 "shared_string_milliradians" = "Milliradians";
 "angular_units" = "Angular measurement units";
 "angular_units_descr" = "Change azimuth measurement units.";
 "allow_3d" = "Allow 2.5D view";
 "allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
-
 "access_intermediate_arrival_time" = "Intermediate arrival time";
 "map_widget_intermediate_time" = "Intermediate time";
 "shared_string_previous" = "Previous";
@@ -48,13 +42,11 @@
 "transport_nearby_routes_within" = "Trehentadoù e-kichen";
 "transport_nearby_routes" = "NEPELL";
 "shared_string_control_stop" = "Stop";
-
 "cancel_navigation" = "Stop navigation";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "Sort door-to-door";
 "switch_start_finish" = "Reverse starting point & destination";
 "clear_all_intermediates" = "Clear all intermediate points";
-
 "shared_string_options" = "Options";
 "new_destination_point_dialog" = "You have already set a destination";
 "replace_destination_point" = "Replace the destination";
@@ -66,11 +58,9 @@
 "first_intermediate_dest_description" = "Ouzhpennañ a ra an arsav kentañ war an hent";
 "add_as_last_destination_point" = "Add as last intermediate destination";
 "last_intermediate_dest_description" = "Ouzhpenn a ra an arsav diwezhañ war an hent";
-
 "start_point" = "Start";
 "altitude" = "Altitude";
 "shared_string_speed" = "Speed";
-
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "Search";
 "address_search_desc" = "Address search";
@@ -79,7 +69,6 @@
 "search_radius_proximity" = "Within";
 "poi" = "POI";
 "search_more" = "Search more…";
-
 "day_off_label" = "off";
 "open_from" = "Open from";
 "open_till" = "Open till";
@@ -87,7 +76,6 @@
 "will_open_at" = "Will open at";
 "will_open_on" = "Will open on";
 "will_open_tomorrow_at" = "Will open tomorrow at";
-
 "error_avoid_specific_road" = "No bypass found";
 "road_blocked" = "Blocked road";
 "starting_point" = "Starting point";
@@ -101,16 +89,13 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-
 "day_night_info_description" = "Sunrise: %@\nSunset: %@";
 "day_night_info" = "Day/night info";
 "daynight_mode_auto" = "Sunrise/sunset";
-
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Auto-center map view in use.";
 "unknown_location" = "Position not yet known";
 "animate_routing_route_not_calculated" = "Please calculate the route first";
-
 "simulation_real_mode_desc" = "• On straight road sections, speed will be approximate to the maximum allowed speed.\n• At intersections, the simulation will slow down.\n• Extra penalties will be applied on traffic signals, stop signs, etc.";
 "simulation_real_mode_title" = "Realistic simulation";
 "simulation_constant_mode_desc" = "The simulation will be performed with constant selected speed.";
@@ -118,7 +103,6 @@
 "simulation_preview_mode_desc" = "The speed of the simulation will be maximum on straight sections and slow down only at intersections.";
 "simulation_preview_mode_title" = "Fast preview mode";
 "speed_mode" = "Speed mode";
-
 "settings_preset" = "Default profile";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications_title" = "Dialogs and notifications";
@@ -168,7 +152,6 @@
 "reset_plugin_to_default" = "Reset plugin settings to default";
 "save_heading" = "Include heading";
 "save_heading_descr" = "Save heading information for each recorded point";
-
 "map_widget_magnetic_bearing" = "Magnetic bearing";
 "map_widget_bearing" = "Relative bearing";
 "map_widget_transparent" = "Transparent widgets";
@@ -196,7 +179,6 @@
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
 "map_widget_rendering_fps" = "Map rendering FPS";
-
 "shared_string_collapse" = "Collapse";
 "shared_string_topbar" = "Top bar";
 "shared_string_widgets" = "Widgets";
@@ -210,14 +192,11 @@
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
-
 "shared_string_last_used" = "Last used";
-
 "carplay_available_in_sub_plans" = "Purchase OsmAnd Pro or Maps+ to use OsmAnd with CarPlay.";
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
-
 "show_traffic_warnings" = "Traffic warnings";
 "show_pedestrian_warnings" = "Pedestrian crosswalks";
 "show_cameras" = "Speed cameras";
@@ -231,7 +210,6 @@
 "speak_poi" = "Nearby POI";
 "speak_pedestrian" = "Pedestrian crosswalks";
 "show_tunnels" = "Tunnels";
-
 "tts_title" = "TTS";
 "shared_string_recorded" = "Recorded";
 
@@ -263,7 +241,6 @@
 "arrival_distance_factor_normally" = "Normal";
 "arrival_distance_factor_late" = "Late";
 "arrival_distance_factor_at_last" = "In the last meters";
-
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "Fastest route";
 "connect_rp" = "Connect route points";
@@ -325,7 +302,6 @@
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
-
 "guidance_preferences_descr" = "Navigation preferences";
 "routing_preferences_descr" = "Routing preferences";
 "recording_preferences_descr" = "Track recording preferences";
@@ -363,14 +339,14 @@
 "select_route_finish_on_map" = "Select end point of the route";
 "select_route_intermediate" = "Select an intermediate point";
 "select_home" = "Select home point";
-"select_work_point" =  "Select work point";
+"select_work_point" = "Select work point";
 "sort_by_distance" = "Sort by distance";
 "sort_by_name" = "Sort by name";
 "by_name" = "By name";
 "by_dist" = "By distance";
 "sort_by" = "Sort";
-"map_markers_other"= "Other markers";
-"directions_other"= "Other directions";
+"map_markers_other" = "Other markers";
+"directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
 "cancel_route" = "Dismiss route";
@@ -405,7 +381,6 @@
 "route_preferred_terrain_flat" = "Routes with a flat relief profile. The length may increase.";
 "route_preferred_terrain_less_hilly" = "Shorter, less hilly routes.";
 "route_preferred_terrain_hilly" = "Routes with a hilly relief profile.";
-
 "towards" = "toward";
 "route_roundabout" = "Roundabout: take %d exit and go";
 "route_roundabout_short" = "Take %d exit and go";
@@ -418,7 +393,6 @@
 "route_tshl" = "Turn sharply left and go";
 "route_tsll" = "Turn slightly left and go";
 "route_tu" = "Make U-turn and go";
-
 "route_head" = "Head";
 "looking_up_address" = "Looking up address";
 "no_address_found" = "No address determined";
@@ -434,17 +408,14 @@
 "traffic_warning_hazard" = "Hazard";
 "tunnel_warning" = "Tunnel ahead";
 "accessibility_announce" = "Announce";
-
 "driving_region_japan" = "Japan";
 "driving_region_us" = "United States";
 "driving_region_canada" = "Canada";
 "driving_region_europe_asia" = "Europe, Asia, Latin America & similar";
 "driving_region_uk" = "UK, India & similar";
 "driving_region_australia" = "Australia";
-
 "left_side_navigation" = "Left-hand driving";
 "right_side_navigation" = "Right-hand driving";
-
 "si_mi_feet" = "Miles/feet";
 "si_mi_yard" = "Miles/yards";
 "si_mi_meters" = "Miles/meters";
@@ -459,7 +430,6 @@
 "si_min_m" = "Minutes per mile";
 "si_nm_h" = "Nautical miles per hour (knot)";
 "shared_string_tones" = "tones";
-
 "nothing_found" = "Nothing found";
 "nothing_found_descr" = "Modify the search query or increase the search radius";
 "select_street" = "Select street";
@@ -474,10 +444,8 @@
 "search_poi_category_hint" = "Type to search all";
 "poi_categories" = "POI categories";
 "shared_string_search_history" = "Search history";
-
 "track_coloring_solid" = "Solid";
 "attribute" = "Attribute";
-
 "in_grace_period" = "In grace period";
 "on_hold" = "On hold";
 "shared_string_paused" = "Paused";
@@ -594,9 +562,7 @@
 "shared_string_uploaded" = "Uploaded";
 "shared_string_do_not_exist" = "Do not exist";
 "shared_string_any" = "Any";
-
 "restart" = "Restart";
-
 "offline_maps" = "Offline Maps";
 "shared_string_download_map" = "Download map";
 "download_map_dialog" = "Download map dialog";
@@ -663,7 +629,6 @@
 "fav_point_emoticons_message" = "Favorite renamed to \'%@\' to save the string containing emoticons to a file.";
 "access_default_color" = "Default color";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
-
 "favorite_friends_category" = "Friends";
 "favorite_places_category" = "Places";
 "shared_string_others" = "Others";
@@ -694,9 +659,7 @@
 "gpx_selection_segment_title" = "Segments";
 "route_points" = "Route points";
 "copy_to_map_favorites" = "Copy to favorites";
-
 "import_export" = "Import/Export";
-
 "import_tracks" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_import_already_exists_short" = "The specified track file is already exists in the list.";
@@ -705,7 +668,6 @@
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "Tracks on map";
-
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
@@ -713,7 +675,6 @@
 "import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
-
 "gpx_remove" = "Remove track?";
 "shared_string_statistics" = "Statistics";
 "layer_route" = "Route";
@@ -752,30 +713,24 @@
 "record_trip" = "Record your track";
 "shared_string_clear" = "Clear";
 "quick_action_poi_list" = "POI list";
-
 "gpxup_public" = "Public";
 "gpxup_identifiable" = "Identifiable";
 "gpxup_trackable" = "Trackable";
 "gpxup_private" = "Private";
-
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-
 "save_track_to_gpx" = "Auto-record track";
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
-
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_slope" = "Slope";
-
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
 "routing_engine_vehicle_type_driving" = "Driving";
 "poi_filter_public_transport" = "Public transport";
-
 "shared_string_map" = "Map";
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "show_borders_of_downloaded_maps" = "Show borders of downloaded maps";
@@ -807,7 +762,6 @@
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Legend";
-
 "map_settings_show_slider_map" = "Show slider on the map";
 "add_online_source" = "Add online source";
 "map_settings_hide_polygons" = "Hide polygons";
@@ -820,7 +774,6 @@
 "shared_string_appearance" = "Appearance";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-
 "shared_string_weather" = "Weather";
 "map_settings_weather_temp" = "Temperature";
 "map_settings_weather_pressure" = "Pressure";
@@ -831,16 +784,13 @@
 "map_settings_clear_raster_cache" = "Clear raster tiles";
 "shared_string_contours" = "Contours";
 "shared_string_layers" = "Layers";
-
 "weather_temp_enable_descr" = "Enable to view temperature layer on the map.";
 "weather_pressure_enable_descr" = "Enable to view pressure layer on the map.";
 "weather_wind_enable_descr" = "Enable to view wind layer on the map.";
 "weather_cloud_enable_descr" = "Enable to view cloud layer on the map.";
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
-
 "screen_settings_weather_toolbar" = "Weather toolbar";
-
 "settings_app_theme" = "Application theme";
 "light_theme" = "Light";
 "do_not_rotate" = "Do not rotate";
@@ -889,7 +839,6 @@
 "navigate_point_olc" = "Open Location Code";
 "navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size";
-
 "shared_string_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "mgrs_format_descr" = "OsmAnd uses MGRS format which is identical to UTM NATO.";
@@ -898,7 +847,6 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "translit_names" = "Transliterate names";
-
 "lang_af" = "Afrikaans";
 "lang_al" = "Albanian";
 "lang_als" = "Albanian (Tosk)";
@@ -1027,10 +975,8 @@
 "lang_zh_tw" = "Chinese (Traditional)";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
-
 "shared_string_maps" = "Maps";
 "purchases" = "Purchases";
-
 "select_map_style" = "Select map style";
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
@@ -1039,7 +985,6 @@
 "avoid_by_type" = "Avoid by type";
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
-
 "export_profile" = "Export";
 "shared_string_import" = "Import";
 "create_profile" = "Create profile";
@@ -1052,7 +997,6 @@
 "custom_osmand_plugin" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Extra maps";
-
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
 "keep_both" = "Keep both";
@@ -1068,28 +1012,22 @@
 "avoid_road" = "Avoid road";
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
-
 "shared_string_restoring" = "Restoring";
 "restoring_from" = "Restoring selected data from the cloud";
-
 "shared_string_settings" = "Settings";
 "configure_screen_quick_action" = "Quick action";
 "search_activity" = "Search";
-
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "ltr_or_rtl_combine_via_dash" = "%@ - %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
-
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Application restart required to apply some settings.";
 "shared_string_finish" = "Finish";
 "added_items" = "Added items: %@";
-
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Delete profile";
@@ -1134,23 +1072,19 @@
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
 "new_plugin_added" = "New plugin added";
-
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
-
 "checking_for_duplicates" = "Checking for duplicates...";
 "checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";
-
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-
 "shared_string_download" = "Download";
 "shared_string_no_thanks" = "No, thanks";
 "download_now" = "Download map now";
@@ -1330,10 +1264,8 @@
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
-
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
-
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
 "delete_tracks_bottom_sheet_title" = "Delete tracks?";
@@ -1344,7 +1276,6 @@
 "commiting_node" = "Committing node…";
 "loading_poi_obj" = "Loading POI…";
 "shared_string_loading" = "Loading…";
-
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "Exit without saving?";
@@ -1354,7 +1285,6 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-
 "osmand_depelopment_simulate_location_section" = "Simulate";
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "You can simulate location moving by using GPX track.";
@@ -1370,7 +1300,6 @@
 "simulate_location_movement_speed_x3_desc" = "The location movement speed during the simulation will be x3 bigger to the speed in the selected file.";
 "simulate_location_movement_speed_x4_desc" = "The location movement speed during the simulation will be x4 bigger to the speed in the selected file.";
 "use_heightmap_setting" = "Use 3D relief heightmaps";
-
 "shared_string_added" = "Added";
 "osn_bug_name" = "OSM Note";
 "osm_created" = "Created";
@@ -1619,7 +1548,6 @@
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
-
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
@@ -1658,16 +1586,13 @@
 "yard" = "yd";
 "foot" = "ft";
 "nm" = "nmi";
-
 "km_h" = "km/h";
 "mile_per_hour" = "mph";
 "units_nm_h" = "nmi/h";
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
-
 "metric_ton" = "t";
-
 "int_hour" = "h";
 "int_min" = "min.";
 "shared_string_sec" = "sec";
@@ -1768,25 +1693,20 @@
 "plugin_nautical_name" = "Nautical map";
 "product_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
 "plugin_nautical_descr" = "Turn on to enrich your map with information about sailing routes, navigation lights, danger zones, zones where it is allowed or prohibited to sail or dock, etc. To use download Nautical maps and enable \"Nautical map\" type in Configure map. \n\nHow to - https://osmand.net/docs/user/plugins/nautical-charts";
-
 "osmand_parking_plugin_name" = "Parking Position";
 "product_desc_parking" = "Track the parking time and location of your car";
 "osmand_parking_plugin_description" = "Enable to set a point on the map where your car is left on the street and notify your calendar when parking time starts. Plugin helps to track the parking time and location of your car. To place a marker choose a place on the map, then go to Actions and press \"Add parking\".";
-
 "plugin_ski_name" = "Ski map";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
 "plugin_ski_descr" = "Designed to navigate at winter sports locations. Watch ski pistes, ski lift markers and colored lines indicating the complexity of each track. To use after enabling go to Configure map and choose \"Winter and ski\" map type.";
-
 "record_plugin_name" = "Trip recording";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
 "record_plugin_description" = "Allows you to record, save and analyze your training or movement data, such as speed, ascents, descents or route relief, which can then be reused, improved, supplemented or shared with friends. \n\nHow to - https://osmand.net/docs/user/plugins/trip-recording";
-
 "osm_editing_plugin_name" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
 "osm_editing_plugin_description" = "Allows you to make contributions to OpenStreetMap, a global community aimed at creating a comprehensive map of the world and providing up-to date open-source data to every user. \n\nYou can find instruction on how to edit the map on out website https://osmand.net/docs/user/plugins/osm-editing";
 "product_desc_mapillary" = "Street-level views to check out the surroundings";
 "plugin_mapillary_descr" = "Brings street-level views. Where imagery is missing, you can just add it yourself so that others can make use of it. To enable the Mapillary layer turn on the \"Street-level imagery\" in Configure map menu.";
-
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "For developers and experienced users";
 "osmand_development_plugin_description" = "Allows to configure OsmAnd for testing: simulate navigation routes, check the screen rendering performance, etc. Plugin is not required for normal application use.";
@@ -1809,7 +1729,6 @@
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
-
 "download_wikipedia_maps" = "Wikipedia";
 "product_desc_wiki" = "Location based Wikipedia articles on the map";
 "purchases_feature_desc_wikipedia" = "Having offline Wikipedia on your trip helps you learn more about the places you visit. It is available offline and shows Wikipedia articles in relation to the points of interest right on the map. Don't forget to download Wikipedia maps for chosen region.";
@@ -1819,31 +1738,25 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-
 "srtm_plugin_name" = "Topography";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
 "srtm_plugin_description" = "Terrain information, such as contour lines, hillshades and slopes, helps you visually assess the shape of the land surface, considering curvature, extremes, steepness, points of equal height, and more. Topographic information on a map can be represented by slope shading, contour lines for the uphill and downhill, and the colour of the slope angle deviation from flat. Data from SRTM and ASTER. \n\nHow to - https://osmand.net/docs/user/plugins/contour-lines";
-
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
 "depth_contour_lines" = "Depth contour lines";
-
-"nautical_depth_points" ="Nautical depth points";
+"nautical_depth_points" = "Nautical depth points";
 "depth_contours" = "Depth contours";
 "worldwide_maps" = "Worldwide maps";
-
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
-
 "navigate_point_latitude" = "Latitude";
 "navigate_point_longitude" = "Longitude";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-
 "context_menu_points_of_group" = "All points of the group";
 "enter_description" = "Enter description";
 "shared_string_description" = "Description";
@@ -1855,7 +1768,6 @@
 "roads" = "Roads";
 "shared_string_hillshade" = "Hillshade";
 "download_regular_maps" = "Standard map";
-
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1882,30 +1794,24 @@
 "access_hint_enter_name" = "Enter name";
 "shared_string_not_selected" = "Not selected";
 "shared_string_language" = "Language";
-
 "you_searching" = "You are searching";
 "from_location" = "away";
-
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "Get";
 "srtm_plugin_disabled" = "Contour lines disabled";
 "prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
-
 "osm_live_active" = "Active";
 "menu_all_trips" = "All Tracks";
-
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "calc_pedestrian_route" = "Calculate pedestrian route";
 "public_transport_warning_title" = "Public transport navigation is currently in beta testing, expect errors and inaccuracies.";
 "public_transport_warning_descr_blog" = "Read more about OsmAnd routing in our blog.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "Try changing the settings.";
-
 "shared_string_total" = "Total";
 "shared_string_walk" = "Walk";
 "board_at" = "Board at";
@@ -1926,28 +1832,23 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
-"activity"= "Activity";
-
+"activity" = "Activity";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Deactivated";
 "gpx_trip_groups" = "Track groups";
 "gpx_group_select" = "Group Select";
 "poi_filter_parking" = "Parking";
 "parked_at" = "Parked at";
-
 "context_menu_item_directions_from" = "Directions from";
 "search_nearby" = "Search nearby";
 "change_object_posiotion" = "Change object's position";
 "move_marker_bottom_sheet_title" = "Move the map to change object's position";
-
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-
 "plugins_menu_group" = "Plugins";
 "open_map_settings" = "Open Map Settings";
-
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
@@ -1965,28 +1866,20 @@
 "plugin_popup_weather_ask" = "Please enable Weather plugin";
 "product_desc_weather" = "24h hourly forecast 7 days ahead on the map";
 "weather_plugin_description" = "Enable the Weather Plugin to plan a route considering the weather. Watch the coloured map of weather forecast, which is updated hourly for today, tomorrow, and the week ahead. \n\nWhile traveling see location based info widgets with temperature, precipitation, wind speed, pressure. \n\nWill be useful for hiking and long trips by bike or motorcycle.";
-
 "measurement_units" = "Measurement units";
-
 "weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
-
 "weather_pressure_hectopascals" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Millimeters of mercury";
 "weather_pressure_inches_of_mercury" = "Inches of mercury";
-
 "weather_wind_unit_m_s" = "Meters/Second";
 "weather_wind_kilimeters_per_hour" = "Kilometers per hour";
 "weather_wind_knots" = "Knots";
-
 "weather_precip_milimeters" = "Millimeters";
 "weather_precip_inches" = "Inches";
-
 "weather_cloud_data_description" = "Weather data will be downloaded for viewed area each time.";
-
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
-
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "shared_string_restore" = "Restore";
 "restore_all_purchases" = "Restore all purchases";
@@ -1995,15 +1888,12 @@
 "restore_backup_descr" = "Restore data on the device unsing online backups";
 "backup_restore_data" = "Restore data";
 "syncing_progress" = "Syncing...";
-
 "no_statistics" = "No statistics";
-
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
 "map_downloaded" = "Map downloaded";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
-
 "obf_import_title" = "Import offline map file";
 "obf_import_already_exists" = "File with this name already exists. Please select an action.";
 "obf_import_already_exists_short" = "File with this name already exists.";
@@ -2031,45 +1921,34 @@
 "go_to_map" = "Go to Map";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
-
 "device_memory" = "Device memory";
 "free" = "Free %@";
-
 "first_usage_greeting" = "Get directions and discover new places without Internet connection";
 "get_started" = "Get started";
-
 "first_usage_wizard_desc" = "Let OsmAnd determine your location and suggest maps to download for that region.";
-
 "suggested_maps" = "Suggested maps";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Added profiles";
 "added_profiles_descr" = "Profiles added by plugin";
-
 "location_not_found" = "Location not found";
 "search_my_location" = "Search my location";
-
 "no_inet_connection" = "No Internet connection";
 "no_inet_connection_desc_map" = "Required to download maps.";
 "try_again" = "Try again";
-
 "searching" = "Searching…";
 "search_location" = "Searching location…";
 "search_map" = "Searching map…";
 "search_another_country" = "Select another region";
-
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
-
 "wiki_around" = "Nearby Wikipedia articles";
 "search_categories" = "Categories";
 "items_selected" = "%d selected";
-
 "how_to_open_wiki_title" = "How to open Wikipedia articles?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_in_browser_wiki" = "Open article online";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "Page only available online. Open in web browser?";
-
 "custom_search" = "Custom search";
 "add_custom_category" = "Add custom category";
 "poi_filter_custom_filter" = "Custom filter";
@@ -2089,7 +1968,6 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
 "login_account" = "Account";
@@ -2111,7 +1989,6 @@
 "poi_select_type" = "Select type";
 "shared_a_z" = "A - Z";
 "shared_z_a" = "Z - A";
-
 "city_type_suburb" = "Suburb";
 "city_type_hamlet" = "Hamlet";
 "city_type_village" = "Village";
@@ -2122,30 +1999,24 @@
 "postcode" = "Postcode";
 "show_something_on_map" = "Show %@ on the map";
 "search_POI_level_btn" = "Increase search radius";
-
 "search_address_street" = "Street";
 "search_address_building_option" = "Building";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "Address";
-
 "do_not_show_discount" = "Do not show promotions";
 "send_anonymous_data" = "Send anonymous data";
-
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "external_input_device" = "External input devices";
 "sett_generic_ext_input" = "Generic Keyboard";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
 "shared_string_deselect" = "Deselect";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
-
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "this region";
-
 "osm_live_plan_pricing" = "Plans & Pricing";
 "osm_live_payment_monthly_title" = "Pay monthly";
 "osm_live_payment_3_months_title" = "Pay once in 3 months";
@@ -2161,14 +2032,12 @@
 "default_price_currency_format" = "%@ %@";
 "osm_live_payment_header" = "Select the payment period convenient for you:";
 "osm_live_payment_contribute_descr" = "Part of income goes to OpenStreetMap contributors.";
-
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "free_version_message" = "%@ maps to download or update.";
 "get_osmand_live" = "Get OsmAnd Live to unlock all features:";
 "osm_live_subscription" = "OsmAnd Live subscription";
 "cancel_subscription" = "Cancel subscription";
-
 "wikivoyage_offline" = "Wikivoyage offline";
 "unlimited_downloads" = "Unlimited downloads";
 "wikipedia_offline" = "Wikipedia offline";
@@ -2196,18 +2065,13 @@
 "osm_live_ask_for_purchase" = "Please purchase a subscription to OsmAnd Live first";
 "shared_string_io_error" = "I/O error";
 "osm_live_hide_user_name" = "Do not show my name in reports";
-
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
-
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
-
 "map_download_privacy_descr" = "By downloading maps you agree to the <a href='https://osmand.net/docs/legal/terms-of-use'>Terms Of Use</a> and <a href='https://osmand.net/docs/legal/privacy-policy'>Privacy Policy</a>.";
-
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
-
 "rendering_value_high_name" = "High";
 "routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
 "routing_attr_height_description" = "Specify vehicle height to be permitted on routes.";
@@ -2530,7 +2394,7 @@
 "routing_attr_allow_motorway_description" = "Allows motorways.";
 "rendering_attr_hmRendered_name" = "Show more map detail";
 "rendering_attr_roadColors_name" = "Road color scheme";
-"routing_attr_allow_gate_name" ="Allow gate usage";
+"routing_attr_allow_gate_name" = "Allow gate usage";
 "routing_attr_allow_gate_description" = "Allow usage of gates";
 "routing_attr_only_permitted_streets_description" = "Only use streets which are expressly permitted";
 "routing_attr_only_permitted_streets_name" = "Expressly permitted streets";
@@ -2570,7 +2434,6 @@
 "icon_group_industrial" = "Industrial";
 "icon_group_education" = "Education";
 "transport" = "Transport";
-
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "Browse map";
 "app_mode_car" = "Driving";
@@ -2595,7 +2458,6 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
-
 "user_login" = "Login";
 "osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
 "login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
@@ -2605,7 +2467,6 @@
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "restore_from_osmand_cloud" = "Restore from OsmAnd Cloud";
 "choose_what_to_restore" = "Choose items to restore";
-
 "backup_error_no_valid_subscription" = "No valid subscription present";
 "backup_error_user_is_not_registered" = "No user registered with that e-mail address";
 "backup_error_token_is_not_valid_or_expired" = "Invalid or expired verification code";
@@ -2623,26 +2484,21 @@
 "error_contact_support" = "If the issue persists, please contact our support team.";
 "promo_subscription" = "OsmAnd Pro (Promo)";
 "renew_subscription" = "Renew subscription";
-
 "register_opr_create_new_account" = "Create new account";
 "osmand_cloud_create_account_descr" = "Please enter your e-mail address, a verification code will be sent there, and all your data will be linked to it.";
-
 "verification" = "Verification";
 "verify_email_address_descr" = "Verification code sent to %@. Please enter it in the field below.";
 "verification_code_placeholder" = "Code";
 "verification_code_missing" = "I didn't receive a verification code";
 "verification_code_missing_description" = "It can take up to 10 minutes. Use the button below if it isn't in your spam folder.";
 "resend_verification_code" = "Resend";
-
 "travel_routes" = "Travel routes";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Color by network affiliation.";
 "rendering_value_walkingRoutesOSMC_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and hiking shield symbol.";
 "routes_color_by_type" = "Color routes by…";
-
 "q_clear_weather_cache" = "Do you want to clear weather cache?";
-
 "osmand_cloud" = "OsmAnd Cloud";
 "shared_string_cloud" = "Cloud";
 "remote_item" = "Remote item";
@@ -2662,7 +2518,6 @@
 "fetching_from_server" = "Fetching data from server";
 "backup_complete" = "Backup complete";
 "duration_ago" = "%@ ago";
-
 "last_sync" = "Last sync";
 "last_synchronization" = "Last synchronization";
 "sync_now" = "Sync now";
@@ -2673,7 +2528,6 @@
 "cloud_changes_will_be_dismissed" = "Cloud changes will be dismissed";
 "local_file_will_be_restored" = "Local file will be restored";
 "local_changes_will_be_dismissed" = "Local changes will be dismissed";
-
 "cloud_no_online_backup" = "You don’t have any online backup yet";
 "cloud_no_online_backup_descr" = "Set up an automatic backup so you don't have to worry about lost data.";
 "set_up_backup" = "Set up backup";
@@ -2723,13 +2577,11 @@
 "cloud_contains_newer_changes" = "OsmAnd Cloud version contains newer changes.";
 "upload_local_version" = "Upload local version";
 "dowload_cloud_version" = "Dowload cloud version";
-
 "copy_address" = "Copy address";
 "copy_poi_name" = "Copy POI Name";
 "copy_coordinates" = "Copy coordinates";
 "share_geo" = "geo:";
 "toast_empty_name_error" = "Unnamed location";
-
 "pro_features" = "Pro Features";
 "unlimited_map_downloads" = "Unlimited map downloads";
 "carplay" = "CarPlay";
@@ -2737,10 +2589,8 @@
 "nautical_depth" = "Nautical depth";
 "terrain_maps" = "Terrain maps";
 "shared_string_cross_buy" = "Cross-buy";
-
 "track_has_no_needed_data" = "The track is missing the respective data.";
 "select_another_colorization" = "Please select another coloring type.";
-
 "purchases_feature_desc_osmand_cloud" = "Store all OsmAnd data online. No lost data after reinstalling. Back up and restore all info easily.";
 "purchases_feature_desc_pro_widgets" = "Get access to OsmAnd Pro features: Route coloring and more.";
 "purchases_feature_desc_hourly_map_updates" = "Get access to more frequent map updates. Hourly, daily, or weekly updates. Updates are downloaded incrementally, only for the changed area.";
@@ -2754,26 +2604,20 @@
 "purchases_feature_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
 "purchases_feature_weather" = "24h hourly forecast 7 days ahead coloured on the map";
 "you_can_get_feature_as_part_of_pattern" = "Get \"%@\" as part of the %@ plan. Comparison:";
-
 "monthly_subscription" = "Monthly subscription";
 "annual_subscription" = "Annual subscription";
 "quarterly_subscription" = "Quarterly subscription";
-
 "option_available_only_by_subscription" = "Available in subscription plans";
 "osm_live_subscriptions" = "Subscriptions";
-
 "product_title_pro" = "OsmAnd Pro";
 "osmand_pro_tagline" = "Get maximum features";
 "product_title_plus" = "Maps+";
 "osmand_maps_plus_tagline" = "Get extended features";
-
 "not_available_with" = "Not available with %@";
 "continue_with" = "Continue with %@";
 "complete_purchase" = "Complete purchase";
 "subscription_cancel_description" = "Cancel anytime in AppStore.";
-
 "osm_live_payment_subscription_management_aid" = "Payment will be charged to your Apple ID account at the confirmation of purchase.\n\nSubscription automatically renews unless it is canceled at least 24 hours before the end of the current period. Your account will be charged for renewal within 24 hours prior to the end of the current period.\n\nYou can manage and cancel your subscriptions by going to your account settings on the App Store after purchase";
-
 "no_purchases" = "You don’t have any purchases";
 "empty_purchases_description" = "If your purchases don\'t show up here, tap on \"%@\", or contact our support team.";
 "explore_osmnad_plans_to_find_suitable" = "Explore OsmAnd Plans to find one suitable for you.";
@@ -2793,18 +2637,14 @@
 "contact_support" = "Contact support";
 "contact_support_description" = "If you have any questions, please contact us at %@.";
 "loading_purchase_information" = "Loading purchase information";
-
 "shared_string_now" = "Now";
-
 "subscription_banner_free_maps_title" = "You can download %i maps for free.";
 "subscription_banner_free_maps_description" = "Get unlimited map downloads and updates.";
 "subscription_banner_no_free_maps_title" = "You spent all free downloads";
 "subscription_banner_osmand_pro_title" = "Get hourly, daily or weekly map updates with OsmAnd Pro.";
-
 "compass_visible_if_map_rotated" = "Visible if map is rotated";
 "compass_visible_in_rotated_mode_descr" = "Hidden when north is up";
 "compass_options_description" = "Click on compass to switch map orientation mode";
-
 "weather_plugin" = "Weather plugin";
 "weather_forecast" = "Weather forecast";
 "weather_forecast_entire_world" = "Weather forecast for entire world";
@@ -2816,9 +2656,7 @@
 "weather_clear_online_cache" = "This will clear all cache for online weather tile.";
 "weather_clear_offline_cache" = "This will clear all cache for offline weather tile.";
 "weather_clear_offline_cache_for" = "This will clear all cache for offline weather tile for %@.";
-
 "all_maps_are_up_to_date" = "All maps are up to date";
-
 "with_offline_maps" = "With offline maps";
 "other_countries" = "Other countries";
 "weather_forecast_is_outdated" = "Forecast is outdated.";
@@ -2830,12 +2668,9 @@
 "weather_updates_automatically" = "OsmAnd will be download updates automatically when it is running.";
 "weather_accuracy_forecast_description" = "Offline forecast is available until: %@.\nAccuracy: %@, hourly. %@ for every 3 hours.";
 "weather_generates_new_forecast_description" = "OsmAnd generates a new forecast every 6 hours. The closer to the current date, the more accurate it will be.";
-
 "auto_update" = "Auto-update";
 "update_parameters" = "Update parameters";
-
 "recording_delete_confirm" = "Delete this item?";
-
 "login_open_street_map_org" = "Login to OpenStreetMap.org";
 "map_updates_for_mappers" = "Map updates for mappers";
 "offline_edition_descr" = "If offline editing is enabled, changes will be saved locally and can only be uploaded manually, otherwise, changes will be uploaded immediately.";
@@ -2852,12 +2687,9 @@
 "enough_contributions_descr" = "Congratulations, you have made enough OpenStreetMap contributions and can now enjoy unlimited OsmAnd map updates!";
 "last_two_month_total" = "Last two month total";
 "auth_failed" = "Authorization Error";
-
 "recalc_angle_dialog_title" = "Minimum angle between my location and route";
 "recalc_angle_dialog_descr" = "Extra straight segment between my location and calculated route will be displayed until the route is recalculated";
-
 "checking_progress" = "Checking..";
-
 "co2_mission" = "CO2 emission";
 
 // Release Notes
@@ -2865,59 +2697,8 @@
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 
 "latest_version" = "You have the latest version: %@";
-
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n
-• New arrangement of settings by profiles and types: navigation, general, map and screen\n
-• Ability to import or export profile settings\n
-• Added data sources for Online photos\n
-• Added ability to download online maps to cache\n
-• Improved \"Search\" algorithms\n";
-
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n
-• Added an option to enable a сompass over the \"Radius Ruler\" tool\n
-• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n
-• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n
-• Fixed issues with missing Wikipedia search category\n
-• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n
-• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
-• Added new \"Coordinates widget\" with coordinates of the current location\n
-• Added ability to import custom user-defined plugins\n
-• Significantly extended the import/export functionality\n
-• Distance by tap moved from the Radius ruler into a separate option\n
-• Fixed CarPlay app freezes when iPhone screen is turned off\n
-• Plugins screen moved from the Maps & Resources to the main menu\n
-• Added Finnish localization\n
-• Fixed UI in landscape orientation for \"Plan a route\" screen\n
-• Added support for custom routing and rendering files\n
-• Fixed performance of markers direction line\n
-• Fixed issue with importing GPX files with uppercase extensions\n
-• Fixed issue with \"Follow track\" menu\n
-• Fixed import of OBF files\n";
-
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map
-• New screen for searching by coordinates in different formats\n
-• Improved coordinate search in OLC format\n
-• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n
-• Added ability to easily load maps of all regions of the country with a couple of clicks.\n
-• Added contour lines in feet (You need to download additional files)\n
-• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
-• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
-• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
-
-"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n
-• Tracks: added option for deleting several tracks at once\n
-• Track context menu: added scroll bar with waypoint groups\n
-• Map appearance: divided additional routes by type with ability to enable one from each category separately\n
-• Horseback riding: add new navigation type and app profile\n
-• OsmAnd files are now visible in the \"Files\" application\n
-• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n
-• New option \"Include heading\" for track recording\n
-• Street name widget: now show road shield and exit number during navigation\n
-• New Fitness and running routes on the map\n
-• CarPlay bug fixes, added gestures for touchscreens\n
-• Fixed import of GPX files from OSF package\n
-• Fixed import of custom plugins with included files\n
-• Fixed various crashes in the Route planning mode\n
-• Fixed crashes during Navigation\n";
+"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
+"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
+"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n• Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
+"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";

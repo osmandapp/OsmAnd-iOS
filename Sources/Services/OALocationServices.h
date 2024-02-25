@@ -25,6 +25,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @interface CLLocation (util)
 
 - (double) bearingTo:(CLLocation *)location;
+- (BOOL) hasBearing;
 
 @end
 

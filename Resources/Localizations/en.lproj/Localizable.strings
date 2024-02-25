@@ -749,6 +749,7 @@
 "shared_string_delete" = "Delete";
 "shared_string_upload" = "Upload";
 "shared_string_remove" = "Remove";
+"shared_string_move" = "Move";
 "shared_string_dismiss" = "Dismiss";
 "shared_string_add" = "Add";
 "buy" = "Buy";
@@ -984,7 +985,7 @@
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "Issues found with a GPX file.\n\nYou may contact OsmAnd support to investigate.";
-"tracks_on_map" = "Displayed tracks";
+"tracks_on_map" = "Visible on map";
 
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
@@ -1060,6 +1061,7 @@
 "layer_amenity_label" = "Point Labels (POI, Favorites)";
 "show_borders_of_downloaded_maps" = "Show borders of downloaded maps";
 "shared_string_show_on_map" = "Show on map";
+"shared_string_hide_from_map" = "Hide from map";
 "map_settings_type" = "Map type";
 "map_mode" = "Map mode";
 "map_magnifier" = "Map magnifier";
@@ -1630,6 +1632,7 @@
 
 "select_tracks" = "Select tracks";
 "selected_tracks_count" = "Tracks - %d";
+"folder_tracks_count" = "%d tracks";
 
 "delete_tracks_bottom_sheet_description_regular_part" = "Are you sure you want to delete ";
 "delete_tracks_bottom_sheet_description_bold_part" = "%d tracks?";
@@ -1852,6 +1855,7 @@
 "quick_action_navigation_voice_on" = "Mute Voice";
 "quick_action_navigation_voice_off" = "Unmute Voice";
 "show_hide_gpx" = "Show/hide tracks";
+"shared_string_open_track" = "Open track";
 "show_gpx" = "Tracks";
 "hide_gpx" = "Hide track";
 "show_notes" = "Show OSM notes";
@@ -2233,6 +2237,7 @@
 "white_color_undefined" = "Parts without data are white.";
 "analyze_on_map" = "Analyze on map";
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
+"upload_to_osm" = "Upload to OSM";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Enter name";
@@ -2279,6 +2284,7 @@
 "select_wpt_on_map" = "Select point on map to add to the track";
 "rename_track" = "Rename track";
 "gpx_enter_new_name" = "Please enter new name for the track";
+"enter_new_name" = "Enter new name";
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Points";
 "shared_string_overview" = "Overview";
@@ -3593,6 +3599,19 @@
 "apply_to_existing" = "Apply to existing";
 "apply_only_to_new_points" = "Apply only to new points";
 "apply_to_existing_favorites_descr" = "Apply changes to the existing favorite points of the group or only to new?";
+
+"my_places_no_tracks_title_root" = "You don’t have track files";
+"my_places_no_tracks_descr_root" = "You can import, create or record track files using OsmAnd.";
+"my_places_no_tracks_title" = "Empty folder";
+"my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
+"delete_folder" = "Delete folder";
+"remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
+"new_track" = "New track";
+"not_recorded" = "Not recorded";
+"start_recording" = "Start recording";
+"recorded_track" = "Recorded track";
+"shared_string_error" = "Error";
+
 
 "show_icon" = "Show icon";
 "simple_widget_footer" = "Widget can take full row width or just one column.";

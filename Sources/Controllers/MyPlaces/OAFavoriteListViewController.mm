@@ -1107,6 +1107,7 @@ static UIViewController *parentController;
             [self presentViewController:alert animated:YES completion:nil];
         }];
         deleteAction.accessibilityLabel = OALocalizedString(@"shared_string_delete");
+        deleteAction.attributes = UIMenuElementAttributesDestructive;
         [menuElements addObject:[UIMenu menuWithTitle:@""
                                            image:nil
                                       identifier:nil
@@ -1848,8 +1849,8 @@ static UIViewController *parentController;
     CATransition* transition = [CATransition animation];
     transition.duration = 0.4;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionPush; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
-    transition.subtype = kCATransitionFromRight; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    transition.type = kCATransitionPush;
+    transition.subtype = kCATransitionFromRight;
     [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
     [[OARootViewController instance].navigationController popToRootViewControllerAnimated:NO];
 }
@@ -1859,8 +1860,8 @@ static UIViewController *parentController;
     CATransition* transition = [CATransition animation];
     transition.duration = 0.4;
     transition.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-    transition.type = kCATransitionReveal; // kCATransitionMoveIn; //, kCATransitionPush, kCATransitionReveal, kCATransitionFade
-    transition.subtype = kCATransitionFromLeft; //kCATransitionFromLeft, kCATransitionFromRight, kCATransitionFromTop, kCATransitionFromBottom
+    transition.type = kCATransitionReveal;
+    transition.subtype = kCATransitionFromLeft;
     [[OARootViewController instance].navigationController.view.layer addAnimation:transition forKey:nil];
     [[OARootViewController instance].navigationController pushViewController:parentController animated:NO];
 

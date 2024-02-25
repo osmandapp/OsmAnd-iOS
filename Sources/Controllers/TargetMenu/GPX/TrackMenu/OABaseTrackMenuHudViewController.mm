@@ -95,6 +95,8 @@
         _toggle = [data[kCellToggle] boolValue];
     if ([data.allKeys containsObject:kCellTintColor])
         _tintColor = data[kCellTintColor];
+    if ([data.allKeys containsObject:kCellIsDisabled])
+        _isDisabled = [data[kCellIsDisabled] boolValue];
 }
 
 - (OAGPXTableCellData *)getSubject:(NSString *)key

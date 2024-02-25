@@ -32,6 +32,7 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     NSThread *_routeAnimation;
+    double _lastCourse;
 }
 
 - (instancetype) init
@@ -139,11 +140,21 @@
 
                 if ((prev && [prev distanceFromLocation:current] > 3) || (realistic && speed >= 3))
                 {
-                    course = [OAMapUtils adjustBearing:[prev bearingTo:current]];
+                    course = [OAMapUtils normalizeDegrees360:[prev bearingTo:current]];
+                    if (course > 0)
+                        _lastCourse = course;
                 }
+                else if ([current hasBearing])
+                {
+                    course = current.course;
+                    _lastCourse = course;
+                }
+                
+                if (course < 0)
+                    course = _lastCourse;
             }
             
-            CLLocation *toset = [[CLLocation alloc] initWithCoordinate:current.coordinate altitude:current.altitude horizontalAccuracy:accuracy >= 0 ? accuracy : current.horizontalAccuracy verticalAccuracy:current.verticalAccuracy course:course >= 0 ? course : current.course speed:speed >= 0 ? speed : current.speed timestamp:[NSDate date]];
+            CLLocation *toset = [[CLLocation alloc] initWithCoordinate:current.coordinate altitude:current.altitude horizontalAccuracy:accuracy >= 0 ? accuracy : current.horizontalAccuracy verticalAccuracy:current.verticalAccuracy course:course speed:speed >= 0 ? speed : current.speed timestamp:[NSDate date]];
             
             if (realistic) {
                 toset = [self addNoise:toset];
@@ -247,7 +258,7 @@
     float brng = (float) (qDegreesToRadians(brngDeg));
     double lat2 = asin(sin(lat1) * cos(d / R) + cos(lat1) * sin(d / R) * cos(brng));
     double lon2 = lon1 + atan2(sin(brng) * sin(d / R) * cos(lat1), cos(d / R) - sin(lat1) * sin(lat2));
-    CLLocation *nl = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(qRadiansToDegrees(lat2), qRadiansToDegrees(lon2)) altitude:start.altitude horizontalAccuracy:0 verticalAccuracy:start.verticalAccuracy course:[OAMapUtils adjustBearing:brngDeg] speed:start.speed timestamp:start.timestamp];
+    CLLocation *nl = [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(qRadiansToDegrees(lat2), qRadiansToDegrees(lon2)) altitude:start.altitude horizontalAccuracy:0 verticalAccuracy:start.verticalAccuracy course:[OAMapUtils normalizeDegrees360:brngDeg] speed:start.speed timestamp:start.timestamp];
     OASimulatedLocation *result = [[OASimulatedLocation alloc] initWithLocation:nl];
     [result setTrafficLight:false];
     return result;

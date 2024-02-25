@@ -2248,7 +2248,6 @@
 "position_on_map_bottom" = "Dưới";
 "tts_title" = "TTS";
 "position_on_map_center" = "Tâm";
-
 "rendering_attr_OSMMapperAssistantFixme_name" = "Thẻ fixme";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Hiển thị các thẻ fixme";
 "rendering_attr_OSMMapperAssistantNote_name" = "Thẻ ghi chú";

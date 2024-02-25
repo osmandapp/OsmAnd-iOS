@@ -2240,6 +2240,5 @@
 "routing_attr_allow_private_for_truck_name" = "Allow private access (lorry)";
 "routing_attr_allow_private_for_truck_description" = "Allow access to private areas for lorries.";
 "position_on_map_center" = "Centre";
-
 "routing_attr_avoid_highway_description" = "Avoid motorways";
 "routing_attr_avoid_highway_name" = "Avoid motorways";

@@ -1,18 +1,18 @@
 //
-//  OAFavoritesTabBarViewController.m
+//  OAMyPlacesTabBarViewController.m
 //  OsmAnd
 //
 //  Created by Paul on 4/16/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
 
-#import "OAFavoritesTabBarViewController.h"
+#import "OAMyPlacesTabBarViewController.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-@implementation OAFavoritesTabBarViewController
+@implementation OAMyPlacesTabBarViewController
 
 - (void)viewDidLoad
 {

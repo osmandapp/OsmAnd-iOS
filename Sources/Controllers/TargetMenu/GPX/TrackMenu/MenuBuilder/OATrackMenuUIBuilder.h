@@ -15,7 +15,7 @@
 
 @property (nonatomic, weak) id<OATrackMenuViewControllerDelegate> trackMenuDelegate;
 
-- (instancetype)initWithSelectedTab:(EOATrackMenuHudTab)selectedTab;
+- (instancetype)initWithSelectedTab:(EOATrackMenuHudTab)selectedTab isCurrentTrack:(BOOL)isCurrentTrack;
 
 - (OAGPXTableData *)generateSectionsData;
 - (void)resetDataInTab:(EOATrackMenuHudTab)selectedTab;

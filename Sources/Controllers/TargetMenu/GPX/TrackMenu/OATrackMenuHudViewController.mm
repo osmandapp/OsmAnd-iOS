@@ -18,7 +18,6 @@
 #import "OAEditWaypointsGroupOptionsViewController.h"
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OARouteBaseViewController.h"
-#import "OAGPXListViewController.h"
 #import "OARootViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARouteKey.h"
@@ -91,7 +90,7 @@
 
 @end
 
-@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, UIDocumentInteractionControllerDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
+@interface OATrackMenuHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UITabBarDelegate, SFSafariViewControllerDelegate, OASaveTrackViewControllerDelegate, OASegmentSelectionDelegate, OATrackMenuViewControllerDelegate, OASelectTrackFolderDelegate, OAEditWaypointsGroupOptionsDelegate, OAFoldersCellDelegate, OAEditDescriptionViewControllerDelegate, OARouteLineChartHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UIView *statusBarBackgroundView;
 @property (weak, nonatomic) IBOutlet UIButton *backButton;
@@ -113,6 +112,7 @@
     OsmAndAppInstance _app;
     OARouteLineChartHelper *_routeLineChartHelper;
     OATrackMenuUIBuilder *_uiBuilder;
+    OAGPXUIHelper *_gpxUIHelper;
 
     OAAutoObserverProxy *_locationServicesUpdateObserver;
     NSTimeInterval _lastUpdate;
@@ -197,7 +197,7 @@
 
 - (void)setupUIBuilder
 {
-    _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab];
+    _uiBuilder = [[OATrackMenuUIBuilder alloc] initWithSelectedTab:_selectedTab isCurrentTrack:self.isCurrentTrack];
     _uiBuilder.trackMenuDelegate = self;
 }
 
@@ -205,6 +205,7 @@
 {
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
+    _gpxUIHelper = [[OAGPXUIHelper alloc] init];
 
     [self setupUIBuilder];
 }
@@ -391,11 +392,9 @@
                         [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
                 [myPlacesViewController setSelectedIndex:1];
     
-                OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+                TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
                 if (gpxController == nil)
                     return;
-    
-                [gpxController setShouldPopToParent:YES];
     
                 [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
             }
@@ -600,67 +599,6 @@
     return _tableData.subjects[indexPath.section].subjects[indexPath.row];
 }
 
-- (void)copyGPXToNewFolder:(NSString *)newFolderName
-           renameToNewName:(NSString *)newFileName
-        deleteOriginalFile:(BOOL)deleteOriginalFile
-                 openTrack:(BOOL)openTrack
-{
-    NSString *oldPath = self.gpx.gpxFilePath;
-    NSString *sourcePath = [_app.gpxPath stringByAppendingPathComponent:oldPath];
-
-    NSString *newFolder = [newFolderName isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")] ? @"" : newFolderName;
-    NSString *newFolderPath = [_app.gpxPath stringByAppendingPathComponent:newFolder];
-    NSString *newName = self.gpx.gpxFileName;
-
-    if (newFileName)
-    {
-        if ([[NSFileManager defaultManager]
-                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newFileName]])
-            newName = [OAUtilities createNewFileName:newFileName];
-        else
-            newName = newFileName;
-    }
-
-    NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];
-    NSString *destinationPath = [newFolderPath stringByAppendingPathComponent:newName];
-
-    [[NSFileManager defaultManager] copyItemAtPath:sourcePath toPath:destinationPath error:nil];
-
-    OAGPXDatabase *gpxDatabase = [OAGPXDatabase sharedDb];
-    if (deleteOriginalFile)
-    {
-        [self.gpx updateFolderName:newStoringPath];
-        self.doc.path = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:self.gpx.gpxFilePath];
-        [gpxDatabase save];
-        [[NSFileManager defaultManager] removeItemAtPath:sourcePath error:nil];
-
-        [OASelectedGPXHelper renameVisibleTrack:oldPath newPath:newStoringPath];
-    }
-    else
-    {
-        OAGPXMutableDocument *gpxDoc = [[OAGPXMutableDocument alloc] initWithGpxFile:sourcePath];
-        [gpxDatabase addGpxItem:[newFolder stringByAppendingPathComponent:newName]
-                          title:newName
-                           desc:gpxDoc.metadata.desc
-                         bounds:gpxDoc.bounds
-                       document:gpxDoc];
-
-        if ([self.settings.mapSettingVisibleGpx.get containsObject:oldPath])
-            [self.settings showGpx:@[newStoringPath]];
-    }
-    if (openTrack)
-    {
-        OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
-        if (gpx)
-        {
-            [self hide:YES duration:.2 onComplete:^{
-                [self.mapViewController hideContextPinMarker];
-                [self.mapPanelViewController openTargetViewWithGPX:gpx];
-            }];
-        }
-    }
-}
-
 - (void)showAlertWithText:(NSString *)text
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
@@ -670,75 +608,6 @@
                                               style:UIAlertActionStyleDefault
                                             handler:nil]];
     [self presentViewController:alert animated:YES completion:nil];
-}
-
-- (void)renameTrack:(NSString *)newName
-{
-    if (newName.length > 0)
-    {
-        NSString *oldFilePath = self.gpx.gpxFilePath;
-        NSString *oldPath = [_app.gpxPath stringByAppendingPathComponent:oldFilePath];
-        NSString *newFileName = [newName stringByAppendingPathExtension:@"gpx"];
-        NSString *newFilePath = [[self.gpx.gpxFilePath stringByDeletingLastPathComponent] stringByAppendingPathComponent:newFileName];
-        NSString *newPath = [_app.gpxPath stringByAppendingPathComponent:newFilePath];
-        if (![NSFileManager.defaultManager fileExistsAtPath:newPath])
-        {
-            self.gpx.gpxTitle = newName;
-            self.gpx.gpxFileName = newFileName;
-            self.gpx.gpxFilePath = newFilePath;
-            [[OAGPXDatabase sharedDb] save];
-
-            OAMetadata *metadata;
-            if (self.doc.metadata)
-            {
-                metadata = self.doc.metadata;
-            }
-            else
-            {
-                metadata = [[OAMetadata alloc] init];
-                long time = 0;
-                if (self.doc.points.count > 0)
-                    time = self.doc.points[0].time;
-                if (self.doc.tracks.count > 0)
-                {
-                    OATrack *track = self.doc.tracks[0];
-                    track.name = newName;
-                    if (track.segments.count > 0)
-                    {
-                        OATrkSegment *seg = track.segments[0];
-                        if (seg.points.count > 0)
-                         {
-                            OAWptPt *p = seg.points[0];
-                            if (time > p.time)
-                                time = p.time;
-                        }
-                    }
-                }
-                metadata.time = time == 0 ? (long) [[NSDate date] timeIntervalSince1970] : time;
-            }
-            metadata.name = newFileName;
-
-            if ([NSFileManager.defaultManager fileExistsAtPath:oldPath])
-                [NSFileManager.defaultManager removeItemAtPath:oldPath error:nil];
-
-            BOOL saveFailed = ![self.mapViewController updateMetadata:metadata oldPath:oldPath docPath:newPath];
-            self.doc.path = newPath;
-            self.doc.metadata = metadata;
-
-            if (saveFailed)
-                [self.doc saveTo:newPath];
-
-            [OASelectedGPXHelper renameVisibleTrack:oldFilePath newPath:newFilePath];
-        }
-        else
-        {
-            [self showAlertWithText:OALocalizedString(@"gpx_already_exsists")];
-        }
-    }
-    else
-    {
-        [self showAlertWithText:OALocalizedString(@"empty_filename")];
-    }
 }
 
 - (OATrackMenuViewControllerState *)getCurrentState
@@ -1580,36 +1449,7 @@
 
 - (void)openExport
 {
-    if (self.isCurrentTrack)
-    {
-        NSDateFormatter *fmt = [[NSDateFormatter alloc] init];
-        [fmt setDateFormat:@"yyyy-MM-dd"];
-
-        NSDateFormatter *simpleFormat = [[NSDateFormatter alloc] init];
-        [simpleFormat setDateFormat:@"HH-mm_EEE"];
-
-        _exportFileName = [NSString stringWithFormat:@"%@_%@",
-                                                     [fmt stringFromDate:[NSDate date]],
-                                                     [simpleFormat stringFromDate:[NSDate date]]];
-        _exportFilePath = [NSString stringWithFormat:@"%@/%@.gpx",
-                                                     NSTemporaryDirectory(),
-                                                     _exportFileName];
-
-        [self.savingHelper saveCurrentTrack:_exportFilePath];
-    }
-    else
-    {
-        _exportFileName = self.gpx.gpxFileName;
-        _exportFilePath = [NSTemporaryDirectory() stringByAppendingPathComponent:self.gpx.gpxFileName];
-        [OAGPXUIHelper addAppearanceToGpx:self.doc gpxItem:self.gpx];
-        [self.doc saveTo:_exportFilePath];
-    }
-
-    _exportController = [UIDocumentInteractionController interactionControllerWithURL:[NSURL fileURLWithPath:_exportFilePath]];
-    _exportController.UTI = @"com.topografix.gpx";
-    _exportController.delegate = self;
-    _exportController.name = _exportFileName;
-    [_exportController presentOptionsMenuFromRect:CGRectZero inView:self.view animated:YES];
+    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil];
 }
 
 - (void)openNavigation
@@ -1823,7 +1663,7 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction *_Nonnull action) {
-                                                [weakSelf renameTrack:alert.textFields[0].text];
+        [_gpxUIHelper renameTrack:weakSelf.gpx doc:weakSelf.doc newName:alert.textFields[0].text hostVC:weakSelf];
                                             }]];
 
     [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
@@ -1888,51 +1728,11 @@
     [_uiBuilder updateProperty:value tableData:tableData];
 }
 
-#pragma mark - UIDocumentInteractionControllerDelegate
-
-- (void)documentInteractionControllerDidDismissOpenInMenu:(UIDocumentInteractionController *)controller
-{
-    if (controller == _exportController)
-        _exportController = nil;
-}
-
-- (void)documentInteractionController:(UIDocumentInteractionController *)controller
-            didEndSendingToApplication:(NSString *)application
-{
-    if (self.isCurrentTrack && _exportFilePath)
-    {
-        [[NSFileManager defaultManager] removeItemAtPath:_exportFilePath error:nil];
-        _exportFilePath = nil;
-    }
-}
-
-- (void)documentInteractionController:(UIDocumentInteractionController *)controller
-        willBeginSendingToApplication:(NSString *)application
-{
-    if ([application isEqualToString:@"net.osmand.maps"])
-    {
-        [_exportController dismissMenuAnimated:YES];
-        _exportFilePath = nil;
-        _exportController = nil;
-
-        OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
-                initWithFileName:self.gpx.gpxFileName
-                        filePath:self.gpx.gpxFilePath
-                       showOnMap:YES
-                 simplifiedTrack:YES
-                       duplicate:NO];
-
-        saveTrackViewController.delegate = self;
-        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:saveTrackViewController];
-        [self presentViewController:navigationController animated:YES completion:nil];
-    }
-}
-
 #pragma mark - OASelectTrackFolderDelegate
 
 - (void)onFolderSelected:(NSString *)selectedFolderName
 {
-    [self copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO];
+    [_gpxUIHelper copyGPXToNewFolder:selectedFolderName renameToNewName:nil deleteOriginalFile:YES openTrack:NO gpx:self.gpx doc:self.doc];
     [_uiBuilder resetDataInTab:EOATrackMenuHudOverviewTab];
     if (_selectedTab == EOATrackMenuHudActionsTab)
     {
@@ -1973,10 +1773,12 @@
          simplifiedTrack:(BOOL)simplifiedTrack
                openTrack:(BOOL)openTrack
 {
-    [self copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
+    [_gpxUIHelper copyGPXToNewFolder:fileName.stringByDeletingLastPathComponent
              renameToNewName:[fileName.lastPathComponent stringByAppendingPathExtension:@"gpx"]
           deleteOriginalFile:NO
-                   openTrack:YES];
+                   openTrack:YES
+                         gpx:self.gpx
+                         doc:self.doc];
 }
 
 #pragma mark - OASegmentSelectionDelegate
@@ -2225,6 +2027,10 @@
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
+            
+            cell.userInteractionEnabled = !cellData.isDisabled;
+            cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
+            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
         }
         outCell = cell;
     }
@@ -2252,6 +2058,10 @@
             BOOL isLast = indexPath.row == [self tableView:tableView numberOfRowsInSection:indexPath.section] - 1;
             [cell roundCorners:(indexPath.row == 0) bottomCorners:isLast hasLeftMargin:YES];
             cell.separatorView.hidden = isLast;
+            
+            cell.userInteractionEnabled = !cellData.isDisabled;
+            cell.textColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameTextColorSecondary : ACColorNameTextColorPrimary];
+            cell.iconColorNormal = [UIColor colorNamed: cellData.isDisabled ? ACColorNameIconColorDisabled : ACColorNameIconColorActive];
         }
         outCell = cell;
     }

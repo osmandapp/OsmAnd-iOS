@@ -80,6 +80,33 @@
     NSTimer *_framePreparedTimer;
 }
 
+- (void)configureShadowForWidget:(UIView *)view top:(BOOL)top
+{
+    auto containerView = [[ShadowTransporentTouchesPassView alloc] init];
+    containerView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.35].CGColor;
+    containerView.layer.shadowOffset = CGSizeMake(0, 1);
+    containerView.layer.shadowOpacity = 1;
+    containerView.layer.shadowRadius = 4;
+    containerView.layer.masksToBounds = false;
+    containerView.layer.cornerRadius = view.layer.cornerRadius;
+    containerView.layer.shouldRasterize = true;
+    containerView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+    
+    containerView.translatesAutoresizingMaskIntoConstraints = NO;
+    [view addSubview:containerView];
+        
+    [NSLayoutConstraint activateConstraints:@[
+        [containerView.leftAnchor constraintEqualToAnchor:view.leftAnchor],
+        [containerView.heightAnchor constraintEqualToConstant:2],
+        [containerView.rightAnchor constraintEqualToAnchor:view.rightAnchor],
+    ]];
+    
+    if (top)
+        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:6].active = YES;
+    else
+        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-6].active = YES;
+}
+
 - (void)configureShadowForWidgets:(NSArray<UIView *> *)views
 {
     for (UIView *view in views)
@@ -136,10 +163,6 @@
         [mapHudViewController.leftWidgetsView addSubview:_leftPanelController.view];
         [mapHudViewController.bottomWidgetsView addSubview:_bottomPanelController.view];
         [mapHudViewController.rightWidgetsView addSubview:_rightPanelController.view];
-        
-        [_topPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
-        [_topPanelController.specialPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner];
-        [_bottomPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
 
         _topPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
         _topPanelController.specialPanelController.view.translatesAutoresizingMaskIntoConstraints = NO;
@@ -180,11 +203,11 @@
         [_bottomPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
         
-        [self configureShadowForWidgets:@[mapHudViewController.topWidgetsView,
-                                          mapHudViewController.middleWidgetsView,
+        [self configureShadowForWidgets:@[mapHudViewController.middleWidgetsView,
                                           mapHudViewController.leftWidgetsView,
-                                          mapHudViewController.rightWidgetsView,
-                                          mapHudViewController.bottomWidgetsView]];
+                                          mapHudViewController.rightWidgetsView]];
+        [self configureShadowForWidget:mapHudViewController.topWidgetsView top:YES];
+        [self configureShadowForWidget:mapHudViewController.bottomWidgetsView top:NO];
 
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
@@ -363,10 +386,12 @@
     if (hasTopWidgets)
     {
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
+        _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
     }
     else
     {
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = 0.;
+        _mapHudViewController.topWidgetsView.layer.masksToBounds = YES;
     }
 
     if (hasTopSpecialWidgets)
@@ -395,7 +420,17 @@
     }
 
     _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
-    _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = hasBottomWidgets ? [_bottomPanelController calculateContentSize].height : 0.;
+    if (hasBottomWidgets)
+    {
+        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
+        _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
+    }
+    else
+    {
+        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = 0;
+        _mapHudViewController.bottomWidgetsView.layer.masksToBounds = YES;
+    }
+
     
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;

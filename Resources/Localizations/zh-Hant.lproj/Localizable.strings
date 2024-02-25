@@ -3021,3 +3021,10 @@
 "shared_string_link" = "連結";
 "shared_string_author" = "作者";
 "shared_string_keywords" = "關鍵字";
+"help_article_map_legend_nautical_map_name" = "航海圖地圖風格";
+"help_article_map_interact_with_map_name" = "與地圖互動";
+"help_article_map_map_context_menu_name" = "地圖內容選單";
+"help_article_map_point_layers_on_map_name" = "地圖上的點位";
+"help_article_map_raster_maps_name" = "點陣地圖 (線上/離線)";
+"help_article_map_legend_osmand_name" = "OsmAnd 地圖風格";
+"help_article_map_legend_ski_map_name" = "滑雪地圖風格";

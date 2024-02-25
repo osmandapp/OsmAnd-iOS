@@ -3292,3 +3292,5 @@
 "download_images_settings_footer" = "Hægt er að sækja myndir á hvaða netkerfi sem er. Notast má við farsímagögn.";
 "popular_articles_not_found_descr" = "Það eru engar greinar nálægt miðju kortsins. Notaðu leitina til að finna greinar.";
 "simple_widget_footer" = "Viðmótshluti getur tekið fulla breidd raðar eða bara einn dálk.";
+"shared_string_not_available" = "Ekki tiltækt";
+"help_article_plugins_custom_name" = "Sérsniðinn pakki";

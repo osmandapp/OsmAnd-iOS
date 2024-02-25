@@ -87,7 +87,7 @@
     OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OARemoteFile *remoteFile in _filesToDownload)
     {
-        OAExportSettingsType *type = remoteFile.item != nil ? [OAExportSettingsType getExportSettingsTypeForItem:remoteFile.item] : nil;
+        OAExportSettingsType *type = [OAExportSettingsType findByRemoteFile:remoteFile];
         if (type != nil && [helper getBackupTypePref:type].get)
         {
             [files addObject:remoteFile];
@@ -102,7 +102,7 @@
     OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OALocalFile *localFile in _filesToUpload)
     {
-        OAExportSettingsType *type = localFile.item != nil ? [OAExportSettingsType getExportSettingsTypeForItem:localFile.item] : nil;
+        OAExportSettingsType *type = [OAExportSettingsType findBySettingsItem:localFile.item];
         if (type != nil && [helper getBackupTypePref:type].get && (type.isAllowedInFreeVersion || [OAIAPHelper isOsmAndProAvailable]))
         {
             [files addObject:localFile];
@@ -117,7 +117,7 @@
     OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OARemoteFile *remoteFile in _filesToDelete)
     {
-        OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForRemoteFile:remoteFile];
+        OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
         if (exportType != nil && [helper getBackupTypePref:exportType].get)
         {
             [files addObject:remoteFile];
@@ -132,7 +132,7 @@
     OABackupHelper *helper = OABackupHelper.sharedInstance;
     for (OALocalFile *localFile in _localFilesToDelete)
     {
-        OAExportSettingsType *exportType = localFile.item != nil ? [OAExportSettingsType getExportSettingsTypeForItem:localFile.item] : nil;
+        OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:localFile.item];
         if (exportType != nil && [helper getBackupTypePref:exportType].get)
         {
             [files addObject:localFile];
@@ -151,7 +151,7 @@
         OASettingsItem *item = ((OALocalFile *) pair.firstObject).item;
         if (![items containsObject:item])
         {
-            OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForRemoteFile:pair.lastObject];
+            OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:pair.lastObject];
             if (exportType != nil && [helper getBackupTypePref:exportType].get)
             {
                 [files addObject:pair];

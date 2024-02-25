@@ -50,7 +50,7 @@
         {
             [_exporter addSettingsItem:item];
             
-            OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
+            OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
             if (exportType && [backupHelper getVersionHistoryTypePref:exportType].get)
             {
                 [_exporter addOldItemToDelete:item];

@@ -165,7 +165,7 @@
         NSMutableArray<OASettingsItem *> *oldItemsToDelete = [NSMutableArray array];
         for (OASettingsItem *item in info.itemsToUpload)
         {
-            OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
+            OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
             if (exportType && [_backupHelper getVersionHistoryTypePref:exportType].get)
             {
                 [oldItemsToDelete addObject:item];

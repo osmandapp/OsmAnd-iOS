@@ -243,6 +243,7 @@
     {
         [remoteFileItems enumerateKeysAndObjectsUsingBlock:^(OARemoteFile * _Nonnull key, OASettingsItem * _Nonnull obj, BOOL * _Nonnull stop) {
             obj.localModifiedTime = key.clienttimems / 1000;
+            obj.lastModifiedTime = key.clienttimems / 1000;
         }];
     }
 
@@ -447,7 +448,7 @@
         NSArray<OARemoteFile *> *foundRemoteFiles = [self getItemRemoteFiles:settingsItem remoteFiles:remoteFilesMap];
         for (OARemoteFile *remoteFile in foundRemoteFiles)
         {
-            if (restoreDeleted)
+            if (!restoreDeleted)
                 settingsItem.lastModifiedTime = remoteFile.clienttimems / 1000;
             remoteFile.item = settingsItem;
             if ([settingsItem isKindOfClass:OAFileSettingsItem.class])

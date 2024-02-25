@@ -318,7 +318,7 @@
         NSMutableArray<OARemoteFile *> *filesByType = [NSMutableArray array];
         for (OARemoteFile *remoteFile in remoteFiles.allValues)
         {
-            if ([OAExportSettingsType getExportSettingsTypeForRemoteFile:remoteFile] == type)
+            if ([OAExportSettingsType findByRemoteFile:remoteFile] == type)
                 [filesByType addObject:remoteFile];
         }
         settingsToOperate[type] = filesByType;

@@ -36,8 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAExportSettingsType *) VOICE;
 + (OAExportSettingsType *) ONLINE_ROUTING_ENGINES;
 
-+ (OAExportSettingsType *) getExportSettingsTypeForItem:(OASettingsItem *)item;
-+ (OAExportSettingsType *) getExportSettingsTypeForRemoteFile:(OARemoteFile *)remoteFile;
++ (OAExportSettingsType *) findBySettingsItem:(OASettingsItem *)item;
++ (OAExportSettingsType *) findByRemoteFile:(OARemoteFile *)remoteFile;
 
 + (NSArray<OAExportSettingsType *> *)getAllValues;
 + (NSArray<OAExportSettingsType *> *)getEnabledTypes;

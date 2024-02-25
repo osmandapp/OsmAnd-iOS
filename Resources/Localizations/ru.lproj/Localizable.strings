@@ -2683,7 +2683,7 @@
 "announcement_time_title" = "Время оповещения";
 "announcement_time_descr" = "Время голосового оповещения определяется его типом, текущей скоростью навигации и скоростью навигации по умолчанию.";
 "rotate_map_manual_opt" = "поворот вручную (фикс.)";
-"visible_in_3d_mode" = "На экране, когда 3D включён";
+"visible_in_3d_mode" = "Виден, когда карта наклонена";
 "map_3d_mode_description" = "Для изменения перспективы коснитесь карты двумя пальцами и двигайте вверх или вниз.";
 "rendering_value_caiScale_description" = "Итальянский альпийский клуб (CAI)";
 "rendering_value_sacScale_description" = "Швейцарский альпийский клуб (SAC)";

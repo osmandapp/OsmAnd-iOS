@@ -37,10 +37,10 @@ enum DeleteAccountStatus {
 final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDeleteAccountListener {
     
     private let token: String
+    private let progressIndexPath = IndexPath(row: 0, section: 0)
     private var status = DeleteAccountStatus.notStarted
     private var backupHelper: OABackupHelper?
     private var progress: Float = 0.0
-    private let progressIndexPath = IndexPath(row: 0, section: 0)
 
     // MARK: - Initialization
 
@@ -254,10 +254,10 @@ final class DeleteAccountViewController: OABaseButtonsViewController, OAOnDelete
 
     override func onLeftNavbarButtonPressed() {
         if let navigationController, status == .finished {
-            for controller in navigationController.viewControllers where controller is OAMainSettingsViewController {
-                navigationController.popToViewController(controller, animated: true)
-                return
+            guard let controller = navigationController.viewControllers.first(where: { $0 is OAMainSettingsViewController }) else {
+                return super.onLeftNavbarButtonPressed()
             }
+            navigationController.popToViewController(controller, animated: true)
         } else {
             super.onLeftNavbarButtonPressed()
         }

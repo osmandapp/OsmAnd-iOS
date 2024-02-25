@@ -31,17 +31,15 @@ final class DeleteAccountCommand: Operation {
     }
     
     private func getBody() -> String? {
-        var body :String?
         do {
-            body = String(data: try JSONSerialization.data(withJSONObject: ["username": email,
+            return String(data: try JSONSerialization.data(withJSONObject: ["username": email,
                                                                             "password": "",
                                                                             "token": token],
-                                                           options: .prettyPrinted),
+                                                           options: .withoutEscapingSlashes),
                           encoding: .utf8)
         } catch {
-            body = nil
+            return nil
         }
-        return body
     }
 
     override func main() {
@@ -53,32 +51,35 @@ final class DeleteAccountCommand: Operation {
                                        body: getBody(),
                                        contentType: "application/json",
                                        post: true,
-                                       async: false) { data, response, _ in
+                                       async: false) { [weak self] data, response, _ in
+            guard let self else { return }
+
             var status: Int32
             var message: String
             var backupError: OABackupError?
-            let result = data != nil ? String(data: data!, encoding: .utf8) ?? "" : ""
-            if let urlResponse = response as? HTTPURLResponse {
-                if urlResponse.statusCode == 200 {
+            guard let data, let httpResponse = response as? HTTPURLResponse else {
+                return onProgressUpdate(STATUS_EMPTY_RESPONSE_ERROR,
+                                        message: "Account deletion error: empty response",
+                                        error: nil,
+                                        operationLog: operationLog)
+            }
+            let result = String(data: data, encoding: .utf8) ?? ""
+            if httpResponse.statusCode == 200 {
                     message = result
                     status = STATUS_SUCCESS
-                } else {
-                    backupError = OABackupError(error: result)
-                    message = "Account deletion error: \(String(describing: backupError?.toString))\nEmail=\(self.email)\nDeviceId=\(String(describing: backupHelper.getDeviceId()))"
-                    status = STATUS_SERVER_ERROR
-                }
             } else {
-                message = "Account deletion error: empty response"
-                status = STATUS_EMPTY_RESPONSE_ERROR
+                backupError = OABackupError(error: result)
+                message = "Account deletion error: \(String(describing: backupError?.toString))\nEmail=\(self.email)\nDeviceId=\(String(describing: backupHelper.getDeviceId()))"
+                status = STATUS_SERVER_ERROR
             }
-            self.onProgressUpdate(status: status, message: message, error: backupError)
-            operationLog.finishOperation("\(status) \(message)")
+            onProgressUpdate(status, message: message, error: backupError, operationLog: operationLog)
         }
     }
 
-    private func onProgressUpdate(status: Int32, message: String, error: OABackupError?) {
-        for listener in self.getListeners() {
+    private func onProgressUpdate(_ status: Int32, message: String, error: OABackupError?, operationLog: OAOperationLog) {
+        for listener in getListeners() {
             listener.onDeleteAccount(Int(status), message: message, error: error)
         }
+        operationLog.finishOperation("\(status) \(message)")
     }
 }

@@ -424,7 +424,7 @@
 "shared_string_enable" = "Omogući";
 "shared_string_disable" = "Onemogući";
 "shared_string_apply" = "Primeni";
-"shared_string_select" = "Označi";
+"shared_string_select" = "Odabrati";
 "shared_string_back" = "Nazad";
 "shared_string_ok" = "U redu";
 "shared_string_cancel" = "Odustani";

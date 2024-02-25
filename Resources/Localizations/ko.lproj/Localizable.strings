@@ -409,7 +409,7 @@
 "group_properties" = "그룹 프리퍼티";
 "displayed_route_save" = "OsmAnd 트랙에 저장";
 "shared_string_octagon" = "팔각형";
-"shared_string_square" = "사각형";
+"shared_string_square" = "정사각형";
 "shared_string_waypoints" = "경유지";
 "gpx_points" = "점(s)";
 "import_tracks" = "트랙 가져오기";
@@ -2343,3 +2343,12 @@
 "shared_string_file_info" = "파일 정보";
 "quick_action_bug_descr" = "이 메시지는 댓글 필드에 포함되어 있습니다.";
 "lang_zhminnan" = "남부 분";
+"shared_string_import_complete" = "가져오기 완료";
+"shared_string_legend" = "레전드";
+
+// Menu
+"shared_string_menu" = "메뉴";
+"shared_string_angle" = "각도";
+"mapillary_item" = "OsmAnd + Mapillary";
+"copy_coordinates" = "복사 좌표";
+"shared_string_hillshade" = "힐스헤드";

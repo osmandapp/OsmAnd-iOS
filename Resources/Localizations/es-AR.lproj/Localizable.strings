@@ -3310,7 +3310,7 @@
 "shared_string_not_available" = "No disponible";
 "help_article_plugins_custom_name" = "Paquete personalizado";
 "shared_string_move" = "Mover";
-"shared_string_hide_from_map" = "Ocultar el mapa";
+"shared_string_hide_from_map" = "Ocultar del mapa";
 "shared_string_open_track" = "Abrir traza";
 "enter_new_name" = "Ingresar nuevo nombre";
 "my_places_no_tracks_title_root" = "No tienes archivos de trazas";

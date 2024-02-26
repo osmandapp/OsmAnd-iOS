@@ -3143,3 +3143,8 @@
 "shared_string_author" = "Autor";
 "shared_string_remove_bookmark" = "Eliminați salvarea";
 "help_article_plugins_custom_name" = "Pachet personalizat";
+"shared_string_row_number" = "Rând %d";
+"no_track_files" = "Nu aveți fișiere de urmărire";
+"newest_date_first" = "Cea mai nouă dată mai întâi";
+"oldest_date_first" = "Data cea mai veche mai întâi";
+"longest_distance_first" = "Cea mai lungă distanță prima";

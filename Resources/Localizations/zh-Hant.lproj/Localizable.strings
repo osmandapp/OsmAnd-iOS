@@ -3028,3 +3028,12 @@
 "help_article_map_raster_maps_name" = "點陣地圖 (線上/離線)";
 "help_article_map_legend_osmand_name" = "OsmAnd 地圖風格";
 "help_article_map_legend_ski_map_name" = "滑雪地圖風格";
+"help_article_map_track_context_menu_name" = "軌跡選單內容";
+"help_article_map_vector_maps_name" = "向量地圖 (地圖樣式)";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"help_article_navigation_guidance_name" = "Guidance";
+"help_article_navigation_guidance_map_during_navigation_name" = "導航時的地圖螢幕";
+"help_article_navigation_guidance_voice_navigation_name" = "語音介面 / 通知";
+"help_article_navigation_routing_name" = "路徑參數";
+"help_article_map_tracks_on_map_name" = "軌跡與路徑";
+"help_article_navigation_car_play_name" = "CarPlay";

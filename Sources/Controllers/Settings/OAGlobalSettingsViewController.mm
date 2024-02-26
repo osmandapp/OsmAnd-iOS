@@ -542,11 +542,11 @@
                 {
                     OAHistorySettingsViewController *historyViewController;
                     if ([item.key isEqualToString:@"search_history"])
-                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch];
+                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeSearch editing:NO];
                     else if ([item.key isEqualToString:@"navigation_history"])
-                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeNavigation];
+                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeNavigation editing:NO];
                     else if ([item.key isEqualToString:@"map_markers_history"])
-                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeMapMarkers];
+                        historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:EOAHistorySettingsTypeMapMarkers editing:NO];
                     if (historyViewController)
                         [self.navigationController pushViewController:historyViewController animated:YES];
                 }

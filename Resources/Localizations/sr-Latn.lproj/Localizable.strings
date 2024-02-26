@@ -427,7 +427,7 @@
 "shared_string_select" = "Odabrati";
 "shared_string_back" = "Nazad";
 "shared_string_ok" = "U redu";
-"shared_string_cancel" = "Odustani";
+"shared_string_cancel" = "Otkazati";
 "shared_string_exit" = "Izlaz";
 "shared_string_close" = "Zatvori";
 "shared_string_no" = "Ne";
@@ -1531,7 +1531,7 @@
 "rendering_category_hide" = "Sakrij";
 "rendering_category_routes" = "Rute";
 "rendering_category_details" = "Detalji";
-"rendering_category_transport" = "Transport";
+"rendering_category_transport" = "Prevoz";
 "rendering_category_others" = "Ostala svojstva mape";
 
 // Rendering attributes

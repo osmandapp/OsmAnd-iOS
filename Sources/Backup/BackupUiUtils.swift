@@ -39,7 +39,7 @@ final class BackupUiUtils: NSObject {
         if let profileItem = item as? OAProfileSettingsItem {
             return profileItem.appMode.getIcon()
         }
-        let type: OAExportSettingsType? = OAExportSettingsType.getTypeFor(item)
+        let type: OAExportSettingsType? = OAExportSettingsType.find(by: item)
         return type?.icon
     }
 

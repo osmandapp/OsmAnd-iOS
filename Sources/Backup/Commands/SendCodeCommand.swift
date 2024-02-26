@@ -51,10 +51,6 @@ final class SendCodeCommand: Operation {
                                        post: true,
                                        async: false) { [weak self] data, response, _ in
             guard let self else { return }
-
-            var status: Int32
-            var message: String
-            var backupError: OABackupError?
             guard let data, let httpResponse = response as? HTTPURLResponse else {
                 return onProgressUpdate(STATUS_EMPTY_RESPONSE_ERROR,
                                         message: "Send code error: empty response",
@@ -62,9 +58,12 @@ final class SendCodeCommand: Operation {
                                         operationLog: operationLog)
             }
             let result = String(data: data, encoding: .utf8) ?? ""
+            var status: Int32
+            var message: String
+            var backupError: OABackupError?
             if httpResponse.statusCode != 200 {
                 backupError = OABackupError(error: result)
-                message = "Send code error: \(String(describing: backupError?.toString()))\nEmail=\(self.email)\nDeviceId=\(String(describing: backupHelper.getDeviceId()))"
+                message = "Send code error: \(String(describing: backupError?.toString()))\nEmail=\(email)\nDeviceId=\(String(describing: backupHelper.getDeviceId()))"
                 status = STATUS_SERVER_ERROR
             } else if !result.isEmpty {
                 do {

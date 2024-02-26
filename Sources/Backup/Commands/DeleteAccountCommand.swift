@@ -53,10 +53,6 @@ final class DeleteAccountCommand: Operation {
                                        post: true,
                                        async: false) { [weak self] data, response, _ in
             guard let self else { return }
-
-            var status: Int32
-            var message: String
-            var backupError: OABackupError?
             guard let data, let httpResponse = response as? HTTPURLResponse else {
                 return onProgressUpdate(STATUS_EMPTY_RESPONSE_ERROR,
                                         message: "Account deletion error: empty response",
@@ -64,12 +60,15 @@ final class DeleteAccountCommand: Operation {
                                         operationLog: operationLog)
             }
             let result = String(data: data, encoding: .utf8) ?? ""
+            var status: Int32
+            var message: String
+            var backupError: OABackupError?
             if httpResponse.statusCode == 200 {
                     message = result
                     status = STATUS_SUCCESS
             } else {
                 backupError = OABackupError(error: result)
-                message = "Account deletion error: \(String(describing: backupError?.toString))\nEmail=\(self.email)\nDeviceId=\(String(describing: backupHelper.getDeviceId()))"
+                message = "Account deletion error: \(String(describing: backupError?.toString))\nEmail=\(email)\nDeviceId=\(String(describing: backupHelper.getDeviceId()))"
                 status = STATUS_SERVER_ERROR
             }
             onProgressUpdate(status, message: message, error: backupError, operationLog: operationLog)

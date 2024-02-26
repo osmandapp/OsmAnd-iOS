@@ -603,7 +603,7 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Prosečna brzina";
-"shared_string_control_start" = "Počni";
+"shared_string_control_start" = "Kreni";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Prosečna visina";
@@ -1740,7 +1740,7 @@
 "device_memory" = "Memorija uređaja";
 "free" = "Slobodno %@";
 "first_usage_greeting" = "Uzmi uputstva i otkrij nova mesta i bez interneta";
-"get_started" = "Počnimo";
+"get_started" = "Započni";
 "first_usage_wizard_desc" = "Pusti da OsmAnd odredi lokaciju i da prema tome predloži mape za preuzimanje te oblasti.";
 "suggested_maps" = "Predložene mape";
 "suggested_maps_descr" = "Ove mape su potrebne za rad ovog dodatka.";

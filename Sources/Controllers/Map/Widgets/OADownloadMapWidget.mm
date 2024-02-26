@@ -50,7 +50,6 @@
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAMapRendererView *_mapView;
-    BOOL _nightMode;
     BOOL _cachedVisibiliy;
     
     OARepositoryResourceItem *_resourceItem;
@@ -96,8 +95,8 @@
     [self.closeButton setCornerRadius:9];
     [self.downloadButton setCornerRadius:9];
     [self applyLocalization];
+    [self onDayNightModeChanged];
     [self updateInfo];
-    [self updateColors];
 
     self.descrView.font = [UIFont systemFontOfSize:15. weight:UIFontWeightBold];
     self.closeButton.titleLabel.font = [UIFont systemFontOfSize:15. weight:UIFontWeightSemibold];
@@ -193,7 +192,7 @@
         NSString *titleText = [NSString stringWithFormat:OALocalizedString(@"download_suggestion"), _resourceItem.title];
         NSMutableAttributedString *attrString = [[NSMutableAttributedString alloc] initWithString:titleText attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:17]}];
         NSRange range = [titleText rangeOfString:_resourceItem.title];
-        [attrString addAttributes:@{NSForegroundColorAttributeName : UIColorFromRGB(_nightMode ? color_chart_orange : color_primary_purple), NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightMedium]} range:range];
+        [attrString addAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorActive], NSFontAttributeName : [UIFont systemFontOfSize:17.0 weight:UIFontWeightMedium]} range:range];
         
         _titleView.attributedText = attrString;
         _descrView.text = [NSByteCountFormatter stringFromByteCount:_resourceItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
@@ -252,8 +251,9 @@
 - (void) onDayNightModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _nightMode = OAAppSettings.sharedManager.nightMode;
+        self.overrideUserInterfaceStyle = OAAppSettings.sharedManager.nightMode ? UIUserInterfaceStyleDark : UIUserInterfaceStyleLight;
         [self updateColors];
+        [self updateWidgetInformation];
     });
 }
 

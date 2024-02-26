@@ -196,6 +196,7 @@
         gpx.gpxDescription = @"";
     
     gpx.importDate = [NSDate date];
+    gpx.creationDate = document.metadata.time > 0 ? [NSDate dateWithTimeIntervalSince1970:document.metadata.time] : [NSDate date];
     
     gpx.totalDistance = analysis.totalDistance;
     gpx.totalTracks = analysis.totalTracks;
@@ -390,6 +391,7 @@
     NSMutableArray *dbContent = [NSMutableArray array];
     for (OAGPX *gpx in gpxList)
     {
+        gpx.creationDate = gpx.creationDate ?: gpx.importDate;
         [dbContent addObject:[self generateGpxData:gpx]];
     }
     [dbContent writeToFile:self.dbFilePath atomically:YES];
@@ -456,6 +458,7 @@
     [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
     [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
     [d setObject:gpx.importDate forKey:@"importDate"];
+    [d setObject:gpx.creationDate forKey:@"creationDate"];
 
     [d setObject:@((int) gpx.color) forKey:@"color"];
 
@@ -555,6 +558,8 @@
             gpx.gpxDescription = value;
         } else if ([key isEqualToString:@"importDate"]) {
             gpx.importDate = value;
+        } else if ([key isEqualToString:@"creationDate"]) {
+            gpx.creationDate = value;
         } else if ([key isEqualToString:@"totalDistance"]) {
             gpx.totalDistance = [value floatValue];
         } else if ([key isEqualToString:@"totalTracks"]) {

@@ -3630,3 +3630,5 @@
 "shared_string_next_event" = "Next event";
 "map_widget_sun_position_desc" = "This widget shows the time until sunrise or sunset, depending on the current time.";
 "map_widget_sun_position" = "Sun position";
+"shared_string_mode" = "Mode";
+"shared_string_format" = "Format";

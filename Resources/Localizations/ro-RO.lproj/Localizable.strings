@@ -2385,7 +2385,7 @@
 "purchases_feature_desc_carplay" = "Aduce hărțile și navigația offline OsmAnd pe ecranul vehiculului dumneavoastră și se integrează cu comenzile vehiculului.";
 "option_available_only_by_subscription" = "Disponibil în planuri de abonament";
 "purchases_feature_weather" = "Prognoza orară pe 24h cu 7 zile înainte, colorată pe hartă";
-"you_can_get_feature_as_part_of_pattern" = "Obțineți “%@” ca parte a planului %@. Comparație:";
+"you_can_get_feature_as_part_of_pattern" = "Obțineți \"%@\" ca parte a planului %@. Comparație:";
 "quarterly_subscription" = "Abonament trimestrial";
 "no_purchases" = "Nu aveți achiziții";
 "empty_purchases_description" = "Dacă achizițiile dvs. nu apar aici, apăsați pe \"%@\" sau contactați echipa noastră de asistență.";
@@ -3156,3 +3156,13 @@
 "shared_string_delete_immediately" = "Ștergeți imediat";
 "clear_travel_search_history" = "Ștergeți istoricul căutărilor de călătorie?";
 "shared_string_move" = "Mutați";
+"download_images_settings_footer" = "Descărcarea imaginilor este posibilă prin orice rețea. Se pot utiliza date mobile.";
+"context_menu_read_article" = "Citiți articolul";
+"cache_size" = "Dimensiunea cache-ului";
+"popular_articles_not_found_title" = "Articole populare care nu au fost găsite";
+"calendar_new_event_message" = "A fost adăugat un nou eveniment în calendar: Ridicați mașina la %@";
+"no_travel_guides_data_title" = "Nu aveți date de călătorie";
+"images" = "Imagini";
+"article_has_no_points" = "Articolul nu are niciun punct";
+"no_travel_guides_data_descr" = "Descărcați ghidurile de călătorie Wikivoyage pentru a vizualiza articole despre locuri din întreaga lume fără o conexiune la internet.";
+"enter_new_name" = "Introduceți noul nume";

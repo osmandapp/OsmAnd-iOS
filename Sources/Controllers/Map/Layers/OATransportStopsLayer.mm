@@ -15,6 +15,7 @@
 #import "OATransportStop.h"
 #import "OAMapStyleSettings.h"
 #import "OATransportStopRoute.h"
+#import "OAQuickSearchTableController.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
 
@@ -170,6 +171,11 @@
     if ([obj isKindOfClass:[OATransportStop class]])
     {
         OATransportStop *item = (OATransportStop *)obj;
+        item.poi = [OAQuickSearchTableController findAmenity:item.name
+                                                         lat:item.location.latitude
+                                                         lon:item.location.longitude
+                                                        lang:[[OAAppSettings sharedManager].settingPrefMapLanguage get]
+                                               transliterate:NO];
         
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetTransportStop;

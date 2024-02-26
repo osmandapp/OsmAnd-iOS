@@ -97,6 +97,24 @@
         BOOL isFromNavigation = dataItem.item.fromNavigation;
         OAHistorySettingsViewController *historyViewController = [[OAHistorySettingsViewController alloc] initWithSettingsType:isFromNavigation ? EOAHistorySettingsTypeNavigation : EOAHistorySettingsTypeSearch editing:YES];
         [self.navigationController pushViewController:historyViewController animated:YES];
+        
+        // TODO: Remove the commented-out code below and any associated obsolete logic related to the table view's editing mode. https://github.com/osmandapp/OsmAnd-Issues/issues/2431
+        
+//        _wasAnyDeleted = NO;
+//        
+//        if (self.delegate)
+//            [self.delegate enterHistoryEditingMode];
+//        
+//        [self.tableView beginUpdates];
+//        [self.tableView setEditing:YES animated:YES];
+//        if (indexPath && gestureRecognizer.state == UIGestureRecognizerStateBegan)
+//        {
+//            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+//            if (self.delegate)
+//                [self.delegate historyItemsSelected:1];
+//        }
+//        
+//        [self.tableView endUpdates];
     }
 }
 

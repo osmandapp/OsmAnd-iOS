@@ -3148,3 +3148,11 @@
 "newest_date_first" = "Cea mai nouă dată mai întâi";
 "oldest_date_first" = "Data cea mai veche mai întâi";
 "longest_distance_first" = "Cea mai lungă distanță prima";
+"shared_string_not_available" = "Nu este disponibil";
+"shared_string_delete_item" = "Ștergeți elementul";
+"shared_string_is_deleted" = "%@ este șters.";
+"shared_string_trash" = "Coș de gunoi";
+"shared_string_file_info" = "Informații despre fișier";
+"shared_string_delete_immediately" = "Ștergeți imediat";
+"clear_travel_search_history" = "Ștergeți istoricul căutărilor de călătorie?";
+"shared_string_move" = "Mutați";

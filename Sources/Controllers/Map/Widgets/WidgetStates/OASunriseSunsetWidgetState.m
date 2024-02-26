@@ -18,6 +18,7 @@
     OAWidgetType *_widgetType;
     OAAppSettings *_settings;
     OACommonInteger *_preference;
+    OACommonInteger *_sunPositionPreference;
 }
 
 - (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
@@ -30,6 +31,7 @@
         _widgetType = widgetType;
         _settings = [OAAppSettings sharedManager];
         _preference = [self registerPreference:customId];
+        _sunPositionPreference = [self registerSunPositionPreference:customId];
     }
     return self;
 }
@@ -39,14 +41,15 @@
     return _widgetType;
 }
 
-//- (OsmandPreference<SunPositionMode> *)getSunPositionPreference {
-//    return self.sunPositionPreference;
-//}
+- (OACommonInteger *)getSunPositionPreference {
+    return _sunPositionPreference;
+}
 
 - (BOOL) isSunriseMode
 {
     return _widgetType == OAWidgetType.sunrise;
 }
+
 
 - (NSString *) getMenuTitle
 {

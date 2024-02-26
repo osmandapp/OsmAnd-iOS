@@ -45,8 +45,10 @@
         };
         
         [self setText:@"-" subtext:@""];
-        if ([_state isSunriseMode])
-            [self setIcon:@"widget_sunrise"];
+        
+        OAWidgetType *type = [_state getWidgetType];
+        if (type == OAWidgetType.sunset)
+            [self setIcon:@"widget_sunset"];
         else
             [self setIcon:@"widget_sunset"];
     }
@@ -136,6 +138,22 @@
     [res addObject:row];
 
     return res;
+}
+
+- (nullable NSString *)getWidgetName {
+    return @"";
+//    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+//    
+//    NSString *sunsetStringId = OALocalizedString(@"map_widget_sunset");
+//    NSString *sunriseStringId = OALocalizedString(@"map_widget_sunrise");
+//    
+//    if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+//        return sunsetStringId;
+//    } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+//        return [self getString:lastIsDaytime ? sunsetStringId : sunriseStringId];
+//    } else {
+//        return sunriseStringId;
+//    }
 }
 
 + (NSString *) getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise

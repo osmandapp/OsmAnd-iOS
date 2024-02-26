@@ -22,5 +22,6 @@
 
 - (BOOL)isSunriseMode;
 - (OACommonInteger *)getPreference;
+- (OACommonInteger *_Nonnull)getSunPositionPreference;
 
 @end

@@ -528,7 +528,12 @@ extension WidgetsListViewController {
         
         let row = section.createNewRow()
         row.setObj(widget, forKey: kWidgetsInfoKey)
-        row.iconName = widget.widget.widgetType?.iconName
+        if widget.widget.widgetType == .sunPosition, let sunPositionWidget = widget.widget as? Sun {
+            
+        } else {
+            row.iconName = widget.widget.widgetType?.iconName
+        }
+
         row.title = widget.getTitle()
         row.descr = widget.getMessage()
         row.cellType = OASimpleTableViewCell.getIdentifier()

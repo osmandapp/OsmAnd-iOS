@@ -40,16 +40,18 @@
     OATableDataModel *_data;
     BOOL _isLogHistoryOn;
     BOOL _decelerating;
+    BOOL _isTableViewEditing;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithSettingsType:(EOAHistorySettingsType)historyType
+- (instancetype)initWithSettingsType:(EOAHistorySettingsType)historyType editing:(BOOL)isEditing
 {
     self = [super init];
     if (self)
     {
         _historyType = historyType;
+        _isTableViewEditing = isEditing;
         [self postInit];
     }
     return self;
@@ -89,6 +91,14 @@
 }
 
 #pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self.tableView setEditing:_isTableViewEditing animated:NO];
+    self.tableView.allowsMultipleSelectionDuringEditing = _isTableViewEditing;
+}
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -176,7 +186,7 @@
 - (void)generateData
 {
     _data = [OATableDataModel model];
-    if (!self.tableView.editing)
+    if (!self.tableView.editing && !_isTableViewEditing)
     {
         OATableSectionData *switchSection = [_data createNewSection];
         [switchSection addRowFromDictionary:@{
@@ -459,7 +469,7 @@
 
 - (void)onLeftNavbarButtonPressed
 {
-    if (self.tableView.editing)
+    if (self.tableView.editing && !_isTableViewEditing)
     {
         [self.tableView setEditing:NO animated:YES];
         self.tableView.allowsMultipleSelectionDuringEditing = NO;

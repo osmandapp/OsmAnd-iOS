@@ -72,6 +72,11 @@ private enum TrackSortType {
     }
 }
 
+@objc(OAMapSettingsGpxViewControllerDelegate)
+protocol MapSettingsGpxViewControllerDelegate: AnyObject  {
+    func onVisibleTracksUpdate()
+}
+
 @objc(OAMapSettingsGpxViewController)
 @objcMembers
 final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
@@ -95,6 +100,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
     private var importHelper: OAGPXImportUIHelper?
+    weak var delegate: MapSettingsGpxViewControllerDelegate?
 
     private lazy var sortButton: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -398,6 +404,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             UserDefaults.standard.set(hiddenTracksPaths, forKey: previouslyVisibleTracksKey)
             OAAppSettings.sharedManager()?.showGpx(tracksToShow)
             OAAppSettings.sharedManager()?.hideGpx(tracksToHide)
+            
+            if let delegate {
+                delegate.onVisibleTracksUpdate()
+            }
         }
     }
     

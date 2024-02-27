@@ -8,6 +8,7 @@
 
 #import "OASettingsBackupViewController.h"
 #import "OACloudAccountLogoutViewController.h"
+#import "OACloudAccountLoginViewController.h"
 #import "OADeleteAllVersionsBackupViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseBackupTypesViewController.h"
@@ -170,6 +171,13 @@
     removeVersionsData[@"title"] = OALocalizedString(@"backup_delete_old_data");
     removeVersionsData[@"text_color"] = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
     [dangerZoneCells addObject:removeVersionsData];
+
+    NSMutableDictionary *deleteAccountData = [NSMutableDictionary dictionary];
+    deleteAccountData[@"key"] = @"delete_account_cell";
+    deleteAccountData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
+    deleteAccountData[@"title"] = OALocalizedString(@"delete_account");
+    deleteAccountData[@"text_color"] = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
+    [dangerZoneCells addObject:deleteAccountData];
 
     _data = data;
 }
@@ -424,6 +432,10 @@
         OADeleteAllVersionsBackupViewController *removeOldVersionsViewController = [[OADeleteAllVersionsBackupViewController alloc] initWithScreenType:EOARemoveOldVersionsBackupScreenType];
         removeOldVersionsViewController.deleteDelegate = self;
         [self.navigationController pushViewController:removeOldVersionsViewController animated:YES];
+    }
+    else if ([key isEqualToString:@"delete_account_cell"])
+    {
+        [self showViewController:[[OACloudAccountLoginViewController alloc] initWithScreenType:EOACloudAccountDeletionScreenType]];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

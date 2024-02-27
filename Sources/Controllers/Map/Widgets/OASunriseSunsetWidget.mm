@@ -193,22 +193,22 @@
     NSMutableString *result = [NSMutableString string];
     
     if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
-        result = [sunsetStringId copy];
+        [result appendString:sunsetStringId];
     } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
-        result = [_lastIsDaytime ? sunsetStringId : sunriseStringId copy];
+        [result appendString:_lastIsDaytime ? sunsetStringId : sunriseStringId];
     } else {
-        result = [sunriseStringId copy];
+        [result appendString:sunriseStringId];
     }
     
     EOASunriseSunsetMode sunriseSunsetMode = (EOASunriseSunsetMode)[[self getPreference] get];
     [result appendString:@", "];
     if (sunriseSunsetMode == EOASunriseSunsetNext)
     {
-        [result appendFormat:@"%@:", OALocalizedString(@"shared_string_next")];
+        [result appendFormat:@"%@", OALocalizedString(@"shared_string_next")];
     }
     else if (sunriseSunsetMode == EOASunriseSunsetTimeLeft)
     {
-        [result appendFormat:@"%@:", OALocalizedString(@"map_widget_sunrise_sunset_time_left")];
+        [result appendFormat:@"%@", OALocalizedString(@"map_widget_sunrise_sunset_time_left")];
     }
     
     return result;

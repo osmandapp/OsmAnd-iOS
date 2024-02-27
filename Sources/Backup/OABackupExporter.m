@@ -276,7 +276,7 @@
 - (void) markOldFileForDeletion:(OASettingsItem *)item fileName:(NSString *)fileName
 {
     NSString *type = [OASettingsItemType typeName:item.type];
-    OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
+    OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
     if (exportType != nil && ![_backupHelper getVersionHistoryTypePref:exportType].get)
     {
         OARemoteFile *remoteFile = [_backupHelper.backup getRemoteFile:type fileName:fileName];

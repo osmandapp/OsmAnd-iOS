@@ -582,7 +582,7 @@
     NSString *newName = gpx.gpxFileName;
     
     NSString *subfolderPath = OsmAndApp.instance.gpxPath;
-    for (NSString *component in [newFolderName pathComponents])
+    for (NSString *component in [newFolder pathComponents])
     {
         subfolderPath = [subfolderPath stringByAppendingPathComponent:component];
         if (![[NSFileManager defaultManager] fileExistsAtPath:subfolderPath])

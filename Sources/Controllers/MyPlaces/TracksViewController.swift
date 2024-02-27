@@ -106,7 +106,7 @@ private enum ButtonActionNumberTag: Int {
     case save = 2
 }
 
-class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASaveTrackViewControllerDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate {
+class TracksViewController: OACompoundViewController, UITableViewDelegate, UITableViewDataSource, OATrackSavingHelperUpdatableDelegate, TrackListUpdatableDelegate, OASaveTrackViewControllerDelegate, OASelectTrackFolderDelegate, OAGPXImportUIHelperDelegate, MapSettingsGpxViewControllerDelegate {
     
     private let visibleTracksKey = "visibleTracksKey"
     private let tracksFolderKey = "tracksFolderKey"
@@ -122,6 +122,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private let secondButtonIconKey = "secondButtonIconKey"
     private let secondButtonActionNumberTagKey = "button2ActionNumberTagKey"
     private let isVisibleKey = "isVisibleKey"
+    private let isFullWidthSeparatorKey = "isFullWidthSeparatorKey"
     
     @IBOutlet private weak var tableView: UITableView!
     
@@ -178,6 +179,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         super.viewWillAppear(animated)
         setupNavbar()
         if shouldReload {
+            currentFolder = getTrackFolderByPath(currentFolderPath) ?? rootFolder
             updateData()
             shouldReload = false
         }
@@ -186,6 +188,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
         if isRootFolder && rootFolder.tracks.isEmpty && rootFolder.subfolders.isEmpty {
             buildFoldersTree()
         }
@@ -327,6 +331,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             }
         }
+        
+        let lastRow = section.getRow(section.rowCount() - 1)
+        lastRow.setObj(true, forKey: isFullWidthSeparatorKey)
     }
     
     private func getTrackDescription(distance: Float, timeSpan: Int, waypoints: Int32, showDate: Bool, filepath: String?) -> String {
@@ -395,6 +402,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let alert = UIAlertController(title: text, message: nil, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .cancel))
         present(alert, animated: true)
+    }
+    
+    @objc private func onRefresh() {
+        updateAllFoldersVCData()
+        tableView.refreshControl?.endRefreshing()
     }
     
     // MARK: - Data
@@ -782,8 +794,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
-                currentFolder.subfolders[name] = TrackFolder()
-                updateData()
+                updateAllFoldersVCData()
             } catch let error {
                 debugPrint(error)
             }
@@ -805,7 +816,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 currentFolder.subfolders[oldName] = nil
                 guard let renamedFolder = currentFolder.subfolders[newName] else { return }
                 changeGpxDBSubfolderTags(folderContent: renamedFolder, srcPath: oldFolderShortPath, destPath: newFolderShortPath)
-                updateData()
+                updateAllFoldersVCData()
             } catch let error {
                 debugPrint(error)
             }
@@ -820,10 +831,15 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             currentFolder.subfolders[folderName]?.performForAllTracks { gpxDB.removeGpxItem($0.gpxFilePath) }
             currentFolder.subfolders[folderName] = nil
             try FileManager.default.removeItem(atPath: folderPath)
-            updateData()
+            updateAllFoldersVCData()
         } catch let error {
             debugPrint(error)
         }
+    }
+    
+    private func moveFile(selectedFolderName: String) {
+        gpxHelper.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
+        updateAllFoldersVCData()
     }
     
     private func moveFolder(folderPathForOpenedContextMenu: String, selectedFolderName: String) {
@@ -958,12 +974,19 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
                 }
+                
+                cell.setCustomLeftSeparatorInset(false)
+                if item.obj(forKey: isFullWidthSeparatorKey) as? Bool ?? false {
+                    cell.setCustomLeftSeparatorInset(true)
+                    cell.separatorInset = .zero
+                }
                 outCell = cell
             }
         } else if item.cellType == OALargeImageTitleDescrTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier) as? OALargeImageTitleDescrTableViewCell
             if let cell = cell {
                 cell.selectionStyle = .none
+                cell.separatorInset = .zero
                 cell.imageWidthConstraint.constant = 60
                 cell.imageHeightConstraint.constant = 60
                 cell.cellImageView?.contentMode = .scaleAspectFit
@@ -1002,11 +1025,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let item = tableData.item(for: indexPath)
         if item.key == visibleTracksKey {
             let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
-            if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
-                vc.rootFolder = rootFolder
-                vc.visibleTracksFolder = visibleTracksFolder
-                vc.isRootFolder = false
-                vc.isVisibleOnMapFolder = true
+            if let vc = MapSettingsGpxViewController() {
+                vc.delegate = self
                 show(vc)
             }
         } else if item.key == tracksFolderKey {
@@ -1175,8 +1195,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     func onFolderSelected(_ selectedFolderName: String?) {
         if let selectedFolderName {
             if let selectedTrack {
-                gpxHelper.copyGPX(toNewFolder: selectedFolderName, renameToNewName: nil, deleteOriginalFile: true, openTrack: false, gpx: selectedTrack)
-                updateAllFoldersVCData()
+                moveFile(selectedFolderName: selectedFolderName)
+                
             } else if let selectedFolderPath {
                 moveFolder(folderPathForOpenedContextMenu: selectedFolderPath, selectedFolderName: selectedFolderName)
             }
@@ -1205,6 +1225,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - OAGPXImportUIHelperDelegate
     
     func updateVCData() {
+        updateAllFoldersVCData()
+    }
+    
+    
+    // MARK: - MapSettingsGpxViewControllerDelegate
+    
+    func onVisibleTracksUpdate() {
         updateAllFoldersVCData()
     }
 }

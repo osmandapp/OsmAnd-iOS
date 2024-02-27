@@ -976,8 +976,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 
                 cell.setCustomLeftSeparatorInset(false)
-                let isFullWidthSeparator = item.obj(forKey: isFullWidthSeparatorKey) as? Bool ?? false
-                if isFullWidthSeparator {
+                if item.obj(forKey: isFullWidthSeparatorKey) as? Bool ?? false {
                     cell.setCustomLeftSeparatorInset(true)
                     cell.separatorInset = .zero
                 }

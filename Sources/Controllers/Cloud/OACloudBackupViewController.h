@@ -12,7 +12,8 @@
 typedef NS_ENUM(NSInteger, EOACloudScreenSourceType) {
     EOACloudScreenSourceTypeSignIn = 0,
     EOACloudScreenSourceTypeSignUp,
-    EOACloudScreenSourceTypeDirect
+    EOACloudScreenSourceTypeDirect,
+    EOACloudScreenSourceDeleteAccount
 };
 
 @interface OACloudBackupViewController : OABaseCloudBackupViewController

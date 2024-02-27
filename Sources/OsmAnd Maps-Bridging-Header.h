@@ -121,6 +121,8 @@
 #import "OAAlertBottomSheetViewController.h"
 #import "OAExportItemsViewController.h"
 #import "OATrackMenuAppearanceHudViewController.h"
+#import "OAPurchasesViewController.h"
+#import "OAMainSettingsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -134,6 +136,8 @@
 #import "OAGpxStatBlockCollectionViewCell.h"
 #import "OATitleDescriptionBigIconCell.h"
 #import "OASearchMoreCell.h"
+#import "OADividerCell.h"
+#import "OADownloadProgressBarCell.h"
 
 // Other
 #import "OAIndexConstants.h"
@@ -163,6 +167,7 @@
 
 // Backup
 #import "OABackupHelper.h"
+#import "OABackupListeners.h"
 #import "OABackupInfo.h"
 #import "OABackupError.h"
 #import "OANetworkSettingsHelper.h"
@@ -174,3 +179,5 @@
 #import "OAExportSettingsType.h"
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
+#import "OAOperationLog.h"
+#import "OANetworkUtilities.h"

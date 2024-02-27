@@ -904,6 +904,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *snapToRoad;
 @property (nonatomic) OACommonInteger *autoFollowRoute;
 @property (nonatomic) OACommonBoolean *autoZoomMap;
+@property (nonatomic) OACommonBoolean *useV1AutoZoom;
 @property (nonatomic) OACommonAutoZoomMap *autoZoomMapScale;
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;

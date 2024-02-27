@@ -144,6 +144,7 @@
 #define snapToRoadKey @"snapToRoad"
 #define autoFollowRouteKey @"autoFollowRoute"
 #define autoZoomMapKey @"autoZoomMap"
+#define useV1AutoZoomKey @"useV1AutoZoom"
 #define autoZoomMapScaleKey @"autoZoomMapScale"
 #define keepInformingKey @"keepInforming"
 #define speedSystemKey @"speedSystem"
@@ -4116,6 +4117,9 @@
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode BICYCLE]];
         [_autoZoomMap setModeDefaultValue:@NO mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_autoZoomMap forKey:@"auto_zoom_map_on_off"];
+        
+        _useV1AutoZoom = [OACommonBoolean withKey:useV1AutoZoomKey defValue:NO];
+        [_profilePreferences setObject:_useV1AutoZoom forKey:@"use_v1_auto_zoom"];
 
         _autoZoomMapScale = [OACommonAutoZoomMap withKey:autoZoomMapScaleKey defValue:AUTO_ZOOM_MAP_FAR];
         [_autoZoomMapScale setModeDefaultValue:@(AUTO_ZOOM_MAP_FAR) mode:[OAApplicationMode CAR]];

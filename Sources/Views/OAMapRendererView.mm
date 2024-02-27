@@ -366,6 +366,11 @@ forcedUpdate:(BOOL)forcedUpdate
     }
 }
 
+- (OsmAnd::PointI) getViewSize
+{
+    return _viewSize;
+}
+
 - (float)zoom
 {
     return _renderer->getState().surfaceZoomLevel + (_renderer->getState().surfaceVisualZoom >= 1.0f ? _renderer->getState().surfaceVisualZoom - 1.0f : (_renderer->getState().surfaceVisualZoom - 1.0f) * 2.0f);

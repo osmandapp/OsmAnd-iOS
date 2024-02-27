@@ -331,4 +331,15 @@
     return OsmAnd::PointI(x31, y31);
 }
 
++ (BOOL) containsLatLon:(CLLocation *)location
+{
+    return [self.class containsLatLon:location.coordinate.latitude lon:location.coordinate.longitude];
+}
+
++ (BOOL) containsLatLon:(double)lat lon:(double)lon
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    return [mapRenderer isPositionVisible:[self.class getPoint31FromLatLon:lat lon:lon]];
+}
+
 @end

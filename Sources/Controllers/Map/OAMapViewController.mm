@@ -215,6 +215,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     OAAutoObserverProxy* _framePreparedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
+    
+    OAAutoObserverProxy* _manualZoomObserver;
 
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
@@ -1292,6 +1294,8 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 
                             if (_startZooming && zoom != 0)
                                 _mapView.flatZoom = qBound(_mapView.minZoom, _mapView.flatZoom + (float)zoom, _mapView.maxZoom);
+                            
+                            [OAMapViewTrackingUtilities.instance setZoomTime:[[NSDate now] timeIntervalSince1970]];
                         }
                         else
                         {

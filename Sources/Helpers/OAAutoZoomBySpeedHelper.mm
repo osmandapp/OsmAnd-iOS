@@ -15,6 +15,8 @@
 #import "OARouteCalculationResult.h"
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
+#import "OAAutoObserverProxy.h"
+#import "OAMapViewTrackingUtilities.h"
 
 const static int kShowDrivingSecondsV2 = 45;
 const static float kMinAutoZoomSpeed = 7.0 / 3.6;
@@ -82,6 +84,8 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     
     OARouteDirectionInfo *_nextTurnInFocus;
     
+    OAAutoObserverProxy *_mapZoomObserver;
+    
     //old vars
     NSTimeInterval _lastTimeAutoZooming;
     BOOL _isUserZoomed;
@@ -95,6 +99,8 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _speedFilter = [[OASpeedFilter alloc] init];
+        
+        _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onManualZoomChange) andObserve:OARootViewController.instance.mapPanel.mapViewController.zoomObservable];
     }
     return self;
 }
@@ -103,8 +109,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 // without any changes. differs with android
 - (double) calculateAutoZoomBySpeedV1:(float)speed mapView:(OAMapRendererView *)mapView
 {
-    EOAAutoZoomMap autoZoomScale = [_settings.autoZoomMapScale get];
-    
     if (speed >= 0)
     {
         NSTimeInterval now = CACurrentMediaTime();
@@ -278,14 +282,23 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 
 - (OsmAnd::PointI) getFocusPixel:(int)pixWidth pixHeight:(int)pixHeight
 {
-    //TODO: implement
-    return OsmAnd::PointI();
+    //TODO: Test all values. Compare work with android
+        CGPoint originalRatio = CGPointMake(kFocusPixelRatioX, kFocusPixelRatioY);
+        CGPoint ratio = [OAMapViewTrackingUtilities.instance projectRatioToVisibleMapRect:originalRatio];
+        if (CGPointEqualToPoint(ratio, CGPointZero))
+            ratio = originalRatio;
+        
+        int32_t pixelX = (int32_t) (ratio.x * pixWidth);
+        int32_t pixelY = (int32_t) (ratio.y * pixHeight);
+        return OsmAnd::PointI(pixelX, pixelY);
 }
 
 
-// onManualZoomChange()
-
-// onTouchEvent()
+- (void) onManualZoomChange
+{
+   //TODO: check it
+   _nextTurnInFocus = nil;
+}
 
 // getTrackPointsAnalyser()
 

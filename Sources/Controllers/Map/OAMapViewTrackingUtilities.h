@@ -42,4 +42,7 @@
 
 - (CLLocation *) getDefaultLocation;
 
+- (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
+- (void) setZoomTime:(NSTimeInterval)time;
+
 @end

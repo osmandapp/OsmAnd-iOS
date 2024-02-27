@@ -76,4 +76,7 @@
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;
 + (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon;
 
++ (BOOL) containsLatLon:(CLLocation *)location;
++ (BOOL) containsLatLon:(double)lat lon:(double)lon;
+
 @end

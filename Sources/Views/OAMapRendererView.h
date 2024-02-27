@@ -143,6 +143,7 @@ struct CLLocationCoordinate2D;
 - (OsmAnd::AreaI) getVisibleBBox31;
 - (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos;
+- (OsmAnd::PointI) getViewSize;
 
 - (void)dumpResourcesInfo;
 

@@ -16,8 +16,8 @@
                       appMode:(OAApplicationMode * _Nonnull)appMode
                  widgetParams:(NSDictionary * _Nullable)widgetParams;
 
-+ (NSString *)getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
-+ (NSString *)getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
+//- (NSString *)getTitle:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
+//- (NSString *)getDescription:(EOASunriseSunsetMode)ssm isSunrise:(BOOL)isSunrise;
 - (OACommonInteger *)getPreference;
 
 @end

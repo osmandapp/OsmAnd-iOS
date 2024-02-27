@@ -20,7 +20,7 @@
 
 - (OAWidgetType *_Nonnull)getWidgetType;
 
-- (BOOL)isSunriseMode;
+//- (BOOL)isSunriseMode;
 - (OACommonInteger *)getPreference;
 - (OACommonInteger *_Nonnull)getSunPositionPreference;
 

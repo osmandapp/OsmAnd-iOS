@@ -176,7 +176,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     private func showToastForComplexWidget(_ widgetTitle: String) {
-        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: self.view)
+        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: view)
     }
     
     @objc private func onWidgetAdded(notification: NSNotification) {
@@ -330,6 +330,12 @@ extension WidgetsListViewController {
             vc.selectedAppMode = selectedAppMode
             vc.widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
             vc.widgetPanel = widgetPanel
+            vc.onWidgetStateChangedAction = { [weak self] in
+                DispatchQueue.main.async {
+                    self?.reorderWidgets()
+                    self?.updateUIAnimated(nil)
+                }
+            }
             show(vc)
         }
     }

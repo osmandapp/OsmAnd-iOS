@@ -50,11 +50,49 @@
     return _widgetType == OAWidgetType.sunrise;
 }
 
+- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode {
+    switch (mode)
+    {
+        case SunPositionModeSunPositionMode:
+            return OALocalizedString(@"shared_string_next_event");
+        case SunPositionModeSunsetMode:
+            return OALocalizedString(@"map_widget_sunset");
+        case SunPositionModeSunriseMode:
+            return OALocalizedString(@"map_widget_sunrise");
+    }
+}
 
-- (NSString *) getMenuTitle
+
+- (NSString *)getMenuTitle
 {
+    if (_widgetType == OAWidgetType.sunPosition)
+    {
+        SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
+        return [NSString stringWithFormat:@"%@: %@", _widgetType.title, [self getTitleForSunPositionMode:sunPositionMode]];
+    }
     return _widgetType.title;
 }
+
+//- (NSString *)getWidgetTitle
+//{
+//    // TODO:
+//    return _widgetType.title;
+//}
+
+//- (NSString *)getWidgetName {
+//    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+//    
+//    NSString *sunsetStringId = OALocalizedString(@"map_widget_sunset");
+//    NSString *sunriseStringId = OALocalizedString(@"map_widget_sunrise");
+//    
+//    if (OAWidgetType.sunset == _widgetType || (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+//        return sunsetStringId;
+//    } else if (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+//        return _lastIsDaytime ? sunsetStringId : sunriseStringId;
+//    } else {
+//        return sunriseStringId;
+//    }
+//}
 
 - (NSString *)getMenuDescription
 {
@@ -80,42 +118,6 @@
 - (NSString *) getMenuItemId
 {
     return @((EOASunriseSunsetMode) [[self getPreference] get]).stringValue;
-}
-
-- (NSArray<NSString *> *) getMenuTitles
-{
-    if (_widgetType == OAWidgetType.sunrise)
-    {
-        return @[
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:YES]
-        ];
-    } else if (_widgetType == OAWidgetType.sunset)
-    {
-        return @[
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:NO]
-        ];
-    }
-    return @[@""];
-}
-
-- (NSArray<NSString *> *) getMenuDescriptions
-{
-    if (_widgetType == OAWidgetType.sunrise)
-    {
-        return @[
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:YES]
-        ];
-    } else if (_widgetType == OAWidgetType.sunset)
-    {
-        return @[
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:NO]
-        ];
-    }
-    return @[@""];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds

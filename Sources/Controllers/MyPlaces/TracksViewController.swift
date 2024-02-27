@@ -794,7 +794,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if !FileManager.default.fileExists(atPath: newFolderPath) {
             do {
                 try FileManager.default.createDirectory(atPath: newFolderPath, withIntermediateDirectories: true)
-                let newFolder = TrackFolder()
                 updateAllFoldersVCData()
             } catch let error {
                 debugPrint(error)
@@ -977,11 +976,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
                 
                 cell.setCustomLeftSeparatorInset(false)
-                if let isFullWidthSeparator = item.obj(forKey: isFullWidthSeparatorKey) as? Bool {
-                    if isFullWidthSeparator {
-                        cell.setCustomLeftSeparatorInset(true)
-                        cell.separatorInset = .zero
-                    }
+                let isFullWidthSeparator = item.obj(forKey: isFullWidthSeparatorKey) as? Bool ?? false
+                if isFullWidthSeparator {
+                    cell.setCustomLeftSeparatorInset(true)
+                    cell.separatorInset = .zero
                 }
                 outCell = cell
             }

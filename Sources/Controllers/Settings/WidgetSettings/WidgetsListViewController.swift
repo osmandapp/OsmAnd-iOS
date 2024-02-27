@@ -534,7 +534,6 @@ extension WidgetsListViewController {
         } else {
             row.iconName = widget.widget.widgetType?.iconName
         }
-
         row.title = widget.getTitle()
         row.descr = widget.getMessage()
         row.cellType = OASimpleTableViewCell.getIdentifier()

@@ -7,7 +7,5 @@
 //
 
 @objc enum SunPositionMode: Int {
-    case sunPositionMode
-    case sunsetMode
-    case sunriseMode
+    case sunPositionMode, sunsetMode, sunriseMode
 }

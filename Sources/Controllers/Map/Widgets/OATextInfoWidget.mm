@@ -271,7 +271,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     [NSLayoutConstraint activateConstraints:@[
         [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
         [self.valueLabel.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor],
-        [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor]
+        [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor],
         [self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
     

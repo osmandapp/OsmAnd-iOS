@@ -20,7 +20,6 @@
     OAAppSettings *_settings;
     OASunriseSunsetWidgetState *_state;
     NSArray<NSString *> *_items;
-    BOOL _lastIsDaytime;
 }
 
 - (instancetype)initWithState:(OASunriseSunsetWidgetState *)state
@@ -46,7 +45,7 @@
         };
         
         [self setText:@"-" subtext:@""];
-        [self setIcon:[self getWidgetIconName]];
+        [self setIcon:[_state getWidgetIconName]];
     }
     return self;
 }
@@ -74,7 +73,7 @@
     
     if (OAWidgetType.sunPosition == self.widgetType)
     {
-        [self setIcon:[self getWidgetIconName]];
+        [self setIcon:[_state getWidgetIconName]];
     }
   
     return YES;
@@ -195,7 +194,7 @@
     if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
         [result appendString:sunsetStringId];
     } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
-        [result appendString:_lastIsDaytime ? sunsetStringId : sunriseStringId];
+        [result appendString:_state.lastIsDayTime ? sunsetStringId : sunriseStringId];
     } else {
         [result appendString:sunriseStringId];
     }
@@ -212,21 +211,6 @@
     }
     
     return result;
-}
-
-- (NSString *)getWidgetIconName {
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
-    
-    NSString *sunsetStringId = @"widget_sunset";
-    NSString *sunriseStringId = @"widget_sunrise";
-    
-    if (OAWidgetType.sunset == self.widgetType || (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
-        return sunsetStringId;
-    } else if (OAWidgetType.sunPosition == self.widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
-        return _lastIsDaytime ? sunsetStringId : sunriseStringId;
-    } else {
-        return sunriseStringId;
-    }
 }
 
 - (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode {
@@ -254,28 +238,31 @@
     }
 }
 
-- (NSString *)getNextEventString:(SunPositionMode)sunPositionMode
-{
+- (NSString *)getNextEventString:(SunPositionMode)sunPositionMode {
     OAWidgetType *type = [_state getWidgetType];
+    NSString *eventString = @"";
+    
     if (OAWidgetType.sunPosition == type)
     {
-        switch (sunPositionMode) {
-            case SunPositionModeSunPositionMode:
-                return OALocalizedString(@"shared_string_next_event");
+        switch (sunPositionMode)
+        {
             case SunPositionModeSunriseMode:
-                return OALocalizedString(@"map_widget_next_sunrise");
+                eventString = @"map_widget_next_sunrise";
+                break;
             case SunPositionModeSunsetMode:
-                return OALocalizedString(@"map_widget_next_sunset");
+                eventString = @"map_widget_next_sunset";
+                break;
             default:
+                eventString = @"shared_string_next_event";
                 break;
         }
-        return OALocalizedString(@"shared_string_next_event");
     }
-    else if (OAWidgetType.sunrise == type)
+    else
     {
-        return OALocalizedString(@"map_widget_next_sunrise");
+        eventString = OAWidgetType.sunrise == type ? @"map_widget_next_sunrise" : @"map_widget_next_sunset";
     }
-    return OALocalizedString(@"map_widget_next_sunset");
+
+    return OALocalizedString(eventString);
 }
 
 - (NSString *)getDescription:(EOASunriseSunsetMode)ssm
@@ -319,8 +306,8 @@
     }
     else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
     {
-        _lastIsDaytime = [sunriseSunset isDaytime];
-        nextTimeDate = _lastIsDaytime ? sunset : sunrise;
+        _state.lastIsDayTime = [sunriseSunset isDaytime];
+        nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;
     }
     else
     {

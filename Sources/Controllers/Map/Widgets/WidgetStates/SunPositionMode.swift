@@ -12,14 +12,6 @@ import Foundation
     case sunPositionMode
     case sunsetMode
     case sunriseMode
-    
-//    var prefId: String {
-//        switch self {
-//        case .sunPositionMode: localizedString("shared_string_next_event")
-//        case .sunsetMode: localizedString("map_widget_sunset")
-//        case .sunriseMode: localizedString("map_widget_sunrise")
-//        }
-//    }
 }
 
 

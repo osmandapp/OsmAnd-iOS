@@ -50,7 +50,8 @@
     return _widgetType == OAWidgetType.sunrise;
 }
 
-- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode {
+- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode
+{
     switch (mode)
     {
         case SunPositionModeSunPositionMode:
@@ -59,6 +60,21 @@
             return OALocalizedString(@"map_widget_sunset");
         case SunPositionModeSunriseMode:
             return OALocalizedString(@"map_widget_sunrise");
+    }
+}
+
+- (NSString *)getWidgetIconName {
+    SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
+    
+    NSString *sunsetStringId = @"widget_sunset";
+    NSString *sunriseStringId = @"widget_sunrise";
+    
+    if (OAWidgetType.sunset == _widgetType || (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+        return sunsetStringId;
+    } else if (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+        return _lastIsDayTime ? sunsetStringId : sunriseStringId;
+    } else {
+        return sunriseStringId;
     }
 }
 

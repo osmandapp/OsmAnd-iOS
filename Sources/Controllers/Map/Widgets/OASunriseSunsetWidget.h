@@ -17,6 +17,5 @@
                  widgetParams:(NSDictionary * _Nullable)widgetParams;
 
 - (OACommonInteger *)getPreference;
-- (NSString *_Nonnull)getWidgetIconName;
 
 @end

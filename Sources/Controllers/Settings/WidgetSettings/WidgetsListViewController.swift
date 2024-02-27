@@ -528,8 +528,9 @@ extension WidgetsListViewController {
         
         let row = section.createNewRow()
         row.setObj(widget, forKey: kWidgetsInfoKey)
-        if widget.widget.widgetType == .sunPosition, let sunPositionWidget = widget.widget as? Sun {
-            
+        if widget.widget.widgetType == .sunPosition,
+           let sunPositionWidgetState = widget.getWidgetState() as? OASunriseSunsetWidgetState {
+            row.iconName = sunPositionWidgetState.getWidgetIconName()
         } else {
             row.iconName = widget.widget.widgetType?.iconName
         }

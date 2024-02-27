@@ -2287,7 +2287,10 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
             [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
 
             _obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
-                                                                                   rasterTileSize));
+                                                                                   rasterTileSize,
+                                                                                   nullptr,
+                                                                                   false,
+                                                                                   true));
             
             [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
             

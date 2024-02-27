@@ -9,30 +9,31 @@
 #import "OATransportStop.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
 @implementation OATransportStop
 
-- (NSString *) name
+- (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
 {
-    if (_stop)
+    if (self)
     {
-        NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        return _stop->getName(QString::fromNSString(prefLang), transliterate).toNSString();
+        _stop = stop;
+        if (stop)
+        {
+            NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
+            _name = _stop->getName(QString::fromNSString(prefLang), transliterate).toNSString();
+            _location = CLLocationCoordinate2DMake(stop->location.latitude, stop->location.longitude);
+            _poi = [OAPOIHelper findPOIByName:self.name lat:_location.latitude lon:_location.longitude];
+        }
+        else
+        {
+            _name = @"";
+        }
     }
-    else
-    {
-        return @"";
-    }
-}
-
-- (void) setStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
-{
-    _stop = stop;
-    if (stop)
-        _location = CLLocationCoordinate2DMake(stop->location.latitude, stop->location.longitude);
+    return self;
 }
 
 - (BOOL)isEqual:(OATransportStop *)object

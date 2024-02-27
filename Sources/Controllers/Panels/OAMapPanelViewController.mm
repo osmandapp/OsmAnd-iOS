@@ -2756,6 +2756,7 @@ typedef enum
     }
 
     [self hideMultiMenuIfNeeded];
+    [self hideTargetPointMenu];
 
     if (_dashboard)
         [self closeDashboard];

@@ -3254,12 +3254,17 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
     return YES;
 }
 
-- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName
+- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
 {
+    OAGPXDocument *gpxDocument;
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
-        return helper.currentTrack.points;
+        gpxDocument = helper.currentTrack;
+    }
+    else if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
+    {
+        gpxDocument = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())];
     }
     else
     {
@@ -3269,17 +3274,15 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
-                OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
-                return document.points;
+                gpxDocument = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+                break;
             }
         }
-        if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())];
-            return document.points;
-        }
     }
-    return nil;
+    if (gpxDocument)
+        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.points;
+    else
+        return @[];
 }
 
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap

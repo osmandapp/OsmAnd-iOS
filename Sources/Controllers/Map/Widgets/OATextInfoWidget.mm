@@ -51,7 +51,6 @@
     UIStackView *_contentUnitStackViewSimpleWidget;
     NSLayoutConstraint *_verticalStackViewSimpleWidgetTopConstraint;
     NSLayoutConstraint *_verticalStackViewSimpleWidgetBottomConstraint;
-    NSLayoutConstraint *_valueMinHeightSimpleWidgetConstraint;
     UIColor *_iconColor;
 }
 
@@ -273,11 +272,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [self.valueLabel.topAnchor constraintEqualToAnchor:valueUnitOrEmptyView.topAnchor],
         [self.valueLabel.leadingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.leadingAnchor],
         [self.valueLabel.bottomAnchor constraintEqualToAnchor:valueUnitOrEmptyView.bottomAnchor]
-        //[self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
+        [self.valueLabel.heightAnchor constraintGreaterThanOrEqualToConstant:30]
     ]];
-    
-    _valueMinHeightSimpleWidgetConstraint = [self.valueLabel.heightAnchor constraintEqualToConstant:30];
-    _valueMinHeightSimpleWidgetConstraint.active = YES;
     
     [NSLayoutConstraint activateConstraints:@[
         [_contentUnitStackViewSimpleWidget.centerYAnchor constraintEqualToAnchor:valueUnitOrEmptyView.centerYAnchor],
@@ -491,7 +487,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     if (text.length == 0 && subtext.length == 0)
     {
         if (self.isSimpleLayout) {
-            self.valueLabel.text = @"";
+            self.valueLabel.attributedText = nil;
         }
         else
         {
@@ -527,10 +523,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightSemibold];
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
-    _valueMinHeightSimpleWidgetConstraint.constant = [WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle];
-    self.valueLabel.text = _text;
-    
-//    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
                                       
     self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;

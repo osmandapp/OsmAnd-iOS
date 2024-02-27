@@ -6,12 +6,8 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objc enum SunPositionMode: Int {
     case sunPositionMode
     case sunsetMode
     case sunriseMode
 }
-
-

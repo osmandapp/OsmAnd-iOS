@@ -663,7 +663,7 @@
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
     ts.textShadowColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
-    if (!transparent && !nightMode)
+    if (!transparent)
         ts.textShadowRadius = 0;
     else
         ts.textShadowRadius = 4.0;

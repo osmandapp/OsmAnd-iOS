@@ -93,7 +93,7 @@
     containerView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
     containerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [view addSubview:containerView];
+    [view insertSubview:containerView atIndex:0];
         
     [NSLayoutConstraint activateConstraints:@[
         [containerView.leftAnchor constraintEqualToAnchor:view.leftAnchor],
@@ -102,9 +102,9 @@
     ]];
     
     if (top)
-        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:6].active = YES;
+        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:5].active = YES;
     else
-        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-6].active = YES;
+        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-5].active = YES;
 }
 
 - (void)configureShadowForWidgets:(NSArray<UIView *> *)views
@@ -202,12 +202,16 @@
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_bottomPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
+
+        // for showing shadows
+        _topPanelController.view.layer.masksToBounds = NO;
+        _bottomPanelController.view.layer.masksToBounds = NO;
         
         [self configureShadowForWidgets:@[mapHudViewController.middleWidgetsView,
                                           mapHudViewController.leftWidgetsView,
                                           mapHudViewController.rightWidgetsView]];
-        [self configureShadowForWidget:mapHudViewController.topWidgetsView top:YES];
-        [self configureShadowForWidget:mapHudViewController.bottomWidgetsView top:NO];
+        [self configureShadowForWidget:_topPanelController.view top:YES];
+        [self configureShadowForWidget:_bottomPanelController.view top:NO];
 
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;

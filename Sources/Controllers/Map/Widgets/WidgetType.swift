@@ -264,16 +264,17 @@ extension WidgetType {
     static let weatherWindWidget = WidgetType(ordinal: 40, id: "weather_wind", title: localizedString("map_settings_weather_wind"), descr: localizedString("wind_widget_desc"), iconName: "widget_weather_wind", group: .weather, defaultPanel: .rightPanel)
     static let weatherCloudsWidget = WidgetType(ordinal: 41, id: "weather_cloud", title: localizedString("map_settings_weather_cloud"), descr: localizedString("clouds_widget_desc"), iconName: "widget_weather_clouds", group: .weather, defaultPanel: .rightPanel)
     static let weatherAirPressureWidget = WidgetType(ordinal: 42, id: "weather_pressure", title: localizedString("map_settings_weather_pressure"), descr: localizedString("air_pressure_widget_desc"), iconName: "widget_weather_air_pressure", group: .weather, defaultPanel: .rightPanel)
-
-    static let sunrise = WidgetType(ordinal: 43, id: "day_night_mode_sunrise", title: localizedString("map_widget_sunrise"), descr: localizedString("map_widget_sunrise_desc"), iconName: "widget_sunrise", group: .sunriseSunset, defaultPanel: .rightPanel)
-    static let sunset = WidgetType(ordinal: 44, id: "day_night_mode_sunset", title: localizedString("map_widget_sunset"), descr: localizedString("map_widget_sunset_desc"), iconName: "widget_sunset", group: .sunriseSunset, defaultPanel: .rightPanel)
-    static let sunPosition = WidgetType(ordinal: 45,
+    
+    static let sunPosition = WidgetType(ordinal: 43,
                                         id: "day_night_mode_sun_position",
                                         title: localizedString("map_widget_sun_position"),
                                         descr: localizedString("map_widget_sun_position_desc"),
                                         iconName: "widget_sunrise",
                                         group: .sunriseSunset,
                                         defaultPanel: .rightPanel)
+
+    static let sunrise = WidgetType(ordinal: 44, id: "day_night_mode_sunrise", title: localizedString("map_widget_sunrise"), descr: localizedString("map_widget_sunrise_desc"), iconName: "widget_sunrise", group: .sunriseSunset, defaultPanel: .rightPanel)
+    static let sunset = WidgetType(ordinal: 45, id: "day_night_mode_sunset", title: localizedString("map_widget_sunset"), descr: localizedString("map_widget_sunset_desc"), iconName: "widget_sunset", group: .sunriseSunset, defaultPanel: .rightPanel)
 
     // Bottom panel
     static let elevationProfile = WidgetType(ordinal: 46, id: "elevation_profile", title: localizedString("elevation_profile"), descr: localizedString("elevation_profile_widget_desc"), iconName: "widget_route_elevation", defaultPanel: .bottomPanel)

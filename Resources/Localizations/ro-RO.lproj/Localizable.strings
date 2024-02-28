@@ -3167,3 +3167,10 @@
 "no_travel_guides_data_descr" = "Descărcați ghidurile de călătorie Wikivoyage pentru a vizualiza articole despre locuri din întreaga lume fără o conexiune la internet.";
 "enter_new_name" = "Introduceți noul nume";
 "no_tracks_on_map" = "Nu există urme pe hartă";
+"select_tracks_to_display" = "Selectați piesele pentru a le afișa pe hartă.";
+"show_all_tracks" = "Afișați toate traseele";
+"recently_visible" = "Vizibilă recent";
+"shared_string_nearest" = "Cea mai apropiată";
+"shorter_duration_first" = "Mai întâi o durată mai scurtă";
+"shared_string_deleting" = "Ștergere";
+"shared_string_deleting_complete" = "Ștergerea completă";

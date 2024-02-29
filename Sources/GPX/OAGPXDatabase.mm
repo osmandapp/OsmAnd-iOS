@@ -196,7 +196,7 @@
         gpx.gpxDescription = @"";
     
     gpx.importDate = [NSDate date];
-    gpx.creationDate = document.metadata.time > 0 ? [NSDate dateWithTimeIntervalSince1970:document.metadata.time] : [NSDate date];
+    gpx.creationDate = [self getCreationDateForGPX:gpx document:document];
     
     gpx.totalDistance = analysis.totalDistance;
     gpx.totalTracks = analysis.totalTracks;
@@ -301,11 +301,13 @@
     return [[filePath stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
 }
 
-- (NSDate *)getCreationDateForGPX:(OAGPX *)gpx
+- (NSDate *)getCreationDateForGPX:(OAGPX *)gpx document:(OAGPXDocument *)document
 {
     NSDate *creationDate = nil;
     if (gpx.creationDate)
         creationDate = gpx.creationDate;
+    else if (document && document.metadata.time > 0)
+        creationDate = [NSDate dateWithTimeIntervalSince1970:document.metadata.time];
     else if (gpx.locationEnd.time > 0)
         creationDate = [NSDate dateWithTimeIntervalSince1970:gpx.locationEnd.time];
     else
@@ -382,7 +384,7 @@
         OAGPX *gpx = [self generateGpxItem:gpxData];
 
         // Make compatible with old database data
-        gpx.creationDate = [self getCreationDateForGPX:gpx];
+        gpx.creationDate = [self getCreationDateForGPX:gpx document:nil];
         NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
         if (!gpx.gpxFilePath)
             gpx.gpxFilePath = gpx.gpxFileName;

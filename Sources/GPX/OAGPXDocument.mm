@@ -180,6 +180,29 @@
     return widthValue;
 }
 
+- (long)getLastPointTime
+{
+    long time = [self getLastPointTime:[self getAllSegmentsPoints]];
+    if (time == 0)
+        time = [self getLastPointTime:[self getRoutePoints]];
+    if (time == 0)
+        time = [self getLastPointTime:[self getAllPoints]];
+    
+    return time;
+}
+
+- (long)getLastPointTime:(NSArray<OAWptPt *> *)points
+{
+    for (NSInteger i = points.count - 1; i >= 0; i--) 
+    {
+        OAWptPt *point = points[i];
+        if (point.time > 0)
+            return point.time;
+    }
+    
+    return 0;
+}
+
 - (void) setWidth:(NSString *)width
 {
     [self setExtension:@"width" value:width];

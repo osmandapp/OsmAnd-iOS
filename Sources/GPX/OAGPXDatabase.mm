@@ -305,13 +305,19 @@
 {
     NSDate *creationDate = nil;
     if (gpx.creationDate)
+    {
         creationDate = gpx.creationDate;
-    else if (document && document.metadata.time > 0)
-        creationDate = [NSDate dateWithTimeIntervalSince1970:document.metadata.time];
-    else if (gpx.locationEnd.time > 0)
-        creationDate = [NSDate dateWithTimeIntervalSince1970:gpx.locationEnd.time];
-    else
-        creationDate = gpx.importDate;
+    }
+    else if (document)
+    {
+        if (document.metadata && document.metadata.time > 0)
+            creationDate = [NSDate dateWithTimeIntervalSince1970:document.metadata.time];
+        else
+            creationDate = [NSDate dateWithTimeIntervalSince1970:[document getLastPointTime]];
+        
+        if ([creationDate timeIntervalSince1970] <= 0)
+            creationDate = gpx.importDate;
+    }
     
     if (!creationDate)
         creationDate = [NSDate date];

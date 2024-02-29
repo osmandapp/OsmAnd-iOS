@@ -127,26 +127,8 @@
             kSectionHeaderHeight: @56.
     }];
     [data.subjects addObject:infoSectionData];
-    
-    NSString *tag = routeKey.routeKey.getTag().toNSString();
-    NSString *networkTag = routeKey.routeKey.getNetwork().toNSString();
-    if (networkTag.length > 0)
-    {
-        NSString *network = [NSString stringWithFormat:@"route_%@_%@_poi", tag, networkTag];
-        NSString *resolvedName = [OAPOIHelper.sharedInstance getPhraseByName:network];
-        
-        if (resolvedName)
-        {
-            OAGPXTableCellData *networkCellData = [OAGPXTableCellData withData:@{
-                    kTableKey: @"network",
-                    kCellType: [OAValueTableViewCell getCellIdentifier],
-                    kCellTitle: OALocalizedString(@"network"),
-                    kCellDesc: resolvedName
-            }];
-            [infoSectionData.subjects addObject:networkCellData];
-        }
-    }
 
+    NSString *tag = routeKey.routeKey.getTag().toNSString();
     OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
             kTableKey: @"route",
             kCellType: [OAValueTableViewCell getCellIdentifier],
@@ -154,58 +136,46 @@
             kCellDesc: OALocalizedString([NSString stringWithFormat:@"activity_type_%@_name", [self tagToActivity:tag]])
     }];
     [infoSectionData.subjects addObject:routeCellData];
-    
-    NSString *oper = routeKey.routeKey.getOperator().toNSString();
-    if (oper.length > 0)
+
+    NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
+    QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
+    for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
     {
-        OAGPXTableCellData *operatorCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"operator",
-                kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"poi_operator"),
-                kCellDesc: oper
-        }];
-        [infoSectionData.subjects addObject:operatorCellData];
-    }
-    
-    NSString *symbol = routeKey.routeKey.getSymbol().toNSString();
-    if (symbol.length > 0)
-    {
+        NSString *routeTagKey = i.key().toNSString();
+        if ([routeTagKey hasPrefix:@"osmc"]
+            || [routeTagKey isEqualToString:@"name"])
+            continue;
+        OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
+        if (!poiType)
+            continue;
+
+        NSString *routeTagValue = i.value().toNSString();
+        if ([routeTagKey isEqualToString:@"ascent"] || [routeTagKey isEqualToString:@"descent"])
+            routeTagValue = [NSString stringWithFormat:@"%@ %@", routeTagValue, OALocalizedString(@"m")];
+        else if ([routeTagKey isEqualToString:@"distance"])
+            routeTagValue = [NSString stringWithFormat:@"%@ %@", routeTagValue, OALocalizedString(@"km")];
+        else if ([routeTagKey isEqualToString:@"network"])
+            routeTagValue = [OAPOIHelper.sharedInstance getPhraseByName:[NSString stringWithFormat:@"route_%@_%@_poi", tag, routeTagValue]];
+        else if ([routeTagKey isEqualToString:@"wikipedia"])
+            routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
+
         OAGPXTableCellData *symbolCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"symbol",
+                kTableKey: routeTagKey,
                 kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"shared_string_symbol"),
-                kCellDesc: symbol
+                kCellTitle: poiType.nameLocalized,
+                kCellDesc: routeTagValue,
+                kTableValues: @{ @"order": [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90) }
         }];
-        [infoSectionData.subjects addObject:symbolCellData];
-    }
-    
-    NSString *website = routeKey.routeKey.getWebsite().toNSString();
-    if (website.length > 0)
-    {
-        OAGPXTableCellData *websiteCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"website",
-                kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"website"),
-                kCellDesc: website
-        }];
-        [infoSectionData.subjects addObject:websiteCellData];
+        [subjects addObject:symbolCellData];
     }
 
-    NSString *wiki = routeKey.routeKey.getWikipedia().toNSString();
-    if (wiki.length > 0)
-    {
-        wiki = [OAWikiAlgorithms getWikiUrlWithText:wiki];
-        if (wiki.length > 0)
-        {
-            OAGPXTableCellData *wikiCellData = [OAGPXTableCellData withData:@{
-                kTableKey: @"wiki",
-                kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: OALocalizedString(@"download_wikipedia_maps"),
-                kCellDesc: wiki
-            }];
-            [infoSectionData.subjects addObject:wikiCellData];
-        }
-    }
+    [subjects sortUsingComparator:^NSComparisonResult(OAGPXTableCellData * _Nonnull cellData1, OAGPXTableCellData * _Nonnull cellData2) {
+        int order1 = [cellData1.values[@"order"] intValue];
+        int order2 = [cellData2.values[@"order"] intValue];
+        return [OAUtilities compareInt:order1 y:order2];
+    }];
+
+    [infoSectionData.subjects addObjectsFromArray:subjects];
 }
 
 - (NSString *)tagToActivity:(NSString *)tag

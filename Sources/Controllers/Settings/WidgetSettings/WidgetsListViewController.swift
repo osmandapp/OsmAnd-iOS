@@ -176,7 +176,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     private func showToastForComplexWidget(_ widgetTitle: String) {
-        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: self.view)
+        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: view)
     }
     
     @objc private func onWidgetAdded(notification: NSNotification) {
@@ -330,6 +330,12 @@ extension WidgetsListViewController {
             vc.selectedAppMode = selectedAppMode
             vc.widgetInfo = item.obj(forKey: kWidgetsInfoKey) as? MapWidgetInfo
             vc.widgetPanel = widgetPanel
+            vc.onWidgetStateChangedAction = { [weak self] in
+                DispatchQueue.main.async {
+                    self?.reorderWidgets()
+                    self?.updateUIAnimated(nil)
+                }
+            }
             show(vc)
         }
     }
@@ -522,7 +528,12 @@ extension WidgetsListViewController {
         
         let row = section.createNewRow()
         row.setObj(widget, forKey: kWidgetsInfoKey)
-        row.iconName = widget.widget.widgetType?.iconName
+        if widget.widget.widgetType == .sunPosition,
+           let sunPositionWidgetState = widget.getWidgetState() as? OASunriseSunsetWidgetState {
+            row.iconName = sunPositionWidgetState.getWidgetIconName()
+        } else {
+            row.iconName = widget.widget.widgetType?.iconName
+        }
         row.title = widget.getTitle()
         row.descr = widget.getMessage()
         row.cellType = OASimpleTableViewCell.getIdentifier()

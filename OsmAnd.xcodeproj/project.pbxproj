@@ -3311,6 +3311,7 @@
 		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
+		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
@@ -7948,6 +7949,7 @@
 		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLableTableViewCell.xib; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
+		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
@@ -13008,6 +13010,7 @@
 				DA5A7F1A26C563A400F274C7 /* OACompassRulerWidgetState.m */,
 				C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */,
 				C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */,
+				FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */,
 				DA5A7F1826C563A400F274C7 /* OATimeWidgetState.h */,
 				DA5A7F1B26C563A400F274C7 /* OATimeWidgetState.m */,
 				DA5A7F1C26C563A400F274C7 /* OAWidgetState.h */,
@@ -17419,6 +17422,7 @@
 				DA5A853B26C563A900F274C7 /* OAFileNameTranslationHelper.m in Sources */,
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
+				FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,

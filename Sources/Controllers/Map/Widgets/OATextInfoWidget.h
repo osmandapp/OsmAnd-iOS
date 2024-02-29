@@ -87,5 +87,6 @@
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)configureSimpleLayout;
 - (void)refreshLayout;
+- (OAApplicationMode *_Nonnull)getAppMode;
 
 @end

@@ -322,7 +322,7 @@
 "map_markers_other" = "Ostali markeri";
 "directions_other" = "Other directions";
 "shared_string_turn" = "Skretanje";
-"stop_routing_confirm" = "Zaustavi navođenje?";
+"stop_routing_confirm" = "Zaustavljaš navođenje?";
 "cancel_route" = "Prekidaš navigaciju?";
 "route_is_too_long_v2" = "Za duža odredišta: Dodaj usputna odredišta ako nijedna ruta nije nađena za ovu dugačku rutu ni posle 10 minuta.";
 "navigation_over_track" = "Da započnem navođenje duž trase?";

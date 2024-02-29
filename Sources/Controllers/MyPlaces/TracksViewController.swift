@@ -600,6 +600,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let absolutePath = getAbsolutePath(gpx.gpxFilePath)
             rootVC.mapPanel.openTargetView(withRouteDetailsGraph: absolutePath, isCurrentTrack: isCurrentTrack)
             navigationController?.popToRootViewController(animated: true)
+            navigationController?.setNavigationBarHidden(true, animated: true)
         }
     }
     

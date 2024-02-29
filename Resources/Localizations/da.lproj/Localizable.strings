@@ -3334,3 +3334,8 @@
 "osmand_cloud_deletion_subscriptions_warning" = "Dette vil ikke annullere dit OsmAnd Pro-abonnement.";
 "osmand_cloud_deleting_account_descr" = "I løbet af få øjeblikke vil alle dine data og din konto blive slettet fra OsmAnd Cloud.\n\nAlle data på enheden forbliver uberørte.";
 "osmand_cloud_deleted_account_descr" = "Konto og alle data blev slettet fra OsmAnd Cloud.";
+"shared_string_next_event" = "Næste begivenhed";
+"map_widget_sun_position_desc" = "Dette modul viser, hvor lang tid der er til solopgang eller solnedgang, afhængigt af det aktuelle tidspunkt.";
+"map_widget_sun_position" = "Solposition";
+"shared_string_mode" = "Tilstand";
+"shared_string_format" = "Format";

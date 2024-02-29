@@ -18,7 +18,7 @@
 #define imageSide 30
 #define minTextWidth 64
 #define fullTextWidth 90
-#define minWidgetHeight 32
+#define minWidgetHeight 34
 
 @implementation OATextInfoWidget
 {
@@ -317,14 +317,14 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 {
     [NSLayoutConstraint activateConstraints:@[
         [_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
-        [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
+        [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0],
         [_imageView.heightAnchor constraintEqualToConstant:imageSide],
         [_imageView.widthAnchor constraintEqualToConstant:imageSide]
     ]];
 
     [NSLayoutConstraint activateConstraints:@[
-        [_textView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-5],
-        [_textView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor]
+        [_textView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-6],
+        [_textView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10]
     ]];
     self.topTextAnchor = [_textView.topAnchor constraintEqualToAnchor:self.topAnchor constant:5];
     self.topTextAnchor.active = YES;
@@ -677,7 +677,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 {
     if (self.isSimpleLayout)
         return;
-    CGFloat leadingOffset = _imageView.hidden ? 4 : 31;
+    CGFloat leadingOffset = _imageView.hidden ? 3 : 39;
     _leadingTextAnchor.constant = leadingOffset;
     
     [_textView sizeToFit];
@@ -690,9 +690,17 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     tf.size.width = currentWidth > widthLimit ? widthLimit : currentWidth;
 
     CGRect f = self.frame;
-    f.size.width = leadingOffset + tf.size.width + 4;
-    CGFloat height = tf.size.height + 10;
-    f.size.height = height < minWidgetHeight ? minWidgetHeight : height;
+    f.size.width = leadingOffset + tf.size.width + 4 + 10;
+    CGFloat topBottomOffset = 10;
+    CGFloat height = tf.size.height + topBottomOffset;
+    if (UIScreen.mainScreen.traitCollection.preferredContentSizeCategory <= UIContentSizeCategoryLarge) {
+        f.size.height = minWidgetHeight;
+    }
+    else
+    {
+        f.size.height = height < minWidgetHeight ? minWidgetHeight : height;
+    }
+    
     self.frame = f;
 }
 

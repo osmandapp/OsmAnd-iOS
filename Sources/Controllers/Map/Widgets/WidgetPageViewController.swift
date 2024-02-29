@@ -95,11 +95,14 @@ final class WidgetPageViewController: UIViewController {
                 if !widget.isHidden {
                     height += widget.frame.size.height
                 }
-                /*
-                 let constraint = widget.heightAnchor.constraint(greaterThanOrEqualToConstant: widget.frame.size.height)
-                 constraint.priority = .defaultHigh
-                 constraint.isActive = true
-                 */
+                
+                var constraint = widget.heightAnchor.constraint(equalToConstant: widget.frame.size.height)
+                
+                if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
+                    constraint = widget.heightAnchor.constraint(greaterThanOrEqualToConstant: widget.frame.size.height)
+                }
+                constraint.priority = .defaultHigh
+                constraint.isActive = true
             }
         }
         return (width, height)

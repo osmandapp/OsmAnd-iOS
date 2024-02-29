@@ -339,23 +339,47 @@
 {
     if (hasTopWidgets) {
         CACornerMask maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
-        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
-        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+        
+        [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+        _rightPanelController.pageContainerView.layer.cornerRadius = 0;
+        
+        [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+        _leftPanelController.pageContainerView.layer.cornerRadius = 0;
     }
     else
     {
         if ([OAUtilities isLandscapeIpadAware])
         {
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
-            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
-            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+            
+            [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+            [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+            
+            [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+            [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
         }
         else
         {
-            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
-            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner];
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner isNighTheme:_settings.nightMode];
+            [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMinXMaxYCorner];
+            [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner];
+            
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner isNighTheme:_settings.nightMode];
+            [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner];
+            [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMinYCorner];
         }
     }
+}
+
+- (void)configureCornerRadiusForView:(UIView *)view
+                                mask:(CACornerMask)mask
+{
+    view.layer.cornerRadius = 5;
+    view.layer.maskedCorners = mask;
 }
 
 - (void) layoutWidgets
@@ -414,7 +438,7 @@
     {
         CGSize leftSize = [_leftPanelController calculateContentSize];
         CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight;
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight + (_leftPanelController.view.layer.borderWidth * 2);
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
     }
     else
@@ -449,7 +473,7 @@
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
         CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight;
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight + (_rightPanelController.view.layer.borderWidth * 2);
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
     }
     else

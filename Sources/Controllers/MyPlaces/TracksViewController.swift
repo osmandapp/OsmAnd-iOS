@@ -19,6 +19,8 @@ private class TrackFolder {
     var tracksCount: Int = 0 // count of tracks in current folder and in subfolders
     var parentFolder: TrackFolder?
     var flattenedFolders: [String: TrackFolder] = [:]
+    
+    let gpxFolderRelativePath = "/Documents/GPX/"
 
     func performForAllTracks(action: (_ track: OAGPX) -> Void) {
         for track in tracks.values {
@@ -60,10 +62,12 @@ private class TrackFolder {
                 let subfolderName = subfolderURL.lastPathComponent
                 subfolders[subfolderName] = newSubfolderNode
                 
-                let relativeSubfolderPath = subfolderURL.relativePath.replacingOccurrences(of: OsmAndApp.swiftInstance().gpxPath + "/", with: "")
-                newSubfolderNode.path = relativeSubfolderPath
-                insertToFlattenedFolders(path: relativeSubfolderPath, subfolder: newSubfolderNode)
-                
+                let parts = subfolderURL.relativePath.components(separatedBy: gpxFolderRelativePath)
+                if parts.count == 2 {
+                    let relativeSubfolderPath = parts[1]
+                    newSubfolderNode.path = relativeSubfolderPath
+                    insertToFlattenedFolders(path: relativeSubfolderPath, subfolder: newSubfolderNode)
+                }
                 newSubfolderNode.collectFolderInfo(subfolderURL)
             }
         } catch let error {
@@ -637,10 +641,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onTrackRenameClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            let message = localizedString("gpx_enter_new_name") + " " + gpx.gpxTitle
+            let gpxFilename = gpx.gpxFilePath.lastPathComponent().deletingPathExtension()
+            let message = localizedString("gpx_enter_new_name") + " " + gpxFilename
             let alert = UIAlertController(title: localizedString("rename_track"), message: message, preferredStyle: .alert)
             alert.addTextField { textField in
-                textField.text = track?.gpxTitle
+                textField.text = gpxFilename
             }
             alert.addAction(UIAlertAction(title: localizedString("shared_string_ok"), style: .default) { [weak self] _ in
                 guard let self else { return }
@@ -804,7 +809,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func renameFolder(oldName: String, newName: String) {
-        
         let oldFolderPath = currentFolderAbsolutePath().appendingPathComponent(oldName)
         let newFolderPath = currentFolderAbsolutePath().appendingPathComponent(newName)
         let oldFolderShortPath = currentFolderPath.appendingPathComponent(oldName)
@@ -844,8 +848,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func moveFolder(folderPathForOpenedContextMenu: String, selectedFolderName: String) {
         let sourceFolderPath = getAbsolutePath(folderPathForOpenedContextMenu)
-        let destinationShortFolderPath = selectedFolderName == localizedString("shared_string_gpx_tracks") ? "" : selectedFolderName
-        let destinationFolderPath = getAbsolutePath(destinationShortFolderPath).appendingPathComponent(folderPathForOpenedContextMenu.lastPathComponent())
+        let destinationShortFolderPath = (selectedFolderName == localizedString("shared_string_gpx_tracks") ? "" : selectedFolderName).appendingPathComponent(sourceFolderPath.lastPathComponent())
+        let destinationFolderPath = getAbsolutePath(destinationShortFolderPath)
         do {
             try FileManager.default.moveItem(atPath: sourceFolderPath, toPath: destinationFolderPath)
             
@@ -862,8 +866,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate func changeGpxDBSubfolderTags(folderContent: TrackFolder, srcPath: String, destPath: String) {
         for gpxFile in folderContent.tracks.values {
             var path = gpxFile.gpxFilePath ?? ""
-            let rootSrcPath = srcPath.deletingLastPathComponent()
-            path = path.substring(from: rootSrcPath.length)
+            path = path.replacingOccurrences(of: srcPath, with: "")
             path = destPath.appendingPathComponent(path)
             gpxFile.updateFolderName(path)
         }

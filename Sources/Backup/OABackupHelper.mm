@@ -670,7 +670,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     params[@"accessToken"] = [self getAccessToken];
     params[@"name"] = fileName;
     params[@"type"] = type;
-    params[@"updateTime"] = @(remoteFile.updatetimems).stringValue;
+    params[@"updatetime"] = @(remoteFile.updatetimems).stringValue;
     NSMutableString *builder = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
     __block BOOL firstParam = YES;
     [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {

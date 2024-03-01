@@ -217,11 +217,11 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
 {
     if ([point isKindOfClass:OAWptPt.class])
     {
+        NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+        numberFormatter.decimalSeparator = @".";
         for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
         {
-            CGFloat defaultValue = [OAPointAttributes.sensorTagTemperature isEqualToString:tag] ?  NAN : 0;
-            
-            CGFloat value = defaultValue;
+            CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
             OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:@"trackpointextension"];
             if (trackpointextension)
             {
@@ -229,7 +229,7 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
                 {
                     if ([subextension.name isEqualToString:tag])
                     {
-                        NSNumber *val = [[[NSNumberFormatter alloc] init] numberFromString:subextension.value];
+                        NSNumber *val = [numberFormatter numberFromString:subextension.value];
                         if (val)
                             value = val.floatValue;
                     }

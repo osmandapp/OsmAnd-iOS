@@ -16,7 +16,7 @@ protocol WidgetPanelDelegate: AnyObject {
 @objc(OAWidgetPanelViewController)
 @objcMembers
 final class WidgetPanelViewController: UIViewController, OAWidgetListener {
-    private static let controlHeight: CGFloat = 26
+    private static let controlHeight: CGFloat = 16
     private static let contentHeight: CGFloat = 34
     private static let borderWidth: CGFloat = 2
     
@@ -116,9 +116,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             }
             height = max(height, Self.contentHeight)
         }
-        if !isHorizontal {
-            width += 2
-        }
+        
         return CGSize(width: width, height: height)
     }
     

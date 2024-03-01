@@ -1536,6 +1536,15 @@
     [self.navigationController pushViewController:editDescController animated:YES];
 }
 
+- (void)openDescriptionReadOnly:(NSString *)description
+{
+    OAEditDescriptionViewController *routeDescController = [[OAEditDescriptionViewController alloc] initWithDescription:description
+                                                                                                                  isNew:NO
+                                                                                                              isEditing:NO
+                                                                                                               readOnly:YES];
+    [self.navigationController pushViewController:routeDescController animated:YES];
+}
+
 - (void)openDuplicateTrack
 {
     OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
@@ -1956,10 +1965,12 @@
             {
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
                 cell.accessoryView.tintColor = tintColor;
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
             else
             {
                 cell.accessoryView = nil;
+                cell.accessoryType = [cellData.key hasPrefix:@"description"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
             }
         }
         outCell = cell;

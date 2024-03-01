@@ -146,9 +146,9 @@
             || [routeTagKey isEqualToString:@"name"])
             continue;
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
-        if (!poiType && ![routeTagKey isEqualToString:@"symbol"])
+        if (!poiType && ![routeTagKey isEqualToString:@"symbol"] && ![routeTagKey isEqualToString:@"colour"])
             continue;
-        NSString *routeTagTitle = [routeTagKey isEqualToString:@"symbol"] ? OALocalizedString(@"shared_string_symbol") : poiType.nameLocalized;
+        NSString *routeTagTitle = poiType ? poiType.nameLocalized : @"";
         NSNumber *routeTagOrder = poiType && [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90);
 
         NSString *routeTagValue = i.value().toNSString();
@@ -161,14 +161,29 @@
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
 
-        OAGPXTableCellData *symbolCellData = [OAGPXTableCellData withData:@{
+        if ([routeTagKey isEqualToString:@"colour"])
+        {
+            routeTagTitle = OALocalizedString(@"shared_string_color");
+            NSString *stringKey = [NSString stringWithFormat:@"rendering_value_%@_name", routeTagValue];
+            routeTagValue = OALocalizedString(stringKey);
+            if ([routeTagValue isEqualToString:stringKey])
+                routeTagValue = i.value().toNSString().uppercaseString;
+        }
+        else if ([routeTagKey isEqualToString:@"symbol"])
+        {
+            routeTagTitle = OALocalizedString(@"shared_string_symbol");
+        }
+
+        OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
                 kTableKey: routeTagKey,
                 kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: routeTagTitle,
                 kCellDesc: routeTagValue,
                 kTableValues: @{ @"order": routeTagOrder }
         }];
-        [subjects addObject:symbolCellData];
+        if ([routeTagKey hasPrefix:@"description"])
+            [routeCellData setData:@{ kCellToggle: @YES }];
+        [subjects addObject:routeCellData];
     }
 
     [subjects sortUsingComparator:^NSComparisonResult(OAGPXTableCellData * _Nonnull cellData1, OAGPXTableCellData * _Nonnull cellData2) {
@@ -636,6 +651,10 @@
             else if ([cellData.key hasPrefix:@"email_"])
             {
                 [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
+            else if ([cellData.key hasPrefix:@"description"])
+            {
+                [self.trackMenuDelegate openDescriptionReadOnly:cellData.desc];
             }
         }
     }

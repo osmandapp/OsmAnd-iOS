@@ -25,7 +25,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
             guard let widgetInfo else { continue }
             let row = section.createNewRow()
             row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.title = widgetInfo.getTitle()
+            row.title = widget == .sunPosition ? widgetInfo.getStateIndependentTitle() : widgetInfo.getTitle()
             row.iconName = widgetInfo.widget.widgetType?.iconName
             row.setObj(widgetInfo, forKey: "widget_info")
         }
@@ -33,8 +33,8 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
-        if (item.cellType == OASimpleTableViewCell.getIdentifier()) {
+        var outCell: UITableViewCell?
+        if item.cellType == OASimpleTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
             if cell == nil {
                 let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
@@ -42,8 +42,7 @@ class WidgetGroupItemsViewController: OABaseNavbarViewController {
                 cell?.descriptionVisibility(false)
                 cell?.accessoryType = .disclosureIndicator
             }
-            if let cell = cell {
-                
+            if let cell {
                 cell.titleLabel.text = item.title
                 cell.leftIconView.image = UIImage(named: item.iconName ?? "")
             }

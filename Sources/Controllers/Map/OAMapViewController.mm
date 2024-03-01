@@ -951,6 +951,13 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
                 return [self pointWithMapContentScaleFactor:CGPointMake(simulateFingerPointX, simulateFingerPointY)];
             }
         }
+        else
+        {
+            if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
+            {
+                return [self pointWithMapContentScaleFactor:[recognizer locationOfTouch:touchIndex inView:self.view]];
+            }
+        }
     }
     else
     {

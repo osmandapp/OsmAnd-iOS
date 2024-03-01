@@ -1289,6 +1289,7 @@
 "lang_sq" = "Albanian";
 "lang_sr" = "Serbian (cyrillic)";
 "lang_sr_latn" = "Serbian (latin)";
+"lang_sr-Latn" = "Serbian (latin)";
 "lang_sv" = "Swedish";
 "lang_sw" = "Swahili";
 "lang_ta" = "Tamil";
@@ -3629,6 +3630,11 @@
 "permanent_delete_warning" = "%@ will be deleted permanently. Are you sure?";
 "action_cannot_be_undone" = "This action can't be undone.";
 "cloud_item_restored" = "%@ is restored into Cloud.";
+"shared_string_next_event" = "Next event";
+"map_widget_sun_position_desc" = "This widget shows the time until sunrise or sunset, depending on the current time.";
+"map_widget_sun_position" = "Sun position";
+"shared_string_mode" = "Mode";
+"shared_string_format" = "Format";
 "delete_account" = "Delete account";
 "verify_account" = "Verify your account";
 "verify_account_deletion_descr" = "We need to verify your account before delete it.\n\nPlease enter the e-mail address you registered with. A one-time password for the next step will be sent to it.";

@@ -52,7 +52,7 @@ class MapWidgetInfo: NSObject, Comparable {
     }
     
     func getSettingsIconId(nightMode: Bool) -> String {
-        if let widgetState = widgetState {
+        if let widgetState {
             return widgetState.getSettingsIconId(nightMode)
         } else {
             return settingsIconId

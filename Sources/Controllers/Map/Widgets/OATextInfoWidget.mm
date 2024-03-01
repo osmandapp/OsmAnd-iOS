@@ -520,8 +520,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     self.unitOrEmptyLabel.textColor = _unitsColor;
     
-    
     self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
     self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
@@ -892,6 +892,11 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         prefId = [prefId stringByAppendingFormat:@"%@",kHideIconPref];
     
     return [settings registerBooleanPreference:prefId defValue:YES];
+}
+
+- (OAApplicationMode *_Nonnull)getAppMode
+{
+    return _appMode;
 }
 
 @end

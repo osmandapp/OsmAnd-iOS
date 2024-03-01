@@ -24,6 +24,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetKey = ""
     var widgetConfigurationParams: [String: Any]?
     var isFirstGenerateData = true
+    var onWidgetStateChangedAction: (() -> Void)?
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
@@ -330,6 +331,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
         }
         generateData()
+        onWidgetStateChangedAction?()
         tableView.reloadData()
     }
 }

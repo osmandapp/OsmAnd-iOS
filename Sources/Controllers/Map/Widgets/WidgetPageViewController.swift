@@ -92,6 +92,11 @@ final class WidgetPageViewController: UIViewController {
                 widget.translatesAutoresizingMaskIntoConstraints = false
                 widget.adjustSize()
                 width = max(width, widget.frame.size.width)
+                if widget.frame.size.width < width {
+                    var rect = widget.frame
+                    rect.size.width = width
+                    widget.frame = rect
+                }
                 if !widget.isHidden {
                     height += widget.frame.size.height
                 }

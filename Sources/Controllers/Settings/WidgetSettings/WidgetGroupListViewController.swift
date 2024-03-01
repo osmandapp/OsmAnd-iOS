@@ -180,22 +180,26 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         for i in 0..<section.rowCount() {
             let row = section.getRow(i)
             if let widgetGroup = row.obj(forKey: "widget_group") as? WidgetGroup {
-                if widgetGroup.title.range(of: searchText, options: .caseInsensitive) != nil {
+                if containsCaseInsensitive(text: widgetGroup.title, substring: searchText) {
                     filteredSection.addRow(row)
                 }
                 
                 widgetGroup.getWidgets().forEach {
-                    if $0.title.range(of: searchText, options: .caseInsensitive) != nil {
+                    if containsCaseInsensitive(text: $0.title, substring: searchText) {
                         filteredSection.addRow(createSearchRowData(for: $0))
                     }
                 }
             } else if let widgetType = row.obj(forKey: "widget_type") as? WidgetType,
-                      widgetType.title.range(of: searchText, options: .caseInsensitive) != nil {
+                      containsCaseInsensitive(text: widgetType.title, substring: searchText) {
                 filteredSection.addRow(row)
             }
         }
         
         tableView.reloadData()
+    }
+    
+    private func containsCaseInsensitive(text: String, substring: String) -> Bool {
+        text.range(of: substring, options: .caseInsensitive) != nil
     }
     
     private func createSearchRowData(for widget: WidgetType) -> OATableRowData {

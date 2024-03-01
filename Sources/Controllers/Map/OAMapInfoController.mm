@@ -341,12 +341,22 @@
         CACornerMask maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
         [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
         [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
-        
-        [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
-        _rightPanelController.pageContainerView.layer.cornerRadius = 0;
-        
-        [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
-        _leftPanelController.pageContainerView.layer.cornerRadius = 0;
+        if (_rightPanelController.pages.count > 1)
+        {
+            [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+            _rightPanelController.pageContainerView.layer.cornerRadius = 0;
+        }
+        else
+            [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+
+        if (_leftPanelController.pages.count > 1)
+        {
+            [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+            _leftPanelController.pageContainerView.layer.cornerRadius = 0;
+        }
+        else
+            [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+
     }
     else
     {
@@ -355,22 +365,41 @@
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
             [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
             [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
-            
-            [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
-            [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
-            
-            [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
-            [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+            if (_rightPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:maskedCorners];
+  
+            if (_leftPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:maskedCorners];
         }
         else
         {
             [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner isNighTheme:_settings.nightMode];
-            [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMinXMaxYCorner];
-            [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner];
+            if (_rightPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMinXMaxYCorner];
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
             
             [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner isNighTheme:_settings.nightMode];
-            [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner];
-            [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMinYCorner];
+            if (_leftPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner];
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner];
         }
     }
 }

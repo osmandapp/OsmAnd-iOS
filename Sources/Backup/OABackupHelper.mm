@@ -250,17 +250,31 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSString *fileName;
     if (!filePath)
         filePath = fileSettingsItem.filePath;
+    
     if (subtypeFolder.length == 0)
+    {
         fileName = filePath.lastPathComponent;
+    }
     else if (fileSettingsItem.subtype == EOASettingsItemFileSubtypeGpx)
+    {
         fileName = [filePath stringByReplacingOccurrencesOfString:[subtypeFolder stringByAppendingString:@"/"] withString:@""];
+    }
     else if ([OAFileSettingsItemFileSubtype isMap:fileSettingsItem.subtype])
+    {
         fileName = filePath.lastPathComponent;
+    }
     else
-        fileName = [filePath substringFromIndex:[filePath indexOf:subtypeFolder.lastPathComponent]];
-
+    {
+        int index = [filePath indexOf:subtypeFolder.lastPathComponent];
+        if (index >= 0)
+            fileName = [filePath substringFromIndex:index];
+        else
+            fileName = filePath.lastPathComponent;
+    }
+    
     if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
         fileName = [fileName substringFromIndex:1];
+    
     return fileName;
 }
 

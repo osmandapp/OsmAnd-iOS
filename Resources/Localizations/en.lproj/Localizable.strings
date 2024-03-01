@@ -1289,6 +1289,7 @@
 "lang_sq" = "Albanian";
 "lang_sr" = "Serbian (cyrillic)";
 "lang_sr_latn" = "Serbian (latin)";
+"lang_sr-Latn" = "Serbian (latin)";
 "lang_sv" = "Swedish";
 "lang_sw" = "Swahili";
 "lang_ta" = "Tamil";

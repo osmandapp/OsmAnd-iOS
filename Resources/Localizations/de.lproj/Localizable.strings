@@ -3347,3 +3347,8 @@
 "osmand_cloud_deleted_account_descr" = "Das Konto und alle Daten wurden aus der OsmAnd Cloud gelöscht.";
 "verify_account_deletion_descr" = "Wir müssen dein Konto verifizieren, bevor wir es löschen können.\n\nBitte gib die E-Mail-Adresse ein, mit der du dich registriert hast. An diese Adresse wird ein Einmalpasswort für den nächsten Schritt gesendet.";
 "osmand_cloud_deleting_account_descr" = "In wenigen Augenblicken werden alle deine Daten und dein Konto aus der OsmAnd Cloud gelöscht.\n\nAlle Daten auf dem Gerät bleiben unangetastet.";
+"shared_string_next_event" = "Nächste Veranstaltung";
+"map_widget_sun_position_desc" = "Dieses Widget zeigt die Zeit bis zum Sonnenaufgang oder Sonnenuntergang an, abhängig von der aktuellen Uhrzeit.";
+"map_widget_sun_position" = "Sonnenposition";
+"shared_string_mode" = "Modus";
+"shared_string_format" = "Format";

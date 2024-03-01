@@ -2915,3 +2915,25 @@
 "map_widget_time_to_intermediate" = "Време до посредне тачке";
 "map_widget_gps_info" = "Подаци ГПС-а";
 "route_maneuvers_desc" = "Навигациони видгети су омогућени током навигације за приказ информација као што су растојање, време доласка или преостало време, следећа скретања, смер, тренутни назив улице, информације о тракама, максимална брзина, упозорења о приближавању, ТОИ, тачке пута.";
+"history_clear_alert_message" = "Да ли сте сигурни да желите да избришете сву историју?";
+"track_sort_za" = "Име З - А";
+"newest_date_first" = "Најпре најновији датум";
+"last_seven_days" = "Последње седмице";
+"shortest_distance_first" = "Најпре најкраће растојање";
+"longest_duration_first" = "Најпре најдуже трајање";
+"recently_visible" = "Недавно видљиво";
+"shared_string_nearest" = "Најближе";
+"track_sort_az" = "Име А - З";
+"oldest_date_first" = "Најпре најстарији датум";
+"longest_distance_first" = "Најпре најдуже растојање";
+"shorter_duration_first" = "Најпре најкраће трајање";
+"history_clear_alert_title" = "Избриши сву историју";
+"search_history_disabled" = "Претрага историје је онемогућена";
+"enable_search_history" = "Можете омогућити претрагу историје у Подешавањима";
+"unsaved_changes" = "Несачуване измене";
+"unsaved_changes_will_be_lost_discard" = "Било које несачуване измене биће изгубљене. Одбацити измене?";
+
+
+// Shared Strings
+"shared_string_discard" = "Одбаци";
+"shared_string_cancelled" = "Отказано";

@@ -101,6 +101,7 @@
 - (void)applyBounds;
 
 - (double) getSpeed:(NSArray<OAGpxExtension *> *)extensions;
+- (long)getLastPointTime;
 
 + (NSString *)buildTrackSegmentName:(OAGPXDocument *)gpxFile
                               track:(OATrack *)track

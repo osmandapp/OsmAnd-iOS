@@ -3177,7 +3177,7 @@
 "whats_here" = "Ce se află aici";
 "calendar_new_event_title" = "Eveniment nou";
 "external_sensors_plugin_description" = "Accesați senzori externi pentru a citi, spre exemplu, pulsul, viteza biciclete, puterea produsă sau cadența pedalatului. Necesită ca dispozitivul d-voastră să fie conectat la respectivii senzori prin protocolul de rețea personală wireless ANT+.";
-"shared_string_temperature" = "Temperatura";
+"shared_string_temperature" = "Temperatură";
 "map_widget_ant_bicycle_speed_desc" = "Arată viteza de mișcare";
 "import_create_track_files" = "Poți importa, creea, sau înregistra fișiere GPS folosind OsmAnd.";
 "track_sort_az" = "Nume A-Z";

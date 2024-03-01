@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_0" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -55,9 +56,9 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OGE-Cb-Dbb">
-                    <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                    <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                     <subviews>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KGH-xB-uHD">
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KGH-xB-uHD" userLabel="ContentView">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="356.5"/>
                             <subviews>
                                 <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_firstscreen.png" translatesAutoresizingMaskIntoConstraints="NO" id="IbV-aB-aC0">
@@ -156,13 +157,14 @@
                     </constraints>
                 </scrollView>
             </subviews>
-            <color key="backgroundColor" name="groupBg"/>
+            <viewLayoutGuide key="safeArea" id="Uv9-oA-7gY"/>
+            <color key="backgroundColor" name="viewBg"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="OGE-Cb-Dbb" secondAttribute="bottom" id="Maa-Ue-KqQ"/>
-                <constraint firstItem="OGE-Cb-Dbb" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="MuV-Lu-FFg"/>
-                <constraint firstItem="KGH-xB-uHD" firstAttribute="width" secondItem="i5M-Pr-FkT" secondAttribute="width" id="N9K-zO-nMg"/>
-                <constraint firstItem="OGE-Cb-Dbb" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="Nd8-5q-IC7"/>
-                <constraint firstAttribute="trailing" secondItem="OGE-Cb-Dbb" secondAttribute="trailing" id="hGj-Sq-yBo"/>
+                <constraint firstItem="Uv9-oA-7gY" firstAttribute="bottom" secondItem="OGE-Cb-Dbb" secondAttribute="bottom" id="Maa-Ue-KqQ"/>
+                <constraint firstItem="OGE-Cb-Dbb" firstAttribute="top" secondItem="Uv9-oA-7gY" secondAttribute="top" id="MuV-Lu-FFg"/>
+                <constraint firstItem="KGH-xB-uHD" firstAttribute="width" secondItem="OGE-Cb-Dbb" secondAttribute="width" id="N9K-zO-nMg"/>
+                <constraint firstItem="OGE-Cb-Dbb" firstAttribute="leading" secondItem="Uv9-oA-7gY" secondAttribute="leading" id="Nd8-5q-IC7"/>
+                <constraint firstItem="Uv9-oA-7gY" firstAttribute="trailing" secondItem="OGE-Cb-Dbb" secondAttribute="trailing" id="hGj-Sq-yBo"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <point key="canvasLocation" x="24.375" y="51.760563380281688"/>
@@ -208,6 +210,7 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="oNb-pP-fNr"/>
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="hcO-3W-9bU" firstAttribute="top" secondItem="PhJ-bF-aCF" secondAttribute="top" constant="8" id="4eb-DT-GDl"/>
@@ -230,7 +233,7 @@
                     <integer key="value" value="4"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="373" y="-179"/>
+            <point key="canvasLocation" x="371" y="-412"/>
         </view>
         <view clipsSubviews="YES" contentMode="scaleToFill" id="v2V-o2-lNa">
             <rect key="frame" x="0.0" y="0.0" width="240" height="108"/>
@@ -282,6 +285,7 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="XFv-qW-HzB"/>
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="zaB-im-K9B" firstAttribute="top" secondItem="jAx-rG-pzj" secondAttribute="bottom" constant="8" id="2da-zI-Mgi"/>
@@ -307,7 +311,7 @@
                     <integer key="value" value="4"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="678" y="-179.5"/>
+            <point key="canvasLocation" x="898" y="-413"/>
         </view>
         <view clipsSubviews="YES" contentMode="scaleToFill" id="83P-Wa-vWr">
             <rect key="frame" x="0.0" y="0.0" width="240" height="107"/>
@@ -348,6 +352,7 @@
                     </state>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="iWX-iq-wuK"/>
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="Tho-b9-zbm" firstAttribute="leading" secondItem="83P-Wa-vWr" secondAttribute="leading" id="3zw-lz-zmE"/>
@@ -371,7 +376,7 @@
                     <integer key="value" value="4"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="373" y="-4.5"/>
+            <point key="canvasLocation" x="609" y="-242"/>
         </view>
         <view clipsSubviews="YES" contentMode="scaleToFill" id="2ei-b8-Dc5">
             <rect key="frame" x="0.0" y="0.0" width="240" height="171"/>
@@ -431,6 +436,7 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="7kp-yh-o1p"/>
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstItem="Xe3-bl-xiy" firstAttribute="top" secondItem="vid-Tx-j13" secondAttribute="bottom" constant="8" id="22f-Tm-tC6"/>
@@ -456,7 +462,7 @@
                     <integer key="value" value="4"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="373" y="215.5"/>
+            <point key="canvasLocation" x="608" y="80"/>
         </view>
         <view clipsSubviews="YES" contentMode="scaleToFill" id="7hZ-qK-Bdg">
             <rect key="frame" x="0.0" y="0.0" width="240" height="131"/>
@@ -549,6 +555,7 @@
                     </connections>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="Me6-q1-bku"/>
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="DDB-xy-UT5" secondAttribute="trailing" id="0T5-mj-Wcq"/>
@@ -584,7 +591,7 @@
                     <integer key="value" value="4"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="756" y="434"/>
+            <point key="canvasLocation" x="608" y="274"/>
         </view>
         <view clipsSubviews="YES" contentMode="scaleToFill" id="BSw-kZ-iET">
             <rect key="frame" x="0.0" y="0.0" width="240" height="107"/>
@@ -625,6 +632,7 @@
                     </state>
                 </button>
             </subviews>
+            <viewLayoutGuide key="safeArea" id="Ld3-JF-BJG"/>
             <color key="backgroundColor" name="groupBg"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="SU2-jz-oPD" secondAttribute="trailing" id="5Px-Nz-Ocg"/>
@@ -648,7 +656,7 @@
                     <integer key="value" value="4"/>
                 </userDefinedRuntimeAttribute>
             </userDefinedRuntimeAttributes>
-            <point key="canvasLocation" x="678" y="-5"/>
+            <point key="canvasLocation" x="608" y="-98"/>
         </view>
     </objects>
     <resources>

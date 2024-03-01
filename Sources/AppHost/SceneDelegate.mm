@@ -53,7 +53,7 @@
 #include <OsmAndCore/QIODeviceLogSink.h>
 #include <OsmAndCore/FunctorLogSink.h>
 
-#import "OAFirstUsageWelcomeController.h"
+#import "OAFirstUsageWizardController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kCheckUpdatesInterval 3600
@@ -161,7 +161,7 @@
             break;
         case AppLaunchEventFirstLaunch:
             NSLog(@"AppLaunchEventFirstLaunch");
-            [_rootViewController.navigationController pushViewController:[OAFirstUsageWelcomeController new] animated:NO];
+            [_rootViewController.navigationController pushViewController:[OAFirstUsageWizardController new] animated:NO];
             break;
         case AppLaunchEventRestoreSession:
             NSLog(@"AppLaunchEventRestoreSession");

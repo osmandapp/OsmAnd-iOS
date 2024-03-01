@@ -35,7 +35,7 @@ typedef enum
     MAP_DOWNLOAD,
 } WizardType;
 
-
+// ic_navbar_overflow_menu_outlined
 @interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
@@ -107,6 +107,8 @@ typedef enum
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    //self.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAlways;
     
     _app = [OsmAndApp instance];
 

@@ -165,7 +165,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
                 }
             }
             // Show intro screen
-            if (execCount == 1 || !mapInstalled)
+            if (YES/*execCount == 1 || !mapInstalled*/)
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
             }

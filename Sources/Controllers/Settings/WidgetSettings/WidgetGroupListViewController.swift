@@ -179,22 +179,13 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
         let section = tableData.sectionData(for: 0)
         for i in 0..<section.rowCount() {
             let row = section.getRow(i)
-            var groupMatched = false
             if let widgetGroup = row.obj(forKey: "widget_group") as? WidgetGroup {
                 if widgetGroup.title.range(of: searchText, options: .caseInsensitive) != nil {
                     filteredSection.addRow(row)
-                    groupMatched = true
                 }
                 
                 widgetGroup.getWidgets().forEach {
                     if $0.title.range(of: searchText, options: .caseInsensitive) != nil {
-                        if !groupMatched {
-                            if widgetGroup.title.range(of: searchText, options: .caseInsensitive) != nil {
-                                filteredSection.addRow(row)
-                                groupMatched = true
-                            }
-                        }
-                        
                         filteredSection.addRow(createSearchRowData(for: $0))
                     }
                 }

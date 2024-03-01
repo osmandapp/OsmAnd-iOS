@@ -317,7 +317,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 {
     [NSLayoutConstraint activateConstraints:@[
         [_imageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
-        [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor constant:0],
+        [_imageView.centerYAnchor constraintEqualToAnchor:self.centerYAnchor],
         [_imageView.heightAnchor constraintEqualToConstant:imageSide],
         [_imageView.widthAnchor constraintEqualToConstant:imageSide]
     ]];

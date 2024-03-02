@@ -503,7 +503,7 @@
 "map_update_warning" = "Да ли желите да поново учитате податке плочица са Интернета?";
 
 // HUD
-"hud_heading" = "Наслов";
+"hud_heading" = "Усмерење";
 "hud_no_movement" = "Нема покрета";
 
 // Favorites
@@ -2541,7 +2541,7 @@
 "co2_mission" = "издув CO2";
 "shared_string_expires" = "Истиче";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Приказуј трагове МТБ ИМБА";
-"shared_string_not_included" = "Не укључује";
+"shared_string_not_included" = "Не укључено";
 "upload_local_version" = "Отпреми локалну верзију";
 "pro_features" = "Плаћене могућности";
 "routing_attr_motor_type_electric_name" = "Електрична";
@@ -2937,3 +2937,46 @@
 // Shared Strings
 "shared_string_discard" = "Одбаци";
 "shared_string_cancelled" = "Отказано";
+"shared_string_available_until" = "Доступно до";
+"shared_string_updates_frequency" = "Учесталост ажурирања";
+"shared_string_unavailable" = "Недоступно";
+"shared_string_delete_color" = "Обриши боју";
+"shared_string_duplicate" = "Удвостручи";
+"shared_string_trash" = "Отпад";
+"map_2d_mode_action" = "2Д начин активности";
+"map_3d_mode_action" = "3Д начин активности";
+"shared_string_countries" = "Земље";
+"shared_string_download_update" = "Преузми ажурирање";
+"shared_string_does_not_exist" = "Не постоји";
+"shared_string_not_available" = "Није доступно";
+"shared_string_delete_item" = "Обриши ставку";
+"shared_string_updated" = "Ажурирано";
+"shared_string_next_update" = "Следеће ажурирање";
+"shared_string_profile" = "Профил";
+"visible_in_3d_mode" = "Видљиво у 3Д начину";
+"shared_string_hidden" = "Скривено";
+"map_3d_mode_description" = "Додирните мапу двома прстима и преместите их навише и наниже ради прилагођавања нагиба мапе.";
+"shared_string_clear_online_cache" = "Очисти мрежни захват";
+"shared_string_clear_offline_cache" = "Очисти ванмрежни захват";
+"shared_string_external" = "Спољни";
+"shared_string_coloring" = "Обојеност";
+"without_permission_my_position_value" = "ОсмАнд нема приступ локацији";
+"shared_string_changed" = "Измењено";
+"shared_string_leave" = "Остави";
+"shared_string_delete_data" = "Обриши податке";
+"shared_string_all_colors" = "Све боје";
+"shared_string_add_color" = "Додај боју";
+"shared_string_edit_color" = "Уреди боју";
+"shared_string_any" = "Било који";
+"shared_string_data_type" = "Тип податка";
+"with_permission_my_position_value" = "Помери мапу на тренутну локацију";
+"shared_string_result" = "Резултат";
+"shared_string_move" = "Помери";
+"shared_string_total_size" = "Укупна величина";
+"shared_string_updates_size" = "Величина ажурирања";
+"shared_string_duplicate_color" = "Дупликат боје";
+"shared_string_file_info" = "Инфо фајла";
+"shared_string_delete_immediately" = "Обриши одмах";
+"shared_string_is_deleted" = "%@ је обрисано.";
+"shared_string_deleting" = "Брисање";
+"shared_string_deleting_complete" = "Брисање завршено";

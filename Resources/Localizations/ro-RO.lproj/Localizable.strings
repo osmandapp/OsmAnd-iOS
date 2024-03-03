@@ -3270,3 +3270,16 @@
 "external_device_status_connect" = "Conectare";
 "ant_plus_nothing_found_description" = "Asigurați-vă că:\n– Bluetooth e pornit\n– Senzorul e activ\n– Acest dispozitiv se află lângă senzor";
 "purchases_feature_desc_external_sensors" = "Afișați și înregistrați date de la senzorii externi: viteza bicicletei, puterea exercitată, cadența pedalării și pulsul.";
+"default_appearance_desc" = "Culoarea, pictograma și forma implicite se vor aplica punctelor favorite adăugate în grup.";
+"apply_to_existing" = "Se aplică la cele existente";
+"change_appearance" = "Modificarea aspectului";
+"apply_only_to_new_points" = "Se aplică numai la punctele noi";
+"apply_to_existing_favorites_descr" = "Aplicați modificările la punctele favorite existente ale grupului sau numai la cele noi?";
+
+
+"show_icon" = "Afișați pictograma";
+"new_track" = "Piesă nouă";
+"not_recorded" = "Neînregistrat";
+"start_recording" = "Începeți înregistrarea";
+"recorded_track" = "Traseu înregistrat";
+"shared_string_error" = "Eroare";

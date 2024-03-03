@@ -3057,3 +3057,12 @@
 "shared_string_hide_from_map" = "Сакриј на карти";
 "folder_tracks_count" = "%d путања";
 "osmand_depelopment_simulate_location_section" = "Симулирај";
+"osm_upload_gpx_tags_footer" = "Унесите ознаке одвојене зарезом.";
+"coordinates_widget_map_center" = "Координате: средиште мапе";
+"show_map_center" = "Прикажи координате: мапа у центру";
+"osm_upload_gpx_description_footer" = "Име путање биће употребљено уместо празног описа. Унет опис биће примењен за сваку путању.";
+"download_images_settings_header" = "Ванмрежни фајлови Википедије у ОсмАнду не садрже слике. Али могу бити преузете током прегледа чланака.";
+"download_images_settings_footer" = "Преузимање слика је омогућено преко било које мреже. Мобилни подаци могу бути употребљени.";
+"popular_articles_not_found_title" = "Популарни чланци нису нађени";
+"visibility" = "Видљивост";
+"toggle_map_center" = "Прикажи / сакриј координате: мапа у центру";

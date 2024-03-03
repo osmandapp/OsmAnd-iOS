@@ -3283,3 +3283,10 @@
 "start_recording" = "Începeți înregistrarea";
 "recorded_track" = "Traseu înregistrat";
 "shared_string_error" = "Eroare";
+"download_to_device" = "Descărcați pe dispozitiv";
+"restore_from_trash" = "Restaurați din coșul de gunoi";
+"permanent_delete_warning" = "%@ va fi șters definitiv. Sunteți sigur?";
+"delete_all_items" = "Ștergeți toate elementele";
+"delete_all_items_desc" = "Sunteți sigur că doriți să ștergeți definitiv toate elementele din Coșul de gunoi? Această acțiune nu poate fi anulată.";
+"subscribe_email_error" = "Eroare";
+"action_cannot_be_undone" = "Această acțiune nu poate fi anulată.";

@@ -1251,7 +1251,7 @@
 "mapillary_descr" = "Мрежне слике улица за све. Откријте места, сарађујте, освојите свет.";
 "mapillary_turn_on_widget" = "Укључите Мапилари виџет";
 "mapillary_turn_on_widget_descr" = "Ово вам омогућава да брзо допринесете Мапилари-у";
-"mapillary_menu_title_tile_cache" = "Оставка плочица";
+"mapillary_menu_title_tile_cache" = "Захват плочица";
 "shared_string_reload" = "Поново учитај";
 "show_more" = "Прикажи још";
 "mapil_reload_cache" = "Поново учитајте плочице да бисте видели најновије податке";

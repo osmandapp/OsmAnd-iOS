@@ -136,6 +136,8 @@
 #define ZONE_1_ZOOM_THRESHOLD 0.6f
 #define ZONE_2_ZOOM_THRESHOLD 1.5f
 
+#define kReplaceLocalNamesMaxZoom 6
+
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
     EOAMapPanDirectionDown,
@@ -211,7 +213,7 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
     OAAutoObserverProxy* _mapLayerChangeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicationModeChangedObserver;
-    
+    OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
     OAAutoObserverProxy* _framePreparedObserver;
@@ -353,7 +355,11 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
-    
+
+    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                  andObserve:_zoomObservable];
+
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidEnterBackground:)
@@ -2121,6 +2127,36 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
     _map3DModeElevationAngle = _mapView.elevationAngle;
 }
 
+- (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    @synchronized(_rendererSync)
+    {
+        [self updateMapLocaleLanguage];
+    }
+}
+
+- (void)updateMapLocaleLanguage
+{
+    NSString *langId = [self getMapPreferredLocale:_mapView.zoomLevel];
+    if (_mapPresentationEnvironment != nullptr && ![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
+        _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+}
+
+- (NSString *)getMapPreferredLocale:(int)zoom
+{
+    return [self useAppLocaleForMap:zoom]
+            ? [OAUtilities currentLang]
+            : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+}
+
+- (BOOL)useAppLocaleForMap:(int)zoom
+{
+    BOOL replaceLocalNamesToAppLocale = zoom <= kReplaceLocalNamesMaxZoom;
+    NSString *settingPrefMapLanguage = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+    BOOL useLocalNames = !settingPrefMapLanguage || settingPrefMapLanguage.length == 0;
+    return replaceLocalNamesToAppLocale && useLocalNames;
+}
+
 - (void) updateCurrentMapSource
 {
     if (!self.mapViewLoaded)
@@ -2210,12 +2246,6 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
                     break;
             }
             
-            NSString *langId = [OAUtilities currentLang];
-            if (settings.settingPrefMapLanguage.get)
-                langId = settings.settingPrefMapLanguage.get;
-            else if (settings.settingMapLanguageShowLocal &&
-                     settings.settingMapLanguageTranslit.get)
-                langId = @"en";
             double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
             
@@ -2230,7 +2260,7 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
-            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            [self updateMapLocaleLanguage];
             _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
@@ -2374,13 +2404,6 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
             }
-            
-            NSString *langId = [OAUtilities currentLang];
-            if (settings.settingPrefMapLanguage.get)
-                langId = settings.settingPrefMapLanguage.get;
-            else if ([settings settingMapLanguageShowLocal] &&
-                     settings.settingMapLanguageTranslit.get)
-                langId = @"en";
 
             QSet<QString> disabledPoiTypes = QSet<QString>();
             for (NSString *disabledPoiType in [settings getDisabledTypes])
@@ -2393,7 +2416,7 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
                                                                                      1.0,
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
-            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            [self updateMapLocaleLanguage];
             _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,

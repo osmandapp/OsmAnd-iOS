@@ -3290,3 +3290,9 @@
 "delete_all_items_desc" = "Sunteți sigur că doriți să ștergeți definitiv toate elementele din Coșul de gunoi? Această acțiune nu poate fi anulată.";
 "subscribe_email_error" = "Eroare";
 "action_cannot_be_undone" = "Această acțiune nu poate fi anulată.";
+"my_places_no_tracks_descr_root" = "Puteți importa, crea sau înregistra fișiere track folosind OsmAnd.";
+"shared_string_deleted" = "Eliminat";
+"duration_moment_ago" = "cu un moment în urmă";
+"my_places_no_tracks_title_root" = "Nu aveți fișiere de traseu";
+"my_places_no_tracks_title" = "Folder gol";
+"my_places_no_tracks_descr" = "Acest folder nu are încă niciun traseu.";

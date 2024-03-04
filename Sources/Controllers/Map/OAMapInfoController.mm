@@ -93,7 +93,7 @@
     containerView.layer.rasterizationScale = [UIScreen mainScreen].scale;
     
     containerView.translatesAutoresizingMaskIntoConstraints = NO;
-    [view addSubview:containerView];
+    [view insertSubview:containerView atIndex:0];
         
     [NSLayoutConstraint activateConstraints:@[
         [containerView.leftAnchor constraintEqualToAnchor:view.leftAnchor],
@@ -102,9 +102,9 @@
     ]];
     
     if (top)
-        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:6].active = YES;
+        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:5].active = YES;
     else
-        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-6].active = YES;
+        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-5].active = YES;
 }
 
 - (void)configureShadowForWidgets:(NSArray<UIView *> *)views
@@ -202,12 +202,16 @@
         [_leftPanelController didMoveToParentViewController:mapHudViewController];
         [_bottomPanelController didMoveToParentViewController:mapHudViewController];
         [_rightPanelController didMoveToParentViewController:mapHudViewController];
+
+        // for showing shadows
+        _topPanelController.view.layer.masksToBounds = NO;
+        _bottomPanelController.view.layer.masksToBounds = NO;
         
         [self configureShadowForWidgets:@[mapHudViewController.middleWidgetsView,
                                           mapHudViewController.leftWidgetsView,
                                           mapHudViewController.rightWidgetsView]];
-        [self configureShadowForWidget:mapHudViewController.topWidgetsView top:YES];
-        [self configureShadowForWidget:mapHudViewController.bottomWidgetsView top:NO];
+        [self configureShadowForWidget:_topPanelController.view top:YES];
+        [self configureShadowForWidget:_bottomPanelController.view top:NO];
 
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
@@ -335,23 +339,76 @@
 {
     if (hasTopWidgets) {
         CACornerMask maskedCorners = kCALayerMinXMaxYCorner | kCALayerMaxXMaxYCorner;
-        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
-        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+        [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+        [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+        if (_rightPanelController.pages.count > 1)
+        {
+            [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+            _rightPanelController.pageContainerView.layer.cornerRadius = 0;
+        }
+        else
+            [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+
+        if (_leftPanelController.pages.count > 1)
+        {
+            [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+            _leftPanelController.pageContainerView.layer.cornerRadius = 0;
+        }
+        else
+            [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+
     }
     else
     {
         if ([OAUtilities isLandscapeIpadAware])
         {
             CACornerMask maskedCorners = kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner | kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner;
-            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
-            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners];
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:maskedCorners isNighTheme:_settings.nightMode];
+            if (_rightPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:maskedCorners];
+  
+            if (_leftPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner | kCALayerMinXMaxYCorner];
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:maskedCorners];
         }
         else
         {
-            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
-            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner];
+            [_rightPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner isNighTheme:_settings.nightMode];
+            if (_rightPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_rightPanelController.pageControl mask:kCALayerMinXMaxYCorner];
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_rightPanelController.pageContainerView mask:kCALayerMinXMaxYCorner | kCALayerMinXMinYCorner];
+            
+            [_leftPanelController.view.layer addWidgetLayerDecoratorWithMask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner isNighTheme:_settings.nightMode];
+            if (_leftPanelController.pages.count > 1)
+            {
+                [self configureCornerRadiusForView:_leftPanelController.pageControl mask:kCALayerMaxXMaxYCorner];
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMinYCorner];
+            }
+            else
+                [self configureCornerRadiusForView:_leftPanelController.pageContainerView mask:kCALayerMaxXMaxYCorner | kCALayerMaxXMinYCorner];
         }
     }
+}
+
+- (void)configureCornerRadiusForView:(UIView *)view
+                                mask:(CACornerMask)mask
+{
+    view.layer.cornerRadius = 5;
+    view.layer.maskedCorners = mask;
 }
 
 - (void) layoutWidgets
@@ -410,7 +467,7 @@
     {
         CGSize leftSize = [_leftPanelController calculateContentSize];
         CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight;
+        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight + (_leftPanelController.view.layer.borderWidth * 2);
         _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
     }
     else
@@ -445,7 +502,7 @@
     {
         CGSize rightSize = [_rightPanelController calculateContentSize];
         CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight;
+        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight + (_rightPanelController.view.layer.borderWidth * 2);
         _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
     }
     else
@@ -659,7 +716,7 @@
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
     ts.textShadowColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
-    if (!transparent && !nightMode)
+    if (!transparent)
         ts.textShadowRadius = 0;
     else
         ts.textShadowRadius = 4.0;

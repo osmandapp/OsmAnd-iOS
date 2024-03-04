@@ -7,10 +7,11 @@
 //
 
 extension CALayer {
-    @objc func addWidgetLayerDecorator(mask: CACornerMask) {
+    @objc func addWidgetLayerDecorator(mask: CACornerMask,
+                                       isNighTheme: Bool) {
         borderWidth = 2
         cornerRadius = 7
-        borderColor = UIColor.lightGray.cgColor
+        borderColor = isNighTheme ? UIColor.widgetBgStroke.dark.cgColor : UIColor.widgetBgStroke.light.cgColor
         maskedCorners = mask
     }
 }

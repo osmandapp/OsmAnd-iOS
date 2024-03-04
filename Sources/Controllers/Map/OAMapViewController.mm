@@ -136,7 +136,6 @@
 #define ZONE_1_ZOOM_THRESHOLD 0.6f
 #define ZONE_2_ZOOM_THRESHOLD 1.5f
 
-#define kReplaceLocalNamesMaxZoom 6
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
@@ -146,6 +145,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
 };
 
 static const CGFloat kDistanceBetweenFingers = 50.0;
+static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 @interface OATouchLocation : NSObject
 
@@ -2137,9 +2137,12 @@ static const CGFloat kDistanceBetweenFingers = 50.0;
 
 - (void)updateMapLocaleLanguage
 {
-    NSString *langId = [self getMapPreferredLocale:_mapView.zoomLevel];
-    if (_mapPresentationEnvironment != nullptr && ![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
-        _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+    if (_mapPresentationEnvironment != nullptr)
+    {
+        NSString *langId = [self getMapPreferredLocale:_mapView.zoomLevel];
+        if (![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
+            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+    }
 }
 
 - (NSString *)getMapPreferredLocale:(int)zoom

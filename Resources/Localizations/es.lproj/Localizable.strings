@@ -3336,3 +3336,4 @@
 "osmand_cloud_delete_account_descr" = "¿Estás seguro de que quieres eliminar la cuenta de OsmAnd Cloud?";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar la cuenta?";
 "osmand_cloud_deletion_all_data_warning" = "Todos los datos de OsmAnd Cloud serán %@. Los datos del dispositivo permanecen intactos.";
+"lang_sr-Latn" = "Serbio (latino)";

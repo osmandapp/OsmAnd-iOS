@@ -226,7 +226,7 @@
 "res_installing" = "Installation…";
 "shared_string_not_selected" = "Non sélectionné";
 "shared_string_get" = "Installer";
-"osm_live_active" = "Activer";
+"osm_live_active" = "Actif";
 "menu_all_trips" = "Toutes les traces";
 "total_time" = "Temps total";
 "create_new_trip" = "Créer une nouvelle trace";

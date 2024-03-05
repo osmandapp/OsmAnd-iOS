@@ -3022,6 +3022,8 @@ typedef enum
             : [doc getAnalysis:0];
         OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
         state.openedFromTracksList = true;
+        state.selectedStatisticsTab = EOATrackMenuHudSegmentsStatisticsOverviewTab;
+        state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
     }
 }

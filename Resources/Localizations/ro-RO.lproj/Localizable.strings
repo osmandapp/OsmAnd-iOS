@@ -3296,3 +3296,5 @@
 "my_places_no_tracks_title_root" = "Nu aveți fișiere de traseu";
 "my_places_no_tracks_title" = "Folder gol";
 "my_places_no_tracks_descr" = "Acest folder nu are încă niciun traseu.";
+"trash_is_empty" = "Coșul de gunoi este gol";
+"delete_folder" = "Ștergeți folderul";

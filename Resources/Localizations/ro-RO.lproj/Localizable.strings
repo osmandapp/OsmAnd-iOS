@@ -3298,3 +3298,11 @@
 "my_places_no_tracks_descr" = "Acest folder nu are încă niciun traseu.";
 "trash_is_empty" = "Coșul de gunoi este gol";
 "delete_folder" = "Șterge folderul";
+"cloud_item_restored" = "%@ este restaurat în Cloud.";
+"map_widget_sun_position_desc" = "Acest widget afișează timpul până la răsăritul sau apusul soarelui, în funcție de ora curentă.";
+"shared_string_mode" = "Mod";
+"shared_string_format" = "Formatul";
+"delete_account" = "Ștergeți contul";
+"verify_account" = "Verificați-vă contul";
+"verify_account_deletion_descr" = "Trebuie să vă verificăm contul înainte de a-l șterge.\n\nVă rugăm să introduceți adresa de e-mail cu care v-ați înregistrat. O parolă unică pentru următorul pas va fi trimisă la aceasta.";
+"osmand_cloud_deletion_all_data_warning" = "Toate datele din OsmAnd Cloud vor fi %@. Datele de pe dispozitiv rămân neatinse.";

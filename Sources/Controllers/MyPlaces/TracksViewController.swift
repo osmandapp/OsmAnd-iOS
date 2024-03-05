@@ -19,8 +19,6 @@ private class TrackFolder {
     var tracksCount: Int = 0 // count of tracks in current folder and in subfolders
     var parentFolder: TrackFolder?
     var flattenedFolders: [String: TrackFolder] = [:]
-    
-    let gpxFolderRelativePath = "/Documents/GPX/"
 
     func performForAllTracks(action: (_ track: OAGPX) -> Void) {
         for track in tracks.values {

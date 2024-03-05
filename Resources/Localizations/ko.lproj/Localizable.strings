@@ -11,7 +11,7 @@
 "daynight_mode_auto" = "일출/일몰";
 "route_simulation" = "경로 시뮬레이션";
 "auto_follow_location_enabled" = "자동-센터 지도 보기 사용 중입니다.";
-"unknown_location" = "위치는 아직 알 수 없음";
+"unknown_location" = "위치를 아직 알 수 없습니다.";
 "settings_preset" = "기본 프로필";
 "default_profile_descr" = "응용 프로그램 실행을 사용할 프로필을 선택하십시오.";
 "unit_of_length" = "측정 단위";
@@ -373,7 +373,7 @@
 "default_speed_system" = "속도 단위";
 "gpx_upload_trackable_visibility_descr" = "\"추적 가능\"은 추적이 공개 목록에 나타나지 않으나, 추적점에서 타임스탬프가 있는 처리된 추적점은 공개 GPS API에서 다운로드를 통해 이루어진다.";
 "si_min_m" = "마일당 분";
-"speak_title" = "발표…";
+"speak_title" = "안내…";
 "speak_descr" = "거리 이름, 교통 경고(강제 정지, 속도 범프), 속도 카메라 경고, 제한 속도를 알리기 위해  구성합니다";
 "keep_informing" = "탐색 지침을 반복";
 "keep_informing_descr" = "정기적인 간격으로 운행 명령을 다시 알리기";
@@ -2380,3 +2380,5 @@
 "rendering_attr_piste_type_connection_name" = "연결";
 "rendering_attr_piste_type_nordic_name" = "북유럽";
 "rendering_value_thick_name" = "두껍게";
+"speak_route_recalculation" = "경로 재탐색 안내";
+"speak_gps_signal_status" = "GPS 신호 손실 및 복구 안내";

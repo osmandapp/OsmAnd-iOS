@@ -1132,7 +1132,6 @@
 		84E297561E2FD80B006EA6B1 /* topo.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 84E297551E2FD80A006EA6B1 /* topo.render.xml */; };
 		84E2DB5B1AB720FA001A7FEC /* left_menu_icon_about@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB201AB720FA001A7FEC /* left_menu_icon_about@2x.png */; };
 		84E2DB5E1AB720FA001A7FEC /* left_menu_icon_about@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E2DB211AB720FA001A7FEC /* left_menu_icon_about@3x.png */; };
-		84E3F92D1DEC7BAA00B653BC /* logo_firstscreen.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E3F92A1DEC7BAA00B653BC /* logo_firstscreen.png */; };
 		84E3F92E1DEC7BAA00B653BC /* logo_firstscreen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E3F92B1DEC7BAA00B653BC /* logo_firstscreen@2x.png */; };
 		84E3F92F1DEC7BAA00B653BC /* logo_firstscreen@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E3F92C1DEC7BAA00B653BC /* logo_firstscreen@3x.png */; };
 		84E441B61AF8A07500F87542 /* add_waypoint_to_track@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84E4418A1AF8A07500F87542 /* add_waypoint_to_track@2x.png */; };
@@ -4741,7 +4740,6 @@
 		84E297551E2FD80A006EA6B1 /* topo.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = topo.render.xml; path = ../resources/rendering_styles/topo.render.xml; sourceTree = "<group>"; };
 		84E2DB201AB720FA001A7FEC /* left_menu_icon_about@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_about@2x.png"; path = "Resources/Icons/left_menu_icon_about@2x.png"; sourceTree = "<group>"; };
 		84E2DB211AB720FA001A7FEC /* left_menu_icon_about@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_about@3x.png"; path = "Resources/Icons/left_menu_icon_about@3x.png"; sourceTree = "<group>"; };
-		84E3F92A1DEC7BAA00B653BC /* logo_firstscreen.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = logo_firstscreen.png; path = Resources/IntroImages/logo_firstscreen.png; sourceTree = "<group>"; };
 		84E3F92B1DEC7BAA00B653BC /* logo_firstscreen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo_firstscreen@2x.png"; path = "Resources/IntroImages/logo_firstscreen@2x.png"; sourceTree = "<group>"; };
 		84E3F92C1DEC7BAA00B653BC /* logo_firstscreen@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "logo_firstscreen@3x.png"; path = "Resources/IntroImages/logo_firstscreen@3x.png"; sourceTree = "<group>"; };
 		84E4418A1AF8A07500F87542 /* add_waypoint_to_track@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "add_waypoint_to_track@2x.png"; path = "Resources/Icons/add_waypoint_to_track@2x.png"; sourceTree = "<group>"; };
@@ -8366,7 +8364,6 @@
 				846F431C1FE5209B00AFEA8E /* img_splash_osmand_logo.png */,
 				846F431A1FE5209A00AFEA8E /* img_splash_osmand_logo@2x.png */,
 				846F431B1FE5209B00AFEA8E /* img_splash_osmand_logo@3x.png */,
-				84E3F92A1DEC7BAA00B653BC /* logo_firstscreen.png */,
 				84E3F92B1DEC7BAA00B653BC /* logo_firstscreen@2x.png */,
 				84E3F92C1DEC7BAA00B653BC /* logo_firstscreen@3x.png */,
 				841A111E1DEC454F009558D3 /* osmand_logo.png */,
@@ -15117,7 +15114,6 @@
 				DA5F6A0D245844A100C7DF71 /* map_public_transport_stop_shield@2x.png in Resources */,
 				849E81751AFA5D6700549953 /* btn_map_type_icon_bike@2x.png in Resources */,
 				DA6B074424ED65200062AA98 /* ic_custom_reverse_direction@2x.png in Resources */,
-				84E3F92D1DEC7BAA00B653BC /* logo_firstscreen.png in Resources */,
 				DAF2F808254825BA00967935 /* map_plan_route_point_normal@3x.png in Resources */,
 				8476E2941F6C1EEC00EC274F /* map_car_location_view_angle@3x.png in Resources */,
 				DAF50C6C299BB269006AAF2E /* routes.addon.render.xml in Resources */,

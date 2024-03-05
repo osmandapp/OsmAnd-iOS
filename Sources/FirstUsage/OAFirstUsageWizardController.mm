@@ -21,6 +21,7 @@
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
+#import "GeneratedAssetSymbols.h"
 
 const static int PROGRESS_ON_MARGIN = 29;
 const static int PROGRESS_OFF_MARGIN = 8;
@@ -40,6 +41,7 @@ typedef enum
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnSkip;
+@property (weak, nonatomic) IBOutlet UIButton *navBarMenuButton;
 @property (weak, nonatomic) IBOutlet UILabel *lbDescription;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
@@ -68,7 +70,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UILabel *lbDownloadMapName;
 @property (weak, nonatomic) IBOutlet UILabel *lbDownloadMapSize;
 @property (weak, nonatomic) IBOutlet UIButton *btnDownload;
-@property (weak, nonatomic) IBOutlet UIButton *btnSelectMap;
+//@property (weak, nonatomic) IBOutlet UIButton *btnSelectMap;
 
 @property (strong, nonatomic) IBOutlet UIView *viewProgress;
 
@@ -82,6 +84,11 @@ typedef enum
 
 @property (weak, nonatomic) IBOutlet UIButton *btnGoToMap;
 @property (weak, nonatomic) IBOutlet UITextView *bottomTextView;
+
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *logoHeightConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *logoWidthConstraint;
+@property (weak, nonatomic) IBOutlet UIStackView *logoTitleStackView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoTitleStackViewTopConstraint;
 
 @end
 
@@ -127,7 +134,7 @@ typedef enum
     _lbTitle.text = OALocalizedString(@"shared_string_download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
     _lbDescription.font = [UIFont scaledSystemFontOfSize:14.];
-    [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
+    [_btnSkip setTitle:OALocalizedString(@"skip_download") forState:UIControlStateNormal];
     _btnSkip.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     
     // Init no location view
@@ -150,7 +157,7 @@ typedef enum
     // Init download map view
     [self updateDownloadButtonLayer];
     [_btnDownload setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
-    [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
+  //  [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
 
     // Init progress view
     _btnRestart1.hidden = YES;
@@ -191,6 +198,56 @@ typedef enum
     _bottomTextView.attributedText = titleStr;
     
     [self startWizard];
+    [self configureToolbar];
+    [self configureUI];
+}
+
+
+- (void)configureUI
+{
+    BOOL isLandscape = OAUtilities.isLandscape;
+    [self.navigationController setToolbarHidden:isLandscape];
+    [self.btnSkip setHidden:!isLandscape];
+    
+    self.logoHeightConstraint.constant = isLandscape ? 48 : 60;
+    self.logoWidthConstraint.constant = self.logoHeightConstraint.constant;
+    _lbTitle.font = [UIFont scaledSystemFontOfSize:isLandscape ? 28 : 34];
+    if (isLandscape)
+    {
+        self.logoTitleStackView.axis = UILayoutConstraintAxisHorizontal;
+        self.logoTitleStackView.alignment = UIStackViewAlignmentCenter;
+        self.logoTitleStackViewTopConstraint.constant = 16;
+//        verticalStackView.spacing = 4;
+//        verticalStackView.distribution = UIStackViewDistributionEqualSpacing;
+//        [self.logoTitleStackView addArrangedSubview:_lbTitle];
+    }
+    else
+    {
+        self.logoTitleStackViewTopConstraint.constant = 0;
+        self.logoTitleStackView.axis = UILayoutConstraintAxisVertical;
+        self.logoTitleStackView.alignment = UIStackViewAlignmentLeading;
+    }
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self configureUI];
+    } completion:nil];
+}
+
+- (void)configureToolbar
+{
+    NSMutableArray *items = [NSMutableArray new];
+
+    UIBarButtonItem *flexibleSpaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [items addObject:flexibleSpaceItem];
+    
+    UIBarButtonItem *skipDownloadButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"skip_download") style:UIBarButtonItemStylePlain target:self action:@selector(yourMethod:)];
+    [skipDownloadButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorNamed:ACColorNameTextColorActive], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+    [items addObject:skipDownloadButtonItem];
+
+    [self setToolbarItems:items];
 }
 
 # pragma mark - UITextViewDelegate
@@ -249,11 +306,11 @@ typedef enum
 
 - (void)updateDownloadButtonLayer
 {
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_btnDownload.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(4.0, 4.0)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = self.view.bounds;
-    maskLayer.path  = maskPath.CGPath;
-    _btnDownload.layer.mask = maskLayer;
+//    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_btnDownload.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(10.0, 10.0)];
+//    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
+//    maskLayer.frame = self.view.bounds;
+//    maskLayer.path  = maskPath.CGPath;
+//    _btnDownload.layer.mask = maskLayer;
 }
 
 - (void)showCard:(UIView *)cardView
@@ -265,14 +322,58 @@ typedef enum
 -(void)resizeToFitSubviews:(UIView *)source
 {
     float h = 0;
-    for (UIView *v in source.subviews)
-    {
-        float fh = v.frame.origin.y + v.frame.size.height;
-        h = MAX(fh, h);
-    }
-    source.frame = CGRectMake(source.frame.origin.x, source.frame.origin.y, _cardView.frame.size.width, h);
+//    for (UIView *v in source.subviews)
+//    {
+//        float fh = v.frame.origin.y + v.frame.size.height;
+//        h = MAX(fh, h);
+//    }
+    source.frame = CGRectMake(source.frame.origin.x, source.frame.origin.y, _cardView.frame.size.width, 130);
     if (source == _viewDownloadMap)
         [self updateDownloadButtonLayer];
+}
+
+- (IBAction)onMenuPresssd:(id)sender
+{
+        NSMutableArray<UIMenuElement *> *menuElements;
+        UIAlertController *menuAlert;
+                    
+    
+    UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
+                                                       image:[UIImage systemImageNamed:@"pencil"]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+        
+    }];
+    
+    
+    
+    UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
+                                                      image:[UIImage systemImageNamed:@"pencil"]
+                                                 identifier:nil
+                                                    handler:^(__kindof UIAction * _Nonnull action) {
+        
+    }];
+    
+    UIMenu *menu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[restoreCloudAction,restoreFileAction ]];
+    
+//        UIBarButtonItem *button = [self createRightNavbarButton:editMode ? localizedString(@"shared_string_done") : nil
+//                                                      iconName:editMode ? nil : @"ic_navbar_overflow_menu_stroke"
+//                                                        action:@selector(onRightNavbarButtonPressed)
+//                                                         menu:menu];
+//        
+//        if (!editMode) {
+//            button.accessibilityLabel = localizedString(@"shared_string_options");
+//        }
+        
+//        UIPopoverPresentationController *popover = resetAlert.popoverPresentationController;
+//        popover.barButtonItem = button;
+//    
+//    button.showsMenuAsPrimaryAction = YES;
+//    button.menu = menu;
+    
+//    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+//
+//        return @[button];
 }
 
 - (IBAction)skipPress:(id)sender
@@ -376,7 +477,8 @@ typedef enum
             if (indexItem)
             {
                 _lbDownloadMapName.text = indexItem.title;
-                _lbDownloadMapSize.text = [NSByteCountFormatter stringFromByteCount:indexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
+                
+                [_btnDownload setTitle:[OALocalizedString(@"shared_string_download") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:indexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]] forState:UIControlStateNormal];
             }
             
             [self showCard:_viewDownloadMap];

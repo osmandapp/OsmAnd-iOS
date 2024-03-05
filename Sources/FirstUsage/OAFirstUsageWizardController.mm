@@ -18,10 +18,14 @@
 #import "SafariServices/SafariServices.h"
 #import "GeneratedAssetSymbols.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "OACloudIntroductionViewController.h"
+#import "OACloudBackupViewController.h"
+#import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#import "GeneratedAssetSymbols.h"
+
 
 const static int PROGRESS_ON_MARGIN = 29;
 const static int PROGRESS_OFF_MARGIN = 8;
@@ -37,7 +41,7 @@ typedef enum
 } WizardType;
 
 // ic_navbar_overflow_menu_outlined
-@interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate>
+@interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate, UIDocumentPickerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnSkip;
@@ -197,11 +201,19 @@ typedef enum
     _bottomTextView.linkTextAttributes = linkAttributes;
     _bottomTextView.attributedText = titleStr;
     
+    self.navBarMenuButton.showsMenuAsPrimaryAction = YES;
+    self.navBarMenuButton.menu = [self rightNavButtonMenuItems];
+    
     [self startWizard];
     [self configureToolbar];
     [self configureUI];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
 
 - (void)configureUI
 {
@@ -243,7 +255,7 @@ typedef enum
     UIBarButtonItem *flexibleSpaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
     [items addObject:flexibleSpaceItem];
     
-    UIBarButtonItem *skipDownloadButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"skip_download") style:UIBarButtonItemStylePlain target:self action:@selector(yourMethod:)];
+    UIBarButtonItem *skipDownloadButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"skip_download") style:UIBarButtonItemStylePlain target:self action:@selector(closeWizard)];
     [skipDownloadButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorNamed:ACColorNameTextColorActive], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
     [items addObject:skipDownloadButtonItem];
 
@@ -269,12 +281,6 @@ typedef enum
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
     [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc
@@ -332,66 +338,95 @@ typedef enum
         [self updateDownloadButtonLayer];
 }
 
-- (IBAction)onMenuPresssd:(id)sender
-{
-        NSMutableArray<UIMenuElement *> *menuElements;
-        UIAlertController *menuAlert;
-                    
-    
-    UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
-                                                       image:[UIImage systemImageNamed:@"pencil"]
+- (UIMenu *)rightNavButtonMenuItems {
+    __weak OAFirstUsageWizardController *weakSelf = self;
+    UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_osmand_cloud")
+                                                       image:[UIImage imageNamed:@"ic_custom_restore"]
                                                   identifier:nil
                                                      handler:^(__kindof UIAction * _Nonnull action) {
-        
+        UIViewController *controller = OABackupHelper.sharedInstance.isRegistered
+        ? [OACloudBackupViewController new]
+        : [OACloudIntroductionViewController new];
+        [weakSelf.navigationController pushViewController:controller animated:YES];
     }];
-    
-    
-    
-    UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
-                                                      image:[UIImage systemImageNamed:@"pencil"]
+    UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_file")
+                                                      image:[UIImage imageNamed:@"ic_custom_import_outlined"]
                                                  identifier:nil
                                                     handler:^(__kindof UIAction * _Nonnull action) {
-        
+        [weakSelf onRestoreFromFilePressed];
     }];
     
-    UIMenu *menu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[restoreCloudAction,restoreFileAction ]];
-    
-//        UIBarButtonItem *button = [self createRightNavbarButton:editMode ? localizedString(@"shared_string_done") : nil
-//                                                      iconName:editMode ? nil : @"ic_navbar_overflow_menu_stroke"
-//                                                        action:@selector(onRightNavbarButtonPressed)
-//                                                         menu:menu];
-//        
-//        if (!editMode) {
-//            button.accessibilityLabel = localizedString(@"shared_string_options");
-//        }
-        
-//        UIPopoverPresentationController *popover = resetAlert.popoverPresentationController;
-//        popover.barButtonItem = button;
-//    
-//    button.showsMenuAsPrimaryAction = YES;
-//    button.menu = menu;
-    
-//    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
-//
-//        return @[button];
+    return [UIMenu menuWithTitle:@""
+                           image:nil
+                      identifier:nil
+                         options:UIMenuOptionsDisplayInline children:@[restoreCloudAction, restoreFileAction]];;
 }
+
+- (void)onRestoreFromFilePressed
+{
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"net.osmand.osf" conformingToType:UTTypeArchive]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
+}
+//- (IBAction)onMenuPresssd:(id)sender
+//{
+//
+//    UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
+//                                                       image:[UIImage systemImageNamed:@"pencil"]
+//                                                  identifier:nil
+//                                                     handler:^(__kindof UIAction * _Nonnull action) {
+//        
+//    }];
+//    
+//    
+//    
+//    UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_edit")
+//                                                      image:[UIImage systemImageNamed:@"pencil"]
+//                                                 identifier:nil
+//                                                    handler:^(__kindof UIAction * _Nonnull action) {
+//        
+//    }];
+//    
+//    UIMenu *menu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[restoreCloudAction,restoreFileAction ]];
+//    
+////        UIBarButtonItem *button = [self createRightNavbarButton:editMode ? localizedString(@"shared_string_done") : nil
+////                                                      iconName:editMode ? nil : @"ic_navbar_overflow_menu_stroke"
+////                                                        action:@selector(onRightNavbarButtonPressed)
+////                                                         menu:menu];
+////        
+////        if (!editMode) {
+////            button.accessibilityLabel = localizedString(@"shared_string_options");
+////        }
+//        
+////        UIPopoverPresentationController *popover = resetAlert.popoverPresentationController;
+////        popover.barButtonItem = button;
+////    
+////    button.showsMenuAsPrimaryAction = YES;
+////    button.menu = menu;
+//    
+////    [[OARootViewController instance] presentViewController:alert animated:YES completion:nil];
+////
+////        return @[button];
+//}
 
 - (IBAction)skipPress:(id)sender
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_skip") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self closeWizard];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_select") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self selectMapPress:nil];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:alert animated:YES completion:nil];
+//    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") preferredStyle:UIAlertControllerStyleAlert];
+//    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_skip") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self closeWizard];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_select") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+//        [self selectMapPress:nil];
+//    }]];
+//    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+//    [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) closeWizard
+- (void)closeWizard
 {
-    [self.navigationController popToRootViewControllerAnimated:YES];
+    [self.navigationController popToRootViewControllerAnimated:NO];
 }
 
 - (void) startWizard
@@ -950,6 +985,27 @@ typedef enum
         }
         
     });
+}
+
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller
+didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSString *path = urls[0].path;
+    NSString *extension = [[path pathExtension] lowercaseString];
+    if ([extension caseInsensitiveCompare:@"osf"] == NSOrderedSame)
+        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:1];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark
+    ? UIStatusBarStyleLightContent
+    : UIStatusBarStyleDarkContent;
 }
 
 @end

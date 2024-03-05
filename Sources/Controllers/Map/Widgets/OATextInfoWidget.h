@@ -12,7 +12,7 @@
 #import "OAAppSettings.h"
 
 #define kTextInfoWidgetWidth 94
-#define kTextInfoWidgetHeight 32
+#define kTextInfoWidgetHeight 34
 
 #define UPDATE_INTERVAL_MILLIS 1000
 

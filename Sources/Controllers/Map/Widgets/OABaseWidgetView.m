@@ -48,7 +48,7 @@
     [NSLayoutConstraint activateConstraints:@[
         [_separatorBottomView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
         [_separatorBottomView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-        [_separatorBottomView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-1],
+        [_separatorBottomView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
         [_separatorBottomView.heightAnchor constraintEqualToConstant:1]
     ]];
     

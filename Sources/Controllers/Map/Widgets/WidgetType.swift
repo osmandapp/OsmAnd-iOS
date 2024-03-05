@@ -269,7 +269,7 @@ extension WidgetType {
                                         id: "day_night_mode_sun_position",
                                         title: localizedString("map_widget_sun_position"),
                                         descr: localizedString("map_widget_sun_position_desc"),
-                                        iconName: "widget_sunrise",
+                                        iconName: "widget_sunset",
                                         group: .sunriseSunset,
                                         defaultPanel: .rightPanel)
 

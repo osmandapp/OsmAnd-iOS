@@ -62,12 +62,10 @@ private class TrackFolder {
                 let subfolderName = subfolderURL.lastPathComponent
                 subfolders[subfolderName] = newSubfolderNode
                 
-                let parts = subfolderURL.relativePath.components(separatedBy: gpxFolderRelativePath)
-                if parts.count == 2 {
-                    let relativeSubfolderPath = parts[1]
-                    newSubfolderNode.path = relativeSubfolderPath
-                    insertToFlattenedFolders(path: relativeSubfolderPath, subfolder: newSubfolderNode)
-                }
+                let relativeSubfolderPath = subfolderURL.standardizedFileURL.relativePath.replacingOccurrences(of: OsmAndApp.swiftInstance().gpxPath + "/", with: "")
+                newSubfolderNode.path = relativeSubfolderPath
+                insertToFlattenedFolders(path: relativeSubfolderPath, subfolder: newSubfolderNode)
+
                 newSubfolderNode.collectFolderInfo(subfolderURL)
             }
         } catch let error {

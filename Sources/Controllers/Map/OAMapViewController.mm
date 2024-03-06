@@ -2330,7 +2330,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                                                                                    rasterTileSize,
                                                                                    nullptr,
                                                                                    false,
-                                                                                   true));
+                                                                                   false));
             
             [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
             

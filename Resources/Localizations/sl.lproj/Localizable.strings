@@ -152,7 +152,7 @@
 "device_memory" = "Pomnilnik naprave";
 "skip_map_downloading" = "Preskoči prejemanje zemljevidov";
 "search_another_country" = "Izberi drugo državo";
-"search_map" = "Iskanje zemljevidov…";
+"search_map" = "Iskanje zemljevidov";
 "first_usage_wizard_desc" = "Zemljevidi za prejem so predlagani po podatkih trenutnega mesta.";
 "location_not_found" = "Mesta ni mogoče najti";
 "no_inet_connection" = "Ni internetne povezave";

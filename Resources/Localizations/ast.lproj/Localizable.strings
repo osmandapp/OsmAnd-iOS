@@ -1753,7 +1753,7 @@
 "try_again" = "Try again";
 "searching" = "Buscando…";
 "search_location" = "Searching for location…";
-"search_map" = "Buscando mapes…";
+"search_map" = "Buscando mapes";
 "search_another_country" = "Esbillar otra rexón";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

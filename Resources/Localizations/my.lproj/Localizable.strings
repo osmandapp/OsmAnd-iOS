@@ -378,7 +378,7 @@
 "sett_deg" = "Degrees";
 "sett_deg_min" = "Degrees and minutes";
 "sett_arr" = "Map arrows";
-"shared_string_location" = "Location";
+"c" = "Location";
 "sett_arr_map" = "Map center";
 "sett_lang_trans" = "translit";
 "sett_pref_lang" = "Preferred Language";
@@ -647,7 +647,7 @@
 "no_inet_connection_desc_map" = "မြေပုံများကို download လုပ်ရန်လိုအပ်သည်။";
 "try_again" = "Try again";
 "search_location" = "Searching location…";
-"search_map" = "Searching map…";
+"search_map" = "Searching map";
 "search_another_country" = "အခြားဒေသတစ်ခုကိုရွေးပါ";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

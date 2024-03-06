@@ -2418,7 +2418,7 @@
 
 "searching" = "Searching…";
 "search_location" = "Searching for location…";
-"search_map" = "Searching maps…";
+"search_map" = "Searching maps";
 "search_another_country" = "Select another region";
 
 "skip_map_downloading" = "Skip downloading maps";

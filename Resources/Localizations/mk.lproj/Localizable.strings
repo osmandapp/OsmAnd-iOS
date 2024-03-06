@@ -1935,7 +1935,7 @@
 "try_again" = "Obidete se povtorno";
 "searching" = "Se bara…";
 "search_location" = "Baranje za lokacija…";
-"search_map" = "Baranje karti…";
+"search_map" = "Baranje karti";
 "search_another_country" = "Odberete drug region";
 "skip_map_downloading" = "Preskoknete prevzemanje na karti";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

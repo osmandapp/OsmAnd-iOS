@@ -1753,7 +1753,7 @@
 "try_again" = "Coba lagi";
 "searching" = "Sdg mencari…";
 "search_location" = "Mencari lokasi…";
-"search_map" = "Mencari Peta…";
+"search_map" = "Mencari Peta";
 "search_another_country" = "Pilih Daerah lain";
 "skip_map_downloading" = "Lewati download peta";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

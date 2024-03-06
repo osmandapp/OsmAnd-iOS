@@ -1096,7 +1096,7 @@
 "no_inet_connection_desc_map" = "Vajalik kaartide allalaadimiseks.";
 "try_again" = "Proovi uuesti";
 "search_location" = "Asukoha otsing…";
-"search_map" = "Kaartide otsing…";
+"search_map" = "Kaartide otsing";
 "search_another_country" = "Vali mõni teine piirkond";
 "skip_map_downloading" = "Jäta kaartide allalaadimine vahele";
 "skip_map_downloading_desc_ios" = "Sul ei ole ühtegi võrguühenduseta kaarti paigaldatud. Võid valida kaardi nimekirjast või laadida kaarte hiljem alla: Menüü - Halda kaardifaile";

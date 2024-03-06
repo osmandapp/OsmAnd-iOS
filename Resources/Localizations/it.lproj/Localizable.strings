@@ -1257,7 +1257,7 @@
 "hist_select_remove" = "Per favore scegli l'elemento della cronologia da rimuovere";
 "gpx_edit_mode" = "Modalità modifica";
 "search_my_location" = "Cerca la mia posizione";
-"search_map" = "Ricerca delle mappe…";
+"search_map" = "Ricerca delle mappe";
 "items_selected" = "%d selezionato";
 "search_POI_level_btn" = "Trovane altri";
 "shared_string_street_intersection" = "Intersezione strade";

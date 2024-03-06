@@ -592,7 +592,7 @@
 "route_roundabout_short" = "Prenez la sortie %d";
 "driving_region_europe_asia" = "Europe, Asie, Amérique latine et équivalent";
 "shared_string_history" = "Historique";
-"search_map" = "Recherche des cartes…";
+"search_map" = "Recherche des cartes";
 "skip_map_downloading_desc_ios" = "Aucune carte hors-ligne n'est installée. Vous pouvez sélectionner une carte dans la liste ou télécharger ultérieurement une carte depuis le menu « Gérer les fichiers de cartes »";
 "map_widget_battery" = "Niveau de batterie";
 "map_widget_plain_time" = "Heure actuelle";

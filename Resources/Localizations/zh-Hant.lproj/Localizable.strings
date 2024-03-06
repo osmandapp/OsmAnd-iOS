@@ -413,7 +413,7 @@
 "no_inet_connection_desc_map" = "需要下載地圖。";
 "try_again" = "再試一次";
 "search_location" = "正在搜尋位置…";
-"search_map" = "搜尋地圖…";
+"search_map" = "搜尋地圖";
 "search_another_country" = "選擇其它地區";
 "skip_map_downloading" = "跳過下載中地圖";
 "wiki_around" = "附近維基百科條目";

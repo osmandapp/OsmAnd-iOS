@@ -1931,7 +1931,7 @@
 "how_to_open_wiki_title" = "Cum se deschid articolele din Wikipedia\?";
 "items_selected" = "%d selectat";
 "skip_map_downloading_desc_ios" = "Nu aveți instalată nicio hartă offline. Puteți alege o hartă din listă sau puteți descărca hărți mai târziu prin Menu - Manage map files (Meniu - Gestionare fișiere hartă)";
-"search_map" = "Se caută hărți…";
+"search_map" = "Se caută hărți";
 "search_location" = "Se caută locația…";
 "search_my_location" = "Găsește-mi poziția";
 "first_usage_greeting" = "Obțineți indicații și descoperiți locuri noi fără o conexiune la internet";

@@ -3314,7 +3314,7 @@
 "deleting_complete" = "Ștergere completă";
 "osmand_cloud_delete_account_descr" = "Sunteți sigur că doriți să ștergeți contul OsmAnd Cloud?";
 "osmand_cloud_delete_account_confirmation" = "Ștergeți contul?";
-"osmand_cloud_deletion_subscriptions_warning" = "Acest lucru nu vă va anula abonamentul OsmAnd Pro.";
+"osmand_cloud_deletion_subscriptions_warning" = "Acesta nu vă va anula abonamentul OsmAnd Pro.";
 "osmand_cloud_deleting_account_descr" = "În câteva momente, toate datele și contul dumneavoastră vor fi șterse din OsmAnd Cloud.\n\nToate datele de pe dispozitiv rămân neatinse.";
 "osmand_cloud_deleted_account_descr" = "Contul și toate datele au fost șterse din OsmAnd Cloud.";
 "remove_folder_with_files_descr" = "Sunteți sigur că doriți să eliminați folderul \"%@\" și toate cele %d trasee?";

@@ -10,7 +10,7 @@
 "day_night_info" = "주간/야간 정보";
 "daynight_mode_auto" = "일출/일몰";
 "route_simulation" = "경로 시뮬레이션";
-"auto_follow_location_enabled" = "자동-센터 지도 보기 사용 중입니다.";
+"auto_follow_location_enabled" = "자동-현위치 지도 보기 사용 중입니다.";
 "unknown_location" = "위치를 아직 알 수 없습니다.";
 "settings_preset" = "기본 프로필";
 "default_profile_descr" = "응용 프로그램 실행을 사용할 프로필을 선택하십시오.";
@@ -308,7 +308,7 @@
 "avoid_in_routing_descr_" = "유료 도로, 비 포장 도로, 페리 제외";
 "avoid_in_routing_title" = "제외…";
 "relief_smoothness_factor_descr" = "선호하는 지형: 평지 또는 낮은 언덕";
-"choose_auto_follow_route" = "자동 중앙 지도 보기";
+"choose_auto_follow_route" = "자동-현위치 지도 보기";
 "choose_auto_follow_route_descr" = "지도 보기가 현재 위치와 동기화하여 복귀할 때까지 걸리는 시간입니다";
 "choose_auto_center_map_view_descr" = "이동 후 지도 보기가 현재 위치와 동기화될 때까지의 시간";
 "auto_zoom_map" = "자동 줌 맵";
@@ -323,7 +323,7 @@
 "arrived_at_intermediate_point" = "경유지에 도착했습니다";
 "starting_point_too_far" = "시작 포인트가 도로에서 이탈.";
 "intermediate_point_too_far" = "도로에서 너무 멀리 떨어진 경유지 %@ .";
-"arrived_at_destination" = "도착지에 도착하였습니다";
+"arrived_at_destination" = "목적지에 도착하였습니다.";
 "looking_up_address" = "주소 조회 중";
 "no_address_found" = "결정된 주소 없음";
 "traffic_warning_speed_limit" = "속도 제한";
@@ -375,7 +375,7 @@
 "si_min_m" = "마일당 분";
 "speak_title" = "안내…";
 "speak_descr" = "거리 이름, 교통 경고(강제 정지, 속도 범프), 속도 카메라 경고, 제한 속도를 알리기 위해  구성합니다";
-"keep_informing" = "탐색 지침을 반복";
+"keep_informing" = "운행 지시를 반복";
 "keep_informing_descr" = "정기적인 간격으로 운행 명령을 다시 알리기";
 "arrival_distance" = "도착고지";
 "arrival_distance_descr" = "도착 안내방송은 언제까지 해드릴까요\?";
@@ -555,7 +555,7 @@
 "rendering_category_hide" = "숨기기";
 "shared_string_show_all" = "모두 표시";
 "icon_group_sport" = "스포츠";
-"keep_informing_never" = "수동으로 (화살표를 누르세요)";
+"keep_informing_never" = "수동으로만 (화살표를 탭)";
 "routing_attr_avoid_motorway_name" = "전용도로 회피";
 "rendering_attr_alpineHiking_description" = "SAC Scale에 따른 경로 렌더링";
 "favorite_home_category" = "집";
@@ -1363,7 +1363,7 @@
 "mapillary_descr" = "모든 사람을 위한 거리 기반의 파노라마 영상 서비스. 장소를 탐색하고, 협업하고, 세상을 사로잡습니다.";
 "enough_contributions_descr" = "축하합니다, 충분한 OpenStreetMap 기여도를 제공했으며 이제 무제한 OsmAnd 지도 업데이트를 즐길 수 있습니다!";
 "walking_route_osmc_description" = "노선 색상을 각각의 로컬 색상(OpenStreetMap에 있는 경우) 및 유형(국제, 지역, 로컬)으로 지정합니다.";
-"impassable_road" = "도로 회피…";
+"impassable_road" = "다음 도로 우회…";
 "routing_attr_allow_private_for_truck_description" = "트럭의 개인 구역에 대한 접근을 허용합니다.";
 "select_another_colorization" = "다른 색상 유형을 선택하십시오.";
 "routing_attr_motor_type_petrol_name" = "가솔린";
@@ -1467,7 +1467,7 @@
 "routing_attr_prefer_unpaved_name" = "비포장 도로 선호";
 "add_row" = "더 보기";
 "get_osmand_cloud" = "OsmAnd Cloud 획득";
-"announcement_time_title" = "공지시간";
+"announcement_time_title" = "안내 시점";
 "recalculate_route" = "경로 재탐색";
 "select_color" = "색상 선택";
 "select_icon_profile_dialog_title" = "아이콘 선택";
@@ -1625,7 +1625,7 @@
 "in_grace_period" = "유예 기간 중";
 "route_preferred_terrain_hilly" = "구릉 기복 프로파일이 있는 경로.";
 "ios_release_4_4" = "• 외부 키보드: 새로운 키\n지원 추가• 여행 기록을\n위한 새로운 위젯• 즐겨찾기, 트랙 및 OSM 편집 항목 검색 추가• CarPlay: 기록에 내비게이션\n에 사용된 지점이 포함됨\n• 이제 이모티콘을 즐겨찾기 또는 경유지 이름으로\n사용할 수 있습니다.• 오프라인 위키백과 문서\n간의 전환 문제 수정• 사용자 지정 라우팅 가져오기와 관련된 문제 수정 및 렌더링 파일\n• 트랙 모양: 사용자 지정 색상\n설정 기능 추가• 새로운 위젯 \"고도: 지도 센터\"\n• 경로\n에서 벗어난 경우 알림을 비활성화하는 옵션 추가• Wikipedia: 이미지 보기 기능 추가, 리더 UI\n업데이트• 즐겨찾기: 검색\n기능 추가• CarPlay: 기록 추가, 트랙 및 즐겨찾기 목록 재편성\n• 하이킹 경로: 추가 정보나 내비게이션\n을 보기 위해 지도에서 경로를 선택할 수 있는 기능 추가• OpenStreetMap: 트랙 업로드 기능 추가• 새로운 위젯: 다음 일출 또는 일몰\n까지의 정확한 시간 또는 남은 시간 표시• 새로운 위젯: 지도 중앙\n의 좌표 표시\n• 외부 키보드 지원 개선, 기본 동작\n지원 추가• 음성 안내: 새로운 언어에 대한 지원 추가: 카탈로니아어, 우크라이나어, 불가리아어, 인도네시아어, 슬로베니아어\n• 과속 단속 카메라 경고 사용에 대한 법적 경고 추가• 개인 정보 보호 개선: 기록 기록 비활성화 옵션 추가• 지도 눈금자의\n가시성 개선• OsmAnd Cloud 버그 수정 및 UI 개선• RTL 언어\nUI 개선\n\n\n• 접근성: 지도 버튼\n• \"동적 문자\" 지원 추가, Osm의 텍스트 크기는 iOS의 텍스트 크기에 따라 변경됩니다.\n• 지도 방향: 수동 회전 모드\n추가• 새로운 오토바이 프로필\n• 최소 iOS 버전이 15.0으로 증가\n";
-"accessibility_announce" = "발표";
+"accessibility_announce" = "안내";
 "ios_release_4_6" = "• 자전거 속도, 자전거 케이던스, 자전거 거리, 심박수 및 온도\n를 포함한 외부 센서로 지표 기록 및 추적• 이제 CarPlay 대시보드\n에서 직접 지도를 볼 수 있습니다.• 저조도 조건에서\n편안한 시청 경험을 위한 야간 테마 추가• \"위키여행\"\n의 여행 가이드 발견• 메모 추가 및 메모 및 POI를 OpenStreetMap\n에 업로드하기 위한 대화 상자 개선• 새로운 \"기본값으로 재설정\" 옵션을\n사용하여 플러그인 설정을 설치 기본값으로 쉽게 복원• 자동 전환 없이 원하는 방향을 설정할 수 있는 \"화면 방향\" 옵션 추가• CarPlay 화면에서\n직접 3D 모드를 전환할 수 있는 별도의 버튼 추가• 오르막과 내리막\n외에도 내비게이션 경로에 최소 및 최대 고도 정보 추가\n• 트랙 개선 슬로프 모드에서 새로운 대칭 그라데이션\n으로 채색• 즐겨찾기 폴더는 이제 추가된 각 포인트\n에 자동으로 적용되는 기본 모양을 저장합니다.• \"반지름 눈금자\" 중심점이 맵 중심\n과 일치하지 않는 문제 수정• 위키백과 POI 컨텍스트 메뉴\n에 \"문서 읽기\" 버튼 추가• GPX 파일을 즐겨찾기로 가져올 때 발생하는 문제 수정\n• 주차 위치에\n대한 캘린더 이벤트 문제 수정• 팔레트에서 색상을 제거할 때 발생하는 충돌 문제 수정\n";
 "parked_at" = "에 주차됨";
 "change_object_posiotion" = "개체의 위치 변경";

@@ -139,7 +139,6 @@
 - (OAGPXDocument *) generateGpx:(NSArray<OAHistoryItem *> *)historyItems
 {
     OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-    [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", [[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]]];
     for (OAHistoryItem *historyItem in historyItems)
     {
         OAWptPt *wpt = [[OAWptPt alloc] init];

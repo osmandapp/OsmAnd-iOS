@@ -3652,6 +3652,5 @@
 "osmand_cloud_deleted_account_descr" = "Account and all data was deleted from OsmAnd Cloud.";
 "osmand_cloud_deleting_account_descr" = "In few moments all your data and account will be deleted from OsmAnd Cloud.\n\nAll data on the device remain untouched.";
 
-"value_downloaded_of_mb" = "Downloading %@/%@ MB";
 "skip_download" = "Skip download";
 "determine_location" = "Allow us to determine your location";

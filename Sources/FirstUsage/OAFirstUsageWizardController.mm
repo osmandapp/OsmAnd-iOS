@@ -83,8 +83,8 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UIButton *btnGoToMap;
 @property (weak, nonatomic) IBOutlet UITextView *bottomTextView;
 
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *logoHeightConstraint;
-@property (strong, nonatomic) IBOutlet NSLayoutConstraint *logoWidthConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoWidthConstraint;
 @property (weak, nonatomic) IBOutlet UIStackView *logoTitleStackView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoTitleStackViewTopConstraint;
 @property (weak, nonatomic) IBOutlet UIButton *userLocationButton;

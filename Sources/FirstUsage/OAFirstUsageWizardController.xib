@@ -41,7 +41,7 @@
                 <outlet property="privacyPolicyLeadingConstraint" destination="VSU-cS-Jxg" id="Xkx-cN-eYt"/>
                 <outlet property="progress1" destination="gxY-l6-cXV" id="d05-L3-CDU"/>
                 <outlet property="scrollView" destination="OGE-Cb-Dbb" id="pMl-TX-IxR"/>
-                <outlet property="userLocationButton" destination="1wK-0u-oV6" id="Uvr-Hy-snx"/>
+                <outlet property="userLocationButton" destination="BVH-t4-QzE" id="akK-kn-9SM"/>
                 <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
                 <outlet property="viewDownloadMap" destination="2ei-b8-Dc5" id="3um-7q-eA5"/>
                 <outlet property="viewLocationNotFound" destination="PhJ-bF-aCF" id="6MZ-Ju-pGF"/>
@@ -60,10 +60,10 @@
                     <rect key="frame" x="0.0" y="20" width="320" height="548"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="KGH-xB-uHD" userLabel="ContentView">
-                            <rect key="frame" x="0.0" y="0.0" width="320" height="442.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="320" height="472"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="top" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="lH7-At-In1" userLabel="Logo Title Stack View">
-                                    <rect key="frame" x="18" y="0.0" width="118.5" height="100.5"/>
+                                    <rect key="frame" x="18" y="0.0" width="122.5" height="130"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_logo_osmand 1" translatesAutoresizingMaskIntoConstraints="NO" id="IbV-aB-aC0">
                                             <rect key="frame" x="0.0" y="0.0" width="60" height="60"/>
@@ -73,12 +73,24 @@
                                                 <constraint firstAttribute="width" constant="60" id="oVI-qI-0hq"/>
                                             </constraints>
                                         </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download map" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cya-4D-IRx">
-                                            <rect key="frame" x="0.0" y="80" width="118.5" height="20.5"/>
-                                            <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
-                                            <color key="textColor" name="textColorPrimary"/>
-                                            <nil key="highlightedColor"/>
-                                        </label>
+                                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Fh4-9W-SXb">
+                                            <rect key="frame" x="0.0" y="80" width="122.5" height="50"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Download map" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cya-4D-IRx">
+                                                    <rect key="frame" x="4" y="0.0" width="118.5" height="50"/>
+                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                                                    <color key="textColor" name="textColorPrimary"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                            <constraints>
+                                                <constraint firstAttribute="bottom" secondItem="cya-4D-IRx" secondAttribute="bottom" id="dpn-Gy-W5H"/>
+                                                <constraint firstItem="cya-4D-IRx" firstAttribute="top" secondItem="Fh4-9W-SXb" secondAttribute="top" id="dxT-gh-3G8"/>
+                                                <constraint firstItem="cya-4D-IRx" firstAttribute="leading" secondItem="Fh4-9W-SXb" secondAttribute="leading" constant="4" id="jb9-Yd-8x2"/>
+                                                <constraint firstAttribute="trailing" secondItem="cya-4D-IRx" secondAttribute="trailing" id="rn1-sA-8aF"/>
+                                            </constraints>
+                                        </view>
                                     </subviews>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </stackView>
@@ -87,7 +99,7 @@
                                     <subviews>
                                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dvd-qP-3NI" userLabel="Menu Action">
                                             <rect key="frame" x="0.0" y="0.0" width="28" height="30"/>
-                                            <color key="tintColor" name="buttonBgColorPrimary"/>
+                                            <color key="tintColor" name="iconColorActive"/>
                                             <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                             <state key="normal" image="ic_navbar_overflow_menu_outlined"/>
                                         </button>
@@ -106,7 +118,7 @@
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </stackView>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Let OsmAnd determine your location and suggest maps to download for that region." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TCg-Be-FI5">
-                                    <rect key="frame" x="20" y="120.5" width="280" height="58"/>
+                                    <rect key="frame" x="20" y="150" width="280" height="58"/>
                                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     <constraints>
                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="p62-jt-eJI"/>
@@ -116,7 +128,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dmg-0N-HWk">
-                                    <rect key="frame" x="16" y="202.5" width="288" height="130"/>
+                                    <rect key="frame" x="16" y="232" width="288" height="130"/>
                                     <color key="backgroundColor" name="viewBg"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="130" id="Mgd-p9-onS"/>
@@ -128,7 +140,7 @@
                                     </userDefinedRuntimeAttributes>
                                 </view>
                                 <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" text="By Downloading maps you agree to the Terms Of Use and Privacy Policy." textAlignment="natural" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Xzc-q4-6Ac">
-                                    <rect key="frame" x="20" y="342.5" width="280" height="80"/>
+                                    <rect key="frame" x="20" y="372" width="280" height="80"/>
                                     <constraints>
                                         <constraint firstAttribute="height" constant="80" id="ae8-9U-CHa"/>
                                     </constraints>
@@ -259,8 +271,9 @@
             <rect key="frame" x="0.0" y="0.0" width="333" height="130"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_wifi_off.png" translatesAutoresizingMaskIntoConstraints="NO" id="09t-4B-Jkp">
+                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_wifi_off" translatesAutoresizingMaskIntoConstraints="NO" id="09t-4B-Jkp">
                     <rect key="frame" x="20" y="21" width="30" height="30"/>
+                    <color key="tintColor" name="iconColorSecondary"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="30" id="0to-B9-bxK"/>
                         <constraint firstAttribute="width" constant="30" id="uTH-wK-fyj"/>
@@ -296,7 +309,7 @@
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Try again">
-                        <color key="titleColor" name="textColorActive"/>
+                        <color key="titleColor" name="buttonTextColorSecondary"/>
                     </state>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -602,13 +615,13 @@
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gfa-zn-jJc">
                     <rect key="frame" x="16" y="72" width="333" height="42"/>
-                    <color key="backgroundColor" name="buttonBgColorSecondary"/>
+                    <color key="backgroundColor" name="buttonBgColorDisabled"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="42" id="l35-qr-QTi"/>
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Download">
-                        <color key="titleColor" name="buttonTextColorSecondary"/>
+                        <color key="titleColor" name="textColorSecondary"/>
                     </state>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
@@ -659,9 +672,12 @@
         <image name="ic_custom_location_user" width="30" height="30"/>
         <image name="ic_custom_logo_osmand 1" width="60" height="60"/>
         <image name="ic_custom_map_outline" width="30" height="30"/>
+        <image name="ic_custom_wifi_off" width="30" height="30"/>
         <image name="ic_location_off.png" width="25" height="25"/>
         <image name="ic_navbar_overflow_menu_outlined" width="28" height="28"/>
-        <image name="ic_wifi_off.png" width="25" height="25"/>
+        <namedColor name="buttonBgColorDisabled">
+            <color red="0.8784313725490196" green="0.8666666666666667" blue="0.8901960784313725" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="buttonBgColorPrimary">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
@@ -679,6 +695,9 @@
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorSecondary">
+            <color red="0.64313725490196083" green="0.61568627450980395" blue="0.68627450980392157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

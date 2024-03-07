@@ -22,6 +22,7 @@
 #import "OACloudIntroductionViewController.h"
 #import "OACloudBackupViewController.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -216,7 +217,7 @@ typedef enum
     
     self.logoHeightConstraint.constant = isLandscape ? 48 : 60;
     self.logoWidthConstraint.constant = self.logoHeightConstraint.constant;
-    _lbTitle.font = [UIFont scaledSystemFontOfSize:isLandscape ? 28 : 34];
+    _lbTitle.font = [UIFont scaledBoldSystemFontOfSize:isLandscape ? 28 : 34];
     if (isLandscape)
     {
         self.privacyPolicyLeadingConstraint.constant = 40;
@@ -351,24 +352,26 @@ typedef enum
 
 - (IBAction)userLocationButtonPress:(id)sender
 {
-    UIAlertController *actionSheet = [UIAlertController alertControllerWithTitle:OALocalizedString(@"Location") message:@"" preferredStyle:UIAlertControllerStyleActionSheet];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"Location") message:@"" preferredStyle:OAUtilities.isIPad?UIAlertControllerStyleAlert:UIAlertControllerStyleActionSheet];
+    alert.accessibilityLabel = OALocalizedString(@"Location");
 
-    [actionSheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"search_another_country") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"search_another_country") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self selectMapPress:nil];
     }]];
-    [actionSheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"determine_location") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        OALocationServices *locationServices = [OsmAndApp instance].locationServices;
-        if (locationServices.denied)
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"determine_location") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        if (_app.locationServices.denied)
         {
             [OALocationServices showDeniedAlert];
             return;
         }
       
-        if (!locationServices.allowed)
-            [locationServices start];
+        if (!_app.locationServices.allowed)
+            [_app.locationServices start];
     }]];
-    [actionSheet addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
-    [self presentViewController:actionSheet animated:YES completion:nil];
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 - (void)closeWizard
@@ -378,12 +381,6 @@ typedef enum
 
 - (void) startWizard
 {
-   // [self showCard:_viewDownloadMap];
-   // [self showCard:_viewSearchingLocation];
-   // [self showCard:_viewNoInet];
-   // [self showCard:_viewLocationNotFound];
-   // [self showCard:_viewSearchingMap];
-
     if (!AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         [self startNoInternetWizard];
@@ -834,7 +831,7 @@ typedef enum
 - (NSByteCountFormatter *)byteCountFormatter
 {
     if (!_byteCountFormatter) {
-        _byteCountFormatter = [[NSByteCountFormatter alloc] init];
+        _byteCountFormatter = [NSByteCountFormatter new];
         _byteCountFormatter.includesUnit = NO;
         _byteCountFormatter.countStyle = NSByteCountFormatterCountStyleFile;
     }

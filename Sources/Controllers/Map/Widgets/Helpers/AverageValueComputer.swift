@@ -39,15 +39,9 @@ class AverageValueComputer: NSObject {
         saveLocation(location, time: Date().timeIntervalSince1970)
     }
 
-    func clearExpiredLocations(_ locations: inout [CLLocation], measuredInterval: Int) {
+    func clearExpiredLocations(_ measuredInterval: Int) {
         let expirationTime = Int(Date().timeIntervalSince1970) * 1000 - measuredInterval
-        locations.enumerated().forEach {
-            if Int($1.timestamp.timeIntervalSince1970) * 1000 < expirationTime {
-                locations.remove(at: $0)
-            } else {
-                return
-            }
-        }
+        locations.removeAll(where: { Int($0.timestamp.timeIntervalSince1970) * 1000 < expirationTime })
     }
 
     func isEnabled() -> Bool {

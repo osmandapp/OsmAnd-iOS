@@ -30,26 +30,24 @@ final class AverageGlideComputer: AverageValueComputer {
 
     override func saveLocation(_ location: CLLocation, time: TimeInterval) {
         if !location.altitude.isNaN, !location.altitude.isZero {
-            var loc = CLLocation(coordinate: location.coordinate,
-                                 altitude: location.altitude,
-                                 horizontalAccuracy: location.horizontalAccuracy,
-                                 verticalAccuracy: location.verticalAccuracy,
-                                 course: location.course,
-                                 courseAccuracy: location.courseAccuracy,
-                                 speed: location.speed,
-                                 speedAccuracy: location.speedAccuracy,
-                                 timestamp: Date(timeIntervalSince1970: time),
-                                 sourceInfo: location.sourceInformation ?? CLLocationSourceInformation())
-            addLocation(loc)
-            var locations: [CLLocation] = getLocations()
-            clearExpiredLocations(&locations, measuredInterval: AverageValueComputer.biggestMeasuredInterval)
+            addLocation(CLLocation(coordinate: location.coordinate,
+                                   altitude: location.altitude,
+                                   horizontalAccuracy: location.horizontalAccuracy,
+                                   verticalAccuracy: location.verticalAccuracy,
+                                   course: location.course,
+                                   courseAccuracy: location.courseAccuracy,
+                                   speed: location.speed,
+                                   speedAccuracy: location.speedAccuracy,
+                                   timestamp: Date(timeIntervalSince1970: time),
+                                   sourceInfo: location.sourceInformation ?? CLLocationSourceInformation()))
+            clearExpiredLocations(AverageValueComputer.biggestMeasuredInterval)
         }
     }
 
     func getFormattedAverageGlideRatio(_ measuredInterval: Int) -> String? {
-        var locationsToUse: [CLLocation] = getLocations()
-        clearExpiredLocations(&locationsToUse, measuredInterval: measuredInterval)
+        clearExpiredLocations(measuredInterval)
 
+        let locationsToUse: [CLLocation] = getLocations()
         if !locationsToUse.isEmpty {
             let distance = calculateTotalDistance(locationsToUse)
             let difference = calculateAltitudeDifference(locationsToUse)

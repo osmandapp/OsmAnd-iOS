@@ -12,6 +12,8 @@ import Foundation
 @objcMembers
 final class GlideTargetWidget: GlideBaseWidget {
 
+    private static let minAltitudeValue = -20000.0
+
     private let widgetState: GlideTargetWidgetState?
     private var cachedCurrentLocation: CLLocation?
     private var cachedCurrentAltitude: Double?
@@ -33,6 +35,7 @@ final class GlideTargetWidget: GlideBaseWidget {
             self?.setContentTitle(self?.getWidgetName())
         }
         setContentTitle(getWidgetName())
+        setIcon("widget_glide_ratio_to_target")
     }
 
     override init(frame: CGRect) {
@@ -116,7 +119,7 @@ final class GlideTargetWidget: GlideBaseWidget {
                     let formattedAltitude: String = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude)
                     let components = formattedAltitude.components(separatedBy: " ")
                     if components.count > 1 {
-                        setText(components[0], subtext: components[1])
+                        setText(formattedAltitude.replacingOccurrences(of: components.last!, with: "").trim(), subtext: components.last)
                     } else {
                         setText(formattedAltitude, subtext: "")
                     }
@@ -177,11 +180,11 @@ final class GlideTargetWidget: GlideBaseWidget {
     }
 
     private func calculateAltitude(_ location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
-        completion(CLLocationCoordinate2DIsValid(location) ? OAMapUtils.getAltitudeForLatLon(location) : nil)
+        completion(CLLocationCoordinate2DIsValid(location) ? OAMapUtils.getAltitudeForLatLon(location) : Self.minAltitudeValue)
     }
 
     private func calculateFormattedRatio(_ l1: CLLocation?, a1: Double?, l2: CLLocationCoordinate2D?, a2: Double?) -> String? {
-        guard let l1, let a1, let l2, let a2, a2 != -20000.0 else { return nil }
+        guard let l1, let a1, let l2, let a2 else { return nil }
         return GlideUtils.calculateFormattedRatio(CLLocationCoordinate2D(latitude: l1.coordinate.latitude, longitude: l1.coordinate.longitude), l2: l2, a1: a1, a2: a2)
     }
 

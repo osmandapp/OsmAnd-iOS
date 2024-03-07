@@ -23,6 +23,7 @@ final class GlideAverageWidget: GlideBaseWidget {
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         super.init(WidgetType.glideAverage, customId: customId, appMode: appMode, widgetParams: widgetParams)
         updateInfo()
+        setIcon("widget_glide_ratio_average")
     }
 
     override init(frame: CGRect) {

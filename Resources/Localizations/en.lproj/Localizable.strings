@@ -1365,6 +1365,7 @@
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
@@ -3649,3 +3650,11 @@
 "osmand_cloud_deletion_subscriptions_warning" = "This will not cancel your OsmAnd Pro subscription.";
 "osmand_cloud_deleting_account_descr" = "In few moments all your data and account will be deleted from OsmAnd Cloud.\n\nAll data on the device remain untouched.";
 "osmand_cloud_deleted_account_descr" = "Account and all data was deleted from OsmAnd Cloud.";
+
+"average_glide_ratio" = "Average glide ratio";
+"glide_ratio_to_target" = "Glide ratio to target";
+"map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
+"map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
+"map_widget_group_glide_ratio" = "Glide ratio";
+"map_widget_group_glide_desc" = "Widgets show the glide ratio to the target or average glide ratio for the current trip.";
+"target_elevation" = "Target elevation";

@@ -31,6 +31,8 @@
 #import "OAWebImagesCacheHelper.h"
 #import "OAGPXImportUIHelper.h"
 #import "OAGPXUIHelper.h"
+#import "OAMapUtils.h"
+#import "OADestination.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

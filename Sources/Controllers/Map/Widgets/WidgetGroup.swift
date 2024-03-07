@@ -23,6 +23,7 @@ class WidgetGroup: NSObject {
     static let weather = WidgetGroup(title: localizedString("shared_string_weather"), descr: localizedString("weather_widget_group_desc"), iconName: "widget_weather_umbrella")
     static let sunriseSunset = WidgetGroup(title: localizedString("map_widget_sun_position"), descr: localizedString("map_widget_group_sunrise_sunset_desc"), iconName: "widget_sunset")
     static let externalSensors = WidgetGroup(title: localizedString("external_sensors_plugin_name"), descr: localizedString("external_sensors_plugin_description"), iconName: "widget_sensor_external")
+    static let glide = WidgetGroup(title: localizedString("map_widget_group_glide_ratio"), descr: localizedString("map_widget_group_glide_desc"), iconName: "widget_glide_ratio_to_target_night")
     
     static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors]
     

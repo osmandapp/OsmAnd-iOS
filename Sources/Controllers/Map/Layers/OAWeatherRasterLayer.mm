@@ -141,9 +141,13 @@
                 layer = OsmAnd::WeatherLayer::Low;
                 break;
         }
+        int64_t dateTimeStep = 60 * 60 * 1000;
+        int64_t dateTimeFirst = dateTime - dateTimeStep;
+        int64_t dateTimeLast = dateTime + dateTimeStep;
+        [self.mapView setDateTime:dateTime];
         if (true)//!_provider)
         {
-            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTime, bands, self.app.data.weatherUseOfflineData);
+            _provider = std::make_shared<OsmAnd::WeatherRasterLayerProvider>(_resourcesManager, layer, dateTimeFirst, dateTimeLast, dateTimeStep, bands, self.app.data.weatherUseOfflineData);
             [self.mapView setProvider:_provider forLayer:self.layerIndex];
 
             OsmAnd::MapLayerConfiguration config;
@@ -152,7 +156,7 @@
         }
         else
         {
-            _provider->setDateTime(dateTime);
+            _provider->setDateTime(dateTimeFirst, dateTimeLast, dateTimeStep);
             _provider->setBands(bands);
 
             [self.mapView invalidateFrame];

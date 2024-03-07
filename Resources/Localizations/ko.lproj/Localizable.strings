@@ -1115,7 +1115,7 @@
 "shared_string_purchased" = "구입됨";
 "daily_map_updates" = "시간별 지도 업데이트";
 "shared_string_learn_more" = "더 배우기";
-"osmand_cloud_authorize_descr" = "‎데이터를 ‎‎잃지‎‎ 마십시오. 모든 정보를 쉽게 백업하고 복원하십시오.‎";
+"osmand_cloud_authorize_descr" = "‎데이터를 ‎‎잃지‎‎ 마십시오. 모든 정보를 쉽게 백업하고 복원하세요.‎";
 "monthly_subscription" = "월 구독";
 "nautical_depth" = "해저 지형";
 "debugging_and_development" = "OsmAnd개발";
@@ -1257,7 +1257,7 @@
 "shared_string_turn_off" = "끄기";
 "shared_string_clear_offline_cache" = "오프라인 캐시 지우기";
 "shared_string_last_used" = "마지막으로 사용한 날짜";
-"no_purchases" = "구매한 항목이 없습니다.";
+"no_purchases" = "구매한 항목이 없음";
 "promo_subscription" = "판촉가입";
 "recording_delete_confirm" = "이 기록을 삭제하시겠습니까 ?";
 "backup_error_subscription_was_used" = "다른 계정에서 사용하는 구독 또는 프로모션 %@";
@@ -2174,7 +2174,7 @@
 "magnetic_bearing_widget_desc" = "자북과 사용자 위치에서 관찰된 목표점 사이의 각도입니다.";
 "quick_action_coordinates_widget_descr" = "A toggle to show or hide the 좌표 위젯 에 지도.";
 "street_name_widget_desc" = "스트리트 이름 위젯은 직선 위치 화살표로 현재 거리 이름을 보여줍니다, 또는 곧 회전을 나타내는 화살표와 다음 거리 이름.";
-"coordinates_widget_desc" = "현재 위치의 지리적 좌표 표시";
+"coordinates_widget_desc" = "현재 위치의 지리적 좌표 표시합니다.";
 "mapillary_widget_descr" = "Mapillary에 빠른 기여를 허용합니다.";
 "bearing_desc" = "각 단위의 표적에 절대 또는 관계되는 방위를 보여주십시오 (180도, 360도, 또는 milliradians 형태에서).";
 "map_widget_gps_info" = "GPS 정보";

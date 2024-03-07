@@ -273,18 +273,14 @@
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             OARootViewController *rootVC = [OARootViewController instance];
-
+            UIViewController *topViewController = rootVC.presentedViewController ?: rootVC;
             UIActivityViewController *activityViewController =
             [[UIActivityViewController alloc] initWithActivityItems:@[[NSURL fileURLWithPath:file]]
                                               applicationActivities:nil];
-
-            activityViewController.popoverPresentationController.sourceView = rootVC.view;
-            activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(rootVC.view.bounds), CGRectGetMidY(rootVC.view.bounds), 0., 0.);
+            activityViewController.popoverPresentationController.sourceView = topViewController.view;
+            activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(topViewController.view.bounds), CGRectGetMidY(topViewController.view.bounds), 0., 0.);
             activityViewController.popoverPresentationController.permittedArrowDirections = 0;
-
-            [rootVC presentViewController:activityViewController
-                                 animated:YES
-                               completion:nil];
+            [topViewController presentViewController:activityViewController animated:YES completion:nil];
         });
     }
 }

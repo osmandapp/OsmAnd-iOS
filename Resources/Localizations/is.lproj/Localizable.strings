@@ -1905,7 +1905,7 @@
 "simplified_track" = "Einfaldaður ferill";
 "join_segments" = "Sameina búta";
 "gpx_export_failed" = "Gat ekki vistað útbúna leið";
-"tracks_on_map" = "Birtir ferlar";
+"tracks_on_map" = "Sýnilegt á korti";
 "shared_string_visible" = "Sýnilegt";
 "hide_compass_ruler" = "Felaáttavitastiku";
 "show_compass_ruler" = "Birtaáttavitastiku";

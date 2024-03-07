@@ -914,7 +914,7 @@
     switch (autoZoomMap)
     {
         case AUTO_ZOOM_MAP_FARTHEST:
-            return 15.5f;
+            return 16.f;
         case AUTO_ZOOM_MAP_FAR:
             return 17.f;
         case AUTO_ZOOM_MAP_CLOSE:

@@ -105,6 +105,9 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     return self;
 }
 
+
+//TODO: delete?
+
 // previous version of autozoom code from OAMapViewTrackingUtilities
 // without any changes. differs with android
 - (double) calculateAutoZoomBySpeedV1:(float)speed mapView:(OAMapRendererView *)mapView
@@ -140,6 +143,8 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     return 0;
 }
 
+//TODO: delete?
+
 // previous version of autozoom code from OAMapViewTrackingUtilities
 // without any changes. differs with android
 - (float) defineZoomFromSpeed:(float)speed mapView:(OAMapRendererView *)mapView
@@ -159,6 +164,7 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     // check if 17, 18 is correct?
     return zoomDelta;
 }
+
 
 - (OAComplexZoom *) calculateZoomBySpeedToAnimate:(OAMapRendererView *)mapRenderer myLocation:(CLLocation *)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *)nextTurn
 {
@@ -282,7 +288,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 
 - (OsmAnd::PointI) getFocusPixel:(int)pixWidth pixHeight:(int)pixHeight
 {
-    //TODO: Test all values. Compare work with android
         CGPoint originalRatio = CGPointMake(kFocusPixelRatioX, kFocusPixelRatioY);
         CGPoint ratio = [OAMapViewTrackingUtilities.instance projectRatioToVisibleMapRect:originalRatio];
         if (CGPointEqualToPoint(ratio, CGPointZero))

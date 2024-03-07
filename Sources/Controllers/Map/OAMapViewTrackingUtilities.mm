@@ -19,6 +19,7 @@
 #import "OARootViewController.h"
 #import "OANativeUtilities.h"
 #import "OAAutoZoomBySpeedHelper.h"
+#import "OAZoom.h"
 #import "OAAppDelegate.h"
 #import "OARouteCalculationResult.h"
 
@@ -269,8 +270,17 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
+        if (!_mapViewController || ![_mapViewController isViewLoaded])
+        {
+            _needsLocationUpdate = YES;
+            return;
+        }
+        
+        
         CLLocation *location = _app.locationServices.lastKnownLocation;
         CLLocationDirection heading = _app.locationServices.lastKnownHeading;
+        heading = location.course;
+        
         
         CLLocation *prevLocation = _myLocation;
         NSTimeInterval movingTime = 0;
@@ -278,112 +288,7 @@
         {
             movingTime = location.timestamp.timeIntervalSince1970 - prevLocation.timestamp.timeIntervalSince1970;
         }
-        _myLocation = location;
-        BOOL showViewAngle = NO;
-        BOOL isApplicationInitializing = [((OAAppDelegate *)[[UIApplication sharedApplication] delegate]) isAppInitializing];
         
-        if (location)
-        {
-            if ([_settings.drivingRegionAutomatic get] && !_drivingRegionUpdated && !isApplicationInitializing)
-            {
-                _drivingRegionUpdated = true;
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self detectDrivingRegion:location];
-                });
-            }
-        }
-        
-        if (_mapViewController && [_mapViewController isViewLoaded])
-        {
-            _needsLocationUpdate = NO;
-            
-            if ([self isMapLinkedToLocation] && location != nil)
-            {
-                double rotation = 0;
-                BOOL pendingRotation = NO;
-                int currentMapRotation = [_settings.rotateMap get];
-                BOOL smallSpeedForCompass = [self.class isSmallSpeedForCompass:location];
-                
-                showViewAngle = (heading > 0 || smallSpeedForCompass) && [OANativeUtilities containsLatLon:location];
-                if (currentMapRotation == ROTATE_MAP_BEARING)
-                {
-                    // special case when bearing equals to zero (we don't change anything)
-                    if (heading > 0)
-                    {
-                        rotation = -heading;
-                    }
-                    if (rotation != 0 && prevLocation != nil)
-                    {
-                        //double distDp = (tb.getPixDensity() * MapUtils.getDistance(prevLocation, location)) / tb.getDensity();
-                        //if (distDp > SKIP_ANIMATION_DP_THRESHOLD) {
-                        //    movingTime = 0;
-                        //}
-                    }
-                }
-                else if (currentMapRotation == ROTATE_MAP_COMPASS)
-                {
-                    showViewAngle = _routePlanningMode;  // disable compass rotation in that mode
-                    pendingRotation = YES;
-                }
-                else if (currentMapRotation == ROTATE_MAP_NONE)
-                {
-                    rotation = 0;
-                    pendingRotation = YES;
-                }
-                else if (currentMapRotation == ROTATE_MAP_MANUAL)
-                {
-                    pendingRotation = YES;
-                }
-                
-                //registerUnregisterSensor(location, smallSpeedForCompass);
-                
-                if (![_settings.useV1AutoZoom get])
-                {
-                    [self setMyLocationV2:location timeDiff:movingTime rotation:rotation];
-                }
-                else
-                {
-                    [self setMyLocationV1:location timeDiff:movingTime rotation:rotation pendingRotation:pendingRotation];
-                }
-            }
-            else if (location != nil)
-            {
-                showViewAngle = (heading <= 0 || [self.class isSmallSpeedForCompass:location]) && [OANativeUtilities containsLatLon:location];
-                //registerUnregisterSensor(location, smallSpeedForCompass);
-            }
-            _showViewAngle = showViewAngle;
-            OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-            _followingMode = [routingHelper isFollowingMode];
-            if (_routePlanningMode != [routingHelper isRoutePlanningMode])
-                [self switchToRoutePlanningMode];
-            
-            // When location is changed we need to refresh map in order to show movement!
-            if (_mapViewController)
-                [_mapViewController refreshMap];
-        }
-        else
-        {
-            _needsLocationUpdate = YES;
-        }
-        
-        //if (dashboard != null) {
-        //    dashboard.updateMyLocation(location);
-        //}
-        //if (contextMenu != null) {
-        //    contextMenu.updateMyLocation(location);
-        //}
-        
-        
-        
-        // -------------
-        // old code
-        
-//
-//        if (!_mapViewController || ![_mapViewController isViewLoaded])
-//        {
-//            _needsLocationUpdate = YES;
-//            return;
-//        }
         
         _needsLocationUpdate = NO;
         // Obtain fresh location and heading
@@ -423,8 +328,18 @@
                 
                 float zoom = 0;
                 if ([_settings.autoZoomMap get])
-                    zoom = [_autoZoomBySpeedHelper calculateAutoZoomBySpeedV1:newLocation.speed mapView:_mapView];
+                {
                     //zoom = [self autozoom:newLocation];
+                    //zoom = [_autoZoomBySpeedHelper calculateAutoZoomBySpeedV1:newLocation.speed mapView:_mapView];
+//                    
+//                    OAComplexZoom *z = [_autoZoomBySpeedHelper calculateZoomBySpeedToAnimate:_mapView myLocation:newLocation rotationToAnimate:newHeading nextTurn:[self getNextTurn]];
+//                    zoom = [z fullZoom];
+                    
+                    
+                    // TODO: revert?
+                    zoom = [self setMyLocationV2:newLocation timeDiff:movingTime rotation:heading];
+                }
+                    
                 
                 CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
                 
@@ -517,7 +432,9 @@
     });
 }
 
-- (void) setMyLocationV2:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation
+//TODO: delete?
+
+- (float) setMyLocationV2:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation
 {
     BOOL animateMyLocation = [self animateMyLocation:location];
     
@@ -558,11 +475,26 @@
 //                    false, rotation, movingTime, false,
 //                    () -> movingToMyLocation = false);
     
+    return zoomParams ? ([zoomParams zoomValue].base + [zoomParams zoomValue].floatPart) : 0;
 }
 
+//TODO: delete?
 - (void) setMyLocationV1:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation pendingRotation:(BOOL)pendingRotation
 {
     
+}
+
+//TODO: delete?
+
+- (void) startMoving:(double)finalLat finalLon:(double)finalLon zoomParams:(OAAutoZoomDTO *)zoomParams pendingRotation:(BOOL)pendingRotation finalRotation:(float)finalRotation movingTime:(NSTimeInterval)movingTime notifyListener:(BOOL)notifyListener finishAnimationCallback:(id)finishAnimationCallback
+{
+//    if (animationsDisabled)
+//        return;
+    
+    double startLat = _mapViewController.getMapLocation.coordinate.latitude;
+    double startLon = _mapViewController.getMapLocation.coordinate.longitude;
+    float startZoom = _mapViewController.getMapZoom;
+//    startRotation
 }
 
 - (BOOL) animateMyLocation:(CLLocation *)location
@@ -639,6 +571,8 @@
     }
     return direction;
 }
+
+//TODO: delete?
 
 //- (float) defineZoomFromSpeed:(CLLocationSpeed)speed
 //{
@@ -946,11 +880,15 @@
     if (!_mapView)
         return CGPointZero;
     
-    OsmAnd::AreaI visibleMapRect = [_mapView getVisibleBBox31];
+    //OsmAnd::AreaI visibleMapRect = [_mapView getVisibleBBox31]; // diff
+    CGRect visibleMapRect = [self calculateVisibleMapRect];
     OsmAnd::PointI viewSize = [_mapView getViewSize];
-    float projectedRatioX = (visibleMapRect.left() + visibleMapRect.width() * ratio.x) / viewSize.x;
-    float projectedRatioY = (visibleMapRect.top() + visibleMapRect.height() * ratio.y) / viewSize.y;
-    return CGPointMake(projectedRatioX, projectedRatioY);
+    //float projectedRatioX = (visibleMapRect.left() + visibleMapRect.width() * ratio.x) / viewSize.x;
+    //float projectedRatioY = (visibleMapRect.top() + visibleMapRect.height() * ratio.y) / viewSize.y;
+    float projectedRatioX = (visibleMapRect.origin.x + visibleMapRect.size.width * ratio.x) / viewSize.x;
+    float projectedRatioY = (visibleMapRect.origin.y + visibleMapRect.size.height * ratio.y) / viewSize.y;
+    
+    return CGPointMake(projectedRatioX, projectedRatioY); //0.5  0.3887
 }
 
 - (void) onProfileSettingSet:(NSNotification *)notification
@@ -966,6 +904,22 @@
             });
         }
     }
+}
+
+- (CGRect) calculateVisibleMapRect
+{
+    OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+    OsmAnd::PointI windowSize = mapRenderer.renderer->getState().windowSize;
+    
+    int left = 0;
+    int top = 0;
+    int right = windowSize.x;
+    int bottom = windowSize.y;
+    
+    //TODO: implement
+    
+    
+    return CGRectMake(left, top, right, bottom);
 }
 
 @end

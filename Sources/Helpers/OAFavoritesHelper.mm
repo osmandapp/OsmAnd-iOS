@@ -971,7 +971,6 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (OAGPXMutableDocument *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
     for (OAFavoriteGroup *group in favoriteGroups)
     {
         [gpx addPointsGroup:[group toPointsGroup]];

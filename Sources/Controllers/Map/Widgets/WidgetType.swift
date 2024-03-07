@@ -290,8 +290,8 @@ extension WidgetType {
     
     static let temperature = WidgetType(ordinal: 51, id: "temperature", title: localizedString("shared_string_temperature"), descr: localizedString("sensor_temperature_desc"), iconName: "widget_weather_temperature", disabledIconName: "ic_custom_sensor_thermometer", group: .externalSensors, defaultPanel: .rightPanel)
 
-    static let glideTarget = WidgetType(ordinal: 52, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target_day", group: .glide, defaultPanel: .rightPanel)
-    static let glideAverage = WidgetType(ordinal: 53, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average_day", group: .glide, defaultPanel: .rightPanel)
+    static let glideTarget = WidgetType(ordinal: 52, id: "glide_ratio_to_target", title: localizedString("glide_ratio_to_target"), descr: localizedString("map_widget_glide_target_desc"), iconName: "widget_glide_ratio_to_target", group: .glide, defaultPanel: .rightPanel)
+    static let glideAverage = WidgetType(ordinal: 53, id: "average_glide_ratio", title: localizedString("average_glide_ratio"), descr: localizedString("map_widget_glide_average_desc"), iconName: "widget_glide_ratio_average", group: .glide, defaultPanel: .rightPanel)
 
     static let values = [nextTurn,
                          smallNextTurn,

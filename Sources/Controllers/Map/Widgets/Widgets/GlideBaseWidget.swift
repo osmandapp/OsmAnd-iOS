@@ -22,7 +22,7 @@ class GlideBaseWidget: OASimpleWidget {
         setText("-", subtext: "")
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
     }
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }

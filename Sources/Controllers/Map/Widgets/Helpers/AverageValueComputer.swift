@@ -35,11 +35,8 @@ class AverageValueComputer: NSObject {
     }
 
     func updateLocation(_ location: CLLocation?) {
-        guard let location else { return }
-        let time = Date().timeIntervalSince1970
-        if isEnabled() && !OAAppSettings.sharedManager().simulateNavigation {
-            saveLocation(location, time: time)
-        }
+        guard let location, isEnabled() else { return }
+        saveLocation(location, time: Date().timeIntervalSince1970)
     }
 
     func clearExpiredLocations(_ locations: inout [CLLocation], measuredInterval: Int) {

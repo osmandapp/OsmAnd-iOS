@@ -38,10 +38,8 @@ final class AverageGlideComputer: AverageValueComputer {
                                  courseAccuracy: location.courseAccuracy,
                                  speed: location.speed,
                                  speedAccuracy: location.speedAccuracy,
-                                 timestamp: Date(timeIntervalSince1970: time))
-//            if let sourceInformation = location.sourceInformation {
-//                loc.sourceInformation = location.sourceInformation
-//            }
+                                 timestamp: Date(timeIntervalSince1970: time),
+                                 sourceInfo: location.sourceInformation ?? CLLocationSourceInformation())
             addLocation(loc)
             var locations: [CLLocation] = getLocations()
             clearExpiredLocations(&locations, measuredInterval: AverageValueComputer.biggestMeasuredInterval)

@@ -30,7 +30,7 @@ final class GlideUtils: NSObject {
     }
 
     static func calculateFormattedRatio(_ distance: Double, altDif: Double) -> String {
-        let sign = altDif < 0 ? -1 : 1
+        let sign = altDif < 0 ? -1.0 : 1.0
 
         // Round arguments to '0' if they are smaller
         // in absolute value than the minimum acceptable value
@@ -51,10 +51,10 @@ final class GlideUtils: NSObject {
         if absRatio > maxValueToDisplay || (absRatio == 1 && divider == 0) {
             return String(format: localizedString("ltr_or_rtl_combine_via_colon_with_space"), "1", "0")
         } else if absRatio > maxValueToFormat {
-            let formattedRatio = String(format: "%.0f", absRatio * Double(sign))
+            let formattedRatio = String(format: "%.0f", absRatio * sign)
             return String(format: localizedString("ltr_or_rtl_combine_via_colon_with_space"), formattedRatio, "\(divider)")
         } else {
-            let formattedRatio = glideRatioFormatter.string(from: NSNumber(value: absRatio * Double(sign))) ?? "0"
+            let formattedRatio = glideRatioFormatter.string(from: NSNumber(value: absRatio * sign)) ?? "0"
             return String(format: localizedString("ltr_or_rtl_combine_via_colon_with_space"), formattedRatio, "\(divider)")
         }
     }

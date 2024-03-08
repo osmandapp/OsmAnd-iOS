@@ -21,4 +21,7 @@
 
 - (void) processTransportStop;
 
++ (NSArray<OATransportStop *> *) findTransportStopsAt:(double)lat lon:(double)lon radiusMeters:(int)radiusMeters;
++ (OATransportStop *) findBestTransportStopForAmenity:(OAPOI *)amenity;
+
 @end

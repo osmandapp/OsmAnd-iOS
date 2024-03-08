@@ -10,7 +10,7 @@
 
 #include <OsmAndCore/Data/TransportStop.h>
 
-@class OAPOI;
+@class OAPOI, OATransportStopAggregated;
 
 @interface OATransportStop : NSObject
 
@@ -20,5 +20,7 @@
 
 @property (nonatomic) OAPOI *poi;
 @property (nonatomic) int distance;
+
+@property (nonatomic) OATransportStopAggregated *transportStopAggregated;
 
 @end

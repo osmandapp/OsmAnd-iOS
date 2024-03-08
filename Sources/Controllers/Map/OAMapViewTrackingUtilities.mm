@@ -107,7 +107,7 @@
                                                                      andObserve:_app.locationServices.statusObservable];
 
         _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateLocation)
+                                                                    withHandler:@selector(onLocationServicesUpdate)
                                                                      andObserve:_app.locationServices.updateObserver];
 
         //addTargetPointListener(app);
@@ -266,7 +266,7 @@
     }
 }
 
-- (void) updateLocation
+- (void) onLocationServicesUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         
@@ -276,20 +276,6 @@
             return;
         }
         
-        
-        CLLocation *location = _app.locationServices.lastKnownLocation;
-        CLLocationDirection heading = _app.locationServices.lastKnownHeading;
-        heading = location.course;
-        
-        
-        CLLocation *prevLocation = _myLocation;
-        NSTimeInterval movingTime = 0;
-        if (prevLocation != nil && location != nil)
-        {
-            movingTime = location.timestamp.timeIntervalSince1970 - prevLocation.timestamp.timeIntervalSince1970;
-        }
-        
-        
         _needsLocationUpdate = NO;
         // Obtain fresh location and heading
         CLLocation* newLocation = _app.locationServices.lastKnownLocation;
@@ -298,7 +284,7 @@
         bool sameLocation = newLocation && [newLocation isEqual:_myLocation];
         bool sameHeading = _heading == newHeading;
 
-//        CLLocation* prevLocation = _myLocation;
+        CLLocation* prevLocation = _myLocation;
         _myLocation = newLocation;
         _heading = newHeading;
 
@@ -326,22 +312,21 @@
             {
                 _mapView.mapAnimator->pause();
                 
+                CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
+                
                 float zoom = 0;
                 if ([_settings.autoZoomMap get])
                 {
-                    //zoom = [self autozoom:newLocation];
-                    //zoom = [_autoZoomBySpeedHelper calculateAutoZoomBySpeedV1:newLocation.speed mapView:_mapView];
-//                    
-//                    OAComplexZoom *z = [_autoZoomBySpeedHelper calculateZoomBySpeedToAnimate:_mapView myLocation:newLocation rotationToAnimate:newHeading nextTurn:[self getNextTurn]];
-//                    zoom = [z fullZoom];
-                    
-                    
-                    // TODO: revert?
-                    zoom = [self setMyLocationV2:newLocation timeDiff:movingTime rotation:heading];
+                    if ([_settings useV1AutoZoom])
+                    {
+                        zoom = [_autoZoomBySpeedHelper calculateAutoZoomBySpeedV1:newLocation.speed mapView:_mapView];
+                    }
+                    else
+                    {
+                        OAComplexZoom *complexZoom = [_autoZoomBySpeedHelper calculateZoomBySpeedToAnimate:_mapView myLocation:newLocation rotationToAnimate:newHeading nextTurn:[self getNextTurn]];
+                        zoom = [complexZoom fullZoom];
+                    }
                 }
-                    
-                
-                CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
                 
                 const auto targetAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
                 auto zoomAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
@@ -432,71 +417,6 @@
     });
 }
 
-//TODO: delete?
-
-- (float) setMyLocationV2:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation
-{
-    BOOL animateMyLocation = [self animateMyLocation:location];
-    
-    OAComplexZoom *autoZoom = nil;
-    if ([self shouldAutoZoom:location autoZoomFrequency:0])
-    {
-        if (animateMyLocation)
-        {
-            //mapView.getAnimatedDraggingThread().stopAnimatingSync();
-        }
-        
-        autoZoom = [_autoZoomBySpeedHelper calculateZoomBySpeedToAnimate:_mapView myLocation:location rotationToAnimate:rotation nextTurn:[self getNextTurn]];
-    }
-    
-    NSTimeInterval movingTime;
-    if (animateMyLocation)
-    {
-        movingTime = timeDiff;
-    }
-    else
-    {
-        BOOL doNotUseAnimations = NO;  // settings.DO_NOT_USE_ANIMATIONS.get()
-        if (doNotUseAnimations)
-        {
-            movingTime = 0;
-        }
-        else
-        {
-            movingTime = _movingToMyLocation ? MIN(timeDiff * 0.7, MOVE_ANIMATION_TIME) : MOVE_ANIMATION_TIME;
-        }
-    }
-    
-    float fixedZoomDuration = animateMyLocation ? -1 : NAV_ANIMATION_TIME;
-    OAAutoZoomDTO *zoomParams = autoZoom != nil ? [_autoZoomBySpeedHelper getAutoZoomParams:_mapView.zoom autoZoom:autoZoom fixedDurationMillis:fixedZoomDuration] : nil;
-    
-//    mapView.getAnimatedDraggingThread().startMoving(
-//                    location.getLatitude(), location.getLongitude(), zoomParams,
-//                    false, rotation, movingTime, false,
-//                    () -> movingToMyLocation = false);
-    
-    return zoomParams ? ([zoomParams zoomValue].base + [zoomParams zoomValue].floatPart) : 0;
-}
-
-//TODO: delete?
-- (void) setMyLocationV1:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation pendingRotation:(BOOL)pendingRotation
-{
-    
-}
-
-//TODO: delete?
-
-- (void) startMoving:(double)finalLat finalLon:(double)finalLon zoomParams:(OAAutoZoomDTO *)zoomParams pendingRotation:(BOOL)pendingRotation finalRotation:(float)finalRotation movingTime:(NSTimeInterval)movingTime notifyListener:(BOOL)notifyListener finishAnimationCallback:(id)finishAnimationCallback
-{
-//    if (animationsDisabled)
-//        return;
-    
-    double startLat = _mapViewController.getMapLocation.coordinate.latitude;
-    double startLon = _mapViewController.getMapLocation.coordinate.longitude;
-    float startZoom = _mapViewController.getMapZoom;
-//    startRotation
-}
-
 - (BOOL) animateMyLocation:(CLLocation *)location
 {
     return [_settings.animateMyLocation get] && ![self.class isSmallSpeedForAnimation:location] && !_movingToMyLocation;
@@ -520,6 +440,8 @@
 - (void) setZoomTime:(NSTimeInterval)time
 {
     _lastTimeManualZooming = time;
+    if (_autoZoomBySpeedHelper)
+        [_autoZoomBySpeedHelper onManualZoomChange];
 }
 
 - (OANextDirectionInfo *) getNextTurn
@@ -572,66 +494,9 @@
     return direction;
 }
 
-//TODO: delete?
-
-//- (float) defineZoomFromSpeed:(CLLocationSpeed)speed
-//{
-//    if (speed < 7.0 / 3.6)
-//        return 0;
-//
-//    OsmAnd::AreaI bbox = [_mapView getVisibleBBox31];
-//    double visibleDist = OsmAnd::Utilities::distance31(OsmAnd::PointI(bbox.left() + bbox.width() / 2, bbox.top()), bbox.center());
-//    float time = 75.f; // > 83 km/h show 75 seconds
-//    if (speed < 83.f / 3.6)
-//        time = 60.f;
-//    
-//    time /= [OAAutoZoomMap getCoefficient:[_settings.autoZoomMapScale get]];
-//    double distToSee = speed * time;
-//    float zoomDelta = (float) (log(visibleDist / distToSee) / log(2.0f));
-//    // check if 17, 18 is correct?
-//    return zoomDelta;
-//}
-
-//- (float) autozoom:(CLLocation *)location
-//{
-//    if (location.speed >= 0)
-//    {
-//        NSTimeInterval now = CACurrentMediaTime();
-//        float zdelta = [self defineZoomFromSpeed:location.speed];
-//        if (ABS(zdelta) >= 0.5/*?Math.sqrt(0.5)*/)
-//        {
-//            // prevent ui hysteresis (check time interval for autozoom)
-//            if (zdelta >= 2)
-//            {
-//                // decrease a bit
-//                zdelta -= 1;
-//            }
-//            else if (zdelta <= -2)
-//            {
-//                // decrease a bit
-//                zdelta += 1;
-//            }
-//            double targetZoom = MIN(_mapView.zoom + zdelta, [OAAutoZoomMap getMaxZoom:[_settings.autoZoomMapScale get]]);
-//            int threshold = [_settings.autoFollowRoute get];
-//            if (now - _lastTimeAutoZooming > 4.5 && (now - _lastTimeAutoZooming > threshold || !_isUserZoomed))
-//            {
-//                _isUserZoomed = false;
-//                _lastTimeAutoZooming = now;
-//                //                    double settingsZoomScale = Math.log(mapView.getSettingsMapDensity()) / Math.log(2.0f);
-//                //                    double zoomScale = Math.log(tb.getMapDensity()) / Math.log(2.0f);
-//                //                    double complexZoom = tb.getZoom() + zoomScale + zdelta;
-//                // round to 0.33
-//                targetZoom = round(targetZoom * 3) / 3.f;
-//                return targetZoom;
-//            }
-//        }
-//    }
-//    return 0;
-//}
-
 - (void) refreshLocation
 {
-    [self updateLocation];
+    [self onLocationServicesUpdate];
 }
 
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location
@@ -736,7 +601,7 @@
     _mapViewController = mapViewController;
     _mapView = _mapViewController.mapView;
     if (_needsLocationUpdate)
-        [self updateLocation];
+        [self onLocationServicesUpdate];
 }
 
 - (void) switchToRoutePlanningMode
@@ -870,25 +735,35 @@
 - (void) resetDrivingRegionUpdate
 {
     _drivingRegionUpdated = NO;
-    [self updateLocation];
+    [self onLocationServicesUpdate];
 }
 
 - (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio
 {
-    //TODO: debug. test and comare all values with android
-    
     if (!_mapView)
         return CGPointZero;
     
-    //OsmAnd::AreaI visibleMapRect = [_mapView getVisibleBBox31]; // diff
     CGRect visibleMapRect = [self calculateVisibleMapRect];
     OsmAnd::PointI viewSize = [_mapView getViewSize];
-    //float projectedRatioX = (visibleMapRect.left() + visibleMapRect.width() * ratio.x) / viewSize.x;
-    //float projectedRatioY = (visibleMapRect.top() + visibleMapRect.height() * ratio.y) / viewSize.y;
     float projectedRatioX = (visibleMapRect.origin.x + visibleMapRect.size.width * ratio.x) / viewSize.x;
     float projectedRatioY = (visibleMapRect.origin.y + visibleMapRect.size.height * ratio.y) / viewSize.y;
     
     return CGPointMake(projectedRatioX, projectedRatioY); //0.5  0.3887
+}
+
+- (CGRect) calculateVisibleMapRect
+{
+    OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
+    OsmAnd::PointI windowSize = [mapRenderer getViewSize];
+    
+    int left = 0;
+    int top = 0;
+    int right = windowSize.x;
+    int bottom = windowSize.y;
+    
+    //TODO: implement offset calculation if needed
+    
+    return CGRectMake(left, top, right, bottom);
 }
 
 - (void) onProfileSettingSet:(NSNotification *)notification
@@ -904,22 +779,6 @@
             });
         }
     }
-}
-
-- (CGRect) calculateVisibleMapRect
-{
-    OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
-    OsmAnd::PointI windowSize = mapRenderer.renderer->getState().windowSize;
-    
-    int left = 0;
-    int top = 0;
-    int right = windowSize.x;
-    int bottom = windowSize.y;
-    
-    //TODO: implement
-    
-    
-    return CGRectMake(left, top, right, bottom);
 }
 
 @end

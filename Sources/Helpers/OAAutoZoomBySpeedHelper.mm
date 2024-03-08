@@ -86,7 +86,7 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     
     OAAutoObserverProxy *_mapZoomObserver;
     
-    //old vars
+    //Autozoom V1 vars
     NSTimeInterval _lastTimeAutoZooming;
     BOOL _isUserZoomed;
 }
@@ -104,9 +104,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     }
     return self;
 }
-
-
-//TODO: delete?
 
 // previous version of autozoom code from OAMapViewTrackingUtilities
 // without any changes. differs with android
@@ -142,8 +139,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     }
     return 0;
 }
-
-//TODO: delete?
 
 // previous version of autozoom code from OAMapViewTrackingUtilities
 // without any changes. differs with android
@@ -301,18 +296,7 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 
 - (void) onManualZoomChange
 {
-   //TODO: check it
    _nextTurnInFocus = nil;
 }
-
-// getTrackPointsAnalyser()
-
-// addAvailableGPXDataSetTypes()
-
-// getOrderedLineDataSet()
-
-// getZoomDataSet()
-
-// postProcessAttributes()
 
 @end

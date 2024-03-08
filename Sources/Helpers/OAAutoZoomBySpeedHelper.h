@@ -36,4 +36,6 @@ const static int kZoomDurationMillis = 1500;
 
 - (OAAutoZoomDTO *) getAutoZoomParams:(float)currentZoom autoZoom:(OAComplexZoom *)autoZoom fixedDurationMillis:(float)fixedDurationMillis;
 
+- (void) onManualZoomChange;
+
 @end

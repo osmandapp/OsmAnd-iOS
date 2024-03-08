@@ -1746,7 +1746,6 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
                     [self enterApproximationMode];
                 } else {
                     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
-                    [gpx setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
                     [gpx addRoutePoints:points addRoute:NO];
                     [self onCloseButtonPressed];
                     [targetPointsHelper clearAllPoints:NO];

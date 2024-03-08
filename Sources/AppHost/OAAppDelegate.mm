@@ -158,15 +158,15 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             BOOL mapInstalled = NO;
             for (const auto& resource : _app.resourcesManager->getLocalResources())
             {
-                if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion
+                    && resource->id != QString::fromNSString(kWorldMiniBasemapKey.lowercaseString))
                 {
                     mapInstalled = YES;
                     break;
                 }
             }
             // Show intro screen
-            //!mapInstalled
-            if (YES)
+            if (!mapInstalled)
             {
                 [self configureAppLaunchEvent:AppLaunchEventFirstLaunch];
             }

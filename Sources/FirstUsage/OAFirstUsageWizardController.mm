@@ -91,7 +91,7 @@ typedef enum
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *privacyPolicyLeadingConstraint;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionLeadingConstraint;
-@property (nonatomic, strong) NSByteCountFormatter *byteCountFormatter;
+@property (strong, nonatomic) NSByteCountFormatter *byteCountFormatter;
 
 @end
 
@@ -103,7 +103,6 @@ typedef enum
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
 
-    //WorldRegion localDownloadRegion;
     OARepositoryResourceItem *_localMapIndexItem;
     NSMutableArray<OARepositoryResourceItem *> *_indexItems;
     BOOL _mapDownloadCancelled;

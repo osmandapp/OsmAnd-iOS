@@ -46,6 +46,7 @@ NSString *const kGenerateHillshadeKey = @"kGenerateHillshadeKey";
 NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
 NSString *const kUseHHRouting = @"kUseHHRouting";
 NSString *const kUseHHRoutingOnly = @"kUseHHRoutingOnly";
+NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
 
 #pragma mark - Initialization
 
@@ -106,6 +107,16 @@ NSString *const kUseHHRoutingOnly = @"kUseHHRoutingOnly";
         @"isOn" : @([[OAAppSettings sharedManager].useHHRoutingOnly get])
     }];
     [_data addSection:simulationSection];
+    
+    OATableSectionData *navigationSection = [OATableSectionData sectionData];
+    navigationSection.headerText = OALocalizedString(@"shared_string_navigation");
+    [navigationSection addRowFromDictionary:@{
+        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
+        kCellKeyKey : kUseV1AutoZoom,
+        kCellTitleKey : @"Discrete autozoom (old version)",
+        @"isOn" : @([[OAAppSettings sharedManager].useV1AutoZoom get])
+    }];
+    [_data addSection:navigationSection];
 }
 
 - (NSInteger)sectionsCount
@@ -184,6 +195,8 @@ NSString *const kUseHHRoutingOnly = @"kUseHHRoutingOnly";
         [[OAAppSettings sharedManager].useHHRouting set:sender.isOn];
     else if ([item.key isEqualToString:kUseHHRoutingOnly])        
         [[OAAppSettings sharedManager].useHHRoutingOnly set:sender.isOn];
+    else if ([item.key isEqualToString:kUseV1AutoZoom])
+        [[OAAppSettings sharedManager].useV1AutoZoom set:sender.isOn];
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

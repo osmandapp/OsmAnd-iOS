@@ -12,7 +12,7 @@
 #import "OAAppSettings.h"
 
 #define kTextInfoWidgetWidth 94
-#define kTextInfoWidgetHeight 32
+#define kTextInfoWidgetHeight 34
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
@@ -87,5 +87,6 @@
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)configureSimpleLayout;
 - (void)refreshLayout;
+- (OAApplicationMode *_Nonnull)getAppMode;
 
 @end

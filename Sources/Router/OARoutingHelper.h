@@ -117,4 +117,6 @@ struct RouteSegmentResult;
 + (double) getDefaultAllowedDeviation:(OAApplicationMode *)mode posTolerance:(double)posTolerance;
 + (double) getPosTolerance:(double)accuracy;
 
+- (double) getMaxAllowedProjectDist:(CLLocation *)location;
+
 @end

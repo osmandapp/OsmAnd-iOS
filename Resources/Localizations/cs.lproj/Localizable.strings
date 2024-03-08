@@ -1579,7 +1579,7 @@
 "gpx_analyze" = "Analyzovat";
 "gpx_export_failed" = "Nepodařilo se uložit vytvořenou stopu";
 "import_from_files" = "Importovat ze souborů";
-"tracks_on_map" = "Zobrazené stopy";
+"tracks_on_map" = "Viditelné na mapě";
 "shared_string_visible" = "Viditelné";
 "add_group" = "Přidat skupinu";
 "group_properties" = "Vlastnosti skupiny";
@@ -3057,3 +3057,4 @@
 "help_article_widgets_name" = "Mapové nástroje";
 "shared_string_link" = "Odkaz";
 "shared_string_author" = "Autor";
+"shared_string_keywords" = "Klíčová slova";

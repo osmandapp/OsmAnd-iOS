@@ -86,8 +86,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Gün çıxır: %@
-\nGün batır: %@";
+"day_night_info_description" = "Gün çıxır: %@\nGün batır: %@";
 "day_night_info" = "Gündüz/gecə məlumatı";
 "daynight_mode_auto" = "Günəş çıxır/batır";
 "route_simulation" = "Route simulation";
@@ -897,9 +896,7 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Əlavə xəritələr";
 "import_duplicates_title" = "Bəzi elementlər artıq mövcuddur";
-"import_duplicates_description" = "OsmAnd-da artıq idxal olunanlarla eyni adda elementlər var.
-\n
-\nFəaliyyət seçin.";
+"import_duplicates_description" = "OsmAnd-da artıq idxal olunanlarla eyni adda elementlər var.\n\nFəaliyyət seçin.";
 "keep_both" = "İkisini də saxla";
 "keep_both_desc" = "İdxal edilmiş elementlər prefikslə əlavə olunacaq";
 "replace_all" = "Hamısını əvəz et";
@@ -971,9 +968,7 @@
 "reset_to_default" = "Standarta sıfırla";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAnd proqramdakı mövcud elementlərlə dublikatların olub-olmaması üçün %@-ni yoxlayır.
-\n
-\nBir az vaxt ala bilər.";
+"checking_for_duplicate_description" = "OsmAnd proqramdakı mövcud elementlərlə dublikatların olub-olmaması üçün %@-ni yoxlayır.\n\nBir az vaxt ala bilər.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1556,9 +1551,7 @@
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Səfər qeydetmə";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Bu qoşma xəritədə GPX qeydetmə vidcetinə əl ilə toxunmaqla izlərinizi qeyd etmək və saxlamaq, həmçinin bütün naviqasiya marşrutlarınızı avtomatik olaraq GPX faylına qeyd etmək funksiyasını aktivləşdirir.
-\n
-\nQeyd edilmiş izlər dostlarınızla paylaşıla və ya OSM töhfələri üçün istifadə edilə bilər. İdmançılar məşqlərinə nəzarət etmək üçün qeyd edilmiş izlərdən istifadə edə bilərlər. Dövrə vaxtları, orta sürət və s. kimi bəzi əsas iz analizləri birbaşa OsmAnd-da həyata keçirilə bilər və əlbəttə ki, daha sonra izlər xüsusi 3-cü tərəf analiz alətlərində də təhlil edilə bilər.";
+"record_plugin_description" = "Bu qoşma xəritədə GPX qeydetmə vidcetinə əl ilə toxunmaqla izlərinizi qeyd etmək və saxlamaq, həmçinin bütün naviqasiya marşrutlarınızı avtomatik olaraq GPX faylına qeyd etmək funksiyasını aktivləşdirir.\n\nQeyd edilmiş izlər dostlarınızla paylaşıla və ya OSM töhfələri üçün istifadə edilə bilər. İdmançılar məşqlərinə nəzarət etmək üçün qeyd edilmiş izlərdən istifadə edə bilərlər. Dövrə vaxtları, orta sürət və s. kimi bəzi əsas iz analizləri birbaşa OsmAnd-da həyata keçirilə bilər və əlbəttə ki, daha sonra izlər xüsusi 3-cü tərəf analiz alətlərində də təhlil edilə bilər.";
 "osm_editing_plugin_name" = "OpenStreetMap Editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "OSM Editing plugin can be used to make OSM contributions like creating or modifying POI objects, opening or commenting on OSM Notes, and contributing recorded GPX files. OSM is a community driven global public domain mapping project. For more information, please refer to https://osm.org. Contributions can be made directly from OsmAnd, if you specify your OSM credentials in the app.";
@@ -1594,9 +1587,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontur xətləri";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Bu qoşma OsmAnd-ın standart xəritələrinin üzərində həm kontur xəttinin, həm də (relyef) təpə kölgəsi örtüyünün göstərilməsini təmin edir. Bu funksionallıq idmançılar, piyada gəzənlər, səyahətçilər və landşaftın relyef quruluşu ilə maraqlanan hər kəs tərəfindənyüksək qiymətləndiriləcək. (Nəzərə alın ki, kontur xətti və/yaxud relyef məlumatları ayrıdır, qoşmanı aktivləşdirdikdən sonra əlavə endirmələr mümkündür.)
-\n
-\nQlobal məlumatlar (70° şimal və 70° cənub arasında) SRTM (Shuttle Radar Topography Mission) və NASA-nınYer Müşahidə Sisteminin qabaqcıl peyki olan Terra-nın göyərtəsində təsvir aləti olan ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) tərəfindən ölçmələrə əsaslanır. ASTER – NASA, Yaponiyanın İqtisadiyyat, Ticarət və Sənaye Nazirliyi (METI) və Yaponiya Kosmik Sistemləri (J-spacesystems) arasında ortaq işdir.";
+"srtm_plugin_description" = "Bu qoşma OsmAnd-ın standart xəritələrinin üzərində həm kontur xəttinin, həm də (relyef) təpə kölgəsi örtüyünün göstərilməsini təmin edir. Bu funksionallıq idmançılar, piyada gəzənlər, səyahətçilər və landşaftın relyef quruluşu ilə maraqlanan hər kəs tərəfindənyüksək qiymətləndiriləcək. (Nəzərə alın ki, kontur xətti və/yaxud relyef məlumatları ayrıdır, qoşmanı aktivləşdirdikdən sonra əlavə endirmələr mümkündür.)\n\nQlobal məlumatlar (70° şimal və 70° cənub arasında) SRTM (Shuttle Radar Topography Mission) və NASA-nınYer Müşahidə Sisteminin qabaqcıl peyki olan Terra-nın göyərtəsində təsvir aləti olan ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer) tərəfindən ölçmələrə əsaslanır. ASTER – NASA, Yaponiyanın İqtisadiyyat, Ticarət və Sənaye Nazirliyi (METI) və Yaponiya Kosmik Sistemləri (J-spacesystems) arasında ortaq işdir.";
 "wikivoyage_travel_guide" = "Səyahət Bələdçiləri";
 "start_editing_card_image_text" = "Pulsuz dünya səyahət bələdçisinə hər kəs düzəliş edə bilər.";
 "wikivoyage_travel_guide_descr" = "İnternet bağlantısı olmadan OsmAnd daxilində planetin ən maraqlı yerlərinə bələdçi.";
@@ -2386,8 +2377,7 @@
 "duration_ago" = "%@əvvəl";
 "shared_string_not_included" = "Daxil deyil";
 "compass_visible_if_map_rotated" = "Xəritə çevrildikdə görünən";
-"logout_from_osmand_cloud_decsr" = "Çıxış edilsin\?
-\nMəlumatların nüsxəsini çıxarmaq və ya bərpa etmək üçün yenidən daxil olmalısınız.";
+"logout_from_osmand_cloud_decsr" = "Çıxış edilsin\?\nMəlumatların nüsxəsini çıxarmaq və ya bərpa etmək üçün yenidən daxil olmalısınız.";
 "choose_what_to_restore" = "Nəyi bərpa edəcəyinizi seçin.";
 "shared_string_weather" = "Hava";
 "track_has_no_needed_data" = "İzdə müvafiq məlumatlar yoxdur.";
@@ -2400,8 +2390,7 @@
 "service_is_not_available_please_try_later" = "Xidmət mövcud deyil. Zəhmət olmasa, sonra cəhd edin.";
 "backup_complete" = "Nüsxələmə tamamlandı";
 "compass_always_hidden" = "Hər zaman gizli";
-"osmand_cloud_create_account_descr" = "E-poçt ünvanınızı daxil edin, ora təsdiq kodu göndəriləcək
-\nvə bütün məlumatlarınız onunla əlaqələndiriləcək.";
+"osmand_cloud_create_account_descr" = "E-poçt ünvanınızı daxil edin, ora təsdiq kodu göndəriləcək\nvə bütün məlumatlarınız onunla əlaqələndiriləcək.";
 "map_updates_for_mappers" = "Xəritəçəkənlər üçün xəritə yeniləmələri";
 "routing_attr_avoid_tunnels_name" = "Tunellərdən yayın";
 "compass_always_visible" = "Hər zaman görünən";
@@ -2412,7 +2401,6 @@
 "shared_string_selected" = "Seçilmiş";
 "backup_into_file" = "Fayl olaraq nüsxələ";
 "local_backup" = "Yerli nüsxə";
-
 "routing_attr_length_description" = "Marşrutlarda icazə veriləcək nəqliyyat vasitəsinin uzunluğunu təyin edin.";
 "rendering_value_all_name" = "Hamısı";
 "auth_failed" = "İcazə uğursuz oldu";
@@ -2428,12 +2416,6 @@
 "shared_string_keep_active" = "Aktiv saxla";
 "shared_string_height" = "Hündürlük";
 "uninstall_speed_cameras" = "Sürət kameralarını sil";
-"speed_cameras_legal_descr" = "Bəzi ölkələrdə və ya bölgələrdə sürət kamerası ilə bağlı xəbərdarlıq proqramlarından istifadə qanunla qadağandır.
-\n
-\nÖlkənizin qanunlarından asılı olaraq seçim etməlisiniz.
-\n
-\n%@-nı seçsəniz, sürət kameraları haqqında siqnallar və xəbərdarlıqlar alacaqsınız.
-\n
-\n%@-i seçsəniz, sürət kameraları ilə bağlı bütün məlumatlar: xəbərdarlıqlar, bildirişlər, POI-lər OsmAnd tamamilə yenidən quraşdırılana qədər silinəcək.";
+"speed_cameras_legal_descr" = "Bəzi ölkələrdə və ya bölgələrdə sürət kamerası ilə bağlı xəbərdarlıq proqramlarından istifadə qanunla qadağandır.\n\nÖlkənizin qanunlarından asılı olaraq seçim etməlisiniz.\n\n%@-nı seçsəniz, sürət kameraları haqqında siqnallar və xəbərdarlıqlar alacaqsınız.\n\n%@-i seçsəniz, sürət kameraları ilə bağlı bütün məlumatlar: xəbərdarlıqlar, bildirişlər, POI-lər OsmAnd tamamilə yenidən quraşdırılana qədər silinəcək.";
 "shared_string_legal" = "Qanuni";
 "icon_group_service" = "Xidmət";

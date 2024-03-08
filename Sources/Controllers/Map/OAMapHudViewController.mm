@@ -31,6 +31,7 @@
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAReverseGeocoder.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kButtonWidth 50.0
 #define kButtonOffset 16.0
@@ -498,6 +499,7 @@
     [self.rulerLabel updateColors];
     [_mapPanelViewController updateColors];
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    [self updateBottomBarViewBackgroundColor];
     [self setNeedsStatusBarAppearanceUpdate];
 }
 
@@ -917,7 +919,18 @@
         _routingProgressView.frame = [self getRoutingProgressViewFrame];
 
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
+    [self updateBottomBarViewBackgroundColor];
     [self setNeedsStatusBarAppearanceUpdate];
+}
+
+- (void)updateBottomBarViewBackgroundColor
+{
+    if ([OAUtilities isLandscape] || [OAUtilities isIPad])
+        _bottomBarView.backgroundColor = [UIColor clearColor];
+    else {
+        UIColor *color = [UIColor colorNamed:ACColorNameWidgetBgColor];
+        _bottomBarView.backgroundColor = _settings.nightMode ? color.dark : color.light;
+    }
 }
 
 - (void) updateTopButtonsLayoutY

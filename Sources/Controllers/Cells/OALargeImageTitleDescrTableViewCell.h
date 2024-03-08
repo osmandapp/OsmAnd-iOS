@@ -19,6 +19,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionWithButtonConstraint;
 @property (strong, nonatomic) IBOutlet NSLayoutConstraint *descriptionNoButtonConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageWidthConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *imageHeightConstraint;
 
 - (void)showButton:(BOOL)show;
 

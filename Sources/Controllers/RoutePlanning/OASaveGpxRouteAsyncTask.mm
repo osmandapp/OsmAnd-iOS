@@ -124,6 +124,7 @@
         gpx.width = oldGpx.width;
         gpx.splitType = oldGpx.splitType;
         gpx.splitInterval = oldGpx.splitInterval;
+        gpx.creationDate = oldGpx.creationDate;
     }
     [gpxDb replaceGpxItem:gpx];
     [gpxDb save];

@@ -8,7 +8,6 @@
 
 #import "OAGPXWptListViewController.h"
 #import "OAPointTableViewCell.h"
-#import "OAGPXListViewController.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGpxWptItem.h"
 #import "OAUtilities.h"

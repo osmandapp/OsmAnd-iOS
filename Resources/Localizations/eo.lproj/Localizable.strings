@@ -170,7 +170,7 @@
 "edit_profile_screen_options_subtitle" = "Elekti agordojn pri ekrano por la profilo";
 "map_markers" = "Map-markoj";
 "markers_history" = "Historio de markoj";
-"confirm_usage_speed_cameras" = "En multaj landoj (Germanujo, Francujo, Italujo kaj aliaj) uzado de sciigoj pri rapid-kontroliloj estas kontraŭleĝa. OsmAnd ne respondumos, se vi rompos leĝon. Bonvolu elekti “jes” nur se vi estas permesata por uzi tiun ĉi eblon.";
+"confirm_usage_speed_cameras" = "En multaj landoj (Germanujo, Francujo, Italujo kaj aliaj) uzado de sciigoj pri rapid-kontroliloj estas kontraŭleĝa. OsmAnd ne respondumos, se vi rompos leĝon. Elektu “Jes” nur se vi rajtas uzi tiun ĉi eblon.";
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
@@ -223,7 +223,7 @@
 "arrival_distance_factor_at_last" = "Dum la plej lastaj metroj";
 "route_parameters" = "Parametroj de navigo";
 "fast_route_mode" = "Plej rapida kurso";
-"voice_announces" = "Voĉaj anoncoj";
+"voice_announces" = "Voĉaj sciigoj";
 "screen_alerts" = "Ekranaj avertoj";
 "vehicle_parameters" = "Parametroj de veturilo";
 "map_during_navigation" = "Mapo dum navigi";
@@ -252,11 +252,11 @@
 "show_warnings_descr" = "Agordi trafikajn avertojn (pri rapidlimoj, devigaj haltejoj, strat-ĝiboj, tuneloj), avertojn pri rapid-kontroliloj kaj informojn pri koridoroj.";
 "speak_title" = "Anoncado…";
 "speak_descr" = "Agordi anoncojn pri strataj nomoj, trafikaj avertoj (devigaj haltejoj, strat‑ĝiboj), rapid‑kontroliloj kaj rapidlimoj.";
-"keep_informing" = "Reanonci navigadajn sciigojn";
+"keep_informing" = "Ripeti navigadajn sciigojn";
 "repeat_after" = "Repeat after";
-"keep_informing_descr" = "Reanonci sciigojn pri navigado je regulaj temp-intervaloj.";
-"arrival_distance" = "Anonco pri alveno";
-"arrival_distance_descr" = "Kiafrue vi volas anoncon pri alveno?";
+"keep_informing_descr" = "Ripeti sciigojn pri navigado je regulaj temp-intervaloj.";
+"arrival_distance" = "Sciigo pri alveno";
+"arrival_distance_descr" = "Kiafrue vi volas akiri sciigon pri alveno?";
 "default_speed_system" = "Unuo de rapido";
 "default_speed_system_descr" = "Difini unuon de rapido.";
 "speed_limit_exceed" = "Tolerado de rapidlimo";
@@ -267,7 +267,7 @@
 "voice_provider" = "Gvidada voĉo";
 "voice_provider_descr" = "Elekti gvidadan voĉon por navigado.";
 "choose_audio_stream" = "Eligo de gvidada voĉo";
-"choose_audio_stream_descr" = "Elekti laŭtparolilon por ludi voĉajn anoncojn.";
+"choose_audio_stream_descr" = "Elekti laŭtparolilon por ludi voĉajn sciigojn.";
 "use_osm_live_routing" = "OsmAnd-Live navigado";
 "osm_live_routing_descr" = "Use OsmAnd Live updates for navigation";
 "osmand_default_routing" = "OsmAnd-navigilo";
@@ -304,7 +304,7 @@
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Konsideri portempajn limigojn";
 "impassable_road_desc" = "Elekti vojojn, kiujn vi volas eviti dum navigado.";
-"interrupt_music_descr" = "Voĉaj anoncoj paǔzigas ludadon de muziko.";
+"interrupt_music_descr" = "Voĉaj sciigoj paǔzigas ludadon de muziko.";
 "interrupt_music" = "Paŭzigi muzikon";
 "shared_string_do_not_use" = "Ne uzi";
 "shared_string_sound" = "Sono";
@@ -376,7 +376,7 @@
 "traffic_warning_pedestrian" = "Zebrostria pasejo";
 "traffic_warning_hazard" = "Danĝero";
 "tunnel_warning" = "Tunelo antaŭe";
-"accessibility_announce" = "Anonco";
+"accessibility_announce" = "Sciigo";
 "driving_region_japan" = "Japanujo";
 "driving_region_us" = "Usono";
 "driving_region_canada" = "Kanado";
@@ -2603,12 +2603,12 @@
 "weather_plugin_description" = "Liveras:\n • 24-horan 7-tagan veterprognozojn kun 5 tavoloj\n • fenestraĵojn agordiĝantajn laŭ loko\n • egal-temperatur-liniojn kaj egal-aerprem-liniojn.\n\nDatumoj estas liverataj de «Global Forecast System» (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ).";
 "km" = "km";
 "lang_sat" = "Santala";
-"uninstall_speed_cameras" = "Malinstali informojn pri rapidkontroliloj";
+"uninstall_speed_cameras" = "Malinstali informojn pri rapid-kontroliloj";
 "shared_string_legal" = "Leĝaj";
 "privacy_and_security" = "Privateco kaj sekureco";
 "shared_string_keep_active" = "Plue uzi";
-"speed_camera_pois" = "Pozicioj de rapidkontroliloj";
-"speed_cameras_alert" = "Avertoj pri rapidkontroliloj estas kontraŭleĝaj en iuj landoj.";
+"speed_camera_pois" = "Pozicioj de rapid-kontroliloj";
+"speed_cameras_alert" = "Avertoj pri rapid-kontroliloj estas kontraŭleĝaj en iuj landoj.";
 "shared_string_height" = "Alto";
 "lang_zh-Hant" = "Ĉina (tradicia)";
 "speed_cameras_legal_descr" = "En iuj landoj kaj regionoj uzado de aplikaĵoj avertantaj pri rapidkontroliloj estas kontraŭleĝa.\n\nVi devas elekti laŭleĝe de via lando.\n\nElektu “%@” por pluigi ricevi avertojn pri rapidkontroliloj.\n\nElektu “%@” por forigi (ĝis la reinstalo de OsmAnd) ĉiujn datumojn pri rapidkontrolilojn: avertojn, sciigojn, poziciojn.";
@@ -2624,3 +2624,8 @@
 "shared_string_author" = "Aŭtoro";
 "shared_string_license" = "Permesilo";
 "shared_string_keywords" = "Ŝlosilvortoj";
+"speak_route_deviation" = "Sciigi pri devojiĝo de la kurso";
+"speak_gps_signal_status" = "Sciigi pri perdo aŭ akiro de signalo GPS";
+"announce_when_exceeded" = "Sciigi kiam superita";
+"speak_route_recalculation" = "Sciigi pri rekalkulo de kurso";
+"help_article_navigation_guidance_voice_navigation_name" = "Voĉaj kaj surekranaj sciigoj";

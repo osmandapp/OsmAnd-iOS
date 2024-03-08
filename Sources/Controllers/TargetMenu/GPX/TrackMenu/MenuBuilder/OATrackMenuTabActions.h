@@ -10,4 +10,6 @@
 
 @interface OATrackMenuTabActions : OABaseTrackMenuTabItem
 
+- (instancetype) initWithIsCurrentTrack:(BOOL)isCurrentTrack;
+
 @end

@@ -2319,7 +2319,7 @@
 "weather_wind_kilimeters_per_hour" = "Кілометрів на годину";
 "weather_wind_knots" = "Вузлів";
 "weather_precip_inches" = "Дюйми";
-"user_login" = "Ім\'я користувача";
+"user_login" = "Увійти";
 "login_footer_email_part" = "support@osmand.net";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "register_opr_create_new_account" = "Створити обліковий запис";

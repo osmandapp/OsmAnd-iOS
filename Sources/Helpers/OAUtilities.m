@@ -373,24 +373,12 @@
     return col1 == col2;
 }
 
-- (UIColor *)lightThemeColor
-{
-    UITraitCollection *trait = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleLight];
-    return [self resolvedColorWithTraitCollection:trait];
-}
-
-- (UIColor *)darkThemeColor
-{
-    UITraitCollection *trait = [UITraitCollection traitCollectionWithUserInterfaceStyle:UIUserInterfaceStyleDark];
-    return [self resolvedColorWithTraitCollection:trait];
-}
-
 - (UIColor *)currentThemeColor
 {
     if ([[ThemeManager shared] isLightTheme])
-        return [self lightThemeColor];
+        return [self light];
     else
-        return [self darkThemeColor];
+        return [self dark];
 }
 
 @end
@@ -2001,9 +1989,14 @@ static const double d180PI = 180.0 / M_PI_2;
     return result;
 }
 
++ (BOOL)isiOSAppOnMac
+{
+    return [NSProcessInfo processInfo].isiOSAppOnMac;
+}
+
 + (BOOL) isWindowed
 {
-    BOOL isiOSAppOnMac = [NSProcessInfo processInfo].isiOSAppOnMac;
+    BOOL isiOSAppOnMac = [[self class] isiOSAppOnMac];
     return !isiOSAppOnMac && [self isIPad] && (DeviceScreenWidth != [[UIScreen mainScreen] bounds].size.width || [UIApplication sharedApplication].mainWindow.bounds.size.height != [[UIScreen mainScreen] bounds].size.height);
 }
 
@@ -2578,28 +2571,71 @@ static const double d180PI = 180.0 / M_PI_2;
     return [trackFolderName stringByAppendingPathComponent:fullFilePath.lastPathComponent];
 }
 
-+ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddRootTracksFolder
 {
-    NSMutableArray<NSString *> *allFoldersNames = [NSMutableArray new];
-    NSArray* filesList = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:OsmAndApp.instance.gpxPath error:nil];
-    for (NSString *name in filesList)
+    NSMutableArray<NSString *> *flattenedFilePaths = [self.class getFlattenedFileList:OsmAndApp.instance.gpxPath];
+    NSMutableArray<NSString *> *flattenedRelativeFilePaths = [NSMutableArray array];
+    for (NSString *path in flattenedFilePaths)
     {
-        if (![name hasPrefix:@"."] && ![name.lowerCase hasSuffix:@".gpx"])
-            [allFoldersNames addObject:name];
+        NSString *pathToDelete = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
+        [flattenedRelativeFilePaths addObject:[path stringByReplacingOccurrencesOfString:pathToDelete withString:@""]];
     }
-    if (shouldAddTracksFolder)
-        [allFoldersNames addObject:OALocalizedString(@"shared_string_gpx_tracks")];
+    
+    if (shouldAddRootTracksFolder)
+        [flattenedRelativeFilePaths addObject:OALocalizedString(@"shared_string_gpx_tracks")];
     
     if (shouldSort)
     {
-        return [allFoldersNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-            return [obj1 compare:obj2];
+        return [flattenedRelativeFilePaths sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+            if ([obj1 isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
+                return NSOrderedAscending;
+            else if ([obj2 isEqualToString:OALocalizedString(@"shared_string_gpx_tracks")])
+                return NSOrderedDescending;
+            else
+                return [obj1 compare:obj2];
         }];
     }
     else
     {
-        return [NSArray arrayWithArray:allFoldersNames];
+        return [NSArray arrayWithArray:flattenedRelativeFilePaths];
     }
+}
+
++ (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path
+{
+    NSMutableArray<NSString *> *allSubfolderPaths = [NSMutableArray new];
+    
+    NSString *currentFolderPath = path;
+    if (!currentFolderPath || currentFolderPath.length == 0)
+        currentFolderPath = OsmAndApp.instance.documentsPath;
+    
+    NSArray<NSString *> *subfolderPaths = [[NSFileManager defaultManager] subpathsOfDirectoryAtPath:currentFolderPath error:nil];
+    for (NSString *subfolderPath in subfolderPaths)
+    {
+        if([subfolderPath.lastPathComponent hasPrefix:@"."])
+            continue;
+        
+        NSString *fullSubfolderPath = [currentFolderPath stringByAppendingPathComponent:subfolderPath];
+        BOOL isDir = NO;
+        BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:fullSubfolderPath isDirectory:&isDir];
+        if (exists && isDir)
+        {
+            if (![allSubfolderPaths containsObject:fullSubfolderPath])
+                [allSubfolderPaths addObject:fullSubfolderPath];
+            
+            NSMutableArray<NSString *> *foundSubfolderPaths = [self.class getFlattenedFileList:fullSubfolderPath];
+            if (foundSubfolderPaths.count > 0)
+            {
+                for (NSString *path in foundSubfolderPaths)
+                {
+                    if (![allSubfolderPaths containsObject:path])
+                        [allSubfolderPaths addObject:path];
+                }
+            }
+        }
+        
+    }
+    return allSubfolderPaths;
 }
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor

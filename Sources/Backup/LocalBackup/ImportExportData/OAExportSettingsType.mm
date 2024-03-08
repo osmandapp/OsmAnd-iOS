@@ -44,57 +44,41 @@ static NSArray<OAExportSettingsType *> *allValues;
 
 @interface OAExportSettingsType ()
 
-- (instancetype)initWithTitle:(NSString *)title name:(NSString *)name itemName:(NSString *)itemName icon:(UIImage *)icon;
-
 @end
 
 @implementation OAExportSettingsType
 
-+ (OAExportSettingsType *) getExportSettingsTypeForItem:(OASettingsItem *)item
++ (OAExportSettingsType *)findBySettingsItem:(OASettingsItem *)item
 {
+    if (item.type == EOASettingsItemTypeFile)
+        return [self findByFileSubtype:((OAFileSettingsItem *) item).subtype];
+
     for (OAExportSettingsType *exportType in self.getAllValues)
     {
         if ([exportType.itemName isEqualToString:[OASettingsItemType typeName:item.type]])
-        {
-            if (item.type == EOASettingsItemTypeFile)
-            {
-                OAFileSettingsItem *fileItem = (OAFileSettingsItem *) item;
-                return [self getExportSettingsTypeFileSubtype:fileItem.subtype];
-            }
-            else
-            {
-                return exportType;
-            }
-        }
+            return exportType;
     }
     return nil;
 }
 
-+ (OAExportSettingsType *) getExportSettingsTypeForRemoteFile:(OARemoteFile *)remoteFile
++ (OAExportSettingsType *)findByRemoteFile:(OARemoteFile *)remoteFile
 {
     if (remoteFile.item != nil)
-        return [self getExportSettingsTypeForItem:remoteFile.item];
+        return [self findBySettingsItem:remoteFile.item];
+
+    if ([[OASettingsItemType typeName:EOASettingsItemTypeFile] isEqualToString:remoteFile.type])
+        return [self findByFileSubtype:((OAFileSettingsItem *) remoteFile.item).subtype];
+
     for (OAExportSettingsType *exportType in self.getAllValues)
     {
         NSString *type = remoteFile.type;
-        if ([exportType.itemName isEqualToString:type])
-        {
-            if ([[OASettingsItemType typeName:EOASettingsItemTypeFile] isEqualToString:type])
-            {
-                EOASettingsItemFileSubtype subtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:remoteFile.name];
-                if (subtype != EOASettingsItemFileSubtypeUnknown)
-                    return [self getExportSettingsTypeFileSubtype:subtype];
-            }
-            else
-            {
-                return exportType;
-            }
-        }
+        if ([exportType.itemName isEqualToString:remoteFile.type])
+            return exportType;
     }
     return nil;
 }
 
-+ (OAExportSettingsType *) getExportSettingsTypeFileSubtype:(EOASettingsItemFileSubtype)subtype
++ (OAExportSettingsType *)findByFileSubtype:(EOASettingsItemFileSubtype)subtype
 {
     if (subtype == EOASettingsItemFileSubtypeRenderingStyle) {
         return CUSTOM_RENDER_STYLE;

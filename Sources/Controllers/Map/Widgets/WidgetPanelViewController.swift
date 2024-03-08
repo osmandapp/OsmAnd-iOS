@@ -16,28 +16,34 @@ protocol WidgetPanelDelegate: AnyObject {
 @objc(OAWidgetPanelViewController)
 @objcMembers
 final class WidgetPanelViewController: UIViewController, OAWidgetListener {
-    private static let controlHeight: CGFloat = 26
-    private static let contentHeight: CGFloat = 32
-    private static let borderWidth: CGFloat = 1
+    private static let controlHeight: CGFloat = 16
+    private static let contentHeight: CGFloat = 34
+    private static let borderWidth: CGFloat = 2
     
     @IBOutlet var pageControlHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet private var contentView: UIView!
-    @IBOutlet private var pageControl: UIPageControl! {
+    @IBOutlet var pageControl: UIPageControl! {
         didSet {
             pageControl.backgroundStyle = .minimal
             pageControl.isEnabled = false
         }
     }
-
-    var specialPanelController: WidgetPanelViewController? = nil
+    
+    @IBOutlet private var contentView: UIView!
 
     let isHorizontal: Bool
     let isSpecial: Bool
+    let pageContainerView = UIView()
 
-    var pageViewController: UIPageViewController!
     var pages: [UIViewController] = []
     var widgetPages: [[OABaseWidgetView]] = []
+    var specialPanelController: WidgetPanelViewController?
+    
+    var pageViewController: UIPageViewController! {
+        didSet {
+            pageViewController.view.clipsToBounds = true
+        }
+    }
     
     var currentIndex: Int {
         guard let vc = pageViewController.viewControllers?.first else { return 0 }
@@ -45,8 +51,6 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     }
     
     weak var delegate: WidgetPanelDelegate?
-    
-    private let pageContainerView = UIView()
     
     private var isInTransition = false
     private var dayNightObserver: OAAutoObserverProxy!
@@ -112,9 +116,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             }
             height = max(height, Self.contentHeight)
         }
-        if !isHorizontal {
-            width += 2
-        }
+        
         return CGSize(width: width, height: height)
     }
     
@@ -157,9 +159,11 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             vc.isMultipleWidgetsInRow = true
             pages.append(vc)
         } else {
+            let isHiddenPageControl = widgetPages.count <= 1
             for page in widgetPages {
                 let vc = WidgetPageViewController()
                 vc.widgetViews = page
+                vc.isHiddenPageControl = isHiddenPageControl
                 pages.append(vc)
             }
         }
@@ -177,6 +181,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         pageControl.numberOfPages = pages.count
         pageControl.currentPage = currentIndex
         pageControl.isHidden = pages.count <= 1 || isHorizontal
+        pageViewController.scrollView?.isScrollEnabled = !pageControl.isHidden
+        
         pageControlHeightConstraint.constant = pageControl.isHidden ? 0 : Self.controlHeight
     }
 
@@ -209,6 +215,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         }
         pageViewController.delegate = self
         pageViewController.scrollView?.delegate = self
+        pageContainerView.clipsToBounds = true
         
         // Add the container view to the view hierarchy
         view.addSubview(pageContainerView)

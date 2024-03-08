@@ -20,9 +20,9 @@ class WidgetGroup: NSObject {
     static let tripRecording = WidgetGroup(title: localizedString("record_plugin_name"), iconName: "widget_trip_recording", docsUrl: docs_widget_trip_recording)
     static let developerOptions = WidgetGroup(title: localizedString("developer_widgets"), iconName: "widget_developer")
     static let altitude = WidgetGroup(title: localizedString("altitude"), descr: localizedString("map_widget_altitude_desc"), iconName: "widget_altitude")
-    static let weather = WidgetGroup(title: localizedString("shared_string_weather"), descr:localizedString("weather_widget_group_desc"), iconName: "widget_weather_umbrella")
-    static let sunriseSunset = WidgetGroup(title: localizedString("map_widget_group_sunrise_sunset"), descr:localizedString("map_widget_group_sunrise_sunset_desc"), iconName: "widget_sunset")
-    static let externalSensors = WidgetGroup(title: localizedString("external_sensors_plugin_name"), descr:localizedString("external_sensors_plugin_description"), iconName: "widget_sensor_external")
+    static let weather = WidgetGroup(title: localizedString("shared_string_weather"), descr: localizedString("weather_widget_group_desc"), iconName: "widget_weather_umbrella")
+    static let sunriseSunset = WidgetGroup(title: localizedString("map_widget_sun_position"), descr: localizedString("map_widget_group_sunrise_sunset_desc"), iconName: "widget_sunset")
+    static let externalSensors = WidgetGroup(title: localizedString("external_sensors_plugin_name"), descr: localizedString("external_sensors_plugin_description"), iconName: "widget_sensor_external")
     
     static let values = [routeManeuvers, navigationPoints, coordinatesWidget, mapMarkers, bearing, tripRecording, developerOptions, altitude, weather, sunriseSunset, externalSensors]
     
@@ -58,20 +58,6 @@ class WidgetGroup: NSObject {
             widgetsIds.append(widget.id)
         }
         return widgetsIds
-    }
-    
-    
-    @objc func getMainWidget() -> WidgetType? {
-        switch self {
-        case .bearing:
-            return WidgetType.relativeBearing
-        case .tripRecording:
-            return WidgetType.tripRecordingDistance
-//        case AUDIO_VIDEO_NOTES():
-//            return WidgetType.AV_NOTES_ON_REQUEST;
-        default:
-            return nil
-        }
     }
     
     @objc func getSecondaryDescription() -> String? {

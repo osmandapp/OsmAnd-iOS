@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21679"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -25,7 +25,7 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
                         <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="skp-uv-S5T">
-                            <rect key="frame" x="0.0" y="826" width="393" height="26"/>
+                            <rect key="frame" x="0.0" y="824" width="391" height="26"/>
                             <color key="backgroundColor" name="viewBgColor"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <constraints>
@@ -37,9 +37,9 @@
                         </pageControl>
                     </subviews>
                     <constraints>
-                        <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" id="Q6U-lP-hgl"/>
+                        <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" constant="2" id="Q6U-lP-hgl"/>
                         <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" id="kmS-9A-Kcj"/>
-                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" id="zPn-gh-3vl"/>
+                        <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" constant="2" id="zPn-gh-3vl"/>
                     </constraints>
                 </view>
             </subviews>

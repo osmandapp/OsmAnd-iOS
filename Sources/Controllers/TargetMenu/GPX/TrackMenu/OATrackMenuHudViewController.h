@@ -76,6 +76,7 @@
 - (void)openNavigation;
 - (void)openDescription;
 - (void)openDescriptionEditor;
+- (void)openDescriptionReadOnly:(NSString *)description;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;
@@ -105,6 +106,7 @@
 @property (nonatomic, assign) CLLocationCoordinate2D pinLocation;
 @property (nonatomic, assign) EOADraggableMenuState showingState;
 @property (nonatomic, assign) BOOL openedFromMap;
+@property (nonatomic, assign) BOOL openedFromTracksList;
 
 @end
 

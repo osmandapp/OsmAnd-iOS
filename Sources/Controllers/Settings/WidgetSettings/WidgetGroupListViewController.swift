@@ -168,25 +168,47 @@ class WidgetGroupListViewController: OABaseNavbarViewController, UISearchBarDele
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if searchText.isEmpty {
-            isFiltered = false
-            setupSearchControllerWithFilter(false)
-        } else {
-            isFiltered = true
-            setupSearchControllerWithFilter(true)
-            filteredSection.removeAllRows()
-            let section = tableData.sectionData(for: 0)
-            for i in 0..<section.rowCount() {
-                let row = section.getRow(i)
-                let name = row.title
-                guard let name else { continue }
-                let nameRange = name.range(of: searchText, options: .caseInsensitive)
-                if nameRange != nil {
+        isFiltered = !searchText.isEmpty
+        setupSearchControllerWithFilter(isFiltered)
+        filteredSection.removeAllRows()
+        guard isFiltered else {
+            tableView.reloadData()
+            return
+        }
+        
+        let section = tableData.sectionData(for: 0)
+        for i in 0..<section.rowCount() {
+            let row = section.getRow(i)
+            if let widgetGroup = row.obj(forKey: "widget_group") as? WidgetGroup {
+                if containsCaseInsensitive(text: widgetGroup.title, substring: searchText) {
                     filteredSection.addRow(row)
                 }
+                
+                widgetGroup.getWidgets().forEach {
+                    if containsCaseInsensitive(text: $0.title, substring: searchText) {
+                        filteredSection.addRow(createSearchRowData(for: $0))
+                    }
+                }
+            } else if let widgetType = row.obj(forKey: "widget_type") as? WidgetType,
+                      containsCaseInsensitive(text: widgetType.title, substring: searchText) {
+                filteredSection.addRow(row)
             }
         }
+        
         tableView.reloadData()
+    }
+    
+    private func containsCaseInsensitive(text: String, substring: String) -> Bool {
+        text.range(of: substring, options: .caseInsensitive) != nil
+    }
+    
+    private func createSearchRowData(for widget: WidgetType) -> OATableRowData {
+        let newRow = OATableRowData()
+        newRow.cellType = OAValueTableViewCell.getIdentifier()
+        newRow.setObj(widget, forKey: "widget_type")
+        newRow.title = widget.title
+        newRow.iconName = widget.iconName
+        return newRow
     }
     
     // MARK: - Keyboard Notifications

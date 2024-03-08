@@ -167,8 +167,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (int) toNumberFromString:(NSString *)string;
 + (BOOL) colorRGB:(UIColor *)color1 equalToColorRGB:(UIColor *)color2;
 
-- (UIColor *)lightThemeColor;
-- (UIColor *)darkThemeColor;
 - (UIColor *)currentThemeColor;
 
 @end
@@ -329,6 +327,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
 + (BOOL) isWindowed;
++ (BOOL)isiOSAppOnMac;
 + (BOOL) isIPhone;
 + (BOOL) isIPad;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
@@ -367,7 +366,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (NSString *) getGpxShortPath:(NSString *)fullFilePath;
 
-+ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder;
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddTracksFolder;
++ (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path;
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor;
 

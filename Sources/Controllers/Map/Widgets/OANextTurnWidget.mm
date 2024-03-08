@@ -209,7 +209,7 @@
     [super adjustViewSize];
     self.topTextAnchor.constant = _horisontalMini ? 5 : self.topView.frame.size.height + 5;
     CGRect rect = self.frame;
-    rect.size.height += self.textView.frame.origin.y;
+    rect.size.height += self.textView.frame.origin.y - 5;
     self.frame = rect;
 }
 

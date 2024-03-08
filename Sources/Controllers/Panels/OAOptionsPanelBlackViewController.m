@@ -10,7 +10,6 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAFavoriteListViewController.h"
-#import "OAGPXListViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAHelpViewController.h"

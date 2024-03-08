@@ -202,7 +202,7 @@
 
 - (void)onBottomButtonPressed
 {
-    [self.navigationController pushViewController:[OACloudAccountLoginViewController new] animated:YES];
+    [self.navigationController pushViewController:[[OACloudAccountLoginViewController alloc] initWithScreenType:EOACloudAccountLoginScreenType] animated:YES];
 }
 
 @end

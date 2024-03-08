@@ -118,14 +118,14 @@
     [self.topButton setTitleColor:topButtonTintColor forState:UIControlStateNormal];
     self.topButton.tintColor = topButtonTintColor;
     self.topButton.backgroundColor = [self getButtonBackgroundColor:topButtonColorScheme];
-    self.topButton.enabled = topButtonColorScheme != EOABaseButtonColorSchemeInactive;
+    self.topButton.enabled = topButtonColorScheme != EOABaseButtonColorSchemeInactive && topButtonColorScheme != EOABaseButtonColorSchemeBlank;
 
     EOABaseButtonColorScheme bottomButtonColorScheme = [self getBottomButtonColorScheme];
     UIColor *bottomButtonTintColor = [self getButtonTintColor:bottomButtonColorScheme];
     [self.bottomButton setTitleColor:bottomButtonTintColor forState:UIControlStateNormal];
     self.bottomButton.tintColor = bottomButtonTintColor;
     self.bottomButton.backgroundColor = [self getButtonBackgroundColor:bottomButtonColorScheme];
-    self.bottomButton.enabled = bottomButtonColorScheme != EOABaseButtonColorSchemeInactive;
+    self.bottomButton.enabled = bottomButtonColorScheme != EOABaseButtonColorSchemeInactive && bottomButtonColorScheme != EOABaseButtonColorSchemeBlank;
 
     NSString *topButtonTitle = [self getTopButtonTitle];
     NSAttributedString *topButtonTitleAttr = [self getTopButtonTitleAttr];
@@ -194,12 +194,15 @@
 
 - (void)setupBottomFonts
 {
-    UILayoutConstraintAxis axisMode = [self getBottomAxisMode];
-    UIFont *buttonFont = axisMode == UILayoutConstraintAxisVertical
-        ? [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.]
-        : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    self.topButton.titleLabel.font = buttonFont;
-    self.bottomButton.titleLabel.font = buttonFont;
+    self.topButton.titleLabel.font = [self getButtonFont:[self getTopButtonColorScheme]];
+    self.bottomButton.titleLabel.font = [self getButtonFont:[self getBottomButtonColorScheme]];
+}
+
+- (UIFont *)getButtonFont:(EOABaseButtonColorScheme)scheme
+{
+    return scheme == EOABaseButtonColorSchemeBlank || [self getBottomAxisMode] != UILayoutConstraintAxisVertical
+            ? [UIFont preferredFontForTextStyle:UIFontTextStyleBody]
+            : [UIFont scaledSystemFontOfSize:15. weight:UIFontWeightSemibold maximumSize:20.];
 }
 
 - (UIColor *)getBottomBackgroundColor
@@ -221,6 +224,7 @@
 {
     switch (scheme)
     {
+        case EOABaseButtonColorSchemeBlank:
         case EOABaseButtonColorSchemeInactive:
             return [UIColor colorNamed:ACColorNameTextColorSecondary];
         case EOABaseButtonColorSchemeGrayAttn:
@@ -240,6 +244,8 @@
 
     switch (scheme)
     {
+        case EOABaseButtonColorSchemeBlank:
+            return UIColor.clearColor;
         case EOABaseButtonColorSchemePurple:
             return [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
         case EOABaseButtonColorSchemeRed:

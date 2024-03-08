@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     EOAItemStatusFinishedType
 };
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OAOnDeleteAccountListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tblView;
 
@@ -137,7 +137,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
+    [_backupHelper.backupListeners addDeleteAccountListener:self];
+
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
@@ -162,6 +164,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
     _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    [_backupHelper.backupListeners removeDeleteAccountListener:self];
 }
 
 - (void)dealloc
@@ -865,6 +874,21 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [_backupHelper addPrepareBackupListener:self];
             [_backupHelper prepareBackup];
         }
+    });
+}
+
+#pragma mark - OAOnDeleteAccountListener
+
+- (void)onDeleteAccount:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!error)
+            [_backupHelper logout];
+
+        NSString *text = error != nil ? [error getLocalizedError] : message;
+        if (text && text.length > 0)
+            [OAUtilities showToast:text details:nil duration:4 inView:self.view];
+        [self dismissViewController];
     });
 }
 

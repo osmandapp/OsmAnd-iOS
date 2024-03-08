@@ -218,7 +218,7 @@
 }
 
 - (BOOL)isDefaultElevationAngle {
-    return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle == kMapModePositionTrackingDefaultElevationAngle;
+    return ceil([OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle) == kMapModePositionTrackingDefaultElevationAngle;
 }
 
 - (void)startTilting:(float)elevationAngle
@@ -250,7 +250,7 @@
     float tiltAngle = kMapModePositionTrackingDefaultElevationAngle;
     if (defaultElevationAngle)
     {
-        float elevationAngle = [[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle];
+        float elevationAngle = ceil([[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle]);
         tiltAngle = elevationAngle != tiltAngle ? elevationAngle : kMapModeFollowDefaultElevationAngle;
     }
     [self startTilting:tiltAngle];

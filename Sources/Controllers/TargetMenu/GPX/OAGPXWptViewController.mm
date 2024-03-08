@@ -56,6 +56,8 @@
         _openingHoursInfo = OpeningHoursParser::getInfo(openingHoursExt && openingHoursExt.value ? openingHoursExt.value.UTF8String : "");
         [self acquireOriginObject];
         self.topToolbarType = ETopToolbarTypeMiddleFixed;
+        self.leftControlButton = [[OATargetMenuControlButton alloc] init];
+        self.leftControlButton.title = OALocalizedString(@"shared_string_open_track");
     }
     return self;
 }
@@ -195,10 +197,13 @@
 - (NSAttributedString *) getAttributedTypeStr:(NSString *)group
 {
     NSAttributedString *attributedTypeStr = [self getAttributedTypeStr:group color:[self getItemColor]];
-    NSString *address = [@"\n\n" stringByAppendingString:[self.wpt.point getAddress]];
-    NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] init];
-    [mutAttributedTypeStr appendAttributedString:attributedTypeStr];
-    [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    NSMutableAttributedString *mutAttributedTypeStr = [[NSMutableAttributedString alloc] initWithAttributedString:attributedTypeStr];
+    NSString *rawAddress = [self.wpt.point getAddress];
+    if (rawAddress && rawAddress.length > 0) {
+        NSString *address = [@"\n" stringByAppendingString:rawAddress];
+        [mutAttributedTypeStr appendAttributedString:[[NSAttributedString alloc] initWithString:address]];
+    }
+    
     [mutAttributedTypeStr addAttributes:@{ NSFontAttributeName : [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline],
                                            NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorSecondary] }
                                   range:NSMakeRange(0, mutAttributedTypeStr.length)];
@@ -247,6 +252,15 @@
         return [NSDate dateWithTimeIntervalSince1970:timestamp];
     else
         return nil;
+}
+
+- (void) leftControlButtonPressed
+{
+    OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[OAUtilities getGpxShortPath:self.wpt.docPath]];
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    [mapPanel targetHideMenu:0 backButtonClicked:YES onComplete:^{
+        [mapPanel openTargetViewWithGPX:gpx selectedTab:EOATrackMenuHudOverviewTab selectedStatisticsTab:EOATrackMenuHudSegmentsStatisticsOverviewTab openedFromMap:YES];
+    }];
 }
 
 @end

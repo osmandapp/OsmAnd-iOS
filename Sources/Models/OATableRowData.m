@@ -86,6 +86,16 @@
     _data[kCellIconNameKey] = iconName;
 }
 
+- (UIImage *)icon
+{
+    return _data[kCellIconKey];
+}
+
+- (void)setIcon:(UIImage *)icon
+{
+    _data[kCellIconKey] = icon;
+}
+
 - (NSString *)secondaryIconName
 {
     return _data[kCellSecondaryIconName];

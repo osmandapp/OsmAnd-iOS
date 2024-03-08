@@ -99,6 +99,7 @@ struct CLLocationCoordinate2D;
 - (BOOL) resumeGpuWorker;
 - (void) invalidateFrame;
 - (void) setSymbolsOpacity:(float)opacityFactor;
+- (void) setDateTime:(int64_t)dateTime;
 - (void) setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration;
 
 @property (nonatomic) CGFloat displayDensityFactor;

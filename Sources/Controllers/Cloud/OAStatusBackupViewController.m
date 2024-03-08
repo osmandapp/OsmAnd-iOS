@@ -217,7 +217,7 @@
     }
     else
     {
-        OAExportSettingsType *type = [OAExportSettingsType getExportSettingsTypeForItem:item];
+        OAExportSettingsType *type = [OAExportSettingsType findBySettingsItem:item];
         if (type != nil)
             [rowData setObj:type.icon forKey:@"icon"];
     }

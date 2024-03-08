@@ -317,7 +317,7 @@
                 float zoom = 0;
                 if ([_settings.autoZoomMap get])
                 {
-                    if ([_settings useV1AutoZoom])
+                    if ([_settings.useV1AutoZoom get])
                     {
                         zoom = [_autoZoomBySpeedHelper calculateAutoZoomBySpeedV1:newLocation.speed mapView:_mapView];
                     }

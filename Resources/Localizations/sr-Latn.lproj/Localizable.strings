@@ -1775,7 +1775,7 @@
 "poi_filter_by_name" = "Pretraga po imenu";
 "subcategories" = "Potkategorije";
 "shared_string_select_all" = "Odaberi sve";
-"create_custom_poi" = "Odabir TOI kategorije za pretragu";
+"create_custom_poi" = "TOI kategorije za pretragu";
 "selected_categories" = "Izabrane kategorije";
 "new_filter_desc" = "Molimo, upiši naziv za novi filter, koji će biti dodan u oznaku \"Kategorija\".";
 "rearrange_categories" = "Preuredi kategorije";
@@ -2219,7 +2219,7 @@
 "app_mode_utv" = "Rame uz rame";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
-"travel_routes" = "Rute putovanja";
+"travel_routes" = "Turističke rute";
 "walking_route_osmc_description" = "Boji rute po njihovim pojedinačnim mesnim bojama (ukoliko je prisutno na mapama OpenStreetMap) i vrsti (međunarodne, oblastne, mesne).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Oboji puteve prema njihovim vrstama (međunarodni, oblastni, mesni).";
 "rendering_value_walkingRoutesScopeOSMC_description" = "Oboj po vrsti.";

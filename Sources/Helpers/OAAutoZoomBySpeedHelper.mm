@@ -262,7 +262,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     float showDistanceToDrive = speed * kShowDrivingSecondsV2 / [OAAutoZoomMap getCoefficient:autoZoomScale];
     if (nextTurn)
     {
-        //TODO: check this comparation
         if (_nextTurnInFocus && _nextTurnInFocus == nextTurn.directionInfo)
         {
             showDistanceToDrive = nextTurn.distanceTo;

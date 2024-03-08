@@ -761,7 +761,7 @@
     int right = windowSize.x;
     int bottom = windowSize.y;
     
-    //TODO: implement offset calculation if needed
+    //TODO: implement here code for splitting screen if needed. For now just return original screen size
     
     return CGRectMake(left, top, right, bottom);
 }

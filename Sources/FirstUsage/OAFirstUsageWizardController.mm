@@ -352,7 +352,7 @@ typedef enum
 - (IBAction)userLocationButtonPress:(id)sender
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"Location") message:@"" preferredStyle:OAUtilities.isIPad?UIAlertControllerStyleAlert:UIAlertControllerStyleActionSheet];
-    alert.accessibilityLabel = OALocalizedString(@"Location");
+    alert.accessibilityLabel = OALocalizedString(@"shared_string_location");
 
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"search_another_country") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self selectMapPress:nil];
@@ -375,7 +375,7 @@ typedef enum
 
 - (void)closeWizard
 {
-    [self.navigationController popToRootViewControllerAnimated:NO];
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 - (void) startWizard

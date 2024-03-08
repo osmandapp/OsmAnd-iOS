@@ -83,8 +83,8 @@
 - (void)configureShadowForWidget:(UIView *)view top:(BOOL)top
 {
     auto containerView = [[ShadowTransporentTouchesPassView alloc] init];
-    containerView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.35].CGColor;
-    containerView.layer.shadowOffset = CGSizeMake(0, 1);
+    containerView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.45].CGColor;
+    containerView.layer.shadowOffset = top ? CGSizeMake(0, 2) : CGSizeMake(0, -2) ;
     containerView.layer.shadowOpacity = 1;
     containerView.layer.shadowRadius = 4;
     containerView.layer.masksToBounds = false;
@@ -102,9 +102,9 @@
     ]];
     
     if (top)
-        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:5].active = YES;
+        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:0].active = YES;
     else
-        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-5].active = YES;
+        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:0].active = YES;
 }
 
 - (void)configureShadowForWidgets:(NSArray<UIView *> *)views
@@ -715,11 +715,11 @@
     ts.dividerColor = dividerColor;
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
-    ts.textShadowColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
+    ts.textOutlineColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
     if (!transparent)
-        ts.textShadowRadius = 0;
+        ts.textOutlineWidth = 0;
     else
-        ts.textShadowRadius = 4.0;
+        ts.textOutlineWidth = 4.0;
     
     ts.leftColor = transparent
     ? [UIColor clearColor]

@@ -2418,7 +2418,7 @@
 
 "searching" = "Searching…";
 "search_location" = "Searching for location…";
-"search_map" = "Searching maps…";
+"search_map" = "Searching maps";
 "search_another_country" = "Select another region";
 
 "skip_map_downloading" = "Skip downloading maps";
@@ -3648,4 +3648,8 @@
 "osmand_cloud_deletion_secondary_devices_warning" = "Secondary devices will be logged off from OsmAnd Cloud and lose access to paid features.";
 "osmand_cloud_deletion_subscriptions_warning" = "This will not cancel your OsmAnd Pro subscription.";
 "osmand_cloud_deleting_account_descr" = "In few moments all your data and account will be deleted from OsmAnd Cloud.\n\nAll data on the device remain untouched.";
+
 "osmand_cloud_deleted_account_descr" = "Account and all data was deleted from OsmAnd Cloud.";
+
+"skip_download" = "Skip download";
+"determine_location" = "Allow us to determine your location";

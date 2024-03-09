@@ -1753,7 +1753,7 @@
 "try_again" = "Pokušaj ponovo";
 "searching" = "Pretraživanje…";
 "search_location" = "Lociranje…";
-"search_map" = "Pretražujem mape…";
+"search_map" = "Pretražujem mape";
 "search_another_country" = "Odaberi drugi region";
 "skip_map_downloading" = "Preskoči preuzimanje mapa";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

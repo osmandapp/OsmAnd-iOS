@@ -414,7 +414,7 @@
 "no_inet_connection_desc_map" = "És necessari per baixar mapes.";
 "try_again" = "Torneu-ho a provar";
 "search_location" = "Cercant la localització…";
-"search_map" = "Cercant mapes…";
+"search_map" = "Cercant mapes";
 "search_another_country" = "Selecciona un altre país";
 "skip_map_downloading" = "Omet els mapes en procés de baixada";
 "skip_map_downloading_desc_ios" = "No teniu cap mapa instal·lat per consultar sense internet. En podeu triar un de la llista o baixar-ne més tard via Menú - Gestiona fitxers de mapes";

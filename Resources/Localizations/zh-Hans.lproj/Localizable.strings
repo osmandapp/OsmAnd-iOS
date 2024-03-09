@@ -425,7 +425,7 @@
 "no_inet_connection_desc_map" = "需要下载地图。";
 "try_again" = "再试一次";
 "search_location" = "正在搜索位置…";
-"search_map" = "正在搜索地图…";
+"search_map" = "正在搜索地图";
 "search_another_country" = "选择另一区域";
 "skip_map_downloading" = "跳过下载地图";
 "skip_map_downloading_desc_ios" = "";

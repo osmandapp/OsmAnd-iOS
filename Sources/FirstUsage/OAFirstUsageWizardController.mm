@@ -18,6 +18,11 @@
 #import "SafariServices/SafariServices.h"
 #import "GeneratedAssetSymbols.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
+#import "OACloudIntroductionViewController.h"
+#import "OACloudBackupViewController.h"
+#import "GeneratedAssetSymbols.h"
+#import "OAUtilities.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -35,11 +40,11 @@ typedef enum
     MAP_DOWNLOAD,
 } WizardType;
 
-
-@interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate>
+@interface OAFirstUsageWizardController () <UITextViewDelegate, SFSafariViewControllerDelegate, UIDocumentPickerDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *lbTitle;
 @property (weak, nonatomic) IBOutlet UIButton *btnSkip;
+@property (weak, nonatomic) IBOutlet UIButton *navBarMenuButton;
 @property (weak, nonatomic) IBOutlet UILabel *lbDescription;
 @property (weak, nonatomic) IBOutlet UIScrollView *scrollView;
 @property (weak, nonatomic) IBOutlet UIView *contentView;
@@ -53,7 +58,6 @@ typedef enum
 
 @property (strong, nonatomic) IBOutlet UIView *viewNoInet;
 @property (weak, nonatomic) IBOutlet UILabel *lbNoInet;
-@property (weak, nonatomic) IBOutlet UILabel *lbNoInteDesc;
 @property (weak, nonatomic) IBOutlet UIButton *btnTryAgain;
 
 @property (strong, nonatomic) IBOutlet UIView *viewSearchingLocation;
@@ -68,20 +72,26 @@ typedef enum
 @property (weak, nonatomic) IBOutlet UILabel *lbDownloadMapName;
 @property (weak, nonatomic) IBOutlet UILabel *lbDownloadMapSize;
 @property (weak, nonatomic) IBOutlet UIButton *btnDownload;
-@property (weak, nonatomic) IBOutlet UIButton *btnSelectMap;
 
 @property (strong, nonatomic) IBOutlet UIView *viewProgress;
 
 @property (weak, nonatomic) IBOutlet UIImageView *imgMapIcon1;
 @property (weak, nonatomic) IBOutlet UILabel *lbMapName1;
-@property (weak, nonatomic) IBOutlet UILabel *lbMapSize1;
-@property (weak, nonatomic) IBOutlet UIButton *btnRestart1;
 @property (weak, nonatomic) IBOutlet UIProgressView *progress1;
-@property (weak, nonatomic) IBOutlet UIButton *btnCancel1;
 @property (weak, nonatomic) IBOutlet UIView *viewDivider;
 
 @property (weak, nonatomic) IBOutlet UIButton *btnGoToMap;
 @property (weak, nonatomic) IBOutlet UITextView *bottomTextView;
+
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoHeightConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoWidthConstraint;
+@property (weak, nonatomic) IBOutlet UIStackView *logoTitleStackView;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *logoTitleStackViewTopConstraint;
+@property (weak, nonatomic) IBOutlet UIButton *userLocationButton;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *cardViewTopConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *privacyPolicyLeadingConstraint;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *descriptionLeadingConstraint;
+@property (strong, nonatomic) NSByteCountFormatter *byteCountFormatter;
 
 @end
 
@@ -93,7 +103,6 @@ typedef enum
     OAAutoObserverProxy* _locationServicesUpdateFirstTimeObserver;
     OAAutoObserverProxy* _repositoryUpdatedObserver;
 
-    //WorldRegion localDownloadRegion;
     OARepositoryResourceItem *_localMapIndexItem;
     NSMutableArray<OARepositoryResourceItem *> *_indexItems;
     BOOL _mapDownloadCancelled;
@@ -103,6 +112,7 @@ typedef enum
     
     WizardType _wizardType;
 }
+
 
 - (void)viewDidLoad
 {
@@ -125,7 +135,7 @@ typedef enum
     _lbTitle.text = OALocalizedString(@"shared_string_download_map");
     _lbDescription.text = OALocalizedString(@"first_usage_wizard_desc");
     _lbDescription.font = [UIFont scaledSystemFontOfSize:14.];
-    [_btnSkip setTitle:OALocalizedString(@"shared_string_skip") forState:UIControlStateNormal];
+    [_btnSkip setTitle:OALocalizedString(@"skip_download") forState:UIControlStateNormal];
     _btnSkip.titleLabel.font = [UIFont scaledSystemFontOfSize:14.];
     
     // Init no location view
@@ -134,7 +144,6 @@ typedef enum
 
     // Init no inet view
     _lbNoInet.text = OALocalizedString(@"no_inet_connection");
-    _lbNoInteDesc.text = OALocalizedString(@"no_inet_connection_desc_map");
     [_btnTryAgain setTitle:OALocalizedString(@"try_again") forState:UIControlStateNormal];
 
     // Init searching location view
@@ -145,13 +154,10 @@ typedef enum
     _lbSearchingMap.text = OALocalizedString(@"search_map");
     [_btnSearchingMap setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
 
-    // Init download map view
-    [self updateDownloadButtonLayer];
+    // Init download map view;
     [_btnDownload setTitle:OALocalizedString(@"shared_string_download") forState:UIControlStateNormal];
-    [_btnSelectMap setTitle:OALocalizedString(@"search_another_country") forState:UIControlStateNormal];
 
     // Init progress view
-    _btnRestart1.hidden = YES;
     [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
     
     _bottomTextView.textContainerInset = UIEdgeInsetsZero;
@@ -188,7 +194,67 @@ typedef enum
     _bottomTextView.linkTextAttributes = linkAttributes;
     _bottomTextView.attributedText = titleStr;
     
+    self.navBarMenuButton.showsMenuAsPrimaryAction = YES;
+    self.navBarMenuButton.menu = [self rightNavButtonMenuItems];
+    
     [self startWizard];
+    [self configureToolbar];
+    [self configureUI];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    [self.navigationController setNavigationBarHidden:YES animated:NO];
+}
+
+- (void)configureUI
+{
+    BOOL isLandscape = OAUtilities.isLandscape;
+    [self.navigationController setToolbarHidden:isLandscape];
+    [self.btnSkip setHidden:!isLandscape];
+    
+    self.logoHeightConstraint.constant = isLandscape ? 48 : 60;
+    self.logoWidthConstraint.constant = self.logoHeightConstraint.constant;
+    _lbTitle.font = [UIFont scaledBoldSystemFontOfSize:isLandscape ? 28 : 34];
+    if (isLandscape)
+    {
+        self.privacyPolicyLeadingConstraint.constant = 40;
+        self.logoTitleStackView.axis = UILayoutConstraintAxisHorizontal;
+        self.logoTitleStackView.alignment = UIStackViewAlignmentCenter;
+        self.logoTitleStackViewTopConstraint.constant = 16;
+        self.cardViewTopConstraint.constant = 0;
+    }
+    else
+    {
+        self.privacyPolicyLeadingConstraint.constant = 20;
+        self.cardViewTopConstraint.constant = 20;
+        self.logoTitleStackViewTopConstraint.constant = 0;
+        self.logoTitleStackView.axis = UILayoutConstraintAxisVertical;
+        self.logoTitleStackView.alignment = UIStackViewAlignmentLeading;
+    }
+    self.descriptionLeadingConstraint.constant = self.privacyPolicyLeadingConstraint.constant;
+}
+
+- (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
+{
+    [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
+        [self configureUI];
+    } completion:nil];
+}
+
+- (void)configureToolbar
+{
+    NSMutableArray *items = [NSMutableArray new];
+
+    UIBarButtonItem *flexibleSpaceItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:nil];
+    [items addObject:flexibleSpaceItem];
+    
+    UIBarButtonItem *skipDownloadButtonItem = [[UIBarButtonItem alloc] initWithTitle:OALocalizedString(@"skip_download") style:UIBarButtonItemStylePlain target:self action:@selector(closeWizard)];
+    [skipDownloadButtonItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys: [UIColor colorNamed:ACColorNameTextColorActive], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
+    [items addObject:skipDownloadButtonItem];
+
+    [self setToolbarItems:items];
 }
 
 # pragma mark - UITextViewDelegate
@@ -210,12 +276,6 @@ typedef enum
 - (void)safariViewControllerDidFinish:(SFSafariViewController *)controller
 {
     [controller dismissViewControllerAnimated:YES completion:nil];
-}
-
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 - (void)dealloc
@@ -245,48 +305,75 @@ typedef enum
     }
 }
 
-- (void)updateDownloadButtonLayer
-{
-    UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:_btnDownload.bounds byRoundingCorners:(UIRectCornerBottomLeft | UIRectCornerBottomRight) cornerRadii:CGSizeMake(4.0, 4.0)];
-    CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
-    maskLayer.frame = self.view.bounds;
-    maskLayer.path  = maskPath.CGPath;
-    _btnDownload.layer.mask = maskLayer;
-}
-
 - (void)showCard:(UIView *)cardView
 {
     [self clearSubViews];
     [_cardView addSubview:cardView];
 }
 
--(void)resizeToFitSubviews:(UIView *)source
+- (void)resizeToFitSubviews:(UIView *)source
 {
-    float h = 0;
-    for (UIView *v in source.subviews)
-    {
-        float fh = v.frame.origin.y + v.frame.size.height;
-        h = MAX(fh, h);
-    }
-    source.frame = CGRectMake(source.frame.origin.x, source.frame.origin.y, _cardView.frame.size.width, h);
-    if (source == _viewDownloadMap)
-        [self updateDownloadButtonLayer];
+    source.frame = CGRectMake(source.frame.origin.x, source.frame.origin.y, _cardView.frame.size.width, 130);
 }
 
-- (IBAction)skipPress:(id)sender
+- (UIMenu *)rightNavButtonMenuItems {
+    __weak OAFirstUsageWizardController *weakSelf = self;
+    UIAction *restoreCloudAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_osmand_cloud")
+                                                       image:[UIImage imageNamed:@"ic_custom_restore"]
+                                                  identifier:nil
+                                                     handler:^(__kindof UIAction * _Nonnull action) {
+        UIViewController *controller = OABackupHelper.sharedInstance.isRegistered
+        ? [OACloudBackupViewController new]
+        : [OACloudIntroductionViewController new];
+        [weakSelf.navigationController pushViewController:controller animated:YES];
+    }];
+    UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_file")
+                                                      image:[UIImage imageNamed:@"ic_custom_import_outlined"]
+                                                 identifier:nil
+                                                    handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf onRestoreFromFilePressed];
+    }];
+    
+    return [UIMenu menuWithTitle:@""
+                           image:nil
+                      identifier:nil
+                         options:UIMenuOptionsDisplayInline children:@[restoreCloudAction, restoreFileAction]];;
+}
+
+- (void)onRestoreFromFilePressed
 {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"skip_map_downloading") message:OALocalizedString(@"skip_map_downloading_desc_ios") preferredStyle:UIAlertControllerStyleAlert];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_skip") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-        [self closeWizard];
-    }]];
-    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_select") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+    NSArray<UTType *> *contentTypes = @[[UTType importedTypeWithIdentifier:@"net.osmand.osf" conformingToType:UTTypeArchive]];
+    UIDocumentPickerViewController *documentPickerVC = [[UIDocumentPickerViewController alloc] initForOpeningContentTypes:contentTypes asCopy:YES];
+    documentPickerVC.allowsMultipleSelection = NO;
+    documentPickerVC.delegate = self;
+    [self presentViewController:documentPickerVC animated:YES completion:nil];
+}
+
+- (IBAction)userLocationButtonPress:(id)sender
+{
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"Location") message:@"" preferredStyle:OAUtilities.isIPad?UIAlertControllerStyleAlert:UIAlertControllerStyleActionSheet];
+    alert.accessibilityLabel = OALocalizedString(@"shared_string_location");
+
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"search_another_country") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [self selectMapPress:nil];
     }]];
+    
+    [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"determine_location") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        if (_app.locationServices.denied)
+        {
+            [OALocationServices showDeniedAlert];
+            return;
+        }
+      
+        if (!_app.locationServices.allowed)
+            [_app.locationServices start];
+    }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
+    
     [self presentViewController:alert animated:YES completion:nil];
 }
 
-- (void) closeWizard
+- (void)closeWizard
 {
     [self.navigationController popToRootViewControllerAnimated:YES];
 }
@@ -374,7 +461,8 @@ typedef enum
             if (indexItem)
             {
                 _lbDownloadMapName.text = indexItem.title;
-                _lbDownloadMapSize.text = [NSByteCountFormatter stringFromByteCount:indexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
+                
+                [_btnDownload setTitle:[OALocalizedString(@"shared_string_download") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:indexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]] forState:UIControlStateNormal];
             }
             
             [self showCard:_viewDownloadMap];
@@ -390,22 +478,19 @@ typedef enum
             {
                 OARepositoryResourceItem *item = _indexItems[0];
                 _lbMapName1.text = item.title;
-                _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
+                
+                [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile]] forState:UIControlStateNormal];
+
                 if (_mapDownloadCancelled)
                 {
                     _progress1.hidden = YES;
-                    _btnCancel1.hidden = YES;
-                    _btnRestart1.hidden = _mapDownloadCancelled ? NO : YES;
                 }
             }
             else
             {
                 _imgMapIcon1.hidden = YES;
                 _lbMapName1.hidden = YES;
-                _lbMapSize1.hidden = YES;
                 _progress1.hidden = YES;
-                _btnCancel1.hidden = YES;
-                _btnRestart1.hidden = YES;
                 _viewDivider.hidden = YES;
             }
             
@@ -692,44 +777,6 @@ typedef enum
     [self.navigationController pushViewController:resourcesViewController animated:YES];
 }
 
-- (IBAction)restart1Press:(id)sender
-{
-    if (_indexItems.count > 0)
-    {
-        OARepositoryResourceItem *item = _indexItems[0];
-        if (item && [_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]].count == 0 && _mapDownloadCancelled)
-        {
-            _progress1.hidden = NO;
-            _btnCancel1.hidden = NO;
-            _btnRestart1.hidden = YES;
-            [self startDownload:item];
-            _mapDownloadCancelled = NO;
-            _progress1DivTopMarginConstraint.constant = PROGRESS_ON_MARGIN;
-            [self.view setNeedsLayout];
-        }
-    }
-}
-
-- (IBAction)cancel1Press:(id)sender
-{
-    if (_indexItems.count > 0)
-    {
-        OARepositoryResourceItem *item = _indexItems[0];
-        id<OADownloadTask> task = [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:item.resourceId.toNSString()]] firstObject];
-        if (task)
-            [task stop];
-
-        _mapDownloadCancelled = YES;
-        _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:item.sizePkg countStyle:NSByteCountFormatterCountStyleFile];
-        _progress1.hidden = YES;
-        _progress1.progress = 0;
-        _btnCancel1.hidden = YES;
-        _btnRestart1.hidden = NO;
-        _progress1DivTopMarginConstraint.constant = PROGRESS_OFF_MARGIN;
-        [self.view setNeedsLayout];
-    }
-}
-
 - (IBAction)goToMapPress:(id)sender
 {
     if (_location)
@@ -780,6 +827,16 @@ typedef enum
     }
 }
 
+- (NSByteCountFormatter *)byteCountFormatter
+{
+    if (!_byteCountFormatter) {
+        _byteCountFormatter = [NSByteCountFormatter new];
+        _byteCountFormatter.includesUnit = NO;
+        _byteCountFormatter.countStyle = NSByteCountFormatterCountStyleFile;
+    }
+    return _byteCountFormatter;
+}
+
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
@@ -792,19 +849,14 @@ typedef enum
         task.silentInstall = YES;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        NSByteCountFormatter *f = [[NSByteCountFormatter alloc] init];
-        f.includesUnit = NO;
-        f.countStyle = NSByteCountFormatterCountStyleFile;
-
         if (_indexItems.count > 0 && [_indexItems[0].resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
         {
             NSMutableString *progressStr = [NSMutableString string];
-            [progressStr appendString:[f stringFromByteCount:(_indexItems[0].size * [value floatValue])]];
-            [progressStr appendString:@" "];
-            [progressStr appendString:OALocalizedString(@"shared_string_of")];
-            [progressStr appendString:@" "];
-            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:_indexItems[0].size countStyle:NSByteCountFormatterCountStyleFile]];
-            _lbMapSize1.text = progressStr;
+            uint64_t size = _indexItems[0].size;
+            [progressStr appendString:[self.byteCountFormatter stringFromByteCount:(size * [value floatValue])]];
+            [progressStr appendString:@"/"];
+            [progressStr appendString:[NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile]];
+            [_btnGoToMap setTitle:[OALocalizedString(@"downloading") stringByAppendingFormat:@" %@", progressStr] forState:UIControlStateNormal];
             [_progress1 setProgress:[value floatValue]];
         }
     });
@@ -822,7 +874,7 @@ typedef enum
         
         if (_indexItems.count > 0)
         {
-            _lbMapSize1.text = [NSByteCountFormatter stringFromByteCount:_indexItems[0].size countStyle:NSByteCountFormatterCountStyleFile];
+            [_btnGoToMap setTitle:OALocalizedString(@"show_region_on_map_go") forState:UIControlStateNormal];
         }
 
         if (task.progressCompleted < 1.0)
@@ -838,14 +890,33 @@ typedef enum
             if (_indexItems.count > 0 && [_indexItems[0].resourceId.toNSString() isEqualToString:[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""]])
             {
                 _progress1.hidden = YES;
-                _btnCancel1.hidden = YES;
-                _btnRestart1.hidden = YES;
                 _progress1DivTopMarginConstraint.constant = PROGRESS_OFF_MARGIN;
                 [self.view setNeedsLayout];
             }
         }
         
     });
+}
+
+#pragma mark - UIDocumentPickerDelegate
+
+- (void)documentPicker:(UIDocumentPickerViewController *)controller
+didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
+{
+    if (urls.count == 0)
+        return;
+    
+    NSString *path = urls[0].path;
+    NSString *extension = [[path pathExtension] lowercaseString];
+    if ([extension caseInsensitiveCompare:@"osf"] == NSOrderedSame)
+        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:1];
+}
+
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return self.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark
+    ? UIStatusBarStyleLightContent
+    : UIStatusBarStyleDarkContent;
 }
 
 @end

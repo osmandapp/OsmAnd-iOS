@@ -1753,7 +1753,7 @@
 "try_again" = "Try again";
 "searching" = "Searching…";
 "search_location" = "இடம் தேடுகிறது …";
-"search_map" = "வரைபடங்களை தேடுகிறது …";
+"search_map" = "வரைபடங்களை தேடுகிறது";
 "search_another_country" = "மற்றொரு பகுதியைத் தேர்ந்தெடுக்கவும்";
 "skip_map_downloading" = "வரைபடங்களைப் பதிவிறக்குக";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

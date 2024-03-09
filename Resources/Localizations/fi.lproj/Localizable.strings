@@ -1540,7 +1540,7 @@
 "try_again" = "Yritä uudelleen";
 "searching" = "Etsitään…";
 "search_location" = "Etsitään sijaintia…";
-"search_map" = "Etsitään karttoja…";
+"search_map" = "Etsitään karttoja";
 "search_another_country" = "Valitse toinen alue";
 "skip_map_downloading" = "Ohita karttojen lataus";
 "skip_map_downloading_desc_ios" = "Sinulla ei ole yhtään offline-karttaa asennettuna. Voit valita kartan luettelosta tai ladata kartat myöhemmin valikosta Valikko - Karttatiedostojen hallinta";

@@ -960,7 +960,7 @@
 "menu_my_directions" = "Yol Tariflerim";
 "shared_string_of" = "/";
 "search_my_location" = "Konumumu bul";
-"search_map" = "Haritalar aranıyor…";
+"search_map" = "Haritalar aranıyor";
 "skip_map_downloading_desc_ios" = "Yüklü çevrim dışı haritanız yok. Listeden bir harita seçebilir veya daha sonra şuradan harita indirebilirsiniz: Menü - Harita dosyalarını yönet";
 "items_selected" = "%d seçildi";
 "shared_string_street_intersection" = "Sokak kesişimi";

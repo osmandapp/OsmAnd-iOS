@@ -922,7 +922,7 @@
 "gpx_edit_mode" = "Modo edição";
 "go_to_map" = "Exibir mapa";
 "search_my_location" = "Encontrar a minha posição";
-"search_map" = "Procurando mapas…";
+"search_map" = "Procurando mapas";
 "skip_map_downloading_desc_ios" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do Menu - Mapas e recursos";
 "items_selected" = "%d selecionado";
 "user_password" = "Senha";

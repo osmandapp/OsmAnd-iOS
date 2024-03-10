@@ -430,7 +430,7 @@
 "edit_filter_delete_dialog_title" = "Törli ezt a szűrőt\?";
 "apply_filters" = "Szűrők alkalmazása";
 "filter_poi_hint" = "Szűrés név szerint";
-"search_map" = "Térkép keresése…";
+"search_map" = "Térkép keresése";
 "skip_map_downloading_desc_ios" = "Nincs telepítve offline térképed. Választhatsz egy térképet a listából, vagy letölthetsz térképet később a Menü - Térképek kezelése alól";
 "city_type_suburb" = "Településrész";
 "city_type_hamlet" = "Falucska";

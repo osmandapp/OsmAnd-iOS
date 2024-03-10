@@ -18,7 +18,7 @@
 
 #define VERIFICATION_CODE_EXPIRATION_TIME_MIN (10 * 60)
 
-@interface OACloudAccountVerificationViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener>
+@interface OACloudAccountVerificationViewController () <OAOnRegisterUserListener, OAOnRegisterDeviceListener, OAOnCheckCodeListener>
 
 @end
 
@@ -59,6 +59,7 @@
     [super viewWillAppear:animated];
     [_backupHelper.backupListeners addRegisterUserListener:self];
     [_backupHelper.backupListeners addRegisterDeviceListener:self];
+    [_backupHelper.backupListeners addCheckCodeListener:self];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -66,6 +67,7 @@
     [super viewWillDisappear:animated];
     [_backupHelper.backupListeners removeRegisterUserListener:self];
     [_backupHelper.backupListeners removeRegisterDeviceListener:self];
+    [_backupHelper.backupListeners removeCheckCodeListener:self];
 }
 
 #pragma mark - Data section
@@ -194,7 +196,10 @@
     NSString *token = [self getTextFieldValue];
     if ([OABackupHelper isTokenValid:token])
     {
-        [_backupHelper registerDevice:token];
+        if (_sourceType == EOACloudScreenSourceDeleteAccount)
+            [_backupHelper checkCode:[[OAAppSettings sharedManager].backupUserEmail get] token:token];
+        else
+            [_backupHelper registerDevice:token];
     }
     else
     {
@@ -225,26 +230,15 @@
     return NO;
 }
 
-// MARK: OAOnRegisterUserListener
-
-- (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
-        if (status == STATUS_SUCCESS)
-            [self.tableView reloadData];
-    });
-}
-
-// MARK: OAOnRegisterDeviceListener
-
-- (void)onRegisterDevice:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+- (void)checkStatus:(NSInteger)status message:(NSString *)message error:(OABackupError *)error token:(NSString *)token
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         if (status == STATUS_SUCCESS)
         {
-            OACloudBackupViewController *vc = [[OACloudBackupViewController alloc] initWithSourceType:_sourceType];
-            [self.navigationController pushViewController:vc animated:YES];
+            if (_sourceType == EOACloudScreenSourceDeleteAccount)
+                [self showViewController:[[OADeleteAccountViewController alloc] initWithToken:token]];
+            else
+                [self showViewController:[[OACloudBackupViewController alloc] initWithSourceType:_sourceType]];
             [self.navigationController.transitionCoordinator animateAlongsideTransition:nil completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
                 NSMutableArray<UIViewController *> *viewControllers = [NSMutableArray arrayWithArray:self.navigationController.viewControllers];
                 if (viewControllers.count > 3)
@@ -260,6 +254,31 @@
             [self updateScreen];
         }
     });
+}
+
+// MARK: OAOnRegisterUserListener
+
+- (void)onRegisterUser:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _lastTimeCodeSent = NSDate.date.timeIntervalSince1970;
+        if (status == STATUS_SUCCESS)
+            [self.tableView reloadData];
+    });
+}
+
+// MARK: OAOnRegisterDeviceListener
+
+- (void)onRegisterDevice:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+{
+    [self checkStatus:status message:message error:error token:nil];
+}
+
+// MARK: OAOnCheckCodeListener
+
+- (void)onCheckCode:(NSString *)token status:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+{
+    [self checkStatus:status message:message error:error token:token];
 }
 
 @end

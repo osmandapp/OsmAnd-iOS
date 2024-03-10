@@ -2756,6 +2756,7 @@ typedef enum
     }
 
     [self hideMultiMenuIfNeeded];
+    [self hideTargetPointMenu];
 
     if (_dashboard)
         [self closeDashboard];
@@ -3021,6 +3022,8 @@ typedef enum
             : [doc getAnalysis:0];
         OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
         state.openedFromTracksList = true;
+        state.selectedStatisticsTab = EOATrackMenuHudSegmentsStatisticsOverviewTab;
+        state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
     }
 }

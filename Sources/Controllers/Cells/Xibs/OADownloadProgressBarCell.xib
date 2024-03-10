@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -46,13 +46,17 @@
                     <constraint firstItem="GCB-w4-09b" firstAttribute="leading" secondItem="dtJ-z4-amE" secondAttribute="leadingMargin" id="adn-u5-b43"/>
                     <constraint firstItem="d0B-u1-UVp" firstAttribute="top" secondItem="af4-W9-ki2" secondAttribute="bottom" constant="21" id="cYx-cf-dBh"/>
                     <constraint firstAttribute="bottom" secondItem="d0B-u1-UVp" secondAttribute="bottom" constant="13" id="eTr-Qk-3si"/>
+                    <constraint firstAttribute="bottom" secondItem="af4-W9-ki2" secondAttribute="bottom" priority="999" id="oJb-J5-86u"/>
                     <constraint firstAttribute="bottom" secondItem="GCB-w4-09b" secondAttribute="bottom" constant="13" id="ysG-mb-lI7"/>
                 </constraints>
             </tableViewCellContentView>
             <connections>
                 <outlet property="progressBarView" destination="af4-W9-ki2" id="jsB-Wi-ZE9"/>
+                <outlet property="progressBarViewBottomConstraint" destination="oJb-J5-86u" id="yf9-A7-9EY"/>
                 <outlet property="progressStatusLabel" destination="GCB-w4-09b" id="u3W-fF-Tr9"/>
+                <outlet property="progressStatusLabelTopConstraint" destination="9MR-TL-JRK" id="XOh-Ov-DH2"/>
                 <outlet property="progressValueLabel" destination="d0B-u1-UVp" id="PuO-l8-C4L"/>
+                <outlet property="progressValueLabelTopConstraint" destination="cYx-cf-dBh" id="KWt-5F-WjB"/>
             </connections>
             <point key="canvasLocation" x="189.85507246376812" y="112.5"/>
         </tableViewCell>

@@ -450,12 +450,6 @@
     return CLLocationCoordinate2DMake(prevPoint.position.latitude + dLat, prevPoint.position.longitude + dLon);
 }
 
-+ (OAPOI *)checkAndSearchNearestCity:(OAGPXTrackAnalysis *)analysis
-{
-    OAWptPt *startPoint = analysis ? analysis.locationStart : nil;
-    return startPoint ? [self searchNearestCity:startPoint.position] : nil;
-}
-
 + (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon
 {
     OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
@@ -582,7 +576,7 @@
     NSString *newName = gpx.gpxFileName;
     
     NSString *subfolderPath = OsmAndApp.instance.gpxPath;
-    for (NSString *component in [newFolderName pathComponents])
+    for (NSString *component in [newFolder pathComponents])
     {
         subfolderPath = [subfolderPath stringByAppendingPathComponent:component];
         if (![[NSFileManager defaultManager] fileExistsAtPath:subfolderPath])

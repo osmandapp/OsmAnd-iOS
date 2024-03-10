@@ -16,6 +16,8 @@
 #import "OAUtilities.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGPXUIHelper.h"
+#import "OAPOI.h"
 
 #define kDbName @"gpx.db"
 
@@ -177,7 +179,14 @@
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
     OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
-    
+
+    NSString *nearestCity;
+    if (analysis.locationStart)
+    {
+        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+        nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+    }
+
     OAGPX *gpx = [[OAGPX alloc] init];
     NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
@@ -196,6 +205,7 @@
         gpx.gpxDescription = @"";
     
     gpx.importDate = [NSDate date];
+    gpx.creationDate = [self getCreationDateForGPX:gpx document:document];
     
     gpx.totalDistance = analysis.totalDistance;
     gpx.totalTracks = analysis.totalTracks;
@@ -218,7 +228,8 @@
     gpx.metricEnd = analysis.metricEnd;
     gpx.locationStart = analysis.locationStart;
     gpx.locationEnd = analysis.locationEnd;
-    
+    gpx.nearestCity = nearestCity;
+
     gpx.splitType = [self.class splitTypeByName:document.getSplitType];
     gpx.splitInterval = [document getSplitInterval];
     gpx.color = [document getColor:0];
@@ -300,6 +311,30 @@
     return [[filePath stringByReplacingOccurrencesOfString:pathToDelete withString:@""] stringByDeletingLastPathComponent];
 }
 
+- (NSDate *)getCreationDateForGPX:(OAGPX *)gpx document:(OAGPXDocument *)document
+{
+    NSDate *creationDate = nil;
+    if (gpx.creationDate)
+    {
+        creationDate = gpx.creationDate;
+    }
+    else if (document)
+    {
+        if (document.metadata && document.metadata.time > 0)
+            creationDate = [NSDate dateWithTimeIntervalSince1970:document.metadata.time];
+        else
+            creationDate = [NSDate dateWithTimeIntervalSince1970:[document getLastPointTime]];
+        
+        if ([creationDate timeIntervalSince1970] <= 0)
+            creationDate = gpx.importDate;
+    }
+    
+    if (!creationDate)
+        creationDate = [NSDate date];
+    
+    return creationDate;
+}
+
 -(BOOL)containsGPXItem:(NSString *)filePath
 {
     for (OAGPX *item in gpxList)
@@ -365,6 +400,7 @@
         OAGPX *gpx = [self generateGpxItem:gpxData];
 
         // Make compatible with old database data
+        gpx.creationDate = [self getCreationDateForGPX:gpx document:nil];
         NSString *filePath = [gpx.gpxFilePath hasPrefix:gpxFolderPath] ? gpx.gpxFilePath : [gpxFolderPath stringByAppendingPathComponent:gpx.gpxFilePath];
         if (!gpx.gpxFilePath)
             gpx.gpxFilePath = gpx.gpxFileName;
@@ -456,6 +492,7 @@
     [d setObject:gpx.gpxTitle forKey:@"gpxTitle"];
     [d setObject:gpx.gpxDescription forKey:@"gpxDescription"];
     [d setObject:gpx.importDate forKey:@"importDate"];
+    [d setObject:gpx.creationDate forKey:@"creationDate"];
 
     [d setObject:@((int) gpx.color) forKey:@"color"];
 
@@ -525,6 +562,8 @@
         [wpt setObject:@(gpx.locationEnd.speed) forKey:@"speed"];
         [d setObject:wpt forKey:@"locationEnd"];
     }
+    if (gpx.nearestCity)
+    	[d setObject:gpx.nearestCity forKey:@"nearestCity"];
 
     return d;
 }
@@ -555,6 +594,8 @@
             gpx.gpxDescription = value;
         } else if ([key isEqualToString:@"importDate"]) {
             gpx.importDate = value;
+        } else if ([key isEqualToString:@"creationDate"]) {
+            gpx.creationDate = value;
         } else if ([key isEqualToString:@"totalDistance"]) {
             gpx.totalDistance = [value floatValue];
         } else if ([key isEqualToString:@"totalTracks"]) {
@@ -641,6 +682,10 @@
         else if ([key isEqualToString:@"hiddenGroups"])
         {
             gpx.hiddenGroups = [NSSet setWithArray:value];
+        }
+        else if ([key isEqualToString:@"nearestCity"])
+        {
+            gpx.nearestCity = value;
         }
     }
     if (!gpx.hiddenGroups)

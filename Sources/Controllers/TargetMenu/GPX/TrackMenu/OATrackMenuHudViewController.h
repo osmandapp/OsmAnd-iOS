@@ -76,6 +76,7 @@
 - (void)openNavigation;
 - (void)openDescription;
 - (void)openDescriptionEditor;
+- (void)openDescriptionReadOnly:(NSString *)description;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;

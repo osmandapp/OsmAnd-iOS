@@ -385,7 +385,6 @@
 - (OAGPXDocument *) generateGpx:(NSArray<OADestination *> *)markers completeBackup:(BOOL)completeBackup
 {
     OAGPXMutableDocument *doc = [[OAGPXMutableDocument alloc] init];
-    [doc setVersion:[NSString stringWithFormat:@"%@ %@", @"OsmAnd", OAAppVersionDependentConstants.getVersion]];
     for (OADestination *marker in markers)
     {
         OAWptPt *wpt = [[OAWptPt alloc] init];

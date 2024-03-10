@@ -1086,7 +1086,7 @@
 "no_inet_connection_desc_map" = "マップのダウンロードが必要です。";
 "try_again" = "再試行";
 "search_location" = "場所を検索しています…";
-"search_map" = "マップを検索しています…";
+"search_map" = "マップを検索しています";
 "search_another_country" = "別の地域を選択";
 "skip_map_downloading" = "マップのダウンロードをスキップ";
 "skip_map_downloading_desc_ios" = "オフラインマップがインストールされていません。リストからマップを選択するか、『メニュー』＞『マップファイル管理』から必要なマップをダウンロードしてください";

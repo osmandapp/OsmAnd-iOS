@@ -975,7 +975,7 @@
 "download_wikipedia_maps" = "Vikipeedia";
 "product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Sirvi Vikipeediat võrguühenduseta. Artiklid on jaotatud riikide ja piirkondade kaupa ning saadaval kõigis keeltes.";
-"srtm_plugin_name" = "Kõrgusjooned";
+"srtm_plugin_name" = "Topograafia";
 "product_desc_srtm" = "Kuva kõrgusjooned";
 "srtm_plugin_description" = "See laiendus pakub nii kõrgusjoonte ülekatte kui ka (reljeefse) künkavarjutuse kihi, mida kuvatakse OsmAnd standardkaartidel. Seda funktsionaalsust hindavad sportlased, matkajad, rändajad ja kõik teised, kes on huvitatud maastiku reljeefstruktuurist. (Pange tähele, et kõrgusjoonte ja/või reljeefi andmed on eraldi,pärast laienduse aktiveerimist on saadaval täiendavad allalaaditavad failid.)\n\nGlobaalsed andmed (vahemikus 70 ° põhja ja 70 ° lõuna) põhinevad mõõtmistel, mille on teinud SRTM (süstiku radari topograafiamissioon) ja ASTER (täiustatud kosmose termilise kiirguse ja peegelduse radiomeeter), NASA maavaatlussatelliitide süsteemi lipulaeva Terra pardal olev pildistamisinstrument. ASTER on NASA, Jaapani majandus-, kaubandus- ja tööstusministeeriumi (METI) ja Jaapani kosmosesüsteemide (J-kosmosesüsteemid) koostöö.";
 "wikivoyage_travel_guide" = "Reisijuhid";
@@ -1096,7 +1096,7 @@
 "no_inet_connection_desc_map" = "Vajalik kaartide allalaadimiseks.";
 "try_again" = "Proovi uuesti";
 "search_location" = "Asukoha otsing…";
-"search_map" = "Kaartide otsing…";
+"search_map" = "Kaartide otsing";
 "search_another_country" = "Vali mõni teine piirkond";
 "skip_map_downloading" = "Jäta kaartide allalaadimine vahele";
 "skip_map_downloading_desc_ios" = "Sul ei ole ühtegi võrguühenduseta kaarti paigaldatud. Võid valida kaardi nimekirjast või laadida kaarte hiljem alla: Menüü - Halda kaardifaile";
@@ -1761,7 +1761,7 @@
 "ui_customization_short_descr" = "Sahtli osad, kontekstimenüü";
 "arrows_direction_to_markers" = "Nooled osutavad aktiivse markeri suunda, kui see asub väljaspool ekraani. Suunajooned viitavad aktiivsetele markeritele.";
 "specify_number_of_dir_indicators" = "Määra suunamärguannete arv, see mõjutab kõiki allpool olevaid seadeid.";
-"gpx_parse_error" = "OsmAnd GPX-andmestiku vorming on vigane. Täpsemaks uurimiseks palun võta ühendust meie kasutajatoega.";
+"gpx_parse_error" = "OsmAnd GPX-andmestiku vormingus on vigu.\n\nTäpsemaks uurimiseks võid võta ühendust meie kasutajatoega.";
 "shared_string_next" = "Järgmine";
 "checking_for_duplicates" = "Otsin topeltkirjeid...";
 "added_items" = "Lisatud kirjed: %@";
@@ -1852,7 +1852,7 @@
 "road_max_speed_descr" = "Määrab kõigi marsruudil olevate teede maksimaalse sõidukiiruse. Alandab prioriteeti maanteedel, mille võimalik kiirus on üle maksimaalse.";
 "road_min_speed_descr" = "Määrab kõigi marsruudil olevate teede minimaalse sõidukiiruse. Tõstab prioriteedi maanteedele, mille soovitatav kiirus on alla miinimumi.";
 "reverse_route" = "Pööra teekond teistpidi";
-"quick_action_remove_next_destination" = "Kustuta lähim sihtpunkt";
+"quick_action_remove_next_destination" = "Kustuta järgmine sihtpunkt";
 "quick_action_showhide_mapillary_title" = "Näita või peida Mapillary andmed";
 "shared_string_add_profile" = "Lisa profiil";
 "profile_type_osmand_string" = "OsmAnd profiil";
@@ -1982,7 +1982,7 @@
 "route_between_points_warning_desc" = "Järgmisena klõpsa oma rada lähimale lubatud teele ühe oma navigatsiooniprofiiliga selle võimaluse kasutamiseks.";
 "preparing_file" = "Faili ettevalmistamine";
 "reading_file" = "Faili lugemine";
-"app_restart_required" = "Mõningate seadete rakendamiseks on vajalik rakenduse taaskäivitamine.";
+"app_restart_required" = "Mõningate seadistuste rakendamiseks on vajalik rakenduse taaskäivitamine.";
 "custom_plugins" = "Kohandatud pistikprogrammid";
 "export_failed" = "Profiili eksportimine ebaõnnestus";
 "selected_of" = "Valitud - %d/%d";
@@ -2498,3 +2498,4 @@
 "speed_cameras_legal_descr" = "Mõnedes riikides või piirkondades on kiiruskaamerate eest hoiatavad rakendused seadusega keelatud,\n\nVastavalt oma maa seadustele pead sa otsuse tegema.\n\nValides %@ sa saad kiiruskaamerate-kohaseid teateid ja hoiatusi.\n\nValides %@ kustutatakse kõik kiiruskaameratega seotud andmed, nagu hoiatused, teated ja huvipunktid seniks, kuni sa OsmAnd\'ile ei tee täiesti uut paigaldust.";
 "speed_cameras_alert" = "Kiiruskaamerate hoiatused on mõnedes riikides seadusega keelatud.";
 "icon_group_service" = "Teenused";
+"shared_string_keywords" = "Võtmesõnad";

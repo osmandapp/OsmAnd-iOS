@@ -72,6 +72,11 @@ private enum TrackSortType {
     }
 }
 
+@objc(OAMapSettingsGpxViewControllerDelegate)
+protocol MapSettingsGpxViewControllerDelegate: AnyObject  {
+    func onVisibleTracksUpdate()
+}
+
 @objc(OAMapSettingsGpxViewController)
 @objcMembers
 final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
@@ -95,6 +100,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
     private var importHelper: OAGPXImportUIHelper?
+    weak var delegate: MapSettingsGpxViewControllerDelegate?
 
     private lazy var sortButton: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -398,6 +404,10 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             UserDefaults.standard.set(hiddenTracksPaths, forKey: previouslyVisibleTracksKey)
             OAAppSettings.sharedManager()?.showGpx(tracksToShow)
             OAAppSettings.sharedManager()?.hideGpx(tracksToHide)
+            
+            if let delegate {
+                delegate.onVisibleTracksUpdate()
+            }
         }
     }
     
@@ -601,9 +611,9 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             case .nameZA:
                 list.sort { $0.getNiceTitle().localizedCaseInsensitiveCompare($1.getNiceTitle()) == .orderedDescending }
             case .newestDateFirst:
-                list.sort { $0.importDate ?? Date.distantPast > $1.importDate ?? Date.distantPast }
+                list.sort { $0.creationDate ?? Date.distantPast > $1.creationDate ?? Date.distantPast }
             case .oldestDateFirst:
-                list.sort { $0.importDate ?? Date.distantPast < $1.importDate ?? Date.distantPast }
+                list.sort { $0.creationDate ?? Date.distantPast < $1.creationDate ?? Date.distantPast }
             case .longestDistanceFirst:
                 list.sort { $0.totalDistance > $1.totalDistance }
             case .shortestDistanceFirst:
@@ -629,7 +639,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "dd.MM.yyyy"
         let date = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
-        let creationDate = gpx.importDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
+        let creationDate = gpx.creationDate.map { dateFormatter.string(from: $0) } ?? localizedString("shared_string_not_available")
         let distance = OAOsmAndFormatter.getFormattedDistance(gpx.totalDistance) ?? localizedString("shared_string_not_available")
         let time = OAOsmAndFormatter.getFormattedTimeInterval(TimeInterval(gpx.timeSpan), shortFormat: true) ?? localizedString("shared_string_not_available")
         let waypointCount = "\(gpx.wptPoints)"

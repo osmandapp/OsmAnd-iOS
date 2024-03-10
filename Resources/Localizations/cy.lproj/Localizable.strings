@@ -1753,7 +1753,7 @@
 "try_again" = "Ceisio eto";
 "searching" = "Yn chwilio…";
 "search_location" = "Wrthi\'n chwilio am leoliad…";
-"search_map" = "Yn chwilio mapiau…";
+"search_map" = "Yn chwilio mapiau";
 "search_another_country" = "Dewis ardal arall";
 "skip_map_downloading" = "Neidio lawrlwytho mapiau";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

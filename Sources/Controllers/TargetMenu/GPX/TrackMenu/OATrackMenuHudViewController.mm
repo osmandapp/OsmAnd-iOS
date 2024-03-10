@@ -511,7 +511,8 @@
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
             routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
-                        title:[self.gpx getNiceTitle]];
+                        title:[self.gpx getNiceTitle]
+                  nearestCity:self.gpx.nearestCity];
 
     [self.scrollableView addSubview:_headerView];
 
@@ -1496,7 +1497,8 @@
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
                     routeIcon:_reopeningState.trackIcon
-                        title:[self.gpx getNiceTitle]];
+                        title:[self.gpx getNiceTitle]
+                  nearestCity:gpx.nearestCity];
     [self setupUIBuilder];
     [_uiBuilder setupTabBar:self.tabBarView
                 parentWidth:self.scrollableView.frame.size.width];
@@ -1534,6 +1536,15 @@
     OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:[self generateDescription] isNew:NO isEditing:YES readOnly:NO];
     editDescController.delegate = self;
     [self.navigationController pushViewController:editDescController animated:YES];
+}
+
+- (void)openDescriptionReadOnly:(NSString *)description
+{
+    OAEditDescriptionViewController *routeDescController = [[OAEditDescriptionViewController alloc] initWithDescription:description
+                                                                                                                  isNew:NO
+                                                                                                              isEditing:NO
+                                                                                                               readOnly:YES];
+    [self.navigationController pushViewController:routeDescController animated:YES];
 }
 
 - (void)openDuplicateTrack
@@ -1956,10 +1967,12 @@
             {
                 cell.accessoryView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:cellData.rightIconName]];
                 cell.accessoryView.tintColor = tintColor;
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
             else
             {
                 cell.accessoryView = nil;
+                cell.accessoryType = [cellData.key hasPrefix:@"description"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
             }
         }
         outCell = cell;

@@ -1753,7 +1753,7 @@
 "try_again" = "Försök igen";
 "searching" = "Söker …";
 "search_location" = "Söker efter plats…";
-"search_map" = "Söker efter kartor …";
+"search_map" = "Söker efter kartor";
 "search_another_country" = "Välj en annan region";
 "skip_map_downloading" = "Hoppaöver nerladdning av kartor";
 "skip_map_downloading_desc_ios" = "Du har inga offlinekartor installerade. Du kan välja en från listan eller ladda ner senare via menyn Hantera kartor";

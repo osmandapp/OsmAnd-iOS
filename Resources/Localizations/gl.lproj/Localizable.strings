@@ -725,7 +725,7 @@
 "no_inet_connection_desc_map" = "Obrigatorio para baixar mapas.";
 "try_again" = "Tentar de novo";
 "search_location" = "Estase a procurar a localización…";
-"search_map" = "Estase a procurar mapas…";
+"search_map" = "Estase a procurar mapas";
 "search_another_country" = "Escoller outra rexión";
 "skip_map_downloading" = "Rexeitar a descarga dos mapas";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

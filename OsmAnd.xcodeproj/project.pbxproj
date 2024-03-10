@@ -16710,7 +16710,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/../android\"\n./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\n#cd \"$SRCROOT/../android\"\n#./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
 		};
 		32EAF9FC2AE14BD300646807 /* Download Default_wikivoyage.travel.obf */ = {
 			isa = PBXShellScriptBuildPhase;

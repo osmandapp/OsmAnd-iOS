@@ -14,6 +14,10 @@
 #include <OsmAndCore/Utilities.h>
 
 @implementation OATransportStop
+{
+    OAPOI *_poi;
+    BOOL _wasSearchedPoi;
+}
 
 - (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
 {
@@ -26,7 +30,6 @@
             BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
             _name = _stop->getName(QString::fromNSString(prefLang), transliterate).toNSString();
             _location = CLLocationCoordinate2DMake(stop->location.latitude, stop->location.longitude);
-            _poi = [OAPOIHelper findPOIByName:self.name lat:_location.latitude lon:_location.longitude];
         }
         else
         {
@@ -34,6 +37,22 @@
         }
     }
     return self;
+}
+
+- (OAPOI *)poi
+{
+    if (!_poi && !_wasSearchedPoi)
+    {
+        _poi = [OAPOIHelper findPOIByName:self.name lat:_location.latitude lon:_location.longitude];
+        _wasSearchedPoi = YES;
+    }
+    return _poi;
+}
+
+- (void)setPoi:(OAPOI *)poi
+{
+    _poi = poi;
+    _wasSearchedPoi = YES;
 }
 
 - (BOOL)isEqual:(OATransportStop *)object

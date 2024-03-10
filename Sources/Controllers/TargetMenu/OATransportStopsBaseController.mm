@@ -194,7 +194,7 @@
 + (OATransportStop *) findBestTransportStopForAmenity:(OAPOI *)amenity
 {
     OATransportStopAggregated *stopAggregated;
-    BOOL isSubwayEntrance = [amenity.subType isEqualToString:@"subway_entrance"]; // TODO: check it
+    BOOL isSubwayEntrance = [amenity.type.name isEqualToString:@"subway_entrance"];
     
     double lat = amenity.latitude;
     double lon = amenity.longitude;

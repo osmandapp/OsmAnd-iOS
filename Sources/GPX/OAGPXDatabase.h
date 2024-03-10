@@ -74,6 +74,7 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @property (nonatomic) double   metricEnd;
 @property (nonatomic) OAWptPt *locationStart;
 @property (nonatomic) OAWptPt *locationEnd;
+@property (nonatomic) NSString *nearestCity;
 
 - (NSString *)getNiceTitle;
 

@@ -16,6 +16,8 @@
 #import "OAUtilities.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAGPXUIHelper.h"
+#import "OAPOI.h"
 
 #define kDbName @"gpx.db"
 
@@ -177,7 +179,14 @@
 - (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
     OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
-    
+
+    NSString *nearestCity;
+    if (analysis.locationStart)
+    {
+        OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
+        nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
+    }
+
     OAGPX *gpx = [[OAGPX alloc] init];
     NSString *pathToRemove = [OsmAndApp.instance.gpxPath stringByAppendingString:@"/"];
     gpx.bounds = bounds;
@@ -219,7 +228,8 @@
     gpx.metricEnd = analysis.metricEnd;
     gpx.locationStart = analysis.locationStart;
     gpx.locationEnd = analysis.locationEnd;
-    
+    gpx.nearestCity = nearestCity;
+
     gpx.splitType = [self.class splitTypeByName:document.getSplitType];
     gpx.splitInterval = [document getSplitInterval];
     gpx.color = [document getColor:0];
@@ -552,6 +562,8 @@
         [wpt setObject:@(gpx.locationEnd.speed) forKey:@"speed"];
         [d setObject:wpt forKey:@"locationEnd"];
     }
+    if (gpx.nearestCity)
+    	[d setObject:gpx.nearestCity forKey:@"nearestCity"];
 
     return d;
 }
@@ -670,6 +682,10 @@
         else if ([key isEqualToString:@"hiddenGroups"])
         {
             gpx.hiddenGroups = [NSSet setWithArray:value];
+        }
+        else if ([key isEqualToString:@"nearestCity"])
+        {
+            gpx.nearestCity = value;
         }
     }
     if (!gpx.hiddenGroups)

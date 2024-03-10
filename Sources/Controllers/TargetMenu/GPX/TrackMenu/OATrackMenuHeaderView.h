@@ -55,7 +55,8 @@
           shownTrack:(BOOL)shownTrack
       isNetworkRoute:(BOOL)isNetworkRoute
            routeIcon:(UIImage *)icon
-               title:(NSString *)title;
+               title:(NSString *)title
+         nearestCity:(NSString *)nearestCity;
 
 + (NSMutableArray<OAGPXTableCellData *> *)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis withoutGaps:(BOOL)withoutGaps;
 - (void)generateGpxBlockStatistics:(OAGPXTrackAnalysis *)analysis

@@ -1808,7 +1808,7 @@
 "city_type_suburb" = "Predgrađe";
 "city_type_hamlet" = "Zaseok";
 "city_type_village" = "Selo";
-"city_type_town" = "Naseljeno mesto";
+"city_type_town" = "Gradsko naselje";
 "city_type_city" = "Grad";
 "city_type_district" = "Distrikt";
 "city_type_neighbourhood" = "Sused";

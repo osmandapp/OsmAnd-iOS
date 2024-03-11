@@ -970,9 +970,12 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Widgets
 
 @property (nonatomic) OACommonListOfStringList *leftWidgetPanelOrder;
-@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrder;
 @property (nonatomic) OACommonListOfStringList *rightWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrder;
 @property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrder;
+
+@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrderOld;
+@property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrderOld;
 
 // OSM Editing
 @property (nonatomic) OACommonString *osmUserName;

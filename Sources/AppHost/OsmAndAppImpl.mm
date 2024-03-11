@@ -88,6 +88,7 @@
 #define kNumberOfStarts @"starts_num"
 #define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
+#define kIsOldWidgetKeysMigratedKey @"isOldWidgetKeysMigrated"
 
 #define _(name)
 @implementation OsmAndAppImpl
@@ -299,6 +300,25 @@
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
+}
+
+- (void)migrateOldWidgetKeysIfNeeded
+{
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults boolForKey:kIsOldWidgetKeysMigratedKey])
+    {
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        for (OAApplicationMode *mode in [OAApplicationMode allPossibleValues])
+        {
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.topWidgetPanelOrderOld newPanelPreference:settings.topWidgetPanelOrder];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.bottomWidgetPanelOrderOld newPanelPreference:settings.bottomWidgetPanelOrder];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.leftWidgetPanelOrder newPanelPreference:nil];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.rightWidgetPanelOrder newPanelPreference:nil];
+            [OAWidgetUtils updateExistingCustomWidgetIds:mode customIdsPreference:settings.customWidgetKeys];
+            [OAWidgetUtils updateExistingWidgetsVisibility:mode visibilityPreference:settings.mapInfoControls];
+        }
+        [userDefaults setBool:YES forKey:kIsOldWidgetKeysMigratedKey];
+    }
 }
 
 - (BOOL) initializeCore
@@ -563,7 +583,8 @@
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
     [self migrateResourcesToDocumentsIfNeeded];
-    
+    [self migrateOldWidgetKeysIfNeeded];
+
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
     NSString *ocbfPathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/regions.ocbf"];

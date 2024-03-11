@@ -187,11 +187,34 @@
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
-                    [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
-                else if ([key isEqualToString:@"map_info_controls"])
                 {
+                    [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
+                }
+                else if ([key isEqualToString:settings.leftWidgetPanelOrder.key]
+                         || [key isEqualToString:settings.rightWidgetPanelOrder.key]
+                         || [key isEqualToString:settings.topWidgetPanelOrderOld.key]
+                         || [key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
+                {
+                    OACommonListOfStringList *newPanelPreference;
+                    if ([key isEqualToString:settings.topWidgetPanelOrderOld.key])
+                        newPanelPreference = settings.topWidgetPanelOrder;
+                    else if ([key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
+                        newPanelPreference = settings.bottomWidgetPanelOrder;
+
+                    [OAWidgetUtils updateExistingWidgetIds:_appMode
+                                           panelPreference:(OACommonListOfStringList *) setting
+                                        newPanelPreference:newPanelPreference];
+                }
+                else if ([key isEqualToString:settings.customWidgetKeys.key])
+                {
+                    [OAWidgetUtils updateExistingCustomWidgetIds:_appMode
+                                             customIdsPreference:settings.customWidgetKeys];
+                }
+                else if ([key isEqualToString:settings.mapInfoControls.key])
+                {
+                    [OAWidgetUtils updateExistingWidgetsVisibility:_appMode visibilityPreference:settings.mapInfoControls];
                     NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
-                    for (key in [value componentsSeparatedByString:@";"])
+                    for (key in [[settings.mapInfoControls get:_appMode] componentsSeparatedByString:@";"])
                     {
                         if (![key hasPrefix:HIDE_PREFIX])
                         {
@@ -362,7 +385,9 @@
     NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     for (NSString *key in [settings getPreferences:NO].keyEnumerator)
     {
-        if ([appModeBeanPrefsIds containsObject:key])
+        if ([appModeBeanPrefsIds containsObject:key]
+            || [key isEqualToString:settings.topWidgetPanelOrderOld.key]
+            || [key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
             continue;
         OACommonPreference *setting = [settings getPreferenceByKey:key];
         if (setting)

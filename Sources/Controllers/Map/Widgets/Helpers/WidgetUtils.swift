@@ -6,7 +6,9 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-final class WidgetUtils {
+@objc(OAWidgetUtils)
+@objcMembers
+final class WidgetUtils: NSObject {
 
     static func reorderWidgets(orderedWidgetPages: [[String]],
                                panel: WidgetsPanel,
@@ -145,4 +147,61 @@ final class WidgetUtils {
                                            recreateControls: false)
     }
 
+    static func updateExistingWidgetIds(_ appMode: OAApplicationMode,
+                                        panelPreference: OACommonListOfStringList,
+                                        newPanelPreference: OACommonListOfStringList?) {
+        guard let pages = panelPreference.get(appMode) else { return }
+        if newPanelPreference == nil {
+            guard (pages.flatMap({ $0 }).contains { WidgetType.oldNewWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
+        }
+
+        var newPages = [Array<String>]()
+        for page in pages {
+            newPages.append(getUpdatedWidgetIds(page))
+        }
+        if pages != newPages {
+            panelPreference.set(newPages, mode: appMode)
+        }
+        if let newPanelPreference {
+            newPanelPreference.set(newPages, mode: appMode)
+        }
+    }
+
+    static func updateExistingCustomWidgetIds(_ appMode: OAApplicationMode,
+                                              customIdsPreference: OACommonStringList) {
+        guard let customIds = customIdsPreference.get(appMode),
+              (customIds.contains { WidgetType.oldNewWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
+
+        let newCustomIds = Self.getUpdatedWidgetIds(customIds)
+        if customIds != newCustomIds {
+            customIdsPreference.set(newCustomIds, mode: appMode)
+        }
+    }
+    
+    static func updateExistingWidgetsVisibility(_ appMode: OAApplicationMode,
+                                                visibilityPreference: OACommonString) {
+        guard let widgetsVisibilityString = visibilityPreference.get(appMode) else { return  }
+
+        let widgetsVisibility = widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR);
+        guard (widgetsVisibility.contains { WidgetType.oldNewWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
+
+        let newWidgetsVisibility = Self.getUpdatedWidgetIds(widgetsVisibility)
+        if widgetsVisibility != newWidgetsVisibility {
+            visibilityPreference.set(newWidgetsVisibility.joined(separator: SETTINGS_SEPARATOR), mode: appMode)
+        }
+    }
+
+    static func getUpdatedWidgetIds(_ widgetIds: [String]) -> [String] {
+        var newWidgetsList = [String]()
+        for widgetId in widgetIds {
+            let originalId = WidgetType.getDefaultWidgetId(widgetId)
+            if let newId = WidgetType.oldNewWidgetIds[originalId], !newId.isEmpty {
+                newWidgetsList.append(widgetId.replacingOccurrences(of: originalId, with: newId))
+            } else {
+                newWidgetsList.append(widgetId)
+            }
+            
+        }
+        return newWidgetsList
+    }
 }

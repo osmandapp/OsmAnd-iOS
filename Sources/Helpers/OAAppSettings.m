@@ -422,8 +422,11 @@
 // Widgets
 #define kLeftWidgetPanelOrderKey @"left_widget_panel_order"
 #define kRightWidgetPanelOrderKey @"right_widget_panel_order"
-#define kTopWidgetPanelOrderKey @"top_widget_panel_order"
-#define kBottomWidgetPanelOrderKey @"bottom_widget_panel_order"
+#define kTopWidgetPanelOrderKey @"widget_top_panel_order"
+#define kBottomWidgetPanelOrderKey @"widget_bottom_panel_order"
+
+#define kTopWidgetPanelOrderOldKey @"top_widget_panel_order"
+#define kBottomWidgetPanelOrderKeyOldOld @"bottom_widget_panel_order"
 
 #define useHHRoutingKey @"useHHRoutingKey"
 #define useHHRoutingOnlyKey @"useHHRoutingOnlyKey"
@@ -3799,11 +3802,17 @@
         _rightWidgetPanelOrder = [OACommonListOfStringList withKey:kRightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
         _topWidgetPanelOrder = [OACommonListOfStringList withKey:kTopWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
         _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+
+        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:kTopWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKeyOldOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
         [_profilePreferences setObject:_topWidgetPanelOrder forKey:_topWidgetPanelOrder.key];
         [_profilePreferences setObject:_bottomWidgetPanelOrder forKey:_bottomWidgetPanelOrder.key];
+
+        [_profilePreferences setObject:_topWidgetPanelOrderOld forKey:_topWidgetPanelOrderOld.key];
+        [_profilePreferences setObject:_bottomWidgetPanelOrderOld forKey:_bottomWidgetPanelOrderOld.key];
 
         // Map Settings
         _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];

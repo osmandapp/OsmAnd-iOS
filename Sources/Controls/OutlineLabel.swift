@@ -9,7 +9,7 @@
 @objcMembers
 final class OutlineLabel: UILabel {
     
-    var outlineColor: UIColor = .black
+    var outlineColor: UIColor? = .black
     var outlineWidth: CGFloat = 1.0
     
     required init?(coder aDecoder: NSCoder) {

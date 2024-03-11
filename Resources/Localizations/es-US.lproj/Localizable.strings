@@ -1753,7 +1753,7 @@
 "try_again" = "Prueba de nuevo";
 "searching" = "Buscando…";
 "search_location" = "Buscando la ubicación…";
-"search_map" = "Buscando mapas…";
+"search_map" = "Buscando mapas";
 "search_another_country" = "Elegir otra región";
 "skip_map_downloading" = "Omitir descargas de mapas";
 "skip_map_downloading_desc_ios" = "Sin mapas descargados. Puedes elegir uno de la lista o descargarlos luego desde el menú «Gestionar mapas»";

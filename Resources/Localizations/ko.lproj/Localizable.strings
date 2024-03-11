@@ -1214,7 +1214,7 @@
 "go_to_downloads" = "다운로드로 이동";
 "all_world_popup_desc" = "세계 기본 지도를 다운로드하여 주 이름, 국경 및 기타 정보를 확인하세요.";
 "search_my_location" = "내 위치 찾기";
-"search_map" = "지도 검색 중…";
+"search_map" = "지도 검색 중";
 "no_internet_avail_desc_first" = "지도 목록을 다운로드하려면 인터넷 연결을 켜십시오.";
 "map_widget_distance_by_tap" = "탭으로 거리";
 "restore_backup_descr" = "온라인 백업을 해제하는 장치의 데이터 복원";

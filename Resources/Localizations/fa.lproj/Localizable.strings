@@ -647,7 +647,7 @@
 "no_inet_connection_desc_map" = "برای بارگیری نقشه‌ها لازم است.";
 "try_again" = "تلاش مجدد";
 "search_location" = "در حال جست‌وجوی مکان…";
-"search_map" = "در حال جست‌وجوی نقشه‌ها…";
+"search_map" = "در حال جست‌وجوی نقشه‌ها";
 "search_another_country" = "منطقهٔ دیگری را انتخاب کنید";
 "skip_map_downloading" = "صرف‌نظر از بارگیری نقشه‌ها";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

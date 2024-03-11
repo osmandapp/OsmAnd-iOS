@@ -411,7 +411,7 @@
 "no_inet_connection_desc_map" = "Nauðsynleg til að sækja kort.";
 "try_again" = "Reyndu aftur";
 "search_location" = "Leita að stað…";
-"search_map" = "Leitaá kortum…";
+"search_map" = "Leitaá kortum";
 "search_another_country" = "Velja annað svæði";
 "skip_map_downloading" = "Sleppaþví að ná í kort";
 "skip_map_downloading_desc_ios" = "Þú ert ekki með uppsett nein ónettengd kort. Þú gætir valið kort úr listanum eða hlaðið inn kortum síðar með valmyndinni - Sýsla með kortaskrár";

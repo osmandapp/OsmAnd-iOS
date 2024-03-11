@@ -921,7 +921,7 @@
 "gpx_edit_mode" = "Modo edição";
 "go_to_map" = "Mostrar mapa";
 "search_my_location" = "Encontrar a minha localização";
-"search_map" = "À procura de mapas…";
+"search_map" = "À procura de mapas";
 "skip_map_downloading_desc_ios" = "Não tem nenhum mapa offline instalado. Pode escolher um mapa na lista ou descarregar mapas mais tarde através do Menu - Mapas e recursos";
 "items_selected" = "%d selecionado";
 "user_password" = "Palavra-passe";

@@ -1753,7 +1753,7 @@
 "try_again" = "\"ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക\"";
 "searching" = "തെരഞ്ഞുകൊണ്ടിരിക്കുന്നു…";
 "search_location" = "സ്ഥാനം തിരയുന്നു…";
-"search_map" = "ഭൂപടം തെരയുന്നു…";
+"search_map" = "ഭൂപടം തെരയുന്നു";
 "search_another_country" = "\"വേറോരു പ്രദേശം(region) തെരഞ്ഞെടുക്കുക \"";
 "skip_map_downloading" = "ഭൂപടങ്ങള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുന്നത് ഒഴിവാക്കുക";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

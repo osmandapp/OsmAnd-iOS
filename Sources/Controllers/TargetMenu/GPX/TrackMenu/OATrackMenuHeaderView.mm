@@ -122,6 +122,7 @@
       isNetworkRoute:(BOOL)isNetworkRoute
            routeIcon:(UIImage *)icon
                title:(NSString *)title
+         nearestCity:(NSString *)nearestCity
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
     ? [UIColor colorNamed:ACColorNameGroupBg] : [UIColor colorNamed:ACColorNameViewBg];
@@ -138,14 +139,12 @@
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
         CLLocationCoordinate2D gpxLocation = kCLLocationCoordinate2DInvalid;
-        OAPOI *nearestCity;
         if (self.trackMenuDelegate)
         {
             if ([self.trackMenuDelegate openedFromMap])
                 gpxLocation = [self.trackMenuDelegate getPinLocation];
             if (!CLLocationCoordinate2DIsValid(gpxLocation))
                 gpxLocation = [self.trackMenuDelegate getCenterGpxLocation];
-            nearestCity = [OAGPXUIHelper checkAndSearchNearestCity:[self.trackMenuDelegate getGeneralAnalysis]];
         }
 
         CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
@@ -162,11 +161,11 @@
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
 
-        if (nearestCity)
+        if (nearestCity.length > 0)
         {
             self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
             self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-            [self.regionTextView setText:nearestCity.nameLocalized];
+            [self.regionTextView setText:nearestCity];
             self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else

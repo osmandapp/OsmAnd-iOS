@@ -1078,7 +1078,7 @@
 "no_inet_connection_desc_map" = "Trěbny za sćehnjenje kartow.";
 "try_again" = "Znowa spytać";
 "search_location" = "Pytam za stejišćom…";
-"search_map" = "Pytam karty…";
+"search_map" = "Pytam karty";
 "search_another_country" = "Druhi region wubrać";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

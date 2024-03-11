@@ -681,7 +681,7 @@
 "no_inet_connection_desc_map" = "Vyžadováno pro stažení map.";
 "try_again" = "Zkusit znovu";
 "search_location" = "Hledání polohy…";
-"search_map" = "Hledání map…";
+"search_map" = "Hledání map";
 "search_another_country" = "Vybrat jinou oblast";
 "skip_map_downloading" = "Přeskočit stahování map";
 "skip_map_downloading_desc_ios" = "Nemáte nainstalovanou žádnou offline mapu. Můžete vybrat mapu ze seznamu, nebo stáhnout mapy později přes Menu - Spravovat mapové soubory";

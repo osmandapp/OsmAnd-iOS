@@ -1072,7 +1072,7 @@
 "no_inet_connection_desc_map" = "Kreves forå laste ned kart.";
 "try_again" = "Prøv igjen";
 "search_location" = "Søker etter posisjon…";
-"search_map" = "Kartsøking…";
+"search_map" = "Kartsøking";
 "search_another_country" = "Velg en annen region";
 "skip_map_downloading" = "Hopp over nedlasting av kart";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

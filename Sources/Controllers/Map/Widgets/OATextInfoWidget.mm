@@ -84,8 +84,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (NSDictionary<NSAttributedStringKey, id> *)getAttributes:(CGFloat)lineHeight
                                                       label:(UILabel *)label
-                                            widgetSizeStyle:(WidgetSizeStyle)widgetSizeStyle
-                                            isValue:(BOOL)isValue
                                            fontMetrics:(UIFontMetrics *)fontMetrics
 {
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
@@ -97,19 +95,16 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     paragraphStyle.minimumLineHeight = scaledLineHeight;
     paragraphStyle.maximumLineHeight = scaledLineHeight;
     
-    CGFloat baselineOffset = 0.0;
-    if (scaledLineHeight != lineHeight && widgetSizeStyle == WidgetSizeStyleLarge && isValue)
-    {
-        // Sometimes when lineHeight >= 50(WidgetSizeStyleLarge current), the text is not centered, there is a baselineOffset. need more smart approach
-        CGFloat lineHeightMultiple = lineHeight / label.font.lineHeight;
-        paragraphStyle.lineHeightMultiple = lineHeightMultiple;
-        baselineOffset = 1 / lineHeightMultiple;
-    }
-    else
-    {
-        baselineOffset = (lineHeight - label.font.lineHeight) / 4;
-    }
+    CGFloat baselineOffset = (scaledLineHeight - label.font.lineHeight) / 4;
     
+    if (label.minimumScaleFactor < 1) {
+        CGFloat actualScaleFactor = [label actualScaleFactor];
+        if (actualScaleFactor < 1) {
+            CGFloat fontLineHeight = label.font.lineHeight * actualScaleFactor;
+            baselineOffset = (scaledLineHeight - fontLineHeight) / 2;
+        }
+    }
+
     NSMutableDictionary<NSAttributedStringKey, id> *dic = [NSMutableDictionary dictionary];
     dic[NSParagraphStyleAttributeName] = paragraphStyle;
     dic[NSKernAttributeName] = @0;
@@ -512,9 +507,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
-    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
                                       
-    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
     
     CGFloat topBottomPadding = [WidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
@@ -550,7 +545,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
             self.titleOrEmptyLabel.text = @"";
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
-            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
             self.unitLabel.textAlignment = NSTextAlignmentRight;
         }
     }

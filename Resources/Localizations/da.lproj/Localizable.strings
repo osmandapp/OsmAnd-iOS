@@ -413,7 +413,7 @@
 "no_inet_connection_desc_map" = "Nødvendig for at hente kort.";
 "try_again" = "Prøv igen";
 "search_location" = "Søger efter placering…";
-"search_map" = "Søger på kort…";
+"search_map" = "Søger på kort";
 "search_another_country" = "Vælg et andet område";
 "skip_map_downloading" = "Spring over hentning af kort";
 "skip_map_downloading_desc_ios" = "Der er ingen offline kort installeret. Vælg et kort fra listen eller hent et kort senere via Menu - Administrer kort";

@@ -1072,7 +1072,7 @@
 "no_inet_connection_desc_map" = "Es necessari de teledescargar de mapas.";
 "try_again" = "Tornatz assajar";
 "search_location" = "A recercar la posicion…";
-"search_map" = "Recèrca lei mapas…";
+"search_map" = "Recèrca lei mapas";
 "search_another_country" = "Seleccionar un autre país";
 "skip_map_downloading" = "Sautar lo teledescargament de mapa en cors";
 "skip_map_downloading_desc_ios" = "Avètz ges de mapa installada per consultar sensa internet. Ne'n podètz chausir sus la lista ò ne'n teledescargar pus tard per lo Menut - Gestion dei fichiers de mapa";

@@ -23,6 +23,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAFirstUsageWizardController.h"
 
 @interface OASettingsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OACloudAccountLogoutDelegate, OADeleteAllVersionsBackupDelegate, OABackupTypesDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener>
 
@@ -211,10 +212,10 @@
 {
     [[OABackupHelper sharedInstance] logout];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
-
+    
     for (UIViewController *controller in self.navigationController.viewControllers)
     {
-        if ([controller isKindOfClass:OAMainSettingsViewController.class])
+        if ([controller isKindOfClass:OAMainSettingsViewController.class] || [controller isKindOfClass:OAFirstUsageWizardController.class])
         {
             [self.navigationController popToViewController:controller animated:YES];
             return;

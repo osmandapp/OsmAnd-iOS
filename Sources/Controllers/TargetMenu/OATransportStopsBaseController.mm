@@ -204,7 +204,7 @@
         return nil;
     
     NSMutableArray *sortedStops = [NSMutableArray arrayWithArray:transportStops];
-    [self.class sortTransportStopsExits:OsmAnd::LatLon(lat, lon) stops:sortedStops];
+    [self.class sortTransportStops:OsmAnd::LatLon(lat, lon) stops:sortedStops];
     
     if (isSubwayEntrance)
     {
@@ -215,7 +215,7 @@
         stopAggregated = [[OATransportStopAggregated alloc] init];
         stopAggregated.amenity = amenity;
         OATransportStop *nearestStop = nil;
-        NSString *amenityName = [[amenity name] lowercaseString]; //TODO: compare name getter result with android
+        NSString *amenityName = [[amenity name] lowercaseString];
         
         for (OATransportStop *stop in sortedStops)
         {
@@ -319,6 +319,21 @@
             if (transportStop.distance > distance) {
                 transportStop.distance = distance;
             }
+        }
+    }
+    [stops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull obj1, OATransportStop * _Nonnull obj2) {
+        return [@(obj1.distance) compare:@(obj2.distance)];
+    }];
+}
+
++ (void) sortTransportStops:(OsmAnd::LatLon)latLon stops:(NSMutableArray<OATransportStop *> *)stops
+{
+    for (OATransportStop *transportStop in stops)
+    {
+        for (const auto &exit : transportStop.stop->exits)
+        {
+            int distance = (int) OsmAnd::Utilities::distance(latLon, exit->location);
+                transportStop.distance = distance;
         }
     }
     [stops sortUsingComparator:^NSComparisonResult(OATransportStop * _Nonnull obj1, OATransportStop * _Nonnull obj2) {

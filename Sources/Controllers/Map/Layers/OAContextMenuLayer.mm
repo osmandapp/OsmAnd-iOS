@@ -743,7 +743,6 @@
                 OATransportStop *transportStop = [OATransportStopsBaseController findBestTransportStopForAmenity:amenity];
                 if (transportStop && self.mapViewController.mapLayers.transportStopsLayer)
                 {
-                    // TODO: check this part
                     [selectedObjects removeObject:point];
                     transportStop.poi = point.targetObj;
                     [selectedObjects addObject:[self.mapViewController.mapLayers.transportStopsLayer getTargetPoint:transportStop]];

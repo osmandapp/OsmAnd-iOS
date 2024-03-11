@@ -3653,3 +3653,5 @@
 
 "skip_download" = "Skip download";
 "determine_location" = "Allow us to determine your location";
+
+"upload_to_osm_short" = "Upload to OSM";

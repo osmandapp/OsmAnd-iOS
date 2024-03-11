@@ -304,20 +304,23 @@
 
 - (void)migrateOldWidgetKeysIfNeeded
 {
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (![userDefaults boolForKey:kIsOldWidgetKeysMigratedKey])
+    if (!_firstLaunch)
     {
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        for (OAApplicationMode *mode in [OAApplicationMode allPossibleValues])
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        if (![userDefaults boolForKey:kIsOldWidgetKeysMigratedKey])
         {
-            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.topWidgetPanelOrderOld newPanelPreference:settings.topWidgetPanelOrder];
-            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.bottomWidgetPanelOrderOld newPanelPreference:settings.bottomWidgetPanelOrder];
-            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.leftWidgetPanelOrder newPanelPreference:nil];
-            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.rightWidgetPanelOrder newPanelPreference:nil];
-            [OAWidgetUtils updateExistingCustomWidgetIds:mode customIdsPreference:settings.customWidgetKeys];
-            [OAWidgetUtils updateExistingWidgetsVisibility:mode visibilityPreference:settings.mapInfoControls];
+            OAAppSettings *settings = [OAAppSettings sharedManager];
+            for (OAApplicationMode *mode in [OAApplicationMode allPossibleValues])
+            {
+                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.topWidgetPanelOrderOld newPanelPreference:settings.topWidgetPanelOrder];
+                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.bottomWidgetPanelOrderOld newPanelPreference:settings.bottomWidgetPanelOrder];
+                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.leftWidgetPanelOrder newPanelPreference:nil];
+                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.rightWidgetPanelOrder newPanelPreference:nil];
+                [OAWidgetUtils updateExistingCustomWidgetIds:mode customIdsPreference:settings.customWidgetKeys];
+                [OAWidgetUtils updateExistingWidgetsVisibility:mode visibilityPreference:settings.mapInfoControls];
+            }
+            [userDefaults setBool:YES forKey:kIsOldWidgetKeysMigratedKey];
         }
-        [userDefaults setBool:YES forKey:kIsOldWidgetKeysMigratedKey];
     }
 }
 

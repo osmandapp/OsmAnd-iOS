@@ -16728,7 +16728,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download Default_wikivoyage file if not exists\n\nFILE=${SRCROOT}/Resources/Shipped/Default_wikivoyage.travel.obf\nif [ -f \"$FILE\" ]; then\n    echo \"Default_wikivoyage.travel.obf is already downloaded\"\nelse\n    curl -o ${SRCROOT}/Resources/Shipped/Default_wikivoyage.travel.obf https://creator.osmand.net/basemap/Default_wikivoyage_2.travel.obf ||:\nfi\n";
+			shellScript = "# Download Default_wikivoyage file if not exists\n\n#FILE=${SRCROOT}/Resources/Shipped/Default_wikivoyage.travel.obf\n#if [ -f \"$FILE\" ]; then\n#    echo \"Default_wikivoyage.travel.obf is already downloaded\"\n#else\n#    curl -o ${SRCROOT}/Resources/Shipped/Default_wikivoyage.travel.obf https://creator.osmand.net/basemap/Default_wikivoyage_2.travel.obf ||:\n#fi\n";
 		};
 		3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16796,7 +16796,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
+			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\n#curl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
 		FA45668A2AFB839000B07165 /* Run Script: SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;

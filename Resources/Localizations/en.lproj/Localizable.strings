@@ -2238,7 +2238,6 @@
 "white_color_undefined" = "Parts without data are white.";
 "analyze_on_map" = "Analyze on map";
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
-"upload_to_osm" = "Upload to OSM";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Enter name";

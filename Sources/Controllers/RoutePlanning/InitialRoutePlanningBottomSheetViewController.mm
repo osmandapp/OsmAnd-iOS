@@ -59,6 +59,11 @@
     [self.leftIconView setImage:[UIImage imageNamed:@"ic_custom_routes"]];
 }
 
+- (UIStatusBarStyle)preferredStatusBarStyle
+{
+    return [OAAppSettings sharedManager].nightMode ? UIStatusBarStyleLightContent : UIStatusBarStyleDarkContent;
+}
+
 - (void) applyLocalization
 {
     self.titleView.text = OALocalizedString(@"plan_route");

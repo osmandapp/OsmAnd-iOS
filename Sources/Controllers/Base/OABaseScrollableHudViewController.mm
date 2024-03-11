@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OABaseScrollableHudViewController () <UIScrollViewDelegate, UIGestureRecognizerDelegate>
 
@@ -95,8 +96,12 @@
 
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
-    return self.currentState != EOADraggableMenuStateFullScreen && [OAAppSettings sharedManager].nightMode
-            ? UIStatusBarStyleLightContent : UIStatusBarStyleDefault;
+    if (self.currentState != EOADraggableMenuStateFullScreen && [OAAppSettings sharedManager].nightMode)
+        return UIStatusBarStyleLightContent;
+    else if (self.currentState != EOADraggableMenuStateFullScreen && ![ThemeManager shared].isLightTheme)
+        return UIStatusBarStyleDarkContent;
+    else
+        return UIStatusBarStyleDefault;
 }
 
 - (void)applyCornerRadius:(BOOL)enable

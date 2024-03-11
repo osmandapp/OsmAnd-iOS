@@ -3322,3 +3322,5 @@
 "osmand_cloud_delete_account_confirmation" = "Eliminare l'account?";
 "osmand_cloud_deleting_account_descr" = "In pochi istanti tutti i tuoi dati e il tuo account verranno eliminati da OsmAnd Cloud.\n\nTutti i dati sul dispositivo rimangono intatti.";
 "lang_sr-Latn" = "Serbo (latino)";
+"determine_location" = "Consentici di determinare la tua posizione";
+"skip_download" = "Salta il download";

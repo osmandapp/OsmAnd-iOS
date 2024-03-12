@@ -125,6 +125,12 @@
     }
 }
 
+- (void)updateLayout
+{
+    [self layoutWidgets];
+    [self execOnDraw];
+}
+
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
 {
     self = [super init];

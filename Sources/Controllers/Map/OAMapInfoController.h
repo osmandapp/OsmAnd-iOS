@@ -63,5 +63,6 @@
 - (void) updateRuler;
 
 - (BOOL)topTextViewVisible;
+- (void)updateLayout;
 
 @end

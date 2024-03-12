@@ -87,9 +87,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 @interface OAQuickSearchViewController () <OAQuickSearchTableDelegate, UITextFieldDelegate, UIPageViewControllerDataSource, OACategoryTableDelegate, OAHistoryTableDelegate, UIGestureRecognizerDelegate, UIPageViewControllerDelegate, OAPOIFilterViewDelegate, OASearchToolbarViewControllerProtocol, OAAddressTableDelegate, OAPOIFiltersRemoveDelegate>
 
-@property (weak, nonatomic) IBOutlet UIView *topView;
+@property (weak, nonatomic) IBOutlet UIView *containerView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
-@property (weak, nonatomic) IBOutlet UIButton *leftImageButton;
 @property (weak, nonatomic) IBOutlet UITextField *textField;
 @property (weak, nonatomic) IBOutlet UIButton *btnCancel;
 
@@ -107,6 +106,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 @property (weak, nonatomic) IBOutlet UIButton *bottomTextBtn;
 @property (weak, nonatomic) IBOutlet UIButton *bottomImageBtn;
 
+@property (weak, nonatomic) IBOutlet UIView *tabsView;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
 
@@ -141,7 +141,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     UIPanGestureRecognizer *_tblMove;
 
-    UIImageView *_leftImgView;
+    UIImageView *_rightImgView;
     UIActivityIndicatorView *_activityIndicatorView;
 
     OAQuickSearchTableController *_tableController;
@@ -178,7 +178,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 -(void)applyLocalization
 {
-    [_btnCancel setTitle:OALocalizedString(@"shared_string_hide") forState:UIControlStateNormal];
     [_bottomTextBtn setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
 }
 
@@ -206,7 +205,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _pageController = [[UIPageViewController alloc] initWithTransitionStyle:UIPageViewControllerTransitionStyleScroll navigationOrientation:UIPageViewControllerNavigationOrientationHorizontal options:nil];
     _pageController.dataSource = self;
     _pageController.delegate = self;
-    _pageController.view.frame = _tableView.frame;
+    _pageController.view.frame = _containerView.frame;
     _pageController.view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
     _addressViewController = [[OAAddressTableViewController alloc] initWithFrame:_pageController.view.bounds];
@@ -245,19 +244,29 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _tblMove = [[UIPanGestureRecognizer alloc] initWithTarget:self
                                                        action:@selector(moveGestureDetected:)];
     _tblMove.delegate = self;
-
-    _textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(4.0, 0.0, 24.0, _textField.bounds.size.height)];
+    
+    _textField.leftView = _btnCancel;
     _textField.leftViewMode = UITextFieldViewModeAlways;
 
-    _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_textField.leftView.frame];
+    _textField.rightView = [[UIView alloc] initWithFrame:CGRectMake(0.0, 0.0, 40.0, _textField.bounds.size.height)];
+    _textField.rightViewMode = UITextFieldViewModeAlways;
+
+    _activityIndicatorView = [[UIActivityIndicatorView alloc] initWithFrame:_textField.rightView.frame];
     _activityIndicatorView.activityIndicatorViewStyle = UIActivityIndicatorViewStyleMedium;
+    
+    _rightImgView = [[UIImageView alloc] initWithImage:[UIImage systemImageNamed: @"magnifyingglass"]];
+    _rightImgView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    _rightImgView.contentMode = UIViewContentModeCenter;
+    _rightImgView.frame = _textField.rightView.frame;
 
-    _leftImgView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"search_icon"]];
-    _leftImgView.contentMode = UIViewContentModeCenter;
-    _leftImgView.frame = _textField.leftView.frame;
-
-    [_textField.leftView addSubview:_leftImgView];
-    [_textField.leftView addSubview:_activityIndicatorView];
+    [_textField.rightView addSubview:_rightImgView];
+    [_textField.rightView addSubview:_activityIndicatorView];
+    
+    UITapGestureRecognizer *singleFingerTap =
+      [[UITapGestureRecognizer alloc] initWithTarget:self
+                                              action:@selector(textFieldRightImageTap:)];
+    [_textField.rightView addGestureRecognizer:singleFingerTap];
+    
 
     [self setupSearch];
     [self updateHint];
@@ -357,6 +366,11 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             }
         });
     };
+}
+
+-(void)dismissViewControllerAnimated:(BOOL)flag completion:(void (^)())completion{
+    [super dismissViewControllerAnimated:flag completion:completion];
+    [self clearLastWord];
 }
 
 - (void)setupBarActionView:(BarActionType)type title:(NSString *)title
@@ -476,20 +490,25 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)showTabs
 {
-    [self addChildViewController:_pageController];
-    [self.view addSubview:_pageController.view];
-    _pageController.view.frame = _tableView.frame;
-    _tabs.hidden = NO;
+    _tabsView.hidden = NO;
     _tableView.hidden = YES;
+    [self addChildViewController:_pageController];
+    [self.containerView addSubview:_pageController.view];
+    _pageController.view.frame = _containerView.frame;
     [_pageController didMoveToParentViewController:self];
 }
 
 - (void)hideTabs
 {
-    _tabs.hidden = YES;
+    _tabsView.hidden = YES;
     _tableView.hidden = NO;
     [_pageController.view removeFromSuperview];
     [_pageController removeFromParentViewController];
+}
+
+- (void)textFieldRightImageTap:(UITapGestureRecognizer *)recognizer
+{
+    [self clearLastWord];
 }
 
 - (IBAction)tabChanged:(id)sender
@@ -523,14 +542,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [self updateHint];
     if (!(self.addressSearch && !self.citiesLoaded))
         [self restoreSearch];
-}
-
-- (IBAction)leftImgButtonPress:(id)sender
-{
-    [self restoreInputLayout];
-    [self resetSearch];
-    if (self.addressSearch && [self tabsVisible])
-        [self reloadCities];
 }
 
 - (IBAction)barActionTextButtonPress:(id)sender
@@ -850,43 +861,13 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     BOOL showInputView = _barActionType != BarActionEditHistory;
     BOOL showMapCenterSearch = !showBarActionView && _searchNearMapCenter && self.searchQuery.length == 0 && _distanceFromMyLocation > 0;
     BOOL showTabs = [self tabsVisible] && _barActionType != BarActionEditHistory;
-    CGRect topViewFrame = _topView.frame;
-    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight];
-    statusBarHeight = statusBarHeight == 0 ? 10.0 : statusBarHeight;
-    topViewFrame.size.height = (showInputView ? kInitialSearchToolbarHeight + statusBarHeight : statusBarHeight) + (showMapCenterSearch || showBarActionView ? kBarActionViewHeight : 0.0)  + (showTabs ? kTabsHeight : 0.0);
 
     _textField.hidden = !showInputView;
-    _btnCancel.hidden = !showInputView || _modalInput;
+    _btnCancel.hidden = !showInputView;
     _barActionView.hidden = !showBarActionView;
     _searchNearCenterView.hidden = !showMapCenterSearch;
-    _tabs.hidden = !showTabs;
+    _tabsView.hidden = !showTabs;
 
-    _barActionView.frame = CGRectMake(0.0, showInputView ? 40.0 + statusBarHeight : statusBarHeight, _barActionView.bounds.size.width, _barActionView.bounds.size.height);
-    [self adjustViewPosition:_searchNearCenterView byHeight:showInputView ? 40.0 : 0.0];
-
-    [self adjustViewPosition:_btnCancel byHeight:kCancelButtonY];
-    [self adjustViewPosition:_leftImageButton byHeight:kLeftImageButtonY];
-
-    if (_modalInput)
-    {
-        self.leftImageButton.hidden = NO;
-        self.textField.frame = CGRectMake(44 + OAUtilities.getLeftMargin, 5 + statusBarHeight, self.view.frame.size.width - 44 - 8 - 2*OAUtilities.getLeftMargin, self.textField.frame.size.height);
-    }
-    else
-    {
-        self.leftImageButton.hidden = YES;
-        self.textField.frame = CGRectMake(8 + OAUtilities.getLeftMargin, 5 + statusBarHeight, self.view.frame.size.width - 84 - 8 - 2*OAUtilities.getLeftMargin, self.textField.frame.size.height);
-        self.tabs.frame = CGRectMake(8 + OAUtilities.getLeftMargin, self.tabs.frame.origin.y, self.view.frame.size.width - 2*8 - 2*OAUtilities.getLeftMargin, self.tabs.frame.size.height);
-        self.btnCancel.frame = CGRectMake(self.view.frame.size.width - 84 - OAUtilities.getLeftMargin + 8, self.btnCancel.frame.origin.y, self.btnCancel.frame.size.width, self.btnCancel.frame.size.height);
-    }
-
-    _topView.frame = topViewFrame;
-    _tableView.frame = CGRectMake(
-            0.,
-            topViewFrame.size.height,
-            topViewFrame.size.width,
-            self.view.frame.size.height - topViewFrame.size.height - (_bottomViewVisible ? self.view.frame.size.height - _bottomView.frame.origin.y : 0.)
-    );
     _pageController.view.frame = _tableView.frame;
 }
 
@@ -895,18 +876,10 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     _lbSearchNearCenter.text = [NSString stringWithFormat:@"%@ %@ %@", OALocalizedString(@"you_searching"), [OAOsmAndFormatter getFormattedDistance:self.distanceFromMyLocation], OALocalizedString(@"from_location")];
 }
 
-- (void) adjustViewPosition:(UIView *)view byHeight:(CGFloat)height
-{
-    CGRect frame = view.frame;
-    CGFloat statusBarHeight = [OAUtilities getStatusBarHeight] == 0 ? 10.0 : [OAUtilities getStatusBarHeight];
-    frame.origin.y = statusBarHeight + height;
-    view.frame = frame;
-}
-
 -(void)showWaitingIndicator
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [_leftImgView setHidden:YES];
+        [_rightImgView setHidden:YES];
         [_activityIndicatorView setHidden:NO];
         [_activityIndicatorView startAnimating];
     });
@@ -916,7 +889,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_activityIndicatorView setHidden:YES];
-        [_leftImgView setHidden:NO];
+        [_rightImgView setHidden:NO];
     });
 }
 
@@ -1365,7 +1338,14 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (IBAction) btnCancelClicked:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    if(_modalInput){
+        [self restoreInputLayout];
+        [self resetSearch];
+        if (self.addressSearch && [self tabsVisible])
+            [self reloadCities];
+    }else{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 - (IBAction) btnMyLocationClicked:(id)sender
@@ -1426,6 +1406,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         self.runSearchFirstTime = NO;
         [self runSearch];
     }
+    
+    [_rightImgView setImage: [UIImage systemImageNamed: !textEmpty ? @"xmark.circle" : @"magnifyingglass"]];
 
     [self.view setNeedsLayout];
 }

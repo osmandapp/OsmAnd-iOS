@@ -1029,6 +1029,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) NSString *customPluginsJson;
 
 @property (nonatomic) OATravelGuidesState *travelGuidesState;
+@property (nonatomic) NSArray<UIViewController *> *previousOpenedScreens;
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;

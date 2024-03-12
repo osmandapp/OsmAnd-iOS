@@ -415,8 +415,11 @@
         BOOL didAddFiles = [self addNewGpxFiles:existingGpxPaths];
         if (didAddFiles)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewTracksFetched
-                                                                object:self];
+            [self save];
+        }
+        else
+        {
+            [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksReloaded object:self];
         }
     });
 }
@@ -429,6 +432,7 @@
         [dbContent addObject:[self generateGpxData:gpx]];
     }
     [dbContent writeToFile:self.dbFilePath atomically:YES];
+    [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksReloaded object:self];
 }
 
 - (BOOL) addNewGpxFiles:(NSSet<NSString *> *)existingFilePaths

@@ -12,7 +12,7 @@
 
 #define kDefaultTrackColor 0xFFFF0000
 
-#define kNotificationNewTracksFetched @"kNotificationNewTracksFetched"
+#define kGPXDBTracksReloaded @"kGPXDBTracksReloaded"
 
 typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeNone = -1,

@@ -395,8 +395,12 @@
                 TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
                 if (gpxController == nil)
                     return;
-    
-                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                
+                NSArray<UIViewController *> *previousOpenedScreens =  OAAppSettings.sharedManager.previousOpenedScreens;
+                if (previousOpenedScreens && previousOpenedScreens.count > 0)
+                {
+                    [[OARootViewController instance].navigationController setViewControllers:previousOpenedScreens animated:YES];
+                }
             }
         }
     }];

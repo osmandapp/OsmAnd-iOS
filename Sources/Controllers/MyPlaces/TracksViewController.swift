@@ -188,6 +188,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             updateData()
             shouldReload = false
         }
+        
+        if settings.previousOpenedScreens != nil {
+            settings.previousOpenedScreens = nil
+        }
     }
     
     override func viewDidLoad() {
@@ -202,6 +206,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         trackRecordingObserver = OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable)
         trackStartStopObserver = OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable)
+        NotificationCenter.default.addObserver(self, selector: #selector(onRefreshEnd), name: Notification.Name(kGPXDBTracksReloaded), object: nil)
         
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
@@ -448,8 +453,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     @objc private func onRefresh() {
-        updateAllFoldersVCData()
-        tableView.refreshControl?.endRefreshing()
+        gpxDB.load()
+    }
+    
+    @objc private func onRefreshEnd() {
+        DispatchQueue.main.async { [weak self] in
+            self?.updateAllFoldersVCData()
+            self?.tableView.refreshControl?.endRefreshing()
+        }
     }
     
     func setupSearchController() {
@@ -480,9 +491,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - Data
     
     private func buildFoldersTree() {
-        
-        gpxDB.load() // ???
-        
         guard let allTracks = gpxDB.gpxList as? [OAGPX] else { return }
         guard let visibleTrackPaths = settings.mapSettingVisibleGpx.get() else { return }
 
@@ -1116,6 +1124,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         } else if item.key == trackKey {
             if let filename = item.string(forKey: fileNameKey) {
                 if let track = currentFolder.tracks[filename] {
+                    settings.previousOpenedScreens = navigationController?.viewControllers
                     rootVC.mapPanel.openTargetView(with: track)
                     rootVC.navigationController?.popToRootViewController(animated: true)
                 }

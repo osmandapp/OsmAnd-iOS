@@ -740,7 +740,7 @@
             for (OATargetPoint *point in transportStopAmenities)
             {
                 OAPOI *amenity = (OAPOI *)point.targetObj;
-                OATransportStop *transportStop = [OATransportStopsBaseController findBestTransportStopForAmenity:amenity];
+                OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
                 if (transportStop && self.mapViewController.mapLayers.transportStopsLayer)
                 {
                     [selectedObjects removeObject:point];

@@ -191,7 +191,7 @@
     self.nearbyRoutes = nearbyRoutes;
 }
 
-+ (OATransportStop *) findBestTransportStopForAmenity:(OAPOI *)amenity
++ (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity
 {
     OATransportStopAggregated *stopAggregated;
     BOOL isSubwayEntrance = [amenity.type.name isEqualToString:@"subway_entrance"];

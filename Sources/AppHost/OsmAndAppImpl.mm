@@ -304,23 +304,20 @@
 
 - (void)migrateOldWidgetKeysIfNeeded
 {
-    if (!_firstLaunch)
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults boolForKey:kIsOldWidgetKeysMigratedKey])
     {
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        if (![userDefaults boolForKey:kIsOldWidgetKeysMigratedKey])
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        for (OAApplicationMode *mode in [OAApplicationMode allPossibleValues])
         {
-            OAAppSettings *settings = [OAAppSettings sharedManager];
-            for (OAApplicationMode *mode in [OAApplicationMode allPossibleValues])
-            {
-                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.topWidgetPanelOrderOld newPanelPreference:settings.topWidgetPanelOrder];
-                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.bottomWidgetPanelOrderOld newPanelPreference:settings.bottomWidgetPanelOrder];
-                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.leftWidgetPanelOrder newPanelPreference:nil];
-                [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.rightWidgetPanelOrder newPanelPreference:nil];
-                [OAWidgetUtils updateExistingCustomWidgetIds:mode customIdsPreference:settings.customWidgetKeys];
-                [OAWidgetUtils updateExistingWidgetsVisibility:mode visibilityPreference:settings.mapInfoControls];
-            }
-            [userDefaults setBool:YES forKey:kIsOldWidgetKeysMigratedKey];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.topWidgetPanelOrderOld newPanelPreference:settings.topWidgetPanelOrder];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.bottomWidgetPanelOrderOld newPanelPreference:settings.bottomWidgetPanelOrder];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.leftWidgetPanelOrder newPanelPreference:nil];
+            [OAWidgetUtils updateExistingWidgetIds:mode panelPreference:settings.rightWidgetPanelOrder newPanelPreference:nil];
+            [OAWidgetUtils updateExistingCustomWidgetIds:mode customIdsPreference:settings.customWidgetKeys];
+            [OAWidgetUtils updateExistingWidgetsVisibility:mode visibilityPreference:settings.mapInfoControls];
         }
+        [userDefaults setBool:YES forKey:kIsOldWidgetKeysMigratedKey];
     }
 }
 
@@ -533,8 +530,10 @@
     
     if (_firstLaunch)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
-        [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:NSDate.date forKey:kInstallDate];
+        [userDefaults setFloat:currentVersion forKey:@"appVersion"];
+        [userDefaults setBool:YES forKey:kIsOldWidgetKeysMigratedKey];
         _resourcesManager->installBuiltInTileSources();
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
     }

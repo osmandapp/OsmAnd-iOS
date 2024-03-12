@@ -9,7 +9,7 @@
 import Foundation
 
 extension String {
-    func trim() -> String {
-        return self.trimmingCharacters(in: CharacterSet.whitespaces)
+    func trimWhitespaces() -> String {
+        trimmingCharacters(in: .whitespaces)
     }
 }

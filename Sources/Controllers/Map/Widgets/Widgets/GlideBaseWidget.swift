@@ -36,10 +36,10 @@ class GlideBaseWidget: OASimpleWidget {
     }
 
     func isTimeToUpdate() -> Bool {
-        return isTimeToUpdate(Self.updateIntervalMillis)
+        isTimeToUpdate(Self.updateIntervalMillis)
     }
 
     func isTimeToUpdate(_ interval: Int) -> Bool {
-        return Int(Date.now.timeIntervalSince1970) - lastUpdateTime > interval
+        Int(Date.now.timeIntervalSince1970) - lastUpdateTime > interval
     }
 }

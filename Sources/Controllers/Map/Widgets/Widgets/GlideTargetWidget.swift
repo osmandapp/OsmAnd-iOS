@@ -29,10 +29,12 @@ final class GlideTargetWidget: GlideBaseWidget {
         
         updateInfo()
         onClickFunction = { [weak self] _ in
-            self?.forceUpdate = true
-            self?.widgetState?.changeToNextState()
-            self?.updateInfo()
-            self?.setContentTitle(self?.getWidgetName())
+            guard let self else { return }
+
+            forceUpdate = true
+            widgetState.changeToNextState()
+            updateInfo()
+            setContentTitle(getWidgetName())
         }
         setContentTitle(getWidgetName())
         setIcon("widget_glide_ratio_to_target")
@@ -67,7 +69,6 @@ final class GlideTargetWidget: GlideBaseWidget {
             settingRow.cellType = OAValueTableViewCell.reuseIdentifier
             settingRow.key = "value_pref"
             settingRow.title = localizedString("shared_string_mode")
-            settingRow.descr = localizedString("shared_string_mode")
             settingRow.setObj(preference, forKey: "pref")
             settingRow.setObj(getWidgetName() ?? localizedString("glide_ratio_to_target"), forKey: "value")
             settingRow.setObj(getPossibleValues(), forKey: "possible_values")
@@ -81,7 +82,7 @@ final class GlideTargetWidget: GlideBaseWidget {
             let row = OATableRowData()
             row.cellType = OASimpleTableViewCell.getIdentifier()
             row.setObj(i == 0 ? "false" : "true", forKey: "value")
-            row.title = i == 0 ? localizedString("glide_ratio_to_target") : localizedString("target_elevation")
+            row.title = localizedString(i == 0 ? "glide_ratio_to_target" : "target_elevation")
             res.append(row)
         }
         return res
@@ -91,7 +92,7 @@ final class GlideTargetWidget: GlideBaseWidget {
         guard widgetState != nil else {
             return widgetType?.title
         }
-        return isInTargetAltitudeState() ? localizedString("target_elevation") : localizedString("glide_ratio_to_target")
+        return localizedString(isInTargetAltitudeState() ? "target_elevation" : "glide_ratio_to_target")
     }
 
     private func updateTargetAltitude() {
@@ -119,7 +120,7 @@ final class GlideTargetWidget: GlideBaseWidget {
                     let formattedAltitude: String = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude)
                     let components = formattedAltitude.components(separatedBy: " ")
                     if components.count > 1 {
-                        setText(formattedAltitude.replacingOccurrences(of: components.last!, with: "").trim(), subtext: components.last)
+                        setText(formattedAltitude.replacingOccurrences(of: components.last!, with: "").trimWhitespaces(), subtext: components.last)
                     } else {
                         setText(formattedAltitude, subtext: "")
                     }
@@ -169,7 +170,7 @@ final class GlideTargetWidget: GlideBaseWidget {
     }
 
     private func getCurrentLocation() -> CLLocation? {
-        return OsmAndApp.swiftInstance().locationServices.lastKnownLocation
+        OsmAndApp.swiftInstance().locationServices.lastKnownLocation
     }
 
     private func getTargetLocation() -> CLLocationCoordinate2D? {

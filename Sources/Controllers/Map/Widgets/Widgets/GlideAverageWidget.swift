@@ -44,7 +44,6 @@ final class GlideAverageWidget: GlideBaseWidget {
         settingRow.cellType = OAValueTableViewCell.reuseIdentifier
         settingRow.key = "value_pref"
         settingRow.title = localizedString("shared_string_interval")
-        settingRow.descr = localizedString("shared_string_interval")
         settingRow.setObj(measuredIntervalPref, forKey: "pref")
         settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
         settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")
@@ -67,7 +66,7 @@ final class GlideAverageWidget: GlideBaseWidget {
     }
 
     static func getIntervalTitle(_ intervalValue: Int) -> String {
-        return availableIntervals[intervalValue] ?? "-"
+        availableIntervals[intervalValue] ?? "-"
     }
 
     private static func getAvailableIntervals() -> [Int: String] {
@@ -75,7 +74,7 @@ final class GlideAverageWidget: GlideBaseWidget {
         for interval in AverageValueComputer.measuredIntervals {
             let seconds = interval < 60 * 1000
             let timeInterval = seconds ? String(interval / 1000) : String(interval / 1000 / 60)
-            let timeUnit = interval < 60 * 1000 ? localizedString("shared_string_sec") : localizedString("int_min")
+            let timeUnit = localizedString(interval < 60 * 1000 ? "shared_string_sec" : "int_min")
             let formattedInterval = String(format: localizedString("ltr_or_rtl_combine_via_space"), arguments: [timeInterval, timeUnit])
             intervals[interval] = formattedInterval
         }
@@ -83,7 +82,7 @@ final class GlideAverageWidget: GlideBaseWidget {
     }
 
     func getMeasuredInterval(_ appMode: OAApplicationMode) -> Int {
-        return measuredIntervalPref.get(appMode)
+        measuredIntervalPref.get(appMode)
     }
 
     func setMeasuredInterval(_ appMode: OAApplicationMode, measuredInterval: Int) {

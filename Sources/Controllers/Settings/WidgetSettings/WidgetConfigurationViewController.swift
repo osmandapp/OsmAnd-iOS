@@ -261,7 +261,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 section.addRows(possibleValues)
                 section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
-                vc.screenTitle = item.descr
+                vc.screenTitle = item.descr ?? item.title
                 if isCreateNewAndSimilarAlreadyExist {
                     guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
                           let prefLong = pref as? OACommonLong else {

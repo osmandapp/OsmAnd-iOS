@@ -11,7 +11,7 @@ import Foundation
 @objc(OAAverageValueComputer)
 @objcMembers
 class AverageValueComputer: NSObject {
-    
+
     static let addPointIntervalMillis = 1000
     static let defaultIntervalMillis = 30 * 60 * 1000
     static let measuredIntervals: [Int] = {
@@ -47,7 +47,9 @@ class AverageValueComputer: NSObject {
     func isEnabled() -> Bool {
         false
     }
+}
 
+extension AverageValueComputer {
     func saveLocation(_ location: CLLocation, time: TimeInterval) {
     }
 }

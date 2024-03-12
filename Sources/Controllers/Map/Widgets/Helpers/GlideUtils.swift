@@ -12,6 +12,10 @@ import Foundation
 @objcMembers
 final class GlideUtils: NSObject {
 
+    static let maxValueToDisplay: Double = 150.0
+    static let maxValueToFormat: Double = 100.0
+    static let minAcceptableValue: Double = 0.1
+
     private static let glideRatioFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
@@ -19,10 +23,6 @@ final class GlideUtils: NSObject {
         formatter.locale = Locale(identifier: "en_US")
         return formatter
     }()
-
-    static let maxValueToDisplay: Double = 150.0
-    static let maxValueToFormat: Double = 100.0
-    static let minAcceptableValue: Double = 0.1
 
     static func calculateFormattedRatio(_ l1: CLLocationCoordinate2D, l2: CLLocationCoordinate2D, a1: Double, a2: Double) -> String {
         let distance = OAMapUtils.getDistance(l1.latitude, lon1: l1.longitude, lat2: l2.latitude, lon2: l2.longitude)

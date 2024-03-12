@@ -13,11 +13,11 @@
 
 @interface OATransportStopAggregated : NSObject
 
-@property (nonatomic) OAPOI *amenity;
-@property (nonatomic) NSMutableArray<OATransportStop *> *localTransportStops;
-@property (nonatomic) NSMutableArray<OATransportStop *> *nearbyTransportStops;
+@property (nonatomic, nullable) OAPOI *amenity;
+@property (nonatomic, nonnull) NSMutableArray<OATransportStop *> *localTransportStops;
+@property (nonatomic, nonnull) NSMutableArray<OATransportStop *> *nearbyTransportStops;
 
-- (void) addLocalTransportStop:(OATransportStop *)transportStop;
-- (void) addNearbyTransportStop:(OATransportStop *)transportStop;
+- (void) addLocalTransportStop:(nonnull OATransportStop *)transportStop;
+- (void) addNearbyTransportStop:(nonnull OATransportStop *)transportStop;
 
 @end

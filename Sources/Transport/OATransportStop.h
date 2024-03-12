@@ -16,11 +16,11 @@
 
 @property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> stop;
 @property (nonatomic, readonly) CLLocationCoordinate2D location;
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly, nullable) NSString *name;
 
-@property (nonatomic) OAPOI *poi;
+@property (nonatomic, nullable) OAPOI *poi;
 @property (nonatomic) int distance;
 
-@property (nonatomic) OATransportStopAggregated *transportStopAggregated;
+@property (nonatomic, nullable) OATransportStopAggregated *transportStopAggregated;
 
 @end

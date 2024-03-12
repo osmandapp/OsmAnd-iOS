@@ -19,9 +19,9 @@
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/TransportStopExit.h>
 
-#define ROUNDING_ERROR 3
-#define SHOW_STOPS_RADIUS_METERS 150
-#define SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS 400
+static NSInteger const ROUNDING_ERROR = 3;
+static NSInteger const SHOW_STOPS_RADIUS_METERS = 150;
+static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 
 @implementation OATransportStopsBaseController
 

@@ -14,7 +14,9 @@
 
 @interface OATransportStop : NSObject
 
-@property (nonatomic, assign) std::shared_ptr<const OsmAnd::TransportStop> stop;
+- (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop;
+
+@property (nonatomic, assign, readonly) std::shared_ptr<const OsmAnd::TransportStop> stop;
 @property (nonatomic, readonly) CLLocationCoordinate2D location;
 @property (nonatomic, readonly) NSString *name;
 

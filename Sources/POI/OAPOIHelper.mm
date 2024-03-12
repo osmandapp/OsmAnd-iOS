@@ -792,6 +792,38 @@
         [_delegate searchDone:_breakSearch];
 }
 
++ (OAPOI *)findPOIByName:(NSString *)name lat:(double)lat lon:(double)lon
+{
+    auto keyword = QString::fromNSString(name);
+    OsmAnd::PointI pointI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    const auto& searchCriteria = std::make_shared<OsmAnd::AmenitiesInAreaSearch::Criteria>();
+    searchCriteria->bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(15, pointI);
+    
+    const auto& obfsCollection = [OsmAndApp instance].resourcesManager->obfsCollection;
+    const auto search = std::make_shared<const OsmAnd::AmenitiesInAreaSearch>(obfsCollection);
+
+    std::shared_ptr<const OsmAnd::Amenity> amenity;
+    std::shared_ptr<const OsmAnd::IQueryController> ctrl;
+    ctrl.reset(new OsmAnd::FunctorQueryController([self, &amenity]
+                                                  (const OsmAnd::IQueryController* const controller)
+                                                  {
+                                                      return amenity != nullptr;
+                                                  }));
+    OAAppSettings *settings = [OAAppSettings sharedManager];
+    search->performSearch(*searchCriteria,
+                          [self, &amenity, &keyword, settings]
+                          (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
+                          {
+                              auto a = ((OsmAnd::AmenitiesInAreaSearch::ResultEntry&)resultEntry).amenity;
+                              if (![settings isTypeDisabled:a->subType.toNSString()] && (a->nativeName == keyword || a->localizedNames.contains(keyword)))
+                                  amenity = qMove(a);
+                          }, ctrl);
+    if (amenity)
+        return [OAPOIHelper parsePOIByAmenity:amenity];
+
+    return nil;
+}
+
 + (OAPOI *) findPOIByOriginName:(NSString *)originName lat:(double)lat lon:(double)lon
 {
     OsmAndAppInstance app = [OsmAndApp instance];

@@ -396,7 +396,7 @@
                 if (gpxController == nil)
                     return;
                 
-                NSArray<UIViewController *> *previousOpenedScreens =  OAAppSettings.sharedManager.previousOpenedScreens;
+                NSArray<UIViewController *> *previousOpenedScreens = OAAppSettings.sharedManager.previousOpenedScreens;
                 if (previousOpenedScreens && previousOpenedScreens.count > 0)
                 {
                     [[OARootViewController instance].navigationController setViewControllers:previousOpenedScreens animated:YES];

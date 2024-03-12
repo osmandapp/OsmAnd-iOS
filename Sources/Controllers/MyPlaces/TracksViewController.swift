@@ -92,7 +92,6 @@ private class TrackFolder {
     
     func getTrackByPath(_ path: String) -> OAGPX? {
         var result: OAGPX? = nil
-        let trimmedPath = path.hasPrefix("/") ? path.substring(from: 1) : path
         performForAllTracks { track in
             if path == track.gpxFilePath {
                 result = track
@@ -246,12 +245,12 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             var foundedFolders: [TrackFolder] = []
             var foundedTracks: [OAGPX] = []
             for folder in rootFolder.flattenedFolders.values {
-                if folder.path.lastPathComponent().lowercased().contains(searchText.lowercased()) {
+                if folder.path.lastPathComponent().containsCaseInsensitive(text: searchText) {
                     foundedFolders.append(folder)
                 }
             }
             rootFolder.performForAllTracks { track in
-                if track.gpxFileName.lowercased().contains(searchText.lowercased()) {
+                if track.gpxFileName.containsCaseInsensitive(text: searchText) {
                     foundedTracks.append(track)
                 }
             }
@@ -334,8 +333,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     visibleTracksFolderRow.title = localizedString("tracks_on_map")
                     visibleTracksFolderRow.iconName = "ic_custom_map_pin"
                     visibleTracksFolderRow.setObj(UIColor.iconColorActive, forKey: colorKey)
-                    let descr = String(format: localizedString("folder_tracks_count"), visibleTracksFolder.tracks.count)
-                    visibleTracksFolderRow.descr = descr
+                    visibleTracksFolderRow.descr = String(format: localizedString("folder_tracks_count"), visibleTracksFolder.tracks.count)
                 }
                 
                 var foldersNames = Array(currentTrackFolder.subfolders.keys)

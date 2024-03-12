@@ -10,9 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OACommonTypes.h"
 
-#define kDefaultTrackColor 0xFFFF0000
-
-#define kGPXDBTracksReloaded @"kGPXDBTracksReloaded"
+static NSInteger const kDefaultTrackColor = 0xFFFF0000;
+static NSString * const kGPXDBTracksReloaded = @"kGPXDBTracksReloaded";
 
 typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeNone = -1,

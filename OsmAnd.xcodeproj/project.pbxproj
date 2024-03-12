@@ -278,6 +278,7 @@
 		321251492A4B2081006C44BD /* ic_custom_button_3d@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 321251412A4B2080006C44BD /* ic_custom_button_3d@2x.png */; };
 		3212514A2A4B2081006C44BD /* ic_custom_2d@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 321251422A4B2080006C44BD /* ic_custom_2d@2x.png */; };
 		3212514B2A4B2081006C44BD /* ic_custom_3d@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 321251432A4B2080006C44BD /* ic_custom_3d@3x.png */; };
+		3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3216E9522BA097BD0087D0EF /* StringExtensions.swift */; };
 		3219704B25FA0C6100C3FED6 /* poi_categories.json in Resources */ = {isa = PBXBuildFile; fileRef = 3219704A25FA0C6100C3FED6 /* poi_categories.json */; };
 		3219705825FA0DCE00C3FED6 /* bg_point_square@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705025FA0DCC00C3FED6 /* bg_point_square@2x.png */; };
 		3219705925FA0DCE00C3FED6 /* ic_custom_replace@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */; };
@@ -3760,6 +3761,7 @@
 		321251412A4B2080006C44BD /* ic_custom_button_3d@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_button_3d@2x.png"; path = "Resources/Icons/ic_custom_button_3d@2x.png"; sourceTree = "<group>"; };
 		321251422A4B2080006C44BD /* ic_custom_2d@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_2d@2x.png"; path = "Resources/Icons/ic_custom_2d@2x.png"; sourceTree = "<group>"; };
 		321251432A4B2080006C44BD /* ic_custom_3d@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_3d@3x.png"; path = "Resources/Icons/ic_custom_3d@3x.png"; sourceTree = "<group>"; };
+		3216E9522BA097BD0087D0EF /* StringExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringExtensions.swift; sourceTree = "<group>"; };
 		3219704A25FA0C6100C3FED6 /* poi_categories.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = poi_categories.json; path = ../resources/poi/poi_categories.json; sourceTree = "<group>"; };
 		3219705025FA0DCC00C3FED6 /* bg_point_square@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_square@2x.png"; path = "Resources/Icons/bg_point_square@2x.png"; sourceTree = "<group>"; };
 		3219705125FA0DCC00C3FED6 /* ic_custom_replace@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_replace@2x.png"; path = "Resources/Icons/ic_custom_replace@2x.png"; sourceTree = "<group>"; };
@@ -11375,6 +11377,7 @@
 				DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */,
 				46E8FFC529ED749800DB1EFE /* UINavigationController+keyCommands.h */,
 				46E8FFC629ED756000DB1EFE /* UINavigationController+keyCommands.m */,
+				3216E9522BA097BD0087D0EF /* StringExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -17477,6 +17480,7 @@
 				DA5A814226C563A700F274C7 /* OAOpenStreetMapLocalUtil.mm in Sources */,
 				C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */,
 				DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */,
+				3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */,
 				DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,

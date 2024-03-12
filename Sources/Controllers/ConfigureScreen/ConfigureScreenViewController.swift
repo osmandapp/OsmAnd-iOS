@@ -240,6 +240,7 @@ extension ConfigureScreenViewController {
         let settings = OAAppSettings.sharedManager()!
         if data.key == "map_widget_transparent" {
             settings.transparentMapTheme.set(sw.isOn)
+            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateLayout()
         } else if data.key == "map_widget_distance_by_tap" {
             settings.showDistanceRuler.set(sw.isOn)
             OARootViewController.instance().mapPanel.mapViewController.updateTapRulerLayer()

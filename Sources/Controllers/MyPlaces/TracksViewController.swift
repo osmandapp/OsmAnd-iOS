@@ -89,6 +89,17 @@ private class TrackFolder {
         let trimmedPath = path.hasPrefix("/") ? path.substring(from: 1) : path
         return trimmedPath.isEmpty ? self : flattenedFolders[trimmedPath]
     }
+    
+    func getTrackByPath(_ path: String) -> OAGPX? {
+        var result: OAGPX? = nil
+        let trimmedPath = path.hasPrefix("/") ? path.substring(from: 1) : path
+        performForAllTracks { track in
+            if path == track.gpxFilePath {
+                result = track
+            }
+        }
+        return result
+    }
 }
 
 private enum SortingOptions {
@@ -359,6 +370,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         folderRow.title = folderName
         folderRow.iconName = "ic_custom_folder"
         folderRow.setObj(UIColor.iconColorSelected, forKey: colorKey)
+        folderRow.setObj(folder.path, forKey: pathKey)
         let tracksCount = folder.tracksCount
         folderRow.setObj(tracksCount, forKey: tracksCountKey)
         let descr = String(format: localizedString("folder_tracks_count"), tracksCount)
@@ -468,6 +480,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         searchController.searchResultsUpdater = self
         searchController.searchBar.delegate = self
         searchController.obscuresBackgroundDuringPresentation = false
+        definesPresentationContext = true
         tabBarController?.navigationItem.searchController = searchController
         updateSearchController()
     }
@@ -1106,10 +1119,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 show(vc)
             }
         } else if item.key == tracksFolderKey {
-            if let subfolderName = item.title {
+            if let subfolderPath = item.obj(forKey: pathKey) as? String {
                 let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
                 if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
-                    let subfolderPath = currentFolderPath.appendingPathComponent(subfolderName)
                     if let subfolder = rootFolder.getFolderByPath(subfolderPath) {
                         vc.currentFolder = subfolder
                         vc.currentFolderPath = subfolderPath
@@ -1122,8 +1134,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             }
         } else if item.key == trackKey {
-            if let filename = item.string(forKey: fileNameKey) {
-                if let track = currentFolder.tracks[filename] {
+            if let trackPath = item.obj(forKey: pathKey) as? String {
+                if let track = rootFolder.getTrackByPath(trackPath) {
                     settings.previousOpenedScreens = navigationController?.viewControllers
                     rootVC.mapPanel.openTargetView(with: track)
                     rootVC.navigationController?.popToRootViewController(animated: true)

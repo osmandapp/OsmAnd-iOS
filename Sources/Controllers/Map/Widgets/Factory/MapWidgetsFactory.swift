@@ -106,6 +106,11 @@ class MapWidgetsFactory: NSObject {
         case .sunPosition:
             let sunPositiontState = OASunriseSunsetWidgetState(widgetType: .sunPosition, customId: customId)
             return OASunriseSunsetWidget(state: sunPositiontState, appMode: appMode, widgetParams: widgetParams)
+        case .glideTarget:
+            let glideWidgetState = GlideTargetWidgetState(customId)
+            return GlideTargetWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
+        case .glideAverage:
+            return GlideAverageWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:

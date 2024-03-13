@@ -7,6 +7,7 @@
 //
 
 #import "OAMapUtils.h"
+#import "OANativeUtilities.h"
 #import "OAPOI.h"
 #import "QuadRect.h"
 
@@ -349,6 +350,39 @@
 +(double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
 {
     return OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
+}
+
++ (BOOL)areLocationEqual:(CLLocation *)l1 l2:(CLLocation *)l2
+{
+    return (l1 == nil && l2 == nil) || (l2 != nil && [self areLocationEqual:l1 lat:l2.coordinate.latitude lon:l2.coordinate.longitude]);
+}
+
++ (BOOL)areLocationEqual:(CLLocation *)l lat:(CGFloat)lat lon:(CGFloat)lon
+{
+    return l != nil && [self areLatLonEqual:l.coordinate.latitude lon1:l.coordinate.longitude lat2:lat lon2:lon];
+}
+
++ (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 l2:(CLLocationCoordinate2D)l2
+{
+    return (!CLLocationCoordinate2DIsValid(l1) && !CLLocationCoordinate2DIsValid(l2))
+        || (CLLocationCoordinate2DIsValid(l2) && [self areLatLonEqual:l1 lat:l2.latitude lon:l1.longitude]);
+}
+
++ (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l lat:(CGFloat)lat lon:(CGFloat)lon
+{
+    return CLLocationCoordinate2DIsValid(l) && [self areLatLonEqual:l.latitude lon1:l.longitude lat2:lat lon2:lon];
+}
+
++ (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2
+{
+    BOOL latEqual = (isnan(lat1) && isnan(lat2)) || (abs(lat1 - lat2) < 0.00001);
+    BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || (abs(lon1 - lon2) < 0.00001);
+    return latEqual && lonEqual;
+}
+
++ (double)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon
+{
+    return [OANativeUtilities getAltitudeForElevatedPoint:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
 }
 
 @end

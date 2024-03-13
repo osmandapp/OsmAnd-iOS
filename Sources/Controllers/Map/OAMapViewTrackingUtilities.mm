@@ -29,10 +29,10 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>
 
-#define COMPASS_REQUEST_TIME_INTERVAL 5
-#define AUTO_ZOOM_DEFAULT_CHANGE_ZOOM 4.5
-#define MOVE_ANIMATION_TIME 0.5
-#define NAV_ANIMATION_TIME 1.0
+static double const COMPASS_REQUEST_TIME_INTERVAL = 5;
+static double const AUTO_ZOOM_DEFAULT_CHANGE_ZOOM = 4.5;
+static double const MOVE_ANIMATION_TIME = 0.5;
+static double const NAV_ANIMATION_TIME = 1.0;
 
 @interface OAMapViewTrackingUtilities ()
 
@@ -266,6 +266,7 @@
     }
 }
 
+// TODO: sync it with android
 - (void) onLocationServicesUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -430,7 +431,6 @@
     NSTimeInterval now = [[NSDate now] timeIntervalSince1970];
     BOOL isUserZoomed = _lastTimeManualZooming > _lastTimeAutoZooming;
 
-    
     if (isUserZoomed)
         return (now - _lastTimeManualZooming) > MAX([_settings.autoFollowRoute get], AUTO_ZOOM_DEFAULT_CHANGE_ZOOM);
     else

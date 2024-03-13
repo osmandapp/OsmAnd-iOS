@@ -97,13 +97,13 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellKeyKey : kUseHHRouting,
-        kCellTitleKey : @"Use special routing (HH + old)",
+        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_special_routing_hh+old"),
         @"isOn" : @([[OAAppSettings sharedManager].useHHRouting get])
     }];
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellKeyKey : kUseHHRoutingOnly,
-        kCellTitleKey : @"Use special routing (HH only)",
+        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_special_routing_hh_only"),
         @"isOn" : @([[OAAppSettings sharedManager].useHHRoutingOnly get])
     }];
     [_data addSection:simulationSection];
@@ -113,7 +113,7 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
     [navigationSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
         kCellKeyKey : kUseV1AutoZoom,
-        kCellTitleKey : @"Discrete autozoom (old version)",
+        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_discrete_autozoom"),
         @"isOn" : @([[OAAppSettings sharedManager].useV1AutoZoom get])
     }];
     [_data addSection:navigationSection];

@@ -17,24 +17,24 @@ const static int kZoomDurationMillis = 1500;
 
 @interface OAAutoZoomDTO : NSObject
 
-@property (nonatomic) OAComplexZoom *zoomValue;
+@property (nonatomic, nonnull) OAComplexZoom *zoomValue;
 @property (nonatomic) float floatValue;
-- (instancetype) initWithZoom:(OAComplexZoom *)zoomValue floatValue:(float)floatValue;
+- (instancetype _Nonnull) initWithZoom:(OAComplexZoom *_Nonnull)zoomValue floatValue:(float)floatValue;
 
 @end
 
 
 @interface OAAutoZoomBySpeedHelper : NSObject
 
-- (double) calculateAutoZoomBySpeedV1:(float)speed mapView:(OAMapRendererView *)mapView;
+- (double) calculateAutoZoomBySpeedV1:(float)speed mapView:(OAMapRendererView *_Nonnull)mapView;
 
-- (OAComplexZoom *) calculateZoomBySpeedToAnimate:(OAMapRendererView *)mapRenderer myLocation:(CLLocation *)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *)nextTurn;
+- (OAComplexZoom *_Nullable) calculateZoomBySpeedToAnimate:(OAMapRendererView *_Nonnull)mapRenderer myLocation:(CLLocation *_Nonnull)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *_Nonnull)nextTurn;
 
-- (OAAutoZoomDTO *) getAnimatedZoomParamsForChart:(OAMapRendererView *)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon heading:(float)heading speed:(float)speed;
+- (OAAutoZoomDTO *_Nullable) getAnimatedZoomParamsForChart:(OAMapRendererView *_Nonnull)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon heading:(float)heading speed:(float)speed;
 
-- (OAComplexZoom *) calculateRawZoomBySpeedForChart:(OAMapRendererView *)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon rotation:(float)rotation speed:(float)speed;
+- (OAComplexZoom *_Nullable) calculateRawZoomBySpeedForChart:(OAMapRendererView *_Nonnull)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon rotation:(float)rotation speed:(float)speed;
 
-- (OAAutoZoomDTO *) getAutoZoomParams:(float)currentZoom autoZoom:(OAComplexZoom *)autoZoom fixedDurationMillis:(float)fixedDurationMillis;
+- (OAAutoZoomDTO *_Nullable) getAutoZoomParams:(float)currentZoom autoZoom:(OAComplexZoom *_Nonnull)autoZoom fixedDurationMillis:(float)fixedDurationMillis;
 
 - (void) onManualZoomChange;
 

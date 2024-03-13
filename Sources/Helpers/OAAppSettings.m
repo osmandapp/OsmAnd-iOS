@@ -16,418 +16,418 @@
 #import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-#define settingShowMapRuletKey @"settingShowMapRuletKey"
-#define metricSystemKey @"settingMetricSystemKey"
-#define drivingRegionAutomaticKey @"drivingRegionAutomatic"
-#define drivingRegionKey @"settingDrivingRegion"
-#define settingZoomButtonKey @"settingZoomButtonKey"
-#define settingGeoFormatKey @"settingGeoFormatKey"
-#define settingMapArrowsKey @"settingMapArrowsKey"
-#define settingMapShowAltInDriveModeKey @"settingMapShowAltInDriveModeKey"
-#define settingDoNotShowPromotionsKey @"settingDoNotShowPromotionsKey"
-#define settingUseFirebaseKey @"settingUseFirebaseKey"
-#define metricSystemChangedManuallyKey @"metricSystemChangedManuallyKey"
-#define liveUpdatesPurchasedKey @"liveUpdatesPurchasedKey"
-#define settingOsmAndLiveEnabledKey @"settingOsmAndLiveEnabledKey"
-#define liveUpdatesRetriesKey @"liveUpdatesRetriesKey"
-#define settingExternalInputDeviceKey @"settingExternalInputDeviceKey"
+static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
+static NSString * const metricSystemKey = @"settingMetricSystemKey";
+static NSString * const drivingRegionAutomaticKey = @"drivingRegionAutomatic";
+static NSString * const drivingRegionKey = @"settingDrivingRegion";
+static NSString * const settingZoomButtonKey = @"settingZoomButtonKey";
+static NSString * const settingGeoFormatKey = @"settingGeoFormatKey";
+static NSString * const settingMapArrowsKey = @"settingMapArrowsKey";
+static NSString * const settingMapShowAltInDriveModeKey = @"settingMapShowAltInDriveModeKey";
+static NSString * const settingDoNotShowPromotionsKey = @"settingDoNotShowPromotionsKey";
+static NSString * const settingUseFirebaseKey = @"settingUseFirebaseKey";
+static NSString * const metricSystemChangedManuallyKey = @"metricSystemChangedManuallyKey";
+static NSString * const liveUpdatesPurchasedKey = @"liveUpdatesPurchasedKey";
+static NSString * const settingOsmAndLiveEnabledKey = @"settingOsmAndLiveEnabledKey";
+static NSString * const liveUpdatesRetriesKey = @"liveUpdatesRetriesKey";
+static NSString * const settingExternalInputDeviceKey = @"settingExternalInputDeviceKey";
 
-#define mapSettingShowFavoritesKey @"mapSettingShowFavoritesKey"
-#define mapSettingShowPoiLabelKey @"mapSettingShowPoiLabelKey"
-#define mapSettingShowBordersOfDownloadedMapsKey @"mapSettingShowBordersOfDownloadedMapsKey"
-#define mapSettingShowOfflineEditsKey @"mapSettingShowOfflineEditsKey"
-#define mapSettingShowOnlineNotesKey @"mapSettingShowOnlineNotesKey"
-#define layerTransparencySeekbarModeKey @"layerTransparencySeekbarModeKey"
-#define mapSettingVisibleGpxKey @"selected_gpx"
+static NSString * const mapSettingShowFavoritesKey = @"mapSettingShowFavoritesKey";
+static NSString * const mapSettingShowPoiLabelKey = @"mapSettingShowPoiLabelKey";
+static NSString * const mapSettingShowBordersOfDownloadedMapsKey = @"mapSettingShowBordersOfDownloadedMapsKey";
+static NSString * const mapSettingShowOfflineEditsKey = @"mapSettingShowOfflineEditsKey";
+static NSString * const mapSettingShowOnlineNotesKey = @"mapSettingShowOnlineNotesKey";
+static NSString * const layerTransparencySeekbarModeKey = @"layerTransparencySeekbarModeKey";
+static NSString * const mapSettingVisibleGpxKey = @"selected_gpx";
 
-#define billingUserIdKey @"billingUserIdKey"
-#define billingUserNameKey @"billingUserNameKey"
-#define billingUserTokenKey @"billingUserTokenKey"
-#define billingUserEmailKey @"billingUserEmailKey"
-#define billingUserCountryKey @"billingUserCountryKey"
-#define billingUserCountryDownloadNameKey @"billingUserCountryDownloadNameKey"
-#define billingHideUserNameKey @"billingHideUserNameKey"
-#define billingPurchaseTokenSentKey @"billingPurchaseTokenSentKey"
-#define billingPurchaseTokensSentKey @"billingPurchaseTokensSentKey"
-#define liveUpdatesPurchaseCancelledFirstDlgShownKey @"liveUpdatesPurchaseCancelledFirstDlgShownKey"
-#define liveUpdatesPurchaseCancelledSecondDlgShownKey @"liveUpdatesPurchaseCancelledSecondDlgShownKey"
-#define fullVersionPurchasedKey @"fullVersionPurchasedKey"
-#define depthContoursPurchasedKey @"depthContoursPurchasedKey"
-#define contourLinesPurchasedKey @"contourLinesPurchasedKey"
-#define wikipediaPurchasedKey @"wikipediaPurchasedKey"
-#define emailSubscribedKey @"emailSubscribedKey"
-#define osmandProPurchasedKey @"osmandProPurchasedKey"
-#define osmandMapsPurchasedKey @"osmandMapsPurchasedKey"
-#define lastReceiptValidationDateKey @"lastReceiptValidationDateKey"
-#define eligibleForIntroductoryPriceKey @"eligibleForIntroductoryPriceKey"
-#define eligibleForSubscriptionOfferKey @"eligibleForSubscriptionOfferKey"
-#define shouldShowWhatsNewScreenKey @"shouldShowWhatsNewScreenKey"
+static NSString * const billingUserIdKey = @"billingUserIdKey";
+static NSString * const billingUserNameKey = @"billingUserNameKey";
+static NSString * const billingUserTokenKey = @"billingUserTokenKey";
+static NSString * const billingUserEmailKey = @"billingUserEmailKey";
+static NSString * const billingUserCountryKey = @"billingUserCountryKey";
+static NSString * const billingUserCountryDownloadNameKey = @"billingUserCountryDownloadNameKey";
+static NSString * const billingHideUserNameKey = @"billingHideUserNameKey";
+static NSString * const billingPurchaseTokenSentKey = @"billingPurchaseTokenSentKey";
+static NSString * const billingPurchaseTokensSentKey = @"billingPurchaseTokensSentKey";
+static NSString * const liveUpdatesPurchaseCancelledFirstDlgShownKey = @"liveUpdatesPurchaseCancelledFirstDlgShownKey";
+static NSString * const liveUpdatesPurchaseCancelledSecondDlgShownKey = @"liveUpdatesPurchaseCancelledSecondDlgShownKey";
+static NSString * const fullVersionPurchasedKey = @"fullVersionPurchasedKey";
+static NSString * const depthContoursPurchasedKey = @"depthContoursPurchasedKey";
+static NSString * const contourLinesPurchasedKey = @"contourLinesPurchasedKey";
+static NSString * const wikipediaPurchasedKey = @"wikipediaPurchasedKey";
+static NSString * const emailSubscribedKey = @"emailSubscribedKey";
+static NSString * const osmandProPurchasedKey = @"osmandProPurchasedKey";
+static NSString * const osmandMapsPurchasedKey = @"osmandMapsPurchasedKey";
+static NSString * const lastReceiptValidationDateKey = @"lastReceiptValidationDateKey";
+static NSString * const eligibleForIntroductoryPriceKey = @"eligibleForIntroductoryPriceKey";
+static NSString * const eligibleForSubscriptionOfferKey = @"eligibleForSubscriptionOfferKey";
+static NSString * const shouldShowWhatsNewScreenKey = @"shouldShowWhatsNewScreenKey";
 
-#define mapSettingTrackRecordingKey @"mapSettingTrackRecordingKey"
+static NSString * const mapSettingTrackRecordingKey = @"mapSettingTrackRecordingKey";
 
-#define mapSettingSaveGlobalTrackToGpxKey @"mapSettingSaveGlobalTrackToGpxKey"
-#define mapSettingSaveTrackIntervalGlobalKey @"mapSettingSaveTrackIntervalGlobalKey"
-#define mapSettingSaveTrackIntervalApprovedKey @"mapSettingSaveTrackIntervalApprovedKey"
-#define mapSettingShowRecordingTrackKey @"mapSettingShowRecordingTrackKey"
-#define mapSettingShowTripRecordingStartDialogKey @"mapSettingShowTripRecordingStartDialogKey"
+static NSString * const mapSettingSaveGlobalTrackToGpxKey = @"mapSettingSaveGlobalTrackToGpxKey";
+static NSString * const mapSettingSaveTrackIntervalGlobalKey = @"mapSettingSaveTrackIntervalGlobalKey";
+static NSString * const mapSettingSaveTrackIntervalApprovedKey = @"mapSettingSaveTrackIntervalApprovedKey";
+static NSString * const mapSettingShowRecordingTrackKey = @"mapSettingShowRecordingTrackKey";
+static NSString * const mapSettingShowTripRecordingStartDialogKey = @"mapSettingShowTripRecordingStartDialogKey";
 
-#define mapSettingSaveTrackIntervalKey @"mapSettingSaveTrackIntervalKey"
-#define mapSettingRecordingIntervalKey @"mapSettingRecordingIntervalKey"
+static NSString * const mapSettingSaveTrackIntervalKey = @"mapSettingSaveTrackIntervalKey";
+static NSString * const mapSettingRecordingIntervalKey = @"mapSettingRecordingIntervalKey";
 
-#define settingMapLanguageKey @"settingMapLanguageKey"
-#define settingPrefMapLanguageKey @"settingPrefMapLanguageKey"
-#define settingMapLanguageShowLocalKey @"settingMapLanguageShowLocalKey"
-#define settingMapLanguageTranslitKey @"settingMapLanguageTranslitKey"
+static NSString * const settingMapLanguageKey = @"settingMapLanguageKey";
+static NSString * const settingPrefMapLanguageKey = @"settingPrefMapLanguageKey";
+static NSString * const settingMapLanguageShowLocalKey = @"settingMapLanguageShowLocalKey";
+static NSString * const settingMapLanguageTranslitKey = @"settingMapLanguageTranslitKey";
 
-#define selectedPoiFiltersKey @"selectedPoiFiltersKey"
-#define pluginsKey @"pluginsKey"
-#define impassableRoadsKey @"impassableRoadsKey"
+static NSString * const selectedPoiFiltersKey = @"selectedPoiFiltersKey";
+static NSString * const pluginsKey = @"pluginsKey";
+static NSString * const impassableRoadsKey = @"impassableRoadsKey";
 
-#define discountIdKey @"discountId"
-#define discountShowNumberOfStartsKey @"discountShowNumberOfStarts"
-#define discountTotalShowKey @"discountTotalShow"
-#define discountShowDatetimeKey @"discountShowDatetime"
+static NSString * const discountIdKey = @"discountId";
+static NSString * const discountShowNumberOfStartsKey = @"discountShowNumberOfStarts";
+static NSString * const discountTotalShowKey = @"discountTotalShow";
+static NSString * const discountShowDatetimeKey = @"discountShowDatetime";
 
-#define lastSearchedCityKey @"lastSearchedCity"
-#define lastSearchedCityNameKey @"lastSearchedCityName"
-#define lastSearchedPointLatKey @"lastSearchedPointLat"
-#define lastSearchedPointLonKey @"lastSearchedPointLon"
+static NSString * const lastSearchedCityKey = @"lastSearchedCity";
+static NSString * const lastSearchedCityNameKey = @"lastSearchedCityName";
+static NSString * const lastSearchedPointLatKey = @"lastSearchedPointLat";
+static NSString * const lastSearchedPointLonKey = @"lastSearchedPointLon";
 
-#define applicationModeKey @"applicationMode"
-#define defaultApplicationModeKey @"default_application_mode_string"
-#define defaultCarplayModeKey @"default_carplay_mode_string"
-#define carPlayModeIsDefaultKey @"carplay_mode_is_default_string"
-#define availableApplicationModesKey @"available_application_modes"
-#define customAppModesKey @"customAppModes"
+static NSString * const applicationModeKey = @"applicationMode";
+static NSString * const defaultApplicationModeKey = @"default_application_mode_string";
+static NSString * const defaultCarplayModeKey = @"default_carplay_mode_string";
+static NSString * const carPlayModeIsDefaultKey = @"carplay_mode_is_default_string";
+static NSString * const availableApplicationModesKey = @"available_application_modes";
+static NSString * const customAppModesKey = @"customAppModes";
 
-#define mapInfoControlsKey @"mapInfoControls"
-#define transparentMapThemeKey @"transparentMapTheme"
-#define showStreetNameKey @"showStreetName"
-#define positionPlacementOnMapKey @"positionPlacementOnMap"
-#define rotateMapKey @"rotateMap"
-#define compassModeKey @"compassMode"
-#define firstMapIsDownloadedKey @"firstMapIsDownloaded"
+static NSString * const mapInfoControlsKey = @"mapInfoControls";
+static NSString * const transparentMapThemeKey = @"transparentMapTheme";
+static NSString * const showStreetNameKey = @"showStreetName";
+static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
+static NSString * const rotateMapKey = @"rotateMap";
+static NSString * const compassModeKey = @"compassMode";
+static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
 
 // App profiles
-#define appModeBeanPrefsIdsKey @"appModeBeanPrefsIds"
-#define routingProfileKey @"routingProfile"
-#define derivedProfileKey @"derivedProfile"
-#define profileIconNameKey @"profileIconName"
-#define profileIconColorKey @"profileIconColor"
-#define userProfileNameKey @"userProfileName"
-#define parentAppModeKey @"parentAppMode"
-#define routeServiceKey @"routeService"
-#define navigationIconKey @"navigationIcon"
-#define locationIconKey @"locationIcon"
-#define appModeOrderKey @"appModeOrder"
-#define defaultSpeedKey @"defaultSpeed"
-#define minSpeedKey @"minSpeed"
-#define maxSpeedKey @"maxSpeed"
-#define routeStraightAngleKey @"routeStraightAngle"
+static NSString * const appModeBeanPrefsIdsKey = @"appModeBeanPrefsIds";
+static NSString * const routingProfileKey = @"routingProfile";
+static NSString * const derivedProfileKey = @"derivedProfile";
+static NSString * const profileIconNameKey = @"profileIconName";
+static NSString * const profileIconColorKey = @"profileIconColor";
+static NSString * const userProfileNameKey = @"userProfileName";
+static NSString * const parentAppModeKey = @"parentAppMode";
+static NSString * const routeServiceKey = @"routeService";
+static NSString * const navigationIconKey = @"navigationIcon";
+static NSString * const locationIconKey = @"locationIcon";
+static NSString * const appModeOrderKey = @"appModeOrder";
+static NSString * const defaultSpeedKey = @"defaultSpeed";
+static NSString * const minSpeedKey = @"minSpeed";
+static NSString * const maxSpeedKey = @"maxSpeed";
+static NSString * const routeStraightAngleKey = @"routeStraightAngle";
 
-#define rendererKey @"renderer"
+static NSString * const rendererKey = @"renderer";
 
 // navigation settings
-#define useFastRecalculationKey @"useFastRecalculation"
-#define forcePrivateAccessRoutingAskedKey @"forcePrivateAccessRoutingAsked"
-#define fastRouteModeKey @"fastRouteMode"
-#define disableComplexRoutingKey @"disableComplexRouting"
-#define followTheRouteKey @"followTheRoute"
-#define followTheGpxRouteKey @"followTheGpxRoute"
-#define arrivalDistanceFactorKey @"arrivalDistanceFactor"
-#define enableTimeConditionalRoutingKey @"enableTimeConditionalRouting"
-#define useIntermediatePointsNavigationKey @"useIntermediatePointsNavigation"
-#define disableOffrouteRecalcKey @"disableOffrouteRecalc"
-#define disableWrongDirectionRecalcKey @"disableWrongDirectionRecalc"
-#define hazmatTransportingEnabledKey @"hazmatTransportingEnabled"
-#define routerServiceKey @"routerService"
-#define snapToRoadKey @"snapToRoad"
-#define autoFollowRouteKey @"autoFollowRoute"
-#define autoZoomMapKey @"autoZoomMap"
-#define useV1AutoZoomKey @"useV1AutoZoom"
-#define autoZoomMapScaleKey @"autoZoomMapScale"
-#define keepInformingKey @"keepInforming"
-#define speedSystemKey @"speedSystem"
-#define angularUnitsKey @"angularUnits"
-#define speedLimitExceedKey @"speedLimitExceed"
-#define showArrivalTimeKey @"showArrivalTime"
-#define showIntermediateArrivalTimeKey @"showIntermediateArrivalTime"
-#define showRelativeBearingKey @"showRelativeBearing"
-#define routeRecalculationDistanceKey @"routeRecalculationDistance"
-#define customRouteColorDayKey @"customRouteColorDay"
-#define customRouteColorNightKey @"customRouteColorNight"
-#define routeColoringTypeKey @"routeColoringType"
-#define routeInfoAttributeKey @"routeInfoAttribute"
-#define routeLineWidthKey @"routeLineWidth"
-#define routeShowTurnArrowsKey @"routeShowTurnArrows"
-#define showCompassControlRulerKey @"showCompassRuler"
-#define showCurrentLocationCoordinatesWidgetKey @"showCoordinatesWidget"
-#define showMapCenterWidgetKey @"showMapCenterWidget"
+static NSString * const useFastRecalculationKey = @"useFastRecalculation";
+static NSString * const forcePrivateAccessRoutingAskedKey = @"forcePrivateAccessRoutingAsked";
+static NSString * const fastRouteModeKey = @"fastRouteMode";
+static NSString * const disableComplexRoutingKey = @"disableComplexRouting";
+static NSString * const followTheRouteKey = @"followTheRoute";
+static NSString * const followTheGpxRouteKey = @"followTheGpxRoute";
+static NSString * const arrivalDistanceFactorKey = @"arrivalDistanceFactor";
+static NSString * const enableTimeConditionalRoutingKey = @"enableTimeConditionalRouting";
+static NSString * const useIntermediatePointsNavigationKey = @"useIntermediatePointsNavigation";
+static NSString * const disableOffrouteRecalcKey = @"disableOffrouteRecalc";
+static NSString * const disableWrongDirectionRecalcKey = @"disableWrongDirectionRecalc";
+static NSString * const hazmatTransportingEnabledKey = @"hazmatTransportingEnabled";
+static NSString * const routerServiceKey = @"routerService";
+static NSString * const snapToRoadKey = @"snapToRoad";
+static NSString * const autoFollowRouteKey = @"autoFollowRoute";
+static NSString * const autoZoomMapKey = @"autoZoomMap";
+static NSString * const useV1AutoZoomKey = @"useV1AutoZoom";
+static NSString * const autoZoomMapScaleKey = @"autoZoomMapScale";
+static NSString * const keepInformingKey = @"keepInforming";
+static NSString * const speedSystemKey = @"speedSystem";
+static NSString * const angularUnitsKey = @"angularUnits";
+static NSString * const speedLimitExceedKey = @"speedLimitExceed";
+static NSString * const showArrivalTimeKey = @"showArrivalTime";
+static NSString * const showIntermediateArrivalTimeKey = @"showIntermediateArrivalTime";
+static NSString * const showRelativeBearingKey = @"showRelativeBearing";
+static NSString * const routeRecalculationDistanceKey = @"routeRecalculationDistance";
+static NSString * const customRouteColorDayKey = @"customRouteColorDay";
+static NSString * const customRouteColorNightKey = @"customRouteColorNight";
+static NSString * const routeColoringTypeKey = @"routeColoringType";
+static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
+static NSString * const routeLineWidthKey = @"routeLineWidth";
+static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
+static NSString * const showCompassControlRulerKey = @"showCompassRuler";
+static NSString * const showCurrentLocationCoordinatesWidgetKey = @"showCoordinatesWidget";
+static NSString * const showMapCenterWidgetKey = @"showMapCenterWidget";
 
-#define showTrafficWarningsKey @"showTrafficWarnings"
-#define showPedestrianKey @"showPedestrian"
-#define showCamerasKey @"showCameras"
-#define showTunnelsKey @"showTunnels"
-#define showLanesKey @"showLanes"
-#define showGpxWptKey @"showGpxWpt"
-#define showNearbyFavoritesKey @"showNearbyFavorites"
-#define showNearbyPoiKey @"showNearbyPoi"
+static NSString * const showTrafficWarningsKey = @"showTrafficWarnings";
+static NSString * const showPedestrianKey = @"showPedestrian";
+static NSString * const showCamerasKey = @"showCameras";
+static NSString * const showTunnelsKey = @"showTunnels";
+static NSString * const showLanesKey = @"showLanes";
+static NSString * const showGpxWptKey = @"showGpxWpt";
+static NSString * const showNearbyFavoritesKey = @"showNearbyFavorites";
+static NSString * const showNearbyPoiKey = @"showNearbyPoi";
 
-#define speakStreetNamesKey @"speakStreetNames"
-#define speakTrafficWarningsKey @"speakTrafficWarnings"
-#define speakPedestrianKey @"speakPedestrian"
-#define speakSpeedLimitKey @"speakSpeedLimit"
-#define speakCamerasKey @"speakCameras"
-#define speakExitNumberNamesKey @"speakExitNumberNames"
-#define speakGpsSignalStatusKey @"speakGpsSignalStatus"
-#define speakRouteRecalculationKey @"speakRouteRecalculation"
-#define speakRouteDeviationKey @"speakRouteDeviation"
-#define announceWptKey @"announceWpt"
-#define announceNearbyFavoritesKey @"announceNearbyFavorites"
-#define announceNearbyPoiKey @"announceNearbyPoi"
-#define speakTunnels @"speakTunnels"
+static NSString * const speakStreetNamesKey = @"speakStreetNames";
+static NSString * const speakTrafficWarningsKey = @"speakTrafficWarnings";
+static NSString * const speakPedestrianKey = @"speakPedestrian";
+static NSString * const speakSpeedLimitKey = @"speakSpeedLimit";
+static NSString * const speakCamerasKey = @"speakCameras";
+static NSString * const speakExitNumberNamesKey = @"speakExitNumberNames";
+static NSString * const speakGpsSignalStatusKey = @"speakGpsSignalStatus";
+static NSString * const speakRouteRecalculationKey = @"speakRouteRecalculation";
+static NSString * const speakRouteDeviationKey = @"speakRouteDeviation";
+static NSString * const announceWptKey = @"announceWpt";
+static NSString * const announceNearbyFavoritesKey = @"announceNearbyFavorites";
+static NSString * const announceNearbyPoiKey = @"announceNearbyPoi";
+static NSString * const speakTunnels = @"speakTunnels";
 
-#define voiceMuteKey @"voiceMute"
-#define voiceProviderKey @"voiceProvider"
-#define interruptMusicKey @"interruptMusic"
-#define showScreenAlertsKey @"showScreenAlerts"
+static NSString * const voiceMuteKey = @"voiceMute";
+static NSString * const voiceProviderKey = @"voiceProvider";
+static NSString * const interruptMusicKey = @"interruptMusic";
+static NSString * const showScreenAlertsKey = @"showScreenAlerts";
 
-#define gpxRouteCalcOsmandPartsKey @"gpxRouteCalcOsmandParts"
-#define gpxCalculateRteptKey @"gpxCalculateRtept"
-#define gpxRouteCalcKey @"gpxRouteCalc"
-#define gpxRouteSegmentKey @"gpxRouteSegment"
-#define showStartFinishIconsKey @"showStartFinishIcons"
-#define useOsmLiveForRoutingKey @"useOsmLiveForRouting"
+static NSString * const gpxRouteCalcOsmandPartsKey = @"gpxRouteCalcOsmandParts";
+static NSString * const gpxCalculateRteptKey = @"gpxCalculateRtept";
+static NSString * const gpxRouteCalcKey = @"gpxRouteCalc";
+static NSString * const gpxRouteSegmentKey = @"gpxRouteSegment";
+static NSString * const showStartFinishIconsKey = @"showStartFinishIcons";
+static NSString * const useOsmLiveForRoutingKey = @"useOsmLiveForRouting";
 
-#define saveTrackToGPXKey @"saveTrackToGPX"
-#define saveTrackMinDistanceKey @"saveTrackMinDistance"
-#define saveTrackPrecisionKey @"saveTrackPrecision"
-#define saveTrackMinSpeedKey @"saveTrackMinSpeed"
-#define autoSplitRecordingKey @"autoSplitRecording"
-#define saveHeadingToGpxKey @"saveHeadingToGpx"
+static NSString * const saveTrackToGPXKey = @"saveTrackToGPX";
+static NSString * const saveTrackMinDistanceKey = @"saveTrackMinDistance";
+static NSString * const saveTrackPrecisionKey = @"saveTrackPrecision";
+static NSString * const saveTrackMinSpeedKey = @"saveTrackMinSpeed";
+static NSString * const autoSplitRecordingKey = @"autoSplitRecording";
+static NSString * const saveHeadingToGpxKey = @"saveHeadingToGpx";
 
-#define rulerModeKey @"rulerMode"
-#define showDistanceRulerKey @"showDistanceRuler"
-#define showElevationProfileWidgetKey @"show_elevation_profile_widget"
-#define showSlopesOnElevationWidget @"show_slopes_on_elevation_widget"
-#define customWidgetKeys @"custom_widgets_keys"
+static NSString * const rulerModeKey = @"rulerMode";
+static NSString * const showDistanceRulerKey = @"showDistanceRuler";
+static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
+static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
+static NSString * const customWidgetKeys = @"custom_widgets_keys";
 
-#define osmUserNameKey @"osm_user_name"
-#define userOsmBugNameKey @"userOsmBugName"
-#define osmPasswordKey @"osm_pass"
-#define osmUserAccessTokenKey @"osm_user_access_token"
-#define osmUserAccessTokenSecretKey @"osm_user_access_token_secret"
-#define oprAccessTokenKey @"opr_access_token"
-#define oprUsernameKey @"opr_username"
-#define oprBlockchainNameKey @"opr_blockchain_name"
-#define oprUseDevUrlKey @"opr_use_dev_url"
-#define offlineEditingKey @"offline_editing"
-#define osmUseDevUrlKey @"use_dev_url"
-#define mapperLiveUpdatesExpireTimeKey @"mapper_live_updates_expire_time"
+static NSString * const osmUserNameKey = @"osm_user_name";
+static NSString * const userOsmBugNameKey = @"userOsmBugName";
+static NSString * const osmPasswordKey = @"osm_pass";
+static NSString * const osmUserAccessTokenKey = @"osm_user_access_token";
+static NSString * const osmUserAccessTokenSecretKey = @"osm_user_access_token_secret";
+static NSString * const oprAccessTokenKey = @"opr_access_token";
+static NSString * const oprUsernameKey = @"opr_username";
+static NSString * const oprBlockchainNameKey = @"opr_blockchain_name";
+static NSString * const oprUseDevUrlKey = @"opr_use_dev_url";
+static NSString * const offlineEditingKey = @"offline_editing";
+static NSString * const osmUseDevUrlKey = @"use_dev_url";
+static NSString * const mapperLiveUpdatesExpireTimeKey = @"mapper_live_updates_expire_time";
 
-#define showMapillaryKey @"show_mapillary"
-#define onlinePhotosRowCollapsedKey @"onlinePhotosRowCollapsed"
-#define mapillaryFirstDialogShownKey @"mapillaryFirstDialogShown"
-#define useMapillaryFilterKey @"useMapillaryFilter"
-#define mapillaryFilterUserKeyKey @"mapillaryFilterUserKey"
-#define mapillaryFilterUserNameKey @"mapillaryFilterUserName"
-#define mapillaryFilterStartDateKey @"mapillaryFilterStartDate"
-#define mapillaryFilterEndDateKey @"mapillaryFilterEndDate"
-#define mapillaryFilterPanoKey @"mapillaryFilterPano"
+static NSString * const showMapillaryKey = @"show_mapillary";
+static NSString * const onlinePhotosRowCollapsedKey = @"onlinePhotosRowCollapsed";
+static NSString * const mapillaryFirstDialogShownKey = @"mapillaryFirstDialogShown";
+static NSString * const useMapillaryFilterKey = @"useMapillaryFilter";
+static NSString * const mapillaryFilterUserKeyKey = @"mapillaryFilterUserKey";
+static NSString * const mapillaryFilterUserNameKey = @"mapillaryFilterUserName";
+static NSString * const mapillaryFilterStartDateKey = @"mapillaryFilterStartDate";
+static NSString * const mapillaryFilterEndDateKey = @"mapillaryFilterEndDate";
+static NSString * const mapillaryFilterPanoKey = @"mapillaryFilterPano";
 
-#define quickActionIsOnKey @"qiuckActionIsOn"
-#define quickActionsListKey @"quickActionsList"
-#define isQuickActionTutorialShownKey @"isQuickActionTutorialShown"
+static NSString * const quickActionIsOnKey = @"qiuckActionIsOn";
+static NSString * const quickActionsListKey = @"quickActionsList";
+static NSString * const isQuickActionTutorialShownKey = @"isQuickActionTutorialShown";
 
-#define quickActionLandscapeXKey @"quickActionLandscapeX"
-#define quickActionLandscapeYKey @"quickActionLandscapeY"
-#define quickActionPortraitXKey @"quickActionPortraitX"
-#define quickActionPortraitYKey @"quickActionPortraitY"
+static NSString * const quickActionLandscapeXKey = @"quickActionLandscapeX";
+static NSString * const quickActionLandscapeYKey = @"quickActionLandscapeY";
+static NSString * const quickActionPortraitXKey = @"quickActionPortraitX";
+static NSString * const quickActionPortraitYKey = @"quickActionPortraitY";
 
-#define map3dModeLandscapeXKey @"map3dModeLandscapeX"
-#define map3dModeLandscapeYKey @"map3dModeLandscapeY"
-#define map3dModePortraitXKey @"map3dModePortraitX"
-#define map3dModePortraitYKey @"map3dModePortraitY"
-#define map3dModeVisibilityKey @"map_3d_mode_visibility"
+static NSString * const map3dModeLandscapeXKey = @"map3dModeLandscapeX";
+static NSString * const map3dModeLandscapeYKey = @"map3dModeLandscapeY";
+static NSString * const map3dModePortraitXKey = @"map3dModePortraitX";
+static NSString * const map3dModePortraitYKey = @"map3dModePortraitY";
+static NSString * const map3dModeVisibilityKey = @"map_3d_mode_visibility";
 
-#define contourLinesZoomKey @"contourLinesZoom"
-#define hikingRoutesParameterKey @"hikingRoutesParameter"
-#define cycleRoutesParameterKey @"cycleRoutesParameter"
-#define mountainBikeRoutesParameterKey @"mountainBikeRoutesParameter"
-#define mapManuallyRotatingAngleKey @"mapManuallyRotatingAngle"
-#define mapScreenOrientationKey @"mapScreenOrientation"
+static NSString * const contourLinesZoomKey = @"contourLinesZoom";
+static NSString * const hikingRoutesParameterKey = @"hikingRoutesParameter";
+static NSString * const cycleRoutesParameterKey = @"cycleRoutesParameter";
+static NSString * const mountainBikeRoutesParameterKey = @"mountainBikeRoutesParameter";
+static NSString * const mapManuallyRotatingAngleKey = @"mapManuallyRotatingAngle";
+static NSString * const mapScreenOrientationKey = @"mapScreenOrientation";
 
-#define activeMarkerKey @"activeMarkerKey"
-#define mapDistanceIndicationVisabilityKey @"mapDistanceIndicationVisabilityKey"
-#define mapDistanceIndicationKey @"mapDistanceIndicationKey"
-#define mapArrowsOnMapKey @"mapArrowsOnMapKey"
-#define mapDirectionLinesKey @"mapDirectionLinesKey"
+static NSString * const activeMarkerKey = @"activeMarkerKey";
+static NSString * const mapDistanceIndicationVisabilityKey = @"mapDistanceIndicationVisabilityKey";
+static NSString * const mapDistanceIndicationKey = @"mapDistanceIndicationKey";
+static NSString * const mapArrowsOnMapKey = @"mapArrowsOnMapKey";
+static NSString * const mapDirectionLinesKey = @"mapDirectionLinesKey";
 
-#define poiFiltersOrderKey @"poi_filters_order"
-#define inactivePoiFiltersKey @"inactive_poi_filters"
+static NSString * const poiFiltersOrderKey = @"poi_filters_order";
+static NSString * const inactivePoiFiltersKey = @"inactive_poi_filters";
 
-#define customPluginsJsonKey @"customPluginsJson"
+static NSString * const customPluginsJsonKey = @"customPluginsJson";
 
 // global
 
-#define wikiArticleShowImagesAskedKey @"wikivoyageShowImagesAsked"
-#define wikivoyageShowImgsKey @"wikivoyageShowImgs"
+static NSString * const wikiArticleShowImagesAskedKey = @"wikivoyageShowImagesAsked";
+static NSString * const wikivoyageShowImgsKey = @"wikivoyageShowImgs";
 
-#define coordsInputUseRightSideKey @"coordsInputUseRightSide"
-#define coordsInputFormatKey @"coordsInputFormat"
-#define coordsInputUseOsmandKeyboardKey @"coordsInputUseOsmandKeyboard"
-#define coordsInputTwoDigitsLongitudeKey @"coordsInputTwoDigitsLongitude"
+static NSString * const coordsInputUseRightSideKey = @"coordsInputUseRightSide";
+static NSString * const coordsInputFormatKey = @"coordsInputFormat";
+static NSString * const coordsInputUseOsmandKeyboardKey = @"coordsInputUseOsmandKeyboard";
+static NSString * const coordsInputTwoDigitsLongitudeKey = @"coordsInputTwoDigitsLongitude";
 
-#define showCardToChooseDrawerKey @"showCardToChooseDrawer"
-#define shouldShowDashboardOnStartKey @"shouldShowDashboardOnStart"
-#define showDashboardOnMapScreenKey @"showDashboardOnMapScreen"
-#define showOsmandWelcomeScreenKey @"showOsmandWelcomeScreen"
-#define apiNavDrawerItemsJsonKey @"apiNavDrawerItemsJson"
-#define apiConnectedAppsJsonKey @"apiConnectedAppsJson"
-#define numberOfStartsFirstXmasShownKey @"numberOfStartsFirstXmasShown"
+static NSString * const showCardToChooseDrawerKey = @"showCardToChooseDrawer";
+static NSString * const shouldShowDashboardOnStartKey = @"shouldShowDashboardOnStart";
+static NSString * const showDashboardOnMapScreenKey = @"showDashboardOnMapScreen";
+static NSString * const showOsmandWelcomeScreenKey = @"showOsmandWelcomeScreen";
+static NSString * const apiNavDrawerItemsJsonKey = @"apiNavDrawerItemsJson";
+static NSString * const apiConnectedAppsJsonKey = @"apiConnectedAppsJson";
+static NSString * const numberOfStartsFirstXmasShownKey = @"numberOfStartsFirstXmasShown";
 
-#define lastFavCategoryEnteredKey @"lastFavCategoryEntered"
-#define useLastApplicationModeByDefaultKey @"useLastApplicationModeByDefault"
-#define lastUsedApplicationModeKey @"lastUsedApplicationMode"
-#define lastRouteApplicationModeBackupStringKey @"lastRouteApplicationModeBackupString"
-#define searchHistoryKey @"searchHistoy"
-#define navigationHistoryKey @"navigationHistory"
-#define mapMarkersHistoryKey @"mapMarkersHistory"
+static NSString * const lastFavCategoryEnteredKey = @"lastFavCategoryEntered";
+static NSString * const useLastApplicationModeByDefaultKey = @"useLastApplicationModeByDefault";
+static NSString * const lastUsedApplicationModeKey = @"lastUsedApplicationMode";
+static NSString * const lastRouteApplicationModeBackupStringKey = @"lastRouteApplicationModeBackupString";
+static NSString * const searchHistoryKey = @"searchHistoy";
+static NSString * const navigationHistoryKey = @"navigationHistory";
+static NSString * const mapMarkersHistoryKey = @"mapMarkersHistory";
 
-#define onlineRoutingEnginesKey @"onlineRoutingEngines"
+static NSString * const onlineRoutingEnginesKey = @"onlineRoutingEngines";
 
-#define doNotShowStartupMessagesKey @"doNotShowStartupMessages"
-#define showDownloadMapDialogKey @"showDownloadMapDialog"
+static NSString * const doNotShowStartupMessagesKey = @"doNotShowStartupMessages";
+static NSString * const showDownloadMapDialogKey = @"showDownloadMapDialog";
 
-#define sendAnonymousMapDownloadsDataKey @"sendAnonymousMapDownloadsData"
-#define sendAnonymousAppUsageDataKey @"sendAnonymousAppUsageData"
-#define sendAnonymousDataRequestProcessedKey @"sendAnonymousDataRequestProcessed"
-#define sendAnonymousDataRequestCountKey @"sendAnonymousDataRequestCount"
-#define sendAnonymousDataLastRequestNsKey @"sendAnonymousDataLastRequestNs"
+static NSString * const sendAnonymousMapDownloadsDataKey = @"sendAnonymousMapDownloadsData";
+static NSString * const sendAnonymousAppUsageDataKey = @"sendAnonymousAppUsageData";
+static NSString * const sendAnonymousDataRequestProcessedKey = @"sendAnonymousDataRequestProcessed";
+static NSString * const sendAnonymousDataRequestCountKey = @"sendAnonymousDataRequestCount";
+static NSString * const sendAnonymousDataLastRequestNsKey = @"sendAnonymousDataLastRequestNs";
 
-#define webglSupportedKey @"webglSupported"
+static NSString * const webglSupportedKey = @"webglSupported";
 
-#define osmUserDisplayNameKey @"osmUserDisplayName"
-#define osmUploadVisibilityKey @"osmUploadVisibility"
+static NSString * const osmUserDisplayNameKey = @"osmUserDisplayName";
+static NSString * const osmUploadVisibilityKey = @"osmUploadVisibility";
 
-#define inappsReadKey @"inappsRead"
+static NSString * const inappsReadKey = @"inappsRead";
 
-#define backupUserEmailKey @"backupUserEmail"
-#define backupUserIdKey @"backupUserId"
-#define backupDeviceIdKey @"backupDeviceId"
-#define backupNativeDeviceIdKey @"backupNativeDeviceId"
-#define backupAccessTokenKey @"backupAccessToken"
-#define backupAccessTokenUpdateTimeKey @"backupAccessTokenUpdateTime"
-#define backupFreePlanRegistrationTime @"backupFreePlanRegistrationTime"
+static NSString * const backupUserEmailKey = @"backupUserEmail";
+static NSString * const backupUserIdKey = @"backupUserId";
+static NSString * const backupDeviceIdKey = @"backupDeviceId";
+static NSString * const backupNativeDeviceIdKey = @"backupNativeDeviceId";
+static NSString * const backupAccessTokenKey = @"backupAccessToken";
+static NSString * const backupAccessTokenUpdateTimeKey = @"backupAccessTokenUpdateTime";
+static NSString * const backupFreePlanRegistrationTime = @"backupFreePlanRegistrationTime";
 
-#define backupPromocodeKey @"backupPromocode"
-#define backupPurchaseActiveKey @"backupPurchaseActive"
-#define backupPurchaseStartTimeKey @"backupPurchaseStartTime"
-#define backupPurchaseExpireTimeKey @"backupPurchaseExpireTime"
-#define backupPurchaseStateKey @"backupPurchaseState"
-#define proSubscriptionOriginKey @"proSubscriptionOrigin"
-#define proSubscriptionDurationKey @"proSubscriptionDuration"
-#define purchaseIdentifiersKey @"purchaseIdentifiers"
+static NSString * const backupPromocodeKey = @"backupPromocode";
+static NSString * const backupPurchaseActiveKey = @"backupPurchaseActive";
+static NSString * const backupPurchaseStartTimeKey = @"backupPurchaseStartTime";
+static NSString * const backupPurchaseExpireTimeKey = @"backupPurchaseExpireTime";
+static NSString * const backupPurchaseStateKey = @"backupPurchaseState";
+static NSString * const proSubscriptionOriginKey = @"proSubscriptionOrigin";
+static NSString * const proSubscriptionDurationKey = @"proSubscriptionDuration";
+static NSString * const purchaseIdentifiersKey = @"purchaseIdentifiers";
 
-#define userIosIdKey @"userIosId"
+static NSString * const userIosIdKey = @"userIosId";
 
-#define favoritesLastUploadedTimeKey @"favoritesLastUploadedTime"
-#define backupLastUploadedTimeKey @"backupLastUploadedTime"
+static NSString * const favoritesLastUploadedTimeKey = @"favoritesLastUploadedTime";
+static NSString * const backupLastUploadedTimeKey = @"backupLastUploadedTime";
 
-#define delayToStartNavigationKey @"delayToStartNavigation"
+static NSString * const delayToStartNavigationKey = @"delayToStartNavigation";
 
-#define enableProxyKey @"enableProxy"
-#define proxyHostKey @"proxyHost"
-#define proxyPortKey @"proxyPort"
-#define userAndroidIdKey @"userAndroidId"
+static NSString * const enableProxyKey = @"enableProxy";
+static NSString * const proxyHostKey = @"proxyHost";
+static NSString * const proxyPortKey = @"proxyPort";
+static NSString * const userAndroidIdKey = @"userAndroidId";
 
-#define speedCamerasUninstalledKey @"speedCamerasUninstalled"
-#define speedCamerasAlertShownKey @"speedCamerasAlertShown"
+static NSString * const speedCamerasUninstalledKey = @"speedCamerasUninstalled";
+static NSString * const speedCamerasAlertShownKey = @"speedCamerasAlertShown";
 
-#define lastUpdatesCardRefreshKey @"lastUpdatesCardRefresh"
+static NSString * const lastUpdatesCardRefreshKey = @"lastUpdatesCardRefresh";
 
-#define currentTrackColorKey @"currentTrackColor"
-#define currentTrackColoringTypeKey @"currentTrackColoringType"
-#define currentTrackSpeedGradientPaletteKey @"currentTrackSpeedGradientPalette"
-#define currentTrackAltitudeGradientPaletteKey @"currentTrackAltitudeGradientPalette"
-#define currentTrackSlopeGradientPaletteKey @"currentTrackSlopeGradientPalette"
-#define currentTrackWidthKey @"currentTrackWidth"
-#define currentTrackShowArrowsKey @"currentTrackShowArrows"
-#define currentTrackShowStartFinishKey @"currentTrackShowStartFinish"
-#define customTrackColorsKey @"customTrackColors"
-#define customTrackColorsLastUsedKey @"customTrackColorsLastUsed"
-#define lastUsedFavIconsKey @"lastUsedFavIcons"
+static NSString * const currentTrackColorKey = @"currentTrackColor";
+static NSString * const currentTrackColoringTypeKey = @"currentTrackColoringType";
+static NSString * const currentTrackSpeedGradientPaletteKey = @"currentTrackSpeedGradientPalette";
+static NSString * const currentTrackAltitudeGradientPaletteKey = @"currentTrackAltitudeGradientPalette";
+static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlopeGradientPalette";
+static NSString * const currentTrackWidthKey = @"currentTrackWidth";
+static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
+static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
+static NSString * const customTrackColorsKey = @"customTrackColors";
+static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
+static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
 
-#define gpsStatusAppKey @"gpsStatusApp"
+static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
-#define debugRenderingInfoKey @"debugRenderingInfo"
+static NSString * const debugRenderingInfoKey = @"debugRenderingInfo";
 
-#define levelToSwitchVectorRasterKey @"levelToSwitchVectorRaster"
+static NSString * const levelToSwitchVectorRasterKey = @"levelToSwitchVectorRaster";
 
-#define voicePromptDelay0Key @"voicePromptDelay0"
-#define voicePromptDelay3Key @"voicePromptDelay3"
-#define voicePromptDelay5Key @"voicePromptDelay5"
+static NSString * const voicePromptDelay0Key = @"voicePromptDelay0";
+static NSString * const voicePromptDelay3Key = @"voicePromptDelay3";
+static NSString * const voicePromptDelay5Key = @"voicePromptDelay5";
 
-#define displayTtsUtteranceKey @"displayTtsUtterance"
+static NSString * const displayTtsUtteranceKey = @"displayTtsUtterance";
 
-#define mapOverlayPreviousKey @"mapOverlayPrevious"
-#define mapUnderlayPreviousKey @"mapUnderlayPrevious"
-#define previousInstalledVersionKey @"previousInstalledVersion"
-#define shouldShowFreeVersionBannerKey @"shouldShowFreeVersionBanner"
+static NSString * const mapOverlayPreviousKey = @"mapOverlayPrevious";
+static NSString * const mapUnderlayPreviousKey = @"mapUnderlayPrevious";
+static NSString * const previousInstalledVersionKey = @"previousInstalledVersion";
+static NSString * const shouldShowFreeVersionBannerKey = @"shouldShowFreeVersionBanner";
 
-#define routeMapMarkersStartMyLocKey @"routeMapMarkersStartMyLoc"
-#define routeMapMarkersRoundTripKey @"routeMapMarkersRoundTrip"
+static NSString * const routeMapMarkersStartMyLocKey = @"routeMapMarkersStartMyLoc";
+static NSString * const routeMapMarkersRoundTripKey = @"routeMapMarkersRoundTrip";
 
-#define osmandUsageSpaceKey @"osmandUsageSpace"
+static NSString * const osmandUsageSpaceKey = @"osmandUsageSpace";
 
-#define lastSelectedGpxTrackForNewPointKey @"lastSelectedGpxTrackForNewPoint"
+static NSString * const lastSelectedGpxTrackForNewPointKey = @"lastSelectedGpxTrackForNewPoint";
 
-#define customRouteLineColorsKey @"customRouteLineColors"
+static NSString * const customRouteLineColorsKey = @"customRouteLineColors";
 
-#define mapActivityEnabledKey @"mapActivityEnabled"
+static NSString * const mapActivityEnabledKey = @"mapActivityEnabled";
 
-#define safeModeKey @"safeMode"
-#define nativeRenderingFailedKey @"nativeRenderingFailed"
+static NSString * const safeModeKey = @"safeMode";
+static NSString * const nativeRenderingFailedKey = @"nativeRenderingFailed";
 
-#define useOpenglRenderKey @"useOpenglRender"
-#define openglRenderFailedKey @"openglRenderFailed"
+static NSString * const useOpenglRenderKey = @"useOpenglRender";
+static NSString * const openglRenderFailedKey = @"openglRenderFailed";
 
-#define contributionInstallAppDateKey @"contributionInstallAppDate"
+static NSString * const contributionInstallAppDateKey = @"contributionInstallAppDate";
 
-#define selectedTravelBookKey @"selectedTravelBook"
+static NSString * const selectedTravelBookKey = @"selectedTravelBook";
 
-#define agpsDataLastTimeDownloadedKey @"agpsDataLastTimeDownloaded"
+static NSString * const agpsDataLastTimeDownloadedKey = @"agpsDataLastTimeDownloaded";
 
-#define searchTabKey @"searchTab"
-#define favoritesTabKey @"favoritesTab"
+static NSString * const searchTabKey = @"searchTab";
+static NSString * const favoritesTabKey = @"favoritesTab";
 
-#define fluorescentOverlaysKey @"fluorescentOverlays"
-#define keepMapLabelsVisibleKey @"keepMapLabelsVisible"
+static NSString * const fluorescentOverlaysKey = @"fluorescentOverlays";
+static NSString * const keepMapLabelsVisibleKey = @"keepMapLabelsVisible";
 
-#define numberOfFreeDownloadsKey @"numberOfFreeDownloads"
+static NSString * const numberOfFreeDownloadsKey = @"numberOfFreeDownloads";
 
-#define lastDisplayTimeKey @"lastDisplayTime"
-#define lastCheckedUpdatesKey @"lastCheckedUpdates"
-#define numberOfAppStartsOnDislikeMomentKey @"numberOfAppStartsOnDislikeMoment"
-#define rateUsStateKey @"rateUsState"
+static NSString * const lastDisplayTimeKey = @"lastDisplayTime";
+static NSString * const lastCheckedUpdatesKey = @"lastCheckedUpdates";
+static NSString * const numberOfAppStartsOnDislikeMomentKey = @"numberOfAppStartsOnDislikeMoment";
+static NSString * const rateUsStateKey = @"rateUsState";
 
-#define animateMyLocationKey @"animateMyLocation"
+static NSString * const animateMyLocationKey = @"animateMyLocation";
 
-#define lastGlobalSettingsModifiedTimeKey @"lastGlobalSettingsModifiedTime"
-#define lastProfileSettingsModifiedTimeKey @"lastProfileSettingsModifiedTime"
+static NSString * const lastGlobalSettingsModifiedTimeKey = @"lastGlobalSettingsModifiedTime";
+static NSString * const lastProfileSettingsModifiedTimeKey = @"lastProfileSettingsModifiedTime";
 
-#define lastUUIDChangeTimestampKey @"lastUUIDChangeTimestamp"
+static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 
-#define kShowHeightmapsKey @"showHeightmaps"
+static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
 // Widgets
-#define kLeftWidgetPanelOrderKey @"left_widget_panel_order"
-#define kRightWidgetPanelOrderKey @"right_widget_panel_order"
-#define kTopWidgetPanelOrderKey @"top_widget_panel_order"
-#define kBottomWidgetPanelOrderKey @"bottom_widget_panel_order"
+static NSString * const kLeftWidgetPanelOrderKey = @"left_widget_panel_order";
+static NSString * const kRightWidgetPanelOrderKey = @"right_widget_panel_order";
+static NSString * const kTopWidgetPanelOrderKey = @"top_widget_panel_order";
+static NSString * const kBottomWidgetPanelOrderKey = @"bottom_widget_panel_order";
 
-#define useHHRoutingKey @"useHHRoutingKey"
-#define useHHRoutingOnlyKey @"useHHRoutingOnlyKey"
+static NSString * const useHHRoutingKey = @"useHHRoutingKey";
+static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
 @implementation OACompassMode
 

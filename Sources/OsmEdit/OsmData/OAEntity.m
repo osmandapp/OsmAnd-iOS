@@ -340,7 +340,7 @@
 
 -(NSString *) getOsmUrl
 {
-    static const NSString *browseUrl = @"https://www.openstreetmap.org/browse/";
+    static NSString * const browseUrl = @"https://www.openstreetmap.org/browse/";
     if (_entityType == NODE)
         return [NSString stringWithFormat:@"%@node/%lld", browseUrl, _identifier];
     if (_entityType == WAY)

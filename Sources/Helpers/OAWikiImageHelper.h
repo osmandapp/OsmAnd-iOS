@@ -23,9 +23,9 @@
 
 #define THUMB_SIZE 500
 
-static const NSString *OSMAND_API_ENDPOINT = @"https://osmand.net/api/";
-static const NSString *OSMAND_API_WIKIDATA_ARTICLE_ACTION = @"wiki_place?article=";
-static const NSString *OSMAND_API_WIKIDATA_CATEGORY_ACTION = @"wiki_place?category=";
+static NSString * const OSMAND_API_ENDPOINT = @"https://osmand.net/api/";
+static NSString * const OSMAND_API_WIKIDATA_ARTICLE_ACTION = @"wiki_place?article=";
+static NSString * const OSMAND_API_WIKIDATA_CATEGORY_ACTION = @"wiki_place?category=";
 static const BOOL USE_OSMAND_WIKI_API = YES;
 
 @class OARowInfo;

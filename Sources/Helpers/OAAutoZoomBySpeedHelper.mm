@@ -75,7 +75,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 @end
 
 
-
 @implementation OAAutoZoomBySpeedHelper
 {
     OsmAndAppInstance _app;
@@ -113,7 +112,7 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     {
         NSTimeInterval now = CACurrentMediaTime();
         float zdelta = [self defineZoomFromSpeed:speed mapView:mapView];
-        if (ABS(zdelta) >= 0.5/*?Math.sqrt(0.5)*/)
+        if (ABS(zdelta) >= 0.5)
         {
             // prevent ui hysteresis (check time interval for autozoom)
             if (zdelta >= 2)
@@ -156,7 +155,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     time /= [OAAutoZoomMap getCoefficient:[_settings.autoZoomMapScale get]];
     double distToSee = speed * time;
     float zoomDelta = (float) (log(visibleDist / distToSee) / log(2.0f));
-    // check if 17, 18 is correct?
     return zoomDelta;
 }
 

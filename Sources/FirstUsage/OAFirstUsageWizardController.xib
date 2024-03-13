@@ -15,7 +15,6 @@
                 <outlet property="btnDownload" destination="Xe3-bl-xiy" id="Jzb-rZ-wuQ"/>
                 <outlet property="btnGoToMap" destination="DDB-xy-UT5" id="ctr-Wd-rHB"/>
                 <outlet property="btnSearchLocation" destination="QJa-zg-tIo" id="RPT-Vd-gTU"/>
-                <outlet property="btnSearchingLocation" destination="5Kd-ve-oPV" id="bIt-Ta-Djf"/>
                 <outlet property="btnSearchingMap" destination="gfa-zn-jJc" id="Oi0-Hl-gdd"/>
                 <outlet property="btnSkip" destination="ho0-j3-9RI" id="o8i-Rb-njp"/>
                 <outlet property="btnTryAgain" destination="GZq-8A-O1Z" id="Asn-Em-sK1"/>
@@ -386,7 +385,7 @@
                     </constraints>
                     <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                     <state key="normal" title="Download">
-                        <color key="titleColor" name="buttonTextColorSecondary"/>
+                        <color key="titleColor" name="textColorSecondary"/>
                     </state>
                     <userDefinedRuntimeAttributes>
                         <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">

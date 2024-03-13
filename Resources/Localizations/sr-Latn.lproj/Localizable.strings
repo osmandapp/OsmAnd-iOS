@@ -1586,7 +1586,7 @@
 "available_languages" = "Dostupni jezici";
 "preferred_languages" = "Željeni jezici";
 "srtm_plugin_name" = "Topografija";
-"product_desc_srtm" = "Display of contour lines";
+"product_desc_srtm" = "Vizuelna procena oblika površine zemljišta";
 "srtm_plugin_description" = "Informacije o terenu kao što su konturne linije, senovi brda i padine, pomažu vam da vizuelno procenite teren i reljef, plovnost i još mnogo toga. Topografske informacije na karti mogu biti predstavljene senčenjem nagiba, linijama konture i/ili bojama strmine.\n\nOsnovni podaci potiču od SRTM i ASTER.\n\nDalje čitanje na http://osmand.net/docs/user/plugins/contour-lines.";
 "wikivoyage_travel_guide" = "Turistički vodiči";
 "start_editing_card_image_text" = "Besplatni svetski turistički vodič koji svako može da uređuje.";
@@ -1637,7 +1637,7 @@
 "from_location" = "dalje";
 "show_alt_in_drive" = "Prikaži visinu u režimu vožnje";
 "shared_string_get" = "Preuzmi";
-"srtm_plugin_disabled" = "Izohipse su isključene";
+"srtm_plugin_disabled" = "Topografija je onemogućena";
 "prch_wiki_info" = "Dodatak Vikipedija omogućava informacije na Vikipediji za mape na koje imate pravo, koje ste kupili ili preuzeli u okviru besplatnog ograničenja.";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Otvori";
@@ -1695,8 +1695,8 @@
 "plugin_popup_wiki_desc" = "Da biste počeli da koristite dodatak Vikipedije, prvo preuzmite Vikipedijine podatke o regionu";
 "plugin_popup_wiki_ask" = "Da biste preuzeli podatke Vikipedije potrebno je da aktivirate dodatak: <b>Vikipedia</b>";
 "plugin_popup_srtm_title" = "Preuzmite konturne linije";
-"plugin_popup_srtm_desc" = "To start using Contour lines feature, please download Contour lines of an region first";
-"plugin_popup_srtm_ask" = "To download Contour lines you need to activate plugin: <b>Contour lines</b>";
+"plugin_popup_srtm_desc" = "Da biste počeli da koristite funkcionalnost Topografije, prvo preuzmite Konturne linije regiona";
+"plugin_popup_srtm_ask" = "Za preuzimanje Konturnih linija potrebno je da aktivirate dodatak: <b>Topografija</b>";
 "plugin_popup_nautical_title" = "Preuzmite Nautičke karte";
 "plugin_popup_nautical_desc" = "Prvo preuzmite nautičke karte.\nZatim idite na <b>Podešavanja mape</b> > <b>Tip karte</b> i uključite <b>Nautički</b> stil";
 "plugin_popup_osm_editing_title" = "Uključi uređivanje OpenStritMap";
@@ -2233,7 +2233,7 @@
 "latest_version" = "Imate najnoviju verziju: %@";
 "ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
+"ios_release_4_0" = "• Novo! Ekran „Dodaj omiljeno“ sa opcijama za izbor prilagođene ikone, boje i oblika\n• Dodat je novi \"Koordinatni vidžet\" sa koordinatama trenutne lokacije\n• Dodata mogućnost uvoza prilagođenih korisnički definisanih dodataka\n• Značajno proširena funkcionalnost uvoza/izvoza\n• Udaljenost dodirom je premeštena sa Lenjira radijusa u posebnu opciju\n• Popravljena KarPlej aplikacija pri zamrzavanju kada je ekran iPhone-a isključen\n• Ekran dodataka je premešten iz Mape i Resursi u glavni meni\n• Dodata finska lokalizacija\n• Ispravljen korisnički interfejs u pejzažnoj orijentaciji za ekran „Planiranje rute“.\n• Dodata podrška za prilagođeno rutiranje i renderovanje fajlova\n• Popravljene performanse linije pravca markera\n• Rešen problem sa uvozom GPX fajlova sa ekstenzijama velikim slovima\n• Rešen problem sa menijem „Prati trag“.\n• Popravljen uvoz OBF fajlova\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "user_login" = "Prijava";
 "any_poi" = "Bilo koji";
@@ -2385,7 +2385,7 @@
 "shared_string_selected" = "Izabrano";
 "routing_attr_motor_type_name" = "Tip motora";
 "position_on_map_center" = "Centar";
-"routing_attr_hazmat_category_name" = "Hazmat kategorija";
+"routing_attr_hazmat_category_name" = "Prevoz opasnih materija";
 "copy_poi_name" = "Kopiraj TOI ime";
 "renew_subscription" = "Obnavljanje pretplate";
 "backup_deleting_all_data" = "Brišem sve podatke…";
@@ -2401,7 +2401,7 @@
 "recalc_angle_dialog_descr" = "Potpuno pravi segment između lokacije i izračunatog puta biće prikazan dok se ruta ne izračuna";
 "promo_subscription" = "Promotivna pretplata";
 "are_you_sure" = "Da li si siguran?";
-"you_can_get_feature_as_part_of_pattern" = "Uzmite„%@“ kao deo: %@ plana. Uporedite planove:";
+"you_can_get_feature_as_part_of_pattern" = "Uzmite „%@“ kao deo: %@ plana. Uporedite:";
 "shared_string_not_included" = "Ne uključuje";
 "contact_support_description" = "Ako imate ikakvih pitanja, kontaktirajte nas na %@.";
 "backup_version_history" = "Istorija verzija";
@@ -3344,3 +3344,6 @@
 "determine_location" = "Omogućava nam da odredimo vaš položaj";
 "over_any_network" = "Preko bilo koje mreže";
 "free_downloads" = "Besplatna preuzimanja";
+"backup_delete_all_data_in_progress" = "Molimo sačekajte dok OsmAmd ne izbriše sve vaše podatke iz oblaka. Svi podaci na uređaju ostaće ne dirnuti.";
+"osm_live_payment_subscription_management_aid" = "Plaćanje će biti naplaćeno sa vašeg Apple ID naloga prilikom potvrde kupovine.\n\nPretplata se automatski obnavlja osim ako se ne otkaže najmanje 24 sata pre kraja tekućeg perioda. Vašem nalogu će biti naplaćeno obnavljanje u roku od 24 sata pre kraja tekućeg perioda.\n\nSvojim pretplatama možete upravljati i otkazati ih tako što ćete nakon kupovine otići u podešavanja naloga u App Store-u";
+"weather_plugin_description" = "Obezbeđuje\n- 24-časovna i 7-dnevna vremenska prognoza sa 5 slojeva\n- vidžeti zasnovani na lokaciji\n- izolinije temperatura/pritisak\n\nVremenske podatke obezbeđuje Globalni sistem prognoze (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast).";

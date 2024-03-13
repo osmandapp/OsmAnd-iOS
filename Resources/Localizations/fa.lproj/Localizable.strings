@@ -2095,3 +2095,10 @@
 "lang_zh-Hant" = "چینی (سنتی)";
 "shared_string_keep_active" = "فعال بماند";
 "icon_group_service" = "خدمات";
+"shared_string_keywords" = "کلیدواژه ها";
+"shared_string_license" = "مجوز";
+"shared_string_link" = "پیوند";
+"add_row" = "افزودن ردیف";
+"shared_string_author" = "مالک";
+"map_widget_sun_position" = "موقعیت خورشید";
+"download_to_device" = "دریافت در دستگاه";

@@ -16,6 +16,9 @@
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
+NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
+NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
+
 @class OAWidgetType, OutlineLabel;
 
 @interface OATextInfoWidget : OABaseWidgetView
@@ -43,7 +46,7 @@
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
-@property (nonatomic) OACommonInteger *sizeStylePref;
+@property (nonatomic) OACommonInteger *widgetSizePref;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);

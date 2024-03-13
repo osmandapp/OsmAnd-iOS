@@ -209,15 +209,11 @@
                 }
                 else if ([key isEqualToString:settings.customWidgetKeys.key])
                 {
-                    [migrationManager updateExistingCustomWidgetIds:_appMode
-                                                    changeWidgetIds:migrationManager.changeWidgetIds1
-                                                customIdsPreference:settings.customWidgetKeys];
+                    [migrationManager updateCustomWidgetKeys:_appMode changeWidgetIds:migrationManager.changeWidgetIds1];
                 }
                 else if ([key isEqualToString:settings.mapInfoControls.key])
                 {
-                    [migrationManager updateExistingWidgetsVisibility:_appMode
-                                                      changeWidgetIds:migrationManager.changeWidgetIds1
-                                                 visibilityPreference:settings.mapInfoControls];
+                    [migrationManager updateMapInfoControls:_appMode changeWidgetIds:migrationManager.changeWidgetIds1];
                     NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
                     for (key in [[settings.mapInfoControls get:_appMode] componentsSeparatedByString:@";"])
                     {

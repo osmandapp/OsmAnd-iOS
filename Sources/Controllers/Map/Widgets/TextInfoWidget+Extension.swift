@@ -8,7 +8,7 @@
 
 extension OATextInfoWidget {
     @objc var widgetSizeStyle: WidgetSizeStyle {
-        guard sizeStylePref != nil, let style = WidgetSizeStyle(rawValue: NSInteger(sizeStylePref.get(OAAppSettings.sharedManager().applicationMode.get()!))) else {
+        guard widgetSizePref != nil, let style = WidgetSizeStyle(rawValue: NSInteger(widgetSizePref.get(OAAppSettings.sharedManager().applicationMode.get()!))) else {
             return .medium
         }
         return style
@@ -19,7 +19,7 @@ extension OATextInfoWidget {
         guard widgetSizeStyle != style else {
             return
         }
-        sizeStylePref.set(Int32(style.rawValue), mode: appMode)
+        widgetSizePref.set(Int32(style.rawValue), mode: appMode)
     }
 }
 

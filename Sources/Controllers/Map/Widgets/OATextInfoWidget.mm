@@ -44,7 +44,7 @@
     int _cachedAngularUnits;
     NSLayoutConstraint *_leadingTextAnchor;
     NSString *_customId;
-    OACommonBoolean *_hideIconPref;
+    OACommonBoolean *_showIconPref;
     OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
     UIStackView *_contentStackViewSimpleWidget;
@@ -53,9 +53,6 @@
     NSLayoutConstraint *_verticalStackViewSimpleWidgetBottomConstraint;
     UIColor *_iconColor;
 }
-
-NSString *const kHideIconPref = @"kHideIconPref";
-NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (instancetype) init
 {
@@ -517,9 +514,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     _verticalStackViewSimpleWidgetBottomConstraint.constant = -(topBottomPadding - 2);
             
     BOOL isVisibleIcon = false;
-    if (_appMode && _hideIconPref)
+    if (_appMode && _showIconPref)
     {
-        isVisibleIcon = [_hideIconPref get:_appMode];
+        isVisibleIcon = [_showIconPref get:_appMode];
         self.iconWidgetView.hidden = !isVisibleIcon;
         _contentStackViewSimpleWidget.spacing = 0;
     }
@@ -811,14 +808,14 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     OATableRowData *widgetStyleRow = section.createNewRow;
     widgetStyleRow.cellType = SegmentImagesWithRightLableTableViewCell.getCellIdentifier;
     widgetStyleRow.title = OALocalizedString(@"shared_string_height");
-    [widgetStyleRow setObj:self.sizeStylePref forKey:@"prefSegment"];
+    [widgetStyleRow setObj:self.widgetSizePref forKey:@"prefSegment"];
     [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];
     [widgetStyleRow setObj:@[ACImageNameIcCustom20HeightS, ACImageNameIcCustom20HeightM, ACImageNameIcCustom20HeightL] forKey:@"values"];
     
     OATableRowData *showIconRow = section.createNewRow;
     showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
     showIconRow.title = OALocalizedString(@"show_icon");
-    [showIconRow setObj:_hideIconPref forKey:@"pref"];
+    [showIconRow setObj:_showIconPref forKey:@"pref"];
 
     return data;
 }
@@ -826,8 +823,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
 {
     _appMode = appMode;
-    _hideIconPref = [self registerHideIconPrefWith:id];
-    self.sizeStylePref = [self registerSizeStylePrefWith:id];
+    _showIconPref = [self registerShowIconPref:id];
+    self.widgetSizePref = [self registerWidgetSizePref:id];
     
     if (widgetParams)
     {
@@ -837,40 +834,26 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
             NSString *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
             if (widgetSizeStyle)
             {
-                [self.sizeStylePref set:[widgetSizeStyle intValue] mode:selectedAppMode];
+                [self.widgetSizePref set:[widgetSizeStyle intValue] mode:selectedAppMode];
             }
             NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
             if (isVisibleIconNumber)
             {
                 BOOL isVisibleIcon = [isVisibleIconNumber boolValue];
-                [_hideIconPref set:isVisibleIcon mode:selectedAppMode];
+                [_showIconPref set:isVisibleIcon mode:selectedAppMode];
             }
         }
     }
 }
 
-- (OACommonInteger *)registerSizeStylePrefWith:(NSString *)customId
+- (OACommonInteger *)registerWidgetSizePref:(NSString *)customId
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefId = self.widgetType.title;
-    if (customId.length > 0)
-        prefId = [prefId stringByAppendingFormat:@"%@_%@",kSizeStylePref,customId];
-    else
-        prefId = [prefId stringByAppendingFormat:@"%@",kSizeStylePref];
-    
-    return [settings registerIntPreference:prefId defValue:WidgetSizeStyleMedium];
+    return (OACommonInteger *) [[OAMigrationManager shared] registerWidgetPref:self.widgetType prefKey:kSizeStylePref customId:customId];
 }
 
-- (OACommonBoolean *)registerHideIconPrefWith:(NSString *)customId
+- (OACommonBoolean *)registerShowIconPref:(NSString *)customId
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefId = self.widgetType.title;
-    if (customId.length > 0)
-        prefId = [prefId stringByAppendingFormat:@"%@_%@",kHideIconPref,customId];
-    else
-        prefId = [prefId stringByAppendingFormat:@"%@",kHideIconPref];
-    
-    return [settings registerBooleanPreference:prefId defValue:YES];
+    return (OACommonBoolean *) [[OAMigrationManager shared] registerWidgetPref:self.widgetType prefKey:kShowIconPref customId:customId];
 }
 
 - (OAApplicationMode *_Nonnull)getAppMode

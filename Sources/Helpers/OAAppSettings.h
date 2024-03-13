@@ -327,6 +327,8 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 @property (nonatomic, assign) BOOL lastModifiedTimeStored;
 @property (nonatomic) long lastModifiedTime;
 
+- (NSString *)getKey:(OAApplicationMode *)mode;
+
 - (id) makeGlobal;
 - (id) makeProfile;
 - (id) makeShared;

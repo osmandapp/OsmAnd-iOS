@@ -40,8 +40,8 @@ final class MigrationManager: NSObject {
             return
         }
 
-        guard let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue),
-              isOldWidgetKeysMigrated as! Bool == false else { return }
+        let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+        if isOldWidgetKeysMigrated != nil && (isOldWidgetKeysMigrated as! Bool) == true { return }
 
         if let settings = OAAppSettings.sharedManager() {
             for mode in OAApplicationMode.allPossibleValues() {
@@ -57,7 +57,7 @@ final class MigrationManager: NSObject {
 
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds1,
-                                        panelPreference:settings.leftWidgetPanelOrder)
+                                        panelPreference: settings.leftWidgetPanelOrder)
 
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds1,
@@ -79,7 +79,7 @@ final class MigrationManager: NSObject {
             guard (pages.flatMap({ $0 }).contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
         }
 
-        var newPages = [Array<String>]()
+        var newPages = [[String]]()
         for page in pages {
             newPages.append(getUpdatedWidgetIds(page, changeWidgetIds: changeWidgetIds))
         }
@@ -147,7 +147,8 @@ final class MigrationManager: NSObject {
                 }
                 if let preferenceOld = settings.getPreferenceByKey(prefIdOld),
                    let preferenceNew = registerWidgetPref(widgetType, prefKey: prefKeyNew, customId: customId) {
-                        preferenceNew.setValueFrom(preferenceOld.toStringValue(appMode), appMode: appMode)
+                    preferenceNew.setValueFrom(preferenceOld.toStringValue(appMode), appMode: appMode)
+                    defaults.removeObject(forKey: preferenceOld.getKey(appMode))
                 }
             }
         }

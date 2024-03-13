@@ -383,14 +383,17 @@ typedef enum
                 [self onLocationServicesFirstTimeUpdate];
             }
         } else {
-            if (_localMapIndexItem) {
+            if (_localMapIndexItem)
+            {
                 NSString *resourceId = _localMapIndexItem.resourceId.toNSString();
                 BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", resourceId]];
                 if (!isDownloading)
                     [self configureSearchLocationState];
                 else
                     NSLog(@"resource: %@ is downloading", resourceId);
-            } else {
+            }
+            else
+            {
                 [self configureSearchLocationState];
             }
         }

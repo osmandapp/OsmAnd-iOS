@@ -680,7 +680,7 @@
     {
         LIMIT = 10000;
         BBOX_RADIUS = 500 * 1000;
-        BBOX_RADIUS_INSIDE = 10000 * 1000;
+        BBOX_RADIUS_INSIDE = 20000 * 1000;
         BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
         _types = [OAPOIHelper sharedInstance];

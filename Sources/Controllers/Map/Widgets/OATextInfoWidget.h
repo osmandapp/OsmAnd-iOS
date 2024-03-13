@@ -16,8 +16,8 @@
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
-NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
+static NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
+static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 @class OAWidgetType, OutlineLabel;
 

@@ -20,11 +20,11 @@ final class MigrationManager: NSObject {
     let defaults = UserDefaults.standard
 
     let changeWidgetIds1 = [
-        "heartRate" : "ant_heart_rate",
-        "bicycleCadence" : "ant_bicycle_cadence",
-        "bicycleDistance" : "ant_bicycle_distance",
-        "bicycleSpeed" : "ant_bicycle_speed",
-        "temperature" : "temperature_sensor"
+        "heartRate": "ant_heart_rate",
+        "bicycleCadence": "ant_bicycle_cadence",
+        "bicycleDistance": "ant_bicycle_distance",
+        "bicycleSpeed": "ant_bicycle_speed",
+        "temperature": "temperature_sensor"
     ]
 
     let changeWidgetPrefs1 = [
@@ -36,7 +36,7 @@ final class MigrationManager: NSObject {
 
     func changeWidgetIdsMigration1(_ firstLaunch: Bool) {
         if firstLaunch {
-            defaults.set(true, forKey:  MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+            defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
             return
         }
 
@@ -47,13 +47,13 @@ final class MigrationManager: NSObject {
             for mode in OAApplicationMode.allPossibleValues() {
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds1,
-                                        panelPreference:settings.topWidgetPanelOrderOld,
-                                        newPanelPreference:settings.topWidgetPanelOrder)
+                                        panelPreference: settings.topWidgetPanelOrderOld,
+                                        newPanelPreference: settings.topWidgetPanelOrder)
 
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds1,
-                                        panelPreference:settings.bottomWidgetPanelOrderOld,
-                                        newPanelPreference:settings.bottomWidgetPanelOrder)
+                                        panelPreference: settings.bottomWidgetPanelOrderOld,
+                                        newPanelPreference: settings.bottomWidgetPanelOrder)
 
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds1,
@@ -61,12 +61,12 @@ final class MigrationManager: NSObject {
 
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds1,
-                                        panelPreference:settings.rightWidgetPanelOrder)
+                                        panelPreference: settings.rightWidgetPanelOrder)
 
                 updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds1)
                 updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds1)
             }
-            defaults.set(true, forKey:  MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+            defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
         }
     }
 
@@ -106,7 +106,7 @@ final class MigrationManager: NSObject {
         let mapInfoControls: OACommonString = OAAppSettings.sharedManager().mapInfoControls
         guard let widgetsVisibilityString = mapInfoControls.get(appMode) else { return  }
 
-        let widgetsVisibility = widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR);
+        let widgetsVisibility = widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
         guard (widgetsVisibility.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
 
         let newWidgetsVisibility = getUpdatedWidgetIds(widgetsVisibility, changeWidgetIds: changeWidgetIds)
@@ -154,16 +154,16 @@ final class MigrationManager: NSObject {
     }
 
     func registerWidgetPref(_ widgetType: WidgetType, prefKey: String, customId: String?) -> OACommonPreference? {
-        var prefId: String = kSizeStylePref
+        var prefId = prefKey
         prefId = prefId.appending(widgetType.id)
         if let customId, !customId.isEmpty {
             prefId = prefId.appending(customId)
         }
         if prefKey == kShowIconPref {
-            return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue:true)
+            return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
         }
         else if prefKey == kSizeStylePref {
-            return OAAppSettings.sharedManager().registerIntPreference(prefId, defValue:Int32(WidgetSizeStyle.medium.rawValue))
+            return OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(WidgetSizeStyle.medium.rawValue))
         }
         return nil
     }

@@ -3340,3 +3340,5 @@
 "shared_string_mode" = "Tilstand";
 "shared_string_format" = "Format";
 "lang_sr-Latn" = "Serbisk (latin)";
+"skip_download" = "Spring download over";
+"determine_location" = "Tillad os at bestemme din placering";

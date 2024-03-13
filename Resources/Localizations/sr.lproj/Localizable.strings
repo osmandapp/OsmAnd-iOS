@@ -3339,3 +3339,5 @@
 "announcement_time_intervals" = "Интервали времена и удаљености";
 "restart_is_required" = "Потребно је поновно покретање за примену измена.";
 "download_only_now" = "Преузми само сада";
+"skip_download" = "Прескочи преузимање";
+"determine_location" = "Омогућава нам да одредимо ваш положај";

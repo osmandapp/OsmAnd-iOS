@@ -546,6 +546,7 @@
 		4613BFAB2A93DECC004385FB /* ic_custom_screen_side_top_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA32A93DECB004385FB /* ic_custom_screen_side_top_48@2x.png */; };
 		4613BFAC2A93DECC004385FB /* ic_custom_screen_side_top_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA42A93DECB004385FB /* ic_custom_screen_side_top_48@3x.png */; };
 		4613BFAD2A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BFA52A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png */; };
+		4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4617129D2B973C34000446F9 /* GlideUtils.swift */; };
 		4619604B2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4619604A2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift */; };
 		461A3F0029F6A62C008EE079 /* OATrackColoringTypeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */; };
 		461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */; };
@@ -557,6 +558,7 @@
 		461F4522283E370C00796360 /* ic_custom_arrow_down_short@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4520283E370B00796360 /* ic_custom_arrow_down_short@3x.png */; };
 		461F4523283E370C00796360 /* ic_custom_arrow_down_short@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */; };
 		461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */ = {isa = PBXBuildFile; fileRef = 461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */; };
+		46207CF72B9A7EDE000D337D /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46207CF62B9A7EDE000D337D /* String+Extension.swift */; };
 		462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462148712B6BEF44003DA10C /* CloudTrashViewController.swift */; };
 		46220B702AD6D6F2006C3248 /* OABaseEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */; };
 		46220B792AD70AF9006C3248 /* OAGroupEditorViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46220B782AD70AF9006C3248 /* OAGroupEditorViewController.mm */; };
@@ -576,6 +578,8 @@
 		464076CA2B55B3FC005AA91F /* SimpleWidgetInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */; };
 		464167D428AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */; };
 		464167D528AE4F2D00C6AA8F /* ic_custom_checkbox_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */; };
+		4641A4652B98B4A5000D8B32 /* GlideTargetWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4641A4642B98B4A5000D8B32 /* GlideTargetWidget.swift */; };
+		4641A4672B98B5DE000D8B32 /* GlideTargetWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4641A4662B98B5DE000D8B32 /* GlideTargetWidgetState.swift */; };
 		4643322A291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m in Sources */ = {isa = PBXBuildFile; fileRef = 46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */; };
 		46453ADA2835234B001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */; };
 		46453ADB2835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46453AD72835234A001F9A3A /* ic_custom_advanced_widgets_colored_big@2x.png */; };
@@ -755,6 +759,10 @@
 		46C49509291E57DA005A9D70 /* OANauticalDepthParametersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */; };
 		46C7647728DC7BAA002DB43E /* OASimpleTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */; };
 		46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */; };
+		46CBC9722B96126C005CC244 /* GlideBaseWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9712B96126C005CC244 /* GlideBaseWidget.swift */; };
+		46CBC9742B962707005CC244 /* GlideAverageWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9732B962707005CC244 /* GlideAverageWidget.swift */; };
+		46CBC9762B962B8B005CC244 /* AverageValueComputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9752B962B8B005CC244 /* AverageValueComputer.swift */; };
+		46CBC9782B9633FB005CC244 /* AverageGlideComputer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46CBC9772B9633FB005CC244 /* AverageGlideComputer.swift */; };
 		46CE450D2AAA0A4D00C827B5 /* OADistanceAndDirectionsUpdater.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46CE450C2AAA0A4D00C827B5 /* OADistanceAndDirectionsUpdater.mm */; };
 		46D38A9429C38E10000AAE0C /* OARoutingProfilesHolder.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38A9329C38DD0000AAE0C /* OARoutingProfilesHolder.m */; };
 		46D38A9929C39545000AAE0C /* OARoutingDataObject.m in Sources */ = {isa = PBXBuildFile; fileRef = 46D38A9829C39509000AAE0C /* OARoutingDataObject.m */; };
@@ -3302,6 +3310,9 @@
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
 		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */; };
 		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */; };
+		FA069C542B9AF61B0007E4DE /* OutlineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */; };
+		FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C682B9F13160007E4DE /* ShadowPathView.swift */; };
+		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
@@ -4087,6 +4098,7 @@
 		4613BFA32A93DECB004385FB /* ic_custom_screen_side_top_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_top_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_top_48@2x.png"; sourceTree = "<group>"; };
 		4613BFA42A93DECB004385FB /* ic_custom_screen_side_top_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_top_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_top_48@3x.png"; sourceTree = "<group>"; };
 		4613BFA52A93DECC004385FB /* ic_custom_screen_side_bottom_48@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@3x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@3x.png"; sourceTree = "<group>"; };
+		4617129D2B973C34000446F9 /* GlideUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideUtils.swift; sourceTree = "<group>"; };
 		4619604A2B0CCA6C002CBAF9 /* ExternalSettingsWriteToTrackSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExternalSettingsWriteToTrackSettingsViewController.swift; sourceTree = "<group>"; };
 		461A3EFE29F6A5C3008EE079 /* OATrackColoringTypeViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATrackColoringTypeViewController.h; sourceTree = "<group>"; };
 		461A3EFF29F6A5DF008EE079 /* OATrackColoringTypeViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATrackColoringTypeViewController.m; sourceTree = "<group>"; };
@@ -4103,6 +4115,7 @@
 		461F4521283E370C00796360 /* ic_custom_arrow_down_short@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_arrow_down_short@2x.png"; path = "Resources/Icons/ic_custom_arrow_down_short@2x.png"; sourceTree = "<group>"; };
 		461FB12C2987FDFA00097673 /* OAAnnounceTimeDistances.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAnnounceTimeDistances.h; sourceTree = "<group>"; };
 		461FB12D2987FE0B00097673 /* OAAnnounceTimeDistances.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAAnnounceTimeDistances.m; sourceTree = "<group>"; };
+		46207CF62B9A7EDE000D337D /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		462148712B6BEF44003DA10C /* CloudTrashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashViewController.swift; sourceTree = "<group>"; };
 		46220B6E2AD6D6A8006C3248 /* OABaseEditorViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseEditorViewController.h; sourceTree = "<group>"; };
 		46220B6F2AD6D6F2006C3248 /* OABaseEditorViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABaseEditorViewController.mm; sourceTree = "<group>"; };
@@ -4125,6 +4138,8 @@
 		464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWidgetInfo.swift; sourceTree = "<group>"; };
 		464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@2x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@2x.png"; sourceTree = "<group>"; };
 		464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@3x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@3x.png"; sourceTree = "<group>"; };
+		4641A4642B98B4A5000D8B32 /* GlideTargetWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideTargetWidget.swift; sourceTree = "<group>"; };
+		4641A4662B98B5DE000D8B32 /* GlideTargetWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideTargetWidgetState.swift; sourceTree = "<group>"; };
 		46433228291D5FD1005AEF12 /* OAMapSettingsNauticalDepthScreen.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapSettingsNauticalDepthScreen.h; sourceTree = "<group>"; };
 		46433229291D5FE7005AEF12 /* OAMapSettingsNauticalDepthScreen.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAMapSettingsNauticalDepthScreen.m; sourceTree = "<group>"; };
 		46453AD62835234A001F9A3A /* ic_custom_advanced_widgets_colored_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_advanced_widgets_colored_day@2x.png"; path = "Resources/Icons/ic_custom_advanced_widgets_colored_day@2x.png"; sourceTree = "<group>"; };
@@ -4325,6 +4340,10 @@
 		46C49508291E57DA005A9D70 /* OANauticalDepthParametersViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OANauticalDepthParametersViewController.m; sourceTree = "<group>"; };
 		46C7647628DC7BAA002DB43E /* OASimpleTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASimpleTableViewCell.xib; sourceTree = "<group>"; };
 		46C78C0928BD16A30019FF69 /* OAStorageStateValuesCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAStorageStateValuesCell.xib; sourceTree = "<group>"; };
+		46CBC9712B96126C005CC244 /* GlideBaseWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideBaseWidget.swift; sourceTree = "<group>"; };
+		46CBC9732B962707005CC244 /* GlideAverageWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideAverageWidget.swift; sourceTree = "<group>"; };
+		46CBC9752B962B8B005CC244 /* AverageValueComputer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageValueComputer.swift; sourceTree = "<group>"; };
+		46CBC9772B9633FB005CC244 /* AverageGlideComputer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AverageGlideComputer.swift; sourceTree = "<group>"; };
 		46CE450B2AAA0A2900C827B5 /* OADistanceAndDirectionsUpdater.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADistanceAndDirectionsUpdater.h; sourceTree = "<group>"; };
 		46CE450C2AAA0A4D00C827B5 /* OADistanceAndDirectionsUpdater.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADistanceAndDirectionsUpdater.mm; sourceTree = "<group>"; };
 		46D38A9229C38DC0000AAE0C /* OARoutingProfilesHolder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OARoutingProfilesHolder.h; sourceTree = "<group>"; };
@@ -7932,6 +7951,9 @@
 		FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
 		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLableTableViewCell.swift; sourceTree = "<group>"; };
 		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLableTableViewCell.xib; sourceTree = "<group>"; };
+		FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLabel.swift; sourceTree = "<group>"; };
+		FA069C682B9F13160007E4DE /* ShadowPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPathView.swift; sourceTree = "<group>"; };
+		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
@@ -9949,6 +9971,7 @@
 				46ED6C3F2B333B8100A5555F /* ExternalSensorsPlugin+Extension.swift */,
 				46ED6C412B333BE400A5555F /* Pair.swift */,
 				46ED6C3D2B333B4400A5555F /* Plugin+Extension.swift */,
+				46207CF62B9A7EDE000D337D /* String+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -10381,6 +10404,9 @@
 				DAA61CC72A03AB5E00AFF65D /* WidgetsAvailabilityHelper.swift */,
 				DA0133132A20E24700920C14 /* WidgetsSettingsHelper.swift */,
 				46FB65BB2A8BCF2200A21850 /* WidgetUtils.swift */,
+				46CBC9752B962B8B005CC244 /* AverageValueComputer.swift */,
+				46CBC9772B9633FB005CC244 /* AverageGlideComputer.swift */,
+				4617129D2B973C34000446F9 /* GlideUtils.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -10832,6 +10858,7 @@
 		DA5A78FF26C5639F00F274C7 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				FA069C522B9AF6090007E4DE /* Controls */,
 				DAABE4EC2A16578A00569F71 /* SwiftExtensions */,
 				DACF784127E343FF00A8A218 /* Backup */,
 				DA5A7AA726C563A000F274C7 /* Address */,
@@ -12979,6 +13006,9 @@
 		DA5A7F1626C563A400F274C7 /* WidgetStates */ = {
 			isa = PBXGroup;
 			children = (
+				4641A4662B98B5DE000D8B32 /* GlideTargetWidgetState.swift */,
+				DA8DC3932A0CDAF1006C116B /* IntermediateTimeControlWidgetState.swift */,
+				DAA61CB62A0102EC00AFF65D /* MapMarkerSideWidgetState.swift */,
 				DA5A7F1E26C563A400F274C7 /* OABearingWidgetState.h */,
 				DA5A7F1926C563A400F274C7 /* OABearingWidgetState.m */,
 				CA4ED526936BFF80957E31DA /* OACompassModeWidgetState.h */,
@@ -12987,14 +13017,12 @@
 				DA5A7F1A26C563A400F274C7 /* OACompassRulerWidgetState.m */,
 				C54D7F8629BF357700E14746 /* OASunriseSunsetWidgetState.h */,
 				C54D7F8729BF357700E14746 /* OASunriseSunsetWidgetState.m */,
-				FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */,
 				DA5A7F1826C563A400F274C7 /* OATimeWidgetState.h */,
 				DA5A7F1B26C563A400F274C7 /* OATimeWidgetState.m */,
 				DA5A7F1C26C563A400F274C7 /* OAWidgetState.h */,
 				DA5A7F1726C563A400F274C7 /* OAWidgetState.m */,
-				DAA61CB62A0102EC00AFF65D /* MapMarkerSideWidgetState.swift */,
+				FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */,
 				DAA61CBB2A02576A00AFF65D /* TimeToNavigationPointWidgetState.swift */,
-				DA8DC3932A0CDAF1006C116B /* IntermediateTimeControlWidgetState.swift */,
 			);
 			path = WidgetStates;
 			sourceTree = "<group>";
@@ -13804,6 +13832,9 @@
 				DA7B18DF2A1227A30029967F /* CurrentTimeWidget.swift */,
 				DA8DC38F2A0CCFCB006C116B /* DistanceToDestinationWidget.swift */,
 				DA8DC3912A0CD9A3006C116B /* DistanceToIntermediateDestinationWidget.swift */,
+				46CBC9732B962707005CC244 /* GlideAverageWidget.swift */,
+				46CBC9712B96126C005CC244 /* GlideBaseWidget.swift */,
+				4641A4642B98B4A5000D8B32 /* GlideTargetWidget.swift */,
 				DA8DC3972A0CF47D006C116B /* MapMarkerSideWidget.swift */,
 				DA8DC3A12A0E4EBB006C116B /* OABearingWidget.h */,
 				DA8DC3A22A0E4EBB006C116B /* OABearingWidget.m */,
@@ -13891,6 +13922,7 @@
 				FAA6503F2ADD42C40020DCEA /* UIView+Extension.swift */,
 				FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */,
 				FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */,
+				FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */,
 			);
 			path = SwiftExtensions;
 			sourceTree = "<group>";
@@ -14000,6 +14032,15 @@
 				DAD3FD252A4AEE7C00BFA03A /* WidgetGroupItemsViewController.swift */,
 			);
 			path = WidgetSettings;
+			sourceTree = "<group>";
+		};
+		FA069C522B9AF6090007E4DE /* Controls */ = {
+			isa = PBXGroup;
+			children = (
+				FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */,
+				FA069C682B9F13160007E4DE /* ShadowPathView.swift */,
+			);
+			path = Controls;
 			sourceTree = "<group>";
 		};
 		FA0ADED92B31995A006129D1 /* OACustomSourceDetailsViewController */ = {
@@ -17130,6 +17171,7 @@
 				DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
 				DA9F841C29CC96EF00127DAE /* OAShapeLayer.m in Sources */,
+				46CBC9722B96126C005CC244 /* GlideBaseWidget.swift in Sources */,
 				DA5A835526C563A800F274C7 /* OAGPXTrackCell.m in Sources */,
 				DA5A844926C563A900F274C7 /* OADiscountToolbarViewController.mm in Sources */,
 				DA5A84A926C563A900F274C7 /* OAAddTrackFolderViewController.m in Sources */,
@@ -17201,6 +17243,7 @@
 				DA5A84F126C563A900F274C7 /* OAMapSource.m in Sources */,
 				DA5A825526C563A700F274C7 /* OAArrivalAnnouncementViewController.m in Sources */,
 				DA5A816B26C563A700F274C7 /* OANoImagesCard.m in Sources */,
+				4641A4672B98B5DE000D8B32 /* GlideTargetWidgetState.swift in Sources */,
 				DA5A852B26C563A900F274C7 /* OAWaypointUIHelper.mm in Sources */,
 				DA5A849F26C563A900F274C7 /* OAChangeRouteModeCommand.mm in Sources */,
 				DA5A847F26C563A900F274C7 /* OAAlarmWidget.mm in Sources */,
@@ -17268,6 +17311,7 @@
 				DA5A835426C563A800F274C7 /* OAGPXRouteRoundCell.m in Sources */,
 				DA5A819C26C563A700F274C7 /* OAAddPOIAction.mm in Sources */,
 				DA5A839B26C563A800F274C7 /* OAOptionsPanelBlackViewController.m in Sources */,
+				46207CF72B9A7EDE000D337D /* String+Extension.swift in Sources */,
 				DA5A83AA26C563A800F274C7 /* OAAdvancedEditingViewController.mm in Sources */,
 				464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */,
 				DA5A812526C563A700F274C7 /* OATransportStopType.m in Sources */,
@@ -17376,6 +17420,7 @@
 				DA5A854926C563A900F274C7 /* OAJsonHelper.m in Sources */,
 				DA5A818226C563A700F274C7 /* OAMapStyleAction.mm in Sources */,
 				DA5A843126C563A800F274C7 /* OARouteTargetSelectionViewController.m in Sources */,
+				4617129E2B973C34000446F9 /* GlideUtils.swift in Sources */,
 				32D253B027F336C200324717 /* OACloudAccountCreateViewController.m in Sources */,
 				FA63F24C2AF3DAA00040A0CE /* SensorDataField.swift in Sources */,
 				DA842ECF2A0BA2420030866E /* MapWidgetsFactory.swift in Sources */,
@@ -17550,6 +17595,7 @@
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
 				DA5A831426C563A800F274C7 /* OARouteInfoLegendCell.m in Sources */,
 				DA5A812D26C563A700F274C7 /* IOAMapTiledCollectionProvider.mm in Sources */,
+				FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */,
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,
 				DA5A837126C563A800F274C7 /* OARoutingInfoCell.mm in Sources */,
 				DA653CD9288ACEDF00AB623C /* OATitleIconProgressbarCell.mm in Sources */,
@@ -17635,6 +17681,7 @@
 				DAAC0EC32801885800867D35 /* OABackupImporter.m in Sources */,
 				FA86F41C2AE7CE0100DC3B2B /* BLEBikeSensor.swift in Sources */,
 				DA5A81DB26C563A700F274C7 /* OACity.mm in Sources */,
+				4641A4652B98B4A5000D8B32 /* GlideTargetWidget.swift in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
 				DAABE4E32A13752000569F71 /* OAAverageSpeedComputer.m in Sources */,
 				DA5A852726C563A900F274C7 /* OAOverlayUnderlayView.m in Sources */,
@@ -17701,6 +17748,7 @@
 				DA5A842C26C563A800F274C7 /* OAImpassableRoadViewController.m in Sources */,
 				DA5A83CC26C563A800F274C7 /* OATransportRouteToolbarViewController.mm in Sources */,
 				DA5A823726C563A700F274C7 /* OAExportItemsSelectionViewController.mm in Sources */,
+				FA069C542B9AF61B0007E4DE /* OutlineLabel.swift in Sources */,
 				DA5A854226C563A900F274C7 /* UIColor+RGB.swift in Sources */,
 				DA5A832026C563A800F274C7 /* OAMultilineTextViewCell.m in Sources */,
 				DA5A81D126C563A700F274C7 /* OATerrainLayer.mm in Sources */,
@@ -17713,6 +17761,8 @@
 				32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */,
 				DA5A837726C563A800F274C7 /* OARouteInfoView.mm in Sources */,
 				DA5A84DF26C563A900F274C7 /* OAMapSettingsTerrainScreen.mm in Sources */,
+				46CBC9762B962B8B005CC244 /* AverageValueComputer.swift in Sources */,
+				46CBC9742B962707005CC244 /* GlideAverageWidget.swift in Sources */,
 				DA5A842526C563A800F274C7 /* OATargetHistoryItemViewController.m in Sources */,
 				32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */,
 				8A31787527E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm in Sources */,
@@ -17755,6 +17805,7 @@
 				DA5A813026C563A700F274C7 /* OAOnlineOsmNote.mm in Sources */,
 				DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */,
 				DA5A831A26C563A800F274C7 /* OATextInputFloatingCellWithIcon.mm in Sources */,
+				FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */,
 				46D38A9F29C39B0F000AAE0C /* OAProfilesGroup.m in Sources */,
 				DA4ABF1B2876DA6800B996EF /* OAFavoritesSettingsItem.mm in Sources */,
 				DA591EAF28D9EB2C0068CAC7 /* OATableRowData.m in Sources */,
@@ -17920,6 +17971,7 @@
 				CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */,
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
+				46CBC9782B9633FB005CC244 /* AverageGlideComputer.swift in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,

@@ -71,7 +71,6 @@ class TimeToNavigationPointWidget: OASimpleWidget {
         settingRow.cellType = OAValueTableViewCell.getIdentifier()
         settingRow.key = "value_pref"
         settingRow.title = widgetType!.title
-        settingRow.descr = widgetType!.title
         settingRow.setObj(arrivalTimeOtherwiseTimeToGoPref, forKey: "pref")
         settingRow.setObj(widgetState!.getPrefValue(), forKey: "value")
         settingRow.setObj(getPossibleValues(), forKey: "possible_values")

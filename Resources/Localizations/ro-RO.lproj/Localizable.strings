@@ -3310,8 +3310,8 @@
 "shared_string_next_event" = "Următorul eveniment";
 "map_widget_sun_position" = "Poziția soarelui";
 "action_cant_be_undone" = "Această acțiune nu poate fi anulată.";
-"manage_subscriptions" = "Gestionați abonamentele.";
-"deleting_complete" = "Ștergere completă";
+"manage_subscriptions" = "Gestionare abonamente.";
+"deleting_complete" = "Ștergere finalizată";
 "osmand_cloud_delete_account_descr" = "Sunteți sigur că doriți să ștergeți contul OsmAnd Cloud?";
 "osmand_cloud_delete_account_confirmation" = "Ștergeți contul?";
 "osmand_cloud_deletion_subscriptions_warning" = "Acesta nu vă va anula abonamentul OsmAnd Pro.";
@@ -3321,6 +3321,6 @@
 "trash_is_empty_banner_desc" = "Fișierele eliminate din OsmAnd Cloud vor fi disponibile aici timp de %d zile după aceea.";
 "complex_widget_alert" = "Widgetul %@ poate fi plasat numai pe propriul rând.";
 "osmand_cloud_deletion_account_warning" = "Contul dumneavoastră și toate detaliile contului vor fi %@.";
-"osmand_cloud_deletion_secondary_devices_warning" = "Dispozitivele secundare vor fi deconectate de la OsmAnd Cloud și vor pierde accesul la funcțiile plătite.";
+"osmand_cloud_deletion_secondary_devices_warning" = "Dispozitivele secundare vor fi deconectate de la OsmAnd Cloud și vor pierde accesul la funcționalitățile plătite.";
 "skip_download" = "Săriți descărcarea";
 "determine_location" = "Permiteți-ne să vă determinăm locația";

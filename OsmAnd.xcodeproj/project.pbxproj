@@ -673,6 +673,7 @@
 		46624E742993B4B100F425AE /* OABaseNavbarViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46624E732993B4B100F425AE /* OABaseNavbarViewController.xib */; };
 		4663AB402951C95A00D9781E /* OAInputTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */; };
 		4663AB412951CB6200D9781E /* OAInputTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 4663AB3E2951C94700D9781E /* OAInputTableViewCell.m */; };
+		4663EC7A2BA1FEEF006B0EBB /* MigrationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */; };
 		46693AB0284919DA00ADA1A1 /* ic_custom_hazmat_limit@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */; };
 		46693AB1284919DA00ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */; };
 		46693AB2284919DA00ADA1A1 /* ic_custom_hazmat_limit@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46693AAE284919D900ADA1A1 /* ic_custom_hazmat_limit@3x.png */; };
@@ -4242,6 +4243,7 @@
 		4663AB3D2951C92C00D9781E /* OAInputTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAInputTableViewCell.h; sourceTree = "<group>"; };
 		4663AB3E2951C94700D9781E /* OAInputTableViewCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAInputTableViewCell.m; sourceTree = "<group>"; };
 		4663AB3F2951C95A00D9781E /* OAInputTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAInputTableViewCell.xib; sourceTree = "<group>"; };
+		4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MigrationManager.swift; sourceTree = "<group>"; };
 		46693AAC284919D800ADA1A1 /* ic_custom_hazmat_limit@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit@2x.png"; path = "Resources/Icons/ic_custom_hazmat_limit@2x.png"; sourceTree = "<group>"; };
 		46693AAD284919D900ADA1A1 /* ic_custom_hazmat_limit_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit_colored@2x.png"; path = "Resources/Icons/ic_custom_hazmat_limit_colored@2x.png"; sourceTree = "<group>"; };
 		46693AAE284919D900ADA1A1 /* ic_custom_hazmat_limit@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hazmat_limit@3x.png"; path = "Resources/Icons/ic_custom_hazmat_limit@3x.png"; sourceTree = "<group>"; };
@@ -13635,6 +13637,7 @@
 				05898FB12B511E0500E64B58 /* OASvgHelper.mm */,
 				32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */,
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
+				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -17806,6 +17809,7 @@
 				DA5A820B26C563A700F274C7 /* OAProfileGeneralSettingsViewController.m in Sources */,
 				DA5A831A26C563A800F274C7 /* OATextInputFloatingCellWithIcon.mm in Sources */,
 				FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */,
+				4663EC7A2BA1FEEF006B0EBB /* MigrationManager.swift in Sources */,
 				46D38A9F29C39B0F000AAE0C /* OAProfilesGroup.m in Sources */,
 				DA4ABF1B2876DA6800B996EF /* OAFavoritesSettingsItem.mm in Sources */,
 				DA591EAF28D9EB2C0068CAC7 /* OATableRowData.m in Sources */,

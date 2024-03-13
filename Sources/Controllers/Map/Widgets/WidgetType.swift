@@ -362,12 +362,4 @@ extension WidgetType {
                          glideTarget,
                          glideAverage
     ]
-
-    static let oldNewWidgetIds = [
-        "heartRate" : "ant_heart_rate",
-        "bicycleCadence" : "ant_bicycle_cadence",
-        "bicycleDistance" : "ant_bicycle_distance",
-        "bicycleSpeed" : "ant_bicycle_speed",
-        "temperature" : "temperature_sensor"
-    ]
 }

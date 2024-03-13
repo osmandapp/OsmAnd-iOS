@@ -169,6 +169,7 @@
 - (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
+    OAMigrationManager *migrationManager = [OAMigrationManager shared];
     if (!_appModeBeanPrefsIds)
         _appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     
@@ -201,18 +202,22 @@
                     else if ([key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
                         newPanelPreference = settings.bottomWidgetPanelOrder;
 
-                    [OAWidgetUtils updateExistingWidgetIds:_appMode
-                                           panelPreference:(OACommonListOfStringList *) setting
-                                        newPanelPreference:newPanelPreference];
+                    [migrationManager updateExistingWidgetIds:_appMode
+                                              changeWidgetIds:migrationManager.changeWidgetIds1
+                                              panelPreference:(OACommonListOfStringList *) setting
+                                           newPanelPreference:newPanelPreference];
                 }
                 else if ([key isEqualToString:settings.customWidgetKeys.key])
                 {
-                    [OAWidgetUtils updateExistingCustomWidgetIds:_appMode
-                                             customIdsPreference:settings.customWidgetKeys];
+                    [migrationManager updateExistingCustomWidgetIds:_appMode
+                                                    changeWidgetIds:migrationManager.changeWidgetIds1
+                                                customIdsPreference:settings.customWidgetKeys];
                 }
                 else if ([key isEqualToString:settings.mapInfoControls.key])
                 {
-                    [OAWidgetUtils updateExistingWidgetsVisibility:_appMode visibilityPreference:settings.mapInfoControls];
+                    [migrationManager updateExistingWidgetsVisibility:_appMode
+                                                      changeWidgetIds:migrationManager.changeWidgetIds1
+                                                 visibilityPreference:settings.mapInfoControls];
                     NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
                     for (key in [[settings.mapInfoControls get:_appMode] componentsSeparatedByString:@";"])
                     {

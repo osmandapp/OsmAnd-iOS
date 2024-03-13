@@ -325,7 +325,9 @@ typedef enum
         UIViewController *controller = OABackupHelper.sharedInstance.isRegistered
         ? [OACloudBackupViewController new]
         : [OACloudIntroductionViewController new];
-        [weakSelf.navigationController pushViewController:controller animated:YES];
+        [weakSelf.navigationController pushViewController:controller animated:YES completion:^{
+            [weakSelf removeFromParentViewController];
+        }];
     }];
     UIAction *restoreFileAction = [UIAction actionWithTitle:OALocalizedString(@"restore_from_file")
                                                       image:[UIImage imageNamed:@"ic_custom_import_outlined"]
@@ -366,11 +368,43 @@ typedef enum
         }
       
         if (!_app.locationServices.allowed)
+        {
             [_app.locationServices start];
+            [self initWizard:SEARCH_LOCATION];
+            _location = _app.locationServices.lastKnownLocation;
+            if (!_location)
+            {
+                _locationServicesUpdateFirstTimeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                                     withHandler:@selector(onLocationServicesFirstTimeUpdate)
+                                                                                      andObserve:_app.locationServices.updateFirstTimeObserver];
+            }
+            else
+            {
+                [self onLocationServicesFirstTimeUpdate];
+            }
+        } else {
+            if (_localMapIndexItem) {
+                NSString *resourceId = _localMapIndexItem.resourceId.toNSString();
+                BOOL isDownloading = [[OsmAndApp instance].downloadsManager.keysOfDownloadTasks containsObject:[NSString stringWithFormat:@"resource:%@", resourceId]];
+                if (!isDownloading)
+                    [self configureSearchLocationState];
+                else
+                    NSLog(@"resource: %@ is downloading", resourceId);
+            } else {
+                [self configureSearchLocationState];
+            }
+        }
     }]];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel") style:UIAlertActionStyleCancel handler:nil]];
     
     [self presentViewController:alert animated:YES completion:nil];
+}
+
+- (void)configureSearchLocationState
+{
+    [self initWizard:SEARCH_LOCATION];
+    _location = _app.locationServices.lastKnownLocation;
+    [self onLocationServicesFirstTimeUpdate];
 }
 
 - (void)closeWizard

@@ -1936,7 +1936,7 @@
 "try_again" = "Try again";
 "searching" = "Searching…";
 "search_location" = "Searching location…";
-"search_map" = "Searching map…";
+"search_map" = "Searching map";
 "search_another_country" = "Select another region";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

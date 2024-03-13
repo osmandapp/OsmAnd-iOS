@@ -94,7 +94,6 @@ final class AverageSpeedWidget: OASimpleWidget {
         settingRow.cellType = OAValueTableViewCell.getIdentifier()
         settingRow.key = "value_pref"
         settingRow.title = localizedString("shared_string_interval")
-        settingRow.descr = localizedString("shared_string_interval")
         settingRow.setObj(measuredIntervalPref, forKey: "pref")
         settingRow.setObj(Self.getIntervalTitle(measuredIntervalPref.get(appMode)), forKey: "value")
         settingRow.setObj(getPossibleValues(measuredIntervalPref), forKey: "possible_values")

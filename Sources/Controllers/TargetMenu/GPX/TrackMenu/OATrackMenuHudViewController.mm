@@ -511,7 +511,8 @@
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
             routeIcon:isRoute ? _reopeningState.trackIcon : [UIImage templateImageNamed:@"ic_custom_trip"]
-                        title:[self.gpx getNiceTitle]];
+                        title:[self.gpx getNiceTitle]
+                  nearestCity:self.gpx.nearestCity];
 
     [self.scrollableView addSubview:_headerView];
 
@@ -1327,7 +1328,7 @@
 
 - (NSString *)getCreatedOn
 {
-    long time = self.doc.metadata.time;
+    NSTimeInterval time = [self.gpx.creationDate timeIntervalSince1970];
     if (time < 0)
     {
         NSFileManager *manager = NSFileManager.defaultManager;
@@ -1496,7 +1497,8 @@
                    shownTrack:self.isShown
                isNetworkRoute:_isNewRoute
                     routeIcon:_reopeningState.trackIcon
-                        title:[self.gpx getNiceTitle]];
+                        title:[self.gpx getNiceTitle]
+                  nearestCity:gpx.nearestCity];
     [self setupUIBuilder];
     [_uiBuilder setupTabBar:self.tabBarView
                 parentWidth:self.scrollableView.frame.size.width];

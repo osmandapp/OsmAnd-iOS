@@ -16,20 +16,19 @@
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType;
+@class OAWidgetType, OutlineLabel;
 
 @interface OATextInfoWidget : OABaseWidgetView
 
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
-@property (nonatomic, readonly) UIColor *primaryShadowColor;
+@property (nonatomic, readonly) UIColor *primaryOutlineColor;
 @property (nonatomic, readonly) UIFont *unitsFont;
 @property (nonatomic, readonly) UIColor *unitsColor;
 @property (nonatomic, readonly) UIColor *unitsShadowColor;
-@property (nonatomic, readonly) float shadowRadius;
+@property (nonatomic, readonly) float textOutlineWidth;
 
-@property (nonatomic) UILabel *textView;
-@property (nonatomic) UILabel *textShadowView;
+@property (nonatomic) OutlineLabel *textView;
 @property (nonatomic) UIImageView *imageView;
 
 @property (nonatomic) NSLayoutConstraint *topTextAnchor;

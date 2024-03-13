@@ -418,7 +418,7 @@
 "no_inet_connection_desc_map" = "Necesario para descargar mapas.";
 "try_again" = "Prueba de nuevo";
 "search_location" = "Buscando la ubicación…";
-"search_map" = "Buscando mapas…";
+"search_map" = "Buscando mapas";
 "search_another_country" = "Elegir otra región";
 "skip_map_downloading" = "Omitir descargas de mapas";
 "skip_map_downloading_desc_ios" = "Sin mapas descargados. Puedes elegir uno de la lista o descargarlos luego desde el menú «Gestionar mapas»";
@@ -3337,3 +3337,5 @@
 "osmand_cloud_delete_account_confirmation" = "¿Borrar la cuenta?";
 "osmand_cloud_deletion_all_data_warning" = "Todos los datos de OsmAnd Cloud serán %@. Los datos del dispositivo permanecen intactos.";
 "lang_sr-Latn" = "Serbio (latino)";
+"skip_download" = "Omitir la descarga";
+"determine_location" = "Permítanos determinar su ubicación";

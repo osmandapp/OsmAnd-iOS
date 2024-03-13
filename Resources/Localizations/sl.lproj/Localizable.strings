@@ -152,7 +152,7 @@
 "device_memory" = "Pomnilnik naprave";
 "skip_map_downloading" = "Preskoči prejemanje zemljevidov";
 "search_another_country" = "Izberi drugo državo";
-"search_map" = "Iskanje zemljevidov…";
+"search_map" = "Iskanje zemljevidov";
 "first_usage_wizard_desc" = "Zemljevidi za prejem so predlagani po podatkih trenutnega mesta.";
 "location_not_found" = "Mesta ni mogoče najti";
 "no_inet_connection" = "Ni internetne povezave";
@@ -384,7 +384,7 @@
 "route_tsll" = "Zavijte rahlo levo in pojdite";
 "route_tu" = "Polkrožno obrnite in pojdite";
 "arrived_at_intermediate_point" = "Dosežen je vmesni cilj";
-"starting_point_too_far" = "Štartna točka je predaleč od najbližje ceste.";
+"starting_point_too_far" = "Začetna točka je predaleč od najbližje ceste.";
 "ending_point_too_far" = "Končna točka je predaleč od najbližje ceste.";
 "intermediate_point_too_far" = "Vmesni cilji %@ je predaleč od najbližje ceste.";
 "route_head" = "Začetek poti";
@@ -577,7 +577,7 @@
 "shared_string_options" = "Možnosti";
 "replace_destination_point" = "Zamenjaj cilj";
 "shared_string_current" = "Trenutno";
-"make_as_start_point" = "Naj bo toštartna točka";
+"make_as_start_point" = "Ta točka naj bo začetna točka";
 "keep_and_add_destination_point" = "Dodaj kot naslednjo ciljno točko";
 "add_as_first_destination_point" = "Dodaj kot prvi vmesni cilj";
 "add_as_last_destination_point" = "Dodaj kot zadnji vmesni cilj";
@@ -2035,7 +2035,7 @@
 "save_track_to_gpx_descrp" = "Samodejni zagon snemanja sledi med navigacijo in samodejno shranjevanje po tem.";
 "move_marker_bottom_sheet_title" = "S premikom zemljevida se spremeni položaj označbe";
 "local_openstreetmap_uploading" = "Poteka pošiljanje …";
-"route_add_start_point" = "Dodajštartno točko";
+"route_add_start_point" = "Dodaj začetno točko";
 "quick_action_add_osm_bug" = "Vpiši opombo OSM";
 "add_point_before" = "Dodaj točko pred";
 "auth_failed" = "Pooblastitev je spodletela";

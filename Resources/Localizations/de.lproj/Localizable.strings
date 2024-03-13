@@ -415,7 +415,7 @@
 "no_inet_connection_desc_map" = "Erforderlich, um Karten herunterzuladen.";
 "try_again" = "Erneut versuchen";
 "search_location" = "Standort wird gesucht…";
-"search_map" = "Karten werden gesucht…";
+"search_map" = "Karten werden gesucht";
 "search_another_country" = "Eine andere Region auswählen";
 "skip_map_downloading" = "Herunterladen der Kartenüberspringen";
 "skip_map_downloading_desc_ios" = "Sie haben keine Offline Karten installiert. Sie können jetzt eine Karte auswählen oder später Karten über “Menü - Kartenverwaltung“ herunterladen";
@@ -3353,3 +3353,5 @@
 "shared_string_mode" = "Modus";
 "shared_string_format" = "Format";
 "lang_sr-Latn" = "Serbisch (lateinisch)";
+"skip_download" = "Download überspringen";
+"determine_location" = "Erlaube Sie uns, Ihnren Standort zu ermitteln";

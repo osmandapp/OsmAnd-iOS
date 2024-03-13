@@ -52,7 +52,7 @@
                                     preciseLocation:(BOOL)preciseLocation
                                        joinSegments:(BOOL)joinSegments;
 
-+ (OAPOI *)checkAndSearchNearestCity:(OAGPXTrackAnalysis *)analysis;
++ (OAPOI *)searchNearestCity:(CLLocationCoordinate2D)latLon;
 
 - (void) openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate;
 - (void) copyGPXToNewFolder:(NSString *)newFolderName

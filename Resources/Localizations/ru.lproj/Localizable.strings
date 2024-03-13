@@ -740,7 +740,7 @@
 "by_name" = "По имени";
 "shared_string_on" = "Вкл.";
 "shared_string_off" = "Выкл.";
-"search_map" = "Поиск карт…";
+"search_map" = "Поиск карт";
 "skip_map_downloading_desc_ios" = "У вас не установлена офлайновая карта. Вы можете выбрать карту из списка или скачать карту позже через Меню — Управление файлами карт";
 "items_selected" = "%d выбрано";
 "poi_filter_custom_filter" = "Пользовательский фильтр";

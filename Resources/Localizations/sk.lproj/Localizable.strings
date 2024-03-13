@@ -402,7 +402,7 @@
 "menu_my_directions" = "Moje pokyny";
 "skip_map_downloading" = "Preskočiť sťahovanie máp";
 "search_another_country" = "Zvoľte inú oblasť";
-"search_map" = "Hľadajú sa mapy…";
+"search_map" = "Hľadajú sa mapy";
 "first_usage_wizard_desc" = "Nechajte OsmAnd určiť Vašu polohu a navrhnúť mapy, ktoré sa dajú stiahnuť pre daný región.";
 "location_not_found" = "Poloha sa nenašla";
 "no_inet_connection" = "Nie je pripojenie na Internet";

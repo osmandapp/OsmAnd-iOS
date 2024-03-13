@@ -700,9 +700,7 @@
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
                               const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              OATransportStop *stop = [[OATransportStop alloc] init];
-                              stop.stop = transportStop;
-                              [transportStops addObject:stop];
+                              [transportStops addObject:[[OATransportStop alloc] initWithStop:transportStop]];
                           });
     
     return transportStops;

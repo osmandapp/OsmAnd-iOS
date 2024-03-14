@@ -27,11 +27,6 @@ final class MigrationManager: NSObject {
         "temperature": "temperature_sensor"
     ]
 
-    let changeWidgetPrefs1 = [
-        "kHideIconPref": kShowIconPref,
-        "kSizeStylePref": kSizeStylePref
-    ]
-
     private override init() {}
 
     func changeWidgetIdsMigration1(_ firstLaunch: Bool) {
@@ -113,14 +108,6 @@ final class MigrationManager: NSObject {
         if widgetsVisibility != newWidgetsVisibility {
             mapInfoControls.set(newWidgetsVisibility.joined(separator: SETTINGS_SEPARATOR), mode: appMode)
         }
-        for widgetId in newWidgetsVisibility {
-            if let widgetType = WidgetType.getById(widgetId) {
-                resetWidgetPrefs(appMode,
-                                 widgetType: widgetType,
-                                 prefKeys: changeWidgetPrefs1,
-                                 customId: widgetId.range(of: MapWidgetInfo.DELIMITER) != nil ? widgetId : nil)
-            }
-        }
     }
 
     func getUpdatedWidgetIds(_ widgetIds: [String], changeWidgetIds: [String: String]) -> [String] {
@@ -134,38 +121,5 @@ final class MigrationManager: NSObject {
             }
         }
         return newWidgetsList
-    }
-
-    func resetWidgetPrefs(_ appMode: OAApplicationMode, widgetType: WidgetType, prefKeys: [String: String], customId: String?) {
-        if let settings = OAAppSettings.sharedManager() {
-            var prefIdOld = widgetType.title
-            for (prefKeyOld, prefKeyNew) in prefKeys {
-                if let customId, !customId.isEmpty {
-                    prefIdOld = prefIdOld.appendingFormat("%@_%@", prefKeyOld, customId)
-                } else {
-                    prefIdOld = prefIdOld.appending(prefKeyOld)
-                }
-                if let preferenceOld = settings.getPreferenceByKey(prefIdOld),
-                   let preferenceNew = registerWidgetPref(widgetType, prefKey: prefKeyNew, customId: customId) {
-                    preferenceNew.setValueFrom(preferenceOld.toStringValue(appMode), appMode: appMode)
-                    defaults.removeObject(forKey: preferenceOld.getKey(appMode))
-                }
-            }
-        }
-    }
-
-    func registerWidgetPref(_ widgetType: WidgetType, prefKey: String, customId: String?) -> OACommonPreference? {
-        var prefId = prefKey
-        prefId = prefId.appending(widgetType.id)
-        if let customId, !customId.isEmpty {
-            prefId = prefId.appending(customId)
-        }
-        if prefKey == kShowIconPref {
-            return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
-        }
-        else if prefKey == kSizeStylePref {
-            return OAAppSettings.sharedManager().registerIntPreference(prefId, defValue: Int32(WidgetSizeStyle.medium.rawValue))
-        }
-        return nil
     }
 }

@@ -20,6 +20,9 @@
 #define fullTextWidth 90
 #define minWidgetHeight 34
 
+static NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
+static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
+
 @implementation OATextInfoWidget
 {
     NSString *_contentTitle;
@@ -848,12 +851,20 @@
 
 - (OACommonInteger *)registerWidgetSizePref:(NSString *)customId
 {
-    return (OACommonInteger *) [[OAMigrationManager shared] registerWidgetPref:self.widgetType prefKey:kSizeStylePref customId:customId];
+    NSString *prefId = kSizeStylePref;
+    prefId = [prefId stringByAppendingString:self.widgetType.id];
+    if (customId && customId.length > 0)
+        prefId = [prefId stringByAppendingString:customId];
+    return [[OAAppSettings sharedManager] registerIntPreference:prefId defValue:WidgetSizeStyleMedium];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId
 {
-    return (OACommonBoolean *) [[OAMigrationManager shared] registerWidgetPref:self.widgetType prefKey:kShowIconPref customId:customId];
+    NSString *prefId = kShowIconPref;
+    prefId = [prefId stringByAppendingString:self.widgetType.id];
+    if (customId && customId.length > 0)
+        prefId = [prefId stringByAppendingString:customId];
+    return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
 }
 
 - (OAApplicationMode *_Nonnull)getAppMode

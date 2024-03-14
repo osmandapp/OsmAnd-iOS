@@ -255,7 +255,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             }
             
-            // TODO: implement sorting in next task
+            #warning: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
             foundedFolders.sort { $0.path.lastPathComponent() < $1.path.lastPathComponent() }
             foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
             
@@ -452,7 +452,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func sortWithOptions(_ list: [String], options: SortingOptions) -> [String] {
-        // TODO: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
+    #warning: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
         list.sorted { $0 < $1 }
     }
     

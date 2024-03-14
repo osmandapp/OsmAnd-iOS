@@ -12,7 +12,7 @@ import Foundation
 extension String {
     
     var length: Int {
-        return self.count
+        self.count
     }
     
     subscript (i: Int) -> Character {
@@ -21,11 +21,11 @@ extension String {
     }
     
     func substring(from: Int) -> String {
-        return self[min(from, length) ..< length]
+        self[min(from, length) ..< length]
     }
     
     func substring(to: Int) -> String {
-        return self[0 ..< max(0, to)]
+        self[0 ..< max(0, to)]
     }
     
     func substring(from: Int, to: Int) -> String {

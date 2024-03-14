@@ -194,9 +194,7 @@
     if (transportStopSymbolGroup != nullptr)
     {
         const auto transportStop = transportStopSymbolGroup->transportStop;
-        OATransportStop *stop = [[OATransportStop alloc] init];
-        stop.stop = transportStop;
-        OATargetPoint *targetPoint = [self getTargetPoint:stop];
+        OATargetPoint *targetPoint = [self getTargetPoint:[[OATransportStop alloc] initWithStop:transportStop]];
         if (![found containsObject:targetPoint])
             [found addObject:targetPoint];
     }

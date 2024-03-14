@@ -118,7 +118,7 @@ class TravelArticle: NSObject {
     
     func equals(obj: TravelArticle?) -> Bool {
         if let obj {
-            return TravelArticleIdentifier.areLatLonEqual(lat1: self.lat, lon1: self.lon, lat2: obj.lat, lon2: obj.lon) &&
+            return OAMapUtils.areLatLonEqual(self.lat, lon1: self.lon, lat2: obj.lat, lon2: obj.lon) &&
                 self.file == obj.file &&
                 self.routeId == obj.routeId &&
                 self.routeSource == obj.routeSource
@@ -170,15 +170,9 @@ final class TravelArticleIdentifier : NSObject {
         routeId = article.routeId
         routeSource = article.routeSource
     }
-    
-    static func areLatLonEqual(lat1: Double, lon1: Double, lat2: Double, lon2: Double) -> Bool {
-        let latEqual = (lat1 == Double.nan && lat2 == Double.nan) || (abs(lat1 - lat2) < 0.00001)
-        let lonEqual = (lon1 == Double.nan && lon2 == Double.nan) || (abs(lon1 - lon2) < 0.00001)
-        return latEqual && lonEqual
-    }
-    
+
     static func == (lhs: TravelArticleIdentifier, rhs: TravelArticleIdentifier) -> Bool {
-        return areLatLonEqual(lat1: lhs.lat, lon1: lhs.lon, lat2: rhs.lat, lon2: rhs.lon) &&
+        return OAMapUtils.areLatLonEqual(lhs.lat, lon1: lhs.lon, lat2: rhs.lat, lon2: rhs.lon) &&
         lhs.file == rhs.file &&
         lhs.routeId == rhs.routeId &&
         lhs.routeSource == rhs.routeSource

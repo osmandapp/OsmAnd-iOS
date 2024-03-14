@@ -9,30 +9,50 @@
 #import "OATransportStop.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAPOIHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
 @implementation OATransportStop
-
-- (NSString *) name
 {
-    if (_stop)
-    {
-        NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
-        BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        return _stop->getName(QString::fromNSString(prefLang), transliterate).toNSString();
-    }
-    else
-    {
-        return @"";
-    }
+    OAPOI *_poi;
+    BOOL _wasSearchedPoi;
 }
 
-- (void) setStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
+- (instancetype)initWithStop:(std::shared_ptr<const OsmAnd::TransportStop>)stop
 {
-    _stop = stop;
-    if (stop)
-        _location = CLLocationCoordinate2DMake(stop->location.latitude, stop->location.longitude);
+    if (self)
+    {
+        _stop = stop;
+        if (stop)
+        {
+            NSString *prefLang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
+            BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
+            _name = _stop->getName(QString::fromNSString(prefLang), transliterate).toNSString();
+            _location = CLLocationCoordinate2DMake(stop->location.latitude, stop->location.longitude);
+        }
+        else
+        {
+            _name = @"";
+        }
+    }
+    return self;
+}
+
+- (OAPOI *)poi
+{
+    if (!_poi && !_wasSearchedPoi)
+    {
+        _poi = [OAPOIHelper findPOIByName:self.name lat:_location.latitude lon:_location.longitude];
+        _wasSearchedPoi = YES;
+    }
+    return _poi;
+}
+
+- (void)setPoi:(OAPOI *)poi
+{
+    _poi = poi;
+    _wasSearchedPoi = YES;
 }
 
 - (BOOL)isEqual:(OATransportStop *)object

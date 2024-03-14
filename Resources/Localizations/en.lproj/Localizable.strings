@@ -1365,6 +1365,7 @@
 
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "ltr_or_rtl_combine_via_or" = "%@ or %@";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
@@ -3654,3 +3655,14 @@
 "determine_location" = "Allow us to determine your location";
 
 "upload_to_osm_short" = "Upload to OSM";
+
+"average_glide_ratio" = "Average glide ratio";
+"glide_ratio_to_target" = "Glide ratio to target";
+"map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
+"map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
+"map_widget_group_glide_ratio" = "Glide ratio";
+"map_widget_group_glide_desc" = "Widgets show the glide ratio to the target or average glide ratio for the current trip.";
+"target_elevation" = "Target elevation";
+"average_glide_ratio_time_interval_desc" = "Shows the average glide ratio or vertical speed for the set interval.";
+"average_glide_time_interval_desc" = "Specify the time interval for glide averaging.";
+"time_to_navigation_point_widget_settings_desc" = "Tap the widget to switch modes.";

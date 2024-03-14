@@ -3340,3 +3340,18 @@
 "shared_string_mode" = "Tilstand";
 "shared_string_format" = "Format";
 "lang_sr-Latn" = "Serbisk (latin)";
+"skip_download" = "Spring download over";
+"determine_location" = "Tillad os at bestemme din placering";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+
+
+"average_glide_ratio" = "Gennemsnitligt glidetal";
+"map_widget_glide_average_desc" = "Viser det gennemsnitlige glidetal for det indstillede interval.";
+"map_widget_glide_target_desc" = "Viser det nødvendige glidetal for at nå målpunktet.";
+"map_widget_group_glide_ratio" = "Glidetal";
+"average_glide_ratio_time_interval_desc" = "Viser det gennemsnitlige glidetal eller lodret hastighed for det indstillede interval.";
+"time_to_navigation_point_widget_settings_desc" = "Tryk på modulet for at skifte tilstand.";
+"glide_ratio_to_target" = "Glidetal til mål";
+"map_widget_group_glide_desc" = "Moduler viser glidetal til målet eller gennemsnitlig glidetal for den aktuelle tur.";
+"target_elevation" = "Højde for målet";
+"average_glide_time_interval_desc" = "Angiv tidsintervallet for glide-gennemsnit.";

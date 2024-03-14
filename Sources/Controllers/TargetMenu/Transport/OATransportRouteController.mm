@@ -271,15 +271,9 @@ static OATransportRouteToolbarViewController *toolbarController;
     OATransportStopRoute *r = [transportRoute clone];    
     toolbarController.transportRoute = r;
     if (r.refStop)
-    {
-        toolbarController.transportStop = [[OATransportStop alloc] init];
-        toolbarController.transportStop.stop = r.refStop;
-    }
+        toolbarController.transportStop = [[OATransportStop alloc] initWithStop:r.refStop];
     if (r.stop)
-    {
-        toolbarController.transportStop = [[OATransportStop alloc] init];
-        toolbarController.transportStop.stop = r.stop;
-    }
+        toolbarController.transportStop = [[OATransportStop alloc] initWithStop:r.stop];
     toolbarController.toolbarTitle = [self.class getTitle:r];
 
     [[OARootViewController instance].mapPanel showToolbar:toolbarController];

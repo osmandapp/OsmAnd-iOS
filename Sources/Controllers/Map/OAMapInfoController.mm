@@ -78,33 +78,27 @@
 
     NSArray<OABaseWidgetView *> *_widgetsToUpdate;
     NSTimer *_framePreparedTimer;
+    ShadowPathView *_topShadowContainerView;
+    ShadowPathView *_bottomShadowContainerView;
 }
 
-- (void)configureShadowForWidget:(UIView *)view top:(BOOL)top
+- (void)configureShadowForWidget:(UIView *)view
+                   containerView:(ShadowPathView *)containerView
+                             top:(BOOL)top
 {
-    auto containerView = [[ShadowTransporentTouchesPassView alloc] init];
-    containerView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.35].CGColor;
-    containerView.layer.shadowOffset = CGSizeMake(0, 1);
-    containerView.layer.shadowOpacity = 1;
-    containerView.layer.shadowRadius = 4;
-    containerView.layer.masksToBounds = false;
-    containerView.layer.cornerRadius = view.layer.cornerRadius;
-    containerView.layer.shouldRasterize = true;
-    containerView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-    
+    if ([_settings.transparentMapTheme get])
+        containerView.direction = ShadowPathDirectionClear;
+    else
+        containerView.direction = top ? ShadowPathDirectionBottom : ShadowPathDirectionTop;
     containerView.translatesAutoresizingMaskIntoConstraints = NO;
     [view insertSubview:containerView atIndex:0];
         
     [NSLayoutConstraint activateConstraints:@[
         [containerView.leftAnchor constraintEqualToAnchor:view.leftAnchor],
-        [containerView.heightAnchor constraintEqualToConstant:2],
         [containerView.rightAnchor constraintEqualToAnchor:view.rightAnchor],
+        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor],
+        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor]
     ]];
-    
-    if (top)
-        [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor constant:5].active = YES;
-    else
-        [containerView.topAnchor constraintEqualToAnchor:view.topAnchor constant:-5].active = YES;
 }
 
 - (void)configureShadowForWidgets:(NSArray<UIView *> *)views
@@ -129,6 +123,12 @@
             [containerView.rightAnchor constraintEqualToAnchor:view.rightAnchor]
         ]];
     }
+}
+
+- (void)updateLayout
+{
+    [self layoutWidgets];
+    [self execOnDraw];
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -210,8 +210,11 @@
         [self configureShadowForWidgets:@[mapHudViewController.middleWidgetsView,
                                           mapHudViewController.leftWidgetsView,
                                           mapHudViewController.rightWidgetsView]];
-        [self configureShadowForWidget:_topPanelController.view top:YES];
-        [self configureShadowForWidget:_bottomPanelController.view top:NO];
+        
+        _topShadowContainerView = [ShadowPathView new];
+        [self configureShadowForWidget:_topPanelController.view containerView:_topShadowContainerView top:YES];
+        _bottomShadowContainerView = [ShadowPathView new];
+        [self configureShadowForWidget:_bottomPanelController.view containerView:_bottomShadowContainerView top:NO];
 
         _mapWidgetRegistry = [OAMapWidgetRegistry sharedInstance];
         _expanded = NO;
@@ -411,6 +414,12 @@
     view.layer.maskedCorners = mask;
 }
 
+- (void)updateShadowView:(ShadowPathView *)view
+               direction:(ShadowPathDirection)direction
+{
+    view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
+}
+
 - (void) layoutWidgets
 {
     BOOL portrait = ![OAUtilities isLandscape];
@@ -444,6 +453,8 @@
     {
         _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
         _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
+        
+        [self updateShadowView:_topShadowContainerView direction:ShadowPathDirectionBottom];
     }
     else
     {
@@ -481,6 +492,8 @@
     {
         _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
         _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
+        
+        [self updateShadowView:_bottomShadowContainerView direction:ShadowPathDirectionTop];
     }
     else
     {
@@ -488,7 +501,7 @@
         _mapHudViewController.bottomWidgetsView.layer.masksToBounds = YES;
     }
 
-    
+
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;
     CGFloat bottomOffset = _mapHudViewController.bottomWidgetsViewHeightConstraint.constant;
@@ -715,11 +728,11 @@
     ts.dividerColor = dividerColor;
     
     // Night shadowColor always use widgettext_shadow_night, same as widget background color for non-transparent
-    ts.textShadowColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
+    ts.textOutlineColor = nightMode ? [UIColor blackColor] : [UIColor whiteColor];
     if (!transparent)
-        ts.textShadowRadius = 0;
+        ts.textOutlineWidth = 0;
     else
-        ts.textShadowRadius = 4.0;
+        ts.textOutlineWidth = 4.0;
     
     ts.leftColor = transparent
     ? [UIColor clearColor]

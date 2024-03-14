@@ -276,7 +276,6 @@
     settingRow.cellType = [OAValueTableViewCell getCellIdentifier];
     settingRow.key = @"value_pref";
     settingRow.title = OALocalizedString(@"active_markers");
-    settingRow.descr = OALocalizedString(@"active_markers");
     [settingRow setObj:pref forKey:@"pref"];
     [settingRow setObj:[self getTitle:[pref get:appMode]] forKey: @"value"];
     [settingRow setObj:[self getPossibleValues] forKey: @"possible_values"];

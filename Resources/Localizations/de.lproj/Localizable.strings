@@ -3353,3 +3353,5 @@
 "shared_string_mode" = "Modus";
 "shared_string_format" = "Format";
 "lang_sr-Latn" = "Serbisch (lateinisch)";
+"skip_download" = "Download überspringen";
+"determine_location" = "Erlauben Sie uns, Ihren Standort zu ermitteln";

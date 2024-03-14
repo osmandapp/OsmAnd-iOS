@@ -156,9 +156,7 @@
                           [stops]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                                OATransportStop *stop = [[OATransportStop alloc] init];
-                                stop.stop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                                [stops addObject:stop];
+                                [stops addObject:[[OATransportStop alloc] initWithStop:((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop]];
                           });
     
     if (self.transportStop && !isSubwayEntrance)

@@ -84,8 +84,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (NSDictionary<NSAttributedStringKey, id> *)getAttributes:(CGFloat)lineHeight
                                                       label:(UILabel *)label
-                                            widgetSizeStyle:(WidgetSizeStyle)widgetSizeStyle
-                                            isValue:(BOOL)isValue
                                            fontMetrics:(UIFontMetrics *)fontMetrics
 {
     NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
@@ -97,19 +95,16 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     paragraphStyle.minimumLineHeight = scaledLineHeight;
     paragraphStyle.maximumLineHeight = scaledLineHeight;
     
-    CGFloat baselineOffset = 0.0;
-    if (scaledLineHeight != lineHeight && widgetSizeStyle == WidgetSizeStyleLarge && isValue)
-    {
-        // Sometimes when lineHeight >= 50(WidgetSizeStyleLarge current), the text is not centered, there is a baselineOffset. need more smart approach
-        CGFloat lineHeightMultiple = lineHeight / label.font.lineHeight;
-        paragraphStyle.lineHeightMultiple = lineHeightMultiple;
-        baselineOffset = 1 / lineHeightMultiple;
-    }
-    else
-    {
-        baselineOffset = (lineHeight - label.font.lineHeight) / 4;
-    }
+    CGFloat baselineOffset = (scaledLineHeight - label.font.lineHeight) / 4;
     
+    if (label.minimumScaleFactor < 1) {
+        CGFloat actualScaleFactor = [label actualScaleFactor];
+        if (actualScaleFactor < 1) {
+            CGFloat fontLineHeight = label.font.lineHeight * actualScaleFactor;
+            baselineOffset = (scaledLineHeight - fontLineHeight) / 2;
+        }
+    }
+
     NSMutableDictionary<NSAttributedStringKey, id> *dic = [NSMutableDictionary dictionary];
     dic[NSParagraphStyleAttributeName] = paragraphStyle;
     dic[NSKernAttributeName] = @0;
@@ -151,6 +146,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.topNameUnitStackView.axis = UILayoutConstraintAxisHorizontal;
     self.topNameUnitStackView.alignment = UIStackViewAlignmentFill;
     self.topNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
+    self.topNameUnitStackView.spacing = 3;
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
     
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
@@ -180,7 +176,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     [self.topNameUnitStackView addArrangedSubview:self.unitView];
     [NSLayoutConstraint activateConstraints:@[
         [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11],
-        [self.unitView.widthAnchor constraintGreaterThanOrEqualToConstant:20]
+        [self.unitView.widthAnchor constraintGreaterThanOrEqualToConstant:15]
     ]];
     self.unitView.hidden = _subtext.length == 0;
     
@@ -196,7 +192,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor],
         [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor],
         [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor],
-        [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:20]
+        [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:15]
     ]];
     
     // Create the _contentStackViewSimpleWidget
@@ -277,7 +273,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     
     [NSLayoutConstraint activateConstraints:@[
         [_contentUnitStackViewSimpleWidget.centerYAnchor constraintEqualToAnchor:valueUnitOrEmptyView.centerYAnchor],
-        [_contentUnitStackViewSimpleWidget.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor],
+        [_contentUnitStackViewSimpleWidget.leadingAnchor constraintEqualToAnchor:self.valueLabel.trailingAnchor constant:3],
         [_contentUnitStackViewSimpleWidget.trailingAnchor constraintEqualToAnchor:valueUnitOrEmptyView.trailingAnchor],
     ]];
     _unitOrEmptyLabelWidthConstraint = [_contentUnitStackViewSimpleWidget.widthAnchor constraintGreaterThanOrEqualToConstant:15];
@@ -332,13 +328,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     _leadingTextAnchor = [_textView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3];
     _leadingTextAnchor.active = YES;
     
-    [NSLayoutConstraint activateConstraints:@[
-        [_textShadowView.topAnchor constraintEqualToAnchor:_textView.topAnchor],
-        [_textShadowView.bottomAnchor constraintEqualToAnchor:_textView.bottomAnchor],
-        [_textShadowView.trailingAnchor constraintEqualToAnchor:_textView.trailingAnchor],
-        [_textShadowView.leadingAnchor constraintEqualToAnchor:_textView.leadingAnchor]
-    ]];
-
     _largeFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightSemibold];
     _largeBoldFont = [UIFont scaledSystemFontOfSize:21 weight:UIFontWeightBold];
     _primaryFont = _largeFont;
@@ -347,19 +336,18 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     _smallBoldFont = [UIFont scaledSystemFontOfSize:14 weight:UIFontWeightBold];
     _unitsFont = _smallFont;
     _unitsColor = [UIColor grayColor];
-    _primaryShadowColor = nil;
+    _primaryOutlineColor = nil;
     _unitsShadowColor = nil;
-    _shadowRadius = 0;
+    _textOutlineWidth = 0;
     
     _text = @"";
     _subtext = @"";
-    _textShadowView.textAlignment = NSTextAlignmentNatural;
     _textView.textAlignment = NSTextAlignmentNatural;
 }
 
 - (void)commonInit
 {
-    _textView = [[UILabel alloc] init];
+    _textView = [[OutlineLabel alloc] init];
     _textView.adjustsFontForContentSizeCategory = YES;
     _textView.translatesAutoresizingMaskIntoConstraints = NO;
     _imageView = [UIImageView new];
@@ -367,11 +355,6 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     
     [self addSubview:_textView];
     [self addSubview:_imageView];
-    
-    _textShadowView = [[UILabel alloc] init];
-    _textShadowView.adjustsFontForContentSizeCategory = YES;
-    _textShadowView.translatesAutoresizingMaskIntoConstraints = NO;
-    [self addSubview:_textShadowView];
     
     [self commonLayout];
     _shadowButton = [[UIButton alloc] initWithFrame:self.frame];
@@ -524,9 +507,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
     self.titleOrEmptyLabel.textColor = _unitsColor;
     
-    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel widgetSizeStyle:self.widgetSizeStyle isValue:YES fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
                                       
-    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
     
     CGFloat topBottomPadding = [WidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
@@ -562,7 +545,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
             self.titleOrEmptyLabel.text = @"";
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
-            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel widgetSizeStyle:self.widgetSizeStyle isValue:NO fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.unitLabel.textAlignment = NSTextAlignmentRight;
         }
     }
     
@@ -607,19 +591,18 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
         if (_imageView.hidden)
         {
-            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            NSMutableParagraphStyle *paragraphStyle = [NSMutableParagraphStyle new];
             paragraphStyle.alignment = NSTextAlignmentCenter;
             attributes[NSParagraphStyleAttributeName] = paragraphStyle;
         }
         else
         {
-            NSMutableParagraphStyle *ps = [[NSMutableParagraphStyle alloc] init];
+            NSMutableParagraphStyle *ps = [NSMutableParagraphStyle new];
             ps.firstLineHeadIndent = 2.0;
             ps.tailIndent = -2.0;
             attributes[NSParagraphStyleAttributeName] = ps;
         }
         NSMutableAttributedString *string = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
-        NSMutableAttributedString *shadowString = [[NSMutableAttributedString alloc] initWithString:[self combine:_text subtext:_subtext] attributes:attributes];
 
         NSRange valueRange = NSMakeRange(0, _text.length);
         NSRange unitRange = NSMakeRange(_text.length + 1, _subtext.length);
@@ -628,28 +611,24 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
         {
             [string addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
             [string addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
-            if (_primaryShadowColor && _shadowRadius > 0)
-            {
-                [shadowString addAttribute:NSFontAttributeName value:_primaryFont range:valueRange];
-                [shadowString addAttribute:NSForegroundColorAttributeName value:_primaryColor range:valueRange];
-                [shadowString addAttribute:NSStrokeColorAttributeName value:_primaryShadowColor range:valueRange];
-                [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:valueRange];
-            }
         }
         if (unitRange.length > 0)
         {
             [string addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
             [string addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
-            if (_unitsShadowColor && _shadowRadius > 0)
-            {
-                [shadowString addAttribute:NSFontAttributeName value:_unitsFont range:unitRange];
-                [shadowString addAttribute:NSForegroundColorAttributeName value:_unitsColor range:unitRange];
-                [shadowString addAttribute:NSStrokeColorAttributeName value:_unitsShadowColor range:unitRange];
-                [shadowString addAttribute:NSStrokeWidthAttributeName value:[NSNumber numberWithFloat: -_shadowRadius] range:unitRange];
-            }
         }
         
-        _textShadowView.attributedText = _primaryShadowColor && _shadowRadius > 0 ? shadowString : nil;
+        if (_primaryOutlineColor && _textOutlineWidth > 0)
+        {
+            _textView.outlineColor = _primaryOutlineColor;
+            _textView.outlineWidth = _textOutlineWidth;
+        }
+        else
+        {
+            _textView.outlineColor = nil;
+            _textView.outlineWidth = 0.0;
+        }
+        
         _textView.attributedText = string;
         _shadowButton.accessibilityValue = string.string;
         
@@ -814,9 +793,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     
     _primaryColor = state.textColor;
     _unitsColor = self.isSimpleLayout ? state.unitColor : state.textColor;
-    _primaryShadowColor = state.textShadowColor;
-    _unitsShadowColor = state.textShadowColor;
-    _shadowRadius = state.textShadowRadius;
+    _primaryOutlineColor = state.textOutlineColor;
+    _unitsShadowColor = state.textOutlineColor;
+    _textOutlineWidth = state.textOutlineWidth;
     _contentTitleColor = state.titleColor;
     
     [self updatesSeparatorsColor:state.dividerColor];

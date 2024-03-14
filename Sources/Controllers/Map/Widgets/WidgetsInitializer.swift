@@ -82,6 +82,8 @@ class WidgetsInitializer: NSObject, WidgetRegistrationDelegate {
         addWidgetInfo(.sunPosition)
         addWidgetInfo(.sunrise)
         addWidgetInfo(.sunset)
+        addWidgetInfo(.glideTarget)
+        addWidgetInfo(.glideAverage)
     }
     
     private func addWidgetInfo(_ widgetType: WidgetType) {

@@ -559,7 +559,7 @@
 "keep_informing" = "Répéter les instructions de guidage";
 "keep_informing_descr" = "Répéter les instructions de guidage à intervalles réguliers.";
 "arrival_distance" = "Annonce d\'arrivée";
-"arrival_distance_descr" = "Quand souhaitez-vous être informé de l'arrivée à destination?";
+"arrival_distance_descr" = "Quand souhaitez-vous être informé de l\\'arrivée à destination?";
 "default_speed_system" = "Unité de vitesse";
 "default_speed_system_descr" = "Définir l\'unité de vitesse.";
 "speed_limit_exceed" = "Marge de tolérance aux limites de vitesse";
@@ -942,7 +942,7 @@
 "index_item_depth_contours_osmand_ext" = "Lignes de sondes marines";
 "in_app_purchase" = "Achat depuis l\'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
-"subscribe_email_desc" = "Inscrivez-vous à notre lettre d'information et téléchargez 3 cartes supplémentaires gratuitement !";
+"subscribe_email_desc" = "Inscrivez-vous à notre lettre d\\'information et téléchargez 3 cartes supplémentaires gratuitement !";
 "osm_live_payment_desc" = "Abonnement facturé périodiquement. Annulation possible à tout moment depuis Google Play.";
 "osm_live_unlock_updates" = "Déverrouiller les mises à jour des cartes toutes les heures";
 "osm_live_banner_descr" = "Abonnez-vous à OsmAnd Live et obtenez un nombre illimité de mises à jour de cartes <b>toutes les heures</b> et <b>toutes les fonctionnalités</b> incluses de %@";
@@ -1039,7 +1039,7 @@
 "download_depth_countours" = "Lignes de sondes marines";
 "quick_action_map_overlay" = "Modifier la sur-couche de carte";
 "show_more" = "Afficher plus";
-"mapillary_menu_title_pano" = "N'afficher que les images à 360°";
+"mapillary_menu_title_pano" = "N\\'afficher que les images à 360°";
 "quick_action_poi_list" = "Liste des points d\'intérêt";
 "quick_action_start_stop_navigation" = "Démarrer / Arrêter le guidage";
 "quick_action_map_styles" = "Styles de carte";
@@ -1047,7 +1047,7 @@
 "work_button" = "Travail";
 "shared_string_add_photos" = "Ajouter des photos";
 "altitude_range" = "Amplitude altimétrique";
-"show_from_zoom_level" = "L'affichage commence à partir du niveau de zoom";
+"show_from_zoom_level" = "L\\'affichage commence à partir du niveau de zoom";
 "previous_route" = "Itinéraire précédent";
 "quick_action_add_parking" = "Ajouter un emplacement de stationnement";
 "external_input_device" = "Périphériques externes d\'entrée";
@@ -2086,7 +2086,7 @@
 "gpx_join_gaps" = "Fusionner pouréviter les interruptions";
 "gpx_join_gaps_descr" = "Les écarts entre les segments seront connectés.";
 "track_show_start_finish_icons" = "Afficher les icônes de départ et d\'arrivée";
-"reset_to_original" = "Revenir à l'original";
+"reset_to_original" = "Revenir à l\\'original";
 "gpx_split_interval_none_descr" = "Sélectionnez l\'option de fractionnement souhaitée : par temps ou par distance.";
 "activity" = "Activité";
 "icon_group_nautical" = "Nautisme";
@@ -2324,7 +2324,7 @@
 "osmand_cloud_login_descr" = "Veuillez saisir l\'adresse email utilisée à l\'inscription. Vous allez recevoir, à cette adresse, un mot de passe à usage unique.";
 "cloud_conflicts" = "Conflits";
 "set_up_backup" = "Paramétrer la sauvegarde";
-"restore_from_file" = "Restaurer à partir d'un fichier";
+"restore_from_file" = "Restaurer à partir d\\'un fichier";
 "osmand_cloud_authorize_descr" = "Ne perdez jamais vos données. Sauvegardez et restaurez facilement toutes vos informations.";
 "resend_verification_code" = "Renvoyer le code";
 "last_backup" = "Dernière sauvegarde";
@@ -2483,7 +2483,7 @@
 "you_can_get_feature_as_part_of_pattern" = "Obtenez \"%@\" provenant du pack %@. Comparaison :";
 "in_grace_period" = "En période d\'essai";
 "shared_string_expires" = "Expire";
-"simulate_your_location_gpx_descr" = "Simulez votre position à l'aide d'une trace GPX enregistrée.";
+"simulate_your_location_gpx_descr" = "Simulez votre position à l\\'aide d\\'une trace GPX enregistrée.";
 "simulate_location_movement_speed_original_desc" = "La vitesse de déplacement durant la simulation sera égale à la vitesse dans le fichier sélectionné.";
 "carplay" = "CarPlay";
 "product_title_plus" = "Maps+";

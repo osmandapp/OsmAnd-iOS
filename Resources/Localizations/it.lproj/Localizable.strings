@@ -3324,3 +3324,15 @@
 "lang_sr-Latn" = "Serbo (latino)";
 "determine_location" = "Consentici di determinare la tua posizione";
 "skip_download" = "Salta il download";
+"glide_ratio_to_target" = "Rapporto di planata rispetto al target";
+"map_widget_glide_target_desc" = "Mostra il rapporto di planata necessario per raggiungere il punto di destinazione.";
+"map_widget_group_glide_desc" = "I widget mostrano il rapporto di planata rispetto al target o il rapporto di planata medio per il viaggio corrente.";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+
+
+"average_glide_ratio" = "Rapporto di planata medio";
+"map_widget_glide_average_desc" = "Mostra il rapporto di planata medio per l'intervallo impostato.";
+"map_widget_group_glide_ratio" = "Rapporto di planata";
+"target_elevation" = "Elevazione del bersaglio";
+"average_glide_time_interval_desc" = "Specificare l'intervallo di tempo per la media di planata.";
+"time_to_navigation_point_widget_settings_desc" = "Tocca il widget per cambiare modalità.";

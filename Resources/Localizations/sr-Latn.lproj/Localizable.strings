@@ -1916,7 +1916,7 @@
 "routing_attr_piste_type_sled_name" = "Sanke";
 "rendering_attr_smoothness_bad_name" = "Loše";
 "routing_attr_allow_expert_description" = "Ekstremno teške staze, sa opasnim preprekama i okolinom.";
-"routeInfo_surface_name" = "Podloga";
+"routeInfo_surface_name" = "Površina";
 "rendering_attr_showMtbRoutes_name" = "Putevi planinskih bicikli";
 "rendering_attr_tracktype_grade5_name" = "Mekana";
 "routing_attr_avoid_share_taxi_description" = "Deljenje taksija";

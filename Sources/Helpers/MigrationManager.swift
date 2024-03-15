@@ -25,6 +25,22 @@ final class MigrationManager: NSObject {
         if firstLaunch {
             defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
         } else {
+
+            /*  Migration 1, sync with android
+
+                widget panels:
+            
+                top_widget_panel_order -> widget_top_panel_order
+                bottom_widget_panel_order -> widget_bottom_panel_order
+
+                BLE sensor widget IDs:
+
+                heartRate -> ant_heart_rate
+                bicycleCadence -> ant_bicycle_cadence
+                bicycleDistance -> ant_bicycle_distance
+                bicycleSpeed -> ant_bicycle_speed
+                temperature -> temperature_sensor */
+
             let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
             if isOldWidgetKeysMigrated == nil || (isOldWidgetKeysMigrated as! Bool) == false {
                 changeWidgetIdsMigration1()
@@ -35,7 +51,6 @@ final class MigrationManager: NSObject {
 
     private func changeWidgetIdsMigration1() {
         if let settings = OAAppSettings.sharedManager() {
-
             let changeWidgetIds = [
                 "heartRate": "ant_heart_rate",
                 "bicycleCadence": "ant_bicycle_cadence",
@@ -43,7 +58,6 @@ final class MigrationManager: NSObject {
                 "bicycleSpeed": "ant_bicycle_speed",
                 "temperature": "temperature_sensor"
             ]
-
             for mode in OAApplicationMode.allPossibleValues() {
                 updateExistingWidgetIds(mode,
                                         changeWidgetIds: changeWidgetIds,
@@ -128,6 +142,9 @@ final class MigrationManager: NSObject {
     }
 
     func changeJsonMigration(_ json: [String: String]) -> [String: String] {
+
+        // change keys inside old json import file after "Migration 1"
+
         let changeSettingKeys = [
             "top_widget_panel_order": "widget_top_panel_order",
             "bottom_widget_panel_order": "widget_bottom_panel_order"

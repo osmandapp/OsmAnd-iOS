@@ -169,7 +169,6 @@
 - (void)readPreferenceFromJson:(NSString *)key value:(NSString *)value
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
-    OAMigrationManager *migrationManager = [OAMigrationManager shared];
     if (!_appModeBeanPrefsIds)
         _appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
     

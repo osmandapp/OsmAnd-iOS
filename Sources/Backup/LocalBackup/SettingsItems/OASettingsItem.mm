@@ -314,8 +314,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         
         return NO;
     }
-    NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
-    settings = [[OAMigrationManager shared] changeJsonMigration:settings];
+    NSDictionary<NSString *, NSString *> *settings = [[OAMigrationManager shared] changeJsonMigration:json];
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {

@@ -770,8 +770,8 @@
 "search_nearby" = "Rechercherà proximité";
 "unlimited_downloads" = "Téléchargements illimités";
 "wikipedia_offline" = "Wikipédia hors-ligne";
-"monthly_map_updates" = "Mise à jour des cartes mensuelle";
-"daily_map_updates" = "Mise à jour des cartes horaire";
+"monthly_map_updates" = "Mise à jour des cartes : mensuelle";
+"daily_map_updates" = "Mise à jour des cartes : chaque heure";
 "donation_to_osm" = "Don à la communauté OpenStreetMap";
 "unlock_all_features" = "Débloquer toutes les fonctionnalités d\'OsmAnd";
 "shared_string_email_address" = "Adresse courriel";

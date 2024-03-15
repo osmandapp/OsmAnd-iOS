@@ -851,8 +851,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (OACommonInteger *)registerWidgetSizePref:(NSString *)customId
 {
-    NSString *prefId = kSizeStylePref;
-    prefId = [prefId stringByAppendingString:self.widgetType.id];
+    NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     return [[OAAppSettings sharedManager] registerIntPreference:prefId defValue:WidgetSizeStyleMedium];
@@ -860,8 +859,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId
 {
-    NSString *prefId = kShowIconPref;
-    prefId = [prefId stringByAppendingString:self.widgetType.id];
+    NSString *prefId = [kShowIconPref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];

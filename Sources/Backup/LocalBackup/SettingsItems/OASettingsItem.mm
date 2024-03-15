@@ -9,6 +9,7 @@
 #import "OASettingsItem.h"
 #import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
+#import "OsmAnd_Maps-Swift.h"
 
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";
 NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
@@ -314,6 +315,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         return NO;
     }
     NSDictionary<NSString *, NSString *> *settings = (NSDictionary *) json;
+    settings = [[OAMigrationManager shared] changeJsonMigration:settings];
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {

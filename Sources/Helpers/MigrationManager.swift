@@ -19,56 +19,60 @@ final class MigrationManager: NSObject {
     static let shared = MigrationManager()
     let defaults = UserDefaults.standard
 
-    let changeWidgetIds1 = [
-        "heartRate": "ant_heart_rate",
-        "bicycleCadence": "ant_bicycle_cadence",
-        "bicycleDistance": "ant_bicycle_distance",
-        "bicycleSpeed": "ant_bicycle_speed",
-        "temperature": "temperature_sensor"
-    ]
-
     private override init() {}
 
-    func changeWidgetIdsMigration1(_ firstLaunch: Bool) {
+    func migrateIfNeeded(_ firstLaunch: Bool) {
         if firstLaunch {
             defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-            return
+        } else {
+            let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+            if isOldWidgetKeysMigrated == nil || (isOldWidgetKeysMigrated as! Bool) == false {
+                changeWidgetIdsMigration1()
+                defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+            }
         }
+    }
 
-        let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-        if isOldWidgetKeysMigrated != nil && (isOldWidgetKeysMigrated as! Bool) == true { return }
-
+    private func changeWidgetIdsMigration1() {
         if let settings = OAAppSettings.sharedManager() {
+
+            let changeWidgetIds = [
+                "heartRate": "ant_heart_rate",
+                "bicycleCadence": "ant_bicycle_cadence",
+                "bicycleDistance": "ant_bicycle_distance",
+                "bicycleSpeed": "ant_bicycle_speed",
+                "temperature": "temperature_sensor"
+            ]
+
             for mode in OAApplicationMode.allPossibleValues() {
                 updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds1,
+                                        changeWidgetIds: changeWidgetIds,
                                         panelPreference: settings.topWidgetPanelOrderOld,
                                         newPanelPreference: settings.topWidgetPanelOrder)
 
                 updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds1,
+                                        changeWidgetIds: changeWidgetIds,
                                         panelPreference: settings.bottomWidgetPanelOrderOld,
                                         newPanelPreference: settings.bottomWidgetPanelOrder)
 
                 updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds1,
+                                        changeWidgetIds: changeWidgetIds,
                                         panelPreference: settings.leftWidgetPanelOrder)
 
                 updateExistingWidgetIds(mode,
-                                        changeWidgetIds: changeWidgetIds1,
+                                        changeWidgetIds: changeWidgetIds,
                                         panelPreference: settings.rightWidgetPanelOrder)
 
-                updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds1)
-                updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds1)
+                updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds)
+                updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds)
             }
-            defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
         }
     }
 
-    func updateExistingWidgetIds(_ appMode: OAApplicationMode,
-                                 changeWidgetIds: [String: String],
-                                 panelPreference: OACommonListOfStringList,
-                                 newPanelPreference: OACommonListOfStringList? = nil) {
+    private func updateExistingWidgetIds(_ appMode: OAApplicationMode,
+                                         changeWidgetIds: [String: String],
+                                         panelPreference: OACommonListOfStringList,
+                                         newPanelPreference: OACommonListOfStringList? = nil) {
         guard let pages = panelPreference.get(appMode) else { return }
         if newPanelPreference == nil {
             guard (pages.flatMap({ $0 }).contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
@@ -86,7 +90,7 @@ final class MigrationManager: NSObject {
         }
     }
 
-    func updateCustomWidgetKeys(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
+    private func updateCustomWidgetKeys(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
         let customWidgetKeys: OACommonStringList = OAAppSettings.sharedManager().customWidgetKeys
         guard let customIds = customWidgetKeys.get(appMode),
               (customIds.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
@@ -97,7 +101,7 @@ final class MigrationManager: NSObject {
         }
     }
 
-    func updateMapInfoControls(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
+    private func updateMapInfoControls(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
         let mapInfoControls: OACommonString = OAAppSettings.sharedManager().mapInfoControls
         guard let widgetsVisibilityString = mapInfoControls.get(appMode) else { return  }
 
@@ -110,7 +114,7 @@ final class MigrationManager: NSObject {
         }
     }
 
-    func getUpdatedWidgetIds(_ widgetIds: [String], changeWidgetIds: [String: String]) -> [String] {
+    private func getUpdatedWidgetIds(_ widgetIds: [String], changeWidgetIds: [String: String]) -> [String] {
         var newWidgetsList = [String]()
         for widgetId in widgetIds {
             let originalId = WidgetType.getDefaultWidgetId(widgetId)
@@ -121,5 +125,45 @@ final class MigrationManager: NSObject {
             }
         }
         return newWidgetsList
+    }
+
+    func changeJsonMigration(_ json: [String: String]) -> [String: String] {
+        let changeSettingKeys = [
+            "top_widget_panel_order": "widget_top_panel_order",
+            "bottom_widget_panel_order": "widget_bottom_panel_order"
+        ]
+
+        let changeWidgetIds = [
+            "heartRate": "ant_heart_rate",
+            "bicycleCadence": "ant_bicycle_cadence",
+            "bicycleDistance": "ant_bicycle_distance",
+            "bicycleSpeed": "ant_bicycle_speed",
+            "temperature": "temperature_sensor"
+        ]
+
+        let widgetSettingKeys = [
+            "left_widget_panel_order",
+            "right_widget_panel_order",
+            "widget_top_panel_order",
+            "widget_bottom_panel_order",
+            "custom_widgets_keys",
+            "map_info_controls"
+        ]
+
+        return Dictionary(uniqueKeysWithValues: json.map {
+            var settingKey = $0
+            var value = $1
+            if let newKey = changeSettingKeys[settingKey], !newKey.isEmpty {
+                settingKey = newKey
+            }
+            if widgetSettingKeys.contains(settingKey) {
+                for (widgetIdOld, widgetIdNew) in changeWidgetIds {
+                    value = value.replacingOccurrences(of: "(?<=^|;|,)(\(widgetIdOld))(?=(__|;|,|$)|$)",
+                                                       with: widgetIdNew,
+                                                       options: .regularExpression)
+                }
+            }
+            return (settingKey, value)
+        })
     }
 }

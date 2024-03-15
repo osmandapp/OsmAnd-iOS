@@ -188,34 +188,11 @@
             {
                 [setting setValueFromString:value appMode:_appMode];
                 if ([key isEqualToString:@"voice_mute"])
-                {
                     [OARoutingHelper.sharedInstance.getVoiceRouter setMute:[OAAppSettings.sharedManager.voiceMute get:_appMode]];
-                }
-                else if ([key isEqualToString:settings.leftWidgetPanelOrder.key]
-                         || [key isEqualToString:settings.rightWidgetPanelOrder.key]
-                         || [key isEqualToString:settings.topWidgetPanelOrderOld.key]
-                         || [key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
+                else if ([key isEqualToString:@"map_info_controls"])
                 {
-                    OACommonListOfStringList *newPanelPreference;
-                    if ([key isEqualToString:settings.topWidgetPanelOrderOld.key])
-                        newPanelPreference = settings.topWidgetPanelOrder;
-                    else if ([key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
-                        newPanelPreference = settings.bottomWidgetPanelOrder;
-
-                    [migrationManager updateExistingWidgetIds:_appMode
-                                              changeWidgetIds:migrationManager.changeWidgetIds1
-                                              panelPreference:(OACommonListOfStringList *) setting
-                                           newPanelPreference:newPanelPreference];
-                }
-                else if ([key isEqualToString:settings.customWidgetKeys.key])
-                {
-                    [migrationManager updateCustomWidgetKeys:_appMode changeWidgetIds:migrationManager.changeWidgetIds1];
-                }
-                else if ([key isEqualToString:settings.mapInfoControls.key])
-                {
-                    [migrationManager updateMapInfoControls:_appMode changeWidgetIds:migrationManager.changeWidgetIds1];
                     NSMutableSet<NSString *> *enabledWidgets = [NSMutableSet set];
-                    for (key in [[settings.mapInfoControls get:_appMode] componentsSeparatedByString:@";"])
+                    for (key in [value componentsSeparatedByString:@";"])
                     {
                         if (![key hasPrefix:HIDE_PREFIX])
                         {

@@ -563,7 +563,7 @@
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
     [self migrateResourcesToDocumentsIfNeeded];
-    [OAMigrationManager.shared changeWidgetIdsMigration1:_firstLaunch];
+    [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
 
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];

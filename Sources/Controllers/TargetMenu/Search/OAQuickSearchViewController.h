@@ -38,7 +38,7 @@ typedef NS_ENUM(NSInteger, BarActionType)
 @property (nonatomic, assign) NSInteger tabIndex;
 @property (nonatomic) NSString* searchQuery;
 @property (nonatomic, assign) BOOL fromNavigation;
-@property (nonatomic, copy) void (^closeBlock)(void);
+@property (nonatomic, copy) void (^onCloseCallback)(void);
 
 @property (nonatomic, weak) id<OAQuickSearchDelegate> delegate;
 

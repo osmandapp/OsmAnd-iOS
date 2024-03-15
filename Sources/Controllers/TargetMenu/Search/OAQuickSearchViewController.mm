@@ -1366,7 +1366,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (IBAction) btnCancelClicked:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:self.closeBlock];
+    [self dismissViewControllerAnimated:YES completion:self.onCloseCallback];
 }
 
 - (IBAction) btnMyLocationClicked:(id)sender

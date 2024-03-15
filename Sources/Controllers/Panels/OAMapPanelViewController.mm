@@ -1168,7 +1168,7 @@ typedef enum
     _searchViewController.searchType = searchType;
     _searchViewController.fromNavigation = [self isRouteInfoVisible];
     __weak OAMapPanelViewController *selfWeak = self;
-    _searchViewController.closeBlock = ^{
+    _searchViewController.onCloseCallback = ^{
         [selfWeak clearSearchViewController];
     };
 
@@ -3574,7 +3574,7 @@ typedef enum
     {
         _searchViewController = [[OAQuickSearchViewController alloc] init];
         __weak OAMapPanelViewController *selfWeak = self;
-        _searchViewController.closeBlock = ^{
+        _searchViewController.onCloseCallback = ^{
             [selfWeak clearSearchViewController];
         };
     }

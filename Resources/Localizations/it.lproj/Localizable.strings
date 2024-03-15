@@ -3336,3 +3336,4 @@
 "target_elevation" = "Elevazione del bersaglio";
 "average_glide_time_interval_desc" = "Specificare l'intervallo di tempo per la media di planata.";
 "time_to_navigation_point_widget_settings_desc" = "Tocca il widget per cambiare modalità.";
+"average_glide_ratio_time_interval_desc" = "Mostra il rapporto di planata medio o la velocità verticale per l'intervallo impostato.";

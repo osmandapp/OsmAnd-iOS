@@ -102,7 +102,7 @@
         return res;
     }
 
-- (BOOL) allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount*)cnt
+- (BOOL)allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount *)cnt
 {
     NSMutableArray<NSString *> * searchPhraseNames = [self getSearchPhraseNames];
     NSMutableArray<NSString *> * localResultNames;
@@ -123,8 +123,7 @@
         wordMatched = NO;
         for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
         {
-            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
-            if (r == 0)
+            if ([searchPhraseName compare:localResultNames[i] options:NSCaseInsensitiveSearch | NSDiacriticInsensitiveSearch] == NSOrderedSame)
             {
                 wordMatched = YES;
                 idxMatchedWord = i;

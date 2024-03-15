@@ -195,7 +195,7 @@
 "arrival_distance" = "Anóncia d\'arribada";
 "arrival_distance_descr" = "Quant de temps avans d\'arribar vos fau prevenir \?";
 "default_speed_system" = "Unitats de velocitat";
-"default_speed_system_descr" = "Definissètz l'unitat de velocitat";
+"default_speed_system_descr" = "Definissètz l'unitat de velocitat.";
 "speed_limit_exceed" = "Tolerància dau limit de velocitat";
 "speed_limit_exceed_message" = "Chausissètz la valor de tolerància dau limit de velocitat, partent de laquala recebretz un avís vocau.";
 "wake_on_voice" = "Activar l\'ecran";

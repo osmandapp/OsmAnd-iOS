@@ -68,4 +68,20 @@ import Foundation
         case .medium, .large: 12
         }
     }
+
+    static func getValueFromString(_ value: String) -> Int {
+        switch value {
+        case "SMALL": WidgetSizeStyle.small.rawValue
+        case "LARGE": WidgetSizeStyle.large.rawValue
+        default: WidgetSizeStyle.medium.rawValue
+        }
+    }
+
+    static func getStringFromValue(_ value: Int) -> String {
+        switch value {
+        case WidgetSizeStyle.small.rawValue: "SMALL"
+        case WidgetSizeStyle.large.rawValue: "LARGE"
+        default: "MEDIUM"
+        }
+    }
 }

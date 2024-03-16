@@ -85,7 +85,7 @@
 "simulate_navigation" = "Опонашај навођење";
 "simulate_routing_descr" = "Симулирајте своју позицију користећи израчунату руту";
 "select_avoid_descr" = "Изаберите путеве које желите да избегнете током навигације. Можете или да изаберете пут на мапи или да изаберете тип са листе испод.";
-"no_active_route" = "No active route";
+"no_active_route" = "Bez aktivne rute";
 "day_night_info_description" = "Излазак сунца: %@ \nЗалазак сунца: %@";
 "day_night_info" = "Подаци о дану/ноћи";
 "daynight_mode_auto" = "Излазак/залазак сунца";
@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Изаберите поравнање екрана карте.";
 "rotate_map_compass_opt" = "Правац компаса";
 "rotate_map_bearing_opt" = "У смеру кретања";
-"rotate_map_north_opt" = "Не ротирај (север је горе)";
+"rotate_map_north_opt" = "Север је горе (фиксно)";
 "driving_region_descr" = "Одаберите област вожње: САД, Европа, Уједињено Краљевство, Азија и остало.";
 "driving_region" = "Област вожње";
 "shared_string_automatic" = "Самостално";

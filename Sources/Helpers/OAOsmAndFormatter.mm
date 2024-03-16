@@ -27,6 +27,7 @@ static NSString * const _unitsMph = OALocalizedString(@"mile_per_hour");
 static NSString * const _unitsMinKm = OALocalizedString(@"min_km");
 static NSString * const _unitsMinMi = OALocalizedString(@"min_mile");
 static NSString * const _unitsmps = OALocalizedString(@"m_s");
+static NSArray<NSNumber *> *roundingBounds = nil;
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
@@ -739,15 +740,13 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
 
 + (float)roundedDistanceValueForUnit:(float)value
 {
+    if (roundingBounds == nil)
+        roundingBounds = [self generate10BaseRoundingBoundsWithMax:100 multCoef:5];
+    
     if (value >= 1)
-    {
-        NSArray<NSNumber *> *roundRange = [self generate10BaseRoundingBoundsWithMax:100 multCoef:5];
-        return [self lowerTo10BaseRoundingBounds:value withRoundRange:roundRange];
-    }
+        return [self lowerTo10BaseRoundingBounds:value withRoundRange:roundingBounds];
     else
-    {
         return value;
-    }
 }
 
 + (NSArray<NSNumber *> *)generate10BaseRoundingBoundsWithMax:(int)max multCoef:(int)multCoef

@@ -40,9 +40,10 @@
 #define EAST @"E"
 
 + (double)calculateRoundedDist:(double)baseMetersDist;
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes roundUp:(BOOL)isRoundUp valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedDistance:(float)meters;
 + (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
++ (NSString *) getFormattedDistance:(float)meters roundUp:(BOOL)isRoundUp;
 + (NSString *)getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *)getFormattedAzimuth:(float)bearing;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;

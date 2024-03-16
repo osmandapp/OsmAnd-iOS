@@ -85,7 +85,7 @@
         }
         else
         {
-            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters];
+            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
                 [self setText:ds subtext:nil];

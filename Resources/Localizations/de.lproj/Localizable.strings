@@ -3365,3 +3365,6 @@
 
 "average_glide_ratio" = "Mittlere Gleitzahl";
 "map_widget_group_glide_desc" = "Widgets zur Anzeige der Gleitzahl zum Ziel oder mittlere Gleitzahl der aktuellen Reise.";
+"time_to_navigation_point_widget_settings_desc" = "Tippe auf das Widget, um die Modi zu wechseln.";
+"average_glide_ratio_time_interval_desc" = "Zeigt das mittlere Gleitverhältnis oder die vertikale Geschwindigkeit für das eingestellte Intervall an.";
+"average_glide_time_interval_desc" = "Zeitintervall eingeben, um mittlere Gleitzahl zu ermitteln.";

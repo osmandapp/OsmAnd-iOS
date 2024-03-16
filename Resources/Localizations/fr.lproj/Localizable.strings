@@ -3229,12 +3229,12 @@
 "help_article_personal_import_export_name" = "Import / Export";
 "help_article_widgets_radius_ruler_name" = "Règle et règle-rayon";
 "help_article_troubleshooting_track_recording_issues_name" = "Enregistrement de trace";
-"help_article_map_legend_nautical_map_name" = "Style Carte nautique";
+"help_article_map_legend_nautical_map_name" = "Style Carte Nautique";
 "help_article_plan_route_name" = "Planifier un itinéraire";
 "help_article_widgets_map_buttons_name" = "Boutons de la carte";
 "help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";
 "help_article_map_track_context_menu_name" = "Menu contextuel des traces";
-"help_article_map_legend_osmand_name" = "Style de carte OsmAnd";
+"help_article_map_legend_osmand_name" = "Style Carte OsmAnd";
 "help_article_navigation_auto_car_name" = "Android Auto";
 "shared_string_setup_route" = "Établir un itinéraire";
 "help_article_widgets_info_widgets_name" = "Gadgets d'information";
@@ -3259,7 +3259,7 @@
 "help_article_troubleshooting_crash_logs_name" = "Journaux des plantages";
 "help_article_personal_storage_name" = "Stockage";
 "shared_string_keywords" = "Mots-clés";
-"help_article_map_legend_ski_map_name" = "Style de carte Ski";
+"help_article_map_legend_ski_map_name" = "Style Carte Ski";
 "help_article_navigation_routing_osmand_routing_name" = "À propos des guidages OsmAnd";
 "whats_here" = "Ce qu'il y a ici";
 "no_tracks_on_map" = "Aucune trace sur la carte";

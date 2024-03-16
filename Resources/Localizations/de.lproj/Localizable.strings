@@ -3355,3 +3355,13 @@
 "lang_sr-Latn" = "Serbisch (lateinisch)";
 "skip_download" = "Download überspringen";
 "determine_location" = "Erlauben Sie uns, Ihren Standort zu ermitteln";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"glide_ratio_to_target" = "Gleitzahl zum Zielpunkt";
+"map_widget_glide_average_desc" = "Zeigt die mittlere Gleitzahl für das eingestellte Intervall an.";
+"map_widget_group_glide_ratio" = "Gleitzahl";
+"target_elevation" = "Zielhöhe";
+"map_widget_glide_target_desc" = "Zeigt die erforderliche Gleitzahl zum Erreichen des Zielpunkts an.";
+
+
+"average_glide_ratio" = "Mittlere Gleitzahl";
+"map_widget_group_glide_desc" = "Widgets zur Anzeige der Gleitzahl zum Ziel oder mittlere Gleitzahl der aktuellen Reise.";

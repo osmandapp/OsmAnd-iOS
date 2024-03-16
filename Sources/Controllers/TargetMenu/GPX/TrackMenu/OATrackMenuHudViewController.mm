@@ -1328,7 +1328,7 @@
 
 - (NSString *)getCreatedOn
 {
-    long time = self.doc.metadata.time;
+    NSTimeInterval time = [self.gpx.creationDate timeIntervalSince1970];
     if (time < 0)
     {
         NSFileManager *manager = NSFileManager.defaultManager;

@@ -142,6 +142,8 @@
     
     OARouteKey *_routeKey;
     BOOL _isNewRoute;
+    
+    NSArray<UIViewController *> *_navControllerHistory;
 }
 
 @dynamic gpx, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
@@ -184,6 +186,7 @@
                 _reopeningState.trackIcon = drawable.getIcon;
             }
             _selectedTab = _reopeningState.lastSelectedTab;
+            _navControllerHistory = _reopeningState.navControllerHistory;
             [self commonInit];
         }
     }
@@ -386,20 +389,11 @@
                     [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
                 }
             }
-            else
+            else if (_reopeningState && _reopeningState.openedFromTracksList)
             {
-                UITabBarController *myPlacesViewController =
-                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                [myPlacesViewController setSelectedIndex:1];
-    
-                TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
-                if (gpxController == nil)
-                    return;
-                
-                NSArray<UIViewController *> *previousOpenedScreens = OAAppSettings.sharedManager.previousOpenedScreens;
-                if (previousOpenedScreens && previousOpenedScreens.count > 0)
+                if ( _navControllerHistory && _navControllerHistory.count > 0)
                 {
-                    [[OARootViewController instance].navigationController setViewControllers:previousOpenedScreens animated:YES];
+                    [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
                 }
             }
         }

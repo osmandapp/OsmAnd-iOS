@@ -198,10 +198,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             updateData()
             shouldReload = false
         }
-        
-        if settings.previousOpenedScreens != nil {
-            settings.previousOpenedScreens = nil
-        }
     }
     
     override func viewDidLoad() {
@@ -255,7 +251,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             }
             
-            #warning: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
+            #warning("implement sorting in next task   https:")//github.com/osmandapp/OsmAnd-Issues/issues/2348
             foundedFolders.sort { $0.path.lastPathComponent() < $1.path.lastPathComponent() }
             foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
             
@@ -451,8 +447,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    #warning("implement sorting in next task   https:")//github.com/osmandapp/OsmAnd-Issues/issues/2348
     private func sortWithOptions(_ list: [String], options: SortingOptions) -> [String] {
-    #warning: implement sorting in next task   https://github.com/osmandapp/OsmAnd-Issues/issues/2348
         list.sorted { $0 < $1 }
     }
     
@@ -1134,10 +1130,21 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         } else if item.key == trackKey {
             if let trackPath = item.obj(forKey: pathKey) as? String {
                 if let track = rootFolder.getTrackByPath(trackPath) {
-                    settings.previousOpenedScreens = navigationController?.viewControllers
-                    rootVC.mapPanel.openTargetView(with: track)
-                    rootVC.navigationController?.popToRootViewController(animated: true)
-                }
+                    // Show map in the front.
+                    // before: [RootVC, MyPlacesTabBar, Folder1, Folder2]
+                    // after [MyPlacesTabBar, Folder1, Folder2, RootVC]
+                    if let currentHistory = navigationController?.viewControllers {
+                        var newHistory: [UIViewController] = Array()
+                        if let rootVC = navigationController?.viewControllers[0] {
+                            newHistory.append(contentsOf: currentHistory)
+                            newHistory.remove(at: 0)
+                            newHistory.append(rootVC)
+                            navigationController?.setViewControllers(newHistory, animated: true)
+                        }
+                        // Show track context menu above the map.
+                        // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
+                        rootVC.mapPanel.openTargetView(with: track, navControllerHistory: currentHistory)
+                    }                }
             }
         } else if item.key == recordingTrackKey {
             if savingHelper.hasData() {

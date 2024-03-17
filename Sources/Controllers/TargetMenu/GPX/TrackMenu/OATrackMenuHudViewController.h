@@ -107,6 +107,7 @@
 @property (nonatomic, assign) EOADraggableMenuState showingState;
 @property (nonatomic, assign) BOOL openedFromMap;
 @property (nonatomic, assign) BOOL openedFromTracksList;
+@property (nonatomic, assign, nullable) NSArray<UIViewController *> *navControllerHistory;
 
 @end
 

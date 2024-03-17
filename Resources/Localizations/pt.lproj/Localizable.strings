@@ -3338,3 +3338,18 @@
 "verify_account_deletion_descr" = "Temos de verificar a sua conta antes de a eliminar.\n\nPor favor, introduza o endereço de e-mail com que se registou. Ser-lhe-á enviada uma palavra-passe única para o passo seguinte.";
 "osmand_cloud_deletion_secondary_devices_warning" = "Os dispositivos secundários serão desconectados do OsmAnd Cloud e perderão o acesso às funcionalidades pagas.";
 "osmand_cloud_deleting_account_descr" = "Em poucos instantes, todos os seus dados e conta serão eliminados do OsmAnd Cloud.\n\nTodos os dados no dispositivo permanecem intactos.";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+
+
+"average_glide_ratio" = "Rácio de deslizamento médio";
+"glide_ratio_to_target" = "Rácio de deslizamento até ao objetivo";
+"map_widget_group_glide_desc" = "Os widgets mostram a relação de deslizamento para o objetivo ou a relação de deslizamento média para a viagem atual.";
+"average_glide_ratio_time_interval_desc" = "Mostra o rácio de deslizamento médio ou a velocidade vertical para o intervalo definido.";
+"map_widget_glide_average_desc" = "Mostra o rácio de deslizamento médio para o intervalo definido.";
+"map_widget_glide_target_desc" = "Mostra a razão de planeio necessária para atingir o objetivo.";
+"map_widget_group_glide_ratio" = "Rácio de deslizamento";
+"target_elevation" = "Elevação do objetivo";
+"average_glide_time_interval_desc" = "Especificar o intervalo de tempo para o cálculo da média do deslizamento.";
+"time_to_navigation_point_widget_settings_desc" = "Toque no widget para mudar de modo.";
+"skip_download" = "Ignorar descarga";
+"determine_location" = "Permita-nos determinar a sua localização";

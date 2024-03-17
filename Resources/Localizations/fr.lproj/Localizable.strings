@@ -481,7 +481,7 @@
 "sort_by_distance" = "Trier par distance";
 "sort_by_name" = "Trier par nom";
 "map_markers_other" = "Autres marques";
-"stop_routing_confirm" = "Arrêter le guidage ?";
+"stop_routing_confirm" = "Souhaitez-vous arrêter le guidage ?";
 "cancel_route" = "Arrêter le guidage \?";
 "route_is_too_long_v2" = "Pour les longues distances et si l\'itinéraire n\'est pas calculé dans 10 minutes, ajoutez des étapes.";
 "navigation_over_track" = "Démarrer le guidage en suivant cette trace \?";
@@ -3278,7 +3278,7 @@
 "cloud_item_restored" = "%@ est restauré dans le nuage.";
 "action_cannot_be_undone" = "Cette action ne peut être annulée.";
 "shared_string_row_number" = "Ligne %d";
-"shared_string_nearest" = "";
+"shared_string_nearest" = "Le plus proche";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "my_places_no_tracks_title_root" = "Vous n’avez pas de traces";
 "my_places_no_tracks_title" = "Dossier vide";
@@ -3307,13 +3307,13 @@
 "new_track" = "Nouvelle trace";
 "not_recorded" = "Non enregistré";
 "permanent_delete_warning" = "%@ sera définitivement supprimé.\nÊtes vous sûr?";
-"start_recording" = "Commencer l’enregistrement";
+"start_recording" = "Démarrer l’enregistrement";
 "recorded_track" = "Trace enregistrée";
 "shared_string_error" = "Erreur";
 "shared_string_move" = "Déplacer";
 "shared_string_trash" = "Poubelle";
 "shared_string_delete_item" = "Supprimer";
 "shared_string_is_deleted" = "%@ a été supprimé.";
-"enter_new_name" = "Entrer un nouveau nom";
+"enter_new_name" = "Entrez un nouveau nom";
 "shared_string_deleting" = "Suppression";
 "shared_string_deleting_complete" = "Suppression terminée";

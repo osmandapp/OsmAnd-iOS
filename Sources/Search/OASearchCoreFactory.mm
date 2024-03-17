@@ -667,7 +667,6 @@
 {
     int LIMIT;
     int BBOX_RADIUS;
-    int BBOX_RADIUS_INSIDE;// to support city search for basemap
     int BBOX_RADIUS_POI_IN_CITY;
     int FIRST_WORD_MIN_LENGTH;
     OAPOIHelper *_types;
@@ -680,7 +679,6 @@
     {
         LIMIT = 10000;
         BBOX_RADIUS = 500 * 1000;
-        BBOX_RADIUS_INSIDE = 20000 * 1000;
         BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
         _types = [OAPOIHelper sharedInstance];
@@ -719,8 +717,6 @@
     NSString *searchWord = [phrase getUnknownWordToSearch];
     OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
     
-    QuadRect *bbox = [phrase getFileId] != nil ? [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_POI_IN_CITY] : [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_INSIDE];
-    
     int limit = 0;
     std::shared_ptr<const OsmAnd::IQueryController> ctrl;
     ctrl.reset(new OsmAnd::FunctorQueryController([self, limit, &phrase, &resultMatcher]
@@ -730,10 +726,18 @@
                                                   }));
 
     const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
-    
+
     searchCriteria->name = QString::fromNSString(searchWord);
-    searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
+
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:BBOX_RADIUS_POI_IN_CITY];
     searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
+    if ([phrase getFileId] != nil) {
+        searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
+    }
+    else {
+        // expand bbox to cover Earth for basemap search
+        searchCriteria->bbox31 = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+    }
 
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));

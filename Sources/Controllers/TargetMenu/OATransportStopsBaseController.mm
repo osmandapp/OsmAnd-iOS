@@ -302,6 +302,11 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
                 [stopAggregated addNearbyTransportStop:stop];
             }
         }
+        if (!stopOnSameExitAdded && OsmAnd::Utilities::distance(stop.stop->location, amenityLocation)
+            <= SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS)
+        {
+            [stopAggregated addNearbyTransportStop:stop];
+        }
     }
     
     [self.class sortTransportStopsExits:amenityLocation stops:stopAggregated.localTransportStops];

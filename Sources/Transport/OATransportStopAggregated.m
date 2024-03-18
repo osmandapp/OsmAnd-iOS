@@ -23,17 +23,11 @@
 
 - (void) addLocalTransportStop:(OATransportStop *)transportStop
 {
-    if (!_localTransportStops)
-        _localTransportStops = [NSMutableArray new];
-    
     [_localTransportStops addObject:transportStop];
 }
 
 - (void) addNearbyTransportStop:(OATransportStop *)transportStop
 {
-    if (!_nearbyTransportStops)
-        _nearbyTransportStops = [NSMutableArray new];
-    
     [_nearbyTransportStops addObject:transportStop];
 }
 

@@ -235,7 +235,7 @@
             NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
             const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
             auto it = activeGpx.find(QString::fromNSString(gpxFullPath));
-            if (it != activeGpx.end())
+            if (it != activeGpx.end() && it.value() != nullptr)
                 _doc = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
             else
                 _doc = [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFullPath];

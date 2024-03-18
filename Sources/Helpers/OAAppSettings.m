@@ -19,6 +19,7 @@
 #define settingShowMapRuletKey @"settingShowMapRuletKey"
 #define metricSystemKey @"settingMetricSystemKey"
 #define drivingRegionAutomaticKey @"drivingRegionAutomatic"
+#define preciseDistanceNumbersKey @"precise_distance_numbers"
 #define drivingRegionKey @"settingDrivingRegion"
 #define settingZoomButtonKey @"settingZoomButtonKey"
 #define settingGeoFormatKey @"settingGeoFormatKey"
@@ -4133,6 +4134,10 @@
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
+        
+        _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
+        [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
+        [_profilePreferences setObject:_preciseDistanceNumbers forKey:@"precise_distance_numbers"];
 
         _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];

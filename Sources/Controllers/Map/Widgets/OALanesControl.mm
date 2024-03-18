@@ -276,7 +276,7 @@
             if (dist == 0)
                 [self refreshLabel:@""];
             else
-                [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist]];
+                [self refreshLabel:[OAOsmAndFormatter getFormattedDistance:dist roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]]];
             
             _textView.hidden = _textView.text.length == 0;
             _textShadowView.hidden = _textShadowView.text.length == 0;

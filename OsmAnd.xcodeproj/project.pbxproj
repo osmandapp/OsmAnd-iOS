@@ -394,6 +394,7 @@
 		326B4FC1257FD11400ABAB1D /* ic_action_light_aircraft@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 326B4FBC257FD11400ABAB1D /* ic_action_light_aircraft@3x.png */; };
 		326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */; };
 		326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */; };
+		3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */ = {isa = PBXBuildFile; fileRef = 3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */; };
 		3271CC6E2A38C27900DCEBAC /* OAMap3DModeVisibilityType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */; };
 		3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */; };
 		327A19862A98D57800F4A027 /* TravelJsonParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327A19852A98D57800F4A027 /* TravelJsonParser.swift */; };
@@ -3906,6 +3907,8 @@
 		326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingTimeWidget.h; sourceTree = "<group>"; };
 		326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingTimeWidget.mm; sourceTree = "<group>"; };
 		326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeomagnetismObjCBridge.swift; sourceTree = "<group>"; };
+		3271171B2B9B18A40082C2EA /* OATransportStopAggregated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopAggregated.h; sourceTree = "<group>"; };
+		3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopAggregated.m; sourceTree = "<group>"; };
 		3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapAlgorithms.h; sourceTree = "<group>"; };
 		3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapAlgorithms.mm; sourceTree = "<group>"; };
 		3275552129758ED80049BC84 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -10932,6 +10935,8 @@
 				DA5A790926C5639F00F274C7 /* OATransportStopRoute.mm */,
 				DA5A790A26C5639F00F274C7 /* OATransportStopType.h */,
 				DA5A790C26C5639F00F274C7 /* OATransportStopType.m */,
+				3271171B2B9B18A40082C2EA /* OATransportStopAggregated.h */,
+				3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */,
 			);
 			path = Transport;
 			sourceTree = "<group>";
@@ -17529,6 +17534,7 @@
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,
 				DA8DC3A32A0E4EBB006C116B /* OABearingWidget.m in Sources */,
 				DA5A836426C563A800F274C7 /* OACompoundViewController.m in Sources */,
+				3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */,
 				46F0746F294C8F3400E641E9 /* OAEmissionHelper.mm in Sources */,
 				FA5A21A82A9E17DB00319695 /* UIPageViewController+Extension.swift in Sources */,
 				DA5A83F626C563A800F274C7 /* OASelectSubcategoryViewController.mm in Sources */,

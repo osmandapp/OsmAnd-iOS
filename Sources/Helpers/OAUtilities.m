@@ -1739,6 +1739,11 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     return [OAUtilities doublesEqualUpToDigits:5 source:srcLat destination:destLat] && [OAUtilities doublesEqualUpToDigits:5 source:srcLon destination:destLon];
 }
 
++ (BOOL) isCoordEqual:(CLLocationCoordinate2D)srcLatLon destLat:(CLLocationCoordinate2D)desLatLon
+{
+    return [OAUtilities doublesEqualUpToDigits:5 source:srcLatLon.latitude destination:desLatLon.latitude] && [OAUtilities doublesEqualUpToDigits:5 source:srcLatLon.longitude destination:desLatLon.longitude];
+}
+
 + (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon upToDigits:(int)digits
 {
     return [OAUtilities doublesEqualUpToDigits:digits source:srcLat destination:destLat] && [OAUtilities doublesEqualUpToDigits:digits source:srcLon destination:destLon];

@@ -212,7 +212,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         trackRecordingObserver = OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackRecordingObservable)
         trackStartStopObserver = OAAutoObserverProxy(self, withHandler: #selector(onObservedRecordedTrackChanged), andObserve: app.trackStartStopRecObservable)
-        NotificationCenter.default.addObserver(self, selector: #selector(onRefreshEnd), name: Notification.Name(kGPXDBTracksReloaded), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(onRefreshEnd), name: Notification.Name(kGPXDBTracksLoaded), object: nil)
         
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)

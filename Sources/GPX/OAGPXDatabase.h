@@ -11,7 +11,7 @@
 #import "OACommonTypes.h"
 
 static NSInteger const kDefaultTrackColor = 0xFFFF0000;
-static NSString * const kGPXDBTracksReloaded = @"kGPXDBTracksReloaded";
+static NSString * const kGPXDBTracksLoaded = @"kGPXDBTracksLoaded";
 
 typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeNone = -1,

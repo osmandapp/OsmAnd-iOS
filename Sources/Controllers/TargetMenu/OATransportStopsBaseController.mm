@@ -265,11 +265,10 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
                           [self, transportStops]
                           (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                           {
-                              const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
-                              OATransportStop *stop = [[OATransportStop alloc] init];
-                              stop.stop = transportStop;
-                              [transportStops addObject:stop];
-                          });
+        const auto transportStop = ((OsmAnd::TransportStopsInAreaSearch::ResultEntry&)resultEntry).transportStop;
+        OATransportStop *stop = [[OATransportStop alloc] initWithStop:transportStop];
+        [transportStops addObject:stop];
+    });
     
     return transportStops;
 }

@@ -1122,7 +1122,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonBoolean *doNotShowStartupMessages;
 @property (nonatomic) OACommonBoolean *showDownloadMapDialog;
-
+@property (nonatomic) OACommonBoolean *preciseDistanceNumbers;
 @property (nonatomic) OACommonBoolean *sendAnonymousMapDownloadsData;
 @property (nonatomic) OACommonBoolean *sendAnonymousAppUsageData;
 @property (nonatomic) OACommonBoolean *sendAnonymousDataRequestProcessed;

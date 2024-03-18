@@ -3322,5 +3322,5 @@
 "complex_widget_alert" = "Widgetul %@ poate fi plasat numai pe propriul rând.";
 "osmand_cloud_deletion_account_warning" = "Contul dumneavoastră și toate detaliile contului vor fi %@.";
 "osmand_cloud_deletion_secondary_devices_warning" = "Dispozitivele secundare vor fi deconectate de la OsmAnd Cloud și vor pierde accesul la funcționalitățile plătite.";
-"skip_download" = "Săriți descărcarea";
+"skip_download" = "Sări peste descărcare";
 "determine_location" = "Permiteți-ne să vă determinăm locația";

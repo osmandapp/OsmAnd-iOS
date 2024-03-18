@@ -85,6 +85,9 @@
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             _title = OALocalizedString(@"angular_measurment_units");
             break;
+        case EOAProfileGeneralSettingsDistanceDuringNavigation:
+            _title = OALocalizedString(@"distance_during_navigation");
+            break;
         case EOAProfileGeneralSettingsExternalInputDevices:
             _title = OALocalizedString(@"external_input_device");
             break;
@@ -96,6 +99,15 @@
     }
 }
 
+#pragma mark - UIViewController
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    self.tableView.tableHeaderView = [self setupHeaderView];
+}
+
 #pragma mark - Base UI
 
 - (NSString *)getTitle
@@ -105,7 +117,7 @@
 
 - (NSString *)getSubtitle
 {
-    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme ? @"" : [self.appMode toHumanString];
+    return (_settingsType == EOAProfileGeneralSettingsMapOrientation && _openFromMap) || _settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation ? @"" : [self.appMode toHumanString];
 }
 
 - (BOOL)isNavbarSeparatorVisible
@@ -113,6 +125,28 @@
     if (_settingsType == EOAProfileGeneralSettingsAppTheme)
         return NO;
     return !_openFromMap;
+}
+
+- (BOOL)useCustomTableViewHeader
+{
+    return _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation;
+}
+
+- (UIView *)setupHeaderView
+{
+    UIView *headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 90)];
+    headerView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:[_settings.preciseDistanceNumbers get:self.appMode] ? @"ic_custom_distance_number_precise" : @"ic_custom_distance_number_rounded"]];
+    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [headerView addSubview:imageView];
+    
+    NSLayoutConstraint *centerXConstraint = [NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0];
+    NSLayoutConstraint *centerYConstraint = [NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeCenterY multiplier:1.0 constant:0];
+    NSLayoutConstraint *widthConstraint = [NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeNotAnAttribute multiplier:1.0 constant:90];
+    NSLayoutConstraint *heightConstraint = [NSLayoutConstraint constraintWithItem:imageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:headerView attribute:NSLayoutAttributeHeight multiplier:1.0 constant:0];
+    [NSLayoutConstraint activateConstraints:@[centerXConstraint, centerYConstraint, widthConstraint, heightConstraint]];
+    
+    return headerView;
 }
 
 - (NSString *)getTableHeaderDescription
@@ -138,6 +172,7 @@
     Theme appTheme = [_settings.appearanceProfileTheme get:self.appMode];
     EOAPositionPlacement positionMap = [_settings.positionPlacementOnMap get:self.appMode];
     BOOL automatic = [_settings.drivingRegionAutomatic get:self.appMode];
+    BOOL isPreciseDistanceNumbers = [_settings.preciseDistanceNumbers get:self.appMode];
     NSInteger drivingRegion = [_settings.drivingRegion get:self.appMode];
     NSInteger metricSystem = [_settings.metricSystem get:self.appMode];
     NSInteger speedSystem = [_settings.speedSystem get:self.appMode];
@@ -426,6 +461,23 @@
             }];
             break;
             
+        case EOAProfileGeneralSettingsDistanceDuringNavigation:
+            [dataArr addObject:@{
+                @"name" : @"preciseDistance",
+                @"title" : OALocalizedString(@"shared_string_precise"),
+                @"selected" : @(isPreciseDistanceNumbers),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            [dataArr addObject:@{
+                @"name" : @"roundUpDistance",
+                @"title" : OALocalizedString(@"shared_string_round_up"),
+                @"selected" : @(!isPreciseDistanceNumbers),
+                @"icon" : @"ic_checkmark_default",
+                @"type" : [OASimpleTableViewCell getCellIdentifier],
+            }];
+            break;
+            
         default:
             break;
     }
@@ -435,6 +487,11 @@
 - (BOOL) hideFirstHeader
 {
     return _settingsType == EOAProfileGeneralSettingsMapOrientation;
+}
+
+- (NSString *)getTitleForFooter:(NSInteger)section
+{
+    return _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation ? OALocalizedString(@"distance_during_navigation_footer") : nil;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -461,7 +518,7 @@
             [cell leftIconVisibility:item[@"icon"] != nil];
             cell.titleLabel.text = item[@"title"];
             cell.descriptionLabel.text = item[@"description"];
-            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation)
+            if (_settingsType == EOAProfileGeneralSettingsAppTheme || _settingsType == EOAProfileGeneralSettingsScreenOrientation || _settingsType == EOAProfileGeneralSettingsDistanceDuringNavigation)
             {
                 cell.leftIconView.image = [item[@"selected"] boolValue] ? [UIImage templateImageNamed:item[@"icon"]] : nil;
             }
@@ -474,7 +531,7 @@
             {
                 cell.leftIconView.image = [UIImage imageNamed:item[@"icon"]];
             }
-            cell.accessoryType = [item[@"selected"] boolValue] && (_settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = [item[@"selected"] boolValue] && (_settingsType != EOAProfileGeneralSettingsAppTheme && _settingsType != EOAProfileGeneralSettingsScreenOrientation && _settingsType != EOAProfileGeneralSettingsDistanceDuringNavigation) ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         return cell;
     }
@@ -519,6 +576,9 @@
             break;
         case EOAProfileGeneralSettingsAngularMeasurmentUnits:
             [self selectSettingAngularUnits:name];
+            break;
+        case EOAProfileGeneralSettingsDistanceDuringNavigation:
+            [self selectDistanceDuringNavigationSetting:name];
             break;
         case EOAProfileGeneralSettingsExternalInputDevices:
             [self selectSettingExternalInput:name];
@@ -649,6 +709,11 @@
         [_settings.angularUnits set:DEGREES360 mode:self.appMode];
     else if ([name isEqualToString:@"milliradians"])
         [_settings.angularUnits set:MILLIRADS mode:self.appMode];
+}
+
+- (void) selectDistanceDuringNavigationSetting:(NSString *)name
+{
+    [_settings.preciseDistanceNumbers set:[name isEqualToString:@"preciseDistance"] mode:self.appMode];
 }
 
 - (void) selectSettingExternalInput:(NSString *)name

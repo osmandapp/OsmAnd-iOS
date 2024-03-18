@@ -34,6 +34,9 @@
 @end
 
 @implementation OASearchResult
+{
+    double _unknownPhraseMatchWeight;
+}
 
 - (instancetype) initWithPhrase:(OASearchPhrase *)sp
 {
@@ -42,6 +45,7 @@
     {
         self.preferredZoom = 15;
         self.requiredSearchPhrase = sp;
+        _unknownPhraseMatchWeight = 0;
     }
     return self;
 }
@@ -49,8 +53,12 @@
 // maximum corresponds to the top entry
 - (double) unknownPhraseMatchWeight
 {
+    if (_unknownPhraseMatchWeight != 0)
+        return _unknownPhraseMatchWeight;
+
     // normalize number to get as power, so we get numbers > 1
-    return [self getSumPhraseMatchWeight] / pow(MAX_PHRASE_WEIGHT_TOTAL, [self getDepth] - 1);
+    _unknownPhraseMatchWeight = [self getSumPhraseMatchWeight] / pow(MAX_PHRASE_WEIGHT_TOTAL, [self getDepth] - 1);
+    return _unknownPhraseMatchWeight;
 }
 
 - (double) getSumPhraseMatchWeight
@@ -102,28 +110,37 @@
         return res;
     }
 
-- (BOOL) allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount*)cnt
+- (BOOL)allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount *)cnt
 {
-    NSMutableArray<NSString *> * searchPhraseNames = [self getSearchPhraseNames];
-    NSMutableArray<NSString *> * localResultNames;
+    NSMutableArray<NSString *> *searchPhraseNamesArray = [self getSearchPhraseNames];
+    QStringList searchPhraseNames;
+    for (NSString *searchPhraseName : searchPhraseNamesArray)
+        searchPhraseNames.append(QString::fromNSString(searchPhraseName));
+
+    NSMutableArray<NSString *> *localResultNamesArray;
     if (![[_requiredSearchPhrase getFullSearchPhrase] containsString:@HYPHEN])
     {
         // we split '-' words in result, so user can input same without '-'
-        localResultNames = [OASearchPhrase splitWords:name ws:[NSMutableArray array] delimiters:@ALLDELIMITERS_WITH_HYPHEN];
+        localResultNamesArray = [OASearchPhrase splitWords:name ws:[NSMutableArray array] delimiters:@ALLDELIMITERS_WITH_HYPHEN];
     }
     else
-        localResultNames = [OASearchPhrase splitWords:name ws:[NSMutableArray array] delimiters:@ALLDELIMITERS];
+    {
+        localResultNamesArray = [OASearchPhrase splitWords:name ws:[NSMutableArray array] delimiters:@ALLDELIMITERS];
+    }
+    QStringList localResultNames;
+    for (NSString *localResultName : localResultNamesArray)
+        localResultNames.append(QString::fromNSString(localResultName));
 
     BOOL wordMatched;
-    if ([searchPhraseNames count] == 0)
+    if (searchPhraseNames.isEmpty())
         return NO;
     int idxMatchedWord = -1;
-    for (NSString *searchPhraseName : searchPhraseNames)
+    for (const auto& searchPhraseName : searchPhraseNames)
     {
         wordMatched = NO;
-        for (int i = idxMatchedWord + 1; i < [localResultNames count]; i++)
+        for (int i = idxMatchedWord + 1; i < localResultNames.size(); i++)
         {
-            int r = OsmAnd::ICU::ccompare(QString::fromNSString(searchPhraseName), QString::fromNSString(localResultNames[i]));
+            int r = OsmAnd::ICU::ccompare(searchPhraseName, localResultNames.at(i));
             if (r == 0)
             {
                 wordMatched = YES;
@@ -134,7 +151,7 @@
         if (!wordMatched)
             return NO;
     }
-    if (searchPhraseNames.count == localResultNames.count)
+    if (searchPhraseNames.size() == localResultNames.size())
         cnt.allWordsEqual = YES;
     
     cnt.allWordsInPhraseAreInResult = YES;

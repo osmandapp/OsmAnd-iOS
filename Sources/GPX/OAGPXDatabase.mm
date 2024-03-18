@@ -415,9 +415,9 @@
         BOOL didAddFiles = [self addNewGpxFiles:existingGpxPaths];
         if (didAddFiles)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewTracksFetched
-                                                                object:self];
+            [self save];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksLoaded object:self];
     });
 }
 

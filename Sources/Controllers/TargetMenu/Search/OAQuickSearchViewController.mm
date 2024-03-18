@@ -1503,15 +1503,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             self.cancelPrev = false;
 
         if (self.paused || self.cancelPrev)
-        {
-            if (results.count > 0)
-            {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [[self getResultCollection] addSearchResults:results resortAll:YES removeDuplicates:YES];
-                });
-            }
             return NO;
-        }
+
         switch (obj.objectType)
         {
             case SEARCH_STARTED:

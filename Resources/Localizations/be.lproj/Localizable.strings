@@ -2535,3 +2535,4 @@
 "speak_route_deviation" = "Апавясціць аб адхіленні ад маршруту";
 "generate_slope_from_3d_maps" = "Стварыць растравыя карты схілаў з 3D карт";
 "generate_hillshade_from_3d_maps" = "Стварыць растравыя карты рэльефу з 3D карт";
+"shared_string_read" = "Чытаць";

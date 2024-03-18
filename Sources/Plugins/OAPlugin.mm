@@ -262,6 +262,16 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @[];
 }
 
+- (NSString *)getAnyConnectedDeviceId
+{
+    return nil;
+}
+
+- (NSString *)getWidgetDataFieldTypeNameByWidgetId:(NSString *)widgetId
+{
+    return nil;
+}
+
 /*
  * Return true in case if plugin should fill the map context menu with buildContextMenuRows method.
  */
@@ -655,6 +665,19 @@ public List<String> indexingFiles(IProgress progress) {
     for (OAPlugin *plugin in [self getAvailablePlugins])
     {
         if ([plugin.getId isEqualToString:pluginId])
+            return plugin;
+    }
+    return nil;
+}
+
++ (OAPlugin * _Nullable) getPluginByWidgetId:(NSString * _Nonnull)widgetId
+{
+    NSString *origWidgetId = [widgetId containsString:OAMapWidgetInfo.DELIMITER]
+        ? [widgetId substringToIndex:[widgetId indexOf:OAMapWidgetInfo.DELIMITER]]
+        : widgetId;
+    for (OAPlugin *plugin in [self getAvailablePlugins])
+    {
+        if ([[plugin getWidgetIds] containsObject:origWidgetId])
             return plugin;
     }
     return nil;

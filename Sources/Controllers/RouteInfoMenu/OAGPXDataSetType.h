@@ -16,5 +16,6 @@
 + (UIColor *)getTextColor:(NSInteger)dst;
 + (UIColor *)getFillColor:(NSInteger)dst;
 + (NSString *)getMainUnitY:(NSInteger)dst;
++ (NSString *)getFieldTypeNameByWidgetId:(NSString *)widgetId;
 
 @end

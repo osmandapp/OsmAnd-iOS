@@ -23,6 +23,7 @@
 
 #define kLastUsedExternalSensorKey @"kLastUsedExternalSensorKey"
 
+NSString * const kAnyDevice = @"any_connected_device_write_sensor_data_to_track_key";
 NSString * const OATrackRecordingNone = @"OATrackRecordingNone";
 NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
 
@@ -98,6 +99,16 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
              OAWidgetType.bicycleCadence,
              OAWidgetType.bicycleSpeed,
              OAWidgetType.temperature];
+}
+
+- (NSString *)getAnyConnectedDeviceId
+{
+    return kAnyDevice;
+}
+
+- (NSString *)getWidgetDataFieldTypeNameByWidgetId:(NSString *)widgetId
+{
+    return [OAGPXDataSetType getFieldTypeNameByWidgetId:widgetId];
 }
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams

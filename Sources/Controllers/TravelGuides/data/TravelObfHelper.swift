@@ -71,6 +71,8 @@ final class TravelObfHelper : NSObject {
                     }
                     
                     if !foundAmenities.isEmpty {
+                        // In rare cases, amenity could be nil
+                        foundAmenities.removeAll { $0.amenity == nil }
                         foundAmenities.sort { a, b in
                             let d1 = location.distance(from: CLLocation(latitude: a.amenity.latitude, longitude: a.amenity.longitude))
                             let d2 = location.distance(from: CLLocation(latitude: b.amenity.latitude, longitude: b.amenity.longitude))

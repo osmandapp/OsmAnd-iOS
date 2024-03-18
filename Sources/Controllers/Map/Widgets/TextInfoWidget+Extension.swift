@@ -15,7 +15,8 @@ extension OATextInfoWidget {
     }
     
     func updateWith(style: WidgetSizeStyle, appMode: OAApplicationMode) {
-        guard widgetSizeStyle != style else { 
+        refreshLayout()
+        guard widgetSizeStyle != style else {
             return
         }
         sizeStylePref.set(Int32(style.rawValue), mode: appMode)

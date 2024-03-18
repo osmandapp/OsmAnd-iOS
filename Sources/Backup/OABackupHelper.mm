@@ -31,6 +31,7 @@
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
 #import "OAURLSessionProgress.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kUpdateIdOperation @"Update order id"
 
@@ -38,14 +39,17 @@ static NSString *INFO_EXT = @"info";
 
 static NSString *SERVER_URL = @"https://osmand.net";
 
-static NSString *USER_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/user-register"];
-static NSString *DEVICE_REGISTER_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/device-register"];
-static NSString *UPDATE_ORDER_ID_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/user-update-orderid"];
-static NSString *UPLOAD_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/upload-file"];
-static NSString *LIST_FILES_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/list-files"];
-static NSString *DOWNLOAD_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/download-file"];
-static NSString *DELETE_FILE_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/delete-file"];
-static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingPathComponent:@"/userdata/delete-file-version"];
+static NSString *USER_REGISTER_URL = [SERVER_URL stringByAppendingString:@"/userdata/user-register"];
+static NSString *DEVICE_REGISTER_URL = [SERVER_URL stringByAppendingString:@"/userdata/device-register"];
+static NSString *UPDATE_ORDER_ID_URL = [SERVER_URL stringByAppendingString:@"/userdata/user-update-orderid"];
+static NSString *UPLOAD_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/upload-file"];
+static NSString *LIST_FILES_URL = [SERVER_URL stringByAppendingString:@"/userdata/list-files"];
+static NSString *DOWNLOAD_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/download-file"];
+static NSString *DELETE_FILE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file"];
+static NSString *DELETE_FILE_VERSION_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-file-version"];
+static NSString *ACCOUNT_DELETE_URL = [SERVER_URL stringByAppendingString:@"/userdata/delete-account"];
+static NSString *SEND_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/send-code"];
+static NSString *CHECK_CODE_URL = [SERVER_URL stringByAppendingString:@"/userdata/auth/confirm-code"];
 
 static NSString *BACKUP_TYPE_PREFIX = @"backup_type_";
 static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
@@ -93,6 +97,21 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
 + (NSString *) DELETE_FILE_URL
 {
     return DELETE_FILE_URL;
+}
+
++ (NSString *) ACCOUNT_DELETE_URL
+{
+    return ACCOUNT_DELETE_URL;
+}
+
++ (NSString *) SEND_CODE_URL
+{
+    return SEND_CODE_URL;
+}
+
++ (NSString *) CHECK_CODE_URL
+{
+    return CHECK_CODE_URL;
 }
 
 + (BOOL) isTokenValid:(NSString *)token
@@ -231,17 +250,31 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     NSString *fileName;
     if (!filePath)
         filePath = fileSettingsItem.filePath;
+    
     if (subtypeFolder.length == 0)
+    {
         fileName = filePath.lastPathComponent;
+    }
     else if (fileSettingsItem.subtype == EOASettingsItemFileSubtypeGpx)
+    {
         fileName = [filePath stringByReplacingOccurrencesOfString:[subtypeFolder stringByAppendingString:@"/"] withString:@""];
+    }
     else if ([OAFileSettingsItemFileSubtype isMap:fileSettingsItem.subtype])
+    {
         fileName = filePath.lastPathComponent;
+    }
     else
-        fileName = [filePath substringFromIndex:[filePath indexOf:subtypeFolder.lastPathComponent]];
-
+    {
+        int index = [filePath indexOf:subtypeFolder.lastPathComponent];
+        if (index >= 0)
+            fileName = [filePath substringFromIndex:index];
+        else
+            fileName = filePath.lastPathComponent;
+    }
+    
     if (fileName.length > 0 && [fileName characterAtIndex:0] == '/')
         fileName = [fileName substringFromIndex:1];
+    
     return fileName;
 }
 
@@ -596,6 +629,24 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     [_executor addOperation:[[OADeleteOldFilesCommand alloc] initWithTypes:types listener:listener]];
 }
 
+- (void)deleteAccount:(NSString *)email token:(NSString *)token
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OADeleteAccountCommand alloc] initWith:email token:token]];
+}
+
+- (void)checkCode:(NSString *)email token:(NSString *)token
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OACheckCodeCommand alloc] initWith:email token:token]];
+}
+
+- (void)sendCode:(NSString *)email action:(NSString *)action
+{
+    [self checkRegistered];
+    [_executor addOperation:[[OASendCodeCommand alloc] initWith:email action:action]];
+}
+
 - (NSInteger)calculateFileSize:(OARemoteFile *)remoteFile
 {
     NSInteger sz = remoteFile.filesize / 1024;
@@ -633,10 +684,11 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
     params[@"accessToken"] = [self getAccessToken];
     params[@"name"] = fileName;
     params[@"type"] = type;
-    NSMutableString *sb = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
+    params[@"updatetime"] = @(remoteFile.updatetimems).stringValue;
+    NSMutableString *builder = [NSMutableString stringWithString:DOWNLOAD_FILE_URL];
     __block BOOL firstParam = YES;
     [params enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {
-        [sb appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
+        [builder appendString:[NSString stringWithFormat:@"%@%@=%@", firstParam ? @"?" : @"&", key, [obj stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]]];
         firstParam = NO;
     }];
     
@@ -649,7 +701,7 @@ static NSString *VERSION_HISTORY_PREFIX = @"save_version_history_";
         [listener onFileDownloadProgress:type fileName:fileName progress:prog deltaWork:deltaWork itemFileName:nil];
     }];
     
-    bool sucseess = [OANetworkUtilities downloadFile:filePath url:sb progress:progress];
+    bool sucseess = [OANetworkUtilities downloadFile:filePath url:builder progress:progress];
     if (!sucseess)
         error = [NSString stringWithFormat:@"Could not download remote file:%@", fileName];
     

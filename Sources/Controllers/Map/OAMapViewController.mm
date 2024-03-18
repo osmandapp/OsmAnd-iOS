@@ -136,12 +136,16 @@
 #define ZONE_1_ZOOM_THRESHOLD 0.6f
 #define ZONE_2_ZOOM_THRESHOLD 1.5f
 
+
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     EOAMapPanDirectionUp = 0,
     EOAMapPanDirectionDown,
     EOAMapPanDirectionLeft,
     EOAMapPanDirectionRight
 };
+
+static const CGFloat kDistanceBetweenFingers = 50.0;
+static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 @interface OATouchLocation : NSObject
 
@@ -209,7 +213,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     OAAutoObserverProxy* _mapLayerChangeObserver;
     OAAutoObserverProxy* _lastMapSourceChangeObserver;
     OAAutoObserverProxy* _applicationModeChangedObserver;
-    
+    OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _stateObserver;
     OAAutoObserverProxy* _settingsObserver;
     OAAutoObserverProxy* _framePreparedObserver;
@@ -351,7 +355,11 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
                                                             andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
-    
+
+    _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                 withHandler:@selector(onMapZoomChanged:withKey:andValue:)
+                                                  andObserve:_zoomObservable];
+
     // Subscribe to application notifications to correctly suspend and resume rendering
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(applicationDidEnterBackground:)
@@ -909,16 +917,69 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return loc;
 }
 
-- (CGPoint) getTouchPoint:(UIGestureRecognizer *)recognizer touchIndex:(NSUInteger)touchIndex
+- (CGPoint)getTouchPoint:(UIGestureRecognizer *)recognizer touchIndex:(NSUInteger)touchIndex
 {
-    if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
+    if ([OAUtilities isiOSAppOnMac])
     {
-        CGPoint touchPoint = [recognizer locationOfTouch:touchIndex inView:self.view];
-        touchPoint.x *= _mapView.contentScaleFactor;
-        touchPoint.y *= _mapView.contentScaleFactor;
-        return touchPoint;
+        if ([recognizer isKindOfClass:[UIPinchGestureRecognizer class]])
+        {
+            UIPinchGestureRecognizer *pinchRecognizer = (UIPinchGestureRecognizer *)recognizer;
+            CGPoint cursorCenter = [pinchRecognizer locationInView:pinchRecognizer.view];
+            CGFloat adjustedDistance = kDistanceBetweenFingers * pinchRecognizer.scale;
+            
+            if (touchIndex == 0)
+            {
+                return [self pointWithMapContentScaleFactor:CGPointMake(cursorCenter.x + adjustedDistance, cursorCenter.y)];
+            }
+            else if (touchIndex == 1)
+            {
+                return [self pointWithMapContentScaleFactor:CGPointMake(cursorCenter.x - adjustedDistance, cursorCenter.y)];
+            }
+        }
+        else if ([recognizer isKindOfClass:[UIRotationGestureRecognizer class]])
+        {
+            UIRotationGestureRecognizer *rotationRecognizer = (UIRotationGestureRecognizer *)recognizer;
+            CGPoint cursorCenter = [rotationRecognizer locationInView:rotationRecognizer.view];
+            CGFloat rotation = [rotationRecognizer rotation];
+            
+            if (touchIndex == 0)
+            {
+                CGFloat simulateFingerPointX = cursorCenter.x + kDistanceBetweenFingers * cos(rotation);
+                CGFloat simulateFingerPointY = cursorCenter.y + kDistanceBetweenFingers * sin(rotation);
+                
+                return [self pointWithMapContentScaleFactor:CGPointMake(simulateFingerPointX, simulateFingerPointY)];
+            }
+            else if (touchIndex == 1)
+            {
+                CGFloat simulateFingerPointX = cursorCenter.x + kDistanceBetweenFingers * (-1 * cos(rotation));
+                CGFloat simulateFingerPointY = cursorCenter.y + kDistanceBetweenFingers * (-1 * sin(rotation));
+                
+                return [self pointWithMapContentScaleFactor:CGPointMake(simulateFingerPointX, simulateFingerPointY)];
+            }
+        }
+        else
+        {
+            if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
+            {
+                return [self pointWithMapContentScaleFactor:[recognizer locationOfTouch:touchIndex inView:self.view]];
+            }
+        }
+    }
+    else
+    {
+        if (touchIndex >= 0 && touchIndex < recognizer.numberOfTouches)
+        {
+            return [self pointWithMapContentScaleFactor:[recognizer locationOfTouch:touchIndex inView:self.view]];
+        }
     }
     return CGPointZero;
+}
+
+- (CGPoint)pointWithMapContentScaleFactor:(CGPoint)point
+{
+    point.x *= _mapView.contentScaleFactor;
+    point.y *= _mapView.contentScaleFactor;
+    return point;
 }
 
 - (BOOL) isTargetChanged
@@ -1251,7 +1312,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if (pinchRecognizer || rotationRecognizer)
         {
             NSArray<OATouchLocation *> *touchLocations = [NSArray arrayWithArray:pinchRecognizer ? _zoomTouchLocations : _rotateTouchLocations];
-            if (touchLocations.count != recognizer.numberOfTouches)
+            if (touchLocations.count != recognizer.numberOfTouches && ![OAUtilities isiOSAppOnMac])
             {
                 [self reacquireMapTouchLocations:recognizer];
                 touchLocations = [NSArray arrayWithArray:pinchRecognizer ? _zoomTouchLocations : _rotateTouchLocations];
@@ -2066,12 +2127,45 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     _map3DModeElevationAngle = _mapView.elevationAngle;
 }
 
+- (void)onMapZoomChanged:(id)observable withKey:(id)key andValue:(id)value
+{
+    @synchronized(_rendererSync)
+    {
+        [self updateMapLocaleLanguage];
+    }
+}
+
+- (void)updateMapLocaleLanguage
+{
+    if (_mapPresentationEnvironment != nullptr)
+    {
+        NSString *langId = [self getMapPreferredLocale:_mapView.zoomLevel];
+        if (![langId isEqualToString:_mapPresentationEnvironment->getLocaleLanguageId().toNSString()])
+            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+    }
+}
+
+- (NSString *)getMapPreferredLocale:(int)zoom
+{
+    return [self useAppLocaleForMap:zoom]
+            ? [OAUtilities currentLang]
+            : [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+}
+
+- (BOOL)useAppLocaleForMap:(int)zoom
+{
+    BOOL replaceLocalNamesToAppLocale = zoom <= kReplaceLocalNamesMaxZoom;
+    NSString *settingPrefMapLanguage = [[OAAppSettings sharedManager].settingPrefMapLanguage get];
+    BOOL useLocalNames = !settingPrefMapLanguage || settingPrefMapLanguage.length == 0;
+    return replaceLocalNamesToAppLocale && useLocalNames;
+}
+
 - (void) updateCurrentMapSource
 {
     if (!self.mapViewLoaded)
         return;
     
-    [self showProgressHUD];
+    //[self showProgressHUD];
     
     @synchronized(_rendererSync)
     {
@@ -2155,12 +2249,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     break;
             }
             
-            NSString *langId = [OAUtilities currentLang];
-            if (settings.settingPrefMapLanguage.get)
-                langId = settings.settingPrefMapLanguage.get;
-            else if (settings.settingMapLanguageShowLocal &&
-                     settings.settingMapLanguageTranslit.get)
-                langId = @"en";
             double mapDensity = [settings.mapDensity get];
             [_mapView setVisualZoomShift:mapDensity];
             
@@ -2175,7 +2263,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                                                                      [settings.textSize get:settings.applicationMode.get],
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
-            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            [self updateMapLocaleLanguage];
             _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             [OAWeatherHelper.sharedInstance updateMapPresentationEnvironment:self.mapPresentationEnv];
             
@@ -2239,7 +2327,10 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
             [_mapView setProvider:_obfMapRasterLayerProvider forLayer:kObfRasterLayer];
 
             _obfMapSymbolsProvider.reset(new OsmAnd::MapObjectsSymbolsProvider(_mapPrimitivesProvider,
-                                                                                   rasterTileSize));
+                                                                                   rasterTileSize,
+                                                                                   nullptr,
+                                                                                   false,
+                                                                                   false));
             
             [_mapView addTiledSymbolsProvider:kObfSymbolSection provider:_obfMapSymbolsProvider];
             
@@ -2316,13 +2407,6 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                     langPreferences = OsmAnd::MapPresentationEnvironment::LanguagePreference::NativeOnly;
                     break;
             }
-            
-            NSString *langId = [OAUtilities currentLang];
-            if (settings.settingPrefMapLanguage.get)
-                langId = settings.settingPrefMapLanguage.get;
-            else if ([settings settingMapLanguageShowLocal] &&
-                     settings.settingMapLanguageTranslit.get)
-                langId = @"en";
 
             QSet<QString> disabledPoiTypes = QSet<QString>();
             for (NSString *disabledPoiType in [settings getDisabledTypes])
@@ -2335,7 +2419,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
                                                                                      1.0,
                                                                                      nullptr,
                                                                                      disabledPoiTypes));
-            _mapPresentationEnvironment->setLocaleLanguageId(QString::fromNSString(langId));
+            [self updateMapLocaleLanguage];
             _mapPresentationEnvironment->setLanguagePreference(langPreferences);
             _mapPrimitiviser.reset(new OsmAnd::MapPrimitiviser(_mapPresentationEnvironment));
             _mapPrimitivesProvider.reset(new OsmAnd::MapPrimitivesProvider(_obfMapObjectsProvider,
@@ -2360,7 +2444,7 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         if (!_selectedGpxHelper.activeGpx.isEmpty() || !_gpxDocsTemp.isEmpty())
             [self initRendererWithGpxTracks];
 
-        [self hideProgressHUD];
+        //[self hideProgressHUD];
         [_mapSourceUpdatedObservable notifyEvent];
     }
 }
@@ -2786,6 +2870,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         [paths addObject:it.key().toNSString()];
         list << it.value();
     }
@@ -2814,6 +2901,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+		if (it.value() == nullptr)
+            continue;
+
         const auto& doc = it.value();
         for (auto& loc : doc->points)
         {
@@ -2891,11 +2981,13 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     if (currentTrackOnly)
         return NO;
     
-    int i = 0;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
+        if (!doc || doc->points.isEmpty())
+            continue;
+
         NSString *gpxFilePath = [it.key().toNSString()
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
@@ -2937,13 +3029,11 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         {
             groups.clear();
         }
-        
-        i++;
     }
     
     if (!_gpxDocsTemp.isEmpty())
     {
-        const auto &doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+        const auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
         OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:doc];
         NSString *gpxFilePath = [document.path
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
@@ -3015,6 +3105,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
             {
@@ -3074,6 +3167,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
             {
@@ -3138,6 +3234,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
@@ -3206,32 +3305,38 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     return YES;
 }
 
-- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName
+- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName groupName:(NSString *)groupName
 {
+    OAGPXDocument *gpxDocument;
     OASavingTrackHelper *helper = [OASavingTrackHelper sharedInstance];
     if (!gpxFileName)
     {
-        return helper.currentTrack.points;
+        gpxDocument = helper.currentTrack;
+    }
+    else if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
+    {
+        gpxDocument = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())];
     }
     else
     {
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
-                OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
-                return document.points;
+                gpxDocument = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+                break;
             }
         }
-        if ([_gpxDocFileTemp isEqualToString:[gpxFileName lastPathComponent]])
-        {
-            OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first())];
-            return document.points;
-        }
     }
-    return nil;
+    if (gpxDocument)
+        return [gpxDocument.pointsGroups.allKeys containsObject:groupName] ? gpxDocument.pointsGroups[groupName].points : gpxDocument.points;
+    else
+        return @[];
 }
 
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap
@@ -3243,6 +3348,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
         {
@@ -3333,6 +3441,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:oldPath])
         {
@@ -3400,6 +3511,9 @@ typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
         {

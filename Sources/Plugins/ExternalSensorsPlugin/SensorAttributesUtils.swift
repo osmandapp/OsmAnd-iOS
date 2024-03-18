@@ -15,7 +15,7 @@ final class SensorAttributesUtils: NSObject {
 
     static let sensorGpxTags: [String] = [PointAttributes.sensorTagHeartRate, PointAttributes.sensorTagSpeed,
                                                  PointAttributes.sensorTagCadence, PointAttributes.sensorTagBikePower,
-                                                 PointAttributes.sensorTagTemperature]
+                                                 PointAttributes.sensorTagTemperatureW, PointAttributes.sensorTagTemperatureA]
 
     static func hasHeartRateData(_ analysis: OAGPXTrackAnalysis) -> Bool {
         analysis.hasData(PointAttributes.sensorTagHeartRate)
@@ -34,7 +34,7 @@ final class SensorAttributesUtils: NSObject {
     }
 
     static func hasTemperatureData(_ analysis: OAGPXTrackAnalysis) -> Bool {
-        analysis.hasData(PointAttributes.sensorTagTemperature)
+        analysis.hasData(PointAttributes.sensorTagTemperatureW) || analysis.hasData(PointAttributes.sensorTagTemperatureA)
     }
 
     @objc static func getAvailableGPXDataSetTypes(analysis: OAGPXTrackAnalysis, availableTypes: NSMutableArray) {

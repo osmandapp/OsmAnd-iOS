@@ -1671,7 +1671,7 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "Точки";
 "shared_string_overview" = "Преглед";
-"activity" = "Activity";
+"activity" = "Активност";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "Изключен";
 "gpx_trip_groups" = "Track groups";
@@ -1753,7 +1753,7 @@
 "try_again" = "Нов опит";
 "searching" = "Търсене…";
 "search_location" = "Определяне местоположение…";
-"search_map" = "Търсене на карти …";
+"search_map" = "Търсене на карти";
 "search_another_country" = "Изберете друг регион";
 "skip_map_downloading" = "Пропускане на картите";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
@@ -2579,3 +2579,6 @@
 "free_account" = "Безплатен профил";
 "save_heading_descr" = "Запазва посоката към всяка записана точка от трасето.";
 "save_heading" = "Включва посоката";
+"privacy_and_security" = "Поверителност и защита";
+"search_favorites" = "Търсене в избрани";
+"shared_string_keywords" = "Ключови думи";

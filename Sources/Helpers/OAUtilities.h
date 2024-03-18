@@ -167,8 +167,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (int) toNumberFromString:(NSString *)string;
 + (BOOL) colorRGB:(UIColor *)color1 equalToColorRGB:(UIColor *)color2;
 
-- (UIColor *)lightThemeColor;
-- (UIColor *)darkThemeColor;
 - (UIColor *)currentThemeColor;
 
 @end
@@ -259,6 +257,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (NSComparisonResult) compareInt:(int)x y:(int)y;
 + (NSComparisonResult) compareDouble:(double)x y:(double)y;
 + (int) extractFirstIntegerNumber:(NSString *)s;
++ (int) extractIntegerNumber:(NSString *)s;
 
 + (BOOL) isWordComplete:(NSString *)text;
 
@@ -300,6 +299,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
++ (BOOL) isCoordEqual:(CLLocationCoordinate2D)srcLatLon destLat:(CLLocationCoordinate2D)desLatLon;
 + (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon;
 + (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon upToDigits:(int)digits;
 
@@ -328,6 +328,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (CGFloat) calculateScreenHeight;
 + (CGFloat) calculateScreenWidth;
 + (BOOL) isWindowed;
++ (BOOL)isiOSAppOnMac;
 + (BOOL) isIPhone;
 + (BOOL) isIPad;
 + (void) adjustViewsToNotch:(CGSize)size topView:(UIView *)topView middleView:(UIView *)middleView bottomView:(UIView *)bottomView
@@ -366,7 +367,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (NSString *) getGpxShortPath:(NSString *)fullFilePath;
 
-+ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddTracksFolder:(BOOL)shouldAddTracksFolder;
++ (NSArray<NSString *> *) getGpxFoldersListSorted:(BOOL)shouldSort shouldAddRootTracksFolder:(BOOL)shouldAddTracksFolder;
++ (NSMutableArray<NSString *> *) getFlattenedFileList:(NSString *)path;
 
 + (NSAttributedString *) attributedStringFromHtmlString:(NSString *)html fontSize:(NSInteger)fontSize textColor:(UIColor *)textColor;
 

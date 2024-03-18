@@ -588,8 +588,8 @@
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "ה־GPX של OsmAnd אינו מסודר כראוי, נא ליצור קשר עם צוות התמיכה כדי להעמיק את המחקר.";
-"tracks_on_map" = "עקבות מוצגים";
-"gpx_export_title" = "Export track";
+"tracks_on_map" = "גלוי במפה";
+"gpx_export_title" = "ייצוא מסלול";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
 "import_from_docs" = "Import from documents";
@@ -1753,7 +1753,7 @@
 "try_again" = "ניסיון חוזר";
 "searching" = "מתבצע חיפוש…";
 "search_location" = "מתבצע חיפוש אחר המיקום…";
-"search_map" = "מתבצע חיפוש במפות…";
+"search_map" = "מתבצע חיפוש במפות";
 "search_another_country" = "נא לבחור באזור אחר";
 "skip_map_downloading" = "דילוג על הורדת המפות";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

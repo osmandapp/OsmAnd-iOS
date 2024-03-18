@@ -86,8 +86,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Izlazak sunca: %@
-\nZalazak sunca: %@";
+"day_night_info_description" = "Izlazak sunca: %@\nZalazak sunca: %@";
 "day_night_info" = "Informacije dan/noć";
 "daynight_mode_auto" = "Izlazak/zalazak sunca";
 "route_simulation" = "Route simulation";
@@ -1754,7 +1753,7 @@
 "try_again" = "Try again";
 "searching" = "Tražim…";
 "search_location" = "Searching location…";
-"search_map" = "Searching map…";
+"search_map" = "Searching map";
 "search_another_country" = "Select another region";
 "skip_map_downloading" = "Preskoči Preuzimanje karata";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";

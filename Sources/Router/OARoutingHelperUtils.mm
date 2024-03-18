@@ -10,9 +10,12 @@
 #import "OARoutePreferencesParameters.h"
 #import "OAApplicationMode.h"
 #import "OAMapUtils.h"
+#import "OAUtilities.h"
 #import "OALocationServices.h"
+#import "OARoutingHelper.h"
 
 #define CACHE_RADIUS 100000
+#define MAX_BEARING_DEVIATION 45
 
 @implementation OARoutingHelperUtils
 
@@ -21,16 +24,36 @@
                     destination:(NSString *)destination
                         towards:(NSString *)towards
 {
+    return [self formatStreetName:name ref:ref destination:destination towards:towards shields:nil];
+}
+
++ (NSString *) formatStreetName:(NSString *)name
+                            ref:(NSString *)originalRef
+                    destination:(NSString *)destination
+                        towards:(NSString *)towards
+                        shields:(NSArray<RoadShield *> *)shields
+{
     NSMutableString *formattedStreetName = [NSMutableString string];
-    if (ref != nil && ref.length > 0)
-        [formattedStreetName appendString:ref];
-    if (name != nil && name.length > 0)
+    if (originalRef && originalRef.length > 0)
+    {
+        NSArray<NSString *> *refs = [originalRef componentsSeparatedByString:@";"];
+        for (NSString *ref in refs)
+        {
+            if (!shields || ![self isRefEqualsShield:shields ref:ref])
+            {
+                if (formattedStreetName.length > 0)
+                    [formattedStreetName appendString:@" "];
+                [formattedStreetName appendString:ref];
+            }
+        }
+    }
+    if (name && name.length > 0)
     {
         if (formattedStreetName.length > 0)
             [formattedStreetName appendString:@" "];
         [formattedStreetName appendString:name];
     }
-    if (destination != nil && destination.length > 0)
+    if (destination && destination.length > 0)
     {
         if (formattedStreetName.length > 0)
             [formattedStreetName appendString:@" "];
@@ -40,6 +63,16 @@
     return formattedStreetName;
 }
 
++ (BOOL)isRefEqualsShield:(NSArray<RoadShield *> *)shields ref:(NSString *)ref {
+    NSString * refNumber = [NSString stringWithFormat:@"%d", [OAUtilities extractIntegerNumber:ref]];
+    for (RoadShield *shield in shields)
+    {
+        NSString *shieldValue = shield.value;
+        if ([ref isEqualToString:shieldValue] || [refNumber isEqualToString:shieldValue])
+            return YES;
+    }
+    return NO;
+}
 
 + (RoutingParameter)getParameterForDerivedProfile:(NSString *)key appMode:(OAApplicationMode *)appMode router:(std::shared_ptr<GeneralRouter>)router
 {
@@ -90,12 +123,12 @@
 {
     // measuring without bearing could be really error prone (with last fixed location)
     // this code has an effect on route recalculation which should be detected without mistakes
-    if (currentLocation.course >= 0 && nextRouteLocation)
+    if ([currentLocation hasBearing]  && nextRouteLocation)
     {
         float bearingMotion = currentLocation.course;
         float bearingToRoute = [prevRouteLocation ? prevRouteLocation : currentLocation bearingTo:nextRouteLocation];
         double diff = degreesDiff(bearingMotion, bearingToRoute);
-        if (ABS(diff) > 60.0)
+        if (ABS(diff) > 90.0)
         {
             // require delay interval since first detection, to avoid false positive
             //but leave out for now, as late detection is worse than false positive (it may reset voice router then cause bogus turn and u-turn prompting)
@@ -113,6 +146,36 @@
     }
     //wrongMovementDetected = 0;
     return false;
+}
+
++ (CLLocation *) approximateBearingIfNeeded:(OARoutingHelper *)helper projection:(CLLocation *)projection location:(CLLocation *)location previousRouteLocation:(CLLocation *)previousRouteLocation currentRouteLocation:(CLLocation *)currentRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation
+{
+    double maxDist = [helper getMaxAllowedProjectDist:currentRouteLocation];
+    if ([location distanceFromLocation:projection] >= maxDist)
+        return projection;
+    
+    double projectionOffsetN = [OAMapUtils getProjectionCoeff:location fromLocation:previousRouteLocation toLocation:currentRouteLocation];
+    double currentSegmentBearing = [OAMapUtils normalizeDegrees360:[previousRouteLocation bearingTo:currentRouteLocation]];
+    double nextSegmentBearing = [OAMapUtils normalizeDegrees360:[currentRouteLocation bearingTo:nextRouteLocation]];
+    double segmentsBearingDelta = [OAMapUtils unifyRotationDiff:currentSegmentBearing targetRotate:nextSegmentBearing] * projectionOffsetN;
+    double approximatedBearing = [OAMapUtils normalizeDegrees360:currentSegmentBearing + segmentsBearingDelta];
+    
+    BOOL setApproximated;
+    if ([location hasBearing])
+    {
+        double rotationDiff = [OAMapUtils unifyRotationDiff:location.course targetRotate:approximatedBearing];
+        setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;
+    }
+    else
+    {
+        setApproximated = YES;
+    }
+    
+    if (setApproximated)
+    {
+        return [[CLLocation alloc] initWithCoordinate:projection.coordinate altitude:projection.altitude horizontalAccuracy:projection.horizontalAccuracy verticalAccuracy:projection.verticalAccuracy course:approximatedBearing speed:projection.speed timestamp:projection.timestamp];
+    }
+    return projection;
 }
 
 @end

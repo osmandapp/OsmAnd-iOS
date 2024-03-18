@@ -8,14 +8,21 @@
 
 #import "OAWidgetState.h"
 
-@class OACommonInteger;
+
+@class OACommonInteger, OAWidgetType;
 
 @interface OASunriseSunsetWidgetState : OAWidgetState
 
 @property (nonatomic, strong, nullable) NSString *customId;
+@property (nonatomic, assign) BOOL lastIsDayTime;
 
-- (instancetype _Nonnull)initWithType:(BOOL)sunriseMode customId:(NSString *_Nullable)customId;
-- (BOOL)isSunriseMode;
+- (instancetype _Nonnull)initWithWidgetType:(OAWidgetType *_Nonnull)widgetType
+                                   customId:(NSString *_Nullable)customId;
+
+- (OAWidgetType *_Nonnull)getWidgetType;
+
+- (NSString *_Nonnull)getWidgetIconName;
 - (OACommonInteger *)getPreference;
+- (OACommonInteger *_Nonnull)getSunPositionPreference;
 
 @end

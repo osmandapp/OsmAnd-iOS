@@ -23,12 +23,15 @@
 #import "OARouteProvider.h"
 #import "OAGPXMutableDocument.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapActions.h"
 #import "OAMeasurementEditingContext.h"
 #import "OAGpxData.h"
 #import "OAGpxInfo.h"
 #import "OATargetPointsHelper.h"
 #import "OAGPXUIHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OASavingTrackHelper.h"
 
 @interface OATrackSegmentsViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -50,6 +53,20 @@
     if (self)
     {
         _gpx = gpx;
+        [self generateData];
+    }
+    return self;
+}
+
+- (instancetype) initWithFilepath:(NSString *)filepath isCurrentTrack:(BOOL)isCurrentTrack
+{
+    self = [super init];
+    if (self)
+    {
+        if (isCurrentTrack)
+            _gpx = [OASavingTrackHelper.sharedInstance currentTrack];
+        else
+            _gpx = [[OAGPXDocument alloc] initWithGpxFile:filepath];
         [self generateData];
     }
     return self;
@@ -218,9 +235,44 @@
 {
     if (self.delegate)
         [self.delegate onSegmentSelected:indexPath.row - 1 gpx:_gpx];
+    if (self.startNavigationOnSelect)
+        [self startNavigation:indexPath.row - 1 gpx:_gpx];
     
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (void) startNavigation:(NSInteger)position gpx:(OAGPXDocument *)gpx;
+{
+    [OAAppSettings.sharedManager.gpxRouteSegment set:position];
+
+    [OARootViewController.instance.mapPanel.mapActions setGPXRouteParamsWithDocument:gpx path:gpx.path];
+    [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    [[OATargetPointsHelper sharedInstance] updateRouteAndRefresh:YES];
+
+    OAGPXRouteParamsBuilder *paramsBuilder = OARoutingHelper.sharedInstance.getCurrentGPXRoute;
+    if (paramsBuilder)
+    {
+        [paramsBuilder setSelectedSegment:position];
+        NSArray<CLLocation *> *ps = [paramsBuilder getPoints];
+        if (ps.count > 0)
+        {
+            OATargetPointsHelper *tg = [OATargetPointsHelper sharedInstance];
+            [tg clearStartPoint:NO];
+            CLLocation *loc = ps.lastObject;
+            [tg navigateToPoint:loc updateRoute:YES intermediate:-1];
+        }
+    }
+
+    [OARootViewController.instance.mapPanel.mapActions stopNavigationWithoutConfirm];
+    [OARootViewController.instance.mapPanel.mapActions enterRoutePlanningModeGivenGpx:gpx
+                                                                      path:[gpx.path lastPathComponent]
+                                                                      from:nil
+                                                                  fromName:nil
+                                            useIntermediatePointsByDefault:YES
+                                                                showDialog:YES];
+    
+    [self dismissViewController];
 }
 
 @end

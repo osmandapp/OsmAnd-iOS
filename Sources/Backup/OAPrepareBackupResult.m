@@ -48,27 +48,27 @@
 {
     NSMutableDictionary<NSString *, OARemoteFile *> *remoteFilesMap = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OARemoteFile *> *oldRemoteFiles = [NSMutableDictionary dictionary];
-    for (OARemoteFile *rf in remoteFiles)
+    for (OARemoteFile *file in remoteFiles)
     {
-        NSString *typeNamePath = rf.getTypeNamePath;
+        NSString *typeNamePath = file.getTypeNamePath;
         if (!remoteFilesMap[typeNamePath])
-            remoteFilesMap[typeNamePath] = rf;
-        else if (!rf.isInfoFile && !rf.isDeleted)
-            oldRemoteFiles[typeNamePath] = rf;
+            remoteFilesMap[typeNamePath] = file;
+        else if (![oldRemoteFiles.allKeys containsObject:typeNamePath] && !file.isInfoFile && !file.isDeleted)
+            oldRemoteFiles[typeNamePath] = file;
     }
     NSMutableDictionary<NSString *, OARemoteFile *> *uniqueRemoteFiles = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OARemoteFile *> *uniqueInfoRemoteFiles = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OARemoteFile *> *deletedRemoteFiles = [NSMutableDictionary dictionary];;
     NSMutableSet<NSString *> *uniqueFileIds = [NSMutableSet set];
-    [remoteFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull fileId, OARemoteFile * _Nonnull rf, BOOL * _Nonnull stop) {
+    [remoteFilesMap enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull fileId, OARemoteFile * _Nonnull file, BOOL * _Nonnull stop) {
         if (![uniqueFileIds containsObject:fileId]) {
             [uniqueFileIds addObject:fileId];
-            if (rf.isInfoFile)
-                uniqueInfoRemoteFiles[fileId] = rf;
-            else if (rf.isDeleted)
-                deletedRemoteFiles[fileId] = rf;
+            if (file.isInfoFile)
+                uniqueInfoRemoteFiles[fileId] = file;
+            else if (file.isDeleted)
+                deletedRemoteFiles[fileId] = file;
             else
-                uniqueRemoteFiles[fileId] = rf;
+                uniqueRemoteFiles[fileId] = file;
         }
     }];
     _uniqueRemoteFiles = uniqueRemoteFiles;

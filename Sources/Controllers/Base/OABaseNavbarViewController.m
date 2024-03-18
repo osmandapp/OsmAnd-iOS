@@ -74,6 +74,7 @@
 
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
+    [self registerCells];
     self.tableView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
     NSString *tableFooterText = [self getTableFooterText];
     if (tableFooterText && tableFooterText.length > 0)
@@ -524,18 +525,28 @@
                                       action:(SEL)action
                                         menu:(UIMenu *)menu
 {
+    return [self.class createRightNavbarButton:title icon:icon color:[self getNavbarButtonsTintColor] action:action target:self menu:menu];
+}
+
++ (UIBarButtonItem *)createRightNavbarButton:(NSString *)title
+                                    icon:(UIImage *)icon
+                                       color:(UIColor *)color
+                                      action:(SEL)action
+                                      target:(id)target
+                                        menu:(UIMenu *)menu
+{
     UIButton *button = [[UIButton alloc] initWithFrame:CGRectMake(0., 0., kDefaultBarButtonSize, 30.)];
     button.titleLabel.lineBreakMode = NSLineBreakByTruncatingMiddle;
     button.titleLabel.numberOfLines = 1;
     button.titleLabel.adjustsFontForContentSizeCategory = YES;
     button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    [button setTintColor:[self getNavbarButtonsTintColor]];
-    [button setTitleColor:[self getNavbarButtonsTintColor] forState:UIControlStateNormal];
-    [button setTitleColor:[[self getNavbarButtonsTintColor] colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
+    [button setTintColor:color];
+    [button setTitleColor:color forState:UIControlStateNormal];
+    [button setTitleColor:[color colorWithAlphaComponent:.3] forState:UIControlStateHighlighted];
     [button setTitle:title forState:UIControlStateNormal];
     [button setImage:icon forState:UIControlStateNormal];
     [button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-    [button addTarget:self action:action forControlEvents:UIControlEventTouchUpInside];
+    [button addTarget:target action:action forControlEvents:UIControlEventTouchUpInside];
     button.translatesAutoresizingMaskIntoConstraints = NO;
     if (menu)
     {
@@ -719,6 +730,18 @@
 }
 
 #pragma mark - Table data
+
+// use addCell: method here
+// cells will be automatically registerd in viewDidLoad:
+- (void)registerCells
+{
+}
+
+// do not override
+- (void)addCell:(NSString *)cellIdentifier
+{
+    [self.tableView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellReuseIdentifier:cellIdentifier];
+}
 
 - (void)generateData
 {

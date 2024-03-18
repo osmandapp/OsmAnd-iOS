@@ -960,7 +960,7 @@
 "menu_my_directions" = "Yol Tariflerim";
 "shared_string_of" = "/";
 "search_my_location" = "Konumumu bul";
-"search_map" = "Haritalar aranıyor…";
+"search_map" = "Haritalar aranıyor";
 "skip_map_downloading_desc_ios" = "Yüklü çevrim dışı haritanız yok. Listeden bir harita seçebilir veya daha sonra şuradan harita indirebilirsiniz: Menü - Harita dosyalarını yönet";
 "items_selected" = "%d seçildi";
 "shared_string_street_intersection" = "Sokak kesişimi";
@@ -2542,7 +2542,7 @@
 "contact_support_description" = "Herhangi bir sorunuz varsa, lütfen %@ üzerinden bizimle iletişime geçin.";
 "routing_attr_motor_type_diesel_name" = "Dizel";
 "shared_string_angle" = "Açı";
-"duration_ago" = "%@önce";
+"duration_ago" = "%@ önce";
 "offline_edition_descr" = "Çevrim dışı düzenleme etkinleştirilirse, değişiklikler önce yerel olarak kaydedilecek ve istek üzerine karşıya yüklenecek, aksi takdirde değişiklikler hemen karşıya yüklenecek.";
 "rendering_attr_showMtbScale_name" = "MTBölçeğini göster";
 "map_updates_are_unavailable_yet" = "Henüz harita güncellemeleri yok. :-(";

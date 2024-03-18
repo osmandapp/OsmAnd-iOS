@@ -29,5 +29,6 @@
 @interface OATrackMenuAppearanceHudViewController : OABaseTrackMenuHudViewController
 
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state;
+- (instancetype)initWithGpx:(OAGPX *)gpx tracks:(NSArray<OAGPX *> *)tracks state:(OATrackMenuViewControllerState *)state;
 
 @end

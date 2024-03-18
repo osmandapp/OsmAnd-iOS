@@ -82,6 +82,7 @@
     
     std::shared_ptr<const OsmAnd::TextRasterizer> _textRasterizer;
     OACurrentStreetName *_prevStreetName;
+    NSArray<RoadShield *> *cachedRoadShields;
     NSString *_roadShieldName;
     
     UIFont *_textFont;
@@ -574,24 +575,22 @@
         [self updateVisibility:_addressText visible:YES];
         [self updateVisibility:_addressTextShadow visible:_shadowRadius > 0];
         _prevStreetName = streetName;
-        
-        if (streetName.shieldObject && !streetName.shieldObject->namesIds.empty() && [self setRoadShield:_shieldIcon object:streetName.shieldObject])
+        NSArray<RoadShield *> *shields = streetName.shields;
+        if (shields.count != 0 && ![shields isEqual:cachedRoadShields])
         {
-            _shieldIcon.hidden = NO;
-            int idx = [streetName.text indexOf:@"»"];
-            if (idx > 0)
-                streetName.text = [streetName.text substringToIndex:idx];
-            
-            if (_roadShieldName && [streetName.text hasPrefix:_roadShieldName])
+            if([self setRoadShield:_shieldIcon shields:shields])
             {
-                NSRange roadShieldNameRange = [streetName.text rangeOfString:_roadShieldName];
-                streetName.text = [streetName.text stringByReplacingCharactersInRange:roadShieldNameRange withString:@""];
-                streetName.text = [streetName.text trim];
+                _shieldIcon.hidden = NO;
+                int idx = [streetName.text indexOf:@"»"];
+                if (idx > 0)
+                    streetName.text = [streetName.text substringFromIndex:idx];
             }
+            cachedRoadShields = shields;
         }
         else
         {
             _shieldIcon.hidden = YES;
+            cachedRoadShields = nil;
         }
         if (streetName.exitRef.length > 0)
         {
@@ -653,33 +652,32 @@
     return NO;
 }
 
-- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject>)object
-{
-    NSMutableString *additional = [NSMutableString string];
-    for (NSInteger i = 0; i < object->namesIds.size(); i++)
+
+
+- (BOOL)setRoadShield:(UIImageView *)view shields:(NSArray<RoadShield *> *)shields {
+    if (shields.count != 0) 
     {
-        NSString *key = [NSString stringWithUTF8String:object->region->quickGetEncodingRule(object->namesIds[i].first).getTag().c_str()];
-        NSString *val = [NSString stringWithUTF8String:object->names[object->namesIds[i].first].c_str()];
-        if (![key hasSuffix:@"_ref"] && ![key hasPrefix:@"route_road"])
-            [additional appendFormat:@"%@=%@;", key, val];
-    }
-    for (NSInteger i = 0; i < object->namesIds.size(); i++)
-    {
-        NSString *key = [NSString stringWithUTF8String:object->region->quickGetEncodingRule(object->namesIds[i].first).getTag().c_str()];
-        NSString *val = [NSString stringWithUTF8String:object->names[object->namesIds[i].first].c_str()];
-        if ([key hasPrefix:@"route_road"] && [key hasSuffix:@"_ref"])
+        BOOL isShieldSet = NO;
+        NSInteger maxShields = MIN(shields.count, MAX_SHIELDS_QUANTITY);
+        
+        for (NSInteger i = 0; i < maxShields; i++) 
         {
-            BOOL visible = [self setRoadShield:view object:object nameTag:key name:val additional:additional];
-            if (visible)
-                return YES;
+            RoadShield * shield = shields[i];
+            isShieldSet |= [self setRoadShield:view shield:shield];
         }
+        
+        return isShieldSet;
     }
     return NO;
 }
 
-- (BOOL) setRoadShield:(UIImageView *)view object:(std::shared_ptr<RouteDataObject> &)object nameTag:(NSString *)nameTag name:(NSString *)name additional:(NSMutableString *)additional
+- (BOOL) setRoadShield:(UIImageView *)view shield:(RoadShield *)shield
 {
+    const auto& object = shield.rdo;
     const auto& tps = object->types;
+    NSString* nameTag = shield.tag;
+    NSString* name = shield.value;
+    NSMutableString * additional = [shield.additional mutableCopy];
     OAMapPresentationEnvironment *mapPres = OARootViewController.instance.mapPanel.mapViewController.mapPresentationEnv;
     const auto& env = mapPres.mapPresentationEnvironment;
     if (!env)

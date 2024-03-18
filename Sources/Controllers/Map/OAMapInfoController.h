@@ -27,13 +27,15 @@
 @property (nonatomic) BOOL textBold;
 @property (nonatomic) BOOL night;
 @property (nonatomic) UIColor *textColor;
-@property (nonatomic) UIColor *textShadowColor;
+@property (nonatomic) UIColor *unitColor;
+@property (nonatomic) UIColor *dividerColor;
+@property (nonatomic) UIColor *titleColor;
+@property (nonatomic) UIColor *textOutlineColor;
 @property (nonatomic) int boxTop;
-@property (nonatomic) UIColor *rightColor;
 @property (nonatomic) UIColor *leftColor;
 @property (nonatomic) NSString *expand;
 @property (nonatomic) int boxFree;
-@property (nonatomic) float textShadowRadius;
+@property (nonatomic) float textOutlineWidth;
 
 @end
 
@@ -61,5 +63,6 @@
 - (void) updateRuler;
 
 - (BOOL)topTextViewVisible;
+- (void)updateLayout;
 
 @end

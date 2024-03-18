@@ -16,7 +16,9 @@ final class PointAttributes : NSObject {
     static let sensorTagSpeed = "speed_sensor"
     static let sensorTagCadence = "cad"
     static let sensorTagBikePower = "power"
-    static let sensorTagTemperature = "wtemp"
+    static let sensorTagTemperature = "temp_sensor"
+    static let sensorTagTemperatureW = "wtemp"
+    static let sensorTagTemperatureA = "atemp"
     static let sensorTagDistance = "bike_distance_sensor"
 
     let distance: Float
@@ -30,7 +32,8 @@ final class PointAttributes : NSObject {
     var sensorSpeed: Float = 0.0
     var bikeCadence: Float = 0.0
     var bikePower: Float = 0.0
-    var temperature: Float = 0.0
+    var temperatureW: Float = 0.0
+    var temperatureA: Float = 0.0
 
     init(distance: Float, timeDiff: Float, firstPoint: Bool, lastPoint: Bool) {
         self.distance = distance
@@ -54,7 +57,11 @@ final class PointAttributes : NSObject {
         case Self.sensorTagBikePower:
             return bikePower
         case Self.sensorTagTemperature:
-            return temperature
+            return Float.maximum(temperatureW, temperatureA)
+        case Self.sensorTagTemperatureW:
+            return temperatureW
+        case Self.sensorTagTemperatureA:
+            return temperatureA
         default:
             return nil
         }
@@ -74,8 +81,10 @@ final class PointAttributes : NSObject {
             bikeCadence = value
         case Self.sensorTagBikePower:
             bikePower = value
-        case Self.sensorTagTemperature:
-            temperature = value
+        case Self.sensorTagTemperatureW:
+            temperatureW = value
+        case Self.sensorTagTemperatureA:
+            temperatureA = value
         default:
             break
         }
@@ -84,11 +93,10 @@ final class PointAttributes : NSObject {
     func hasValidValue(for tag: String) -> Bool {
         guard let value = getAttributeValue(for: tag) else { return false }
         
-        if Self.sensorTagTemperature == tag || Self.pointElevation == tag {
+        if Self.sensorTagTemperatureW == tag || Self.sensorTagTemperatureA == tag || Self.pointElevation == tag {
             return !value.isNaN
         } else {
             return value > 0
         }
     }
-
 }

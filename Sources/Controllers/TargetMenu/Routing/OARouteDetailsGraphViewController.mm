@@ -410,11 +410,23 @@
 {
     if (_trackMenuControlState)
     {
-        [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-            [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
-                                                               trackHudMode:EOATrackMenuHudMode
-                                                                      state:_trackMenuControlState];
-        }];
+        if (_trackMenuControlState.openedFromTracksList)
+        {
+            [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
+                UITabBarController *myPlacesViewController =
+                                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                [myPlacesViewController setSelectedIndex:1];
+                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+            }];
+        }
+        else
+        {
+            [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
+                [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
+                                                                   trackHudMode:EOATrackMenuHudMode
+                                                                          state:_trackMenuControlState];
+            }];
+        }
     }
     else
     {

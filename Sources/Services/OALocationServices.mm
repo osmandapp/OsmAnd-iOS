@@ -662,6 +662,7 @@
     {
         [OASavingTrackHelper.sharedInstance updateLocation:location heading:_lastHeading];
         [OAAverageSpeedComputer.sharedInstance updateLocation:location];
+        [[OAAverageGlideComputer shared] updateLocation:location];
         //OsmandPlugin.updateLocationPlugins(location);
     }
     
@@ -934,6 +935,11 @@
     [OALocationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
     
     return bearing;
+}
+
+- (BOOL) hasBearing;
+{
+    return self.course != -1 && self.course != 0;
 }
 
 @end

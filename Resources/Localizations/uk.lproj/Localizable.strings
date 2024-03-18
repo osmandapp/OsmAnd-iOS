@@ -433,7 +433,7 @@
 "go_to_map" = "Показати мапу";
 "free" = "Вільно %@";
 "try_again" = "Спробуйте ще раз";
-"search_map" = "Пошук мапи…";
+"search_map" = "Пошук мапи";
 "skip_map_downloading_desc_ios" = "У вас немає встановлених офлайн мап. Ви можете вибрати мапу з переліку або завантажити мапи пізніше через меню — Керування файлами мап";
 "search_categories" = "Категорії";
 "items_selected" = "%d вибрано";
@@ -2319,7 +2319,7 @@
 "weather_wind_kilimeters_per_hour" = "Кілометрів на годину";
 "weather_wind_knots" = "Вузлів";
 "weather_precip_inches" = "Дюйми";
-"user_login" = "Ім\'я користувача";
+"user_login" = "Увійти";
 "login_footer_email_part" = "support@osmand.net";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "register_opr_create_new_account" = "Створити обліковий запис";
@@ -2536,7 +2536,7 @@
 "renew_subscription" = "Поновити передплату";
 "fetching_from_server" = "Отримання даних із сервера";
 "backup_complete" = "Резервне копіювання завершено";
-"duration_ago" = "%@тому";
+"duration_ago" = "%@ тому";
 "restore_backup_descr" = "Відновити дані на пристрій з резервних онлайн-копій";
 "service_is_not_available_please_try_later" = "Служба недоступна. Повторіть спробу пізніше.";
 "weather_forecast" = "Прогноз погоди";

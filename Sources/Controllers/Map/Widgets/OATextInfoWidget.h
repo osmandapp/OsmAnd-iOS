@@ -12,24 +12,23 @@
 #import "OAAppSettings.h"
 
 #define kTextInfoWidgetWidth 94
-#define kTextInfoWidgetHeight 32
+#define kTextInfoWidgetHeight 34
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType;
+@class OAWidgetType, OutlineLabel;
 
 @interface OATextInfoWidget : OABaseWidgetView
 
 @property (nonatomic, readonly) UIFont *primaryFont;
 @property (nonatomic, readonly) UIColor *primaryColor;
-@property (nonatomic, readonly) UIColor *primaryShadowColor;
+@property (nonatomic, readonly) UIColor *primaryOutlineColor;
 @property (nonatomic, readonly) UIFont *unitsFont;
 @property (nonatomic, readonly) UIColor *unitsColor;
 @property (nonatomic, readonly) UIColor *unitsShadowColor;
-@property (nonatomic, readonly) float shadowRadius;
+@property (nonatomic, readonly) float textOutlineWidth;
 
-@property (nonatomic) UILabel *textView;
-@property (nonatomic) UILabel *textShadowView;
+@property (nonatomic) OutlineLabel *textView;
 @property (nonatomic) UIImageView *imageView;
 
 @property (nonatomic) NSLayoutConstraint *topTextAnchor;
@@ -40,6 +39,7 @@
 @property (nonatomic, strong, nullable) UILabel *unitLabel;
 @property (nonatomic, strong, nullable) UIView *unitView;
 @property (nonatomic, strong, nullable) UIView *emptyViewRightPlaceholderFullRow;
+@property (nonatomic, strong, nullable) UILabel *titleOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
@@ -75,13 +75,17 @@
 - (void) setAngularUnitsDepended:(BOOL)newValue;
 - (BOOL) isExplicitlyVisible;
 - (void) setExplicitlyVisible:(BOOL)explicitlyVisible;
-- (void) updateIconMode:(BOOL)night;
-- (void) updateTextColor:(UIColor *)textColor textShadowColor:(UIColor *)textShadowColor bold:(BOOL)bold shadowRadius:(float)shadowRadius;
+- (void)updateIcon;
+- (void)setNightMode:(BOOL)night;
+
+- (void)updateTextWitState:(OATextState *_Nonnull)state;
 
 - (CGFloat) getWidgetHeight;
 - (void) adjustViewSize;
 
 - (void)configurePrefsWithId:(NSString * _Nullable)id appMode:(OAApplicationMode *_Nonnull)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)configureSimpleLayout;
+- (void)refreshLayout;
+- (OAApplicationMode *_Nonnull)getAppMode;
 
 @end

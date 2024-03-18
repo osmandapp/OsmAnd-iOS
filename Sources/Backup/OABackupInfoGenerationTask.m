@@ -75,7 +75,7 @@
     [remoteFiles addObjectsFromArray:_deletedRemoteFiles.allValues];
     for (OARemoteFile *remoteFile in remoteFiles)
     {
-        OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForRemoteFile:remoteFile];
+        OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType] || remoteFile.isRecordedVoiceFile)
         {
             continue;
@@ -124,7 +124,7 @@
     for (OALocalFile *localFile in _localFiles.allValues)
     {
         OAExportSettingsType *exportType = localFile.item != nil
-        ? [OAExportSettingsType getExportSettingsTypeForItem:localFile.item] : nil;
+        ? [OAExportSettingsType findBySettingsItem:localFile.item] : nil;
         if (exportType == nil || ![OAExportSettingsType isTypeEnabled:exportType])
             continue;
         

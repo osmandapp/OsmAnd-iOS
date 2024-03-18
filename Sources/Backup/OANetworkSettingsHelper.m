@@ -17,6 +17,7 @@
 #import "OASyncBackupTask.h"
 #import "OAUtilities.h"
 #import "OABackupHelper.h"
+#import "OAPrepareBackupResult.h"
 #import "OARootViewController.h"
 #import "OALog.h"
 
@@ -192,7 +193,27 @@
 - (void) syncSettingsItems:(NSString *)key
                  localFile:(OALocalFile *)localFile
                 remoteFile:(OARemoteFile *)remoteFile
+                 filesType:(EOARemoteFilesType)filesType
                  operation:(EOABackupSyncOperationType)operation
+                errorToast:(void (^)(NSString *message, NSString *details))errorToast
+{
+    [self syncSettingsItems:key
+                  localFile:localFile
+                 remoteFile:remoteFile
+                  filesType:filesType
+                  operation:operation
+              shouldReplace:YES
+             restoreDeleted:NO
+                 errorToast:errorToast];
+}
+
+- (void) syncSettingsItems:(NSString *)key
+                 localFile:(OALocalFile *)localFile
+                remoteFile:(OARemoteFile *)remoteFile
+                 filesType:(EOARemoteFilesType)filesType
+                 operation:(EOABackupSyncOperationType)operation
+             shouldReplace:(BOOL)shouldReplace
+            restoreDeleted:(BOOL)restoreDeleted
                 errorToast:(void (^)(NSString *message, NSString *details))errorToast
 {
     NSString *fileKey = key;
@@ -236,7 +257,7 @@
             case EOABackupSyncOperationDownload:
             {
                 if (remoteFile)
-                    [syncTask downloadRemoteVersion:remoteFile.item];
+                    [syncTask downloadRemoteVersion:remoteFile.item filesType:filesType shouldReplace:shouldReplace restoreDeleted:restoreDeleted];
                 break;
             }
             default:
@@ -268,12 +289,30 @@
 
 - (void) importSettings:(NSString *)key
                   items:(NSArray<OASettingsItem *> *)items
+              filesType:(EOARemoteFilesType)filesType
           forceReadData:(BOOL)forceReadData
+               listener:(id<OAImportListener>)listener
+{
+    [self importSettings:key items:items filesType:filesType forceReadData:forceReadData shouldReplace:YES restoreDeleted:NO listener:listener];
+}
+
+- (void) importSettings:(NSString *)key
+                  items:(NSArray<OASettingsItem *> *)items
+              filesType:(EOARemoteFilesType)filesType
+          forceReadData:(BOOL)forceReadData
+          shouldReplace:(BOOL)shouldReplace
+         restoreDeleted:(BOOL)restoreDeleted
                listener:(id<OAImportListener>)listener
 {
     if (!self.importAsyncTasks[key])
     {
-        OAImportBackupTask *importTask = [[OAImportBackupTask alloc] initWithKey:key items:items importListener:listener forceReadData:forceReadData];
+        OAImportBackupTask *importTask = [[OAImportBackupTask alloc] initWithKey:key
+                                                                           items:items
+                                                                       filesType:filesType
+                                                                  importListener:listener
+                                                                   forceReadData:forceReadData
+                                                                   shouldReplace:shouldReplace
+                                                                  restoreDeleted:restoreDeleted];
         self.importAsyncTasks[key] = importTask;
         [OABackupHelper.sharedInstance.executor addOperation:importTask];
     }

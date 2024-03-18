@@ -8,6 +8,7 @@
 
 #import "OASettingsBackupViewController.h"
 #import "OACloudAccountLogoutViewController.h"
+#import "OACloudAccountLoginViewController.h"
 #import "OADeleteAllVersionsBackupViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OABaseBackupTypesViewController.h"
@@ -22,6 +23,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAFirstUsageWizardController.h"
 
 @interface OASettingsBackupViewController () <UITableViewDelegate, UITableViewDataSource, OACloudAccountLogoutDelegate, OADeleteAllVersionsBackupDelegate, OABackupTypesDelegate, OAOnDeleteFilesListener, OAOnPrepareBackupListener>
 
@@ -171,6 +173,13 @@
     removeVersionsData[@"text_color"] = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
     [dangerZoneCells addObject:removeVersionsData];
 
+    NSMutableDictionary *deleteAccountData = [NSMutableDictionary dictionary];
+    deleteAccountData[@"key"] = @"delete_account_cell";
+    deleteAccountData[@"type"] = [OASimpleTableViewCell getCellIdentifier];
+    deleteAccountData[@"title"] = OALocalizedString(@"delete_account");
+    deleteAccountData[@"text_color"] = [UIColor colorNamed:ACColorNameButtonBgColorDisruptive];
+    [dangerZoneCells addObject:deleteAccountData];
+
     _data = data;
 }
 
@@ -203,10 +212,10 @@
 {
     [[OABackupHelper sharedInstance] logout];
     [OAIAPHelper.sharedInstance checkBackupPurchase];
-
+    
     for (UIViewController *controller in self.navigationController.viewControllers)
     {
-        if ([controller isKindOfClass:OAMainSettingsViewController.class])
+        if ([controller isKindOfClass:OAMainSettingsViewController.class] || [controller isKindOfClass:OAFirstUsageWizardController.class])
         {
             [self.navigationController popToViewController:controller animated:YES];
             return;
@@ -424,6 +433,10 @@
         OADeleteAllVersionsBackupViewController *removeOldVersionsViewController = [[OADeleteAllVersionsBackupViewController alloc] initWithScreenType:EOARemoveOldVersionsBackupScreenType];
         removeOldVersionsViewController.deleteDelegate = self;
         [self.navigationController pushViewController:removeOldVersionsViewController animated:YES];
+    }
+    else if ([key isEqualToString:@"delete_account_cell"])
+    {
+        [self showViewController:[[OACloudAccountLoginViewController alloc] initWithScreenType:EOACloudAccountDeletionScreenType]];
     }
 
     [tableView deselectRowAtIndexPath:indexPath animated:YES];

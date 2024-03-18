@@ -45,6 +45,7 @@
 #define kScreensToFlyWithAnimation 400000.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
+#define kNavAnimatonTime 1.0f
 
 #define CENTER_CONSTANT 0
 #define BOTTOM_CONSTANT 1
@@ -119,7 +120,7 @@
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
 - (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName;
-- (NSArray<OAWptPt *> *)getPointsOf:(NSString *)gpxFileName;
+- (NSArray<OAWptPt *> * _Nonnull)getPointsOf:(NSString * _Nullable)gpxFileName groupName:(NSString * _Nonnull)groupName;
 
 - (BOOL) canZoomIn;
 - (void) animatedZoomIn;

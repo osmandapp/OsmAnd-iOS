@@ -17,7 +17,7 @@ typedef enum
 
 @interface OAHistorySettingsViewController : OABaseButtonsViewController
 
-- (instancetype)initWithSettingsType:(EOAHistorySettingsType)historyType;
+- (instancetype)initWithSettingsType:(EOAHistorySettingsType)historyType editing:(BOOL)isEditing;
 
 @property (nonatomic, readonly) EOAHistorySettingsType historyType;
 

@@ -98,11 +98,19 @@ class MapWidgetsFactory: NSObject {
         case .radiusRuler:
             return RulerDistanceWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .sunrise:
-            let sunriseState = OASunriseSunsetWidgetState(type: true, customId: customId)
+            let sunriseState = OASunriseSunsetWidgetState(widgetType: .sunrise, customId: customId)
             return OASunriseSunsetWidget(state: sunriseState, appMode: appMode, widgetParams: widgetParams)
         case .sunset:
-            let sunsetState = OASunriseSunsetWidgetState(type: false, customId: customId)
+            let sunsetState = OASunriseSunsetWidgetState(widgetType: .sunset, customId: customId)
             return OASunriseSunsetWidget(state: sunsetState, appMode: appMode, widgetParams: widgetParams)
+        case .sunPosition:
+            let sunPositiontState = OASunriseSunsetWidgetState(widgetType: .sunPosition, customId: customId)
+            return OASunriseSunsetWidget(state: sunPositiontState, appMode: appMode, widgetParams: widgetParams)
+        case .glideTarget:
+            let glideWidgetState = GlideTargetWidgetState(customId)
+            return GlideTargetWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
+        case .glideAverage:
+            return GlideAverageWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:

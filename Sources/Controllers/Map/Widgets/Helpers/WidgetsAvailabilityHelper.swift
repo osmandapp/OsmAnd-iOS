@@ -65,8 +65,11 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetAvailability(widgetType: .averageSpeed)
         regWidgetAvailability(widgetType: .altitudeMyLocation)
         regWidgetAvailability(widgetType: .altitudeMapCenter)
+        regWidgetAvailability(widgetType: .sunPosition)
         regWidgetAvailability(widgetType: .sunrise)
         regWidgetAvailability(widgetType: .sunset)
+        regWidgetAvailability(widgetType: .glideTarget)
+        regWidgetAvailability(widgetType: .glideAverage)
         
         // vertical
         regWidgetVisibility(widgetType: .streetName, appModes: [.car()])

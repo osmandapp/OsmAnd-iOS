@@ -7,7 +7,6 @@
 //
 
 #import "OATripRecordingSettingsViewController.h"
-#import "OAGPXListViewController.h"
 #import "OASwitchTableViewCell.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
@@ -738,11 +737,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
         UITabBarController* myPlacesViewController = [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
         [myPlacesViewController setSelectedIndex:1];
         
-        OAGPXListViewController *gpxController = myPlacesViewController.viewControllers[1];
+        TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
         if (gpxController == nil)
             return;
-        
-        [gpxController setShouldPopToParent:YES];
         
         [self.navigationController pushViewController:myPlacesViewController animated:YES];
     }

@@ -1,7 +1,5 @@
 "OsmAnd Maps" = "OsmAnd Maps";
-
 "download_depth_countours" = "നോട്ടിക്കൽ ഡെപ്ത് കോണ്ടൂറുകള്‍";
-
 "day_short" = "D";
 "week_short" = "Wk";
 "weeks_short" = "Wks";
@@ -22,23 +20,19 @@
 "years_2_4" = "Years";
 "years_5" = "Years";
 "months_3" = "Three months";
-
 "price_free" = "Free";
-
 "get_discount_title" = "Get %d %@ at %d%% off.";
 "get_free_trial_title" = "Start your %d %@ free trial.";
 "get_discount_short_descr" = "%@ for %d %@, then %@";
 "get_discount_first_part" = "%@ for first %@";
 "get_discount_first_few_parts" = "%@ for first %@";
 "get_discount_second_part" = "then %@";
-
 "mapillary_image" = "മാപ്പില്ലറി ചിത്രം";
 "shared_string_milliradians" = "മില്ലിറേഡിയൻസ്";
 "angular_units" = "Angular measurement units";
 "angular_units_descr" = "Change azimuth measurement units.";
 "allow_3d" = "Allow 2.5D view";
 "allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
-
 "access_intermediate_arrival_time" = "ഇട-ലക്ഷ്യസ്ഥാനത്തെത്തുന്ന സമയം";
 "map_widget_intermediate_time" = "ഇടയ്ക്കുള്ള സമയം";
 "shared_string_previous" = "കഴിഞ്ഞത്";
@@ -48,13 +42,11 @@
 "transport_nearby_routes_within" = "ഉള്ളില്‍ സമീപത്തുള്ള റൂട്ടുകൾ";
 "transport_nearby_routes" = "\"അകത്ത് \"";
 "shared_string_control_stop" = "നിര്‍ത്തുക";
-
 "cancel_navigation" = "വഴികാട്ടി നിര്‍ത്തുക";
 "start_navigation" = "Start navigation";
 "intermediate_items_sort_by_distance" = "ഡോര്‍-ടു-ഡോര്‍ ക്രമീകരിക്കുക";
 "switch_start_finish" = "പ്രാരംഭ സ്ഥലം ലക്ഷ്യസ്ഥാനവും തിരിച്ചിടുക";
 "clear_all_intermediates" = "ഇടയിലുള്ള എല്ലാ പോയിന്റുകളും മായ്ക്കുക";
-
 "shared_string_options" = "ഐച്ഛികങ്ങള്‍";
 "new_destination_point_dialog" = "\"ഇപ്പോഴെ ഒരു ലക്ഷ്യസ്ഥാനം  നിങ്ങളുടെ കയ്യിലുണ്ട്:\"";
 "replace_destination_point" = "ലക്ഷ്യസ്ഥാനം മാറ്റിവയ്‌ക്കുക";
@@ -66,7 +58,6 @@
 "first_intermediate_dest_description" = "പ്രാരംഭ സ്റ്റോപ്പ് ചേർക്കുന്നു";
 "add_as_last_destination_point" = "\"അവസാനത്തെ  ഇട-ലക്ഷ്യസ്ഥാനമായി ചേര്‍ക്കുക\"";
 "last_intermediate_dest_description" = "\"ഇടലക്ഷ്യസ്ഥാനം ചേര്‍ക്കുക \"";
-
 "show_poi_over_map" = "\"പി ഓ ഐ കാണിക്കൂക \"";
 "shared_string_search" = "തെരച്ചില്‍";
 "address_search_desc" = "വിലാസം തെരയുക";
@@ -75,7 +66,6 @@
 "search_radius_proximity" = "\"അകത്ത് \"";
 "poi" = "താല്‍പര്യ ബിന്ദു (പി ഓ ഐ )";
 "search_more" = "Search more…";
-
 "day_off_label" = "ഓഫ്";
 "open_from" = "\"ആരംഭിച്ച് \"";
 "open_till" = "\"പ്രവര്‍ത്തന സമയം \"";
@@ -83,7 +73,6 @@
 "will_open_at" = "തുറക്കുന്ന സമയം";
 "will_open_on" = "തുറക്കുന്ന സമയം";
 "will_open_tomorrow_at" = "\"നാളെ തുറക്കുന്ന സമയം \"";
-
 "error_avoid_specific_road" = "\"പകരം വഴി കണ്ടെത്താനായില്ല \"";
 "road_blocked" = "മാര്‍ഗതടസം";
 "starting_point" = "പ്രാരംഭ സ്ഥലം";
@@ -97,17 +86,13 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-
-"day_night_info_description" = "സൂര്യോദയം: %@ 
-സൂര്യസ്തമയം: %@";
+"day_night_info_description" = "സൂര്യോദയം: %@ സൂര്യസ്തമയം: %@";
 "day_night_info" = "പകല്‍/രാത്രി വിവരം";
 "daynight_mode_auto" = "സൂര്യോദയം/സൂര്യാസ്തമയം";
-
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "സ്വയം ഭുപടദൃശ്യം നടുവിലാക്കുക.";
 "unknown_location" = "\"തല്‍സ്ഥലം അറിയില്ല \"";
 "animate_routing_route_not_calculated" = "\"ആദ്യം റൂട്ട് കണക്കാക്കുക \"";
-
 "settings_preset" = "സഹജമായ രൂപരേഖ(ഡിഫാള്‍ട് പ്രൊഫൈല്‍)";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
 "dialogs_and_notifications_title" = "Dialogs and notifications";
@@ -153,7 +138,6 @@
 "auto_split_gap_descr" = "Start a new segment after 6 min gap, new track after 2 h gap, or new file after a longer gap";
 "trip_rec_actions_descr" = "You can find all your recorded tracks in %@";
 "reset_plugin_to_default" = "Reset plugin settings to default";
-
 "map_widget_magnetic_bearing" = "മാഗനറ്റിക് ബെയറിങ്ങ്";
 "map_widget_bearing" = "റിലേറ്റിവ് ബെയറിങ്ങ്";
 "map_widget_transparent" = "സുതാര്യമായ വിഡ്ജെറ്റ്";
@@ -177,7 +161,6 @@
 "show_compass_ruler" = "Show compass ruler";
 "hide_compass_ruler" = "Hide compass ruler";
 "map_widget_distance_by_tap" = "Distance by tap";
-
 "shared_string_collapse" = "ചുരുക്കുക";
 "shared_string_topbar" = "ടോപ്പ് ബാർ";
 "shared_string_widgets" = "വിഡ്ജെറ്റ്";
@@ -191,13 +174,10 @@
 "map_markers_empty" = "You have no active map markers";
 "tracks_empty" = "Your track list is empty";
 "favorites_empty" = "You have not saved any favorite points";
-
 "shared_string_last_used" = "Last used";
-
 "carplay_active_message" = "Map is displayed via CarPlay";
 "carplay_profile" = "CarPlay profile";
 "carplay_profile_descr" = "Profile that will be used while connected to CarPlay.";
-
 "show_traffic_warnings" = "ഗതാഗത മുന്നറിയിപ്പു്";
 "show_pedestrian_warnings" = "സീബ്രക്രോസിങ്ങ്";
 "show_cameras" = "സ്പീഡ് ക്യാമറ";
@@ -241,7 +221,6 @@
 "arrival_distance_factor_normally" = "സാധാരണ";
 "arrival_distance_factor_late" = "\"താമസിച്ച് \"";
 "arrival_distance_factor_at_last" = "അവസാന നിമിഷത്തില്‍";
-
 "route_parameters" = "Route parameters";
 "fast_route_mode" = "വേഗതയേറിയ വഴി";
 "voice_announces" = "Voice prompts";
@@ -302,7 +281,6 @@
 "speed_limit_tolerance_descr" = "Select the speed limit tolerance margin above which you will receive a voice warning.";
 "only_manually" = "Only manually";
 "instructions_repeat" = "Tap \"Next turn\" widget to repeat instructions";
-
 "guidance_preferences_descr" = "വഴികാട്ടിയുടെ മുന്‍ഗണനകള്‍";
 "routing_preferences_descr" = "റൂട്ടിങ്ങ് മുന്‍ഗണനകള്‍";
 "recording_preferences_descr" = "Track recording preferences";
@@ -335,14 +313,14 @@
 "select_route_finish_on_map" = "Select end point of the route";
 "select_route_intermediate" = "Select an intermediate point";
 "select_home" = "Select home point";
-"select_work_point" =  "Select work point";
+"select_work_point" = "Select work point";
 "sort_by_distance" = "\"ദൂരക്രമത്തിലടുക്കുക \"";
 "sort_by_name" = "നാമക്രമത്തിലാക്കുക";
 "by_name" = "By name";
 "by_dist" = "By distance";
 "sort_by" = "അടുക്കുന്ന വിധം";
-"map_markers_other"= "മറ്റു മാര്‍ക്കറുകള്‍";
-"directions_other"= "Other directions";
+"map_markers_other" = "മറ്റു മാര്‍ക്കറുകള്‍";
+"directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "ഉറപ്പായിട്ടും വഴികാട്ടല്‍ നിര്‍ത്തണമോ?";
 "cancel_route" = "വഴികാട്ടി ഒഴിവാക്കുക";
@@ -373,7 +351,6 @@
 "ending_point_too_far" = "അടുത്തുള്ള റോഡില്‍ നിന്നും വളരെ അകലെയാണു അവസാനബിന്ദു.";
 "intermediate_point_too_far" = "ഇടലക്ഷ്യസ്ഥാനം %@ അടുത്തുള്ള പാതയില്‍ നിന്നും വളരെ അകലെയാണ്.";
 "arrived_at_destination" = "\"നിങ്ങള്‍  ലക്ഷ്യസ്ഥാനത്തെത്തിയിരിക്കുന്നു\"";
-
 "towards" = "നേരെ";
 "route_roundabout" = "\"റൗണ്ടാന: %d പുറത്തേക്കുള്ള വഴി എടുത്ത് പോവുക \"";
 "route_roundabout_short" = "%dഎക്സിറ്റ് എടുത്തു പോവുക";
@@ -386,7 +363,6 @@
 "route_tshl" = "\"ഇടത്തോട്ട് വട്ടം തിരിഞ്ഞ്  പോവുക\"";
 "route_tsll" = "ഇടത്തോട്ട് ചെറുതായ് തിരിഞ്ഞ് പോവുക";
 "route_tu" = "യൂ ടേണ്‍ എടുത്തു പോവുക";
-
 "route_head" = "ഹെഡ്";
 "looking_up_address" = "വിലാസം നോക്കികണ്ട്പിടിച്ച്കൊണ്ടിരിക്കുന്നു";
 "no_address_found" = "\"വിലാസം കണ്ട്പിടിക്കാനയില്ല \"";
@@ -402,17 +378,14 @@
 "traffic_warning_hazard" = "അപായം";
 "tunnel_warning" = "മുന്നില്‍ തുരങ്കം ഉണ്ട്";
 "accessibility_announce" = "Announce";
-
 "driving_region_japan" = "ജപ്പാൻ";
 "driving_region_us" = "യുണൈറ്റഡ് സ്റ്റേറ്റ്സ്";
 "driving_region_canada" = "കാനഡ";
 "driving_region_europe_asia" = "യൂറോപ്പും ഏഷ്യായും, ലാറ്റിനമേരിക്ക തുടങ്ങിയ";
 "driving_region_uk" = "ഇന്ത്യ, യൂകെ, ജപ്പാന്‍";
 "driving_region_australia" = "ഓസ്ട്രേലിയ";
-
 "left_side_navigation" = "ലെഫ്ട് ഹാന്റ് ഡ്രൈവിങ്ങ്";
 "right_side_navigation" = "\"റൈറ്റ്  ഹാന്റ് ഡ്രൈവിങ്ങ്\"";
-
 "si_mi_feet" = "\"മൈല്‍/അടി \"";
 "si_mi_yard" = "മൈല്‍/യാര്‍ഡ്";
 "si_mi_meters" = "\"മൈല്‍/മീറ്റര്‍ \"";
@@ -429,7 +402,6 @@
 "min_km" = "മിനു/കിമി";
 "m_s" = "മീ/സെ.";
 "shared_string_tones" = "tones";
-
 "nothing_found" = "\"ഒന്നും കണ്ടെത്താനായില്ല \"";
 "nothing_found_descr" = "തിരയൽ പരിഷ്കരിക്കുക അല്ലെങ്കിൽ തിരയൽ വ്രുത്തം വർദ്ധിപ്പിക്കുക.";
 "select_street" = "\"തെരുവ് തെരഞ്ഞെടുക്കുക \"";
@@ -444,7 +416,6 @@
 "search_poi_category_hint" = "\"എല്ലാത്തിലും തെരയാനായി  എഴുതിതരുക \"";
 "poi_categories" = "POI categories";
 "shared_string_search_history" = "Search history";
-
 "track_coloring_solid" = "Solid";
 "attribute" = "Attribute";
 
@@ -514,9 +485,7 @@
 "shared_string_width" = "വീതി";
 "shared_string_interval" = "Interval";
 "shared_string_none" = "ഒന്നുമില്ല";
-
 "restart" = "Restart";
-
 "offline_maps" = "Offline Maps";
 "shared_string_download_map" = "ഭൂപടം ഡൗണ്‍ലോഡ് ചെയ്യുക";
 "download_map_dialog" = "Download map dialog";
@@ -583,7 +552,6 @@
 "fav_point_emoticons_message" = "സ്ട്രിംഗ് ഇമോട്ടിക്കോണുകൾ ഒരു ഫയലിലേക്ക് ശരിയായി സംരക്ഷിക്കുന്നതിന് പേര് %@ എന്നതിലേക്ക് പരിഷ്ക്കരിച്ചു.";
 "access_default_color" = "സ്വതേയുള്ള നിറം";
 "default_color_descr" = "This color wil be used for all new favorites added to the group.";
-
 "favorite_friends_category" = "ചങ്ങാതിമാര്‍";
 "favorite_places_category" = "സ്ഥലങ്ങള്‍";
 "shared_string_others" = "\"മറ്റുള്ളവ \"";
@@ -613,9 +581,7 @@
 "shared_string_export" = "എക്സ്പോര്‍ട്ട്";
 "gpx_selection_segment_title" = "സെഗ്മെന്റ്";
 "route_points" = "പാത ബിന്ദുക്കള്‍";
-
 "import_export" = "Import/Export";
-
 "import_tracks" = "Import tracks";
 "gpx_import_already_exists" = "The specified track file is already exists in the list. Please choose action.";
 "gpx_add_new" = "Add new file";
@@ -623,7 +589,6 @@
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "OsmAnd GPX is not well formed, please contact the support team to investigate further.";
 "tracks_on_map" = "കാണിക്കുന്ന ട്രാക്കുകള്‍";
-
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
@@ -631,7 +596,6 @@
 "import_from_files" = "Import from files";
 "gpx_no_tracks" = "There are no tracks";
 "gpx_export_failed" = "Could not save created route";
-
 "gpx_remove" = "Remove track?";
 "shared_string_statistics" = "Statistics";
 "layer_route" = "മാര്‍ഗം";
@@ -669,31 +633,25 @@
 "record_trip" = "Record your track";
 "shared_string_clear" = "വൃത്തിയാക്കുക";
 "quick_action_poi_list" = "POIലിസ്റ്റ്";
-
 "gpxup_public" = "പബ്ളിക്";
 "gpxup_identifiable" = "\"തിരിച്ചറിയാവുന്ന \"";
 "gpxup_trackable" = "\"പിന്തുടരാവുന്ന \"";
 "gpxup_private" = "പ്രൈവറ്റ്";
-
 "gpx_upload_public_visibility_descr" = "\"Public\" means the trace is shown publicly in your GPS traces and in public GPS trace listings, and in the public trace list with timestamps in raw form. Data served via the API does not reference your trace page. Tracepoint timestamps are not available through the public GPS API, and tracepoints are not chronologically ordered.";
 "gpx_upload_identifiable_visibility_descr" = "\"Identifiable\" means that the trace will be shown publicly in your GPS traces and in public GPS trace listings, i.e. other users will be able to download the raw trace and associate it with your username. Public timestamped tracepoint data from the GPS API served via the trackpoints API will reference your original trace page.";
 "gpx_upload_trackable_visibility_descr" = "\"Trackable\" means the trace does not show up in any public listings, but processed trackpoints with timestamps from it (that can\'t be associated with you directly) do through downloads from the public GPS API.";
 "gpx_upload_private_visibility_descr" = "\"Private\" means the trace does not show up in any public listings, but trackpoints from it in unchronological order are available through the public GPS API without timestamps.";
-
 "save_track_to_gpx" = "നാവിഗേഷൻ സമയത്ത് ട്രാക്ക് ഓട്ടോമാറ്റിക്കായി റെക്കോർഡ് ചെയ്യുക";
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
-
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
 "shared_string_speed" = "വേഗത";
 "shared_string_slope" = "ചരിവ്";
-
 "stats_select_graph_data" = "Select graph data";
 
 // Map settings
 "routing_engine_vehicle_type_driving" = "കാര്‍";
 "poi_filter_public_transport" = "പൊതു ഗതാഗത സംവിധാനം";
-
 "shared_string_map" = "ഭൂപടം";
 "layer_amenity_label" = "ബിന്ദുവിന്റെ പേരുചീട്ട്";
 "shared_string_show_on_map" = "ഭൂപടത്തില്‍ കാണിക്കുക";
@@ -724,7 +682,6 @@
 "map_settings_add_maps_hillshade" = "Additional maps are needed to view hillshades on the map";
 "map_settings_add_maps_slopes" = "Additional maps are needed to view slopes on the map";
 "shared_string_legend" = "Legend";
-
 "map_settings_show_slider_map" = "Show slider on the map";
 "add_online_source" = "Add online source";
 "map_settings_hide_polygons" = "Hide polygons";
@@ -736,7 +693,6 @@
 "shared_string_appearance" = "ദൃശ്യരൂപം";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-
 "settings_app_theme" = "Application theme";
 "light_theme" = "പ്രകാശമയം";
 "do_not_rotate" = "Do not rotate";
@@ -770,8 +726,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "സ്ഥാനം";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "അക്ഷാംശം: %@ 
-രേഖാംശം: %@";
+"short_location_on_map" = "അക്ഷാംശം: %@ രേഖാംശം: %@";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "\"ഡിഡിഡി എംഎം എസ്എസ്. എസ്എസ് \"";
@@ -784,7 +739,6 @@
 "navigate_point_olc" = "ലൊക്കേഷൻ കോഡ് തുറക്കുക";
 "navigate_point_olc_short" = "OLC";
 "approximate_file_size" = "Approximate file size";
-
 "shared_string_example" = "Example";
 "utm_description" = "Please note, OsmAnd uses UTM Standard format which is similar but not identical to UTM NATO.";
 "coordinates_copy_descr" = "Tap to copy coordintates to clipboard.";
@@ -792,7 +746,6 @@
 "sett_pref_lang" = "Preferred Language";
 "sett_lang_show_local" = "Show local names";
 "translit_names" = "ലിപി മാറ്റിയെഴുതിയ പേരുകള്‍";
-
 "lang_af" = "ആഫ്രിക്കന്‍ ഭാഷ";
 "lang_al" = "അല്‍ബേനിയന്‍";
 "lang_als" = "അല്‍ബേനിയന്‍(ടോസ്ക്)";
@@ -920,10 +873,8 @@
 "lang_zh_tw" = "\"പരമ്പാഗത ചൈനീസ് \"";
 "lang_zhminnan" = "Southern Min";
 "lang_zhyue" = "Cantonese";
-
 "shared_string_maps" = "Maps";
 "purchases" = "Purchases";
-
 "select_map_style" = "Select map style";
 "select_map_source" = "Select map source";
 "select_overlay" = "Select overlay map";
@@ -932,7 +883,6 @@
 "avoid_by_type" = "Avoid by type";
 "available_map_styles" = "Available map styles";
 "available_map_sources" = "Available map sources";
-
 "export_profile" = "Export";
 "shared_string_import" = "ഇംപോര്‍ട്ട് ചെയ്യുക";
 "create_profile" = "Create profile";
@@ -945,7 +895,6 @@
 "custom_osmand_plugin" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Extra maps";
-
 "import_duplicates_title" = "Some items already exist";
 "import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
 "keep_both" = "Keep both";
@@ -961,22 +910,17 @@
 "avoid_road" = "പാത ഒഴിവാക്കുക";
 "shared_string_importing" = "Importing";
 "importing_from" = "Importing data from %@";
-
 "shared_string_settings" = "സജ്ജീകരണങ്ങള്‍";
 "configure_screen_quick_action" = "ദ്രുത പ്രവർത്തനം";
 "search_activity" = "തെരച്ചില്‍";
-
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
-
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
-
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
 "app_restart_required" = "Application restart required to apply some settings.";
 "shared_string_finish" = "പൂർത്തിയാക്കുക";
 "added_items" = "Added items: %@";
-
 "copy_from_other_profile" = "Copy from another profile";
 "copy_from_other_profile_descr" = "You can copy all settings from any profile to the selected profile: ";
 "profile_alert_delete_title" = "Delete profile";
@@ -1021,23 +965,19 @@
 "import_profile_descr" = "To import a profile, tap on the needed file (*.osf) in any application and select \"Copy to OsmAnd Maps\"";
 "export_profile_descr" = "You can export all profile settings, copy all settings from another profile or reset all profile settings to default state.";
 "new_plugin_added" = "New plugin added";
-
 "reset_to_default" = "Reset to default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
-
 "checking_for_duplicates" = "Checking for duplicates...";
 "checking_for_duplicate_description" = "OsmAnd checks %@ for duplicates with existing items in the application. It may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";
-
 "prch_nau_q1" = "Please turn on \"Nautical\" style in the Map Settings and install world seamarks basemap.";
 "prch_nau_q2_cell" = "Downloading requires %@ over cellular network.";
 "incur_high_charges" = "This may incur high charges.";
 "prch_nau_q2_wifi" = "Downloading requires %@ over WiFi network.";
 "prch_nau_q3" = "You may install it later through the Maps & Resources.";
 "proceed_q" = "Proceed?";
-
 "shared_string_download" = "\"ഡൗണ്‍ലോഡ്\"";
 "shared_string_no_thanks" = "വേണ്ട, നന്ദി";
 "download_now" = "Download map now";
@@ -1224,7 +1164,6 @@
 "commiting_node" = "നോഡ് ഉറപ്പിക്കുന്നു(Committing)…";
 "loading_poi_obj" = "\"സ്ഥലങ്ങള്‍  (POI) നിറച്ചുകൊണ്ടിരിക്കുന്നു…\"";
 "shared_string_loading" = "Loading…";
-
 "osm_upload_failed_title" = "Upload failed";
 "osm_upload_failed_descr" = "Please check your login details and Internet connection and try again.";
 "exit_without_saving" = "സൂക്ഷിക്കാതെ പുറത്ത് പോവുക\?";
@@ -1234,7 +1173,6 @@
 "osm_succsessful_uploads" = "Successful";
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
-
 "osn_bug_name" = "\"ഓഎസ്എം കുറിപ്പ് \"";
 "osm_created" = "Created";
 "poi_remove_success" = "താല്‍പര്യ ബിന്ദു (പിഓഐ) വിജയകരമായി നീക്കം ചെയ്തിരിക്കുന്നു";
@@ -1467,7 +1405,6 @@
 "unsupported_action" = "Unsupported action";
 "unsupported_action_title" = "Unsupported action (%@)";
 "unsupported_action_descr" = "This quick action in not supported now. This can be fixed in new app versions.";
-
 "other_options" = "Other options";
 "add_parking" = "Add as Parking position";
 "add_parking_short" = "Add Parking";
@@ -1506,12 +1443,10 @@
 "nm" = "നോ. മൈല്‍";
 "km_h" = "കി.മീ/മണി.";
 "mile_per_hour" = "മൈല്‍/മണി.";
-
 "int_hour" = "മ.";
 "int_min" = "മി.";
 "shared_string_sec" = "sec";
 "units_sec_short" = "s";
-
 "metric_ton" = "ടണ്‍";
 
 // Help
@@ -1608,27 +1543,20 @@
 "plugin_nautical_name" = "കപ്പലോട്ട ഭൂപട വിന്യാസം";
 "product_desc_nautical" = "Nautical map of all world";
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
-
 "osmand_parking_plugin_name" = "പാര്‍ക്കിങ്ങ് സ്ഥാനം";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.
-
-പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്.കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
-
+"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്.കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
 "plugin_ski_name" = "സ്കീ ഭൂപടവിന്യാസം";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
-
 "record_plugin_name" = "സഞ്ചാരം രേഖപെടുത്തുന്നു";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
 "record_plugin_description" = "Record your tracks and save them manually using OsmAnd Track recording plugin. Export your track as a gpx file, share it or even use it to contribute to OpenStreetMap project.  A handy tool for runners, hikers and anyone interested in recording their tracks.";
-
 "osm_editing_plugin_name" = "ഓഎസ്എം തിരുത്തലുകള്‍";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "\"ഈ OSM കോണ്ട്രിബൂഷന്‍ പ്ലഗിൻ ഉപയോഗിച്ച് ഒഎസ്എം POI ഒബ്ജക്റ്റുകൾ സൃഷ്ടിക്കുക, പരിഷ്കരിക്കുക, OSM Notes തുറക്കുകയും അഭിപ്രായമിടുകയുംറിക്കോഡ് ചെയ്ത GPX ഫയലുകൾ സംഭാവന ചെയ്യുകയും ചെയ്യാം. OSM ഒരു  ആഗോള  പബ്ലിക് ഡൊമെയ്ൻ - പങ്കാളിത്ത മാപ്പിംഗ് പ്രോജക്ട് ആണ്. കൂടുതൽ വിവരങ്ങൾക്ക് https://openstreetmap.org സന്ദർശിക്കുക. സജീവ പങ്കാളിത്തം വിലമതിക്കപ്പെടുന്നു, കൂടാതെ താങ്കളുടെ വ്യക്തിഗത OSM ക്രെഡൻഷ്യലുകൾ ആപ്ലിക്കേഷനിൽ വ്യക്തമാക്കിയിട്ടുണ്ടെങ്കിൽ, OSM സംഭാവനകൾ നേരിട്ട് നൽകാവുന്നതാണ്.\"";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "എല്ലാവർക്കുമായി ഓൺലൈൻ സ്ട്രീറ്റ്-ലെവൽ ഫോട്ടോകൾ. സ്ഥലങ്ങൾ കണ്ടെത്തുക, സഹകരിക്കുക, ലോകം ചിത്രത്തിലാക്കുക.";
-
 "product_desc_africa" = "Unlimited map downloads for Africa";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
@@ -1648,7 +1576,6 @@
 "product_desc_allworld" = "Maps of All World";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
-
 "download_wikipedia_maps" = "വിക്കിപീഡിയ";
 "product_desc_wiki" = "Wikipedia data";
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
@@ -1658,26 +1585,21 @@
 "some_articles_may_not_available_in_lang" = "Some Wikipedia articles may not be available in your language.";
 "available_languages" = "Available languages";
 "preferred_languages" = "Preferred languages";
-
 "srtm_plugin_name" = "\"കോണ്ടൂര്‍ ലൈനുകള്‍ \"";
 "product_desc_srtm" = "Display of contour lines";
 "srtm_plugin_description" = "This plugin provides contour lines and hillshade, which can be displayed in OsmAnd offline maps. Contour lines provide the information about heights of the area while hillshade is their visualization. See the names of mountain peaks and specific features of terrain using this plugin.\n\nThe global data (between 70 degrees north and 70 degrees south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
-
 "wikivoyage_travel_guide" = "യാത്ര സഹായികള്‍";
 "start_editing_card_image_text" = "ആർക്കും എഡിറ്റുചെയ്യാൻ കഴിയുന്ന സ്വതന്ത്ര ലോകവ്യാപക യാത്ര ഗൈഡ്.";
 "wikivoyage_travel_guide_descr" = "ഒസ്മാൻഡിനുള്ളിലുള്ള ലോകത്തേ പ്രധാനസ്ഥലങ്ങളുടെ യാത്രാസഹായി, ഇന്റർനെറ്റാവശ്യമില്ലാത്തത്.";
 "product_desc_sea_depth_contours" = "Sea depth contour lines and seamarks";
-
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "പരിധിയില്ലാത്ത ആക്സസ്സ് നേടുക";
-
 "navigate_point_latitude" = "അക്ഷാംശം";
 "navigate_point_longitude" = "രേഖാംശം";
 "track_save_short_q" = "Track is too short, do you want to save?";
 "add_as" = "Add as";
 "make_call" = "Make a call";
-
 "context_menu_points_of_group" = "ഗ്രൂപ്പിലെ എല്ലാ പോയിന്റുകളും";
 "enter_description" = "Enter description";
 "shared_string_description" = "വിവരണം";
@@ -1687,7 +1609,6 @@
 "roads" = "\"റോഡുകള്‍ \"";
 "shared_string_hillshade" = "Hillshade";
 "download_regular_maps" = "സാധാരണ ഭൂപടം";
-
 "select_language" = "Select language";
 "language_short" = "Lang";
 "open_url" = "Open page in browser";
@@ -1712,30 +1633,24 @@
 "access_hint_enter_name" = "പേര് തരുക";
 "shared_string_not_selected" = "\"തിരഞ്ഞെടുത്തില്ല \"";
 "shared_string_language" = "Language";
-
 "you_searching" = "You are searching";
 "from_location" = "away";
-
 "show_alt_in_drive" = "Show altitude in Drive mode";
 "shared_string_get" = "നേടുക";
 "srtm_plugin_disabled" = "\"കോണ്ടൂര്‍ ലൈനുകള്‍ നിര്‍ജീവമാക്കിയിരിക്കുന്നു \"";
 "prch_wiki_info" = "Wikipedia plugin enables wikipedia information for maps you are entitled, purchased or downloaded within free limit.";
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
-
 "shared_string_open" = "പ്രവേശനം";
 "time_closed" = "Closed";
 "time_will_open" = "Will open in";
-
 "osm_live_active" = "\"സജീവം \"";
 "menu_all_trips" = "All Tracks";
-
 "public_transport_ped_route_title" = "The route on foot is approximately %@, and may be faster than by public transport.";
 "calc_pedestrian_route" = "Calculate pedestrian route";
 "public_transport_warning_title" = "\"പൊതു ഗതാഗത നാവിഗേഷൻ ബീറ്റാ ടെസ്റ്റിങ്ങിലാൺ   പിശകുകളും തെറ്റും    പ്രതീക്ഷിക്കു.\"";
 "public_transport_warning_descr_blog" = "ഞങ്ങളുടെ ബ്ലോഗിൽ നിന്നും OsmAnd റൂട്ടുകൾ എങ്ങനെ കണക്കുകൂട്ടുന്നുവെന്നതിനെ കുറിച്ച് കൂടുതലറിയാം.";
 "public_transport_empty_warning_title" = "Unfortunately, OsmAnd could not find a route for your settings.";
 "public_transport_try_change_settings" = "ക്രമീകരണങ്ങൾ മാറ്റി ശ്രമിക്കുക.";
-
 "shared_string_total" = "മൊത്തം";
 "shared_string_walk" = "നടക്കുക";
 "board_at" = "Board at";
@@ -1756,8 +1671,7 @@
 "map_coords" = "Map: Lat %.5f Lon %.5f";
 "shared_string_gpx_points" = "പോയിന്റുകള്‍";
 "shared_string_overview" = "അവലോകനം";
-"activity"= "Activity";
-
+"activity" = "Activity";
 "gpx_cancel_route_q" = "Do you want to cancel this route?";
 "local_indexes_cat_backup" = "നിര്‍ജീവം";
 "gpx_trip_groups" = "Track groups";
@@ -1765,20 +1679,16 @@
 "shared_string_show_all" = "എല്ലാം കാണിക്കുക";
 "poi_filter_parking" = "പാര്‍ക്കിങ്ങ്";
 "parked_at" = "\"പാര്‍ക്ക് ചെയ്ത സമയം \"";
-
 "context_menu_item_directions_from" = "ദിശ ഇവിടെ നിന്നും";
 "search_nearby" = "സമീപത്തു തിരയുക";
 "change_object_posiotion" = "Change object's position";
 "move_marker_bottom_sheet_title" = "മാര്‍ക്കറിന്റെ സ്ഥാനം മാറ്റാനായി ഭൂപടം നീക്കുക";
-
 "est_travel_time" = "Estimate travel time";
 "pedestrian" = "Pedestrian";
 "sorting" = "Sorting";
 "default_speed_descr" = "Estimates arrival time for unknown road types and limits speed for all roads (may affect routing)";
-
 "plugins_menu_group" = "പ്ളഗ്-ഇനുകള്‍";
 "open_map_settings" = "Open Map Settings";
-
 "plugin_popup_ski_title" = "Turn on Ski map style";
 "plugin_popup_ski_desc" = "To turn on <b>Ski map</b> style, please go to the <b>Map Settings</b> > <b>Map type</b>";
 "plugin_popup_wiki_title" = "Download Wikipedia";
@@ -1791,22 +1701,17 @@
 "plugin_popup_nautical_desc" = "Please download Nautical maps first.\nThen go to the <b>Map Settings</b> > <b>Map type</b> and turn on <b>Nautical</b> style";
 "plugin_popup_osm_editing_title" = "Turn on OpenStreetMap Editing";
 "plugin_popup_osm_editing_ask" = "Please enable OpenStreetMap Editing plugin to add and manage map edits and notes";
-
 "go_to_downloads" = "Go to downloads";
 "turn_on_plugin" = "Turn on plugin";
-
 "all_world_popup_desc" = "Download World base map to see state names, borders and other information";
 "shared_string_restore" = "പുനഃസ്ഥാപിക്കുക";
 "restore_all_purchases" = "Restore all purchases";
-
 "no_statistics" = "No statistics";
-
 "no_internet_avail" = "No internet available";
 "no_internet_avail_desc_first" = "Please turn on internet connection to download list of maps";
 "map_downloaded" = "ഭൂപടം ഡൗണ്‍ലോഡായി";
 "show_region_on_map_desc" = "Map of %@ has been downloaded. Go to the map to start using it.";
 "show_region_on_map_go" = "Go to the map";
-
 "obf_import_title" = "Import offline map file";
 "obf_import_already_exists" = "File with this name already exists. Please select an action.";
 "obf_import_success" = "File was successfully imported";
@@ -1832,45 +1737,34 @@
 "go_to_map" = "\"ഭൂപടം കാണിക്കുക \"";
 "import_raster_map_success" = "Raster map has been imported. Open Map Settings and activate it via Overlay/Underlay";
 "import_raster_map_failed" = "Raster map import failed";
-
 "device_memory" = "ഉപകരണ മെമ്മറി";
 "free" = "\"ഫ്രീ  %@ \"";
-
 "first_usage_greeting" = "ഇന്റര്‍നെറ്റ് ഇല്ലാതെ തന്നെ മാര്‍ഗദിശയും, പുതിയ സ്ഥലങ്ങളും കണ്ടെത്തുക";
 "get_started" = "തുടങ്ങുക";
-
 "first_usage_wizard_desc" = "ഓഎസ്എംആന്റ് നിങ്ങളുടെ സ്ഥാനം കണ്ട്പിടിച്ച് ആ പ്രദേശം ഉള്‍പെട്ട ഭൂപടം നിര്‍ദേശിക്കാന്‍ അനുവദിക്കുക.";
-
 "suggested_maps" = "Suggested maps";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Added profiles";
 "added_profiles_descr" = "Profiles added by plugin";
-
 "location_not_found" = "\"തല്‍സ്ഥലം ക്ണ്ടെത്താനായില്ല \"";
 "search_my_location" = "എന്റെ സ്ഥാനം തെരയുക";
-
 "no_inet_connection" = "ഇന്റര്‍നെറ്റ് കണക്ഷന്‍ ഇല്ല";
 "no_inet_connection_desc_map" = "ആവശ്യമുള്ള മാപ്പുകള്‍ ഡൗണ്‍ലോഡ് ചെയ്യാന്‍.";
 "try_again" = "\"ദയവായി വീണ്ടും ശ്രമിയ്ക്കുക\"";
-
 "searching" = "തെരഞ്ഞുകൊണ്ടിരിക്കുന്നു…";
 "search_location" = "സ്ഥാനം തിരയുന്നു…";
-"search_map" = "ഭൂപടം തെരയുന്നു…";
+"search_map" = "ഭൂപടം തെരയുന്നു";
 "search_another_country" = "\"വേറോരു പ്രദേശം(region) തെരഞ്ഞെടുക്കുക \"";
-
 "skip_map_downloading" = "ഭൂപടങ്ങള്‍ ഡൗണ്‍ലോഡ് ചെയ്യുന്നത് ഒഴിവാക്കുക";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
-
 "wiki_around" = "അടുത്തുള്ള വിക്കിപീഡിയ ലേഖനങ്ങൾ";
 "search_categories" = "വിഭാഗങ്ങള്‍";
 "items_selected" = "%d selected";
-
 "how_to_open_wiki_title" = "വിക്കിപ്പീഡിയ ലേഖനം എങ്ങനെ തുറക്കാം\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
 "open_in_browser_wiki" = "\"പൂര്‍ണ്ണ ലേഖനം ഓണ്‍ലൈനില്‍ വായിക്കുക \"";
 "explore_wikipedia_offline" = "Explore Wikipedia offline.";
 "online_webpage_warning" = "ഈ പേ ജ് ഓണ്‍ലൈനിലെ ഉള്ളൂ. ബ്രൗവ്സറില്‍ തുറക്കട്ടേ\?";
-
 "custom_search" = "\"കസ്റ്റം തെരച്ചില്‍ \"";
 "add_custom_category" = "Add custom category";
 "poi_filter_custom_filter" = "കസ്റ്റം അരിപ്പ";
@@ -1890,7 +1784,6 @@
 "create_custom_categories_list_promo" = "You can add custom categories, hide categories that you don’t find necessary, and change the sort order of the list. Custom categories can be imported and exported with profiles.";
 "reset_to_default_category_button_promo" = "Resetting to default will restore the sort order to its initial state.";
 "search_poi_types_descr" = "You can combine POI types from different categories.";
-
 "email_example_hint" = "user@example.com";
 "shared_string_required" = "Required";
 "login_account" = "Account";
@@ -1912,7 +1805,6 @@
 "poi_select_type" = "Select type";
 "shared_a_z" = "A - Z";
 "shared_z_a" = "Z - A";
-
 "city_type_suburb" = "പട്ടണപ്രാന്തം";
 "city_type_hamlet" = "ചെറുഗ്രാമം";
 "city_type_village" = "ഗ്രാമം";
@@ -1923,30 +1815,24 @@
 "postcode" = "പോസ്റ്റ്കോഡ്";
 "show_something_on_map" = "%@നെ ഭൂപടത്തില്‍ കാണിക്കുക";
 "search_POI_level_btn" = "കൂടുതല്‍ കണ്ടെത്തുക";
-
 "search_address_street" = "തെരുവ്";
 "search_address_building_option" = "കെട്ടിടം";
 "shared_string_street_intersection" = "Street intersection";
 "shared_string_address" = "വിലാസം";
-
 "do_not_show_discount" = "Do not show promotions";
 "send_anonymous_data" = "Send anonymous data";
-
 "sett_ext_input_desc" = "Select a device such as a generic keyboard or WunderLINQ for external controls.";
 "external_input_device" = "External input devices";
 "sett_generic_ext_input" = "Generic Keyboard";
 "sett_wunderlinq_ext_input" = "WunderLINQ";
-
 "key_hint_zoom_in" = "Zoom In";
 "key_hint_zoom_out" = "Zoom Out";
 "shared_string_deselect" = "ഒഴിവാക്കുക";
 "key_hint_goback" = "Go Back";
 "key_hint_recenter_map" = "Recenter Map";
-
 "wiki_buy_description" = "To read full articles - buy Wikipedia plugin and download Wikipedia data of %@";
 "wiki_download_description" = "To read full articles - download Wikipedia data of %@";
 "download_wiki_region_placeholder" = "ഈ പ്രദേശം";
-
 "osm_live_plan_pricing" = "\"വിലവിവരങ്ങൾ \"";
 "osm_live_payment_monthly_title" = "മാസത്തിലൊരിക്കൽ";
 "osm_live_payment_3_months_title" = "മൂന്നുമാസത്തിലൊരിക്കൽ";
@@ -1961,14 +1847,12 @@
 "default_price_currency_format" = "%.2f %@";
 "osm_live_payment_header" = "വരിസംഖ്യ അടക്കാനുള്ള ഇടവേള തെരഞ്ഞെടുക്കുക:";
 "osm_live_payment_contribute_descr" = "വരുമാനത്തിന്റെ ഭാഗം ഓപ്പൺസ്ട്രീറ്റ്മാപ്പ് സംഭാവകർക്ക് പോകുന്നു.";
-
 "purchase_dialog_title" = "പ്ലാൻ തിരഞ്ഞെടുക്കുക";
 "purchase_dialog_travel_description" = "\"ഓഫ്‌ലൈന്‍  യാത്രാ ഗൈഡ് പ്രവർത്തനം ലഭിക്കുന്നതിന് ഇനിപ്പറയുന്നവയിൽ ഒന്ന് വാങ്ങുക:\"";
 "free_version_message" = "ഈ സൗജന്യ ഓഎസ്എം ആന്ഡ് പതിപ്പ് %@ ഡൗണ്‍ലോഡുകളെ അനുവദിക്കൂ, ഓഫ്ലൈന് വിക്കിപീഡിയ ലേഖനങ്ങളുമില്ല. ഈ നിയന്ത്രണമൊഴിവാക്കാന്‍ ദയവായി ഓഎസ്ംആന്ഡ്+ അല്ലെങ്കില്‍ എഫ്ഡ്രോയിഡ് പതിപ്പിലേക്ക് പരിഷ്കരിക്കുക.";
 "get_osmand_live" = "\"എല്ലാ പ്ളഗ്ഗിനുകളും, വിക്കിപ്പീഡിയ, വിക്കിവൊയേജ്, എല്ലാദിവസവും പുതുക്കുന്ന ഭൂപടങ്ങള്‍  നിയന്ത്രണങ്ങളില്ലാതെഡൗണ്ലോഡ്  ചെയ്യുക തുടങ്ങിയ   സവിശേഷകള്‍ക്ക്    ഓഎസ്എംആന്‍ഡ്  ലൈവ് നേടുക. \"";
 "osm_live_subscription" = "OsmAndലൈവ് സബ്സ്ക്രിപ്ഷൻ";
 "cancel_subscription" = "Cancel subscription";
-
 "wikivoyage_offline" = "ഓഫ്‌ലൈന്‍ വിക്കിവൊയേജ്";
 "unlimited_downloads" = "\"പരിധിയില്ലാത്ത  ഡൌണ്‍ലോഡുകള്‍\"";
 "wikipedia_offline" = "ഓഫ്‌ലൈന്‍ വിക്കിപീഡിയ";
@@ -1996,16 +1880,12 @@
 "osm_live_ask_for_purchase" = "ആദ്യം OsmAnd Liveന്റെ ഒരു സബ്സ്ക്രിപ്ഷൻ വാങ്ങുക";
 "shared_string_io_error" = "ഇന്‍പുട്ട്/ഔട്ട്പുട്ട് പിശകുണ്ടായിരിക്കുന്നു";
 "osm_live_hide_user_name" = "റിപ്പോർട്ടുകളിൽ എന്റെ പേര് കാണിക്കരുത്";
-
 "subscriptions_public_info" = "Payment will be charged to your iTunes Account at confirmation of purchase. The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. Your account will be charged according to your plan for renewal within 24 hours prior to the end of the current period. You can manage or turn off auto-renew in your Account Settings after purchase. If you purchase a subscription during a free trial period, the unused portion of this period will be forfeited.";
-
 "terms_of_use" = "Terms of use";
 "privacy_policy" = "Privacy policy";
-
 "already_has_subscription" = "You have already subscribed to OsmAnd Live and have all the functionality unlocked.";
 "already_has_inapp" = "You have already subscribed to %@.";
 "inapp_not_found" = "The %@ is not found in the OsmAnd. Probably it has been canceled.";
-
 "rendering_value_high_name" = "കൂടിയ";
 "routing_attr_difficulty_preference_description" = "Prefer routes of this difficulty, although routing over harder or easier pistes is still possible if shorter.";
 "routing_attr_height_description" = "റൂട്ടില്‍ അനുവദനീയമാണോയെന്നറിയാന്‍ വാഹനത്തിന്റെ ഉയരം ചേര്‍ക്കുക";
@@ -2316,7 +2196,6 @@
 "icon_group_industrial" = "Industrial";
 "icon_group_education" = "വിദ്യാഭ്യാസം";
 "transport" = "ഗതാഗത സംവിധാനം";
-
 "settings_item_read_error" = "Could not read %@.";
 "app_mode_default" = "\"ഭൂപടം പരതുക \"";
 "app_mode_car" = "കാര്‍";
@@ -2340,7 +2219,6 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
-
 "travel_routes" = "Travel routes";
 "walking_route_osmc_description" = "Color routes according to their individual local color (if present on OpenStreetMap) and type (international, regional, local).";
 "rendering_value_walkingRoutesOSMCNodes_description" = "Color routes according to their node network type (international, regional, local).";
@@ -2353,46 +2231,10 @@
 //https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
 
 "latest_version" = "You have the latest version: %@";
-
-"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n
-• New arrangement of settings by profiles and types: navigation, general, map and screen\n
-• Ability to import or export profile settings\n
-• Added data sources for Online photos\n
-• Added ability to download online maps to cache\n
-• Improved \"Search\" algorithms\n";
-
-"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n
-• Added an option to enable a сompass over the \"Radius Ruler\" tool\n
-• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n
-• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n
-• Fixed issues with missing Wikipedia search category\n
-• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n
-• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
-
-"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n
-• Added new \"Coordinates widget\" with coordinates of the current location\n
-• Added ability to import custom user-defined plugins\n
-• Significantly extended the import/export functionality\n
-• Distance by tap moved from the Radius ruler into a separate option\n
-• Fixed CarPlay app freezes when iPhone screen is turned off\n
-• Plugins screen moved from the Maps & Resources to the main menu\n
-• Added Finnish localization\n
-• Fixed UI in landscape orientation for \"Plan a route\" screen\n
-• Added support for custom routing and rendering files\n
-• Fixed performance of markers direction line\n 
-• Fixed issue with importing GPX files with uppercase extensions\n
-• Fixed issue with \"Follow track\" menu\n
-• Fixed import of OBF files\n";
-
-"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map
-• New screen for searching by coordinates in different formats\n
-• Improved coordinate search in OLC format\n
-• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n
-• Added ability to easily load maps of all regions of the country with a couple of clicks.\n
-• Added contour lines in feet (You need to download additional files)\n
-• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n
-• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n
-• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"ios_release_3_80" = "• Introduced \"Application Profiles\" with independent settings\n• New arrangement of settings by profiles and types: navigation, general, map and screen\n• Ability to import or export profile settings\n• Added data sources for Online photos\n• Added ability to download online maps to cache\n• Improved \"Search\" algorithms\n";
+"ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
+"ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
+"ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "weather_wind_kilimeters_per_hour" = "കിലോമീറ്റര്‍/മണിക്കൂര്‍";
 "altitude" = "ഉയരം";
 "points_delete_multiple" = "നിങ്ങൾ %d പോയിന്റ് (കൾ) ഇല്ലാതാക്കാൻ പോകുന്നു. ഉറപ്പാണോ\?";

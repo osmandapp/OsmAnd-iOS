@@ -296,8 +296,6 @@
             {
                 OAAppSettings *settings = [OAAppSettings sharedManager];
                 OAPOIHelper *poiHelper = [OAPOIHelper sharedInstance];
-                NSString *lang = [settings.settingPrefMapLanguage get];
-                BOOL transliterate = [settings.settingMapLanguageTranslit get];
                 while (sqlite3_step(statement) == SQLITE_ROW)
                 {
                     OAHistoryItem *item = [[OAHistoryItem alloc] init];
@@ -332,13 +330,7 @@
                                 skipDisabledResult = YES;
                         }
                         if (!skipDisabledResult)
-                        {
-                            skipDisabledResult = type == OAHistoryTypePOI && ![OAQuickSearchTableController findAmenity:name
-                                                                                                                    lat:lat
-                                                                                                                    lon:lon
-                                                                                                                   lang:lang ? lang : @""
-                                                                                                          transliterate:transliterate];
-                        }
+                            skipDisabledResult = type == OAHistoryTypePOI && ![OAPOIHelper findPOIByName:name lat:lat lon:lon];
                     }
                     if (!skipDisabledResult)
                     {

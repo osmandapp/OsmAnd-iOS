@@ -24,18 +24,21 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var widgetKey = ""
     var widgetConfigurationParams: [String: Any]?
     var isFirstGenerateData = true
+    var onWidgetStateChangedAction: (() -> Void)?
     
     lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         tableView.setContentOffset(CGPoint(x: 0, y: 1), animated: false)
-        
-        tableView.register(UINib(nibName: SegmentImagesWithRightLableTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
-        
         if isCreateNewAndSimilarAlreadyExist || (createNew && !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "")) {
             widgetConfigurationParams = ["selectedAppMode": selectedAppMode!]
         }
+    }
+
+    override func registerCells() {
+        addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -147,6 +150,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                         value = item.string(forKey: "value")!
                         if widgetKey == WidgetType.averageSpeed.id {
                             widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = param
+                        } else if widgetKey == WidgetType.glideAverage.id {
+                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = param
                         } else {
                             fatalError("You need implement value handler for widgetKey")
                         }
@@ -155,6 +160,9 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                         if widgetKey == WidgetType.averageSpeed.id {
                             _value = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? "0"
                             value = AverageSpeedWidget.getIntervalTitle(Int(_value)!)
+                        } else if widgetKey == WidgetType.glideAverage.id {
+                            _value = widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] as? String ?? "0"
+                            value = GlideAverageWidget.getIntervalTitle(Int(_value)!)
                         } else {
                             fatalError("You need implement value handler for widgetKey")
                         }
@@ -253,7 +261,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 section.addRows(possibleValues)
                 section.footerText = (item.obj(forKey: "footer") as? String) ?? ""
                 vc.appMode = selectedAppMode
-                vc.screenTitle = item.descr
+                vc.screenTitle = item.descr ?? item.title
                 if isCreateNewAndSimilarAlreadyExist {
                     guard let pref = item.obj(forKey: "pref") as? OACommonPreference,
                           let prefLong = pref as? OACommonLong else {
@@ -264,12 +272,16 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                         value = Int(prefLong.get(selectedAppMode))
                         if widgetKey == WidgetType.averageSpeed.id {
                             widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = String(value ?? 0)
+                        } else if widgetKey == WidgetType.glideAverage.id {
+                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = String(value ?? 0)
                         } else {
                             fatalError("You need implement value handler for widgetKey")
                         }
                     }
                     if widgetKey == WidgetType.averageSpeed.id {
                         vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] as? String ?? ""
+                    } else if widgetKey == WidgetType.glideAverage.id {
+                        vc.widgetConfigurationSelectedValue = widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] as? String ?? ""
                     } else {
                         fatalError("You need implement value handler for widgetKey")
                     }
@@ -277,6 +289,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                         guard let self else { return }
                         if widgetKey == WidgetType.averageSpeed.id {
                             widgetConfigurationParams?[AverageSpeedWidget.MEASURED_INTERVAL_PREF_ID] = result ?? ""
+                        } else if widgetKey == WidgetType.glideAverage.id {
+                            widgetConfigurationParams?[GlideAverageWidget.measuredIntervalPrefID] = result ?? ""
                         } else {
                             fatalError("You need implement value handler for widgetKey")
                         }
@@ -328,6 +342,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             (widgetInfo.widget as? RulerDistanceWidget)?.updateRulerObservable.notifyEvent()
         }
         generateData()
+        onWidgetStateChangedAction?()
         tableView.reloadData()
     }
 }

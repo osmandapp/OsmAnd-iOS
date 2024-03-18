@@ -15,32 +15,77 @@
 
 @implementation OASunriseSunsetWidgetState
 {
-    OAWidgetType *_type;
+    OAWidgetType *_widgetType;
     OAAppSettings *_settings;
     OACommonInteger *_preference;
+    OACommonInteger *_sunPositionPreference;
 }
 
-- (instancetype) initWithType:(BOOL)sunriseMode customId:(NSString *)customId
+- (instancetype)initWithWidgetType:(OAWidgetType *)widgetType
+                                   customId:(NSString *)customId;
 {
     self = [super init];
     if (self)
     {
         self.customId = customId;
+        _widgetType = widgetType;
         _settings = [OAAppSettings sharedManager];
-        _type = sunriseMode ? OAWidgetType.sunrise : OAWidgetType.sunset;
         _preference = [self registerPreference:customId];
+        _sunPositionPreference = [self registerSunPositionPreference:customId];
     }
     return self;
 }
 
-- (BOOL) isSunriseMode
+- (OAWidgetType *)getWidgetType
 {
-    return _type == OAWidgetType.sunrise;
+    return _widgetType;
 }
 
-- (NSString *) getMenuTitle
+- (OACommonInteger *)getSunPositionPreference {
+    return _sunPositionPreference;
+}
+
+- (BOOL) isSunriseMode
 {
-    return _type.title;
+    return _widgetType == OAWidgetType.sunrise;
+}
+
+- (NSString *)getTitleForSunPositionMode:(SunPositionMode)mode
+{
+    switch (mode)
+    {
+        case SunPositionModeSunPositionMode:
+            return OALocalizedString(@"shared_string_next_event");
+        case SunPositionModeSunsetMode:
+            return OALocalizedString(@"map_widget_sunset");
+        case SunPositionModeSunriseMode:
+            return OALocalizedString(@"map_widget_sunrise");
+    }
+}
+
+- (NSString *)getWidgetIconName {
+    SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
+    
+    NSString *sunsetStringId = @"widget_sunset";
+    NSString *sunriseStringId = @"widget_sunrise";
+    
+    if (OAWidgetType.sunset == _widgetType || (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunsetMode)) {
+        return sunsetStringId;
+    } else if (OAWidgetType.sunPosition == _widgetType && sunPositionMode == SunPositionModeSunPositionMode) {
+        return _lastIsDayTime ? sunsetStringId : sunriseStringId;
+    } else {
+        return sunriseStringId;
+    }
+}
+
+- (NSString *)getMenuTitle
+{
+    if (_widgetType == OAWidgetType.sunPosition)
+    {
+        SunPositionMode sunPositionMode = (SunPositionMode)[_sunPositionPreference get];
+        return [NSString stringWithFormat:@"%@: %@", _widgetType.title, [self getTitleForSunPositionMode:sunPositionMode]];
+    }
+    return _widgetType.title;
 }
 
 - (NSString *)getMenuDescription
@@ -61,48 +106,12 @@
 
 - (NSString *)getSettingsIconId:(BOOL)nightMode
 {
-    return [_type iconName];
+    return [_widgetType iconName];
 }
 
 - (NSString *) getMenuItemId
 {
     return @((EOASunriseSunsetMode) [[self getPreference] get]).stringValue;
-}
-
-- (NSArray<NSString *> *) getMenuTitles
-{
-    if (_type == OAWidgetType.sunrise)
-    {
-        return @[
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:YES],
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:YES]
-        ];
-    } else if (_type == OAWidgetType.sunset)
-    {
-        return @[
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetTimeLeft isSunrise:NO],
-            [OASunriseSunsetWidget getTitle:EOASunriseSunsetNext isSunrise:NO]
-        ];
-    }
-    return @[@""];
-}
-
-- (NSArray<NSString *> *) getMenuDescriptions
-{
-    if (_type == OAWidgetType.sunrise)
-    {
-        return @[
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:YES],
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:YES]
-        ];
-    } else if (_type == OAWidgetType.sunset)
-    {
-        return @[
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetTimeLeft isSunrise:NO],
-            [OASunriseSunsetWidget getDescription:EOASunriseSunsetNext isSunrise:NO]
-        ];
-    }
-    return @[@""];
 }
 
 - (NSArray<NSString *> *) getMenuItemIds
@@ -128,13 +137,37 @@
     [[self registerPreference:customId] set:[_preference get:appMode] mode:appMode];
 }
 
-- (OACommonInteger *) registerPreference:(NSString *)customId
+- (NSString *)getPrefId {
+    NSString *prefId;
+    if (_widgetType == OAWidgetType.sunset)
+    {
+        prefId = @"show_sunset_info";
+    } else if (_widgetType == OAWidgetType.sunrise)
+    {
+        prefId = @"show_sunrise_info";
+    } else if (_widgetType == OAWidgetType.sunPosition)
+    {
+        prefId = @"show_sun_position_info";
+    }
+    return prefId;
+}
+
+- (OACommonInteger *)registerPreference:(NSString *)customId
 {
-    NSString *prefId = [self isSunriseMode] ? @"show_sunrise_info" : @"show_sunset_info";
+    NSString *prefId = [self getPrefId];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
 
-    return [_settings registerIntPreference:prefId defValue:EOASunriseSunsetTimeLeft];
+    return [[_settings registerIntPreference:prefId defValue:EOASunriseSunsetTimeLeft] makeProfile];
 }
+
+- (OACommonInteger *)registerSunPositionPreference:(NSString *)customId {
+    NSString *prefId = @"sun_position_widget_mode";
+    if (customId && customId.length > 0)
+        prefId = [prefId stringByAppendingString:customId];
+
+    return [[_settings registerIntPreference:prefId defValue:SunPositionModeSunPositionMode] makeProfile];
+}
+
 
 @end

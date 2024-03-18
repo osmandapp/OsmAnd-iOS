@@ -487,7 +487,7 @@
 "show_region_on_map_go" = "Перайсці да мапы";
 "gpx_edit_mode" = "Рэжым рэдагавання";
 "go_to_map" = "Паказаць мапу";
-"search_map" = "Пошук мапаў…";
+"search_map" = "Пошук мапаў";
 "search_categories" = "Катэгорыі";
 "items_selected" = "%d абрана";
 "shared_string_select_all" = "Абраць усё";
@@ -2363,7 +2363,7 @@
 "shared_string_angle_param" = "Вугал: %@°";
 "upload_local_version" = "Адправіць лакальную версію";
 "are_you_sure" = "Вы ўпэўненыя?";
-"duration_ago" = "%@таму";
+"duration_ago" = "%@ таму";
 "osmand_cloud_create_account_descr" = "Калі ласка, увядзіце свой адрас электроннай пошты, на яго будзе адпраўлены код праверкі,\nі ўсе вашы даныя будуць звязаныя з ім.";
 "backup_data" = "Рэзервовае капіяванне даных";
 "quick_action_showhide_mapillary_descr" = "Пераключальнік для паказу альбо хавання пласта Mapillary.";
@@ -2535,3 +2535,4 @@
 "speak_route_deviation" = "Апавясціць аб адхіленні ад маршруту";
 "generate_slope_from_3d_maps" = "Стварыць растравыя карты схілаў з 3D карт";
 "generate_hillshade_from_3d_maps" = "Стварыць растравыя карты рэльефу з 3D карт";
+"shared_string_read" = "Чытаць";

@@ -681,7 +681,7 @@
 "no_inet_connection_desc_map" = "Noodzakelijk om kaarten te downloaden.";
 "try_again" = "Probeer het opnieuw";
 "search_location" = "Zoeken naar positie…";
-"search_map" = "Kaart wordt gezocht…";
+"search_map" = "Kaart wordt gezocht";
 "search_another_country" = "Kies een andere regio";
 "skip_map_downloading" = "Kaarten later downloaden";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
@@ -977,7 +977,7 @@
 "rendering_attr_highway_class_track_grade5_name" = "Toestand 5";
 "rendering_value_translucent_blue_name" = "Doorschijnend blauw";
 "rendering_attr_tracktype_grade2_name" = "Vast";
-"rendering_attr_piste_difficulty_freeride_name" = "Gratis rit";
+"rendering_attr_piste_difficulty_freeride_name" = "Vrij rijden";
 "routing_attr_piste_type_skitour_description" = "Routes voor ski tours.";
 "routing_attr_piste_type_downhill_description" = "Hellingen voor alpine en bergafwaarts skiën en toegang tot skiliften.";
 "rendering_attr_coloredBuildings_name" = "Gebouwen kleuren per soort";

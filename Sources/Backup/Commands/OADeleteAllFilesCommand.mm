@@ -98,7 +98,7 @@
             {
                 for (OARemoteFile *file in remoteFiles)
                 {
-                    OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForRemoteFile:file];
+                    OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:file];
                     if ([_types containsObject:exportType])
                         [filesToDelete addObject:file];
                 }

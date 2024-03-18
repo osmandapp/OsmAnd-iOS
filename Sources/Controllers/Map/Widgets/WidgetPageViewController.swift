@@ -6,8 +6,6 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 @objc(OAWidgetPageViewController)
 @objcMembers
 final class WidgetPageViewController: UIViewController {
@@ -16,7 +14,10 @@ final class WidgetPageViewController: UIViewController {
     // At the moment, it's for the top panel and bottom panel
     var isMultipleWidgetsInRow = false
     var simpleWidgetViews: [[OABaseWidgetView]] = []
-    var stackView: UIStackView!
+    var isHiddenPageControl = true
+    
+    private var stackView: UIStackView!
+    private var bottomStackViewConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +27,7 @@ final class WidgetPageViewController: UIViewController {
         stackView.axis = .vertical
         stackView.alignment = .fill
         stackView.spacing = 0
-        
+
         if isMultipleWidgetsInRow {
             stackView.distribution = .equalSpacing
             for (index, items) in simpleWidgetViews.enumerated() {
@@ -45,7 +46,7 @@ final class WidgetPageViewController: UIViewController {
                         stackView.addArrangedSubview(widget)
                     }
                 }
-                if index != simpleWidgetViews.count - 1 {
+                if index != simpleWidgetViews.count {
                     stackView.addSeparators(at: [stackView.subviews.count])
                 }
             }
@@ -67,9 +68,14 @@ final class WidgetPageViewController: UIViewController {
         NSLayoutConstraint.activate([
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stackView.topAnchor.constraint(equalTo: view.topAnchor),
-            stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            stackView.topAnchor.constraint(equalTo: view.topAnchor)
         ])
+        bottomStackViewConstraint = stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        if isMultipleWidgetsInRow {
+            bottomStackViewConstraint.isActive = true
+        } else {
+            bottomStackViewConstraint.isActive = isHiddenPageControl
+        }
     }
     
     func layoutWidgets() -> (width: CGFloat, height: CGFloat) {
@@ -86,14 +92,22 @@ final class WidgetPageViewController: UIViewController {
                 widget.translatesAutoresizingMaskIntoConstraints = false
                 widget.adjustSize()
                 width = max(width, widget.frame.size.width)
+                if widget.frame.size.width < width {
+                    var rect = widget.frame
+                    rect.size.width = width
+                    widget.frame = rect
+                }
                 if !widget.isHidden {
                     height += widget.frame.size.height
                 }
-                /*
-                 let constraint = widget.heightAnchor.constraint(greaterThanOrEqualToConstant: widget.frame.size.height)
-                 constraint.priority = .defaultHigh
-                 constraint.isActive = true
-                 */
+                
+                var constraint = widget.heightAnchor.constraint(equalToConstant: widget.frame.size.height)
+                
+                if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
+                    constraint = widget.heightAnchor.constraint(greaterThanOrEqualToConstant: widget.frame.size.height)
+                }
+                constraint.priority = .defaultHigh
+                constraint.isActive = true
             }
         }
         return (width, height)
@@ -127,7 +141,7 @@ extension WidgetPageViewController {
     }
     
     private func updateSimpleWidget() {
-        simpleWidgetViews.enumerated().forEach { index, items in
+        simpleWidgetViews.forEach { items in
             let visibleWidgets = items.filter { !$0.isHidden }
             if visibleWidgets.count == 1, let firstWidget = visibleWidgets.first {
                 // NOTE: use adjustSize for Complex widget
@@ -147,14 +161,24 @@ extension WidgetPageViewController {
                     }
                 }
             }
-            // show horizontal separator for visible items in row
-            if index != simpleWidgetViews.count - 1, stackView.subviews.count - 1 > index {
-                let horizontalSeparator = stackView.subviews[index + 1]
-                horizontalSeparator.isHidden = visibleWidgets.isEmpty
-            }
             // show right separator
             items.enumerated().forEach { idx, widget in
                 widget.showRightSeparator(idx != items.count - 1)
+            }
+        }
+        updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)
+    }
+    
+    // stackView.subviews = [widgetView] -> [horizontalSeparatorView] -> ... [widgetView] -> [horizontalSeparatorView]
+    private func updateHorizontalSeparatorVisibilityAndBackground(for views: [UIView]) {
+        guard views.count >= 2 else { return }
+        
+        for i in 1..<views.count where !i.isMultiple(of: 2) {
+            let horizontalSeparatorView = views[i]
+            horizontalSeparatorView.isHidden = views[i - 1].isHidden
+            if !horizontalSeparatorView.isHidden {
+                // update color for horizontal separator
+                horizontalSeparatorView.backgroundColor = OAAppSettings.sharedManager().nightMode ? .widgetSeparator.dark : .widgetSeparator.light
             }
         }
     }

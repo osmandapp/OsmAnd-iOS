@@ -82,7 +82,7 @@
     [NSNotificationCenter.defaultCenter postNotificationName:kBackupSyncStartedNotification object:nil];
     if (_settingsItems.count > 0 && _operation != EOABackupSyncOperationUpload)
     {
-        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems forceReadData:YES listener:self];
+        [OANetworkSettingsHelper.sharedInstance importSettings:kRestoreItemsKey items:_settingsItems filesType:EOARemoteFilesTypeUnique forceReadData:YES listener:self];
     }
     else if (_operation != EOABackupSyncOperationDownload)
     {
@@ -108,9 +108,12 @@
 }
 
 - (void)downloadRemoteVersion:(OASettingsItem *)item
+                    filesType:(EOARemoteFilesType)filesType
+                shouldReplace:(BOOL)shouldReplace
+               restoreDeleted:(BOOL)restoreDeleted
 {
-    [item setShouldReplace:YES];
-    [OANetworkSettingsHelper.sharedInstance importSettings:[OABackupHelper getItemFileName:item] items:@[item] forceReadData:YES listener:self];
+    [item setShouldReplace:shouldReplace];
+    [OANetworkSettingsHelper.sharedInstance importSettings:[OABackupHelper getItemFileName:item] items:@[item] filesType:filesType forceReadData:YES shouldReplace:shouldReplace restoreDeleted:restoreDeleted listener:self];
 }
 
 - (void) deleteItem:(OASettingsItem *)item
@@ -162,7 +165,7 @@
         NSMutableArray<OASettingsItem *> *oldItemsToDelete = [NSMutableArray array];
         for (OASettingsItem *item in info.itemsToUpload)
         {
-            OAExportSettingsType *exportType = [OAExportSettingsType getExportSettingsTypeForItem:item];
+            OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:item];
             if (exportType && [_backupHelper getVersionHistoryTypePref:exportType].get)
             {
                 [oldItemsToDelete addObject:item];

@@ -92,7 +92,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     _selectedFolderIndex = kAllFoldersIndex;
     _scrollCellsState = [[OACollectionViewCellState alloc] init];
-    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddTracksFolder:YES];
+    _allFolders = [OAUtilities getGpxFoldersListSorted:YES shouldAddRootTracksFolder:YES];
     [self generateData];
 }
 
@@ -422,9 +422,7 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
             NSString *filePath = track.gpxFilePath;
             const auto& activeGpx = OASelectedGPXHelper.instance.activeGpx;
             if (activeGpx.find(QString::fromNSString(filePath)) == activeGpx.end())
-            {
                 [OAAppSettings.sharedManager showGpx:@[filePath]];
-            }
             
             OAGPXDocument *doc = [[OAGPXDocument alloc] initWithGpxFile:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:track.gpxFilePath]];
             

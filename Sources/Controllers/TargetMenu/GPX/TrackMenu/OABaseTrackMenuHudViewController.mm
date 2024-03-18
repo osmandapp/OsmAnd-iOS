@@ -18,6 +18,8 @@
 #import "OASavingTrackHelper.h"
 #import "OAGPXTrackAnalysis.h"
 #import "GeneratedAssetSymbols.h"
+#import "OASelectedGPXHelper.h"
+#import "OAGPXUIHelper.h"
 
 @implementation OAGPXBaseTableData
 
@@ -95,6 +97,8 @@
         _toggle = [data[kCellToggle] boolValue];
     if ([data.allKeys containsObject:kCellTintColor])
         _tintColor = data[kCellTintColor];
+    if ([data.allKeys containsObject:kCellIsDisabled])
+        _isDisabled = [data[kCellIsDisabled] boolValue];
 }
 
 - (OAGPXTableCellData *)getSubject:(NSString *)key
@@ -229,10 +233,30 @@
         else
         {
             NSString *gpxFullPath = [[OsmAndApp instance].gpxPath stringByAppendingPathComponent:_gpx.gpxFilePath];
-            _doc = [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFullPath];
+            const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
+            auto it = activeGpx.find(QString::fromNSString(gpxFullPath));
+            if (it != activeGpx.end() && it.value() != nullptr)
+                _doc = [[OAGPXMutableDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
+            else
+                _doc = [[OAGPXMutableDocument alloc] initWithGpxFile:gpxFullPath];
         }
     }
     [self updateAnalysis];
+
+    if (_gpx && !_gpx.nearestCity && _analysis && _analysis.locationStart)
+    {
+        OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:_analysis.locationStart.position];
+        _gpx.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
+
+        OAGPXDatabase *db = [OAGPXDatabase sharedDb];
+        OAGPX *gpx = [db getGPXItem:_gpx.gpxFilePath];
+        if (gpx)
+        {
+            gpx.nearestCity = _gpx.nearestCity;
+            [db replaceGpxItem:gpx];
+            [db save];
+        }
+    }
 
     if (replaceGPX)
     {
@@ -244,6 +268,7 @@
         {
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
             OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+            gpx.nearestCity = _gpx.nearestCity;
             [db replaceGpxItem:gpx];
             [db save];
             _gpx = gpx;

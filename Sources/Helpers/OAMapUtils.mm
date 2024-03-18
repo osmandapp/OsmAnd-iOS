@@ -7,6 +7,7 @@
 //
 
 #import "OAMapUtils.h"
+#import "OANativeUtilities.h"
 #import "OAPOI.h"
 #import "QuadRect.h"
 
@@ -60,7 +61,24 @@
         prlat = fromLat + (toLat - fromLat) * (projection / mDist);
         prlon = fromLon + (toLon - fromLon) * (projection / mDist);
     }
-    return [[CLLocation alloc] initWithLatitude:prlat longitude:prlon];
+    return [[CLLocation alloc] initWithCoordinate:CLLocationCoordinate2DMake(prlat, prlon) altitude:location.altitude horizontalAccuracy:location.horizontalAccuracy verticalAccuracy:location.verticalAccuracy course:location.course speed:location.speed timestamp:location.timestamp];
+}
+
++ (double) getProjectionCoeff:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation
+{
+    double lat = location.coordinate.latitude;
+    double lon = location.coordinate.longitude;
+    double fromLat = fromLocation.coordinate.latitude;
+    double fromLon = fromLocation.coordinate.longitude;
+    double toLat = toLocation.coordinate.latitude;
+    double toLon = toLocation.coordinate.longitude;
+    
+    double mDist = (fromLat - toLat) * (fromLat - toLat) + (fromLon - toLon) * (fromLon - toLon);
+    double projection = [self.class scalarMultiplication:fromLat yA:fromLon xB:toLat yB:toLon xC:lat yC:lon];
+    if (projection < 0)
+        return 0;
+    else 
+        return projection >= mDist ? 1 : projection / mDist;
 }
 
 + (double) getOrthogonalDistance:(CLLocation *)location fromLocation:(CLLocation *)fromLocation toLocation:(CLLocation *)toLocation
@@ -78,15 +96,28 @@
     return sa < 0;
 }
 
-+ (CLLocationDirection) adjustBearing:(CLLocationDirection)bearing
++ (CLLocationDirection) normalizeDegrees360:(CLLocationDirection)bearing
 {
-    CLLocationDirection b = bearing;
-    if (b < 0)
-        b += 360;
-    else if (b > 360)
-        b -= 360;
-    
-    return b;
+    CLLocationDirection degrees = bearing;
+    while (degrees < 0.0) {
+        degrees += 360.0;
+    }
+    while (degrees >= 360.0) {
+        degrees -= 360.0;
+    }
+    return degrees;
+}
+
++ (double) unifyRotationDiff:(double)rotate targetRotate:(double)targetRotate
+{
+    double d = targetRotate - rotate;
+    while (d >= 180.0) {
+        d -= 360.0;
+    }
+    while (d < -180.0) {
+        d += 360.0;
+    }
+    return d;
 }
 
 + (CLLocation *) calculateMidPoint:(CLLocation *) s1 s2:(CLLocation *) s2
@@ -319,6 +350,39 @@
 +(double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
 {
     return OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
+}
+
++ (BOOL)areLocationEqual:(CLLocation *)l1 l2:(CLLocation *)l2
+{
+    return (l1 == nil && l2 == nil) || (l2 != nil && [self areLocationEqual:l1 lat:l2.coordinate.latitude lon:l2.coordinate.longitude]);
+}
+
++ (BOOL)areLocationEqual:(CLLocation *)l lat:(CGFloat)lat lon:(CGFloat)lon
+{
+    return l != nil && [self areLatLonEqual:l.coordinate.latitude lon1:l.coordinate.longitude lat2:lat lon2:lon];
+}
+
++ (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 l2:(CLLocationCoordinate2D)l2
+{
+    return (!CLLocationCoordinate2DIsValid(l1) && !CLLocationCoordinate2DIsValid(l2))
+        || (CLLocationCoordinate2DIsValid(l2) && [self areLatLonEqual:l1 lat:l2.latitude lon:l1.longitude]);
+}
+
++ (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l lat:(CGFloat)lat lon:(CGFloat)lon
+{
+    return CLLocationCoordinate2DIsValid(l) && [self areLatLonEqual:l.latitude lon1:l.longitude lat2:lat lon2:lon];
+}
+
++ (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2
+{
+    BOOL latEqual = (isnan(lat1) && isnan(lat2)) || (abs(lat1 - lat2) < 0.00001);
+    BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || (abs(lon1 - lon2) < 0.00001);
+    return latEqual && lonEqual;
+}
+
++ (double)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon
+{
+    return [OANativeUtilities getAltitudeForElevatedPoint:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
 }
 
 @end

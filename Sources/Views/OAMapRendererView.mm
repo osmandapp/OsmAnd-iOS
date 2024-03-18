@@ -1113,6 +1113,11 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setSymbolsOpacity(opacityFactor);
 }
 
+- (void)setDateTime:(int64_t)dateTime
+{
+    _renderer->setDateTime(dateTime);
+}
+
 - (void)setSymbolSubsectionConfiguration:(int)subsectionIndex configuration:(const OsmAnd::SymbolSubsectionConfiguration &)configuration
 {
     _renderer->setSymbolSubsectionConfiguration(subsectionIndex, configuration);

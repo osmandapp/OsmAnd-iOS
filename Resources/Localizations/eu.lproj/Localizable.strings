@@ -1753,7 +1753,7 @@
 "try_again" = "Saiatu berriro";
 "searching" = "Bilatzen…";
 "search_location" = "Kokalekua bilatzen…";
-"search_map" = "Mapak bilatzen…";
+"search_map" = "Mapak bilatzen";
 "search_another_country" = "Bilatu beste eskualde bat";
 "skip_map_downloading" = "Saltatu mapen deskarga";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
@@ -2551,3 +2551,8 @@
 "search_favorites" = "Gogokoenetan bilatu";
 "add_row" = "Gehitu errenkada";
 "shared_string_cache" = "Cache";
+"shared_string_link" = "Esteka";
+"shared_string_author" = "Egilea";
+"shared_string_keywords" = "Gako-hitzak";
+"shared_string_license" = "Lizentzia";
+"deleting_complete" = "Ezabatzea osatu da";

@@ -10,4 +10,9 @@
 
 @implementation OARouteCalculationParams
 
+- (BOOL) recheckRouteNearestPoint
+{
+    return self.previousToRecalculate && self.onlyStartPointChanged && self.start && self.gpxRoute;
+}
+
 @end

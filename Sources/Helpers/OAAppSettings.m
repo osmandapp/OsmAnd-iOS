@@ -425,6 +425,9 @@
 #define kTopWidgetPanelOrderKey @"top_widget_panel_order"
 #define kBottomWidgetPanelOrderKey @"bottom_widget_panel_order"
 
+#define useHHRoutingKey @"useHHRoutingKey"
+#define useHHRoutingOnlyKey @"useHHRoutingOnlyKey"
+
 @implementation OACompassMode
 
 + (NSString *) getTitle:(EOACompassMode)cm
@@ -3693,7 +3696,7 @@
         _trackIntervalArray = @[@0, @1, @2, @3, @5, @10, @15, @30, @60, @90, @120, @180, @300];
         
         _mapLanguages = @[
-            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-Hans", @"zh-Hant"];
+            @"af", @"als", @"ar", @"az", @"be", @"ber", @"bg", @"bn", @"bpy", @"br", @"bs", @"ca", @"ceb", @"ckb", @"cs", @"cy", @"da", @"de", @"el", @"eo", @"es", @"et", @"eu", @"fa", @"fi", @"fr", @"fy", @"ga", @"gl", @"he", @"hi", @"hsb", @"hr", @"ht", @"hu", @"hy", @"id", @"is", @"it", @"ja", @"ka", @"kab", @"kk", @"kn", @"ko", @"ku", @"la", @"lb", @"lo", @"lt", @"lv", @"mk", @"ml", @"mr", @"ms", @"nds", @"new", @"nl", @"nn", @"no", @"nv", @"oc", @"os", @"pl", @"pms", @"pt", @"ro", @"ru", @"sat", @"sc", @"sh", @"sk", @"sl", @"sq", @"sr", @"sr-Latn", @"sv", @"sw", @"ta", @"te", @"th", @"tl", @"tr", @"uk", @"vi", @"vo", @"zh", @"zh-Hans", @"zh-Hant"];
         
         _rtlLanguages = @[@"ar",@"dv",@"he",@"iw",@"fa",@"nqo",@"ps",@"sd",@"ug",@"ur",@"yi"];
         
@@ -4615,6 +4618,11 @@
         
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
+        
+        _useHHRouting = [[[OACommonBoolean withKey:useHHRoutingKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing"];
+        _useHHRoutingOnly = [[[OACommonBoolean withKey:useHHRoutingOnlyKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing_only"];
 
         [self fetchImpassableRoads];
 

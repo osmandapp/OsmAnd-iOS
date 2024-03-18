@@ -62,7 +62,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     EOAItemStatusFinishedType
 };
 
-@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
+@interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OAOnDeleteAccountListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tblView;
 
@@ -137,7 +137,9 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+
+    [_backupHelper.backupListeners addDeleteAccountListener:self];
+
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     UINavigationBarAppearance *appearance = [[UINavigationBarAppearance alloc] init];
     [appearance configureWithOpaqueBackground];
@@ -162,6 +164,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     OACloudBackupViewController *navigationController = (OACloudBackupViewController *)self.navigationController.topViewController;
     _settingsButton = [[UIBarButtonItem alloc] initWithImage:[UIImage templateImageNamed:@"ic_navbar_settings"] style:UIBarButtonItemStylePlain target:self action:@selector(onSettingsButtonPressed)];
     [navigationController.navigationItem setRightBarButtonItem:_settingsButton];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    [_backupHelper.backupListeners removeDeleteAccountListener:self];
 }
 
 - (void)dealloc
@@ -381,6 +390,19 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             };
             [backupRows addRowFromDictionary:purchaseCell];
         }
+
+        OATableSectionData *storageRows = [OATableSectionData sectionData];
+        storageRows.headerText = OALocalizedString(@"help_article_personal_storage_name");
+        [_data addSection:storageRows];
+
+        NSDictionary *purchaseCell = @{
+            kCellTypeKey: [OAButtonTableViewCell getCellIdentifier],
+            kCellKeyKey: @"onTrashPressed",
+            kCellTitleKey: OALocalizedString(@"shared_string_trash"),
+            kCellIconNameKey: @"ic_custom_remove",
+            kCellIconTintColor: [UIColor colorNamed:ACColorNameIconColorSecondary]
+        };
+        [storageRows addRowFromDictionary:purchaseCell];
     }
 }
 
@@ -585,14 +607,49 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [cell.button setTitle:nil forState:UIControlStateNormal];
             cell.button.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         }
-        BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
-        [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
-        [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-        [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
-        cell.titleLabel.text = item.title;
-        cell.descriptionLabel.text = item.descr;
-        [cell.leftIconView setImage:[UIImage templateImageNamed:item.iconName]];
-        cell.leftIconView.tintColor = item.iconTint != -1 ? UIColorFromRGB(item.iconTint) : [UIColor colorNamed:ACColorNameIconColorActive];
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            cell.descriptionLabel.text = item.descr;
+            [cell descriptionVisibility:item.descr && item.descr.length > 0];
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
+            if ([item.key isEqualToString:@"lastBackup"])
+            {
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.button.configuration = nil;
+                BOOL collapsed = item.rowType == EOATableRowTypeCollapsable && ((OATableCollapsableRowData *) item).collapsed;
+                [cell.button setImage:[UIImage templateImageNamed:collapsed ? @"ic_custom_arrow_right" : @"ic_custom_arrow_down"].imageFlippedForRightToLeftLayoutDirection forState:UIControlStateNormal];
+                [cell.button addTarget:self action:@selector(onCollapseButtonPressed) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([item.key isEqualToString:@"onTrashPressed"])
+            {
+                if ([OAIAPHelper isOsmAndProAvailable])
+                {
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                    cell.button.configuration = nil;
+                    [cell.button setImage:nil forState:UIControlStateNormal];
+                }
+                else
+                {
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                    conf.contentInsets = NSDirectionalEdgeInsetsMake(0., 0, 0, 0.);
+                    cell.button.configuration = conf;
+                    [cell.button setImage:[UIImage imageNamed:@"ic_payment_label_pro"] forState:UIControlStateNormal];
+                    [cell.button addTarget:self action:@selector(onSubscriptionExpired) forControlEvents:UIControlEventTouchUpInside];
+                }
+            }
+
+            UIColor *leftIconTintColor;
+            if (item.iconTintColor)
+                leftIconTintColor = item.iconTintColor;
+            else if (item.iconTint != -1)
+                leftIconTintColor = UIColorFromRGB(item.iconTint);
+            else
+                leftIconTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            cell.leftIconView.tintColor = leftIconTintColor;
+        }
         return cell;
     }
     else if ([cellId isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
@@ -692,13 +749,20 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     {
         statusBackupViewController = [[OAStatusBackupViewController alloc] initWithType:EOARecentChangesConflicts];
     }
+    else if ([item.key isEqualToString:@"onTrashPressed"])
+    {
+        if ([OAIAPHelper isOsmAndProAvailable])
+            [self showViewController:[[OACloudTrashViewController alloc] init]];
+        else
+            [self onSubscriptionExpired];
+    }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
         if (![self isActionButtonDisabled:item] && [self respondsToSelector:NSSelectorFromString(item.key)])
             [self performSelector:NSSelectorFromString(item.key) withObject:nil afterDelay:0.];
     }
     if (statusBackupViewController)
-        [self.navigationController pushViewController:statusBackupViewController animated:YES];
+        [self showViewController:statusBackupViewController];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
@@ -810,6 +874,21 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
             [_backupHelper addPrepareBackupListener:self];
             [_backupHelper prepareBackup];
         }
+    });
+}
+
+#pragma mark - OAOnDeleteAccountListener
+
+- (void)onDeleteAccount:(NSInteger)status message:(NSString *)message error:(OABackupError *)error
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!error)
+            [_backupHelper logout];
+
+        NSString *text = error != nil ? [error getLocalizedError] : message;
+        if (text && text.length > 0)
+            [OAUtilities showToast:text details:nil duration:4 inView:self.view];
+        [self dismissViewController];
     });
 }
 

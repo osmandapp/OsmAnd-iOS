@@ -23,7 +23,8 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
     EOABaseButtonColorSchemeGraySimple,
     EOABaseButtonColorSchemeGrayAttn,
     EOABaseButtonColorSchemePurple,
-    EOABaseButtonColorSchemeRed
+    EOABaseButtonColorSchemeRed,
+    EOABaseButtonColorSchemeBlank
 };
 
 @interface OABaseButtonsViewController : OABaseNavbarViewController

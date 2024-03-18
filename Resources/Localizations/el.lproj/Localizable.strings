@@ -1511,7 +1511,7 @@
 "dialogs_and_notifications_descr" = "Έλεγχος αναδύσεων, διαλόγων και ειδοποιήσεων.";
 "intermediate_point_too_far" = "Ο ενδιάμεσος προορισμός %@ είναι πολύ μακριά από τον πλησιέστερο δρόμο.";
 "icon_group_travel" = "Ταξίδι";
-"search_map" = "Αναζήτηση χαρτών…";
+"search_map" = "Αναζήτηση χαρτών";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "icon_group_symbols" = "Σύμβολα";
 "change_folder" = "Αλλαγή φακέλου";

@@ -323,7 +323,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         OAGPX *gpx = [dbHelper getGPXItem:gpxFilePath];
         if (gpx)
         {
-            auto doc = it.value();
+            const auto& doc = it.value();
             if (doc != nullptr && (doc->hasRtePt() || doc->hasTrkPt()))
             {
                 [visibleGpx addObject:gpx];
@@ -332,7 +332,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         }
     }
     
-    if(visibleGpx.count == 0)
+    if (visibleGpx.count == 0)
         return;
     
     [section addObject:@{

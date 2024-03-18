@@ -15,6 +15,7 @@
 #import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAGPXUIHelper.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.
@@ -121,6 +122,7 @@
       isNetworkRoute:(BOOL)isNetworkRoute
            routeIcon:(UIImage *)icon
                title:(NSString *)title
+         nearestCity:(NSString *)nearestCity
 {
     self.backgroundColor = _selectedTab != EOATrackMenuHudActionsTab
     ? [UIColor colorNamed:ACColorNameGroupBg] : [UIColor colorNamed:ACColorNameViewBg];
@@ -136,10 +138,17 @@
 
     if (_selectedTab == EOATrackMenuHudOverviewTab)
     {
-        CLLocationCoordinate2D gpxLocation = self.trackMenuDelegate ? [self.trackMenuDelegate getCenterGpxLocation] : kCLLocationCoordinate2DInvalid;
+        CLLocationCoordinate2D gpxLocation = kCLLocationCoordinate2DInvalid;
+        if (self.trackMenuDelegate)
+        {
+            if ([self.trackMenuDelegate openedFromMap])
+                gpxLocation = [self.trackMenuDelegate getPinLocation];
+            if (!CLLocationCoordinate2DIsValid(gpxLocation))
+                gpxLocation = [self.trackMenuDelegate getCenterGpxLocation];
+        }
 
         CLLocation *lastKnownLocation = _app.locationServices.lastKnownLocation;
-        NSString *direction = lastKnownLocation && gpxLocation.latitude != DBL_MAX ?
+        NSString *direction = lastKnownLocation && CLLocationCoordinate2DIsValid(gpxLocation) ?
                 [OAOsmAndFormatter getFormattedDistance:getDistance(
                         lastKnownLocation.coordinate.latitude, lastKnownLocation.coordinate.longitude,
                         gpxLocation.latitude, gpxLocation.longitude)] : @"";
@@ -152,13 +161,11 @@
             self.directionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
         }
 
-        if (gpxLocation.latitude != DBL_MAX)
+        if (nearestCity.length > 0)
         {
-            OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:gpxLocation.latitude
-                                                                 lon:gpxLocation.longitude];
             self.regionIconView.image = [UIImage templateImageNamed:@"ic_small_map_point"];
             self.regionIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
-            [self.regionTextView setText:worldRegion.localizedName ? worldRegion.localizedName : worldRegion.nativeName];
+            [self.regionTextView setText:nearestCity];
             self.regionTextView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
         }
         else

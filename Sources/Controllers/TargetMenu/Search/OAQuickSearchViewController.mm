@@ -1149,18 +1149,19 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
     }
     [self startNearestCitySearch];
+    __weak OAQuickSearchViewController *selfWeak = self;
     [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:nil onPublish:nil onSearchFinished:^BOOL(OASearchPhrase *phrase) {
 
-        OASearchResultCollection *res = [self getResultCollection];
+        OASearchResultCollection *res = [selfWeak getResultCollection];
 
         OAAppSettings *settings = [OAAppSettings sharedManager];
         NSMutableArray<NSMutableArray<OAQuickSearchListItem *> *> *data = [NSMutableArray array];
 
-        self.citySearchedRect = [phrase getRadiusBBox31ToSearch:1000];
+        selfWeak.citySearchedRect = [phrase getRadiusBBox31ToSearch:1000];
         OASearchResult *lastCity = nil;
         if (res)
         {
-            self.citiesLoaded = [res getCurrentSearchResults].count > 0;
+            selfWeak.citiesLoaded = [res getCurrentSearchResults].count > 0;
             unsigned long long lastCityId = settings.lastSearchedCity;
             for (OASearchResult *sr in [res getCurrentSearchResults])
             {
@@ -1188,9 +1189,9 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                     CLLocation *lastCityPoint = settings.lastSearchedPoint;
                     if (lastCityId != -1 && lastCityPoint)
                     {
-                        [self startLastCitySearch:lastCityPoint];
+                        [selfWeak startLastCitySearch:lastCityPoint];
                         BOOL __block cityFound = NO;
-                        [self runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:^(OASearchPhrase *phrase) {
+                        [selfWeak runCoreSearch:@"" updateResult:NO searchMore:NO onSearchStarted:^(OASearchPhrase *phrase) {
                             //
                         } onPublish:^(OASearchResultCollection *res, BOOL append) {
                             if (res) {
@@ -1199,53 +1200,53 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
                                     if (sr.objectType == CITY && ((OACity *) sr.object).addrId == lastCityId)
                                     {
                                         cityFound = YES;
-                                        [self completeQueryWithObject:sr];
+                                        [selfWeak completeQueryWithObject:sr];
                                         break;
                                     }
                                 }
                             }
                         } onSearchFinished:^BOOL(OASearchPhrase *phrase) {
                             if (!cityFound)
-                                [self replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
+                                [selfWeak replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
 
                             return NO;
                         }];
-                        [self restoreSearch];
+                        [selfWeak restoreSearch];
                     }
                     else
                     {
-                        [self replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
+                        [selfWeak replaceQueryWithText:[lastCityName stringByAppendingString:@" "]];
                     }
                 }
                 else
                 {
-                    [self completeQueryWithObject:lastCity];
+                    [selfWeak completeQueryWithObject:lastCity];
                 }
-                [self.textField becomeFirstResponder];
+                [selfWeak.textField becomeFirstResponder];
             }]];
         }
 
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_building_number"] text:OALocalizedString(@"select_city") onClickFunction:^(id sender) {
-            self.textField.placeholder = OALocalizedString(@"type_city_town");
-            [self startCitySearch];
-            [self updateTabsVisibility:NO];
-            [self runCoreSearch:@"" updateResult:NO searchMore:NO];
-            [self.textField becomeFirstResponder];
+            selfWeak.textField.placeholder = OALocalizedString(@"type_city_town");
+            [selfWeak startCitySearch];
+            [selfWeak updateTabsVisibility:NO];
+            [selfWeak runCoreSearch:@"" updateResult:NO searchMore:NO];
+            [selfWeak.textField becomeFirstResponder];
         }]];
 
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_action_postcode"] text:OALocalizedString(@"select_postcode") onClickFunction:^(id sender) {
-            self.textField.placeholder = OALocalizedString(@"type_postcode");
-            [self startPostcodeSearch];
-            [self updateData:[NSMutableArray<OAQuickSearchListItem *> array] append:NO];
-            [self updateTabsVisibility:NO];
-            [self.textField becomeFirstResponder];
+            selfWeak.textField.placeholder = OALocalizedString(@"type_postcode");
+            [selfWeak startPostcodeSearch];
+            [selfWeak updateData:[NSMutableArray<OAQuickSearchListItem *> array] append:NO];
+            [selfWeak updateTabsVisibility:NO];
+            [selfWeak.textField becomeFirstResponder];
         }]];
         
         [rows addObject:[[OAQuickSearchButtonListItem alloc] initWithIcon:[UIImage imageNamed:@"ic_custom_location_marker"] text:OALocalizedString(@"coords_search") onClickFunction:^(id sender) {
-            CLLocation *latLon = [[self.searchUICore getSearchSettings] getOriginalLocation];
+            CLLocation *latLon = [[selfWeak.searchUICore getSearchSettings] getOriginalLocation];
             OAQuickSearchCoordinatesViewController *vc = [[OAQuickSearchCoordinatesViewController alloc] initWithLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
             UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-            [self presentViewController:navigationController animated:YES completion:nil];
+            [selfWeak presentViewController:navigationController animated:YES completion:nil];
 
         }]];
 
@@ -1365,7 +1366,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (IBAction) btnCancelClicked:(id)sender
 {
-    [self dismissViewControllerAnimated:YES completion:nil];
+    [self dismissViewControllerAnimated:YES completion:self.onCloseCallback];
 }
 
 - (IBAction) btnMyLocationClicked:(id)sender

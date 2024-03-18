@@ -1167,6 +1167,10 @@ typedef enum
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
     _searchViewController.fromNavigation = [self isRouteInfoVisible];
+    __weak OAMapPanelViewController *selfWeak = self;
+    _searchViewController.onCloseCallback = ^{
+        [selfWeak clearSearchViewController];
+    };
 
     if (object)
     {
@@ -1218,6 +1222,11 @@ typedef enum
         _isNewContextMenuStillEnabled = YES;
 
     [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)clearSearchViewController
+{
+    _searchViewController = nil;
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
@@ -3562,7 +3571,13 @@ typedef enum
     double distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
 
     if (!_searchViewController)
+    {
         _searchViewController = [[OAQuickSearchViewController alloc] init];
+        __weak OAMapPanelViewController *selfWeak = self;
+        _searchViewController.onCloseCallback = ^{
+            [selfWeak clearSearchViewController];
+        };
+    }
 
     _searchViewController.myLocation = myLocation;
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;

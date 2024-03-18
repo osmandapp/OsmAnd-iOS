@@ -22,9 +22,9 @@ final class MigrationManager: NSObject {
     private override init() {}
 
     func migrateIfNeeded(_ firstLaunch: Bool) {
-//        if firstLaunch {
-//            defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-//        } else {
+        if firstLaunch {
+            defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+        } else {
 
             /*  Migration 1, sync with android
 
@@ -41,12 +41,12 @@ final class MigrationManager: NSObject {
                 bicycleSpeed -> ant_bicycle_speed
                 temperature -> temperature_sensor */
 
-//            let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-//            if isOldWidgetKeysMigrated == nil || (isOldWidgetKeysMigrated as! Bool) == false {
+            let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
+            if isOldWidgetKeysMigrated == nil || (isOldWidgetKeysMigrated as! Bool) == false {
                 changeWidgetIdsMigration1()
                 defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-//            }
-//        }
+            }
+        }
     }
 
     private func changeWidgetIdsMigration1() {
@@ -117,16 +117,16 @@ final class MigrationManager: NSObject {
 
     private func updateMapInfoControls(_ appMode: OAApplicationMode, changeWidgetIds: [String: String]) {
         let mapInfoControls: OACommonString = OAAppSettings.sharedManager().mapInfoControls
-        /*guard*/ let widgetsVisibilityString: String = mapInfoControls.get(appMode)/* else { return  }*/
+        guard let widgetsVisibilityString: String = mapInfoControls.get(appMode) else { return }
 
         let widgetsVisibility = widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
-//        guard (widgetsVisibility.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
+        guard (widgetsVisibility.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
 
         let newWidgetsVisibility = getUpdatedWidgetIds(widgetsVisibility, changeWidgetIds: changeWidgetIds)
-//        if widgetsVisibility != newWidgetsVisibility {
+        if widgetsVisibility != newWidgetsVisibility {
             mapInfoControls.set(newWidgetsVisibility.joined(separator: SETTINGS_SEPARATOR), mode: appMode)
             changeWidgetPrefs1(appMode, oldWidgetIds: widgetsVisibility, changeWidgetIds: changeWidgetIds)
-//        }
+        }
     }
 
     private func changeWidgetPrefs1(_ appMode: OAApplicationMode, oldWidgetIds: [String], changeWidgetIds: [String: String]) {
@@ -134,24 +134,24 @@ final class MigrationManager: NSObject {
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {
-                    var customSuffix = oldCustomWidgetId.contains(MapWidgetInfo.DELIMITER)
+                    let customSuffix = oldCustomWidgetId.contains(MapWidgetInfo.DELIMITER)
                         ? oldCustomWidgetId.substring(from: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)) + 2)
                         : ""
                     let newCustomWidgetId = oldCustomWidgetId.replacingOccurrences(of: oldOriginalWidgetId, with: newOriginalWidgetId)
                     if let widgetType = WidgetType.getById(newCustomWidgetId) {
                         let appModeStringKey: String = appMode.stringKey
+                        var prefKeySuffix = !customSuffix.isEmpty ? oldCustomWidgetId : ""
 
                         // sync preference key and value for saved BLE sensor devices
 
-                        let useAnyDevicePrefKeySuffix = !customSuffix.isEmpty ? oldCustomWidgetId : ""
-                        let useAnyDevicePrefKey = "\(widgetType.title)_useAnyDevicePref_\(useAnyDevicePrefKeySuffix)_\(appModeStringKey)"
+                        let useAnyDevicePrefKey = "\(widgetType.title)_useAnyDevicePref_\(prefKeySuffix)_\(appModeStringKey)"
                         if let useAnyDevicePref = defaults.object(forKey: useAnyDevicePrefKey) as? Bool,
                            let plugin = OAPlugin.getByWidgetId(newOriginalWidgetId),
                            let fieldType = plugin.getWidgetDataFieldTypeName(byWidgetId: newOriginalWidgetId) {
                             let newPrefKey = fieldType + customSuffix
                             let newPref: OACommonString = settings.registerStringPreference(newPrefKey, defValue: plugin.getAnyConnectedDeviceId())
                             if !useAnyDevicePref {
-                                var oldPrefKey = "\(widgetType.title)\(customSuffix)_\(appModeStringKey)"
+                                let oldPrefKey = "\(widgetType.title)\(oldCustomWidgetId)_\(appModeStringKey)"
                                 if let oldPref = defaults.object(forKey: oldPrefKey) as? String {
                                     newPref.set(oldPref, mode: appMode)
                                 }
@@ -160,31 +160,30 @@ final class MigrationManager: NSObject {
 
                         // sync show_icon preference key of simple widgets
 
-                        let hideIconPrefKeySuffix = !customSuffix.isEmpty ? "_\(oldCustomWidgetId)" : ""
-                        let hideIconPrefKey = "\(widgetType.title)kHideIconPref\(hideIconPrefKeySuffix)_\(appModeStringKey)"
+                        prefKeySuffix = !customSuffix.isEmpty ? "_\(prefKeySuffix)" : ""
+                        let hideIconPrefKey = "\(widgetType.title)kHideIconPref\(prefKeySuffix)_\(appModeStringKey)"
                         if let hideIconPref = defaults.object(forKey: hideIconPrefKey) as? Bool {
                             var newPrefKey = "simple_widget_show_icon\(widgetType.id)"
                             if !customSuffix.isEmpty {
                                 newPrefKey = newPrefKey.appending(newCustomWidgetId)
-                                let newPref: OACommonBoolean = settings.registerBooleanPreference(newPrefKey, defValue: true)
-                                if !hideIconPref {
-                                    newPref.set(hideIconPref, mode: appMode)
-                                }
+                            }
+                            let newPref: OACommonBoolean = settings.registerBooleanPreference(newPrefKey, defValue: true)
+                            if !hideIconPref {
+                                newPref.set(hideIconPref, mode: appMode)
                             }
                         }
 
                         // sync size preference key of simple widgets
 
-                        let sizeStylePrefKeySuffix = !customSuffix.isEmpty ? "_\(oldCustomWidgetId)" : ""
-                        let sizeStylePrefKey = "\(widgetType.title)kSizeStylePref\(sizeStylePrefKeySuffix)_\(appModeStringKey)"
+                        let sizeStylePrefKey = "\(widgetType.title)kSizeStylePref\(prefKeySuffix)_\(appModeStringKey)"
                         if let sizeStylePref = defaults.object(forKey: sizeStylePrefKey) as? Int {
                             var newPrefKey = "simple_widget_show_icon\(widgetType.id)"
                             if !customSuffix.isEmpty {
                                 newPrefKey = newPrefKey.appending(newCustomWidgetId)
-                                let newPref: OACommonInteger = settings.registerIntPreference(newPrefKey, defValue: Int32(WidgetSizeStyle.medium.rawValue))
-                                if sizeStylePref != WidgetSizeStyle.medium.rawValue {
-                                    newPref.set(Int32(sizeStylePref), mode: appMode)
-                                }
+                            }
+                            let newPref: OACommonInteger = settings.registerIntPreference(newPrefKey, defValue: Int32(WidgetSizeStyle.medium.rawValue))
+                            if sizeStylePref != WidgetSizeStyle.medium.rawValue {
+                                newPref.set(Int32(sizeStylePref), mode: appMode)
                             }
                         }
                     }

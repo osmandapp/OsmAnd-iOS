@@ -205,7 +205,13 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     int i = 0;
     for (auto gpxIt = _geoDocList.begin(); gpxIt != _geoDocList.end(); ++gpxIt)
     {
-        const auto& gpx = *gpxIt;
+        const auto gpx = *gpxIt;
+        if (!gpx || gpx->points.isEmpty())
+        {
+            i++;
+            continue;
+        }
+
         for (auto it = gpx->points.begin(); it != gpx->points.end(); ++it)
         {
             const auto& point = *it;

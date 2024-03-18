@@ -755,7 +755,7 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     int mult = 1;
     int num = basenum * mult;
     int ind = 0;
-    NSMutableArray<NSNumber *> *bounds = [[NSMutableArray alloc] init];
+    NSMutableArray<NSNumber *> *bounds = [NSMutableArray array];
     
     while (num < max)
     {

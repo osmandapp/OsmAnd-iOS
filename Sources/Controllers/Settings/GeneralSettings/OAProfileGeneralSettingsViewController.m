@@ -335,7 +335,7 @@
     [unitsAndFormatsArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"distance_during_navigation"),
-        @"value" : [_settings.preciseDistanceNumbers get:self.appMode] ? OALocalizedString(@"shared_string_precise") : OALocalizedString(@"shared_string_round_up"),
+        @"value" : OALocalizedString([_settings.preciseDistanceNumbers get:self.appMode] ? @"shared_string_precise" : @"shared_string_round_up"),
         @"icon" : [_settings.preciseDistanceNumbers get:self.appMode] ? @"ic_custom_distance_number_precise" : @"ic_custom_distance_number_rounded",
         @"key" : @"distanceDuringNavigation",
     }];

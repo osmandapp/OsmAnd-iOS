@@ -10,7 +10,7 @@
 
 #include <OsmAndCore/Data/TransportStop.h>
 
-@class OAPOI;
+@class OAPOI, OATransportStopAggregated;
 
 @interface OATransportStop : NSObject
 
@@ -18,9 +18,11 @@
 
 @property (nonatomic, assign, readonly) std::shared_ptr<const OsmAnd::TransportStop> stop;
 @property (nonatomic, readonly) CLLocationCoordinate2D location;
-@property (nonatomic, readonly) NSString *name;
+@property (nonatomic, readonly, nullable) NSString *name;
 
-@property (nonatomic) OAPOI *poi;
+@property (nonatomic, nullable) OAPOI *poi;
 @property (nonatomic) int distance;
+
+@property (nonatomic, nullable) OATransportStopAggregated *transportStopAggregated;
 
 @end

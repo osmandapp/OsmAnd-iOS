@@ -299,6 +299,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
++ (BOOL) isCoordEqual:(CLLocationCoordinate2D)srcLatLon destLat:(CLLocationCoordinate2D)desLatLon;
 + (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon;
 + (BOOL) isCoordEqual:(double)srcLat srcLon:(double)srcLon destLat:(double)destLat destLon:(double)destLon upToDigits:(int)digits;
 

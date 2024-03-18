@@ -23,6 +23,7 @@
 #import "OATransportStop.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OATransportStopsBaseController.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
@@ -721,49 +722,29 @@
     NSArray<NSString *> *publicTransportTypes = [self getPublicTransportTypes];
     if (publicTransportTypes)
     {
-        NSMutableArray<OATargetPoint *> *transportStopPOIs = [NSMutableArray array];
+        NSMutableArray<OATargetPoint *> *transportStopAmenities = [NSMutableArray array];
         for (OATargetPoint *point in selectedObjects)
         {
-            id o = point.targetObj;
-            if ([o isKindOfClass:[OAPOI class]])
+            id object = point.targetObj;
+            if ([object isKindOfClass:[OAPOI class]])
             {
-                OAPOI *poi = (OAPOI *)o;
-                if (poi.type.name.length > 0 && [publicTransportTypes containsObject:poi.type.name])
-                    [transportStopPOIs addObject:point];
+                OAPOI *amenity = (OAPOI *)object;
+                if (amenity.type.name.length > 0 && [publicTransportTypes containsObject:amenity.type.name])
+                    [transportStopAmenities addObject:point];
             }
         }
-        if (transportStopPOIs.count > 0)
+        if (transportStopAmenities.count > 0)
         {
-            NSArray<OATransportStop *> *transportStops = [self findTransportStopsAt:coord];
-            NSMutableArray<OATransportStop *> *transportStopsReplacement = [NSMutableArray array];
-            for (OATargetPoint *point in transportStopPOIs)
+            for (OATargetPoint *point in transportStopAmenities)
             {
-                OAPOI *poi = (OAPOI *)point.targetObj;
-                NSMutableArray<OATransportStop *> *poiTransportStops = [NSMutableArray array];
-                for (OATransportStop *transportStop in transportStops)
-                {
-                    if ([transportStop.name hasPrefix:poi.name])
-                    {
-                        [poiTransportStops addObject:transportStop];
-                        transportStop.poi = poi;
-                    }
-                }
-                if (poiTransportStops.count > 0)
+                OAPOI *amenity = (OAPOI *)point.targetObj;
+                OATransportStop *transportStop = [OATransportStopsBaseController findNearestTransportStopForAmenity:amenity];
+                if (transportStop && self.mapViewController.mapLayers.transportStopsLayer)
                 {
                     [selectedObjects removeObject:point];
-                    if (poiTransportStops.count > 1)
-                        [self sortTransportStops:CLLocationCoordinate2DMake(poi.latitude, poi.longitude) transportStops:poiTransportStops];
-
-                    OATransportStop *poiTransportStop = poiTransportStops[0];
-                    if (![transportStopsReplacement containsObject:poiTransportStop])
-                        [transportStopsReplacement addObject:poiTransportStop];
+                    transportStop.poi = point.targetObj;
+                    [selectedObjects addObject:[self.mapViewController.mapLayers.transportStopsLayer getTargetPoint:transportStop]];
                 }
-            }
-            if (transportStopsReplacement.count > 0)
-            {
-                OAMapViewController *mapViewController = self.mapViewController;
-                for (OATransportStop *transportStop in transportStopsReplacement)
-                    [selectedObjects addObject:[mapViewController.mapLayers.transportStopsLayer getTargetPoint:transportStop]];
             }
         }
     }

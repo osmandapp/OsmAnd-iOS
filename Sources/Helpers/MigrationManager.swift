@@ -134,13 +134,11 @@ final class MigrationManager: NSObject {
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {
-                    let customSuffix = oldCustomWidgetId.contains(MapWidgetInfo.DELIMITER)
-                        ? oldCustomWidgetId.substring(from: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)) + 2)
-                        : ""
+                    let hasCustomSuffix = oldCustomWidgetId.contains(MapWidgetInfo.DELIMITER)
                     let newCustomWidgetId = oldCustomWidgetId.replacingOccurrences(of: oldOriginalWidgetId, with: newOriginalWidgetId)
                     if let widgetType = WidgetType.getById(newCustomWidgetId) {
                         let appModeStringKey: String = appMode.stringKey
-                        var prefKeySuffix = !customSuffix.isEmpty ? oldCustomWidgetId : ""
+                        var prefKeySuffix = hasCustomSuffix ? oldCustomWidgetId : ""
 
                         // sync preference key and value for saved BLE sensor devices
 
@@ -148,7 +146,7 @@ final class MigrationManager: NSObject {
                         if let useAnyDevicePref = defaults.object(forKey: useAnyDevicePrefKey) as? Bool,
                            let plugin = OAPlugin.getByWidgetId(newOriginalWidgetId),
                            let fieldType = plugin.getWidgetDataFieldTypeName(byWidgetId: newOriginalWidgetId) {
-                            let newPrefKey = fieldType + customSuffix
+                            let newPrefKey = fieldType + (hasCustomSuffix ? newCustomWidgetId : "")
                             let newPref: OACommonString = settings.registerStringPreference(newPrefKey, defValue: plugin.getAnyConnectedDeviceId())
                             if !useAnyDevicePref {
                                 let oldPrefKey = "\(widgetType.title)\(oldCustomWidgetId)_\(appModeStringKey)"
@@ -160,11 +158,11 @@ final class MigrationManager: NSObject {
 
                         // sync show_icon preference key of simple widgets
 
-                        prefKeySuffix = !customSuffix.isEmpty ? "_\(prefKeySuffix)" : ""
+                        prefKeySuffix = hasCustomSuffix ? "_\(prefKeySuffix)" : ""
                         let hideIconPrefKey = "\(widgetType.title)kHideIconPref\(prefKeySuffix)_\(appModeStringKey)"
                         if let hideIconPref = defaults.object(forKey: hideIconPrefKey) as? Bool {
                             var newPrefKey = "simple_widget_show_icon\(widgetType.id)"
-                            if !customSuffix.isEmpty {
+                            if hasCustomSuffix {
                                 newPrefKey = newPrefKey.appending(newCustomWidgetId)
                             }
                             let newPref: OACommonBoolean = settings.registerBooleanPreference(newPrefKey, defValue: true)
@@ -178,7 +176,7 @@ final class MigrationManager: NSObject {
                         let sizeStylePrefKey = "\(widgetType.title)kSizeStylePref\(prefKeySuffix)_\(appModeStringKey)"
                         if let sizeStylePref = defaults.object(forKey: sizeStylePrefKey) as? Int {
                             var newPrefKey = "simple_widget_show_icon\(widgetType.id)"
-                            if !customSuffix.isEmpty {
+                            if hasCustomSuffix {
                                 newPrefKey = newPrefKey.appending(newCustomWidgetId)
                             }
                             let newPref: OACommonInteger = settings.registerIntPreference(newPrefKey, defValue: Int32(WidgetSizeStyle.medium.rawValue))

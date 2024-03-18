@@ -563,7 +563,6 @@
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
     [self migrateResourcesToDocumentsIfNeeded];
-    [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
 
     // Copy regions.ocbf to Documents/Resources if needed
     NSString *ocbfPathBundle = [[NSBundle mainBundle] pathForResource:@"regions" ofType:@"ocbf"];
@@ -692,6 +691,7 @@
     [settings setApplicationModePref:initialAppMode];
 
     [OAPlugin initPlugins];
+    [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];

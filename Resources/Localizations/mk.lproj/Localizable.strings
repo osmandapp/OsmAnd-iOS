@@ -89,17 +89,14 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Izgrejsonce: %@
-\nZajdisonce: %@";
+"day_night_info_description" = "Izgrejsonce: %@\nZajdisonce: %@";
 "day_night_info" = "Informacii za den/noḱ";
 "daynight_mode_auto" = "Izgrejsonce /zajdisonce";
 "route_simulation" = "Route simulation";
 "auto_follow_location_enabled" = "Se koristi avtomatski centralen prikaz na kartata.";
 "unknown_location" = "Pozicijata sè ušte ne e poznata.";
 "animate_routing_route_not_calculated" = "Ve molime, prvo presmetajte ja maršrutata";
-"simulation_real_mode_desc" = "Na prav pat, brzinata ḱe bide približna na maksimalnata dozvolena brzina.
-\nNa raskrsnicite, simulacijata ḱe uspori.
-\nDopolnitelni kazni ḱe se primenuvaat na soobraḱajnata signalizacija, znacite za stop i sl.";
+"simulation_real_mode_desc" = "Na prav pat, brzinata ḱe bide približna na maksimalnata dozvolena brzina.\nNa raskrsnicite, simulacijata ḱe uspori.\nDopolnitelni kazni ḱe se primenuvaat na soobraḱajnata signalizacija, znacite za stop i sl.";
 "simulation_real_mode_title" = "Realna simulacija";
 "simulation_constant_mode_desc" = "Simulacijata ce se izveduva so konstantna izbrana brzina.";
 "simulation_constant_mode_title" = "Fiksna brzina";
@@ -827,8 +824,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "Lokacija";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "Geografskaširina %@
-\nGeografska širina dolzina %@";
+"short_location_on_map" = "Geografskaširina %@\nGeografska širina dolzina %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -1001,9 +997,7 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Dodatni karti";
 "import_duplicates_title" = "Nekoi stavki vece postojat";
-"import_duplicates_description" = "OsmAnd veḱe ima elementi so isti iminja kako i uvezenite.
-\n
-\nIzberete dejstvo.";
+"import_duplicates_description" = "OsmAnd veḱe ima elementi so isti iminja kako i uvezenite.\n\nIzberete dejstvo.";
 "keep_both" = "Čuvajte gi dvete";
 "keep_both_desc" = "Uvezenite stavki ḱe bidat dodadeni so prefiks";
 "replace_all" = "Zameni se\'";
@@ -1080,9 +1074,7 @@
 "reset_to_default" = "Resetiranje na standardno";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAnd proverete %@ za duplikati so postoečki stavki vo aplikacijata.
-\n
-\nMože da potrae nekoe vreme.";
+"checking_for_duplicate_description" = "OsmAnd proverete %@ za duplikati so postoečki stavki vo aplikacijata.\n\nMože da potrae nekoe vreme.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1699,25 +1691,16 @@
 //inapps
 "plugin_nautical_name" = "Prikaz na nautička karta";
 "product_desc_nautical" = "Vector maps appropriate for sailing routes navigation";
-"plugin_nautical_descr" = "Ovoj priklučok ja zbogatuva aplikacijata za mapi i navigacija OsmAnd za da proizveduva i nautički karti za plovenje, edrenje i drugi vidovi na vodeni sportovi.
-\n
-\nSpecijalen dodatok za mapi za OsmAnd ḱe gi obezbedi site oznaki za nautička navigacija i simboli na grafikoni, za navigacija vo vnatrešnostai vo blizina na bregot. Opisot na sekoja navigaciska oznaka gi dava detalite potrebni za nivno identifikuvanje i nivnoto značenje (kategorija, forma, boja, niza, referenca itn.).
-\n
-\nZa da se vratite na eden od konvencionalnite stilovi na mapi na OsmAnd, ednostavno ili povtorno deaktivirajte go ovoj priklučok ili promenete go „Stilot na karta“ pod „Konfiguriraj mapa“ po želba.";
+"plugin_nautical_descr" = "Ovoj priklučok ja zbogatuva aplikacijata za mapi i navigacija OsmAnd za da proizveduva i nautički karti za plovenje, edrenje i drugi vidovi na vodeni sportovi.\n\nSpecijalen dodatok za mapi za OsmAnd ḱe gi obezbedi site oznaki za nautička navigacija i simboli na grafikoni, za navigacija vo vnatrešnostai vo blizina na bregot. Opisot na sekoja navigaciska oznaka gi dava detalite potrebni za nivno identifikuvanje i nivnoto značenje (kategorija, forma, boja, niza, referenca itn.).\n\nZa da se vratite na eden od konvencionalnite stilovi na mapi na OsmAnd, ednostavno ili povtorno deaktivirajte go ovoj priklučok ili promenete go „Stilot na karta“ pod „Konfiguriraj mapa“ po želba.";
 "osmand_parking_plugin_name" = "Parking pozicija";
 "product_desc_parking" = "Track the parking time and location of your car";
-"osmand_parking_plugin_description" = "Vi ovozmožuva da snimate kade e parkiran vašiot avtomobil, vklučitelno i kolku vreme ostanuva za parkiranje.
-\n I lokacijata i vremeto se vidlivi na kontrolnata tabla, kako i vo dodatokot za mapa. Potsetnik za alarm može da se dodade vo kalendarot na Android.";
+"osmand_parking_plugin_description" = "Vi ovozmožuva da snimate kade e parkiran vašiot avtomobil, vklučitelno i kolku vreme ostanuva za parkiranje.\n I lokacijata i vremeto se vidlivi na kontrolnata tabla, kako i vo dodatokot za mapa. Potsetnik za alarm može da se dodade vo kalendarot na Android.";
 "plugin_ski_name" = "Prikaz na karta za skijanje";
 "product_desc_skimap" = "Up-to-date ski trail map with lifts and slopes";
-"plugin_ski_descr" = "Ovoj priklučok za OsmAnd vi gi stava na dofat detalite za globalnite skijački pateki, kros-kantri skijački pateki, alpskite ski pateki, žičarnicite i ski-liftovite. Patekite i patekite se prikažani vo boja spored teškotija i prikažani vo specijalen stil na mapa „Zimski“ koj asimilira zimski pejzažoboen so sneg.
-\n
-\nAktiviranjeto na ovoj prikaz go menuva stilot na kartata vo „Zima i skijanje“, prikažuvajḱi gi site karakteristiki na pejzažot vo zimski uslovi. Ovoj prikaz može da se vrati ili so deaktiviranje povtorno ovde ili so menuvanje na „stilot na karta“ pod „Konfigurirajmapa“ po želba.";
+"plugin_ski_descr" = "Ovoj priklučok za OsmAnd vi gi stava na dofat detalite za globalnite skijački pateki, kros-kantri skijački pateki, alpskite ski pateki, žičarnicite i ski-liftovite. Patekite i patekite se prikažani vo boja spored teškotija i prikažani vo specijalen stil na mapa „Zimski“ koj asimilira zimski pejzažoboen so sneg.\n\nAktiviranjeto na ovoj prikaz go menuva stilot na kartata vo „Zima i skijanje“, prikažuvajḱi gi site karakteristiki na pejzažot vo zimski uslovi. Ovoj prikaz može da se vrati ili so deaktiviranje povtorno ovde ili so menuvanje na „stilot na karta“ pod „Konfigurirajmapa“ po želba.";
 "record_plugin_name" = "Snimanje na patuvanjeto";
 "product_desc_track_recording" = "Record and save your trips as GPX tracks";
-"record_plugin_description" = "Ovoj priklučok ja aktivira funkcionalnosta za snimanje i začuvuvanje na vašite pesni so račno dopiranje na dodatokot za evidencija na GPX na kartata ili, isto taka, za avtomatsko evidentiranje na site vaši navigaciski pravci vo datoteka GPX.
-\n
-\n Snimenite pesni može da se spodelat so vašite prijateliili da se koristat za pridonesi za OSM. Sportistite možat da koristat snimeni pateki za da gi sledat nivnite treninzi. Nekoi osnovni analizi na patekite može da se izvedat direktno vo OsmAnd, kako što se vreminjata na krugovi, prosečnata brzina itn., a trakite, se razbira, može i podocna da seanaliziraat vo specijalni alatki za analiza od treta strana.";
+"record_plugin_description" = "Ovoj priklučok ja aktivira funkcionalnosta za snimanje i začuvuvanje na vašite pesni so račno dopiranje na dodatokot za evidencija na GPX na kartata ili, isto taka, za avtomatsko evidentiranje na site vaši navigaciski pravci vo datoteka GPX.\n\n Snimenite pesni može da se spodelat so vašite prijateliili da se koristat za pridonesi za OSM. Sportistite možat da koristat snimeni pateki za da gi sledat nivnite treninzi. Nekoi osnovni analizi na patekite može da se izvedat direktno vo OsmAnd, kako što se vreminjata na krugovi, prosečnata brzina itn., a trakite, se razbira, može i podocna da seanaliziraat vo specijalni alatki za analiza od treta strana.";
 "osm_editing_plugin_name" = "Ureduvanje na OpenStreetMap";
 "product_desc_osm_editing" = "Turn your mobile phone into a mapping tool";
 "osm_editing_plugin_description" = "Napravete pridonesi za OSM kako kreiranje ili menuvanje objekti na OSM POI, otvoranje ili komentiranje beleški za OSM i pridonesuvanje snimeni GPX-datoteki vo OsmAnd so dostavuvanje na vašeto korisničko ime i lozinka. OpenStreetMap.org e globalen proekt za mapiranje na javen domen upravuvan od zaednicata.";
@@ -1756,9 +1739,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Konturni linii";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"srtm_plugin_description" = "Ovoj priklučok obezbeduva i preklopuvanje na konturnata linija i (reljef) sloj na senka na ridot što ḱe se prikažat na vrvot na standardnite karti na OsmAnd. Ovaa funkcionalnost ḱe bide mnogu ceneta od sportisti, planinari, velossipedisti i site zainteresirani za reljefnata struktura na pejzažot. (Ve molime imajte predvid deka podatocite za linijata na konturata i/ili relefot se odvoeni, dostapni se dopolnitelni prezemanja po aktiviranjeto na priklučokot.)
-\n
-\nGlobalnite podatoci (pomeǵu 70 ° sever i 70 ° južno) se zasnovaat na merenjata na SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Termal Emission and Reflection Radiometer), instrument za slikanje na odborot Terra, vodečkiot satelit na NASA za nabljuduvanje na Zemjata. Sistem. ASTER e kooperativen napor pomeǵu NASA, japonskoto Ministerstvo za ekonomija, trgovija i industrija (METI) i Japan Space Systems(J-spacesystems).";
+"srtm_plugin_description" = "Ovoj priklučok obezbeduva i preklopuvanje na konturnata linija i (reljef) sloj na senka na ridot što ḱe se prikažat na vrvot na standardnite karti na OsmAnd. Ovaa funkcionalnost ḱe bide mnogu ceneta od sportisti, planinari, velossipedisti i site zainteresirani za reljefnata struktura na pejzažot. (Ve molime imajte predvid deka podatocite za linijata na konturata i/ili relefot se odvoeni, dostapni se dopolnitelni prezemanja po aktiviranjeto na priklučokot.)\n\nGlobalnite podatoci (pomeǵu 70 ° sever i 70 ° južno) se zasnovaat na merenjata na SRTM (Shuttle Radar Topography Mission) i ASTER (Advanced Spaceborne Termal Emission and Reflection Radiometer), instrument za slikanje na odborot Terra, vodečkiot satelit na NASA za nabljuduvanje na Zemjata. Sistem. ASTER e kooperativen napor pomeǵu NASA, japonskoto Ministerstvo za ekonomija, trgovija i industrija (METI) i Japan Space Systems(J-spacesystems).";
 "wikivoyage_travel_guide" = "Vodiči za patuvanje";
 "start_editing_card_image_text" = "Besplatniot svetski turistički vodič koj sekoj može da go ureduva.";
 "wikivoyage_travel_guide_descr" = "Vodiči za najinteresnite mesta na planetata, vnatre vo OsmAnd, bez vrska na Internet.";
@@ -2502,8 +2483,7 @@
 "promo_subscription" = "Promo pretplata";
 "renew_subscription" = "Obnovete ja pretplatata";
 "register_opr_create_new_account" = "Kreiraj nov akaunt";
-"osmand_cloud_create_account_descr" = "Ve molime vnesete ja vašata e-mail adresa, tamu ḱe vi bide ispraten kod za potvrda,
-\ni site vaši podatoci ḱe bidat povrzani so nego.";
+"osmand_cloud_create_account_descr" = "Ve molime vnesete ja vašata e-mail adresa, tamu ḱe vi bide ispraten kod za potvrda,\ni site vaši podatoci ḱe bidat povrzani so nego.";
 "verification" = "Verification";
 "verify_email_address_descr" = "Kodot za potvrda e ispraten do %@. Ve molime vnesete go vo poleto podolu.";
 "verification_code_placeholder" = "Code";
@@ -2569,16 +2549,11 @@
 "backup_delete_all_data" = "Izbrisi ja seta moja datoteka";
 "backup_delete_old_data" = "Otstranete gi starite verzii";
 "backup_delete_from_cloud" = "Delete from cloud";
-"logout_from_osmand_cloud_decsr" = "Odjavuvanje\?
-\nḰe treba povtorno da se najavite za da napravite rezervna kopija ili da gi vratite podatocite.";
+"logout_from_osmand_cloud_decsr" = "Odjavuvanje\?\nḰe treba povtorno da se najavite za da napravite rezervna kopija ili da gi vratite podatocite.";
 "are_you_sure" = "Dali ste sigurni\?";
 "backup_deleting_all_data" = "Se brišat site podatoci…";
-"backup_delete_all_data_warning" = "Ḱe gi izbrišete site podatoci prethodno postaveni na OsmAnd Cloud, vklučuvajḱi ja i istorijata na verzii.
-\n
-\nNema da možete da gi vratite izbrišanite podatoci.";
-"backup_delete_old_data_warning" = "Ḱe ja izbrišete istorijata na promeni za prethodno včitanite podatoci.
-\n
-\nTekovnata verzija na podatocite ḱe bide začuvana na serverot, no nema da možete da se vratite na prethodno napravenite promeni.";
+"backup_delete_all_data_warning" = "Ḱe gi izbrišete site podatoci prethodno postaveni na OsmAnd Cloud, vklučuvajḱi ja i istorijata na verzii.\n\nNema da možete da gi vratite izbrišanite podatoci.";
+"backup_delete_old_data_warning" = "Ḱe ja izbrišete istorijata na promeni za prethodno včitanite podatoci.\n\nTekovnata verzija na podatocite ḱe bide začuvana na serverot, no nema da možete da se vratite na prethodno napravenite promeni.";
 "backup_delete_all_data_in_progress" = "Please wait until OsmAnd delete all your data from cloud. All data on the device remain untouch.";
 "backup_delete_all_data_finished" = "All your data was successfully deleted from OsmAnd Cloud.";
 "backup_remove_old_versions_finished" = "Old versions was successfully deleted from OsmAnd Cloud.";
@@ -2798,21 +2773,14 @@
 "speed_cameras_alert" = "Predupreduvanjata na kamerite za brzina vo nekoi zemji se zabraneti so zakon.";
 "lang_sat" = "Sntalski";
 "shared_string_height" = "Visina";
-"speed_cameras_legal_descr" = "Vo nekoi zemji ili regioni, upotrebata na aplikacii za predupreduvanje za kameri za brzina e zabraneta so zakon.
-\n
-\nTreba da napravite izbor vo zavisnost od zakonot na vašata zemja.
-\n
-\nIzberete %@ i ḱe dobivate predupreduvanja i predupreduvanja za kamerite za brzina.
-\n
-\nIzberete %@. Site podatoci povrzani so kamerite za brzina: predupreduvanja, izvestuvanja, POI ḱe se izbrišat dodeka OsmAnd celosno ne se instalira.";
+"speed_cameras_legal_descr" = "Vo nekoi zemji ili regioni, upotrebata na aplikacii za predupreduvanje za kameri za brzina e zabraneta so zakon.\n\nTreba da napravite izbor vo zavisnost od zakonot na vašata zemja.\n\nIzberete %@ i ḱe dobivate predupreduvanja i predupreduvanja za kamerite za brzina.\n\nIzberete %@. Site podatoci povrzani so kamerite za brzina: predupreduvanja, izvestuvanja, POI ḱe se izbrišat dodeka OsmAnd celosno ne se instalira.";
 "shared_string_keep_active" = "Bidi aktiven";
 "lang_zh-Hant" = "Kineski (Tradicionalen)";
 "speed_camera_pois" = "Brzinska kamera POI’s";
 "shared_string_legal" = "Legalno";
 "uninstall_speed_cameras" = "Deinstaliraj ja brzinskata kamera";
 "icon_group_service" = "Servis";
-
-"rendering_attr_showProposed_name" = "Predlozeni objekti";;
+"rendering_attr_showProposed_name" = "Predlozeni objekti";
 "av_notes_audio_widget_desc" = "Dopiranjeto na vidzetot ovozmozuva zapocnuvanje na snimanje audio zabeleski.";
 "shared_string_dark" = "Temna";
 "map_widget_distance_to_destination" = "Rastojanie do odredisteto";

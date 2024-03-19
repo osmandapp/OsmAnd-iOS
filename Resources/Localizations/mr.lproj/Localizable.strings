@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "होकायंत्र दिशा";
 "rotate_map_bearing_opt" = "हालचालीची दिशा";
-"rotate_map_north_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "फिरवू नका (उत्तर दिशा नेहमी वरती)";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "shared_string_automatic" = "Automatic";
@@ -1753,7 +1753,7 @@
 "try_again" = "Try again";
 "searching" = "शोधत आहे…";
 "search_location" = "स्थान शोधत आहे…";
-"search_map" = "नकाशे शोधत आहे";
+"search_map" = "नकाशे शोधत आहे…";
 "search_another_country" = "इतर प्रदेश निवडा";
 "skip_map_downloading" = "Skip downloading maps";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
@@ -2246,3 +2246,12 @@
 "altitude_descent" = "उतार";
 "shared_string_hide_all" = "सगळे लपवा";
 "weather_entire_world" = "संपूर्ण जग";
+"general_settings" = "सर्वसाधारण पर्याय";
+"shared_string_dark" = "गडद";
+"user_name" = "तुमचे ओएसएम युजरनेम";
+"network" = "नेटवर्क";
+"map_orientation_landscape" = "आडवा";
+"shared_string_any" = "कुठलाही";
+"short_min" = "मी";
+"map_orientation_portrait" = "उभा";
+"map_widget_gps_info" = "जिपिएस माहिती";

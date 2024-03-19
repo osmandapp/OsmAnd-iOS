@@ -388,11 +388,22 @@
 "gpx_import_desc" = "GPX dosyalarınızı (yaygın GPS veri biçimi) Dropbox, E-posta veya başka bir kaynaktan içe aktarmak için \"OsmAnd Haritalara Kopyala\" seçeneğini kullanın";
 "sett_lang_trans" = "başka alfabeyle yaz";
 "translit_names" = "Adlara harfçevirisi yap";
-"plugin_nautical_descr" = "Bu eklenti, bot, yelken ve diğer su sporları türleri için deniz haritaları üretmesi için OsmAnd harita ve navigasyon uygulamasını zenginleştirir. \n \nOsmAnd için özel bir harita eklentisi, tüm deniz navigasyon işaretlerini ve harita sembollerini, hem kıyıdan uzak hem de yakın navigasyon için sağlayacaktır. Her gezinme işaretinin açıklaması, onları tanımlamak için gereken ayrıntıları ve anlamlarını (kategori, şekil, renk, sıra, referans vb.) sağlar. \n \nOsmAnd\'ın geleneksel harita tarzlarından birine geri dönmek için, bu eklentiyi tekrar devre dışı bırakın ya da \'Haritayıyapılandırın\' altında \'Harita tarzını\' istediğiniz gibi değiştirin.";
-"osmand_parking_plugin_description" = "Aracınızın nerede park edildiğini ve alternatif olarak ne kadar park süresi kaldığını kaydetmenizi sağlar.\n Konum ve saat hem gösterge tablosunda hem de harita widget\'ında görülebilir. Android takvimine bir alarm hatırlatıcısı eklenebilir.";
-"plugin_ski_descr" = "OsmAnd için bu eklenti, küresel yokuş aşağı kayak pistlerinin, kros kayağı pistlerinin, Alp kayak pistlerinin, teleferiklerin ve telesiyejlerin ayrıntılarını parmaklarınızın ucuna getirir. Yollar ve pistler, zorluk derecesine göre renk kodlu olarak gösterilir ve kar renginde bir kış manzarasına benzeyen özel bir \'Kış\' harita tarzında gösterilir. \n \nBu görünümü etkinleştirmek, kış koşullarında tüm peyzaj özelliklerini gösteren harita tarzını \'Kış ve kayak\' olarak değiştirir. Bu görünüm, burada tekrar devre dışı bırakılarak veya \'Harita yapılandır\' altındaki \'Harita tarzını\' istediğiniz gibi değiştirerek geri döndürülebilir.";
-"record_plugin_description" = "Bu eklenti, haritaüzerindeki GPX kayıt widget\'ına elle dokunarak gezinme rotalarınızı kaydetme işlevini, ya da tüm navigasyon rotalarınızı bir GPX dosyasına otomatik olarak kaydetme özelliğini etkinleştirir. \n \nKaydedilen yollar arkadaşlarınızla paylaşılabilir veya OSM\'ye katkıda bulunmak için kullanılabilir. Atletler antremanlarını izlemek için kayıtlı yolları kullanabilir. Tur zamanı, ortalama hız vs. gibi bazı basit yol analizi doğrudan OsmAnd içinde yapılabilir, ve tabii ki daha sonra özel üçüncü parti araçlarla da analiz edilebilir.";
-"srtm_plugin_description" = "Bu eklenti, OsmAnd\'ın standart haritalarının üstünde hem eş yükselti eğrisi üst katmanının hem de (kabartma) tepe gölgesi katmanının gösterilmesini sağlamaktadır. Bu işlevsellik sporcular, uzun yürüyüşçüler, doğa yürüyüşçüleri ve manzaranın kabartma yapısıyla ilgilenen herkes tarafından çok takdir edilecektir. (Eş yükselti eğrisi ve/veya kabartma verilerinin ayrı olduğunu, eklentiyi etkinleştirdikten sonra ek indirmelerin mevcut olduğunu lütfen unutmayın.) \n \nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER(Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA\'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon UzaySistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
+"plugin_nautical_descr" = "Bu eklenti, bot, yelken ve diğer su sporları türleri için deniz haritaları üretmesi için OsmAnd harita ve navigasyon uygulamasını zenginleştirir. 
+\n 
+\nOsmAnd için özel bir harita eklentisi, tüm deniz navigasyon işaretlerini ve harita sembollerini, hem kıyıdan uzak hem de yakın navigasyon için sağlayacaktır. Her gezinme işaretinin açıklaması, onları tanımlamak için gereken ayrıntıları ve anlamlarını (kategori, şekil, renk, sıra, referans vb.) sağlar. 
+\n 
+\nOsmAnd\'ın geleneksel harita tarzlarından birine geri dönmek için, bu eklentiyi tekrar devre dışı bırakın ya da \'Haritayıyapılandırın\' altında \'Harita tarzını\' istediğiniz gibi değiştirin.";
+"osmand_parking_plugin_description" = "Aracınızın nerede park edildiğini ve alternatif olarak ne kadar park süresi kaldığını kaydetmenizi sağlar.
+\n Konum ve saat hem gösterge tablosunda hem de harita widget\'ında görülebilir. Android takvimine bir alarm hatırlatıcısı eklenebilir.";
+"plugin_ski_descr" = "OsmAnd için bu eklenti, küresel yokuş aşağı kayak pistlerinin, kros kayağı pistlerinin, Alp kayak pistlerinin, teleferiklerin ve telesiyejlerin ayrıntılarını parmaklarınızın ucuna getirir. Yollar ve pistler, zorluk derecesine göre renk kodlu olarak gösterilir ve kar renginde bir kış manzarasına benzeyen özel bir \'Kış\' harita tarzında gösterilir. 
+\n 
+\nBu görünümü etkinleştirmek, kış koşullarında tüm peyzaj özelliklerini gösteren harita tarzını \'Kış ve kayak\' olarak değiştirir. Bu görünüm, burada tekrar devre dışı bırakılarak veya \'Harita yapılandır\' altındaki \'Harita tarzını\' istediğiniz gibi değiştirerek geri döndürülebilir.";
+"record_plugin_description" = "Bu eklenti, haritaüzerindeki GPX kayıt widget\'ına elle dokunarak gezinme rotalarınızı kaydetme işlevini, ya da tüm navigasyon rotalarınızı bir GPX dosyasına otomatik olarak kaydetme özelliğini etkinleştirir. 
+\n 
+\nKaydedilen yollar arkadaşlarınızla paylaşılabilir veya OSM\'ye katkıda bulunmak için kullanılabilir. Atletler antremanlarını izlemek için kayıtlı yolları kullanabilir. Tur zamanı, ortalama hız vs. gibi bazı basit yol analizi doğrudan OsmAnd içinde yapılabilir, ve tabii ki daha sonra özel üçüncü parti araçlarla da analiz edilebilir.";
+"srtm_plugin_description" = "Bu eklenti, OsmAnd\'ın standart haritalarının üstünde hem eş yükselti eğrisi üst katmanının hem de (kabartma) tepe gölgesi katmanının gösterilmesini sağlamaktadır. Bu işlevsellik sporcular, uzun yürüyüşçüler, doğa yürüyüşçüleri ve manzaranın kabartma yapısıyla ilgilenen herkes tarafından çok takdir edilecektir. (Eş yükselti eğrisi ve/veya kabartma verilerinin ayrı olduğunu, eklentiyi etkinleştirdikten sonra ek indirmelerin mevcut olduğunu lütfen unutmayın.)
+\n 
+\nKüresel veriler (70° kuzey ve 70° güney arasındaki) SRTM (Shuttle Radar Topography Mission) ve ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), NASA\'nın Dünya Gözlem Sisteminin amiral uydusu olan Terra üzerindeki bir görüntüleme aracı, tarafından yapılan ölçümlere dayanmaktadır. ASTER NASA, Japonya Ekonomi, Ticaret ve Sanayi Bakanlığı (METI) , ve Japon Uzay Sistemleri (J-spacesystems) arasında ortak bir çalışmadır.";
 "shared_string_hillshade" = "Tepe gölgesi";
 "plugin_popup_ski_desc" = "<b>Kayak haritası</b> tarzını açmak için lütfen <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin";
 "plugin_popup_nautical_desc" = "Lütfen önce Deniz haritalarını indirin.\nArdından <b>Harita Ayarları</b> > <b> Harita türü</b>'ne gidin ve <b>Deniz</b> tarzını açın";
@@ -438,7 +449,7 @@
 "subcategories" = "Alt kategoriler";
 "selected_categories" = "Seçilen kategoriler";
 "new_filter_desc" = "Lütfen yeni süzgeç için bir ad girin, bu \'Kategoriler\' sekmenize eklenecek.";
-"edit_filter" = "Kategorileri düzenle";
+"edit_filter" = "Süzgeci düzenle";
 "nothing_found" = "Hiçbir şey bulunamadı";
 "select_street" = "Sokağı seçin";
 "type_address" = "Adresi yazın";
@@ -471,7 +482,8 @@
 "info_button" = "Bilgi";
 "simulate_your_location" = "Konumunuzu simüle et";
 "simulate_routing_descr" = "Hesaplanmış rota ile konumunuzu simüle edin";
-"day_night_info_description" = "Gün doğumu:%@\nGün batımı:%@";
+"day_night_info_description" = "Gün doğumu:%@
+\nGün batımı:%@";
 "day_night_info" = "Gündüz/gece bilgisi";
 "daynight_mode_auto" = "Gündoğumu/günbatımı";
 "route_simulation" = "Rota simülasyonu";
@@ -485,7 +497,7 @@
 "save_global_track_interval" = "Genel kayıt tutma aralığı";
 "rotate_map_compass_opt" = "Pusula yönü";
 "rotate_map_bearing_opt" = "Hareket yönü";
-"rotate_map_north_opt" = "Döndürülmesin (kuzey yukarıda)";
+"rotate_map_north_opt" = "Dönme yok (kuzey her zaman yukarı doğru)";
 "shared_string_automatic" = "Otomatik";
 "shared_string_near" = "Yakın";
 "map_widget_next_turn" = "Sonraki dönüş";
@@ -542,7 +554,7 @@
 "speak_title" = "Bildir…";
 "keep_informing" = "Navigasyon talimatlarını tekrarla";
 "arrival_distance" = "Varış duyurusu";
-"arrival_distance_descr" = "Varış duyurusunu ne kadar kala istiyorsunuz?";
+"arrival_distance_descr" = "Varış duyurusunu ne kadar kala istiyorsunuz\?";
 "speed_limit_exceed" = "Hız sınırı oynama payı";
 "speed_limit_exceed_message" = "Üzerine çıktığınızda sesli uyarı alacağınız hız sınırı toleransını seçin.";
 "wake_on_voice" = "Ekranı aç";
@@ -626,7 +638,7 @@
 "clear_all_intermediates" = "Tüm başlangıç noktalarını temizle";
 "cancel_navigation" = "Navigasyonu durdur";
 "intermediate_items_sort_by_distance" = "kapıdan kapıya sırala";
-"switch_start_finish" = "Başlangıç ve hedefi ters çevir";
+"switch_start_finish" = "Rotayı tersine çevir";
 "shared_string_options" = "Ayarlar";
 "shared_string_search" = "Arama";
 "shared_string_target_points" = "Varış noktaları";
@@ -960,7 +972,7 @@
 "menu_my_directions" = "Yol Tariflerim";
 "shared_string_of" = "/";
 "search_my_location" = "Konumumu bul";
-"search_map" = "Haritalar aranıyor";
+"search_map" = "Haritalar aranıyor…";
 "skip_map_downloading_desc_ios" = "Yüklü çevrim dışı haritanız yok. Listeden bir harita seçebilir veya daha sonra şuradan harita indirebilirsiniz: Menü - Harita dosyalarını yönet";
 "items_selected" = "%d seçildi";
 "shared_string_street_intersection" = "Sokak kesişimi";
@@ -1105,7 +1117,8 @@
 "save_poi_without_poi_type_message" = "POI tür olmadan kaydedilsin mi\?";
 "local_openstreetmap_uploading" = "Yükleniyor…";
 "key_hint_zoom_out" = "Uzaklaştır";
-"short_location_on_map" = "Enlem %@\nBoylam %@";
+"short_location_on_map" = "Enlem %@
+\nBoylam %@";
 "navigate_point_format_OLC" = "Açık Konum Kodu (Open Location Code - OLC)";
 "utm_description" = "OsmAnd'ın, UTM NATO biçimine benzeyen ancak aynı olmayan UTM Standart biçimini kullandığını lütfen unutmayın.";
 "coordinates_copy_descr" = "Koordinatları panoya kopyalamak için dokunun.";
@@ -1704,7 +1717,7 @@
 "allow_3D_view" = "2.5B görünüm";
 "do_not_rotate" = "Döndürme";
 "light_theme" = "Açık";
-"settings_app_theme" = "Uygulama teması";
+"settings_app_theme" = "Uygulama gövdesi";
 "shared_string_meters" = "metre";
 "shared_string_tones" = "ton";
 "accessibility_announce" = "Duyuru";
@@ -1791,7 +1804,9 @@
 
 // Route planning
 "plan_route" = "Rota planla";
-"checking_for_duplicate_description" = "OsmAnd, uygulamadaki mevcutögelerle yinelenme durumu için %@\'i denetliyor. \n \nBu biraz zaman alabilir.";
+"checking_for_duplicate_description" = "OsmAnd, uygulamadaki mevcutögelerle yinelenme durumu için %@\'i denetliyor. 
+\n 
+\nBu biraz zaman alabilir.";
 "checking_for_duplicates" = "Yinelenenler denetleniyor...";
 "added_items" = "Eklenen ögeler: %@";
 "import_complete_description" = "%@\'deki tüm veriler içe aktarıldı. Yönetmek üzere uygulamanın gerekli bölümünü açmak için aşağıdaki düğmeleri kullanabilirsiniz.";
@@ -1819,7 +1834,9 @@
 "replace_all" = "Hepsini değiştir";
 "keep_both_desc" = "İçe aktarılan ögelere ön ek eklenecek";
 "keep_both" = "Her ikisini de sakla";
-"import_duplicates_description" = "OsmAnd\'da içe aktarılanlarla aynı ada sahip ögeler zaten var.\n\nBir eylem seçin.";
+"import_duplicates_description" = "OsmAnd\'da içe aktarılanlarla aynı ada sahip ögeler zaten var.
+\n
+\nBir eylem seçin.";
 "import_duplicates_title" = "Bazı ögeler zaten var";
 "shared_string_nothing_selected" = "Hiçbir şey seçilmedi";
 "shared_string_preparing" = "Hazırlama";
@@ -1909,7 +1926,7 @@
 "show_compass_ruler" = "Pusula cetvelini göster";
 "tracks_on_map" = "Görüntülenen izlenen yollar";
 "searching" = "Aranıyor…";
-"shared_string_loading" = "Yükleniyor…";
+"shared_string_loading" = "Yükleniyor";
 "shared_string_visible" = "Görünür";
 "poi_categories" = "POI kategorileri";
 "route_calc_progress" = "Hesaplanıyor: %%%d";
@@ -1930,7 +1947,7 @@
 "icon_group_symbols" = "Semboller";
 "icon_group_sport" = "Spor";
 "icon_group_special" = "Özel";
-"icon_group_emergency" = "Acil durum";
+"icon_group_emergency" = "Acil";
 "shared_string_gpx_points" = "Noktalar";
 "download_regular_maps" = "Standart harita";
 "quick_action_current_location_widget_descr" = "Haritaüzerinde koordinatlar widget\'ını göstermek veya gizlemek için bir geçiş.";
@@ -2319,7 +2336,8 @@
 "cloud_email_already_registered" = "Bu e-posta adresi zaten kayıtlı.";
 "login_help_email_title" = "OsmAnd iOS Cloud";
 "register_opr_create_new_account" = "Yeni hesap oluştur";
-"osmand_cloud_create_account_descr" = "Lütfen e-posta adresinizi girin, bu adrese bir doğrulama kodu gönderilecek,\nve tüm verileriniz ona bağlanacaktır.";
+"osmand_cloud_create_account_descr" = "Lütfen e-posta adresinizi girin, bu adrese bir doğrulama kodu gönderilecek,
+\nve tüm verileriniz ona bağlanacaktır.";
 "verification" = "Doğrulama";
 "verify_email_address_descr" = "Doğrulama kodu %@ adresine gönderildi. Lütfen onu aşağıdaki alana girin.";
 "verification_code_placeholder" = "Kod";
@@ -2345,7 +2363,12 @@
 "backup_view_conflicts" = "Çakışmaları görüntüle";
 "plugin_popup_weather_title" = "Hava Durumu'nu Etkinleştir";
 "plugin_popup_weather_ask" = "Lütfen Hava Durumu eklentisini etkinleştirin";
-"weather_plugin_description" = "Sağladıkları:\n- 5 katman içeren 24 saatlik ve 7 günlük hava tahmini\n- konum tabanlı widget\'lar\n- sıcaklık/basınç eş değer eğrileri\n\nHava durumu verileri Global Forecast System (GFS, https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast) tarafından sağlanır.";
+"weather_plugin_description" = "Sağladıkları:
+\n- 5 katman içeren 24 saatlik ve 7 günlük hava tahmini
+\n- konum tabanlı widget\'lar
+\n- sıcaklık/basınç eş değer eğrileri
+\n
+\nHava durumu verileri Global Forecast System (GFS, %@) tarafından sağlanır.";
 "osmand_cloud_login_descr" = "Lütfen kayıt olduğunuz e-posta adresini girin. Bu adrese bir sonraki adım için tek seferlik bir parola gönderilecek.";
 "login_footer_email_part" = "support@osmand.net";
 "cloud_email_not_registered" = "Bu e-posta adresi OsmAnd Cloud için kayıtlı değil";
@@ -2395,7 +2418,9 @@
 "routeInfo_horse_scale_name" = "At parkurlarının zorluğu";
 "routeInfo_horse_scale_description" = "Yolları at parkurlarının zorluğuna göre görselleştir";
 "simulation_preview_mode_title" = "Hızlı ön izleme modu";
-"simulation_real_mode_desc" = "Düz yol kesimlerinde hız, izin verilen azami hıza yaklaşık olacaktır.\nKavşaklarda simülasyon yavaşlayacaktır.\nTrafik işaretleri, dur işaretleri vb. için ek cezalar uygulanacaktır.";
+"simulation_real_mode_desc" = "Düz yol kesimlerinde hız, izin verilen azami hıza yaklaşık olacaktır.
+\nKavşaklarda simülasyon yavaşlayacaktır.
+\nTrafik işaretleri, dur işaretleri vb. için ek cezalar uygulanacaktır.";
 "simulation_real_mode_title" = "Gerçekçi simülasyon";
 "simulation_constant_mode_desc" = "Simülasyon sabit seçilen hızda gerçekleştirilecektir.";
 "shared_string_capacity" = "Kapasite";
@@ -2538,11 +2563,13 @@
 "mtb_imba_full" = "Uluslararası Dağ Bisikleti Birliği";
 "use_login_and_password" = "Kullanıcı adı ve parola kullan";
 "backup_data" = "Verileri yedekle";
-"backup_delete_all_data_warning" = "Sürüm geçmişi de dahil olmak üzere daha önce OsmAnd Cloud\'a yüklenen tüm verileri silmek üzeresiniz.\n\nSilinen verileri kurtaramazsınız.";
+"backup_delete_all_data_warning" = "Sürüm geçmişi de dahil olmak üzere daha önce OsmAnd Cloud\'a yüklenen tüm verileri silmek üzeresiniz.
+\n
+\nSilinen verileri kurtaramazsınız.";
 "contact_support_description" = "Herhangi bir sorunuz varsa, lütfen %@ üzerinden bizimle iletişime geçin.";
 "routing_attr_motor_type_diesel_name" = "Dizel";
 "shared_string_angle" = "Açı";
-"duration_ago" = "%@ önce";
+"duration_ago" = "%@önce";
 "offline_edition_descr" = "Çevrim dışı düzenleme etkinleştirilirse, değişiklikler önce yerel olarak kaydedilecek ve istek üzerine karşıya yüklenecek, aksi takdirde değişiklikler hemen karşıya yüklenecek.";
 "rendering_attr_showMtbScale_name" = "MTBölçeğini göster";
 "map_updates_are_unavailable_yet" = "Henüz harita güncellemeleri yok. :-(";
@@ -2569,11 +2596,14 @@
 "show_borders_of_downloaded_maps" = "İndirilen haritaların sınırlarını göster";
 "backup_danger_zone" = "Tehlike bölgesi";
 "routing_attr_motor_type_name" = "Motorun kullandığı yakıt";
-"backup_delete_old_data_warning" = "Önceden yüklenen veriler için değişiklik geçmişini silmek üzeresiniz.\n\nVerilerin geçerli sürümü sunucuya kaydedilecek, ancak daha önce yapılan değişikliklere geri dönemeyeceksiniz.";
+"backup_delete_old_data_warning" = "Önceden yüklenen veriler için değişiklik geçmişini silmek üzeresiniz.
+\n
+\nVerilerin geçerli sürümü sunucuya kaydedilecek, ancak daha önce yapılan değişikliklere geri dönemeyeceksiniz.";
 "download_heightmap_maps" = "Yükseklik haritası";
 "select_backup_data_descr" = "Yedeklenecek verileri ve klasörleri seçin.";
 "backup_restore_data" = "Verileri geri yükle";
-"logout_from_osmand_cloud_decsr" = "Oturum kapatılsın mı\?\nVerileri yedeklemek veya geri yüklemek için tekrar oturum açmanız gerekecek.";
+"logout_from_osmand_cloud_decsr" = "Oturum kapatılsın mı\?
+\nVerileri yedeklemek veya geri yüklemek için tekrar oturum açmanız gerekecek.";
 "contributions_may_calculate_with_delay" = "Katkıda bulunmaların hesaplanması birkaç saat sürebilir.";
 "map_updates_for_mappers" = "Haritacılar için harita güncellemeleri";
 "shared_string_progress" = "İlerleme";
@@ -2673,7 +2703,13 @@
 "m" = "m";
 "kg" = "kg";
 "km" = "km";
-"speed_cameras_legal_descr" = "Bazı ülke veya bölgelerde hız kamerası uyarı uygulamalarının kullanımı yasalarca yasaklanmıştır.\n\nÜlkenizin yasalarına bağlı olarak bir seçim yapmanız gerekmektedir.\n\n%@ seçeneğini seçtiğinizde hız kameraları hakkında ikaz ve uyarıları alırsınız.\n\n%@ seçeneğini seçtiğinizde hız kameraları ile ilgili tüm veriler: uyarılar, bildirimler, POI\'ler OsmAnd tamamen yeniden kurulana kadar silinecektir.";
+"speed_cameras_legal_descr" = "Bazı ülke veya bölgelerde hız kamerası uyarı uygulamalarının kullanımı yasalarca yasaklanmıştır.
+\n
+\nÜlkenizin yasalarına bağlı olarak bir seçim yapmanız gerekmektedir.
+\n
+\n%@ seçeneğini seçtiğinizde hız kameraları hakkında ikaz ve uyarıları alırsınız.
+\n
+\n%@ seçeneğini seçtiğinizde hız kameraları ile ilgili tüm veriler: uyarılar, bildirimler, POI\'ler OsmAnd tamamen yeniden kurulana kadar silinecektir.";
 "shared_string_legal" = "Yasal";
 "speed_cameras_alert" = "Hız kamerası uyarıları bazı ülkelerde yasalarca yasaklanmıştır.";
 "uninstall_speed_cameras" = "Hız kameralarını kaldır";
@@ -2686,7 +2722,7 @@
 "icon_group_service" = "Hizmet";
 "send_log" = "Rapor gönder";
 "user_guide" = "Kullanıcı kılavuzu";
-"map_widgets" = "Harita Widget'ları";
+"map_widgets" = "Harita Widget\'ları";
 "my_data" = "Verilerim";
 "add_row" = "Satır ekle";
 "troubleshooting" = "Sorun giderme";
@@ -2713,15 +2749,15 @@
 "help_article_troubleshooting_crash_logs_name" = "Çökme günlükleri";
 "help_article_troubleshooting_maps_data_name" = "Haritalar ve Veriler";
 "help_article_troubleshooting_track_recording_issues_name" = "Yol kaydı";
-"help_article_widgets_name" = "Harita Widget'ları";
-"help_article_widgets_info_widgets_name" = "Bilgilendirme widget'ları";
+"help_article_widgets_name" = "Harita Widget\'ları";
+"help_article_widgets_info_widgets_name" = "Bilgilendirme widget\'ları";
 "help_article_widgets_map_buttons_name" = "Harita düğmeleri";
-"help_article_widgets_nav_widgets_name" = "Navigasyon widget'ları";
+"help_article_widgets_nav_widgets_name" = "Navigasyon widget\'ları";
 "global_settings" = "Genel ayarlar";
 "shared_string_markers" = "İşaretçiler";
 "audionotes_plugin_name" = "Ses/video notları";
 "shared_string_accessibility" = "Erişilebilirlik";
-"tracker_item" = "OsmAnd Tracker";
+"tracker_item" = "OsmAnd izleyici";
 "history_actions_footer_text" = "Geçmişi bir dosyaya aktarabilirsiniz. Şimdiye kadar kaydedilen tüm geçmiş kayıtlarını silebilirsiniz.";
 "shared_string_author" = "Yazar";
 "help_article_personal_import_export_name" = "İçe / Dışa Aktar";
@@ -2731,9 +2767,260 @@
 "free_account" = "Ücretsiz hesap";
 "cache_size" = "Önbellek boyutu";
 "copy_build_version" = "Derleme sürümünü kopyala";
-"most_viewed" = "En çok görüntülenen";
+"most_viewed" = "Ençok görüntülenen";
 "telegram_chats" = "Telegram sohbetleri";
 "rendering_attr_alpineHiking_name" = "Zorluk sınıflandırması";
 "shared_string_keywords" = "Anahtar sözcükler";
 "help_article_navigation_guidance_map_during_navigation_name" = "Navigasyon sırasında harita ekranı";
 "help_article_navigation_guidance_voice_navigation_name" = "Sesli komutlar / Bildirimler";
+
+"rendering_attr_showProposed_name" = "Önerilen nesneler";
+"rendering_attr_showToll_description" = "Yollardakiücret kısıtlamalarını göster";
+"routing_attr_hazmat_category_usa_1_name" = "Patlayıcılar";
+"routing_attr_hazmat_category_usa_6_name" = "Zehirli ve Bulaşıcı Maddeler";
+"routing_attr_hazmat_category_usa_7_name" = "Radyoaktif Maddeler";
+"routing_attr_hazmat_category_usa_4_name" = "Yanıcı Katılar";
+"routing_attr_hazmat_category_usa_2_name" = "Gazlar";
+"rendering_attr_showToll_name" = "Ücret kısıtlamalarını göster";
+"routing_attr_hazmat_category_usa_5_name" = "Oksitleyici Maddeler ve Organik Peroksitler";
+"routing_attr_hazmat_category_usa_3_name" = "Yanıcı Sıvılar";
+"routing_attr_hazmat_category_usa_8_name" = "Aşındırıcı Maddeler";
+"routing_attr_hazmat_category_usa_9_name" = "Çeşitli";;
+"bearing_desc" = "Yön widget\'ı, bir hedefin mutlak veya göreceli yönünü açısal birimlerde gösterir (Derece 180, Derece 360, Miliradyan).";
+"map_widget_group_sunrise_sunset" = "Gün doğumu, gün batımı";
+"delete_history_items" = "%@ geçmiş ögesi silinsin mi\?";
+"temperature_widget_desc" = "Geçerli harita merkezi için sıcaklığı gösterir.";
+"shared_string_next_event" = "Sonraki etkinlik";
+"detailed_log_file" = "Ayrıntılı günlük dosyası";
+"travel_card_download_descr" = "İnternet bağlantısı olmadan dünyadaki yerler hakkındaki makaleleri görüntülemek için Wikivoyage seyahat rehberlerini indirin.";
+"activity_type_hiking_name" = "Yürüyüş";
+"help_article_widgets_radius_ruler_name" = "Yarıçap cetveli ve Cetvel";
+"angular_measeurement_descr" = "Azimut\'unölçüm birimini değiştirin.";
+"shared_string_error" = "Hata";
+"bearing_secondary_desc" = "Görüntülenen verilerin biçimini şu şekilde değiştirebilirsiniz: %@ – %@ – %@.";
+"wikivoyage_download_pics" = "Resimleri indir";
+"cloud_item_restored" = "%@ Bulut\'a geri yüklendi.";
+"report_an_issues" = "Hata bildir";
+"shared_string_uploading" = "Karşıya yükleniyor";
+"relative_bearing_widget_desc" = "İlerlediğiniz hareket yönü ile hedef nokta arasındaki açıyı gösterir.";
+"map_orientation_portrait" = "Dikey";
+"map_widget_glide_average_desc" = "Ayarlanan ara için ortalama süzülme oranını gösterir.";
+"map_widget_sunset_desc" = "Bir sonraki gün batımı saatini veya gün batımına kalan süreyi gösterir.";
+"route_maneuvers" = "Rota manevraları";
+"time_to_destination_widget_desc" = "Widget, son varış noktasına \"Varış zamanı\" veya \"Gidiş süresini” gösterir. Navigasyon sırasında süre, sürekli olarak güncellenir ve geçerli konumunuzdan varma süresine eşittir.";
+"shared_string_system_default" = "Sistem varsayılanı";
+"shared_string_dark" = "Koyu";
+"shared_string_any" = "Herhangi";
+"time_to_navigation_point_widget_settings_desc" = "Widget\'a dokunarak modu değiştirin.";
+"mapillary_widget_desc" = "Sokak düzeyinde görüntü eklemek için Mapillary uygulamasına hızlı erişim sağlayan widget.";
+"user_name" = "OSM kullanıcı adınız";
+"short_min" = "m";
+"coordinates_format" = "Koordinat biçimi";
+"purchases_feature_desc_external_sensors" = "Harici sensörlerden gelen verileri görüntüleyin ve kaydedin: bisiklet hızı, bisiklet gücü, ritim ve kalp atış hızı.";
+"about_osmAnd" = "OsmAnd hakkında";
+"widget_secondary_desc_part_of" = "%@ eklentisinin bir parçası.";
+"activity_type_riding_name" = "Binme";
+"battery_widget_desc" = "Aygıtınızın pil seviyesini gösterir.";
+"route_maneuvers_desc" = "Navigasyon widget\'ları, mesafe, varış veya kalan zaman, sonraki dönüşler, yön, geçerli sokak adı, şerit bilgileri, azami hız, yaklaşan uyarılar, POI\'ler, ara noktalar gibi bilgileri görüntülemek için navigasyon sırasında etkinleştirilir.";
+"shared_string_contents" = "İçerikler";
+"search_history" = "Arama geçmişi";
+"shared_string_delete_item" = "Ögeyi sil";
+"map_settings_topography" = "Eş yükselti eğrileri";
+"radius_rules_widget_desc" = "Yarıçap cetveli aracı, harita üzerinde mesafe daireleri görüntüleyerek harita üzerinde seçilen nokta etrafındaki yarıçapın belirlenmesine yardımcı olur.";
+"side_marker_eta" = "Tahmini varış zamanı";
+"map_widget_sunrise" = "Gün doğumu";
+"map_widget_trip_recording_uphill" = "Yokuş yukarı";
+"offline_wikivoyage" = "Çevrim dışı Wikivoyage";
+"current_time_widget_desc" = "Aygıtınızın geçerli saatini gösterir.";
+"popular_destinations" = "Popüler yerler";
+"shared_string_hidden" = "Gizli";
+"shared_string_trash" = "Çöp kutusu";
+"external_sensors_support" = "Harici sensör desteği";
+"network" = "Ağ";
+"map_marker_1st" = "İlk harita işaretleyicisi";
+"navigation_points" = "Navigasyon noktaları";
+"map_markers_bar_widget_desc" = "Üst çubuk widget\'ında, geçerli konumdan işaretçiye olan mesafeyi ve yönü görebilirsiniz. Widget\'ta 1 veya 2 üst işaretçiyi görecek şekilde yapılandırmak mümkündür.";
+"announcement_time_intervals" = "Zaman ve mesafe aralıkları";
+"map_widget_time_to_destination" = "Hedefe varış süresi";
+"reset_all_settings_desc" = "Tüm ayarları varsayılan değerlerine sıfırlamak istediğinizden emin misiniz\?";
+"distance_circles" = "Mesafe daireleri";
+"trash_is_empty" = "Çöp kutusu boş";
+"parking_widget_desc" = "Ekran merkezinizden park yerine olan mesafeyi gösteren widget.";
+"announcement_time_prepare" = "Hazırlık";
+"map_widget_distance_to_intermediate" = "Ara noktaya uzaklık";
+"average_speed_time_interval_desc" = "Ortalama hızın ölçüleceği zaman aralığını belirtin.";
+"shared_string_is_deleted" = "%@ silindi.";
+"activity_type_water_name" = "Su";
+"shared_string_travel" = "Seyahat";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"map_widget_next_sunrise" = "Sonraki gün doğumu";
+"map_widget_group_sunrise_sunset_desc" = "Bu widget\'lar bir sonraki gün doğumu ve gün batımı hakkında bilgi gösterir.";
+"enter_new_name" = "Yeni ad gir";
+"activity_type_racing_name" = "Yarış";
+"first_marker_widget_desc" = "Widget\'ı, birinci harita işaretleyicisine kalan mesafeyi veya tahmini varış zamanını gösterecek şekilde ayarlayabilirsiniz.";
+"av_notes_video_widget_desc" = "Widget\'a dokunmak bir video kaydı başlatmanızı sağlar.";
+"top_widgets_panel" = "Üst panel";
+"shared_string_open_track" = "İzlenen yolu aç";
+"download_to_device" = "Aygıta indir";
+"apply_to_existing" = "Mevcut olanlara uygula";
+"compass_click_desc" = "Harita yönlendirme modunu değiştirmek için pusulaya dokunun.";
+"shared_string_delete_immediately" = "Hemen sil";
+"time_to_go_desc" = "Varış noktasına ulaşmak için gereken dakika veya saat cinsinden süre.";
+"map_widget_time_to_intermediate" = "Ara noktaya varış süresi";
+"av_notes_choose_action_widget_desc" = "Eylem seçin.";
+"precipitation_widget_desc" = "Geçerli harita merkezi için yağışı gösterir.";
+"no_widgets_descr" = "Kullanılabilir widget\'lar listesinden bir veya daha fazla widget ekleyin.";
+"shared_string_result" = "Sonuç";
+"navigation_points_desc" = "Navigasyon widget\'ları, mesafe, varış veya kalan zaman, sonraki dönüşler, yön, geçerli sokak adı, şerit bilgileri, azami hız, yaklaşan uyarılar, POI\'ler, ara noktalar gibi bilgileri görüntülemek için navigasyon sırasında etkinleştirilir.";
+"trip_recording_downhill_widget_desc" = "Mevcut kayıtlı seyahatin toplam tüm inişlerini gösterir.";
+"elevation_profile_widget_desc" = "Geçerli rotanın yükseklik ve eğim profilini gösteren widget.";
+"shared_string_read" = "Oku";
+"map_widget_trip_recording_distance" = "Mesafe";
+"shared_string_light" = "Açık";
+"activity_type_snowmobile_name" = "Kar arabası";
+"gitHub_discussion" = "GitHub Tartışmaları";
+"announcement_time_descr" = "Farklı sesli komutların duyuru zamanlaması komut türüne, geçerli navigasyon hızına ve varsayılan navigasyon hızına bağlıdır.";
+"shared_string_bookmark" = "Yer imi";
+"download_file" = "Dosyayı indir";
+"true_bearing_widget_desc" = "Gerçek kuzey ile bulunduğunuz yerden gözlemlenen hedef noktası arasındaki açı.";
+"weather_widget_group_desc" = "Çeşitli hava durumu bilgilerini gösteren bir dizi widget.";
+"activity_type_offroad_name" = "Arazi";
+"bottom_widgets_panel" = "Alt panel";
+"exit_number" = "Çıkış numarası";
+"weather_update_disabled" = "Devre dışı";
+"osmand_cloud_deletion_secondary_devices_warning" = "İkincil aygıtların OsmAnd Cloud\'dan oturumu kapatılacak ve ücretli özelliklere erişimi kaybedilecektir.";
+"delete_all_items" = "Tüm ögeleri sil";
+"true_bearing_wdiget_desc" = "Gerçek kuzey ile bulunduğunuz yerden gözlemlenen hedef noktası arasındaki açı.";
+"announcement_time_title" = "Duyuru zamanı";
+"map_orientation_default" = "Aygıt ile aynı";
+"last_seven_days" = "Son 7 gün";
+"time_to_intermediate_widget_desc" = "Widget, ilk ara noktaya \"Varış zamanı\" veya \"Gidiş süresini” gösterir. Navigasyon sırasında süre, sürekli olarak güncellenir. Ara nokta geçildikten sonra süre, bir sonraki ara noktaya göre güncellenecektir.";
+"angular_measeurement" = "Açısal birim";
+"shared_string_deleted" = "Silindi";
+"activity_type_cycling_name" = "Bisiklet sürme";
+"activity_type_car_name" = "Araba";
+"map_widget_gps_info" = "GPS bilgisi";
+"trash_is_empty_banner_desc" = "OsmAnd Bulut\'tan kaldırılan dosyalar %@ gün sonra burada bulunabilecektir.";
+"weather_widgets_secondary_desc" = "Ölçüm birimleri hava durumu eklentisi ayarlarından değiştirilebilir.";
+"average_speed_skip_stops" = "Durmaları dikkate al";
+"announcement_time_arrive" = "Hedefe varış";
+"perform_oauth_authorization" = "OAuth ile oturum aç";
+"map_widget_trip_recording_duration" = "Süre";
+"lanes_widgets_desc" = "Şeritler widget\'ı, geçerli yol şerit düzenini gösterir ve etkin navigasyonla sürülecek şeritleri vurgular.";
+"wind_widget_desc" = "Geçerli harita merkezi için rüzgar hızını görüntüler.";
+"upload_poi" = "POI yükleyin";
+"osmand_cloud_delete_account_confirmation" = "Hesap silinsin mi?";
+"osmand_cloud_deleting_account_descr" = "Birkaç dakika içinde tüm verileriniz ve hesabınız OsmAnd Cloud\'dan silinecektir.
+\n
+\nAygıttaki tüm veriler dokunulmadan kalır.";
+"shared_string_move" = "Taşı";
+"navigation_history" = "Gezinti geçmişi";
+"quick_action_coordinates_widget_descr" = "Haritaüzerinde koordinatlar widget\'ını göstermek veya gizlemek için bir geçiş.";
+"osm_upload_gpx_tags_footer" = "Virgülle ayrılmış etiketleri girin.";
+"specify_number_of_dir_indicators_desc" = "Yön göstergelerinin sayısını belirtin.";
+"restore_from_trash" = "Çöp kutusundan geri yükle";
+"lang_sr-Latn" = "Sırpça (latin)";
+"shared_string_explore" = "Gezin";
+"shared_string_duplicate" = "Çoğalt";
+"glide_ratio_to_target" = "Hedefe kalan süzülme oranı";
+"user_points" = "Kullanıcı puanları";
+"activity_type_motorbike_name" = "Motosiklet";
+"context_menu_read_article" = "Makaleyi oku";
+"arrival_time_widget_desc" = "Varış noktasına ulaşma zamanı.";
+"distance_to_intermediate_widget_desc" = "Widget, ilk ara noktaya kalan mesafeyi gösterir. Ara nokta geçildikten sonra mesafe, bir sonraki ara noktaya göre güncellenecektir.";
+"coordinates_widget_desc" = "Geçerli coğrafi konumun coğrafi koordinatlarını gösterir.";
+"map_markers_history" = "Harita işaretleyicileri geçmişi";
+"shared_string_symbol" = "Simge";
+"shared_string_wikivoyage" = "Wikivoyage";
+"shared_string_mode" = "Mod";
+"mapillary_widget_descr" = "Mapillary\'ye hızlıca katkıda bulunmanıza imkan verir.";
+"no_widgets_here_yet" = "Burada henüz widget yok";
+"altitude_widget_desc" = "Geçerli coğrafi konumun deniz seviyesinden yüksekliğini gösterir.";
+"manage_subscriptions" = "Abonelikleri yönet.";
+"max_speed_widget_desc" = "Geçerli sürüş yolu için hız sınırını gösterir.";
+"press_again_to_change_the_map_orientation" = "Harita yönünü değiştirmek için tekrar dokunun";
+"delete_account" = "Hesabı sil";
+"magnetic_bearing_widget_desc" = "Bulunduğunuz yerden gözlemlenen hedef nokta ile manyetik kuzey arasındaki açı.";
+"add_page" = "Sayfa ekle";
+"average_speed_widget_desc" = "Geçerli sürüşün ortalama hızını gösterir.";
+"map_widget_current_speed" = "Geçerli hız";
+"announcement_time_passing" = "Geçme";
+"map_widget_sun_position_desc" = "Gün doğumuna veya gün batımına kadar olan süreyi gösterir.";
+"distance_to_destination_widget_desc" = "Widget, son varış noktasına kalan mesafeyi gösterir.";
+"next_turn_widget_desc" = "Widget, bir sonraki dönüşünüzle ilgili bilgileri manevranın resmi ve ona olan mesafeyle birlikte gösterir.";
+"street_name_widget_desc" = "Sokak adı widget\'ı, düz konum oku ile geçerli cadde adını veya tamamlanması gereken manevra ile bir sonraki cadde adını gösterir.";
+"shared_string_format" = "Biçim";
+"announce_when_exceeded" = "Aşıldığında duyur";
+"external_device_any_connected" = "Bağlı olan herhangi biri";
+"shared_string_bearing" = "Kerteriz";
+"terrain_3D_maps" = "Arazi haritaları";
+"trip_recording_uphill_widget_desc" = "Mevcut kayıtlı seyahatin toplam tüm çıkışlarını gösterir.";
+"general_settings" = "Genel";
+"subscribe_email_error" = "Hata";
+"verify_account" = "Hesabınızı doğrulayın";
+"target_elevation" = "Hedef yükseklik";
+"clouds_widget_desc" = "Geçerli harita merkezi için bulut kaplamasını gösterir.";
+"map_widget_true_bearing" = "Gerçek yön";
+"osmand_cloud_deletion_account_warning" = "Hesabınız ve tüm hesap bilgileriniz %@";
+"announcement_time_prepare_long" = "Uzun hazırlık";
+"open_issue_on_gitHub" = "GitHub\'da sorun açın";
+"show_icon" = "Simge göster";
+"announcement_time_approach" = "Yaklaşma";
+"route_info" = "Rota bilgisi";
+"image_cache" = "Resimönbelleği";
+"external_device_status_connect" = "Bağlamak";
+"coordinates_widget_secondary_desc" = "Koordinat biçimi %@ – %@ – %@ içinde değiştirilebilir.";
+"map_widget_sunrise_sunset_time_left" = "Kalan zaman";
+"shared_string_view" = "Görünüm";
+"map_widget_sun_position" = "Güneşin konumu";
+"map_screen_orientation" = "Ekran yönlendirme";
+"av_notes_audio_widget_desc" = "Widget\'a dokunmak bir sesli not almanızı sağlar.";
+"map_markers_bar" = "Harita işaretleyicileri çubuğu";
+"activity_type_walking_name" = "Yürüme";
+"saved_articles" = "İşaretlenmiş makaleler";
+"av_notes_photo_widget_desc" = "Widget\'a dokunmak bir fotoğraf çekmenizi sağlar.";
+"shared_string_external" = "Harici";
+"default_appearance_desc" = "Varsayılan renk, simge ve şekil, gruba eklenen favori noktalara uygulanacaktır.";
+"map_widget_group_glide_desc" = "Widget\'lar, hedefe kalan süzülme oranını veya şu anki yolculuğun ortalama süzülme oranını gösterir.";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"trip_recording_distance_widget_desc" = "Mevcut kayıtlı seyahatin mesafesini gösterir.";
+"action_cannot_be_undone" = "Bu işlem geri alınamaz.";
+"osmand_cloud_deletion_subscriptions_warning" = "Bu işlem OsmAnd Pro aboneliğinizi iptal etmeyecektir.";
+"second_marker_widget_desc" = "Widget\'ı, ikinci harita işaretleyicisine kalan mesafeyi veya tahmini varış zamanını gösterecek şekilde ayarlayabilirsiniz.";
+"ask_question_propose_features" = "Soru sorun,özellik önerin";
+"activity_type_running_name" = "Koşma";
+"map_orientation_landscape" = "Yatay";
+"shared_string_deleting" = "Siliniyor";
+"lang_zh-Hans" = "Basitleştirilmiş Çince";
+"map_widget_distance_to_destination" = "Varış noktasına uzaklık";
+"shared_string_travel_guides" = "Seyahat rehberleri";
+"switch_profile" = "Profil değiştir";
+"gps_info_widget_desc" = "Aygıtınızın o anda algıladığı ve kullandığı uydu sayısını gösterir.";
+"compass_on_circles" = "Dairelerüzerinde pusula";
+"second_next_turn_widget_desc" = "Widget, yaklaşan mesafe içinde dönerseniz etkinleştirilen bir sonraki dönüşünüzle ilgili bilgileri gösterir.";
+"duration_moment_ago" = "azönce";
+"deleting_complete" = "Silme işlemi tamamlandı";
+"restart_is_required" = "Değişikliği uygulamak için yeniden başlatma gerekmektedir.";
+"wiki_article_search_text" = "İlgili wiki makalesi aranıyor";
+"apply_only_to_new_points" = "Yalnızca yeni noktalara uygula";
+"verify_account_deletion_descr" = "Hesabınızı silmeden önce doğrulamamız gerekiyor.
+\n
+\nLütfen kayıt olduğunuz e-posta adresini girin. Bir sonraki adım için tek kullanımlık bir parola gönderilecektir.";
+"announcement_time_off_route" = "Rota dışı";
+"activity_type_winter_name" = "Kış";
+"complex_widget_alert" = "%@ widget\'ı yalnızca kendi satırına yerleştirilebilir.";
+"map_widget_sunset" = "Gün batımı";
+"map_widget_next_sunset" = "Sonraki gün batımı";
+"osmand_cloud_deleted_account_descr" = "Hesap ve tüm veriler OsmAnd Cloud\'dan silindi.";
+"no_travel_guides_data_descr" = "İnternet bağlantısı olmadan dünyadaki yerler hakkındaki makaleleri görüntülemek için Wikivoyage seyahat rehberlerini indirin.";
+"start_recording" = "Kaydı başlat";
+"air_pressure_widget_desc" = "Geçerli harita merkezi için hava basıncını görüntüler.";
+"map_marker_2nd" = "İkinci harita işaretleyicisi";
+"apply_to_existing_favorites_descr" = "Değişiklikler grubun mevcut favori noktalarına mı uygulansın yoksa yalnızca yeni noktalara mı uygulansın\?";
+"osmand_cloud_deletion_all_data_warning" = "OsmAnd Cloud\'daki tüm veriler %@. Aygıttaki verilere dokunulmaz.";
+"map_widget_sunrise_desc" = "Bir sonraki gün doğumu saatini veya gün doğumuna kalan süreyi gösterir.";
+"shared_string_buttons" = "Düğmeler";
+"current_speed_widget_desc" = "GPS sensörü tarafından algılanan geçerli hızınızı gösterir.";
+"trip_recording_duration_widget_desc" = "Mevcut kayıtlı seyahatin süresini gösterir.";
+"visibility" = "Görünürlük";
+"map_widget_trip_recording_downhill" = "Yokuş aşağı";

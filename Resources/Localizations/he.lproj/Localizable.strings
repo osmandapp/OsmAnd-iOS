@@ -86,7 +86,8 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "זריחה : %@\nשקיעה : %@";
+"day_night_info_description" = "זריחה : %@
+\nשקיעה : %@";
 "day_night_info" = "פרטי יום/לילה";
 "daynight_mode_auto" = "זריחה/שקיעה";
 "route_simulation" = "Route simulation";
@@ -110,7 +111,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "כיוון מצפן";
 "rotate_map_bearing_opt" = "כיוון התנועה";
-"rotate_map_north_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "לא לסובב (הצפון תמיד למעלה)";
 "driving_region_descr" = "נא לבחור את איזור הנהיגה: ארה״ב, אירופה, הממלכה המאוחדת, אסיה ואחרות.";
 "driving_region" = "אזור נהיגה";
 "shared_string_automatic" = "אוטומטי";
@@ -414,7 +415,7 @@
 "nearest_cities" = "הערים הקרובות";
 "type_address" = "נא להקליד כתובת";
 "search_poi_category_hint" = "סוג לחיפוש הכול";
-"poi_categories" = "POI categories";
+"poi_categories" = "קטגוריות נקודות עניין";
 "shared_string_search_history" = "היסטוריית חיפוש";
 "track_coloring_solid" = "אחיד";
 "attribute" = "מאפיין";
@@ -588,7 +589,7 @@
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
 "gpx_parse_error" = "ה־GPX של OsmAnd אינו מסודר כראוי, נא ליצור קשר עם צוות התמיכה כדי להעמיק את המחקר.";
-"tracks_on_map" = "גלוי במפה";
+"tracks_on_map" = "עקבות מוצגים";
 "gpx_export_title" = "ייצוא מסלול";
 "gpx_export_select_track" = "Please select track for Export";
 "gpx_import_desc" = "To import your GPX files (common GPS data format) from Dropbox, Email, or any other source use \"Copy to OsmAnd Maps\" option";
@@ -693,7 +694,7 @@
 "shared_string_appearance" = "מראה";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-"settings_app_theme" = "Application theme";
+"settings_app_theme" = "ערכת עיצוב ליישום";
 "light_theme" = "בהיר";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
@@ -726,7 +727,8 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "מיקום";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "רוחב %@\nאורך %@";
+"short_location_on_map" = "רוחב %@
+\nאורך %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -896,7 +898,9 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "מפות נוספות";
 "import_duplicates_title" = "חלק מהפריטים קיימים";
-"import_duplicates_description" = "ל־OsmAnd כבר יש פריטים באותם השמות כמו אלו המיובאים.\n\nנא לבחור פעולה.";
+"import_duplicates_description" = "ל־OsmAnd כבר יש פריטים באותם השמות כמו אלו המיובאים.
+\n
+\nנא לבחור פעולה.";
 "keep_both" = "להשאיר את שניהם";
 "keep_both_desc" = "הפריטים הנוכחיים יתווספו עם קידומת";
 "replace_all" = "להחליף הכול";
@@ -968,7 +972,9 @@
 "reset_to_default" = "איפוס לבררת מחדל";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAndיחפש כפילויות של %@ עם פריטים קיימים ביישומון.\n\nהתהליך עשוי לארוך זמן מה.";
+"checking_for_duplicate_description" = "OsmAndיחפש כפילויות של %@ עם פריטים קיימים ביישומון.
+\n
+\nהתהליך עשוי לארוך זמן מה.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1472,7 +1478,7 @@
 "instalation_troubleshooting_item" = "התקנה וטיפול בתקלות";
 "techical_articles_item" = "מאמרים טכניים";
 "versions_item" = "גרסאות";
-"help_contact_us" = "Contact us";
+"help_contact_us" = "יצירת קשר";
 "shared_string_about" = "על אודות";
 "follow_us" = "לעקוב אחרינו";
 "facebook" = "Facebook";
@@ -1542,16 +1548,25 @@
 //inapps
 "plugin_nautical_name" = "תצוגת מפה ימית";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "תוסף זה מעשיר את המפה ואת הניווט של יישומון OsmAnd ומאפשר לייצר מפות ימיות לחתירה, הפלגה וסוגים נוספים של ספורט ימי. \n\nתוסף מפה מיוחד ל־OsmAnd יספק את כל סימוני הניווט הימיים והסימנים הימיים המוסכמים, לניווט במקווי מים פנימיים לרבות ניווט באזורים הקרובים לחוף. התיאור של כל סימון ניווט מספק את הפרטים הנדרשים כדי לזהות אותם ואת המשמעותשלהם (קטגוריה, צורה, צבע, רצף, הפניה וכו׳). \n\nכדי לחזור לאחד מסגנונות המפה הרגילים של OsmAnd עליך פשוט להשבית את התוסף הזה שוב או לשנות את ‚סגנון המפה’ תחת ‚הגדרות המפה’ לפי הצורך.";
+"plugin_nautical_descr" = "תוסף זה מעשיר את המפה ואת הניווט של יישומון OsmAnd ומאפשר לייצר מפות ימיות לחתירה, הפלגה וסוגים נוספים של ספורט ימי. 
+\n
+\nתוסף מפה מיוחד ל־OsmAnd יספק את כל סימוני הניווט הימיים והסימנים הימיים המוסכמים, לניווט במקווי מים פנימיים לרבות ניווט באזורים הקרובים לחוף. התיאור של כל סימון ניווט מספק את הפרטים הנדרשים כדי לזהות אותם ואת המשמעותשלהם (קטגוריה, צורה, צבע, רצף, הפניה וכו׳). 
+\n
+\nכדי לחזור לאחד מסגנונות המפה הרגילים של OsmAnd עליך פשוט להשבית את התוסף הזה שוב או לשנות את ‚סגנון המפה’ תחת ‚הגדרות המפה’ לפי הצורך.";
 "osmand_parking_plugin_name" = "מיקום החנייה";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "מאפשר לך לשמור איפה רכבך חנה וכמה זמן נותר לחנייה.\n המיקום והשעה מופיעים בלוח הבקרה וגם בחלונית מפה. ניתן להוסיף התראה ליומן של Android.";
+"osmand_parking_plugin_description" = "מאפשר לך לשמור איפה רכבך חנה וכמה זמן נותר לחנייה.
+\n המיקום והשעה מופיעים בלוח הבקרה וגם בחלונית מפה. ניתן להוסיף התראה ליומן של Android.";
 "plugin_ski_name" = "תצוגת מפת סקי";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "תוסף זה ל־OsmAnd מגיש לך פרטים של מדרוני גלישת סקי, מסלולי סקי חוצי מדינות, מסלולי סקי אלפינים, רכבלים ומעליות סקי. המעברים והמסלולים מופיעים בצבע לפי דרגת קושי ומופיעיםבסגנון מפה מיוחד בשם ‚חורף’ שמטמיע משטחי חורף בצבעי שלג.\n\nהפעלת תצוגה זו משנה את סגנון המפה ל‚חורף וסקי’ והיא מפעילה את כל תכונות הקרקע בתנאי חורף. ניתן לכבות תצוגה זו על ידי השבתתה כאן או על ידי שינוי ‚סגנון המפה’ תחת ‚הגדרת המפה’ לפי הצורך.";
+"plugin_ski_descr" = "תוסף זה ל־OsmAnd מגיש לך פרטים של מדרוני גלישת סקי, מסלולי סקי חוצי מדינות, מסלולי סקי אלפינים, רכבלים ומעליות סקי. המעברים והמסלולים מופיעים בצבע לפי דרגת קושי ומופיעיםבסגנון מפה מיוחד בשם ‚חורף’ שמטמיע משטחי חורף בצבעי שלג.
+\n
+\nהפעלת תצוגה זו משנה את סגנון המפה ל‚חורף וסקי’ והיא מפעילה את כל תכונות הקרקע בתנאי חורף. ניתן לכבות תצוגה זו על ידי השבתתה כאן או על ידי שינוי ‚סגנון המפה’ תחת ‚הגדרת המפה’ לפי הצורך.";
 "record_plugin_name" = "הקלטת מסלול";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "תוסף זה מפעיל את התכונה להקלטת ולשמירת המסלולים שלך על ידי נגיעה באופן ידני בווידג׳ט רישום ה־GPX במפה, או גם לערוך רישום של כל נתיבי הניווט שלך לקובץ GPX.\n \nניתן לשתף נתיבים מוקלטים עם חבריך או להשתמש בהם כתרומה ל־OSM. אתלטים יכולים להשתמש במסלולים מוקלטים כדי לעקוב אחר האימונים שלהם. ניתן לבצע ניתוח מסלול בסיסי ישירות ב־OsmAnd, כמו זמניהקפה, מהירות ממוצעת וכו׳, כמו כן, ניתן לנתח את המסלולים בשלב מאוחר יותר על ידי כלי ניתוח מיוחדים מגורמי צד־שלישי.";
+"record_plugin_description" = "תוסף זה מפעיל את התכונה להקלטת ולשמירת המסלולים שלך על ידי נגיעה באופן ידני בווידג׳ט רישום ה־GPX במפה, או גם לערוך רישום של כל נתיבי הניווט שלך לקובץ GPX.
+\n 
+\nניתן לשתף נתיבים מוקלטים עם חבריך או להשתמש בהם כתרומה ל־OSM. אתלטים יכולים להשתמש במסלולים מוקלטים כדי לעקוב אחר האימונים שלהם. ניתן לבצע ניתוח מסלול בסיסי ישירות ב־OsmAnd, כמו זמניהקפה, מהירות ממוצעת וכו׳, כמו כן, ניתן לנתח את המסלולים בשלב מאוחר יותר על ידי כלי ניתוח מיוחדים מגורמי צד־שלישי.";
 "osm_editing_plugin_name" = "עריכה של OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "ניתן לתרום ל־OSM למשל על ידי שינוי פריטי נקודות עניין ב־OSM או ליצור הערות OSM ולתרום קובצי הקלטות GPX ל־OsmAnd על ידי ציון שם המשתמש והססמה שלך. OpenStreetMap.org הוא מיזם מיפוי גלובלי, בהנהגה קהילתית לרווחת הציבור.";
@@ -1587,7 +1602,9 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "קווי מתאר";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "תוסף זה מספק הן שכבת קווי מתאר והן שכבת הצללה אותן ניתן להציג על המפות הרגילות של OsmAnd. תכונה זו נחוצה ביותר לאתלטים, מטיילי שטח, תרמילאים וכל מי שמעוניין להבין את מבנהפני השטח. (נא לשים לב שנתוני קווי מתאר ו/או נתוני הצללה הם נפרדים, תתאפשרנה הורדות נוספות לאחר הפעלת התוסף.) \n\nהנתונים הגלובליים (בין 70° צפון ל־70° דרום) מבוססים על מדידות שבוצעו על ידי ה־SRTM (משימת הטופוגרפיה של מעבורת המכ״ם) ו־ASTER (רדיומטר חלל מתקדם לגילוי פליטה תרמית והשתקפות), התקן דימות על סיפונה של Terra, לוויין הדגל של מערכת ההשקפה על כדור הארץ של NASA.‏ ASTER הנו שיתוף פעולה בין NASA, משרד התמ״ת היפני (METI) ומערכות החלל היפניות (J-spacesystems).";
+"srtm_plugin_description" = "תוסף זה מספק הן שכבת קווי מתאר והן שכבת הצללה אותן ניתן להציג על המפות הרגילות של OsmAnd. תכונה זו נחוצה ביותר לאתלטים, מטיילי שטח, תרמילאים וכל מי שמעוניין להבין את מבנהפני השטח. (נא לשים לב שנתוני קווי מתאר ו/או נתוני הצללה הם נפרדים, תתאפשרנה הורדות נוספות לאחר הפעלת התוסף.)
+\n
+\nהנתונים הגלובליים (בין 70° צפון ל־70° דרום) מבוססים על מדידות שבוצעו על ידי ה־SRTM (משימת הטופוגרפיה של מעבורת המכ״ם) ו־ASTER (רדיומטר חלל מתקדם לגילוי פליטה תרמית והשתקפות), התקן דימות על סיפונה של Terra, לוויין הדגל של מערכת ההשקפה על כדור הארץ של NASA.‏ ASTER הנו שיתוף פעולה בין NASA, משרד התמ״ת היפני (METI) ומערכות החלל היפניות (J-spacesystems).";
 "wikivoyage_travel_guide" = "מדריכי תיירות";
 "start_editing_card_image_text" = "מדריך התיירות המקוון שכל אחד יכול לערוך.";
 "wikivoyage_travel_guide_descr" = "מדריכים למקומות המעניינים ביותר בעולם, בתוך OsmAnd, ללא חיבור לאינטרנט.";
@@ -1753,7 +1770,7 @@
 "try_again" = "ניסיון חוזר";
 "searching" = "מתבצע חיפוש…";
 "search_location" = "מתבצע חיפוש אחר המיקום…";
-"search_map" = "מתבצע חיפוש במפות";
+"search_map" = "מתבצע חיפוש במפות…";
 "search_another_country" = "נא לבחור באזור אחר";
 "skip_map_downloading" = "דילוג על הורדת המפות";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
@@ -2056,7 +2073,7 @@
 "routing_attr_avoid_sett_name" = "ללא ריצוף חלוקי נחל או אבנים משתלבות";
 "rendering_value_translucent_lightblue_name" = "כחול בהיר שקוף למחצה";
 "rendering_attr_smoothness_good_name" = "טובה";
-"routing_attr_weight_name" = "הגבלת משקל";
+"routing_attr_weight_name" = "משקל";
 "rendering_value_bold_name" = "מודגש";
 "rendering_attr_surface_stone_name" = "אבן";
 "rendering_attr_pisteGrooming_name" = "פילוס שלג";
@@ -2151,7 +2168,7 @@
 "rendering_attr_trainLightrailRoutes_name" = "נתיבי רכבת";
 "rendering_value_pedestrian_name" = "ברגל";
 "rendering_attr_highway_class_track_grade5_name" = "רמה 5";
-"routing_attr_height_name" = "מגבלת גובה";
+"routing_attr_height_name" = "גובה";
 "rendering_attr_piste_type_connection_name" = "חיבור";
 "routing_attr_relief_smoothness_factor_name" = "בחירת תנודת גובה";
 "routing_attr_piste_type_downhill_name" = "סקי אלפיני ובמורדות";
@@ -2170,7 +2187,7 @@
 "rendering_attr_depthContours_description" = "הצגת מתאר עומק ונקודות.";
 "rendering_value_thick_name" = "עבה";
 "routing_attr_avoid_ferry_name" = "ללא מעבורות";
-"routing_attr_width_name" = "מגבלת רוחב";
+"routing_attr_width_name" = "רוחב";
 "routing_attr_avoid_train_name" = "ללא רכבות";
 "routing_attr_allow_motorway_description" = "מאפשר דרכים סלולות.";
 "rendering_attr_hmRendered_name" = "הצגת יותר פרטים במפה";
@@ -2194,7 +2211,7 @@
 "icon_group_travel" = "טיול";
 "icon_group_nautical" = "ימי";
 "icon_group_industrial" = "תעשייתי";
-"icon_group_education" = "חינוך";
+"icon_group_education" = "חינוכי";
 "transport" = "תחבורה";
 "settings_item_read_error" = "לא ניתן לקרוא מתוך ‚%@’.";
 "app_mode_default" = "עיון במפה";
@@ -2408,7 +2425,9 @@
 "backup_delete_all_data" = "למחוק את כל הנתונים שלי";
 "routing_attr_motor_type_gas_name" = "גז טבעי דחוס";
 "local_backup_descr" = "גיבוי ושחזור נתונים מקובץ מקומי.";
-"backup_delete_all_data_warning" = "פעולה זו תמחק את כל הנתונים שהועלו בעבר ל־OsmAnd Cloud, לרבות את היסטוריית הגרסאות.\n\nלא תהיה לך אפשרות לשחזר נתונים שנמחקו.";
+"backup_delete_all_data_warning" = "פעולה זו תמחק את כל הנתונים שהועלו בעבר ל־OsmAnd Cloud, לרבות את היסטוריית הגרסאות.
+\n
+\nלא תהיה לך אפשרות לשחזר נתונים שנמחקו.";
 "shared_string_angle_param" = "זווית: ‎%@°‎";
 "offline_edition_descr" = "אם עריכה בלתי מקוונת פעילה, השינויים יחולו מקומית תחילה ויועלו לפי דרישה, אחרת השינויים יועלו אוטומטית.";
 "activity_type_mountainbike_name" = "אופני הרים";
@@ -2439,9 +2458,12 @@
 "download_all" = "להוריד הכול";
 "backup_pause_all" = "להשהות הכול";
 "map_updates_for_mappers" = "עדכוני מפות לממפים";
-"backup_delete_old_data_warning" = "פעולה זו תמחק את ההיסטוריה של הנתונים שנטענו בעבר.\n\nהגרסה הנוכחית של הנתונים תישמר על השרת אך לא תהיה לך אפשרות לשחזר שינויים שערכת בעבר.";
+"backup_delete_old_data_warning" = "פעולה זו תמחק את ההיסטוריה של הנתונים שנטענו בעבר.
+\n
+\nהגרסה הנוכחית של הנתונים תישמר על השרת אך לא תהיה לך אפשרות לשחזר שינויים שערכת בעבר.";
 "benefits_for_contributors" = "הטבות למתנדבים פעילים ב־OSM";
-"logout_from_osmand_cloud_decsr" = "לצאת מהחשבון\?\nיהיה עליך להיכנס שוב כדי לגבות או לשחזר נתונים.";
+"logout_from_osmand_cloud_decsr" = "לצאת מהחשבון\?
+\nיהיה עליך להיכנס שוב כדי לגבות או לשחזר נתונים.";
 "routing_attr_motor_type_description" = "נא לבחור את סוג הדלק שמשמש את מנוע כלי הרכב שלך כדי לחשב פליטות פחמן דו־חמצני.";
 "select_backup_data_descr" = "נא לבחור נתונים ותיקיות לגיבוי.";
 "are_you_sure" = "להמשיך?";
@@ -2449,7 +2471,9 @@
 "select_another_colorization" = "נא לבחור סוג אחר של צביעה.";
 "contact_support" = "יצירת קשר עם התמיכה";
 "not_enough_contributions_descr" = "נדרשים %@ שינויים על פני החודשיים האחרונים %@ כדי לקבל גישה לעדכוני מפה שעתיים ללא הגבלה.";
-"simulation_real_mode_desc" = "במקטעים ישרים, המהירות תמוצע לפי המהירות המרבית המותרת.\nבצמתים, ההדמיה תאט.\nישנה החמרת ענישה על תמרורים ככלל, תמרורי עצור בפרט וכן הלאה.";
+"simulation_real_mode_desc" = "במקטעים ישרים, המהירות תמוצע לפי המהירות המרבית המותרת.
+\nבצמתים, ההדמיה תאט.
+\nישנה החמרת ענישה על תמרורים ככלל, תמרורי עצור בפרט וכן הלאה.";
 "login_open_street_map_org" = "כניסה אל OpenStreetMap.org";
 "delete_all_confirmation" = "כן, למחוק הכול";
 "routing_attr_motor_type_diesel_name" = "דיזל";
@@ -2473,7 +2497,8 @@
 "shared_string_selected" = "נבחר";
 "promo_subscription" = "מינוי פרומו";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
-"osmand_cloud_create_account_descr" = "נא למלא את כתובת הדוא״ל שלך, אליה ישלח קוד האימות,\nוכל הנתונים שלך יקושרו אליה.";
+"osmand_cloud_create_account_descr" = "נא למלא את כתובת הדוא״ל שלך, אליה ישלח קוד האימות,
+\nוכל הנתונים שלך יקושרו אליה.";
 "backup_complete" = "הגיבוי הושלם";
 "routing_attr_avoid_fords_name" = "המנעות מגשרים איריים";
 "routing_attr_avoid_fords_description" = "המנעות מגשרים איריים";
@@ -2561,7 +2586,13 @@
 "si_nm_mt" = "מיל/מטר ימי";
 "modified_file" = "קובץ שנערך";
 "shared_string_legal" = "משפטי";
-"speed_cameras_legal_descr" = "בחלק מהמדינות או האזורים השימוש ביישומוני אזהרה מפני מצלמות מהירות אסור על פי חוק.\n\nעליך להחליט כיצד לנהוג בהתאם לחוק במדינה שלך.\n\nבחירה באפשרות %@ תוביל לכך שתישלחנה אליך התרעות על מצלמות מהירות.\n\nבחירה באפשרות %@ תוביל לכך שנתונים שקשורים במצלמות מהירות: אזהרות, התרעות ונקודות עניין תימחקנה עד להתקנה מחדש של OsmAnd.";
+"speed_cameras_legal_descr" = "בחלק מהמדינות או האזורים השימוש ביישומוני אזהרה מפני מצלמות מהירות אסור על פי חוק.
+\n
+\nעליך להחליט כיצד לנהוג בהתאם לחוק במדינה שלך.
+\n
+\nבחירה באפשרות %@ תוביל לכך שתישלחנה אליך התרעות על מצלמות מהירות.
+\n
+\nבחירה באפשרות %@ תוביל לכך שנתונים שקשורים במצלמות מהירות: אזהרות, התרעות ונקודות עניין תימחקנה עד להתקנה מחדש של OsmAnd.";
 "shared_string_uploaded" = "הועלה";
 "cloud_version_will_be_removed" = "גרסת הענן תימחק";
 "local_file_will_be_restored" = "הקובץ המקומי ישוחזר";
@@ -2597,3 +2628,294 @@
 "shared_string_bearing" = "תכווין";
 "map_widget_current_speed" = "מהירות נוכחית";
 "map_widget_gps_info" = "פרטי GPS";
+
+"routing_attr_hazmat_category_usa_7_name" = "חומרים רדיואקטיביים";
+"routing_attr_hazmat_category_usa_2_name" = "גזים";
+"routing_attr_hazmat_category_usa_4_name" = "מוצקים דליקים";
+"routing_attr_hazmat_category_usa_1_name" = "חומרי נפץ";
+"routing_attr_hazmat_category_usa_8_name" = "חומרים מְאַכְּלִים";
+"rendering_attr_showProposed_name" = "עצמים מוצעים";
+"routing_attr_hazmat_category_usa_3_name" = "נוזלים דליקים";
+"routing_attr_hazmat_category_usa_9_name" = "שונות";
+"routing_attr_hazmat_category_usa_6_name" = "חומרים רעילים ומידבקים";
+"rendering_value_name_only_name" = "שם בלבד";;
+"subscribe_email_error" = "שגיאה";
+"user_name" = "שם המשתמש שלך ב־OSM";
+"current_speed_widget_desc" = "מציג את המהירות הנוכחית שלך לפי חיישן ה־GPS.";
+"short_min" = "מ׳";
+"write_data_from_sensor_to_track" = "לכתוב נתונים מחיישנים חיצוניים ל־GPX בעת הקלטת טיול.";
+"map_markers_bar" = "סרגל סמני מפה";
+"apply_only_to_new_points" = "החלה רק על נקודות חדשות";
+"network" = "רשת";
+"shared_string_mode" = "מצב";
+"oldest_date_first" = "העדפת תאריך ישן יותר";
+"altitude_widget_desc" = "מציג את גובה פני הים במיקום הנוכחי.";
+"map_widget_sunset" = "שקיעת החמה";
+"map_widget_camera_tilt" = "הטיית מצלמה";
+"shared_string_nearest" = "הקרוב ביותר";
+"user_guide" = "מדריך שימוש";
+"bottom_widgets_panel" = "לוח תחתון";
+"ant_plus_open_settings" = "פתיחת ההגדרות";
+"announcement_time_descr" = "זמן ההכרזה של ההנחיות הקוליות השונות תלוי בסוג ההכרזה, במהירות הניווט הנוכחית ובמהירות הניווט כבררת מחדל.";
+"activity_type_car_name" = "מכונית";
+"compass_on_circles" = "מצפן על עיגולים";
+"battery_widget_desc" = "מציג את עוצמת הסוללה של המכשיר שלך.";
+"announcement_time_intervals" = "הפרשי זמן ומרחק";
+"map_markers_history" = "היסטוריית סמני המפה";
+"help_article_navigation_routing_horse_routing_name" = "ניווט רכיבה";
+"backup_error_invalid_token" = "האסימון שגוי";
+"map_widget_ant_heart_rate" = "דופק";
+"announcement_time_passing" = "מעבר";
+"navigation_history" = "היסטוריית ניווט";
+"distance_circles" = "עיגולי מרחק";
+"shared_string_contents" = "תכנים";
+"announce_when_exceeded" = "להכריז בחריגה";
+"help_article_navigation_car_play_name" = "CarPlay";
+"help_article_plan_route_name" = "תכנון מסלול";
+"quick_action_coordinates_widget_descr" = "מפסק להצגה או הסתרה של וידג׳ט נקודות הציון במפה.";
+"shared_string_travel_guides" = "מדריכי תיירות";
+"help_article_map_interact_with_map_name" = "הפעלת המפה";
+"open_issue_on_gitHub" = "פתיחת תקלות ב־GitHub";
+"help_article_navigation_routing_direct_to_point_routing_name" = "ניווט ישירות לנקודה (סירה)";
+"announcement_time_approach" = "הגעה";
+"shared_string_move" = "העברה";
+"widget_secondary_desc_part_of" = "חלק מהתוסף %@.";
+"map_widget_trip_recording_duration" = "משך";
+"bearing_secondary_desc" = "אפשר לשנות את תבנית הנתונים שמוצגים דרך: %@ – %@ – %@.";
+"help_article_widgets_map_buttons_name" = "כפתורי מפה";
+"no_travel_guides_data_descr" = "יש להוריד הדרכות תיירות של ויקימסע כדי לצפות בערכים על מקומות מסביב לעולם ללא חיבור לאינטרנט.";
+"activity_type_water_name" = "מים";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"learn_more_about_sensors_link" = "מידע נוסף על חיישנים.";
+"activity_type_cycling_name" = "רכיבת אופניים";
+"help_article_navigation_routing_public_transport_navigation_name" = "ניווט לתחבורה ציבורית";
+"troubleshooting" = "פתרון בעיות";
+"parking_widget_desc" = "וידג׳ט שמציג את המרחק ממרכז המסך שלך למקום החנייה.";
+"help_article_map_vector_maps_name" = "מפות וקטוריות (סגנונות מפה)";
+"av_notes_video_widget_desc" = "נגיעה בווידג׳ט מאפשרת התחלת הקלטת סרטון.";
+"shortest_distance_first" = "העדפת מרחק קצר קודם";
+"map_widget_ant_heart_rate_desc" = "להציג את דופק המשתמש במהלך פעילות כלשהי בזמן אמת";
+"lang_zh-Hans" = "סינית מפושטת";
+"help_article_navigation_guidance_map_during_navigation_name" = "מסך המפה במהלך ניווט";
+"announcement_time_arrive" = "הגעה ליעד";
+"external_device_characteristic_speed" = "מהירות";
+"bearing_desc" = "וידג׳ט התכווין מציג את התכווין המוחלט או היחסי ליעד ביחידות זווית (מעלות 180, מעלות 360, מילירדיאנים).";
+"map_widget_time_to_intermediate" = "זמן לנק׳ ביניים";
+"average_speed_widget_desc" = "מציג את המהירות הממוצעת בנסיעה הנוכחית.";
+"upload_poi" = "העלאת נקודות עניין";
+"external_device_menu_forget" = "לשכוח";
+"shared_string_deleted" = "נמחקה";
+"global_settings" = "הגדרות כלליות";
+"map_orientation_landscape" = "לרוחב";
+"not_recorded" = "לא הוקלט";
+"mapillary_widget_descr" = "מאפשר תרומה במהירות ל־Mapillary.";
+"help_article_map_legend_ski_map_name" = "סגנון מפה סקי";
+"shared_string_buttons" = "כפתורים";
+"determine_location" = "מאפשר לנו לאתר את המיקום שלך";
+"map_widget_trip_recording_uphill" = "במעלה ההר";
+"activity_type_racing_name" = "מירוץ";
+"map_widget_ant_bicycle_cadence_desc" = "הצגת המהירות שבה המשתמש מדווש";
+"enter_new_name" = "נא להקליד שם חדש";
+"new_track" = "מסלול חדש";
+"ant_plus_searching" = "מתבצע חיפוש";
+"reset_all_settings_desc" = "לאפס את כל ההגדרות לברירת המחדל\?";
+"coordinates_widget_desc" = "הוא מציג את נקודות הציון הגאוגרפיות של המיקום הגאוגרפי הנוכחי.";
+"search_favorites" = "חיפוש במועדפים";
+"shared_string_any" = "כלשהי";
+"shared_string_clear_online_cache" = "ניקוי זכרון מצב מקוון";
+"context_menu_read_article" = "קריאת הכתבה";
+"wiki_article_search_text" = "מתבצע חיפוש אחר ערך הוויקי המתאים";
+"map_marker_2nd" = "סמן מפה שני";
+"user_points" = "נקודות משתמש";
+"backup_error_failed_to_fetch_remote_items" = "משיכת רשימת הקבצים מהשרת נכשלה.";
+"average_speed_time_interval_desc" = "נא לציין את הפרש הזמן למדידת מהירות ממוצעת.";
+"shared_string_system_default" = "בררת המחדל של המערכת";
+"delete_folder" = "למחוק את התיקייה";
+"activity_type_running_name" = "ריצה";
+"click_on_widget" = "לחיצה על הווידג׳ט";
+"navigation_points_desc" = "וידג׳טים ניווטיים מופעלים במהלך הניווט כדי להציג מידע כגון מרחק, זמן הגעה או עזיבה, הפניות הבאות, תכווין, שם הרחוב הנוכחי, פרטי נתיבים, מהירות מרבית, התראות הגעה, נקודות עניין, נקודות דרך.";
+"help_article_map_map_context_menu_name" = "תפריט הקשר מפה";
+"cloud_all_changes_uploaded_descr" = "כל השינויים שנוצרו במכשיר הזה מסונכרנים עם OsmAnd Cloud.";
+"shared_string_wikivoyage" = "ויקימסע";
+"shared_string_symbol" = "סמל";
+"help_article_map_point_layers_on_map_name" = "נקודות על המפה";
+"map_orientation_default" = "כמו ההתקן";
+"angular_measeurement" = "יחידה זוויתית";
+"ant_plus_pair_new_sensor" = "צימוד חיישן חדש";
+"popular_destinations" = "יעדים נפוצים";
+"average_speed_skip_stops" = "לוקח תחנות בחשבון";
+"help_article_navigation_routing_osmand_routing_name" = "על הניווט ב־OsmAnd";
+"no_widgets_here_yet" = "אין כאן וידג׳טים עדיין";
+"shared_string_accessibility" = "נגישות";
+"about_osmAnd" = "על OsmAnd";
+"perform_oauth_authorization" = "להיכנס דרך OAuth";
+"apply_to_existing" = "החלה על הקיימות";
+"copy_build_version" = "העתקת גרסת הבנייה";
+"duration_moment_ago" = "לפני רגע קט";
+"help_article_navigation_routing_ski_routing_name" = "ניווט לסקי";
+"shared_string_expires" = "תפוגה";
+"delete_history_items" = "למחוק %@ פריטי היסטוריה\?";
+"help_article_navigation_guidance_name" = "הנחיות ניווט";
+"help_article_navigation_routing_train_routing_name" = "ניווט לרכבת";
+"shared_string_format" = "עיצוב";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"external_device_status_connected" = "מחובר";
+"longest_duration_first" = "הצגת תקופה ארוכה קודם";
+"shared_string_travel" = "טיול";
+"gps_info_widget_desc" = "מציג את מספר הלוויינים בהם משתמש המכשיר כרגע.";
+"help_article_start_with_main_menu_name" = "תפריט ראשי";
+"image_cache" = "זיכרון מטמון תמונות";
+"help_article_personal_storage_name" = "אחסון";
+"gitHub_discussion" = "דיונים ב־GitHub";
+"map_widget_ant_bicycle_power" = "עצמת אופניים";
+"history_preferences_descr" = "אפשר להשבית את תיעוד ההיסטוריה באופן פרטני לכל סוג של היסטוריה.";
+"map_orientation_portrait" = "לאורך";
+"press_again_to_change_the_map_orientation" = "יש לגעת שוב כדי לשנות את כיוון המפה";
+"external_device_characteristic_distance" = "מרחק";
+"map_widget_glide_target_desc" = "מציג את יחס הגלישה הדרוש להגעה לנקודת היעד.";
+"help_article_navigation_setup_gpx_navigation_name" = "ניווט לפי מסלול";
+"shared_string_view" = "תצוגה";
+"shared_string_open_track" = "מסלול פתוח";
+"help_article_map_legend_nautical_map_name" = "סגנון מפה ימית";
+"map_widget_true_bearing" = "תכווין אמיתי";
+"announcement_time_title" = "זמן ההכרזה";
+"shared_string_external" = "חיצוני";
+"longest_distance_first" = "העדפת מרחק ארוך קודם";
+"magnetic_bearing_widget_desc" = "זווית בין הצפון המגנטי ונקודת היעד ביחס למיקום שלך.";
+"saved_articles" = "ערכים שנוספו למועדפים";
+"speak_route_deviation" = "הכרזה על סטייה ממסלול";
+"route_info" = "פרטי המסלול";
+"external_device_details_battery" = "סוללה";
+"street_name_widget_desc" = "וידג׳ט שם הרחוב מציג את שם הרחוב הנוכחי עם חץ מיקום ישר או ליד שם הרחוב עם המעקף שיש להשלים.";
+"shared_string_read" = "נקרא";
+"shared_string_markers" = "סמנים";
+"map_widget_next_sunrise" = "הזריחה הבאה";
+"map_widget_glide_average_desc" = "מציג את יחס הגלישה הממוצע לטווח שהוגדר.";
+"top_widgets_panel" = "לוח עליון";
+"ant_plus_pair_bluetooth_prompt" = "אפשר לצמד חיישני Bluetooth LE ו־ANT+‎ עם OsmAnd.";
+"map_widget_time_to_destination" = "זמן ליעד";
+"tracker_item" = "עוקב OsmAnd";
+"search_history" = "היסטוריית חיפוש";
+"av_notes_photo_widget_desc" = "נגיעה בווידג׳ט מאפשרת לצלם תמונה.";
+"visibility" = "הופעה";
+"external_sensors_not_found" = "לא נמצאו חיישנים";
+"help_article_navigation_setup_route_navigation_name" = "הכנות מסלול";
+"start_recording" = "התחלת הקלטה";
+"external_device_status_disconnected" = "מנותק";
+"help_article_navigation_setup_route_details_name" = "פרטי מסלול";
+"osm_upload_gpx_tags_footer" = "נא למלא תגיות מופרדות בפסיקים.";
+"ble_search_again" = "חיפוש חוזר";
+"simulate_location_movement_speed" = "מהירות תנועה";
+"help_article_map_track_context_menu_name" = "תפריט הקשר מסלולים";
+"shared_string_bookmark" = "סימנייה";
+"lanes_widgets_desc" = "וידג׳ט הנתיבים מציג את פריסת הנתיבים בכביש הנוכחי ומדגיש באילו נתיבים ליסוע כחלק מהניווט הפעיל.";
+"average_glide_ratio" = "יחס גלישה ממוצע";
+"help_article_map_raster_maps_name" = "מפות מעובדות (מקוונות או שלא)";
+"rotate_map_manual_opt" = "סיבוב ידני (קבוע)";
+"general_settings" = "כללי";
+"add_page" = "הוספת עמוד";
+"shared_string_result" = "תוצאה";
+"shared_string_explore" = "סיור";
+"my_data" = "הנתונים שלי";
+"route_maneuvers" = "מעקפים";
+"map_widget_trip_recording_downhill" = "במורד ההר";
+"map_settings_topography" = "קווי מתאר";
+"activity_type_walking_name" = "הליכה";
+"map_markers_bar_widget_desc" = "בווידג׳ט הסרגל העליון אפשר לראות את המרחק ואת הכיוון לסמן מהמיקום הנוכחי. אפשר להגדיר כדי לראות סמן או שניים מובילים בווידג׳ט.";
+"download_file" = "הורדת קובץ";
+"map_3d_mode_action" = "מצב תלת־ממד";
+"announcement_time_off_route" = "סטייה ממסלול";
+"report_an_issues" = "דיווח על תקלות";
+"map_widget_trip_recording_distance" = "מרחק";
+"telegram_chats" = "ערוצי טלגרם";
+"activity_type_motorbike_name" = "אופנוע";
+"skip_download" = "דילוג על הורדה";
+"apply_to_existing_favorites_descr" = "להחיל את השינויים על הנקודות המועדפות הנוכחיות של הקבוצה או רק על חדשות\?";
+"help_article_navigation_routing_boat_navigation_name" = "ניווט לספינה";
+"help_article_navigation_setup_markers_navigation_name" = "ניווט לפי סמנים";
+"carplay" = "CarPlay";
+"time_to_go_desc" = "הזמן בדקות או שעות שנדרש להגעה ליעד שלך.";
+"lang_sr-Latn" = "סרבית לטינית";
+"wikivoyage_download_pics" = "הורדת תמונות";
+"detailed_log_file" = "קובץ יומן מפורט";
+"restart_is_required" = "נדרשת הפעלה מחדש כדי להחיל את השינוי.";
+"travel_card_download_descr" = "יש להוריד הדרכות תיירות של ויקימסע כדי לצפות בערכים על מקומות מסביב לעולם ללא חיבור לאינטרנט.";
+"default_appearance_desc" = "צבע ברירת מחדל, הסמל והצורה יחולו על הנקודות המועדפות שיתווספו לקבוצה.";
+"there_are_no_connected_sensors_of_this_type" = "אין חיישנים מחוברים מהסוג הזה";
+"offline_wikivoyage" = "ויקימסע בלתי־מקוון";
+"map_widget_group_glide_ratio" = "יחס גלישה";
+"help_article_navigation_routing_car_based_routing_name" = "ניווט לרכב (משאית, אופנוע)";
+"no_widgets_descr" = "ניתן להוסיף וידג׳ט אחד או יותר מרשימת הווידג׳טים הזמינים.";
+"route_maneuvers_desc" = "וידג׳טים ניווטיים מופעלים במהלך הניווט כדי להציג מידע כגון מרחק, זמן הגעה או עזיבה, הפניות הבאות, תכווין, שם הרחוב הנוכחי, פרטי נתיבים, מהירות מרבית, התראות הגעה, נקודות עניין, נקודות דרך.";
+"disable_vertex_hillshade_3d" = "הסתרת צל במצב תלת־ממד";
+"external_sensors_source_of_data" = "מקור הנתונים";
+"map_widget_ant_bicycle_speed" = "מהירות אופניים";
+"map_widget_distance_to_intermediate" = "מרחק לנק׳ ביניים";
+"help_article_navigation_routing_online_routing_name" = "ניווט מקוון";
+"announcement_time_prepare_long" = "הכנה ממושכת";
+"time_to_navigation_point_widget_settings_desc" = "אפשר להחליף מצב בנגיעה בווידג׳ט.";
+"mapillary_widget_desc" = "וידג׳ט שמספק גישה מהירה ליישומון Mapillary כדי להוסיף תמונות ברמת רחוב.";
+"activity_type_riding_name" = "רכיבה";
+"help_article_personal_profiles_name" = "פרופילים (הגדרות)";
+"map_widget_next_sunset" = "השקיעה הבאה";
+"current_time_widget_desc" = "מציג את הזמן הנוכחי מהמכשיר שלך.";
+"help_article_plan_route_coordinate_input_name" = "קלט נקודות ציון";
+"simulate_location_movement_speed_original" = "מקורי";
+"coordinates_widget_secondary_desc" = "ניתן לשנות את תבנית נקודות הציון דרך %@ – %@ – %@.";
+"navigation_points" = "נקודות ניווט";
+"select_tracks_to_display" = "נא לבחור מסלולים כדי להציג אותם על המפה.";
+"elevation_profile_widget_desc" = "וידג׳ט מציג את פרופיל העילוי והשיפוע של המסלול הנוכחי.";
+"external_device_status_connect" = "התחברות";
+"help_article_map_legend_osmand_name" = "סגנון מפה OsmAnd";
+"coordinates_format" = "תבנית נקודות הציון";
+"map_marker_1st" = "סמן המפה הראשון";
+"help_article_navigation_routing_moped_routing_name" = "ניווט לקטנוע";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"shared_string_hidden" = "מוסתר";
+"deleting_complete" = "המחיקה הושלמה";
+"shared_string_error" = "שגיאה";
+"help_article_personal_name" = "הנתונים שלי";
+"help_article_navigation_routing_pedestrian_routing_name" = "ניווט להולכי רגל";
+"av_notes_audio_widget_desc" = "נגיעה בווידג׳ט מאפשרת הוספת הערות קוליות.";
+"external_device_characteristic_total_distance" = "סה״כ מרחק";
+"newest_date_first" = "העדפת תאריך חדש יותר";
+"audionotes_plugin_name" = "תוסף הערות קוליות";
+"most_viewed" = "הנצפים ביותר";
+"activity_type_hiking_name" = "טיול שטח";
+"activity_type_snowmobile_name" = "אופנוע שלג";
+"av_notes_choose_action_widget_desc" = "בחירה בפעולה.";
+"help_article_navigation_routing_straight_line_routing_name" = "ניווט קו ישיר (מטוסים)";
+"shared_string_light" = "בהיר";
+"shared_string_dark" = "כהה";
+"my_places_no_tracks_title" = "תיקייה ריקה";
+"exit_number" = "יציאה מספר";
+"announcement_time_prepare" = "הכנה";
+"help_article_navigation_routing_bicycle_based_routing_name" = "ניווט לאופניים (אופני הרים)";
+"map_widget_sunrise_sunset_time_left" = "הזמן שנותר";
+"specify_number_of_dir_indicators_desc" = "ציון כמות מחווני כיוון.";
+"radius_rules_widget_desc" = "כלי סרגל רדיוס מסייע לאתר את הרדיוס מסביב לנקודה נבחרת במפה על ידי הצגת עיגולי מרחק במפה.";
+"map_widget_group_glide_desc" = "וידג׳טים מציגים את יחס הגלישה למטרה או יחס הגלישה הממוצע עבור הנסיעה הנוכחית.";
+"simulate_in_progress" = "בתהליך";
+"shorter_duration_first" = "הצגת תקופה קצרה קודם";
+"map_2d_mode_action" = "מצב דו־ממד";
+"weather_update_disabled" = "מושבת";
+"map_widget_sunrise" = "זריחת החמה";
+"map_widget_distance_to_destination" = "מרחק ליעד";
+"map_screen_orientation" = "כיוון המסך";
+"bluetooth_found_title" = "נמצאו: %d";
+"last_seven_days" = "7הימים האחרונים";
+"ask_question_propose_features" = "פרסום שאלות, הצעת יכולות";
+"help_article_map_tracks_on_map_name" = "מסלולים ונתיבים";
+"activity_type_winter_name" = "חורף";
+"activity_type_offroad_name" = "שטח";
+"max_speed_widget_desc" = "מציג את מגבלת המהירות בכביש הנוכחי.";
+"arrival_time_widget_desc" = "זמן ההגעה לנקודת היעד.";
+"side_marker_eta" = "זמן ההגעה המשוערך";
+"help_article_troubleshooting_maps_data_name" = "מפות ונתונים";
+"glide_ratio_to_target" = "יחס גלישה למטרה";
+"help_article_personal_import_export_name" = "ייבוא/ייצוא";
+"shared_string_uploading" = "מתבצעת שליחה";
+"switch_profile" = "החלפת פרופיל";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"send_log" = "שליחת יומן";
+"angular_measeurement_descr" = "החלפת יחידת המידה לאזימוט.";

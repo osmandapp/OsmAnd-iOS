@@ -885,3 +885,13 @@
 "route_add_start_point" = "အစနေရာထည့်ပါ";
 "will_open_at" = "ဖွင့်ချိန်";
 "shared_string_height" = "အမြင့်";
+"context_menu_read_article" = "ဆောင်းပါးဖတ်သည်";
+"wikivoyage_download_pics" = "ပုံများကူးယူပါ";
+"shared_string_deleted" = "ဖျက်လိုက်သည်";
+"send_log" = "logပို့ပါ";
+"shared_string_contents" = "မာတိကာ";
+"shared_string_travel_guides" = "ခရီးသွားလမ်းညွှန်များ";
+"switch_profile" = "ပရိုဖိုင်းကိုပြောင်းလဲမည်";
+"shared_string_result" = "ရလဒ်";
+"shared_string_read" = "ဖတ်ပါ";
+"press_again_to_change_the_map_orientation" = "မြေပုံတည်နေရာကိုပြောင်းလဲရန်နောက်တစ်ကြိမ်အသာပုတ်ပါ";

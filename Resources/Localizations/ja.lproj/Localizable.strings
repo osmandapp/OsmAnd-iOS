@@ -20,7 +20,7 @@
 "years_5" = "年";
 "months_3" = "3ヶ月";
 "price_free" = "無料";
-"get_discount_title" = "%dを%@で入手 、いまなら%@割引です。";
+"get_discount_title" = "%dを%@で入手 、今なら%@割引です。";
 "get_free_trial_title" = "%d %@ の無料トライアルを始める。";
 "get_discount_short_descr" = "";
 "get_discount_first_part" = "初%@度 %@";
@@ -80,7 +80,8 @@
 "simulate_routing_descr" = "検索されたルートでナビゲーションのシミュレートを行います";
 "select_avoid_descr" = "ナビゲーション中に避けたい道路を選択します。マップ上の道路を選択するか、下のリストから種類を選択できます。";
 "no_active_route" = "現在有効なルートはありません";
-"day_night_info_description" = "日出時刻: %@ \n日没時刻: %@";
+"day_night_info_description" = "日出時刻: %@ 
+\n日没時刻: %@";
 "day_night_info" = "昼/夜判別情報";
 "daynight_mode_auto" = "日出/日没";
 "route_simulation" = "ルートシミュレーション";
@@ -99,7 +100,7 @@
 "rotate_map_to_bearing_descr" = "マップ画面の向きを選択します。";
 "rotate_map_compass_opt" = "コンパスに従う";
 "rotate_map_bearing_opt" = "移動方向に従う";
-"rotate_map_north_opt" = "回転しない (北が上)";
+"rotate_map_north_opt" = "回転しない";
 "driving_region_descr" = "運転する地域を選択します:アメリカ、ヨーロッパ、イギリス、アジア、その他";
 "driving_region" = "運転地域";
 "shared_string_automatic" = "自動判別";
@@ -630,7 +631,7 @@
 "osm_succsessful_uploads" = "成功しました";
 "osm_failed_uploads" = "失敗しました";
 "osn_bug_name" = "OSMでの注釈";
-"osm_created" = "作成しました";
+"osm_created" = "作成されました";
 "poi_remove_success" = "削除されました";
 "shared_string_modified" = "修正済み";
 "osm_edit_reopened_note" = "OSMでの注釈を開き直す";
@@ -928,7 +929,8 @@
 //inapps
 "plugin_nautical_name" = "航路マップ表示";
 "product_desc_nautical" = "航海ルートのナビゲーションに適したベクターマップ";
-"plugin_nautical_descr" = "このプラグインはOsmAndのマップ画面に海洋および河川移動時に便利なマップを反映させることができ、ボート、セーリング、その他のウォータースポーツに向けた機能を含んでいます。 \n \nこの特殊マップアドオンはOsmAndに沿岸から川上の内陸部まで、航路ナビゲーションマークや各航路標識を提供することができます。各ナビゲーションマークの説明はそれらの意味(カテゴリー、形状、色、順序、参照など)を識別するために必要な情報も含まれています。 \n \nOsmAndの従来のマップスタイルに戻すには、このプラグインを非アクティブにするか、必要に応じて\'マップ設定\'の\'マップスタイル \'からも変更できます。";
+"plugin_nautical_descr" = "航路、ビーコン、海上の危険エリア、航行や係留が禁止されているエリアなどの情報で海図を充実させます。使用するには、対応する海図をダウンロードし[マップ設定]＞[マップスタイル]＞[船舶]を有効にしてください。
+\n\n詳しくは、%@ をご参照下さい。";
 "osmand_parking_plugin_name" = "駐車位置";
 "product_desc_parking" = "車の駐車時間と駐車場所の追跡";
 "osmand_parking_plugin_description" = "車が停まっている場所をマークして、パーキングメーターの有効期限をカレンダーに知らせます。マーカーを設定するには、マップ上を長押しで場所を選択し\"その他\"にて\"駐車位置としてマーク\"をタップします。";
@@ -937,13 +939,17 @@
 "plugin_ski_descr" = "ウィンタースポーツエリアでのナビゲーション用に設計されています。スキー場、スキーリフト、クロスカントリースキーコースを、難易度を示す色のついた線で見ることができます。この拡張機能を利用するには、プラグインを有効にしてから\"マップ設定\"内のマップスタイルで\"ウィンター＆スキー\"を選択します。";
 "record_plugin_name" = "旅程・経路記録";
 "product_desc_track_recording" = "旅程・経路を記録してGPXとして保存";
-"record_plugin_description" = "ドライブやトレーニング時の経路を記録し、速度、累積登坂・降坂、標高プロファイルなどの観点からデータを分析することができます。記録した経路は、アーカイブしたり、友人と共有したり、編集などの後処理も行えます。\n\n詳しくは https://osmand.net/docs/user/plugins/trip-recording をご覧下さい。";
+"record_plugin_description" = "ドライブやトレーニング時の経路を記録し、速度、累積登坂・降坂、標高プロファイルなどの観点からデータを分析することができます。記録した経路は、アーカイブしたり、友人と共有したり、編集などの後処理も行えます。
+\n
+\n詳しくは %@ をご覧下さい。";
 "product_title_trip_planning" = "旅程計画";
 "product_desc_trip_planning" = "このプラグインは旅程の計画、細かな経由地点の追加、目的地までの距離の算出に役立ちます";
 "product_desc_ext_trip_planning" = "旅程計画プラグインを使用すると、マップ上に旅程を作成したあと保存し、直線で接続されたポイント間の距離も測定できます。ルートの策定よりも、事前の旅程計画を詰める用途のために作成されました。";
 "osm_editing_plugin_name" = "OpenStreetMap編集";
 "product_desc_osm_editing" = "スマートフォンを地図作成ツールに変える";
-"osm_editing_plugin_description" = "OSMのユーザー名とパスワードを入力してOSM POIオブジェクトの作成や変更、OSMメモの作成や注釈を付けたり、OsmAndで記録されたGPXファイルをOSMへ提出したりなどのOSM発展への貢献が可能です。 OpenStreetMap.orgはコミュニティ主導型で知的財産権を主張しない、世界規模の地図作成プロジェクトです。";
+"osm_editing_plugin_description" = "世界地図を包括的に管理し、すべてのユーザーが最新のオープンソースデータを利用できるようにするグローバルコミュニティであるOpenStreetMapに貢献してください。
+\n
+\n地図の編集方法は、弊社ウェブサイト %@ に掲載されています。";
 "product_desc_africa" = "アフリカ向けマップの無制限ダウンロード";
 "product_desc_africa_short" = "アフリカ地域のマップ";
 "product_desc_australia" = "オーストラリア向けマップの無制限ダウンロード";
@@ -967,7 +973,11 @@
 "purchases_feature_desc_wikipedia" = "位置情報に基づいてすべてのWikipedia記事をオフラインで参照できるので、旅行で訪れた場所についてマップをタップするだけで、より詳しく知ることができます。その為には各地域のWikipediaマップファイルを忘れずにダウンロードしてください。";
 "srtm_plugin_name" = "等高線";
 "product_desc_srtm" = "等高線の表示";
-"srtm_plugin_description" = "等高線、起伏、勾配などの地形情報は、地形配置、起伏、航行の可能性などを視覚的に評価するのに役立ちます。地形情報は、勾配の陰影、等高線、勾配の度合いによる色付けでマップに表すことができます。\n\n基礎となるデータは、SRTM(スペースシャトル立体地形データ)およびASTER(資源探査用将来型センサ)に由来します。\n\n詳しくは、https://osmand.net/docs/user/plugins/contour-lines をご参照下さい。";
+"srtm_plugin_description" = "等高線、起伏、勾配などの地形情報は、地形配置、起伏、航行の可能性などを視覚的に評価するのに役立ちます。地形情報は、勾配の陰影、等高線、勾配の度合いによる色付けでマップに表すことができます。
+\n
+\n基礎となるデータは、SRTM(スペースシャトル立体地形データ)およびASTER(資源探査用将来型センサ)に由来します。
+\n
+\n詳しくは、https://osmand.net/docs/user/plugins/contour-lines をご参照下さい。";
 "wikivoyage_travel_guide" = "旅行ガイド";
 "start_editing_card_image_text" = "誰でも自由に編集できる世界規模の旅行ガイドです。";
 "wikivoyage_travel_guide_descr" = "インターネットへ接続せずにOsmAnd上で地球上のあらゆる興味深いスポットのガイドを利用することができます。";
@@ -1086,7 +1096,7 @@
 "no_inet_connection_desc_map" = "マップのダウンロードが必要です。";
 "try_again" = "再試行";
 "search_location" = "場所を検索しています…";
-"search_map" = "マップを検索しています";
+"search_map" = "マップを検索しています…";
 "search_another_country" = "別の地域を選択";
 "skip_map_downloading" = "マップのダウンロードをスキップ";
 "skip_map_downloading_desc_ios" = "オフラインマップがインストールされていません。リストからマップを選択するか、『メニュー』＞『マップファイル管理』から必要なマップをダウンロードしてください";
@@ -1106,7 +1116,7 @@
 "new_filter_desc" = "新しいフィルターの名前を入力してください、作成したフィルターは[カテゴリー]タブに追加されます。";
 "user_password" = "パスワード";
 "shared_string_filters" = "フィルター";
-"edit_filter" = "カテゴリーを編集";
+"edit_filter" = "フィルターの編集";
 "edit_filter_save_as_menu_item" = "名前をつけて保存";
 "delete_filter" = "フィルターデフォルト";
 "save_filter" = "フィルターの保存";
@@ -1424,9 +1434,9 @@
 "rendering_attr_surface_stone_name" = "石";
 "rendering_value_highContrastRoads_name" = "ハイコントラスト道路";
 "routing_attr_driving_style_safety_name" = "脇道を選り抜く";
-"routing_attr_avoid_sett_description" = "石畳や敷石の道を通らないようにします";
+"routing_attr_avoid_sett_description" = "敷石の道を避けます";
 "rendering_attr_smoothness_excellent_name" = "ローラーブレードやスケボーなども走行可";
-"rendering_attr_alpineHiking_description" = "SACスケールに従って道を描写";
+"rendering_attr_alpineHiking_description" = "ハイキングルートの難易度を指定します。";
 "rendering_attr_highway_class_path_name" = "道(自動車以外のもの向け)";
 "rendering_attr_surface_asphalt_name" = "アスファルト舗装";
 "routing_attr_allow_private_description" = "専有エリア(業者用通路、私有地など)を通行可能と見なします。";
@@ -1576,7 +1586,7 @@
 "width_limit_description" = "車幅を入力してください。一部のルートにおいては、幅の広い車両では通行できない場合があります。";
 "height_limit_description" = "車高を入力してください。一部のルートにおいては、車高の高い車両では通行できない場合があります。";
 "weight_limit_description" = "車両の重量を入力してください。一部のルートにおいては、大型車両では通行できない場合があります。";
-"routing_attr_length_name" = "長さ制限";
+"routing_attr_length_name" = "長さ";
 "shared_string_copy" = "コピー";
 "product_desc_antarctica" = "南極大陸向けマップの無制限ダウンロード";
 "send_anonymous_data" = "匿名データを送信する";
@@ -1689,7 +1699,9 @@
 "profile_type_custom_string" = "カスタムプロファイル";
 "profile_alert_delete_title" = "プロファイルの削除";
 "export_profile" = "プロファイルのエクスポート";
-"gpx_parse_error" = "GPXファイルに問題が見つかりました。\n\nOsmAndのサポートに連絡すれば調査することができます。";
+"gpx_parse_error" = "GPXファイルに問題が見つかりました。
+\n
+\nOsmAndのサポートに連絡すれば調査することができます。";
 "osm_editing_settings_descr" = "このプラグインの設定はすべてのプロファイルに適用されます。";
 "shared_string_required" = "必須";
 "shared_string_email" = "メールアドレス";
@@ -1825,7 +1837,7 @@
 
 // Resources
 "shared_string_resources" = "リソース";
-"segments_count" = "%dセグメント";
+"segments_count" = "%d区分";
 "track_multiple_segments_select" = "%@ 複数のセグメントがあります。ナビゲーションに使用する部分の経路を選択してください。";
 "select_segment" = "セグメントの選択";
 "add_folder" = "フォルダを追加";
@@ -1888,7 +1900,9 @@
 // Route planning
 "plan_route" = "ルートを計画する";
 "downloading" = "ダウンロード中";
-"checking_for_duplicate_description" = "OsmAnd側でアプリ内の既存の項目と重複していないか、%@をチェックします。 \n \n少し時間がかかるかもしれません。";
+"checking_for_duplicate_description" = "OsmAnd側でアプリ内の既存の項目と重複していないか、%@をチェックします。 
+\n 
+\n少し時間がかかるかもしれません。";
 "checking_for_duplicates" = "重複要素の確認中...";
 "export_profile_descr" = "すべてのプロファイル設定はエクスポートしたり、別のプロファイルから設定をコピーしたり、プロファイル設定をデフォルトの状態にリセットしたりできます。";
 "profile_sett_descr" = "選択したアプリプロファイルに影響します";
@@ -1904,7 +1918,9 @@
 "copy_from_other_profile_descr" = "設定の全てを任意のプロファイルから選択したプロファイルへコピーできます。 ";
 "added_items" = "追加項目: %@";
 "shared_string_rendering_style" = "レンダリングのスタイル";
-"import_duplicates_description" = "OsmAndには、すでにインポートされたものと同じ名前の項目があります。\n\n対応を選択してください。";
+"import_duplicates_description" = "OsmAndには、すでにインポートされたものと同じ名前の項目があります。
+\n
+\n対応を選択してください。";
 "export_failed" = "プロファイルをエクスポートできませんでした";
 "nav_type_hint" = "ナビゲーションタイプ";
 "selected_of" = "選択済み - %d/%d";
@@ -1913,7 +1929,7 @@
 "plugin_settings_descr" = "選択したプロファイルへのプラグイン設定です。";
 "global_settings_descr" = "アプリケーション全体に影響します。";
 "do_not_rotate" = "回転しない";
-"settings_app_theme" = "アプリテーマ";
+"settings_app_theme" = "アプリケーションテーマ";
 "shared_string_legend" = "凡例";
 "map_settings_add_maps_slopes" = "マップ上に勾配を表示するには、追加のマップが必要です";
 "map_settings_add_maps_hillshade" = "マップ上に陰影起伏図を表示するには、追加のマップが必要です";
@@ -1932,7 +1948,7 @@
 "icon_group_symbols" = "記号";
 "icon_group_special" = "特別";
 "icon_group_sport" = "スポーツ";
-"icon_group_emergency" = "救急";
+"icon_group_emergency" = "緊急";
 "transport" = "交通";
 "key_hint_recenter_map" = "マップを中央に再配置";
 "shared_z_a" = "降順(Z～A)";
@@ -1970,7 +1986,7 @@
 "hide_terrain" = "地形の非表示";
 "show_terrain" = "地形の表示";
 "unsupported_items" = "サポートされていない要素";
-"quick_action_current_location_widget_descr" = "マップ上で座標ウィジェットの表示/非表示を切り替えます。";
+"quick_action_current_location_widget_descr" = "マップ上で現在地ウィジェットを表示/非表示を切り替えるトグルボタンです。";
 "hide_current_location" = "座標を非表示";
 "show_current_location" = "座標を表示";
 "toggle_current_location" = "座標ウィジェットの表示/非表示";
@@ -1978,9 +1994,9 @@
 "searching_gps" = "GPS検索";
 
 // Coordinate widget
-"coordinates_widget_current_location" = "座標ウィジェット";
+"coordinates_widget_current_location" = "座標:現在地";
 "osm_editing_access_descr" = "すべてのローカル編集とメモを%@で表示できます。すでにアップロードされたアイテムはOsmAndのリストに表示されません。";
-"shared_string_loading" = "読込中…";
+"shared_string_loading" = "読み込み中";
 "add_custom_category" = "カスタムカテゴリーを追加";
 "new_plugin_added" = "新しいプラグインが追加されました";
 "coordinates" = "座標";
@@ -2306,7 +2322,7 @@
 "shared_string_includes" = "含む";
 "explore_osmnad_plans_to_find_suitable" = "OsmAnd Plansを参照し、自分に適したプランやサブスクリプションをご利用ください。";
 "purchases_feature_desc_osmand_cloud" = "OsmAnd Cloudを入手することで、すべてのOsmAndデータをクラウド保存が可能になります。再インストール後にデータが失われることはありません。全情報を簡単にバックアップおよび復元出来ます。";
-"not_available_with" = "%@は利用できません";
+"not_available_with" = "%@では利用できません";
 "lang_ckb" = "中央クルド語";
 "shared_string_delete_all" = "すべて削除";
 "restore_from_osmand_cloud" = "OsmAnd Cloudから復元";
@@ -2344,12 +2360,17 @@
 "use_login_and_password" = "ユーザー名とパスワードを使用する";
 "last_two_month_total" = "過去2ヶ月間の合計";
 "enough_contributions_descr" = "おめでとうございます。OpenStreetMapに十分な貢献をしたと判断され、無制限のOsmAndマップの更新を受けることができます！";
-"logout_from_osmand_cloud_decsr" = "ログアウトしますか？\nデータをバックアップまたは復元するには、再度ログインする必要があります。";
-"backup_delete_old_data_warning" = "以前ロードしたデータの変更履歴を削除しようとしています。\n\nデータの現在のバージョンはサーバーに保存されますが、以前に行った変更に戻すことはできません。";
+"logout_from_osmand_cloud_decsr" = "ログアウトしますか？
+\nデータをバックアップまたは復元するには、再度ログインする必要があります。";
+"backup_delete_old_data_warning" = "以前ロードしたデータの変更履歴を削除しようとしています。
+\n
+\nデータの現在のバージョンはサーバーに保存されますが、以前に行った変更に戻すことはできません。";
 "use_login_and_password_description" = "メールアドレス/ユーザー名とパスワードを使用してOpenStreetMap.orgにログインする。";
 "plugin_popup_weather_title" = "天気を有効にする";
 "local_backup" = "ローカルバックアップ";
-"backup_delete_all_data_warning" = "バージョン履歴を含め、以前にOsmAnd Cloudにアップロードされたすべてのデータを削除しようとしています。\n\n削除されたデータを復元することはできません。";
+"backup_delete_all_data_warning" = "バージョン履歴を含め、以前にOsmAnd Cloudにアップロードされたすべてのデータを削除しようとしています。
+\n
+\n削除されたデータを復元することはできません。";
 "backup_delete_types_descr" = "推奨されない種類のデータすべてをOsmAnd Cloudから削除しますか？";
 "login_open_street_map_org" = "OpenStreetMap.orgにログイン";
 "contributions_may_calculate_with_delay" = "貢献度の計算には数時間程度かかる場合があります。";
@@ -2360,7 +2381,7 @@
 "product_title_plus" = "Maps+";
 "map_widget_rendering_fps" = "マップ描画FPS";
 "weather_online_cache" = "オンラインキャッシュ";
-"shared_string_clear_online_cache" = "オンラインキャッシュを消去";
+"shared_string_clear_online_cache" = "オンラインキャッシュを消去する";
 "shared_string_clear_offline_cache" = "オフラインキャッシュを消去";
 "shared_string_total_size" = "合計サイズ";
 "shared_string_delete_data" = "データを削除";
@@ -2425,7 +2446,7 @@
 "simulate_your_location_gpx_descr" = "記録されたGPX経路を利用して位置をシミュレートします。";
 "track_has_no_needed_data" = "経路に対応するデータがありません。";
 "search_poi_types_descr" = "異なるカテゴリのPOIタイプを組み合わせます。スイッチをタップしてすべてを選択し、左側をタップしてカテゴリを選択します。";
-"empty_purchases_description" = "購入した品目がここに表示されない場合は、\"%@\"をタップするか、サポートチームにお問い合わせください。";
+"empty_purchases_description" = "購入したはずのアイテムがここに表示されない場合は、\"%@\"をタップするか、サポートチームにお問い合わせください。";
 "position_on_map_bottom" = "下";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "routing_attr_avoid_low_emission_zone_name" = "低排出ゾーンを避ける";
@@ -2438,7 +2459,8 @@
 "srtm_unit_format" = "等高線ユニットバリアント";
 "save_heading_descr" = "記録中の各経路地点でのその時の向きも保存します。";
 "no_purchases" = "購入済みのアイテムはありません";
-"osmand_cloud_create_account_descr" = "メールアドレスを入力してください。ワンタイムパスワードが送信されます。\n手続きを進めるとすべてのデータがリンクされます。";
+"osmand_cloud_create_account_descr" = "メールアドレスを入力してください。ワンタイムパスワードが送信されます。
+\n手続きを進めるとすべてのデータがリンクされます。";
 "service_is_not_available_please_try_later" = "サービスは利用できません。後ほどもう一度やり直してください。";
 "select_another_colorization" = "別タイプのカラーリングを選択してください。";
 "choose_what_to_restore" = "復元したいものを選択してください。";
@@ -2459,7 +2481,7 @@
 "recalc_angle_dialog_descr" = "ルートの再計算が終わるまで、現在地と計算済みルートの間に余剰分の直線区分が表示されます";
 "routing_attr_avoid_tunnels_description" = "移動時にトンネルを避けるようにします";
 "routing_attr_motor_type_description" = "エンジンの燃料タイプを選択します。これは、CO2の排出量を推定するために必要です。";
-"you_can_get_feature_as_part_of_pattern" = "%@プランの一部として\"%@\"を入手できます。比較:";
+"you_can_get_feature_as_part_of_pattern" = "\"%@\"が利用可能なプラン:%@";
 "duration_ago" = "%@前";
 "parked_at" = "駐車開始時刻";
 "position_on_map_center" = "中央";
@@ -2510,7 +2532,13 @@
 "mgrs_format_descr" = "OsmAndは、UTM NATO形式類似のMGRSを使用します。";
 "m" = "m";
 "km" = "km";
-"speed_cameras_legal_descr" = "一部の国や地域では、スピードカメラ警告機能の使用が法律で禁止されています。\n\n国の法律に基づいて、使用を望むかどうかを決定する必要があります。\n\n『%@』を選択すると、スピードカメラに関するアラートと警告機能を使用できます。\n\n『%@』を選択すると、スピードカメラに関するすべてのデータ(警告、通知、POI)が、OsmAndの再インストールを行うまで削除されます。";
+"speed_cameras_legal_descr" = "一部の国や地域では、スピードカメラ警告機能の使用が法律で禁止されています。
+\n
+\n国の法律に基づいて、使用を望むかどうかを決定する必要があります。
+\n
+\n『%@』を選択すると、スピードカメラに関するアラートと警告機能を使用できます。
+\n
+\n『%@』を選択すると、スピードカメラに関するすべてのデータ(警告、通知、POI)が、OsmAndの再インストールを行うまで削除されます。";
 "lang_zh-Hant" = "中国語 (繁体字)";
 "privacy_and_security" = "プライバシーとセキュリティ";
 "speed_camera_pois" = "スピードカメラPOI";
@@ -2559,7 +2587,12 @@
 "simulation_preview_mode_desc" = "シミュレーションの速度は直線区間で最大となり、交差点でのみ減速します。";
 "speed_mode" = "スピード重視モード";
 "mtb_segment_classification" = "区分の分類";
-"weather_plugin_description" = "提供されるサービスは以下の通りです\n- 5つのレイヤーを備えた 24時間および 7日間の天気予報\n- 位置に応じたウィジェット\n- 温度/気圧の分布図\n\n気象データは、Global Forecast System (GFS、https://www.ncei.noaa.gov/products/weather-climate-models/global-forecast ) によって提供されています。";
+"weather_plugin_description" = "提供されるサービスは以下の通りです
+\n- 5つのレイヤーを備えた 24時間および 7日間の天気予報
+\n- 位置に応じたウィジェット
+\n- 温度/気圧の分布図
+\n
+\n気象データは、Global Forecast System (GFS、%@) によって提供されています。";
 "rendering_attr_depthContourColorScheme_name" = "線の色";
 "show_borders_of_downloaded_maps" = "ダウンロードしたマップの境界線を表示";
 "purchases_feature_desc_cross_buy" = "追加料金なしで、さまざまなプラットフォーム(Android/iOS/ウェブ) からサブスクリプション機能を利用できます。";
@@ -2570,7 +2603,9 @@
 "routeInfo_horse_scale_name" = "馬道(手綱さばき)の難易度";
 "rendering_attr_horse_scale_critical_name" = "Critical(経験者のみ)";
 "simulation_preview_mode_title" = "高速プレビューモード";
-"simulation_real_mode_desc" = "直線区間の道路では、速度はおおよその最大許容速度が想定されます。\n交差点では、シミュレーションの速度を落として対応します。\n交通標識や一時停止標識などがある場所では、さらに時間的な余裕が必要であると考慮されます。";
+"simulation_real_mode_desc" = "直線区間の道路では、速度はおおよその最大許容速度が想定されます。
+\n交差点では、シミュレーションの速度を落として対応します。
+\n交通標識や一時停止標識などがある場所では、さらに時間的な余裕が必要であると考慮されます。";
 "simulation_real_mode_title" = "現実的なシミュレーション";
 "simulation_constant_mode_desc" = "選択された速度でシミュレーションが実行されます。";
 "lang_sat" = "サンタル語";
@@ -2619,3 +2654,314 @@
 "rendering_value_sacScale_description" = "スイス・アルペン・クラブ(スイス山岳会)";
 "map_widget_current_speed" = "現在速度";
 "add_row" = "行を追加";
+
+"rendering_attr_weatherWindSpeedContours_name" = "風速等高線";
+"rendering_attr_showProposed_name" = "指定オブジェクト";;
+"map_widget_target_distance" = "カメラからターゲットまでの距離";
+"map_widget_group_sunrise_sunset" = "日出、日没";
+"bearing_desc" = "目標までの絶対方位または相対方位を任意の角度単位(180度、360度、ミリラジアンモード)で表示します。";
+"delete_history_items" = "%@の履歴項目を削除しますか？";
+"temperature_widget_desc" = "現在のマップ中心の気温を表示します。";
+"travel_card_download_descr" = "Wikivoyageの旅行ガイドをダウンロードしておけば、オフライン環境でも世界各地の観光名所を知ることができます。";
+"help_article_navigation_guidance_map_during_navigation_name" = "ナビゲーション中のマップ画面";
+"activity_type_hiking_name" = "ハイキング";
+"angular_measeurement_descr" = "方位角(方位を示す角度)の単位を変更します。";
+"shared_string_error" = "エラー";
+"shorter_duration_first" = "短い期間順";
+"bearing_secondary_desc" = "%@– %@ – %@での使用されるデータ形式を変更できます。";
+"wikivoyage_download_pics" = "画像のダウンロード";
+"cloud_item_restored" = "%@はクラウド側に復元されました。";
+"shared_string_uploading" = "アップロード中";
+"audionotes_plugin_name" = "音声/動画メモ";
+"relative_bearing_widget_desc" = "進行方向と目的地点間の角度を示します。";
+"shared_string_switch_mode" = "スイッチモード";
+"coordinates_widget_map_center" = "座標:マップの中心";
+"map_orientation_portrait" = "縦向き";
+"map_widget_glide_average_desc" = "設定された距離における平均滑空比を表示します。";
+"simulate_location_movement_speed" = "移動速度";
+"map_widget_sunset_desc" = "次の日没時刻、または日没までの残り時間を表示します。";
+"route_maneuvers" = "ルート操作";
+"time_to_destination_widget_desc" = "ウィジェットには、最終目的地までの\"到着時刻\"または\"残り時間\"が表示されます。時間はナビゲーション中に常に更新され、現在地からのルート時間とほぼ同じになります。";
+"shared_string_system_default" = "システムのデフォルト";
+"show_all_tracks" = "すべての経路を表示";
+"troubleshooting" = "トラブルシューティング";
+"help_article_navigation_routing_brouter_name" = "BRouter";
+"shared_string_any" = "すべて";
+"shared_string_dark" = "暗色";
+"map_widget_ant_bicycle_cadence_desc" = "利用者がペダリングしている速度(1分当たりの回転数)を表示します";
+"search_favorites" = "お気に入りで検索";
+"simulate_location_movement_speed_original" = "オリジナル";
+"help_article_map_track_context_menu_name" = "経路コンテキストメニュー";
+"time_to_navigation_point_widget_settings_desc" = "ウィジェットをタップしてモードを切り替えます。";
+"mapillary_widget_desc" = "Mapillaryアプリにすばやくアクセスして、ストリート画像を追加できます。";
+"user_name" = "OSMユーザー名";
+"coordinates_widget_map_center_desc" = "現在のマップ中心の地理座標を表示します";
+"short_min" = "m";
+"coordinates_format" = "座標形式";
+"help_article_navigation_routing_name" = "ルートパラメータ";
+"purchases_feature_desc_external_sensors" = "自転車の速度、自転車の出力ー、ケイデンス(1分あたりのクランク回転数)、心拍数などの外部センサーから取得したデータの表示や記録を行います。";
+"widget_secondary_desc_part_of" = "%@プラグインの一部です。";
+"activity_type_riding_name" = "乗用馬";
+"battery_widget_desc" = "端末のバッテリー量を表示します。";
+"map_widget_camera_tilt_desc" = "パースペクティブモードにおけるカメラのチルト角度を表示します。デフォルトは 90°（チルトなし）です。";
+"shared_string_contents" = "コンテンツ";
+"route_maneuvers_desc" = "ナビゲーション中にナビゲーションウィジェットが起動し、距離、到着時刻または残り時間、次の曲がり角、方位、現在/次の道路名、車線情報、最高速度、近接警告、POI、経由地点などの情報を表示することができます。";
+"shared_string_delete_item" = "項目の削除";
+"search_history" = "検索履歴";
+"map_settings_topography" = "等高線";
+"radius_rules_widget_desc" = "半径定規ツールは、マップ上の選択したポイントの周りに距離円を表示します。";
+"side_marker_eta" = "到着予定時刻";
+"map_widget_sunrise" = "日出";
+"help_article_navigation_car_play_name" = "CarPlay";
+"map_widget_trip_recording_uphill" = "上り坂";
+"offline_wikivoyage" = "オフラインWikivoyage";
+"developer_widgets" = "開発者用ウィジェット";
+"current_time_widget_desc" = "端末から取得した現在の時刻を表示します。";
+"popular_destinations" = "人気の目的地";
+"coordinates_widget_current_location_desc" = "現在のジオロケーション地理座標を表示します";
+"shared_string_hidden" = "非表示";
+"shared_string_trash" = "ごみ";
+"external_sensors_support" = "外部センサーのサポート";
+"help_article_map_raster_maps_name" = "ラスターマップ (オンライン/オフライン)";
+"help_article_map_interact_with_map_name" = "マップの操作";
+"network" = "ネットワーク";
+"map_marker_1st" = "1番目のマップマーカー";
+"navigation_points" = "ナビゲーション地点";
+"click_on_widget" = "ウィジェットをタップ";
+"go_to_marker_location" = "マーカーの場所に移動";
+"map_markers_bar_widget_desc" = "上部バーのウィジェットにて、現在地から最も近いマップマーカーまでの距離と方角を表示します。ウィジェットは、1つまたは2つのマーカーを表示するように設定することができます。";
+"sensor_temperature_desc" = "センサーからの温度を表示します";
+"announcement_time_intervals" = "タイミングと距離の間隔";
+"quick_action_map_center_widget_descr" = "マップ上のマップセンター ウィジェットの表示/非表示を切り替えます。";
+"map_widget_time_to_destination" = "目的地までの時間";
+"reset_all_settings_desc" = "すべての設定を初期値にリセットしますか？";
+"map_widget_ant_heart_rate_desc" = "特定のアクティビティ中のユーザーの心拍数をリアルタイムで表示します";
+"distance_circles" = "距離円";
+"trash_is_empty" = "ごみ箱は空です";
+"announcement_time_prepare" = "次々回案内(中距離)";
+"parking_widget_desc" = "画面の中心から駐車場までの距離を表示します。";
+"average_speed_time_interval_desc" = "速度平均化の時間間隔を指定します。";
+"map_widget_distance_to_intermediate" = "中間経由地点までの距離";
+"shared_string_accessibility" = "アクセシビリティ";
+"shared_string_is_deleted" = "%@は削除されました。";
+"map_widget_altitude_current_location" = "高度: 現在地";
+"activity_type_water_name" = "水";
+"shared_string_travel" = "旅行";
+"ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
+"map_widget_next_sunrise" = "次の日出";
+"map_widget_group_sunrise_sunset_desc" = "これらのウィジェットは、次の日出(日の出)と日没(日の入)に関する情報を表示します。";
+"help_article_map_map_context_menu_name" = "マップコンテキストメニュー";
+"help_article_navigation_auto_car_name" = "Android Auto";
+"enter_new_name" = "新しい名前を入力";
+"first_marker_widget_desc" = "最初のマップ マーカーまでの距離または到着予定時刻を表示するようにウィジェットを構成できます。";
+"activity_type_racing_name" = "レーシング";
+"av_notes_video_widget_desc" = "ウィジェットをタップすると、動画を撮影できます。";
+"top_widgets_panel" = "上パネル";
+"shared_string_open_track" = "経路を開く";
+"disable_vertex_hillshade_3d" = "3Dでの頂点部の陰影を無効にする";
+"apply_to_existing" = "既存に適用";
+"download_to_device" = "端末にダウンロード";
+"compass_click_desc" = "ヒント:コンパスウィジェットをタップして、マップの方向モードを切り替えます。";
+"shared_string_delete_immediately" = "すぐに削除する";
+"time_to_go_desc" = "目的地に到着するまでに必要な時間(分または時間)です。";
+"map_widget_time_to_intermediate" = "中間経由地点までの時間";
+"precipitation_widget_desc" = "現在のマップ中心の降水量を表示します。";
+"map_widget_altitude_desc" = "現在のジオロケーションの高度または現在のマップの中心の標高を表示します";
+"average_glide_time_interval_desc" = "平均滑空比を決めるための時間間隔を入力します。";
+"shared_string_result" = "結果";
+"external_sensors_plugin_description" = "外部センサーから心拍数、自転車の速度、自転車の出力またはケイデンス(1分あたりのクランク回転数)を読み取ります。端末はANT+ ワイヤレスパーソナルネットワークプロトコルを介して、それぞれのセンサーに接続されている必要があります。";
+"navigation_points_desc" = "ナビゲーション中にナビゲーションウィジェットが起動し、距離、到着時刻または残り時間、次の曲がり角、方位、現在/次の道路名、車線情報、最高速度、近接警告、POI、経由地点などの情報を表示することができます。";
+"av_notes_choose_action_widget_desc" = "アクションを選択します。";
+"help_article_map_point_layers_on_map_name" = "マップ上のポイント";
+"trip_recording_downhill_widget_desc" = "現在記録されている旅程の全下降距離の合計を表示します。";
+"shared_string_read" = "読む";
+"modified_file" = "変更されたファイル";
+"elevation_profile_widget_desc" = "現在のルートの標高と勾配のプロファイルを表示します。";
+"no_widgets_descr" = "利用可能なウィジェットの一覧から、1つ以上のウィジェットを追加します。";
+"map_widget_trip_recording_distance" = "距離";
+"activity_type_snowmobile_name" = "スノーモービル";
+"shared_string_light" = "明色";
+"shortest_distance_first" = "短い距離順";
+"map_widget_glide_target_desc" = "目標点に到達するために必要な滑空比を表示します。";
+"announcement_time_descr" = "音声による案内タイミングは、音声形式、現在のナビゲーション速度、および標準のナビゲーション速度によって異なります。";
+"shared_string_bookmark" = "ブックマーク";
+"download_file" = "ダウンロードファイル";
+"tracker_item" = "OsmAnd Tracker";
+"weather_widget_group_desc" = "さまざまな天候情報を表示するウィジェットのセットです。";
+"deleted_file" = "削除されたファイル";
+"true_bearing_widget_desc" = "現在地から見た真北とターゲット地点間の角度を示します。";
+"average_glide_ratio" = "平均滑空比";
+"si_nm_mt" = "海里/メートル";
+"activity_type_offroad_name" = "未舗装道路";
+"bottom_widgets_panel" = "下パネル";
+"exit_number" = "出口番号";
+"map_widget_ant_bicycle_dist" = "自転車の距離";
+"weather_update_disabled" = "無効";
+"time_to_intermediate_widget_desc" = "ウィジェットには、最初の中間地点までの\"到着時刻\"または\"残り時間\"が表示されます。ナビゲーション中は常に時間が更新され、中間地点を通過すると次の中間地点までの時間へと更新されます。";
+"true_bearing_wdiget_desc" = "現在地から見た真北とターゲット地点間の角度を示します。";
+"map_widget_group_glide_ratio" = "滑空比";
+"announcement_time_title" = "案内タイミング";
+"last_seven_days" = "直近の7日間";
+"angular_measeurement" = "角度の単位";
+"delete_all_items" = "すべての項目を削除";
+"shared_string_deleted" = "削除予定";
+"map_orientation_default" = "端末設定に従う";
+"activity_type_car_name" = "車";
+"map_widget_ant_bicycle_cadence" = "自転車ケイデンス";
+"activity_type_cycling_name" = "自転車";
+"map_widget_gps_info" = "GPS情報";
+"weather_widgets_secondary_desc" = "測定単位は、天候プラグインの設定で変更できます。";
+"trash_is_empty_banner_desc" = "OsmAnd Cloudから削除されたファイルは、%@日後までここで利用可能です。";
+"average_speed_skip_stops" = "停留所を考慮する";
+"shared_string_uploaded" = "アップロード済み";
+"shared_string_temperature" = "温度";
+"announcement_time_arrive" = "目的地に到着";
+"perform_oauth_authorization" = "OAuthでログイン";
+"map_widget_target_distance_desc" = "カメラとターゲット位置間の距離を表示します。";
+"shared_string_nearest" = "最寄り";
+"si_nm_ft" = "海里/フィート";
+"map_widget_trip_recording_duration" = "間隔";
+"lanes_widgets_desc" = "現在の道路の車線を表示し、ナビゲート時に進むべき車線を強調表示します。";
+"newest_date_first" = "新しい日付順";
+"map_widget_ant_bicycle_power" = "自転車の出力";
+"wind_widget_desc" = "現在のマップ中心の風速を表示します。";
+"upload_poi" = "POIのアップロード";
+"shared_string_move" = "移動";
+"quick_action_coordinates_widget_descr" = "マップ上で座標ウィジェットの表示/非表示を切り替えます。";
+"navigation_history" = "ナビゲーション履歴";
+"osm_upload_gpx_tags_footer" = "タグはカンマで区切って入力してください。";
+"specify_number_of_dir_indicators_desc" = "マーカーの方向と距離を示すインジケーターの数を指定してください。";
+"restore_from_trash" = "ごみ箱から復元する";
+"map_markers_desc" = "このウィジェットは、マップマーカーの一覧にて最初の2つのマーカーの距離または到着予定時刻(ETA)を表示します。";
+"lang_sr-Latn" = "セルビア語 (ラテン文字)";
+"shared_string_explore" = "探索";
+"import_create_track_files" = "OsmAndを使用して、経路ファイルのインポート、作成、記録ができます。";
+"shared_string_duplicate" = "複製";
+"glide_ratio_to_target" = "目標に対する滑空比";
+"user_points" = "ユーザーポイント";
+"sync_now" = "今すぐ同期";
+"help_article_troubleshooting_android_auto_name" = "Android Auto";
+"activity_type_motorbike_name" = "オートバイ";
+"help_article_map_legend_osmand_name" = "OsmAndマップのスタイル";
+"arrival_time_widget_desc" = "目的地への到着時刻です。";
+"app_mode_moped" = "モペッド";
+"map_widget_camera_distance_desc" = "路面レベルより上のカメラの高さを示します。";
+"distance_to_intermediate_widget_desc" = "ウィジェットには、最初の中間地点までの距離が表示されます。中間地点を通過すると、距離は次の中間地点へのものに更新されます。";
+"context_menu_read_article" = "記事を読む";
+"coordinates_widget_desc" = "現在のジオロケーションの地理座標を表示します。";
+"shared_string_cloud" = "クラウド";
+"map_markers_history" = "マップマーカー履歴";
+"shared_string_symbol" = "記号";
+"shared_string_markers" = "マーカー";
+"shared_string_wikivoyage" = "Wikivoyage";
+"shared_string_mode" = "モード";
+"mapillary_widget_descr" = "Mapillaryへのワンタッチ投稿を許可します。";
+"no_widgets_here_yet" = "ここにはまだウィジェットがありません";
+"altitude_widget_desc" = "現在のジオロケーションの海抜高度を示します。";
+"map_widget_ant_bicycle_power_desc" = "自転車を前進させるために使用されたサイクリストのパワー出力を表示します";
+"oldest_date_first" = "古い日付順";
+"help_article_map_vector_maps_name" = "ベクターマップ (マップスタイル)";
+"max_speed_widget_desc" = "現在走行中の道路の制限速度を表示します。";
+"press_again_to_change_the_map_orientation" = "もう一度タップするとマップの向きが変わります";
+"help_article_navigation_guidance_name" = "案内";
+"map_widget_ant_bicycle_speed" = "自転車の速度";
+"magnetic_bearing_widget_desc" = "現在地から観測される磁北と目標地点との角度を示します。";
+"add_page" = "ページを追加";
+"skip_download" = "ダウンロードをスキップ";
+"average_speed_widget_desc" = "現在の旅程の平均速度を表示します。";
+"help_article_navigation_routing_bicycle_based_routing_name" = "自転車ルーティング (MTB)";
+"announcement_time_passing" = "通過する";
+"next_turn_widget_desc" = "ウィジェットには、次のターンに関する情報が操縦とそのターンまでの距離の写真と共に表示されます。";
+"distance_to_destination_widget_desc" = "ウィジェットには、最終目的地までの距離が表示されます。";
+"street_name_widget_desc" = "道路名ウィジェットには、現在の道路の名称と方向指示の矢印、または次の道路名と曲がる方向を示す矢印が表示されます。";
+"shared_string_format" = "形式";
+"map_widget_camera_tilt" = "カメラの傾き";
+"announce_when_exceeded" = "超過した場合の通知";
+"map_widget_ant_heart_rate" = "心拍数";
+"shared_string_bearing" = "ベアリング";
+"terrain_3D_maps" = "地形マップ";
+"trip_recording_uphill_widget_desc" = "現在記録されている旅程の全上昇距離の合計を表示します。";
+"general_settings" = "全般設定";
+"subscribe_email_error" = "エラー";
+"send_log" = "ログの送信";
+"determine_location" = "あなたの居場所を特定できるようにします";
+"map_widget_rendering_fps_desc" = "マップおよびマップエレメントが表示および更新される速さをフレーム/秒(FPS)で示します。";
+"clouds_widget_desc" = "現在のマップ中心の雲量を表示します。";
+"map_widget_true_bearing" = "方向探知";
+"announcement_time_prepare_long" = "次回案内(長距離)";
+"help_article_map_legend_nautical_map_name" = "海図のスタイル";
+"show_icon" = "アイコンを表示";
+"announcement_time_approach" = "目標に接近";
+"route_info" = "ルート情報";
+"image_cache" = "画像のキャッシュ";
+"external_device_status_connect" = "接続";
+"coordinates_widget_secondary_desc" = "%@– %@ – %@での座標形式を変更できます。";
+"map_widget_altitude_map_center_desc" = "現在のマップ中心の海抜高度を表示します。";
+"help_article_map_legend_ski_map_name" = "スキーマップのスタイル";
+"map_widget_camera_distance" = "カメラの仰角";
+"change_appearance" = "外観の変更";
+"map_widget_sunrise_sunset_time_left" = "残り時間";
+"help_article_navigation_guidance_voice_navigation_name" = "音声案内 / 通知";
+"longest_distance_first" = "長い距離順";
+"shared_string_view" = "表示";
+"global_settings" = "グローバル設定";
+"map_screen_orientation" = "マップ画面の向き";
+"av_notes_audio_widget_desc" = "ウィジェットをタップすると、音声メモを取ることができます。";
+"map_markers_bar" = "マップマーカー用バー";
+"activity_type_walking_name" = "徒歩";
+"saved_articles" = "ブックマークした記事";
+"local_changes" = "ローカルでの変更";
+"av_notes_photo_widget_desc" = "ウィジェットをタップすると、写真を撮ることができます。";
+"shared_string_external" = "外部";
+"default_appearance_desc" = "グループに追加されたお気に入りの地点は、それぞれデフォルトの色、アイコン、および形状が適用されます。";
+"map_widget_group_glide_desc" = "目的地までの滑空比、または現在の旅程の平均滑空比を表示するウィジェットです。";
+"map_widget_ant_bicycle_dist_desc" = "走行距離を表示";
+"simulate_in_progress" = "進行中";
+"ltr_or_rtl_combine_via_comma" = "%@, %@";
+"trip_recording_distance_widget_desc" = "現在記録されている走行距離を表示します。";
+"second_marker_widget_desc" = "2番目のマップ マーカーまでの距離または到着予定時刻を表示するようにウィジェットを構成できます。";
+"map_marker_interval_dialog_desc" = "到着予定時刻を計算するために平均速度を測定する時間間隔を指定します。";
+"activity_type_running_name" = "ランニング";
+"map_orientation_landscape" = "横向き";
+"longest_duration_first" = "長い期間順";
+"lang_zh-Hans" = "中国語 (簡体字)";
+"map_widget_distance_to_destination" = "目的地までの距離";
+"new_file" = "新規ファイル";
+"shared_string_travel_guides" = "旅行ガイド";
+"gps_info_widget_desc" = "現在把握できている衛星の数、使用中の衛星の数を表示します。";
+"recently_visible" = "最近表示された%@";
+"generate_slope_from_3d_maps" = "3Dマップから2D化した勾配マップを生成する";
+"switch_profile" = "プロファイル切替";
+"compass_on_circles" = "円のコンパス";
+"second_next_turn_widget_desc" = "ウィジェットは、次々回のターンに関する情報を表示します。これは、ターンが近づいている場合に有効になります。";
+"duration_moment_ago" = "すこし前";
+"external_sensors_plugin_name" = "外部センサー";
+"restart_is_required" = "変更を適用するためにアプリを再起動します。";
+"wiki_article_search_text" = "対応するwiki記事から検索";
+"apply_only_to_new_points" = "新規地点のみ適用";
+"map_widget_sunset" = "日没";
+"announcement_time_off_route" = "ルートからの逸脱";
+"activity_type_winter_name" = "冬";
+"map_widget_next_sunset" = "次の日没";
+"no_travel_guides_data_descr" = "Wikivoyageの旅行ガイドをダウンロードしておけば、オフライン環境でも世界各地の観光名所を知ることができます。";
+"start_recording" = "記録の開始";
+"air_pressure_widget_desc" = "現在のマップ中心の気圧を表示します。";
+"map_marker_2nd" = "2番目のマップマーカー";
+"apply_to_existing_favorites_descr" = "グループの既存のお気に入り地点に変更を適用、それとも新規地点のみ変更を適用しますか？";
+"rotate_map_manual_opt" = "手動回転(固定)";
+"generate_hillshade_from_3d_maps" = "3Dマップから2D化した陰影起伏図を生成する。";
+"carplay" = "CarPlay";
+"map_widget_altitude_map_center" = "標高：マップ中心";
+"select_tracks_to_display" = "マップ上に表示する経路を選択します。";
+"history_preferences_descr" = "履歴の項目は個別にログを無効化できます。";
+"map_widget_sunrise_desc" = "次の日出時刻、または日出までの残り時間を表示します。";
+"shared_string_buttons" = "ボタン";
+"help_article_map_tracks_on_map_name" = "経路とルート";
+"help_article_navigation_routing_boat_navigation_name" = "ボートルーティング";
+"current_speed_widget_desc" = "GPS経由で計測される現在の速度を表示します。";
+"trip_recording_duration_widget_desc" = "現在記録されている旅程の時間を表示します。";
+"map_widget_zoom_level" = "ズームレベル";
+"map_widget_zoom_level_desc" = "現在のマップのズームレベルを表示します。";
+"visibility" = "確認可能";
+"map_widget_trip_recording_downhill" = "下り坂";
+"map_widget_ant_bicycle_speed_desc" = "移動速度を表示";

@@ -1374,7 +1374,7 @@
 "quick_action_toggle_notes_descr" = "Tap this action button to show or hide online OSM notes.";
 "quick_action_toggle_edits_descr" = "Tap this action button to show or hide offline OSM edits.";
 "quick_action_edit_list" = "Edit actions list";
-"quick_action_hillshade_descr" = "ನಕ್ಷೆಯಲ್ಲಿ \'ಹಿಲ್ಶೇಡ್\' ಅನ್ನು ತೋರಿಸಲು ಅಥವಾ ಮರೆಮಾಡಲು ಟಾಗಲ್ ಮಾಡಿ.";
+"quick_action_hillshade_descr" = "ನಕ್ಷೆಯಲ್ಲಿ 'ಹಿಲ್ಶೇಡ್' ಅನ್ನು ತೋರಿಸಲು ಅಥವಾ ಮರೆಮಾಡಲು ಟಾಗಲ್ ಮಾಡಿ.";
 "show_terrain" = "Show Terrain";
 "hide_terrain" = "Hide Terrain";
 "toggle_contour_lines" = "Show/Hide contour lines";

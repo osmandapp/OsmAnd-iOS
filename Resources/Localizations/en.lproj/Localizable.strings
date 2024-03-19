@@ -1130,6 +1130,10 @@
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
+"distance_during_navigation" = "Distance during navigation";
+"shared_string_precise" = "Precise";
+"shared_string_round_up" = "Round up";
+"distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
 "units_and_formats" = "Units&formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
@@ -2239,7 +2243,6 @@
 "white_color_undefined" = "Parts without data are white.";
 "analyze_on_map" = "Analyze on map";
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
-"upload_to_osm" = "Upload to OSM";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Enter name";
@@ -3655,6 +3658,7 @@
 "skip_download" = "Skip download";
 "determine_location" = "Allow us to determine your location";
 
+"upload_to_osm_short" = "Upload to OSM";
 
 "average_glide_ratio" = "Average glide ratio";
 "glide_ratio_to_target" = "Glide ratio to target";

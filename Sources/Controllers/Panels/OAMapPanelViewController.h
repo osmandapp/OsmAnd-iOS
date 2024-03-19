@@ -150,6 +150,8 @@
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 
+- (void)openTargetViewWithGPX:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory;
+
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
 - (void) openTargetViewWithRouteTargetPoint:(OARTargetPoint *)routeTargetPoint pushed:(BOOL)pushed;

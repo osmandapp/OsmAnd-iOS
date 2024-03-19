@@ -27,6 +27,7 @@ static NSString * const _unitsMph = OALocalizedString(@"mile_per_hour");
 static NSString * const _unitsMinKm = OALocalizedString(@"min_km");
 static NSString * const _unitsMinMi = OALocalizedString(@"min_mile");
 static NSString * const _unitsmps = OALocalizedString(@"m_s");
+static NSArray<NSNumber *> *roundingBounds = nil;
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
 {
@@ -190,10 +191,15 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
 
 + (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes
 {
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES valueUnitArray:nil];;
+    return [self getFormattedDistance:meters forceTrailingZeroes:YES roundUp:NO valueUnitArray:nil];
 }
 
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
++ (NSString *) getFormattedDistance:(float)meters roundUp:(BOOL)isRoundUp
+{
+    return [self getFormattedDistance:meters forceTrailingZeroes:YES roundUp:isRoundUp valueUnitArray:nil];
+}
+
++ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes roundUp:(BOOL)isRoundUp valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
@@ -217,6 +223,8 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     }
 
     float floatDistance = meters / mainUnitInMeters;
+    if (isRoundUp)
+        floatDistance = [self roundedDistanceValueForUnit:floatDistance];
 
     if (meters >= 100 * mainUnitInMeters)
     {
@@ -254,21 +262,22 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     {
         if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES_AND_METERS)
         {
-            return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
+            return [self formatValue:isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters + 0.5)] : (int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
         {
-            int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
+            int feet = isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters * FEET_IN_ONE_METER + 0.5)] : (int) (meters * FEET_IN_ONE_METER + 0.5);
             return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_YARDS)
         {
-            int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
+            int yards = isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters * YARDS_IN_ONE_METER + 0.5)] : (int) (meters * YARDS_IN_ONE_METER + 0.5);
             return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
-        return [self formatValue:(int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
+        return [self formatValue:isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters + 0.5)] : (int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
 }
+
 + (NSString *)formatValue:(float)value
                      unit:(NSString *)unit
       forceTrailingZeroes:(BOOL)forceTrailingZeroes
@@ -727,6 +736,80 @@ static NSString * const _unitsmps = OALocalizedString(@"m_s");
     {
         return [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"int_min")];
     }
+}
+
++ (float)roundedDistanceValueForUnit:(float)value
+{
+    if (roundingBounds == nil)
+        roundingBounds = [self generate10BaseRoundingBoundsWithMax:100 multCoef:5];
+    
+    if (value >= 1)
+        return [self lowerTo10BaseRoundingBounds:value withRoundRange:roundingBounds];
+    else
+        return value;
+}
+
++ (NSArray<NSNumber *> *)generate10BaseRoundingBoundsWithMax:(int)max multCoef:(int)multCoef
+{
+    int basenum = 1;
+    int mult = 1;
+    int num = basenum * mult;
+    int ind = 0;
+    NSMutableArray<NSNumber *> *bounds = [NSMutableArray array];
+    
+    while (num < max)
+    {
+        ind++;
+        if (ind % 3 == 1)
+        {
+            mult = 2;
+        }
+        else if (ind % 3 == 2)
+        {
+            mult = 5;
+        }
+        else
+        {
+            basenum *= 10;
+            mult = 1;
+        }
+        
+        if (ind > 1)
+        {
+            int bound = num * multCoef;
+            while (bound % (basenum * mult) != 0 && bound > basenum * mult)
+            {
+                bound += num;
+            }
+            
+            [bounds addObject:@(bound)];
+        }
+        
+        num = basenum * mult;
+        [bounds addObject:@(num)];
+    }
+    
+    NSMutableArray<NSNumber *> *reversedBounds = [[NSMutableArray alloc] initWithCapacity:[bounds count]];
+    for (NSNumber *bound in [bounds reverseObjectEnumerator])
+    {
+        [reversedBounds addObject:bound];
+    }
+    
+    return reversedBounds;
+}
+
++ (int)lowerTo10BaseRoundingBounds:(int)num withRoundRange:(NSArray<NSNumber *> *)roundRange
+{
+    int k = 1;
+    while (k < [roundRange count] && ([roundRange[k] intValue] > num || [roundRange[k - 1] intValue] > num))
+    {
+        k += 2;
+    }
+
+    if (k < [roundRange count])
+        return (num / [roundRange[k - 1] intValue]) * [roundRange[k - 1] intValue];
+    
+    return num;
 }
 
 @end

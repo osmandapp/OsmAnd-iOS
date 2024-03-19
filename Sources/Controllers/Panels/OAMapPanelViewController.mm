@@ -1167,6 +1167,10 @@ typedef enum
     _searchViewController.searchNearMapCenter = searchNearMapCenter;
     _searchViewController.searchType = searchType;
     _searchViewController.fromNavigation = [self isRouteInfoVisible];
+    __weak OAMapPanelViewController *selfWeak = self;
+    _searchViewController.onCloseCallback = ^{
+        [selfWeak clearSearchViewController];
+    };
 
     if (object)
     {
@@ -1218,6 +1222,11 @@ typedef enum
         _isNewContextMenuStillEnabled = YES;
 
     [self presentViewController:navController animated:YES completion:nil];
+}
+
+- (void)clearSearchViewController
+{
+    _searchViewController = nil;
 }
 
 - (void) setRouteTargetPoint:(BOOL)target intermediate:(BOOL)intermediate latitude:(double)latitude longitude:(double)longitude pointDescription:(OAPointDescription *)pointDescription
@@ -2697,6 +2706,14 @@ typedef enum
                                                                       openedFromMap:NO]];
 }
 
+- (void)openTargetViewWithGPX:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
+{
+    OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:item.bounds.center openedFromMap:NO];
+    state.openedFromTracksList = YES;
+    state.navControllerHistory = navControllerHistory;
+    [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode state:state];
+}
+
 - (void)openTargetViewWithGPX:(OAGPX *)item selectedTab:(EOATrackMenuHudTab)selectedTab selectedStatisticsTab:(EOATrackMenuHudSegmentsStatisticsTab)selectedStatisticsTab openedFromMap:(BOOL)openedFromMap
 {
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:item.bounds.center openedFromMap:openedFromMap];
@@ -3562,7 +3579,13 @@ typedef enum
     double distanceFromMyLocation = OsmAnd::Utilities::distance31(myLocation, mapView.target31);
 
     if (!_searchViewController)
+    {
         _searchViewController = [[OAQuickSearchViewController alloc] init];
+        __weak OAMapPanelViewController *selfWeak = self;
+        _searchViewController.onCloseCallback = ^{
+            [selfWeak clearSearchViewController];
+        };
+    }
 
     _searchViewController.myLocation = myLocation;
     _searchViewController.distanceFromMyLocation = distanceFromMyLocation;

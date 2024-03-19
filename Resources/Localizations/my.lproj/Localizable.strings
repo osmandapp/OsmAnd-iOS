@@ -817,7 +817,6 @@
 "rendering_attr_surface_asphalt_name" = "ကတ္တရာ";
 "rendering_attr_surface_grass_name" = "မြက်ပင်";
 "routing_attr_avoid_tram_name" = "လမ်းရထားများကိုရှောင်ပါ";
-
 "app_mode_horse" = "မြင်း";
 "app_mode_subway" = "မြေအောက်ရထား";
 "online_webpage_warning" = "စာမျက်နှာကိုအွန်လိုင်းသာရနိုင်သည်။ web browser ဖွင့်ရမလား\?";
@@ -856,7 +855,6 @@
 "application_profiles" = "အက်ပလီကေးရှင်းပရိုဖိုင်းများ";
 "shared_string_total" = "စုစုပေါင်း";
 "map_look_descr" = "မြေပုံမျက်နှာပြင်";
-
 "coordinates_widget_current_location" = "Coordinatesဝစ်ဂျက်";
 "osmand_settings" = "OsmAအပြင်အဆင်များ";
 "show_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖော်ပြ";

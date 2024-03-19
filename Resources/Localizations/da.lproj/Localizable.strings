@@ -3355,3 +3355,8 @@
 "map_widget_group_glide_desc" = "Moduler viser glidetal til målet eller gennemsnitlig glidetal for den aktuelle tur.";
 "target_elevation" = "Højde for målet";
 "average_glide_time_interval_desc" = "Angiv tidsintervallet for glide-gennemsnit.";
+"shared_string_precise" = "Præcis";
+"shared_string_round_up" = "Rund op";
+"distance_during_navigation" = "Afstand under navigation";
+"distance_during_navigation_footer" = "Vælg, hvordan afstandsinformation skal vises i navigationsmoduler (afstand til punkt, næste sving, baner).\n\nVælg \"Præcis\" for nøjagtige tal, eller \"Rund op\" for bedre læsbarhed.";
+"upload_to_osm_short" = "Upload til OSM";

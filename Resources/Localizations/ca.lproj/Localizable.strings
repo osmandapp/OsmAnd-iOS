@@ -363,22 +363,14 @@
 "all_world_popup_desc" = "Baixa el mapa base del món per veure els noms dels estats, les fronteres i altres informacions";
 "shared_string_restore" = "Restaura";
 "restore_all_purchases" = "Recupera totes les compres";
-"plugin_nautical_descr" = "Enriqueix el teu mapa amb informació sobre rutes de navegació, llums de navegació, zones de perill nàutic, zones amb restriccions de navegació o atracament, etc. Per utilitzar-lo, descarrega els respectius mapes nàutics i activa l\'estil \"Mapa nàutic\" a \"Configurar mapa\".
-\n
-\nMés informació a %@.";
+"plugin_nautical_descr" = "Enriqueix el teu mapa amb informació sobre rutes de navegació, llums de navegació, zones de perill nàutic, zones amb restriccions de navegació o atracament, etc. Per utilitzar-lo, descarrega els respectius mapes nàutics i activa l\'estil \"Mapa nàutic\" a \"Configurar mapa\".\n\nMés informació a %@.";
 "osmand_parking_plugin_description" = "Marqueu on està aparcat el vostre cotxe i aviseu al vostre calendari quan caducarà el parquímetre. Per col·locar el marcador, trieu un lloc al mapa, aneu a \"Accions\" i toqueu \"Afegeix aparcament\".";
 "product_title_trip_planning" = "Planificació de viatges";
 "plugin_popup_ski_title" = "Activa l'estil de mapes Esquí";
 "plugin_ski_descr" = "Dissenyat per navegar per zones d\'esports d\'hivern: veure pistes d\'esquí i remuntadors, i pistes d\'esquí de fons, amb línies de colors que indiquen els nivells de dificultat. Per utilitzar-lo, activeu aquest connector i aneu també a \"Configura el mapa\" i trieu l\'estil de mapa \"Hivern i esquí\".";
-"record_plugin_description" = "Enregistreu els vostres viatges o entrenaments i analitzeu les dades en termes de velocitat, ascensos i descensos acumulats, perfil d\'elevació, etc. Les pistes gravades es poden arxivar, compartir amb els amics, editar i processar posteriorment.
-\n
-\nMés informació a %@.";
+"record_plugin_description" = "Enregistreu els vostres viatges o entrenaments i analitzeu les dades en termes de velocitat, ascensos i descensos acumulats, perfil d\'elevació, etc. Les pistes gravades es poden arxivar, compartir amb els amics, editar i processar posteriorment.\n\nMés informació a %@.";
 "purchases_feature_desc_wikipedia" = "Obteniu informació de punts d'interès des la Viquipèdia. Serà la vostra guia de butxaca en desconnexió - només cal que activeu el connector Viquipèdia i fruireu dels articles que tracten de les coses que us rodegen.";
-"srtm_plugin_description" = "La informació del terreny, com ara corbes de nivell, ombres i vessants, us ajuda a avaluar visualment la disposició del terreny i el relleu, la navegabilitat i molt més. La informació topogràfica es pot representar al mapa per ombrejat de vessants, corbes de nivell i/o coloració de pendent.
-\n
-\nLes dadessubjacents provenen de SRTM i ASTER.
-\n
-\nMés informació a %@.";
+"srtm_plugin_description" = "La informació del terreny, com ara corbes de nivell, ombres i vessants, us ajuda a avaluar visualment la disposició del terreny i el relleu, la navegabilitat i molt més. La informació topogràfica es pot representar al mapa per ombrejat de vessants, corbes de nivell i/o coloració de pendent.\n\nLes dadessubjacents provenen de SRTM i ASTER.\n\nMés informació a %@.";
 "plugin_popup_ski_desc" = "Per activar l'estil <b>Mapa d'esquí</b> , aneu a l<b>Configuració del mapa</b> > <b>Tipus de mapa </b>";
 "plugin_popup_wiki_desc" = "Per començar a utilitzar el connector de la Vikipèdia, primer baixeu les dades Viquipèdia d'una regió";
 "plugin_popup_nautical_desc" = "Primer baixeu els mapes nàutics.\nDesprès aneu a la <b>Configuració del mapa</b> <b>Tipus de mapa</b> i activeu l'estil <b>Nàutic</b>";
@@ -692,8 +684,7 @@
 "animate_routing_route_not_calculated" = "Calculeu primer la ruta";
 "simulate_your_location" = "Simula la vostra ubicació";
 "simulate_routing_descr" = "Simula la vostra posició utilitzant una ruta calculada";
-"day_night_info_description" = "Sol ixent: %@ 
-\nOcàs: %@";
+"day_night_info_description" = "Sol ixent: %@ \nOcàs: %@";
 "day_night_info" = "Informació de dia/nit";
 "daynight_mode_auto" = "Sol ixent/ocàs";
 "info_button" = "Informació";
@@ -918,9 +909,7 @@
 "modify_poi" = "Modifica la informació del PDI";
 "osm_editing_plugin_name" = "Edició d\'OpenStreetMap";
 "product_desc_osm_editing" = "Feu canvis a l'OpenStreetMap directament des de OsmAnd";
-"osm_editing_plugin_description" = "Feu contribucions a OpenStreetMap, una comunitat global que manté un mapa global del món i proporciona dades de codi obert actualitzades a tots els usuaris.
-\n
-\nPodeu trobar instruccions sobre com editar el mapa al nostre lloc web %@.";
+"osm_editing_plugin_description" = "Feu contribucions a OpenStreetMap, una comunitat global que manté un mapa global del món i proporciona dades de codi obert actualitzades a tots els usuaris.\n\nPodeu trobar instruccions sobre com editar el mapa al nostre lloc web %@.";
 "user_password" = "Contrasenya";
 "rendering_value_category_name" = "Categoria";
 "poi_category_and_type" = "Categoria i tipus del PDI";
@@ -1212,7 +1201,7 @@
 "tile_data" = "Dades de tessel·la";
 "online_map" = "Mapa en línia";
 "calculating_progress" = "Calculant...";
-"quick_action_hillshade_descr" = "Botó per a mostrar o amagar l\'ombrejat de relleu al mapa.";
+"quick_action_hillshade_descr" = "Botó per a mostrar o amagar l'ombrejat de relleu al mapa.";
 "show_hillshade" = "Mostra l'ombrejat de relleu";
 "hide_hillshade" = "Amaga l'ombrejat de relleu";
 "toggle_contour_lines" = "Mostra/Amaga les corbes de nivell";
@@ -1339,7 +1328,7 @@
 "rendering_attr_hideProposed_name" = "Objectes proposats";
 "rendering_attr_busRoutes_name" = "Rutes de bus";
 "rendering_attr_piste_difficulty_novice_name" = "Novell";
-"rendering_attr_alpineHiking_description" = "Representació dels camins segons l\'escala SAC (Club Alpí Suís).";
+"rendering_attr_alpineHiking_description" = "Representació dels camins segons l'escala SAC (Club Alpí Suís).";
 "routing_attr_short_way_description" = "Ruta més curta optimitzada (baix consum)";
 "rendering_attr_smoothness_excellent_name" = "Excel·lent";
 "rendering_attr_highway_class_bridleway_name" = "Ruta eqüestre";
@@ -1430,7 +1419,7 @@
 "rendering_value_translucent_yellow_name" = "Groc translúcid";
 "rendering_attr_contourColorScheme_name" = "Esquema de color de les línies de contorn";
 "routing_attr_avoid_share_taxi_name" = "Sense taxi compartit";
-"routing_attr_width_name" = "Límit d\'amplada";
+"routing_attr_width_name" = "Límit d'amplada";
 "rendering_attr_highway_class_service_name" = "Servei";
 "routing_attr_prefer_motorway_name" = "Preferència per autopistes";
 "rendering_attr_surface_paved_name" = "Pavimentat";
@@ -1526,7 +1515,7 @@
 "rendering_attr_noAdminboundaries_name" = "Límits administratius";
 "routing_attr_avoid_subway_description" = "Evita el metro i el tram";
 "routing_attr_avoid_bus_description" = "Evita autobús i troleibús";
-"rendering_attr_showAccess_name" = "Mostra les restriccions d\'accés i els peatges";
+"rendering_attr_showAccess_name" = "Mostra les restriccions d'accés i els peatges";
 "rendering_attr_hmRendered_name" = "Mostra més detalls al mapa";
 "routeInfo_steepness_name" = "Inclinació";
 "routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar";
@@ -1783,9 +1772,7 @@
 "navigation_profiles_item" = "Perfils de navegació";
 "metric_ton" = "t";
 "reset_profile_action_descr" = "Reinicialitza la configuració de tots els perfils als valors inicials d'instal·lació. Si toqueu Restableix, es descartaran tots els canvis i no es podrà desfer aquesta acció.";
-"gpx_parse_error" = "S\'han trobat problemes amb un fitxer GPX.
-\n
-\nPodeu contactar amb l\'assistència d\'OsmAnd per investigar.";
+"gpx_parse_error" = "S\'han trobat problemes amb un fitxer GPX.\n\nPodeu contactar amb l\'assistència d\'OsmAnd per investigar.";
 "shared_string_next" = "Endavant";
 "shared_string_finish" = "Finalitza";
 "shared_string_import_complete" = "Importació completada";
@@ -1803,9 +1790,7 @@
 "replace_all" = "Reemplaça-ho tot";
 "keep_both_desc" = "Els elements importats s\'afegiran amb prefix";
 "keep_both" = "Manté tots dos";
-"import_duplicates_description" = "Hi ha elements importats amb els mateixos noms que altres d\'OsmAnd.
-\n
-\nSeleccioneu una opció.";
+"import_duplicates_description" = "Hi ha elements importats amb els mateixos noms que altres d\'OsmAnd.\n\nSeleccioneu una opció.";
 "import_duplicates_title" = "Alguns elements ja existeixen";
 "shared_string_nothing_selected" = "No hi ha res seleccionat";
 "shared_string_preparing" = "Preparant";
@@ -1831,9 +1816,7 @@
 
 // Route planning
 "plan_route" = "Planifica la ruta";
-"checking_for_duplicate_description" = "OsmAnd està comprovant duplicitats de %@ amb elements ja existents a l\'aplicació.
-\n
-\nPodria trigar una estona.";
+"checking_for_duplicate_description" = "OsmAnd està comprovant duplicitats de %@ amb elements ja existents a l\'aplicació.\n\nPodria trigar una estona.";
 "checking_for_duplicates" = "S'estan comprovant els duplicats...";
 "added_items" = "Elements afegits: %@";
 "import_complete_description" = "S\'han importat totes les dades de %@ , podeu utilitzar els botons de sota per gestionar l\'aplicació obrint la part que calgui.";
@@ -2339,23 +2322,12 @@
 "auth_failed" = "Ha fallat l\'autorització";
 "offline_edition_descr" = "En desconnexió la edició està activada, però llavors els canvis es desen localment primer i ja es pujaran quan es demani. altrament els canvis s\'actualitzen immediatament.";
 "km" = "km";
-"weather_plugin_description" = "Proporciona
-\n- previsió meteorològica de 24 hores i 7 dies amb 5 capes
-\n- ginys basats en ubicació
-\n- isolínies de temperatura / de pressió
-\n
-\nLes dades meteorològiques són proporcionades per Global Forecast System (GFS, %@).";
+"weather_plugin_description" = "Proporciona\n- previsió meteorològica de 24 hores i 7 dies amb 5 capes\n- ginys basats en ubicació\n- isolínies de temperatura / de pressió\n\nLes dades meteorològiques són proporcionades per Global Forecast System (GFS, %@).";
 "m" = "m";
 "shared_string_legal" = "Informació legal";
 "speed_camera_pois" = "PDIs de càmeres de radar";
 "uninstall_speed_cameras" = "Desinstal·la les càmeres de radar";
-"speed_cameras_legal_descr" = "En alguns països o regions, l\'ús d\'aplicacions que avisen de la proximitat de càmeres de radar està prohibit. 
-\n
-\nCal que ho configureu segons la llei del vostre país. 
-\n
-\nSeleccioneu %@ i rebreu alertes i advertiments de les càmeres de radar. 
-\n
-\nSeleccioneu %@. Totes les dades relatives a les càmeres de radar (alertes, notificacions, PDIs) desapareixeran fins que es reinstal·li completament OsmAnd .";
+"speed_cameras_legal_descr" = "En alguns països o regions, l\'ús d\'aplicacions que avisen de la proximitat de càmeres de radar està prohibit. \n\nCal que ho configureu segons la llei del vostre país. \n\nSeleccioneu %@ i rebreu alertes i advertiments de les càmeres de radar. \n\nSeleccioneu %@. Totes les dades relatives a les càmeres de radar (alertes, notificacions, PDIs) desapareixeran fins que es reinstal·li completament OsmAnd .";
 "shared_string_keep_active" = "Continua actiu";
 "speed_cameras_alert" = "Les alertes de proximitat a càmeres de radar estan prohibides en alguns països.";
 "privacy_and_security" = "Privadesa i seguretat";
@@ -2375,7 +2347,7 @@
 "routing_attr_motor_type_hybrid_name" = "Híbrid";
 "speak_route_deviation" = "Anunciar desviació de la ruta";
 "transport_hazmat_no_desc" = "En algunes carreteres i túnels es restringeix el transport de materials perillosos.";
-"download_heightmap_maps" = "Mapa d\'alçades";
+"download_heightmap_maps" = "Mapa d'alçades";
 "rendering_attr_hideMilitaryAreas_description" = "Amaga zones militars";
 "activity_type_riding_name" = "Muntar a cavall";
 "activity_type_offroad_name" = "Tot terreny";
@@ -2414,7 +2386,6 @@
 "shared_string_feet" = "peus";
 "app_mode_moped" = "Ciclomotor";
 "shared_string_keywords" = "Mots clau";
-
 "routing_attr_hazmat_category_usa_1_name" = "Explosius";
 "routing_attr_hazmat_category_usa_9_name" = "Divers";
 "rendering_attr_showProposed_name" = "Objectes proposats";
@@ -2429,7 +2400,7 @@
 "routing_attr_hazmat_category_usa_2_name" = "Gasos";
 "rendering_attr_padusHideBoundaries_name" = "Amaga la delimitació dels terrenys públics";
 "rendering_value_sacScale_name" = "SAC";
-"rendering_value_small_name" = "Petit";;
+"rendering_value_small_name" = "Petit";
 "speak_route_recalculation" = "Anuncia el recàlcul de la ruta";
 "map_widget_gps_info" = "Informació GPS";
 "map_widget_group_sunrise_sunset" = "Alba, posta de sol";

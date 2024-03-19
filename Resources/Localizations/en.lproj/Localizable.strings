@@ -3404,6 +3404,23 @@
 • Fixed issue with the calendar event for parking position\n
 • Fixed crash with removing color from pallet\n";
 
+"ios_release_4_7" = "• Enhanced top and bottom widget panels to accommodate all widgets\n
+• Improved management for tracks visible on the map\n
+• Updated \"Analyze on Map\" with the ability to display metrics from sensors\n
+• Enhanced tags support for GPX has been added: link, author, copyright, and keywords\n
+• Improved widget configuration by allowing users to move pages and rows\n
+• Improved track management in the \"My Places\" with subfolders and context menus for tracks and folders\n
+• New widgets: \"Glide Ratio\" and \"Sun Position\"\n
+• Customize \"Distance during navigation\": choose between precise or round up numbers\n
+• App language will be used for names on the world overview map instead of local languages\n
+• OsmAnd Cloud: Added ability to manage your data, including restoring deleted files and deleting your account\n
+• Added additional tags support for tourist routes\n
+• Fixed the \"Coordinates\" widget where, in some cases, the last digits were missed\n
+• Fixed \"3D Mode\" button behavior: tapping on the button doesn't save the tilt angle\n
+• Fixed status bar color for older iOS versions\n
+• Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
+
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";

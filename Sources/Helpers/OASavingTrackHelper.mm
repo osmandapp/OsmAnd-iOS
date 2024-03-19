@@ -1084,7 +1084,7 @@
 - (OAGPX *)getCurrentGPX
 {
     [currentTrack applyBounds];
-    return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack fetchNearestCity:NO];
 }
 
 @end

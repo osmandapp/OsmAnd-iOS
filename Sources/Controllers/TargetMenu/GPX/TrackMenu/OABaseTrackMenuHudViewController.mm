@@ -243,7 +243,7 @@
     }
     [self updateAnalysis];
 
-    if (_gpx && !_gpx.nearestCity && _analysis && _analysis.locationStart)
+    if (!_isCurrentTrack && _gpx && !_gpx.nearestCity && _analysis && _analysis.locationStart)
     {
         OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:_analysis.locationStart.position];
         _gpx.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
@@ -267,7 +267,7 @@
         else if (_doc)
         {
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc fetchNearestCity:NO];
             gpx.nearestCity = _gpx.nearestCity;
             [db replaceGpxItem:gpx];
             [db save];

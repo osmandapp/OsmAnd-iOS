@@ -1130,6 +1130,10 @@
 "allow_3D_view" = "2.5D view";
 "units_of_speed" = "Units of speed";
 "angular_measurment_units" = "Angular measurment units";
+"distance_during_navigation" = "Distance during navigation";
+"shared_string_precise" = "Precise";
+"shared_string_round_up" = "Round up";
+"distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
 "units_and_formats" = "Units&formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
@@ -2239,7 +2243,6 @@
 "white_color_undefined" = "Parts without data are white.";
 "analyze_on_map" = "Analyze on map";
 "upload_to_openstreetmap" = "Upload to OpenStreetMap";
-"upload_to_osm" = "Upload to OSM";
 "edit_track" = "Edit track";
 "duplicate_track" = "Duplicate track";
 "access_hint_enter_name" = "Enter name";
@@ -3401,6 +3404,23 @@
 • Fixed issue with the calendar event for parking position\n
 • Fixed crash with removing color from pallet\n";
 
+"ios_release_4_7" = "• Enhanced top and bottom widget panels to accommodate all widgets\n
+• Improved management for tracks visible on the map\n
+• Updated \"Analyze on Map\" with the ability to display metrics from sensors\n
+• Enhanced tags support for GPX has been added: link, author, copyright, and keywords\n
+• Improved widget configuration by allowing users to move pages and rows\n
+• Improved track management in the \"My Places\" with subfolders and context menus for tracks and folders\n
+• New widgets: \"Glide Ratio\" and \"Sun Position\"\n
+• Customize \"Distance during navigation\": choose between precise or round up numbers\n
+• App language will be used for names on the world overview map instead of local languages\n
+• OsmAnd Cloud: Added ability to manage your data, including restoring deleted files and deleting your account\n
+• Added additional tags support for tourist routes\n
+• Fixed the \"Coordinates\" widget where, in some cases, the last digits were missed\n
+• Fixed \"3D Mode\" button behavior: tapping on the button doesn't save the tilt angle\n
+• Fixed status bar color for older iOS versions\n
+• Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
+
+
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
@@ -3655,6 +3675,7 @@
 "skip_download" = "Skip download";
 "determine_location" = "Allow us to determine your location";
 
+"upload_to_osm_short" = "Upload to OSM";
 
 "average_glide_ratio" = "Average glide ratio";
 "glide_ratio_to_target" = "Glide ratio to target";

@@ -17,6 +17,7 @@ typedef enum
     EOAProfileGeneralSettingsUnitsOfLenght,
     EOAProfileGeneralSettingsUnitsOfSpeed,
     EOAProfileGeneralSettingsAngularMeasurmentUnits,
+    EOAProfileGeneralSettingsDistanceDuringNavigation,
     EOAProfileGeneralSettingsExternalInputDevices,
     EOAProfileGeneralSettingsScreenCoordsFormat,
     EOAProfileGeneralSettingsAppTheme

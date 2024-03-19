@@ -1739,7 +1739,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'->\'Inligtingsbestuur\' ->\'Aflaai\' ->Kies verlangde kaart-tipe).";
+"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus ('Instellings'->'Inligtingsbestuur' ->'Aflaai' ->Kies verlangde kaart-tipe).";
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";

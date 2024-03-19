@@ -114,7 +114,7 @@
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
     OAGPX *oldGpx = [gpxDb getGPXItem:gpxFilePath];
-    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
+    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile fetchNearestCity:YES];
     if (oldGpx)
     {
         gpx.showArrows = oldGpx.showArrows;

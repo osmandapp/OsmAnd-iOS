@@ -86,8 +86,7 @@
 "simulate_routing_descr" = "Simulirajte svoju poziciju koristeći izračunatu rutu";
 "select_avoid_descr" = "Izaberite puteve koje želite da izbegnete tokom navigacije. Možete ili da izaberete put na mapi ili da izaberete tip sa liste ispod.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Izlazak sunca: %@ 
-\nZalazak sunca: %@";
+"day_night_info_description" = "Izlazak sunca: %@ \nZalazak sunca: %@";
 "day_night_info" = "Dan/noć info";
 "daynight_mode_auto" = "Automatski";
 "route_simulation" = "Simulacija rute";
@@ -588,9 +587,7 @@
 "gpx_add_new" = "Dodajte novu datoteku";
 "gpx_overwrite" = "Prepiši";
 "gpx_cannot_import" = "Nije moguće uvesti datu GPX datoteku";
-"gpx_parse_error" = "Pronađen je problem sa datotekom GPX-a
-\n
-\nMožeš se obratiti podršci OsmAnda radi istrage.";
+"gpx_parse_error" = "Pronađen je problem sa datotekom GPX-a\n\nMožeš se obratiti podršci OsmAnda radi istrage.";
 "tracks_on_map" = "Prikazane trase";
 "gpx_export_title" = "Izvezi putanju";
 "gpx_export_select_track" = "Izaberite putanju za izvoz";
@@ -729,8 +726,7 @@
 "sett_arr" = "Strelice mape";
 "shared_string_location" = "Lokacija";
 "sett_arr_map" = "Centar mape";
-"short_location_on_map" = "Širina %@ 
-\nDužina %@";
+"short_location_on_map" = "Širina %@ \nDužina %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -900,9 +896,7 @@
 "custom_plugins" = "Prilagođeni dodaci";
 "extra_maps_menu_group" = "Dodatne mape";
 "import_duplicates_title" = "Neke stavke već postoje";
-"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze. 
-\n 
-\nOdaberi radnju.";
+"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze. \n \nOdaberi radnju.";
 "keep_both" = "Zadrži obe";
 "keep_both_desc" = "Uvežene stavke će biti dodate sa predlozima";
 "replace_all" = "Zameni sve";
@@ -974,9 +968,7 @@
 "reset_to_default" = "Vrati na fabrička podešavanja";
 "reset_profile_action_descr" = "Resetujte sva podešavanja profila na podrazumevane vrednosti instalacije. Dodirom na Resetuj će se odbaciti sve vaše promene, ova radnja se ne može opozvati.";
 "checking_for_duplicates" = "Provera duplikata...";
-"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu. 
-\n 
-\nTo može da potraje neko vreme.";
+"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu. \n \nTo može da potraje neko vreme.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1550,9 +1542,7 @@
 //inapps
 "plugin_nautical_name" = "Pregled nautičke mape";
 "product_desc_nautical" = "Vektorske karte prikladne za navigaciju ruta plovidbe";
-"plugin_nautical_descr" = "Ovaj dodatak obogaćuje program OsmAnd da prikazuje i pomorske puteve, svetionike navođenja, opasne plovne oblasti, oblasti sa ograničenjima za jedrenje i pristajanje, itd. Radi upotrebe, preuzmi odgovarajuće plovne mape i omogući prikaz „Plovne mape“ pod „Podesi mapu“.
-\n
-\nDodatna saznanja na %@.";
+"plugin_nautical_descr" = "Ovaj dodatak obogaćuje program OsmAnd da prikazuje i pomorske puteve, svetionike navođenja, opasne plovne oblasti, oblasti sa ograničenjima za jedrenje i pristajanje, itd. Radi upotrebe, preuzmi odgovarajuće plovne mape i omogući prikaz „Plovne mape“ pod „Podesi mapu“.\n\nDodatna saznanja na %@.";
 "osmand_parking_plugin_name" = "Parking pozicija";
 "product_desc_parking" = "Pratite vreme parkiranja i lokaciju vašeg automobila";
 "osmand_parking_plugin_description" = "Označava gde su vam auta ostavljena i obaveštava kalendar kada će isteći vreme parkiranja. Za postavljanje markera, izaberi mesto na mapi, idi na „Radnje“ i tapni na „Dodaj parking“.";
@@ -1561,14 +1551,10 @@
 "plugin_ski_descr" = "Napravljeno za navođenje po oblastima zimskih sportova. Pregleda skijaške staze i skijaške žičare, poljske skijaške putanje, sa obojenim linijama koje ukazujućim na težinu staza. Radi korišćenja ovog dodatka promeni izgled mape na „Podesi mapu“ pa izgled „Zima i skijanje“.";
 "record_plugin_name" = "Snimanje putovanja";
 "product_desc_track_recording" = "Snimite i sačuvajte svoja putovanja kao GPX putanje";
-"record_plugin_description" = "Snimi svoja putovanja ili vežbanje, i raščlani podatke po brzini, sakupljenom spuštanju i penjanju, proseku visinske razlike, itd. Snimljeni putanje mogu biti arhivirane, podeljene sa prijateljima, uređene i obrađene.
-\n
-\nDalje čitanje na %@.";
+"record_plugin_description" = "Snimi svoja putovanja ili vežbanje, i raščlani podatke po brzini, sakupljenom spuštanju i penjanju, proseku visinske razlike, itd. Snimljeni putanje mogu biti arhivirane, podeljene sa prijateljima, uređene i obrađene.\n\nDalje čitanje na %@.";
 "osm_editing_plugin_name" = "Uređivanje OSM mapa";
 "product_desc_osm_editing" = "Pretvorite svoj mobilni telefon u alatku za mapiranje";
-"osm_editing_plugin_description" = "Doprinosi OSM-u, opštoj zajednici koja stvara i održava obimnu mapu sveta i obezbeđuje redovna ažuriranje svakom korisniku.
-\n
-\nMožeš pronaći uputsva kako uređivati mapu na našim stranicama %@.";
+"osm_editing_plugin_description" = "Doprinosi OSM-u, opštoj zajednici koja stvara i održava obimnu mapu sveta i obezbeđuje redovna ažuriranje svakom korisniku.\n\nMožeš pronaći uputsva kako uređivati mapu na našim stranicama %@.";
 "product_desc_mapillary" = "Pogled na nivou ulice da biste proverili okolinu";
 "plugin_mapillary_descr" = "Slike sa nivoa ulice. Možeš i sam doprineti. Da bi video postojeće podatke kao sloj mape, uključite \'Slike na nivou ulice u meniju \'Podesi mapu\'.";
 "product_desc_africa" = "Neograničeno preuzimanje mapa za Afriku";
@@ -1601,11 +1587,7 @@
 "preferred_languages" = "Željeni jezici";
 "srtm_plugin_name" = "Topografija";
 "product_desc_srtm" = "Vizuelna procena oblika površine zemljišta";
-"srtm_plugin_description" = "Informacije o terenu, kaošto su konturne linije, osenčeni reljef, nagib, pomažu da vizualno proceniš položaj zemlje, reljef, plovnost i još mnogo toga. Topografske informacije na mapi mogu biti predstavljene konturnim linijama, senčanjem reljefa i/ili bojanjem strmine.
-\n
-\nZemaljski podaci (između 70° severno i 70° južno) se zasnovani na SRTM i ASTER.
-\n
-\nViše podataka na %@.";
+"srtm_plugin_description" = "Informacije o terenu, kaošto su konturne linije, osenčeni reljef, nagib, pomažu da vizualno proceniš položaj zemlje, reljef, plovnost i još mnogo toga. Topografske informacije na mapi mogu biti predstavljene konturnim linijama, senčanjem reljefa i/ili bojanjem strmine.\n\nZemaljski podaci (između 70° severno i 70° južno) se zasnovani na SRTM i ASTER.\n\nViše podataka na %@.";
 "wikivoyage_travel_guide" = "Turistički vodiči";
 "start_editing_card_image_text" = "Besplatni svetski turistički vodič koji svako može da uređuje.";
 "wikivoyage_travel_guide_descr" = "Vodiči za najzanimljivija mesta na planeti, unutar OsmAnd-a, bez potrebe za internetom.";
@@ -2394,9 +2376,7 @@
 "animate_my_location" = "Animiraj poziciju";
 "shared_string_status" = "Status";
 "backup_data" = "Rezervna kopija podataka";
-"backup_delete_all_data_warning" = "Izbrisaćeš sve podatke prethodno snimljene u OsmAnd Cloud, uključujući istoriju verzija.
-\n
-\nNećeš moći da vratiš izbrisane podatke.";
+"backup_delete_all_data_warning" = "Izbrisaćeš sve podatke prethodno snimljene u OsmAnd Cloud, uključujući istoriju verzija.\n\nNećeš moći da vratiš izbrisane podatke.";
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "backup_danger_zone" = "Opasna zona";
 "empty_purchases_description" = "Ako se kupovina ne pojavi ovde, klikni na„%@” ili se obrati našoj podršci.";
@@ -2442,13 +2422,10 @@
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
 "simulate_your_location_gpx_descr" = "Simuliraj svoj lokaciju koristeću snimljenu GPX trase.";
-"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd, 
-\ni svi vaši podaci će biti povezani sa njim.";
+"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd, \ni svi vaši podaci će biti povezani sa njim.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";
-"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka. 
-\n 
-\nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
+"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka. \n \nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
 "map_updates_for_mappers" = "Ažuriranje mapa za kartografe";
 "local_backup" = "Lokalna rezervna kopija";
 "backup_delete_old_data" = "Ukloni stare verzije";
@@ -2475,11 +2452,8 @@
 "duration_ago" = "Pre %@";
 "shared_string_angle_param" = "Ugao: %@°";
 "routing_attr_motor_type_electric_name" = "Električna";
-"logout_from_osmand_cloud_decsr" = "Odjavljuješ se?
-\nMoraćeš da se prijaviš ponovo da napraviš kopiju ili da povratiš podatke.";
-"simulation_real_mode_desc" = "Na pravim deonicama puta brzinaće biti približena najvećoj dozvoljenoj brzini.
-\nNa raskrsnicama, simuliranje će se usporiti.
-\nTakođe, semafori, znakovi zaustavljanja itd. utiču na brzinu.";
+"logout_from_osmand_cloud_decsr" = "Odjavljuješ se?\nMoraćeš da se prijaviš ponovo da napraviš kopiju ili da povratiš podatke.";
+"simulation_real_mode_desc" = "Na pravim deonicama puta brzinaće biti približena najvećoj dozvoljenoj brzini.\nNa raskrsnicama, simuliranje će se usporiti.\nTakođe, semafori, znakovi zaustavljanja itd. utiču na brzinu.";
 "backup_into_file" = "Pravljenje rezervne kopije u fajl";
 "routing_attr_motor_type_description" = "Odredi vrstu goriva vozila, potrebno je radi procene količine izduva CO2.";
 "not_enough_contributions_descr" = "Najmanje od %@ izmena kroz vreme od poslednja dva meseca %@ je potrebno radi dobavljanja pristupa neograničenim osveženjima mape svakih sat vremena.";
@@ -2560,13 +2534,7 @@
 "speed_cameras_alert" = "Upozorenja na prekršajne kamere su zakonom zabranjene u nekim državama.";
 "uninstall_speed_cameras" = "Obriši prekršajne kamere";
 "lang_zh-Hant" = "Kineski (tradicionalni)";
-"speed_cameras_legal_descr" = "U nekim državama je zabranjeno obaveštavanje o prekršajnim kamerama.
-\n
-\nMoraš napraviti izbor ovde, u zavisnosti od zakona države.
-\n
-\nOdaberi %@ i primaćeš obaveštenja i upozorenja o radarima i kamerama za brzinu.
-\n
-\nOdaberi %@. Svi podaci vezani za radare: upozorenja, obaveštenja, TOI biće obrisane do ponovne instalacije OsmAnd.";
+"speed_cameras_legal_descr" = "U nekim državama je zabranjeno obaveštavanje o prekršajnim kamerama.\n\nMoraš napraviti izbor ovde, u zavisnosti od zakona države.\n\nOdaberi %@ i primaćeš obaveštenja i upozorenja o radarima i kamerama za brzinu.\n\nOdaberi %@. Svi podaci vezani za radare: upozorenja, obaveštenja, TOI biće obrisane do ponovne instalacije OsmAnd.";
 "speed_camera_pois" = "TOI prekršajnih kamera";
 "privacy_and_security" = "Privatnost i bezbednost";
 "shared_string_height" = "Visina";
@@ -2709,10 +2677,7 @@
 "ant_plus_bluetooth_off" = "Bluetooth je isključen";
 "ant_plus_searching_text" = "Pretraga senzora";
 "ant_plus_open_settings" = "Otvori podešavanja";
-"ant_plus_nothing_found_description" = "Proveri da li je: 
-\n- Blutut uključen 
-\n- Prijemnik uključen 
-\n- Ovaj uređaj smešten blizu senzora";
+"ant_plus_nothing_found_description" = "Proveri da li je: \n- Blutut uključen \n- Prijemnik uključen \n- Ovaj uređaj smešten blizu senzora";
 "external_device_details_information" = "Informacija";
 "external_device_forget_sensor" = "Zaboravi senzor";
 "external_device_details_battery" = "Baterija";
@@ -3170,9 +3135,7 @@
 "shared_string_mode" = "Režim";
 "verify_account" = "Potvrdite svoj nalog";
 "shared_string_format" = "Format";
-"verify_account_deletion_descr" = "Mora da proverimo Vaš nalog pre njegovog brisanja.
-\n
-\nMolim, unesite adresu e-pošte kojom ste se upisali. Lozinka za jednokratnu upotrebu će Vam biti poslata.";
+"verify_account_deletion_descr" = "Mora da proverimo Vaš nalog pre njegovog brisanja.\n\nMolim, unesite adresu e-pošte kojom ste se upisali. Lozinka za jednokratnu upotrebu će Vam biti poslata.";
 "action_cant_be_undone" = "Ovo dejstvo ne može biti opozvano.";
 "manage_subscriptions" = "Upravljajte pretplatama.";
 "osmand_cloud_delete_account_confirmation" = "Da li izbrisati nalog?";
@@ -3304,9 +3267,7 @@
 "verification" = "Verifikacija";
 "remote_item" = "Daljinska stavka";
 "cloud_backup" = "Rezervna kopija";
-"osmand_cloud_deleting_account_descr" = "Kroz nekoliko trenutakaće svi Vaši podaci i nalozi biti izbrisani iz Oblaka OsmAnda.
-\n
-\nSvi podaci na uređaju ostaće celoviti.";
+"osmand_cloud_deleting_account_descr" = "Kroz nekoliko trenutakaće svi Vaši podaci i nalozi biti izbrisani iz Oblaka OsmAnda.\n\nSvi podaci na uređaju ostaće celoviti.";
 "preferred_terrain" = "Preferirani teren";
 "login_footer_email_part" = "support@osmand.net";
 "login_help_email_title" = "OsmAnd iOS oblak";
@@ -3382,12 +3343,7 @@
 "free_downloads" = "Besplatna preuzimanja";
 "backup_delete_all_data_in_progress" = "Molimo sačekajte dok OsmAmd ne izbriše sve vaše podatke iz oblaka. Svi podaci na uređaju ostaće ne dirnuti.";
 "osm_live_payment_subscription_management_aid" = "Plaćanje će biti naplaćeno sa vašeg Apple ID naloga prilikom potvrde kupovine.\n\nPretplata se automatski obnavlja osim ako se ne otkaže najmanje 24 sata pre kraja tekućeg perioda. Vašem nalogu će biti naplaćeno obnavljanje u roku od 24 sata pre kraja tekućeg perioda.\n\nSvojim pretplatama možete upravljati i otkazati ih tako što ćete nakon kupovine otići u podešavanja naloga u App Store-u";
-"weather_plugin_description" = "Omogućava
-\n- 24-ročasovni i sedmični petoslojni pregled vremenskih prilika
-\n- widžet zasnovan na lokaciji
-\n- linije obrisa merenja toplote / pritiska
-\n
-\nPodatke o vremenu dostavlja Global Forecast System (GFS, %@).";
+"weather_plugin_description" = "Omogućava\n- 24-ročasovni i sedmični petoslojni pregled vremenskih prilika\n- widžet zasnovan na lokaciji\n- linije obrisa merenja toplote / pritiska\n\nPodatke o vremenu dostavlja Global Forecast System (GFS, %@).";
 "ios_release_4_2" = "• Izgled linije rute: dodata mogućnost podešavanja širine i boje\n• Tragovi: dodata opcija za brisanje nekoliko numera odjednom\n• Kontekstni meni staze: dodata traka za pomeranje sa grupama putnih tačaka\n• Izgled karte: podeljene dodatne rute po tipu sa mogućnošću da se omogući jedna iz svake kategorije posebno\n• Jahanje: dodajte novi tip navigacije i profil aplikacije\n• OsmAnd datoteke su sada vidljive u aplikaciji „Fajlovi“.\n• Poboljšan je korisnički doživljaj opcija „Koristi podatke o nadmorskoj visini“ i „Izaberi fluktuaciju nadmorske visine“, kombinovane su i preimenovane u „Željeni teren“, trenutno dostupne za profile „Bicikl“ i „Pešak“.\n• Nova opcija \"Uključi naslov\" za snimanje putanje\n• Vidžet imena ulice: sada prikažite štit za put i broj izlaza tokom navigacije\n• Nove rute za fitnes i trčanje na mapi\n• Ispravke grešaka u KarPlej-u, dodani pokreti za ekrane osetljive na dodir\n• Popravljen uvoz GPX fajlova iz OSF paketa\n• Popravljen uvoz prilagođenih dodataka sa uključenim fajlovima\n• Popravljeni različiti padovi u režimu planiranja rute\n• Popravljeni padovi tokom Navigacije\n";
 "ios_release_4_3" = "• Glatka animacija za promene lokacije tokom kretanja\n• KarPlej: dodate trake, 2.5D prikaz, popravljeni problemi sa zvukom dok ste povezani preko Bluetooth-a\n• Predstavljamo nove planove kupovine: pretplate na „OsmAnd Pro“ sa pristupom svim funkcijama i kupovinu „Mape+“ sa neograničenim preuzimanjem mapa i pristupom plaćenim dodacima.\n• Dodata rezervna kopija u oblaku i vremenska prognoza van mreže za OsmAnd Pro korisnike\n• Novi zgodan ekran \"Kupovina\" sa listom svih kupovina\n• Prednosti za aktivne OpenStreetMap.org saradnike\n• Staze sada mogu biti obojene po visini, brzini ili nagibu\n• Oflajn mape su sada dostupne preko aplikacije Datoteke\n• Favoriti: dodato stvaranje lokalnih rezervnih kopija nakon svake promene, rezervne kopije dostupne iz aplikacije Datoteke\n• TOI sačuvana u omiljenim mestima će sačuvati i prikazati sve TOI podatke čak i bez oflajn mape\n• GPX je dodao podršku za link, cmt, desc oznake i za bilo koje prilagođene ekstenzije\n• Dodan režim za dugme Kompas\n• Rešen je problem sa formatom UTM koordinata\n• Rešen je problem sa međutačkama u navigaciji\n";
 "ios_release_4_4" = "• Eksterna tastatura: dodata podrška za nove tastere\n• Novi vidžeti za snimanje putovanja\n• Dodata pretraga favorita, putanja i OSM uređivanja\n• KarPlej: istorija uključuje tačke koje su korišćene u navigaciji\n• Emodži se sada mogu koristiti kao favoriti ili naziv putne tačke\n• Popravljen prelaz između članaka na Vikipediji van mreže\n• Rešeni problemi sa uvozom prilagođenih datoteka za rutiranje i prikazivanje\n• Izgled staze: dodata mogućnost postavljanja bilo koje prilagođene boje\n• Novi vidžet \"Visina: centar mape\"\n• Dodata opcija za onemogućavanje najave za skretanje sa rute\n• Vikipedija: dodata mogućnost pregleda slika, ažuriran korisnički interfejs čitača\n• Favoriti: dodata pretraga\n• KarPlej: dodata istorija, reorganizovane putanje i lista favorita\n• Planinarske rute: dodata mogućnost izbora ruta na mapi za pregled dodatnih informacija ili navigaciju\n• OpenStreetMap: dodata mogućnost otpremanja staza\n• Novi vidžet: prikazuje tačno vreme ili preostalo vreme do sledećeg izlaska ili zalaska sunca\n• Novi vidžet: prikaz koordinata za centar karte\n• Poboljšana podrška spoljnih tastatura, dodata podrška za osnovne radnje\n• Glasovna uputstva: dodata podrška za nove jezike: katalonski, ukrajinski, bugarski, indonežanski, slovenački\n• Dodato pravno upozorenje o korišćenju upozorenja kamere za brzinu\n• Poboljšana privatnost: dodate opcije za onemogućavanje beleženja istorije\n• Poboljšana vidljivost lenjira karte\n• OsmAnd Cloud ispravke grešaka i poboljšanja korisničkog interfejsa\n• Poboljšanja korisničkog interfejsa za RTL jezike\n• Pristupačnost: dodato označavanje sadržaja za dugmad mape\n• Dodata podrška „Dinamički tip“, veličina teksta u OsmAnd-u će se promeniti u skladu sa veličinom teksta u iOS-u\n• Orijentacija karte: dodat je režim ručnog rotiranja\n• Novi profil mopeda\n• Minimalna verzija iOS-a je povećana na 15.0\n";
@@ -3398,7 +3354,6 @@
 "shared_string_round_up" = "Zaokruženo";
 "distance_during_navigation_footer" = "Odaberite kako se informacije o udaljenosti prikazuju u navigacionim vidžetima (udaljenost do tačke, sledeće skretanje, trake).\n\nIzaberite „Precizno“ za tačne brojeve ili „Zaokruženo“ za lakšu čitljivost.";
 "upload_to_osm_short" = "Otpremi na OSM";
-
 "rendering_value_small_name" = "Mali";
 "rendering_value_access_name" = "Po tipu pristupa";
 "rendering_value_sector1_name" = "Sektor 1";
@@ -3429,4 +3384,4 @@
 "rendering_value_sector4_name" = "Sector 4";
 "routing_attr_allow_via_ferrata_name" = "Planinska ruta (Via ferata)";
 "routing_attr_hazmat_category_usa_4_name" = "Zapaljivečvrste materije";
-"routing_attr_allow_via_ferrata_description" = "Planinarska putanja opremljena postavljenim užadima, gredama, lestvicama i brvnima.";;
+"routing_attr_allow_via_ferrata_description" = "Planinarska putanja opremljena postavljenim užadima, gredama, lestvicama i brvnima.";

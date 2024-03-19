@@ -1135,16 +1135,19 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     // after [MyPlacesTabBar, Folder1, Folder2, RootVC]
                     if let currentHistory = navigationController?.viewControllers {
                         var newHistory: [UIViewController] = Array()
-                        if let rootVC = navigationController?.viewControllers[0] {
+                        if !currentHistory.isEmpty {
+                            let rootViewController = currentHistory[0]
                             newHistory.append(contentsOf: currentHistory)
                             newHistory.remove(at: 0)
-                            newHistory.append(rootVC)
+                            newHistory.append(rootViewController)
                             navigationController?.setViewControllers(newHistory, animated: true)
+                            
+                            // Show track context menu above the map.
+                            // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
+                            rootVC.mapPanel.openTargetView(with: track, navControllerHistory: currentHistory)
                         }
-                        // Show track context menu above the map.
-                        // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
-                        rootVC.mapPanel.openTargetView(with: track, navControllerHistory: currentHistory)
-                    }                }
+                    }
+                }
             }
         } else if item.key == recordingTrackKey {
             if savingHelper.hasData() {

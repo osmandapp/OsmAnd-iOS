@@ -3352,3 +3352,8 @@
 "target_elevation" = "Elevación del objetivo";
 "average_glide_ratio_time_interval_desc" = "Muestra la relación promedio de planeo o la velocidad vertical para el intervalo establecido.";
 "average_glide_time_interval_desc" = "Determinar el período de tiempo requerido para el promedio deslizante.";
+"distance_during_navigation" = "Distancia en la navegación";
+"shared_string_precise" = "Preciso";
+"shared_string_round_up" = "Redondear";
+"distance_during_navigation_footer" = "Elige cómo se muestra la información de la distancia en los widgets de navegación (distancia al punto, próximo giro, carriles).\n\nElige \"Preciso\" para números exactos, o \"Redondear\" para facilitar la legibilidad.";
+"upload_to_osm_short" = "Subir a OSM";

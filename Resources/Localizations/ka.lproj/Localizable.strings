@@ -726,8 +726,7 @@
 "sett_arr" = "რუკის ისრები";
 "shared_string_location" = "მდებარეობა";
 "sett_arr_map" = "რუკის ცენტრი";
-"short_location_on_map" = "გრძედი %@
-\nგანედი %@";
+"short_location_on_map" = "გრძედი %@\nგანედი %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -2434,7 +2433,6 @@
 "shared_string_foot" = "ფეხი";
 "announcement_time_prepare_long" = "წინასწარი მომზადება";
 "backup_version_history" = "ვერსიის ისტორია";
-
 "rendering_value_small_name" = "პატარა";
 "routing_attr_hazmat_category_usa_9_name" = "სხვადასხვა";
 "rendering_value_sectors_name" = "სექტორები";
@@ -2442,7 +2440,7 @@
 "rendering_value_caiScale_name" = "CAI";
 "rendering_attr_showProposed_name" = "შეთავაზებული ობიექტები";
 "rendering_value_sacScale_name" = "SAC";
-"routing_attr_hazmat_category_usa_2_name" = "აირები";;
+"routing_attr_hazmat_category_usa_2_name" = "აირები";
 "lang_zh-Hans" = "ჩინური (გამარტივებული)";
 "announcement_time_prepare" = "მომზადება";
 "shared_string_bearing" = "ჩასადები";

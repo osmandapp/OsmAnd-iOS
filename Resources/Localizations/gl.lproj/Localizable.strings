@@ -43,8 +43,7 @@
 "info_button" = "Información";
 "simulate_your_location" = "Simular a súa posición";
 "simulate_routing_descr" = "Simulate your position using a calculated route";
-"day_night_info_description" = "Amencer: %@
-\nSolpor: %@";
+"day_night_info_description" = "Amencer: %@\nSolpor: %@";
 "day_night_info" = "Información sobre o día e a noite";
 "daynight_mode_auto" = "Amencer/Solpor";
 "route_simulation" = "Route simulation";
@@ -592,25 +591,16 @@
 //inapps
 "plugin_nautical_name" = "Vista do mapa náutico";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "Este plugin enriquece a aplicación de mapas de navegación OsmAnd para que amose tamén mapas náuticos para viaxes en barco e outros tipos de deportes acuáticos. 
-\n 
-\nUnha extensión dos mapas especial para o OsmAnd fornece tódalas marcaxes náuticas e símbolos das cartas para a navegación en augas interiores e de cabotaxe. A descrición de cada marcaxe da navegación fornece os detalles precisos para identificala, así coma o seu significado (categoría, forma, cor, secuencia, referencia, etc.). 
-\n 
-\nPara voltar a un dos estilos do mapa convencionais do OsmAnd, sinxelamente hai que desactivar este plugin de novo ou mudar o \"Estilo do mapa\" en \"Configurar o mapa\" coma se desexe.";
+"plugin_nautical_descr" = "Este plugin enriquece a aplicación de mapas de navegación OsmAnd para que amose tamén mapas náuticos para viaxes en barco e outros tipos de deportes acuáticos. \n \nUnha extensión dos mapas especial para o OsmAnd fornece tódalas marcaxes náuticas e símbolos das cartas para a navegación en augas interiores e de cabotaxe. A descrición de cada marcaxe da navegación fornece os detalles precisos para identificala, así coma o seu significado (categoría, forma, cor, secuencia, referencia, etc.). \n \nPara voltar a un dos estilos do mapa convencionais do OsmAnd, sinxelamente hai que desactivar este plugin de novo ou mudar o \"Estilo do mapa\" en \"Configurar o mapa\" coma se desexe.";
 "osmand_parking_plugin_name" = "Posición de aparcamento";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta. 
-\n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
+"osmand_parking_plugin_description" = "Rexistra onde foi aparcado o automóbil, incluíndo canto tempo falta. \n Tanto a localización coma o tempo do aparcamento amósanse no menú principal e nun trebello sobre o mapa. Pódese engadir unha alarma de lembranza ó calendario do Android.";
 "plugin_ski_name" = "Vista dos mapas de esquí";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "Este plugin para o OsmAnd ponó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada.
-\n 
-\nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
+"plugin_ski_descr" = "Este plugin para o OsmAnd ponó teu acade detalles sobre pistas do esquí de baixada, de travesía, roteiros do esquí alpino, teleféricos e refachos a nivel mundial. As rotas e pistas amósanse polo código de cor en función da súa dificuldade e representados cun estilo do mapa especial \"Inverno\" que o asemella a unha paisaxe invernal nevada.\n \nActivando esta vista, muda o estilo do mapa a «Inverno e esquí», amosando as características do terreo en condicións invernais. Esta vista pódese revertir desactivando de novo eiquí ou mudando o \"Estilo do mapa\" en \"Configurar mapa\" cando o desexes.";
 "record_plugin_name" = "Gravación de viaxes";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Este plugin activa a funcionalidade para rexistrar e gardar as túas pistas de xeito manual premendo no trebello de gravación GPX no mapa, ou automáticamente rexistrando todas as túas rutas percorridas nun ficheiro GPX. 
-\n 
-\nAs pistas gravadas poden ser compartidas coas túas amizades ou ser empregadas para contribuír ó OSM. Os atletas poden empregar as pistas gravadas para seguir os seus adestramentos. Algunhas análises básicas de pistas pódense facer directamente no OsmAnd, coma tempos por volta, velocidade media, etc., e por suposto as pistas poden analizarse de xeito posterior con ferramentas de análise de terceiros.";
+"record_plugin_description" = "Este plugin activa a funcionalidade para rexistrar e gardar as túas pistas de xeito manual premendo no trebello de gravación GPX no mapa, ou automáticamente rexistrando todas as túas rutas percorridas nun ficheiro GPX. \n \nAs pistas gravadas poden ser compartidas coas túas amizades ou ser empregadas para contribuír ó OSM. Os atletas poden empregar as pistas gravadas para seguir os seus adestramentos. Algunhas análises básicas de pistas pódense facer directamente no OsmAnd, coma tempos por volta, velocidade media, etc., e por suposto as pistas poden analizarse de xeito posterior con ferramentas de análise de terceiros.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -629,9 +619,7 @@
 "purchases_feature_desc_wikipedia" = "Get information about points of interest from Wikipedia. It is your pocket offline guide - just enable Wikipedia plugin and enjoy articles about objects around you.";
 "srtm_plugin_name" = "Curvas de nivel";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Este plugin fornece unha capa de sobreposición das curvas do nivel e unha capa de sombras da altitude (relevo) que poden ser amosadas nos mapas sen conexión do OsmAnd. Esta funcionalidade pode ser moi apreciada por atletas, camiñantes, sendeiristas e calquera que teña interese pola estrutura de relevo da paisaxe. (Ten en conta que as curvas do nivel e/ou os datos do relevo están dispoñíbeis en descargas adicionais separadas logo de activares o plugin)
-\n 
-\nOs datos globais (entre os 70 graos norte e os 70 graos sul) están baseados nas medicións do SRTM (Misión Topográfica con Radar da Lanzadeira Espacial) e o ASTER (Radiómetro Espacial Avanzado de Emisión Térmica e Reflexión) e instrumentos de imaxes a bordo do Terra, o satélite máis importante do Sistema de Observación Terrestre da NASA. O ASTER é un esforzo cooperativo entre a NASA, o Ministerio de Economía do Xapón, Comercio e Industria (METI) e Sistemas Espaciais Xaponeses (J-spaceystems).";
+"srtm_plugin_description" = "Este plugin fornece unha capa de sobreposición das curvas do nivel e unha capa de sombras da altitude (relevo) que poden ser amosadas nos mapas sen conexión do OsmAnd. Esta funcionalidade pode ser moi apreciada por atletas, camiñantes, sendeiristas e calquera que teña interese pola estrutura de relevo da paisaxe. (Ten en conta que as curvas do nivel e/ou os datos do relevo están dispoñíbeis en descargas adicionais separadas logo de activares o plugin)\n \nOs datos globais (entre os 70 graos norte e os 70 graos sul) están baseados nas medicións do SRTM (Misión Topográfica con Radar da Lanzadeira Espacial) e o ASTER (Radiómetro Espacial Avanzado de Emisión Térmica e Reflexión) e instrumentos de imaxes a bordo do Terra, o satélite máis importante do Sistema de Observación Terrestre da NASA. O ASTER é un esforzo cooperativo entre a NASA, o Ministerio de Economía do Xapón, Comercio e Industria (METI) e Sistemas Espaciais Xaponeses (J-spaceystems).";
 "my_location" = "A miña posición";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Obter acceso ilimitado";
@@ -1768,9 +1756,7 @@
 "ltr_or_rtl_combine_via_dash" = "%@— %@";
 "osm_live_payment_monthly_title" = "Mensual";
 "max_speed" = "Velocidade máxima";
-"checking_for_duplicate_description" = "O OsmAnd comproba %@ para ver se hai duplicados cos elementos existentes na aplicación. 
-\n 
-\nPode levar algún tempo.";
+"checking_for_duplicate_description" = "O OsmAnd comproba %@ para ver se hai duplicados cos elementos existentes na aplicación. \n \nPode levar algún tempo.";
 "move_point" = "Desprazar punto";
 "activity_type_mountainbike_name" = "Bicicleta de montaña";
 "copy_poi_name" = "Copiar nome do PDI";
@@ -1779,9 +1765,7 @@
 "shared_string_angle" = "Ángulo";
 "gpx_upload_private_visibility_descr" = "\"Privado\" significa que a pista non aparecerá en ningunha listaxe pública, pero o conxunto de puntos seguirá estando dispoñíbel en orde cronolóxica a través da API pública de GPS e sen marcas de tempo.";
 "recalc_angle_dialog_title" = "Ángulo mínimo entre a miña localización e ruta";
-"import_duplicates_description" = "O OsmAnd xa posúe elementos cos mesmos nomes que os importados.
-\n
-\nEscolle unha acción.";
+"import_duplicates_description" = "O OsmAnd xa posúe elementos cos mesmos nomes que os importados.\n\nEscolle unha acción.";
 "profile_settings" = "Axustes específicos dos perfís";
 "no_purchases" = "Non tes compras";
 "settings_item_read_error" = "Non foi posíbel ler \'%@\'.";
@@ -1804,8 +1788,7 @@
 "free_version_message" = "Podes baixar ou actualizar %@ mapas.";
 "default_price_currency_format" = "%.2f %@";
 "depth_contour_lines" = "Curvas de nivel da profundidade";
-"short_location_on_map" = "Lat %@
-\nLon %@";
+"short_location_on_map" = "Lat %@\nLon %@";
 "select_another_colorization" = "Escolle outro tipo de cor.";
 "osm_live_payment_current_subscription" = "Subscrición actual";
 "empty_purchases_description" = "Se as túas compras non aparecen aquí, preme en \"%@\", ou ponte en contacto co noso equipo de asistencia.";
@@ -1890,33 +1873,21 @@
 "quick_action_auto_zoom" = "Activar ou desactivar achegamento automático do mapa";
 "m" = "m";
 "km" = "km";
-"weather_plugin_description" = "Proporciona
-\n- a predición meteorolóxica das 24 horas e 7 días con 5 capas
-\n- complementos baseados na localización
-\n- as isolíneas da temperatura/presión
-\n
-\nA predición meteorolóxica e proporcionada polo Global Forecast System (GFS, %@).";
+"weather_plugin_description" = "Proporciona\n- a predición meteorolóxica das 24 horas e 7 días con 5 capas\n- complementos baseados na localización\n- as isolíneas da temperatura/presión\n\nA predición meteorolóxica e proporcionada polo Global Forecast System (GFS, %@).";
 "shared_string_legal" = "Legal";
 "privacy_and_security" = "Privacidade e seguranza";
 "uninstall_speed_cameras" = "Desinstalar radares de velocidade";
 "speed_camera_pois" = "PDI de radares de velocidade";
 "speed_cameras_alert" = "As alertas de radares de velocidade nalgúns países están prohibidas por lei.";
 "shared_string_keep_active" = "Manter activo";
-"speed_cameras_legal_descr" = "Nalgúns países ou rexións, o emprego de aplicacións de aviso de radares está prohibido por lei.
-\n
-\nTes que facer unha escolla, dependendo da lei do teu país.
-\n
-\nEscolle %@ e recibirás alertas e avisos sobre radares de velocidade.
-\n
-\nEscolle %@. Todos os datos relacionados de radares develocidade: alertas, notificacións e PDI serán eliminados até que o OsmAnd sexa reinstalado de xeito completo.";
+"speed_cameras_legal_descr" = "Nalgúns países ou rexións, o emprego de aplicacións de aviso de radares está prohibido por lei.\n\nTes que facer unha escolla, dependendo da lei do teu país.\n\nEscolle %@ e recibirás alertas e avisos sobre radares de velocidade.\n\nEscolle %@. Todos os datos relacionados de radares develocidade: alertas, notificacións e PDI serán eliminados até que o OsmAnd sexa reinstalado de xeito completo.";
 "shared_string_height" = "Altura";
 "lang_zh-Hant" = "Chinés tradicional";
 "icon_group_service" = "Servizo";
 "shared_string_cache" = "Caché";
 "select_nav_profile_dialog_message" = "O \'Tipo de navegación\' selecciona como calculánse as rutas, con motores de rutas en liña e fóra de liña dispoñibles.";
 "terrain_maps" = "Mapas do terreo";
-
-"rendering_attr_showProposed_name" = "Obxectos propostos";;
+"rendering_attr_showProposed_name" = "Obxectos propostos";
 "shared_string_dark" = "Escuro";
 "shared_string_loading" = "Cargando";
 "map_widget_sunset" = "Solpor";

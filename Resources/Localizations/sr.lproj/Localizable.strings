@@ -114,7 +114,7 @@
 "driving_region_descr" = "Одаберите област вожње: САД, Европа, Уједињено Краљевство, Азија и остало.";
 "driving_region" = "Област вожње";
 "shared_string_automatic" = "Самостално";
-"routing_attr_length_name" = "Ограничење дужине";
+"routing_attr_length_name" = "Дужина";
 "default_speed_setting_title" = "Подразумевана брзина";
 "shared_string_min_speed" = "Најмања брзина";
 "max_speed" = "Највећа брзина";
@@ -2000,7 +2000,7 @@
 "routing_attr_height_obstacles_description" = "Планирано време путовања ће се одразити на утицај узбрдица. Поставке путање могу помоћи да се избегну стрме узбрдице:";
 "rendering_attr_currentTrackColor_description" = "Боја ГПИкс-а";
 "routing_attr_driving_style_speed_name" = "Краће путање";
-"routing_attr_avoid_sett_description" = "Избегавај калдрме";
+"routing_attr_avoid_sett_description" = "Избегавај калдрму";
 "rendering_attr_hikingRoutesOSMC_description" = "Приказуј путеве према путањама ОСМЦ-а.";
 "rendering_value_car_name" = "Кола";
 "routing_attr_avoid_unpaved_name" = "Без неасфалтираних путева";
@@ -2053,10 +2053,10 @@
 "routing_attr_prefer_motorway_name" = "Предност путевима за моторна возила";
 "rendering_attr_surface_cobblestone_name" = "Калдрма";
 "rendering_attr_highway_class_state_road_name" = "Државни пут";
-"routing_attr_avoid_sett_name" = "Без калдрма";
+"routing_attr_avoid_sett_name" = "Без калдрме";
 "rendering_value_translucent_lightblue_name" = "Прозирна светло плава";
 "rendering_attr_smoothness_good_name" = "Добро";
-"routing_attr_weight_name" = "Ограничење тежине";
+"routing_attr_weight_name" = "Тежина";
 "rendering_value_bold_name" = "Подебљано";
 "rendering_attr_surface_stone_name" = "Камен";
 "rendering_attr_pisteGrooming_name" = "Равнање стазе";
@@ -2151,7 +2151,7 @@
 "rendering_attr_trainLightrailRoutes_name" = "Железнички путеви";
 "rendering_value_pedestrian_name" = "Пешице";
 "rendering_attr_highway_class_track_grade5_name" = "Квалитет 5";
-"routing_attr_height_name" = "Ограничење висине";
+"routing_attr_height_name" = "Висина";
 "rendering_attr_piste_type_connection_name" = "Веза стазе";
 "routing_attr_relief_smoothness_factor_name" = "Изаберите висинско одступање";
 "routing_attr_piste_type_downhill_name" = "Алпско и скијање спуштање";
@@ -2170,7 +2170,7 @@
 "rendering_attr_depthContours_description" = "Приказуј тачке и изобате.";
 "rendering_value_thick_name" = "Дебело";
 "routing_attr_avoid_ferry_name" = "Без трајеката";
-"routing_attr_width_name" = "Ограничење ширине";
+"routing_attr_width_name" = "Ширина";
 "routing_attr_avoid_train_name" = "Без возова";
 "routing_attr_allow_motorway_description" = "Дозволи аутопутеве.";
 "rendering_attr_hmRendered_name" = "Прикажи више појединости на карти";
@@ -2561,7 +2561,7 @@
 "shared_string_cloud" = "Облак";
 "promo_subscription" = "Попустна претплата";
 "benefits_for_contributors_primary_descr" = "Тренутни доприносиоци ОпенСтритМапама могу имати право на неограничена освежавања карте сваких сат времена.";
-"routing_attr_motor_type_name" = "Мотор возила";
+"routing_attr_motor_type_name" = "Гориво коришћено мотором";
 "shared_string_added" = "Додато";
 "rendering_attr_showMtbScale_name" = "Приказуј лествицу МТБ-а";
 "rendering_attr_depthContourWidth_name" = "Дебљина линија";
@@ -2790,7 +2790,7 @@
 "help_article_start_with_main_menu_name" = "Главни мени";
 "help_article_troubleshooting_crash_logs_name" = "Дневник рушења програма";
 "help_article_troubleshooting_general_name" = "Генерално";
-"help_article_troubleshooting_maps_data_name" = "Карте и подаци";
+"help_article_troubleshooting_maps_data_name" = "Карте и Подаци";
 "help_article_troubleshooting_track_recording_issues_name" = "Снимање трага";
 "help_article_widgets_name" = "Справице карте";
 "help_article_widgets_info_widgets_name" = "Справице обавештења";
@@ -3316,7 +3316,7 @@
 "ant_plus_searching_text_description" = "Молим, држите уређај близу пријемника. Морате укључити пријемник да би га ОсмАнд пронашао.";
 "ant_plus_bluetooth_off" = "Блутут је искључен";
 "external_device_forget_sensor" = "Заборави пријемник";
-"external_device_forget_sensor_description" = "Пријемник биће уклоњен са списка. Моћи ћете да упарите овај пријемник кад год пожелите.";
+"external_device_forget_sensor_description" = "Пријемник биће уклоњен са списка.Моћи ћете да упарите овај пријемник кад год пожелите.";
 "external_device_details_battery" = "Батерија";
 "external_device_details_received_data" = "Примљени подаци";
 "external_device_status_disconnected" = "Неповезан";
@@ -3387,3 +3387,4 @@
 "routing_attr_hazmat_category_usa_9_name" = "Разно";
 "rendering_value_sector4_name" = "Одсечак 4";
 "routing_attr_hazmat_category_usa_3_name" = "Запаљиве течности";
+"ios_release_4_7" = "• Побољшани горњи и доњи панели виџета за смештај свих виџета\n• Побољшано управљање за трагове видљиве на мапи\n• Ажурирана „Анализа на мапи“ са могућношћу приказа метрике са сензора\n• Додата је побољшана подршка за ознаке за ГПКС: линк, аутор, ауторска права и кључне речи\n• Побољшана конфигурација виџета омогућавањем корисницима да померају странице и редове\n• Побољшано управљање стазама у „Мојим местима“ са подфолдерима и контекстним менијима за стазе и фасцикле\n• Нови виџети: „Однос клизања“ и „Позиција сунца“\n• Прилагодите „Удаљеност током навигације“: бирајте између прецизних или заокружених бројева\n• Језик апликације ће се користити за имена на мапи прегледа света уместо локалних језика\n• ОсмАнд Облак: Додата могућност управљања вашим подацима, укључујући враћање избрисаних датотека и брисање вашег налога\n• Додата подршка за додатне ознаке за туристичке руте\n• Поправљен виџет „Координате“ где су, у неким случајевима, пропуштене последње цифре\n• Исправљено понашање дугмета „3Д режим“: додиром на дугме не чува се угао нагиба\n• Фиксна боја статусне траке за старије верзије иОС-а\n• Поправљени покрети ротирања и штипања за зумирање мапе за апликацију која ради на макОС-у\n";

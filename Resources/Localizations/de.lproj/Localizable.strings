@@ -3368,3 +3368,8 @@
 "time_to_navigation_point_widget_settings_desc" = "Tippe auf das Widget, um die Modi zu wechseln.";
 "average_glide_ratio_time_interval_desc" = "Zeigt das mittlere Gleitverhältnis oder die vertikale Geschwindigkeit für das eingestellte Intervall an.";
 "average_glide_time_interval_desc" = "Zeitintervall eingeben, um mittlere Gleitzahl zu ermitteln.";
+"distance_during_navigation" = "Distanz während der Navigation";
+"shared_string_precise" = "Präzise";
+"upload_to_osm_short" = "Hochladen zu OSM";
+"distance_during_navigation_footer" = "Wähle, wie Entfernungsinformationen in Navigationswidgets angezeigt werden (Entfernung zum Punkt, nächste Abbiegung, Spuren).\n\nWähle „Präzise“ für exakte Zahlen oder „Abrunden“ für leichtere Lesbarkeit.";
+"shared_string_round_up" = "Abrunden";

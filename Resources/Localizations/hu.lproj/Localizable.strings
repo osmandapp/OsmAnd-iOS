@@ -2844,3 +2844,4 @@
 "precipitation_widget_desc" = "Megjeleníti a csapadékot a jelenlegi térképközéppontnál.";
 "shared_string_nearest" = "Legközelebbi";
 "second_next_turn_widget_desc" = "A widget a soron következő második bekanyarodásról tájékoztat, és akkor aktiválódik, amikor ezt megközelíti.";
+"distance_during_navigation" = "Távolságok a navigálás során";

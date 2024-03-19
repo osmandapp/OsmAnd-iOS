@@ -292,9 +292,7 @@
 //inapps
 "plugin_nautical_name" = "航海地图视图";
 "product_desc_nautical" = "";
-"plugin_nautical_descr" = "打开以丰富您的地图，其中包含有关航行路线、导航灯、危险区域、允许或禁止航行或停靠的区域等信息。如要使用，下载航海地图并在配置地图中启用“航海地图”类型。
-\n
-\n详情可见 %@。";
+"plugin_nautical_descr" = "打开以丰富您的地图，其中包含有关航行路线、导航灯、危险区域、允许或禁止航行或停靠的区域等信息。如要使用，下载航海地图并在配置地图中启用“航海地图”类型。\n\n详情可见 %@。";
 "osmand_parking_plugin_name" = "停车位置";
 "product_desc_parking" = "";
 "osmand_parking_plugin_description" = "标记您汽车的停放位置，并在停车计时将要到期时通知您的日历。为放置标记，请在地图上选择一个地点，进入 \"操作\"，然后点击 \"添加停车位置\"。";
@@ -303,9 +301,7 @@
 "plugin_ski_descr" = "专为冬季运动场地导航而设计： 查看滑雪道、滑雪缆车和越野滑雪道，并用彩色线条标示难度等级。使用时，请启用此插件，并进入 \"配置地图\"，选择 \"冬季和滑雪 \"地图样式。";
 "record_plugin_name" = "旅行记录";
 "product_desc_track_recording" = "";
-"record_plugin_description" = "记录您的旅行或训练，并分析速度、累计上升和下降、海拔剖面等数据。已记录的轨迹可以归档、与朋友分享、编辑和后期处理。
-\n
-\n详情可见 %@。";
+"record_plugin_description" = "记录您的旅行或训练，并分析速度、累计上升和下降、海拔剖面等数据。已记录的轨迹可以归档、与朋友分享、编辑和后期处理。\n\n详情可见 %@。";
 "product_title_trip_planning" = "";
 "product_desc_trip_planning" = "";
 "product_desc_ext_trip_planning" = "";
@@ -324,11 +320,7 @@
 "purchases_feature_desc_wikipedia" = "离线提供所有与地点相关的维基百科文章，帮助您通过在地图上的简单点击来了解您在旅途中访问的地点。不要忘记下载相应地区的维基百科地图文件。";
 "srtm_plugin_name" = "地形";
 "product_desc_srtm" = "";
-"srtm_plugin_description" = "地形信息，例如等高线、山体阴影和坡度，可帮助您直观地评估土地和地形的布局以及适航性等。地形信息可在地图上通过地形阴影、等高线以及坡度着色来表示。
-\n
-\n底层数据来自 SRTM 和 ASTER。
-\n
-\n详情可见 %@。";
+"srtm_plugin_description" = "地形信息，例如等高线、山体阴影和坡度，可帮助您直观地评估土地和地形的布局以及适航性等。地形信息可在地图上通过地形阴影、等高线以及坡度着色来表示。\n\n底层数据来自 SRTM 和 ASTER。\n\n详情可见 %@。";
 "my_location" = "我的位置";
 "all_categories" = "";
 "get_unlimited_access" = "获取无限访问权限";
@@ -777,8 +769,7 @@
 "mapillary" = "Mapillary";
 "retry" = "重试";
 "day_short" = "天";
-"short_location_on_map" = "纬度 %@
-\n经度 %@";
+"short_location_on_map" = "纬度 %@\n经度 %@";
 "price_free" = "免费";
 "add_intermediate" = "添加中继点";
 "add_home" = "添加家";
@@ -1319,9 +1310,7 @@
 "width_limit_description" = "提供你的车辆宽度，较宽的车辆可能会受到一些路线限制。";
 "height_limit_description" = "提供你的车辆高度，较高的车辆可能会受到一些路线限制。";
 "weight_limit_description" = "提供你的车辆重量，较重的车辆可能会受到一些路线限制。";
-"gpx_parse_error" = "GPX文件存在问题。
-\n
-\n您可联系 OsmAnd 支持进一步排查。";
+"gpx_parse_error" = "GPX文件存在问题。\n\n您可联系 OsmAnd 支持进一步排查。";
 "simplified_track_description" = "只有路线线条会被保存，路径点将被删除。";
 "open_saved_track" = "打开保存的轨迹";
 "profile_type_osmand_string" = "OsmAnd配置文件";
@@ -1645,9 +1634,7 @@
 "shared_string_quick_actions" = "快捷动作";
 "replace_all_desc" = "当前项目将被文件中的项目取代";
 "import_duplicates_title" = "有些项目已经存在";
-"import_duplicates_description" = "OsmAnd已经具有与导入的元素同名的元素。
-\n
-\n选择一个操作。";
+"import_duplicates_description" = "OsmAnd已经具有与导入的元素同名的元素。\n\n选择一个操作。";
 "add_custom_category" = "添加自定义类别";
 "rendering_attr_showFitnessTrails_name" = "健身步道";
 "rendering_attr_showFitnessTrails_description" = "显示健身步道";
@@ -1846,9 +1833,7 @@
 "rendering_attr_piste_type_snow_park_name" = "地形公园";
 "routing_attr_hazmat_category_name" = "危险品类别";
 "osm_live_payment_current_subscription" = "当前订阅";
-"checking_for_duplicate_description" = "OsmAand将检查%@是否与应用程序中的现有项目重复。
-\n
-\n这可能需要一些时间。";
+"checking_for_duplicate_description" = "OsmAand将检查%@是否与应用程序中的现有项目重复。\n\n这可能需要一些时间。";
 "not_enough_contributions_descr" = "需要在过去两个月期间至少进行 %@ 次更改 %@ 才能获得无限制的每小时地图更新。";
 "download_all" = "下载全部";
 "benefits_for_contributors_primary_descr" = "如果你是 OpenStreetMap.org 的积极贡献者，你可能有权获得无限次的每小时地图更新。";
@@ -1893,8 +1878,7 @@
 "backup_data" = "备份数据";
 "transport_hazmat_no_desc" = "道路和隧道可能会限制危险材料的运输。";
 "sort_by" = "排序方式";
-"osmand_cloud_create_account_descr" = "请输入您的电子邮件地址，我们会发送一个验证码到这个地址，
-\n你所有的数据都将与其相链接。";
+"osmand_cloud_create_account_descr" = "请输入您的电子邮件地址，我们会发送一个验证码到这个地址，\n你所有的数据都将与其相链接。";
 "create_custom_categories_list_promo" = "更改列表顺序并隐藏类别。将所有更改导入或导出为配置文件。";
 "gpx_upload_identifiable_visibility_descr" = "\"可识别 \"意味着该轨迹将公开显示在您的GPS轨迹和公共GPS轨迹列表中，即其他用户将能够下载原始轨迹，并与您的用户名相关联。通过trackpoints API服务的GPS API中公开的有时间戳的跟踪点数据将引用您的原始跟踪页面。";
 "contour_lines_hillshade_maps" = "等高线和山体阴影地图";
@@ -1938,13 +1922,9 @@
 "weather_temperature_fahrenheit" = "华氏";
 "backup_danger_zone" = "危险区域";
 "routing_attr_piste_type_nordic_name" = "越野滑雪和北欧滑雪";
-"backup_delete_all_data_warning" = "你将删除之前上传至 OsmAnd 云的所有数据，包括版本历史记录。
-\n
-\n你将无法恢复已删除的数据。";
+"backup_delete_all_data_warning" = "你将删除之前上传至 OsmAnd 云的所有数据，包括版本历史记录。\n\n你将无法恢复已删除的数据。";
 "shared_string_refresh" = "刷新";
-"simulation_real_mode_desc" = "在笔直的路段，速度将近似于允许的最大速度。
-\n在十字路口，模拟将放慢速度。
-\n在交通信号灯、停车标志等处将会有额外的惩罚措施。";
+"simulation_real_mode_desc" = "在笔直的路段，速度将近似于允许的最大速度。\n在十字路口，模拟将放慢速度。\n在交通信号灯、停车标志等处将会有额外的惩罚措施。";
 "purchases_feature_desc_cross_buy" = "在不同的平台（Android/iOS/Web）上使用您的订阅功能，无需额外费用。";
 "backup_restore_data" = "恢复数据";
 "shared_string_added" = "已添加";
@@ -1954,9 +1934,7 @@
 "move_point" = "移动点";
 "compass_always_visible" = "始终可见";
 "use_login_and_password" = "使用用户名和密码";
-"backup_delete_old_data_warning" = "您将删除先前加载的数据的更改历史。
-\n
-\n当前版本的数据将保存在服务器上，但您将无法恢复到以前所做的更改。";
+"backup_delete_old_data_warning" = "您将删除先前加载的数据的更改历史。\n\n当前版本的数据将保存在服务器上，但您将无法恢复到以前所做的更改。";
 "renew_subscription" = "续订";
 "shared_string_status" = "状态";
 "backup_delete_all_data" = "删除我的所有数据";
@@ -2019,8 +1997,7 @@
 "tracks_on_map" = "已显示轨迹";
 "quick_action_showhide_mapillary_descr" = "在地图上显示或隐藏Mapillary图层的开关。";
 "shared_string_layers" = "图层";
-"logout_from_osmand_cloud_decsr" = "退出登录？
-\n您需要再次登录才能备份或恢复数据。";
+"logout_from_osmand_cloud_decsr" = "退出登录？\n您需要再次登录才能备份或恢复数据。";
 "routing_attr_motor_type_hybrid_name" = "混动";
 "weather_temperature_celsius" = "摄氏";
 "backup_into_file" = "备份为文件";
@@ -2133,20 +2110,13 @@
 "local_openstreetmap_uploading" = "正在上传…";
 "quick_action_map_style_action" = "添加地图样式";
 "osm_edit_reopened_note" = "重新打开 OSM 注记";
-"osm_editing_plugin_description" = "向由全球社区所维护的综合性地图 OpenStreetMap 做出贡献，并为每个用户提供最新的开源数据。
-\n
-\n您可以在我们的网站上找到有关如何编辑地图的说明 %@。";
+"osm_editing_plugin_description" = "向由全球社区所维护的综合性地图 OpenStreetMap 做出贡献，并为每个用户提供最新的开源数据。\n\n您可以在我们的网站上找到有关如何编辑地图的说明 %@。";
 "add_point_after" = "在之后添加点";
 "mgrs_format_descr" = "OsmAnd使用MGRS，类似于UTM NATO格式。";
 "download_wikipedia_data" = "下载维基百科数据";
 "route_add_start_point" = "添加出发地";
 "km" = "千米";
-"weather_plugin_description" = "提供
-\n- 24小时 x 7天 的天气预报，包括5个图层
-\n- 基于位置的小工具
-\n- 等温线/等压线
-\n
-\n天气数据由全球预测系统（GFS，%@）提供。";
+"weather_plugin_description" = "提供\n- 24小时 x 7天 的天气预报，包括5个图层\n- 基于位置的小工具\n- 等温线/等压线\n\n天气数据由全球预测系统（GFS，%@）提供。";
 "kg" = "千克";
 "m" = "米";
 "speed_camera_pois" = "测速摄像兴趣点";
@@ -2158,13 +2128,7 @@
 "lang_sat" = "桑塔利语（Satār）";
 "shared_string_height" = "高度";
 "lang_zh-Hant" = "繁体中文";
-"speed_cameras_legal_descr" = "在某些国家或地区，使用测速摄像头提示应用是非法的。
-\n
-\n你需要根据你所在的国家的法律作出选择。
-\n
-\n选择 %@ 你会收到测速摄像头的提示和警告。
-\n
-\n选择 %@，以下关于测速摄像头的数据会被删除直到彻底重新安装OsmAnd:警告、消息、提示、兴趣点。";
+"speed_cameras_legal_descr" = "在某些国家或地区，使用测速摄像头提示应用是非法的。\n\n你需要根据你所在的国家的法律作出选择。\n\n选择 %@ 你会收到测速摄像头的提示和警告。\n\n选择 %@，以下关于测速摄像头的数据会被删除直到彻底重新安装OsmAnd:警告、消息、提示、兴趣点。";
 "rendering_attr_depthContourWidth_name" = "线宽度";
 "new_file" = "新文件";
 "sync_now" = "立即同步";
@@ -2223,7 +2187,6 @@
 "speak_route_recalculation" = "播报路线的重新计算";
 "shared_string_cache" = "缓存";
 "over_wifi_only" = "仅通过 Wi-Fi";
-
 "routing_attr_hazmat_category_usa_7_name" = "放射性物质";
 "rendering_value_caiScale_name" = "CAI";
 "rendering_value_sector2_name" = "分区 2";
@@ -2246,7 +2209,7 @@
 "routing_attr_hazmat_category_usa_5_name" = "氧化剂和有机过氧化物";
 "rendering_value_sector3_name" = "分区 3";
 "rendering_attr_showProposed_name" = "提议的对象";
-"routing_attr_hazmat_category_usa_6_name" = "有毒和传染性物质";;
+"routing_attr_hazmat_category_usa_6_name" = "有毒和传染性物质";
 "bluetooth_found_title" = "已找到：%d";
 "help_article_start_with_main_menu_name" = "主菜单";
 "help_article_map_legend_nautical_map_name" = "航海地图样式";
@@ -2293,9 +2256,7 @@
 "help_article_map_legend_ski_map_name" = "滑雪地图样式";
 "external_device_details_received_data" = "已接收数据";
 "delete_folder" = "删除文件夹";
-"osmand_cloud_deleting_account_descr" = "片刻后，您的所有数据和账户将从 OsmAnd Cloud 中删除。
-\n
-\n设备上的所有数据仍保持不变。";
+"osmand_cloud_deleting_account_descr" = "片刻后，您的所有数据和账户将从 OsmAnd Cloud 中删除。\n\n设备上的所有数据仍保持不变。";
 "distance_to_destination_widget_desc" = "该小工具会显示到最终目的地点的剩余距离。";
 "average_speed_time_interval_desc" = "指定速度平均的时间间隔。";
 "announcement_time_descr" = "不同语音提示的公告时间取决于提示类型、当前导航速度和默认导航速度。";
@@ -2354,10 +2315,7 @@
 "trip_recording_duration_widget_desc" = "显示当前记录的行程时间。";
 "longest_distance_first" = "最长距离优先";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
-"ant_plus_nothing_found_description" = "确保
-\n- 蓝牙已打开
-\n- 传感器已启动
-\n- 此设备位于传感器附近";
+"ant_plus_nothing_found_description" = "确保\n- 蓝牙已打开\n- 传感器已启动\n- 此设备位于传感器附近";
 "map_widget_sunrise_sunset_time_left" = "剩余时间";
 "image_cache" = "图片缓存";
 "help_article_widgets_name" = "地图小工具";
@@ -2558,9 +2516,7 @@
 "trip_recording_downhill_widget_desc" = "显示当前记录的行程中所有下降高度的总和。";
 "shared_string_format" = "格式";
 "shared_string_nearest" = "接近";
-"verify_account_deletion_descr" = "删除之前，我们需要验证您的帐户。
-\n
-\n请输入您注册时使用的电子邮件地址。我们将向其发送下一步操作的一次性密码。";
+"verify_account_deletion_descr" = "删除之前，我们需要验证您的帐户。\n\n请输入您注册时使用的电子邮件地址。我们将向其发送下一步操作的一次性密码。";
 "map_widget_trip_recording_duration" = "持续时间";
 "av_notes_video_widget_desc" = "点击小部件可以让你录制一个视频。";
 "detailed_log_file" = "详细日志文档";

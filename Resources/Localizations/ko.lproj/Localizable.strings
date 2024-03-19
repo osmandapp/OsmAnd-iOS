@@ -1159,9 +1159,7 @@
 "import_duplicates_title" = "일부 항목이 이미 존재함";
 "create_profile" = "프로필 만들기";
 "export_failed" = "프로파일을 내보낼 수 없음";
-"import_duplicates_description" = "OsmAnd에는 이미 가져온 요소와 동일한 이름의 요소가 있습니다.
-\n
-\n작업을 선택합니다.";
+"import_duplicates_description" = "OsmAnd에는 이미 가져온 요소와 동일한 이름의 요소가 있습니다.\n\n작업을 선택합니다.";
 "replace_all" = "모두 바꾸기";
 "intro_download" = "다운로드\n지도";
 "select_manually" = "수동으로 선택";
@@ -1269,8 +1267,7 @@
 "are_you_sure" = "확실한가요?";
 "routing_attr_hazmat_category_name" = "유해 물질 카테고리";
 "make_backup_descr" = "이 장치에는 많은 변경 사항이 있으므로 손실되지 않도록이 데이터를 백업하십시오.";
-"osmand_cloud_create_account_descr" = "이메일 주소를 입력하면 인증 코드가 전송됩니다.
-\n모든 데이터가 연결됩니다.";
+"osmand_cloud_create_account_descr" = "이메일 주소를 입력하면 인증 코드가 전송됩니다.\n모든 데이터가 연결됩니다.";
 "routing_attr_motor_type_description" = "CO2배출량을 계산하기 위해 차량 모터에서 사용하는 연료 유형을 선택하십시오.";
 "animate_my_location" = "자신의 위치에 애니메이션을 사용";
 "ui_customization" = "UI사용자 지정";
@@ -1423,9 +1420,7 @@
 "osm_editing_plugin_description" = "\"이 플러그인을 통해,  OSM POI 생성 및 수정,  OSM 버그 열기 및 주석달기, 기록된  GPX 파일 기부처럼 OSM에 기여를 할 수 있도록  OsmAnd을 사용할 수 있습니다. 이 기능을 사용하려면 ,개인 OSM 자격 증명이 필요합니다.\"";
 "rendering_attr_weatherTempContours_name" = "온도 아이소라인";
 "local_openstreetmap_uploading" = "업로드 중…";
-"plugin_ski_descr" = "지도 스타일을 \' 겨울 스키\'로 변경하려면 뷰(View)를 활성화 합니다, 겨울 조건 하에서 모든 풍경을 보여줍니다.
-		\n\n(모든 스키 슬로프와 크로스 컨트리 스키 경로를 볼 수 있는)  글로벌 지도는 \'세계 스키 지도\'를 다운로드하여  사용할 수 있습니다.
-		\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
+"plugin_ski_descr" = "지도 스타일을 \' 겨울 스키\'로 변경하려면 뷰(View)를 활성화 합니다, 겨울 조건 하에서 모든 풍경을 보여줍니다.\n\n(모든 스키 슬로프와 크로스 컨트리 스키 경로를 볼 수 있는)  글로벌 지도는 \'세계 스키 지도\'를 다운로드하여  사용할 수 있습니다.\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
 "plugin_ski_name" = "스키 지도 보기";
 "osm_editing_plugin_name" = "OSM편집";
 "osmand_parking_plugin_name" = "주차 위치";
@@ -1433,15 +1428,10 @@
 "kg" = "킬로그램";
 "km" = "km";
 "plugin_nautical_name" = "항해 지도 보기";
-"record_plugin_description" = "\"이 플러그인은 지도 화면에서 GPX 기록 위젯을 터치하여 수동으로 경로를 기록하고 저장하기 위해 , 또는 GPX 파일에 운행 경로의 모든 것을 자동으로 기록하기 위해, 기능을 활성화합니다.
-\n↵\n↵\n기록된 트랙을 친구와 공유 할수 있습니다 또는 OSM 지도에 업로드할 수 있습니다. 운동 선수들은 자신의 훈련을 모니터 하기 위해 기록된 트랙을 사용할 수 있습니다. 몇 가지 기본 트랙 분석은 랩 시간, 평균 속도처럼, OsmAnd에서 직접 수행 할 수 있으며, 트랙을 나중에 특별한 서드파티 분석 도구를 사용하여 분석 할 수 있습니다. \"";
+"record_plugin_description" = "\"이 플러그인은 지도 화면에서 GPX 기록 위젯을 터치하여 수동으로 경로를 기록하고 저장하기 위해 , 또는 GPX 파일에 운행 경로의 모든 것을 자동으로 기록하기 위해, 기능을 활성화합니다.\n↵\n↵\n기록된 트랙을 친구와 공유 할수 있습니다 또는 OSM 지도에 업로드할 수 있습니다. 운동 선수들은 자신의 훈련을 모니터 하기 위해 기록된 트랙을 사용할 수 있습니다. 몇 가지 기본 트랙 분석은 랩 시간, 평균 속도처럼, OsmAnd에서 직접 수행 할 수 있으며, 트랙을 나중에 특별한 서드파티 분석 도구를 사용하여 분석 할 수 있습니다. \"";
 "m" = "m";
-"srtm_plugin_description" = "\"오프라인 등고선 과 음영을 다운로드하기 위해 외부플러그인을 이용합니다 (설정→지도 관리→다운로드→ 원하는 지도 유형 선택). OsmAnd 오프라인 지도에서 조합하여 표시할 수 있습니다.
-\n↵\n↵\n이 플러그인은 등고선 오버레이와 음영레이어 모두 제공합니다. OsmAnd 오프라인 지도의 상단에 표시 할 수 있습니다. 이 기능은  운동선수, 하이커, 트레커등 음영에 관심이 있는 사람들이 즐겨 사용할 것이다.
-\n↵\n↵\n(70도 북쪽과 남쪽 70도 사이의) 글로벌데이터는  SRTM (Shuttle Radar Topography Mission:셔틀 레이더 지형 미션)과 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer:고급 우주선 열 방출 및 반사 복사계)에 의한 측정을 기반으로 합니다, 테라 온보드 영상 측정, NASA의 지구 관찰 시스템의 주력 위성 . ASTER는 NASA, 일본 경제 산업성(METI), 일본 우주 시스템 (J-spacesystems) 사이의 협력적인 노력의 결과입니다. \"";
-"plugin_nautical_descr" = "지도 스타일을 항해 지도로 변경하려면 보기(View)를 활성화 합니다, 그러면 모든 해상 운행 마크와 차트 심볼을 볼 수 있습니다.
-		\n\n세계적으로 모든 항해 기호를 포함 하는 지도 파일은  \'세계 seamarks\' 라는 하나의 파일을 다운로드하여 이용할 수 있습니다.
-		\n\n다시 비활성화 하거나, 또는 \'지도 구성\' 의 하위메뉴인  \'지도 스타일\'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
+"srtm_plugin_description" = "\"오프라인 등고선 과 음영을 다운로드하기 위해 외부플러그인을 이용합니다 (설정→지도 관리→다운로드→ 원하는 지도 유형 선택). OsmAnd 오프라인 지도에서 조합하여 표시할 수 있습니다.\n↵\n↵\n이 플러그인은 등고선 오버레이와 음영레이어 모두 제공합니다. OsmAnd 오프라인 지도의 상단에 표시 할 수 있습니다. 이 기능은  운동선수, 하이커, 트레커등 음영에 관심이 있는 사람들이 즐겨 사용할 것이다.\n↵\n↵\n(70도 북쪽과 남쪽 70도 사이의) 글로벌데이터는  SRTM (Shuttle Radar Topography Mission:셔틀 레이더 지형 미션)과 ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer:고급 우주선 열 방출 및 반사 복사계)에 의한 측정을 기반으로 합니다, 테라 온보드 영상 측정, NASA의 지구 관찰 시스템의 주력 위성 . ASTER는 NASA, 일본 경제 산업성(METI), 일본 우주 시스템 (J-spacesystems) 사이의 협력적인 노력의 결과입니다. \"";
+"plugin_nautical_descr" = "지도 스타일을 항해 지도로 변경하려면 보기(View)를 활성화 합니다, 그러면 모든 해상 운행 마크와 차트 심볼을 볼 수 있습니다.\n\n세계적으로 모든 항해 기호를 포함 하는 지도 파일은  '세계 seamarks' 라는 하나의 파일을 다운로드하여 이용할 수 있습니다.\n\n다시 비활성화 하거나, 또는 '지도 구성' 의 하위메뉴인  '지도 스타일'을 변경하여 보기(View)를 되돌릴 수 있습니다.";
 "lang_zh-Hant" = "중국어 번체";
 "speed_cameras_alert" = "일부 국가에서는 과속 단속 카메라 경고가 법으로 금지되어 있습니다.";
 "uninstall_speed_cameras" = "스피드 카메라 제거";
@@ -1507,9 +1497,7 @@
 "save_track_to_gpx_descrp" = "탐색하는 동안 트랙 녹음을 자동으로 시작하고 나중에 자동 저장합니다.";
 "whole_track" = "전체 트랙";
 "next_segment" = "다음 세그먼트";
-"simulation_real_mode_desc" = "똑바른 도로 단면도에, 속도는 최대 허용한 속도에 대략적일 것입니다.
-\n교차로에서 시뮬레이션이 느리게됩니다.
-\n여분 penalties는 교통 신호, 정지 표시, 등에 적용될 것입니다.";
+"simulation_real_mode_desc" = "똑바른 도로 단면도에, 속도는 최대 허용한 속도에 대략적일 것입니다.\n교차로에서 시뮬레이션이 느리게됩니다.\n여분 penalties는 교통 신호, 정지 표시, 등에 적용될 것입니다.";
 "recalc_angle_dialog_descr" = "내 위치와 계산 된 경로 사이의 여분 직선 세그먼트는 경로가 재 계산 될 때까지 표시됩니다";
 "recalc_angle_dialog_title" = "내 위치와 경로 사이의 최소 각도";
 "help_article_navigation_setup_route_details_name" = "경로 세부 정보";
@@ -1649,21 +1637,10 @@
 "plugin_popup_nautical_ask" = "Nautical 플러그인을 활성화하십시오";
 "plugin_popup_osm_editing_title" = "OpenStreetMap Editing 켜기";
 "plugin_popup_weather_title" = "날씨 켜기";
-"weather_plugin_description" = "제공
-\n- 5개의 레이어로 구성된 24시간 및 7일 일기 예보
-\n- 위치 기반 위젯
-\n- 온도/압력 등치선
-\n
-\n날씨 데이터는 Global Forecast System(GFS, %@)에서 제공합니다.";
+"weather_plugin_description" = "제공\n- 5개의 레이어로 구성된 24시간 및 7일 일기 예보\n- 위치 기반 위젯\n- 온도/압력 등치선\n\n날씨 데이터는 Global Forecast System(GFS, %@)에서 제공합니다.";
 "ios_release_4_5" = "• 완전히 새롭게 디자인된 위젯 경험: 위젯 위치 변경 기능 추가, 페이지별 그룹화 추가, 왼쪽 및 오른쪽 패널\n을 위한 위젯 목록 추가• 새롭게 디자인된 구성 화면\n• 즐겨찾기, 설정, 오픈스트리트맵 편집 내용을 OsmAnd Cloud\n에 무료로 백업• \"경로 난이도 분류\"를 위한 \"CAI\" 척도 추가• \"\n등고선 플러그인\"이 \"지형\"으로 이름이 변경됨, 새로운 지형 지도 형식\n에 대한 지원 추가• 3D 릴리프\n추가• OpenStreetMap 편집 플러그인\n에 대한 OAuth 인증 추가• 2D 또는 3D 모드\n간 전환을 위한 별도의 버튼 추가• 틸트 제스처\n방향 변경• 데이터 손실로 이어질 수 있는 즐겨찾기 내보내기 문제 수정\n";
 "osm_live_payment_subscription_management_aid" = "결제는 구매 확인 시 Apple ID 계정으로 청구됩니다.\n\n구독은 현재 기간이 끝나기 최소 24시간 전에 취소하지 않는 한 자동으로 갱신됩니다. 현재 기간이 끝나기 24시간 이내에 귀하의 계정에 갱신 비용이 청구됩니다.\n\n구매 후 App Store의 계정 설정으로 이동하여 구독을 관리하고 취소할 수 있습니다";
-"speed_cameras_legal_descr" = "일부 국가에서 또는 지역, 속도 카메라 경고 앱의 사용은 법에 의해 금지됩니다.
-\n
-\n국가의 법에 따라 선택을해야합니다.
-\n
-\n%@를 선택하고 속도 카메라에 대한 경고와 경고를 받게됩니다.
-\n
-\n%@를 선택하십시오. 속도 카메라와 관련된 모든 데이터 : 경고, 알림, POIs는 OsmAnd가 완전히 재설치 될 때까지 삭제됩니다.";
+"speed_cameras_legal_descr" = "일부 국가에서 또는 지역, 속도 카메라 경고 앱의 사용은 법에 의해 금지됩니다.\n\n국가의 법에 따라 선택을해야합니다.\n\n%@를 선택하고 속도 카메라에 대한 경고와 경고를 받게됩니다.\n\n%@를 선택하십시오. 속도 카메라와 관련된 모든 데이터 : 경고, 알림, POIs는 OsmAnd가 완전히 재설치 될 때까지 삭제됩니다.";
 "weather_pressure_hectopascals" = "헥토파스칼";
 "route_parameters" = "경로 매개변수";
 "transfers" = "전송";
@@ -1780,17 +1757,12 @@
 "external_device_characteristic_total_distance" = "총 거리";
 "backup_error_subscription_was_expired" = "만료된 구독";
 "purchases_feature_desc_wikivoyage" = "Wikivoyage를 오프라인으로 탐색하십시오. 국가 및 지역으로 구분된 기사 및 모든 언어에서 사용할 수 있습니다.";
-"logout_from_osmand_cloud_decsr" = "로그아웃
-\n백업 또는 복원 데이터에 다시 로그인해야합니다.";
+"logout_from_osmand_cloud_decsr" = "로그아웃\n백업 또는 복원 데이터에 다시 로그인해야합니다.";
 "backup_error_no_valid_subscription" = "유효한 구독이 없습니다";
 "backup_error_file_not_available" = "파일 unavailable";
 "backup_error_gzip_only_supported_upload" = "파일은 .gzip 형식으로 전송되어야한다";
-"backup_delete_old_data_warning" = "이전 로드된 데이터에 대한 변경 내역을 삭제하는 것에 관한 것입니다.
-\n
-\n데이터의 현재 버전은 서버에서 저장되지만 이전에 생성 된 변경 사항에 반대 할 수 없습니다.";
-"backup_delete_all_data_warning" = "이전에 OsmAnd Cloud에 업로드된 모든 데이터를 삭제하는 방법에 대해 설명합니다.
-\n
-\n삭제 된 데이터를 복구 할 수 없습니다.";
+"backup_delete_old_data_warning" = "이전 로드된 데이터에 대한 변경 내역을 삭제하는 것에 관한 것입니다.\n\n데이터의 현재 버전은 서버에서 저장되지만 이전에 생성 된 변경 사항에 반대 할 수 없습니다.";
+"backup_delete_all_data_warning" = "이전에 OsmAnd Cloud에 업로드된 모든 데이터를 삭제하는 방법에 대해 설명합니다.\n\n삭제 된 데이터를 복구 할 수 없습니다.";
 "speed_mode" = "속도 모드";
 "external_device_forget_sensor" = "센서 잊어버리기";
 "external_device_forget_sensor_description" = "센서는 목록에서 제거됩니다. 언제든지이 센서를 다시 페어링 할 수 있습니다.";
@@ -2407,7 +2379,6 @@
 "rendering_value_thick_name" = "두껍게";
 "speak_route_recalculation" = "경로 재탐색 안내";
 "speak_gps_signal_status" = "GPS신호 손실 및 복구 안내";
-
 "rendering_value_sector5_name" = "부문 5";
 "rendering_value_sector4_name" = "분야 4";
 "rendering_value_sectors_name" = "섹터";
@@ -2439,7 +2410,7 @@
 "routing_attr_hazmat_category_usa_1_name" = "폭";
 "rendering_value_access_name" = "접속 유형";
 "rendering_value_small_name" = "소형";
-"routing_attr_hazmat_category_usa_6_name" = "독성 및 전염성 물질";;
+"routing_attr_hazmat_category_usa_6_name" = "독성 및 전염성 물질";
 "determine_location" = "위치를 결정하도록 허용해주세요";
 "purchases_feature_relief_3d_description" = "이웃 또는 대륙 전체의 축척 모델을 소유하고 관찰하십시오.";
 "verify_account" = "계정 확인";
@@ -2472,9 +2443,7 @@
 "settings_item_read_error" = "\'%@\'에서 읽을 수 없습니다.";
 "map_widget_glide_average_desc" = "설정된 간격에 대한 평균 활주 비율을 표시합니다.";
 "external_sensors_plugin_name" = "외부 센서";
-"verify_account_deletion_descr" = "삭제하기 전에 계정을 확인해야 합니다.
-\n
-\n등록하신 이메일 주소를 입력해주세요. 다음 단계를 위한 일회용 비밀번호가 전송됩니다.";
+"verify_account_deletion_descr" = "삭제하기 전에 계정을 확인해야 합니다.\n\n등록하신 이메일 주소를 입력해주세요. 다음 단계를 위한 일회용 비밀번호가 전송됩니다.";
 "my_places_no_tracks_title" = "빈 폴더";
 "by_transport_type" = "으로 %@";
 "apply_to_existing_favorites_descr" = "그룹의 기존 즐겨 찾기 포인트에 변경 사항을 적용하거나 새 포인트에만 변경 사항을 적용합니까\?";
@@ -2514,10 +2483,7 @@
 "recently_visible" = "최근에 표시됨 %@";
 "activity_type_snowmobile_name" = "스노모빌";
 "map_orientation_landscape" = "가로";
-"ant_plus_nothing_found_description" = "확실하게 하다:
-\n– 블루투스가 켜져 있습니다.
-\n– 센서가 활성화됨
-\n– 이 장치는 센서 근처에 있습니다.";
+"ant_plus_nothing_found_description" = "확실하게 하다:\n– 블루투스가 켜져 있습니다.\n– 센서가 활성화됨\n– 이 장치는 센서 근처에 있습니다.";
 "shared_string_bookmark" = "북마크";
 "shorter_duration_first" = "짧은 기간 먼저";
 "search_history" = "검색 기록";
@@ -2553,9 +2519,7 @@
 "quick_action_current_location_widget_descr" = "지도에 현재 위치 위젯을 표시하거나 숨기려면 toggle.";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "skip_download" = "다음에 다운로드";
-"osmand_cloud_deleting_account_descr" = "잠시 후 모든 데이터와 계정이 OsmAnd Cloud에서 삭제됩니다.
-\n
-\n장치의 모든 데이터는 그대로 유지됩니다.";
+"osmand_cloud_deleting_account_descr" = "잠시 후 모든 데이터와 계정이 OsmAnd Cloud에서 삭제됩니다.\n\n장치의 모든 데이터는 그대로 유지됩니다.";
 "longest_distance_first" = "최장 거리 먼저";
 "default_appearance_desc" = "기본 색상, 아이콘 및 모양은 그룹에 추가된 즐겨찾기 포인트에 적용됩니다.";
 "activity" = "액티비티";
@@ -2595,9 +2559,7 @@
 "map_widget_ant_bicycle_speed" = "자전거 속도";
 "click_on_widget" = "위젯 클릭";
 "import_create_track_files" = "OsmAnd를 사용하여 트랙 파일을 가져오거나, 만들거나, 녹음할 수 있습니다.";
-"checking_for_duplicate_description" = "OsmAnd체크 %@ 앱의 기존 항목과 중복.
-\n
-\n몇 번 걸릴 수 있습니다.";
+"checking_for_duplicate_description" = "OsmAnd체크 %@ 앱의 기존 항목과 중복.\n\n몇 번 걸릴 수 있습니다.";
 "reset_all_settings_desc" = "모든 설정을 기본값으로 재설정하시겠습니까\?";
 "shared_string_deleting" = "삭제하기";
 "activity_type_motorbike_name" = "오토바이";

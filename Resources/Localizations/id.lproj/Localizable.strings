@@ -3099,3 +3099,4 @@
 "average_glide_time_interval_desc" = "Tentukan interval waktu untuk kecepatan rata-rata.";
 "help_article_start_with_main_menu_name" = "Menu utama";
 "osmand_cloud_delete_account_confirmation" = "Hapus akun\?";
+"distance_during_navigation" = "Jarak selama navigasi";

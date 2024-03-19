@@ -147,6 +147,7 @@
     gpx.width = _appearanceInfo.width;
     gpx.showArrows = _appearanceInfo.showArrows;
     gpx.showStartFinish = _appearanceInfo.showStartFinish;
+    gpx.raiseRoutesAboveRelief = _appearanceInfo.raiseRoutesAboveRelief;
     gpx.splitType = _appearanceInfo.splitType;
     gpx.splitInterval = _appearanceInfo.splitInterval;
     [gpxDb save];

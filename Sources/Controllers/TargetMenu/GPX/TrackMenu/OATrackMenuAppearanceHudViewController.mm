@@ -48,6 +48,7 @@
 
 @property (nonatomic) NSInteger color;
 @property (nonatomic) BOOL showStartFinish;
+@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
 @property (nonatomic) BOOL joinSegments;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) NSString *width;
@@ -172,6 +173,7 @@
     _backupGpxItem = [[OABackupGpx alloc] init];
     _backupGpxItem.showArrows = self.gpx.showArrows;
     _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
+    _backupGpxItem.raiseRoutesAboveRelief = self.gpx.raiseRoutesAboveRelief;
     _backupGpxItem.coloringType = self.gpx.coloringType;
     _backupGpxItem.color = self.gpx.color;
     _backupGpxItem.width = self.gpx.width;
@@ -187,6 +189,7 @@
             OABackupGpx *backupItem = [[OABackupGpx alloc] init];
             backupItem.showArrows = track.showArrows;
             backupItem.showStartFinish = track.showStartFinish;
+            backupItem.raiseRoutesAboveRelief = track.raiseRoutesAboveRelief;
             backupItem.coloringType = track.coloringType;
             backupItem.color = track.color;
             backupItem.width = track.width;
@@ -202,6 +205,8 @@
 {
     self.gpx.showArrows = _backupGpxItem.showArrows;
     self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
+    self.gpx.raiseRoutesAboveRelief = _backupGpxItem.raiseRoutesAboveRelief;
+    
     self.gpx.coloringType = _backupGpxItem.coloringType;
     self.gpx.color = _backupGpxItem.color;
     self.gpx.width = _backupGpxItem.width;
@@ -214,6 +219,8 @@
         [self.settings.currentTrackWidth set:_backupGpxItem.width];
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
+        [self.settings.currentTrackRaiseRoutesAboveRelief set:_backupGpxItem.raiseRoutesAboveRelief];
+        
         [self.settings.currentTrackColoringType set:_backupGpxItem.coloringType.length > 0
                 ? [OAColoringType getNonNullTrackColoringTypeByName:_backupGpxItem.coloringType]
                 : OAColoringType.TRACK_SOLID];
@@ -422,8 +429,16 @@
             kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
+    
+    OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
+            kTableKey:@"visualization_3D",
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
+            kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
+    }];
 
-    [appearanceSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[directionCellData, startFinishCellData] }]];
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+        kTableSubjects: @[directionCellData, startFinishCellData, visualization3DCellData]
+    }]];
 
     NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
 
@@ -763,6 +778,8 @@
             [self.settings.currentTrackWidth set:self.gpx.width];
             [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
             [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
+            [self.settings.currentTrackRaiseRoutesAboveRelief set:self.gpx.raiseRoutesAboveRelief];
+            
             [self.settings.currentTrackColoringType set:self.gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
                     : OAColoringType.TRACK_SOLID];
@@ -1264,6 +1281,11 @@
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
         }
     }
+    else if ([tableData.key isEqualToString:@"visualization_3D"])
+    {
+        
+    }
+    // visualization3D
     else if ([tableData.key isEqualToString:@"join_gaps"])
     {
         self.gpx.joinSegments = toggle;
@@ -1634,12 +1656,17 @@
         {
             [self.settings.currentTrackWidth resetToDefault];
             [self.settings.currentTrackShowArrows resetToDefault];
+            [self.settings.currentTrackRaiseRoutesAboveRelief resetToDefault];
+            
             [self.settings.currentTrackShowStartFinish resetToDefault];
             [self.settings.currentTrackColoringType resetToDefault];
             [self.settings.currentTrackColor resetToDefault];
             
             [self.doc setWidth:[self.settings.currentTrackWidth get]];
             [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
+            #warning("raiseRoutesAboveRelief")
+           // [self.doc setShowArrows:[self.settings.currentTrackRaiseRoutesAboveRelief get]];
+            
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
             [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
             [self.doc setColor:[self.settings.currentTrackColor get]];

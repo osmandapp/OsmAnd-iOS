@@ -3666,3 +3666,7 @@
 "average_glide_ratio_time_interval_desc" = "Shows the average glide ratio or vertical speed for the set interval.";
 "average_glide_time_interval_desc" = "Specify the time interval for glide averaging.";
 "time_to_navigation_point_widget_settings_desc" = "Tap the widget to switch modes.";
+
+"track_appearance_3D_visualization" = "3D visualization";
+
+

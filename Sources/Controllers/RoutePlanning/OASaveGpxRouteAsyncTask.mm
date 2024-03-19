@@ -119,6 +119,7 @@
     {
         gpx.showArrows = oldGpx.showArrows;
         gpx.showStartFinish = oldGpx.showStartFinish;
+        gpx.raiseRoutesAboveRelief = oldGpx.raiseRoutesAboveRelief;
         gpx.color = oldGpx.color;
         gpx.coloringType = oldGpx.coloringType;
         gpx.width = oldGpx.width;

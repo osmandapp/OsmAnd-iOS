@@ -86,8 +86,7 @@
 "simulate_routing_descr" = "Simular la ubicación usando una ruta calculada";
 "select_avoid_descr" = "Marca los caminos a evitar durante la navegación. Puedes marcar una carretera en el mapa o elegir un tipo de la siguiente lista.";
 "no_active_route" = "Sin ruta activa";
-"day_night_info_description" = "Alba: %@
-\nOcaso: %@";
+"day_night_info_description" = "Alba: %@\nOcaso: %@";
 "day_night_info" = "Información diurna/nocturna";
 "daynight_mode_auto" = "Alba/ocaso";
 "route_simulation" = "Simulación de la ruta";
@@ -588,9 +587,7 @@
 "gpx_add_new" = "Añadir nuevo archivo";
 "gpx_overwrite" = "Sobrescribir";
 "gpx_cannot_import" = "No se pudo importar el archivo GPX indicado";
-"gpx_parse_error" = "Se encontraron problemas con un archivo GPX.
-\n
-\nContacta con la asistencia de OsmAnd para investigar.";
+"gpx_parse_error" = "Se encontraron problemas con un archivo GPX.\n\nContacta con la asistencia de OsmAnd para investigar.";
 "tracks_on_map" = "Trazas mostradas";
 "gpx_export_title" = "Exportar traza";
 "gpx_export_select_track" = "Elige la traza a exportar";
@@ -729,8 +726,7 @@
 "sett_arr" = "Flechas del mapa";
 "shared_string_location" = "Ubicación";
 "sett_arr_map" = "Centro del mapa";
-"short_location_on_map" = "Lat %@
-\nLon %@";
+"short_location_on_map" = "Lat %@\nLon %@";
 "navigate_point_format_D" = "GGG.GGGGG";
 "navigate_point_format_DM" = "GGG MM.MMM";
 "navigate_point_format_DMS" = "GGG MM SS.S";
@@ -900,9 +896,7 @@
 "custom_plugins" = "Complementos personalizados";
 "extra_maps_menu_group" = "Mapas adicionales";
 "import_duplicates_title" = "Algunos elementos ya existen";
-"import_duplicates_description" = "OsmAnd ya tiene elementos con los mismos nombres que los importados.
-\n
-\nElige una acción.";
+"import_duplicates_description" = "OsmAnd ya tiene elementos con los mismos nombres que los importados.\n\nElige una acción.";
 "keep_both" = "Mantener ambos";
 "keep_both_desc" = "Los elementos serán importados con un prefijo";
 "replace_all" = "Reemplazar todo";
@@ -974,9 +968,7 @@
 "reset_to_default" = "Restaurar a valores predefinidos";
 "reset_profile_action_descr" = "Restablecer todos los ajustes del perfil a los valores predefinidos de la instalación. Al pulsar en «Restablecer» serán descartados todos los cambios. Esta acción no se puede deshacer.";
 "checking_for_duplicates" = "Comprobando duplicados…";
-"checking_for_duplicate_description" = "OsmAnd comprueba %@ para ver si hay duplicados con los elementos existentes en la aplicación.
-\n
-\nPuede llevar algún tiempo.";
+"checking_for_duplicate_description" = "OsmAnd comprueba %@ para ver si hay duplicados con los elementos existentes en la aplicación.\n\nPuede llevar algún tiempo.";
 
 // Purchases
 "prch_addons" = "Complementos";
@@ -1550,9 +1542,7 @@
 //inapps
 "plugin_nautical_name" = "Vista náutica";
 "product_desc_nautical" = "Mapas vectoriales adecuados para la navegación náutica";
-"plugin_nautical_descr" = "Enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, áreas marinas peligrosas, zonas restringidas para navegar o atracar, etc. Para usarlo, descarga los respectivos mapas náuticos y activa el estilo «Mapa náutico» en «Configurar mapa».
-\n
-\nVéase - %@.";
+"plugin_nautical_descr" = "Enriquece el mapa con información sobre rutas náuticas, marcas de navegación náutica, áreas marinas peligrosas, zonas restringidas para navegar o atracar, etc. Para usarlo, descarga los respectivos mapas náuticos y activa el estilo «Mapa náutico» en «Configurar mapa».\n\nVéase - %@.";
 "osmand_parking_plugin_name" = "Estacionamiento";
 "product_desc_parking" = "Rastrea el tiempo de estacionamiento y la ubicación de su vehículo";
 "osmand_parking_plugin_description" = "Registra en dónde el vehículo fue estacionado y crea un recordatorio sobre la expiración del mismo. Para colocar el marcador, elige un lugar en el mapa, luego ve a «Acciones» y pulsa «Añadir estacionamiento».";
@@ -1561,14 +1551,10 @@
 "plugin_ski_descr" = "Diseñado para navegar en áreas deportivas de invierno. Vea las pistas de esquí, los remontes, etc. con líneas coloreadas que indican el nivel de complejidad. Para usarlo, activa este complemento, ve a «Configurar mapa» y elige el estilo de mapa «Invierno y esquí».";
 "record_plugin_name" = "Grabación de viaje";
 "product_desc_track_recording" = "Graba y guarda tus viajes como trazas GPX";
-"record_plugin_description" = "Registra tus viajes o entrenamientos y analiza los datos de velocidad, ascensos y descensos acumulados, el perfil de elevación, etc. Las trazas grabadas pueden archivarse, compartirse, editarse y post-procesarse.
-\n
-\nVéase - %@.";
+"record_plugin_description" = "Registra tus viajes o entrenamientos y analiza los datos de velocidad, ascensos y descensos acumulados, el perfil de elevación, etc. Las trazas grabadas pueden archivarse, compartirse, editarse y post-procesarse.\n\nVéase - %@.";
 "osm_editing_plugin_name" = "Edición de OpenStreetMap";
 "product_desc_osm_editing" = "Convierte tu dispositivo en una herramienta de mapeo";
-"osm_editing_plugin_description" = "Haz contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre, abierto e impulsado por la comunidad.
-\n
-\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - %@.";
+"osm_editing_plugin_description" = "Haz contribuciones en OpenStreetMap, un proyecto de mapeo de dominio público, global, libre, abierto e impulsado por la comunidad.\n\nEn nuestro sitio web, puedes encontrar una guía de como colaborar en el mapa - %@.";
 "product_desc_mapillary" = "Vistas a nivel de calle para conocer el entorno";
 "plugin_mapillary_descr" = "Imágenes de vistas a nivel de calle. También puedes contribuir tú mismo. Para ver los datos existentes como una capa en el mapa, activa las «Imágenes a nivel de calle» en el menú «Configurar mapa».";
 "product_desc_africa" = "Descargas ilimitadas de mapas para África";
@@ -1601,11 +1587,7 @@
 "preferred_languages" = "Idiomas preferidos";
 "srtm_plugin_name" = "Topografía";
 "product_desc_srtm" = "Evaluación visual de la forma de la superficie terrestre";
-"srtm_plugin_description" = "La información topográfica, como las curvas de nivel, el sombreado y las pendientes, ayudan a evaluar visualmente la disposición del terreno, el relieve, la navegabilidad y más. La información topográfica en un mapa puede representarse mediante las curvas de nivel, el sombreado del relieve y/o el color dela inclinación.
-\n
-\nLos datos subyacentes provienen de SRTM y ASTER.
-\n
-\nVéase - %@.";
+"srtm_plugin_description" = "La información topográfica, como las curvas de nivel, el sombreado y las pendientes, ayudan a evaluar visualmente la disposición del terreno, el relieve, la navegabilidad y más. La información topográfica en un mapa puede representarse mediante las curvas de nivel, el sombreado del relieve y/o el color dela inclinación.\n\nLos datos subyacentes provienen de SRTM y ASTER.\n\nVéase - %@.";
 "wikivoyage_travel_guide" = "Guías turísticas";
 "start_editing_card_image_text" = "La guía turística libre global que cualquiera puede editar.";
 "wikivoyage_travel_guide_descr" = "Las guías de los sitios más interesantes del planeta, dentro de OsmAnd y sin conexión a Internet.";
@@ -2321,12 +2303,7 @@
 "rendering_attr_showRunningRoutes_description" = "Mostrar rutas para correr";
 "rendering_attr_showFitnessTrails_description" = "Muestra los circuitos aeróbicos";
 "plugin_popup_weather_title" = "Ver meteorología";
-"weather_plugin_description" = "Este complemento incluye
-\n- pronóstico meteorológico de 24 horas y de 7 días, en 5 capas
-\n- widgets basados en la ubicación
-\n- isolíneas de temperatura / presión
-\n
-\nLos datos meteorológicos son provistos por el Global Forecast System (GFS, %@).";
+"weather_plugin_description" = "Este complemento incluye\n- pronóstico meteorológico de 24 horas y de 7 días, en 5 capas\n- widgets basados en la ubicación\n- isolíneas de temperatura / presión\n\nLos datos meteorológicos son provistos por el Global Forecast System (GFS, %@).";
 "measurement_units" = "Unidades de medida";
 "weather_temperature_celsius" = "Celsius";
 "weather_temperature_fahrenheit" = "Fahrenheit";
@@ -2343,8 +2320,7 @@
 "login_footer_email_part" = "support@osmand.net";
 "login_help_email_title" = "OsmAnd Cloud en iOS";
 "register_opr_create_new_account" = "Crear nueva cuenta";
-"osmand_cloud_create_account_descr" = "Ingresa tu correo electrónico, se enviará un código de verificación
-\ny todos los datos se vincularán a él.";
+"osmand_cloud_create_account_descr" = "Ingresa tu correo electrónico, se enviará un código de verificación\ny todos los datos se vincularán a él.";
 "verification" = "Verificación";
 "verify_email_address_descr" = "Código de verificación enviado a «%@». Añádelo en el siguiente campo.";
 "verification_code_placeholder" = "Código";
@@ -2422,9 +2398,7 @@
 "routeInfo_horse_scale_name" = "Dificultad de los senderos ecuestres";
 "routeInfo_horse_scale_description" = "Visualizar los caminos según la dificultad de los senderos ecuestres";
 "altitude_ascent" = "Ascenso";
-"simulation_real_mode_desc" = "En los tramos rectos, la velocidad será aproximada a la máxima permitida.
-\nEn las intersecciones, la simulación reducirá la velocidad.
-\nSe aplicarán penalizaciones adicionales en semáforos, señales de pare, etc.";
+"simulation_real_mode_desc" = "En los tramos rectos, la velocidad será aproximada a la máxima permitida.\nEn las intersecciones, la simulación reducirá la velocidad.\nSe aplicarán penalizaciones adicionales en semáforos, señales de pare, etc.";
 "simulation_constant_mode_title" = "Velocidad constante";
 "speed_mode" = "Modo de velocidad";
 "simulation_real_mode_title" = "Simulación realista";
@@ -2593,22 +2567,17 @@
 "shared_string_not_included" = "No incluido";
 "shared_string_logout" = "Cerrar sesión";
 "select_backup_data_descr" = "Marca los datos y carpetas para la copia de seguridad.";
-"logout_from_osmand_cloud_decsr" = "¿Cerrar la sesión\?
-\nTendrás que volver a iniciar sesión para hacer una copia de seguridad o restaurar los datos.";
+"logout_from_osmand_cloud_decsr" = "¿Cerrar la sesión\?\nTendrás que volver a iniciar sesión para hacer una copia de seguridad o restaurar los datos.";
 "backup_deleting_all_data" = "Borrando todos los datos…";
 "backup_delete_all_data_finished" = "Todos los datos han sido borrados con éxito de OsmAnd Cloud.";
 "delete_all_confirmation" = "Sí, borrar todo";
 "shared_string_progress" = "Progreso";
 "backup_data" = "Datos de la copia de seguridad";
 "backup_version_history" = "Historial de versiones";
-"backup_delete_old_data_warning" = "Se borrará el historial de cambios de los datos cargados previamente.
-\n
-\nLa versión actual de los datos se guardará en el servidor, pero no podrás volver a los cambios anteriores.";
+"backup_delete_old_data_warning" = "Se borrará el historial de cambios de los datos cargados previamente.\n\nLa versión actual de los datos se guardará en el servidor, pero no podrás volver a los cambios anteriores.";
 "are_you_sure" = "¿Estás seguro?";
 "backup_danger_zone" = "Zona peligrosa";
-"backup_delete_all_data_warning" = "Se borrarán todos los datos cargados previamente a OsmAnd Cloud, incluyendo el historial de versiones.
-\n
-\nNo se podrán recuperar los datos borrados.";
+"backup_delete_all_data_warning" = "Se borrarán todos los datos cargados previamente a OsmAnd Cloud, incluyendo el historial de versiones.\n\nNo se podrán recuperar los datos borrados.";
 "backup_delete_all_data_or_versions_descr" = "Borra todos los datos en OsmAnd Cloud o sólo el historial de versiones. Los datos locales permanecerán intactos.";
 "backup_delete_all_data" = "Borrar todos mis datos";
 "backup_delete_old_data" = "Quitar versiones antiguas";
@@ -2817,13 +2786,7 @@
 "m" = "m";
 "shared_string_legal" = "Legal";
 "lang_sat" = "Santalí";
-"speed_cameras_legal_descr" = "En algunos países o regiones, las alertas de los radares de velocidad se encuentran prohibidas por ley.
-\n
-\nDebes elegir dependiendo de las leyes del país.
-\n
-\nPulsa en «%@», para recibir alertas y advertencias sobre los radares de velocidad.
-\n
-\nPulsa en «%@», para borrar todos los datos relacionados con los radares de velocidad (alertas, notificaciones y PDI) hasta reinstalar OsmAnd completamente.";
+"speed_cameras_legal_descr" = "En algunos países o regiones, las alertas de los radares de velocidad se encuentran prohibidas por ley.\n\nDebes elegir dependiendo de las leyes del país.\n\nPulsa en «%@», para recibir alertas y advertencias sobre los radares de velocidad.\n\nPulsa en «%@», para borrar todos los datos relacionados con los radares de velocidad (alertas, notificaciones y PDI) hasta reinstalar OsmAnd completamente.";
 "speed_cameras_alert" = "Las alertas de los radares de velocidad se encuentran prohibidas por ley en algunos países.";
 "speed_camera_pois" = "PDI de los radares de velocidad";
 "shared_string_height" = "Altura";
@@ -3194,10 +3157,7 @@
 "shared_string_wrist" = "Muñeca";
 "ant_plus_searching_text_description" = "Acerca el dispositivo al sensor. Debes activar el sensor para que OsmAnd pueda encontrarlo.";
 "shared_string_chest" = "Pecho";
-"ant_plus_nothing_found_description" = "Asegúrate de que
-\n- El Bluetooth esté activado
-\n- El sensor esté activado
-\n- Este dispositivo se encuentre cerca del sensor";
+"ant_plus_nothing_found_description" = "Asegúrate de que\n- El Bluetooth esté activado\n- El sensor esté activado\n- Este dispositivo se encuentre cerca del sensor";
 "bicycle_scd_device_name" = "Dispositivo para«Bicicleta»";
 "shared_string_temperature" = "Temperatura";
 "external_device_unpair_description" = "Conecta el sensor al dispositivo para obtener información.";
@@ -3370,9 +3330,7 @@
 "shared_string_format" = "Formato";
 "manage_subscriptions" = "Gestionar suscripciones.";
 "verify_account" = "Comprobar cuenta";
-"verify_account_deletion_descr" = "Debemos comprobar tu cuenta antes de borrarla.
-\n
-\nIngresa el correo electrónico con el cual fue registrado. Se te enviará la contraseña de un solo uso para el siguiente paso.";
+"verify_account_deletion_descr" = "Debemos comprobar tu cuenta antes de borrarla.\n\nIngresa el correo electrónico con el cual fue registrado. Se te enviará la contraseña de un solo uso para el siguiente paso.";
 "osmand_cloud_delete_account_descr" = "¿Borrar la cuenta de OsmAnd Cloud?";
 "osmand_cloud_deletion_account_warning" = "Esta cuenta y todos sus datos serán %@.";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar cuenta\?";
@@ -3381,9 +3339,7 @@
 "osmand_cloud_deletion_all_data_warning" = "Todos los datos de OsmAnd Cloud serán %@. Los datos en el dispositivo se mantienen intactos.";
 "deleting_complete" = "Borrado completo";
 "osmand_cloud_deletion_secondary_devices_warning" = "Los dispositivos secundarios serán desvinculados de OsmAnd Cloud y se perderá acceso a las funciones de pago.";
-"osmand_cloud_deleting_account_descr" = "En un momento será borrada tu cuenta con todos los datos de OsmAnd Cloud.
-\n
-\nTodos los datos en el dispositivo permanecen intactos.";
+"osmand_cloud_deleting_account_descr" = "En un momento será borrada tu cuenta con todos los datos de OsmAnd Cloud.\n\nTodos los datos en el dispositivo permanecen intactos.";
 "osmand_cloud_deleted_account_descr" = "Se ha borrado la cuenta con todos los datos de OsmAnd Cloud.";
 "shared_string_deleting" = "Borrando";
 "shared_string_deleting_complete" = "Borrado completo";
@@ -3405,7 +3361,6 @@
 "average_glide_time_interval_desc" = "Indica el intervalo de tiempo para el planeo promedio.";
 "skip_download" = "Omitir descarga";
 "map_widget_group_glide_desc" = "Los widgets muestran la relación de planeo hacia el objetivo o la relación de planeo promedio para el viaje actual.";
-
 "rendering_value_sector5_name" = "Sector 5";
 "rendering_value_name_only_name" = "Sólo nombre";
 "routing_attr_hazmat_category_usa_7_name" = "Sustancias radioactivas";
@@ -3436,4 +3391,4 @@
 "routing_attr_hazmat_category_usa_9_name" = "Varios";
 "rendering_value_sectors_name" = "Sectores";
 "routing_attr_allow_via_ferrata_description" = "Una ruta de montaña equipada con cables fijos, anclajes, peldaños, escaleras y puentes.";
-"rendering_value_sector3_name" = "Sector 3";;
+"rendering_value_sector3_name" = "Sector 3";

@@ -3440,3 +3440,8 @@
 "routing_attr_hazmat_category_usa_1_name" = "Sprengstoffe";
 "rendering_value_sector4_name" = "Sektor 4";
 "routing_attr_allow_via_ferrata_name" = "Bergroute (Klettersteig)";;
+"distance_during_navigation" = "Distanz während der Navigation";
+"shared_string_precise" = "Präzise";
+"upload_to_osm_short" = "Hochladen zu OSM";
+"distance_during_navigation_footer" = "Wähle, wie Entfernungsinformationen in Navigationswidgets angezeigt werden (Entfernung zum Punkt, nächste Abbiegung, Spuren).\n\nWähle „Präzise“ für exakte Zahlen oder „Abrunden“ für leichtere Lesbarkeit.";
+"shared_string_round_up" = "Abrunden";

@@ -1776,7 +1776,7 @@
 "skip_map_downloading" = "Preskoči preuzimanje mapa";
 "skip_map_downloading_desc_ios" = "Nemate instaliranu nijednu van mrežnu mapu. Možete da izaberete mapu sa liste ili da preuzmete mape kasnije preko Meni - Upravljanje datotekama mape";
 "wiki_around" = "Članci Vikipedije o okolini";
-"search_categories" = "Kategorije";
+"search_categories" = "TOI kategorije";
 "items_selected" = "%d izabrano'";
 "how_to_open_wiki_title" = "Kako da otvoriš članke sa Vikipedije?";
 "download_wiki_data" = "Download Wikipedia data for %@";

@@ -3424,3 +3424,8 @@
 "rendering_attr_padusHideBoundaries_name" = "Ocultar los límites de los terrenos públicos";
 "routing_attr_hazmat_category_usa_4_name" = "Sustancias inflamables";
 "rendering_attr_showToll_description" = "Mostrar los peajes en las carreteras";;
+"distance_during_navigation" = "Distancia en la navegación";
+"shared_string_precise" = "Preciso";
+"shared_string_round_up" = "Redondear";
+"distance_during_navigation_footer" = "Elige cómo se muestra la información de la distancia en los widgets de navegación (distancia al punto, próximo giro, carriles).\n\nElige \"Preciso\" para números exactos, o \"Redondear\" para facilitar la legibilidad.";
+"upload_to_osm_short" = "Subir a OSM";

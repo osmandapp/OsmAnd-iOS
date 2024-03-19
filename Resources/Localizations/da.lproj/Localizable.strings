@@ -3427,3 +3427,8 @@
 "rendering_attr_showToll_name" = "Vis vejafgiftsrestriktioner";
 "rendering_value_sectors_name" = "Sektorer";
 "rendering_value_sector4_name" = "Sektor 4";;
+"shared_string_precise" = "Præcis";
+"shared_string_round_up" = "Rund op";
+"distance_during_navigation" = "Afstand under navigation";
+"distance_during_navigation_footer" = "Vælg, hvordan afstandsinformation skal vises i navigationsmoduler (afstand til punkt, næste sving, baner).\n\nVælg \"Præcis\" for nøjagtige tal, eller \"Rund op\" for bedre læsbarhed.";
+"upload_to_osm_short" = "Upload til OSM";

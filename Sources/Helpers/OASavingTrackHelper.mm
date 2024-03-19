@@ -87,6 +87,7 @@
     [currentTrack setWidth:[settings.currentTrackWidth get]];
     [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
     [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+    [currentTrack setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
     [currentTrack setColor:[settings.currentTrackColor get]];
     [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
 }
@@ -393,6 +394,7 @@
             [doc setWidth:[settings.currentTrackWidth get]];
             [doc setShowArrows:[settings.currentTrackShowArrows get]];
             [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            [doc setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
             [doc setColor:[settings.currentTrackColor get]];
             [doc setColoringType:[settings.currentTrackColoringType get].name];
 

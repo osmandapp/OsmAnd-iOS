@@ -229,6 +229,7 @@
         [self.doc setWidth:_backupGpxItem.width];
         [self.doc setShowArrows:_backupGpxItem.showArrows];
         [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
+        [self.doc setRaiseRoutesAboveRelief:_backupGpxItem.raiseRoutesAboveRelief];
         [self.doc setColoringType:_backupGpxItem.coloringType];
         [self.doc setColor:_backupGpxItem.color];
     }
@@ -788,6 +789,7 @@
             [self.doc setWidth:self.gpx.width];
             [self.doc setShowArrows:self.gpx.showArrows];
             [self.doc setShowStartFinish:self.gpx.showStartFinish];
+            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
             [self.doc setColoringType:self.gpx.coloringType];
             [self.doc setColor:self.gpx.color];
         }
@@ -1283,7 +1285,22 @@
     }
     else if ([tableData.key isEqualToString:@"visualization_3D"])
     {
-        
+        self.gpx.raiseRoutesAboveRelief = toggle;
+        if (_wholeFolderTracks)
+        {
+            for (OAGPX *track in _wholeFolderTracks)
+                track.raiseRoutesAboveRelief = toggle;
+        }
+
+        if (self.isCurrentTrack)
+        {
+            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        }
+        else
+        {
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        }
     }
     // visualization3D
     else if ([tableData.key isEqualToString:@"join_gaps"])
@@ -1656,18 +1673,15 @@
         {
             [self.settings.currentTrackWidth resetToDefault];
             [self.settings.currentTrackShowArrows resetToDefault];
-            [self.settings.currentTrackRaiseRoutesAboveRelief resetToDefault];
-            
             [self.settings.currentTrackShowStartFinish resetToDefault];
+            [self.settings.currentTrackRaiseRoutesAboveRelief resetToDefault];
             [self.settings.currentTrackColoringType resetToDefault];
             [self.settings.currentTrackColor resetToDefault];
             
             [self.doc setWidth:[self.settings.currentTrackWidth get]];
-            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
-            #warning("raiseRoutesAboveRelief")
-           // [self.doc setShowArrows:[self.settings.currentTrackRaiseRoutesAboveRelief get]];
-            
+            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
+            [self.doc setRaiseRoutesAboveRelief:[self.settings.currentTrackRaiseRoutesAboveRelief get]];
             [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
             [self.doc setColor:[self.settings.currentTrackColor get]];
         }

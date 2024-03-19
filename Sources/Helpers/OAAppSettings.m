@@ -4509,9 +4509,6 @@
         
         _currentTrackShowArrows = [[[OACommonBoolean withKey:currentTrackShowArrowsKey defValue:NO] makeGlobal] makeShared];
         
-        // currentTrackRaiseRoutesAboveRelief
-        
-        
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
         _currentTrackRaiseRoutesAboveRelief = [[[OACommonBoolean withKey:currentTrackRaiseRoutesAboveReliefKey defValue:NO] makeGlobal] makeShared];

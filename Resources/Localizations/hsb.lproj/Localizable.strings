@@ -80,8 +80,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Schadźenje słónca: %@
-\nChowanje słónca: %@";
+"day_night_info_description" = "Schadźenje słónca: %@\nChowanje słónca: %@";
 "day_night_info" = "Day/night info";
 "daynight_mode_auto" = "Schadźenje/chowanje słónca";
 "route_simulation" = "Route simulation";
@@ -515,8 +514,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "městno";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "Šěr %@
-\nDołh %@";
+"short_location_on_map" = "Šěr %@\nDołh %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -1634,9 +1632,8 @@
 "open_saved_track" = "Składowanu čaru wočinić";
 "rendering_attr_hideMilitaryAreas_name" = "Wojerske ležownosće";
 "user_points" = "Wužiwarske dypki";
-
 "rendering_attr_showProposed_name" = "Namjetowane objekty";
-"routing_attr_motor_type_name" = "Ćěriwo za motor";;
+"routing_attr_motor_type_name" = "Ćěriwo za motor";
 "map_widget_target_distance" = "Zdalenosć mjez kameru a cilom";
 "map_orientation_portrait" = "Na wysoko";
 "external_sensors_plugin_name" = "Eksterne sensory";

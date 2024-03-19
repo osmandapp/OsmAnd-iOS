@@ -2497,7 +2497,7 @@
 "simulate_location_movement_speed_x3_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, ist um das 3-fache höher als die Geschwindigkeit in der ausgewählten Datei.";
 "simulate_location_movement_speed_original_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, entspricht der Geschwindigkeit in der ausgewählten Datei.";
 "simulate_location_movement_speed_x4_desc" = "Die Geschwindigkeit, mit der sich der Standort während der Simulation bewegt, ist um das 4-fache höher als die Geschwindigkeit in der ausgewählten Datei.";
-"you_can_get_feature_as_part_of_pattern" = "Erhalten Sie„%@“ als Teil des Tarifs %@. Vergleich:";
+"you_can_get_feature_as_part_of_pattern" = "Erhalte„%@“ als Teil des Tarifs %@. Vergleich:";
 "product_title_plus" = "Maps+";
 "subscription_cancel_description" = "Jederzeit im AppStore kündbar.";
 "no_purchases" = "Sie haben keine Einkäufe";
@@ -3014,9 +3014,9 @@
 "map_3d_mode_action" = "3D-Modus";
 "shared_string_hidden" = "Ausgeblendet";
 "visible_in_3d_mode" = "Sichtbar im 3D-Modus";
-"map_3d_mode_description" = "Berühren Sie die Karte mit zwei Fingern und bewegen Sie sie nach oben und unten, um die Kartenneigung anzupassen.";
+"map_3d_mode_description" = "Berühre die Karte mit zwei Fingern und bewege sie nach oben und unten, um die Kartenneigung anzupassen.";
 "map_3d_mode_hint" = "Durch langes Tippen auf die Schaltfläche kann die Position der Schaltfläche geändert werden.";
-"free_favorites_backup_description" = "Registrieren Sie sich in OsmAnd Cloud, um ein kostenloses Backup Ihrer Favoriten und Einstellungen zu erhalten.";
+"free_favorites_backup_description" = "Registriere dich in OsmAnd Cloud, um ein kostenloses Backup deiner Favoriten und Einstellungen zu erhalten.";
 "free_favorites_backup" = "Kostenloses Backup Ihrer Favoriten";
 "banner_payment_free_backup_settings_title" = "Kostenlose Sicherung der Einstellungen";
 "get_osmand_cloud" = "Holen Sie sich OsmAnd Cloud";

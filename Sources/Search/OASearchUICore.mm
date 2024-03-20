@@ -192,6 +192,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
         {
             NSString *localeName1 = o1.localeName == nil ? @"" : o1.localeName;
             NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
+
             int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
             if (cmp != 0)
                 return (NSComparisonResult)cmp;

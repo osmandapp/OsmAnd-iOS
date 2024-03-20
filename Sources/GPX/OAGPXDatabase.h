@@ -10,9 +10,8 @@
 #import <CoreLocation/CoreLocation.h>
 #import "OACommonTypes.h"
 
-#define kDefaultTrackColor 0xFFFF0000
-
-#define kNotificationNewTracksFetched @"kNotificationNewTracksFetched"
+static NSInteger const kDefaultTrackColor = 0xFFFF0000;
+static NSString * const kGPXDBTracksLoaded = @"kGPXDBTracksLoaded";
 
 typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeNone = -1,
@@ -93,8 +92,8 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 
 + (OAGPXDatabase *)sharedDb;
 
--(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
-- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
+-(OAGPX *)buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
+- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity;
 -(OAGPX *)addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document;
 -(OAGPX *)getGPXItem:(NSString *)filePath;
 -(OAGPX *)getGPXItemByFileName:(NSString *)fileName;

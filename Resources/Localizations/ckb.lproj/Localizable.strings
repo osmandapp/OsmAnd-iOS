@@ -516,7 +516,6 @@
 "shared_string_includes" = "Includes";
 "shared_string_purchased" = "Purchased";
 "shared_string_control_start" = "Start";
-"shared_string_control_stop" = "Stop";
 "shared_string_any" = "Any";
 "restart" = "Restart";
 "offline_maps" = "Offline Maps";
@@ -638,7 +637,6 @@
 "gpx_route_time" = "Route time";
 "gpx_uphldownhl" = "Uphills/Downhills";
 "map_widget_average_speed" = "Average speed";
-"shared_string_control_start" = "Start";
 "gpx_avg_elev" = "Average elevation";
 "gpx_elev_range" = "Elevation range";
 "average_altitude" = "Average altitude";
@@ -682,7 +680,6 @@
 "save_track_to_gpx_descrp" = "Turn on to automatically save a track during navigation";
 "gpx_distance_points" = "Distance (points)";
 "gpx_max_speed" = "Max speed";
-"shared_string_speed" = "Speed";
 "shared_string_slope" = "Slope";
 "stats_select_graph_data" = "Select graph data";
 
@@ -1216,7 +1213,6 @@
 
 // Menu
 "shared_string_menu" = "Menu";
-"shared_string_my_places" = "My Places";
 "menu_my_trips" = "My Tracks";
 "feedback" = "Feedback";
 "shared_string_help" = "Help";
@@ -1664,31 +1660,23 @@
 "debugging_and_development" = "OsmAnd development";
 "product_desc_development" = "Settings for development and debugging features";
 "osmand_development_plugin_description" = "Settings for development and debugging features, like navigation simulation, rendering performance, or voice prompting. Intended for developers, not needed for normal app use.";
-"index_name_africa" = "Africa";
 "product_desc_africa" = "Unlimited map downloads for Africa";
-"index_name_antarctica" = "Antarctica";
 "product_desc_antarctica" = "Unlimited map downloads for Antarctica";
 "product_desc_africa_short" = "Africa region maps";
 "product_desc_australia" = "Unlimited map downloads for Australia";
 "product_desc_australia_short" = "Australia region maps";
-"index_name_central_america" = "Central America";
 "product_desc_centralamerica" = "Unlimited map downloads for Central America";
 "product_desc_centralamerica_short" = "Central America region maps";
-"index_name_europe" = "Europe";
 "product_desc_europe" = "Unlimited map downloads for Europe";
 "product_desc_europe_short" = "Europe region maps";
-"index_name_north_america" = "North America";
 "product_desc_northamerica" = "Unlimited map downloads for North America";
 "product_desc_northamerica_short" = "North America region maps";
-"index_name_russia" = "Russia";
 "product_desc_russia" = "Unlimited map downloads for Russia";
 "product_desc_russia_short" = "Maps of Russia regions";
-"index_name_south_america" = "South America";
 "product_desc_southamerica" = "Unlimited map downloads for South America";
 "product_desc_southamerica_short" = "South America region maps";
 "worldwide_maps" = "All World Maps";
 "product_desc_allworld" = "Maps of All World";
-"index_name_asia" = "Asia";
 "product_desc_asia" = "Unlimited map downloads for Asia";
 "product_desc_asia_short" = "Asia region maps";
 "download_wikipedia_maps" = "Wikipedia";
@@ -1725,7 +1713,6 @@
 "res_installing" = "Installing…";
 "roads" = "Roads";
 "shared_string_hillshade" = "Hillshade";
-"shared_string_slope" = "Slope";
 "download_regular_maps" = "Standard map";
 "select_language" = "Select language";
 "language_short" = "Lang";
@@ -1762,7 +1749,6 @@
 "prch_srtm_info" = "Contour lines plugin enables contour lines for maps you are entitled, purchased or downloaded within free limit.";
 "shared_string_open" = "Open";
 "time_closed" = "Closed";
-"will_close_at" = "Will close in";
 "time_will_open" = "Will open in";
 "osm_live_active" = "Active";
 "menu_all_trips" = "All Tracks";
@@ -2468,7 +2454,6 @@
 "purchases_feature_desc_unlimited_map_download" = "Get unlimited downloads for all continents and regions offline maps.";
 "purchases_feature_desc_carplay" = "Brings OsmAnd offline maps and navigation to your vehicle screen and integrates with your vehicle\'s controls.";
 "purchases_feature_desc_combined_wiki" = "Explore Wikipedia articles on the go, without an internet connection. Offline data divided by countries and available in all languages.";
-"purchases_feature_desc_wikipedia" = "Explore Wikipedia offline. Articles divided by countries and regions and available in all languages.";
 "purchases_feature_desc_wikivoyage" = "Explore Wikivoyage offline. Articles divided by countries and regions and available in all languages.";
 "purchases_feature_desc_terrain" = "Terrain contour lines, full hillshade map with dark shades and slope maps with colors to show peaks and lowlands.";
 "purchases_feature_desc_nautical" = "Get access to nautical depth information";
@@ -2507,3 +2492,4 @@
 "ios_release_3_90" = "• Introduced a \"Plan a route\" feature for planning future trips with the ability to create track segments using different navigation types\n• Added an option to enable a сompass over the \"Radius Ruler\" tool\n• Added \"POI label overlays\" option that allows to show names for favorites, track waypoints and markers on the map\n• Added new Quick actions for visibility of contour lines and terrain on the map, changing an application profile, deleting a nearest intermediate point\n• Fixed issues with missing Wikipedia search category\n• Settings Import: fixed bugs, added support for all data types available in OsmAnd\n• OpenStreetMap editing: fixed the time picker and inability to change the changeset comment\n";
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n• Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
+"shared_string_mode" = "بار/دۆخ";

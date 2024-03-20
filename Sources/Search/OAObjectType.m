@@ -150,17 +150,17 @@
     {
         case HOUSE:
         case STREET_INTERSECTION:
-            return 4;
+            return 4.0;
         case STREET:
-            return 3;
+            return 3.0;
         case CITY:
         case VILLAGE:
         case POSTCODE:
-            return 2;
+            return 2.0;
         case POI:
-            return 1;
+            return 1.0;
         default:
-            return 1;
+            return 1.0;
     }
 }
 

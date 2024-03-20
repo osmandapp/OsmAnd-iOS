@@ -120,7 +120,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Volgens kompas";
 "rotate_map_bearing_opt" = "Volgens rigting van beweging";
-"rotate_map_north_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Moet nie draai nie";
 "driving_region_descr" = "Kies Bestuur Streek: VSA, Europa, VK, Asië en Ander";
 "driving_region" = "Bestuur Streek";
 "shared_string_automatic" = "Automatic";
@@ -790,7 +790,7 @@
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 "screen_settings_weather_toolbar" = "Weather toolbar";
-"settings_app_theme" = "Application theme";
+"settings_app_theme" = "Toepassing tema";
 "light_theme" = "Light";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
@@ -1739,7 +1739,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Kontoerlyn inlasmodule";
 "product_desc_srtm" = "Visual assessment of the shape of the land surface";
-"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus (\'Instellings\'->\'Inligtingsbestuur\' ->\'Aflaai\' ->Kies verlangde kaart-tipe).";
+"srtm_plugin_description" = "Vergemoontlik dei aflaai van aflyn kontoerlyne en heuwelsakdus ('Instellings'->'Inligtingsbestuur' ->'Aflaai' ->Kies verlangde kaart-tipe).";
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "The free worldwide travel guide anyone can edit.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
@@ -1747,7 +1747,6 @@
 "depth_contour_lines" = "Depth contour lines";
 "nautical_depth_points" = "Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
@@ -2703,3 +2702,20 @@
 "ios_release_4_2" = "• Route line appearance: added ability to set width and color\n• Tracks: added option for deleting several tracks at once\n• Track context menu: added scroll bar with waypoint groups\n• Map appearance: divided additional routes by type with ability to enable one from each category separately\n• Horseback riding: add new navigation type and app profile\n• OsmAnd files are now visible in the \"Files\" application\n• UX of options \"Use elevation data\" and \"Select elevation fluctuation\"  was improved, they were combined and renamed to \"Preferred terrain\", currently available for \"Bicycle\" and \"Pedestrian\" profiles.\n• New option \"Include heading\" for track recording\n• Street name widget: now show road shield and exit number during navigation\n• New Fitness and running routes on the map\n• CarPlay bug fixes, added gestures for touchscreens\n• Fixed import of GPX files from OSF package\n• Fixed import of custom plugins with included files\n• Fixed various crashes in the Route planning mode\n• Fixed crashes during Navigation\n";
 "m" = "m";
 "km" = "km";
+"global_settings" = "Oorhoofse instellings";
+"visibility" = "Sigbaarheid";
+"user_name" = "Jou OSM gebruiker naam";
+"route_info" = "Roete inligting";
+"map_orientation_portrait" = "Portret";
+"network" = "Netwerk";
+"map_orientation_default" = "Dieselfde as toestel";
+"map_settings_topography" = "Kontoer lyne inligting";
+"map_orientation_landscape" = "Landskap";
+"general_settings" = "Algemene instellings";
+"short_min" = "m";
+"shared_string_format" = "Formaat :";
+"shared_string_any" = "Enige";
+"audionotes_plugin_name" = "Oudio/video notas";
+"map_screen_orientation" = "Skerm oriëntasie";
+"shared_string_accessibility" = "Toeganklikheid";
+"map_widget_gps_info" = "GPS inligting";

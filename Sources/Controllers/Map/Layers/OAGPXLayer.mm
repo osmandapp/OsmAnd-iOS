@@ -840,18 +840,21 @@ colorizationScheme:(int)colorizationScheme
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         BOOL isCurrentTrack = doc != nullptr && it.value() == doc;
-        OAGPXDocument *document;
+        OAGPXDocument *document = nil;
         NSString *filePath = isCurrentTrack ? kCurrentTrack : it.key().toNSString();
         if ([_cachedTracks.allKeys containsObject:filePath])
         {
             document = _cachedTracks[filePath][@"doc"];
         }
-        else
+        else if (it.value() != nullptr)
         {
             document = isCurrentTrack
                     ? [OASavingTrackHelper sharedInstance].currentTrack
                     : [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(it.value())];
         }
+
+        if (!document)
+            continue;
 
         NSArray<OAWptPt *> *points = [self findPointsNearSegments:[document getPointsToDisplay] radius:r point:point];
         if (points != nil)

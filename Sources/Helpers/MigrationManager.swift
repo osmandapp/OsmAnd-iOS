@@ -21,8 +21,8 @@ final class MigrationManager: NSObject {
 
     private override init() {}
 
-    func migrateIfNeeded(_ firstLaunch: Bool) {
-        if firstLaunch {
+    func migrateIfNeeded(_ isFirstLaunch: Bool) {
+        if isFirstLaunch {
             defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
         } else {
 
@@ -41,8 +41,7 @@ final class MigrationManager: NSObject {
                 bicycleSpeed -> ant_bicycle_speed
                 temperature -> temperature_sensor */
 
-            let isOldWidgetKeysMigrated = defaults.object(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-            if isOldWidgetKeysMigrated == nil || (isOldWidgetKeysMigrated as! Bool) == false {
+            if !defaults.bool(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue) {
                 changeWidgetIdsMigration1()
                 defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
             }
@@ -120,7 +119,9 @@ final class MigrationManager: NSObject {
         guard let widgetsVisibilityString: String = mapInfoControls.get(appMode) else { return }
 
         let widgetsVisibility = widgetsVisibilityString.components(separatedBy: SETTINGS_SEPARATOR)
-        guard (widgetsVisibility.contains { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) else { return }
+        if !widgetsVisibility.contains(where: { changeWidgetIds.keys.contains(WidgetType.getDefaultWidgetId($0)) }) {
+            return
+        }
 
         let newWidgetsVisibility = getUpdatedWidgetIds(widgetsVisibility, changeWidgetIds: changeWidgetIds)
         if widgetsVisibility != newWidgetsVisibility {
@@ -150,7 +151,7 @@ final class MigrationManager: NSObject {
                             let newPref: OACommonString = settings.registerStringPreference(newPrefKey, defValue: plugin.getAnyConnectedDeviceId())
                             if !useAnyDevicePref {
                                 let oldPrefKey = "\(widgetType.title)\(oldCustomWidgetId)_\(appModeStringKey)"
-                                if let oldPref = defaults.object(forKey: oldPrefKey) as? String {
+                                if let oldPref = defaults.string(forKey: oldPrefKey) {
                                     newPref.set(oldPref, mode: appMode)
                                 }
                             }

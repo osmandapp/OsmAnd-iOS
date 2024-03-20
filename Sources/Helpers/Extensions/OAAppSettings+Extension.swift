@@ -9,14 +9,14 @@
 import Foundation
 
 extension OACommonInteger {
-    @objc func stringToEnum(value: String) -> Int32 {
+    @objc func getValueFromString(_ value: String) -> Int32 {
         if key.hasPrefix("simple_widget_size") {
             return Int32(WidgetSizeStyle.getValueFromString(value))
         }
         return Int32(value) ?? 0
     }
 
-    @objc func enumToString(mode: OAApplicationMode) -> String {
+    @objc func getStringFromValue(_ mode: OAApplicationMode) -> String {
         let value = get(mode)
         if key.hasPrefix("simple_widget_size") {
             return WidgetSizeStyle.getStringFromValue(Int(value))

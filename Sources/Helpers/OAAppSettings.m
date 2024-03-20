@@ -1784,12 +1784,12 @@
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    [self set:[self stringToEnumWithValue:strValue] mode:mode];
+    [self set:[self getValueFromString:strValue] mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [self enumToStringWithMode:mode];
+    return [self getStringFromValue:mode];
 }
 
 @end

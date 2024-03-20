@@ -120,6 +120,7 @@
 - (void) setShowArrows:(BOOL)showArrows;
 - (BOOL) isShowStartFinish;
 - (void) setShowStartFinish:(BOOL)showStartFinish;
+- (BOOL)isRaiseRoutesAboveRelief;
 - (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief;
 
 - (OATrack *) getGeneralTrack;

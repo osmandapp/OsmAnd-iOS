@@ -44,6 +44,11 @@
 
 #define kColorGridOrDescriptionCell 1
 
+//static NSString *kTableIsOsmAndProAvailable = @"is_OsmAnd_pro_available";
+
+//OAIAPHelper.isOsmAndProAvailable()
+//[OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
+
 @interface OABackupGpx : NSObject
 
 @property (nonatomic) NSInteger color;
@@ -242,6 +247,7 @@
             OABackupGpx *bakupItem = _backupGpxItems[i];
             track.showArrows = bakupItem.showArrows;
             track.showStartFinish = bakupItem.showStartFinish;
+            track.raiseRoutesAboveRelief = bakupItem.raiseRoutesAboveRelief;
             track.coloringType = bakupItem.coloringType;
             track.color = bakupItem.color;
             track.width = bakupItem.width;
@@ -433,7 +439,9 @@
     
     OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"visualization_3D",
-            kCellType:[OASwitchTableViewCell getCellIdentifier],
+            kCellType:NO/*[OAIAPHelper isOsmAndProAvailable]*/
+            ? [OAButtonTableViewCell getCellIdentifier]
+            : [OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
     }];
 
@@ -1118,6 +1126,45 @@
         }
         return cell;
     }
+    else if ([cellData.type isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    {
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = nib[0];
+            [cell leftIconVisibility:NO];
+            [cell titleVisibility:YES];
+            [cell descriptionVisibility:NO];
+            [cell leftEditButtonVisibility:NO];
+            cell.rightContainerConstraint.constant = -3;
+            cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
+//            UIButtonConfiguration *configuration = [UIButtonConfiguration plainButtonConfiguration];
+//            configuration.contentInsets = NSDirectionalEdgeInsetsMake(0, 10, 0, 11);
+//            configuration.imagePadding = 10;
+//            cell.button.configuration = configuration;
+            cell.button.layer.cornerRadius = 9.0;
+            cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
+            cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+#warning("isDirectionRTL")
+            UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
+            [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
+                         forState:UIControlStateNormal];
+            cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+           [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
+
+            [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
+            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
+            cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
+            cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+            [cell.button addTarget:self action:@selector(onGetOsmAndProButtonPressed:)
+                forControlEvents:UIControlEventTouchUpInside];
+        }
+        cell.titleLabel.text = cellData.title;
+        outCell = cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -1326,8 +1373,11 @@
         return self.gpx.showArrows;
     else if ([tableData.key isEqualToString:@"start_finish_icons"])
         return self.gpx.showStartFinish;
+    else if ([tableData.key isEqualToString:@"visualization_3D"])
+        return self.gpx.raiseRoutesAboveRelief;
     else if ([tableData.key isEqualToString:@"join_gaps"])
         return self.gpx.joinSegments;
+
 
     return NO;
 }
@@ -1748,6 +1798,10 @@
 - (void)onCellButtonPressed:(UIButton *)sender
 {
     [self onRightActionButtonPressed:sender.tag];
+}
+
+- (void)onGetOsmAndProButtonPressed:(UIButton *)button {
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
 }
 
 #pragma mark - OACollectionTableViewCellDelegate

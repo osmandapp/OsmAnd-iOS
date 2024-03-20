@@ -97,6 +97,7 @@
         _width = [document getWidth:nil];
         _showArrows = [document isShowArrows];
         _showStartFinish = [document isShowStartFinish];
+        _raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
     }
 }
 
@@ -237,6 +238,7 @@
     gpx.width = [document getWidth:nil];
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
+    gpx.raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
     
     return gpx;
 }
@@ -525,6 +527,7 @@
     [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
+    [d setObject:@(gpx.raiseRoutesAboveRelief) forKey:@"raiseRoutesAboveRelief"];
     [d setObject:@(gpx.joinSegments) forKey:@"joinSegments"];
     [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
     [d setObject:gpx.width forKey:@"width"];
@@ -662,6 +665,10 @@
         else if ([key isEqualToString:@"showStartFinish"])
         {
             gpx.showStartFinish = [value boolValue];
+        }
+        else if ([key isEqualToString:@"raiseRoutesAboveRelief"])
+        {
+            gpx.raiseRoutesAboveRelief = [value boolValue];
         }
         else if ([key isEqualToString:@"joinSegments"])
         {

@@ -239,6 +239,15 @@
     [self setExtension:@"show_start_finish" value:strValue];
 }
 
+- (BOOL)isRaiseRoutesAboveRelief
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"raise_routes_above_relief"];
+    if (e) {
+        return [e.value isEqualToString:@"true"];
+    }
+    return YES;
+}
+
 - (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief
 {
     [self setExtension:@"raise_routes_above_relief" value:isRaiseRoutesAboveRelief ? @"true" : @"false"];

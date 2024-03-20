@@ -555,7 +555,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
          _contentStackViewSimpleWidget.spacing = 0;
         if (self.widgetSizeStyle == WidgetSizeStyleSmall)
         {
-            _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:WidgetSizeStyleSmall];
+            _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:WidgetSizeStyleSmall];
             self.emptyViewRightPlaceholderFullRow.hidden = YES;
             if (_subtext.length == 0)
             {
@@ -575,7 +575,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     }
     else
     {
-        _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:self.widgetSizeStyle];
+        _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle];
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
 }

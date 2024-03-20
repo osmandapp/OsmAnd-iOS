@@ -360,6 +360,28 @@ colorizationScheme:(int)colorizationScheme
 {
     if (points.size() > 1)
     {
+        QList<float> heights;
+        auto traceColorizationMapping = QList<OsmAnd::FColorARGB>();
+        float r = 0.2f;
+        float g = 0.6f;
+        float b = 1.0f;
+        BOOL showRaised = gpx.raiseRoutesAboveRelief;
+        BOOL showTransparentTraces = true;
+        if (showRaised) {
+            if (!showTransparentTraces)
+                traceColorizationMapping = colors;//colorizationMapping;
+        }
+        
+        if (showRaised)
+        {
+            long size = colors.size();
+            for (int i = 0; i < size; i++)
+            {
+                float a = (float) i / (float) size;
+                traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, r, g, b));
+            }
+        }
+        
         CGFloat lineWidth;
         if (_cachedTrackWidth[gpx.width])
         {
@@ -414,6 +436,27 @@ colorizationScheme:(int)colorizationScheme
                 .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:colorARGB]))
                 .setShouldShowArrows(true)
                 .setScreenScale(UIScreen.mainScreen.scale);
+        }
+        
+        if (showRaised)
+        {
+            heights.append(1000.0);
+            QList<OsmAnd::FColorARGB>();
+            builder.setHeights(heights);
+            builder.setFillColor(OsmAnd::FColorARGB(1.0f, r, g, b));
+            builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
+            builder.setOutlineColorizationMapping(traceColorizationMapping);
+            builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
+            if (showTransparentTraces)
+            {
+                builder.setColorizationScheme(1);
+                builder.setNearOutlineColor(OsmAnd::FColorARGB(0.0f, r, g, b));
+                builder.setFarOutlineColor(OsmAnd::FColorARGB(1.0f, r, g, b));
+            }
+            else
+            {
+                builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 0.8f, 0.8f, 0.8f));
+            }
         }
         
         builder.buildAndAddToCollection(_linesCollection);

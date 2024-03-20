@@ -3301,3 +3301,4 @@
 "ant_plus_pair_bluetooth_prompt" = "您可以使用 OsmAnd 配對低功耗藍牙與 ANT+ 感應器。";
 "osmand_cloud_deletion_all_data_warning" = "所有來自 OsmAnd Cloud 的資料都將會 %@。裝置上的資料會維持不變。";
 "apply_to_existing" = "套用到既有的";
+"distance_during_navigation" = "導航時的距離";

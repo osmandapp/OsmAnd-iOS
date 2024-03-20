@@ -186,7 +186,8 @@
                 _reopeningState.trackIcon = drawable.getIcon;
             }
             _selectedTab = _reopeningState.lastSelectedTab;
-            _navControllerHistory = _reopeningState.navControllerHistory;
+            if (_reopeningState.navControllerHistory)
+                _navControllerHistory = _reopeningState.navControllerHistory;
             [self commonInit];
         }
     }

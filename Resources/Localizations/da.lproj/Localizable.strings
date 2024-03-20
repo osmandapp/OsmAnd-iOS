@@ -2473,7 +2473,7 @@
 "wikipedia_and_wikivoyage_offline" = "Wikipedia og Wikivoyage offline";
 "purchases_feature_desc_osmand_cloud" = "Få OsmAnd Cloud for at gemme alle OsmAnd-data online. Ingen mistede data efter geninstallation. Sikkerhedskopiér og gendan nemt alle informationer.";
 "purchases_feature_desc_unlimited_map_download" = "Få ubegrænset download af offline kort for alle kontinenter og regioner.";
-"you_can_get_feature_as_part_of_pattern" = "Få \"%@\" som en del af %@ abonnementet. Sammenligning:";
+"you_can_get_feature_as_part_of_pattern" = "Få“%@” som en del af %@ abonnementet. Sammenligning:";
 "purchases_feature_desc_carplay" = "Giver dig OsmAnd offline kort og navigation på skærmen i dit køretøj og integreres med bilens betjeningselementer.";
 "purchases_feature_desc_combined_wiki" = "Udforsk Wikipedia-artikler på farten uden internetforbindelse. Offline-data opdelt efter lande og tilgængelig på alle sprog.";
 "purchases_feature_desc_wikivoyage" = "Udforsk Wikivoyage offline. Artikler er opdelt efter lande og regioner og er tilgængelige på alle sprog.";
@@ -3135,7 +3135,7 @@
 "context_menu_read_article" = "Læs artikel";
 "shared_string_discard_changes" = "Kassér ændringer";
 "article_removed_from_bookmark" = " fjernet fra bogmærker.";
-"external_device_forget_sensor_description" = "Sensoren fjernes fra listen. Du vil kunne parre denne sensor igen til enhver tid.";
+"external_device_forget_sensor_description" = "Sensoren fjernes fra listen.Du vil kunne parre denne sensor igen til enhver tid.";
 
 
 //"device_disconnected">%1$s disconnected"Løbeenhed";
@@ -3186,7 +3186,7 @@
 "popular_articles_not_found_title" = "Populære artikler ikke fundet";
 "popular_articles_not_found_descr" = "Der er ingen artikler i nærheden af det aktuelle kortcentrum. Brug søgning til at finde artikler.";
 "shared_string_license" = "Licens";
-"tracker_item" = "OsmAnd Tracker";
+"tracker_item" = "OsmAnd tracker";
 "help_article_navigation_routing_straight_line_routing_name" = "Lige linje ruteberegning (fly)";
 "help_article_navigation_routing_train_routing_name" = "Tog-ruteberegning";
 "help_article_navigation_routing_public_transport_navigation_name" = "Offentlig transport ruteberegning";
@@ -3215,7 +3215,7 @@
 "help_article_personal_profiles_name" = "Profiler (Indstillinger)";
 "help_article_navigation_routing_car_based_routing_name" = "Bil-ruteberegning (lastbil, motorcykel)";
 "general_settings" = "Generelt";
-"help_article_troubleshooting_maps_data_name" = "Kort og data";
+"help_article_troubleshooting_maps_data_name" = "Kort&Data";
 "help_article_navigation_setup_route_details_name" = "Rutedetaljer";
 "help_article_navigation_setup_route_navigation_name" = "Ruteforberedelse";
 "shared_string_link" = "Link";
@@ -3387,3 +3387,4 @@
 "distance_during_navigation" = "Afstand under navigation";
 "distance_during_navigation_footer" = "Vælg, hvordan afstandsinformation skal vises i navigationsmoduler (afstand til punkt, næste sving, baner).\n\nVælg \"Præcis\" for nøjagtige tal, eller \"Rund op\" for bedre læsbarhed.";
 "upload_to_osm_short" = "Upload til OSM";
+"ios_release_4_7" = "• Forbedrede modulpaneler i top og bund til at rumme alle moduler\n• Forbedret håndtering af spor, der er synlige på kortet\n• Opdateret \" Analysér på kort\" med mulighed for at vise målinger fra sensorer\n• Forbedret tagsupport til GPX er blevet tilføjet: link, forfatter, copyright og nøgleord\n• Forbedret modul-konfiguration ved at give brugerne mulighed for at flytte sider og rækker\n• Forbedret sporhåndtering i \"Mine steder\" med undermapper og kontekstmenuer til spor og mapper\n• Nye moduler: \"Glidetal\" og \"Solens position\"\n• Tilpas \"Afstand under navigation\": Vælg mellem præcise eller afrundede tal.\n• App-sprog vil blive brugt til navne på verdensoversigtskortet i stedet for lokale sprog\n• OsmAnd Cloud: Tilføjet mulighed for at administrere dine data, herunder gendannelse af slettede filer og sletning af din konto\n• Tilføjet understøttelse af ekstra tags til turistruter\n• Rettelse af modulet \"Koordinater\", hvor de sidste cifre i nogle tilfælde blev overset.\n• Rettelse af \"3D-tilstand\"-knappens opførsel: Hvis man trykker på knappen, gemmes hældningsvinklen ikke.\n• Rettelse af farve på statuslinje for ældre iOS-versioner\n• Rettelse af kortbevægelser med rotation og knib for at zoome for appen, der kører på macOS\n";

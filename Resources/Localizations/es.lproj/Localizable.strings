@@ -2685,7 +2685,7 @@
 "co2_mission" = "Emisión de CO2";
 "position_on_map_center" = "Centro";
 "position_on_map_bottom" = "Abajo";
-"routing_attr_motor_type_name" = "Motor del vehículo";
+"routing_attr_motor_type_name" = "Combustible del vehículo";
 "routing_attr_motor_type_description" = "Elige el tipo de combustible del motor, necesario para estimar las emisiones de CO₂.";
 "routing_attr_motor_type_diesel_name" = "Diésel";
 "routing_attr_motor_type_petrol_name" = "Gasolina";
@@ -3140,7 +3140,7 @@
 "ble_search_again" = "Volver a buscar";
 "map_widget_ant_bicycle_cadence" = "Cadencia de pedaleo";
 "context_menu_read_article" = "Leer el artículo";
-"external_device_forget_sensor_description" = "El sensor se eliminará de la lista. Podrás volver a emparejar este sensor en cualquier momento.";
+"external_device_forget_sensor_description" = "El sensor se eliminará de la lista y podrá volver a emparejar este sensor en cualquier momento.";
 
 
 //"device_disconnected">%1$s disconnected"Dispositivo en funcionamiento";
@@ -3385,3 +3385,4 @@
 "shared_string_round_up" = "Redondear";
 "distance_during_navigation_footer" = "Elige cómo se muestra la información de la distancia en los widgets de navegación (distancia al punto, próximo giro, carriles).\n\nElige \"Preciso\" para números exactos, o \"Redondear\" para facilitar la legibilidad.";
 "upload_to_osm_short" = "Subir a OSM";
+"ios_release_4_7" = "• Mejora de los paneles de widgets superior e inferior para dar cabida a todos los widgets\n• Mejora de la gestión de las pistas visibles en el mapa\n• Actualizado \"Analizar en el mapa\" con la posibilidad de mostrar las métricas de los sensores\n• Se ha añadido soporte de etiquetas mejorado para GPX: enlace, autor, copyright y palabras clave\n• Mejora de la configuración del widget al permitir a los usuarios mover páginas y filas\n• Mejora de la gestión de pistas en \"Mis lugares\" con subcarpetas y menús contextuales para pistas y carpetas\n• Nuevos widgets: \"Ratio de deslizamiento\" y \"Posición del sol\"\n• Personalizar \"Distancia durante la navegación\": elegir entre números precisos o redondear\n• El idioma de la aplicación se utilizará para los nombres en el mapa general del mundo en lugar de los idiomas locales\n• OsmAnd Cloud: Capacidad añadida para gestionar sus datos, incluyendo la restauración de archivos borrados y la eliminación de su cuenta\n• Añadido soporte de etiquetas adicionales para rutas turísticas\n• Se ha corregido el widget \"Coordenadas\" donde, en algunos casos, se omitieron los últimos dígitos\n• Corregido el comportamiento del botón \" En 3D\": tocar el botón no guarda el ángulo de inclinación\n• Color de barra de estado fijo para versiones anteriores de iOS\n• Corregido rotar y pellizcar para acercar los gestos de mapa para la aplicación que se ejecuta\n";

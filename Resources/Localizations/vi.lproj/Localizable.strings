@@ -110,7 +110,7 @@
 "rotate_map_to_bearing_descr" = "Select the map screen alignment.";
 "rotate_map_compass_opt" = "Theo la bàn";
 "rotate_map_bearing_opt" = "Theo vị trí di chuyển";
-"rotate_map_north_opt" = "Do not rotate (north is up)";
+"rotate_map_north_opt" = "Không xoay";
 "driving_region_descr" = "Select the driving region: US, Europe, UK, Asia and others.";
 "driving_region" = "Driving region";
 "shared_string_automatic" = "Automatic";
@@ -2253,3 +2253,17 @@
 "rendering_attr_OSMMapperAssistantNote_name" = "Thẻ ghi chú";
 "auth_failed" = "Định danh thất bại";
 "rendering_attr_OSMMapperAssistantNote_description" = "Hiển thị thẻ ghi chú";
+"network" = "Network";
+"map_orientation_landscape" = "Nằm ngang";
+"show_all_tracks" = "Hiển thị tất cả các theo dõi";
+"change_appearance" = "Thayđổi ngoại hình";
+"announce_when_exceeded" = "Tuyên bố khi vượt quá";
+"shared_string_any" = "Bất kỳ";
+"map_orientation_default" = "Giống cài đặt của máy";
+"user_name" = "Tên người dùng OSM";
+"recently_visible" = "Hiển thị gần đây %@";
+"import_create_track_files" = "Bạn có thể nhập, tạo hoặc ghi tệp theo dõi bằng OsmAnd.";
+"map_orientation_portrait" = "Thẳng đứng";
+"general_settings" = "Thiết lập chung";
+"select_tracks_to_display" = "Chọn các tuyến đường để hiển thị chúng trên bản đồ.";
+"map_screen_orientation" = "Hướng màn hình bản đồ";

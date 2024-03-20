@@ -3138,8 +3138,6 @@
 "map_widget_ant_bicycle_speed_desc" = "Sýnir ferðahraðann";
 "external_sensors_not_found" = "Skynjarar fundust ekki";
 
-
-//"device_disconnected">%1$s disconnected"Hlaupatæki";
 "purchases_feature_desc_external_sensors" = "Birtu og skráðu gögn frá utanaðkomandi skynjurum: hraða reiðhjóls, afl við hjólreiðar, takt og hjartslátt.";
 "ant_plus_pair_new_sensor" = "Para nýjan skynjara";
 "ant_plus_searching" = "Leita";

@@ -3143,7 +3143,6 @@
 "external_device_forget_sensor_description" = "El sensor se eliminará de la lista y podrá volver a emparejar este sensor en cualquier momento.";
 
 
-//"device_disconnected">%1$s disconnected"Dispositivo en funcionamiento";
 "no_bt_permission" = "El permiso Bluetooth no está concedido";
 "shared_string_wrist" = "Muñeca";
 "ant_plus_searching_text_description" = "Por favor, mantén el dispositivo cerca del sensor. Debe activar el sensor para que OsmAnd pueda encontrarlo.";

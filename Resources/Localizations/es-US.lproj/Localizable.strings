@@ -3151,8 +3151,6 @@
 "context_menu_read_article" = "Leer artículo";
 "external_device_forget_sensor_description" = "El sensor será quitado de la lista. Podrá volver a vincular este sensor en cualquier momento.";
 
-
-//"device_disconnected">%1$s disconnected"Dispositivo para«Correr»";
 "no_bt_permission" = "El permiso de Bluetooth está bloqueado";
 "shared_string_wrist" = "Muñeca";
 "ant_plus_searching_text_description" = "Acerca el dispositivo al sensor. Debes activar el sensor para que OsmAnd pueda encontrarlo.";

@@ -3165,8 +3165,6 @@
 "external_device_forget_sensor_description" = "Датчик буде вилучено зі списку. Ви зможете знову підʼєднати цей датчик у будь-який момент.";
 "detailed_log_file" = "Докладний файл журналу";
 
-
-//"device_disconnected">%1$s disconnected"Пристрій для бігу";
 "no_bt_permission" = "Дозвіл на використання Bluetooth не надано";
 "shared_string_wrist" = "Запʼястя";
 "shared_string_travel_guides" = "Туристичні путівники";

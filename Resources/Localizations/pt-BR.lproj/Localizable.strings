@@ -3138,8 +3138,6 @@
 "context_menu_read_article" = "Leia o artigo";
 "external_device_forget_sensor_description" = "O sensor será removido da lista. Você poderá emparelhar este sensor novamente a qualquer momento.";
 
-
-//"device_disconnected">%1$s disconnected"Dispositivo em execução";
 "no_bt_permission" = "A permissão Bluetooth não é concedida";
 "shared_string_wrist" = "Pulso";
 "shared_string_chest" = "Peito";

@@ -3139,8 +3139,6 @@
 "article_removed_from_bookmark" = " إزالة من العلامات المرجعية.";
 "external_device_forget_sensor_description" = "سيُحذف من القائمة ستكون قادراً على ربط هذا المستشعرمجدداً في أي وقت.";
 
-
-//"device_disconnected">%1$s disconnected"تشغيل الجهاز";
 "no_bt_permission" = "لم يتم منح إذن البلوتوث";
 "shared_string_wrist" = "الرسغ";
 "shared_string_travel_guides" = "ارشادات السفر";

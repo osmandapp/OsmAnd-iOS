@@ -3199,8 +3199,6 @@
 "external_device_blood_pressure" = "Blodtryck";
 "shared_string_foot" = "Fot";
 
-
-//"device_disconnected">%1$s disconnected"Enhet för löpning";
 "learn_more_about_sensors_link" = "Läs mer om sensorer.";
 "external_device_status_connected" = "Ansluten";
 "bluetooth_found_title" = "Hittade: %d";

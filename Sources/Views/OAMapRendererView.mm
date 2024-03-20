@@ -8,6 +8,7 @@
 
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
+#import "OANativeUtilities.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -352,6 +353,11 @@ forcedUpdate:(BOOL)forcedUpdate
 - (OsmAnd::PointI)fixedPixel
 {
     return _renderer->getState().fixedPixel;
+}
+
+- (void)setLat:(double)lat lon:(double)lon
+{
+    [self setTarget31:[OANativeUtilities getPoint31FromLatLon:lat lon:lon]];
 }
 
 - (void)setTarget31:(OsmAnd::PointI)target31
@@ -1136,6 +1142,29 @@ forcedUpdate:(BOOL)forcedUpdate
 - (float)getLocationHeightInMeters:(OsmAnd::PointI)location31
 {
     return _renderer->getLocationHeightInMeters(location31);
+}
+
+//public double getPixDensity() {
+//    double dist = this.getDistance(0, this.getPixHeight() / 2, this.getPixWidth(), this.getPixHeight() / 2);
+//    return (double)this.getPixWidth() / dist;
+//}
+
+- (void) getPixDensity
+{
+    
+}
+
+//public double getDistance(int pixX, int pixY, int pixX2, int pixY2) {
+//    double lat1 = this.getLatFromPixel((float)pixX, (float)pixY);
+//    double lon1 = this.getLonFromPixel((float)pixX, (float)pixY);
+//    double lat2 = this.getLatFromPixel((float)pixX2, (float)pixY2);
+//    double lon2 = this.getLonFromPixel((float)pixX2, (float)pixY2);
+//    return MapUtils.getDistance(lat1, lon1, lat2, lon2);
+//}
+
+- (void) getDistance:(int)pixX pixY:(int)pixY pixX2:(int)pixX2 pixY2:(int)pixY2
+{
+    
 }
 
 @end

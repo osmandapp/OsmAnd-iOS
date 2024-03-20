@@ -135,11 +135,13 @@ struct CLLocationCoordinate2D;
 
 - (OsmAnd::PointI) getTarget;
 - (OsmAnd::PointI) getTargetScreenPosition;
+- (void) setLat:(double)lat lon:(double)lon;
 - (BOOL) setMapTarget:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI)location31;
 - (BOOL) resetMapTarget;
 - (BOOL) resetMapTargetPixelCoordinates:(OsmAnd::PointI)screenPoint;
 - (float) getHeightAndLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31;
 - (BOOL) getZoomAndRotationAfterPinch:(OsmAnd::PointI)firstLocation31 firstHeight:(float)firstHeight firstPoint:(OsmAnd::PointI)firstPoint secondLocation31:(OsmAnd::PointI)secondLocation31 secondHeight:(float)secondHeight secondPoint:(OsmAnd::PointI)secondPoint zoomAndRotate:(OsmAnd::PointD*)zoomAndRotate;
+
 
 - (OsmAnd::AreaI) getVisibleBBox31;
 - (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;

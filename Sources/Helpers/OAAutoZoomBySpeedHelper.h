@@ -18,8 +18,8 @@ const static int kZoomDurationMillis = 1500;
 @interface OAAutoZoomDTO : NSObject
 
 @property (nonatomic, nonnull) OAComplexZoom *zoomValue;
-@property (nonatomic) float floatValue;
-- (instancetype _Nonnull) initWithZoom:(OAComplexZoom *_Nonnull)zoomValue floatValue:(float)floatValue;
+@property (nonatomic) float durationValue;
+- (instancetype _Nonnull) initWithZoom:(OAComplexZoom *_Nonnull)zoomValue durationValue:(float)durationValue;
 
 @end
 

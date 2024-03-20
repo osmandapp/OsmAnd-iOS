@@ -312,6 +312,64 @@
     return OsmAnd::PointI();
 }
 
+//public static PointI get31FromPixel(@NonNull MapRendererView mapRenderer, @Nullable RotatedTileBox tileBox,
+//                                    @NonNull PointI screenPoint, boolean useShiftedCenter) {
+//if (useShiftedCenter && tileBox != null && tileBox.isCenterShifted()) {
+//    RotatedTileBox tbCenter = tileBox.copy();
+//    tbCenter.setCenterLocation(0.5f, 0.5f);
+//    int x = screenPoint.getX() + (tileBox.getCenterPixelX() - tbCenter.getCenterPixelX());
+//    int y = screenPoint.getY() + (tileBox.getCenterPixelY() - tbCenter.getCenterPixelY());
+//    screenPoint = new PointI(x, y);
+//}
+//PointI point31 = new PointI();
+//if (mapRenderer.getLocationFromScreenPoint(screenPoint, point31)) {
+//    return point31;
+//}
+//return null;
+//}
+
+
+- (void) get31FromPixel:(OsmAnd::PointI)screenPoint useShiftedCenter:(BOOL)useShiftedCenter
+{
+    if (useShiftedCenter)
+    {
+        
+    }
+}
+
+
+//
+//public static LatLon getLatLonFromPixel(@NonNull MapRendererView mapRenderer, @Nullable RotatedTileBox tileBox,
+//                                        @NonNull PointI screenPoint) {
+//    PointI point31 = get31FromPixel(mapRenderer, tileBox, screenPoint, false);
+//    if (point31 != null) {
+//        return new LatLon(MapUtils.get31LatitudeY(point31.getY()), MapUtils.get31LongitudeX(point31.getX()));
+//    }
+//    return null;
+//}
+
+- (void) getLatLonFromPixel
+{
+    //[self get31FromPixel]
+}
+
++ (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon
+{
+    CGPoint screenPoint = [self.class getScreenPointFromLatLon:lat lon:lon];
+    return OsmAnd::PointF(screenPoint.x, screenPoint.y);
+}
+
++ (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
+    int y31 = OsmAnd::Utilities::get31TileNumberX(lat);
+    OsmAnd::PointI point31 = OsmAnd::PointI(x31, y31);
+    CGPoint screenPoint;
+    [mapRenderer convert:&point31 toScreen:&screenPoint checkOffScreen:NO];
+    return screenPoint;
+}
+
 + (double) getLocationHeightOrZero:(OsmAnd::PointI)location31
 {
     OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
@@ -340,6 +398,24 @@
 {
     OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
     return [mapRenderer isPositionVisible:[self.class getPoint31FromLatLon:lat lon:lon]];
+}
+
+//public static PointI calculateTarget31(@NonNull MapRendererView mapRenderer,
+//                                       double latitude, double longitude, boolean applyNewTarget) {
+//    PointI target31 = new PointI(MapUtils.get31TileNumberX(longitude), MapUtils.get31TileNumberY(latitude));
+//    if (applyNewTarget) {
+//        mapRenderer.setTarget(target31);
+//    }
+//    return target31;
+//}
+
++ (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    OsmAnd::PointI target31 = [self.class getPoint31FromLatLon:latitude lon:longitude];
+    if (applyNewTarget)
+        [mapRenderer setTarget31:target31];
+    return target31;
 }
 
 @end

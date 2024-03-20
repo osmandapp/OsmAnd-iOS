@@ -22,6 +22,7 @@
 #import "OAZoom.h"
 #import "OAAppDelegate.h"
 #import "OARouteCalculationResult.h"
+#import "OAMapUtils.h"
 
 #include <commonOsmAndCore.h>
 
@@ -33,6 +34,9 @@ static double const COMPASS_REQUEST_TIME_INTERVAL = 5;
 static double const AUTO_ZOOM_DEFAULT_CHANGE_ZOOM = 4.5;
 static double const MOVE_ANIMATION_TIME = 0.5;
 static double const NAV_ANIMATION_TIME = 1.0;
+static double const SKIP_ANIMATION_TIMEOUT = 10.0;
+static double const ROTATION_MOVE_ANIMATION_TIME = 1.0;
+static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
 
 @interface OAMapViewTrackingUtilities ()
 
@@ -47,6 +51,7 @@ static double const NAV_ANIMATION_TIME = 1.0;
     OAAppSettings *_settings;
     OsmAndAppInstance _app;
     OAAutoZoomBySpeedHelper *_autoZoomBySpeedHelper;
+    OARoutingHelper *_routingHelper;
     BOOL _followingMode;
     BOOL _routePlanningMode;
     BOOL _isUserZoomed;
@@ -95,6 +100,7 @@ static double const NAV_ANIMATION_TIME = 1.0;
         _settings = [OAAppSettings sharedManager];
         _myLocation = _app.locationServices.lastKnownLocation;
         _autoZoomBySpeedHelper = [[OAAutoZoomBySpeedHelper alloc] init];
+        _routingHelper = [OARoutingHelper sharedInstance];
         
         _lastMapMode = _app.mapMode;
 
@@ -269,6 +275,129 @@ static double const NAV_ANIMATION_TIME = 1.0;
 // TODO: sync it with android
 - (void) onLocationServicesUpdate
 {
+//    [self onLocationServicesUpdateV1];
+//    return;
+    
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+        
+        if (!_mapViewController || ![_mapViewController isViewLoaded])
+        {
+            _needsLocationUpdate = YES;
+            return;
+        }
+        
+        CLLocation *location = _app.locationServices.lastKnownLocation;
+        CLLocation *prevLocation = _myLocation;
+        NSTimeInterval movingTime = (prevLocation && location) ? (location.timestamp.timeIntervalSince1970 - prevLocation.timestamp.timeIntervalSince1970) : 0;
+        _myLocation = location;
+        BOOL showViewAngle = NO;
+       
+        if (location)
+        {
+            if (_myLocation && ![_myLocation hasBearing])
+                _myLocation = [_myLocation locationWithBearing:_app.locationServices.lastKnownHeading];
+            
+            OAAppDelegate *appDelegate = (OAAppDelegate *)[[UIApplication sharedApplication] delegate];
+            if ([_settings.drivingRegionAutomatic get] && !_drivingRegionUpdated && ![appDelegate isAppInitializing])
+            {
+                _drivingRegionUpdated = true;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [self detectDrivingRegion:location];
+                    
+                    // TODO: implement RoutingHelperUtils.updateDrivingRegionIfNeeded(app, location, true);
+                    // and delete old detectDrivingRegion() method
+                });
+            }
+        }
+        
+        if (_mapViewController)
+        {
+            OAMapRendererView *renderer = _mapViewController.mapView;
+            if ([self isMapLinkedToLocation] && location)
+            {
+                double rotation = NAN;
+                BOOL pendingRotation = NO;
+                int currentMapRotation = [_settings.rotateMap get];
+                BOOL smallSpeedForCompass = [self isSmallSpeedForCompass:location];
+                
+                showViewAngle = (![location hasBearing] || smallSpeedForCompass) && [OANativeUtilities containsLatLon:location];
+                if (currentMapRotation == ROTATE_MAP_BEARING)
+                {
+                    // special case when bearing equals to zero (we don't change anything)
+                    if ([location hasBearing] && location.course != 0)
+                    {
+                        rotation = -location.course; //TODO: check   rotation = location.course;
+                    }
+                    if (isnan(rotation) && prevLocation)
+                    {
+                        //TODO: implement NativeUtils methods
+                        /*
+                        CGFloat density = renderer.displayDensityFactor;
+                        //double distDp = (tb.getPixDensity() * MapUtils.getDistance(prevLocation, location)) / tb.getDensity();
+                        double distDp = (density * [OAMapUtils getDistance:prevLocation.coordinate second:location.coordinate]) / density;
+                        if (distDp > SKIP_ANIMATION_DP_THRESHOLD)
+                        {
+                            movingTime = 0;
+                        }
+                         */
+                    }
+                }
+                else if (currentMapRotation == ROTATE_MAP_COMPASS)
+                {
+                    showViewAngle = _routePlanningMode;  // disable compass rotation in that mode
+                    pendingRotation = YES;
+                }
+                else if (currentMapRotation == ROTATE_MAP_NONE)
+                {
+                    rotation = 0;
+                    pendingRotation = YES;
+                }
+                else if (currentMapRotation == ROTATE_MAP_MANUAL)
+                {
+                    pendingRotation = YES;
+                }
+                // registerUnregisterSensor(location, smallSpeedForCompass);
+                
+                if (![_settings.useV1AutoZoom get])
+                    [self setMyLocationV2:location timeDiff:movingTime rotation:rotation];
+                else
+                    [self setMyLocationV1:location timeDiff:movingTime rotation:rotation pendingRotation:pendingRotation];
+            }
+            else if (location)
+            {
+                showViewAngle = (![location hasBearing] || [self isSmallSpeedForCompass:location]) && [OANativeUtilities containsLatLon:location];
+                // registerUnregisterSensor(location, false);
+            }
+            
+            _showViewAngle = showViewAngle;
+            _followingMode = _routingHelper.isFollowingMode;
+            if (_routePlanningMode != [_routingHelper isRoutePlanningMode])
+            {
+                [self switchToRoutePlanningMode];
+            }
+            // When location is changed we need to refresh map in order to show movement!
+            [[OARootViewController instance].mapPanel refreshMap];
+        }
+        
+        [_mapViewController updateLocation:location heading:location.course];
+        
+        /*
+        if (dashboard != null) {
+            dashboard.updateMyLocation(location);
+        }
+        if (contextMenu != null) {
+            contextMenu.updateMyLocation(location);
+        }
+        */
+                
+    });
+}
+
+//TODO: old code. delete
+- (void) onLocationServicesUpdateV1
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         
         if (!_mapViewController || ![_mapViewController isViewLoaded])
@@ -418,6 +547,188 @@ static double const NAV_ANIMATION_TIME = 1.0;
     });
 }
 
+- (void) setMyLocationV2:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation
+{
+    BOOL animateMyLocation = [self animateMyLocation:location];
+    
+    OAComplexZoom *autoZoom = nil;
+    if ([self shouldAutoZoom:location autoZoomFrequency:0])
+    {
+        if (animateMyLocation)
+        {
+            [self stopAnimatingSync];
+        }
+        
+        autoZoom = [_autoZoomBySpeedHelper calculateZoomBySpeedToAnimate:_mapView myLocation:location rotationToAnimate:rotation nextTurn:[self getNextTurn]];
+    }
+    
+    NSTimeInterval movingTime;
+    if (animateMyLocation)
+    {
+        movingTime = timeDiff;
+    }
+    else
+    {
+        // TODO: add settings.DO_NOT_USE_ANIMATIONS.get()
+        //public final OsmandPreference<Boolean> DO_NOT_USE_ANIMATIONS = new BooleanPreference(this, "do_not_use_animations", false).makeProfile().cache();
+        BOOL doNotUseAnimations = NO;
+        if (doNotUseAnimations)
+        {
+            movingTime = 0;
+        }
+        else
+        {
+            movingTime = _movingToMyLocation ? MIN(timeDiff * 0.7, MOVE_ANIMATION_TIME) : MOVE_ANIMATION_TIME;
+        }
+    }
+    
+    float fixedZoomDuration = animateMyLocation ? -1 : NAV_ANIMATION_TIME;
+    OAAutoZoomDTO *zoomParams = autoZoom != nil ? [_autoZoomBySpeedHelper getAutoZoomParams:_mapView.zoom autoZoom:autoZoom fixedDurationMillis:fixedZoomDuration] : nil;
+    
+    [self startMoving:location.coordinate.latitude finalLon:location.coordinate.longitude zoomParams:zoomParams pendingRotation:NO finalRotation:rotation movingTime:movingTime notifyListener:NO finishAnimationCallback:^{
+        _movingToMyLocation = NO;
+    }];
+}
+
+//TODO: implement
+- (void) setMyLocationV1:(CLLocation *)location timeDiff:(NSTimeInterval)timeDiff rotation:(double)rotation pendingRotation:(BOOL)pendingRotation
+{
+    
+}
+
+- (void) stopAnimatingSync
+{
+    const auto animator = [self getMapAnimator];
+    animator->pause();
+}
+
+
+- (void) startMoving:(double)finalLat finalLon:(double)finalLon zoomParams:(OAAutoZoomDTO *)zoomParams pendingRotation:(BOOL)pendingRotation finalRotation:(double)finalRotation movingTime:(NSTimeInterval)movingTime notifyListener:(BOOL)notifyListener finishAnimationCallback:(void (^)(void))finishAnimationCallback
+{
+    [self stopAnimatingSync];
+    
+    CLLocation *startLatLon = [self getMapLocation];
+    float startZoom = _mapView.zoom;
+    float startRotation = _mapView.azimuth;
+    
+    float zoom;
+    float rotation;
+    if (zoomParams)
+        zoom = zoomParams.zoomValue.base + zoomParams.zoomValue.floatPart;
+    else
+        zoom = startZoom;
+    
+    if (!isnan(finalRotation))
+        rotation = finalRotation;
+    else
+        rotation = startRotation;
+    
+    std::shared_ptr<OsmAnd::IMapRenderer> mapRenderer = _mapView.renderer;
+    float mMoveX;
+    float mMoveY;
+    if (!mapRenderer)
+    {
+        OsmAnd::PointF startPoint = [OANativeUtilities getPixelFromLatLon:startLatLon.coordinate.latitude lon:startLatLon.coordinate.longitude];
+        OsmAnd::PointF finalPoint = [OANativeUtilities getPixelFromLatLon:finalLat lon:finalLon];
+        mMoveX = startPoint.x - finalPoint.x;
+        mMoveY = startPoint.y - finalPoint.y;
+    }
+    else
+    {
+        mMoveX = 0;
+        mMoveY = 0;
+    }
+    
+    BOOL skipAnimation = movingTime == 0 || movingTime > SKIP_ANIMATION_TIMEOUT || ![OANativeUtilities containsLatLon:finalLat lon:finalLon];
+    if (skipAnimation)
+    {
+        [_mapView setLat:finalLat lon:finalLon];
+        [_mapView setZoom:zoom];
+        [_mapView setAzimuth:rotation];
+        if (finishAnimationCallback)
+        {
+            finishAnimationCallback();
+        }
+        return;
+    }
+    
+    float animationDuration = max(movingTime, NAV_ANIMATION_TIME / 4);
+    
+    BOOL animateZoom = zoomParams != nil && (zoom != startZoom);     //TODO: check and delete (zoom != startZoom || zoomFP != startZoomFP);
+    float rotationDiff = !isnan(finalRotation) ? abs([OAMapUtils unifyRotationDiff:rotation targetRotate:startRotation]) : 0;
+    BOOL animateRotation = rotationDiff > 0.1;
+    BOOL animateTarget;
+    
+    const auto animator = [self getMapAnimator];
+    if (mapRenderer && animator)
+    {
+        const auto targetAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+        auto zoomAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        
+        animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
+        
+        if (!animateZoom)
+            zoomAnimation = nullptr;
+        if (zoomAnimation)
+        {
+            animator->cancelAnimation(zoomAnimation);
+            animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
+        }
+        
+        const auto azimuthAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+        if (!isnan(finalRotation))
+        {
+            animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+            if (azimuthAnimation != nullptr)
+            {
+                animator->cancelAnimation(azimuthAnimation);
+            }
+        }
+        
+        if (animateRotation)
+        {
+            animator->animateAzimuthTo(-rotation, MAX(animationDuration, ROTATION_MOVE_ANIMATION_TIME), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
+        }
+        
+        OsmAnd::PointI start31 = [_mapView getTarget];
+        OsmAnd::PointI finish31 = [OANativeUtilities calculateTarget31:finalLat longitude:finalLon applyNewTarget:NO];
+        animateTarget = abs(finish31.x - start31.x) > 5 || abs(finish31.y - start31.y) > 5;
+        if (animateTarget)
+        {
+            float duration = animationDuration; // sec or msecs?
+            if (targetAnimation != nullptr)
+            {
+                animator->cancelAnimation(targetAnimation);
+            }
+            _mapView.mapAnimator->animateTargetTo(finish31, duration, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
+        }
+        
+        if (animateZoom)
+        {
+            animator->animateZoomTo(zoom, zoomParams.durationValue / 1000.0, OsmAnd::MapAnimator::TimingFunction::EaseOutQuartic, kLocationServicesAnimationKey);
+        }
+        if (!animateZoom)
+        {
+            [_mapView setZoom:zoom];
+        }
+        if (!animateRotation && !isnan(finalRotation))
+        {
+            [_mapView setAzimuth:rotation];
+        }
+        if (!animateTarget)
+        {
+            [_mapView setLat:finalLat lon:finalLon];
+        }
+        
+        animator->resume();
+    }
+}
+
+- (const std::shared_ptr<OsmAnd::MapAnimator>&) getMapAnimator
+{
+    return [_mapView getMapAnimator];
+}
+
 - (BOOL) animateMyLocation:(CLLocation *)location
 {
     return [_settings.animateMyLocation get] && ![self.class isSmallSpeedForAnimation:location] && !_movingToMyLocation;
@@ -457,6 +768,22 @@ static double const NAV_ANIMATION_TIME = 1.0;
     if (worldRegion)
         [_app setupDrivingRegion:worldRegion];
 }
+
+//- (void) updateDrivingRegionIfNeeded:(double)lat lon:(double)lon force:(BOOL)force
+//{
+//    if ([_settings.drivingRegionAutomatic get])
+//    {
+////        [_settings startp]
+//    }
+//}
+//
+//- (void) updateDrivingRegionIfNeeded:(CLLocation *)nextStartLocation force:(BOOL)force
+//{
+//    if (nextStartLocation)
+//    {
+//        [self updateDrivingRegionIfNeeded:nextStartLocation.coordinate.latitude lon:nextStartLocation.coordinate.longitude force:force];
+//    }
+//}
 
 - (CLLocationDirection) calculateDirectionWithLocation:(CLLocation *)location heading:(CLLocationDirection)heading applyViewAngleVisibility:(BOOL)applyViewAngleVisibility
 {
@@ -506,7 +833,12 @@ static double const NAV_ANIMATION_TIME = 1.0;
 
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location
 {
-    return isnan(location.speed) || location.speed < 1.5;
+    return ![location hasSpeed] || location.speed < 1.5;
+}
+
+- (BOOL) isSmallSpeedForCompass:(CLLocation *)location
+{
+    return ![location hasSpeed] || location.speed < 0.5;
 }
 
 - (BOOL) isContextMenuVisible

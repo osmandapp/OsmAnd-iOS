@@ -488,6 +488,7 @@
 		32D253B327F336C200324717 /* OACloudAccountLoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A927F336C100324717 /* OACloudAccountLoginViewController.m */; };
 		32D253B427F336C200324717 /* OACloudIntroductionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */; };
 		32D253B527F336C200324717 /* OACloudAccountBaseViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */; };
+		32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */; };
 		32DE2BE42B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
 		32E2D2FC29B9C7A300A17D0B /* OAShowHideMapCenterAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E2D2FB29B9C7A300A17D0B /* OAShowHideMapCenterAction.m */; };
@@ -4039,6 +4040,8 @@
 		32D253AA27F336C100324717 /* OACloudAccountCreateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountCreateViewController.h; sourceTree = "<group>"; };
 		32D253AB27F336C100324717 /* OACloudIntroductionViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OACloudIntroductionViewController.m; sourceTree = "<group>"; };
 		32D253AC27F336C100324717 /* OACloudAccountBaseViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OACloudAccountBaseViewController.xib; sourceTree = "<group>"; };
+		32DA38A62BA9C4C600A3AC3C /* CLLocation+Extension.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "CLLocation+Extension.h"; sourceTree = "<group>"; };
+		32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+Extension.m"; sourceTree = "<group>"; };
 		32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoButtonsTableViewCell.swift; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
 		32E2D2FA29B9C79500A17D0B /* OAShowHideMapCenterAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideMapCenterAction.h; sourceTree = "<group>"; };
@@ -9978,6 +9981,8 @@
 				46ED6C412B333BE400A5555F /* Pair.swift */,
 				46ED6C3D2B333B4400A5555F /* Plugin+Extension.swift */,
 				46207CF62B9A7EDE000D337D /* String+Extension.swift */,
+				32DA38A62BA9C4C600A3AC3C /* CLLocation+Extension.h */,
+				32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -17923,6 +17928,7 @@
 				DA5A84E726C563A900F274C7 /* OAWaypointsPOIScreen.mm in Sources */,
 				DA1A886427FC66DA00A82DF6 /* OABackupDbHelper.m in Sources */,
 				DA5A824E26C563A700F274C7 /* OAMapBehaviorViewController.m in Sources */,
+				32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */,
 				DA5A83BD26C563A800F274C7 /* OAAddQuickActionViewController.m in Sources */,
 				DA5A81DD26C563A700F274C7 /* OAStreetIntersection.mm in Sources */,
 				DA5A83E226C563A800F274C7 /* OAEditColorViewController.m in Sources */,

@@ -61,13 +61,13 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 
 @implementation OAAutoZoomDTO
 
-- (instancetype) initWithZoom:(OAComplexZoom *)zoomValue floatValue:(float)floatValue
+- (instancetype) initWithZoom:(OAComplexZoom *)zoomValue durationValue:(float)durationValue
 {
     self = [super init];
     if (self)
     {
         _zoomValue = zoomValue;
-        _floatValue = floatValue;
+        _durationValue = durationValue;
     }
     return self;
 }
@@ -244,15 +244,16 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
 - (OAAutoZoomDTO *) getAutoZoomParams:(float)currentZoom autoZoom:(OAComplexZoom *)autoZoom fixedDurationMillis:(float)fixedDurationMillis
 {
     if (fixedDurationMillis > 0)
-        return [[OAAutoZoomDTO alloc] initWithZoom:autoZoom floatValue:fixedDurationMillis];
+        return [[OAAutoZoomDTO alloc] initWithZoom:autoZoom durationValue:fixedDurationMillis];
     
     float zoomDelta = [autoZoom fullZoom] - currentZoom;
     float zoomDuration = abs(zoomDelta) / kZoomPerMillis;
     
+    //TODO: test and uncomment
     if (zoomDuration < kZoomDurationMillis)
         return nil;
     
-    return [[OAAutoZoomDTO alloc] initWithZoom:autoZoom floatValue:zoomDuration];
+    return [[OAAutoZoomDTO alloc] initWithZoom:autoZoom durationValue:zoomDuration];
 }
 
 - (float) getShowDistanceToDrive:(EOAAutoZoomMap)autoZoomScale nextTurn:(OANextDirectionInfo *)nextTurn speed:(float)speed

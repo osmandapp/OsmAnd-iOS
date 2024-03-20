@@ -14,7 +14,7 @@
 @interface OAMapViewTrackingUtilities : NSObject
 
 @property (nonatomic, readonly) CLLocation *myLocation;
-@property (nonatomic, readonly) CLLocationDirection heading;
+@property (nonatomic, readonly) CLLocationDirection heading; //TODO: delete this var?
 @property (nonatomic, readonly) BOOL showViewAngle;
 @property (nonatomic, readonly) BOOL movingToMyLocation;
 

@@ -3560,8 +3560,6 @@
 "shared_string_ear_lobe" = "Ear lobe";
 "shared_string_foot" = "Foot";
 
-
-//"device_disconnected">%1$s disconnected"Running device";
 "bicycle_scd_device_name" = "Bicycle device";
 "external_device_blood_pressure" = "Blood pressure";
 "no_bt_permission" = "Bluetooth permission is not granted";

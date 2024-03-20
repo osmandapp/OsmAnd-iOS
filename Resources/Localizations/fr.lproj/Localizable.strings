@@ -3135,7 +3135,6 @@
 "external_device_forget_sensor_description" = "Ce capteur sera supprimé de la liste. Vous pourrez appairer de nouveau ce capteur à tout moment.";
 
 
-//"device_disconnected">%1$s disconnected"Appareil en fonctionnement";
 "no_bt_permission" = "L\'autorisation Bluetooth n\'a pasété accordée";
 "shared_string_wrist" = "Poignet";
 "shared_string_travel_guides" = "Guides de voyage";

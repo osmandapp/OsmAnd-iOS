@@ -3212,7 +3212,6 @@
 "detailed_log_file" = "Ficheiro de registo detalhado";
 
 
-//"device_disconnected">%1$s disconnected"Dispositivo em execução";
 "help_article_navigation_routing_ski_routing_name" = "Roteamento de esqui";
 "no_bt_permission" = "A permissão de Bluetooth não foi concedida";
 "shared_string_wrist" = "Pulso";

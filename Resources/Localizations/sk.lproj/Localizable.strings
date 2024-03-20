@@ -2446,8 +2446,6 @@
 "beats_per_minute_short" = "tep";
 "there_are_no_connected_sensors_of_this_type" = "Nie sú pripojené žiadne snímače tohto typu";
 
-
-//"device_disconnected">%1$s disconnected"Bežecké zariadenie";
 "bicycle_scd_device_name" = "Cyklistické zariadenie";
 "shared_string_finger" = "Prst";
 "shared_string_hand" = "Ruka";

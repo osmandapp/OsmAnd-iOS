@@ -3265,7 +3265,6 @@
 "popular_articles_not_found_title" = "Beliebte Artikel nicht gefunden";
 
 
-//"device_disconnected">%1$s disconnected"Laufgerät";
 "popular_articles_not_found_descr" = "Es sind keine Artikel in der Nähe der Kartenmitte vorhanden. Verwenden Sie die Suche, um Artikel zu finden.";
 "external_device_unpair_description" = "Verbinden Sie den Sensor mit Ihrem Gerät, um Informationen zu erhalten.";
 "help_article_search_search_poi_name" = "POI suchen";

@@ -3077,8 +3077,6 @@
 "routing_attr_avoid_footways_description" = "تجنب طرق المشاة";
 "shared_string_height" = "الارتفاع";
 
-
-//"device_disconnected">%1$s disconnected"تشغيل الجهاز";
 "over_wifi_only" = "عبر الواي الفاي فقط";
 "change_language" = "غيَّر اللغة";
 "shared_string_app_profile" = "تطبيق الملف الشخصي";

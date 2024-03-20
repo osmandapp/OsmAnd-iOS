@@ -3256,8 +3256,6 @@
 "shared_string_ear_lobe" = "Lobul urechii";
 "shared_string_foot" = "Picior";
 
-
-//"device_disconnected">%1$s disconnected"Dispozitiv de alergat";
 "external_device_blood_pressure" = "Tensiune arterială";
 "external_sensors_support" = "Suport senzori externi";
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";

@@ -3225,8 +3225,6 @@
 "map_widget_ant_bicycle_speed" = "Брзина бицикла";
 "map_widget_ant_bicycle_speed_desc" = "Приказује брзину путовања";
 
-
-//"device_disconnected">%1$s disconnected"Радећи уређај";
 "map_widget_ant_bicycle_dist" = "Растојање бицикла";
 "external_sensors_support" = "Подршка спољних пријемника";
 "learn_more_about_sensors_link" = "Сазнајте подробније о пријемницима.";

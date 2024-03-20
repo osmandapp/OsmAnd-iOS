@@ -3137,8 +3137,6 @@
 "article_removed_from_bookmark" = " fjernet fra bogmærker.";
 "external_device_forget_sensor_description" = "Sensoren fjernes fra listen.Du vil kunne parre denne sensor igen til enhver tid.";
 
-
-//"device_disconnected">%1$s disconnected"Løbeenhed";
 "no_bt_permission" = "Bluetooth-tilladelse er ikke givet";
 "shared_string_wrist" = "Håndled";
 "shared_string_travel_guides" = "Rejseguider";

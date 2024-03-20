@@ -2669,8 +2669,6 @@
 "shared_string_ear_lobe" = "Ušna školjka";
 "shared_string_foot" = "Noga";
 
-
-//"device_disconnected">%1$s disconnected"Aktivan uređaj";
 "bicycle_scd_device_name" = "Uređaj za biciklu";
 "learn_more_about_sensors_link" = "Saznaj više o prijemnicima.";
 "ant_plus_nothing_found_text" = "Nije moguće pronaći nijedan senzor";

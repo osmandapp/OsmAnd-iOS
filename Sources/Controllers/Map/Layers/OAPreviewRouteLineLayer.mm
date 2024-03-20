@@ -337,7 +337,7 @@
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        width = [self getParamFromAttr:[OAAppSettings sharedManager].nightMode ? @"strokeWidth_0" : @"strokeWidth"].floatValue;
         double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
         width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
     }

@@ -13,6 +13,8 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OARootViewController.h"
+#import "OAMapRendererView.h"
 
 @implementation OASunriseSunsetWidget
 {
@@ -20,6 +22,7 @@
     OAAppSettings *_settings;
     OASunriseSunsetWidgetState *_state;
     NSArray<NSString *> *_items;
+    CLLocation *_cachedCenterLatLon;
 }
 
 - (instancetype)initWithState:(OASunriseSunsetWidgetState *)state
@@ -52,6 +55,7 @@
 
 - (BOOL) updateInfo
 {
+    [self updateCachedLocation];
     if ([self isShowTimeLeft])
     {
         NSTimeInterval leftTime = [self getTimeLeft];
@@ -330,9 +334,8 @@
 
 - (SunriseSunset *) createSunriseSunset:(NSDate *)date
 {
-    CLLocation *location = OsmAndApp.instance.locationServices.lastKnownLocation;
-    double longitude = location.coordinate.longitude;
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:location.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
+    double longitude = _cachedCenterLatLon.coordinate.longitude;
+    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
     return sunriseSunset;
 }
 
@@ -367,6 +370,26 @@
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setDateFormat:@"HH:mm EE"];
     return [dateFormatter stringFromDate:nextDate];
+}
+
+- (void) updateCachedLocation
+{
+    OsmAnd::LatLon centerLocation = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
+    CLLocation *newCenterLatLon = [[CLLocation alloc] initWithLatitude:centerLocation.latitude longitude:centerLocation.longitude];
+    if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLatLon])
+        _cachedCenterLatLon = newCenterLatLon;
+}
+
+- (BOOL) isLocationsEqual:(CLLocation *)firstCoordinate with:(CLLocation *)secondCoordinate
+{
+    if (firstCoordinate && secondCoordinate)
+    {
+        double lat = firstCoordinate.coordinate.longitude;
+        double newLat = secondCoordinate.coordinate.longitude;
+        return fabs(lat - newLat) <= 0.001;
+    }
+    
+    return NO;
 }
 
 @end

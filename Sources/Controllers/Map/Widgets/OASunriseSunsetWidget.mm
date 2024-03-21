@@ -22,6 +22,7 @@
     OAAppSettings *_settings;
     OASunriseSunsetWidgetState *_state;
     NSArray<NSString *> *_items;
+    OsmAnd::PointI _cachedTarget31;
     CLLocation *_cachedCenterLatLon;
 }
 
@@ -374,19 +375,29 @@
 
 - (void) updateCachedLocation
 {
-    OsmAnd::LatLon centerLocation = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
-    CLLocation *newCenterLatLon = [[CLLocation alloc] initWithLatitude:centerLocation.latitude longitude:centerLocation.longitude];
-    if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLatLon])
-        _cachedCenterLatLon = newCenterLatLon;
+    OsmAnd::PointI currentTarget31 = [OARootViewController instance].mapPanel.mapViewController.mapView.target31;
+    if (_cachedTarget31 != currentTarget31)
+    {
+        _cachedTarget31 = currentTarget31;
+        OsmAnd::LatLon centerLocation = OsmAnd::Utilities::convert31ToLatLon(_cachedTarget31);
+        CLLocation *newCenterLatLon = [[CLLocation alloc] initWithLatitude:centerLocation.latitude longitude:centerLocation.longitude];
+        if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLatLon])
+            _cachedCenterLatLon = newCenterLatLon;
+    }
 }
 
 - (BOOL) isLocationsEqual:(CLLocation *)firstCoordinate with:(CLLocation *)secondCoordinate
 {
     if (firstCoordinate && secondCoordinate)
     {
-        double lat = firstCoordinate.coordinate.longitude;
-        double newLat = secondCoordinate.coordinate.longitude;
-        return fabs(lat - newLat) <= 0.001;
+        CLLocationCoordinate2D firstCoord = firstCoordinate.coordinate;
+        CLLocationCoordinate2D secondCoord = secondCoordinate.coordinate;
+        if (CLLocationCoordinate2DIsValid(firstCoord) && CLLocationCoordinate2DIsValid(secondCoord))
+        {
+            double lon = firstCoord.longitude;
+            double newLon = secondCoord.longitude;
+            return fabs(lon - newLon) <= 0.001;
+        }
     }
     
     return NO;

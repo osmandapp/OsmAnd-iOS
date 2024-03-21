@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -34,8 +34,9 @@
 - (NSArray<OAResourceItem *> *) getSuggestedMaps;
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
 - (NSArray<NSString *> *) getWidgetIds;
-- (NSString  * _Nullable)getAnyConnectedDeviceId;
-- (NSString * _Nullable)getWidgetDataFieldTypeNameByWidgetId:(NSString * _Nonnull)widgetId;
+
+- (NSArray<OACommonPreference *> * _Nonnull)getPreferences;
+- (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)prefId defValue:(NSString * _Nullable)defValue;
 
 - (BOOL) initPlugin;
 - (void) setEnabled:(BOOL)enabled;
@@ -59,7 +60,6 @@
 + (OAPlugin *) getEnabledPlugin:(Class) cl;
 + (OAPlugin *) getPlugin:(Class) cl;
 + (OAPlugin *) getPluginById:(NSString *)pluginId;
-+ (OAPlugin * _Nullable) getPluginByWidgetId:(NSString * _Nonnull)widgetId;
 + (BOOL) isEnabled:(Class) cl;
 + (BOOL) onDestinationReached;
 + (void) createLayers;

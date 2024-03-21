@@ -8,9 +8,6 @@
 
 #import "OAPlugin.h"
 
-FOUNDATION_EXPORT NSString * _Nonnull const OATrackRecordingNone;
-FOUNDATION_EXPORT NSString * _Nonnull const OATrackRecordingAnyConnected;
-
 @class OACommonString, OAApplicationMode;
 
 @interface OAExternalSensorsPlugin : OAPlugin
@@ -19,5 +16,7 @@ FOUNDATION_EXPORT NSString * _Nonnull const OATrackRecordingAnyConnected;
 - (OACommonString * _Nullable)getWriteToTrackDeviceIdPref:(OAWidgetType * _Nonnull)dataType;
 - (void)saveDeviceId:(NSString *_Nonnull)deviceID widgetType:(OAWidgetType *_Nonnull)widgetType appMode:(OAApplicationMode *_Nonnull)appMode;
 - (NSString *_Nonnull)getDeviceIdForWidgetType:(OAWidgetType *_Nonnull)widgetType appMode:(OAApplicationMode *_Nonnull)appMode;
+- (NSString * _Nullable)getWidgetDataFieldTypeNameByWidgetId:(NSString * _Nonnull)widgetId;
+- (NSString * _Nonnull)getAnyConnectedDeviceId;
 
 @end

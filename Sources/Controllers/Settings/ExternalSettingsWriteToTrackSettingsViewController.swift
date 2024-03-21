@@ -65,8 +65,8 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
                 let dataType: OATableRowData = dataTypeSection.createNewRow()
                 dataType.key = widgetType.id
                 var deviceName = localizedString("shared_string_none")
-                if deviceId != OATrackRecordingNone {
-                    if deviceId == OATrackRecordingAnyConnected {
+                if let deviceId, !deviceId.isEmpty {
+                    if deviceId == plugin.getAnyConnectedDeviceId() {
                         if let connectedDevices = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType),
                            let firstDevice = connectedDevices.first {
                             deviceFound = true
@@ -75,7 +75,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
                             deviceName = localizedString("external_device_any_connected")
                         }
                     } else {
-                        if let deviceId, let device = DeviceHelper.shared.getPairedDevicesFor(type: widgetType, deviceId: deviceId) {
+                        if let device = DeviceHelper.shared.getPairedDevicesFor(type: widgetType, deviceId: deviceId) {
                             deviceFound = true
                             deviceName = device.deviceName
                         }

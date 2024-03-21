@@ -153,7 +153,7 @@ final class DeviceHelper: NSObject {
               let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
         supportedTypes.forEach {
             let deviceId = plugin.getDeviceId(for: $0, appMode: OAAppSettings.sharedManager().applicationMode.get())
-            if deviceId != OATrackRecordingNone {
+            if !deviceId.isEmpty {
                 plugin.getWriteToTrackDeviceIdPref($0)?.resetToDefault()
             }
         }

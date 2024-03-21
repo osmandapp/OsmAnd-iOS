@@ -38,6 +38,7 @@
     NSString *_titleId;
     NSString *_shortDescriptionId;
     NSString *_descriptionId;
+    NSMutableArray<OACommonPreference *> *_pluginPreferences;
     
     OAAutoObserverProxy* _addonsSwitchObserver;
 }
@@ -58,7 +59,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if (self)
     {
         [self processNames];
-        
+        _pluginPreferences = [NSMutableArray array];
         _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                           withHandler:@selector(onAddonsSwitch:withKey:andValue:)
                                                            andObserve:[OsmAndApp instance].addonsSwitchObservable];
@@ -262,14 +263,16 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return @[];
 }
 
-- (NSString *)getAnyConnectedDeviceId
+- (NSArray<OACommonPreference*> *)getPreferences
 {
-    return nil;
+    return _pluginPreferences;
 }
 
-- (NSString *)getWidgetDataFieldTypeNameByWidgetId:(NSString *)widgetId
+- (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(NSString *)defValue
 {
-    return nil;
+    OACommonString *preference = [[OAAppSettings sharedManager] registerStringPreference:prefId defValue:defValue];
+    [_pluginPreferences addObject:preference];
+    return preference;
 }
 
 /*
@@ -665,19 +668,6 @@ public List<String> indexingFiles(IProgress progress) {
     for (OAPlugin *plugin in [self getAvailablePlugins])
     {
         if ([plugin.getId isEqualToString:pluginId])
-            return plugin;
-    }
-    return nil;
-}
-
-+ (OAPlugin * _Nullable) getPluginByWidgetId:(NSString * _Nonnull)widgetId
-{
-    NSString *origWidgetId = [widgetId containsString:OAMapWidgetInfo.DELIMITER]
-        ? [widgetId substringToIndex:[widgetId indexOf:OAMapWidgetInfo.DELIMITER]]
-        : widgetId;
-    for (OAPlugin *plugin in [self getAvailablePlugins])
-    {
-        if ([[plugin getWidgetIds] containsObject:origWidgetId])
             return plugin;
     }
     return nil;

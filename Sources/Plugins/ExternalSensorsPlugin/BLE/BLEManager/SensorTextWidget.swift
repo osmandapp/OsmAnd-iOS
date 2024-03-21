@@ -20,7 +20,7 @@ final class SensorTextWidget: OASimpleWidget {
     private var appMode: OAApplicationMode!
     private var plugin: OAExternalSensorsPlugin?
     
-    var shouldUseAnyDevice: Bool {
+    var shouldUseAnyConnectedDevice: Bool {
         deviceIdPref?.get(appMode) == plugin?.getAnyConnectedDeviceId()
     }
    
@@ -77,13 +77,13 @@ final class SensorTextWidget: OASimpleWidget {
             applyDeviceId()
         }
         if let sensor = getCurrentSensor() {
-            if shouldUseAnyDevice {
+            if shouldUseAnyConnectedDevice {
                 settingRow.descr = localizedString("external_device_any_connected") + ": " + sensor.device.deviceName
             } else {
                 settingRow.descr = sensor.device.deviceName
             }
         } else {
-            settingRow.descr = localizedString(shouldUseAnyDevice ? "external_device_any_connected" : "shared_string_none")
+            settingRow.descr = localizedString(shouldUseAnyConnectedDevice ? "external_device_any_connected" : "shared_string_none")
         }
 
         return data
@@ -141,7 +141,7 @@ final class SensorTextWidget: OASimpleWidget {
         guard let widgetType else {
             return nil
         }
-        if shouldUseAnyDevice {
+        if shouldUseAnyConnectedDevice {
             if let device = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType)?.first {
                 return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
                     .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
@@ -162,7 +162,7 @@ final class SensorTextWidget: OASimpleWidget {
     }
     
     private func applyDeviceId() {
-        guard !shouldUseAnyDevice else {
+        guard !shouldUseAnyConnectedDevice else {
             return
         }
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {

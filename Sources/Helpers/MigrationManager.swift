@@ -29,7 +29,7 @@ final class MigrationManager: NSObject {
             /*  Migration 1, sync with android
 
                 widget panels:
-            
+
                 top_widget_panel_order -> widget_top_panel_order
                 bottom_widget_panel_order -> widget_bottom_panel_order
 
@@ -39,7 +39,12 @@ final class MigrationManager: NSObject {
                 bicycleCadence -> ant_bicycle_cadence
                 bicycleDistance -> ant_bicycle_distance
                 bicycleSpeed -> ant_bicycle_speed
-                temperature -> temperature_sensor */
+                temperature -> temperature_sensor
+
+                saved device ids:
+
+                OATrackRecordingNone -> ""
+                OATrackRecordingAnyConnected -> any_connected_device_write_sensor_data_to_track_key */
 
             if !defaults.bool(forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue) {
                 changeWidgetIdsMigration1()
@@ -50,6 +55,8 @@ final class MigrationManager: NSObject {
 
     private func changeWidgetIdsMigration1() {
         if let settings = OAAppSettings.sharedManager() {
+            let externalPlugin = OAPlugin.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
+            let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
             let changeWidgetIds = [
                 "heartRate": "ant_heart_rate",
                 "bicycleCadence": "ant_bicycle_cadence",
@@ -78,6 +85,18 @@ final class MigrationManager: NSObject {
 
                 updateCustomWidgetKeys(mode, changeWidgetIds: changeWidgetIds)
                 updateMapInfoControls(mode, changeWidgetIds: changeWidgetIds)
+
+                if let externalPlugin, let externalSensorsPluginPrefs {
+                    for pref in externalSensorsPluginPrefs {
+                        if let value = pref.toStringValue(mode) {
+                            if value == "OATrackRecordingNone" {
+                                pref.setValueFrom("", appMode: mode)
+                            } else if value == "OATrackRecordingAnyConnected" {
+                                pref.setValueFrom(externalPlugin.getAnyConnectedDeviceId(), appMode: mode)
+                            }
+                        }
+                    }
+                }
             }
         }
     }
@@ -131,7 +150,8 @@ final class MigrationManager: NSObject {
     }
 
     private func changeWidgetPrefs1(_ appMode: OAApplicationMode, oldWidgetIds: [String], changeWidgetIds: [String: String]) {
-        if let settings = OAAppSettings.sharedManager() {
+        if let settings = OAAppSettings.sharedManager(),
+           let plugin = OAPlugin.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {
@@ -145,7 +165,6 @@ final class MigrationManager: NSObject {
 
                         let useAnyDevicePrefKey = "\(widgetType.title)_useAnyDevicePref_\(prefKeySuffix)_\(appModeStringKey)"
                         if let useAnyDevicePref = defaults.object(forKey: useAnyDevicePrefKey) as? Bool,
-                           let plugin = OAPlugin.getByWidgetId(newOriginalWidgetId),
                            let fieldType = plugin.getWidgetDataFieldTypeName(byWidgetId: newOriginalWidgetId) {
                             let newPrefKey = fieldType + (hasCustomSuffix ? newCustomWidgetId : "")
                             let newPref: OACommonString = settings.registerStringPreference(newPrefKey, defValue: plugin.getAnyConnectedDeviceId())

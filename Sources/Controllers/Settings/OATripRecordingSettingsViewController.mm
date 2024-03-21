@@ -255,9 +255,9 @@ static NSArray<NSString *> *minTrackSpeedNames;
                         if (deviceIdPref)
                         {
                             NSString *deviceId = [deviceIdPref get:self.appMode];
-                            if (![deviceId isEqualToString:OATrackRecordingNone])
+                            if (deviceId && deviceId.length > 0)
                             {
-                                if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
+                                if ([deviceId isEqualToString:[plugin getAnyConnectedDeviceId]])
                                 {
                                     if ([[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject)
                                     {

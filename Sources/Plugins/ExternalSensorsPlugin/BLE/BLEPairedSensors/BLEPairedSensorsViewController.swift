@@ -156,9 +156,9 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
                 guard let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
                 switch optionDevice.option {
                 case .none:
-                    plugin.saveDeviceId(OATrackRecordingNone, widgetType: widgetType, appMode: appMode)
+                    plugin.saveDeviceId("", widgetType: widgetType, appMode: appMode)
                 case .anyConnected:
-                    plugin.saveDeviceId(OATrackRecordingAnyConnected, widgetType: widgetType, appMode: appMode)
+                    plugin.saveDeviceId(plugin.getAnyConnectedDeviceId(), widgetType: widgetType, appMode: appMode)
                 }
             }
             onSelectCommonOptionsAction?()
@@ -195,8 +195,8 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
         
         devices = []
         let savedDeviceId = plugin.getDeviceId(for: widgetType, appMode: appMode)
-        let isSelectedNoneConnectedDeviceOption = savedDeviceId == OATrackRecordingNone
-        let isSelectedAnyConnectedDeviceOption = savedDeviceId == OATrackRecordingAnyConnected
+        let isSelectedNoneConnectedDeviceOption = savedDeviceId.isEmpty
+        let isSelectedAnyConnectedDeviceOption = savedDeviceId == plugin.getAnyConnectedDeviceId()
         
         let noneDevice = OptionDevice(deviceType: nil)
         noneDevice.option = .none
@@ -234,7 +234,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     
     private func configureWidgetDataSource() {
         guard let widget else { return }
-        let isSelectedAnyConnectedDeviceOption = widget.shouldUseAnyDevice
+        let isSelectedAnyConnectedDeviceOption = widget.shouldUseAnyConnectedDevice
         let anyConnectedDevice = OptionDevice(deviceType: nil)
         anyConnectedDevice.option = .anyConnected
         anyConnectedDevice.isSelected = isSelectedAnyConnectedDeviceOption

@@ -3156,3 +3156,4 @@
 "activity_type_offroad_name" = "Внедорожник";
 "shared_string_result" = "Результат";
 "select_tracks_to_display" = "Выберите треки для отображения на карте.";
+"distance_during_navigation" = "Расстояние во время навигации";

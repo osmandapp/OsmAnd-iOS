@@ -345,11 +345,9 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             Self.logger.error("Failed to restore item: \(String(describing: trashItem.oldFile.name)), SettingsItem is null")
             return
         }
-        if let deletedFile = trashItem.deletedFile {
-            let trashDeletionListener = TrashDeletionListener(with: String(format: localizedString("cloud_item_restored"), trashItem.name))
-            trashDeletionListener.delegate = self
-            backupHelper?.deleteFilesSync([deletedFile], byVersion: true, listener: trashDeletionListener)
-        }
+        let trashDeletionListener = TrashDeletionListener(with: String(format: localizedString("cloud_item_restored"), trashItem.name))
+        trashDeletionListener.delegate = self
+        backupHelper?.deleteFilesSync([trashItem.deletedFile], byVersion: true, listener: trashDeletionListener)
     }
 
     func downloadItem(_ trashItem: TrashItem) {

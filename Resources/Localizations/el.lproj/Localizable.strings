@@ -58,7 +58,7 @@
 "poi_filter_parking" = "Στάθμευση";
 "shared_string_none" = "Κανένα";
 "quick_action_map_style" = "Αλλαγή μορφής χάρτη";
-"cancel_route" = "Απόρριψη διαδρομής.";
+"cancel_route" = "Απόρριψη διαδρομής;";
 "poi_filter_closest_poi" = "Πλησιέστερα ΣΕ";
 "shared_string_milliradians" = "Χιλιοστά ακτινίων";
 "traffic_warning_stop" = "Πινακίδα stop";
@@ -286,7 +286,7 @@
 "shared_string_without_name" = "Χωρίς όνομα";
 "traffic_warning_speed_limit" = "Όριο ταχύτητας";
 "in_app_purchase_desc_ex" = "Μόλις αγοραστεί, θα είναι μονίμως διαθέσιμη για σας.";
-"arrival_distance_descr" = "Πόσο σύντομη θέλετε την αναγγελία άφιξης.";
+"arrival_distance_descr" = "Πόσο σύντομη θέλετε την αναγγελία άφιξης;";
 "app_mode_train" = "Τρένο";
 "osm_live_active" = "Ενεργή";
 "shared_string_enabled" = "Ενεργοποιημένο";
@@ -545,7 +545,7 @@
 "clear_all_intermediates" = "Καθαρισμός όλων των ενδιάμεσων σημείων";
 "map_widget_compass" = "Πυξίδα";
 "download_depth_countours" = "Ναυτικές ισοβαθείς καμπύλες";
-"stop_routing_confirm" = "Τερματισμός πλοήγησης.";
+"stop_routing_confirm" = "Τερματισμός πλοήγησης;";
 "shared_string_select" = "Επιλέξτε";
 "srtm_plugin_name" = "Τοπογραφία";
 "select_street" = "Επιλέξτε οδό";
@@ -1120,7 +1120,7 @@
 "osmand_settings" = "Ρυθμίσεις OsmAnd";
 "shared_string_circle" = "Κύκλος";
 "download_tab_local" = "Τοπικά";
-"replace_favorite_confirmation" = "Αντικατάσταση του Αγαπημένου \"%@\" .";
+"replace_favorite_confirmation" = "Αντικατάσταση του Αγαπημένου \"%@\" ;";
 "shared_string_enable" = "Ενεργοποίηση";
 "new_plugin_added" = "Προστέθηκε νέο πρόσθετο";
 "plan_route_create_new_route" = "Δημιουργία νέας διαδρομής";
@@ -1135,7 +1135,7 @@
 "coordinates_widget_current_location" = "Γραφικό στοιχείο συντεταγμένων";
 "favorite_places_category" = "Μέρη";
 "shared_string_octagon" = "Οκτάγωνο";
-"navigation_over_track" = "Έναρξη πλοήγησης κατά μήκος του ίχνους.";
+"navigation_over_track" = "Έναρξη πλοήγησης κατά μήκος του ίχνους;";
 "navigate_point_northing" = "προς Βορράν";
 "shared_string_wifi_only" = "Μόνο ασύρματα";
 "gpxup_public" = "Δημόσιο";
@@ -1484,7 +1484,7 @@
 "transfers" = "Μετακινήσεις";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "right_side_navigation" = "Οδήγηση στα δεξιά";
-"use_displayed_track_for_navigation" = "Να χρησιμοποιηθεί το εμφανιζόμενο ίχνος για πλοήγηση.";
+"use_displayed_track_for_navigation" = "Να χρησιμοποιηθεί το εμφανιζόμενο ίχνος για πλοήγηση;";
 "search_location" = "Αναζήτηση της τοποθεσίας…";
 "osm_live_payment_desc" = "Η συνδρομή επιβαρύνεται ανά επιλεγμένη περίοδο. Μπορείτε να την ακυρώσετε στο Google Play οποτεδήποτε.";
 "create_custom_categories_list_promo" = "Η αλλαγή της σειράς διάταξης του καταλόγου, αποκρύπτει τις κατηγορίες. Μπορείτε να εισάγετε ή να εξάγετε όλες τις αλλαγές με κατατομές (προφίλ).";
@@ -1878,7 +1878,7 @@
 "delete_all_items" = "Διαγραφή όλων των αντικειμένων";
 "carplay" = "CarPlay";
 "ask_question_propose_features" = "Κάντε ερώτηση, προτείνετε χαρακτηριστικά";
-"osmand_cloud_deleting_account_descr" = "Σε λίγες στιγμές όαλ τα δεδομένα σας και ο λογαριασμός θα διαγραφούν από το OsmAnd Cloud.\n\nΌλα τα δεδομένα στη συσκευή παραμένουν ανέγγιχτα.";
+"osmand_cloud_deleting_account_descr" = "Σε λίγο όλα τα δεδομένα σας και ο λογαριασμός θα διαγραφούν από το OsmAnd Cloud.\n\nΌλα τα δεδομένα στη συσκευή παραμένουν ανέγγιχτα.";
 "switch_profile" = "Εναλλαγή προφίλ";
 "map_widget_next_sunrise" = "Επόμενη ανατολή";
 "help_article_troubleshooting_maps_data_name" = "Χάρτες&Δεδομένα";
@@ -1940,3 +1940,12 @@
 "wiki_download_description" = "Για να διαβάσετε ολόκληρα άρθρα - κατεβάστε τα δεδομένα της Βικιπαίδεια του %@";
 "download_wiki_data" = "Κατεβάστε δεδομένα της Βικιπαίδεια για %@";
 "no_travel_guides_data_title" = "Δεν έχετε ταξιδιωτικά δεδομένα";
+"visible_in_3d_mode" = "Ορατό σε λειτουργία 3D";
+"map_3d_mode_description" = "Αγγίξτε τον χάρτη με δύο δάχτυλα και τα μετακινήσετε τον πάνω και κάτω για να προσαρμόσετε την κλίση του χάρτη.";
+"ctx_mnu_add_fav" = "Προσθήκη στα αγαπημένα";
+"add_favorite" = "Προσθήκη στα αγαπημένα";
+"mapil_images_nearby" = "Εικόνες κοντά";
+"map_3d_mode_hint" = "Με το παρατεταμένο πάτημα του κουμπιού επιτρέπει την αλλαγή της θέσης του κουμπιού.";
+"gpx_analyze" = "Ανάλυση";
+"stats_select_graph_data" = "Επιλογή δεδομένων γραφήματος";
+"mapil_no_images" = "Δεν έχουμε φωτογραφίες για αυτήν την τοποθεσία.";

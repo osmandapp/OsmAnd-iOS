@@ -126,13 +126,6 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     private func collectTrashItems() -> [TrashItem] {
         var items: [TrashItem] = []
         if let backup: OAPrepareBackupResult = backupHelper?.backup {
-            let info: OABackupInfo = backup.backupInfo
-            let filesToDelete: NSMutableArray = info.filesToDelete
-            if filesToDelete.count > 0 {
-                for file: OARemoteFile in info.filesToDelete as! [OARemoteFile] {
-                    items.append(TrashItem(oldFile: file, deletedFile: nil))
-                }
-            }
             let oldFiles: [String: OARemoteFile] = backup.getRemoteFiles(.old)
             let deletedFiles: [String: OARemoteFile] = backup.getRemoteFiles(.deleted)
             if !oldFiles.isEmpty && !deletedFiles.isEmpty {
@@ -281,10 +274,10 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         settingsHelper?.syncSettingsItems(trashItem.oldFile.name,
                                           localFile: nil,
                                           remoteFile: trashItem.oldFile,
-                                          filesType: trashItem.isLocalDeletion ? .unique : .old,
+                                          filesType: .old,
                                           operation: .download,
                                           shouldReplace: shouldReplace,
-                                          restoreDeleted: !trashItem.isLocalDeletion) { (message: String?, details: String?) in
+                                          restoreDeleted: true) { (message: String?, details: String?) in
             OAUtilities.showToast(message, details: details, duration: 4, in: self.view)
         }
     }

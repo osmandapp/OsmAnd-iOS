@@ -66,14 +66,12 @@ final class CloudTrashItemMenuViewController: OABaseNavbarViewController {
 
         let optionsSection = tableData.createNewSection()
 
-        if !trashItem.isLocalDeletion {
-            let restoreRow = optionsSection.createNewRow()
-            restoreRow.key = "restoreFromTrash"
-            restoreRow.cellType = OARightIconTableViewCell.getIdentifier()
-            restoreRow.title = localizedString("restore_from_trash")
-            restoreRow.secondaryIconName = "ic_custom_reset"
-            restoreRow.secondaryIconTintColor = UIColor.iconColorActive
-        }
+        let restoreRow = optionsSection.createNewRow()
+        restoreRow.key = "restoreFromTrash"
+        restoreRow.cellType = OARightIconTableViewCell.getIdentifier()
+        restoreRow.title = localizedString("restore_from_trash")
+        restoreRow.secondaryIconName = "ic_custom_reset"
+        restoreRow.secondaryIconTintColor = UIColor.iconColorActive
 
         let downloadRow = optionsSection.createNewRow()
         downloadRow.key = "downloadToDevice"

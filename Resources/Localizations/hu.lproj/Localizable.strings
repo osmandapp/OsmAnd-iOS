@@ -475,7 +475,7 @@
 "route_tl" = "Forduljon balra,és haladjon tovább itt:";
 "route_tshl" = "Forduljonélesen balra, és haladjon tovább itt:";
 "route_tsll" = "Forduljon enyhén balra, és haladjon tovább ezen:";
-"route_tu" = "Forduljon meg,és haladjon tovább ezen:";
+"route_tu" = "Forduljon meg, és haladjon tovább ezen:";
 "route_head" = "Egyenesen";
 "looking_up_address" = "Cím keresése";
 "no_address_found" = "Ismeretlen cím";

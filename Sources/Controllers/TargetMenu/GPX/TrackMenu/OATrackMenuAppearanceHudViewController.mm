@@ -44,11 +44,6 @@
 
 #define kColorGridOrDescriptionCell 1
 
-//static NSString *kTableIsOsmAndProAvailable = @"is_OsmAnd_pro_available";
-
-//OAIAPHelper.isOsmAndProAvailable()
-//[OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
-
 @interface OABackupGpx : NSObject
 
 @property (nonatomic) NSInteger color;
@@ -1346,7 +1341,6 @@
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
         }
     }
-    // visualization3D
     else if ([tableData.key isEqualToString:@"join_gaps"])
     {
         self.gpx.joinSegments = toggle;
@@ -1374,7 +1368,6 @@
         return self.gpx.raiseRoutesAboveRelief;
     else if ([tableData.key isEqualToString:@"join_gaps"])
         return self.gpx.joinSegments;
-
 
     return NO;
 }

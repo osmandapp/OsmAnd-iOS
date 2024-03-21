@@ -130,7 +130,7 @@
 "map_widget_intermediate_distance" = "Vahepealne sihtkoht";
 "route_descr_destination" = "Sihtkoht";
 "monitoring_control_start" = "SALVESTA";
-"map_widget_altitude" = "Kõrgus";
+"map_widget_altitude" = "Praeguse asukoha kõrgus";
 "map_widget_battery" = "Aku laetuse tase";
 "map_widget_plain_time" = "Praegune aeg";
 "map_widget_max_speed" = "Kiiruspiirang";
@@ -472,7 +472,7 @@
 "shared_string_clear" = "Tühjenda";
 "quick_action_poi_list" = "HP nimekiri";
 "save_track_to_gpx" = "Salvesta rada automaatselt navigeerimise ajal";
-"save_track_to_gpx_descrp" = "Sisselülitatult salvestatakse navigeerimise ajal teekond automaatselt";
+"save_track_to_gpx_descrp" = "Logi GPX teekond liikumise ajal ja hiljem salvesta automaatselt.";
 "gpx_distance_points" = "Kaugus (punktid)";
 "gpx_max_speed" = "Suurim kiirus";
 "shared_string_speed" = "Kiirus";
@@ -827,7 +827,7 @@
 "hide_hillshade" = "Peida künkavarjutus";
 "toggle_contour_lines" = "Kuva/peida kõrgusjooned";
 "toggle_hillshade" = "Kuva või peida maastik";
-"show_from_zoom_level" = "Kuva alates suurenduse tasemest";
+"show_from_zoom_level" = "Kuvamine algab suurenduse tasemest";
 "quick_action_contour_lines_descr" = "Tegevusnupp kõrgusjoonte kuvamiseks või peitmiseks kaardil.";
 "hide_contour_lines" = "Peida kõrgusjooned";
 "other_options" = "Other options";
@@ -1328,7 +1328,7 @@
 "rendering_attr_surface_cobblestone_name" = "Munakivid";
 "routing_attr_avoid_train_description" = "Väldib ronge";
 "routing_attr_allow_motorway_description" = "Lubab kiirteed.";
-"routing_attr_height_obstacles_description" = "Marsruudi koostamisel võiks vältida raskeid tõuse.";
+"routing_attr_height_obstacles_description" = "Eeldatav teekonna kestus arvestab kõrguste vahesid. Marsruudi koostamisel saad vältida raskeid tõuse:";
 "rendering_value_purple_name" = "Purpur";
 "rendering_value_pink_name" = "Roosa";
 "rendering_attr_undefined_name" = "Määratlemata";
@@ -1814,7 +1814,7 @@
 "coord_input_add_point" = "Lisa punkt";
 
 // Route planning
-"plan_route" = "Planeeri teekond";
+"plan_route" = "Planeeri oma teekond";
 "checking_for_duplicate_description" = "OsmAnd kontrollib faili %@, et leida rakenduses korduvaid kirjeid.\n\nSelleks võib kuluda aega.";
 "import_complete_description" = "Imporditud kõik andmed %@. Kasuta allpool olevaid nuppe, et avada rakenduse mis tahes osa selle haldamiseks.";
 "road_speeds_descr" = "Need parameetrid võivad mõjutada teekonna koostamist.";
@@ -1946,7 +1946,7 @@
 "icon_group_sport" = "Sport";
 "fav_points_not_exist" = "Lemmikpunkte pole";
 "icon_group_travel" = "Reisimine";
-"download_regular_maps" = "Tavaline kaart";
+"download_regular_maps" = "Tavakaart";
 "access_default_color" = "Vaikevärv";
 "icon_group_transport" = "Transport";
 "transport" = "Transport";
@@ -2027,7 +2027,7 @@
 "added_profiles" = "Lisatud profiilid";
 "suggested_maps_descr" = "Need kaardid on laienduse kasutamisel nõutud.";
 "suggested_maps" = "Soovitatud kaardid";
-"plugin_mapillary_descr" = "Tänavataseme fotod kõigile. Avasta kohti, tee kaastööd, jäädvusta maailma.";
+"plugin_mapillary_descr" = "Tänavataseme fotod kõigile. Neid võid ka kaastööna ise lisada. Kui soovid olemasolevaid andmeid näha kaardikihina, siis valikud „Kaardi seadistused“ lülita sisse „Tänavatasandi fotod“.";
 "product_desc_mapillary" = "Tänavatasemel fotod veebis kõigile";
 "population_num" = "Rahvaarv";
 "shared_string_feet" = "jalad";
@@ -2222,7 +2222,7 @@
 "icon_group_industrial" = "Tööstuslik";
 "icon_group_education" = "Haridus";
 "map_settings_clear_geo_cache" = "Tühjenda geopaanid";
-"shared_string_weather" = "Ilm";
+"shared_string_weather" = "Ilmateade";
 "backup_and_restore" = "Varunda ja taasta";
 "navigate_point_mgrs" = "MGRS";
 "mgrs_format_descr" = "OsmAnd kasutab MGRS-vormingut, mis on sarnane NATO UTM-vormingule.";
@@ -2611,3 +2611,11 @@
 "shared_string_move" = "Teisalda";
 "network" = "Võrk";
 "top_widgets_panel" = "Ülemine paneel";
+"distance_during_navigation" = "Vahemaa navigeerimisel";
+"download_to_device" = "Laadi alla seadmesse";
+"weather_forecast" = "Ilmaennustus";
+"map_widget_sun_position" = "Päikese asukoht";
+"map_widget_sun_position_desc" = "Aeg päikesetõusu või -loojanguni.";
+"weather_widgets_secondary_desc" = "Mõõtuühikuid saad muuta Ilmateate lisamooduli seadistustes.";
+"add_row" = "Lisa rida";
+"weather_widget_group_desc" = "Komplekt vidinaid ilmateate erinevate andmete kuvamiseks.";

@@ -123,6 +123,7 @@
 @synthesize travelGuidesPath = _travelGuidesPath;
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
+@synthesize routingMapsCachePath = _routingMapsCachePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -174,6 +175,7 @@
         _travelGuidesPath = [_documentsPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
+        _routingMapsCachePath = [_cachePath stringByAppendingPathComponent:@"ind_routing.cache"];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
@@ -633,7 +635,9 @@
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
     [self loadRoutingFiles];
-    
+
+    initMapFilesFromCache(_routingMapsCachePath.UTF8String);
+
     _dayNightModeObservable = [[OAObservable alloc] init];
     _mapSettingsChangeObservable = [[OAObservable alloc] init];
     _updateGpxTracksOnMapObservable = [[OAObservable alloc] init];

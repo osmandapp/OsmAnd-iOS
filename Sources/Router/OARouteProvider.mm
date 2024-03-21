@@ -789,10 +789,13 @@
                 if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
                 {
                     [_nativeFiles addObject:localPath];
+                    cacheBinaryMapFileIfNeeded(resource->localPath.toStdString(), true);
                     initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
                 }
             }
         }
+        writeMapFilesCache(app.routingMapsCachePath.UTF8String);
+
         for (const auto* file : getOpenMapFiles())
         {
             BOOL hasLocal = NO;

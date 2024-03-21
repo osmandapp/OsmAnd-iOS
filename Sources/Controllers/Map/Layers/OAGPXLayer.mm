@@ -275,6 +275,7 @@
             {
                 int segStartIndex = 0;
                 QVector<OsmAnd::PointI> points;
+                NSMutableArray *elevations = [NSMutableArray array];
                 QList<OsmAnd::FColorARGB> segmentColors;
                 NSArray<OATrack *> *tracks = [doc getTracks:NO];
                 for (const auto& track : doc_->tracks)
@@ -284,6 +285,7 @@
                         for (const auto& pt : seg->points)
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
+                            [elevations addObject:@(pt->elevation)];
                         }
                         if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + seg->points.size() - 1 < _cachedColors[key].size())
                         {
@@ -305,7 +307,7 @@
                             }
                             else
                             {
-                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                                [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
                             }
                             points.clear();
                             segmentColors.clear();
@@ -320,7 +322,7 @@
                     }
                     else
                     {
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue]];
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:segmentColors colorizationScheme:[cachedTrack[@"colorization_scheme"] intValue] elevations:elevations];
                     }
                 }
             }
@@ -339,7 +341,7 @@
                     }
                     else
                     {
-                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE];
+                        [self drawLine:points gpx:gpx baseOrder:baseOrder-- lineId:lineId++ colors:{} colorizationScheme:COLORIZATION_NONE elevations:nil];
                     }
                 }
             }
@@ -357,14 +359,11 @@
            lineId:(int)lineId
            colors:(const QList<OsmAnd::FColorARGB> &)colors
 colorizationScheme:(int)colorizationScheme
+       elevations:(NSArray <NSNumber *>* _Nullable)elevations
 {
     if (points.size() > 1)
     {
-        QList<float> heights;
         auto traceColorizationMapping = QList<OsmAnd::FColorARGB>();
-        float r = 0.2f;
-        float g = 0.6f;
-        float b = 1.0f;
         BOOL showRaised = gpx.raiseRoutesAboveRelief;
         BOOL showTransparentTraces = true;
         if (showRaised) {
@@ -372,13 +371,19 @@ colorizationScheme:(int)colorizationScheme
                 traceColorizationMapping = colors;//colorizationMapping;
         }
         
+        QList<float> heights;
         if (showRaised)
         {
-            long size = colors.size();
-            for (int i = 0; i < size; i++)
+            if (elevations && elevations.count > 0)
             {
-                float a = (float) i / (float) size;
-                traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, r, g, b));
+                for (NSNumber *object in elevations)
+                {
+                    double elevation = [object doubleValue];
+                    if (!isnan(elevation))
+                    {
+                        heights.append(elevation);
+                    }
+                }
             }
         }
         
@@ -440,18 +445,22 @@ colorizationScheme:(int)colorizationScheme
         
         if (showRaised)
         {
-            heights.append(1000.0);
-            QList<OsmAnd::FColorARGB>();
+            long size = colors.size();
+            for (int i = 0; i < size; i++)
+            {
+                float a = (float) i / (float) size;
+                traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, colorARGB.r, colorARGB.g, colorARGB.b));
+            }
+            
             builder.setHeights(heights);
-            builder.setFillColor(OsmAnd::FColorARGB(1.0f, r, g, b));
             builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
             builder.setOutlineColorizationMapping(traceColorizationMapping);
             builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
             if (showTransparentTraces)
             {
                 builder.setColorizationScheme(1);
-                builder.setNearOutlineColor(OsmAnd::FColorARGB(0.0f, r, g, b));
-                builder.setFarOutlineColor(OsmAnd::FColorARGB(1.0f, r, g, b));
+                builder.setNearOutlineColor(OsmAnd::FColorARGB(0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+                builder.setFarOutlineColor(OsmAnd::FColorARGB(1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
             }
             else
             {

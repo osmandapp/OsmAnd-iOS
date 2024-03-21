@@ -437,11 +437,13 @@
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
     
+    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+    
     OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
             kTableKey:@"visualization_3D",
-            kCellType:NO/*[OAIAPHelper isOsmAndProAvailable]*/
-            ? [OAButtonTableViewCell getCellIdentifier]
-            : [OASwitchTableViewCell getCellIdentifier],
+            kCellType:[OAIAPHelper isOsmAndProAvailable] || mapsPlusPurchased
+            ? [OASwitchTableViewCell getCellIdentifier]
+            : [OAButtonTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
     }];
 
@@ -1141,14 +1143,9 @@
             cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
             
-//            UIButtonConfiguration *configuration = [UIButtonConfiguration plainButtonConfiguration];
-//            configuration.contentInsets = NSDirectionalEdgeInsetsMake(0, 10, 0, 11);
-//            configuration.imagePadding = 10;
-//            cell.button.configuration = configuration;
             cell.button.layer.cornerRadius = 9.0;
             cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
             cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-#warning("isDirectionRTL")
             UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
             [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
                          forState:UIControlStateNormal];
@@ -1159,7 +1156,7 @@
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
             cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
             cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-            [cell.button addTarget:self action:@selector(onGetOsmAndProButtonPressed:)
+            [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
                 forControlEvents:UIControlEventTouchUpInside];
         }
         cell.titleLabel.text = cellData.title;
@@ -1800,8 +1797,8 @@
     [self onRightActionButtonPressed:sender.tag];
 }
 
-- (void)onGetOsmAndProButtonPressed:(UIButton *)button {
-    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.OSMAND_CLOUD navController:self.navigationController];
+- (void)onGetFeatureTerrainButtonPressed:(UIButton *)button {
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
 }
 
 #pragma mark - OACollectionTableViewCellDelegate

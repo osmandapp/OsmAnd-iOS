@@ -368,7 +368,7 @@ colorizationScheme:(int)colorizationScheme
         BOOL showTransparentTraces = true;
         if (showRaised) {
             if (!showTransparentTraces)
-                traceColorizationMapping = colors;//colorizationMapping;
+                traceColorizationMapping = colors;
         }
         
         QList<float> heights;

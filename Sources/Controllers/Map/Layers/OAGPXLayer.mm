@@ -371,22 +371,6 @@ colorizationScheme:(int)colorizationScheme
                 traceColorizationMapping = colors;
         }
         
-        QList<float> heights;
-        if (showRaised)
-        {
-            if (elevations && elevations.count > 0)
-            {
-                for (NSNumber *object in elevations)
-                {
-                    double elevation = [object doubleValue];
-                    if (!isnan(elevation))
-                    {
-                        heights.append(elevation);
-                    }
-                }
-            }
-        }
-        
         CGFloat lineWidth;
         if (_cachedTrackWidth[gpx.width])
         {
@@ -420,18 +404,20 @@ colorizationScheme:(int)colorizationScheme
             .setPoints(points)
             .setFillColor(colorARGB);
 
-        // Add outline for colorized lines
-        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
-        {
-            builder.setOutlineWidth(lineWidth + kOutlineWidth)
-                   .setOutlineColor(kOutlineColor);
-        }
+//        // Add outline for colorized lines
+//        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
+//        {
+//            builder.setOutlineWidth(lineWidth + kOutlineWidth)
+//                   .setOutlineColor(kOutlineColor);
+//            builder.setColorizationMapping(colors)
+//                .setColorizationScheme(colorizationScheme);
+//        }
 
-        if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
-        {
-            builder.setColorizationMapping(colors)
-                .setColorizationScheme(colorizationScheme);
-        }
+//        if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
+//        {
+//            builder.setColorizationMapping(colors)
+//                .setColorizationScheme(colorizationScheme);
+//        }
         
         if (gpx.showArrows)
         {
@@ -445,17 +431,38 @@ colorizationScheme:(int)colorizationScheme
         
         if (showRaised)
         {
-            long size = colors.size();
-            for (int i = 0; i < size; i++)
+            if (!colors.isEmpty() && showTransparentTraces)
             {
-                float a = (float) i / (float) size;
-                traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, colorARGB.r, colorARGB.g, colorARGB.b));
+                long size = colors.size();
+                for (int i = 0; i < size; i++)
+                {
+                    float a = (float) i / (float) size;
+                    traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, colorARGB.r, colorARGB.g, colorARGB.b));
+                }
             }
             
-            builder.setHeights(heights);
-            builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
-            builder.setOutlineColorizationMapping(traceColorizationMapping);
-            builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
+            if (elevations && elevations.count > 0)
+            {
+                QList<float> heights;
+                for (NSNumber *object in elevations)
+                {
+                    double elevation = [object doubleValue];
+                    if (!isnan(elevation))
+                    {
+                        heights.append(elevation);
+                    }
+                }
+                builder.setHeights(heights);
+            }
+            
+//            builder.setFillColor(OsmAnd::FColorARGB(1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+//            builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
+//            builder.setOutlineColorizationMapping(traceColorizationMapping);
+//            builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
+            builder.setOutlineWidth(lineWidth + kOutlineWidth)
+                   .setOutlineColor(kOutlineColor);
+            builder.setColorizationMapping(traceColorizationMapping) // colors
+                .setColorizationScheme(colorizationScheme);
             if (showTransparentTraces)
             {
                 builder.setColorizationScheme(1);
@@ -465,6 +472,17 @@ colorizationScheme:(int)colorizationScheme
             else
             {
                 builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 0.8f, 0.8f, 0.8f));
+            }
+        }
+        else
+        {
+            // Add outline for colorized lines
+            if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
+            {
+                builder.setOutlineWidth(lineWidth + kOutlineWidth)
+                       .setOutlineColor(kOutlineColor);
+                builder.setColorizationMapping(colors)
+                    .setColorizationScheme(colorizationScheme);
             }
         }
         

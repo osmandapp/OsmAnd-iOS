@@ -2846,13 +2846,13 @@
 "quick_action_map_center_widget_descr" = "Um alternador para mostrar ou esconder o widget do centro do mapa no mapa.";
 "map_widget_sunrise" = "Nascer do sol";
 "map_widget_sunset" = "Pôr do sol";
-"map_widget_sunset_desc" = "Mostra a hora do próximo pôr do sol ou o tempo que resta até o pôr do sol.";
+"map_widget_sunset_desc" = "Mostra a hora do próximo pôr do sol ou o tempo que falta para o pôr do sol.";
 "map_widget_sunrise_sunset_time_left" = "Tempo restante";
 "map_widget_next_sunset" = "Próximo pôr do sol";
 "shared_string_external" = "Externo";
 "with_permission_my_position_value" = "Mover mapa para a localização atual";
 "app_mode_moped" = "Ciclomotor";
-"map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo que resta até o nascer do sol.";
+"map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo que falta para o nascer do sol.";
 "map_widget_next_sunrise" = "Próximo nascer do sol";
 "without_permission_my_position_value" = "O OsmAnd não tem permissão de localização";
 "press_again_to_change_the_map_orientation" = "Toque novamente para alterar a orientação do mapa";
@@ -2936,7 +2936,7 @@
 "map_markers_desc" = "Mostra a distância ou hora prevista de chegada (ETA) para os dois primeiros marcadores na lista de marcadores do mapa.";
 "route_maneuvers_desc" = "Os widgets de navegação são ativados durante a navegação para mostrar informação como distância, hora de chegada ou tempo que falta para chegar ao destino, viragens seguintes, direção, nome da rua atual, informação das vias de trânsito, velocidade máxima, alertas de aproximação, POIs, pontos de passagem.";
 "navigation_points_desc" = "Os widgets de navegação são ativados durante a navegação para mostrar informação como distância, hora de chegada ou tempo que falta para chegar ao destino, viragens seguintes, direção, nome da rua atual/seguinte, informação da via de trânsito, velocidade máxima, alertas de aproximação, POIs, pontos de passagem.";
-"distance_circles" = "Círculos-distância";
+"distance_circles" = "Círculos de distância";
 "trip_recording_distance_widget_desc" = "Mostra a distância decorrida da viagem atual a ser gravada.";
 "gps_info_widget_desc" = "Mostra o número de satélites atualmente visíveis e usados.";
 "magnetic_bearing_widget_desc" = "Ângulo entre o Norte magnético e o ponto alvo observado na sua localização.";
@@ -3046,7 +3046,7 @@
 "travel_guides_no_file_error" = "Erro: nenhum ficheiro de dados da região";
 "shared_string_license" = "Licença";
 "ios_release_4_6" = "• Registe e acompanhe as suas métricas com sensores externos, incluindo a velocidade da bicicleta, a cadência da bicicleta, a distância da bicicleta, o ritmo cardíaco e a temperatura\n• Agora pode ver o mapa diretamente no painel de instrumentos do CarPlay\n• Adicionado o tema Noite para uma experiência de visualização confortável em condições de pouca luz\n• Descubra guias de viagens do \"Wikivoyage\"\n• Diálogos melhorados para adicionar notas e carregar notas e POIs no OpenStreetMap\n• Restaurar facilmente as definições do complemento para as predefinições de instalação com uma nova opção \"Repor predefinições\"\n• Adicionada uma opção \"Orientação do ecrã\" para definir a sua orientação preferida sem mudança automática\n• Adicionado um botão separado para mudar o modo 3D diretamente no ecrã CarPlay\n• Foram adicionadas informações de elevação mínima e máxima aos percursos de navegação, para além de subidas e descidas\n• Melhoria da coloração dos percursos no modo Declive com um novo gradiente simétrico\n• As pastas de favoritos guardam agora o aspeto predefinido que é aplicado automaticamente a cada ponto adicionado\n• Corrigido o ponto central da \"Régua de raio\" que não correspondia ao centro do mapa\n• Adicionado o botão \"Ler artigo\" ao menu de contexto dos POIs da Wikipédia\n• Corrigido um problema com a importação de ficheiros GPX para os favoritos\n• Corrigido o problema com o evento de calendário para a localização do estacionamento do veículo\n• Corrigida uma falha ao remover uma cor da palete de cores\n";
-"tracker_item" = "OsmAnd Tracker";
+"tracker_item" = "OsmAnd tracker";
 "wheel_circumference" = "Circunferência da roda";
 "article_has_no_points" = "O artigo não tem pontos";
 "images" = "Imagens";
@@ -3379,3 +3379,9 @@
 "rendering_value_sector5_name" = "Setor 5";
 "routing_attr_hazmat_category_usa_4_name" = "Sólidos inflamáveis";
 "routing_attr_allow_via_ferrata_name" = "Rota de montanha (via ferrata)";
+"distance_during_navigation" = "Distância durante a navegação";
+"shared_string_precise" = "Preciso";
+"shared_string_round_up" = "Arredondado";
+"upload_to_osm_short" = "Enviar para o OSM";
+"distance_during_navigation_footer" = "Escolha como as informações de distância são apresentadas nos widgets de navegação (distância até ao ponto, próxima curva, faixas).\n\nEscolha \"Preciso\" para obter números exatos ou \"Arredondado\" para facilitar a leitura.";
+"ios_release_4_7" = "- Painéis de widgets superior e inferior melhorados para acomodar todos os widgets\n- Gestão melhorada dos trilhos visíveis no mapa\n- Atualização de \"Analisar no mapa\" com a capacidade de apresentar métricas de sensores\n- Foi adicionado um suporte melhorado de etiquetas para GPX: hiperligação, autor, direitos de autor e palavras-chave\n- Melhoria da configuração do widget, permitindo aos utilizadores mover páginas e linhas\n- Melhoria da gestão de trilhos em \"Os meus locais\" com subpastas e menus de contexto para trilhos e pastas\n- Novos widgets: \"Rácio de deslizamento\" e \"Posição do sol\"\n- Personalização da \"Distância durante a navegação\": escolha entre números exatos ou arredondados\n- O idioma da aplicação será utilizado para os nomes no mapa geral mundial em vez dos idiomas locais\n- OsmAnd Cloud: Adicionada a capacidade de gerir os seus dados, incluindo o restauro de ficheiros eliminados e a eliminação da sua conta\n- Adicionado suporte de etiquetas adicionais para rotas turísticas\n- Correção do widget \"Coordenadas\" em que, em alguns casos, os últimos dígitos eram omitidos\n- Correção do comportamento do botão \"Modo 3D\": ao tocar no botão, o ângulo de inclinação não era guardado\n- Correção da cor da barra de estado para versões mais antigas do iOS\n- Correção dos gestos de rotação e de pinça para ampliar o mapa para a aplicação executada no macOS\n";

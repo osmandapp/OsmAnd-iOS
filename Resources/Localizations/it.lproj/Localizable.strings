@@ -3363,3 +3363,4 @@
 "routing_attr_hazmat_category_usa_1_name" = "Esplosivi";
 "rendering_value_sector4_name" = "Settore 4";
 "routing_attr_allow_via_ferrata_name" = "Itinerario di montagna (Ferrata)";
+"distance_during_navigation" = "Distanza durante la navigazione";

@@ -93,6 +93,9 @@ static NSString * const lastSearchedCityNameKey = @"lastSearchedCityName";
 static NSString * const lastSearchedPointLatKey = @"lastSearchedPointLat";
 static NSString * const lastSearchedPointLonKey = @"lastSearchedPointLon";
 
+static NSString * const lastStartLatkey = @"lastStartLatkey";
+static NSString * const lastStartLonkey = @"lastStartLonkey";
+
 static NSString * const applicationModeKey = @"applicationMode";
 static NSString * const defaultApplicationModeKey = @"default_application_mode_string";
 static NSString * const defaultCarplayModeKey = @"default_carplay_mode_string";
@@ -3679,6 +3682,9 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
     
     NSObject *_settingsLock;
     NSSet<NSString *> *_disabledTypes;
+    
+    OACommonDouble *_lastStartLat;
+    OACommonDouble *_lastStartLon;
 }
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
@@ -3843,6 +3849,11 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
         _mapSettingVisibleGpx = [[[OACommonStringList withKey:mapSettingVisibleGpxKey defValue:@[]] makeGlobal] makeShared];
         [_globalPreferences setObject:_mapSettingVisibleGpx forKey:@"selected_gpx"];
+        
+        _lastStartLat = [[OACommonDouble withKey:lastStartLatkey defValue:0] makeGlobal];
+        _lastStartLon = [[OACommonDouble withKey:lastStartLonkey defValue:0] makeGlobal];
+        [_globalPreferences setObject:_lastStartLat forKey:lastStartLatkey];
+        [_globalPreferences setObject:_lastStartLon forKey:lastStartLonkey];
 
         _mapSettingTrackRecording = [[NSUserDefaults standardUserDefaults] objectForKey:mapSettingTrackRecordingKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:mapSettingTrackRecordingKey] : NO;
 
@@ -5404,6 +5415,34 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 - (BOOL)isTypeDisabled:(NSString *)typeName
 {
     return [_disabledTypes containsObject:typeName];
+}
+
+- (CLLocation *) getLastStartPoint
+{
+    if (_lastStartLat && _lastStartLon)
+    {
+        return [[CLLocation alloc] initWithLatitude:[_lastStartLat get] longitude:[_lastStartLon get]];
+    }
+    return nil;
+}
+
+- (void) setLastStartPoint:(CLLocation *)location
+{
+    if (location)
+    {
+        [self setLastStartPoint:location.coordinate.latitude lon:location.coordinate.longitude];
+    }
+    else
+    {
+        [_lastStartLat resetToDefault];
+        [_lastStartLon resetToDefault];
+    }
+}
+
+- (void) setLastStartPoint:(double)lat lon:(double)lon
+{
+    [_lastStartLat set:lat];
+    [_lastStartLon set:lon];
 }
 
 @end

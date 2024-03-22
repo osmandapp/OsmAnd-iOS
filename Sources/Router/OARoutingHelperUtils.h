@@ -37,6 +37,8 @@ struct RoutingParameter;
 
 + (CLLocation *) approximateBearingIfNeeded:(OARoutingHelper *)helper projection:(CLLocation *)projection location:(CLLocation *)location previousRouteLocation:(CLLocation *)previousRouteLocation currentRouteLocation:(CLLocation *)currentRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation;
 
++ (void) updateDrivingRegionIfNeeded:(CLLocation *)newStartLocation force:(BOOL)force;
+
 @end
 
 NS_ASSUME_NONNULL_END

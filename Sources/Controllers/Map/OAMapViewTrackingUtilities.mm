@@ -23,6 +23,7 @@
 #import "OAAppDelegate.h"
 #import "OARouteCalculationResult.h"
 #import "OAMapUtils.h"
+#import "OARoutingHelperUtils.h"
 
 #include <commonOsmAndCore.h>
 
@@ -36,7 +37,7 @@ static double const MOVE_ANIMATION_TIME = 0.5;
 static double const NAV_ANIMATION_TIME = 1.0;
 static double const SKIP_ANIMATION_TIMEOUT = 10.0;
 static double const ROTATION_MOVE_ANIMATION_TIME = 1.0;
-static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
+static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 
 @interface OAMapViewTrackingUtilities ()
 
@@ -304,12 +305,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
             {
                 _drivingRegionUpdated = true;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self detectDrivingRegion:location];
-                    
-                    // TODO: do I need to sync this code now?
-                    // TODO: implement RoutingHelperUtils.updateDrivingRegionIfNeeded(app, location, true);
-                    // and delete old detectDrivingRegion() method
+                    [OARoutingHelperUtils updateDrivingRegionIfNeeded:location force:YES];
                 });
             }
         }
@@ -334,7 +330,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
                     }
                     if (isnan(rotation) && prevLocation)
                     {
-                        //TODO: check distDp values in android. Change SKIP_ANIMATION_DP_THRESHOLD constant in IOS if needed.
                         CGFloat distDp = [self getScreenDistance:location.coordinate.latitude lon1:location.coordinate.longitude lat2:prevLocation.coordinate.latitude lon2:prevLocation.coordinate.longitude];
                         if (distDp > SKIP_ANIMATION_DP_THRESHOLD)
                         {
@@ -378,7 +373,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
         
         [_mapViewController updateLocation:location heading:location.course];
         
-        // TODO: delete or implement
+        // TODO: ask do we need this in ios?
         /*
         if (dashboard != null) {
             dashboard.updateMyLocation(location);

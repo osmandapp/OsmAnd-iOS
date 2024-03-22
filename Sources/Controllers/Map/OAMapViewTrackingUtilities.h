@@ -34,6 +34,7 @@
 - (void) setMapViewController:(OAMapViewController *)mapViewController;
 - (void) switchToRoutePlanningMode;
 - (void) resetDrivingRegionUpdate;
+- (void) detectDrivingRegion:(CLLocation *)location;
 - (void) switchRotateMapMode;
 - (void) refreshLocation;
 - (void) updateSettings;

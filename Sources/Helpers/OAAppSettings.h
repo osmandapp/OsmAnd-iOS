@@ -1252,4 +1252,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSSet<NSString *> *)getDisabledTypes;
 - (BOOL)isTypeDisabled:(NSString *)typeName;
 
+- (CLLocation *) getLastStartPoint;
+- (void) setLastStartPoint:(CLLocation *)location;
+- (void) setLastStartPoint:(double)lat lon:(double)lon;
+
 @end

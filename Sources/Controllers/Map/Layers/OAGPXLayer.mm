@@ -457,7 +457,7 @@ colorizationScheme:(int)colorizationScheme
                 {
                     // Adjusts the brightness of the 3D projection (wall) of the route line on the plane if it is gradient.
                     // (r,g,b) 0.0f...1.0f
-                    builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 0.5f, 0.5f, 0.5f)); // - было 1.0 для (r,g,b)
+                    builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 0.4f, 0.4f, 0.4f)); // - было 1.0 для (r,g,b)
                 }
             }
             else

@@ -143,7 +143,6 @@ struct CLLocationCoordinate2D;
 - (float) getHeightAndLocationFromElevatedPoint:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI*)location31;
 - (BOOL) getZoomAndRotationAfterPinch:(OsmAnd::PointI)firstLocation31 firstHeight:(float)firstHeight firstPoint:(OsmAnd::PointI)firstPoint secondLocation31:(OsmAnd::PointI)secondLocation31 secondHeight:(float)secondHeight secondPoint:(OsmAnd::PointI)secondPoint zoomAndRotate:(OsmAnd::PointD*)zoomAndRotate;
 
-
 - (OsmAnd::AreaI) getVisibleBBox31;
 - (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos;

@@ -351,14 +351,12 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 {
                     pendingRotation = YES;
                 }
-                // [self registerUnregisterSensor:location smallSpeedForCompass:smallSpeedForCompass];
                 
                 [self setMyLocationV2:location timeDiff:movingTime rotation:rotation];
             }
             else if (location)
             {
                 showViewAngle = (![location hasBearing] || [self isSmallSpeedForCompass:location]) && [OANativeUtilities containsLatLon:location];
-                // [self registerUnregisterSensor:location smallSpeedForCompass:false];
             }
             
             _showViewAngle = showViewAngle;
@@ -373,16 +371,11 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         
         [_mapViewController updateLocation:location heading:location.course];
         
-        // TODO: ask do we need this in ios?
         /*
-        if (dashboard != null) {
+            // Add notifications if needed
             dashboard.updateMyLocation(location);
-        }
-        if (contextMenu != null) {
             contextMenu.updateMyLocation(location);
-        }
         */
-        
     });
 }
 
@@ -1113,7 +1106,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     int right = windowSize.x;
     int bottom = windowSize.y;
     
-    //TODO: implement here code for splitting screen if needed. For now just return original screen size
+    //TODO: mock method. implement here code for splitting screen if needed. For now just return original screen size
     
     return CGRectMake(left, top, right, bottom);
 }

@@ -326,7 +326,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                     // special case when bearing equals to zero (we don't change anything)
                     if ([location hasBearing] && location.course != 0)
                     {
-                        rotation = -location.course; //TODO: check   rotation = location.course;
+                        rotation = -location.course;
                     }
                     if (isnan(rotation) && prevLocation)
                     {
@@ -484,7 +484,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     
     float animationDuration = max(movingTime, NAV_ANIMATION_TIME / 4);
     
-    BOOL animateZoom = zoomParams != nil && (zoom != startZoom);     //TODO: check and delete (zoom != startZoom || zoomFP != startZoomFP);
+    BOOL animateZoom = zoomParams != nil && (zoom != startZoom);
     float rotationDiff = !isnan(finalRotation) ? abs([OAMapUtils unifyRotationDiff:rotation targetRotate:startRotation]) : 0;
     BOOL animateRotation = rotationDiff > 0.1;
     BOOL animateTarget;
@@ -1117,12 +1117,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     
     return CGRectMake(left, top, right, bottom);
 }
-
-//// TODO: ask - do we need this in IOS?
-//- (void) registerUnregisterSensor:(CLLocation *)location smallSpeedForCompass:(BOOL)smallSpeedForCompass
-//{
-//    
-//}
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {

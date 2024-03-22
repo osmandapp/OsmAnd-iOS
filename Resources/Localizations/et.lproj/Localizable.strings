@@ -1873,7 +1873,7 @@
 "change_application_profile" = "Muuda rakenduse profiil";
 "quick_action_showhide_mapillary_descr" = "Selle tegevusnupu puudutamisel kuvatakse või peidetakse kaardil Mapillary kiht.";
 "unsupported_items" = "Toetamata kirjed";
-"shared_string_loading" = "Laaditakse…";
+"shared_string_loading" = "Laadime andmeid";
 "add_folder" = "Lisa kaust";
 "select_folder_descr" = "Vali kaust või lisa uus";
 "select_folder" = "Vali kaust";
@@ -2619,3 +2619,11 @@
 "weather_widgets_secondary_desc" = "Mõõtuühikuid saad muuta Ilmateate lisamooduli seadistustes.";
 "add_row" = "Lisa rida";
 "weather_widget_group_desc" = "Komplekt vidinaid ilmateate erinevate andmete kuvamiseks.";
+"trash_is_empty" = "Prügikast on tühi";
+"rendering_attr_showToll_name" = "Näita teemaksu piiranguid";
+"rendering_attr_showToll_description" = "Näita teedekohaseid teemaksu piiranguid";
+"shared_string_license" = "Litsents";
+"shared_string_link" = "Link";
+"shared_string_author" = "Autor";
+"shared_string_next_event" = "Järgmine sündmus";
+"shared_string_trash" = "Prügikast";

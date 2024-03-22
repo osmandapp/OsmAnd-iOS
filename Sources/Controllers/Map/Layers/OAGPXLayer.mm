@@ -431,15 +431,18 @@ colorizationScheme:(int)colorizationScheme
         
         if (showRaised)
         {
+/*
+ // NOTE: It looks like an implementation for a gradient, but at the very least it doesn't work for the blue color
             if (!colors.isEmpty() && showTransparentTraces)
             {
                 long size = colors.size();
                 for (int i = 0; i < size; i++)
                 {
                     float a = (float) i / (float) size;
-                    traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, colorARGB.r, colorARGB.g, colorARGB.b));
+                    traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, colors[i].r, colors[i].g, colors[i].b));
                 }
             }
+ */
             
             if (elevations && elevations.count > 0)
             {
@@ -454,15 +457,22 @@ colorizationScheme:(int)colorizationScheme
                 }
                 builder.setHeights(heights);
             }
+            // Add outline for colorized lines
+            if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
+            {
+#warning("need the correct example for setOutlineColorizationMapping")
+                builder.setOutlineWidth(lineWidth + kOutlineWidth)
+                       .setOutlineColor(kOutlineColor);
+                builder.setColorizationMapping(colors)
+                    .setColorizationScheme(colorizationScheme);
+            }
+            else
+            {
+                builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
+                builder.setOutlineColorizationMapping(traceColorizationMapping);
+                builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
+            }
             
-//            builder.setFillColor(OsmAnd::FColorARGB(1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-//            builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
-//            builder.setOutlineColorizationMapping(traceColorizationMapping);
-//            builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
-            builder.setOutlineWidth(lineWidth + kOutlineWidth)
-                   .setOutlineColor(kOutlineColor);
-            builder.setColorizationMapping(traceColorizationMapping) // colors
-                .setColorizationScheme(colorizationScheme);
             if (showTransparentTraces)
             {
                 builder.setColorizationScheme(1);

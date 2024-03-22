@@ -3912,12 +3912,12 @@
 		326B770829D9CA5200FB23DF /* OATripRecordingTimeWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingTimeWidget.h; sourceTree = "<group>"; };
 		326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OATripRecordingTimeWidget.mm; sourceTree = "<group>"; };
 		326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeomagnetismObjCBridge.swift; sourceTree = "<group>"; };
+		3271171B2B9B18A40082C2EA /* OATransportStopAggregated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopAggregated.h; sourceTree = "<group>"; };
+		3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopAggregated.m; sourceTree = "<group>"; };
 		32725F392B7E6B1300995806 /* OAAutoZoomBySpeedHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAAutoZoomBySpeedHelper.h; sourceTree = "<group>"; };
 		32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAutoZoomBySpeedHelper.mm; sourceTree = "<group>"; };
 		32725F3C2B7E7B0300995806 /* OAZoom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAZoom.h; sourceTree = "<group>"; };
 		32725F3D2B7E7B1500995806 /* OAZoom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAZoom.m; sourceTree = "<group>"; };
-		3271171B2B9B18A40082C2EA /* OATransportStopAggregated.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATransportStopAggregated.h; sourceTree = "<group>"; };
-		3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATransportStopAggregated.m; sourceTree = "<group>"; };
 		3274BDAB2AB486EF00AC5E34 /* OAMapAlgorithms.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMapAlgorithms.h; sourceTree = "<group>"; };
 		3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMapAlgorithms.mm; sourceTree = "<group>"; };
 		3275552129758ED80049BC84 /* sq */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sq; path = sq.lproj/Localizable.strings; sourceTree = "<group>"; };

@@ -23,7 +23,7 @@
     OASunriseSunsetWidgetState *_state;
     NSArray<NSString *> *_items;
     OsmAnd::PointI _cachedTarget31;
-    CLLocation *_cachedCenterLatLon;
+    OsmAnd::LatLon _cachedCenterLatLon;
 }
 
 - (instancetype)initWithState:(OASunriseSunsetWidgetState *)state
@@ -335,8 +335,8 @@
 
 - (SunriseSunset *) createSunriseSunset:(NSDate *)date
 {
-    double longitude = _cachedCenterLatLon.coordinate.longitude;
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
+    double longitude = _cachedCenterLatLon.longitude;
+    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
     return sunriseSunset;
 }
 
@@ -379,28 +379,15 @@
     if (_cachedTarget31 != currentTarget31)
     {
         _cachedTarget31 = currentTarget31;
-        OsmAnd::LatLon centerLocation = OsmAnd::Utilities::convert31ToLatLon(_cachedTarget31);
-        CLLocation *newCenterLatLon = [[CLLocation alloc] initWithLatitude:centerLocation.latitude longitude:centerLocation.longitude];
-        if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLatLon])
-            _cachedCenterLatLon = newCenterLatLon;
+        OsmAnd::LatLon newCenterLocation = OsmAnd::Utilities::convert31ToLatLon(_cachedTarget31);
+        if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLocation])
+            _cachedCenterLatLon = newCenterLocation;
     }
 }
 
-- (BOOL) isLocationsEqual:(CLLocation *)firstCoordinate with:(CLLocation *)secondCoordinate
+- (BOOL) isLocationsEqual:(OsmAnd::LatLon)firstLocation with:(OsmAnd::LatLon)secondLocation
 {
-    if (firstCoordinate && secondCoordinate)
-    {
-        CLLocationCoordinate2D firstCoord = firstCoordinate.coordinate;
-        CLLocationCoordinate2D secondCoord = secondCoordinate.coordinate;
-        if (CLLocationCoordinate2DIsValid(firstCoord) && CLLocationCoordinate2DIsValid(secondCoord))
-        {
-            double lon = firstCoord.longitude;
-            double newLon = secondCoord.longitude;
-            return fabs(lon - newLon) <= 0.001;
-        }
-    }
-    
-    return NO;
+    return fabs(firstLocation.longitude - secondLocation.longitude) <= 0.0001;
 }
 
 @end

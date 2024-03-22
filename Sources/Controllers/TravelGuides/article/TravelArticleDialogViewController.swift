@@ -149,6 +149,13 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if let bottomView {
+            bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
+        }
+    }
+    
     func setupBottomButtonsView() {
         bottomView = UIView()
         guard let bottomView else { return }

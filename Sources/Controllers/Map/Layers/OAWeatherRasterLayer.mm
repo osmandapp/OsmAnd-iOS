@@ -142,8 +142,10 @@
                 break;
         }
         int64_t dateTimeStep = 60 * 60 * 1000;
-        int64_t dateTimeFirst = dateTime - dateTimeStep;
-        int64_t dateTimeLast = dateTime + dateTimeStep;
+        if ((dateTime - NSDate.date.timeIntervalSince1970 * 1000) > dateTimeStep * 24)
+            dateTimeStep *= 3;
+        int64_t dateTimeFirst = dateTime;
+        int64_t dateTimeLast = dateTime;
         [self.mapView setDateTime:dateTime];
         if (true)//!_provider)
         {

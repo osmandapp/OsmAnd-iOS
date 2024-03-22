@@ -19,6 +19,7 @@
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
 static NSString * const metricSystemKey = @"settingMetricSystemKey";
 static NSString * const drivingRegionAutomaticKey = @"drivingRegionAutomatic";
+static NSString * const preciseDistanceNumbersKey = @"precise_distance_numbers";
 static NSString * const drivingRegionKey = @"settingDrivingRegion";
 static NSString * const settingZoomButtonKey = @"settingZoomButtonKey";
 static NSString * const settingGeoFormatKey = @"settingGeoFormatKey";
@@ -4168,6 +4169,10 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         [_profilePreferences setObject:_speedLimitExceedKmh forKey:@"speed_limit_exceed"];
         [_profilePreferences setObject:_angularUnits forKey:@"angular_measurement"];
         [_profilePreferences setObject:_speedSystem forKey:@"default_speed_system"];
+        
+        _preciseDistanceNumbers = [OACommonBoolean withKey:preciseDistanceNumbersKey defValue:YES];
+        [_preciseDistanceNumbers setModeDefaultValue:@NO mode:[OAApplicationMode CAR]];
+        [_profilePreferences setObject:_preciseDistanceNumbers forKey:@"precise_distance_numbers"];
 
         _routeRecalculationDistance = [OACommonDouble withKey:routeRecalculationDistanceKey defValue:0.];
         [_profilePreferences setObject:_routeRecalculationDistance forKey:@"routing_recalc_distance"];

@@ -356,7 +356,7 @@
 {
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     OAGPXDocument *gpxDoc = document.object;
-    OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc];
+    OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc fetchNearestCity:YES];
     [gpxDb replaceGpxItem:gpx];
     [gpxDb save];
     return gpx;

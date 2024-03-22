@@ -13,6 +13,7 @@
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -81,11 +82,11 @@
         if (_cachedMeters <= 20)
         {
             _cachedMeters = 0;
-            [self setText:nil subtext:nil];
+            [self setText:[[self getWidgetPanel] isPanelVertical] ? @"-" : nil subtext:nil];
         }
         else
         {
-            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters];
+            NSString *ds = [OAOsmAndFormatter getFormattedDistance:_cachedMeters roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]];
             int ls = [ds indexOf:@" "];
             if (ls == -1)
                 [self setText:ds subtext:nil];

@@ -223,7 +223,7 @@
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [OAOsmAndFormatter getFormattedAlarmInfoDistance:alarm.floatValue];
+                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue roundUp:(![[OAAppSettings sharedManager].preciseDistanceNumbers get] && alarm.type == AIT_TUNNEL)];
             }
             else
             {

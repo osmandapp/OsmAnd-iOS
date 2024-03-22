@@ -173,7 +173,7 @@
     const auto& gpxMap = [OASelectedGPXHelper instance].activeGpx;
     NSString * path = gpx.absolutePath;
     QString qPath = QString::fromNSString(path);
-    if (gpxMap.contains(qPath))
+    if (gpxMap.contains(qPath) && gpxMap[qPath] != nullptr)
     {
         document = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(gpxMap[qPath])];
         document.path = path;

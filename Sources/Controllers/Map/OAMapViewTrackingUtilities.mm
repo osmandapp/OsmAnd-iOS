@@ -335,7 +335,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
                     if (isnan(rotation) && prevLocation)
                     {
                         //TODO: check distDp values in android. Change SKIP_ANIMATION_DP_THRESHOLD constant in IOS if needed.
-                        //TODO: delete OARotatedTileBoxHelper and all unnecessary menthod
                         CGFloat distDp = [self getScreenDistance:location.coordinate.latitude lon1:location.coordinate.longitude lat2:prevLocation.coordinate.latitude lon2:prevLocation.coordinate.longitude];
                         if (distDp > SKIP_ANIMATION_DP_THRESHOLD)
                         {

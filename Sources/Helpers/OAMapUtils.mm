@@ -10,7 +10,6 @@
 #import "OANativeUtilities.h"
 #import "OAPOI.h"
 #import "QuadRect.h"
-#import "OARotatedTileBoxHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

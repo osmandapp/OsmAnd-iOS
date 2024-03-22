@@ -13,7 +13,6 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
-#import "OARotatedTileBoxHelper.h"
 #import "OAMapUtils.h"
 
 #include <QString>

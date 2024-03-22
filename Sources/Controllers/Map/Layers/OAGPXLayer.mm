@@ -403,21 +403,6 @@ colorizationScheme:(int)colorizationScheme
             .setLineWidth(lineWidth)
             .setPoints(points)
             .setFillColor(colorARGB);
-
-//        // Add outline for colorized lines
-//        if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
-//        {
-//            builder.setOutlineWidth(lineWidth + kOutlineWidth)
-//                   .setOutlineColor(kOutlineColor);
-//            builder.setColorizationMapping(colors)
-//                .setColorizationScheme(colorizationScheme);
-//        }
-
-//        if (!colors.empty() && colorizationScheme != COLORIZATION_NONE)
-//        {
-//            builder.setColorizationMapping(colors)
-//                .setColorizationScheme(colorizationScheme);
-//        }
         
         if (gpx.showArrows)
         {
@@ -431,18 +416,15 @@ colorizationScheme:(int)colorizationScheme
         
         if (showRaised)
         {
-/*
- // NOTE: It looks like an implementation for a gradient, but at the very least it doesn't work for the blue color
             if (!colors.isEmpty() && showTransparentTraces)
             {
                 long size = colors.size();
                 for (int i = 0; i < size; i++)
                 {
                     float a = (float) i / (float) size;
-                    traceColorizationMapping.append(OsmAnd::FColorARGB(a * a * a * a, colors[i].r, colors[i].g, colors[i].b));
+                    traceColorizationMapping.append(OsmAnd::FColorARGB(1.0, colors[i].r, colors[i].g, colors[i].b));
                 }
             }
- */
             
             if (elevations && elevations.count > 0)
             {
@@ -457,27 +439,26 @@ colorizationScheme:(int)colorizationScheme
                 }
                 builder.setHeights(heights);
             }
-            // Add outline for colorized lines
-            if (!colors.isEmpty() && colorizationScheme != COLORIZATION_NONE)
-            {
-#warning("need the correct example for setOutlineColorizationMapping")
-                builder.setOutlineWidth(lineWidth + kOutlineWidth)
-                       .setOutlineColor(kOutlineColor);
-                builder.setColorizationMapping(colors)
-                    .setColorizationScheme(colorizationScheme);
-            }
-            else
-            {
-                builder.setColorizationMapping(QList<OsmAnd::FColorARGB>());
-                builder.setOutlineColorizationMapping(traceColorizationMapping);
-                builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
-            }
+            // for setColorizationMapping use: traceColorizationMapping or QList<OsmAnd::FColorARGB>()
+            builder.setColorizationMapping(traceColorizationMapping);
+            builder.setOutlineColorizationMapping(traceColorizationMapping);
+            builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
             
             if (showTransparentTraces)
             {
                 builder.setColorizationScheme(1);
-                builder.setNearOutlineColor(OsmAnd::FColorARGB(0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
-                builder.setFarOutlineColor(OsmAnd::FColorARGB(1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+                if (traceColorizationMapping.isEmpty())
+                {   // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
+                    builder.setNearOutlineColor(OsmAnd::FColorARGB(0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+                    // 1.0f...0.0f - to set up the 3D projection (wall) of the route line onto the plane.
+                    builder.setFarOutlineColor(OsmAnd::FColorARGB(1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+                }
+                else
+                {
+                    // Adjusts the brightness of the 3D projection (wall) of the route line on the plane if it is gradient.
+                    // (r,g,b) 0.0f...1.0f
+                    builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 0.5f, 0.5f, 0.5f)); // - было 1.0 для (r,g,b)
+                }
             }
             else
             {

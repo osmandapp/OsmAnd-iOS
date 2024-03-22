@@ -43,6 +43,7 @@
 
 + (double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second;
 + (double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2;
+//+ (double)getDistance:(int)pixX pixY:(int)pixY pixX2:(int)pixX2 pixY2:(int)pixY2;
 
 + (double) scalarMultiplication:(double)xA yA:(double)yA xB:(double)xB yB:(double)yB xC:(double)xC yC:(double)yC;
 
@@ -53,5 +54,11 @@
 + (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2;
 
 + (double)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon;
+
+//+ (double)getLatitudeFromTile:(double)zoom y:(double)y;
+//+ (double)getLongitudeFromTile:(double)zoom x:(double)x;
+//+ (double)getPowZoom:(double)zoom;
+//+ (double)get31LongitudeX:(int)tileX;
+//+ (double)get31LatitudeY:(int)tileY;
 
 @end

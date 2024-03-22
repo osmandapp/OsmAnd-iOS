@@ -412,6 +412,7 @@ static NSString * const numberOfAppStartsOnDislikeMomentKey = @"numberOfAppStart
 static NSString * const rateUsStateKey = @"rateUsState";
 
 static NSString * const animateMyLocationKey = @"animateMyLocation";
+static NSString * const doNotUseAnimationsKey = @"doNotUseAnimations";
 
 static NSString * const lastGlobalSettingsModifiedTimeKey = @"lastGlobalSettingsModifiedTime";
 static NSString * const lastProfileSettingsModifiedTimeKey = @"lastProfileSettingsModifiedTime";
@@ -3756,7 +3757,9 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         [_globalPreferences setObject:_showDownloadMapDialog forKey:@"show_download_map_dialog"];
         
         _animateMyLocation = [OACommonBoolean withKey:animateMyLocationKey defValue:YES];
+        _doNotUseAnimations = [OACommonBoolean withKey:doNotUseAnimationsKey defValue:NO];
         [_profilePreferences setObject:_animateMyLocation forKey:@"animate_my_location"];
+        [_profilePreferences setObject:_animateMyLocation forKey:@"do_not_use_animations"];
         
         _liveUpdatesPurchased = [[OACommonBoolean withKey:liveUpdatesPurchasedKey defValue:NO] makeGlobal];
         _settingOsmAndLiveEnabled = [[[OACommonBoolean withKey:settingOsmAndLiveEnabledKey defValue:NO] makeGlobal] makeShared];

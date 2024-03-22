@@ -84,10 +84,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     OARouteDirectionInfo *_nextTurnInFocus;
     
     OAAutoObserverProxy *_mapZoomObserver;
-    
-    //Autozoom V1 vars
-    NSTimeInterval _lastTimeAutoZooming;
-    BOOL _isUserZoomed;
 }
 
 - (instancetype) init
@@ -103,61 +99,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     }
     return self;
 }
-
-// previous version of autozoom code from OAMapViewTrackingUtilities
-// without any changes. differs with android
-- (double) calculateAutoZoomBySpeedV1:(float)speed mapView:(OAMapRendererView *)mapView
-{
-    if (speed >= 0)
-    {
-        NSTimeInterval now = CACurrentMediaTime();
-        float zdelta = [self defineZoomFromSpeed:speed mapView:mapView];
-        if (ABS(zdelta) >= 0.5)
-        {
-            // prevent ui hysteresis (check time interval for autozoom)
-            if (zdelta >= 2)
-            {
-                // decrease a bit
-                zdelta -= 1;
-            }
-            else if (zdelta <= -2)
-            {
-                // decrease a bit
-                zdelta += 1;
-            }
-            double targetZoom = MIN(mapView.zoom + zdelta, [OAAutoZoomMap getMaxZoom:[_settings.autoZoomMapScale get]]);
-            int threshold = [_settings.autoFollowRoute get];
-            if (now - _lastTimeAutoZooming > 4.5 && (now - _lastTimeAutoZooming > threshold || !_isUserZoomed))
-            {
-                _isUserZoomed = false;
-                _lastTimeAutoZooming = now;
-                targetZoom = round(targetZoom * 3) / 3.f;
-                return targetZoom;
-            }
-        }
-    }
-    return 0;
-}
-
-// previous version of autozoom code from OAMapViewTrackingUtilities
-// without any changes. differs with android
-- (float) defineZoomFromSpeed:(float)speed mapView:(OAMapRendererView *)mapView
-{
-    if (speed < 7.0 / 3.6)
-        return 0;
-
-    OsmAnd::AreaI bbox = [mapView getVisibleBBox31];
-    double visibleDist = OsmAnd::Utilities::distance31(OsmAnd::PointI(bbox.left() + bbox.width() / 2, bbox.top()), bbox.center());
-    float time = 75.f; // > 83 km/h show 75 seconds
-    if (speed < 83.f / 3.6)
-        time = 60.f;
-    
-    time /= [OAAutoZoomMap getCoefficient:[_settings.autoZoomMapScale get]];
-    double distToSee = speed * time;
-    float zoomDelta = (float) (log(visibleDist / distToSee) / log(2.0f));
-    return zoomDelta;
-}
-
 
 - (OAComplexZoom *) calculateZoomBySpeedToAnimate:(OAMapRendererView *)mapRenderer myLocation:(CLLocation *)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *)nextTurn
 {
@@ -249,7 +190,6 @@ const static float kFocusPixelRatioY = 1.0 / 3.0;
     float zoomDelta = [autoZoom fullZoom] - currentZoom;
     float zoomDuration = abs(zoomDelta) / kZoomPerMillis;
     
-    //TODO: test and uncomment
     if (zoomDuration < kZoomDurationMillis)
         return nil;
     

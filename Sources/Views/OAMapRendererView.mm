@@ -481,6 +481,12 @@ forcedUpdate:(BOOL)forcedUpdate
     return std::dynamic_pointer_cast<OsmAnd::IAtlasMapRenderer>(_renderer)->getVisibleTiles();
 }
 
+//// TODO: check if pointers is correct
+//- (BOOL)getLocationFromScreenPoint:(OsmAnd::PointI)screenPoint location31:(std::shared_ptr<OsmAnd::PointI>)location31
+//{
+//    return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(screenPoint.x), static_cast<int32_t>(screenPoint.y)), *location31);
+//}
+
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location
 {
     if (!location)
@@ -493,6 +499,14 @@ forcedUpdate:(BOOL)forcedUpdate
 
 // virtual bool obtainScreenPointFromPosition(const PointI64& position, PointI& outScreenPoint) const = 0;
 // virtual bool obtainScreenPointFromPosition(const PointI& position31, PointI& outScreenPoint) const = 0;
+
+- (CGPoint)convertToScreenPointLat:(double)lat lon:(double)lon
+{
+    auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
+    CGPoint screenPoint;
+    [self convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
+    return screenPoint;
+}
 
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen
 {
@@ -1144,27 +1158,31 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getLocationHeightInMeters(location31);
 }
 
-//public double getPixDensity() {
-//    double dist = this.getDistance(0, this.getPixHeight() / 2, this.getPixWidth(), this.getPixHeight() / 2);
-//    return (double)this.getPixWidth() / dist;
+////TODO: implement and delete
+//
+////public double getPixDensity() {
+////    double dist = this.getDistance(0, this.getPixHeight() / 2, this.getPixWidth(), this.getPixHeight() / 2);
+////    return (double)this.getPixWidth() / dist;
+////}
+//
+//- (void) getPixDensity
+//{
+//    
 //}
 
-- (void) getPixDensity
-{
-    
-}
-
-//public double getDistance(int pixX, int pixY, int pixX2, int pixY2) {
-//    double lat1 = this.getLatFromPixel((float)pixX, (float)pixY);
-//    double lon1 = this.getLonFromPixel((float)pixX, (float)pixY);
-//    double lat2 = this.getLatFromPixel((float)pixX2, (float)pixY2);
-//    double lon2 = this.getLonFromPixel((float)pixX2, (float)pixY2);
-//    return MapUtils.getDistance(lat1, lon1, lat2, lon2);
+////TODO: implement and delete
+//
+////public double getDistance(int pixX, int pixY, int pixX2, int pixY2) {
+////    double lat1 = this.getLatFromPixel((float)pixX, (float)pixY);
+////    double lon1 = this.getLonFromPixel((float)pixX, (float)pixY);
+////    double lat2 = this.getLatFromPixel((float)pixX2, (float)pixY2);
+////    double lon2 = this.getLonFromPixel((float)pixX2, (float)pixY2);
+////    return MapUtils.getDistance(lat1, lon1, lat2, lon2);
+////}
+//
+//- (void) getDistance:(int)pixX pixY:(int)pixY pixX2:(int)pixX2 pixY2:(int)pixY2
+//{
+////    [OAMapUtils ]
 //}
-
-- (void) getDistance:(int)pixX pixY:(int)pixY pixX2:(int)pixX2 pixY2:(int)pixY2
-{
-    
-}
 
 @end

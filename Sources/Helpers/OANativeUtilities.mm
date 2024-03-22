@@ -13,6 +13,8 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
+#import "OARotatedTileBoxHelper.h"
+#import "OAMapUtils.h"
 
 #include <QString>
 
@@ -312,46 +314,28 @@
     return OsmAnd::PointI();
 }
 
-//public static PointI get31FromPixel(@NonNull MapRendererView mapRenderer, @Nullable RotatedTileBox tileBox,
-//                                    @NonNull PointI screenPoint, boolean useShiftedCenter) {
-//if (useShiftedCenter && tileBox != null && tileBox.isCenterShifted()) {
-//    RotatedTileBox tbCenter = tileBox.copy();
-//    tbCenter.setCenterLocation(0.5f, 0.5f);
-//    int x = screenPoint.getX() + (tileBox.getCenterPixelX() - tbCenter.getCenterPixelX());
-//    int y = screenPoint.getY() + (tileBox.getCenterPixelY() - tbCenter.getCenterPixelY());
-//    screenPoint = new PointI(x, y);
-//}
-//PointI point31 = new PointI();
-//if (mapRenderer.getLocationFromScreenPoint(screenPoint, point31)) {
-//    return point31;
-//}
-//return null;
-//}
-
-
-- (void) get31FromPixel:(OsmAnd::PointI)screenPoint useShiftedCenter:(BOOL)useShiftedCenter
-{
-    if (useShiftedCenter)
-    {
-        
-    }
-}
-
-
-//
-//public static LatLon getLatLonFromPixel(@NonNull MapRendererView mapRenderer, @Nullable RotatedTileBox tileBox,
-//                                        @NonNull PointI screenPoint) {
-//    PointI point31 = get31FromPixel(mapRenderer, tileBox, screenPoint, false);
-//    if (point31 != null) {
-//        return new LatLon(MapUtils.get31LatitudeY(point31.getY()), MapUtils.get31LongitudeX(point31.getX()));
+//- (std::shared_ptr<OsmAnd::PointI>) get31FromPixel:(OsmAnd::PointI)screenPoint useShiftedCenter:(BOOL)useShiftedCenter
+//{
+//    std::shared_ptr<OsmAnd::PointI> point31 = std::make_shared<OsmAnd::PointI>(OsmAnd::PointI());
+//    OAMapRendererView *renderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+//    [renderer getLocationFromScreenPoint:screenPoint location31:point31];
+//    if (point31 != nullptr)
+//    {
+//        return point31;
 //    }
-//    return null;
+//    return nullptr;
 //}
-
-- (void) getLatLonFromPixel
-{
-    //[self get31FromPixel]
-}
+//
+//- (std::shared_ptr<OsmAnd::LatLon>) getLatLonFromPixel:(OsmAnd::PointI)screenPoint
+//{
+//    std::shared_ptr<OsmAnd::PointI> point31 = [self get31FromPixel:screenPoint useShiftedCenter:NO];
+//    if (point31 != nullptr)
+//    {
+//        auto latLon = OsmAnd::LatLon([OAMapUtils get31LatitudeY:point31->y], [OAMapUtils get31LongitudeX:point31->x]);
+//        return std::make_shared<OsmAnd::LatLon>(latLon);
+//    }
+//    return nullptr;
+//}
 
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon
 {
@@ -399,15 +383,6 @@
     OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
     return [mapRenderer isPositionVisible:[self.class getPoint31FromLatLon:lat lon:lon]];
 }
-
-//public static PointI calculateTarget31(@NonNull MapRendererView mapRenderer,
-//                                       double latitude, double longitude, boolean applyNewTarget) {
-//    PointI target31 = new PointI(MapUtils.get31TileNumberX(longitude), MapUtils.get31TileNumberY(latitude));
-//    if (applyNewTarget) {
-//        mapRenderer.setTarget(target31);
-//    }
-//    return target31;
-//}
 
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget
 {

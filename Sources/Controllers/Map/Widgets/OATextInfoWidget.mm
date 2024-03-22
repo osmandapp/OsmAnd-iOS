@@ -826,6 +826,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 - (void)configurePrefsWithId:(NSString *)id appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams
 {
     _appMode = appMode;
+    _customId = id;
     _hideIconPref = [self registerHideIconPrefWith:id];
     self.sizeStylePref = [self registerSizeStylePrefWith:id];
     
@@ -847,6 +848,12 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
             }
         }
     }
+}
+
+- (OAWidgetsPanel *)getWidgetPanel
+{
+    OAMapWidgetInfo *widgetInfo = [[OAMapWidgetRegistry sharedInstance] getWidgetInfoById:_customId];
+    return widgetInfo.widgetPanel;
 }
 
 - (OACommonInteger *)registerSizeStylePrefWith:(NSString *)customId

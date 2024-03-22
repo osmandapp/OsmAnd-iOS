@@ -386,42 +386,4 @@
     return [OANativeUtilities getAltitudeForElevatedPoint:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
 }
 
-//+ (double)getDistance:(int)pixX pixY:(int)pixY pixX2:(int)pixX2 pixY2:(int)pixY2
-//{
-//    double lat1 = [OARotatedTileBoxHelper getLatFromPixel:pixX y:pixY];
-//    double lon1 = [OARotatedTileBoxHelper getLonFromPixel:pixX y:pixY];
-//    double lat2 = [OARotatedTileBoxHelper getLatFromPixel:pixX2 y:pixY2];
-//    double lon2 = [OARotatedTileBoxHelper getLonFromPixel:pixX2 y:pixY2];
-//    return [self getDistance:lat1 lon1:lon1 lat2:lat2 lon2:lon2];
-//}
-
-//+ (double)getLatitudeFromTile:(double)zoom y:(double)y
-//{
-//    int sign = y < 0 ? -1 : 1;
-//    return atan(sign * sinh(M_PI * (1 - 2 * y / [self getPowZoom:zoom]))) * 180 / M_PI;
-//}
-//
-//+ (double)getLongitudeFromTile:(double)zoom x:(double)x
-//{
-//    return x / [self getPowZoom:zoom] * 360 - 180;
-//}
-//
-//+ (double)getPowZoom:(double)zoom
-//{
-//    if (zoom >= 0 && (zoom - floor(zoom)) < 0.001)
-//        return 1 << ((int) zoom);
-//    else
-//        return pow(2, zoom);
-//}
-//
-//+ (double) get31LongitudeX:(int)tileX
-//{
-//    return [self getLongitudeFromTile:21 x:tileX / 1024];
-//}
-//
-//+ (double) get31LatitudeY:(int)tileY
-//{
-//    return [self getLatitudeFromTile:21 y:tileY / 1024];
-//}
-
 @end

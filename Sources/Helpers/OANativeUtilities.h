@@ -76,8 +76,6 @@
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;
 + (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon;
-//- (std::shared_ptr<OsmAnd::LatLon>) getLatLonFromPixel:(OsmAnd::PointI)screenPoint;
-//- (std::shared_ptr<OsmAnd::PointI>) get31FromPixel:(OsmAnd::PointI)screenPoint useShiftedCenter:(BOOL)useShiftedCenter;
 + (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget;
 

@@ -26,8 +26,6 @@ const static int kZoomDurationMillis = 1500;
 
 @interface OAAutoZoomBySpeedHelper : NSObject
 
-- (double) calculateAutoZoomBySpeedV1:(float)speed mapView:(OAMapRendererView *_Nonnull)mapView;
-
 - (OAComplexZoom *_Nullable) calculateZoomBySpeedToAnimate:(OAMapRendererView *_Nonnull)mapRenderer myLocation:(CLLocation *_Nonnull)myLocation rotationToAnimate:(float)rotationToAnimate nextTurn:(OANextDirectionInfo *_Nonnull)nextTurn;
 
 - (OAAutoZoomDTO *_Nullable) getAnimatedZoomParamsForChart:(OAMapRendererView *_Nonnull)mapRenderer currentZoom:(float)currentZoom lat:(double)lat lon:(double)lon heading:(float)heading speed:(float)speed;

@@ -129,7 +129,6 @@ struct CLLocationCoordinate2D;
 @property(nonatomic, readonly) float currentPixelsToMetersScaleFactor;
 
 // Utilities:
-//- (BOOL)getLocationFromScreenPoint:(OsmAnd::PointI)screenPoint location31:(std::shared_ptr<OsmAnd::PointI>)location31;
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (CGPoint)convertToScreenPointLat:(double)lat lon:(double)lon;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;

@@ -357,14 +357,14 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
                 {
                     pendingRotation = YES;
                 }
-                [self registerUnregisterSensor:location smallSpeedForCompass:smallSpeedForCompass];
+                // [self registerUnregisterSensor:location smallSpeedForCompass:smallSpeedForCompass];
                 
                 [self setMyLocationV2:location timeDiff:movingTime rotation:rotation];
             }
             else if (location)
             {
                 showViewAngle = (![location hasBearing] || [self isSmallSpeedForCompass:location]) && [OANativeUtilities containsLatLon:location];
-                [self registerUnregisterSensor:location smallSpeedForCompass:false];
+                // [self registerUnregisterSensor:location smallSpeedForCompass:false];
             }
             
             _showViewAngle = showViewAngle;
@@ -800,35 +800,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
         [_app setupDrivingRegion:worldRegion];
 }
 
-
-//public static void updateDrivingRegionIfNeeded(@NonNull OsmandApplication app, @Nullable LatLon newStartLocation, boolean force) {
-//    OsmandSettings settings = app.getSettings();
-//    if (settings.DRIVING_REGION_AUTOMATIC.get() && newStartLocation != null) {
-//        LatLon lastStartLocation = settings.getLastStartPoint();
-//        if (lastStartLocation == null || MapUtils.getDistance(newStartLocation, lastStartLocation) > CACHE_RADIUS || force) {
-//            app.getMapViewTrackingUtilities().detectDrivingRegion(newStartLocation);
-//            settings.setLastStartPoint(newStartLocation);
-//        }
-//    }
-//}
-
-// TODO: implement or delete
-- (void) updateDrivingRegionIfNeeded:(double)lat lon:(double)lon force:(BOOL)force
-{
-    if ([_settings.drivingRegionAutomatic get])
-    {
-//        [_settings startp]
-    }
-}
-
-- (void) updateDrivingRegionIfNeeded:(CLLocation *)nextStartLocation force:(BOOL)force
-{
-    if (nextStartLocation)
-    {
-        [self updateDrivingRegionIfNeeded:nextStartLocation.coordinate.latitude lon:nextStartLocation.coordinate.longitude force:force];
-    }
-}
-
 - (CGFloat) getScreenDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
 {
     CGPoint screenPoint1 = [_mapView convertToScreenPointLat:lat1 lon:lon1];
@@ -1153,11 +1124,11 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 0.02;
     return CGRectMake(left, top, right, bottom);
 }
 
-// TODO: implement if it is needed in ios. delete if not.
-- (void) registerUnregisterSensor:(CLLocation *)location smallSpeedForCompass:(BOOL)smallSpeedForCompass
-{
-    
-}
+//// TODO: ask - do we need this in IOS?
+//- (void) registerUnregisterSensor:(CLLocation *)location smallSpeedForCompass:(BOOL)smallSpeedForCompass
+//{
+//    
+//}
 
 - (void) onProfileSettingSet:(NSNotification *)notification
 {

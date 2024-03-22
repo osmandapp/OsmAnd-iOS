@@ -314,29 +314,6 @@
     return OsmAnd::PointI();
 }
 
-//- (std::shared_ptr<OsmAnd::PointI>) get31FromPixel:(OsmAnd::PointI)screenPoint useShiftedCenter:(BOOL)useShiftedCenter
-//{
-//    std::shared_ptr<OsmAnd::PointI> point31 = std::make_shared<OsmAnd::PointI>(OsmAnd::PointI());
-//    OAMapRendererView *renderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
-//    [renderer getLocationFromScreenPoint:screenPoint location31:point31];
-//    if (point31 != nullptr)
-//    {
-//        return point31;
-//    }
-//    return nullptr;
-//}
-//
-//- (std::shared_ptr<OsmAnd::LatLon>) getLatLonFromPixel:(OsmAnd::PointI)screenPoint
-//{
-//    std::shared_ptr<OsmAnd::PointI> point31 = [self get31FromPixel:screenPoint useShiftedCenter:NO];
-//    if (point31 != nullptr)
-//    {
-//        auto latLon = OsmAnd::LatLon([OAMapUtils get31LatitudeY:point31->y], [OAMapUtils get31LongitudeX:point31->x]);
-//        return std::make_shared<OsmAnd::LatLon>(latLon);
-//    }
-//    return nullptr;
-//}
-
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon
 {
     CGPoint screenPoint = [self.class getScreenPointFromLatLon:lat lon:lon];

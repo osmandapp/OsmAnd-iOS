@@ -3368,3 +3368,7 @@
 "osmand_cloud_deleting_account_descr" = "Dans quelques instants, toutes vos données et votre compte seront supprimés du cloud OsmAnd.\n\nLes données de l\'appareil ne seront pas affectées.";
 "trash_is_empty_banner_desc" = "Les fichiers supprimés d\'OsmAnd Cloud seront disponibles ici pendant %@ jours.";
 "map_widget_sun_position_desc" = "Indique le temps restant avant le lever ou le coucher du soleil.";
+"upload_to_osm_short" = "Télécharger sur OSM";
+"distance_during_navigation" = "Distance pendant la navigation";
+"osmand_cloud_delete_account_descr" = "Êtes-vous sûrs de vouloir supprimer votre compte OsmAnd Cloud?";
+"shared_string_file_info" = "Informations du fichier";

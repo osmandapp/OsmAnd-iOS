@@ -628,34 +628,37 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSString *) imageNameForTurnType:(const std::shared_ptr<TurnType> &)turnType
 {
-    if (turnType->getValue() == TurnType::C) {
-        return @"map_turn_forward";
-    } else if (turnType->getValue() == TurnType::TSLL) {
-        return @"map_turn_slight_left";
-    } else if (turnType->getValue() == TurnType::TL) {
-        return @"map_turn_left";
-    } else if (turnType->getValue() == TurnType::TSHL) {
-        return @"map_turn_sharp_left";
-    } else if (turnType->getValue() == TurnType::TSLR) {
-        return @"map_turn_slight_right";
-    } else if (turnType->getValue() == TurnType::TR) {
-        return @"map_turn_right";
-    } else if (turnType->getValue() == TurnType::TSHR) {
-        return @"map_turn_sharp_right";
-    } else if (turnType->getValue() == TurnType::TU) {
-        return @"map_turn_uturn";
-    } else if (turnType->getValue() == TurnType::TRU) {
-        return @"map_turn_uturn_right";
-    } else if (turnType->getValue() == TurnType::KL) {
-        return @"map_turn_keep_left";
-    } else if (turnType->getValue() == TurnType::KR) {
-        return @"map_turn_keep_right";
-    } else if (turnType->getValue() == TurnType::RNDB) {
-        return @"map_turn_roundabout";
-    } else if (turnType->getValue() == TurnType::KR) {
-        return @"map_turn_roundablot_left";
+    switch (turnType->getValue())
+    {
+        case TurnType::C:
+            return @"map_turn_continue";
+        case TurnType::TSLL:
+            return @"map_turn_slight_left";
+        case TurnType::TL:
+            return @"map_turn_left";
+        case TurnType::TSHL:
+            return @"map_turn_sharp_left";
+        case TurnType::TSLR:
+            return @"map_turn_slight_right";
+        case TurnType::TR:
+            return @"map_turn_right";
+        case TurnType::TSHR:
+            return @"map_turn_sharp_right";
+        case TurnType::TU:
+            return @"map_turn_uturn_left";
+        case TurnType::TRU:
+            return @"map_turn_uturn_right";
+        case TurnType::KL:
+            return @"map_turn_keep_left";
+        case TurnType::KR:
+            return @"map_turn_keep_right";
+        case TurnType::RNDB:
+            return @"map_turn_roundabout_right";
+        case TurnType::RNLB:
+            return @"map_turn_roundabout_left";
+        default:
+            return nil;
     }
-    return nil;
 }
 
 // MARK: OACarPlayMapViewDelegate

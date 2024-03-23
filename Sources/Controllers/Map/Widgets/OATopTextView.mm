@@ -32,6 +32,7 @@
 #import "OARoutingHelperUtils.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OANativeUtilities.h"
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
@@ -497,7 +498,7 @@
             {
                 OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
                 streetName = [_routingHelper getCurrentName:nextDirInfo];
-                _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor];
             }
         }
         else
@@ -507,7 +508,7 @@
             {
                 showClosestWaypointFirstInAddress = NO;
                 streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
-                _turnDrawable.clr = UIColorFromRGB(color_nav_arrow_distant);
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
             }
         }
     }

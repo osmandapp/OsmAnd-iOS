@@ -16,6 +16,7 @@
 #import "OAVoiceRouter.h"
 #import "OAAppSettings.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -170,7 +171,7 @@
     if ([_turnDrawable setTurnType:turnType] || vis)
     {
         _turnDrawable.textFont = self.primaryFont;
-        _turnDrawable.textColor = self.primaryColor;
+        _turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
         if (_horisontalMini)
             [self setTurnDrawable:_turnDrawable gone:false];
         else

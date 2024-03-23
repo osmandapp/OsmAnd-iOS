@@ -12,7 +12,7 @@
 #import "OATurnResource.h"
 #import "OATurnPathHelper.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 #define IMG_BORDER 2.0
 #define IMG_MIN_DELTA 16.0
@@ -35,8 +35,8 @@
         _scaleCoefficient = scaleCoefficient;
         _miniCoeff = 2.f;
         _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
-        _routeDirectionColor = UIColorFromRGB(color_nav_arrow);
-        _secondTurnColor = UIColorFromRGB(color_nav_arrow_distant);
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor];
+        _secondTurnColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
         
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
@@ -132,7 +132,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
     CGContextSetAllowsAntialiasing(context, true);
-    CGContextSetStrokeColorWithColor(context, [UIColor blackColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].CGColor);
 
     //to change color immediately when needed
     if (!_lanes.empty())
@@ -143,9 +143,9 @@
         for (int i = 0; i < _lanes.size(); i++)
         {
             if ((_lanes[i] & 1) == 1)
-                _routeDirectionColor = _imminent ? UIColorFromRGB(color_nav_arrow_imminent) : UIColorFromRGB(color_nav_arrow);
+                _routeDirectionColor = _imminent ? [UIColor colorNamed:ACColorNameNavArrowImminentColor] : [UIColor colorNamed:ACColorNameNavArrowColor];
             else
-                _routeDirectionColor = UIColorFromRGB(color_nav_arrow_distant);
+                _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
 
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);

@@ -475,7 +475,7 @@
 "shared_string_copy" = "Умножи";
 "shared_string_continue" = "Настави";
 "shared_string_deselect_all" = "Означи све";
-"shared_string_preparing" = "Препремам";
+"shared_string_preparing" = "Припремам";
 "shared_string_min" = "Најмање";
 "shared_string_max" = "Највиши";
 "shared_string_wifi_only" = "Само бежично";
@@ -2056,7 +2056,7 @@
 "routing_attr_avoid_sett_name" = "Без калдрме";
 "rendering_value_translucent_lightblue_name" = "Прозирна светло плава";
 "rendering_attr_smoothness_good_name" = "Добро";
-"routing_attr_weight_name" = "Тежина";
+"routing_attr_weight_name" = "Тежина руте";
 "rendering_value_bold_name" = "Подебљано";
 "rendering_attr_surface_stone_name" = "Камен";
 "rendering_attr_pisteGrooming_name" = "Равнање стазе";
@@ -2151,7 +2151,7 @@
 "rendering_attr_trainLightrailRoutes_name" = "Железнички путеви";
 "rendering_value_pedestrian_name" = "Пешице";
 "rendering_attr_highway_class_track_grade5_name" = "Квалитет 5";
-"routing_attr_height_name" = "Висина";
+"routing_attr_height_name" = "Висина руте";
 "rendering_attr_piste_type_connection_name" = "Веза стазе";
 "routing_attr_relief_smoothness_factor_name" = "Изаберите висинско одступање";
 "routing_attr_piste_type_downhill_name" = "Алпско и скијање спуштање";
@@ -2283,7 +2283,7 @@
 "preferred_terrain" = "Преферирани терен";
 "route_preferred_terrain_hilly" = "Руте са брдовитим профилом рељефа.";
 "start_point" = "Почетак";
-"altitude" = "Висина";
+"altitude" = "Алтитуда";
 "save_heading" = "Урачунај правац";
 "save_heading_descr" = "Сачувај заглавље свакој тачки праћења приликом снимања.";
 "select_tracks" = "Изаберите путање";
@@ -3224,7 +3224,6 @@
 "map_widget_ant_heart_rate_desc" = "Приказује тренутне корисникове срчане откуцаје приликом датог дејства";
 "map_widget_ant_bicycle_speed" = "Брзина бицикла";
 "map_widget_ant_bicycle_speed_desc" = "Приказује брзину путовања";
-
 "map_widget_ant_bicycle_dist" = "Растојање бицикла";
 "external_sensors_support" = "Подршка спољних пријемника";
 "learn_more_about_sensors_link" = "Сазнајте подробније о пријемницима.";

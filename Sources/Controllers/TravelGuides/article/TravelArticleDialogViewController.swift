@@ -151,7 +151,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
-        if self.traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection),
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection),
            let bottomView = bottomView {
             bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
         }

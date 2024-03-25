@@ -171,7 +171,7 @@
     if ([_turnDrawable setTurnType:turnType] || vis)
     {
         _turnDrawable.textFont = self.primaryFont;
-        _turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+        _turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor].currentMapThemeColor;
         if (_horisontalMini)
             [self setTurnDrawable:_turnDrawable gone:false];
         else

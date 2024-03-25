@@ -13,6 +13,7 @@
 #import "OATurnPathHelper.h"
 #import "OAUtilities.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define IMG_BORDER 2.0
 #define IMG_MIN_DELTA 16.0
@@ -35,8 +36,8 @@
         _scaleCoefficient = scaleCoefficient;
         _miniCoeff = 2.f;
         _leftSide = [OADrivingRegion isLeftHandDriving:[[OAAppSettings sharedManager].drivingRegion get]];
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor];
-        _secondTurnColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
+        _secondTurnColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
         
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
@@ -132,7 +133,7 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextClearRect(context, rect);
     CGContextSetAllowsAntialiasing(context, true);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].currentMapThemeColor.CGColor);
 
     //to change color immediately when needed
     if (!_lanes.empty())
@@ -143,9 +144,9 @@
         for (int i = 0; i < _lanes.size(); i++)
         {
             if ((_lanes[i] & 1) == 1)
-                _routeDirectionColor = _imminent ? [UIColor colorNamed:ACColorNameNavArrowImminentColor] : [UIColor colorNamed:ACColorNameNavArrowColor];
+                _routeDirectionColor = [UIColor colorNamed:_imminent ? ACColorNameNavArrowImminentColor : ACColorNameNavArrowColor].currentMapThemeColor;
             else
-                _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
+                _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
 
             int turnType = TurnType::getPrimaryTurn(_lanes[i]);
             int secondTurnType = TurnType::getSecondaryTurn(_lanes[i]);

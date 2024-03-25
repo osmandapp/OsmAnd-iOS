@@ -498,7 +498,7 @@
             {
                 OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
                 streetName = [_routingHelper getCurrentName:nextDirInfo];
-                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor];
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
             }
         }
         else
@@ -508,7 +508,7 @@
             {
                 showClosestWaypointFirstInAddress = NO;
                 streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
-                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
             }
         }
     }

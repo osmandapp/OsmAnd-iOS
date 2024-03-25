@@ -9,6 +9,7 @@
 #import "OATurnDrawable.h"
 #import "OAUtilities.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OATurnDrawable
 {
@@ -32,7 +33,7 @@
 
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
-        [self setClr:[UIColor colorNamed:ACColorNameNavArrowColor]];
+        [self setClr:[UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor];
     }
     return self;
 }
@@ -64,13 +65,13 @@
     _turnImminent = turnImminent;
     _deviatedFromRoute = deviatedFromRoute;
     if (deviatedFromRoute)
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
     else if (turnImminent > 0)
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor];
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
     else if (turnImminent == 0)
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowImminentColor];
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowImminentColor].currentMapThemeColor;
     else
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor];
+        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
 
     [self setNeedsDisplay];
 }
@@ -94,20 +95,18 @@
     CGContextClearRect(context, rect);
 
     CGContextSetAllowsAntialiasing(context, true);
-    //CGContextSetLineWidth(context, 2.5f);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].CGColor);
+    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].currentMapThemeColor.CGColor);
 
     if (_pathForTurnOutlayForDrawing)
     {
-        CGContextSetFillColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowCircleColor].CGColor);
+        CGContextSetFillColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowCircleColor].currentMapThemeColor.CGColor);
         [_pathForTurnOutlayForDrawing fill];
         [_pathForTurnOutlayForDrawing stroke];
     }
 
-    CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
-    //CGContextTranslateCTM(aRef, 50, 50);
     if (_pathForTurnForDrawing)
     {
+        CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
         [_pathForTurnForDrawing fill];
         [_pathForTurnForDrawing stroke];
     }

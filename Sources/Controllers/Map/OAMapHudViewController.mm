@@ -927,10 +927,8 @@
 {
     if ([OAUtilities isLandscape] || [OAUtilities isIPad])
         _bottomBarView.backgroundColor = [UIColor clearColor];
-    else {
-        UIColor *color = [UIColor colorNamed:ACColorNameWidgetBgColor];
-        _bottomBarView.backgroundColor = _settings.nightMode ? color.dark : color.light;
-    }
+    else
+        _bottomBarView.backgroundColor = [UIColor colorNamed:ACColorNameWidgetBgColor].currentMapThemeColor;
 }
 
 - (void) updateTopButtonsLayoutY

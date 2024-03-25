@@ -101,8 +101,13 @@
         }];
         if (historyItems.count > CPListTemplate.maximumItemCount)
             [historyItems removeObjectsInRange:NSMakeRange(CPListTemplate.maximumItemCount, historyItems.count - CPListTemplate.maximumItemCount)];
+
+        NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
         for (OAHistoryItem *historyItem in historyItems)
         {
+            if (listItems.count >= maximumItemCount)
+                break;
+
             [listItems addObject:[self createListItem:historyItem]];
         }
     }

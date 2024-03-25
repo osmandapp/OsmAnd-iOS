@@ -42,10 +42,13 @@
     NSMutableArray<CPListItem *> *items = [NSMutableArray new];
     if (res)
     {
+        NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
         [res.getCurrentSearchResults enumerateObjectsUsingBlock:^(OASearchResult * _Nonnull sr, NSUInteger idx, BOOL * _Nonnull stop) {
             OAQuickSearchListItem *item = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
             CPListItem *listItem = [self createListItem:item];
             [items addObject:listItem];
+            if (items.count >= maximumItemCount)
+                *stop = YES;
         }];
     }
     CPListSection *section = [[CPListSection alloc] initWithItems:items header:nil sectionIndexTitle:nil];

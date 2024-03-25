@@ -358,11 +358,12 @@
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
-        [self.groupsButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
-        [self.toolBarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+        BOOL isLightTheme = [ThemeManager shared].isLightTheme;
+        [self.backButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.groupsButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.toolBarView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
         if (_isHeaderBlurred)
-            [_headerView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+            [_headerView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
     }
 }
 

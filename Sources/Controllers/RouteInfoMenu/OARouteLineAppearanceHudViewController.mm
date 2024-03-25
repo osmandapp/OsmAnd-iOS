@@ -435,9 +435,10 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     
     if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        [self.statusBarBackgroundView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
-        [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
-        [self.applyButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
+        BOOL isLightTheme = [ThemeManager shared].isLightTheme;
+        [self.statusBarBackgroundView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
+        [self.backButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.applyButton addBlurEffect:isLightTheme cornerRadius:12. padding:0.];
     }
 }
 

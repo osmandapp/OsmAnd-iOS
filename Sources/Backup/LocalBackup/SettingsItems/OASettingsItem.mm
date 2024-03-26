@@ -163,7 +163,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         self.fileName = [NSString stringWithFormat:@"%@%@", json[@"name"], self.defaultFileExtension];
     if (json[@"file"])
         self.fileName = json[@"file"];
-
+    
     NSError* readError;
     [self readItemsFromJson:json error:&readError];
     if (error && readError)
@@ -314,7 +314,13 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
         
         return NO;
     }
-    NSDictionary<NSString *, NSString *> *settings = [[OAMigrationManager shared] changeJsonMigration:json];
+
+    NSDictionary<NSString *, NSString *> *settings;
+    if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] == OAMigrationManager.importExportVersionMigration1)
+        settings = [[OAMigrationManager shared] changeJsonMigration:json];
+    else
+        settings = json;
+
     NSMutableDictionary<NSString *, NSString *> *rendererSettings = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, NSString *> *routingSettings = [NSMutableDictionary new];
     [settings enumerateKeysAndObjectsUsingBlock:^(NSString * _Nonnull key, NSString * _Nonnull obj, BOOL * _Nonnull stop) {

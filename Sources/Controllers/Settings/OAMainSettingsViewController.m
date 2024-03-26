@@ -486,7 +486,7 @@
     NSString *path = urls[0].path;
     NSString *extension = [[path pathExtension] lowercaseString];
     if ([extension caseInsensitiveCompare:@"osf"] == NSOrderedSame)
-        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:1];
+        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:kVersion];
 }
 
 @end

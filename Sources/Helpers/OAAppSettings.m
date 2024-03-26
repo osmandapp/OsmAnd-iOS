@@ -427,7 +427,7 @@
 #define kBottomWidgetPanelOrderKey @"widget_bottom_panel_order"
 
 #define kTopWidgetPanelOrderOldKey @"top_widget_panel_order"
-#define kBottomWidgetPanelOrderKeyOldOld @"bottom_widget_panel_order"
+#define kBottomWidgetPanelOrderKeyOld @"bottom_widget_panel_order"
 
 #define useHHRoutingKey @"useHHRoutingKey"
 #define useHHRoutingOnlyKey @"useHHRoutingOnlyKey"
@@ -3805,7 +3805,7 @@
         _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
 
         _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:kTopWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKeyOldOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
@@ -4642,6 +4642,9 @@
 
         for (NSString *key in _profilePreferences.keyEnumerator)
         {
+            if ([key isEqualToString:kTopWidgetPanelOrderOldKey] || [key isEqualToString:kBottomWidgetPanelOrderKeyOld])
+                continue;
+
             [self registerPreference:[self getProfilePreference:key] forKey:key];
         }
         for (NSString *key in _globalPreferences.keyEnumerator)

@@ -43,7 +43,6 @@
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>
 
-#define kVersion 1
 #define kTmpProfileFolder @"tmpProfileData"
 
 @interface OAImportItemsAsyncTask()
@@ -255,13 +254,14 @@
 
 - (void)collectItemsFromDictioanry:(NSDictionary *)json {
     NSArray* itemsJson = json[@"items"];
-    NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : 1;
+    NSInteger version = json[@"version"] ? [json[@"version"] integerValue] : kVersion;
     if (version > kVersion)
     {
         NSLog(@"Error: unsupported version");
         return;
     }
-    
+    [[OASettingsHelper sharedInstance] setCurrentBackupVersion:version];
+
     NSMutableDictionary<NSString *, NSMutableArray<OASettingsItem *> *> *pluginItems = [NSMutableDictionary new];
     for (NSDictionary* itemJSON in itemsJson)
     {

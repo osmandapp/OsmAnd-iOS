@@ -64,7 +64,7 @@
         else if (duplicates.count == 0)
         {
             if (selectedItems && _file)
-                [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:1 delegate:self];
+                [_settingsHelper importSettings:_file items:selectedItems latestChanges:@"" version:kVersion delegate:self];
         }
     }
 
@@ -157,6 +157,7 @@
 
 - (void)onLeftNavbarButtonPressed
 {
+    [[OASettingsHelper sharedInstance] setCurrentBackupVersion:kVersion];
     [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     [self dismissViewController];
 }
@@ -192,7 +193,7 @@
         if (duplicates.count == 0)
         {
             [self showActivityIndicatorWithLabel:OALocalizedString(@"shared_string_importing")];
-            [_settingsHelper importSettings:_file items:items latestChanges:@"" version:1 delegate:self];
+            [_settingsHelper importSettings:_file items:items latestChanges:@"" version:kVersion delegate:self];
         }
         else
         {

@@ -10,12 +10,11 @@
 
 @interface OAGPXDataSetType : NSObject
 
-+ (NSString *)getTitle:(NSInteger)dst;
-+ (NSString *)getIconName:(NSInteger)dst;
-+ (NSString *)getDataKey:(NSInteger)dst;
-+ (UIColor *)getTextColor:(NSInteger)dst;
-+ (UIColor *)getFillColor:(NSInteger)dst;
-+ (NSString *)getMainUnitY:(NSInteger)dst;
-+ (NSString *)getFieldTypeNameByWidgetId:(NSString *)widgetId;
++ (NSString *)getTitle:(NSInteger)type;
++ (NSString *)getIconName:(NSInteger)type;
++ (NSString *)getDataKey:(NSInteger)type;
++ (UIColor *)getTextColor:(NSInteger)type;
++ (UIColor *)getFillColor:(NSInteger)type;
++ (NSString *)getMainUnitY:(NSInteger)type;
 
 @end

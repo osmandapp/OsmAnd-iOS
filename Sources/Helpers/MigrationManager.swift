@@ -12,6 +12,8 @@ import Foundation
 @objcMembers
 final class MigrationManager: NSObject {
 
+    static let importExportVersionMigration1 = 1
+
     enum MigrationKey: String {
         case migrationChangeWidgetIds1Key
     }

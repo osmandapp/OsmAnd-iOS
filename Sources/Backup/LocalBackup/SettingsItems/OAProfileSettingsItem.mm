@@ -363,9 +363,7 @@
     NSMapTable<NSString *, OACommonPreference *> *prefs = [settings getRegisteredPreferences];
     for (NSString *key in prefs.keyEnumerator)
     {
-        if ([appModeBeanPrefsIds containsObject:key]
-            || [key isEqualToString:settings.topWidgetPanelOrderOld.key]
-            || [key isEqualToString:settings.bottomWidgetPanelOrderOld.key])
+        if ([appModeBeanPrefsIds containsObject:key])
             continue;
 
         OACommonPreference *setting = [prefs objectForKey:key];

@@ -106,7 +106,21 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 
 - (NSString *)getWidgetDataFieldTypeNameByWidgetId:(NSString *)widgetId
 {
-    return [OAGPXDataSetType getFieldTypeNameByWidgetId:widgetId];
+    NSString *origWidgetId = [widgetId containsString:OAMapWidgetInfo.DELIMITER]
+        ? [widgetId substringToIndex:[widgetId indexOf:OAMapWidgetInfo.DELIMITER]]
+        : widgetId;
+
+    if ([origWidgetId isEqualToString:OAWidgetType.temperature.id])
+        return @"TEMPERATURE";
+    if ([origWidgetId isEqualToString:OAWidgetType.heartRate.id])
+        return @"HEART_RATE";
+    if ([origWidgetId isEqualToString:OAWidgetType.bicycleSpeed.id])
+        return @"BIKE_SPEED";
+    if ([origWidgetId isEqualToString:OAWidgetType.bicycleCadence.id])
+        return @"BIKE_CADENCE";
+    if ([origWidgetId isEqualToString:OAWidgetType.bicycleDistance.id])
+        return @"BIKE_DISTANCE";
+    return nil;
 }
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams

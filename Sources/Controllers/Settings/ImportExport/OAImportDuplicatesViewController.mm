@@ -464,7 +464,7 @@
         {
             [item setShouldReplace:shouldReplace];
         }
-        [_settingsHelper importSettings:_file items:_settingsItems latestChanges:@"" version:1 delegate:self];
+        [_settingsHelper importSettings:_file items:_settingsItems latestChanges:@"" version:kVersion delegate:self];
     }
 }
 

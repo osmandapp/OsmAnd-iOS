@@ -67,6 +67,7 @@
     self = [super init];
     if (self) {
         BOOL isDir = YES;
+        _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR_NAME];
         if (![[NSFileManager defaultManager] fileExistsAtPath:_tmpDir isDirectory:&isDir])
             [[NSFileManager defaultManager] createDirectoryAtPath:_tmpDir withIntermediateDirectories:YES attributes:nil error:nil];
     }

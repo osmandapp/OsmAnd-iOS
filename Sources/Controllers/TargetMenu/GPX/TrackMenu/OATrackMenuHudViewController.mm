@@ -352,6 +352,21 @@
     _isViewVisible = YES;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        BOOL isLightTheme = [ThemeManager shared].isLightTheme;
+        [self.backButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.groupsButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.toolBarView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
+        if (_isHeaderBlurred)
+            [_headerView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
+    }
+}
+
 - (void)hide
 {
     [self hide:YES duration:.2 onComplete:^{

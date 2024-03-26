@@ -362,6 +362,14 @@
     [self checkColoringAvailability];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
+}
+
 - (void)applyLocalization
 {
     [self.titleView setText:OALocalizedString(@"shared_string_appearance")];
@@ -381,7 +389,7 @@
     self.titleIconView.image = [UIImage templateImageNamed:@"ic_custom_appearance"];
     self.titleIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSecondary];
 
-    [self.doneButton addBlurEffect:YES cornerRadius:12. padding:0.];
+    [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0.];
     [self.doneButton setAttributedTitle:
                     [[NSAttributedString alloc] initWithString:OALocalizedString(@"shared_string_done")
                                                     attributes:@{ NSFontAttributeName:[UIFont scaledBoldSystemFontOfSize:17.] }]

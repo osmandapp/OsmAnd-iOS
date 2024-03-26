@@ -428,13 +428,13 @@ static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
 // Widgets
-#define kLeftWidgetPanelOrderKey @"left_widget_panel_order"
-#define kRightWidgetPanelOrderKey @"right_widget_panel_order"
-#define kTopWidgetPanelOrderKey @"widget_top_panel_order"
-#define kBottomWidgetPanelOrderKey @"widget_bottom_panel_order"
+static NSString * const leftWidgetPanelOrderKey = @"left_widget_panel_order";
+static NSString * const rightWidgetPanelOrderKey = @"right_widget_panel_order";
+static NSString * const topWidgetPanelOrderKey = @"widget_top_panel_order";
+static NSString * const bottomWidgetPanelOrderKey = @"widget_bottom_panel_order";
 
-#define kTopWidgetPanelOrderOldKey @"top_widget_panel_order"
-#define kBottomWidgetPanelOrderKeyOld @"bottom_widget_panel_order"
+static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
+static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useHHRoutingKey = @"useHHRoutingKey";
 static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
@@ -3898,13 +3898,13 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
         
         // Widgets
-        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:kLeftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
-        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:kRightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
-        _topWidgetPanelOrder = [OACommonListOfStringList withKey:kTopWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
+        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
+        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
 
-        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:kTopWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
@@ -4758,7 +4758,7 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
         for (NSString *key in _profilePreferences.keyEnumerator)
         {
-            if ([key isEqualToString:kTopWidgetPanelOrderOldKey] || [key isEqualToString:kBottomWidgetPanelOrderKeyOld])
+            if ([key isEqualToString:topWidgetPanelOrderOldKey] || [key isEqualToString:bottomWidgetPanelOrderKeyOld])
                 continue;
 
             [self registerPreference:[self getProfilePreference:key] forKey:key];

@@ -25,6 +25,8 @@
 
 #import "OACommonTypes.h"
 
+#include <OsmAndCore/LatLon.h>
+
 #define kMinAltitudeValue -20000
 
 @interface UIColor (nsColorNative)
@@ -70,5 +72,14 @@
 + (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint;
 + (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint;
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint;
++ (double) getLocationHeightOrZero:(OsmAnd::PointI)location31;
++ (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;
++ (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon;
++ (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon;
++ (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon;
++ (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget;
+
++ (BOOL) containsLatLon:(CLLocation *)location;
++ (BOOL) containsLatLon:(double)lat lon:(double)lon;
 
 @end

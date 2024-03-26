@@ -26,8 +26,8 @@ import Foundation
         type.topBottomPadding
     }
     
-    static func getPaddingBetweenIconAdndValue(type: WidgetSizeStyle) -> CGFloat {
-        type.paddingBetweenIconAdndValue
+    static func getPaddingBetweenIconAndValue(type: WidgetSizeStyle) -> CGFloat {
+        type.paddingBetweenIconAndValue
     }
 }
 
@@ -62,7 +62,7 @@ import Foundation
         }
     }
     
-    var paddingBetweenIconAdndValue: CGFloat {
+    var paddingBetweenIconAndValue: CGFloat {
         switch self {
         case .small: 6
         case .medium, .large: 12

@@ -8,6 +8,7 @@
 
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
+#import "OANativeUtilities.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -480,9 +481,6 @@ forcedUpdate:(BOOL)forcedUpdate
         return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
-// virtual bool obtainScreenPointFromPosition(const PointI64& position, PointI& outScreenPoint) const = 0;
-// virtual bool obtainScreenPointFromPosition(const PointI& position31, PointI& outScreenPoint) const = 0;
-
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen
 {
     if (!pos)
@@ -495,7 +493,8 @@ forcedUpdate:(BOOL)forcedUpdate
     else
         res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
 
-    if (res) {
+    if (res) 
+    {
         point->x = _point.x / [UIScreen mainScreen].scale;
         point->y = _point.y / [UIScreen mainScreen].scale;
     }
@@ -505,6 +504,22 @@ forcedUpdate:(BOOL)forcedUpdate
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
 {
     return [self convert:pos toScreen:point checkOffScreen:NO];
+}
+
+- (BOOL)obtainScreenPointFromPosition:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen
+{
+    if (!pos)
+        return NO;
+
+    OsmAnd::PointI _point(0, 0);
+    BOOL res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
+
+    if (res) 
+    {
+        point->x = _point.x / [UIScreen mainScreen].scale;
+        point->y = _point.y / [UIScreen mainScreen].scale;
+    }
+    return res;
 }
 
 - (OsmAnd::PointI) getTarget

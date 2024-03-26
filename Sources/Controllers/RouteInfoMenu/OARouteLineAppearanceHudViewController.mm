@@ -429,6 +429,19 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
     }];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        BOOL isLightTheme = [ThemeManager shared].isLightTheme;
+        [self.statusBarBackgroundView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
+        [self.backButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.applyButton addBlurEffect:isLightTheme cornerRadius:12. padding:0.];
+    }
+}
+
 - (void)hide
 {
     [self hide:YES duration:.2 onComplete:^{

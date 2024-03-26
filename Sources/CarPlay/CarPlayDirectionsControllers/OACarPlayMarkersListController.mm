@@ -34,6 +34,7 @@
     NSMutableArray<CPListItem *> *items = [NSMutableArray new];
     if (_destinationsHelper.sortedDestinations.count > 0)
     {
+        NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
         [_destinationsHelper.sortedDestinations enumerateObjectsUsingBlock:^(OADestination * _Nonnull destination, NSUInteger idx, BOOL * _Nonnull stop) {
             NSString *imageName = [destination.markerResourceName stringByAppendingString:@"_small"];
             CPListItem *listItem = [[CPListItem alloc] initWithText:destination.desc
@@ -46,6 +47,8 @@
                 [self onItemSelected:item completionHandler:completionBlock];
             };
             [items addObject:listItem];
+            if (items.count >= maximumItemCount)
+                *stop = YES;
         }];
     }
     else

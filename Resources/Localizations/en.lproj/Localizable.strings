@@ -1663,6 +1663,10 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "osmand_depelopment_simulate_location_section" = "Simulate";
+"osmand_depelopment_use_special_routing_hh+old" = "Use special routing (HH + old)";
+"osmand_depelopment_use_special_routing_hh_only" = "Use special routing (HH only)";
+"osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
+
 "simulate_in_progress" = "In progress";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";
 "simulate_location_track_select_descr" = "Choose track that will use as source for location moving.";
@@ -3669,7 +3673,6 @@ You will be able to pair this sensor again at any time.";
 "osmand_cloud_deletion_secondary_devices_warning" = "Secondary devices will be logged off from OsmAnd Cloud and lose access to paid features.";
 "osmand_cloud_deletion_subscriptions_warning" = "This will not cancel your OsmAnd Pro subscription.";
 "osmand_cloud_deleting_account_descr" = "In few moments all your data and account will be deleted from OsmAnd Cloud.\n\nAll data on the device remain untouched.";
-
 "osmand_cloud_deleted_account_descr" = "Account and all data was deleted from OsmAnd Cloud.";
 
 "skip_download" = "Skip download";
@@ -3687,6 +3690,8 @@ You will be able to pair this sensor again at any time.";
 "average_glide_ratio_time_interval_desc" = "Shows the average glide ratio or vertical speed for the set interval.";
 "average_glide_time_interval_desc" = "Specify the time interval for glide averaging.";
 "time_to_navigation_point_widget_settings_desc" = "Tap the widget to switch modes.";
+
+"track_appearance_3D_visualization" = "3D visualization";
 
 "routing_attr_hazmat_category_usa_7_name" = "Radioactive Substances";
 "rendering_attr_padusDisplayMode_name" = "Public lands display mode";

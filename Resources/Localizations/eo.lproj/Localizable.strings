@@ -1616,7 +1616,7 @@
 "gpx_select_track" = "Select track";
 "current_track" = "Nuna spuro";
 "gpx_direction_arrows" = "Sagetoj de direkto";
-"gpx_split_interval" = "Fragmento";
+"gpx_split_interval" = "Fragmenti";
 "gpx_split_interval_descr" = "Elektu tempon/distancon je kiu markoj sur la spuro estos montrataj.";
 "gpx_join_gaps" = "Kombini interspacojn";
 "gpx_join_gaps_descr" = "Gaps between segments will be connected.";

@@ -2082,7 +2082,7 @@ static BOOL _repositoryUpdated = NO;
 {
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
     
-    static NSString *const downloadingResourceCell = @"downloadingResourceCell";
+    static NSString * const downloadingResourceCell = @"downloadingResourceCell";
     
     NSString *cellTypeId = nil;
     id item_ = nil;
@@ -2165,13 +2165,13 @@ static BOOL _repositoryUpdated = NO;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *const subregionCell = @"subregionCell";
-    static NSString *const outdatedResourceCell = @"outdatedResourceCell";
-    static NSString *const localResourceCell = @"localResourceCell";
-    static NSString *const repositoryResourceCell = @"repositoryResourceCell";
-    static NSString *const downloadingResourceCell = @"downloadingResourceCell";
-    static NSString *const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
-    static NSString *const installedResourcesSubmenuCell = @"installedResourcesSubmenuCell";
+    static NSString * const subregionCell = @"subregionCell";
+    static NSString * const outdatedResourceCell = @"outdatedResourceCell";
+    static NSString * const localResourceCell = @"localResourceCell";
+    static NSString * const repositoryResourceCell = @"repositoryResourceCell";
+    static NSString * const downloadingResourceCell = @"downloadingResourceCell";
+    static NSString * const outdatedResourcesSubmenuCell = @"outdatedResourcesSubmenuCell";
+    static NSString * const installedResourcesSubmenuCell = @"installedResourcesSubmenuCell";
 
     NSString *cellTypeId = nil;
     NSString *title = nil;

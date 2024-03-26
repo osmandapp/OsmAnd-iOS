@@ -45,9 +45,14 @@
 {
     if (_favoriteList.count > 0)
     {
+        NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
+
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
         for (OAFavoriteItem *favoriteItem in _favoriteList)
         {
+            if (listItems.count >= maximumItemCount)
+                break;
+
             CPListItem *listItem = [[CPListItem alloc] initWithText:favoriteItem.favorite->getTitle().toNSString()
                                                          detailText:[self calculateDistanceToItem:favoriteItem]
                                                               image:[favoriteItem getCompositeIcon]

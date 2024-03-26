@@ -412,7 +412,6 @@ colorizationScheme:(int)colorizationScheme
         
         if (gpx.raiseRoutesAboveRelief)
         {
-            
             [self configureRaisedLine:builder
                         isRefreshLine:NO
                            elevations:elevations

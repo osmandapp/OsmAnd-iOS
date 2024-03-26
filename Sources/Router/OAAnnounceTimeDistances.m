@@ -12,7 +12,8 @@
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
-#import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
+#import "GeneratedAssetSymbols.h"
 #import "Localization.h"
 
 // Avoids false negatives: Pre-pone close announcements by this distance to allow for the possible over-estimation of the 'true' lead distance due to positioning error.
@@ -257,9 +258,11 @@
     paragraphStyle.minimumLineHeight = colorize ? 18 : 22.;
     paragraphStyle.lineSpacing = colorize ? 19. : 25;
     [builder addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:[builder.string rangeOfString:str]];
+    [builder addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:[builder.string rangeOfString:str]];
+    [builder addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorPrimary] range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
 
     if (colorize)
-        [builder addAttribute:NSForegroundColorAttributeName value:UIColorFromRGB(color_text_footer) range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
+        [builder addAttribute:NSForegroundColorAttributeName value:[UIColor colorNamed:ACColorNameTextColorSecondary] range:[builder.string rangeOfString:name options:NSBackwardsSearch]];
 }
 
 - (NSAttributedString *)getIntervalsDescription
@@ -285,6 +288,9 @@
 
     // Turn
     [builder addString:turn fontWeight:UIFontWeightRegular size:17.];
+    [builder addAttribute:NSForegroundColorAttributeName 
+                    value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                    range:[builder.string rangeOfString:turn]];
     [builder addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle
                     range:[builder.string rangeOfString:turn]];
@@ -304,6 +310,9 @@
 
     // Traffic warnings
     [builder addString:traffic fontWeight:UIFontWeightRegular size:17.];
+    [builder addAttribute:NSForegroundColorAttributeName 
+                    value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                    range:[builder.string rangeOfString:traffic]];
     [builder addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle
                     range:[builder.string rangeOfString:traffic]];
@@ -312,6 +321,9 @@
 
     // Waypoint / Favorite / POI
     [builder addString:point fontWeight:UIFontWeightRegular size:17.];
+    [builder addAttribute:NSForegroundColorAttributeName 
+                    value:[UIColor colorNamed:ACColorNameTextColorPrimary]
+                    range:[builder.string rangeOfString:point]];
     [builder addAttribute:NSParagraphStyleAttributeName
                     value:paragraphStyle
                     range:[builder.string rangeOfString:point]];

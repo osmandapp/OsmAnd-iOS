@@ -271,7 +271,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     
     [_closeButton setImage:[UIImage templateImageNamed:@"ic_navbar_close"] forState:UIControlStateNormal];
     _closeButton.imageView.tintColor = UIColor.whiteColor;
-    [_closeButton addBlurEffect:NO cornerRadius:12. padding:0];
+    [_closeButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 
     [_doneButton setTitle:OALocalizedString(@"shared_string_done") forState:UIControlStateNormal];
     _titleView.text = OALocalizedString(@"plan_route");
@@ -314,6 +314,14 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
 - (UIStatusBarStyle)preferredStatusBarStyle
 {
     return UIStatusBarStyleLightContent;
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [_closeButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 }
 
 - (void) doAdditionalLayout

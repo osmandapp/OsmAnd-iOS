@@ -3691,6 +3691,8 @@ You will be able to pair this sensor again at any time.";
 "average_glide_time_interval_desc" = "Specify the time interval for glide averaging.";
 "time_to_navigation_point_widget_settings_desc" = "Tap the widget to switch modes.";
 
+"track_appearance_3D_visualization" = "3D visualization";
+
 "routing_attr_hazmat_category_usa_7_name" = "Radioactive Substances";
 "rendering_attr_padusDisplayMode_name" = "Public lands display mode";
 "routing_attr_hazmat_category_usa_6_name" = "Toxic and Infectious Substances";

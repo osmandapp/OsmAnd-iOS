@@ -100,8 +100,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [self generateData];
     
     [self.resetButton setImage:[UIImage templateImageNamed:@"ic_navbar_reset"] forState:UIControlStateNormal];
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
-    [self.resetButton addBlurEffect:YES cornerRadius:12. padding:0];
+    [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
+    [self.resetButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -125,6 +125,17 @@ static const NSInteger kMaxZoomPickerRow = 2;
         if (![self isLandscape])
             [self goMinimized:NO];
     } completion:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
+        [self.resetButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
+    }
 }
 
 #pragma mark - Base setup UI

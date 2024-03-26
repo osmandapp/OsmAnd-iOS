@@ -335,7 +335,7 @@
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
 
     [self setupView];
@@ -366,6 +366,14 @@
         if (![self isLandscape])
             [self goExpanded];
     } completion:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 }
 
 - (void)hide

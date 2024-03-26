@@ -391,7 +391,7 @@
 "si_mi_meters" = "Milje/metri";
 "si_km_m" = "Kilometri/metri";
 "si_nm" = "Nautičke milje";
-"si_kmh" = "Километара на сат";
+"si_kmh" = "Kilometara na sat";
 "si_mph" = "Milja na sat";
 "si_m_s" = "Metara u sekundi";
 "si_min_km" = "Minuta po kilometru";
@@ -1632,7 +1632,7 @@
 "duplicate_track" = "Dupliraj putanju";
 "access_hint_enter_name" = "Unesi ime";
 "shared_string_not_selected" = "Nije označeno";
-"shared_string_language" = "Jezik";
+"shared_string_language" = "Glas";
 "you_searching" = "Vi tražite";
 "from_location" = "dalje";
 "show_alt_in_drive" = "Prikaži visinu u režimu vožnje";

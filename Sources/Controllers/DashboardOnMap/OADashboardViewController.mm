@@ -532,6 +532,14 @@ const static CGFloat kMapSettingsLandscapeWidth = 320.0;
         [screenObj deinitView];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.navbarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+}
+
 - (void)onLeftNavbarButtonPressed
 {
     if ([screenObj respondsToSelector:@selector(backButtonPressed)] && ![screenObj backButtonPressed])

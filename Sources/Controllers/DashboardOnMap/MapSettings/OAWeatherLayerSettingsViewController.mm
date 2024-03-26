@@ -115,11 +115,11 @@
     UIImage *backImage = [UIImage templateImageNamed:@"ic_custom_arrow_back"];
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     if (_mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
         self.doneButtonContainerView.hidden = YES;
     else
-        [self.doneButton addBlurEffect:YES cornerRadius:12. padding:5];
+        [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:5];
     
     self.tableView.delegate = self;
     self.tableView.dataSource = self;
@@ -159,6 +159,18 @@
         if (![self isLandscape])
             [self goMinimized:NO];
     } completion:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
+        if (!_mapPanel.hudViewController.weatherToolbar.needsSettingsForToolbar)
+            [self.doneButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:5];
+    }
 }
 
 - (void)applyLocalization

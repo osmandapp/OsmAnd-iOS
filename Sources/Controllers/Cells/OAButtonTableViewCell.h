@@ -11,6 +11,7 @@
 @interface OAButtonTableViewCell : OASimpleTableViewCell
 
 @property (weak, nonatomic) IBOutlet UIButton *button;
+@property (weak, nonatomic) IBOutlet NSLayoutConstraint *rightContainerConstraint;
 
 - (void)buttonVisibility:(BOOL)show;
 

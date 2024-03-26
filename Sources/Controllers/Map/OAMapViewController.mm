@@ -220,8 +220,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
     
-    OAAutoObserverProxy* _manualZoomObserver;
-
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
     CGFloat _initialZoomTapPointY;

@@ -23,13 +23,13 @@
 
 - (BOOL) hasBearing;
 {
-    return !isnan(self.course) && self.course != -1 && self.course != 0;
+    return !isnan(self.course) && self.course > 0;
 }
 
 
 - (BOOL) hasSpeed;
 {
-    return !isnan(self.speed);
+    return !isnan(self.speed) && self.speed >= 0;
 }
 
 - (CLLocation *) locationWithBearing:(double)bearing

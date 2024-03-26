@@ -326,7 +326,7 @@
     int y31 = OsmAnd::Utilities::get31TileNumberX(lat);
     OsmAnd::PointI point31 = OsmAnd::PointI(x31, y31);
     CGPoint screenPoint;
-    [mapRenderer convert:&point31 toScreen:&screenPoint checkOffScreen:NO];
+    [mapRenderer obtainScreenPointFromPosition:&point31 toScreen:&screenPoint checkOffScreen:YES];
     return screenPoint;
 }
 

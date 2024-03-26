@@ -130,13 +130,12 @@ struct CLLocationCoordinate2D;
 
 // Utilities:
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
-- (CGPoint)convertToScreenPointLat:(double)lat lon:(double)lon;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
+- (BOOL)obtainScreenPointFromPosition:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
 
 - (OsmAnd::PointI) getTarget;
 - (OsmAnd::PointI) getTargetScreenPosition;
-- (void) setLat:(double)lat lon:(double)lon;
 - (BOOL) setMapTarget:(OsmAnd::PointI)screenPoint location31:(OsmAnd::PointI)location31;
 - (BOOL) resetMapTarget;
 - (BOOL) resetMapTargetPixelCoordinates:(OsmAnd::PointI)screenPoint;
@@ -146,7 +145,6 @@ struct CLLocationCoordinate2D;
 - (OsmAnd::AreaI) getVisibleBBox31;
 - (NSArray<NSValue *> *) getVisibleLineFromLat:(double)fromLat fromLon:(double)fromLon toLat:(double)toLat toLon:(double)toLon;
 - (BOOL)isPositionVisible:(OsmAnd::PointI)pos;
-- (OsmAnd::PointI) getViewSize;
 
 - (void)dumpResourcesInfo;
 

@@ -330,7 +330,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                     }
                     if (isnan(rotation) && prevLocation)
                     {
-                        CGFloat distDp = [self getScreenDistance:location.coordinate.latitude lon1:location.coordinate.longitude lat2:prevLocation.coordinate.latitude lon2:prevLocation.coordinate.longitude];
+                        CGFloat distDp = [location distanceFromLocation:prevLocation] / _mapView.currentPixelsToMetersScaleFactor / UIScreen.mainScreen.scale;
                         if (distDp > SKIP_ANIMATION_DP_THRESHOLD)
                         {
                             movingTime = 0;
@@ -365,8 +365,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             {
                 [self switchToRoutePlanningMode];
             }
-            // When location is changed we need to refresh map in order to show movement!
-            [[OARootViewController instance].mapPanel refreshMap];
         }
         
         [_mapViewController updateLocation:location heading:location.course];
@@ -421,8 +419,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 
 - (void) stopAnimatingSync
 {
-    const auto animator = [self getMapAnimator];
-    animator->pause();
+    _mapView.mapAnimator->pause();
 }
 
 
@@ -446,44 +443,26 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     else
         rotation = startRotation;
     
-    std::shared_ptr<OsmAnd::IMapRenderer> mapRenderer = _mapView.renderer;
-    float mMoveX;
-    float mMoveY;
-    if (!mapRenderer)
-    {
-        OsmAnd::PointF startPoint = [OANativeUtilities getPixelFromLatLon:startLatLon.coordinate.latitude lon:startLatLon.coordinate.longitude];
-        OsmAnd::PointF finalPoint = [OANativeUtilities getPixelFromLatLon:finalLat lon:finalLon];
-        mMoveX = startPoint.x - finalPoint.x;
-        mMoveY = startPoint.y - finalPoint.y;
-    }
-    else
-    {
-        mMoveX = 0;
-        mMoveY = 0;
-    }
-    
     BOOL skipAnimation = movingTime == 0 || movingTime > SKIP_ANIMATION_TIMEOUT || ![OANativeUtilities containsLatLon:finalLat lon:finalLon];
     if (skipAnimation)
     {
-        [_mapView setLat:finalLat lon:finalLon];
+        [_mapView setTarget31:[OANativeUtilities getPoint31FromLatLon:finalLat lon:finalLon]];
         [_mapView setZoom:zoom];
         [_mapView setAzimuth:rotation];
         if (finishAnimationCallback)
-        {
             finishAnimationCallback();
-        }
+
         return;
     }
     
     float animationDuration = max(movingTime, NAV_ANIMATION_TIME / 4);
-    
     BOOL animateZoom = zoomParams != nil && (zoom != startZoom);
     float rotationDiff = !isnan(finalRotation) ? abs([OAMapUtils unifyRotationDiff:rotation targetRotate:startRotation]) : 0;
     BOOL animateRotation = rotationDiff > 0.1;
     BOOL animateTarget;
     
-    const auto animator = [self getMapAnimator];
-    if (mapRenderer && animator)
+    const auto& animator = _mapView.mapAnimator;
+    if (animator)
     {
         const auto targetAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Target);
         auto zoomAnimation = animator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Zoom);
@@ -502,12 +481,10 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         if (!isnan(finalRotation))
         {
             animator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
-            if (azimuthAnimation != nullptr)
-            {
+            if (azimuthAnimation)
                 animator->cancelAnimation(azimuthAnimation);
-            }
         }
-        
+
         if (animateRotation)
         {
             animator->animateAzimuthTo(-rotation, MAX(animationDuration, ROTATION_MOVE_ANIMATION_TIME), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
@@ -519,30 +496,24 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         if (animateTarget)
         {
             float duration = animationDuration; // sec or msecs?
-            if (targetAnimation != nullptr)
-            {
+            if (targetAnimation)
                 animator->cancelAnimation(targetAnimation);
-            }
-            _mapView.mapAnimator->animateTargetTo(finish31, duration, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
+
+            animator->animateTargetTo(finish31, duration, OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
         }
         
         if (animateZoom)
-        {
             animator->animateZoomTo(zoom, zoomParams.durationValue / 1000.0, OsmAnd::MapAnimator::TimingFunction::EaseOutQuartic, kLocationServicesAnimationKey);
-        }
+
         if (!animateZoom)
-        {
             [_mapView setZoom:zoom];
-        }
+
         if (!animateRotation && !isnan(finalRotation))
-        {
             [_mapView setAzimuth:rotation];
-        }
+
         if (!animateTarget)
-        {
-            [_mapView setLat:finalLat lon:finalLon];
-        }
-        
+            [_mapView setTarget31:[OANativeUtilities getPoint31FromLatLon:finalLat lon:finalLon]];
+
         animator->resume();
     }
 }
@@ -742,11 +713,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     return zoomDelta;
 }
 
-- (const std::shared_ptr<OsmAnd::MapAnimator>&) getMapAnimator
-{
-    return [_mapView getMapAnimator];
-}
-
 - (BOOL) animateMyLocation:(CLLocation *)location
 {
     return [_settings.animateMyLocation get] && ![self.class isSmallSpeedForAnimation:location] && !_movingToMyLocation;
@@ -785,17 +751,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     OAWorldRegion *worldRegion = [_app.worldRegion findAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
     if (worldRegion)
         [_app setupDrivingRegion:worldRegion];
-}
-
-- (CGFloat) getScreenDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
-{
-    CGPoint screenPoint1 = [_mapView convertToScreenPointLat:lat1 lon:lon1];
-    CGPoint screenPoint2 = [_mapView convertToScreenPointLat:lat2 lon:lon2];
-    
-    CGFloat xDist = abs((screenPoint1.x - screenPoint2.x));
-    CGFloat yDist = abs((screenPoint1.y - screenPoint2.y));
-    CGFloat screenDistance = sqrt((xDist * xDist) + (yDist * yDist));
-    return screenDistance;
 }
 
 - (CLLocationDirection) calculateDirectionWithLocation:(CLLocation *)location heading:(CLLocationDirection)heading applyViewAngleVisibility:(BOOL)applyViewAngleVisibility
@@ -1089,23 +1044,23 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         return CGPointZero;
     
     CGRect visibleMapRect = [self calculateVisibleMapRect];
-    OsmAnd::PointI viewSize = [_mapView getViewSize];
-    float projectedRatioX = (visibleMapRect.origin.x + visibleMapRect.size.width * ratio.x) / viewSize.x;
-    float projectedRatioY = (visibleMapRect.origin.y + visibleMapRect.size.height * ratio.y) / viewSize.y;
-    
+    CGSize viewSize = _mapView.bounds.size;
+    float projectedRatioX = (visibleMapRect.origin.x + visibleMapRect.size.width * ratio.x) / viewSize.width;
+    float projectedRatioY = (visibleMapRect.origin.y + visibleMapRect.size.height * ratio.y) / viewSize.height;
+
     return CGPointMake(projectedRatioX, projectedRatioY); //0.5  0.3887
 }
 
 - (CGRect) calculateVisibleMapRect
 {
-    OAMapRendererView *mapRenderer = (OAMapRendererView *) [OARootViewController instance].mapPanel.mapViewController.view;
-    OsmAnd::PointI windowSize = [mapRenderer getViewSize];
-    
-    int left = 0;
-    int top = 0;
-    int right = windowSize.x;
-    int bottom = windowSize.y;
-    
+    OAMapRendererView *mapRenderer = [OARootViewController instance].mapPanel.mapViewController.mapView;
+    CGSize windowSize = mapRenderer.bounds.size;
+
+    CGFloat left = 0;
+    CGFloat top = 0;
+    CGFloat right = windowSize.width;
+    CGFloat bottom = windowSize.height;
+
     //TODO: mock method. implement here code for splitting screen if needed. For now just return original screen size
     
     return CGRectMake(left, top, right, bottom);

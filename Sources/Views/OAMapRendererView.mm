@@ -355,11 +355,6 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getState().fixedPixel;
 }
 
-- (void)setLat:(double)lat lon:(double)lon
-{
-    [self setTarget31:[OANativeUtilities getPoint31FromLatLon:lat lon:lon]];
-}
-
 - (void)setTarget31:(OsmAnd::PointI)target31
 {
     if (_viewSize.x > 0 && _viewSize.y > 0)
@@ -370,11 +365,6 @@ forcedUpdate:(BOOL)forcedUpdate
     {
         _renderer->setTarget(target31);
     }
-}
-
-- (OsmAnd::PointI) getViewSize
-{
-    return _viewSize;
 }
 
 - (float)zoom
@@ -491,17 +481,6 @@ forcedUpdate:(BOOL)forcedUpdate
         return _renderer->getLocationFromScreenPoint(OsmAnd::PointI(static_cast<int32_t>(point.x), static_cast<int32_t>(point.y)), *location);
 }
 
-// virtual bool obtainScreenPointFromPosition(const PointI64& position, PointI& outScreenPoint) const = 0;
-// virtual bool obtainScreenPointFromPosition(const PointI& position31, PointI& outScreenPoint) const = 0;
-
-- (CGPoint)convertToScreenPointLat:(double)lat lon:(double)lon
-{
-    auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(lat, lon));
-    CGPoint screenPoint;
-    [self convert:&pos31 toScreen:&screenPoint checkOffScreen:YES];
-    return screenPoint;
-}
-
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen
 {
     if (!pos)
@@ -514,7 +493,8 @@ forcedUpdate:(BOOL)forcedUpdate
     else
         res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
 
-    if (res) {
+    if (res) 
+    {
         point->x = _point.x / [UIScreen mainScreen].scale;
         point->y = _point.y / [UIScreen mainScreen].scale;
     }
@@ -524,6 +504,22 @@ forcedUpdate:(BOOL)forcedUpdate
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point
 {
     return [self convert:pos toScreen:point checkOffScreen:NO];
+}
+
+- (BOOL)obtainScreenPointFromPosition:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen
+{
+    if (!pos)
+        return NO;
+
+    OsmAnd::PointI _point(0, 0);
+    BOOL res = _renderer->obtainScreenPointFromPosition(*pos, _point, offScreen);
+
+    if (res) 
+    {
+        point->x = _point.x / [UIScreen mainScreen].scale;
+        point->y = _point.y / [UIScreen mainScreen].scale;
+    }
+    return res;
 }
 
 - (OsmAnd::PointI) getTarget

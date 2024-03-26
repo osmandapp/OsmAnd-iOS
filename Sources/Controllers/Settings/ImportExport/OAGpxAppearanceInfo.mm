@@ -26,6 +26,7 @@
         _width = dataItem.width;
         _showArrows = dataItem.showArrows;
         _showStartFinish = dataItem.showStartFinish;
+        _raiseRoutesAboveRelief = dataItem.raiseRoutesAboveRelief;
         _splitType = dataItem.splitType;
         _splitInterval = dataItem.splitInterval;
 //        _scaleType = dataItem.scaleType;
@@ -47,6 +48,7 @@
     json[@"width"] = _width;
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";
     json[@"show_start_finish"] = _showStartFinish ? @"true" : @"false";
+    json[@"raise_routes_above_relief"] = _raiseRoutesAboveRelief ? @"true" : @"false";
     json[@"split_type"] = [OAGPXDatabase splitTypeNameByValue:_splitType];
 
     json[@"split_interval"] = [NSString stringWithFormat:@"%f", _splitInterval];
@@ -72,6 +74,7 @@
     gpxAppearanceInfo.width = json[@"width"];
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];
     gpxAppearanceInfo.showStartFinish = [json[@"show_start_finish"] boolValue];
+    gpxAppearanceInfo.raiseRoutesAboveRelief = [json[@"raise_routes_above_relief"] boolValue];
     gpxAppearanceInfo.splitType = [OAGPXDatabase splitTypeByName:json[@"split_type"]];
     gpxAppearanceInfo.splitInterval = [json[@"split_interval"] floatValue];
     //gpxAppearanceInfo.scaleType = [self getScaleType:json[@"gradient_scale_type"]];

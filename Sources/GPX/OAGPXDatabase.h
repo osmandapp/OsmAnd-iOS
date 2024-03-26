@@ -42,6 +42,8 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @property (nonatomic, assign) BOOL showStartFinish;
 @property (nonatomic, assign) BOOL joinSegments;
 @property (nonatomic, assign) BOOL showArrows;
+@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
+
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
 

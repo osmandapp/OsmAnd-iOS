@@ -20,6 +20,9 @@
 #define fullTextWidth 90
 #define minWidgetHeight 34
 
+static NSString * _Nonnull const kShowIconPref = @"simple_widget_show_icon";
+static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
+
 @implementation OATextInfoWidget
 {
     NSString *_contentTitle;
@@ -44,7 +47,7 @@
     int _cachedAngularUnits;
     NSLayoutConstraint *_leadingTextAnchor;
     NSString *_customId;
-    OACommonBoolean *_hideIconPref;
+    OACommonBoolean *_showIconPref;
     OAApplicationMode *_appMode;
     NSLayoutConstraint *_unitOrEmptyLabelWidthConstraint;
     UIStackView *_contentStackViewSimpleWidget;
@@ -53,9 +56,6 @@
     NSLayoutConstraint *_verticalStackViewSimpleWidgetBottomConstraint;
     UIColor *_iconColor;
 }
-
-NSString *const kHideIconPref = @"kHideIconPref";
-NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (instancetype) init
 {
@@ -148,8 +148,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     self.topNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
     self.topNameUnitStackView.spacing = 3;
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
-    
-    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
+
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
     
     auto nameView = [UIView new];
     nameView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -161,7 +161,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     // Create the name label ("SPEED")
     self.nameLabel = [UILabel new];
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     [nameView addSubview:self.nameLabel];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -183,7 +183,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     // Create the unit label ("KM/H")
     self.unitLabel = [UILabel new];
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
     [self.unitView addSubview:self.unitLabel];
     
@@ -491,35 +491,37 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 
 - (void)configureSimpleLayout
 {
-    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
-    self.nameLabel.textColor = _contentTitleColor;
-    
-    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightSemibold];
-    self.valueLabel.textColor = _primaryColor;
-    
-    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
-    self.unitLabel.textColor = _unitsColor;
-    
-    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
-    self.unitOrEmptyLabel.textColor = _unitsColor;
-    
-    self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+    CGFloat labelFontSize = [OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle];
+    CGFloat valueFontSize = [OAWidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle];
+    CGFloat unitsFontSize = [OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle];
+    CGFloat paddingBetweenIconAdndValue = [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:self.widgetSizeStyle];
 
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:labelFontSize weight:UIFontWeightMedium];
+    self.nameLabel.textColor = _contentTitleColor;
+
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:valueFontSize weight:UIFontWeightSemibold]; self.valueLabel.textColor = _primaryColor;
+
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
+    self.unitLabel.textColor = _unitsColor;
+
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
+    self.unitOrEmptyLabel.textColor = _unitsColor;
+
+    self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
     self.titleOrEmptyLabel.textColor = _unitsColor;
-    
-    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
-                                      
-    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
-    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
-    
-    CGFloat topBottomPadding = [WidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
+
+    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:valueFontSize label:self.valueLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:labelFontSize label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
+
+    CGFloat topBottomPadding = [OAWidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
     _verticalStackViewSimpleWidgetTopConstraint.constant = topBottomPadding;
     _verticalStackViewSimpleWidgetBottomConstraint.constant = -(topBottomPadding - 2);
-            
+
     BOOL isVisibleIcon = false;
-    if (_appMode && _hideIconPref)
+    if (_appMode && _showIconPref)
     {
-        isVisibleIcon = [_hideIconPref get:_appMode];
+        isVisibleIcon = [_showIconPref get:_appMode];
         self.iconWidgetView.hidden = !isVisibleIcon;
         _contentStackViewSimpleWidget.spacing = 0;
     }
@@ -533,8 +535,8 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     }
     else
     {
-        _unitOrEmptyLabelWidthConstraint.constant = (self.isFullRow || self.widgetSizeStyle != WidgetSizeStyleSmall) ? 0 : 20;
-        if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+        _unitOrEmptyLabelWidthConstraint.constant = (self.isFullRow || self.widgetSizeStyle != EOAWidgetSizeStyleSmall) ? 0 : 20;
+        if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
             self.titleOrEmptyLabel.text = [_contentTitle upperCase];
@@ -545,7 +547,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
             self.titleOrEmptyLabel.text = @"";
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
-            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:unitsFontSize label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
             self.unitLabel.textAlignment = NSTextAlignmentRight;
         }
     }
@@ -553,9 +555,9 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     if (self.isFullRow)
     {
          _contentStackViewSimpleWidget.spacing = 0;
-        if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+        if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
-            _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:WidgetSizeStyleSmall];
+            _contentStackViewSimpleWidget.spacing = paddingBetweenIconAdndValue;
             self.emptyViewRightPlaceholderFullRow.hidden = YES;
             if (_subtext.length == 0)
             {
@@ -575,7 +577,7 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     }
     else
     {
-        _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle];
+        _contentStackViewSimpleWidget.spacing = paddingBetweenIconAdndValue;
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
 }
@@ -811,14 +813,14 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     OATableRowData *widgetStyleRow = section.createNewRow;
     widgetStyleRow.cellType = SegmentImagesWithRightLableTableViewCell.getCellIdentifier;
     widgetStyleRow.title = OALocalizedString(@"shared_string_height");
-    [widgetStyleRow setObj:self.sizeStylePref forKey:@"prefSegment"];
+    [widgetStyleRow setObj:self.widgetSizePref forKey:@"prefSegment"];
     [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];
     [widgetStyleRow setObj:@[ACImageNameIcCustom20HeightS, ACImageNameIcCustom20HeightM, ACImageNameIcCustom20HeightL] forKey:@"values"];
     
     OATableRowData *showIconRow = section.createNewRow;
     showIconRow.cellType = OASwitchTableViewCell.getCellIdentifier;
     showIconRow.title = OALocalizedString(@"show_icon");
-    [showIconRow setObj:_hideIconPref forKey:@"pref"];
+    [showIconRow setObj:_showIconPref forKey:@"pref"];
 
     return data;
 }
@@ -827,24 +829,22 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
 {
     _appMode = appMode;
     _customId = id;
-    _hideIconPref = [self registerHideIconPrefWith:id];
-    self.sizeStylePref = [self registerSizeStylePrefWith:id];
+    _showIconPref = [self registerShowIconPref:id];
+    self.widgetSizePref = [self registerWidgetSizePref:id];
     
     if (widgetParams)
     {
         OAApplicationMode *selectedAppMode = (OAApplicationMode *)widgetParams[@"selectedAppMode"];
         if (selectedAppMode)
         {
-            NSString *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
+            NSNumber *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
             if (widgetSizeStyle)
-            {
-                [self.sizeStylePref set:[widgetSizeStyle intValue] mode:selectedAppMode];
-            }
+                [self.widgetSizePref set:(EOAWidgetSizeStyle) [widgetSizeStyle integerValue] mode:selectedAppMode];
             NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
             if (isVisibleIconNumber)
             {
                 BOOL isVisibleIcon = [isVisibleIconNumber boolValue];
-                [_hideIconPref set:isVisibleIcon mode:selectedAppMode];
+                [_showIconPref set:isVisibleIcon mode:selectedAppMode];
             }
         }
     }
@@ -856,28 +856,20 @@ NSString *const kSizeStylePref = @"kSizeStylePref";
     return widgetInfo.widgetPanel;
 }
 
-- (OACommonInteger *)registerSizeStylePrefWith:(NSString *)customId
+- (OACommonWidgetSizeStyle *)registerWidgetSizePref:(NSString *)customId
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefId = self.widgetType.title;
-    if (customId.length > 0)
-        prefId = [prefId stringByAppendingFormat:@"%@_%@",kSizeStylePref,customId];
-    else
-        prefId = [prefId stringByAppendingFormat:@"%@",kSizeStylePref];
-    
-    return [settings registerIntPreference:prefId defValue:WidgetSizeStyleMedium];
+    NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
+    if (customId && customId.length > 0)
+        prefId = [prefId stringByAppendingString:customId];
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium];
 }
 
-- (OACommonBoolean *)registerHideIconPrefWith:(NSString *)customId
+- (OACommonBoolean *)registerShowIconPref:(NSString *)customId
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    NSString *prefId = self.widgetType.title;
-    if (customId.length > 0)
-        prefId = [prefId stringByAppendingFormat:@"%@_%@",kHideIconPref,customId];
-    else
-        prefId = [prefId stringByAppendingFormat:@"%@",kHideIconPref];
-    
-    return [settings registerBooleanPreference:prefId defValue:YES];
+    NSString *prefId = [kShowIconPref stringByAppendingString:self.widgetType.id];
+    if (customId && customId.length > 0)
+        prefId = [prefId stringByAppendingString:customId];
+    return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
 }
 
 - (OAApplicationMode *_Nonnull)getAppMode

@@ -38,6 +38,7 @@
     NSString *_titleId;
     NSString *_shortDescriptionId;
     NSString *_descriptionId;
+    NSMutableArray<OACommonPreference *> *_pluginPreferences;
     
     OAAutoObserverProxy* _addonsSwitchObserver;
 }
@@ -58,7 +59,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if (self)
     {
         [self processNames];
-        
+        _pluginPreferences = [NSMutableArray array];
         _addonsSwitchObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                           withHandler:@selector(onAddonsSwitch:withKey:andValue:)
                                                            andObserve:[OsmAndApp instance].addonsSwitchObservable];
@@ -260,6 +261,18 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 - (NSArray<NSString *> *) getWidgetIds
 {
     return @[];
+}
+
+- (NSArray<OACommonPreference*> *)getPreferences
+{
+    return _pluginPreferences;
+}
+
+- (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(NSString *)defValue
+{
+    OACommonString *preference = [[OAAppSettings sharedManager] registerStringPreference:prefId defValue:defValue];
+    [_pluginPreferences addObject:preference];
+    return preference;
 }
 
 /*

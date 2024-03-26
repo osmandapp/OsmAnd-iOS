@@ -184,20 +184,20 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
             let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: "values") as? [String],
-               let pref = item.obj(forKey: "prefSegment") as? OACommonInteger {
+               let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = pref.get(selectedAppMode)
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
-                    widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle
+                    widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle.rawValue
                 }
-                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: Int(widgetSizeStyle))
+                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
             }
             cell.didSelectSegmentIndex = { [weak self] index in
                 guard let self,
-                      let pref = item.obj(forKey: "prefSegment") as? OACommonInteger else { return }
-                pref.set(Int32(index), mode: selectedAppMode)
+                      let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle else { return }
+                pref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: selectedAppMode)
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = index
                 }

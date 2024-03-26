@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -34,6 +34,9 @@
 - (NSArray<OAResourceItem *> *) getSuggestedMaps;
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
 - (NSArray<NSString *> *) getWidgetIds;
+
+- (NSArray<OACommonPreference *> * _Nonnull)getPreferences;
+- (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)prefId defValue:(NSString * _Nullable)defValue;
 
 - (BOOL) initPlugin;
 - (void) setEnabled:(BOOL)enabled;

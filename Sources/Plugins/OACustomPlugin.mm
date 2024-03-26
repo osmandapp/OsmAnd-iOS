@@ -191,7 +191,7 @@
 
 - (void) addPluginItemsFromFile:(NSString *)file
 {
-    [OASettingsHelper.sharedInstance collectSettings:file latestChanges:@"" version:1 onComplete:^(BOOL succeed, NSArray<OASettingsItem *> *items) {
+    [OASettingsHelper.sharedInstance collectSettings:file latestChanges:@"" version:kVersion onComplete:^(BOOL succeed, NSArray<OASettingsItem *> *items) {
         if (succeed && items.count > 0)
         {
             NSMutableArray<OASettingsItem *> *toRemove = [NSMutableArray new];
@@ -218,7 +218,7 @@
             }
             NSMutableArray<OASettingsItem *> *newItems = [NSMutableArray arrayWithArray:items];
             [newItems removeObjectsInArray:toRemove];
-            [OASettingsHelper.sharedInstance importSettings:file items:newItems latestChanges:@"" version:1 delegate:self];
+            [OASettingsHelper.sharedInstance importSettings:file items:newItems latestChanges:@"" version:kVersion delegate:self];
         }
     }];
 }
@@ -233,7 +233,7 @@
 
 - (void) removePluginItemsFromFile:(NSString *)file onComplete:(void(^)(void))onComplete
 {
-    [OASettingsHelper.sharedInstance collectSettings:file latestChanges:@"" version:1 onComplete:^(BOOL succeed, NSArray<OASettingsItem *> *items) {
+    [OASettingsHelper.sharedInstance collectSettings:file latestChanges:@"" version:kVersion onComplete:^(BOOL succeed, NSArray<OASettingsItem *> *items) {
             if (succeed && items.count > 0)
             {
                 for (OASettingsItem *item in items)

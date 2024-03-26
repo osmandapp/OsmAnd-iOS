@@ -11,8 +11,6 @@
 #import "OASettingsItem.h"
 #import "OAAbstractWriter.h"
 
-#define kVersion 1
-
 @implementation OAItemExporter
 {
     NSMutableArray<OASettingsItem *> *_items;

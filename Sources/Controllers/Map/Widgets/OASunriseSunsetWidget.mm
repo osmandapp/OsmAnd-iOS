@@ -16,14 +16,20 @@
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
 
+static const NSTimeInterval updateInterval = 60;
+
 @implementation OASunriseSunsetWidget
 {
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OASunriseSunsetWidgetState *_state;
     NSArray<NSString *> *_items;
-    OsmAnd::PointI _cachedTarget31;
-    OsmAnd::LatLon _cachedCenterLatLon;
+    CLLocation *_cachedCenterLatLon;
+    NSTimeInterval _timeToNextUpdate;
+    NSTimeInterval _cachedNextTime;
+    NSTimeInterval _lastUpdateTime;
+    BOOL _isForceUpdate;
+    BOOL _isLocationChanged;
 }
 
 - (instancetype)initWithState:(OASunriseSunsetWidgetState *)state
@@ -50,6 +56,7 @@
         
         [self setText:@"-" subtext:@""];
         [self setIcon:[_state getWidgetIconName]];
+        _isForceUpdate = YES;
     }
     return self;
 }
@@ -57,6 +64,9 @@
 - (BOOL) updateInfo
 {
     [self updateCachedLocation];
+    if (![self isUpdateNeeded])
+        return  NO;
+    
     if ([self isShowTimeLeft])
     {
         NSTimeInterval leftTime = [self getTimeLeft];
@@ -80,12 +90,34 @@
     {
         [self setIcon:[_state getWidgetIconName]];
     }
-  
+    
+    _isForceUpdate = NO;
+    _isLocationChanged = NO;
+    _lastUpdateTime = [[NSDate date] timeIntervalSince1970];
+    NSTimeInterval timeDifference = _cachedNextTime - _lastUpdateTime;
+    if (timeDifference > updateInterval)
+        _timeToNextUpdate = timeDifference - floor(timeDifference / updateInterval) * updateInterval;
+    else
+        _timeToNextUpdate = timeDifference;
+    
     return YES;
+}
+
+- (BOOL)isUpdateNeeded
+{
+    if (_isForceUpdate || _isLocationChanged)
+        return YES;
+    
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    if ([self isShowTimeLeft])
+        return (_lastUpdateTime + _timeToNextUpdate) <= currentTime;
+    else
+        return _cachedNextTime <= currentTime;
 }
 
 - (void) onWidgetClicked
 {
+    _isForceUpdate = YES;
     if ([self isShowTimeLeft])
         [[self getPreference] set:EOASunriseSunsetNext];
     else
@@ -296,47 +328,51 @@
 
 - (NSTimeInterval)getNextTime
 {
-    NSDate *now = [NSDate date];
-    SunriseSunset *sunriseSunset = [self createSunriseSunset:now];
-    
-    NSDate *sunrise = [sunriseSunset getSunrise];
-    NSDate *sunset = [sunriseSunset getSunset];
-    NSDate *nextTimeDate;
-    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
-    OAWidgetType *type = [_state getWidgetType];
-    if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunsetMode))
+    if (_cachedCenterLatLon)
     {
-        nextTimeDate = sunset;
-    }
-    else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
-    {
-        _state.lastIsDayTime = [sunriseSunset isDaytime];
-        nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;
-    }
-    else
-    {
-        nextTimeDate = sunrise;
-    }
-    
-    if (nextTimeDate)
-    {
-        if ([nextTimeDate compare:now] == NSOrderedAscending)
+        NSDate *now = [NSDate date];
+        SunriseSunset *sunriseSunset = [self createSunriseSunset:now];
+        
+        NSDate *sunrise = [sunriseSunset getSunrise];
+        NSDate *sunset = [sunriseSunset getSunset];
+        NSDate *nextTimeDate;
+        SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+        OAWidgetType *type = [_state getWidgetType];
+        if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunsetMode))
         {
-            NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
-            dayComponent.day = 1;
-
-            NSCalendar *theCalendar = [NSCalendar currentCalendar];
-            nextTimeDate = [theCalendar dateByAddingComponents:dayComponent toDate:nextTimeDate options:0];
+            nextTimeDate = sunset;
         }
-        return nextTimeDate.timeIntervalSince1970;
+        else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
+        {
+            _state.lastIsDayTime = [sunriseSunset isDaytime];
+            nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;
+        }
+        else
+        {
+            nextTimeDate = sunrise;
+        }
+        
+        if (nextTimeDate)
+        {
+            if ([nextTimeDate compare:now] == NSOrderedAscending)
+            {
+                NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
+                dayComponent.day = 1;
+                
+                NSCalendar *theCalendar = [NSCalendar currentCalendar];
+                nextTimeDate = [theCalendar dateByAddingComponents:dayComponent toDate:nextTimeDate options:0];
+            }
+            _cachedNextTime = nextTimeDate.timeIntervalSince1970;
+            return _cachedNextTime;
+        }
     }
     return 0;
 }
 
 - (SunriseSunset *) createSunriseSunset:(NSDate *)date
 {
-    double longitude = _cachedCenterLatLon.longitude;
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
+    double longitude = _cachedCenterLatLon.coordinate.longitude;
+    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
     return sunriseSunset;
 }
 
@@ -375,19 +411,31 @@
 
 - (void) updateCachedLocation
 {
-    OsmAnd::PointI currentTarget31 = [OARootViewController instance].mapPanel.mapViewController.mapView.target31;
-    if (_cachedTarget31 != currentTarget31)
+    CLLocation *newCenterLatLon = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+    if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLatLon])
     {
-        _cachedTarget31 = currentTarget31;
-        OsmAnd::LatLon newCenterLocation = OsmAnd::Utilities::convert31ToLatLon(_cachedTarget31);
-        if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLocation])
-            _cachedCenterLatLon = newCenterLocation;
+        _cachedCenterLatLon = newCenterLatLon;
+        _isLocationChanged = YES;
     }
 }
 
-- (BOOL) isLocationsEqual:(OsmAnd::LatLon)firstLocation with:(OsmAnd::LatLon)secondLocation
+- (BOOL) isLocationsEqual:(CLLocation *)firstCoordinate with:(CLLocation *)secondCoordinate
 {
-    return fabs(firstLocation.longitude - secondLocation.longitude) <= 0.0001;
+    if (firstCoordinate && secondCoordinate)
+    {
+        CLLocationCoordinate2D firstCoord = firstCoordinate.coordinate;
+        CLLocationCoordinate2D secondCoord = secondCoordinate.coordinate;
+        if (CLLocationCoordinate2DIsValid(firstCoord) && CLLocationCoordinate2DIsValid(secondCoord))
+        {
+            double lon = firstCoord.longitude;
+            double newLon = secondCoord.longitude;
+            double lat = firstCoord.latitude;
+            double newLat = secondCoord.latitude;
+            return fabs(lon - newLon) <= 0.001 && fabs(lat - newLat) <= 0.001;
+        }
+    }
+    
+    return NO;
 }
 
 @end

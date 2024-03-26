@@ -325,7 +325,9 @@
     self.tableView.sectionFooterHeight = 0.001;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -1125,35 +1127,30 @@
     }
     else if ([cellData.type isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = nib[0];
-            [cell leftIconVisibility:NO];
-            [cell titleVisibility:YES];
-            [cell descriptionVisibility:NO];
-            [cell leftEditButtonVisibility:NO];
-            cell.rightContainerConstraint.constant = -3;
-            cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            
-            cell.button.layer.cornerRadius = 9.0;
-            cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
-            cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-            UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
-            [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
-                         forState:UIControlStateNormal];
-            cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-           [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
-
-            [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
-            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
-            cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
-            cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-            [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
-                forControlEvents:UIControlEventTouchUpInside];
-        }
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier] forIndexPath:indexPath];
+        [cell leftIconVisibility:NO];
+        [cell titleVisibility:YES];
+        [cell descriptionVisibility:NO];
+        [cell leftEditButtonVisibility:NO];
+        cell.rightContainerConstraint.constant = -3;
+        cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        cell.button.layer.cornerRadius = 9.0;
+        cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
+        cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
+        [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
+                     forState:UIControlStateNormal];
+        cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
+        
+        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
+        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
+        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
+        cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+        [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
+              forControlEvents:UIControlEventTouchUpInside];
         cell.titleLabel.text = cellData.title;
         outCell = cell;
     }

@@ -14,21 +14,61 @@
 #import "OADownloadMode.h"
 #import "OAMap3DModeVisibilityType.h"
 
-#define kNotificationSetProfileSetting @"kNotificationSetProfileSetting"
-#define VOICE_PROVIDER_NOT_USE @"VOICE_PROVIDER_NOT_USE"
+static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
+static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
 
-#define settingAppModeKey @"settingAppModeKey"
-#define appearanceProfileThemeKey @"appearanceProfileThemeKey"
+static NSString * const settingAppModeKey = @"settingAppModeKey";
+static NSString * const appearanceProfileThemeKey = @"appearanceProfileThemeKey";
 
-#define mapDensityKey @"mapDensity"
-#define textSizeKey @"textSize"
+static NSString * const mapDensityKey = @"mapDensity";
+static NSString * const textSizeKey = @"textSize";
 
-#define kBillingUserDonationNone @"none"
-#define kSubscriptionHoldingTimeMsec 60.0 * 60.0 * 24.0 * 3.0 // 3 days
-#define kReceiptValidationMinPeriod 60.0 * 60.0 * 24.0 * 1.0 // 1 day
-#define kReceiptValidationMaxPeriod 60.0 * 60.0 * 24.0 * 30.0 // 30 days
+static NSString * const kBillingUserDonationNone = @"none";
+static const double kSubscriptionHoldingTimeMsec = 60.0 * 60.0 * 24.0 * 3.0; // 3 days
+static const double kReceiptValidationMinPeriod = 60.0 * 60.0 * 24.0 * 1.0; // 1 day
+static const double kReceiptValidationMaxPeriod = 60.0 * 60.0 * 24.0 * 30.0; // 30 days
 
-#define kSimMinSpeed 5 / 3.6f
+static const double kSimMinSpeed = 5 / 3.6f;
+
+static const NSInteger APPEARANCE_MODE_DAY = 0;
+static const NSInteger APPEARANCE_MODE_NIGHT = 1;
+static const NSInteger APPEARANCE_MODE_AUTO = 2;
+
+static const NSInteger MAP_ARROWS_LOCATION = 0;
+static const NSInteger MAP_ARROWS_MAP_CENTER = 1;
+
+static const NSInteger SAVE_TRACK_INTERVAL_DEFAULT = 5; //5000 in Android
+static const double REC_FILTER_DEFAULT = 0.f;
+static const double REC_TRACK_PRECISION_DEFAULT = 50.f;
+static const double MPS_TO_KMH_MULTIPLIER = 3.6;
+
+static const NSInteger MAP_GEO_FORMAT_DEGREES = 0;
+static const NSInteger MAP_GEO_FORMAT_MINUTES = 1;
+static const NSInteger MAP_GEO_FORMAT_SECONDS = 2;
+static const NSInteger MAP_GEO_UTM_FORMAT = 3;
+static const NSInteger MAP_GEO_OLC_FORMAT = 4;
+static const NSInteger MAP_GEO_MGRS_FORMAT = 5;
+static const NSInteger SWISS_GRID_FORMAT = 6;
+static const NSInteger SWISS_GRID_PLUS_FORMAT = 7;
+
+static const NSInteger ROTATE_MAP_NONE = 0;
+static const NSInteger ROTATE_MAP_BEARING = 1;
+static const NSInteger ROTATE_MAP_COMPASS = 2;
+static const NSInteger ROTATE_MAP_MANUAL = 3;
+
+static const NSInteger NO_EXTERNAL_DEVICE = 0;
+static const NSInteger GENERIC_EXTERNAL_DEVICE = 1;
+static const NSInteger WUNDERLINQ_EXTERNAL_DEVICE = 2;
+
+static const double MAGNIFIER_DEFAULT_VALUE = 1.0;
+static const double MAGNIFIER_DEFAULT_CAR = 1.5;
+static const double MAGNIFIER_DEFAULT_CAR_TEXT = 1.25;
+
+static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY = 0;
+static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY = 1;
+static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF = 2;
+static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED = 3;
+static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OATravelGuidesState;
 
@@ -211,6 +251,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 @property (nonatomic, readonly) float coefficient;
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) float maxZoom;
+@property (nonatomic, readonly) float minDistanceToDrive;
 
 + (instancetype) withAutoZoomMap:(EOAAutoZoomMap)autoZoomMap;
 + (NSArray<OAAutoZoomMap *> *) values;
@@ -218,6 +259,7 @@ typedef NS_ENUM(NSInteger, EOAAutoZoomMap)
 + (float) getCoefficient:(EOAAutoZoomMap)autoZoomMap;
 + (NSString *) getName:(EOAAutoZoomMap)autoZoomMap;
 + (float) getMaxZoom:(EOAAutoZoomMap)autoZoomMap;
++ (float) getMinDistanceToDrive:(EOAAutoZoomMap)autoZoomMap;
 
 @end
 
@@ -715,46 +757,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (assign, nonatomic) BOOL shouldShowWhatsNewScreen;
 
-#define APPEARANCE_MODE_DAY 0
-#define APPEARANCE_MODE_NIGHT 1
-#define APPEARANCE_MODE_AUTO 2
-
-#define MAP_ARROWS_LOCATION 0
-#define MAP_ARROWS_MAP_CENTER 1
-
-#define SAVE_TRACK_INTERVAL_DEFAULT 5 //5000 in Android
-#define REC_FILTER_DEFAULT 0.f
-#define REC_TRACK_PRECISION_DEFAULT 50.f
-#define MPS_TO_KMH_MULTIPLIER 3.6
-
-#define MAP_GEO_FORMAT_DEGREES 0
-#define MAP_GEO_FORMAT_MINUTES 1
-#define MAP_GEO_FORMAT_SECONDS 2
-#define MAP_GEO_UTM_FORMAT 3
-#define MAP_GEO_OLC_FORMAT 4
-#define MAP_GEO_MGRS_FORMAT 5
-#define SWISS_GRID_FORMAT = 6
-#define SWISS_GRID_PLUS_FORMAT = 7
-
-#define ROTATE_MAP_NONE 0
-#define ROTATE_MAP_BEARING 1
-#define ROTATE_MAP_COMPASS 2
-#define ROTATE_MAP_MANUAL 3
-
-#define NO_EXTERNAL_DEVICE 0
-#define GENERIC_EXTERNAL_DEVICE 1
-#define WUNDERLINQ_EXTERNAL_DEVICE 2
-
-#define MAGNIFIER_DEFAULT_VALUE 1.0
-#define MAGNIFIER_DEFAULT_CAR 1.5
-#define MAGNIFIER_DEFAULT_CAR_TEXT 1.25
-
-#define LAYER_TRANSPARENCY_SEEKBAR_MODE_OVERLAY 0
-#define LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY 1
-#define LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF 2
-#define LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED 3
-#define LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL 4
-
 @property (nonatomic, readonly) NSArray *trackIntervalArray;
 @property (nonatomic, readonly) NSArray *mapLanguages;
 @property (nonatomic, readonly) NSArray *ttsAvailableVoices;
@@ -850,6 +852,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *liveUpdatesRetries;
 
 @property (nonatomic) OACommonBoolean *animateMyLocation;
+@property (nonatomic) OACommonBoolean *doNotUseAnimations;
 
 - (OACommonBoolean *)getCustomRoutingBooleanProperty:(NSString *)attrName defaultValue:(BOOL)defaultValue;
 - (OACommonString *)getCustomRoutingProperty:(NSString *)attrName defaultValue:(NSString *)defaultValue;
@@ -920,6 +923,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *snapToRoad;
 @property (nonatomic) OACommonInteger *autoFollowRoute;
 @property (nonatomic) OACommonBoolean *autoZoomMap;
+@property (nonatomic) OACommonBoolean *useV1AutoZoom;
 @property (nonatomic) OACommonAutoZoomMap *autoZoomMapScale;
 @property (nonatomic) OACommonInteger *keepInforming;
 @property (nonatomic) OACommonSpeedConstant *speedSystem;
@@ -1198,6 +1202,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
+@property (nonatomic) OACommonBoolean *currentTrackRaiseRoutesAboveRelief;
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;
@@ -1269,5 +1274,9 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (void)setDisabledTypes:(NSSet<NSString *> *)disabledTypes;
 - (NSSet<NSString *> *)getDisabledTypes;
 - (BOOL)isTypeDisabled:(NSString *)typeName;
+
+- (CLLocation *) getLastStartPoint;
+- (void) setLastStartPoint:(CLLocation *)location;
+- (void) setLastStartPoint:(double)lat lon:(double)lon;
 
 @end

@@ -16,7 +16,7 @@
 @implementation OAZoomLevelWidget
 {
     OAMapRendererView *_rendererView;
-    int _cachedZoom;
+    float _cachedZoom;
 }
 
 - (instancetype)initWithСustomId:(NSString *)customId
@@ -43,10 +43,11 @@
 - (BOOL) updateInfo
 {
     float newZoom = [_rendererView zoom];
-    if (self.isUpdateNeeded || newZoom != _cachedZoom)
+    BOOL isZoomChangeBigEnough = ABS(int(_cachedZoom * 100) - int(newZoom * 100)) > 1; //update with 0.01 step
+    if (self.isUpdateNeeded || isZoomChangeBigEnough)
     {
         _cachedZoom = newZoom;
-        NSString *cachedZoomText = [NSString stringWithFormat:@"%d", _cachedZoom];
+        NSString *cachedZoomText = [NSString stringWithFormat:@"%.2f", _cachedZoom];
         [self setText:cachedZoomText subtext:@""];
         [self setIcon:@"widget_developer_map_zoom"];
     }

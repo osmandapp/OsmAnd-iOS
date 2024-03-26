@@ -156,15 +156,19 @@
             [self updateProgressWithDelay:params];
 
         __weak OARouteRecalculationTask *newTaskRef = newTask;
+        __weak __typeof(self) weakSelf = self;
         [newTask setCompletionBlock:^{
             OARouteRecalculationTask *newTask = newTaskRef;
             if (newTask)
             {
-                [_tasks removeObject:newTask];
-                _evalWaitInterval = newTask.evalWaitInterval;
-                _lastRouteCalcError = newTask.routeCalcError;
-                _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
-                _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+                @synchronized (weakSelf)
+                {
+                    [_tasks removeObject:newTask];
+                    _evalWaitInterval = newTask.evalWaitInterval;
+                    _lastRouteCalcError = newTask.routeCalcError;
+                    _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
+                    _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+                }
             }
         }];
         [_tasks addObject:newTask];
@@ -216,7 +220,11 @@
     auto calculationProgress = params.calculationProgress;
     if ([self isRouteBeingCalculated])
     {
-        if (_lastTask && _lastTask.params == params)
+        BOOL needUpdateProgress;
+        @synchronized (self) {
+            needUpdateProgress = _lastTask && _lastTask.params == params;
+        }
+        if (needUpdateProgress)
         {
             [callback updateProgress:calculationProgress->getLinearProgress()];
             if (calculationProgress->requestPrivateAccessRouting)

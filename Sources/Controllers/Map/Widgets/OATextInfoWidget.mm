@@ -148,8 +148,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.topNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
     self.topNameUnitStackView.spacing = 3;
     [verticalStackView addArrangedSubview:self.topNameUnitStackView];
-    
-    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
+
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
     
     auto nameView = [UIView new];
     nameView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -161,7 +161,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     // Create the name label ("SPEED")
     self.nameLabel = [UILabel new];
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     [nameView addSubview:self.nameLabel];
     
     [NSLayoutConstraint activateConstraints:@[
@@ -183,7 +183,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     // Create the unit label ("KM/H")
     self.unitLabel = [UILabel new];
     self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     self.unitLabel.textColor = [UIColor colorNamed:ACColorNameWidgetUnitsColor];
     [self.unitView addSubview:self.unitLabel];
     
@@ -491,31 +491,33 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void)configureSimpleLayout
 {
-    self.nameLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
-    self.nameLabel.textColor = _contentTitleColor;
-    
-    self.valueLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightSemibold];
-    self.valueLabel.textColor = _primaryColor;
-    
-    self.unitLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
-    self.unitLabel.textColor = _unitsColor;
-    
-    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
-    self.unitOrEmptyLabel.textColor = _unitsColor;
-    
-    self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
+    CGFloat labelFontSize = [OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle];
+    CGFloat valueFontSize = [OAWidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle];
+    CGFloat unitsFontSize = [OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle];
+    CGFloat paddingBetweenIconAdndValue = [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:self.widgetSizeStyle];
 
+    self.nameLabel.font = [UIFont scaledSystemFontOfSize:labelFontSize weight:UIFontWeightMedium];
+    self.nameLabel.textColor = _contentTitleColor;
+
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:valueFontSize weight:UIFontWeightSemibold]; self.valueLabel.textColor = _primaryColor;
+
+    self.unitLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
+    self.unitLabel.textColor = _unitsColor;
+
+    self.unitOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
+    self.unitOrEmptyLabel.textColor = _unitsColor;
+
+    self.titleOrEmptyLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
     self.titleOrEmptyLabel.textColor = _unitsColor;
-    
-    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle] label:self.valueLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
-                                      
-    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle] label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
-    self.topNameUnitStackView.hidden = self.widgetSizeStyle == WidgetSizeStyleSmall;
-    
-    CGFloat topBottomPadding = [WidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
+
+    self.valueLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:_text attributes:[self getAttributes:valueFontSize label:self.valueLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:[self getAttributes:labelFontSize label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+    self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
+
+    CGFloat topBottomPadding = [OAWidgetSizeStyleObjWrapper getTopBottomPaddingWithType:self.widgetSizeStyle];
     _verticalStackViewSimpleWidgetTopConstraint.constant = topBottomPadding;
     _verticalStackViewSimpleWidgetBottomConstraint.constant = -(topBottomPadding - 2);
-            
+
     BOOL isVisibleIcon = false;
     if (_appMode && _showIconPref)
     {
@@ -533,8 +535,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
     else
     {
-        _unitOrEmptyLabelWidthConstraint.constant = (self.isFullRow || self.widgetSizeStyle != WidgetSizeStyleSmall) ? 0 : 20;
-        if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+        _unitOrEmptyLabelWidthConstraint.constant = (self.isFullRow || self.widgetSizeStyle != EOAWidgetSizeStyleSmall) ? 0 : 20;
+        if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
             self.unitView.hidden = YES;
             self.titleOrEmptyLabel.text = [_contentTitle upperCase];
@@ -545,7 +547,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
             self.titleOrEmptyLabel.text = @"";
             self.unitOrEmptyLabel.text = @"";
             self.unitView.hidden = NO;
-            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:[WidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle] label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
+            self.unitLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_subtext upperCase] attributes:[self getAttributes:unitsFontSize label:self.unitLabel fontMetrics:[UIFontMetrics defaultMetrics]]];
             self.unitLabel.textAlignment = NSTextAlignmentRight;
         }
     }
@@ -553,9 +555,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (self.isFullRow)
     {
          _contentStackViewSimpleWidget.spacing = 0;
-        if (self.widgetSizeStyle == WidgetSizeStyleSmall)
+        if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
-            _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:WidgetSizeStyleSmall];
+            _contentStackViewSimpleWidget.spacing = paddingBetweenIconAdndValue;
             self.emptyViewRightPlaceholderFullRow.hidden = YES;
             if (_subtext.length == 0)
             {
@@ -575,7 +577,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
     else
     {
-        _contentStackViewSimpleWidget.spacing = [WidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:self.widgetSizeStyle];
+        _contentStackViewSimpleWidget.spacing = paddingBetweenIconAdndValue;
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
 }
@@ -835,11 +837,9 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         OAApplicationMode *selectedAppMode = (OAApplicationMode *)widgetParams[@"selectedAppMode"];
         if (selectedAppMode)
         {
-            NSString *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
+            NSNumber *widgetSizeStyle = widgetParams[@"widgetSizeStyle"];
             if (widgetSizeStyle)
-            {
-                [self.widgetSizePref set:[widgetSizeStyle intValue] mode:selectedAppMode];
-            }
+                [self.widgetSizePref set:(EOAWidgetSizeStyle) [widgetSizeStyle integerValue] mode:selectedAppMode];
             NSNumber *isVisibleIconNumber = widgetParams[@"isVisibleIcon"];
             if (isVisibleIconNumber)
             {
@@ -856,12 +856,12 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return widgetInfo.widgetPanel;
 }
 
-- (OACommonInteger *)registerWidgetSizePref:(NSString *)customId
+- (OACommonWidgetSizeStyle *)registerWidgetSizePref:(NSString *)customId
 {
     NSString *prefId = [kSizeStylePref stringByAppendingString:self.widgetType.id];
     if (customId && customId.length > 0)
         prefId = [prefId stringByAppendingString:customId];
-    return [[OAAppSettings sharedManager] registerIntPreference:prefId defValue:WidgetSizeStyleMedium];
+    return [[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium];
 }
 
 - (OACommonBoolean *)registerShowIconPref:(NSString *)customId

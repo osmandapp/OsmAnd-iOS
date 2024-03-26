@@ -620,6 +620,7 @@
         _settingsHelper.importTask = nil;
     }
     [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
+    [[OASettingsHelper sharedInstance] setCurrentBackupVersion:kVersion];
 }
 
 - (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items

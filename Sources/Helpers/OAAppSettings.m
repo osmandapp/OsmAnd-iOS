@@ -1784,12 +1784,12 @@
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    [self set:[self getValueFromString:strValue] mode:mode];
+    [self set:strValue.intValue mode:mode];
 }
 
 - (NSString *)toStringValue:(OAApplicationMode *)mode
 {
-    return [self getStringFromValue:mode];
+    return [NSString stringWithFormat:@"%d", [self get:mode]];
 }
 
 @end
@@ -3653,6 +3653,76 @@
 
 @end
 
+@implementation OACommonWidgetSizeStyle
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+{
+    OACommonWidgetSizeStyle *obj = [[OACommonWidgetSizeStyle alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAWidgetSizeStyle) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle
+{
+    [super set:widgetSizeStyle];
+}
+
+- (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode
+{
+    [super set:widgetSizeStyle mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"SMALL"])
+        return [self set:EOAWidgetSizeStyleSmall mode:mode];
+    else if ([strValue isEqualToString:@"MEDIUM"])
+        return [self set:EOAWidgetSizeStyleMedium mode:mode];
+    else if ([strValue isEqualToString:@"LARGE"])
+        return [self set:EOAWidgetSizeStyleLarge mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOAWidgetSizeStyleSmall:
+            return @"SMALL";
+        case EOAWidgetSizeStyleLarge:
+            return @"LARGE";
+        default:
+            return @"MEDIUM";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAWidgetSizeStyle defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -4760,6 +4830,16 @@
         return (OACommonDouble *)[_registeredPreferences objectForKey:key];
     
     OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

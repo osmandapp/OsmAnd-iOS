@@ -268,6 +268,14 @@
     return _type == EOAChoosePlan ? UIStatusBarStyleDefault : [ThemeManager shared].isLightTheme ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection] && _isHeaderBlurred)
+        [self.viewNavigationBar addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+}
+
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
 {
     [coordinator animateAlongsideTransition:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {

@@ -42,6 +42,14 @@
     self.navBarView.backgroundColor = [self navBarBackgroundColor];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection] && _isHeaderBlurred)
+        [self.navBarView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+}
+
 - (void) setTableHeaderView:(NSString *)label
 {
     if (label)

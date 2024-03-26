@@ -1753,7 +1753,7 @@
 "try_again" = "Try again";
 "searching" = "Searching…";
 "search_location" = "இடம் தேடுகிறது …";
-"search_map" = "வரைபடங்களை தேடுகிறது";
+"search_map" = "வரைபடங்களை தேடுகிறது …";
 "search_another_country" = "மற்றொரு பகுதியைத் தேர்ந்தெடுக்கவும்";
 "skip_map_downloading" = "வரைபடங்களைப் பதிவிறக்குக";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
@@ -2227,47 +2227,46 @@
 "recording_delete_confirm" = "இந்த உருப்படியை நீக்கவா\?";
 "download_wikipedia_data" = "விக்கிபீடியா கட்டுரையை பதிவிறக்கவும்";
 "auth_failed" = "அங்கீகாரம் தோல்வியடைந்தது";
-"rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
-"rendering_value_medium_name" = "நடுத்தர";
-"rendering_attr_trainLightrailRoutes_name" = "ரயில் பாதைகள்";
-"routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
-"rendering_attr_showAccess_name" = "அணுகல் கட்டுப்பாடுகள் மற்றும் எண்ணிக்கை என்பதைக் காட்டு";
-"rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
-"routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
-"rendering_value_pedestrian_name" = "பாதசாரிகள்";
-"rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
-"rendering_value_bicycle_name" = "மிதிவண்டி";
-"rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
-"routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
+
+
+
+
+
+
+
+
+
+
+
+
 "rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்\n";
-"rendering_attr_alpineHiking_description" = "SACஅளவின் படி பாதைகள் வழங்கவும்.";
-"rendering_attr_busRoutes_name" = "பேருந்து வழித்தடங்கள்";
-"rendering_value_bold_name" = "போல்ட்";
-"rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
-"rendering_value_dark_brown_name" = "இருண்ட பழுப்பு";
-"rendering_attr_hideHouseNumbers_name" = "வீட்டு எண்";
-"rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
-"rendering_value_thin_name" = "மெல்லிய";
-"routing_attr_weight_name" = "எடை வரம்பு";
+
+
+
+
+
+
+
+
+
 "m" = "மீ";
-"rendering_value_browse_map_name" = "வரைபடத்தை உலாவுக";
-"rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
+
+
 "rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).\n";
-"rendering_attr_buildings15zoom_name" = "ஜூம் 15 இல் கட்டிடங்கள்";
-"rendering_attr_whiteWaterSports_name" = "வெண்ணீர் விளையாட்டுகள்";
-"routing_attr_height_name" = "உயரம் வரம்பு";
-"rendering_attr_tramRoutes_name" = "டிராம் வழித்தடங்கள்";
-"rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
+
+
+
+
+
 "routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்\n";
 "km" = "கி.மீ.";
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்\n";
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).\n";
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்\n";
+
+
+
 "rendering_attr_hidePOILabels_name" = "POIமுகப்புவரிச்சீட்டு";
 "routing_attr_short_way_name" = "எரிபொருள்-திறனுள்ள வழி";
 "rendering_attr_noAdminboundaries_name" = "எல்லைகள்";
 "rendering_attr_hideIcons_name" = "POIசின்னங்கள்";
-"km" = "கி.மீ.";
 "routing_attr_weight_description" = "அனுமதிக்கப்பட்ட வாகனம் எடை வரம்பை வழிகளில் குறிக்கவும்.";
 "rendering_value_pedestrian_name" = "பாதசாரிகள்";
 "rendering_value_bold_name" = "போல்ட்";
@@ -2285,15 +2284,47 @@
 "rendering_attr_hideAccess_name" = "அணுகல் கட்டுப்பாடுகள்";
 "rendering_value_medium_name" = "நடுத்தர";
 "rendering_attr_hideHouseNumbers_name" = "வீட்டு எண்";
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்\n";
 "rendering_value_thin_name" = "மெல்லிய";
 "rendering_attr_showSurfaces_name" = "சாலை மேற்பரப்பு காட்டு";
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).\n";
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்\n";
+
+
 "rendering_attr_showCycleRoutes_name" = "சுழற்சி வழிகளைக் காண்பி";
 "routing_attr_prefer_motorway_name" = "மோட்டார் வாகனங்களை விரும்புங்கள்";
 "rendering_attr_trolleybusRoutes_name" = "ட்ரோலிபஸ் பாதை";
 "rendering_attr_hideUnderground_name" = "நிலத்தடி பொருட்கள்";
-"m" = "மீ";
 "rendering_value_bicycle_name" = "மிதிவண்டி";
 "routing_attr_weight_name" = "எடை வரம்பு";
+"popular_destinations" = "பிரபலமான இடங்களுக்கு";
+"angular_measeurement" = "கோண அளவீடு அலகுகள்";
+"shared_string_bookmark" = "அடையாளக்குறி";
+"lang_sr-Latn" = "செர்பியன் (லத்தின்)";
+"wiki_article_search_text" = "குறிப்பிட்ட விக்கிபீடியா கட்டுரை தேடப்பட்டு வருகிறது";
+"route_info" = "வழி தகவல்";
+"angular_measeurement_descr" = "என்ன அசிம்மை அளவிடப்படுகிறது என்பதை மாற்றுக";
+"map_settings_topography" = "சமநிலைக்கோடுகள்";
+"visibility" = "தன்மை";
+"shared_string_result" = "முடிவு";
+"shared_string_markers" = "குறிப்பான்";
+"last_seven_days" = "கடந்த 7 நாட்கள்";
+"shared_string_wikivoyage" = "விக்கிவோயாஜ்";
+"travel_card_download_descr" = "\"இணையத்துடன் ஒரு இணைப்பு இல்லாமல் உலகெங்கிலும் உள்ள இடங்களைப் பற்றிய கட்டுரைகளைப் பார்வையிட   Wikivoyage  பயண வழிகாட்டிகளைப் பதிவிறக்கவும்.\"";
+"map_widget_gps_info" = "GPSதகவல்";
+"shared_string_contents" = "தகவல்கள்";
+"shared_string_deleted" = "அழிக்கப்பட்டது";
+"no_travel_guides_data_descr" = "\"இணையத்துடன் ஒரு இணைப்பு இல்லாமல் உலகெங்கிலும் உள்ள இடங்களைப் பற்றிய கட்டுரைகளைப் பார்வையிட   Wikivoyage  பயண வழிகாட்டிகளைப் பதிவிறக்கவும்.\"";
+"specify_number_of_dir_indicators_desc" = "காண்பிப்பதற்காக எத்தனை திசையில் குறிகாட்டிகள் தேவை என்பதைத் தேர்ந்தெடுக்கவும்.";
+"coordinates_format" = "ஒருங்கிணைப்பு வடிவம்";
+"download_file" = "பதிவிறக்க கோப்பு";
+"external_device_status_connect" = "இணைக்கவும்";
+"lang_zh-Hans" = "சீன (எளிமையாக்கப்பட்டது)";
+"shared_string_explore" = "ஆராய்தல்";
+"shared_string_read" = "படிக்க";
+"wikivoyage_download_pics" = "படங்களைப் பதிவிறக்க";
+"short_min" = "மீ";
+"map_marker_1st" = "முதல் வரைபடம் மார்க்கர்";
+"saved_articles" = "புத்தகக்குறியிட்ட கட்டுரை";
+"image_cache" = "புகைப்படம் மறைவிடம்";
+"map_marker_2nd" = "இரண்டாவது வரைபடம் மார்க்கர்";
+"weather_update_disabled" = "முடக்கப்பட்டது";
+"shared_string_travel_guides" = "பயண வழிகாட்டிகள்";
+"context_menu_read_article" = "கட்டுரை வாசிக்க";

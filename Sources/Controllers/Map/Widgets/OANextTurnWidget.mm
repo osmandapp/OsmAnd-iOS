@@ -16,6 +16,7 @@
 #import "OAVoiceRouter.h"
 #import "OAAppSettings.h"
 #import "OAOsmAndFormatter.h"
+#import "GeneratedAssetSymbols.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -170,7 +171,7 @@
     if ([_turnDrawable setTurnType:turnType] || vis)
     {
         _turnDrawable.textFont = self.primaryFont;
-        _turnDrawable.textColor = self.primaryColor;
+        _turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor].currentMapThemeColor;
         if (_horisontalMini)
             [self setTurnDrawable:_turnDrawable gone:false];
         else
@@ -216,7 +217,7 @@
 - (void) updateDistance
 {
     int deviatePath = _turnDrawable.deviatedFromRoute ? _deviatedPath : _nextTurnDistance;
-    NSString *ds = [OAOsmAndFormatter getFormattedDistance:deviatePath];
+    NSString *ds = [OAOsmAndFormatter getFormattedDistance:deviatePath roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]];
     
     if (ds)
     {

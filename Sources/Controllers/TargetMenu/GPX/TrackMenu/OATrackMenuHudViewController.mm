@@ -142,6 +142,8 @@
     
     OARouteKey *_routeKey;
     BOOL _isNewRoute;
+    
+    NSArray<UIViewController *> *_navControllerHistory;
 }
 
 @dynamic gpx, analysis, isShown, backButton, statusBarBackgroundView, contentContainer;
@@ -184,6 +186,8 @@
                 _reopeningState.trackIcon = drawable.getIcon;
             }
             _selectedTab = _reopeningState.lastSelectedTab;
+            if (_reopeningState.navControllerHistory)
+                _navControllerHistory = _reopeningState.navControllerHistory;
             [self commonInit];
         }
     }
@@ -348,6 +352,21 @@
     _isViewVisible = YES;
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        BOOL isLightTheme = [ThemeManager shared].isLightTheme;
+        [self.backButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.groupsButton addBlurEffect:isLightTheme cornerRadius:12. padding:0];
+        [self.toolBarView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
+        if (_isHeaderBlurred)
+            [_headerView addBlurEffect:isLightTheme cornerRadius:0. padding:0.];
+    }
+}
+
 - (void)hide
 {
     [self hide:YES duration:.2 onComplete:^{
@@ -386,17 +405,12 @@
                     [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
                 }
             }
-            else
+            else if (_reopeningState && _reopeningState.openedFromTracksList)
             {
-                UITabBarController *myPlacesViewController =
-                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                [myPlacesViewController setSelectedIndex:1];
-    
-                TracksViewController *gpxController = myPlacesViewController.viewControllers[1];
-                if (gpxController == nil)
-                    return;
-    
-                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                if ( _navControllerHistory && _navControllerHistory.count > 0)
+                {
+                    [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
+                }
             }
         }
     }];

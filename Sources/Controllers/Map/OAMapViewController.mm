@@ -2870,6 +2870,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         [paths addObject:it.key().toNSString()];
         list << it.value();
     }
@@ -2898,6 +2901,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+		if (it.value() == nullptr)
+            continue;
+
         const auto& doc = it.value();
         for (auto& loc : doc->points)
         {
@@ -2975,11 +2981,13 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     if (currentTrackOnly)
         return NO;
     
-    int i = 0;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
         const auto& doc = it.value();
+        if (!doc || doc->points.isEmpty())
+            continue;
+
         NSString *gpxFilePath = [it.key().toNSString()
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
                                           withString:@""];
@@ -3021,13 +3029,11 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         {
             groups.clear();
         }
-        
-        i++;
     }
     
     if (!_gpxDocsTemp.isEmpty())
     {
-        const auto &doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
+        const auto doc = std::const_pointer_cast<OsmAnd::GpxDocument>(_gpxDocsTemp.first());
         OAGPXDocument *document = [[OAGPXDocument alloc] initWithGpxDocument:doc];
         NSString *gpxFilePath = [document.path
                 stringByReplacingOccurrencesOfString:[_app.gpxPath stringByAppendingString:@"/"]
@@ -3099,6 +3105,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
             {
@@ -3158,6 +3167,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:self.foundWptDocPath])
             {
@@ -3222,6 +3234,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
@@ -3307,6 +3322,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         auto activeGpx = _selectedGpxHelper.activeGpx;
         for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
         {
+            if (it.value() == nullptr)
+                continue;
+
             NSString *path = it.key().toNSString();
             if ([path isEqualToString:gpxFileName])
             {
@@ -3330,6 +3348,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
         {
@@ -3420,6 +3441,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:oldPath])
         {
@@ -3487,6 +3511,9 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     auto activeGpx = _selectedGpxHelper.activeGpx;
     for (auto it = activeGpx.begin(); it != activeGpx.end(); ++it)
     {
+        if (it.value() == nullptr)
+            continue;
+
         NSString *path = it.key().toNSString();
         if ([path isEqualToString:docPath])
         {

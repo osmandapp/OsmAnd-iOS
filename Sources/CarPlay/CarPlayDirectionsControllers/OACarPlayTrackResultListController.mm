@@ -49,9 +49,13 @@
 {
     if (_gpxList.count > 0)
     {
+        NSInteger maximumItemCount = CPListTemplate.maximumItemCount;
         NSMutableArray<CPListItem *> *listItems = [NSMutableArray new];
         for (OAGpxInfo *gpxInfo in _gpxList)
         {
+            if (listItems.count >= maximumItemCount)
+                break;
+
             CPListItem *listItem = [[CPListItem alloc] initWithText:[gpxInfo.gpx getNiceTitle]
                                                          detailText:[self getTrackDescription:gpxInfo.gpx]
                                                               image:[UIImage imageNamed:@"ic_custom_trip"]
@@ -107,9 +111,8 @@
     }
     const auto& activeGpx = [OASelectedGPXHelper instance].activeGpx;
     if (activeGpx.find(QString::fromNSString(info.gpx.gpxFilePath)) == activeGpx.end())
-    {
         [OAAppSettings.sharedManager showGpx:@[info.gpx.gpxFilePath]];
-    }
+    
     [[OARoutingHelper sharedInstance] setAppMode:OAApplicationMode.CAR];
     [[OARootViewController instance].mapPanel.mapActions setGPXRouteParams:info.gpx];
     CLLocation *loc = [[CLLocation alloc] initWithLatitude:[info.gpx.locationEnd getLatitude]

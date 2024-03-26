@@ -2,7 +2,6 @@
 "shared_string_no" = "Jo";
 "shared_string_and" = "dhe";
 "shared_string_or" = "ose";
-
 "shared_string_my_places" = "Vendet e mia";
 "driving_region_canada" = "Kanada";
 "app_mode_boat" = "Varkë";
@@ -33,3 +32,5 @@
 "shared_string_delete_all" = "Fshij të gjitha";
 "driving_region_europe_asia" = "Evropë&Azi";
 "driving_region_uk" = "BM, Indi, Australi&Të tjera";
+"shared_string_light" = "Ndriçimi";
+"audionotes_plugin_name" = "Shënimet e audio/video";

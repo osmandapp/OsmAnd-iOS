@@ -1748,7 +1748,6 @@
 "depth_contour_lines" = "Depth contour lines";
 "nautical_depth_points" = "Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
@@ -2706,3 +2705,10 @@
 "shared_string_author" = "రచయిత";
 "shared_string_license" = "లైసెన్స్";
 "shared_string_link" = "లింక్";
+"map_widget_sun_position_desc" = "సూర్యోదయం లేదా సూర్యాస్తమయం వరకు సమయాన్ని చూపుతుంది.";
+"complex_widget_alert" = "విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
+"map_widget_sun_position" = "సూర్య స్థానం";
+"shared_string_bookmark" = "ఇష్టాంశం";
+"external_device_any_connected" = "ఏదైనా కనెక్ట్ చేయబడింది";
+"shared_string_open_track" = "తెరుచుకున్న మార్గం";
+"shared_string_next_event" = "తదుపరి ఈవెంట్";

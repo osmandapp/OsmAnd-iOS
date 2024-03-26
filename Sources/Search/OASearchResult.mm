@@ -110,7 +110,7 @@
         return res;
     }
 
-- (BOOL) allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount*)cnt
+- (BOOL)allWordsMatched:(NSString *)name cnt:(CheckWordsMatchCount *)cnt
 {
     NSMutableArray<NSString *> *searchPhraseNamesArray = [self getSearchPhraseNames];
     QStringList searchPhraseNames;

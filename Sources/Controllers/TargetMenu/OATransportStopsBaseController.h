@@ -20,5 +20,6 @@
 - (NSMutableArray<OATransportStopRoute *> *) filterTransportRoutes:(NSArray<OATransportStopRoute *> *)routes;
 
 - (void) processTransportStop;
++ (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity;
 
 @end

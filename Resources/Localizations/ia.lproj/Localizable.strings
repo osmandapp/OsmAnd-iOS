@@ -1748,7 +1748,6 @@
 "depth_contour_lines" = "Depth contour lines";
 "nautical_depth_points" = "Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
@@ -2705,3 +2704,4 @@
 "shared_string_license" = "Licentia";
 "shared_string_link" = "Ligamine";
 "shared_string_author" = "Autor";
+"shared_string_next_event" = "Proxime evento";

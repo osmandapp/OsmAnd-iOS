@@ -148,7 +148,7 @@
 
 - (OAGPX *) addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
-    OAGPX *gpx = [self buildGpxItem:filePath.lastPathComponent path:filePath title:title desc:desc bounds:bounds document:document];
+    OAGPX *gpx = [self buildGpxItem:filePath.lastPathComponent path:filePath title:title desc:desc bounds:bounds document:document fetchNearestCity:YES];
     NSMutableArray *res = [NSMutableArray array];
     for (OAGPX *item in gpxList)
     {
@@ -171,17 +171,17 @@
     gpxList = res;
 }
 
-- (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
-    return [self buildGpxItem:fileName.lastPathComponent path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
+    return [self buildGpxItem:fileName.lastPathComponent path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document  fetchNearestCity:fetchNearestCity];
 }
 
-- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
     OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
 
     NSString *nearestCity;
-    if (analysis.locationStart)
+    if (fetchNearestCity && analysis.locationStart)
     {
         OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
         nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
@@ -415,9 +415,9 @@
         BOOL didAddFiles = [self addNewGpxFiles:existingGpxPaths];
         if (didAddFiles)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewTracksFetched
-                                                                object:self];
+            [self save];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksLoaded object:self];
     });
 }
 

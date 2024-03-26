@@ -86,7 +86,7 @@ class CoordinatesBaseWidget: OABaseWidgetView {
     }
 
     func showFormattedCoordinates(lat: Double, lon: Double) {
-        let format = OAAppSettings.sharedManager().settingGeoFormat.get()
+        let format = Int(OAAppSettings.sharedManager().settingGeoFormat.get())
         lastLocation = CLLocation(latitude: lat, longitude: lon)
 
         switch format {

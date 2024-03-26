@@ -924,22 +924,3 @@
 }
 
 @end
-
-@implementation CLLocation (util)
-
-- (double) bearingTo:(CLLocation *)location
-{
-    CLLocationCoordinate2D coord1 = self.coordinate;
-    CLLocationCoordinate2D coord2 = location.coordinate;
-    double distance, bearing;
-    [OALocationServices computeDistanceAndBearing:coord1.latitude lon1:coord1.longitude lat2:coord2.latitude lon2:coord2.longitude distance:&distance initialBearing:&bearing];
-    
-    return bearing;
-}
-
-- (BOOL) hasBearing;
-{
-    return self.course != -1 && self.course != 0;
-}
-
-@end

@@ -41,8 +41,8 @@
 + (double) checkLatitude:(double) latitude;
 + (double) checkLongitude:(double) longitude;
 
-+(double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second;
-+(double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2;
++ (double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second;
++ (double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2;
 
 + (double) scalarMultiplication:(double)xA yA:(double)yA xB:(double)xB yB:(double)yB xC:(double)xC yC:(double)yC;
 

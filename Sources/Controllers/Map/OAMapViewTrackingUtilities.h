@@ -14,7 +14,7 @@
 @interface OAMapViewTrackingUtilities : NSObject
 
 @property (nonatomic, readonly) CLLocation *myLocation;
-@property (nonatomic, readonly) CLLocationDirection heading;
+@property (nonatomic, readonly) CLLocationDirection heading; //TODO: delete this var?
 @property (nonatomic, readonly) BOOL showViewAngle;
 @property (nonatomic, readonly) BOOL movingToMyLocation;
 
@@ -34,6 +34,7 @@
 - (void) setMapViewController:(OAMapViewController *)mapViewController;
 - (void) switchToRoutePlanningMode;
 - (void) resetDrivingRegionUpdate;
+- (void) detectDrivingRegion:(CLLocation *)location;
 - (void) switchRotateMapMode;
 - (void) refreshLocation;
 - (void) updateSettings;
@@ -41,5 +42,8 @@
 - (void) setRotationNoneToManual;
 
 - (CLLocation *) getDefaultLocation;
+
+- (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
+- (void) setZoomTime:(NSTimeInterval)time;
 
 @end

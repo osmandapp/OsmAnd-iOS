@@ -11,6 +11,7 @@
 
 #import "OACommonTypes.h"
 #import "OAObservable.h"
+#import "CLLocation+Extension.h"
 
 typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 {
@@ -21,13 +22,6 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 };
 
 @class OALocationSimulation;
-
-@interface CLLocation (util)
-
-- (double) bearingTo:(CLLocation *)location;
-- (BOOL) hasBearing;
-
-@end
 
 @interface OALocationServices : NSObject
 

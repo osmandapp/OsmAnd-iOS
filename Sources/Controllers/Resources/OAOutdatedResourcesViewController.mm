@@ -437,8 +437,8 @@
 {
     static NSString* const outdatedResourceCell = @"outdatedResourceCell";
     static NSString* const downloadingResourceCell = @"downloadingResourceCell";
-    static NSString *const liveUpdatesCell = @"liveUpdatesCell";
-    static NSString *const weatherForecastCell = @"weatherForecastCell";
+    static NSString * const liveUpdatesCell = @"liveUpdatesCell";
+    static NSString * const weatherForecastCell = @"weatherForecastCell";
 
     NSString* cellTypeId = nil;
     NSString* title = nil;

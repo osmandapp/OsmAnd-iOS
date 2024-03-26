@@ -132,6 +132,7 @@ struct CLLocationCoordinate2D;
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
+- (BOOL)obtainScreenPointFromPosition:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
 
 - (OsmAnd::PointI) getTarget;
 - (OsmAnd::PointI) getTargetScreenPosition;

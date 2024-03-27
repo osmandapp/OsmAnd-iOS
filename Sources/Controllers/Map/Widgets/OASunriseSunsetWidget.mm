@@ -13,10 +13,10 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
-#import "OARootViewController.h"
-#import "OAMapRendererView.h"
+#import "OAResourcesUIHelper.h"
 
 static const NSTimeInterval updateInterval = 60;
+static const double locationChangeAccuracy = 0.0001;
 
 @implementation OASunriseSunsetWidget
 {
@@ -24,7 +24,7 @@ static const NSTimeInterval updateInterval = 60;
     OAAppSettings *_settings;
     OASunriseSunsetWidgetState *_state;
     NSArray<NSString *> *_items;
-    CLLocation *_cachedCenterLatLon;
+    CLLocationCoordinate2D _cachedCenterLatLon;
     NSTimeInterval _timeToNextUpdate;
     NSTimeInterval _cachedNextTime;
     NSTimeInterval _lastUpdateTime;
@@ -328,51 +328,49 @@ static const NSTimeInterval updateInterval = 60;
 
 - (NSTimeInterval)getNextTime
 {
-    if (_cachedCenterLatLon)
+    NSDate *now = [NSDate date];
+    SunriseSunset *sunriseSunset = [self createSunriseSunset:now];
+    
+    NSDate *sunrise = [sunriseSunset getSunrise];
+    NSDate *sunset = [sunriseSunset getSunset];
+    NSDate *nextTimeDate;
+    SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
+    OAWidgetType *type = [_state getWidgetType];
+    if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunsetMode))
     {
-        NSDate *now = [NSDate date];
-        SunriseSunset *sunriseSunset = [self createSunriseSunset:now];
-        
-        NSDate *sunrise = [sunriseSunset getSunrise];
-        NSDate *sunset = [sunriseSunset getSunset];
-        NSDate *nextTimeDate;
-        SunPositionMode sunPositionMode = (SunPositionMode)[[_state getSunPositionPreference] get];
-        OAWidgetType *type = [_state getWidgetType];
-        if (OAWidgetType.sunset == type || (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunsetMode))
-        {
-            nextTimeDate = sunset;
-        }
-        else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
-        {
-            _state.lastIsDayTime = [sunriseSunset isDaytime];
-            nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;
-        }
-        else
-        {
-            nextTimeDate = sunrise;
-        }
-        
-        if (nextTimeDate)
-        {
-            if ([nextTimeDate compare:now] == NSOrderedAscending)
-            {
-                NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
-                dayComponent.day = 1;
-                
-                NSCalendar *theCalendar = [NSCalendar currentCalendar];
-                nextTimeDate = [theCalendar dateByAddingComponents:dayComponent toDate:nextTimeDate options:0];
-            }
-            _cachedNextTime = nextTimeDate.timeIntervalSince1970;
-            return _cachedNextTime;
-        }
+        nextTimeDate = sunset;
     }
+    else if (OAWidgetType.sunPosition == type && sunPositionMode == SunPositionModeSunPositionMode)
+    {
+        _state.lastIsDayTime = [sunriseSunset isDaytime];
+        nextTimeDate = _state.lastIsDayTime ? sunset : sunrise;
+    }
+    else
+    {
+        nextTimeDate = sunrise;
+    }
+    
+    if (nextTimeDate)
+    {
+        if ([nextTimeDate compare:now] == NSOrderedAscending)
+        {
+            NSDateComponents *dayComponent = [[NSDateComponents alloc] init];
+            dayComponent.day = 1;
+            
+            NSCalendar *theCalendar = [NSCalendar currentCalendar];
+            nextTimeDate = [theCalendar dateByAddingComponents:dayComponent toDate:nextTimeDate options:0];
+        }
+        _cachedNextTime = nextTimeDate.timeIntervalSince1970;
+        return _cachedNextTime;
+    }
+    
     return 0;
 }
 
 - (SunriseSunset *) createSunriseSunset:(NSDate *)date
 {
-    double longitude = _cachedCenterLatLon.coordinate.longitude;
-    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.coordinate.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
+    double longitude = _cachedCenterLatLon.longitude;
+    SunriseSunset *sunriseSunset = [[SunriseSunset alloc] initWithLatitude:_cachedCenterLatLon.latitude longitude:longitude < 0 ? 360 + longitude : longitude dateInputIn:date tzIn:[NSTimeZone localTimeZone]];
     return sunriseSunset;
 }
 
@@ -411,7 +409,7 @@ static const NSTimeInterval updateInterval = 60;
 
 - (void) updateCachedLocation
 {
-    CLLocation *newCenterLatLon = [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+    CLLocationCoordinate2D newCenterLatLon = [OAResourcesUIHelper getMapLocation];
     if (![self isLocationsEqual:_cachedCenterLatLon with:newCenterLatLon])
     {
         _cachedCenterLatLon = newCenterLatLon;
@@ -419,23 +417,9 @@ static const NSTimeInterval updateInterval = 60;
     }
 }
 
-- (BOOL) isLocationsEqual:(CLLocation *)firstCoordinate with:(CLLocation *)secondCoordinate
+- (BOOL) isLocationsEqual:(CLLocationCoordinate2D)firstCoordinate with:(CLLocationCoordinate2D)secondCoordinate
 {
-    if (firstCoordinate && secondCoordinate)
-    {
-        CLLocationCoordinate2D firstCoord = firstCoordinate.coordinate;
-        CLLocationCoordinate2D secondCoord = secondCoordinate.coordinate;
-        if (CLLocationCoordinate2DIsValid(firstCoord) && CLLocationCoordinate2DIsValid(secondCoord))
-        {
-            double lon = firstCoord.longitude;
-            double newLon = secondCoord.longitude;
-            double lat = firstCoord.latitude;
-            double newLat = secondCoord.latitude;
-            return fabs(lon - newLon) <= 0.001 && fabs(lat - newLat) <= 0.001;
-        }
-    }
-    
-    return NO;
+    return [OAMapUtils areLatLonEqual:firstCoordinate coordinate2:secondCoordinate precision:locationChangeAccuracy];
 }
 
 @end

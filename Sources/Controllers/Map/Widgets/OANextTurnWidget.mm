@@ -84,7 +84,7 @@
         _horisontalMini = horisontalMini;
         _nextNext = nextNext;
         _calc1 = [[OANextDirectionInfo alloc] init];
-        _turnDrawable = [[OATurnDrawable alloc] initWithMini:horisontalMini];
+        _turnDrawable = [[OATurnDrawable alloc] initWithMini:horisontalMini themeColor:EOATurnDrawableThemeColorMap];
         if (horisontalMini)
         {
             [self setTurnDrawable:_turnDrawable gone:NO];
@@ -171,7 +171,6 @@
     if ([_turnDrawable setTurnType:turnType] || vis)
     {
         _turnDrawable.textFont = self.primaryFont;
-        _turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor].currentMapThemeColor;
         if (_horisontalMini)
             [self setTurnDrawable:_turnDrawable gone:false];
         else

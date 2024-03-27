@@ -173,7 +173,7 @@
     _textShadowColor = nil;
     _shadowRadius = 0;
     
-    _turnDrawable = [[OATurnDrawable alloc] initWithMini:YES];
+    _turnDrawable = [[OATurnDrawable alloc] initWithMini:YES themeColor:EOATurnDrawableThemeColorMap];
     _turnDrawable.frame = _turnView.bounds;
     _imageView = [[UIImageView alloc] init];
     _imageView.contentMode = UIViewContentModeCenter;

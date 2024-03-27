@@ -9,6 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "OATurnPathHelper.h"
 
+typedef NS_ENUM(NSInteger, EOATurnDrawableThemeColor)
+{
+    EOATurnDrawableThemeColorMap = 0,
+    EOATurnDrawableThemeColorLight,
+    EOATurnDrawableThemeColorDark
+};
+
 @interface OATurnDrawable : UIView
 
 //@property (nonatomic) Paint paintBlack;
@@ -19,11 +26,10 @@
 @property (nonatomic) int turnImminent;
 @property (nonatomic) BOOL deviatedFromRoute;
 @property (nonatomic) UIFont *textFont;
-@property (nonatomic) UIColor *textColor;
 @property (nonatomic) UIColor *clr;
 @property (nonatomic) CGPoint centerText;
 
-- (instancetype) initWithMini:(BOOL)mini;
+- (instancetype) initWithMini:(BOOL)mini themeColor:(EOATurnDrawableThemeColor)themeColor;
 
 - (BOOL) setTurnType:(std::shared_ptr<TurnType>)turnType;
 - (void) setTurnImminent:(int)turnImminent deviatedFromRoute:(BOOL)deviatedFromRoute;

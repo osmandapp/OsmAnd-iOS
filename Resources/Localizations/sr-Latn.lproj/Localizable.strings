@@ -478,7 +478,7 @@
 "shared_string_preparing" = "Prepremanje";
 "shared_string_min" = "Min";
 "shared_string_max" = "Maks";
-"shared_string_wifi_only" = "Samo na Wi-Fi";
+"shared_string_wifi_only" = "Samo preko Wi-Fi";
 "shared_string_turn_off" = "Isključi";
 "shared_strings_all_regions" = "Svi regije";
 "regions" = "Oblasti";

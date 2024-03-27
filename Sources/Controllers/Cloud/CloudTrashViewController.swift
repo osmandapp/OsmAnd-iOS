@@ -103,7 +103,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             emptyRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
             emptyRow.key = "empty"
             emptyRow.title = localizedString("trash_is_empty")
-            emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), Self.daysForTrashClearing)
+            emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), "\(Self.daysForTrashClearing)")
             emptyRow.iconTintColor = UIColor.iconColorDefault
         } else {
             let orderedNames = groups.keys.sorted {

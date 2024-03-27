@@ -583,15 +583,20 @@ extension WidgetsListViewController {
                                            preferredStyle: .actionSheet)
             let resetAction: UIAction = UIAction(title: localizedString("reset_to_default"),
                                                  image: UIImage(systemName: "gobackward")) { [weak self] _ in
-                guard let self else { return }
-                
-                resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { UIAlertAction in
+                let actionSheet = UIAlertController(title: self?.widgetPanel.title,
+                                                    message: localizedString("reset_all_settings_desc"),
+                                                    preferredStyle: .actionSheet)
+                actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
+                    guard let self else { return }
                     self.widgetsSettingsHelper.resetWidgetsForPanel(panel: self.widgetPanel)
                     OARootViewController.instance().mapPanel.recreateAllControls()
                     self.updateUIAnimated(nil)
                 })
-                resetAlert!.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-                present(resetAlert!, animated: true)
+                actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+                if let popoverController = actionSheet.popoverPresentationController {
+                    popoverController.barButtonItem = self?.navigationItem.rightBarButtonItem
+                }
+                self?.present(actionSheet, animated: true)
             }
             let copyAction: UIAction = UIAction(title: localizedString("copy_from_other_profile"),
                                                 image: UIImage(systemName: "doc.on.doc")) { [weak self] _ in

@@ -642,41 +642,6 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [self.delegate onLocationChanged];
 }
 
-- (NSString *) imageNameForTurnType:(const std::shared_ptr<TurnType> &)turnType
-{
-    switch (turnType->getValue())
-    {
-        case TurnType::C:
-            return @"map_turn_continue";
-        case TurnType::TSLL:
-            return @"map_turn_slight_left";
-        case TurnType::TL:
-            return @"map_turn_left";
-        case TurnType::TSHL:
-            return @"map_turn_sharp_left";
-        case TurnType::TSLR:
-            return @"map_turn_slight_right";
-        case TurnType::TR:
-            return @"map_turn_right";
-        case TurnType::TSHR:
-            return @"map_turn_sharp_right";
-        case TurnType::TU:
-            return @"map_turn_uturn_left";
-        case TurnType::TRU:
-            return @"map_turn_uturn_right";
-        case TurnType::KL:
-            return @"map_turn_keep_left";
-        case TurnType::KR:
-            return @"map_turn_keep_right";
-        case TurnType::RNDB:
-            return @"map_turn_roundabout_right";
-        case TurnType::RNLB:
-            return @"map_turn_roundabout_left";
-        default:
-            return nil;
-    }
-}
-
 // MARK: OACarPlayMapViewDelegate
 
 - (void)onIntefaceControllerAttached

@@ -20,6 +20,7 @@
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OARouteKey.h"
 
 @implementation OATargetPointViewCell
 
@@ -92,7 +93,7 @@
 
 - (void)updateDescriptionView
 {
-    NSString *addressStr = _targetPoint.titleAddress;
+    NSString *descriptionStr = _targetPoint.titleAddress;
     if (_targetPoint.ctrlAttrTypeStr)
     {
         [_descriptionView setAttributedText:_targetPoint.ctrlAttrTypeStr];
@@ -106,10 +107,31 @@
         {
             typeStr = [NSString stringWithFormat:@"%@: %@", typeStr, _targetPoint.titleAddress];
         }
-        addressStr = typeStr;
+        descriptionStr = typeStr;
     }
-    [_descriptionView setText:addressStr];
+    else if (_targetPoint.type == OATargetNetworkGPX)
+    {
+        OARouteKey *key = (OARouteKey *)_targetPoint.targetObj;
+        if (key)
+        {
+            NSString *activityType = OALocalizedString([self tagToActivity:key.routeKey.getTag().toNSString()]);
+            NSString *localizedPrefix = OALocalizedString(@"layer_route");
+            descriptionStr = [NSString stringWithFormat:@"%@ - %@", localizedPrefix, activityType];
+        }
+    }
+    [_descriptionView setText:descriptionStr];
     [_descriptionView setTextColor:[UIColor colorNamed:ACColorNameTextColorSecondary]];
+}
+
+- (NSString *)tagToActivity:(NSString *)tag
+{
+    if ([tag isEqualToString:@"bicycle"])
+        return @"activity_type_cycling_name";
+    else if ([tag isEqualToString:@"mtb"])
+        return @"activity_type_mountainbike_name";
+    else if ([tag isEqualToString:@"horse"])
+        return @"activity_type_riding_name";
+    return @"activity_type_hiking_name";
 }
 
 @end

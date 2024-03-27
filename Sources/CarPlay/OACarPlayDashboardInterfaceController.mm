@@ -27,6 +27,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAPlugin.h"
 #import "OASRTMPlugin.h"
+#import "OATurnDrawable.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
@@ -539,13 +540,28 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (CPManeuver *)createTurnManeuver:(CPTravelEstimates *)estimates directionInfo:(OANextDirectionInfo *)directionInfo
 {
-    const auto turnType = directionInfo.directionInfo.turnType;
-    CPManeuver *maneuver = [[CPManeuver alloc] init];
-    NSString *lightImageName = [self imageNameForTurnType:turnType];
-    NSString *darkImageName = [lightImageName stringByAppendingString:@"_dark"];
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    BOOL followingMode = [routingHelper isFollowingMode];
+    BOOL deviatedFromRoute = false;
+    if (routingHelper && [routingHelper isRouteCalculated] && followingMode)
+        deviatedFromRoute = [OARoutingHelper isDeviatedFromRoute];
+
     UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
-    maneuver.symbolImage = [UIImage imageNamed:style == UIUserInterfaceStyleDark ? lightImageName : darkImageName];
+    EOATurnDrawableThemeColor themeColor = style == UIUserInterfaceStyleDark ? EOATurnDrawableThemeColorDark : EOATurnDrawableThemeColorLight;
+    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:themeColor];
+    const auto turnType = directionInfo.directionInfo.turnType;
+    [turnDrawable setTurnType:turnType];
+    [turnDrawable setTurnImminent:directionInfo.imminent deviatedFromRoute:deviatedFromRoute];
+    turnDrawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
+    CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
+                       turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
+    turnDrawable.frame = CGRectMake(0, 0, size, size);
+    [turnDrawable setNeedsDisplay];
+
+    CPManeuver *maneuver = [[CPManeuver alloc] init];
+    maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
+    maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
     if (directionInfo.directionInfo.streetName)
         maneuver.instructionVariants = @[directionInfo.directionInfo.streetName];
     return maneuver;
@@ -581,15 +597,15 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 }
             }
             
-            CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
+            __block CPManeuver *maneuver = _navigationSession.upcomingManeuvers.firstObject;
             NSMeasurement<NSUnitLength *> *dist = [self getFormattedDistance:nextTurnDistance];
             CPTravelEstimates *estimates = [[CPTravelEstimates alloc] initWithDistanceRemaining:dist timeRemaining:-1];
-            if (!maneuver || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd)
+            if (!maneuver || nextTurn.directionInfoInd != _currentDirectionInfo.directionInfoInd || ([maneuver.userInfo[@"imminent"] intValue] != turnImminent))
             {
-                maneuver = [self createTurnManeuver:estimates directionInfo:nextTurn];
-                if (lanesVisible)
-                {
-                    dispatch_sync(dispatch_get_main_queue(), ^{
+                dispatch_sync(dispatch_get_main_queue(), ^{
+                    maneuver = [self createTurnManeuver:estimates directionInfo:nextTurn];
+                    if (lanesVisible)
+                    {
                         secondaryManeuver = [[CPManeuver alloc] init];
                         auto& drawableLanes = [_lanesDrawable getLanes];
                         if (drawableLanes.size() != loclanes.size() || (drawableLanes.size() > 0 && !std::equal(drawableLanes.begin(), drawableLanes.end(), loclanes.begin())) || (turnImminent == 0) != _lanesDrawable.imminent)
@@ -604,17 +620,17 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                         secondaryManeuver.symbolImage = img;
                         secondaryManeuver.instructionVariants = @[];
                         _secondaryStyle = CPManeuverDisplayStyleSymbolOnly;
-                    });
-                }
-                else if (secondaryVisible)
-                {
-                    secondaryManeuver = [self createTurnManeuver:nil directionInfo:secondaryInfo];
-                }
-                if (secondaryManeuver)
-                    _navigationSession.upcomingManeuvers = @[maneuver, secondaryManeuver];
-                else
-                    _navigationSession.upcomingManeuvers = @[maneuver];
-                _currentDirectionInfo = nextTurn;
+                    }
+                    else if (secondaryVisible)
+                    {
+                        secondaryManeuver = [self createTurnManeuver:nil directionInfo:secondaryInfo];
+                    }
+                    if (secondaryManeuver)
+                        _navigationSession.upcomingManeuvers = @[maneuver, secondaryManeuver];
+                    else
+                        _navigationSession.upcomingManeuvers = @[maneuver];
+                    _currentDirectionInfo = nextTurn;
+                });
             }
             else
             {

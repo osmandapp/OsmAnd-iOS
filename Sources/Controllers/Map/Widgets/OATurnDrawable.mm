@@ -14,17 +14,19 @@
 @implementation OATurnDrawable
 {
     BOOL _mini;
+    EOATurnDrawableThemeColor _themeColor;
     UIColor *_routeDirectionColor;
     UIBezierPath *_pathForTurnForDrawing;
     UIBezierPath *_pathForTurnOutlayForDrawing;
 }
 
-- (instancetype) initWithMini:(BOOL)mini
+- (instancetype) initWithMini:(BOOL)mini themeColor:(EOATurnDrawableThemeColor)themeColor
 {
     self = [super init];
     if (self)
     {
         _mini = mini;
+        _themeColor = themeColor;
         _pathForTurn = [UIBezierPath bezierPath];
         _pathForTurnOutlay = [UIBezierPath bezierPath];
         _pathForTurnOutlay.lineWidth = _mini ? 1.f : 2.f;
@@ -33,9 +35,22 @@
 
         self.opaque = NO;
         self.backgroundColor = [UIColor clearColor];
-        [self setClr:[UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor];
+        [self setClr:[self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowColor]]];
     }
     return self;
+}
+
+- (UIColor *)getThemeColor:(UIColor *)color
+{
+    switch (_themeColor)
+    {
+        case EOATurnDrawableThemeColorMap:
+            return color.currentMapThemeColor;
+        case EOATurnDrawableThemeColorLight:
+            return color.light;
+        case EOATurnDrawableThemeColorDark:
+            return color.dark;
+    }
 }
 
 - (void) setClr:(UIColor *)clr
@@ -65,13 +80,13 @@
     _turnImminent = turnImminent;
     _deviatedFromRoute = deviatedFromRoute;
     if (deviatedFromRoute)
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
+        _routeDirectionColor = [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowDistantColor]];
     else if (turnImminent > 0)
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
+        _routeDirectionColor = [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowColor]];
     else if (turnImminent == 0)
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowImminentColor].currentMapThemeColor;
+        _routeDirectionColor = [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowImminentColor]];
     else
-        _routeDirectionColor = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
+        _routeDirectionColor = [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowDistantColor]];
 
     [self setNeedsDisplay];
 }
@@ -95,11 +110,11 @@
     CGContextClearRect(context, rect);
 
     CGContextSetAllowsAntialiasing(context, true);
-    CGContextSetStrokeColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowStrokeColor].currentMapThemeColor.CGColor);
+    CGContextSetStrokeColorWithColor(context, [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowStrokeColor]].CGColor);
 
     if (_pathForTurnOutlayForDrawing)
     {
-        CGContextSetFillColorWithColor(context, [UIColor colorNamed:ACColorNameNavArrowCircleColor].currentMapThemeColor.CGColor);
+        CGContextSetFillColorWithColor(context, [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowCircleColor]].CGColor);
         [_pathForTurnOutlayForDrawing fill];
         [_pathForTurnOutlayForDrawing stroke];
     }
@@ -117,7 +132,7 @@
         //NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
         //paragraphStyle.alignment = NSTextAlignmentCenter;
         //attributes[NSParagraphStyleAttributeName] = paragraphStyle;
-        attributes[NSForegroundColorAttributeName] = _textColor;
+        attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
         attributes[NSFontAttributeName] = _textFont;
         
         NSString *text = [NSString stringWithFormat:@"%d", _turnType->getExitOut()];

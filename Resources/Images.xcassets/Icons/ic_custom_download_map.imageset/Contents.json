@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "ic_map_pin.svg",
+      "filename" : "ic_custom_download_map.svg",
       "idiom" : "universal"
     }
   ],
@@ -10,6 +10,7 @@
     "version" : 1
   },
   "properties" : {
-    "template-rendering-intent" : "original"
+    "preserves-vector-representation" : true,
+    "template-rendering-intent" : "template"
   }
 }

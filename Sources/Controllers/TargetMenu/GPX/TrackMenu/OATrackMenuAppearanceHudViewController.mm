@@ -48,6 +48,7 @@
 
 @property (nonatomic) NSInteger color;
 @property (nonatomic) BOOL showStartFinish;
+@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
 @property (nonatomic) BOOL joinSegments;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) NSString *width;
@@ -172,6 +173,7 @@
     _backupGpxItem = [[OABackupGpx alloc] init];
     _backupGpxItem.showArrows = self.gpx.showArrows;
     _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
+    _backupGpxItem.raiseRoutesAboveRelief = self.gpx.raiseRoutesAboveRelief;
     _backupGpxItem.coloringType = self.gpx.coloringType;
     _backupGpxItem.color = self.gpx.color;
     _backupGpxItem.width = self.gpx.width;
@@ -187,6 +189,7 @@
             OABackupGpx *backupItem = [[OABackupGpx alloc] init];
             backupItem.showArrows = track.showArrows;
             backupItem.showStartFinish = track.showStartFinish;
+            backupItem.raiseRoutesAboveRelief = track.raiseRoutesAboveRelief;
             backupItem.coloringType = track.coloringType;
             backupItem.color = track.color;
             backupItem.width = track.width;
@@ -202,6 +205,8 @@
 {
     self.gpx.showArrows = _backupGpxItem.showArrows;
     self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
+    self.gpx.raiseRoutesAboveRelief = _backupGpxItem.raiseRoutesAboveRelief;
+    
     self.gpx.coloringType = _backupGpxItem.coloringType;
     self.gpx.color = _backupGpxItem.color;
     self.gpx.width = _backupGpxItem.width;
@@ -214,6 +219,8 @@
         [self.settings.currentTrackWidth set:_backupGpxItem.width];
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
+        [self.settings.currentTrackRaiseRoutesAboveRelief set:_backupGpxItem.raiseRoutesAboveRelief];
+        
         [self.settings.currentTrackColoringType set:_backupGpxItem.coloringType.length > 0
                 ? [OAColoringType getNonNullTrackColoringTypeByName:_backupGpxItem.coloringType]
                 : OAColoringType.TRACK_SOLID];
@@ -222,6 +229,7 @@
         [self.doc setWidth:_backupGpxItem.width];
         [self.doc setShowArrows:_backupGpxItem.showArrows];
         [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
+        [self.doc setRaiseRoutesAboveRelief:_backupGpxItem.raiseRoutesAboveRelief];
         [self.doc setColoringType:_backupGpxItem.coloringType];
         [self.doc setColor:_backupGpxItem.color];
     }
@@ -234,6 +242,7 @@
             OABackupGpx *bakupItem = _backupGpxItems[i];
             track.showArrows = bakupItem.showArrows;
             track.showStartFinish = bakupItem.showStartFinish;
+            track.raiseRoutesAboveRelief = bakupItem.raiseRoutesAboveRelief;
             track.coloringType = bakupItem.coloringType;
             track.color = bakupItem.color;
             track.width = bakupItem.width;
@@ -316,7 +325,9 @@
     self.tableView.sectionFooterHeight = 0.001;
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
 }
+
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -430,8 +441,20 @@
             kCellType:[OASwitchTableViewCell getCellIdentifier],
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
+    
+    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+    
+    OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
+            kTableKey:@"visualization_3D",
+            kCellType:[OAIAPHelper isOsmAndProAvailable] || mapsPlusPurchased
+            ? [OASwitchTableViewCell getCellIdentifier]
+            : [OAButtonTableViewCell getCellIdentifier],
+            kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
+    }];
 
-    [appearanceSections addObject:[OAGPXTableSectionData withData:@{ kTableSubjects: @[directionCellData, startFinishCellData] }]];
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+        kTableSubjects: @[directionCellData, startFinishCellData, visualization3DCellData]
+    }]];
 
     NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
 
@@ -771,6 +794,8 @@
             [self.settings.currentTrackWidth set:self.gpx.width];
             [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
             [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
+            [self.settings.currentTrackRaiseRoutesAboveRelief set:self.gpx.raiseRoutesAboveRelief];
+            
             [self.settings.currentTrackColoringType set:self.gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
                     : OAColoringType.TRACK_SOLID];
@@ -779,6 +804,7 @@
             [self.doc setWidth:self.gpx.width];
             [self.doc setShowArrows:self.gpx.showArrows];
             [self.doc setShowStartFinish:self.gpx.showStartFinish];
+            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
             [self.doc setColoringType:self.gpx.coloringType];
             [self.doc setColor:self.gpx.color];
         }
@@ -1107,6 +1133,35 @@
         }
         return cell;
     }
+    else if ([cellData.type isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    {
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier] forIndexPath:indexPath];
+        [cell leftIconVisibility:NO];
+        [cell titleVisibility:YES];
+        [cell descriptionVisibility:NO];
+        [cell leftEditButtonVisibility:NO];
+        cell.rightContainerConstraint.constant = -3;
+        cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        
+        cell.button.layer.cornerRadius = 9.0;
+        cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
+        cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+        UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
+        [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
+                     forState:UIControlStateNormal];
+        cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+        [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
+        
+        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
+        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
+        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
+        cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+        [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
+              forControlEvents:UIControlEventTouchUpInside];
+        cell.titleLabel.text = cellData.title;
+        outCell = cell;
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
@@ -1272,6 +1327,25 @@
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
         }
     }
+    else if ([tableData.key isEqualToString:@"visualization_3D"])
+    {
+        self.gpx.raiseRoutesAboveRelief = toggle;
+        if (_wholeFolderTracks)
+        {
+            for (OAGPX *track in _wholeFolderTracks)
+                track.raiseRoutesAboveRelief = toggle;
+        }
+
+        if (self.isCurrentTrack)
+        {
+            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
+            [[_app updateRecTrackOnMapObservable] notifyEvent];
+        }
+        else
+        {
+            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+        }
+    }
     else if ([tableData.key isEqualToString:@"join_gaps"])
     {
         self.gpx.joinSegments = toggle;
@@ -1295,6 +1369,8 @@
         return self.gpx.showArrows;
     else if ([tableData.key isEqualToString:@"start_finish_icons"])
         return self.gpx.showStartFinish;
+    else if ([tableData.key isEqualToString:@"visualization_3D"])
+        return self.gpx.raiseRoutesAboveRelief;
     else if ([tableData.key isEqualToString:@"join_gaps"])
         return self.gpx.joinSegments;
 
@@ -1643,12 +1719,14 @@
             [self.settings.currentTrackWidth resetToDefault];
             [self.settings.currentTrackShowArrows resetToDefault];
             [self.settings.currentTrackShowStartFinish resetToDefault];
+            [self.settings.currentTrackRaiseRoutesAboveRelief resetToDefault];
             [self.settings.currentTrackColoringType resetToDefault];
             [self.settings.currentTrackColor resetToDefault];
             
             [self.doc setWidth:[self.settings.currentTrackWidth get]];
-            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
+            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
+            [self.doc setRaiseRoutesAboveRelief:[self.settings.currentTrackRaiseRoutesAboveRelief get]];
             [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
             [self.doc setColor:[self.settings.currentTrackColor get]];
         }
@@ -1715,6 +1793,10 @@
 - (void)onCellButtonPressed:(UIButton *)sender
 {
     [self onRightActionButtonPressed:sender.tag];
+}
+
+- (void)onGetFeatureTerrainButtonPressed:(UIButton *)button {
+    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
 }
 
 #pragma mark - OACollectionTableViewCellDelegate

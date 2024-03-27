@@ -276,6 +276,7 @@
 {
     [gpxFile setShowArrows:gpxItem.showArrows];
     [gpxFile setShowStartFinish:gpxItem.showStartFinish];
+    [gpxFile setRaiseRoutesAboveRelief:gpxItem.raiseRoutesAboveRelief];
     [gpxFile setSplitInterval:gpxItem.splitInterval];
     [gpxFile setSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
     if (gpxItem.color != 0)

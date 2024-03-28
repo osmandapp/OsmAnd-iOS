@@ -680,7 +680,7 @@
     {
         LIMIT = 10000;
         BBOX_RADIUS = 500 * 1000;
-        BBOX_RADIUS_INSIDE = 20000 * 1000;
+        BBOX_RADIUS_INSIDE = 5600 * 1000;
         BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
         _types = [OAPOIHelper sharedInstance];
@@ -732,7 +732,6 @@
     const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
     
     searchCriteria->name = QString::fromNSString(searchWord);
-    searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
     searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
 
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
@@ -752,6 +751,10 @@
         if (!r)
             continue;
         searchCriteria->localResources = {r};
+        if ([resId containsString:@"basemap"])
+            searchCriteria->bbox31 = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+        else
+            searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
 
         search->performSearch(*searchCriteria,
                               [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &ids]

@@ -129,9 +129,6 @@
     if (_turnType && !_mini && _turnType->getExitOut() > 0)
     {
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-        //NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        //paragraphStyle.alignment = NSTextAlignmentCenter;
-        //attributes[NSParagraphStyleAttributeName] = paragraphStyle;
         attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
         attributes[NSFontAttributeName] = _textFont;
         

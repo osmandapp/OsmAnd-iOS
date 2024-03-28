@@ -11,7 +11,7 @@
 
 typedef NS_ENUM(NSInteger, EOATurnDrawableThemeColor)
 {
-    EOATurnDrawableThemeColorMap = 0,
+    EOATurnDrawableThemeColorMap,
     EOATurnDrawableThemeColorLight,
     EOATurnDrawableThemeColorDark
 };

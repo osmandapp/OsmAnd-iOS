@@ -2823,3 +2823,13 @@
 "map_settings_topography" = "Контурныя лініі";
 "map_orientation_default" = "Як у прылады";
 "map_marker_interval_dialog_desc" = "Каб разлічыць прыблізны час прыбыцця, вызначыце інтэрвал часу, за які будзе вымярацца сярэдняя хуткасць.";
+"shared_string_keywords" = "Ключавыя словы";
+"shared_string_author" = "Аўтар";
+"shared_string_license" = "Ліцэнзія";
+"shared_string_link" = "Спасылка";
+"rendering_attr_padusDisplayMode_description" = "Паводле тыпу доступу або імя кіраўніка";
+"rendering_value_access_name" = "Паводле тыпу доступу";
+"rendering_attr_padusDisplayMode_name" = "Рэжым адлюстравання зямель агульнага карыстання";
+"rendering_value_managerName_name" = "Паводле імя кіраўніка";
+"rendering_attr_padusHideBoundaries_name" = "Схаваць межы агульнадаступных зямель";
+"rendering_attr_padusHideBoundaries_description" = "Схаваць межы агульнадаступных зямель, але пакінуць тэрыторыі";

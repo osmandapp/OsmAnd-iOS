@@ -570,7 +570,7 @@
 // My Places
 "favorites_item" = "Omiljena mesta";
 "shared_string_gpx_tracks" = "Trase";
-"personal_category_name" = "Lično";
+"personal_category_name" = "Moji favoriti";
 "shared_string_visible" = "Vidljivo";
 
 // GPX

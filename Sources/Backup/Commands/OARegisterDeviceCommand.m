@@ -55,7 +55,8 @@
     params[@"token"] = _token;
     params[@"lang"] = [OAUtilities currentLang];
     UIDevice *device = [UIDevice currentDevice];
-    params[@"model"] = [NSString stringWithFormat:@"Apple %@", device.model]; // Apple iPhone, Apple iPad
+    params[@"brand"] = @"Apple";
+    params[@"model"] = device.model;
     [OANetworkUtilities sendRequestWithUrl:OABackupHelper.DEVICE_REGISTER_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;
         NSString *message;

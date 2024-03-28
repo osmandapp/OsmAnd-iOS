@@ -588,11 +588,12 @@
 
     if (newFileName)
     {
-        if ([[NSFileManager defaultManager]
-                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newFileName]])
-            newName = [OAUtilities createNewFileName:newFileName];
-        else
-            newName = newFileName;
+        newName = newFileName;
+        while ([[NSFileManager defaultManager]
+                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newName]])
+        {
+            newName = [OAUtilities createNewFileName:newName];
+        }
     }
 
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];

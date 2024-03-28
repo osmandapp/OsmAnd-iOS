@@ -114,9 +114,7 @@
         OARouteKey *key = (OARouteKey *)_targetPoint.targetObj;
         if (key)
         {
-            NSString *activityType = OALocalizedString([self tagToActivity:key.routeKey.getTag().toNSString()]);
-            NSString *localizedPrefix = OALocalizedString(@"layer_route");
-            descriptionStr = [NSString stringWithFormat:@"%@ - %@", localizedPrefix, activityType];
+            descriptionStr = [NSString stringWithFormat:@"%@ - %@", OALocalizedString(@"layer_route"), OALocalizedString([self tagToActivity:key.routeKey.getTag().toNSString()])];
         }
     }
     [_descriptionView setText:descriptionStr];

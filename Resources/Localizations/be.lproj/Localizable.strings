@@ -2833,3 +2833,5 @@
 "rendering_value_managerName_name" = "Паводле імя кіраўніка";
 "rendering_attr_padusHideBoundaries_name" = "Схаваць межы агульнадаступных зямель";
 "rendering_attr_padusHideBoundaries_description" = "Схаваць межы агульнадаступных зямель, але пакінуць тэрыторыі";
+"add_row" = "Дадаць радок";
+"download_to_device" = "Спампаваць на прыладу";

@@ -3372,3 +3372,5 @@
 "distance_during_navigation" = "Distance pendant la navigation";
 "osmand_cloud_delete_account_descr" = "Êtes-vous sûrs de vouloir supprimer votre compte OsmAnd Cloud?";
 "shared_string_file_info" = "Informations du fichier";
+"rendering_value_managerName_name" = "Par nom de gestionnaire";
+"rendering_attr_padusDisplayMode_description" = "Par type d'accès ou nom de gestionnaire";

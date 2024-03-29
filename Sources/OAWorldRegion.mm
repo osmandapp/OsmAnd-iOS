@@ -762,6 +762,45 @@
         return nil;
     }
 }
+/*
+ public List<String> getRegionsToDownload(double lat, double lon, List<String> keyNames) throws IOException {
+     keyNames.clear();
+     int x31 = MapUtils.get31TileNumberX(lon);
+     int y31 = MapUtils.get31TileNumberY(lat);
+     List<BinaryMapDataObject> cs = query(x31, y31);
+     for (BinaryMapDataObject b : cs) {
+         if (contain(b, x31, y31)) {
+             String downloadName = getDownloadName(b);
+             if (!Algorithms.isEmpty(downloadName)) {
+                 keyNames.add(downloadName);
+             }
+         }
+     }
+     return keyNames;
+ }
+ */
+
+//- (NSArray<NSString *> *)getRegionsToDownloadWithLat:(double)lat
+//                                                 lon:(double)lon
+//                                            keyNames:(NSMutableArray<NSString *> *)keyNames {
+//    [keyNames removeAllObjects];
+//    
+//    int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
+//    int y31 = OsmAnd::Utilities::get31TileNumberY(lat);
+//    QList<shared_ptr<MapDataObject>> cs;
+//    // TODO:
+////    NSArray<MapDataObject *> *cs = [self query:x31 y:y31];
+////    for (MapDataObject *b in cs) {
+////        if ([self contain:b x:x31 y:y31]) {
+////            NSString *downloadName = [self getDownloadName:b];
+////            if (![Algorithms isEmpty:downloadName]) {
+////                [keyNames addObject:downloadName];
+////            }
+////        }
+////    }
+//    
+//    return [keyNames copy];
+//}
 
 - (void)findBoundaries
 {

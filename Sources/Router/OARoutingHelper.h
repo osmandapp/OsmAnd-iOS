@@ -11,6 +11,7 @@
 #import "OAApplicationMode.h"
 #import "OACommonTypes.h"
 #import "OAResultMatcher.h"
+#import "OARouteCalculationResult.h"
 
 @protocol OARouteInformationListener <NSObject>
 
@@ -19,6 +20,8 @@
 - (void) routeWasUpdated;
 - (void) routeWasCancelled;
 - (void) routeWasFinished;
+@optional
+- (void)newRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result;
 
 @end
 

@@ -3325,6 +3325,7 @@
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
 		FA2778272B67B5F200D65926 /* TextInfoWidget+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */; };
+		FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */; };
 		FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */; };
 		FA359EE52ADF026D0001C11D /* DeviceType.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE42ADF026D0001C11D /* DeviceType.swift */; };
 		FA359EE92ADFC04A0001C11D /* DeviceSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */; };
@@ -7975,6 +7976,8 @@
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
 		FA2778262B67B5F200D65926 /* TextInfoWidget+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TextInfoWidget+Extension.swift"; sourceTree = "<group>"; };
+		FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MissingMapsCalculator.h; sourceTree = "<group>"; };
+		FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = MissingMapsCalculator.mm; sourceTree = "<group>"; };
 		FA359EDF2ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEChangeDeviceNameViewController.swift; sourceTree = "<group>"; };
 		FA359EE42ADF026D0001C11D /* DeviceType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceType.swift; sourceTree = "<group>"; };
 		FA359EE82ADFC04A0001C11D /* DeviceSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceSettings.swift; sourceTree = "<group>"; };
@@ -13543,6 +13546,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
 				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
 				46CE64EB2A053B0C009CEE11 /* Appearance */,
@@ -14074,6 +14078,15 @@
 				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
 			);
 			path = OACustomSourceDetailsViewController;
+			sourceTree = "<group>";
+		};
+		FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */ = {
+			isa = PBXGroup;
+			children = (
+				FA327BFC2BB418F900CFADCF /* MissingMapsCalculator.h */,
+				FA327BFD2BB418F900CFADCF /* MissingMapsCalculator.mm */,
+			);
+			path = MissingMapsCalculator;
 			sourceTree = "<group>";
 		};
 		FA359EDE2ADEA1FE0001C11D /* BLEChangeDeviceName */ = {
@@ -17573,6 +17586,7 @@
 				DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */,
 				DA3FBFED27D60DB000D25E86 /* OAPreviewRouteLineLayer.mm in Sources */,
 				DA5A840126C563A800F274C7 /* OAQuickSearchButtonListItem.mm in Sources */,
+				FA327BFE2BB418F900CFADCF /* MissingMapsCalculator.mm in Sources */,
 				DA5A854426C563A900F274C7 /* OADownloadsItem.mm in Sources */,
 				32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */,
 				DA5A842E26C563A800F274C7 /* OARouteTargetViewController.mm in Sources */,

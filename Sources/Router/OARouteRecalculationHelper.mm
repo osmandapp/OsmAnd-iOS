@@ -387,6 +387,10 @@
         _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), OALocalizedString(@"internet_connection_required_for_online_route")];
         _routeCalcErrorShort = OALocalizedString(@"error_calculating_route");
         [self showMessage:_routeCalcError];
+        if ([res.missingMaps count] && [res.mapsToUpdate count])
+        {
+            
+        }
     }
     else
     {

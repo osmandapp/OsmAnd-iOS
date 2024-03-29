@@ -50,6 +50,9 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) bool initialCalculation;
 @property (nonatomic, readonly) CLLocation *currentStraightAnglePoint;
 @property (nonatomic, readonly) EOARouteService routeProvider;
+@property (nonatomic) NSArray<OAWorldRegion *> * missingMaps;
+@property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
+
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
 

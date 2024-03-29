@@ -124,6 +124,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     BOOL _needChartUpdate;
     
     BOOL _hasEmptyTransportRoute;
+    BOOL _hasMissingOrOutdatedMaps;
     BOOL _optionsMenuSelected;
 
     NSIndexPath *_routingInfoIndexPath;
@@ -597,10 +598,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     
     [section addObject:@{
         @"cell" : [OARoutingSettingsCell getCellIdentifier]
-
     }];
     
-    if (_hasEmptyTransportRoute)
+    if (_hasEmptyTransportRoute || _hasMissingOrOutdatedMaps)
     {
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         _data = [NSDictionary dictionaryWithDictionary:dictionary];
@@ -1251,6 +1251,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) appModeChanged:(OAApplicationMode *)next
 {
     _hasEmptyTransportRoute = NO;
+    _hasMissingOrOutdatedMaps = NO;
     [_routingHelper setAppMode:next];
     [_settings setApplicationModePref:next markAsLastUsed:NO];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
@@ -1264,6 +1265,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 #pragma mark - OARouteInformationListener
 
+- (void)newRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        directionInfo = -1;
+        _trackAnalysis = nil;
+        _gpx = nil;
+        _progressBarView = nil;
+        _hasMissingOrOutdatedMaps = YES;
+        _hasEmptyTransportRoute = NO;
+        [self updateMenu];
+    });
+}
+
 - (void) newRouteIsCalculated:(BOOL)newRoute
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -1271,6 +1285,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _trackAnalysis = nil;
         _gpx = nil;
         _progressBarView = nil;
+        _hasMissingOrOutdatedMaps = NO;
         _hasEmptyTransportRoute = _routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() == 0;
         [self updateMenu];
     });
@@ -1832,10 +1847,15 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute) && section == _data.count - 1)
+    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || (_hasEmptyTransportRoute || _hasMissingOrOutdatedMaps)) && section == _data.count - 1)
     {
-        return [OAUtilities calculateTextBounds:_hasEmptyTransportRoute ?
-                [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning] width:tableView.bounds.size.width].height + 8.0;
+        if (_hasMissingOrOutdatedMaps) {
+            // TODO:
+            return 200;
+        } else {
+            return [OAUtilities calculateTextBounds:_hasEmptyTransportRoute ?
+                    [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning] width:tableView.bounds.size.width].height + 8.0;
+        }
     }
     return 0.001;
 }
@@ -1903,14 +1923,21 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute) && section == _data.count - 1)
+    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute || _hasMissingOrOutdatedMaps) && section == _data.count - 1)
     {
-        OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
-        NSAttributedString* res = _hasEmptyTransportRoute ? [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning];
-        vw.label.attributedText = res;
-        vw.label.delegate = self;
-        [vw setIcon:_hasEmptyTransportRoute ? @"ic_custom_no_route" : @"ic_action_bus_dark"];
-        return vw;
+        if (_hasMissingOrOutdatedMaps)
+        {
+            return nil;
+        }
+        else
+        {
+            OATableViewCustomFooterView *vw = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+            NSAttributedString* res = _hasEmptyTransportRoute ? [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning];
+            vw.label.attributedText = res;
+            vw.label.delegate = self;
+            [vw setIcon:_hasEmptyTransportRoute ? @"ic_custom_no_route" : @"ic_action_bus_dark"];
+            return vw;
+        }
     }
     else
     {
@@ -2104,6 +2131,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void)stateChanged:(id)change
 {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _hasMissingOrOutdatedMaps = NO;
         _hasEmptyTransportRoute = NO;
         [self updateData];
         [self.tableView reloadData];
@@ -2121,6 +2149,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_progressBarView)
         {
+            _hasMissingOrOutdatedMaps = NO;
             _hasEmptyTransportRoute = NO;
             [self updateData];
             [self.tableView reloadData];
@@ -2140,6 +2169,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)startProgress {
     dispatch_async(dispatch_get_main_queue(), ^{
+        _hasMissingOrOutdatedMaps = NO;
         _hasEmptyTransportRoute = NO;
         if (!_progressBarView)
         {

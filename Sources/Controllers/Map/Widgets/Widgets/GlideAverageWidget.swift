@@ -15,19 +15,33 @@ final class GlideAverageWidget: GlideBaseWidget {
     static let measuredIntervalPrefID = "average_glide_measured_interval_millis"
     private static var availableIntervals: [Int: String] = getAvailableIntervals()
 
+    private let widgetState: GlideAverageWidgetState?
     private let averageGlideComputer = AverageGlideComputer.shared
     private var measuredIntervalPref: OACommonLong
     private var cachedFormattedGlideRatio: String?
+    private var forceUpdate = false // Becomes 'true' when widget state switches
 
-    init(customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
+    init(with widgetState: GlideAverageWidgetState, customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
+        self.widgetState = widgetState
         measuredIntervalPref = Self.registerMeasuredIntervalPref(customId)
         super.init(WidgetType.glideAverage, customId: customId, appMode: appMode, widgetParams: widgetParams)
         updateInfo()
-        setIcon("widget_glide_ratio_average")
+        onClickFunction = { [weak self] _ in
+            guard let self else { return }
+
+            forceUpdate = true
+            self.widgetState?.changeToNextState()
+            updateInfo()
+            setContentTitle(getWidgetName())
+            setIcon(getWidgetIcon())
+        }
+        setContentTitle(getWidgetName())
+        setIcon(getWidgetIcon())
     }
 
     override init(frame: CGRect) {
         measuredIntervalPref = Self.registerMeasuredIntervalPref(nil)
+        widgetState = GlideAverageWidgetState(nil)
         super.init(frame: frame)
     }
 
@@ -35,10 +49,25 @@ final class GlideAverageWidget: GlideBaseWidget {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func getWidgetState() -> OAWidgetState? {
+        return widgetState
+    }
+
     override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {
         let data = OATableDataModel()
         let section = data.createNewSection()
-        section.headerText = localizedString("average_glide_ratio_time_interval_desc")
+        section.headerText = localizedString("shared_string_settings")
+
+        if let preference = widgetState?.getPreference() {
+            let settingRow = section.createNewRow()
+            settingRow.cellType = OAValueTableViewCell.reuseIdentifier
+            settingRow.key = "value_pref"
+            settingRow.title = localizedString("shared_string_mode")
+            settingRow.setObj(preference, forKey: "pref")
+            settingRow.setObj(getWidgetName() ?? localizedString("average_glide_ratio"), forKey: "value")
+            settingRow.setObj(getPossibleValues(preference), forKey: "possible_values")
+            settingRow.setObj(localizedString("time_to_navigation_point_widget_settings_desc"), forKey: "footer")
+        }
 
         let settingRow = section.createNewRow()
         settingRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -61,6 +90,14 @@ final class GlideAverageWidget: GlideBaseWidget {
             valuesRow.title = localizedString("shared_string_interval")
             valuesRow.setObj(Self.availableIntervals, forKey: "values")
             rows.append(valuesRow)
+        } else {
+            for i in 0..<2 {
+                let row = OATableRowData()
+                row.cellType = OASimpleTableViewCell.getIdentifier()
+                row.setObj(i == 0 ? "false" : "true", forKey: "value")
+                row.title = localizedString(i == 0 ? "average_glide_ratio" : "average_vertical_speed")
+                rows.append(row)
+            }
         }
         return rows
     }
@@ -81,6 +118,20 @@ final class GlideAverageWidget: GlideBaseWidget {
         return intervals
     }
 
+    func getWidgetName() -> String? {
+        guard widgetState != nil else {
+            return widgetType?.title
+        }
+        return localizedString(isInVerticalSpeedState() ? "average_vertical_speed" : "average_glide_ratio")
+    }
+
+    func getWidgetIcon() -> String? {
+        guard widgetState != nil else {
+            return widgetType?.iconName
+        }
+        return localizedString(isInVerticalSpeedState() ? "widget_vertical_average_speed" : "widget_glide_ratio_average")
+    }
+
     func getMeasuredInterval(_ appMode: OAApplicationMode) -> Int {
         measuredIntervalPref.get(appMode)
     }
@@ -90,9 +141,9 @@ final class GlideAverageWidget: GlideBaseWidget {
     }
 
     override func updateInfo() -> Bool {
-        if isTimeToUpdate() {
+        if isTimeToUpdate() || forceUpdate {
             let measuredInterval: Int = measuredIntervalPref.get()
-            let ratio: String? = averageGlideComputer.getFormattedAverageGlideRatio(measuredInterval)
+            let ratio: String? = averageGlideComputer.getFormattedAverage(verticalSpeed: isInVerticalSpeedState(), measuredInterval: measuredInterval)
             if ratio != cachedFormattedGlideRatio {
                 cachedFormattedGlideRatio = ratio
                 if let ratio, !ratio.isEmpty {
@@ -101,6 +152,7 @@ final class GlideAverageWidget: GlideBaseWidget {
                     setText("-", subtext: "")
                 }
             }
+            forceUpdate = false
         }
         return true
     }
@@ -117,5 +169,9 @@ final class GlideAverageWidget: GlideBaseWidget {
             prefId = Self.measuredIntervalPrefID
         }
         return OAAppSettings.sharedManager().registerLongPreference(prefId, defValue: Int(AverageValueComputer.defaultIntervalMillis))
+    }
+
+    func isInVerticalSpeedState() -> Bool {
+        widgetState?.getPreference().get() ?? false
     }
 }

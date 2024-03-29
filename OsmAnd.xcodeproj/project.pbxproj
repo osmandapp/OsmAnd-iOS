@@ -789,6 +789,7 @@
 		46E0263E27B6773F00E554DD /* ic_custom_terrain_less_hilly@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263627B6773F00E554DD /* ic_custom_terrain_less_hilly@3x.png */; };
 		46E0263F27B6773F00E554DD /* ic_custom_terrain_flat@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263727B6773F00E554DD /* ic_custom_terrain_flat@3x.png */; };
 		46E0264027B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46E0263827B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png */; };
+		46E10A372BB7400000B9D5C9 /* GlideAverageWidgetState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46E10A362BB7400000B9D5C9 /* GlideAverageWidgetState.swift */; };
 		46E1773B28B1742100F78878 /* OASettingsBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */; };
 		46E32497284A6B7700F95084 /* OAWeatherToolbar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46E32496284A6B7700F95084 /* OAWeatherToolbar.xib */; };
 		46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */ = {isa = PBXBuildFile; fileRef = 46E8FFC629ED756000DB1EFE /* UINavigationController+keyCommands.m */; };
@@ -4386,6 +4387,7 @@
 		46E0263627B6773F00E554DD /* ic_custom_terrain_less_hilly@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_less_hilly@3x.png"; path = "Resources/Icons/ic_custom_terrain_less_hilly@3x.png"; sourceTree = "<group>"; };
 		46E0263727B6773F00E554DD /* ic_custom_terrain_flat@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_flat@3x.png"; path = "Resources/Icons/ic_custom_terrain_flat@3x.png"; sourceTree = "<group>"; };
 		46E0263827B6773F00E554DD /* ic_custom_terrain_less_hilly@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_terrain_less_hilly@2x.png"; path = "Resources/Icons/ic_custom_terrain_less_hilly@2x.png"; sourceTree = "<group>"; };
+		46E10A362BB7400000B9D5C9 /* GlideAverageWidgetState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideAverageWidgetState.swift; sourceTree = "<group>"; };
 		46E1773A28B1742100F78878 /* OASettingsBackupViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASettingsBackupViewController.xib; sourceTree = "<group>"; };
 		46E32496284A6B7700F95084 /* OAWeatherToolbar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherToolbar.xib; sourceTree = "<group>"; };
 		46E8FFC529ED749800DB1EFE /* UINavigationController+keyCommands.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+keyCommands.h"; sourceTree = "<group>"; };
@@ -13025,6 +13027,7 @@
 		DA5A7F1626C563A400F274C7 /* WidgetStates */ = {
 			isa = PBXGroup;
 			children = (
+				46E10A362BB7400000B9D5C9 /* GlideAverageWidgetState.swift */,
 				4641A4662B98B5DE000D8B32 /* GlideTargetWidgetState.swift */,
 				DA8DC3932A0CDAF1006C116B /* IntermediateTimeControlWidgetState.swift */,
 				DAA61CB62A0102EC00AFF65D /* MapMarkerSideWidgetState.swift */,
@@ -17400,6 +17403,7 @@
 				DA5A850726C563A900F274C7 /* OATableViewCellWithButton.m in Sources */,
 				46E9ADA128DC9FD000CC55F9 /* OAButtonTableViewCell.m in Sources */,
 				3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */,
+				46E10A372BB7400000B9D5C9 /* GlideAverageWidgetState.swift in Sources */,
 				DA4ABEE72876DA5D00B996EF /* OASettingsItemWriter.m in Sources */,
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,

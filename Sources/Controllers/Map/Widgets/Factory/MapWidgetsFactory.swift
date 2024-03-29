@@ -110,7 +110,8 @@ class MapWidgetsFactory: NSObject {
             let glideWidgetState = GlideTargetWidgetState(customId)
             return GlideTargetWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .glideAverage:
-            return GlideAverageWidget(customId: customId, appMode: appMode, widgetParams: widgetParams)
+            let glideWidgetState = GlideAverageWidgetState(customId)
+            return GlideAverageWidget(with: glideWidgetState, customId: customId, appMode: appMode, widgetParams: widgetParams)
         case .elevationProfile:
             return /*ElevationProfileWidget(mapActivity: mapActivity)*/nil
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:

@@ -334,7 +334,7 @@
 "shared_string_my_location" = "Moja pozicija";
 "route_descr_select_destination" = "Podesi odredište";
 "swap_points" = "Zameni početak i odredište";
-"route_to" = "Početak:";
+"route_to" = "Odredište:";
 "route_via" = "Preko:";
 "route_from" = "Početak:";
 "transfers" = "Transferi";

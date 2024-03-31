@@ -413,7 +413,6 @@ colorizationScheme:(int)colorizationScheme
         if (gpx.raiseRoutesAboveRelief)
         {
             [self configureRaisedLine:builder
-                        isRefreshLine:NO
                            elevations:elevations
                             colorARGB:colorARGB
                                colors:colors
@@ -495,7 +494,6 @@ colorizationScheme:(int)colorizationScheme
             if (gpx.raiseRoutesAboveRelief)
             {
                 [self configureRaisedLine:builder
-                            isRefreshLine:YES
                                elevations:elevations
                                 colorARGB:colorARGB
                                    colors:colors
@@ -531,7 +529,6 @@ colorizationScheme:(int)colorizationScheme
 }
 
 - (OsmAnd::VectorLineBuilder &)configureRaisedLine:(OsmAnd::VectorLineBuilder &)builder
-              isRefreshLine:(BOOL)isRefreshLine
                  elevations:(NSArray <NSNumber *>* _Nullable)elevations
                   colorARGB:(OsmAnd::FColorARGB)colorARGB
                      colors:(const QList<OsmAnd::FColorARGB> &)colors
@@ -542,11 +539,7 @@ colorizationScheme:(int)colorizationScheme
     if (!showTransparentTraces)
         traceColorizationMapping = colors;
     
-    BOOL shouldAddColorsToRaceColorizationMapping = NO;
-    if (isRefreshLine)
-        shouldAddColorsToRaceColorizationMapping = colors.size() > 1 && showTransparentTraces;
-    else
-        shouldAddColorsToRaceColorizationMapping = !colors.isEmpty() && showTransparentTraces;
+    BOOL shouldAddColorsToRaceColorizationMapping = colors.size() > 1 && showTransparentTraces;
     
     if (shouldAddColorsToRaceColorizationMapping)
     {

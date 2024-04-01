@@ -687,7 +687,7 @@ colorizationScheme:(int)colorizationScheme
     }
     
     QList<OsmAnd::PointI> startFinishPoints;
-    QList<float> startFinishPointElevations;
+    QList<float> startFinishPointsElevations;
     for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
@@ -734,8 +734,8 @@ colorizationScheme:(int)colorizationScheme
                     {
                         if (raiseRoutesAboveRelief)
                         {
-                            startFinishPointElevations.append(seg->points.first()->elevation);
-                            startFinishPointElevations.append(seg->points.last()->elevation);
+                            startFinishPointsElevations.append(seg->points.first()->elevation);
+                            startFinishPointsElevations.append(seg->points.last()->elevation);
                         }
                         startFinishPoints.append({
                             OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),
@@ -747,8 +747,8 @@ colorizationScheme:(int)colorizationScheme
             {
                 if (raiseRoutesAboveRelief)
                 {
-                    startFinishPointElevations.append(startPointElevation);
-                    startFinishPointElevations.append(finishPointElevation);
+                    startFinishPointsElevations.append(startPointElevation);
+                    startFinishPointsElevations.append(finishPointElevation);
                 }
                 startFinishPoints.append({
                     OsmAnd::Utilities::convertLatLonTo31(start),
@@ -761,7 +761,7 @@ colorizationScheme:(int)colorizationScheme
     if (!startFinishPoints.isEmpty())
     {
         [self appendStartFinishPoints:startFinishPoints];
-        [self configureStartFinishPointsElevations:startFinishPointElevations];
+        [self configureStartFinishPointsElevations:startFinishPointsElevations];
     }
 
     [self refreshStartFinishProvider];

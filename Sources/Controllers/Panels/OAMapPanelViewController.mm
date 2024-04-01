@@ -2836,7 +2836,6 @@ typedef enum
         }
         default:
         {
-            state.navControllerHistory = nil;
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
                                                                                   routeKey:routeKey
                                                                                      state:state];

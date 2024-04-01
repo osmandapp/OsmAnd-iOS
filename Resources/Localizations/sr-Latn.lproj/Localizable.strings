@@ -334,7 +334,7 @@
 "shared_string_my_location" = "Moja pozicija";
 "route_descr_select_destination" = "Podesi odredište";
 "swap_points" = "Zameni početak i odredište";
-"route_to" = "Početak:";
+"route_to" = "Odredište:";
 "route_via" = "Preko:";
 "route_from" = "Početak:";
 "transfers" = "Transferi";
@@ -516,7 +516,7 @@
 "poi_overlay" = "TOI nadpodloga";
 "poi_dialog_poi_type" = "Vrsta TOI";
 "my_favorites" = "Moji omiljeni";
-"shared_string_my_places" = "Moja mesta";
+"shared_string_my_places" = "Moja mesta i trase";
 "fav_no_group" = "Nema grupe";
 "fav_add_new_group" = "Dodaj novu grupu";
 "select_group_descr" = "Izaberite grupu ili dodajte novu";

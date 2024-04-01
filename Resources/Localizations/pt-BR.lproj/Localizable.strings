@@ -1128,7 +1128,7 @@
 "quick_action_list_descr" = "Toque nas páginas deste botão de ação na lista abaixo";
 "quick_action_map_style_action" = "Adicionar um estilo de mapa";
 "toggle_local_edits" = "Alternar edições locais do OSM";
-"quick_action_auto_zoom" = "Ligar/desligar zoom automático do mapa";
+"quick_action_auto_zoom" = "Zoom automático do mapa";
 "search_results" = "Procurar resultados";
 "quick_action_name_alert" = "O nome da ação rápida foi alterado para %@ para evitar duplicação.";
 "quick_action_screen_header" = "Ecrã %ld";
@@ -2819,7 +2819,7 @@
 "search_history_disabled" = "O histórico de pesquisa está desativado";
 "enable_search_history" = "Você pode ativar o histórico de pesquisa em Configurações";
 "confirm_history_item_delete" = "Tem certeza de que deseja excluir (%ld) itens do histórico?";
-"search_favorites" = "Pesquisar favoritos";
+"search_favorites" = "Pesquisar em favoritos";
 "rotate_map_manual_opt" = "Rotação manual";
 "compass_click_desc" = "Dica: toque no botão da bússola para alternar o modo de orientação do mapa.";
 "map_widget_camera_distance" = "Elevação da câmera";
@@ -2843,7 +2843,7 @@
 "hide_map_center" = "Ocultar coordenadas: centro do mapa";
 "quick_action_map_center_widget_descr" = "Uma alternância para mostrar ou ocultar o widget da central de mapas no mapa.";
 "map_widget_sunset" = "Pôr do sol";
-"map_widget_sunset_desc" = "Mostra a hora do próximo pôr do sol ou o tempo restante até o pôr do sol.";
+"map_widget_sunset_desc" = "Mostra a hora do próximo pôr do sol ou o tempo que falta até o pôr do sol.";
 "map_widget_next_sunrise" = "Próximo nascer do sol";
 "without_permission_my_position_value" = "OsmAnd não tem permissão de localização";
 "with_permission_my_position_value" = "Mover mapa para a localização atual";
@@ -2851,7 +2851,7 @@
 "app_mode_moped" = "Ciclomotor";
 "map_widget_next_sunset" = "Próximo pôr do sol";
 "map_widget_sunrise" = "Nascer do sol";
-"map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo restante até o nascer do sol.";
+"map_widget_sunrise_desc" = "Mostra a hora do próximo nascer do sol ou o tempo que falta até o nascer do sol.";
 "map_widget_sunrise_sunset_time_left" = "Tempo restante";
 "shared_string_external" = "Externo";
 "speak_route_deviation" = "Anunciar desvio da rota";
@@ -3137,7 +3137,6 @@
 "map_widget_ant_bicycle_cadence" = "Cadência de bicicleta";
 "context_menu_read_article" = "Leia o artigo";
 "external_device_forget_sensor_description" = "O sensor será removido da lista. Você poderá emparelhar este sensor novamente a qualquer momento.";
-
 "no_bt_permission" = "A permissão Bluetooth não é concedida";
 "shared_string_wrist" = "Pulso";
 "shared_string_chest" = "Peito";
@@ -3190,7 +3189,7 @@
 "help_article_navigation_guidance_map_during_navigation_name" = "Tela do mapa durante a navegação";
 "osmAnd_team" = "Equipe OsmAnd";
 "paired_sensors" = "Sensores emparelhados";
-"help_article_navigation_guidance_name" = "Guia";
+"help_article_navigation_guidance_name" = "Guia de navegação";
 "help_article_personal_profiles_name" = "Perfis (Configurações)";
 "popular_articles_not_found_title" = "Artigos populares não encontrados";
 "help_article_navigation_routing_car_based_routing_name" = "Roteamento de carro (caminhão, motocicleta)";
@@ -3356,7 +3355,7 @@
 "glide_ratio_to_target" = "Razão de planeio para o alvo";
 "time_to_navigation_point_widget_settings_desc" = "Toque no widget para alternar entre os modos.";
 "shared_string_is_deleted" = "%@ foi excluído.";
-"map_widget_sun_position_desc" = "Este widget mostra a hora até o nascer ou pôr do sol, dependendo da hora atual.";
+"map_widget_sun_position_desc" = "Mostra a hora até o nascer ou pôr do sol.";
 "map_widget_group_glide_ratio" = "Razão de planeio";
 "deleting_complete" = "Exclusão concluída";
 "map_widget_glide_average_desc" = "Mostra a razão de planeio média para o intervalo definido.";
@@ -3368,3 +3367,24 @@
 "complex_widget_alert" = "O widget %@ só pode ser colocado em sua própria linha.";
 "determine_location" = "Permita-nos determinar sua localização";
 "skip_download" = "Pular download";
+"distance_during_navigation" = "Distância durante a navegação";
+"shared_string_precise" = "Preciso";
+"shared_string_round_up" = "Arredondado";
+"distance_during_navigation_footer" = "Escolha como as informações de distância são apresentadas nos widgets de navegação (distância até ao ponto, próxima curva, pistas).\n\nEscolha \"Preciso\" para obter números exatos ou \"Arredondado\" para facilitar a leitura.";
+"shared_string_row_number" = "Linha %d";
+"permanent_delete_warning" = "%@ será excluído permanentemente. Tem certeza?";
+"osmand_depelopment_use_discrete_autozoom" = "Auto zoom discreto (versão antiga)";
+"osmand_cloud_delete_account_descr" = "Tem certeza de que deseja excluir a conta do OsmAnd Cloud?";
+"upload_to_osm_short" = "Carregar para OSM";
+"track_appearance_3D_visualization" = "Visualização 3D";
+"shared_string_deleting_complete" = "Exclusão concluída";
+"shared_string_hide_from_map" = "Ocultar do mapa";
+"my_places_no_tracks_descr_root" = "Você pode importar, criar ou gravar arquivos de trilha usando o OsmAnd.";
+"remove_folder_with_files_descr" = "Tem certeza de que deseja remover a pasta \"%@\" e todas as %d trilhas?";
+"osmand_depelopment_use_special_routing_hh+old" = "Usar roteamento especial (HH + antigo)";
+"osmand_depelopment_use_special_routing_hh_only" = "Usar roteamento especial (apenas HH)";
+"rendering_value_managerName_name" = "Por nome do gerente";
+"rendering_attr_padusHideBoundaries_description" = "Ocultar fronteiras dos terrenos públicos, mas deixar áreas";
+"ios_release_4_7" = "- Painéis de widgets superior e inferior melhorados para acomodar todos os widgets\n- Gerenciamento melhorado das trilhas visíveis no mapa\n- Atualização de \"Analisar no mapa\" com a capacidade de apresentar métricas de sensores\n- Foi adicionado um suporte melhorado de etiquetas para GPX: hiperligação, autor, direitos de autor e palavras-chave\n- Melhoria da configuração do widget, permitindo aos utilizadores mover páginas e linhas\n- Melhoria da gestão de trilhos em \"Os meus locais\" com subpastas e menus de contexto para trilhos e pastas\n- Novos widgets: \"Rácio de deslizamento\" e \"Posição do sol\"\n- Personalização da \"Distância durante a navegação\": escolha entre números exatos ou arredondados\n- O idioma do aplicativo será usado para os nomes no mapa geral mundial em vez dos idiomas locais\n- OsmAnd Cloud: Adicionada a capacidade de gerir os seus dados, incluindo o restauro de ficheiros eliminados e a eliminação da sua conta\n- Adicionado suporte de etiquetas adicionais para rotas turísticas\n- Correção do widget \"Coordenadas\" em que, em alguns casos, os últimos dígitos eram omitidos\n- Correção do comportamento do botão \"Modo 3D\": ao tocar no botão, o ângulo de inclinação não era guardado\n- Correção da cor da barra de estado para versões mais antigas do iOS\n- Correção dos gestos de rotação e de pinça para ampliar o mapa para a aplicação executada no macOS\n";
+"delete_all_items_desc" = "Tem certeza de que deseja excluir permanentemente todos os itens da Lixeira? Esta ação não pode ser desfeita.";
+"average_glide_ratio_time_interval_desc" = "Mostra a razão de planeio média ou velocidade vertical para o intervalo definido.";

@@ -81,7 +81,7 @@
         [self findDefaultOtherCategory];
         [self updateReferences];
         [self updatePhrases];
-        [self setPoiTranslator];
+        [self sortList:_poiCategories];
         _isInit = YES;
     }
     return self;
@@ -372,12 +372,7 @@
     return [self getSynonymsByName:type.name];
 }
 
-- (void) setPoiTranslator
-{
-    [self sortList:_poiCategories];
-}
-
-- (void) sortList: categories
+- (void) sortList:(NSMutableArray<OAPOICategory *> *)categories
 {
     [categories sortUsingComparator:^NSComparisonResult(OAPOIBaseType * _Nonnull obj1, OAPOIBaseType * _Nonnull obj2)
     {

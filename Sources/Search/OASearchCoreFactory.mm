@@ -778,7 +778,7 @@
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
                                   sr.localeName = amenity->getName(lang, false).toNSString();
-                                  if (![nm matches:sr.localeName])
+                                  if (![nm matches:sr.localeName] && transliterate)
                                       sr.localeName = amenity->getName(lang, transliterate).toNSString();
                                   if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
                                       && ![nm matchesMap:object.getAdditionalInfo.allValues]) {

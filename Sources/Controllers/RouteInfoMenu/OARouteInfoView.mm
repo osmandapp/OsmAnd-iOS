@@ -62,6 +62,7 @@
 #import "OAEmissionHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
+#import "OARequiredMapsResourceViewController.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -1937,6 +1938,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _missingOrOutdatedMapsView = LeftIconRightStackTitleDescriptionButtonView.view;
         __weak __typeof(self) weakSelf = self;
         _missingOrOutdatedMapsView.didBottomButtonTapAction = ^{
+            OARequiredMapsResourceViewController *controller = [OARequiredMapsResourceViewController new];
             NSLog(@"didBottomButtonTapAction");
 #warning show controller
             

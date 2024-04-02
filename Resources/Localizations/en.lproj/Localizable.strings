@@ -3727,3 +3727,4 @@ You will be able to pair this sensor again at any time.";
 
 "missing_or_outdated_maps_title" = "Missing or outdated maps";
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
+"required_maps" = "Required Maps";

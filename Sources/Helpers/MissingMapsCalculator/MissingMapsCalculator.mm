@@ -42,14 +42,17 @@ static const double kDISTANCE_SPLIT = 50000;
 
 @end
 
-@implementation MissingMapsCalculator {
+@implementation MissingMapsCalculator
+{
     OAWorldRegion *_or;
     NSMutableArray<NSString *> *_lastKeyNames;
 }
 
-- (instancetype)init {
+- (instancetype)init
+{
     self = [super init];
-    if (self) {
+    if (self)
+    {
         _or = OsmAndApp.instance.worldRegion;
     }
     return self;
@@ -58,12 +61,12 @@ static const double kDISTANCE_SPLIT = 50000;
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
                              start:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets
-                   checkHHEditions:(BOOL)checkHHEditions {
+                   checkHHEditions:(BOOL)checkHHEditions
+{
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
     _lastKeyNames = [NSMutableArray new];
     NSMutableArray<MissingMapsCalculatorPoint *> *pointsToCheck = [NSMutableArray new];
-    string profile = profileToString(ctx->config->router->getProfile()); // use base profile
-    // mb ordered dict?
+    string profile = profileToString(ctx->config->router->getProfile());
     NSMutableDictionary<NSString *, RegisteredMap *> *knownMaps = [NSMutableDictionary new];
     
     [OARoutingHelper.sharedInstance.getRouteProvider checkInitializedForZoomLevel14];
@@ -73,29 +76,30 @@ static const double kDISTANCE_SPLIT = 50000;
         RegisteredMap *rmap = [RegisteredMap new];
         NSString *regionName = [NSString stringWithCString:file->inputName.c_str()
                                                   encoding:[NSString defaultCStringEncoding]];
-        
-        
-        
         rmap.downloadName = regionName.lastPathComponent;
         rmap.reader = file;
         rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
         [knownMaps setObject:rmap forKey:[rmap downloadName]];
         
-        for (const auto& rt : file->hhIndexes) {
-            if (rt->profile == profile) {
+        for (const auto& rt : file->hhIndexes)
+        {
+            if (rt->profile == profile)
+            {
                 rmap.edition = rt->edition;
             }
         }
     }
     
     CLLocation *end = nil;
-    for (int i = 0; i < [targets count]; i++) {
+    for (int i = 0; i < [targets count]; i++)
+    {
         CLLocation *s = (i == 0) ? start : targets[i - 1];
         end = targets[i];
         [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck start:s end:end];
     }
     
-    if (end != nil) {
+    if (end != nil)
+    {
         [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end];
     }
     
@@ -103,49 +107,68 @@ static const double kDISTANCE_SPLIT = 50000;
     NSMutableSet<NSString *> *mapsToUpdate = [NSMutableSet set];
     NSMutableSet<NSNumber *> *presentTimestamps = nil;
     
-    for (MissingMapsCalculatorPoint *p in pointsToCheck) {
-        if (p.hhEditions == NULL) {
-            if ([p.regions count] > 0) {
+    for (MissingMapsCalculatorPoint *p in pointsToCheck)
+    {
+        if (p.hhEditions == NULL)
+        {
+            if ([p.regions count] > 0)
+            {
                 [mapsToDownload addObject:[p.regions objectAtIndex:0]];
             }
-        } else if (checkHHEditions) {
-            if (presentTimestamps == nil) {
+        }
+        else if (checkHHEditions)
+        {
+            if (presentTimestamps == nil)
+            {
                 presentTimestamps = [p.editionsUnique mutableCopy];
-            } else if ([presentTimestamps count] > 0) {
+            }
+            else if ([presentTimestamps count] > 0)
+            {
                 [presentTimestamps intersectSet:p.editionsUnique];
             }
         }
     }
     
-    if (presentTimestamps != nil && [presentTimestamps count] == 0) {
+    if (presentTimestamps != nil && [presentTimestamps count] == 0)
+    {
         long max = 0;
-        for (MissingMapsCalculatorPoint *p in pointsToCheck) {
-            if (p.editionsUnique != nil && p.editionsUnique.count > 0) {
+        for (MissingMapsCalculatorPoint *p in pointsToCheck)
+        {
+            if (p.editionsUnique != nil && p.editionsUnique.count > 0)
+            {
                 NSNumber *maxNumber = [[p.editionsUnique allObjects] valueForKeyPath:@"@max.self"];
                 max = MAX([maxNumber longValue], max);
             }
         }
         
-        for (MissingMapsCalculatorPoint *p in pointsToCheck) {
+        for (MissingMapsCalculatorPoint *p in pointsToCheck)
+        {
             NSString *region = nil;
-            for (int i = 0; p.hhEditions != NULL && i < p.hhEditions.count; i++) {
-                if (p.hhEditions[i].intValue > 0) {
-                    if (p.hhEditions[i].intValue != max) {
+            for (int i = 0; p.hhEditions != NULL && i < p.hhEditions.count; i++)
+            {
+                if (p.hhEditions[i].intValue > 0)
+                {
+                    if (p.hhEditions[i].intValue != max)
+                    {
                         region = [p.regions objectAtIndex:i];
-                    } else {
+                    }
+                    else
+                    {
                         region = nil;
                         break;
                     }
                 }
             }
             
-            if (region != nil) {
+            if (region != nil)
+            {
                 [mapsToUpdate addObject:region];
             }
         }
     }
     
-    if ([mapsToDownload count] == 0 && [mapsToUpdate count] == 0) {
+    if ([mapsToDownload count] == 0 && [mapsToUpdate count] == 0)
+    {
         return NO;
     }
     self.missingMaps = [self convert:[mapsToDownload copy]];
@@ -156,37 +179,20 @@ static const double kDISTANCE_SPLIT = 50000;
     return YES;
 }
 
-- (NSString *)getRegionName:(NSString *)filename {
-    NSString *lc = [filename lowercaseString];
-    NSInteger firstPoint = [lc rangeOfString:@"."].location;
-    
-    if (firstPoint != NSNotFound) {
-        lc = [lc substringToIndex:firstPoint];
-    }
-    
-    NSInteger ind = lc.length - 1;
-    for (; ind > 0; ind--) {
-        unichar character = [lc characterAtIndex:ind];
-        if ((character >= '0' && character <= '9') || character == '_') {
-            // timestamp ending or version ending
-        } else {
-            break;
-        }
-    }
-    
-    return [lc substringToIndex:ind + 1];
-}
-
 - (void)split:(std::shared_ptr<RoutingContext>)ctx
     knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         start:(CLLocation *)s
-          end:(CLLocation *)e {
+          end:(CLLocation *)e
+{
     double distance = [OAMapUtils getDistance:s.coordinate second:e.coordinate];
     
-    if (distance < kDISTANCE_SPLIT) {
+    if (distance < kDISTANCE_SPLIT)
+    {
         [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:s];
-    } else {
+    }
+    else
+    {
         CLLocation *mid = [OAMapUtils calculateMidPoint:s s2:e];
         [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck start:s end:mid];
         [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck start:mid end:e];
@@ -196,7 +202,8 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
 - (void)addPoint:(std::shared_ptr<RoutingContext>)ctx
        knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
    pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
-           point:(CLLocation *)s {
+           point:(CLLocation *)s
+{
     NSMutableArray<NSString *> *regions = [NSMutableArray array];
     
     NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAt:s.coordinate.latitude longitude:s.coordinate.longitude];
@@ -204,31 +211,39 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     for (OAWorldRegion *region in regionsArray)
     {
         NSString *regionDownloadId = region.downloadsIdPrefix;
-        if ([regionDownloadId hasSuffix:@"."]) {
+        if ([regionDownloadId hasSuffix:@"."])
+        {
             regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
         }
         [regions addObject:regionDownloadId];
     }
     
     NSArray *sortedRegionsNameArray = [regions sortedArrayUsingComparator:^NSComparisonResult(NSString *str1, NSString *str2) {
-        if (str1.length < str2.length) {
+        if (str1.length < str2.length)
+        {
             return NSOrderedAscending;
-        } else if (str1.length > str2.length) {
+        }
+        else if (str1.length > str2.length)
+        {
             return NSOrderedDescending;
-        } else {
+        }
+        else
+        {
             return NSOrderedSame;
         }
     }];
     
     regions = [sortedRegionsNameArray copy];
     
-    if (pointsToCheck.count == 0 || ![regions isEqualToArray:_lastKeyNames]) {
+    if (pointsToCheck.count == 0 || ![regions isEqualToArray:_lastKeyNames])
+    {
         MissingMapsCalculatorPoint *pnt = [MissingMapsCalculatorPoint new];
         _lastKeyNames = regions;
         pnt.regions = [[NSMutableArray alloc] initWithArray:regions];
         
         BOOL hasHHEdition = [self addMapEditions:knownMaps point:pnt];
-        if (!hasHHEdition) {
+        if (!hasHHEdition)
+        {
             pnt.hhEditions = nil; // recreate
             
             // check non-standard maps
@@ -237,12 +252,15 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             
             int zoomToLoad = 14;
             
-            for (RegisteredMap *r in knownMaps.allValues) {
-                if (!r.standard) {
+            for (RegisteredMap *r in knownMaps.allValues)
+            {
+                if (!r.standard)
+                {
                     SearchQuery q((uint32_t)(x31 << zoomToLoad), (uint32_t)((x31 + 1) << zoomToLoad), (uint32_t)(y31 << zoomToLoad),
                                   (uint32_t)((y31 + 1) << zoomToLoad));
                     std::vector<RouteSubregion> tempResult;
-                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q, tempResult, false, false, false)) {
+                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q, tempResult, false, false, false))
+                    {
                         [pnt.regions insertObject:r.downloadName atIndex:0];
                     }
                 }
@@ -255,33 +273,39 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     }
 }
 
-- (NSArray<OAWorldRegion *> *)convert:(NSOrderedSet<NSString *> *)mapsToDownload {
-    if (mapsToDownload.count == 0) {
+- (NSArray<OAWorldRegion *> *)convert:(NSOrderedSet<NSString *> *)mapsToDownload
+{
+    if (mapsToDownload.count == 0)
+    {
         return nil;
     }
     
     NSMutableArray<OAWorldRegion *> *worldRegions = [NSMutableArray array];
     
-    for (NSString *mapName in mapsToDownload) {
+    for (NSString *mapName in mapsToDownload)
+    {
         OAWorldRegion *worldRegion = [_or getRegionDataByDownloadName:mapName];
-        if (worldRegion != nil) {
+        if (worldRegion != nil)
+        {
             [worldRegions addObject:worldRegion];
         }
     }
-    
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES];
-    return [[worldRegions sortedArrayUsingDescriptors:@[sort]] copy];
+    return [[worldRegions sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] copy];
 }
 
 - (BOOL)addMapEditions:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
-                 point:(MissingMapsCalculatorPoint *)pnt {
+                 point:(MissingMapsCalculatorPoint *)pnt
+{
     BOOL hhEditionPresent = NO;
     
-    for (int i = 0; i < pnt.regions.count; i++) {
+    for (int i = 0; i < pnt.regions.count; i++)
+    {
         NSString *regionName = pnt.regions[i];
         
-        if (knownMaps[regionName] != nil) {
-            if (pnt.hhEditions == nil) {
+        if (knownMaps[regionName] != nil)
+        {
+            if (pnt.hhEditions == nil)
+            {
                 pnt.hhEditions = [[NSMutableArray alloc] initWithCapacity:pnt.regions.count];
                 pnt.editionsUnique = [NSMutableSet set];
             }
@@ -295,15 +319,19 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
     return hhEditionPresent;
 }
 
-- (NSString *)getErrorMessage {
+- (NSString *)getErrorMessage
+{
     NSString *msg = @"";
     
-    if (self.mapsToUpdate != nil) {
+    if (self.mapsToUpdate != nil)
+    {
         msg = [NSString stringWithFormat:@"%@ need to be updated", self.mapsToUpdate];
     }
     
-    if (self.missingMaps != nil) {
-        if ([msg length] > 0) {
+    if (self.missingMaps != nil)
+    {
+        if ([msg length] > 0)
+        {
             msg = [msg stringByAppendingString:@" and "];
         }
         msg = [NSString stringWithFormat:@"%@ need to be downloaded", self.missingMaps];

@@ -199,8 +199,7 @@
                                             fileName:@"map_direction_arrow"]))
                    .setSpecialPathIcon(OsmAnd::SingleSkImage([self specialBitmapWithColor:lineColor]))
                    .setShouldShowArrows(true)
-                   .setScreenScale(UIScreen.mainScreen.scale)
-                   .setMapDensity([[OAAppSettings sharedManager].mapDensity get]);
+                   .setScreenScale(UIScreen.mainScreen.scale);
 
             if (!colors.empty())
             {

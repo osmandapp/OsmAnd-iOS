@@ -59,6 +59,7 @@
     NSObject* _splitLock;
     OAAtomicInteger *_splitCounter;
     QList<OsmAnd::PointI> _startFinishPoints;
+    QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
 }
 
@@ -641,6 +642,7 @@ colorizationScheme:(int)colorizationScheme
                 OAWptPt *pt = seg.locationStart;
                 if (pt)
                 {
+                    const auto splitElevation = gpx.raiseRoutesAboveRelief ? pt.elevation : NULL;
                     const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
                     QString stringValue;
                     if (splitByDistance)
@@ -648,7 +650,7 @@ colorizationScheme:(int)colorizationScheme
                     else if (splitByTime)
                         stringValue = QString::fromNSString([OAOsmAndFormatter getFormattedTimeInterval:metricStartValue shortFormat:YES]);
                     const auto colorARGB = [UIColorFromARGB(gpx.color == 0 ? kDefaultTrackColor : gpx.color) toFColorARGB];
-                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB));
+                    splitLabels.push_back(OsmAnd::GpxAdditionalIconsProvider::SplitLabel(pos31, stringValue, colorARGB, splitElevation));
                 }
             }
             if (splitCounter == _splitCounter && !weakOperation.isCancelled)
@@ -676,6 +678,7 @@ colorizationScheme:(int)colorizationScheme
     [_splitLabelsQueue setSuspended:YES];
     [self resetSplitCounter];
     [self clearStartFinishPoints];
+    [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
     if (_startFinishProvider)
     {
@@ -684,12 +687,14 @@ colorizationScheme:(int)colorizationScheme
     }
     
     QList<OsmAnd::PointI> startFinishPoints;
+    QList<float> startFinishPointsElevations;
     for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
     {
         NSString *path = it.key().toNSString();
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
         OAGPX *gpx = [gpxDb getGPXItem:path];
+        const bool raiseRoutesAboveRelief = gpx.raiseRoutesAboveRelief;
         const auto& doc = it.value();
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
@@ -697,6 +702,7 @@ colorizationScheme:(int)colorizationScheme
                 continue;
             const auto& tracks = doc->tracks;
             OsmAnd::LatLon start, finish;
+            float startPointElevation, finishPointElevation;
             for (const auto& trk : constOf(tracks))
             {
                 const auto& segments = constOf(trk->segments);
@@ -708,12 +714,29 @@ colorizationScheme:(int)colorizationScheme
                     if (gpx.joinSegments)
                     {
                         if (i == 0)
+                        {
                             start = seg->points.first()->position;
+                            if (raiseRoutesAboveRelief)
+                            {
+                                startPointElevation = seg->points.first()->elevation;
+                            }
+                        }
                         else if (i == segments.size() - 1)
+                        {
                             finish = seg->points.last()->position;
+                            if (raiseRoutesAboveRelief)
+                            {
+                                finishPointElevation = seg->points.last()->elevation;
+                            }
+                        }
                     }
                     else
                     {
+                        if (raiseRoutesAboveRelief)
+                        {
+                            startFinishPointsElevations.append(seg->points.first()->elevation);
+                            startFinishPointsElevations.append(seg->points.last()->elevation);
+                        }
                         startFinishPoints.append({
                             OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),
                             OsmAnd::Utilities::convertLatLonTo31(seg->points.last()->position)});
@@ -722,6 +745,11 @@ colorizationScheme:(int)colorizationScheme
             }
             if (gpx.joinSegments)
             {
+                if (raiseRoutesAboveRelief)
+                {
+                    startFinishPointsElevations.append(startPointElevation);
+                    startFinishPointsElevations.append(finishPointElevation);
+                }
                 startFinishPoints.append({
                     OsmAnd::Utilities::convertLatLonTo31(start),
                     OsmAnd::Utilities::convertLatLonTo31(finish)});
@@ -731,7 +759,10 @@ colorizationScheme:(int)colorizationScheme
             [self processSplitLabels:gpx doc:doc];
     }
     if (!startFinishPoints.isEmpty())
+    {
         [self appendStartFinishPoints:startFinishPoints];
+        [self configureStartFinishPointsElevations:startFinishPointsElevations];
+    }
 
     [self refreshStartFinishProvider];
     [_splitLabelsQueue setSuspended:NO];
@@ -758,9 +789,9 @@ colorizationScheme:(int)colorizationScheme
                                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:finishIcon
                                                                                                   scaleFactor:_textScaleFactor]),
                                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                                  scaleFactor:_textScaleFactor])
+                                                                                                  scaleFactor:_textScaleFactor]),
+                                                                          _startFinishPointsElevations
                                                                           ));
-
         [self.mapView addTiledSymbolsProvider:_startFinishProvider];
     }
 }
@@ -802,6 +833,22 @@ colorizationScheme:(int)colorizationScheme
     @synchronized(_splitLock)
     {
         _startFinishPoints.append(startFinishPoints);
+    }
+}
+
+- (void)configureStartFinishPointsElevations:(QList<float>)startFinishPointsElevations
+{
+    @synchronized(_splitLock)
+    {
+        _startFinishPointsElevations = startFinishPointsElevations;
+    }
+}
+
+- (void)clearConfigureStartFinishPointsElevations
+{
+    @synchronized(_splitLock)
+    {
+        _startFinishPointsElevations.clear();
     }
 }
 

@@ -1394,6 +1394,7 @@
 		BBA3AF87197FC4BB0039D991 /* Shipped in Resources */ = {isa = PBXBuildFile; fileRef = BB451D8A18D70B4B005FBE09 /* Shipped */; };
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
+		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
 		C542601F2AA0D2A000E76C00 /* ic_custom_visibility@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C542601D2AA0D29F00E76C00 /* ic_custom_visibility@2x.png */; };
@@ -5077,6 +5078,7 @@
 		BBB34EE6179BF2A7004C5567 /* libiconv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.dylib; path = usr/lib/libiconv.dylib; sourceTree = SDKROOT; };
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
 		C542601D2AA0D29F00E76C00 /* ic_custom_visibility@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_visibility@2x.png"; path = "Resources/Icons/ic_custom_visibility@2x.png"; sourceTree = "<group>"; };
@@ -10403,6 +10405,7 @@
 				BB451D8918D70AE4005FBE09 /* Embedded */,
 				BBA858F517C222DC00AADCC7 /* OsmAnd-Info.plist */,
 				DA5A857C26C568EE00F274C7 /* GoogleService-Info.plist */,
+				C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */,
 				C5735AF42AFE9CB500638715 /* InfoPlist.strings */,
 				BB451DF318D8F7D7005FBE09 /* Localizable.strings */,
 			);
@@ -16144,6 +16147,7 @@
 				8AFC2BF324334A4E0095BA9F /* map_location_bicycle_bottom@2x.png in Resources */,
 				DAB331F1212FF3DC006142B9 /* es-ar_tts.js in Resources */,
 				84B6E08A2073CF55002CA15B /* ic_action_route_subsequent_destination@3x.png in Resources */,
+				C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */,
 				4663AB402951C95A00D9781E /* OAInputTableViewCell.xib in Resources */,
 				843394811FF4FA38006205A5 /* camera_click.aiff in Resources */,
 				32309A742698D22F005751F5 /* ic_custom_direction_compass_day@3x.png in Resources */,

@@ -57,8 +57,8 @@
     params[@"brand"] = @"Apple";
 
     struct utsname systemInfo;
-    uname(&systemInfo);
-    params[@"model"] = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    if (uname(&systemInfo) == 0)
+        params[@"model"] = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 
     [OANetworkUtilities sendRequestWithUrl:OABackupHelper.DEVICE_REGISTER_URL params:params post:YES onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         int status;

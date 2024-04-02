@@ -387,13 +387,25 @@
         _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), OALocalizedString(@"internet_connection_required_for_online_route")];
         _routeCalcErrorShort = OALocalizedString(@"error_calculating_route");
         [self showMessage:_routeCalcError];
-        if ([res.missingMaps count] && [res.mapsToUpdate count])
+        if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
         {
-            
+            if ([res.missingMaps count] || [res.mapsToUpdate count])
+            {
+                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate];
+            }
         }
     }
     else
     {
+        if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
+        {
+            if ([res.missingMaps count] || [res.mapsToUpdate count])
+            {
+                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate];
+                return;
+            }
+        }
+       
         if (res.errorMessage)
         {
             _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), res.errorMessage];

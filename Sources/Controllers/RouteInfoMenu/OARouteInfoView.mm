@@ -124,12 +124,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     BOOL _needChartUpdate;
     
     BOOL _hasEmptyTransportRoute;
-    BOOL _hasMissingOrOutdatedMaps;
+    NSArray<OAWorldRegion *> * _missingMaps;
+    NSArray<OAWorldRegion *> * _mapsToUpdate;
     BOOL _optionsMenuSelected;
 
     NSIndexPath *_routingInfoIndexPath;
     NSString *_emission;
     BOOL _closePressed;
+    LeftIconRightStackTitleDescriptionButtonView *_missingOrOutdatedMapsView;
 }
 
 - (instancetype) init
@@ -186,6 +188,8 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectZero];
     [_tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
     [_tableView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
+    [_tableView registerClass:UITableViewHeaderFooterView.class forHeaderFooterViewReuseIdentifier:[UITableViewHeaderFooterView getCellIdentifier]];
+    
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setShowsHorizontalScrollIndicator:NO];
     _tableView.estimatedRowHeight = kEstimatedRowHeight;
@@ -600,7 +604,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         @"cell" : [OARoutingSettingsCell getCellIdentifier]
     }];
     
-    if (_hasEmptyTransportRoute || _hasMissingOrOutdatedMaps)
+    if (_hasEmptyTransportRoute || [self hasMissingOrOutdatedMaps])
     {
         [dictionary setObject:[NSArray arrayWithArray:section] forKey:@(sectionIndex++)];
         _data = [NSDictionary dictionaryWithDictionary:dictionary];
@@ -1251,7 +1255,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) appModeChanged:(OAApplicationMode *)next
 {
     _hasEmptyTransportRoute = NO;
-    _hasMissingOrOutdatedMaps = NO;
+    [self clearMissingOrToUpdateMaps];
     [_routingHelper setAppMode:next];
     [_settings setApplicationModePref:next markAsLastUsed:NO];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
@@ -1265,14 +1269,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 #pragma mark - OARouteInformationListener
 
-- (void)newRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
+- (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMap
+                            mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
         _trackAnalysis = nil;
         _gpx = nil;
         _progressBarView = nil;
-        _hasMissingOrOutdatedMaps = YES;
+        _missingMaps = missingMap;
+        _mapsToUpdate = mapsToUpdate;
         _hasEmptyTransportRoute = NO;
         [self updateMenu];
     });
@@ -1285,7 +1291,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _trackAnalysis = nil;
         _gpx = nil;
         _progressBarView = nil;
-        _hasMissingOrOutdatedMaps = NO;
+        [self clearMissingOrToUpdateMaps];
         _hasEmptyTransportRoute = _routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() == 0;
         [self updateMenu];
     });
@@ -1847,11 +1853,10 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || (_hasEmptyTransportRoute || _hasMissingOrOutdatedMaps)) && section == _data.count - 1)
+    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || (_hasEmptyTransportRoute || [self hasMissingOrOutdatedMaps])) && section == _data.count - 1)
     {
-        if (_hasMissingOrOutdatedMaps) {
-            // TODO:
-            return 200;
+        if ([self hasMissingOrOutdatedMaps]) {
+            return [self missingOrOutdatedMapsViewHeight];
         } else {
             return [OAUtilities calculateTextBounds:_hasEmptyTransportRoute ?
                     [self getAttributedEmptyRouteWarning] : [self getAttributedBetaWarning] width:tableView.bounds.size.width].height + 8.0;
@@ -1921,13 +1926,49 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return [[NSAttributedString alloc] initWithAttributedString:res];
 }
 
+- (CGFloat)missingOrOutdatedMapsViewHeight {
+    CGFloat height = [[self missingOrOutdatedMapsView].stackView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
+    return height + 84;
+}
+
+- (LeftIconRightStackTitleDescriptionButtonView *)missingOrOutdatedMapsView {
+    if (!_missingOrOutdatedMapsView)
+    {
+        _missingOrOutdatedMapsView = LeftIconRightStackTitleDescriptionButtonView.view;
+        __weak __typeof(self) weakSelf = self;
+        _missingOrOutdatedMapsView.didBottomButtonTapAction = ^{
+            NSLog(@"didBottomButtonTapAction");
+#warning show controller
+            
+        };
+        [_missingOrOutdatedMapsView configureWithTitle:OALocalizedString(@"missing_or_outdated_maps_title")
+                                           description:OALocalizedString(@"missing_or_outdated_maps_description")
+                                           buttonTitle:OALocalizedString(@"shared_string_details")
+                                             leftImage:[UIImage imageNamed:@"ic_custom_download_map"]
+                                    leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+    }
+    return _missingOrOutdatedMapsView;
+}
+
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section
 {
-    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute || _hasMissingOrOutdatedMaps) && section == _data.count - 1)
+    if (((_routingHelper.isPublicTransportMode && [_transportHelper isRouteBeingCalculated]) || _hasEmptyTransportRoute || [self hasMissingOrOutdatedMaps]) && section == _data.count - 1)
     {
-        if (_hasMissingOrOutdatedMaps)
+        if ([self hasMissingOrOutdatedMaps])
         {
-            return nil;
+            UITableViewHeaderFooterView *headerView = [tableView dequeueReusableHeaderFooterViewWithIdentifier:[UITableViewHeaderFooterView getCellIdentifier]];
+            headerView.translatesAutoresizingMaskIntoConstraints = NO;
+            
+            _missingOrOutdatedMapsView.translatesAutoresizingMaskIntoConstraints = NO;
+            [headerView.contentView addSubview:_missingOrOutdatedMapsView];
+            [NSLayoutConstraint activateConstraints:@[
+                [_missingOrOutdatedMapsView.leadingAnchor constraintEqualToAnchor:headerView.contentView.leadingAnchor constant:20],
+                [_missingOrOutdatedMapsView.trailingAnchor constraintEqualToAnchor:headerView.contentView.trailingAnchor constant:-20],
+                [_missingOrOutdatedMapsView.topAnchor constraintEqualToAnchor:headerView.contentView.topAnchor constant:20],
+                [_missingOrOutdatedMapsView.bottomAnchor constraintEqualToAnchor:headerView.contentView.bottomAnchor]
+            ]];
+            
+            return headerView;
         }
         else
         {
@@ -1961,7 +2002,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         
     return nil;
 }
-
 
 #pragma mark - UIGestureRecognizerDelegate
 
@@ -2131,7 +2171,6 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void)stateChanged:(id)change
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _hasMissingOrOutdatedMaps = NO;
         _hasEmptyTransportRoute = NO;
         [self updateData];
         [self.tableView reloadData];
@@ -2149,7 +2188,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_progressBarView)
         {
-            _hasMissingOrOutdatedMaps = NO;
+            [self clearMissingOrToUpdateMaps];
             _hasEmptyTransportRoute = NO;
             [self updateData];
             [self.tableView reloadData];
@@ -2169,7 +2208,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)startProgress {
     dispatch_async(dispatch_get_main_queue(), ^{
-        _hasMissingOrOutdatedMaps = NO;
+        [self clearMissingOrToUpdateMaps];
         _hasEmptyTransportRoute = NO;
         if (!_progressBarView)
         {
@@ -2179,6 +2218,16 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         if (_progressBarView)
             [_progressBarView setProgress:0.];
     });
+}
+
+- (BOOL)hasMissingOrOutdatedMaps
+{
+    return _missingMaps.count || _mapsToUpdate.count;
+}
+
+- (void)clearMissingOrToUpdateMaps
+{
+    _missingMaps = _mapsToUpdate = nil;
 }
 
 #pragma mark - UITextViewDelegate

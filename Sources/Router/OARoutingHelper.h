@@ -11,7 +11,8 @@
 #import "OAApplicationMode.h"
 #import "OACommonTypes.h"
 #import "OAResultMatcher.h"
-#import "OARouteCalculationResult.h"
+
+@class OAWorldRegion;
 
 @protocol OARouteInformationListener <NSObject>
 
@@ -21,7 +22,8 @@
 - (void) routeWasCancelled;
 - (void) routeWasFinished;
 @optional
-- (void)newRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result;
+- (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMap
+                            mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate;
 
 @end
 
@@ -105,6 +107,8 @@ struct RouteSegmentResult;
 - (void) notifyIfRouteIsCalculated;
 - (BOOL) isPublicTransportMode;
 - (void) newRouteCalculated:(BOOL)newRoute;
+- (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMaps
+                            mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate;
 
 - (void) startRouteCalculationThread:(OARouteCalculationParams *)params paramsChanged:(BOOL)paramsChanged updateProgress:(BOOL)updateProgress;
 

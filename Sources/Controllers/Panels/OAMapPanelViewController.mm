@@ -2749,6 +2749,7 @@ typedef enum
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             state.pinLocation = item.bounds.center;
+            state.navControllerHistory = nil;
             [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
         }];
         return;

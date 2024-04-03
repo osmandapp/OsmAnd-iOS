@@ -2857,7 +2857,7 @@
 "map_widget_group_sunrise_sunset_desc" = "Ovi vidžeti prikazuju podatke o sledećem izlasku i zalasku Sunca.";
 "map_widget_group_sunrise_sunset" = "Izlazak, zalazak Sunca";
 "map_settings_weather_wind" = "Vetar";
-"map_settings_weather_cloud" = "Oblak";
+"map_settings_weather_cloud" = "Oblačnost";
 "map_settings_weather_precip" = "Padavine";
 "measurement_units" = "Merne jedinice";
 "weather_precip_milimeters" = "Milimetri";

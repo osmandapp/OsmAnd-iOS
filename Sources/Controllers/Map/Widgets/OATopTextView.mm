@@ -728,7 +728,7 @@
     if (!shieldName.isNull() && !shieldName.isEmpty())
     {
         sk_sp<const SkImage> shield;
-        env->obtainTextShield(shieldName, 1.0f, shield);
+        env->obtainShaderOrShield(shieldName, 1.0f, shield);
 
         if (shield)
             textStyle.setBackgroundImage(shield);

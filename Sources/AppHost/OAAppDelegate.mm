@@ -110,6 +110,16 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     [device beginGeneratingDeviceOrientationNotifications];
     device.batteryMonitoringEnabled = YES;
     
+    // Update app execute counter
+    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
+    NSInteger execCount = [settings integerForKey:kAppExecCounter];
+    [settings setInteger:++execCount forKey:kAppExecCounter];
+
+    if ([settings doubleForKey:kAppInstalledDate] == 0)
+        [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
+
+    [settings synchronize];
+
     // Create instance of OsmAnd application
     _app = (id<OsmAndAppProtocol, OsmAndAppCppProtocol, OsmAndAppPrivateProtocol>)[OsmAndApp instance];
     
@@ -143,16 +153,6 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
             [self askReview];
 
-            // Update app execute counter
-            NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-            NSInteger execCount = [settings integerForKey:kAppExecCounter];
-            [settings setInteger:++execCount forKey:kAppExecCounter];
-            
-            if ([settings doubleForKey:kAppInstalledDate] == 0)
-                [settings setDouble:[[NSDate date] timeIntervalSince1970] forKey:kAppInstalledDate];
-            
-            [settings synchronize];
-            
             // Create root view controller
             [self configureAppLaunchEvent:AppLaunchEventSetupRoot];
             BOOL mapInstalled = NO;

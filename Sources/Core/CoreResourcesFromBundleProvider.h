@@ -17,9 +17,10 @@
 class CoreResourcesFromBundleProvider : public OsmAnd::ICoreResourcesProvider
 {
 private:
-    static NSString* getResourcePath(const QString& name);
+    static NSString* getResourcePath(const QString& name, const bool logErrors);
     static NSString* getResourcePath(const QString& name,
-                                     const float displayDensityFactor);
+                                     const float displayDensityFactor,
+                                     const bool logErrors);
 protected:
 public:
     CoreResourcesFromBundleProvider();

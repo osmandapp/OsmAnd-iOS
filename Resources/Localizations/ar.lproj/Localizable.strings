@@ -3138,7 +3138,6 @@
 "shared_string_discard_changes" = "تجاهل التغييرات";
 "article_removed_from_bookmark" = " إزالة من العلامات المرجعية.";
 "external_device_forget_sensor_description" = "سيُحذف من القائمة ستكون قادراً على ربط هذا المستشعرمجدداً في أي وقت.";
-
 "no_bt_permission" = "لم يتم منح إذن البلوتوث";
 "shared_string_wrist" = "الرسغ";
 "shared_string_travel_guides" = "ارشادات السفر";
@@ -3208,7 +3207,7 @@
 "help_article_map_tracks_on_map_name" = "المسارات والطرق";
 "help_article_map_vector_maps_name" = "خرائط المتجهات (أنماط الخريطة)";
 "help_article_navigation_car_play_name" = "كار بلي";
-"help_article_navigation_guidance_name" = "توجيه";
+"help_article_navigation_guidance_name" = "تعليمات الملاحة";
 "help_article_navigation_guidance_voice_navigation_name" = "المطالبات الصوتية / الإشعارات";
 "help_article_navigation_routing_name" = "تفضيلات اختيار الطريق";
 "help_article_navigation_routing_bicycle_based_routing_name" = "توجيه الدراجات (MTB)";
@@ -3381,3 +3380,14 @@
 "map_widget_glide_average_desc" = "يعرض متوسط معدل الانحدار للفترة المحددة.";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "skip_download" = "تخط التنزيل";
+"distance_during_navigation" = "المسافة أثناء الملاحة";
+"shared_string_precise" = "دقيق";
+"shared_string_round_up" = "تقريب";
+"average_glide_ratio_time_interval_desc" = "عرض متوسط نسبة الإنحدار أو السرعة الرأسية للفاصل الزمني المحدد.";
+"osmand_depelopment_use_special_routing_hh+old" = "استخدام التوجيه الخاص (HH + القديم)";
+"osmand_depelopment_use_special_routing_hh_only" = "استخدام التوجيه الخاص (HH فقط)";
+"osmand_depelopment_use_discrete_autozoom" = "تكبير تلقائي منفصل (الإصدار القديم)";
+"upload_to_osm_short" = "رفع إلى OSM";
+"distance_during_navigation_footer" = "اختر كيفية عرض معلومات المسافة في أدوات التنقل (المسافة إلى النقطة، المنعطف التالي، الممرات).\n\nاختر \"دقيق\" للأرقام الدقيقة، أو \"تقريبي\" لتسهيل القراءة.";
+"ios_release_4_7" = "• تعزيزويدجت الشريط العلوي والسفلي لاستيعاب كافة الحاجيات\n• تحسين إدارة المسارات المرئية على الخريطة\n• تحديث \"التحليل على الخريطة\" مع القدرة على عرض المقاييس من أجهزة الاستشعار\n• تمت إضافة دعم العلامات المحسنة لـ GPX: الرابط، المؤلف، حقوق الطبع والنشر، والكلمات الرئيسية\n• تحسين ترتيب الويدجت من خلال السماح للمستخدمين بنقل الصفحات والصفوف\n• تحسين إدارة المسار في \"أماكني المفضلة\" باستخدام المجلدات الفرعية وقوائم السياق للمسارات والمجلدات\n• أدوات جديدة: \"نسبة الانحدار\" و\"موضع الشمس\"\n• تخصيص \"المسافة أثناء التنقل\": اختر بين الأرقام الدقيقة أو التقريبية\n• سيتم استخدام لغة التطبيق للأسماء الموجودة على خريطة العالم العامة بدلاً من اللغات المحلية\n• أوسماند أيكلاود: تمت إضافة القدرة على إدارة بياناتك، بما في ذلك استعادة الملفات المحذوفة وحذف حسابك\n• تمت إضافة دعم العلامات الإضافية للطرق السياحية\n• تم إصلاح أداة \"الإحداثيات\" وتعديل الأرقام الأخيرة الناقصة في بعض الحالات\n• تم إصلاح زر نمط \"الوضع ثلاثي الأبعاد\": النقر على الزر لا يحفظ زاوية الميل\n• لون شريط الحالة ثابت لإصدارات iOS الأقدم\n• تم إصلاح التدوير والضغط لتكبير إيماءات الخريطة للتطبيق الذي يعمل على نظام التشغيل macOS\n";
+"track_appearance_3D_visualization" = "محاكي ثلاثي أبعاد";

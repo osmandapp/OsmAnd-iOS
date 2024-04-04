@@ -2856,7 +2856,7 @@
 "send_log" = "Отправить лог";
 "osmand_cloud_deleting_account_descr" = "Вскоре все ваши данные и аккаунт будут удалены из OsmAnd Cloud.\n\nПри этом данные на устройстве сохранятся без изменений.";
 "activity_type_cycling_name" = "Езда на велосипеде";
-"map_widget_glide_average_desc" = "%d (%dтрек)%d (%dтрека)%d (%dтреков)%d (%dтреков)Показывать средний коэффициент планирования для заданного интервала.";
+"map_widget_glide_average_desc" = "Показывать средний коэффициент планирования для заданного интервала.";
 "announcement_time_intervals" = "Интервалы времени и расстояния";
 "weather_widgets_secondary_desc" = "Единицы измерения можно изменить в настройках плагина «Погода».";
 "map_widget_trip_recording_distance" = "Расстояние";

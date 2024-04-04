@@ -934,7 +934,7 @@
 "profile_appearance_descr" = "Ikonica, boja i ime";
 "ui_customization" = "Prilagođavanje korisničkog interfejsa";
 "ui_customization_short_descr" = "Elementi glavnog i kontekstnog menija";
-"reorder_profiles" = "Izmeni spisak profila";
+"reorder_profiles" = "Izmeni listu profila";
 "profile_alert_need_profile_name_title" = "Unesi ime profila";
 "select_color" = "Odaberi boju";
 "select_icon_profile_dialog_title" = "Odaberi ikonu";
@@ -2847,7 +2847,7 @@
 "upload_all" = "Skinuti sve";
 "cloud_all_changes_uploaded" = "Sve izmene su otpremljene";
 "cloud_all_changes_downloaded" = "Sve izmene su preuzete";
-"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim spisak fajlova sa servera.";
+"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim listu fajlova sa servera.";
 "last_sync" = "Poslednja sinhronizacija";
 "mtb_imba_full" = "Internacionalno udruženje planinskih biciklista";
 "rendering_attr_showMtbScale_name" = "Prikazuj skalu MTB-a";

@@ -245,7 +245,7 @@
     if (e) {
         return [e.value isEqualToString:@"true"];
     }
-    return YES;
+    return NO;
 }
 
 - (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief

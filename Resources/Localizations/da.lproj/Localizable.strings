@@ -1758,7 +1758,7 @@
 "plan_route" = "Planlæg en rute";
 "checking_for_duplicates" = "Søger efter dubletter...";
 "after_tapping_done" = "Tryk på Udført og slettede profiler går helt tabt.";
-"profile_alert_delete_msg" = "Slet profilen \"%@\"\?";
+"profile_alert_delete_msg" = "Slet profilen \"%@\"";
 "added_items" = "Tilføjede elementer: %@";
 "shared_string_finish" = "Afslut";
 "shared_string_import_complete" = "Importen er fuldført";
@@ -3136,7 +3136,6 @@
 "shared_string_discard_changes" = "Kassér ændringer";
 "article_removed_from_bookmark" = " fjernet fra bogmærker.";
 "external_device_forget_sensor_description" = "Sensoren fjernes fra listen.Du vil kunne parre denne sensor igen til enhver tid.";
-
 "no_bt_permission" = "Bluetooth-tilladelse er ikke givet";
 "shared_string_wrist" = "Håndled";
 "shared_string_travel_guides" = "Rejseguider";
@@ -3386,3 +3385,7 @@
 "distance_during_navigation_footer" = "Vælg, hvordan afstandsinformation skal vises i navigationsmoduler (afstand til punkt, næste sving, baner).\n\nVælg \"Præcis\" for nøjagtige tal, eller \"Rund op\" for bedre læsbarhed.";
 "upload_to_osm_short" = "Upload til OSM";
 "ios_release_4_7" = "• Forbedrede modulpaneler i top og bund til at rumme alle moduler\n• Forbedret håndtering af spor, der er synlige på kortet\n• Opdateret \" Analysér på kort\" med mulighed for at vise målinger fra sensorer\n• Forbedret tagsupport til GPX er blevet tilføjet: link, forfatter, copyright og nøgleord\n• Forbedret modul-konfiguration ved at give brugerne mulighed for at flytte sider og rækker\n• Forbedret sporhåndtering i \"Mine steder\" med undermapper og kontekstmenuer til spor og mapper\n• Nye moduler: \"Glidetal\" og \"Solens position\"\n• Tilpas \"Afstand under navigation\": Vælg mellem præcise eller afrundede tal.\n• App-sprog vil blive brugt til navne på verdensoversigtskortet i stedet for lokale sprog\n• OsmAnd Cloud: Tilføjet mulighed for at administrere dine data, herunder gendannelse af slettede filer og sletning af din konto\n• Tilføjet understøttelse af ekstra tags til turistruter\n• Rettelse af modulet \"Koordinater\", hvor de sidste cifre i nogle tilfælde blev overset.\n• Rettelse af \"3D-tilstand\"-knappens opførsel: Hvis man trykker på knappen, gemmes hældningsvinklen ikke.\n• Rettelse af farve på statuslinje for ældre iOS-versioner\n• Rettelse af kortbevægelser med rotation og knib for at zoome for appen, der kører på macOS\n";
+"osmand_depelopment_use_discrete_autozoom" = "Diskret autozoom (gammel version)";
+"track_appearance_3D_visualization" = "3D-visualisering";
+"osmand_depelopment_use_special_routing_hh+old" = "Brug særlig ruteberegning (HH + gammel)";
+"osmand_depelopment_use_special_routing_hh_only" = "Brug særlig ruteberegning (kun HH)";

@@ -28,7 +28,7 @@ QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
                                                         const float displayDensityFactor,
                                                         bool* ok /* = nullptr*/) const
 {
-    NSString* resourcePath = getResourcePath(name, displayDensityFactor);
+    NSString* resourcePath = getResourcePath(name, displayDensityFactor, true);
 
     if (!resourcePath)
     {
@@ -55,7 +55,7 @@ QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
 QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
                                                         bool* ok /* = nullptr*/) const
 {
-    NSString* resourcePath = getResourcePath(name);
+    NSString* resourcePath = getResourcePath(name, true);
 
     if (!resourcePath)
     {
@@ -82,19 +82,19 @@ QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
 bool CoreResourcesFromBundleProvider::containsResource(const QString& name,
                                                        const float displayDensityFactor) const
 {
-    NSString* resourcePath = getResourcePath(name, displayDensityFactor);
+    NSString* resourcePath = getResourcePath(name, displayDensityFactor, false);
 
     return ([[NSFileManager defaultManager] fileExistsAtPath:resourcePath] == YES);
 }
 
 bool CoreResourcesFromBundleProvider::containsResource(const QString& name) const
 {
-    NSString* resourcePath = getResourcePath(name);
+    NSString* resourcePath = getResourcePath(name, false);
 
     return ([[NSFileManager defaultManager] fileExistsAtPath:resourcePath] == YES);
 }
 
-NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
+NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name, const bool logErrors)
 {
     NSString* resourceName = nil;
     NSString* resourceType = nil;
@@ -174,7 +174,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
     }
     else
     {
-        OALog(@"Unrecognized resource name '%@'", name.toNSString());
+        if (logErrors)
+            OALog(@"Unrecognized resource name '%@'", name.toNSString());
         return nil;
     }
 
@@ -183,7 +184,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
                                                         inDirectory:resourceDir];
     if (!resourcePath)
     {
-        OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
+        if (logErrors)
+            OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
         return nil;
     }
 
@@ -191,7 +193,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
 }
 
 NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
-                                                           const float displayDensityFactor)
+                                                           const float displayDensityFactor,
+                                                           const bool logErrors)
 {
     NSString* resourceName = nil;
     NSString* resourceType = nil;
@@ -259,7 +262,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
     }
     else
     {
-        OALog(@"Unrecognized resource name '%@'", name.toNSString());
+        if (logErrors)
+            OALog(@"Unrecognized resource name '%@'", name.toNSString());
         return nil;
     }
 
@@ -268,7 +272,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
                                                         inDirectory:resourceDir];
     if (!resourcePath)
     {
-        OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
+        if (logErrors)
+            OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
         return nil;
     }
 

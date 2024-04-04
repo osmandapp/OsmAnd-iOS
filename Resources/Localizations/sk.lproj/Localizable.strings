@@ -2445,7 +2445,6 @@
 "free_account" = "Bezplatný účet";
 "beats_per_minute_short" = "tep";
 "there_are_no_connected_sensors_of_this_type" = "Nie sú pripojené žiadne snímače tohto typu";
-
 "bicycle_scd_device_name" = "Cyklistické zariadenie";
 "shared_string_finger" = "Prst";
 "shared_string_hand" = "Ruka";
@@ -2818,3 +2817,10 @@
 "longest_distance_first" = "Najdlhšia vzdialenosť nahor";
 "subscribe_email_error" = "Chyba";
 "activity_type_winter_name" = "Zima";
+"distance_during_navigation" = "Vzdialenosť počas navigácie";
+"rendering_attr_padusHideBoundaries_name" = "Skryť hranice verejných pozemkov";
+"rendering_attr_padusHideBoundaries_description" = "Skryť hranice verejných pozemkov ale ponechať oblasti";
+"rendering_value_managerName_name" = "Podľa názvu správcu";
+"rendering_attr_padusDisplayMode_description" = "Podľa typu prístupu alebo názvu správcu";
+"rendering_attr_padusDisplayMode_name" = "Režim zobrazovania verejných pozemkov";
+"rendering_value_access_name" = "Podľa typu prístupu";

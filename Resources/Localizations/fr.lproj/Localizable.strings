@@ -559,7 +559,7 @@
 "keep_informing" = "Répéter les instructions de guidage";
 "keep_informing_descr" = "Répéter les instructions de guidage à intervalles réguliers.";
 "arrival_distance" = "Annonce d\'arrivée";
-"arrival_distance_descr" = "Quand souhaitez-vousêtre informé de l\'arrivée à destination?";
+"arrival_distance_descr" = "Quand souhaitez-vous être informé de l'arrivée à destination ?";
 "default_speed_system" = "Unité de vitesse";
 "default_speed_system_descr" = "Définir l\'unité de vitesse.";
 "speed_limit_exceed" = "Marge de tolérance aux limites de vitesse";
@@ -3374,3 +3374,6 @@
 "shared_string_file_info" = "Informations du fichier";
 "rendering_value_managerName_name" = "Par nom de gestionnaire";
 "rendering_attr_padusDisplayMode_description" = "Par type d'accès ou nom de gestionnaire";
+"rendering_attr_padusDisplayMode_name" = "Mode d'affichage des terres publiques";
+"rendering_attr_padusHideBoundaries_name" = "Masquer les limites des terres publiques";
+"rendering_attr_padusHideBoundaries_description" = "Masquer les limites des terres publiques mais laisser les zones";

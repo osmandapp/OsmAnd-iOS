@@ -14,7 +14,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface MissingMapsCalculator : NSObject
-
+@property (nonatomic) NSArray<OAWorldRegion *> *potentiallyUsedMaps;
 @property (nonatomic) NSArray<OAWorldRegion *> * missingMaps;
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 

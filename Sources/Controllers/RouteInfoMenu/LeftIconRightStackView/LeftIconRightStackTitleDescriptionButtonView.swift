@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import UIKit
-
 @objcMembers
 final class LeftIconRightStackTitleDescriptionButtonView: UIView {
     @IBOutlet weak var stackView: UIStackView!
@@ -24,6 +22,8 @@ final class LeftIconRightStackTitleDescriptionButtonView: UIView {
             .instantiate(withOwner: nil, options: nil)[0] as? LeftIconRightStackTitleDescriptionButtonView
     }
     
+    // MARK: - Configure
+    
     func configure(title: String,
                    description: String,
                    buttonTitle: String,
@@ -33,6 +33,7 @@ final class LeftIconRightStackTitleDescriptionButtonView: UIView {
         descriptionLabel.text = description
         bottomButton.setTitle(buttonTitle, for: .normal)
         leftImageView.image = leftImage
+        leftImageView.tintColor = leftImageTintColor
         
         bottomButton.addTarget(self, action: #selector(onBottomButtonTap), for: .touchUpInside)
     }

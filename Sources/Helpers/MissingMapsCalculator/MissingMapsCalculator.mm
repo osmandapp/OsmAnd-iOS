@@ -16,6 +16,7 @@
 #include <binaryRead.h>
 
 static const double kDISTANCE_SPLIT = 50000;
+static const double DISTANCE_SKIP = 10000;
 
 @interface MissingMapsCalculatorPoint : NSObject
 @property (nonatomic, strong) NSMutableArray<NSString *> *regions;
@@ -93,9 +94,9 @@ static const double kDISTANCE_SPLIT = 50000;
     CLLocation *end = nil;
     for (int i = 0; i < [targets count]; i++)
     {
-        CLLocation *s = (i == 0) ? start : targets[i - 1];
+        CLLocation *prev = (i == 0) ? start : targets[i - 1];
         end = targets[i];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck start:s end:end];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev next:end];
     }
     
     if (end != nil)
@@ -103,6 +104,7 @@ static const double kDISTANCE_SPLIT = 50000;
         [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:end];
     }
     
+    NSMutableSet<NSString *> *usedMaps = [NSMutableSet set];
     NSMutableSet<NSString *> *mapsToDownload = [NSMutableSet set];
     NSMutableSet<NSString *> *mapsToUpdate = [NSMutableSet set];
     NSMutableSet<NSNumber *> *presentTimestamps = nil;
@@ -126,6 +128,10 @@ static const double kDISTANCE_SPLIT = 50000;
             {
                 [presentTimestamps intersectSet:p.editionsUnique];
             }
+        } else {
+            if (p.regions.count > 0) {
+                [usedMaps addObject:p.regions.firstObject];
+            }
         }
     }
     
@@ -144,17 +150,15 @@ static const double kDISTANCE_SPLIT = 50000;
         for (MissingMapsCalculatorPoint *p in pointsToCheck)
         {
             NSString *region = nil;
+            BOOL fresh = false;
             for (int i = 0; p.hhEditions != NULL && i < p.hhEditions.count; i++)
             {
                 if (p.hhEditions[i].intValue > 0)
                 {
-                    if (p.hhEditions[i].intValue != max)
+                    region = p.regions[i];
+                    fresh = p.hhEditions[i].intValue == max;
+                    if (fresh)
                     {
-                        region = [p.regions objectAtIndex:i];
-                    }
-                    else
-                    {
-                        region = nil;
                         break;
                     }
                 }
@@ -162,7 +166,33 @@ static const double kDISTANCE_SPLIT = 50000;
             
             if (region != nil)
             {
-                [mapsToUpdate addObject:region];
+                if (!fresh)
+                {
+                    [mapsToUpdate addObject:region];
+                }
+                else
+                {
+                    [usedMaps addObject:region];
+                }
+            }
+        }
+    }
+    else
+    {
+        long selectedEdition = [[presentTimestamps objectEnumerator].nextObject longValue];
+        
+        for (MissingMapsCalculatorPoint *p in pointsToCheck)
+        {
+            if (p.hhEditions != nil)
+            {
+                for (int i = 0; i < p.hhEditions.count; i++)
+                {
+                    if ([p.hhEditions[i] longValue] == selectedEdition)
+                    {
+                        [usedMaps addObject:p.regions[i]];
+                        break;
+                    }
+                }
             }
         }
     }
@@ -173,6 +203,7 @@ static const double kDISTANCE_SPLIT = 50000;
     }
     self.missingMaps = [self convert:[mapsToDownload copy]];
     self.mapsToUpdate = [self convert:[mapsToUpdate copy]];
+    self.potentiallyUsedMaps = [self convert:[usedMaps copy]];
     
     NSLog(@"Check missing maps %lu points %.2f sec", [pointsToCheck count], ([NSDate timeIntervalSinceReferenceDate] - tm));
     
@@ -182,31 +213,33 @@ static const double kDISTANCE_SPLIT = 50000;
 - (void)split:(std::shared_ptr<RoutingContext>)ctx
     knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
-        start:(CLLocation *)s
-          end:(CLLocation *)e
+          pnt:(CLLocation *)pnt
+         next:(CLLocation *)next
 {
-    double distance = [OAMapUtils getDistance:s.coordinate second:e.coordinate];
-    
-    if (distance < kDISTANCE_SPLIT)
+    double distance = [OAMapUtils getDistance:pnt.coordinate second:next.coordinate];
+    if (distance < DISTANCE_SKIP) {
+        // skip point they too close
+    }
+    else if (distance < kDISTANCE_SPLIT)
     {
-        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:s];
+        [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt];
     }
     else
     {
-        CLLocation *mid = [OAMapUtils calculateMidPoint:s s2:e];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck start:s end:mid];
-        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck start:mid end:e];
+        CLLocation *mid = [OAMapUtils calculateMidPoint:pnt s2:next];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:pnt next:mid];
+        [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:mid next:next];
     }
 }
 
 - (void)addPoint:(std::shared_ptr<RoutingContext>)ctx
        knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
    pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
-           point:(CLLocation *)s
+           point:(CLLocation *)loc
 {
     NSMutableArray<NSString *> *regions = [NSMutableArray array];
     
-    NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAt:s.coordinate.latitude longitude:s.coordinate.longitude];
+    NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAt:loc.coordinate.latitude longitude:loc.coordinate.longitude];
     
     for (OAWorldRegion *region in regionsArray)
     {
@@ -247,8 +280,8 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             pnt.hhEditions = nil; // recreate
             
             // check non-standard maps
-            int x31 = OsmAnd::Utilities::get31TileNumberX(s.coordinate.longitude);
-            int y31 = OsmAnd::Utilities::get31TileNumberY(s.coordinate.latitude);
+            int x31 = OsmAnd::Utilities::get31TileNumberX(loc.coordinate.longitude);
+            int y31 = OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude);
             
             int zoomToLoad = 14;
             

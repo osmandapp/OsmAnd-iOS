@@ -52,6 +52,7 @@ struct RouteSegmentResult;
 @property (nonatomic, readonly) EOARouteService routeProvider;
 @property (nonatomic) NSArray<OAWorldRegion *> * missingMaps;
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
+@property (nonatomic) NSArray<OAWorldRegion *> * potentiallyUsedMaps;
 
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;

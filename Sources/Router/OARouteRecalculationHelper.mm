@@ -391,7 +391,7 @@
         {
             if ([res.missingMaps count] || [res.mapsToUpdate count])
             {
-                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate];
+                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate  potentiallyUsedMaps:res.potentiallyUsedMaps];
             }
         }
     }
@@ -401,7 +401,7 @@
         {
             if ([res.missingMaps count] || [res.mapsToUpdate count])
             {
-                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate];
+                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate potentiallyUsedMaps:res.potentiallyUsedMaps];
                 return;
             }
         }

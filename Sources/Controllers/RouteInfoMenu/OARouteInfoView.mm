@@ -127,6 +127,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     BOOL _hasEmptyTransportRoute;
     NSArray<OAWorldRegion *> * _missingMaps;
     NSArray<OAWorldRegion *> * _mapsToUpdate;
+    NSArray<OAWorldRegion *> * _potentiallyUsedMaps;
     BOOL _optionsMenuSelected;
 
     NSIndexPath *_routingInfoIndexPath;
@@ -1272,6 +1273,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMap
                             mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
+                     potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         directionInfo = -1;
@@ -1280,6 +1282,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _progressBarView = nil;
         _missingMaps = missingMap;
         _mapsToUpdate = mapsToUpdate;
+        _potentiallyUsedMaps = potentiallyUsedMaps;
         _hasEmptyTransportRoute = NO;
         [self updateMenu];
     });
@@ -1928,8 +1931,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 }
 
 - (CGFloat)missingOrOutdatedMapsViewHeight {
+    [[self missingOrOutdatedMapsView].stackView layoutIfNeeded];
     CGFloat height = [[self missingOrOutdatedMapsView].stackView systemLayoutSizeFittingSize:UILayoutFittingCompressedSize].height;
-    return height + 84;
+    return height + 104;
 }
 
 - (LeftIconRightStackTitleDescriptionButtonView *)missingOrOutdatedMapsView {
@@ -1938,10 +1942,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _missingOrOutdatedMapsView = LeftIconRightStackTitleDescriptionButtonView.view;
         __weak __typeof(self) weakSelf = self;
         _missingOrOutdatedMapsView.didBottomButtonTapAction = ^{
-            OARequiredMapsResourceViewController *controller = [OARequiredMapsResourceViewController new];
-            NSLog(@"didBottomButtonTapAction");
-#warning show controller
-            
+            [weakSelf showRequiredMapsResourceViewController];
         };
         [_missingOrOutdatedMapsView configureWithTitle:OALocalizedString(@"missing_or_outdated_maps_title")
                                            description:OALocalizedString(@"missing_or_outdated_maps_description")
@@ -1950,6 +1951,19 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
                                     leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
     }
     return _missingOrOutdatedMapsView;
+}
+
+- (void)showRequiredMapsResourceViewController
+{
+    if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
+    {
+        OARequiredMapsResourceViewController *viewController = [[OARequiredMapsResourceViewController alloc] initWithWorldRegion:_missingMaps mapsToUpdate:_mapsToUpdate potentiallyUsedMaps:_potentiallyUsedMaps];
+        [OARootViewController.instance presentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES completion:nil];
+    }
+    else
+    {
+        NSLog(@"showRequiredMapsResourceViewController _missingMaps or _mapsToUpdate is empty");
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section

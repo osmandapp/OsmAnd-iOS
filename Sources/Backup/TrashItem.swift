@@ -13,15 +13,15 @@ import Foundation
 final class TrashItem: NSObject {
 
     let oldFile: OARemoteFile
-    let deletedFile: OARemoteFile
+    let deletedFile: OARemoteFile?
 
-    init(oldFile: OARemoteFile, deletedFile: OARemoteFile) {
+    init(oldFile: OARemoteFile, deletedFile: OARemoteFile?) {
         self.oldFile = oldFile
         self.deletedFile = deletedFile
     }
 
     var time: Int {
-        deletedFile.updatetimems / 1000
+        (deletedFile?.updatetimems ?? oldFile.updatetimems) / 1000
     }
 
     var name: String {
@@ -46,11 +46,15 @@ final class TrashItem: NSObject {
     }
 
     var settingsItem: OASettingsItem? {
-        deletedFile.item
+        deletedFile?.item ?? oldFile.item
     }
 
     var remoteFiles: [OARemoteFile] {
-        [oldFile, deletedFile]
+        var files = [oldFile]
+        if let deletedFile {
+            files.append(deletedFile)
+        }
+        return files
     }
 
     override var hash: Int {

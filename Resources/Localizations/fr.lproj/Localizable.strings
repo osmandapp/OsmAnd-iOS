@@ -3374,6 +3374,6 @@
 "shared_string_file_info" = "Informations du fichier";
 "rendering_value_managerName_name" = "Par nom de gestionnaire";
 "rendering_attr_padusDisplayMode_description" = "Par type d'accès ou nom de gestionnaire";
-"rendering_attr_padusDisplayMode_name" = "Mode d'affichage des terres publiques";
-"rendering_attr_padusHideBoundaries_name" = "Masquer les limites des terres publiques";
-"rendering_attr_padusHideBoundaries_description" = "Masquer les limites des terres publiques mais laisser les zones";
+"rendering_attr_padusDisplayMode_name" = "Mode d'affichage des terrains publiques";
+"rendering_attr_padusHideBoundaries_name" = "Masquer les limites des terrains publiques";
+"rendering_attr_padusHideBoundaries_description" = "Masquer les limites des terrains publiques mais afficher les surfaces";

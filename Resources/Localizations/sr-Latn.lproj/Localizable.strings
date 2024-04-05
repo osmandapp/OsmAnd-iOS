@@ -2774,7 +2774,7 @@
 "help_article_map_legend_osmand_name" = "Stil OsmAnd mape";
 "help_article_map_legend_ski_map_name" = "Stil skijaške mape";
 "help_article_map_map_context_menu_name" = "Priručni meni mape";
-"help_article_map_track_context_menu_name" = "Priručni meni trasa";
+"help_article_map_track_context_menu_name" = "Priručni meni staza";
 "help_article_map_raster_maps_name" = "Rasterske mape (online/ offline)";
 "help_article_map_tracks_on_map_name" = "Trase i rute";
 "help_article_map_vector_maps_name" = "Vektorske mape (stil mape)";

@@ -2324,7 +2324,7 @@
 "osmand_cloud_login_descr" = "Veuillez saisir l'adresse email utilisée à l'inscription. Vous allez recevoir, à cette adresse, un mot de passe à usage unique.";
 "cloud_conflicts" = "Conflits";
 "set_up_backup" = "Paramétrer la sauvegarde";
-"restore_from_file" = "Restaurer à partir d\\'un fichier";
+"restore_from_file" = "Restaurer à partir d'un fichier";
 "osmand_cloud_authorize_descr" = "Ne perdez jamais vos données. Sauvegardez et restaurez facilement toutes vos informations.";
 "resend_verification_code" = "Renvoyer le code";
 "last_backup" = "Dernière sauvegarde";
@@ -2518,7 +2518,7 @@
 "weather_clear_online_cache" = "Ça effacera tous les caches pour les tuiles météo en ligne.";
 "shared_string_total_size" = "Taille totale";
 "shared_string_delete_all" = "Tout supprimer";
-"restore_from_osmand_cloud" = "Restaurerà partir d’OsmAnd Cloud";
+"restore_from_osmand_cloud" = "Restaurer à partir d’OsmAnd Cloud";
 "all_maps_are_up_to_date" = "Toutes les cartes sont à jour";
 "lang_ckb" = "Sorani";
 "shared_string_restoring" = "Restauration";

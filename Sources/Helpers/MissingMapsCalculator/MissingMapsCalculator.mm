@@ -47,6 +47,7 @@ static const double DISTANCE_SKIP = 10000;
 {
     OAWorldRegion *_or;
     NSMutableArray<NSString *> *_lastKeyNames;
+    std::shared_ptr<RoutingContext> _ctx;
 }
 
 - (instancetype)init
@@ -58,12 +59,25 @@ static const double DISTANCE_SKIP = 10000;
     }
     return self;
 }
+- (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
+                                    targets:(NSArray<CLLocation *> *)targets
+                            checkHHEditions:(BOOL)checkHHEditions
+{
+    return [self checkIfThereAreMissingMaps:_ctx start:start targets:targets checkHHEditions:checkHHEditions];
+}
 
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
                              start:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions
 {
+    _ctx = ctx;
+    self.startPoint = start;
+    if (targets.count > 0)
+    {
+        self.endPoint = targets.lastObject;
+    }
+
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
     _lastKeyNames = [NSMutableArray new];
     NSMutableArray<MissingMapsCalculatorPoint *> *pointsToCheck = [NSMutableArray new];

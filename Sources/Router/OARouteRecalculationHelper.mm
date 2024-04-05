@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAResourcesUIHelper.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -389,21 +390,14 @@
         [self showMessage:_routeCalcError];
         if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
         {
-            if ([res.missingMaps count] || [res.mapsToUpdate count])
-            {
-                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate  potentiallyUsedMaps:res.potentiallyUsedMaps];
-            }
+            [self configureNewRouteHasMissingOrOutdatedMaps:res];
         }
     }
     else
     {
         if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
         {
-            if ([res.missingMaps count] || [res.mapsToUpdate count])
-            {
-                [_routingHelper newRouteHasMissingOrOutdatedMaps:res.missingMaps mapsToUpdate:res.mapsToUpdate potentiallyUsedMaps:res.potentiallyUsedMaps];
-                return;
-            }
+            [self configureNewRouteHasMissingOrOutdatedMaps:res];
         }
        
         if (res.errorMessage)
@@ -417,6 +411,30 @@
             _routeCalcError = OALocalizedString(@"empty_route_calculated");
             _routeCalcErrorShort = OALocalizedString(@"empty_route_calculated");
             [self showMessage:_routeCalcError];
+        }
+    }
+}
+
+- (void)configureNewRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
+{
+    if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
+    {
+        BOOL hasMapsForDownload = NO;
+        if (result.mapsToUpdate.count > 0)
+        {
+            hasMapsForDownload = YES;
+        }
+        else
+        {
+            NSArray<OAResourceItem *> *_missingMapsResourcesForDownload = [OAResourcesUIHelper getMapRegionResourcesToDownloadForRegions:result.missingMaps];
+            if (_missingMapsResourcesForDownload.count > 0)
+            {
+                hasMapsForDownload = YES;
+            }
+        }
+        if (hasMapsForDownload)
+        {
+            [_routingHelper newRouteHasMissingOrOutdatedMaps:result.missingMaps mapsToUpdate:result.mapsToUpdate potentiallyUsedMaps:result.potentiallyUsedMaps];
         }
     }
 }

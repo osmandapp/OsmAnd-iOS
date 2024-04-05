@@ -18,12 +18,18 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSArray<OAWorldRegion *> * missingMaps;
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 
+@property (nonatomic) CLLocation *startPoint;
+@property (nonatomic) CLLocation *endPoint;
+
 - (instancetype)init;
 
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
                              start:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions;
+- (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
+                                    targets:(NSArray<CLLocation *> *)targets
+                            checkHHEditions:(BOOL)checkHHEditions;
 - (NSString *)getErrorMessage;
 
 @end

@@ -24,6 +24,7 @@
 #import "OARouteCalculationParams.h"
 #import "OAProgressTitleCell.h"
 
+#include <OsmAndCore/WorldRegions.h>
 #include <routePlannerFrontEnd.h>
 
 @interface OARequiredMapsResourceViewController ()
@@ -52,7 +53,6 @@
 - (instancetype)initWithWorldRegion:(NSArray<OAWorldRegion *> *)missingMaps
                        mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                 potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
-                        startPoint:(CLLocation *)potentiallyUsedMaps
 {
     self = [super init];
     if (self)
@@ -106,7 +106,7 @@
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return @[[self createRightNavbarButton:OALocalizedString(@"shared_string_select_all")
+    return @[[self createRightNavbarButton:_selectedResourcesItems.count > 0 ? OALocalizedString(@"shared_string_deselect_all") : OALocalizedString(@"shared_string_select_all")
                                   iconName:nil
                                     action:@selector(onRightNavbarButtonPressed)
                                       menu:nil]];
@@ -115,36 +115,6 @@
 - (NSString *)getTitle
 {
     return OALocalizedString(@"required_maps");
-}
-
-- (void)selectAllCells:(BOOL)shouldSelect
-{
-    if (shouldSelect)
-    {
-        _selectedResourcesItems = [_resourcesItems mutableCopy];
-    }
-    else
-    {
-        [_selectedResourcesItems removeAllObjects];
-    }
-    
-    for (NSInteger i = 0; i < _resourcesItems.count; i++)
-    {
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
-        if (shouldSelect)
-            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-        else
-            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
-    }
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
-                    animations:^(void) {
-        [self.tableView reloadData];
-    }
-                    completion:nil];
-    [self updateBottomButtons];
-    [self setupNavbarButtons];
 }
 
 - (void)onRightNavbarButtonPressed
@@ -183,15 +153,14 @@
             progressOnlineRouting.title = OALocalizedString(@"getting_list_required_maps");
             return;
         }
-        // TODO: dynamic footerText
-        mainSection.footerText = @"Maps that will also be used: \"Hamburg, Germany\", \"Saarland, Germany\", \"Saxony, Germany\".  \"Masovia, Poland\".";
+        mainSection.footerText = [self getFooterText];
         for (int i = 0; i < _resourcesItems.count; i++)
         {
             OATableRowData *resourceRow = [mainSection createNewRow];
             resourceRow.cellType = [OASimpleTableViewCell getCellIdentifier];
         }
         
-        if (!_isOnlineCalculateFinished)
+        if ([self isAvailableCalculateOnlineSection] && !_isOnlineCalculateFinished)
         {
             OATableSectionData *calculateOnlineSection = [_data createNewSection];
             OATableRowData *calculateOnlineTitleRow = [calculateOnlineSection createNewRow];
@@ -204,7 +173,6 @@
         }
     }
 }
-
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
@@ -369,57 +337,130 @@
 
 #pragma mark - Private methods
 
+- (NSString *)getCountryName:(OAWorldRegion *)reg
+{
+    NSString *countryName;
+    
+    OAWorldRegion *worldRegion = [OsmAndApp instance].worldRegion;
+    OAWorldRegion *region = reg;
+    
+    if (region.superregion)
+    {
+        while (region.superregion != worldRegion && region.superregion != nil)
+            region = region.superregion;
+        
+        if ([region.regionId isEqualToString:OsmAnd::WorldRegions::RussiaRegionId.toNSString()])
+            countryName = region.name;
+        else if (reg.superregion.superregion != worldRegion)
+            countryName = reg.superregion.name;
+    }
+    
+    return countryName;
+}
+
+- (NSString *)configureFooterTextForRegions:(NSArray<OAWorldRegion *> *)regions
+{
+    // Maps that will also be used: "Hamburg, Germany", "Saarland, Germany", "Saxony, Germany".
+    NSMutableString *description = [NSMutableString string];
+    if (regions.count > 0)
+    {
+        for (NSInteger i = 0; i < regions.count; i++) {
+            OAWorldRegion *region = regions[i];
+            NSString *title = region.localizedName;
+            if (region.superregion)
+            {
+                NSString *countryName = [self getCountryName:region];
+                if (countryName)
+                    title = [NSString stringWithFormat:@"\"%@, %@\"", region.localizedName, countryName];
+            }
+            if (i == 0)
+                [description appendString:title];
+            else
+                [description appendString:[NSString stringWithFormat:@", %@", title]];
+        }
+        [description appendString:@"."];
+    }
+    return [NSString stringWithFormat:OALocalizedString(@"required_maps_list"), description];
+}
+
+- (NSString *)getFooterText
+{
+    if (_potentiallyUsedMaps.count > 0)
+    {
+        return [self configureFooterTextForRegions:_potentiallyUsedMaps];
+    }
+    else if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
+    {
+        NSArray<OAWorldRegion *> *regions = [NSArray arrayWithArray:[_missingMaps arrayByAddingObjectsFromArray:_mapsToUpdate]];
+        
+        NSMutableArray<OAWorldRegion *> *filteredRegions = [NSMutableArray array];
+        
+        for (OAWorldRegion *region in regions) {
+            BOOL shouldIncludeRegion = YES;
+            
+            for (OAResourceItem *resourceItem in _resourcesItems) {
+                if ([resourceItem.resourceId.toNSString() containsString:region.downloadsIdPrefix]) {
+                    shouldIncludeRegion = NO;
+                    break;
+                }
+            }
+            if (shouldIncludeRegion) {
+                [filteredRegions addObject:region];
+            }
+        }
+        return [self configureFooterTextForRegions:filteredRegions];
+    }
+    return @"";
+}
+
+- (void)selectAllCells:(BOOL)shouldSelect
+{
+    if (shouldSelect)
+    {
+        _selectedResourcesItems = [_resourcesItems mutableCopy];
+    }
+    else
+    {
+        [_selectedResourcesItems removeAllObjects];
+    }
+    
+    for (NSInteger i = 0; i < _resourcesItems.count; i++)
+    {
+        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:1 inSection:1];
+        if (shouldSelect)
+            [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+        else
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    }
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve | UIViewAnimationOptionAllowUserInteraction
+                    animations:^(void) {
+        [self.tableView reloadData];
+    }
+                    completion:nil];
+    [self updateBottomButtons];
+    [self setupNavbarButtons];
+}
+
 - (void)configureResourceItems
 {
     _resourcesItems = @[];
     _selectedResourcesItems = [NSMutableArray array];
-    NSMutableArray<OAResourceItem *> *mapItems = [NSMutableArray array];
-    NSArray<OAWorldRegion *> *regions = [NSArray arrayWithArray:[_missingMaps arrayByAddingObjectsFromArray:_mapsToUpdate]];
     
-    NSArray *sortedRegionsMaps = [regions sortedArrayUsingComparator:^NSComparisonResult(OAWorldRegion *obj1, OAWorldRegion *obj2) {
-        return [obj1.localizedName.lowercaseString compare:obj2.localizedName.lowercaseString];
+    NSArray<OAResourceItem *> *_missingMapsResources = [OAResourcesUIHelper getMapRegionResourcesToDownloadForRegions:_missingMaps];
+    NSArray<OAResourceItem *> *_mapsToUpdateResources = [OAResourcesUIHelper getMapRegionResourcesToUpdateForRegions:_mapsToUpdate];
+    
+    NSArray<OAResourceItem *> *resources = [NSArray arrayWithArray:[_missingMapsResources arrayByAddingObjectsFromArray:_mapsToUpdateResources]];
+    
+    NSArray *sortedRegionsMaps = [resources sortedArrayUsingComparator:^NSComparisonResult(OAResourceItem *obj1, OAResourceItem *obj2) {
+        return [obj1.title compare:obj2.title];
     }];
-    for (OAWorldRegion *region in sortedRegionsMaps)
+    
+    if (sortedRegionsMaps.count > 0)
     {
-        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
-        if (ids.count > 0)
-        {
-            OAResourceItem *mapItem = nil;
-            for (NSString *resourceId in ids)
-            {
-                const auto& resource = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
-                if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
-                {
-                    BOOL installed = resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed;
-                    if (!installed || [self containsInMapsToUpdate:resource->id.toNSString()])
-                    {
-                        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
-                        item.resourceId = resource->id;
-                        item.resourceType = resource->type;
-                        item.title = [OAResourcesUIHelper titleOfResource:resource
-                                                                 inRegion:region
-                                                           withRegionName:YES
-                                                         withResourceType:NO];
-                        item.resource = resource;
-                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
-                        item.size = resource->size;
-                        item.sizePkg = resource->packageSize;
-                        item.worldRegion = region;
-                        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
-                        mapItem = item;
-                    }
-                }
-            }
-            if (mapItem)
-            {
-                [mapItems addObject:mapItem];
-            }
-        }
-    }
-    if (mapItems.count > 0)
-    {
-        _resourcesItems = mapItems;
-        _selectedResourcesItems = [mapItems mutableCopy];
+        _resourcesItems = sortedRegionsMaps;
+        _selectedResourcesItems = [sortedRegionsMaps mutableCopy];
         [self.tableView reloadData];
     }
 }
@@ -463,36 +504,38 @@
         [self selectAllCells:NO];
         [self reloadDataWithAnimated:NO completion:nil];
         __weak __typeof(self) weakSelf = self;
-        [self onlineCalculateRequestStartPoint:nil endPoint:nil completion:^(NSArray<CLLocation *> *locations, NSError *error) {
+        OARouteProvider *routeProvider = [OARoutingHelper sharedInstance].getRouteProvider;
+        auto missingMapsCalculator = [routeProvider missingMapsCalculator];
+        [self.navigationItem setRightBarButtonItemsisEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
+        [OAResourcesUIHelper onlineCalculateRequestStartPoint:missingMapsCalculator.startPoint endPoint:missingMapsCalculator.endPoint completion:^(NSArray<CLLocation *> *locations, NSError *error) {
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (!strongSelf)
                 return;
             [strongSelf onlineCalculateFinishState];
             if (!error && locations.count > 0)
             {
-                OARouteCalculationParams *params = [[OARouteCalculationParams alloc] init];
-                params.mode = [[OAAppSettings sharedManager].applicationMode get];
-                
-                auto config = [[OsmAndApp instance] getRoutingConfigForMode:params.mode];
-                auto generalRouter = [[OsmAndApp instance] getRouter:config mode:params.mode];
-                if (generalRouter)
+                CLLocation *startPoint = locations[0];
+                NSMutableArray *targetsPointsArray = [locations mutableCopy];
+                [targetsPointsArray removeObjectAtIndex:0];
+                if ([missingMapsCalculator checkIfThereAreMissingMapsWithStart:startPoint targets:targetsPointsArray checkHHEditions:YES])
                 {
-                    auto cf = [[OARoutingHelper sharedInstance].getRouteProvider initOsmAndRoutingConfig:config params:params generalRouter:generalRouter];
-                    if (cf)
-                    {
-                        auto router = std::make_shared<RoutePlannerFrontEnd>();
-                        std::shared_ptr<RoutingContext> ctx = router->buildRoutingContext(cf, RouteCalculationMode::NORMAL);
-                        MissingMapsCalculator *missingMapsCalculator = [MissingMapsCalculator new];
-                        if ([missingMapsCalculator checkIfThereAreMissingMaps:ctx start:locations[0] targets:@[(locations.count > 1 ? locations[1] : locations[0])] checkHHEditions:YES])
-                        {
-                            dispatch_async(dispatch_get_main_queue(), ^{
-                                [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
-                                                                     mapsToUpdate:missingMapsCalculator.mapsToUpdate
-                                                              potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
-                            });
-                        }
-                    }
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
+                                                             mapsToUpdate:missingMapsCalculator.mapsToUpdate
+                                                      potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
+                        [strongSelf selectAllCells:YES];
+                    });
+                } else {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [strongSelf reloadDataWithAnimated:NO completion:nil];
+                        [strongSelf selectAllCells:YES];
+                    });
                 }
+            } else {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [strongSelf reloadDataWithAnimated:NO completion:nil];
+                    [strongSelf selectAllCells:YES];
+                });
             }
         }];
     }
@@ -533,128 +576,16 @@
     }
 }
 
-- (NSString *)formatCLLocationToPointString:(CLLocation *)point
-{
-    return [NSString stringWithFormat:@"%f,%f", point.coordinate.latitude, point.coordinate.longitude];
-}
-
-typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError *error);
-
-- (void)onlineCalculateRequestStartPoint:(CLLocation *)startPoint
-                                endPoint:(CLLocation *)endPoint
-                              completion:(LocationArrayCallback)completion
-{
-    NSLog(@"onlineCalculateRequestStartPoint start");
-    NSURLSession *session = [NSURLSession sharedSession];
-    
-    NSString *baseUrlString = @"https://maptile.osmand.net/routing/route";
-    NSString *routeMode = [[OAAppSettings sharedManager].applicationMode get].stringKey;
-    NSString *startPointString = [self formatCLLocationToPointString:startPoint];
-    NSString *endPointString = [self formatCLLocationToPointString:endPoint];
-    
-    NSString *urlString = [NSString stringWithFormat:@"%@?routeMode=%@&points=%@&points=%@", baseUrlString, routeMode, startPointString, endPointString];
-    NSURL *url = [NSURL URLWithString:urlString];
-    NSURLRequest *request = [NSURLRequest requestWithURL:url];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
-                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSLog(@"onlineCalculateRequestStartPoint finish");
-        if (error)
-        {
-            NSLog(@"Error: %@", error);
-            if (completion)
-            {
-                completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: error.localizedDescription}]);
-            }
-        } 
-        else
-        {
-            if ([response isKindOfClass:[NSHTTPURLResponse class]])
-            {
-                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-                if (httpResponse.statusCode == 200)
-                {
-                    if (data)
-                    {
-                        @try
-                        {
-                            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
-                            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
-                            NSArray *features = json[@"features"];
-                            NSMutableArray *locationArray = [NSMutableArray array];
-                            for (NSDictionary *feature in features)
-                            {
-                                NSDictionary *geometry = feature[@"geometry"];
-                                NSString *geometryType = geometry[@"type"];
-                                if ([geometryType isEqualToString:@"LineString"])
-                                {
-                                    NSArray *coordinates = geometry[@"coordinates"];
-                                    for (NSArray *array in coordinates)
-                                    {
-                                        if (array.count >= 2)
-                                        {
-                                            double latitude = [array[0] doubleValue];
-                                            double longitude = [array[1] doubleValue];
-                                            [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
-                                        }
-                                    }
-                                }
-                                else if ([geometryType isEqualToString:@"Point"])
-                                {
-                                    NSArray *coordinates = geometry[@"coordinates"];
-                                    if (coordinates.count >= 2)
-                                    {
-                                        double latitude = [coordinates[0] doubleValue];
-                                        double longitude = [coordinates[1] doubleValue];
-                                        [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
-                                    }
-                                }
-                            }
-                            NSLog(@"Coordinates array: %@", locationArray);
-                            if (completion)
-                            {
-                                completion([locationArray copy], nil);
-                            }
-                        }
-                        @catch (NSException *e)
-                        {
-                            NSLog(@"NSException: %@", e.reason);
-                            if (completion)
-                            {
-                                completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:2 userInfo:@{NSLocalizedDescriptionKey: e.reason}]);
-                            }
-                        }
-                    } else {
-                        NSLog(@"Error: No data received");
-                        if (completion)
-                        {
-                            completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:3 userInfo:@{NSLocalizedDescriptionKey: @"Error: No data received"}]);
-                        }
-                    }
-                } else {
-                    NSLog(@"Error: Unexpected HTTP status code: %ld", (long)httpResponse.statusCode);
-                    if (completion)
-                    {
-                        completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:4 userInfo:@{NSLocalizedDescriptionKey: @"Error: Unexpected HTTP status code"}]);
-                    }
-                }
-            } else {
-                NSLog(@"Error: Unexpected response type");
-                if (completion)
-                {
-                    completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:5 userInfo:@{NSLocalizedDescriptionKey: @"Error: Unexpected response type"}]);
-                }
-            }
-        }
-    }];
-    
-    [task resume];
-    [session finishTasksAndInvalidate];
-}
-
 - (void)onlineCalculateFinishState
 {
     _isActiveOnlineCalculateRequest = NO;
     _isOnlineCalculateFinished = YES;
+}
+
+- (BOOL)isAvailableCalculateOnlineSection
+{
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
+    return [@[OAApplicationMode.CAR, OAApplicationMode.BICYCLE] containsObject:currentMode];
 }
 
 @end

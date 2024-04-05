@@ -634,6 +634,11 @@
     return res;
 }
 
+- (MissingMapsCalculator *)missingMapsCalculator
+{
+    return _missingMapsCalculator;
+}
+
 - (OARouteCalculationResult *) applicationModeNotSupported:(OARouteCalculationParams *)params
 {
     return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Application mode '%@' is not supported.", params.mode.variantKey]];
@@ -865,14 +870,8 @@
 - (BOOL)checkIfThereAreMissingMapsStartPoint:(CLLocation *)start
                                      targets:(NSArray<CLLocation *> *)targets
 {
-    if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:YES])
-    {
-        OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
-        r.missingMaps = _missingMapsCalculator.missingMaps;
-        r.mapsToUpdate = _missingMapsCalculator.mapsToUpdate;
-        r.potentiallyUsedMaps = _missingMapsCalculator.potentiallyUsedMaps;
-        return r;
-    }
+    NSAssert(_missingMapsCalculator, @"should be inited in calcOfflineRouteImpl");
+    return [_missingMapsCalculator checkIfThereAreMissingMapsWithStart:start targets:targets checkHHEditions:YES];
 }
 
 - (OARouteCalculationResult *) calcOfflineRouteImpl:(OARouteCalculationParams *)params router:(std::shared_ptr<RoutePlannerFrontEnd>)router ctx:(std::shared_ptr<RoutingContext>)ctx complexCtx:(std::shared_ptr<RoutingContext>)complexCtx st:(CLLocation *)st en:(CLLocation *)en inters:(NSArray<CLLocation *> *)inters precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated

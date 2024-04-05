@@ -17,6 +17,7 @@
 #import "OAAppSettings.h"
 #import "OAResultMatcher.h"
 #import "OALocationSimulation.h"
+#import "MissingMapsCalculator.h"
 
 #include <OsmAndCore.h>
 
@@ -124,5 +125,9 @@ struct RouteSegmentResult;
                                                                  gpxFile:(OAGPXDocument *)gpxFile
                                                         segmentEndpoints:(NSMutableArray<CLLocation *> *)segmentEndpoints
                                                          selectedSegment:(NSInteger)selectedSegment;
+
+- (BOOL)checkIfThereAreMissingMapsStartPoint:(CLLocation *)start
+                           targets:(NSArray<CLLocation *> *)targets;
+- (MissingMapsCalculator *)missingMapsCalculator;
 
 @end

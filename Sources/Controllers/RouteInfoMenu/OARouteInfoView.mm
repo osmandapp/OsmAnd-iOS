@@ -63,6 +63,7 @@
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
 #import "OARequiredMapsResourceViewController.h"
+#import "OAResourcesUIHelper.h"
 
 #include <OsmAndCore/Map/FavoriteLocationsPresenter.h>
 
@@ -1936,13 +1937,30 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return height + 104;
 }
 
+- (void)showRequiredMapsResourceViewControllerIfNeeded
+{
+    NSArray<OAResourceItem *> *_missingMapsResources = [OAResourcesUIHelper getMapRegionResourcesToDownloadForRegions:_missingMaps];
+    NSArray<OAResourceItem *> *_mapsToUpdateResources = [OAResourcesUIHelper getMapRegionResourcesToUpdateForRegions:_mapsToUpdate];
+    if (_missingMapsResources.count > 0 || _mapsToUpdateResources.count > 0)
+    {
+        [self showRequiredMapsResourceViewController];
+    }
+    else
+    {
+        // maps were downloaded while we were in this state. Сlear the state
+        [self clearMissingOrToUpdateMaps];
+        [self updateData];
+        [self.tableView reloadData];
+    }
+}
+
 - (LeftIconRightStackTitleDescriptionButtonView *)missingOrOutdatedMapsView {
     if (!_missingOrOutdatedMapsView)
     {
         _missingOrOutdatedMapsView = LeftIconRightStackTitleDescriptionButtonView.view;
         __weak __typeof(self) weakSelf = self;
         _missingOrOutdatedMapsView.didBottomButtonTapAction = ^{
-            [weakSelf showRequiredMapsResourceViewController];
+            [weakSelf showRequiredMapsResourceViewControllerIfNeeded];
         };
         [_missingOrOutdatedMapsView configureWithTitle:OALocalizedString(@"missing_or_outdated_maps_title")
                                            description:OALocalizedString(@"missing_or_outdated_maps_description")

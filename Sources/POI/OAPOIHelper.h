@@ -117,5 +117,4 @@ const static int kSearchRadiusKm[] = {1, 2, 5, 10, 20, 50, 100};
 
 + (NSString *) processLocalizedNames:(const QHash<QString, QString> &)localizedNames nativeName:(const QString &)nativeName names:(NSMutableDictionary *)names;
 + (void) processDecodedValues:(const QList<OsmAnd::Amenity::DecodedValue> &)decodedValues content:(NSMutableDictionary *)content values:(NSMutableDictionary *)values;
-
 @end

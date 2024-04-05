@@ -934,7 +934,7 @@
 "profile_appearance_descr" = "Ikonica, boja i ime";
 "ui_customization" = "Prilagođavanje korisničkog interfejsa";
 "ui_customization_short_descr" = "Elementi glavnog i kontekstnog menija";
-"reorder_profiles" = "Izmeni spisak profila";
+"reorder_profiles" = "Izmeni listu profila";
 "profile_alert_need_profile_name_title" = "Unesi ime profila";
 "select_color" = "Odaberi boju";
 "select_icon_profile_dialog_title" = "Odaberi ikonu";
@@ -2774,7 +2774,7 @@
 "help_article_map_legend_osmand_name" = "Stil OsmAnd mape";
 "help_article_map_legend_ski_map_name" = "Stil skijaške mape";
 "help_article_map_map_context_menu_name" = "Priručni meni mape";
-"help_article_map_track_context_menu_name" = "Priručni meni trasa";
+"help_article_map_track_context_menu_name" = "Priručni meni staza";
 "help_article_map_raster_maps_name" = "Rasterske mape (online/ offline)";
 "help_article_map_tracks_on_map_name" = "Trase i rute";
 "help_article_map_vector_maps_name" = "Vektorske mape (stil mape)";
@@ -2847,7 +2847,7 @@
 "upload_all" = "Skinuti sve";
 "cloud_all_changes_uploaded" = "Sve izmene su otpremljene";
 "cloud_all_changes_downloaded" = "Sve izmene su preuzete";
-"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim spisak fajlova sa servera.";
+"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim listu fajlova sa servera.";
 "last_sync" = "Poslednja sinhronizacija";
 "mtb_imba_full" = "Internacionalno udruženje planinskih biciklista";
 "rendering_attr_showMtbScale_name" = "Prikazuj skalu MTB-a";
@@ -2857,7 +2857,7 @@
 "map_widget_group_sunrise_sunset_desc" = "Ovi vidžeti prikazuju podatke o sledećem izlasku i zalasku Sunca.";
 "map_widget_group_sunrise_sunset" = "Izlazak, zalazak Sunca";
 "map_settings_weather_wind" = "Vetar";
-"map_settings_weather_cloud" = "Oblak";
+"map_settings_weather_cloud" = "Oblačnost";
 "map_settings_weather_precip" = "Padavine";
 "measurement_units" = "Merne jedinice";
 "weather_precip_milimeters" = "Milimetri";

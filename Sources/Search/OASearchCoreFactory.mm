@@ -777,7 +777,9 @@
                                   OAPOI *object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
-                                  sr.localeName = amenity->getName(lang, transliterate).toNSString();
+                                  sr.localeName = amenity->getName(lang, false).toNSString();
+                                  if (transliterate && ![nm matches:sr.localeName])
+                                      sr.localeName = amenity->getName(lang, transliterate).toNSString();
                                   if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
                                       && ![nm matchesMap:object.getAdditionalInfo.allValues]) {
                                       return false;

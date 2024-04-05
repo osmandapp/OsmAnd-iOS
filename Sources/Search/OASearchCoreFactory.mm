@@ -733,6 +733,7 @@
     
     searchCriteria->name = QString::fromNSString(searchWord);
     searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
+    const auto bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
 
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
@@ -752,9 +753,9 @@
             continue;
         searchCriteria->localResources = {r};
         if ([resId containsString:@"basemap"])
-            searchCriteria->bbox31 = OsmAnd::AreaI(0, 0, INT_MAX, INT_MAX);
+            searchCriteria->bbox31 = nullptr;
         else
-            searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
+            searchCriteria->bbox31 = bbox31;
 
         search->performSearch(*searchCriteria,
                               [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &ids]

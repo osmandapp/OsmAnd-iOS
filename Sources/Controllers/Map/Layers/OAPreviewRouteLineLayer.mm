@@ -337,7 +337,7 @@
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
+        width = [self getParamFromAttr:@"strokeWidth"].floatValue * VECTOR_LINE_SCALE_COEF;
     }
 
     return width;

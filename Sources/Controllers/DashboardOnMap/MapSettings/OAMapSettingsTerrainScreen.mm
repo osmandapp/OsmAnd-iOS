@@ -35,6 +35,7 @@
 #import "OASizes.h"
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kRelief3DCellRowHeight 48.3
 
@@ -71,7 +72,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     {
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
-        _plugin = (OASRTMPlugin *) [OAPlugin getPlugin:OASRTMPlugin.class];
+        _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
         settingsScreen = EMapSettingsScreenTerrain;
 
         vwController = viewController;

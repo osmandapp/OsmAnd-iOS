@@ -20,6 +20,7 @@
 #import "OAPOI.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 @implementation OATargetPointViewCell
 
@@ -50,7 +51,7 @@
         _iconView.image = [UIImage imageNamed:@"map_parking_pin"];
         [_titleView setText:OALocalizedString(@"map_widget_parking")];
         [self updateDescriptionView];
-        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
         if (plugin && plugin.getParkingType)
             [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] creationDate:[NSDate dateWithTimeIntervalSince1970:plugin.getStartParkingTime / 1000] label:self.descriptionView shortText:NO];
     }

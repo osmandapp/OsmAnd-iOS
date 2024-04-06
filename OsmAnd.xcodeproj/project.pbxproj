@@ -17,6 +17,9 @@
 		05898FAD2B4DACBE00E64B58 /* map-icons-svg in Resources */ = {isa = PBXBuildFile; fileRef = 05898FAC2B4DACBD00E64B58 /* map-icons-svg */; };
 		05898FAF2B4DACD900E64B58 /* map-shaders-svg in Resources */ = {isa = PBXBuildFile; fileRef = 05898FAE2B4DACD900E64B58 /* map-shaders-svg */; };
 		05898FB22B511E0500E64B58 /* OASvgHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05898FB12B511E0500E64B58 /* OASvgHelper.mm */; };
+		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
+		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
+		05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
 		0A0EABFD26E618FB0044E82C /* ic_custom_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */; };
 		0A0EABFE26E618FB0044E82C /* ic_custom_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */; };
@@ -3473,6 +3476,11 @@
 		05898FAE2B4DACD900E64B58 /* map-shaders-svg */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "map-shaders-svg"; path = "../resources/rendering_styles/style-icons/map-shaders-svg"; sourceTree = "<group>"; };
 		05898FB02B511E0500E64B58 /* OASvgHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASvgHelper.h; sourceTree = "<group>"; };
 		05898FB12B511E0500E64B58 /* OASvgHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASvgHelper.mm; sourceTree = "<group>"; };
+		05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAOnlinePlugin.h; sourceTree = "<group>"; };
+		05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAOnlinePlugin.mm; sourceTree = "<group>"; };
+		05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPluginsHelper.h; sourceTree = "<group>"; };
+		05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPluginsHelper.mm; sourceTree = "<group>"; };
+		05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PluginsHelper+Extension.swift"; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
 		0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@2x.png"; path = "Resources/Icons/ic_custom_info@2x.png"; sourceTree = "<group>"; };
 		0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@3x.png"; path = "Resources/Icons/ic_custom_info@3x.png"; sourceTree = "<group>"; };
@@ -9988,6 +9996,7 @@
 				46207CF62B9A7EDE000D337D /* String+Extension.swift */,
 				32DA38A62BA9C4C600A3AC3C /* CLLocation+Extension.h */,
 				32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */,
+				05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -11106,10 +11115,14 @@
 				DA5A799526C563A000F274C7 /* Mapillary */,
 				DA5A798C26C563A000F274C7 /* Monitoring */,
 				DA5A797A26C563A000F274C7 /* NauticalMapsPlugin */,
+				05CC79542BB98B0B00BAC638 /* OAOnlinePlugin.h */,
+				05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */,
 				DA5A799426C563A000F274C7 /* OACustomPlugin.h */,
 				DA5A798726C563A000F274C7 /* OACustomPlugin.mm */,
 				DA5A798326C563A000F274C7 /* OAPlugin.h */,
 				DA5A798826C563A000F274C7 /* OAPlugin.mm */,
+				05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */,
+				05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */,
 				DA5A797D26C563A000F274C7 /* OsmEditing */,
 				DA5A799126C563A000F274C7 /* Parking */,
 				DA5A798026C563A000F274C7 /* SkiMapsPlugin */,
@@ -17710,6 +17723,7 @@
 				4641A4652B98B4A5000D8B32 /* GlideTargetWidget.swift in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
 				DAABE4E32A13752000569F71 /* OAAverageSpeedComputer.m in Sources */,
+				05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */,
 				DA5A852726C563A900F274C7 /* OAOverlayUnderlayView.m in Sources */,
 				46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */,
 				DA5A852526C563A900F274C7 /* OATableViewCellWithSwitch.m in Sources */,
@@ -17725,6 +17739,7 @@
 				DA5A81E726C563A700F274C7 /* OAGPXTrackAnalysis.mm in Sources */,
 				DA5A84D726C563A900F274C7 /* OAWikipediaLanguagesViewController.mm in Sources */,
 				DA5A82FB26C563A800F274C7 /* OAImageDescTableViewCell.m in Sources */,
+				05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */,
 				DAA61CC62A039BC700AFF65D /* SideWidgetInfo.swift in Sources */,
 				DA5A824F26C563A700F274C7 /* OAVoicePromptsViewController.mm in Sources */,
 				DA5A844826C563A900F274C7 /* OAMultiDestinationCell.mm in Sources */,
@@ -17922,6 +17937,7 @@
 				DA5A819426C563A700F274C7 /* OAParkingAction.mm in Sources */,
 				DA5A84A426C563A900F274C7 /* OAJoinPointsCommand.mm in Sources */,
 				DA5A815726C563A700F274C7 /* OANauticalMapsPlugin.m in Sources */,
+				05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */,
 				DA5A83FB26C563A800F274C7 /* OAPOIFilterViewController.mm in Sources */,
 				32CCE2992AD81AFE00AAADFA /* SearchTravelCell.swift in Sources */,
 				C56FAB5129B226C60096192F /* OACameraDistanceWidget.mm in Sources */,

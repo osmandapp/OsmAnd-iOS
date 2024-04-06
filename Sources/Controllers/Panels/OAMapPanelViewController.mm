@@ -101,6 +101,7 @@
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
 #import "OAGPXMutableDocument.h"
+#import "OAPluginsHelper.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -1922,7 +1923,7 @@ typedef enum
         
         if (self.targetMenuView.targetPoint.type == OATargetParking)
         {
-            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
             if (plugin)
                 [plugin clearParkingPosition];
             [self targetHideContextPinMarker];
@@ -3655,7 +3656,7 @@ typedef enum
 
 - (void) addParking:(OAParkingViewController *)sender
 {
-    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getEnabledPlugin:OAParkingPositionPlugin.class];
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getEnabledPlugin:OAParkingPositionPlugin.class];
     if (plugin)
     {
         [plugin addOrRemoveParkingEvent:sender.addToCalActive];

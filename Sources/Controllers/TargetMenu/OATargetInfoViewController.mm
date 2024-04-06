@@ -46,6 +46,7 @@
 #import "OAEditDescriptionViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -188,7 +189,7 @@
         [_rows addObjectsFromArray:self.additionalRows];
     }
 
-    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class])
+    if ([self showNearestWiki] && !OAIAPHelper.sharedInstance.wiki.disabled && [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class])
         [self buildRowsPoi:YES];
 
     if ([self showNearestPoi])
@@ -217,7 +218,9 @@
     {
         OAPOI *poi = (OAPOI *) targetObj;
         OAPOIUIFilter *filter = [self getPoiFilterForType:poi isWiki:isWiki];
-
+		if (!filter)
+            return;
+        
         if (isWiki)
             [self processNearestWiki:poi];
         else
@@ -371,7 +374,7 @@
     int radius = kNearbyPoiMinRadius;
     OsmAnd::PointI locI = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(self.location.latitude, self.location.longitude));
     NSMutableArray<OAPOI *> *osmwiki = [NSMutableArray new];
-    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class];
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
     NSMutableArray<NSString *> *languagesToShow = [[wikiPlugin getLanguagesToShow] mutableCopy];
     if ([languagesToShow containsObject:@"en"])
     {

@@ -25,6 +25,7 @@
 #import "OAMapPanelViewController.h"
 #import "OADestinationItemsListViewController.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -83,7 +84,7 @@
     [allTypes addObject:@[@(GPXDataSetTypeSpeed)]];
     [allTypes addObject:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
     [allTypes addObject:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)]];
-    [OAPlugin getAvailableGPXDataSetTypes:vwController.analysis availableTypes:allTypes];
+    [OAPluginsHelper getAvailableGPXDataSetTypes:vwController.analysis availableTypes:allTypes];
 
     for (NSInteger i = 0; i < allTypes.count; i++)
     {

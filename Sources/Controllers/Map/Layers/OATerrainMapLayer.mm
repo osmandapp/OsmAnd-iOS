@@ -14,6 +14,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAOsmandDevelopmentPlugin.h"
+#import "OAPluginsHelper.h"
 
 #include "OATerrainMapLayerProvider.h"
 #include <OsmAndCore/Utilities.h>
@@ -74,7 +75,7 @@
     [super updateLayer];
 
     EOATerrainType type = self.app.data.terrainType;
-    if (type != EOATerrainTypeDisabled && [[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
+    if (type != EOATerrainTypeDisabled && [[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
     {
         if (type == EOATerrainTypeSlope)
             [self setupSlopeLayerProvider];

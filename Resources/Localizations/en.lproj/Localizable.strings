@@ -1342,6 +1342,7 @@
 "export_failed" = "Could not export profile";
 "custom_osmand_plugin" = "Custom OsmAnd plugin";
 "custom_plugins" = "Custom plugins";
+"online_plugins" = "Online plugins";
 "extra_maps_menu_group" = "Extra maps";
 
 "import_duplicates_title" = "Some items already exist";

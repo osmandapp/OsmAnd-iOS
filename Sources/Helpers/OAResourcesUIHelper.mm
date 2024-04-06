@@ -26,6 +26,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherPlugin.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -1270,7 +1271,7 @@ includeHidden:(BOOL)includeHidden
         if ([item.downloadUrl hasPrefix:@"@"])
         {
             NSString *relPath = [item.downloadUrl substringFromIndex:1];
-            NSString *pluginPath = [OAPlugin getAbsoulutePluginPathByRegion:item.worldRegion];
+            NSString *pluginPath = [OAPluginsHelper getAbsoulutePluginPathByRegion:item.worldRegion];
             if (pluginPath.length > 0 && relPath.length > 0)
             {
                 NSString *srcFilePath = [pluginPath stringByAppendingPathComponent:relPath];
@@ -1542,7 +1543,7 @@ includeHidden:(BOOL)includeHidden
 {
     if (item.resourceType == OsmAndResourceType::WeatherForecast)
     {
-        if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
+        if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
             return;
 
         NSString *regionId = [OAWeatherHelper checkAndGetRegionId:item.worldRegion];

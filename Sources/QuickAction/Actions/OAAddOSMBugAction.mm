@@ -15,6 +15,7 @@
 #import "OAQuickActionType.h"
 #import "OAMultilineTextViewCell.h"
 #import "OASwitchTableViewCell.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -32,8 +33,8 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
-    
+    OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getEnabledPlugin:OAOsmEditingPlugin.class];
+
     if (plugin)
     {
         const auto& latLon = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);

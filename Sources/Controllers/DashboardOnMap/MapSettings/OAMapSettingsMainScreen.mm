@@ -34,6 +34,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"
@@ -654,7 +655,11 @@
 {
     NSMutableString *descr = [[NSMutableString alloc] init];
     OAPOIFiltersHelper *filtersHelper = [OAPOIFiltersHelper sharedInstance];
-    NSArray<OAPOIUIFilter *> *selectedFilters = [[filtersHelper getSelectedPoiFilters:@[[filtersHelper getTopWikiPoiFilter]]] allObjects];
+    NSMutableArray<OAPOIUIFilter *> *filtersToExclude = [NSMutableArray array];
+    OAPOIUIFilter *topWikiPoiFilter = [filtersHelper getTopWikiPoiFilter];
+    if (topWikiPoiFilter)
+        [filtersToExclude addObject:topWikiPoiFilter];
+    NSArray<OAPOIUIFilter *> *selectedFilters = [[filtersHelper getSelectedPoiFilters:filtersToExclude] allObjects];
     NSUInteger size = [selectedFilters count];
     if (size > 0)
     {
@@ -1397,12 +1402,12 @@
 
 - (void)wikipediaChanged:(BOOL)isOn
 {
-    [(OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class] wikipediaChanged:isOn];
+    [(OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class] wikipediaChanged:isOn];
 }
 
 - (void)weatherChanged:(BOOL)isOn
 {
-    [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] weatherChanged:isOn];
+    [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] weatherChanged:isOn];
 }
 
 - (void)installMapLayerFor:(id)param

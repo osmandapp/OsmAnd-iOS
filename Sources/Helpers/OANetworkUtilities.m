@@ -186,6 +186,12 @@
         
         dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         
+		if (!progress)
+        {
+            progress = [[OAURLSessionProgress alloc] init];
+            [progress setOnProgress:^(int progress, int64_t deltaWork) {}];
+        }
+
         [progress setOnDownloadFinish:^(NSURLSession *session, NSURLSessionDownloadTask *downloadTask, NSURL *location) {
             data = [NSData dataWithContentsOfURL:location];
             dispatch_semaphore_signal(semaphore);

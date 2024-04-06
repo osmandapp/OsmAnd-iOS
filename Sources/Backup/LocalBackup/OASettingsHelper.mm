@@ -65,6 +65,7 @@
 #import "OAGpxSettingsItem.h"
 #import "OASearchHistorySettingsItem.h"
 #import "OATileSource.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -96,12 +97,25 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return _sharedInstance;
 }
 
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version
+- (void) collectSettings:(NSString *)settingsFile 
+           latestChanges:(NSString *)latestChanges
+                 version:(NSInteger)version
 {
     [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self onComplete:nil silent:NO];
 }
 
-- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
+- (void) collectSettings:(NSString *)settingsFile
+           latestChanges:(NSString *)latestChanges
+                 version:(NSInteger)version
+                  silent:(BOOL)silent
+{
+    [self collectSettings:settingsFile latestChanges:latestChanges version:version delegate:self onComplete:nil silent:silent];
+}
+
+- (void) collectSettings:(NSString *)settingsFile
+           latestChanges:(NSString *)latestChanges
+                 version:(NSInteger)version
+              onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete
 {
     OAImportAsyncTask *task = [[OAImportAsyncTask alloc] initWithFile:settingsFile latestChanges:latestChanges version:version];
     [task executeWithCompletionBlock:onComplete];
@@ -280,7 +294,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (files.count > 0)
             myPlacesItems[OAExportSettingsType.TRACKS] = files;
     }
-    OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+    OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     if (osmEditingPlugin)
     {
         NSArray<OAOsmNotePoint *> *notesPointList = OAOsmBugsDBHelper.sharedDatabase.getOsmBugsPoints;

@@ -79,9 +79,13 @@
     if (!travelBook)
         return;
 
-    NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
     OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
-    [gpx saveTo:tmpFilePath];
+    NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
+    if (gpx)
+    {
+        NSString *gpxPath = [OATravelObfHelper.shared createGpxFileWithArticle:article];
+        [NSFileManager.defaultManager copyItemAtPath:gpxPath toPath:tmpFilePath error:nil];
+    }
     
     OsmAnd::ArchiveWriter archiveWriter;
     BOOL ok = YES;

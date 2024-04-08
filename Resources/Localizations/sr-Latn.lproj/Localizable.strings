@@ -646,7 +646,7 @@
 "gpx_distance_points" = "Rastojanje (tačaka)";
 "gpx_max_speed" = "Maksimalna brzina";
 "shared_string_speed" = "Brzina";
-"shared_string_slope" = "Padina";
+"shared_string_slope" = "Nagib padine";
 "stats_select_graph_data" = "Izaberite podatke grafikona";
 
 // Map settings
@@ -1147,9 +1147,9 @@
 "clear_tiles_warning" = "Primenom ovih izmena očistićeš keš podatke ovog izvora sličica mape";
 "welmode_download_maps" = "Preuzimanje mapa";
 "srtm_unit_format" = "Varijanta mernih jedinica za izohipse";
-"srtm_download_single_help_message" = "Odaberi vrstu. Moraćeš ponovo da preuzmeš fajlradi promene oblika.";
+"srtm_download_single_help_message" = "Odaberi varijantu. Moraćeš ponovno preuzeti datoteku kako bi promenio format.";
 "srtm_download_list_help_message" = "OsmAnd pruža podatke o izohipsama u metrima i stopama. Preuzmi ponovo fajl radi promene formata.";
-"shared_string_meters" = "metara";
+"shared_string_meters" = "metri";
 "shared_string_feet" = "stope";
 
 // Menu
@@ -1163,7 +1163,7 @@
 "closing_changeset" = "Zatvaranje skupa promena…";
 "commiting_node" = "Intervencijačvora…";
 "loading_poi_obj" = "Učitavam TOI…";
-"shared_string_loading" = "Preuzimanje";
+"shared_string_loading" = "Preuzmi";
 "osm_upload_failed_title" = "Otpremanje nije uspelo";
 "osm_upload_failed_descr" = "Proverite svoje podatke za prijavu i internet vezu i pokušajte ponovo.";
 "exit_without_saving" = "Izađi bez snimanja?";

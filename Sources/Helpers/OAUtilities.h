@@ -90,6 +90,12 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @end
 
+@interface UIDevice (util)
+
++ (NSString *) machine;
+
+@end
+
 @interface UIViewController (util)
 
 - (BOOL)isNavbarVisible;

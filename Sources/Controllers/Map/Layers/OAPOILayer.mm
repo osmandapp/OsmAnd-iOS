@@ -22,6 +22,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OARouteKey.h"
 #import "OANetworkRouteDrawable.h"
+#import "OAPluginsHelper.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>
@@ -107,9 +108,13 @@
     }
 
     OAPOIUIFilter *wikiFilter = [_filtersHelper getTopWikiPoiFilter];
-    BOOL isWikiEnabled = [[OAPlugin getPlugin:OAWikipediaPlugin.class] isEnabled];
-    NSMutableSet<OAPOIUIFilter *> *filters = [NSMutableSet setWithSet:[_filtersHelper getSelectedPoiFilters:@[wikiFilter]]];
-    if (!isWikiEnabled || ![_filtersHelper isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]])
+    NSMutableArray<OAPOIUIFilter *> *filtersToExclude = [NSMutableArray array];
+    if (wikiFilter)
+        [filtersToExclude addObject:wikiFilter];
+
+    BOOL isWikiEnabled = [[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] isEnabled];
+    NSMutableSet<OAPOIUIFilter *> *filters = [NSMutableSet setWithSet:[_filtersHelper getSelectedPoiFilters:filtersToExclude]];
+    if (wikiFilter && (!isWikiEnabled || ![_filtersHelper isPoiFilterSelectedByFilterId:[OAPOIFiltersHelper getTopWikiPoiFilterId]]))
     {
         [filters removeObject:wikiFilter];
         wikiFilter = nil;

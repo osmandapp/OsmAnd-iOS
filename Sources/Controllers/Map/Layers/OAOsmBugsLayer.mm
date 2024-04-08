@@ -19,6 +19,7 @@
 #import "OAOsmBugResult.h"
 #import "OAOsmNotesMapLayerProvider.h"
 #import "OAOnlineOsmNoteWrapper.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -43,7 +44,7 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 {
     self = [super initWithMapViewController:mapViewController baseOrder:baseOrder];
     if (self) {
-        _plugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+        _plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     }
     return self;
 }

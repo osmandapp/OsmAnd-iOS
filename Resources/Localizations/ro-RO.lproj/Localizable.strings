@@ -681,7 +681,7 @@
 "rendering_attr_hidePOILabels_name" = "Etichete puncte de interes";
 "rendering_value_car_name" = "Automobil";
 "rendering_value_americanRoadAtlas_name" = "Atlas rutier american";
-"routing_attr_max_num_changes_name" = "Numărul de modificări";
+"routing_attr_max_num_changes_name" = "Număr de modificări";
 "rendering_attr_highway_class_path_name" = "Cale";
 "rendering_attr_highway_class_track_grade1_name" = "Grad 1";
 "routing_attr_driving_style_prefer_unpaved_description" = "Preferați drumurile neasfaltate în locul celor asfaltate pentru traseu.";
@@ -3255,7 +3255,6 @@
 "shared_string_hand" = "Mână";
 "shared_string_ear_lobe" = "Lobul urechii";
 "shared_string_foot" = "Picior";
-
 "external_device_blood_pressure" = "Tensiune arterială";
 "external_sensors_support" = "Suport senzori externi";
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";

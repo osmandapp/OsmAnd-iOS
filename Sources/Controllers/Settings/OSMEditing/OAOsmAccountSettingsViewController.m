@@ -21,6 +21,7 @@
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 @interface OAOsmAccountSettingsViewController () <UITextFieldDelegate, UIGestureRecognizerDelegate>
 
@@ -363,7 +364,7 @@
         [_settings.osmUserName set:_newUserName];
         [_settings.osmUserPassword set:_newPassword];
 
-        OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] getOsmNotesRemoteUtil];
+        OAOsmBugsRemoteUtil *util = (OAOsmBugsRemoteUtil *) [(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] getOsmNotesRemoteUtil];
         OAOsmBugResult *result = [util validateLoginDetails];
         NSString *warning = result.warning;
         if (warning)

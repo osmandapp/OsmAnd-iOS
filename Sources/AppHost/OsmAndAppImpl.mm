@@ -46,6 +46,7 @@
 #import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
+#import "OAPluginsHelper.h"
 
 #include <algorithm>
 #include <QList>
@@ -684,7 +685,7 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
 
-    [OAPlugin initPlugins];
+    [OAPluginsHelper initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];

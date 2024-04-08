@@ -613,7 +613,10 @@ static OASubscriptionState *EXPIRED;
     }
     
     RequestProductsCompletionHandler onComplete = ^(BOOL success) {
-        [self checkBackupPurchaseIfNeeded:completionHandler];
+        if (success)
+        	[self checkBackupPurchaseIfNeeded:completionHandler];
+        else if (completionHandler)
+            completionHandler(NO);
     };
 
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];

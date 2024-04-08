@@ -502,7 +502,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     }
     
     func printHtmlToDebugFileIfEnabled(_ content: String) {
-        if let developmentPlugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin {
+        if let developmentPlugin = OAPluginsHelper.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin {
             if developmentPlugin.isEnabled() {
                 let filepath = OsmAndApp.swiftInstance().travelGuidesPath + "/TravelGuidesDebug.html"
                 do {

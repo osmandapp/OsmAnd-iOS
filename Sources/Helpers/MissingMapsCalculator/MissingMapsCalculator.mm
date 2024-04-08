@@ -224,6 +224,13 @@ static const double DISTANCE_SKIP = 10000;
     return YES;
 }
 
+- (void)clearResult
+{
+    self.missingMaps = @[];
+    self.mapsToUpdate = @[];
+    self.potentiallyUsedMaps = @[];
+}
+
 - (void)split:(std::shared_ptr<RoutingContext>)ctx
     knownMaps:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps
 pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck

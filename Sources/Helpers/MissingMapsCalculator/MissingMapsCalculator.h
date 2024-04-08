@@ -30,6 +30,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
                                     targets:(NSArray<CLLocation *> *)targets
                             checkHHEditions:(BOOL)checkHHEditions;
+- (void)clearResult;
 - (NSString *)getErrorMessage;
 
 @end

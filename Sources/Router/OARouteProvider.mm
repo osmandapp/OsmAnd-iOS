@@ -913,6 +913,7 @@
                 r.missingMaps = _missingMapsCalculator.missingMaps;
                 r.mapsToUpdate = _missingMapsCalculator.mapsToUpdate;
                 r.potentiallyUsedMaps = _missingMapsCalculator.potentiallyUsedMaps;
+                [_missingMapsCalculator clearResult];
                 return r;
             }
         }

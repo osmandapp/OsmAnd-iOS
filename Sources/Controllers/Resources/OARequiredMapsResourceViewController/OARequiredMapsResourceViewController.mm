@@ -523,6 +523,7 @@
                         [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
                                                              mapsToUpdate:missingMapsCalculator.mapsToUpdate
                                                       potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
+                        [missingMapsCalculator clearResult];
                         [strongSelf selectAllCells:YES];
                     });
                 } else {
@@ -565,9 +566,7 @@
         if (AFNetworkReachabilityManager.sharedManager.isReachable)
         {
             [self dismissViewController];
-            for (OARepositoryResourceItem *resourceItem in _selectedResourcesItems) {
-                [OAResourcesUIHelper offerDownloadAndInstallOf:resourceItem onTaskCreated:nil onTaskResumed:nil];
-            }
+            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:nil selectedItems:_selectedResourcesItems onTaskCreated:nil onTaskResumed:nil];
         }
         else
         {

@@ -746,7 +746,7 @@
 "sett_pref_lang" = "Željeni jezik";
 "sett_lang_show_local" = "Prikaži lokalna imena";
 "translit_names" = "Preslovi imena";
-"lang_af" = "Afrikaanski";
+"lang_af" = "Afrički";
 "lang_al" = "Albanski";
 "lang_als" = "Albanski (toskijski)";
 "lang_an" = "Aragonski";
@@ -1163,7 +1163,7 @@
 "closing_changeset" = "Zatvaranje skupa promena…";
 "commiting_node" = "Intervencijačvora…";
 "loading_poi_obj" = "Učitavam TOI…";
-"shared_string_loading" = "Preuzmi";
+"shared_string_loading" = "Učitavanje";
 "osm_upload_failed_title" = "Otpremanje nije uspelo";
 "osm_upload_failed_descr" = "Proverite svoje podatke za prijavu i internet vezu i pokušajte ponovo.";
 "exit_without_saving" = "Izađi bez snimanja?";
@@ -3387,3 +3387,4 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Upotrebi specijalno rutiranje (samo HH)";
 "track_appearance_3D_visualization" = "3D vizuelizacija";
 "osmand_depelopment_use_special_routing_hh+old" = "Upotrebi specijalno rutiranje (HH + staro)";
+"online_plugins" = "Mrežni dodaci";

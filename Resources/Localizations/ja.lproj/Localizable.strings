@@ -1728,7 +1728,7 @@
 "routing_profile_geocoding" = "ジオコーディング";
 "map_look_descr" = "マップの見た目に関する設定";
 "quick_action_mapillary_hide" = "Mapillaryを非表示";
-"avoid_road" = "避ける道を指定";
+"avoid_road" = "避ける道の指定";
 "arrived_at_destination" = "目的地に到着しました。";
 "quick_action_remove_next_destination" = "最も近い目的地を削除";
 "shared_string_import_complete" = "インポート完了";

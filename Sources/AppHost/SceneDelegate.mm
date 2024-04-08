@@ -279,7 +279,7 @@
         {
             startLatLonParam = queryItem.value;
         }
-        else if ([queryItem.name.lowercaseString isEqualToString:@"mode"])
+        else if ([queryItem.name.lowercaseString isEqualToString:@"profile"])
         {
             appModeKeyParam = queryItem.value;
         }

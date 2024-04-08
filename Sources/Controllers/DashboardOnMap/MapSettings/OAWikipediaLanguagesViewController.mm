@@ -15,6 +15,7 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
 #import "OASimpleTableViewCell.h"
+#import "OAPluginsHelper.h"
 
 typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 {
@@ -70,7 +71,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaLangSection)
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+    _wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class];
 }
 
 - (void)postInit

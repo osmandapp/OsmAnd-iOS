@@ -1463,7 +1463,7 @@
 "coordinates" = "Koordináták";
 "select_group" = "Csoport kijelölése";
 "change_folder" = "Mappa módosítása";
-"shared_string_resources" = "Források";
+"shared_string_resources" = "Erőforrások";
 "start_of_the_track" = "Nyomvonal kezdete";
 "shared_string_gpx_points" = "Pontok";
 "context_menu_item_edit_waypoint" = "GPXútpont szerkesztése";

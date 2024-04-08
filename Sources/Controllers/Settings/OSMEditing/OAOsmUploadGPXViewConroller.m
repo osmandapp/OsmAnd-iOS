@@ -29,6 +29,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kDefaultTag @"osmand"
 #define kDescriptionTextFieldTag 0
@@ -489,7 +490,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
             _filesUploadingProgress = [NSMutableDictionary dictionary];
             _failedFileNames = [NSMutableArray array];
             
-            OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class];
+            OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
             _uploadTask = [[OAUploadGPXFilesTask alloc] initWithPlugin:plugin gpxItemsToUpload:_gpxItemsToUpload tags:_tagsText visibility:visibility description:_descriptionText listener:self];
             [_uploadTask uploadTracks];
         }

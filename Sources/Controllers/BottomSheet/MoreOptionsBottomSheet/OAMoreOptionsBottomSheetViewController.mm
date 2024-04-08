@@ -37,6 +37,7 @@
 #import "OASavingTrackHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -155,7 +156,7 @@
             }
             else if ([addon.addonId isEqualToString:kId_Addon_OsmEditing_Edit_POI])
             {
-                _editingAddon = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+                _editingAddon = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
                 if ([_editingAddon isEnabled])
                 {
                     BOOL createNewPoi = (_targetPoint.obfId == 0 && _targetPoint.type != OATargetTransportStop && _targetPoint.type != OATargetOsmEdit) || _targetPoint.type == OATargetOsmNote;

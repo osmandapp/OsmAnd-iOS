@@ -24,6 +24,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kHeaderImageHeight 170
 
@@ -112,7 +113,7 @@
             if (!preferredMapLanguage || preferredMapLanguage.length == 0)
                 preferredMapLanguage = NSLocale.currentLocale.languageCode;
             
-            _contentLocale = [OAPlugin onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
+            _contentLocale = [OAPluginsHelper onGetMapObjectsLocale:_poi preferredLocale:preferredMapLanguage];
             if ([_contentLocale isEqualToString:@"en"])
                 _contentLocale = @"";
         }
@@ -524,7 +525,7 @@
 
 - (void) printHtmlToDebugFileIfEnabled:(NSString *)content
 {
-    if ([OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
+    if ([OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
     {
         NSString *wikiFolder = [OsmAndApp.instance.documentsPath stringByAppendingPathComponent:@"Wiki"];
         BOOL isDir = YES;

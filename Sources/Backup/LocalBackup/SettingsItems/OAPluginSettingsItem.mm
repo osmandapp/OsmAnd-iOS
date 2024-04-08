@@ -11,6 +11,7 @@
 #import "OADownloadsItem.h"
 #import "OAFileSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
+#import "OAPluginsHelper.h"
 
 #define APPROXIMATE_PLUGIN_SIZE_BYTES 1024
 
@@ -38,7 +39,7 @@
 
 - (BOOL)exists
 {
-    return [OAPlugin getPluginById:self.pluginId] != nil;
+    return [OAPluginsHelper getPluginById:self.pluginId] != nil;
 }
 
 - (NSArray<OASettingsItem *> *)pluginDependentItems
@@ -83,14 +84,14 @@
                 [_plugin updateDownloadItems:((OADownloadsItem *) item).items];
             }
         }
-        [OAPlugin addCustomPlugin:_plugin];
+        [OAPluginsHelper addCustomPlugin:_plugin];
     }
 }
 
 - (void)remove
 {
     [super remove];
-    [OAPlugin removeCustomPlugin:_plugin];
+    [OAPluginsHelper removeCustomPlugin:_plugin];
     for (OASettingsItem *item in _pluginDependentItems)
          [item remove];
 }

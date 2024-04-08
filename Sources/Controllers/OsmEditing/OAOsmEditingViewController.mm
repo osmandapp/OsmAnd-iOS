@@ -28,6 +28,7 @@
 #import "OAPOIHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -80,7 +81,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
     self = [super init];
     if (self) {
         _editPoiData = [[OAEditPOIData alloc] initWithEntity:entity];
-        _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+        _editingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
         _editingUtil = [self getEditingUtil];
     }
     return self;
@@ -445,7 +446,7 @@ typedef NS_ENUM(NSInteger, EditingTab)
         [p setEntity:entity];
         [p setAction:action];
         [p setComment:comment];
-        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment];
+        OAUploadOsmPointsAsyncTask *uploadTask  = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:@[p] closeChangeset:closeChangeset anonymous:NO comment:comment];
         [uploadTask uploadPoints];
     }
 }

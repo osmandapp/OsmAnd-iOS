@@ -18,6 +18,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAPOI.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>
@@ -84,7 +85,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 {
     if (self == _parking)
     {
-        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
         if (plugin && plugin.getParkingType)
             return @"special_parking_time_limited";
         else

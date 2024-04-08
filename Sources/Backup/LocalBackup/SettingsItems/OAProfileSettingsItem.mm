@@ -20,6 +20,7 @@
 #import "OARoutePreferencesParameters.h"
 #import "OAMapWidgetRegistry.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAPluginsHelper.h"
 
 @implementation OAProfileSettingsItem
 {
@@ -203,7 +204,7 @@
                         }
                     }
                     if (enabledWidgets.count > 0)
-                        [OAPlugin enablePluginsByMapWidgets:enabledWidgets];
+                        [OAPluginsHelper enablePluginsByMapWidgets:enabledWidgets];
                 }
             }
         }

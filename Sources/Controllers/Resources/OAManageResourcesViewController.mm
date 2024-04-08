@@ -46,6 +46,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -275,7 +276,7 @@ static BOOL _repositoryUpdated = NO;
     _displayBanner = ![self shouldHideBanner];
     _displaySubscribeEmailView = ![self shouldHideEmailSubscription];
     
-    _customRegions = [OAPlugin getCustomDownloadRegions];
+    _customRegions = [OAPluginsHelper getCustomDownloadRegions];
     if ([self.region isKindOfClass:OACustomRegion.class])
     {
         OACustomRegion *customReg = (OACustomRegion *) self.region;
@@ -588,7 +589,7 @@ static BOOL _repositoryUpdated = NO;
 - (void) updateContent
 {
     _doDataUpdate = YES;
-    _customRegions = [OAPlugin getCustomDownloadRegions];
+    _customRegions = [OAPluginsHelper getCustomDownloadRegions];
     [self updateMultipleResources];
     [self obtainDataAndItems];
     [self prepareContent];
@@ -872,7 +873,7 @@ static BOOL _repositoryUpdated = NO;
     NSMutableArray<OAResourceItem *> *allResourcesArray = [NSMutableArray array];
     NSMutableArray<OAResourceItem *> *srtmResourcesArray = [NSMutableArray array];
 
-    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    OAOsmandDevelopmentPlugin *plugin = (OAOsmandDevelopmentPlugin *) [OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class];
     for (const auto& resource_ : regionResources.allResources)
     {
         OAResourceItem *item_ = [self collectSubregionItem:region regionResources:regionResources resource:resource_];
@@ -2355,17 +2356,17 @@ static BOOL _repositoryUpdated = NO;
                         disabled = YES;
                         item.disabled = disabled;
                     }
-                    if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+                    if (item.resourceType == OsmAndResourceType::MapRegion && [self isNauticalScope] && ![OAPluginsHelper isEnabled:OANauticalMapsPlugin.class])
                     {
                         disabled = YES;
                         item.disabled = disabled;
                     }
-                    if ([self isTravelGuidesScope] && ![OAPlugin isEnabled:OAWikipediaPlugin.class])
+                    if ([self isTravelGuidesScope] && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
                     {
                         disabled = YES;
                         item.disabled = disabled;
                     }
-                    if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && (![OAIAPHelper isDepthContoursPurchased] || ![OAPlugin isEnabled:OANauticalMapsPlugin.class]))
+                    if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && (![OAIAPHelper isDepthContoursPurchased] || ![OAPluginsHelper isEnabled:OANauticalMapsPlugin.class]))
                     {
                         disabled = YES;
                         item.disabled = disabled;

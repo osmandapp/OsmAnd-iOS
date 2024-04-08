@@ -123,7 +123,7 @@ class WidgetGroup: NSObject {
     }
     
     class func getPartOfPluginDesc(plugin: AnyClass) -> String? {
-        let plugin = OAPlugin.getPlugin(plugin)
+        let plugin = OAPluginsHelper.getPlugin(plugin)
         if let plugin {
             return String(format: localizedString("widget_secondary_desc_part_of"), plugin.getName())
         }

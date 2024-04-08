@@ -8,7 +8,7 @@
 
 #import "OABaseNavbarViewController.h"
 
-@class OAProduct, OAPlugin;
+@class OAProduct, OAPlugin, OACustomPlugin, OAOnlinePlugin;
 
 @protocol OAPluginDetailsDelegate
 
@@ -29,7 +29,8 @@
 @property (nonatomic, readonly) OAProduct *product;
 @property (nonatomic) id<OAPluginDetailsDelegate> delegate;
 
-- (instancetype)initWithProduct:(OAProduct *)product;
-- (instancetype)initWithCustomPlugin:(OAPlugin *)plugin;
+- (instancetype) initWithProduct:(OAProduct *)product;
+- (instancetype) initWithCustomPlugin:(OACustomPlugin *)plugin;
+- (instancetype) initWithOnlinePlugin:(OAOnlinePlugin *)plugin;
 
 @end

@@ -211,7 +211,9 @@ typedef NS_ENUM(NSInteger, EOAPoiRowType) {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     if (item.rowType == EOAPoiRowTypeButton)
     {
-        [_poiFiltersHelper clearSelectedPoiFilters:@[[[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter]]];
+        OAPOIUIFilter *topWikiPoiFilter = [[OAPOIFiltersHelper sharedInstance] getTopWikiPoiFilter];
+        if (topWikiPoiFilter)
+        	[_poiFiltersHelper clearSelectedPoiFilters:@[topWikiPoiFilter]];
     }
     else if (item.rowType == EOAPoiRowTypePoiFilter)
     {

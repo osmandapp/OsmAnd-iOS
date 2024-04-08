@@ -3100,7 +3100,7 @@
 "routing_attr_hazmat_category_usa_9_name" = "雜項";
 "rendering_value_name_only_name" = "僅名稱";
 "rendering_attr_showToll_description" = "顯示道路通行費限制";
-"rendering_attr_showProposed_name" = "已提出的物件";
+"rendering_attr_showProposed_name" = "計劃物件";
 "routing_attr_hazmat_category_usa_4_name" = "易燃固體";
 "routing_attr_allow_via_ferrata_description" = "配有固定纜繩、柱子、梯子與橋樑的山路。";
 "routing_attr_hazmat_category_usa_6_name" = "有毒與傳染性物質";

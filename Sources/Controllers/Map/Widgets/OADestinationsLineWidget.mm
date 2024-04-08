@@ -291,9 +291,8 @@
 
 - (double) getStrokeWidth
 {
-    double mapDensity = [_settings.mapDensity get];
     float strokeWidth = _lineAttrs[@"strokeWidth"] != nil ? _lineAttrs[@"strokeWidth"].floatValue : 6;
-    return strokeWidth * kWidthCorrectionValue / [[UIScreen mainScreen] scale] / mapDensity;
+    return strokeWidth * kWidthCorrectionValue / [[UIScreen mainScreen] scale];
 }
 
 - (UIImage *)getArrowImage:(UIImage *)fgImage inImage:(UIImage *)bgImage withShadow:(UIImage *)shadow

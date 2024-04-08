@@ -24,6 +24,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OANativeUtilities.h"
 #import "OAFavoritesSettingsItem.h"
+#import "OAPluginsHelper.h"
 
 #import <EventKit/EventKit.h>
 #import "OsmAnd_Maps-Swift.h"
@@ -166,7 +167,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (void)importFavoritesFromGpx:(OAGPXDocument *)gpxFile
 {
     NSString *defCategory = @"";
-    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
     NSArray<OAPointsGroup *> *pointsGroups = gpxFile.pointsGroups.allValues;
     for (OAPointsGroup *pointsGroup in pointsGroups)
     {
@@ -986,7 +987,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
         EKEvent *event = [EKEvent eventWithEventStore:eventStore];
         event.title = OALocalizedString(@"pickup_car");
         
-        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
         if (plugin)
         {
             if (plugin.getEventIdentifier)
@@ -1052,7 +1053,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (void) removeParkingReminderFromCalendar
 {
-    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
     if (plugin)
     {
         if (plugin.getEventIdentifier)

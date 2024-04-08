@@ -25,6 +25,7 @@
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
 #import "OASwitchTableViewCell.h"
+#import "OAPluginsHelper.h"
 
 #define kCellSwitchIsOnKey @"kCellSwitchIsOnKey"
 
@@ -53,7 +54,7 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _plugin = (OAOsmandDevelopmentPlugin *) [OAPlugin getPlugin:OAOsmandDevelopmentPlugin.class];
+    _plugin = (OAOsmandDevelopmentPlugin *) [OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class];
 }
 
 - (void)registerNotifications

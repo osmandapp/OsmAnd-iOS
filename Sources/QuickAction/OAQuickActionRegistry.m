@@ -47,6 +47,7 @@
 #import "OAShowHidePrecipitationAction.h"
 #import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
+#import "OAPluginsHelper.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -165,11 +166,11 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [quickActionTypes addObject:OAShowHideCoordinatesAction.TYPE];
     [quickActionTypes addObject:OAShowHideMapCenterAction.TYPE];
     
-    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
-    if ([[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
+    [OAPluginsHelper registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
+    if ([[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
         [quickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
 
-    if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
+    if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [quickActionTypes addObjectsFromArray:@[
                 OAShowHideTemperatureAction.TYPE,
@@ -192,11 +193,11 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     _quickActionTypesStr = [NSDictionary dictionaryWithDictionary:quickActionTypesStr];
     
     NSMutableArray<OAQuickActionType *> *disabledQuickActionTypes = [NSMutableArray new];
-    [OAPlugin registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
-    if (![[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
+    [OAPluginsHelper registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
+    if (![[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
         [disabledQuickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
 
-    if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
+    if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [disabledQuickActionTypes addObjectsFromArray:@[
                 OAShowHideTemperatureAction.TYPE,

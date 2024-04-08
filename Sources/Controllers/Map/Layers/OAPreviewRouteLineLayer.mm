@@ -337,9 +337,7 @@
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
-        double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
-        width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
+        width = [self getParamFromAttr:@"strokeWidth"].floatValue * VECTOR_LINE_SCALE_COEF;
     }
 
     return width;

@@ -21,6 +21,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIndexConstants.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -420,11 +421,11 @@ static BOOL dataInvalidated = NO;
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
             else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAIAPHelper isDepthContoursPurchased])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_DepthContours];
-            else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+            else if ((item.resourceType == OsmAndResourceType::DepthContourRegion || item.resourceType == OsmAndResourceType::DepthMapRegion) && ![OAPluginsHelper isEnabled:OANauticalMapsPlugin.class])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
-            else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPlugin isEnabled:OANauticalMapsPlugin.class])
+            else if (item.resourceType == OsmAndResourceType::MapRegion && [item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::NauticalRegionId.toNSString()] && ![OAPluginsHelper isEnabled:OANauticalMapsPlugin.class])
                 [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Nautical];
-            else if ([item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && ![OAPlugin isEnabled:OAWikipediaPlugin.class])
+            else if ([item.worldRegion.regionId isEqualToString:OsmAnd::WorldRegions::TravelRegionId.toNSString()] && ![OAPluginsHelper isEnabled:OAWikipediaPlugin.class])
             {
                 if ([_iapHelper.wiki isPurchased])
                     [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];

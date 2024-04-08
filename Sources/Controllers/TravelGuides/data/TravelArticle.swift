@@ -180,11 +180,15 @@ final class TravelArticleIdentifier : NSObject {
     
     override var hash: Int {
         var hasher = Hasher()
-        hasher.combine(lat)
-        hasher.combine(lon)
-        hasher.combine(file)
-        hasher.combine(routeId)
-        hasher.combine(routeSource)
+        hasher.combine(rountToInt(lat))
+        hasher.combine(rountToInt(lon))
+        hasher.combine(file ?? "")
+        hasher.combine(routeId ?? "")
+        hasher.combine(routeSource ?? "")
         return hasher.finalize()
+    }
+    
+    private func rountToInt(_ coordinate: Double) -> Int {
+        return Int(coordinate * 8)
     }
 }

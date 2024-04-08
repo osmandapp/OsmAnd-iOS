@@ -74,10 +74,24 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
 
     task.installResourceRetry = 0;
 
+    NSString* resourceId = [task.key substringFromIndex:[@"resource:" length]];
+    [self checkDownload:resourceId downloadTime:task.downloadTime fileSize:task.fileSize];
+
     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, 0.1 * NSEC_PER_SEC);
     dispatch_after(popTime, dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void){
         [self processResource:task];
     });
+}
+
+- (void) checkDownload:(NSString *)fileName downloadTime:(NSTimeInterval)downloadTime fileSize:(CGFloat)fileSize
+{
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+
+    [params setObject:fileName forKey:@"file_name"];
+    [params setObject:[NSString stringWithFormat:@"%.1f", fileSize] forKey:@"file_size"];
+    [params setObject:[NSString stringWithFormat:@"%d", (int)downloadTime] forKey:@"download_time"];
+
+    [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/check_download" params:params post:NO async:YES onComplete:nil];
 }
 
 + (void)installGpxResource:(NSString *)localPath fileName:(NSString *)fileName

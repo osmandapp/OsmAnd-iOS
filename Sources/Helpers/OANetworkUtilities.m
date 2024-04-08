@@ -22,7 +22,7 @@
 
 + (void) sendRequest:(OANetworkRequest *)request
                async:(BOOL)async
-          onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+          onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     [self sendRequestWithUrl:request.url params:request.params post:request.post async:async onComplete:onComplete];
 }
@@ -30,7 +30,7 @@
 + (void) sendRequestWithUrl:(NSString *)url
                      params:(NSDictionary<NSString *, NSString *> *)params
                        post:(BOOL)post
-                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+                 onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     [self sendRequestWithUrl:url params:params post:post async:YES onComplete:onComplete];
 }
@@ -39,7 +39,7 @@
                      params:(NSDictionary<NSString *, NSString *> *)params
                        post:(BOOL)post
                       async:(BOOL)async
-                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+                 onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     [self sendRequestWithUrl:url
                       params:params
@@ -56,7 +56,7 @@
                 contentType:(NSString *)contentType
                        post:(BOOL)post
                       async:(BOOL)async
-                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
+                 onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete
 {
     dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
     NSURL *urlObj;

@@ -2202,7 +2202,7 @@ includeHidden:(BOOL)includeHidden
                     BOOL installed = OsmAndApp.instance.resourcesManager->isResourceInstalled(resource->id);
                     if (!installed)
                     {
-                        OARepositoryResourceItem* item = [[OARepositoryResourceItem alloc] init];
+                        OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
                         item.resourceId = resource->id;
                         item.resourceType = resource->type;
                         item.title = [OAResourcesUIHelper titleOfResource:resource
@@ -2323,20 +2323,10 @@ includeHidden:(BOOL)includeHidden
                                     {
                                         if (array.count >= 2)
                                         {
-                                            double latitude = [array[0] doubleValue];
-                                            double longitude = [array[1] doubleValue];
+                                            double latitude = [array[1] doubleValue];
+                                            double longitude = [array[0] doubleValue];
                                             [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
                                         }
-                                    }
-                                }
-                                else if ([geometryType isEqualToString:@"Point"])
-                                {
-                                    NSArray *coordinates = geometry[@"coordinates"];
-                                    if (coordinates.count >= 2)
-                                    {
-                                        double latitude = [coordinates[0] doubleValue];
-                                        double longitude = [coordinates[1] doubleValue];
-                                        [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
                                     }
                                 }
                             }

@@ -867,13 +867,6 @@
     }
 }
 
-- (BOOL)checkIfThereAreMissingMapsStartPoint:(CLLocation *)start
-                                     targets:(NSArray<CLLocation *> *)targets
-{
-    NSAssert(_missingMapsCalculator, @"should be inited in calcOfflineRouteImpl");
-    return [_missingMapsCalculator checkIfThereAreMissingMapsWithStart:start targets:targets checkHHEditions:YES];
-}
-
 - (OARouteCalculationResult *) calcOfflineRouteImpl:(OARouteCalculationParams *)params router:(std::shared_ptr<RoutePlannerFrontEnd>)router ctx:(std::shared_ptr<RoutingContext>)ctx complexCtx:(std::shared_ptr<RoutingContext>)complexCtx st:(CLLocation *)st en:(CLLocation *)en inters:(NSArray<CLLocation *> *)inters precalculated:(std::shared_ptr<PrecalculatedRouteDirection>)precalculated
 {
     try
@@ -907,7 +900,7 @@
                 _missingMapsCalculator = [MissingMapsCalculator new];
             }
             NSArray<CLLocation *> *targets = (inters.count > 0) ? [inters arrayByAddingObject:en] : @[en];
-            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:YES])
+            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:YES /*router->getHHRoutingConfig() != NULL*.*/])
             {
                 OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
                 r.missingMaps = _missingMapsCalculator.missingMaps;

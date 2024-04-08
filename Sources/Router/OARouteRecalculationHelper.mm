@@ -419,23 +419,7 @@
 {
     if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
     {
-        BOOL hasMapsForDownload = NO;
-        if (result.mapsToUpdate.count > 0)
-        {
-            hasMapsForDownload = YES;
-        }
-        else
-        {
-            NSArray<OAResourceItem *> *_missingMapsResourcesForDownload = [OAResourcesUIHelper getMapRegionResourcesToDownloadForRegions:result.missingMaps];
-            if (_missingMapsResourcesForDownload.count > 0)
-            {
-                hasMapsForDownload = YES;
-            }
-        }
-        if (hasMapsForDownload)
-        {
-            [_routingHelper newRouteHasMissingOrOutdatedMaps:result.missingMaps mapsToUpdate:result.mapsToUpdate potentiallyUsedMaps:result.potentiallyUsedMaps];
-        }
+        [_routingHelper newRouteHasMissingOrOutdatedMaps:result.missingMaps mapsToUpdate:result.mapsToUpdate potentiallyUsedMaps:result.potentiallyUsedMaps];
     }
 }
 

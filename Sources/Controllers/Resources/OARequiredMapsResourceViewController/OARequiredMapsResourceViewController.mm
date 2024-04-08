@@ -389,27 +389,6 @@
     {
         return [self configureFooterTextForRegions:_potentiallyUsedMaps];
     }
-    else if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
-    {
-        NSArray<OAWorldRegion *> *regions = [NSArray arrayWithArray:[_missingMaps arrayByAddingObjectsFromArray:_mapsToUpdate]];
-        
-        NSMutableArray<OAWorldRegion *> *filteredRegions = [NSMutableArray array];
-        
-        for (OAWorldRegion *region in regions) {
-            BOOL shouldIncludeRegion = YES;
-            
-            for (OAResourceItem *resourceItem in _resourcesItems) {
-                if ([resourceItem.resourceId.toNSString() containsString:region.downloadsIdPrefix]) {
-                    shouldIncludeRegion = NO;
-                    break;
-                }
-            }
-            if (shouldIncludeRegion) {
-                [filteredRegions addObject:region];
-            }
-        }
-        return [self configureFooterTextForRegions:filteredRegions];
-    }
     return @"";
 }
 
@@ -517,7 +496,7 @@
                 CLLocation *startPoint = locations[0];
                 NSMutableArray *targetsPointsArray = [locations mutableCopy];
                 [targetsPointsArray removeObjectAtIndex:0];
-                if ([missingMapsCalculator checkIfThereAreMissingMapsWithStart:startPoint targets:targetsPointsArray checkHHEditions:YES])
+                if ([missingMapsCalculator checkIfThereAreMissingMapsWithStart:startPoint targets:targetsPointsArray])
                 {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
@@ -565,8 +544,12 @@
     {
         if (AFNetworkReachabilityManager.sharedManager.isReachable)
         {
+            if (self.onTapDownloadButtonCallback)
+                self.onTapDownloadButtonCallback();
+                
+            OAMultipleResourceItem *item = [[OAMultipleResourceItem alloc] initWithType:OsmAndResourceType::MapRegion items:_selectedResourcesItems];
+            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:_selectedResourcesItems onTaskCreated:nil onTaskResumed:nil];
             [self dismissViewController];
-            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:nil selectedItems:_selectedResourcesItems onTaskCreated:nil onTaskResumed:nil];
         }
         else
         {

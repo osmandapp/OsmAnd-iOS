@@ -1221,6 +1221,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
     [[OARootViewController instance].keyCommandUpdateObserver handleObservedEventFrom:nil withKey:kCommandNavigationScreenClose];
     _closePressed = NO;
+    [self clearMissingMapsState];
 }
 
 - (void) addWaypoint
@@ -1258,7 +1259,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 - (void) appModeChanged:(OAApplicationMode *)next
 {
     _hasEmptyTransportRoute = NO;
-    [self clearMissingOrToUpdateMaps];
+    [self clearMissingMapsState];
     [_routingHelper setAppMode:next];
     [_settings setApplicationModePref:next markAsLastUsed:NO];
     [_app initVoiceCommandPlayer:next warningNoneProvider:YES showDialog:NO force:NO];
@@ -1296,7 +1297,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
         _trackAnalysis = nil;
         _gpx = nil;
         _progressBarView = nil;
-        [self clearMissingOrToUpdateMaps];
+        [self clearMissingMapsState];
         _hasEmptyTransportRoute = _routingHelper.isPublicTransportMode && _transportHelper.getRoutes.size() == 0;
         [self updateMenu];
     });
@@ -1939,16 +1940,14 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)showRequiredMapsResourceViewControllerIfNeeded
 {
-    NSArray<OAResourceItem *> *_missingMapsResources = [OAResourcesUIHelper getMapRegionResourcesToDownloadForRegions:_missingMaps];
-    NSArray<OAResourceItem *> *_mapsToUpdateResources = [OAResourcesUIHelper getMapRegionResourcesToUpdateForRegions:_mapsToUpdate];
-    if (_missingMapsResources.count > 0 || _mapsToUpdateResources.count > 0)
+    if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
     {
         [self showRequiredMapsResourceViewController];
     }
     else
     {
         // maps were downloaded while we were in this state. Сlear the state
-        [self clearMissingOrToUpdateMaps];
+        [self clearMissingMapsState];
         [self updateData];
         [self.tableView reloadData];
     }
@@ -1975,7 +1974,12 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 {
     if (_missingMaps.count > 0 || _mapsToUpdate.count > 0)
     {
+        __weak __typeof(self) weakSelf = self;
         OARequiredMapsResourceViewController *viewController = [[OARequiredMapsResourceViewController alloc] initWithWorldRegion:_missingMaps mapsToUpdate:_mapsToUpdate potentiallyUsedMaps:_potentiallyUsedMaps];
+        viewController.onTapDownloadButtonCallback = ^{
+            [weakSelf clearMissingMapsState];
+            [[OARootViewController instance].mapPanel closeRouteInfo];
+        };
         [OARootViewController.instance presentViewController:[[UINavigationController alloc] initWithRootViewController:viewController] animated:YES completion:nil];
     }
     else
@@ -2222,7 +2226,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_progressBarView)
         {
-            [self clearMissingOrToUpdateMaps];
+            [self clearMissingMapsState];
             _hasEmptyTransportRoute = NO;
             [self updateData];
             [self.tableView reloadData];
@@ -2242,7 +2246,7 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
 
 - (void)startProgress {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self clearMissingOrToUpdateMaps];
+        [self clearMissingMapsState];
         _hasEmptyTransportRoute = NO;
         if (!_progressBarView)
         {
@@ -2259,9 +2263,9 @@ typedef NS_ENUM(NSInteger, EOARouteInfoMenuState)
     return _missingMaps.count || _mapsToUpdate.count;
 }
 
-- (void)clearMissingOrToUpdateMaps
+- (void)clearMissingMapsState
 {
-    _missingMaps = _mapsToUpdate = nil;
+    _missingMaps = _mapsToUpdate = _potentiallyUsedMaps = nil;
 }
 
 #pragma mark - UITextViewDelegate

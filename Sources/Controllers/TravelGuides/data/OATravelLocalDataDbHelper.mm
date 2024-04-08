@@ -84,7 +84,10 @@
     if (gpx)
     {
         NSString *gpxPath = [OATravelObfHelper.shared createGpxFileWithArticle:article];
-        [NSFileManager.defaultManager copyItemAtPath:gpxPath toPath:tmpFilePath error:nil];
+        NSError *error;
+        [NSFileManager.defaultManager copyItemAtPath:gpxPath toPath:tmpFilePath error:&error];
+        if (error)
+            NSLog(@"Error copying file: %@ to %@ - %@", gpxPath, tmpFilePath, [error localizedDescription]);
     }
     
     OsmAnd::ArchiveWriter archiveWriter;

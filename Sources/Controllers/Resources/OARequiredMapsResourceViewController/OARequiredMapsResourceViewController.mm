@@ -525,6 +525,26 @@
     }
 }
 
+- (void)onTopButtonPressed
+{
+    if (_selectedResourcesItems.count > 0)
+    {
+        if (AFNetworkReachabilityManager.sharedManager.isReachable)
+        {
+            if (self.onTapDownloadButtonCallback)
+                self.onTapDownloadButtonCallback();
+            OAMultipleResourceItem *item = [[OAMultipleResourceItem alloc] initWithType:OsmAndResourceType::MapRegion items:_selectedResourcesItems];
+            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:_selectedResourcesItems onTaskCreated:nil onTaskResumed:nil];
+            
+            [self dismissViewController];
+        }
+        else
+        {
+            [OAResourcesUIHelper showNoInternetAlert];
+        }
+    }
+}
+
 - (void)updateRoutingResourcesWithMissingMaps:(NSArray<OAWorldRegion *> *)missingMaps
                                  mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
                           potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps;
@@ -536,26 +556,6 @@
     [self configureResourceItems];
     [self reloadDataWithAnimated:NO completion:nil];
     [self updateBottomButtons];
-}
-
-- (void)onTopButtonPressed
-{
-    if (_selectedResourcesItems.count > 0)
-    {
-        if (AFNetworkReachabilityManager.sharedManager.isReachable)
-        {
-            if (self.onTapDownloadButtonCallback)
-                self.onTapDownloadButtonCallback();
-                
-            OAMultipleResourceItem *item = [[OAMultipleResourceItem alloc] initWithType:OsmAndResourceType::MapRegion items:_selectedResourcesItems];
-            [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:_selectedResourcesItems onTaskCreated:nil onTaskResumed:nil];
-            [self dismissViewController];
-        }
-        else
-        {
-            [OAResourcesUIHelper showNoInternetAlert];
-        }
-    }
 }
 
 - (void)onlineCalculateFinishState

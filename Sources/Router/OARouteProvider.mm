@@ -778,7 +778,7 @@
     return NO;
 }
 
-- (void)checkInitializedForZoomLevel14
+- (void)checkInitializedForZoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
 {
     @synchronized (self)
     {
@@ -795,7 +795,7 @@
                 NSString *localPath = resource->localPath.toNSString();
                 if (![localPath.lowerCase hasSuffix:BINARY_MAP_INDEX_EXT])
                     continue;
-                if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:nil desiredDataTypes:dataTypes zoomLevel:OsmAnd::ZoomLevel14])
+                if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:nil desiredDataTypes:dataTypes zoomLevel:zoomLevel])
                 {
                     [_nativeFiles addObject:localPath];
                     cacheBinaryMapFileIfNeeded(resource->localPath.toStdString(), true);

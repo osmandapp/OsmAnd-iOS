@@ -2278,12 +2278,12 @@ includeHidden:(BOOL)includeHidden
     NSLog(@"onlineCalculateRequestStartPoint start");
     NSURLSession *session = [NSURLSession sharedSession];
     
-    NSString *baseUrlString = @"https://maptile.osmand.net/routing/route";
+    NSString *routeUrlString = @"https://maptile.osmand.net/routing/route";
     NSString *routeMode = [[OAAppSettings sharedManager].applicationMode get].stringKey;
     NSString *startPointString = [self formatCLLocationToPointString:startPoint];
     NSString *endPointString = [self formatCLLocationToPointString:endPoint];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@?routeMode=%@&points=%@&points=%@", baseUrlString, routeMode, startPointString, endPointString];
+    NSString *urlString = [NSString stringWithFormat:@"%@?routeMode=%@&points=%@&points=%@", routeUrlString, routeMode, startPointString, endPointString];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request

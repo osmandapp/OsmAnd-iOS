@@ -82,8 +82,4 @@
 - (BOOL)isContinent;
 - (BOOL)containsPoint:(CLLocation *)location;
 
-//- (NSArray<NSString *> *)getRegionsToDownloadWithLat:(double)lat
-//                                                 lon:(double)lon
-//                                            keyNames:(NSMutableArray<NSString *> *)keyNames;
-
 @end

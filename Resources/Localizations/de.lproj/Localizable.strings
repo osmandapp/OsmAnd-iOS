@@ -3404,3 +3404,4 @@
 "track_appearance_3D_visualization" = "3D-Visualisierung";
 "osmand_depelopment_use_special_routing_hh+old" = "Besondere Streckenführung verwenden (HH + alt)";
 "osmand_depelopment_use_special_routing_hh_only" = "Besondere Streckenführung verwenden (nur HH)";
+"online_plugins" = "Online Plugins";

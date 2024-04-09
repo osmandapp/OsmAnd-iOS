@@ -511,17 +511,10 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 + (void) fetchOnlinePlugins:(id<OAOnlinePluginsCallback> _Nullable)callback
 {
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    NSString *ver = OAAppVersionDependentConstants.getVersion;
-    int execCount = (int)[settings integerForKey:kAppExecCounter];
-    double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
-    int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
-    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
-    NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
-    NSString *languageCode = [languageDictionary objectForKey:NSLocaleLanguageCode];
-    NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@", ONLINE_PLUGINS_URL, ver, appInstalledDays, execCount, languageCode];
-    NSString *aid = OsmAndApp.instance.getUserIosId;
+    OsmAndAppInstance app = OsmAndApp.instance;
+    NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@",
+                     ONLINE_PLUGINS_URL, OAAppVersionDependentConstants.getVersion, app.getAppInstalledDays, app.getAppExecCount, app.getLanguageCode];
+    NSString *aid = app.getUserIosId;
     if (aid.length > 0)
        url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
 

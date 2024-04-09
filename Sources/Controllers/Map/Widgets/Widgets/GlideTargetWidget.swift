@@ -170,7 +170,7 @@ final class GlideTargetWidget: GlideBaseWidget {
     }
 
     private func getCurrentLocation() -> CLLocation? {
-        OsmAndApp.swiftInstance().locationServices.lastKnownLocation
+        OsmAndApp.swiftInstance().locationServices?.lastKnownLocation
     }
 
     private func getTargetLocation() -> CLLocationCoordinate2D? {

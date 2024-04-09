@@ -189,6 +189,6 @@ final class TravelArticleIdentifier : NSObject {
     }
     
     private func rountToInt(_ coordinate: Double) -> Int {
-        return Int(coordinate * 8)
+        Int(coordinate * 8)
     }
 }

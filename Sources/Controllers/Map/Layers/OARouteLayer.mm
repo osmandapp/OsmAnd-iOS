@@ -462,10 +462,10 @@
     }
     else
     {
-        width = [self getParamFromAttr:@"strokeWidth"].floatValue * VECTOR_LINE_SCALE_COEF;
+        width = [self getParamFromAttr:@"strokeWidth"].floatValue;
     }
 
-    return width;
+    return width * VECTOR_LINE_SCALE_COEF;
 }
 
 - (CGFloat)getWidthByKey:(NSString *)widthKey

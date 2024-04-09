@@ -185,7 +185,7 @@
     
     OAGPXDocument *gpx = [article gpxFile].object;
     NSString *filePath = [OsmAndApp.instance.gpxTravelPath stringByAppendingPathComponent:fileName];
-    BOOL succeed = [gpx saveTo:filePath];
+    [gpx saveTo:filePath];
     [self buildGpx:filePath title:nil gpxDoc:gpx];
     return filePath;
 }

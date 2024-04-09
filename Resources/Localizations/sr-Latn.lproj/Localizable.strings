@@ -1783,7 +1783,7 @@
 "hidden_categories" = "Skrivene kategorije";
 "create_custom_categories_list_promo" = "Promeni redosled spiska i sakrij kategorije. Uvezi ili izvezi sve promene kao profile.";
 "reset_to_default_category_button_promo" = "Povratak na podrazumevanoće postaviti redosled razvrstavanja na podrazumevano stanje posle ugradnje programa.";
-"search_poi_types_descr" = "Kombinuj TOI različitih kategorija. Tapni prekidač za odaabir svih, tapnite na levu stranu da odabereš kategoriju.";
+"search_poi_types_descr" = "Kombinuj TOI različitih kategorija. Tapni prekidač za odabir svih, tapni na levu stranu da odabereš kategoriju.";
 "email_example_hint" = "korisnik@vebsajt.com";
 "shared_string_required" = "Potrebno";
 "login_account" = "Nalog";

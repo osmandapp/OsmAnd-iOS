@@ -54,7 +54,12 @@ final class AverageGlideComputer: AverageValueComputer {
                 let difference = calculateAltitudeDifference(locationsToUse)
                 return GlideUtils.calculateFormattedRatio(distance, altDif: difference)
             } else {
-                //todo return vertical speed
+                let altitudeDifference = calculateAltitudeDifference(locationsToUse)
+                if measuredInterval > 0 {
+                    let verticalSpeedValue = abs(altitudeDifference) / (Double(measuredInterval) / 1000.0)
+                    let roundedVerticalSpeedValue = round(verticalSpeedValue)
+                    return OAOsmAndFormatter.getFormattedSpeed(Float(roundedVerticalSpeedValue))
+                }
             }
         }
         return nil

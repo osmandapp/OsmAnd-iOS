@@ -179,19 +179,15 @@ final class TravelArticleIdentifier : NSObject {
     }
     
     override var hash: Int {
+        // hasher.combine() sometimes makes differs cache for double values like latLon.
+        // but it works fine if it will be rouded. Like this:
+        // 41.31233892746772 -> // "41.3123389275"
         var hasher = Hasher()
-        hasher.combine(getFirstIntSymbols(lat, digitsCount: 10))
-        hasher.combine(getFirstIntSymbols(lon, digitsCount: 10))
+        hasher.combine(String(format: "%.10f", lat))
+        hasher.combine(String(format: "%.10f", lon))
         hasher.combine(file ?? "")
         hasher.combine(routeId ?? "")
         hasher.combine(routeSource ?? "")
         return hasher.finalize()
-    }
-    
-    private func getFirstIntSymbols(_ doubleValue: Double, digitsCount: Int) -> Int {
-        // hasher.combine() sometimes makes differs cache for double values like latLon.
-        // but it works fine if it will be rouded to Int. Like this:
-        // 41.31233892746772 -> 4131233892
-        return Int(doubleValue * pow(Double(10), Double(digitsCount)))
     }
 }

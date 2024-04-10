@@ -170,24 +170,30 @@ final class TravelArticleIdentifier : NSObject {
         routeId = article.routeId
         routeSource = article.routeSource
     }
-
-    static func == (lhs: TravelArticleIdentifier, rhs: TravelArticleIdentifier) -> Bool {
-        return OAMapUtils.areLatLonEqual(lhs.lat, lon1: lhs.lon, lat2: rhs.lat, lon2: rhs.lon) &&
-        lhs.file == rhs.file &&
-        lhs.routeId == rhs.routeId &&
-        lhs.routeSource == rhs.routeSource
-    }
     
     override var hash: Int {
-        // hasher.combine() sometimes makes differs cache for double values like latLon.
-        // but it works fine if it will be rouded. Like this:
-        // 41.31233892746772 -> // "41.3123389275"
         var hasher = Hasher()
-        hasher.combine(String(format: "%.10f", lat))
-        hasher.combine(String(format: "%.10f", lon))
-        hasher.combine(file ?? "")
-        hasher.combine(routeId ?? "")
-        hasher.combine(routeSource ?? "")
+        hasher.combine(lat)
+        hasher.combine(lon)
+        if let file, !file.isEmpty {
+            hasher.combine(file)
+        }
+        if let routeId, !routeId.isEmpty {
+            hasher.combine(routeId)
+        }
+        if let routeSource, !routeSource.isEmpty {
+            hasher.combine(routeSource)
+        }
         return hasher.finalize()
+    }
+    
+    override func isEqual(_ obj: Any?) -> Bool {
+        guard let other = obj as? TravelArticleIdentifier else {
+            return false
+        }
+        return OAMapUtils.areLatLonEqual(self.lat, lon1: self.lon, lat2: other.lat, lon2: other.lon) &&
+        self.file == other.file &&
+        self.routeId == other.routeId &&
+        self.routeSource == other.routeSource
     }
 }

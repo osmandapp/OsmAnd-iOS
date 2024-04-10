@@ -495,6 +495,7 @@ class IOSWriter {
     static func filterUnsafeChars(_ text: String) -> String {
         var result: String = text;
         result = result.replacingOccurrences(of: ";", with: ".")
+        result = result.replacingOccurrences(of: "\n", with: " ")
         
         if result.hasPrefix("\"") && !result.hasPrefix("\\\"") {
             result = String(result.dropFirst())

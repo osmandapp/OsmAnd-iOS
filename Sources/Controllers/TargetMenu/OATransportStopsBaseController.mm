@@ -36,12 +36,11 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 
 - (NSMutableArray<OATransportStopRoute *> *)filterNearbyTransportRoutes:(NSArray<OATransportStopRoute *> *)routes filterFromRoutes:(NSArray<OATransportStopRoute *> *)filterFromRoutes
 {
-    NSMutableArray<OATransportStopRoute *> *nearbyFilteredTransportStopRoutes = [self filterTransportRoutes:routes];
     if (filterFromRoutes == nil || filterFromRoutes.count == 0)
-        return nearbyFilteredTransportStopRoutes;
+        return routes.mutableCopy;
     
     NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
-    for (OATransportStopRoute *route in nearbyFilteredTransportStopRoutes)
+    for (OATransportStopRoute *route in routes)
     {
         if (![self containsRef:filterFromRoutes transportRoute:route])
         {
@@ -182,7 +181,7 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
         return [o1.desc compare:o2.desc];
     };
     localRoutes = [self filterTransportRoutes:localRoutes];
-    nearbyRoutes = [self filterNearbyTransportRoutes:nearbyRoutes filterFromRoutes:localRoutes];
+    nearbyRoutes = [self filterTransportRoutes:nearbyRoutes];
     [localRoutes sortUsingComparator:comparator];
     [nearbyRoutes sortUsingComparator:comparator];
     self.localRoutes = localRoutes;

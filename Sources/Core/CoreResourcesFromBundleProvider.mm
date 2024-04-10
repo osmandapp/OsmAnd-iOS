@@ -216,7 +216,10 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
     else if (name.startsWith(QLatin1String("map/icons/")))
     {
         auto resourceFileName = name;
-        resourceFileName = resourceFileName.replace(QLatin1String("map/icons/"), QLatin1String("mx_"));
+        if (name.startsWith(QLatin1String("map/icons/c_")))
+            resourceFileName = resourceFileName.replace(QLatin1String("map/icons/c_"), QLatin1String("c_mx_"));
+        else
+            resourceFileName = resourceFileName.replace(QLatin1String("map/icons/"), QLatin1String("mx_"));
         const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();

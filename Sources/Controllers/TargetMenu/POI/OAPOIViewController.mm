@@ -26,6 +26,7 @@
 #import "OAWikiArticleHelper.h"
 #import "OANativeUtilities.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Search/TransportStopsInAreaSearch.h>
@@ -180,7 +181,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     OARowInfo *cuisineRow;
     NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
 
-    BOOL osmEditingEnabled = [OAPlugin isEnabled:OAOsmEditingPlugin.class];
+    BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
     CGSize iconSize = {20, 20}; // TODO: Hardcoded size
 
     for (NSString *key in [self.poi getAdditionalInfo].allKeys)
@@ -263,7 +264,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         {
             if (!hasWiki)
             {
-                NSString *articleLang = [OAPlugin onGetMapObjectsLocale:self.poi preferredLocale:preferredLang];
+                NSString *articleLang = [OAPluginsHelper onGetMapObjectsLocale:self.poi preferredLocale:preferredLang];
                 NSString *lng = [self.poi getContentLanguage:@"content" lang:articleLang defLang:@"en"];
                 if (!lng || lng.length == 0)
                     lng = @"en";

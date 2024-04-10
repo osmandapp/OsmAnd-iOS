@@ -22,6 +22,7 @@
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -40,7 +41,7 @@ static OAQuickActionType *ACTION_TYPE;
 
 - (void) execute
 {
-    OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+    OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     
     if (plugin)
     {

@@ -646,7 +646,7 @@
 "gpx_distance_points" = "Rastojanje (tačaka)";
 "gpx_max_speed" = "Maksimalna brzina";
 "shared_string_speed" = "Brzina";
-"shared_string_slope" = "Padina";
+"shared_string_slope" = "Nagib padine";
 "stats_select_graph_data" = "Izaberite podatke grafikona";
 
 // Map settings
@@ -746,7 +746,7 @@
 "sett_pref_lang" = "Željeni jezik";
 "sett_lang_show_local" = "Prikaži lokalna imena";
 "translit_names" = "Preslovi imena";
-"lang_af" = "Afrikaanski";
+"lang_af" = "Afrički";
 "lang_al" = "Albanski";
 "lang_als" = "Albanski (toskijski)";
 "lang_an" = "Aragonski";
@@ -934,7 +934,7 @@
 "profile_appearance_descr" = "Ikonica, boja i ime";
 "ui_customization" = "Prilagođavanje korisničkog interfejsa";
 "ui_customization_short_descr" = "Elementi glavnog i kontekstnog menija";
-"reorder_profiles" = "Izmeni spisak profila";
+"reorder_profiles" = "Izmeni listu profila";
 "profile_alert_need_profile_name_title" = "Unesi ime profila";
 "select_color" = "Odaberi boju";
 "select_icon_profile_dialog_title" = "Odaberi ikonu";
@@ -1147,9 +1147,9 @@
 "clear_tiles_warning" = "Primenom ovih izmena očistićeš keš podatke ovog izvora sličica mape";
 "welmode_download_maps" = "Preuzimanje mapa";
 "srtm_unit_format" = "Varijanta mernih jedinica za izohipse";
-"srtm_download_single_help_message" = "Odaberi vrstu. Moraćeš ponovo da preuzmeš fajlradi promene oblika.";
+"srtm_download_single_help_message" = "Odaberi varijantu. Moraćeš ponovno preuzeti datoteku kako bi promenio format.";
 "srtm_download_list_help_message" = "OsmAnd pruža podatke o izohipsama u metrima i stopama. Preuzmi ponovo fajl radi promene formata.";
-"shared_string_meters" = "metara";
+"shared_string_meters" = "metri";
 "shared_string_feet" = "stope";
 
 // Menu
@@ -1163,7 +1163,7 @@
 "closing_changeset" = "Zatvaranje skupa promena…";
 "commiting_node" = "Intervencijačvora…";
 "loading_poi_obj" = "Učitavam TOI…";
-"shared_string_loading" = "Preuzimanje";
+"shared_string_loading" = "Učitavanje";
 "osm_upload_failed_title" = "Otpremanje nije uspelo";
 "osm_upload_failed_descr" = "Proverite svoje podatke za prijavu i internet vezu i pokušajte ponovo.";
 "exit_without_saving" = "Izađi bez snimanja?";
@@ -1783,7 +1783,7 @@
 "hidden_categories" = "Skrivene kategorije";
 "create_custom_categories_list_promo" = "Promeni redosled spiska i sakrij kategorije. Uvezi ili izvezi sve promene kao profile.";
 "reset_to_default_category_button_promo" = "Povratak na podrazumevanoće postaviti redosled razvrstavanja na podrazumevano stanje posle ugradnje programa.";
-"search_poi_types_descr" = "Kombinuj TOI različitih kategorija. Tapni prekidač za odaabir svih, tapnite na levu stranu da odabereš kategoriju.";
+"search_poi_types_descr" = "Kombinuj TOI različitih kategorija. Tapni prekidač za odabir svih, tapni na levu stranu da odabereš kategoriju.";
 "email_example_hint" = "korisnik@vebsajt.com";
 "shared_string_required" = "Potrebno";
 "login_account" = "Nalog";
@@ -2774,7 +2774,7 @@
 "help_article_map_legend_osmand_name" = "Stil OsmAnd mape";
 "help_article_map_legend_ski_map_name" = "Stil skijaške mape";
 "help_article_map_map_context_menu_name" = "Priručni meni mape";
-"help_article_map_track_context_menu_name" = "Priručni meni trasa";
+"help_article_map_track_context_menu_name" = "Priručni meni staza";
 "help_article_map_raster_maps_name" = "Rasterske mape (online/ offline)";
 "help_article_map_tracks_on_map_name" = "Trase i rute";
 "help_article_map_vector_maps_name" = "Vektorske mape (stil mape)";
@@ -2847,7 +2847,7 @@
 "upload_all" = "Skinuti sve";
 "cloud_all_changes_uploaded" = "Sve izmene su otpremljene";
 "cloud_all_changes_downloaded" = "Sve izmene su preuzete";
-"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim spisak fajlova sa servera.";
+"backup_error_failed_to_fetch_remote_items" = "Nisam uspeo da dobavim listu fajlova sa servera.";
 "last_sync" = "Poslednja sinhronizacija";
 "mtb_imba_full" = "Internacionalno udruženje planinskih biciklista";
 "rendering_attr_showMtbScale_name" = "Prikazuj skalu MTB-a";
@@ -3387,3 +3387,4 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Upotrebi specijalno rutiranje (samo HH)";
 "track_appearance_3D_visualization" = "3D vizuelizacija";
 "osmand_depelopment_use_special_routing_hh+old" = "Upotrebi specijalno rutiranje (HH + staro)";
+"online_plugins" = "Mrežni dodaci";

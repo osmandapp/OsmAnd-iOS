@@ -117,6 +117,9 @@
 - (NSString *) getGroupName:(NSString *)fileName;
 
 - (NSString *) getUserIosId;
+- (int) getAppExecCount;
+- (int) getAppInstalledDays;
+- (NSString *) getLanguageCode;
 
 // Tests only
 - (BOOL) installTestResource:(NSString *)filePath;

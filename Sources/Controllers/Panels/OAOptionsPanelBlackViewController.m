@@ -19,6 +19,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #import "OARoutePlanningHudViewController.h"
 #import "InitialRoutePlanningBottomSheetViewController.h"
@@ -105,14 +106,14 @@
     CGFloat topY = [OAUtilities getStatusBarHeight];
     CGFloat buttonHeight = 50.0;
     CGFloat width = kDrawerWidth;
-    BOOL isWeatherPluginEnabled = [[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled];
+    BOOL isWeatherPluginEnabled = [[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled];
 
     if (isWeatherPluginEnabled)
         _menuButtonWeatherDiv.hidden = NO;
     else
         _menuButtonPlanRouteDiv.hidden = NO;
     
-    BOOL isExternalSensorsPluginEnabled = [[OAPlugin getPlugin:OAExternalSensorsPlugin.class] isEnabled];
+    BOOL isExternalSensorsPluginEnabled = [[OAPluginsHelper getPlugin:OAExternalSensorsPlugin.class] isEnabled];
     
     if (isExternalSensorsPluginEnabled)
         _menuButtonExternalSensors.hidden = NO;

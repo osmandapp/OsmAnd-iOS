@@ -153,7 +153,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
                 widget?.setAnyDevice(use: true)
                 widget?.configureDevice(id: "")
             } else if pairedSensorsType == .tripRecording {
-                guard let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+                guard let plugin = OAPluginsHelper.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
                 switch optionDevice.option {
                 case .none:
                     plugin.saveDeviceId(OATrackRecordingNone, widgetType: widgetType, appMode: appMode)
@@ -168,7 +168,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
                 widget?.setAnyDevice(use: false)
                 widget?.configureDevice(id: currentSelectedDevice.id)
             case .tripRecording:
-                guard let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+                guard let plugin = OAPluginsHelper.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
                 plugin.saveDeviceId(currentSelectedDevice.id, widgetType: widgetType, appMode: appMode)
             }
             onSelectDeviceAction?(currentSelectedDevice)
@@ -191,7 +191,7 @@ final class BLEPairedSensorsViewController: OABaseNavbarViewController {
     private func configureTripRecordingDataSource() {
         guard let widgetType,
               let appMode,
-              let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+              let plugin = OAPluginsHelper.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
         
         devices = []
         let savedDeviceId = plugin.getDeviceId(for: widgetType, appMode: appMode)

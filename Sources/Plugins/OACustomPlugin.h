@@ -15,8 +15,20 @@ NS_ASSUME_NONNULL_BEGIN
 @interface OACustomPlugin : OAPlugin
 
 @property (nonatomic) NSString *resourceDirName;
-@property (nonatomic, readonly) NSMutableArray<NSString *> *rendererNames;
-@property (nonatomic, readonly) NSMutableArray<NSString *> *routerNames;
+@property (nonatomic, readonly) NSArray<NSString *> *rendererNames;
+@property (nonatomic, readonly) NSArray<NSString *> *routerNames;
+
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *names;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *descriptions;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *iconNames;
+@property (nonatomic, readonly) NSDictionary<NSString *, NSString *> *imageNames;
+
+@property (nonatomic, readonly) UIImage *icon;
+@property (nonatomic, readonly) UIImage *image;
+
+@property (nonatomic, readonly) NSArray<OASuggestedDownloadsItem *> *suggestedDownloadItems;
+@property (nonatomic, readonly) NSArray<OAWorldRegion *> *customRegions;
+
 
 - (instancetype) initWithJson:(NSDictionary *)json;
 

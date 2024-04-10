@@ -36,6 +36,17 @@
 
 @interface OACustomPlugin () <OASettingsImportExportDelegate>
 
+@property (nonatomic) NSDictionary<NSString *, NSString *> *names;
+@property (nonatomic) NSDictionary<NSString *, NSString *> *descriptions;
+@property (nonatomic) NSDictionary<NSString *, NSString *> *iconNames;
+@property (nonatomic) NSDictionary<NSString *, NSString *> *imageNames;
+
+@property (nonatomic) UIImage *icon;
+@property (nonatomic) UIImage *image;
+
+@property (nonatomic) NSArray<OASuggestedDownloadsItem *> *suggestedDownloadItems;
+@property (nonatomic) NSArray<OAWorldRegion *> *customRegions;
+
 @end
 
 @implementation OACustomPlugin
@@ -43,17 +54,6 @@
     
     NSString *_pluginId;
     NSInteger _version;
-    
-    NSDictionary<NSString *, NSString *> *_names;
-    NSDictionary<NSString *, NSString *> *_descriptions;
-    NSDictionary<NSString *, NSString *> *_iconNames;
-    NSDictionary<NSString *, NSString *> *_imageNames;
-    
-    UIImage *_icon;
-    UIImage *_image;
-    
-    NSArray<OASuggestedDownloadsItem *> *_suggestedDownloadItems;
-    NSArray<OAWorldRegion *> *_customRegions;
 }
 
 - (instancetype) initWithJson:(NSDictionary *)json
@@ -61,7 +61,7 @@
     self = [super init];
     if (self)
     {
-        _customRegions = [NSArray array];
+        self.customRegions = [NSArray array];
         _pluginId = json[@"pluginId"];
         _version = json[@"version"] ? [json[@"version"] integerValue] : -1;
         [self readAdditionalDataFromJson:json];
@@ -83,17 +83,17 @@
 
 - (NSString *)getName
 {
-    return [OAJsonHelper getLocalizedResFromMap:_names defValue:OALocalizedString(@"custom_osmand_plugin")];
+    return [OAJsonHelper getLocalizedResFromMap:self.names defValue:OALocalizedString(@"custom_osmand_plugin")];
 }
 
 - (NSString *)getDescription
 {
-    return [OAJsonHelper getLocalizedResFromMap:_descriptions defValue:@""];
+    return [OAJsonHelper getLocalizedResFromMap:self.descriptions defValue:@""];
 }
 
 - (NSArray<OAWorldRegion *> *)getDownloadMaps
 {
-    return _customRegions;
+    return self.customRegions;
 }
 
 - (BOOL)initPlugin
@@ -149,19 +149,19 @@
 
 - (UIImage *)getLogoResource
 {
-    return _icon ? : super.getLogoResource;
+    return self.icon ? : super.getLogoResource;
 }
 
 - (UIImage *)getAssetResourceImage
 {
-    return _image ? : super.getAssetResourceImage;
+    return self.image ? : super.getAssetResourceImage;
 }
 
 - (NSArray<OAResourceItem *> *) getSuggestedMaps
 {
     NSMutableArray<OAResourceItem *> *suggestedMaps = [NSMutableArray new];
         
-    for (OASuggestedDownloadsItem *item in _suggestedDownloadItems)
+    for (OASuggestedDownloadsItem *item in self.suggestedDownloadItems)
     {
         OsmAnd::ResourcesManager::ResourceType type = [OAResourceType resourceTypeByScopeId:item.scopeId];
 
@@ -326,28 +326,28 @@
 
 - (void) readAdditionalDataFromJson:(NSDictionary *)json
 {
-    _iconNames = json[@"icon"];
-    _imageNames = json[@"image"];
-    _names = json[@"name"];
-    _descriptions = json[@"description"];
+    self.iconNames = json[@"icon"];
+    self.imageNames = json[@"image"];
+    self.names = json[@"name"];
+    self.descriptions = json[@"description"];
     
     NSArray *regionsJson = json[@"regionsJson"];
     if (regionsJson != nil)
     {
-        _customRegions = [_customRegions arrayByAddingObjectsFromArray:[self.class collectRegionsFromJson:regionsJson]];
+        self.customRegions = [self.customRegions arrayByAddingObjectsFromArray:[self.class collectRegionsFromJson:regionsJson]];
     }
 }
 
 - (void) writeAdditionalDataToJson:(NSMutableDictionary *)json
 {
-    if (_iconNames)
-        json[@"icon"] = _iconNames;
-    if (_imageNames)
-        json[@"image"] = _imageNames;
-    if (_names)
-        json[@"name"] = _names;
-    if (_descriptions)
-        json[@"description"] = _descriptions;
+    if (self.iconNames)
+        json[@"icon"] = self.iconNames;
+    if (self.imageNames)
+        json[@"image"] = self.imageNames;
+    if (self.names)
+        json[@"name"] = self.names;
+    if (self.descriptions)
+        json[@"description"] = self.descriptions;
     
     NSMutableArray *regionsJson = [NSMutableArray new];
     for (OAWorldRegion *region in self.getFlatCustomRegions)
@@ -362,8 +362,8 @@
 
 - (NSArray<OAWorldRegion *> *) getFlatCustomRegions
 {
-    NSMutableArray<OAWorldRegion *> *l = [NSMutableArray arrayWithArray:_customRegions];
-    for (OAWorldRegion *region in _customRegions)
+    NSMutableArray<OAWorldRegion *> *l = [NSMutableArray arrayWithArray:self.customRegions];
+    for (OAWorldRegion *region in self.customRegions)
     {
         [self collectCustomSubregionsFromRegion:region items:l];
     }
@@ -422,20 +422,26 @@
 
 - (void) addRouter:(NSString *)fileName
 {
-    if (!_routerNames)
-        _routerNames = [NSMutableArray array];
+    NSMutableArray<NSString *> *routerNames = [NSMutableArray array];
+    if (_routerNames)
+        [routerNames addObjectsFromArray:_routerNames];
     NSString *routerName = fileName.lastPathComponent;
-    if (![_routerNames containsObject:routerName])
-        [_routerNames addObject:routerName];
+    if (![routerNames containsObject:routerName])
+        [routerNames addObject:routerName];
+
+    _routerNames = routerNames;
 }
 
 - (void) addRenderer:(NSString *)fileName
 {
-    if (!_rendererNames)
-        _rendererNames = [NSMutableArray array];
+    NSMutableArray<NSString *> *rendererNames = [NSMutableArray array];
+    if (_rendererNames)
+        [rendererNames addObjectsFromArray:_rendererNames];
     NSString *rendererName = fileName.lastPathComponent;
-    if (![_rendererNames containsObject:rendererName])
-        [_rendererNames addObject:rendererName];
+    if (![rendererNames containsObject:rendererName])
+        [rendererNames addObject:rendererName];
+
+    _rendererNames = rendererNames;
 }
 
 - (void) loadResources
@@ -450,13 +456,13 @@
         for (NSString *resFile in files)
         {
             NSString *path = [pluginResDir stringByAppendingPathComponent:resFile];
-            if (!_icon)
-                _icon = [self getIconForFile:path fileNames:_iconNames];
-            if (!_image)
-                _image = [self getIconForFile:path fileNames:_imageNames];
+            if (!self.icon)
+                self.icon = [self getIconForFile:path fileNames:self.iconNames];
+            if (!self.image)
+                self.image = [self getIconForFile:path fileNames:self.imageNames];
         }
     }
-    for (OAWorldRegion *region in _customRegions)
+    for (OAWorldRegion *region in self.customRegions)
     {
         [self loadSubregionIndexItems:region];
     }
@@ -475,12 +481,12 @@
 
 - (void) updateSuggestedDownloads:(NSArray<OASuggestedDownloadsItem *> *)items
 {
-    _suggestedDownloadItems = [NSArray arrayWithArray:items];
+    self.suggestedDownloadItems = [NSArray arrayWithArray:items];
 }
 
 - (void) updateDownloadItems:(NSArray<OAWorldRegion *> *)items
 {
-    _customRegions = [NSArray arrayWithArray:items];
+    self.customRegions = [NSArray arrayWithArray:items];
 }
 
 // TODO: figure out how to port this to our download system

@@ -14,6 +14,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherBand.h"
+#import "OAPluginsHelper.h"
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"
@@ -1522,7 +1523,7 @@
 {
     @synchronized (_lock)
     {
-        OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+        OAWikipediaPlugin *plugin = (OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class];
         [plugin toggleWikipediaPoi:wikipedia];
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(wikipedia)];
     }

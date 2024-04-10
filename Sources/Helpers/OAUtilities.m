@@ -28,6 +28,7 @@
 #import <mach/mach_host.h>
 #include <CommonCrypto/CommonDigest.h>
 #import <CocoaSecurity.h>
+#import <sys/utsname.h>
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -229,6 +230,18 @@
     return img;
 }
 
+@end
+
+@implementation UIDevice (util)
+
++ (NSString *) machine
+{
+    struct utsname systemInfo;
+    if (uname(&systemInfo) == 0)
+        return [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+
+    return nil;
+}
 
 @end
 

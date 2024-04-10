@@ -29,7 +29,7 @@ class CoordinatesCurrentLocationWidget: CoordinatesBaseWidget {
         updateVisibility(visible: visible)
 
         if visible {
-            if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices.lastKnownLocation {
+            if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
                 showFormattedCoordinates(lat: lastKnownLocation.coordinate.latitude,
                                          lon: lastKnownLocation.coordinate.longitude)
             }

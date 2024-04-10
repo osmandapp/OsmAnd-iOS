@@ -46,6 +46,7 @@
 #import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
+#import "OAPluginsHelper.h"
 
 #include <algorithm>
 #include <QList>
@@ -684,7 +685,7 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
 
-    [OAPlugin initPlugins];
+    [OAPluginsHelper initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
@@ -784,14 +785,9 @@
 - (NSString *) generateIndexesUrl
 {
     NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersionDependentConstants.getAppVersionForUrl];
-    NSUserDefaults *settings = [NSUserDefaults standardUserDefaults];
-    int execCount = (int)[settings integerForKey:kAppExecCounter];
-    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
-    double appInstalledTime = [settings doubleForKey:kAppInstalledDate];
-    int appInstalledDays = (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
-    [res appendFormat:@"&nd=%d&ns=%d", appInstalledDays, execCount];
+    [res appendFormat:@"&nd=%d&ns=%d", self.getAppInstalledDays, self.getAppExecCount];
     if (self.getUserIosId.length > 0)
-        [res appendFormat:@"&aid=%@", [self getUserIosId]];
+        [res appendFormat:@"&aid=%@", self.getUserIosId];
     return res;
 }
 
@@ -1315,6 +1311,25 @@
     userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     [settings.userIosId set:userIosId];
     return userIosId;
+}
+
+- (int) getAppExecCount
+{
+    return (int)[[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter];
+}
+
+- (int) getAppInstalledDays
+{
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    double appInstalledTime = [[NSUserDefaults standardUserDefaults] doubleForKey:kAppInstalledDate];
+    return (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
+}
+
+- (NSString *) getLanguageCode
+{
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
+    return [languageDictionary objectForKey:NSLocaleLanguageCode];
 }
 
 @end

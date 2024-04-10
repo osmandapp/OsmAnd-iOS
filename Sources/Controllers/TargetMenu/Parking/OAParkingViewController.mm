@@ -20,6 +20,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -55,7 +56,7 @@
     self = [super init];
     if (self)
     {
-        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
         if (plugin)
         {
             _coord = plugin.getParkingPosition ? plugin.getParkingPosition.coordinate : CLLocationCoordinate2DMake(0., 0.);

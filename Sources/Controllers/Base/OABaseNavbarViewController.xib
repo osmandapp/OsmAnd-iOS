@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22155" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22131"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -11,8 +11,9 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="OABaseNavbarViewController">
             <connections>
+                <outlet property="progressView" destination="JYq-b1-d8c" id="B8Q-ac-u2b"/>
                 <outlet property="tableView" destination="lEe-QA-baY" id="2EG-Lw-8Hb"/>
-                <outlet property="view" destination="L5C-Gb-Fk0" id="ZIo-Wn-w1A"/>
+                <outlet property="view" destination="L5C-Gb-Fk0" id="Kxl-Ar-f6R"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -25,14 +26,24 @@
                     <color key="backgroundColor" name="viewBg"/>
                     <color key="separatorColor" name="customSeparator"/>
                 </tableView>
+                <progressView hidden="YES" opaque="NO" contentMode="scaleToFill" verticalHuggingPriority="750" progress="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="JYq-b1-d8c">
+                    <rect key="frame" x="0.0" y="48" width="414" height="4"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="4" id="7ei-43-jde"/>
+                    </constraints>
+                    <color key="progressTintColor" name="iconColorActive"/>
+                </progressView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="Rn4-Fc-LbU"/>
             <color key="backgroundColor" name="viewBg"/>
             <constraints>
+                <constraint firstItem="JYq-b1-d8c" firstAttribute="top" secondItem="Rn4-Fc-LbU" secondAttribute="top" id="1zs-Zo-DPC"/>
                 <constraint firstAttribute="bottom" secondItem="lEe-QA-baY" secondAttribute="bottom" id="BDl-wp-zPY"/>
                 <constraint firstItem="lEe-QA-baY" firstAttribute="top" secondItem="L5C-Gb-Fk0" secondAttribute="top" id="QDa-Jm-M3F"/>
                 <constraint firstAttribute="trailing" secondItem="lEe-QA-baY" secondAttribute="trailing" id="QWh-IP-Sdf"/>
                 <constraint firstItem="lEe-QA-baY" firstAttribute="leading" secondItem="L5C-Gb-Fk0" secondAttribute="leading" id="YpI-nF-0rQ"/>
+                <constraint firstItem="JYq-b1-d8c" firstAttribute="leading" secondItem="Rn4-Fc-LbU" secondAttribute="leading" id="icc-Fh-8rZ"/>
+                <constraint firstItem="JYq-b1-d8c" firstAttribute="trailing" secondItem="Rn4-Fc-LbU" secondAttribute="trailing" id="tB2-F8-Aki"/>
             </constraints>
             <point key="canvasLocation" x="57.971014492753625" y="770.75892857142856"/>
         </view>
@@ -40,6 +51,9 @@
     <resources>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="iconColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

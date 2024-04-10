@@ -27,6 +27,7 @@ typedef NS_ENUM(NSInteger, EOABaseNavbarStyle)
 
 @interface OABaseNavbarViewController : OASuperViewController<UIGestureRecognizerDelegate, UIScrollViewDelegate, UITableViewDelegate, UITableViewDataSource>
 
+@property (weak, nonatomic) IBOutlet UIProgressView *progressView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (nonatomic, readonly) OATableDataModel *tableData;
 

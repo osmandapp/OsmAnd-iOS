@@ -67,6 +67,7 @@
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAPluginsHelper.h"
 
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
@@ -2462,10 +2463,10 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     _geoTiffCollection.reset(manualTilesCollection);
 }
 
-- (void) recreateHeightmapProvider
+- (void)recreateHeightmapProvider
 {
-    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin)
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
+    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -2478,7 +2479,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) updateElevationConfiguration
 {
-    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getEnabledPlugin:OASRTMPlugin.class];
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
     BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)

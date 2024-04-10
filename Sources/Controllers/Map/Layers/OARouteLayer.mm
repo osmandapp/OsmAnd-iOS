@@ -73,6 +73,8 @@
     NSCache<NSString *, NSNumber *> *_cachedRouteLineWidth;
     int _currentAnimatedRoute;
     CLLocation *_lastProj;
+
+    int64_t _linesPriority;
 }
 
 - (NSString *) layerId
@@ -92,10 +94,14 @@
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
+    _linesPriority = std::numeric_limits<int64_t>::max();
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _collection->setPriority(_linesPriority);
     _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _actionLinesCollection->setPriority(_linesPriority);
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
-    
+    _transportRouteMarkers->setPriority(_linesPriority);
+
     _transportTransferIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_transfer"];
     _transportShieldIcon = [OANativeUtilities skImageFromPngResource:@"map_public_transport_stop_shield"];
     
@@ -126,9 +132,12 @@
     [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _collection->setPriority(_linesPriority);
     _actionLinesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    _actionLinesCollection->setPriority(_linesPriority);
     _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
-    
+    _transportRouteMarkers->setPriority(_linesPriority);
+
     _routeAttributes = nil;
     _route = nil;
 }
@@ -274,6 +283,7 @@
             {
                 [self.mapView removeKeyedSymbolsProvider:_collection];
                 _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
+                _collection->setPriority(_linesPriority);
             }
 
             int baseOrder = self.baseOrder;
@@ -453,11 +463,9 @@
     else
     {
         width = [self getParamFromAttr:@"strokeWidth"].floatValue;
-        double mapDensity = [[OAAppSettings sharedManager].mapDensity get];
-        width = 2 / (mapDensity / (width - UIScreen.mainScreen.scale));
     }
 
-    return width;
+    return width * VECTOR_LINE_SCALE_COEF;
 }
 
 - (CGFloat)getWidthByKey:(NSString *)widthKey
@@ -762,9 +770,11 @@
             
             [self.mapView removeKeyedSymbolsProvider:_collection];
             _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
-            
+            _collection->setPriority(_linesPriority);
+
             [self.mapView removeKeyedSymbolsProvider:_transportRouteMarkers];
             _transportRouteMarkers = std::make_shared<OsmAnd::MapMarkersCollection>();
+            _transportRouteMarkers->setPriority(_linesPriority);
             for (const auto &seg : route->segments)
             {
                 [self drawTransportSegment:seg sync:sync];

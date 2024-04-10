@@ -147,7 +147,14 @@ final class GlideAverageWidget: GlideBaseWidget {
             if ratio != cachedFormattedGlideRatio {
                 cachedFormattedGlideRatio = ratio
                 if let ratio, !ratio.isEmpty {
-                    setText(ratio, subtext: "")
+                    if isInVerticalSpeedState() {
+                        let components = ratio.components(separatedBy: " ")
+                        let numberPart = components.dropLast().joined(separator: " ")
+                        let unitPart = components.last ?? ""
+                        setText(numberPart, subtext: unitPart)
+                    } else {
+                        setText(ratio, subtext: "")
+                    }
                 } else {
                     setText("-", subtext: "")
                 }

@@ -190,7 +190,7 @@ final class TravelArticleIdentifier : NSObject {
     
     private func getFirstIntSymbols(_ doubleValue: Double, digitsCount: Int) -> Int {
         // hasher.combine() sometimes makes differs cache for double values like latLon.
-        // but it works fine if it will be rouder to Int. Like this:
+        // but it works fine if it will be rouded to Int. Like this:
         // 41.31233892746772 -> 4131233892
         return Int(doubleValue * pow(Double(10), Double(digitsCount)))
     }

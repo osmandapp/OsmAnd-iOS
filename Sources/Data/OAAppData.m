@@ -35,6 +35,7 @@
 #define kLastTerrainTypeKey @"lastTerrainType"
 #define kHillshadeAlphaKey @"hillshadeAlpha"
 #define kSlopeAlphaKey @"slopeAlpha"
+#define kVerticalExaggerationKey @"kVerticalExaggeration"
 #define kHillshadeMinZoomKey @"hillshadeMinZoom"
 #define kHillshadeMaxZoomKey @"hillshadeMaxZoom"
 #define kSlopeMinZoomKey @"slopeMinZoom"
@@ -109,6 +110,7 @@
     OACommonDouble *_slopeAlphaProfile;
     OACommonInteger *_slopeMinZoomProfile;
     OACommonInteger *_slopeMaxZoomProfile;
+    OACommonDouble *_verticalExaggerationScaleProfile;
     OACommonBoolean *_mapillaryProfile;
     OACommonBoolean *_wikipediaGlobalProfile;
     OACommonStringList *_wikipediaLanguagesProfile;
@@ -215,6 +217,10 @@
         {
             [_slopeMaxZoomProfile setValueFromString:value appMode:mode];
         }
+        else if ([key isEqualToString:@"vertical_exaggeration_scale"])
+        {
+            [_verticalExaggerationScaleProfile set:[value doubleValue] mode:mode];
+        }
         else if ([key isEqualToString:@"show_mapillary"])
         {
             [_mapillaryProfile setValueFromString:value appMode:mode];
@@ -249,6 +255,7 @@
         prefs[@"slope_transparency"] = [NSString stringWithFormat:@"%d", (int) ([_slopeAlphaProfile get:mode] * 100)];
         prefs[@"slope_min_zoom"] = [_slopeMinZoomProfile toStringValue:mode];
         prefs[@"slope_max_zoom"] = [_slopeMaxZoomProfile toStringValue:mode];
+        prefs[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", ([_verticalExaggerationScaleProfile get:mode])];
         prefs[@"show_mapillary"] = [_mapillaryProfile toStringValue:mode];
         prefs[@"global_wikipedia_poi_enabled"] = [_wikipediaGlobalProfile toStringValue:mode];
         prefs[@"wikipedia_poi_enabled_languages"] = [_wikipediaLanguagesProfile toStringValue:mode];
@@ -271,6 +278,7 @@
     _terrainChangeObservable = [[OAObservable alloc] init];
     _terrainResourcesChangeObservable = [[OAObservable alloc] init];
     _terrainAlphaChangeObservable = [[OAObservable alloc] init];
+    _verticalExaggerationScaleChangeObservable = [[OAObservable alloc] init];
     _mapLayerChangeObservable = [[OAObservable alloc] init];
     _mapillaryChangeObservable = [[OAObservable alloc] init];
 
@@ -307,6 +315,8 @@
     _lastTerrainTypeProfile = [OACommonTerrain withKey:kLastTerrainTypeKey defValue:EOATerrainTypeHillshade];
     _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:kHillshadeDefAlpha];
     _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:kSlopeDefAlpha];
+    _verticalExaggerationScaleProfile = [OACommonDouble withKey:kVerticalExaggerationKey defValue:kExaggerationDefScale];
+    
     _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:kHillshadeDefMinZoom];
     _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:kHillshadeDefMaxZoom];
     _slopeMinZoomProfile = [OACommonInteger withKey:kSlopeMinZoomKey defValue:kSlopeDefMinZoom];
@@ -394,6 +404,7 @@
     [_registeredPreferences setObject:_lastTerrainTypeProfile forKey:@"terrain_mode"];
     [_registeredPreferences setObject:_hillshadeAlphaProfile forKey:@"hillshade_transparency"];
     [_registeredPreferences setObject:_slopeAlphaProfile forKey:@"slope_transparency"];
+    [_registeredPreferences setObject:_verticalExaggerationScaleProfile forKey:@"vertical_exaggeration_scale"];
     [_registeredPreferences setObject:_hillshadeMinZoomProfile forKey:@"hillshade_min_zoom"];
     [_registeredPreferences setObject:_hillshadeMaxZoomProfile forKey:@"hillshade_max_zoom"];
     [_registeredPreferences setObject:_slopeMinZoomProfile forKey:@"slope_min_zoom"];
@@ -470,7 +481,10 @@
         [_contoursAlphaChangeObservable notifyEventWithKey:self andValue:@(self.contoursAlpha)];
         [_terrainChangeObservable notifyEventWithKey:self andValue:@YES];
         if (self.terrainType != EOATerrainTypeDisabled)
+        {
             [_terrainAlphaChangeObservable notifyEventWithKey:self andValue:self.terrainType == EOATerrainTypeHillshade ? @(self.hillshadeAlpha) : @(self.slopeAlpha)];
+            [_verticalExaggerationScaleChangeObservable notifyEventWithKey:self andValue:@(self.verticalExaggerationScale)];
+        }
         [_lastMapSourceChangeObservable notifyEventWithKey:self andValue:self.lastMapSource];
         [_wikipediaChangeObservable notifyEventWithKey:self andValue:@(self.wikipedia)];
         [self setLastMapSourceVariant:[OAAppSettings sharedManager].applicationMode.get.variantKey];
@@ -614,6 +628,7 @@
 @synthesize terrainChangeObservable = _terrainChangeObservable;
 @synthesize terrainResourcesChangeObservable = _terrainResourcesChangeObservable;
 @synthesize terrainAlphaChangeObservable = _terrainAlphaChangeObservable;
+@synthesize verticalExaggerationScale = _verticalExaggerationScale;
 @synthesize mapLayerChangeObservable = _mapLayerChangeObservable;
 @synthesize mapillaryChangeObservable = _mapillaryChangeObservable;
 @synthesize wikipediaChangeObservable = _wikipediaChangeObservable;
@@ -1494,6 +1509,28 @@
     [self setSlopeAlpha:kSlopeDefAlpha];
 }
 
+- (double)verticalExaggerationScale
+{
+    @synchronized (_lock)
+    {
+        return [_verticalExaggerationScaleProfile get];
+    }
+}
+
+- (void)setVerticalExaggerationScale:(double)scale
+{
+    @synchronized(_lock)
+    {
+        [_verticalExaggerationScaleProfile set:scale];
+        [_verticalExaggerationScaleChangeObservable notifyEventWithKey:self andValue:@(self.verticalExaggerationScale)];
+    }
+}
+
+- (void)resetVerticalExaggerationScale
+{
+    [self setVerticalExaggerationScale:kExaggerationDefScale];
+}
+
 - (BOOL) mapillary
 {
     @synchronized (_lock)
@@ -1889,6 +1926,7 @@
     [_lastTerrainTypeProfile set:[_lastTerrainTypeProfile get:sourceMode] mode:targetMode];
     [_hillshadeAlphaProfile set:[_hillshadeAlphaProfile get:sourceMode] mode:targetMode];
     [_slopeAlphaProfile set:[_slopeAlphaProfile get:sourceMode] mode:targetMode];
+    [_verticalExaggerationScaleProfile set:[_verticalExaggerationScaleProfile get:sourceMode] mode:targetMode];
     [_hillshadeMinZoomProfile set:[_hillshadeMinZoomProfile get:sourceMode] mode:targetMode];
     [_hillshadeMaxZoomProfile set:[_hillshadeMaxZoomProfile get:sourceMode] mode:targetMode];
     [_slopeMinZoomProfile set:[_slopeMinZoomProfile get:sourceMode] mode:targetMode];

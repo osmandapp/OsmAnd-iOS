@@ -3724,4 +3724,7 @@ You will be able to pair this sensor again at any time.";
 "rendering_value_access_name" = "By access type";
 "rendering_value_sector4_name" = "Sector 4";
 "routing_attr_hazmat_category_usa_9_name" = "Miscellaneous";
-"rendering_value_sector2_name" = "Sector 2";;
+"rendering_value_sector2_name" = "Sector 2";
+"vertical_exaggeration" = "Vertical exaggeration";
+"vertical_exaggeration_description" = "By changing the scale value, you can emphasise the 3D relief.";
+"shared_string_scale" = "Scale";

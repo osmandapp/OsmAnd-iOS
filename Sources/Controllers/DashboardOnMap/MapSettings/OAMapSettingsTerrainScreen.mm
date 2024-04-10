@@ -199,6 +199,23 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellSecondaryIconName : @"ic_payment_label_pro",
             @"value" : @([_plugin.enable3DMaps get]),
         }];
+        if (isRelief3D && [_plugin.enable3DMaps get])
+        {
+            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
+            double scaleValue = _app.data.verticalExaggerationScale;
+            if (scaleValue != 0)
+            {
+                alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
+            }
+            [relief3DSection addRowFromDictionary:@{
+                kCellKeyKey : @"vertical_exaggeration",
+                kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+                kCellTitleKey : OALocalizedString(@"vertical_exaggeration"),
+                kCellIconNameKey : @"ic_custom_terrain_scale",
+                kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorSelected],
+                @"value" : alphaValueString,
+            }];
+        }
         if (_mapItems.count > 0)
         {
             OATableSectionData *availableMapsSection = [_data createNewSection];
@@ -580,6 +597,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeVisibility];
     else if ([item.key isEqualToString:@"zoomLevels"])
         terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeZoomLevels];
+    else if ([item.key isEqualToString:@"vertical_exaggeration"])
+        terrainParametersScreen = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeVerticalExaggeration];
     if (terrainParametersScreen)
     {
         [vwController hide:YES animated:YES];

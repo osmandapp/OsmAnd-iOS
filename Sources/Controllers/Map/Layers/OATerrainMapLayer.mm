@@ -29,8 +29,9 @@
     std::shared_ptr<OsmAnd::SlopeRasterMapLayerProvider> _slopeLayerProvider;
     std::shared_ptr<OsmAnd::HillshadeRasterMapLayerProvider> _hillshadeLayerProvider;
 
-    OAAutoObserverProxy* _terrainChangeObserver;
-    OAAutoObserverProxy* _terrainAlphaChangeObserver;
+    OAAutoObserverProxy *_terrainChangeObserver;
+    OAAutoObserverProxy *_terrainAlphaChangeObserver;
+    OAAutoObserverProxy *_verticalExaggerationScaleChangeObservable;
 }
 
 - (NSString *) layerId
@@ -46,6 +47,12 @@
     _terrainAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onTerrainLayerAlphaChanged)
                                                                andObserve:self.app.data.terrainAlphaChangeObservable];
+    
+    _verticalExaggerationScaleChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                           withHandler:@selector(onVerticalExaggerationScaleChanged)
+                                                                            andObserve:self.app.data.verticalExaggerationScaleChangeObservable];
+    
+    
 }
 
 - (void) deinitLayer
@@ -59,6 +66,11 @@
     {
         [_terrainAlphaChangeObserver detach];
         _terrainAlphaChangeObserver = nil;
+    }
+    if (_verticalExaggerationScaleChangeObservable)
+    {
+        [_verticalExaggerationScaleChangeObservable detach];
+        _verticalExaggerationScaleChangeObservable = nil;
     }
 }
 
@@ -92,6 +104,10 @@
             layerAlpha = self.app.data.hillshadeAlpha;
 
         config.setOpacityFactor(layerAlpha);
+        
+        double verticalExaggerationScale = self.app.data.verticalExaggerationScale;
+#warning "add verticalExaggerationScale to config"
+        
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         return YES;
     }
@@ -134,6 +150,22 @@
         }];
     });
 }
+
+- (void)onVerticalExaggerationScaleChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.mapViewController runWithRenderSync:^{
+            OsmAnd::MapLayerConfiguration config;
+            double verticalExaggerationScale = self.app.data.verticalExaggerationScale;
+#warning "add verticalExaggerationScale to config"
+            // config.setVerticalExaggerationScale(layerAlpha);
+            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        }];
+    });
+}
+
+
+
 
 - (OsmAnd::ZoomLevel) getMinZoom
 {

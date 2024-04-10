@@ -63,7 +63,9 @@ static const double DISTANCE_SKIP = 10000;
 - (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
                                     targets:(NSArray<CLLocation *> *)targets
 {
-    return [self checkIfThereAreMissingMaps:_ctx start:start targets:targets checkHHEditions:YES];
+    bool hhRoutingOnly = [[OAAppSettings sharedManager].useHHRoutingOnly get];
+    bool hhRouting = [[OAAppSettings sharedManager].useHHRouting get];
+    return [self checkIfThereAreMissingMaps:_ctx start:start targets:targets checkHHEditions:hhRoutingOnly || hhRouting];
 }
 
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx

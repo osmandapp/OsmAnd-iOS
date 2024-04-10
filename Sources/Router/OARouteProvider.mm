@@ -900,7 +900,7 @@
                 _missingMapsCalculator = [MissingMapsCalculator new];
             }
             NSArray<CLLocation *> *targets = (inters.count > 0) ? [inters arrayByAddingObject:en] : @[en];
-            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:YES /*router->getHHRoutingConfig() != NULL*.*/])
+            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:hhRouting || hhRoutingOnly])
             {
                 OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
                 r.missingMaps = _missingMapsCalculator.missingMaps;

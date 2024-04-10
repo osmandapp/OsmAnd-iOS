@@ -3682,6 +3682,7 @@ You will be able to pair this sensor again at any time.";
 "upload_to_osm_short" = "Upload to OSM";
 
 "average_glide_ratio" = "Average glide ratio";
+"average_vertical_speed" = "Average vertical speed";
 "glide_ratio_to_target" = "Glide ratio to target";
 "map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
 "map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";

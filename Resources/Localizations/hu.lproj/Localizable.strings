@@ -2845,3 +2845,4 @@
 "shared_string_nearest" = "Legközelebbi";
 "second_next_turn_widget_desc" = "A widget a soron következő második bekanyarodásról tájékoztat, és akkor aktiválódik, amikor ezt megközelíti.";
 "distance_during_navigation" = "Távolságok a navigálás során";
+"average_glide_ratio_time_interval_desc" = "Megjeleníti a beállított intervallumhoz tartozó átlagos siklószámot vagy függőleges sebességet.";

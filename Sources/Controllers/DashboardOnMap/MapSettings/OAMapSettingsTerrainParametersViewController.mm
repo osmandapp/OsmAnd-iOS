@@ -511,7 +511,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (NSString *)sliderValueString:(float)value
 {
-    return value == 0 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+    return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
 }
 
 #pragma mark - UITableViewDataSource
@@ -560,7 +560,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
                 cell.updateValueCallback = ^(float value) {
                     weakCell.valueLabel.text = [weakSelf sliderValueString:value];
                 };
-                cell.sliderView.minimumValue = 0;
+                cell.sliderView.minimumValue = 1;
                 cell.sliderView.maximumValue = 3;
                 cell.sliderView.value = _app.data.verticalExaggerationScale;
                 cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];

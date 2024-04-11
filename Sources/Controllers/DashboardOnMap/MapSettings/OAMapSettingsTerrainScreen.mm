@@ -203,7 +203,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         {
             NSString *alphaValueString = OALocalizedString(@"shared_string_none");
             double scaleValue = _app.data.verticalExaggerationScale;
-            if (scaleValue != 0)
+            if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
             }

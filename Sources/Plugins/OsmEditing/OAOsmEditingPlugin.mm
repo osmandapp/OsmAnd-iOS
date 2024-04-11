@@ -43,7 +43,7 @@
 #import "OAShowHideLocalOSMChanges.h"
 #import "OAShowHideOSMBugAction.h"
 #import "OAOsmBugsDBHelper.h"
-
+#import "OALinks.h"
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
@@ -208,7 +208,8 @@
 
 - (NSString *) getDescription
 {
-    return OALocalizedString(@"osm_editing_plugin_description");
+    //return OALocalizedString(@"osm_editing_plugin_description");
+    return [NSString stringWithFormat:NSLocalizedString(@"osm_editing_plugin_description", nil), k_docs_plugin_osm];
 }
 
 @end

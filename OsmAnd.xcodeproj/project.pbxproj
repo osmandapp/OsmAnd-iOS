@@ -496,7 +496,6 @@
 		32DA38A82BA9C4D500A3AC3C /* CLLocation+Extension.m in Sources */ = {isa = PBXBuildFile; fileRef = 32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */; };
 		32DE2BE42B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */; };
 		32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */; };
-		32E2D2FC29B9C7A300A17D0B /* OAShowHideMapCenterAction.m in Sources */ = {isa = PBXBuildFile; fileRef = 32E2D2FB29B9C7A300A17D0B /* OAShowHideMapCenterAction.m */; };
 		32E2D30229B9DB5700A17D0B /* ic_custom_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */; };
 		32E2D30329B9DB5700A17D0B /* ic_custom_coordinates_map_center@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */; };
 		32E2D30429B9DB5700A17D0B /* ic_custom_coordinates_map_center@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32E2D30029B9DB5600A17D0B /* ic_custom_coordinates_map_center@3x.png */; };
@@ -2074,7 +2073,6 @@
 		DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79F926C563A000F274C7 /* OAMapUnderlayAction.mm */; };
 		DA5A818B26C563A700F274C7 /* OAShowHideLocalOSMChanges.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79FA26C563A000F274C7 /* OAShowHideLocalOSMChanges.m */; };
 		DA5A818C26C563A700F274C7 /* OAQuickAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79FB26C563A000F274C7 /* OAQuickAction.m */; };
-		DA5A818D26C563A700F274C7 /* OAShowHideCoordinatesAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A0226C563A000F274C7 /* OAShowHideCoordinatesAction.mm */; };
 		DA5A818E26C563A700F274C7 /* OANewAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A0326C563A000F274C7 /* OANewAction.m */; };
 		DA5A818F26C563A700F274C7 /* OAShowHidePoiAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */; };
 		DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7A0626C563A000F274C7 /* OAShowHideGPXTracksAction.mm */; };
@@ -4037,8 +4035,6 @@
 		32DA38A72BA9C4D500A3AC3C /* CLLocation+Extension.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "CLLocation+Extension.m"; sourceTree = "<group>"; };
 		32DE2BE32B6D13730025F2B9 /* OATwoButtonsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OATwoButtonsTableViewCell.swift; sourceTree = "<group>"; };
 		32E2A6DF2720699200F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAQuickSearchCoordinateFormatsViewController.xib; sourceTree = "<group>"; };
-		32E2D2FA29B9C79500A17D0B /* OAShowHideMapCenterAction.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAShowHideMapCenterAction.h; sourceTree = "<group>"; };
-		32E2D2FB29B9C7A300A17D0B /* OAShowHideMapCenterAction.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAShowHideMapCenterAction.m; sourceTree = "<group>"; };
 		32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_location@3x.png"; path = "Resources/Icons/ic_custom_coordinates_location@3x.png"; sourceTree = "<group>"; };
 		32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_map_center@2x.png"; path = "Resources/Icons/ic_custom_coordinates_map_center@2x.png"; sourceTree = "<group>"; };
 		32E2D30029B9DB5600A17D0B /* ic_custom_coordinates_map_center@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_coordinates_map_center@3x.png"; path = "Resources/Icons/ic_custom_coordinates_map_center@3x.png"; sourceTree = "<group>"; };
@@ -6052,12 +6048,10 @@
 		DA5A79FA26C563A000F274C7 /* OAShowHideLocalOSMChanges.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHideLocalOSMChanges.m; sourceTree = "<group>"; };
 		DA5A79FB26C563A000F274C7 /* OAQuickAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickAction.m; sourceTree = "<group>"; };
 		DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideTransportLinesAction.h; sourceTree = "<group>"; };
-		DA5A79FD26C563A000F274C7 /* OAShowHideCoordinatesAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideCoordinatesAction.h; sourceTree = "<group>"; };
 		DA5A79FE26C563A000F274C7 /* OAParkingAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAParkingAction.h; sourceTree = "<group>"; };
 		DA5A79FF26C563A000F274C7 /* OAAddOSMBugAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAddOSMBugAction.h; sourceTree = "<group>"; };
 		DA5A7A0026C563A000F274C7 /* OAFavoriteAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAFavoriteAction.h; sourceTree = "<group>"; };
 		DA5A7A0126C563A000F274C7 /* OAUnsupportedAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAUnsupportedAction.h; sourceTree = "<group>"; };
-		DA5A7A0226C563A000F274C7 /* OAShowHideCoordinatesAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAShowHideCoordinatesAction.mm; sourceTree = "<group>"; };
 		DA5A7A0326C563A000F274C7 /* OANewAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANewAction.m; sourceTree = "<group>"; };
 		DA5A7A0426C563A000F274C7 /* OAShowHideOSMBugAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideOSMBugAction.h; sourceTree = "<group>"; };
 		DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHidePoiAction.m; sourceTree = "<group>"; };
@@ -11317,10 +11311,6 @@
 				DA5A7A0F26C563A000F274C7 /* OAParkingAction.mm */,
 				DA5A79E026C563A000F274C7 /* OAQuickAction.h */,
 				DA5A79FB26C563A000F274C7 /* OAQuickAction.m */,
-				DA5A79FD26C563A000F274C7 /* OAShowHideCoordinatesAction.h */,
-				DA5A7A0226C563A000F274C7 /* OAShowHideCoordinatesAction.mm */,
-				32E2D2FA29B9C79500A17D0B /* OAShowHideMapCenterAction.h */,
-				32E2D2FB29B9C7A300A17D0B /* OAShowHideMapCenterAction.m */,
 				DA5A79F826C563A000F274C7 /* OAShowHideFavoritesAction.h */,
 				DA5A7A1426C563A000F274C7 /* OAShowHideFavoritesAction.m */,
 				DA5A79EE26C563A000F274C7 /* OAShowHideGPXTracksAction.h */,
@@ -17077,7 +17067,6 @@
 				DA5A83CD26C563A800F274C7 /* OATransportRouteController.mm in Sources */,
 				DA5A81C326C563A700F274C7 /* OAPOILocationType.mm in Sources */,
 				FA63F2502AF3DFF60040A0CE /* SensorTextWidget.swift in Sources */,
-				DA5A818D26C563A700F274C7 /* OAShowHideCoordinatesAction.mm in Sources */,
 				C556C85329BA0844006794D5 /* OASunriseSunsetWidget.mm in Sources */,
 				DA5A848926C563A900F274C7 /* OASaveTrackViewController.mm in Sources */,
 				DA84999C287EBF27002B1E11 /* OABaseDeleteFilesCommand.m in Sources */,
@@ -17428,7 +17417,6 @@
 				DA5A853126C563A900F274C7 /* OASettingsImporter.mm in Sources */,
 				DA5A854E26C563A900F274C7 /* OAGPXUIHelper.mm in Sources */,
 				DA5A83B626C563A800F274C7 /* OAActionAddCategoryViewController.mm in Sources */,
-				32E2D2FC29B9C7A300A17D0B /* OAShowHideMapCenterAction.m in Sources */,
 				DA5A819726C563A700F274C7 /* OANavResumePauseAction.mm in Sources */,
 				8AE943B327A28BE900961319 /* OAWeatherRasterLayer.mm in Sources */,
 				DA5A813B26C563A700F274C7 /* OAOsmMapUtils.mm in Sources */,

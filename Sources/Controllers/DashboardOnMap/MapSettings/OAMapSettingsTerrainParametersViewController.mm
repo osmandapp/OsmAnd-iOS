@@ -53,8 +53,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
     double _baseAlpha;
     double _currentAlpha;
     
-    double _baseVerticalExaggeration;
-    double _currentVerticalExaggeration;
+    double _baseVerticalExaggerationScale;
+    double _currentVerticalExaggerationScale;
     
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
@@ -89,8 +89,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
     _baseAlpha = _type == EOATerrainTypeHillshade ? _app.data.hillshadeAlpha : _app.data.slopeAlpha;
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
-        _baseVerticalExaggeration = _app.data.verticalExaggerationScale;
-        _currentVerticalExaggeration = _baseVerticalExaggeration;
+        _baseVerticalExaggerationScale = _app.data.verticalExaggerationScale;
+        _currentVerticalExaggerationScale = _baseVerticalExaggerationScale;
     }
     
     _minZoom = _baseMinZoom;
@@ -362,9 +362,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
 {
     [_app.data resetVerticalExaggerationScale];
     double scale = _app.data.verticalExaggerationScale;
-    if (_currentVerticalExaggeration != scale)
+    if (_currentVerticalExaggerationScale != scale)
     {
-        _currentVerticalExaggeration = scale;
+        _currentVerticalExaggerationScale = scale;
         _isValueChange = YES;
         [self updateApplyButton];
     }
@@ -394,7 +394,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)applyVerticalExaggerationScale
 {
-    _app.data.verticalExaggerationScale = _currentVerticalExaggeration;
+    _app.data.verticalExaggerationScale = _currentVerticalExaggerationScale;
 }
 
 - (NSArray<NSString *> *)getPossibleZoomValues
@@ -466,7 +466,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     }
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
-        _app.data.verticalExaggerationScale = _baseVerticalExaggeration;
+        _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
     }
     
     [self hide:YES duration:.2 onComplete:^{
@@ -488,8 +488,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
 {
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
-        _currentVerticalExaggeration = slider.value;
-        _app.data.verticalExaggerationScale = _currentVerticalExaggeration;
+        _currentVerticalExaggerationScale = slider.value;
+        _app.data.verticalExaggerationScale = _currentVerticalExaggerationScale;
         _isValueChange = YES;
         [self updateApplyButton];
         return;

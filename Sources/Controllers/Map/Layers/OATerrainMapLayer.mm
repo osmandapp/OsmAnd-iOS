@@ -156,7 +156,6 @@
         [weakSelf.mapViewController runWithRenderSync:^{
             __strong __typeof(weakSelf) strongSelf = weakSelf;
             if (strongSelf)
-                NSLog(@"verticalExaggerationScale: %f", strongSelf.app.data.verticalExaggerationScale);
                 [strongSelf.mapView setElevationScaleFactor:strongSelf.app.data.verticalExaggerationScale];
         }];
     });

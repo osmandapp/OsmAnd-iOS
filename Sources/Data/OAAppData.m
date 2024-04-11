@@ -35,7 +35,7 @@
 #define kLastTerrainTypeKey @"lastTerrainType"
 #define kHillshadeAlphaKey @"hillshadeAlpha"
 #define kSlopeAlphaKey @"slopeAlpha"
-#define kVerticalExaggerationKey @"kVerticalExaggeration"
+#define kVerticalExaggerationKey @"verticalExaggeration"
 #define kHillshadeMinZoomKey @"hillshadeMinZoom"
 #define kHillshadeMaxZoomKey @"hillshadeMaxZoom"
 #define kSlopeMinZoomKey @"slopeMinZoom"

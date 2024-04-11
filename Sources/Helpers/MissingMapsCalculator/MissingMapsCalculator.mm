@@ -86,7 +86,7 @@ static const double DISTANCE_SKIP = 10000;
     string profile = profileToString(ctx->config->router->getProfile());
     NSMutableDictionary<NSString *, RegisteredMap *> *knownMaps = [NSMutableDictionary new];
     
-    [OARoutingHelper.sharedInstance.getRouteProvider checkInitializedForZoomLevel:OsmAnd::ZoomLevel14];
+    [OARoutingHelper.sharedInstance.getRouteProvider checkInitializedForZoomLevelWithEmptyRect:OsmAnd::ZoomLevel14];
     
     for (auto* file : getOpenMapFiles())
     {

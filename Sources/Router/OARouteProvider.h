@@ -109,7 +109,7 @@ struct RouteSegmentResult;
 - (OARouteCalculationResult *) recalculatePartOfflineRoute:(OARouteCalculationResult *)res params:(OARouteCalculationParams *)params;
 
 - (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY;
-- (void)checkInitializedForZoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
+- (void)checkInitializedForZoomLevelWithEmptyRect:(OsmAnd::ZoomLevel)zoomLevel;
 
 - (std::shared_ptr<RoutingConfiguration>) initOsmAndRoutingConfig:(std::shared_ptr<RoutingConfigurationBuilder>)config params:(OARouteCalculationParams *)params generalRouter:(std::shared_ptr<GeneralRouter>)generalRouter;
 

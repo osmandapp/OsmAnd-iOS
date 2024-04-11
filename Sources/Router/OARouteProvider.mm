@@ -778,58 +778,25 @@
     return NO;
 }
 
-- (void)checkInitializedForZoomLevel:(OsmAnd::ZoomLevel)zoomLevel;
+- (void)checkInitializedForZoomLevelWithEmptyRect:(OsmAnd::ZoomLevel)zoomLevel;
 {
-    @synchronized (self)
-    {
-        OsmAndAppInstance app = [OsmAndApp instance];
-        BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
-        const auto& localResources = app.resourcesManager->getSortedLocalResources();
-        auto dataTypes = OsmAnd::ObfDataTypesMask();
-        dataTypes.set(OsmAnd::ObfDataType::Map);
-        dataTypes.set(OsmAnd::ObfDataType::Routing);
-        for (const auto& resource : localResources)
-        {
-            if (resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed)
-            {
-                NSString *localPath = resource->localPath.toNSString();
-                if (![localPath.lowerCase hasSuffix:BINARY_MAP_INDEX_EXT])
-                    continue;
-                if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:nil desiredDataTypes:dataTypes zoomLevel:zoomLevel])
-                {
-                    [_nativeFiles addObject:localPath];
-                    cacheBinaryMapFileIfNeeded(resource->localPath.toStdString(), true);
-                    initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
-                }
-            }
-        }
-        writeMapFilesCache(app.routingMapsCachePath.UTF8String);
-
-        for (const auto* file : getOpenMapFiles())
-        {
-            BOOL hasLocal = NO;
-            for (const auto& resource : localResources)
-            {
-                if (file->inputName == resource->localPath.toStdString())
-                {
-                    hasLocal = YES;
-                    break;
-                }
-            }
-            if (!hasLocal)
-                closeBinaryMapFile(file->inputName);
-        }
-    }
+    [self checkInitialized:zoomLevel leftX:0 rightX:0 bottomY:0 topY:0];
 }
 
-- (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
+- (void)checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
 {
     @synchronized (self)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         const auto& localResources = app.resourcesManager->getSortedLocalResources();
-        QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
+        QuadRect *rect;
+        BOOL isEmptyRect = leftX == 0 && rightX == 0 && bottomY == 0 && topY == 0;
+        if (!isEmptyRect)
+        {
+            rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
+        }
+       
         auto dataTypes = OsmAnd::ObfDataTypesMask();
         dataTypes.set(OsmAnd::ObfDataType::Map);
         dataTypes.set(OsmAnd::ObfDataType::Routing);

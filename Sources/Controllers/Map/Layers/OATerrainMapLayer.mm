@@ -29,8 +29,9 @@
     std::shared_ptr<OsmAnd::SlopeRasterMapLayerProvider> _slopeLayerProvider;
     std::shared_ptr<OsmAnd::HillshadeRasterMapLayerProvider> _hillshadeLayerProvider;
 
-    OAAutoObserverProxy* _terrainChangeObserver;
-    OAAutoObserverProxy* _terrainAlphaChangeObserver;
+    OAAutoObserverProxy *_terrainChangeObserver;
+    OAAutoObserverProxy *_terrainAlphaChangeObserver;
+    OAAutoObserverProxy *_verticalExaggerationScaleChangeObservable;
 }
 
 - (NSString *) layerId
@@ -46,6 +47,12 @@
     _terrainAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                               withHandler:@selector(onTerrainLayerAlphaChanged)
                                                                andObserve:self.app.data.terrainAlphaChangeObservable];
+    
+    _verticalExaggerationScaleChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
+                                                                           withHandler:@selector(onVerticalExaggerationScaleChanged)
+                                                                            andObserve:self.app.data.verticalExaggerationScaleChangeObservable];
+    
+    
 }
 
 - (void) deinitLayer
@@ -59,6 +66,11 @@
     {
         [_terrainAlphaChangeObserver detach];
         _terrainAlphaChangeObserver = nil;
+    }
+    if (_verticalExaggerationScaleChangeObservable)
+    {
+        [_verticalExaggerationScaleChangeObservable detach];
+        _verticalExaggerationScaleChangeObservable = nil;
     }
 }
 
@@ -92,7 +104,9 @@
             layerAlpha = self.app.data.hillshadeAlpha;
 
         config.setOpacityFactor(layerAlpha);
+        
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
         return YES;
     }
     return NO;
@@ -131,6 +145,18 @@
                 layerAlpha = self.app.data.hillshadeAlpha;
             config.setOpacityFactor(layerAlpha);
             [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        }];
+    });
+}
+
+- (void)onVerticalExaggerationScaleChanged
+{
+    __weak __typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.mapViewController runWithRenderSync:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf)
+                [strongSelf.mapView setElevationScaleFactor:strongSelf.app.data.verticalExaggerationScale];
         }];
     });
 }

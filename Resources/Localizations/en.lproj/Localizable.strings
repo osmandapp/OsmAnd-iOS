@@ -3720,6 +3720,9 @@
 "rendering_value_sector4_name" = "Sector 4";
 "routing_attr_hazmat_category_usa_9_name" = "Miscellaneous";
 "rendering_value_sector2_name" = "Sector 2";
+"vertical_exaggeration" = "Vertical exaggeration";
+"vertical_exaggeration_description" = "By changing the scale value, you can emphasise the 3D relief.";
+"shared_string_scale" = "Scale";
 
 "missing_or_outdated_maps_title" = "Missing or outdated maps";
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
@@ -3728,5 +3731,3 @@
 "calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
-
-

@@ -9,11 +9,12 @@
 #import <UIKit/UIKit.h>
 #import "OABaseScrollableHudViewController.h"
 
-typedef enum
+typedef NS_ENUM(NSInteger, EOATerrainSettingsType)
 {
     EOATerrainSettingsTypeVisibility,
-    EOATerrainSettingsTypeZoomLevels
-} EOATerrainSettingsType;
+    EOATerrainSettingsTypeZoomLevels,
+    EOATerrainSettingsTypeVerticalExaggeration
+};
 
 @protocol OATerrainParametersDelegate
 

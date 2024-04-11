@@ -3270,10 +3270,7 @@
 
 "uninstall_speed_cameras" = "Uninstall speed cameras";
 "speed_camera_pois" = "Speed camera POI’s";
-"speed_cameras_legal_descr" = "In some countries or regions, the use of speed camera warning apps is prohibited by law.
-        \n\nYou need to make a choice depending on the law of your country.
-        \n\nSelect %@ and you will receive alerts and warnings about speed cameras.
-        \n\nSelect %@. All data related to speed cameras: alerts, notifications, POIs will be deleted until OsmAnd is completely reinstalled.";
+"speed_cameras_legal_descr" = "In some countries or regions, the use of speed camera warning apps is prohibited by law.         \n\nYou need to make a choice depending on the law of your country.         \n\nSelect %@ and you will receive alerts and warnings about speed cameras.         \n\nSelect %@. All data related to speed cameras: alerts, notifications, POIs will be deleted until OsmAnd is completely reinstalled.";
 "speed_cameras_alert" = "Speed cameras alerts in some countries is prohibited by the law.";
 
 // Release Notes
@@ -3582,16 +3579,14 @@
 "ant_plus_nothing_found_description" = "Make sure:\n– Bluetooth is turned on\n– Sensor is activated\n– This device is located near sensor";
 
 "ant_plus_searching_text" = "Searching for sensors";
-"ant_plus_searching_text_description" = "Please hold the device close to the sensor.
-You need to activate the sensor so OsmAnd can find it.";
+"ant_plus_searching_text_description" = "Please hold the device close to the sensor. You need to activate the sensor so OsmAnd can find it.";
 "ant_plus_open_settings" = "Open settings";
 
 "ant_plus_bluetooth_off" = "Bluetooth is turned off";
 "ant_plus_bluetooth_off_description" = "Turn on Bluetooth find and pair sensors.";
 
 "external_device_forget_sensor" = "Forget sensor";
-"external_device_forget_sensor_description" = "Sensor will be removed from the list.
-You will be able to pair this sensor again at any time.";
+"external_device_forget_sensor_description" = "Sensor will be removed from the list. You will be able to pair this sensor again at any time.";
 
 "external_device_details_information" = "Information";
 "external_device_details_battery" = "Battery";

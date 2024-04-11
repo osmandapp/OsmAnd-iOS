@@ -2706,10 +2706,12 @@
 "shared_string_license" = "లైసెన్స్";
 "shared_string_link" = "లంకె";
 "map_widget_sun_position_desc" = "సూర్యోదయం లేదా సూర్యాస్తమయం వరకు సమయాన్ని చూపుతుంది.";
-"complex_widget_alert" = "విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
+"complex_widget_alert" = "%@విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
 "map_widget_sun_position" = "సూర్య స్థానం";
 "shared_string_bookmark" = "ఇష్టాంశం";
 "external_device_any_connected" = "ఏదైనా కనెక్ట్ చేయబడింది";
 "shared_string_open_track" = "తెరుచుకున్న మార్గం";
 "shared_string_next_event" = "తదుపరి ఈవెంట్";
 "rendering_attr_padusHideBoundaries_name" = "బహిరంగ భూ సరిహద్దులను దాచివేయు";
+"shared_string_all_colors" = "అన్ని రంగులు";
+"shared_string_precise" = "ఖచ్చితమైన";

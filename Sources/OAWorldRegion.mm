@@ -662,20 +662,20 @@
 - (NSArray<OAWorldRegion *> *) getWorldRegionsAt:(double)latitude longitude:(double)longitude
 {
     NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray arrayWithArray:[self queryAtLat:latitude lon:longitude]];
-    NSMutableArray<OAWorldRegion *> *res = [NSMutableArray array];
     if (mapRegions.count > 0)
     {
-        for (OAWorldRegion *region in mapRegions)
-            if ([region contain:latitude lon:longitude])
-                [res addObject:region];
+        [mapRegions.copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![region contain:latitude lon:longitude])
+                [mapRegions removeObject:region];
+        }];
 
-        [res sortUsingComparator:^NSComparisonResult(id a, id b) {
+        [mapRegions sortUsingComparator:^NSComparisonResult(id a, id b) {
             NSNumber *first = [NSNumber numberWithDouble:[(OAWorldRegion *)a getArea]];
             NSNumber *second = [NSNumber numberWithDouble:[(OAWorldRegion *)b getArea]];
             return [first compare:second];
         }];
     }
-    return res;
+    return mapRegions;
 }
 
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude

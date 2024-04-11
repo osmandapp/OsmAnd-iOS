@@ -1062,9 +1062,8 @@ includeHidden:(BOOL)includeHidden
     if (CLLocationCoordinate2DIsValid(coordinate))
     {
         mapRegions = [[app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
-        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
         if (mapRegions.count > 0) {
-            [copy enumerateObjectsUsingBlock:^(OAWorldRegion *_Nonnull region, NSUInteger idx, BOOL *_Nonnull stop) {
+            [mapRegions.copy enumerateObjectsUsingBlock:^(OAWorldRegion *_Nonnull region, NSUInteger idx, BOOL *_Nonnull stop) {
                 if (![region contain:coordinate.latitude lon:coordinate.longitude])
                     [mapRegions removeObject:region];
             }];

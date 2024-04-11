@@ -28,7 +28,7 @@ final class TrashItem: NSObject {
         if let settingsItem {
             return BackupUiUtils.getItemName(settingsItem)
         } else {
-            return oldFile.name
+            return BackupUiUtils.getItemName(oldFile.item)
         }
     }
 
@@ -41,8 +41,9 @@ final class TrashItem: NSObject {
     var icon: UIImage? {
         if let settingsItem {
             return BackupUiUtils.getIcon(settingsItem)
+        } else {
+            return BackupUiUtils.getIcon(oldFile.item)
         }
-        return nil
     }
 
     var settingsItem: OASettingsItem? {

@@ -341,20 +341,12 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     func restoreItem(_ trashItem: TrashItem) {
-        guard trashItem.settingsItem != nil else {
-            Self.logger.error("Failed to restore item: \(String(describing: trashItem.oldFile.name)), SettingsItem is null")
-            return
-        }
         let trashDeletionListener = TrashDeletionListener(with: String(format: localizedString("cloud_item_restored"), trashItem.name))
         trashDeletionListener.delegate = self
         backupHelper?.deleteFilesSync([trashItem.deletedFile], byVersion: true, listener: trashDeletionListener)
     }
 
     func downloadItem(_ trashItem: TrashItem) {
-        guard trashItem.settingsItem != nil else {
-            Self.logger.error("Failed to download item: \(String(describing: trashItem.oldFile.name)), SettingsItem is null")
-            return
-        }
         if backupHelper?.backup.localFiles[trashItem.oldFile.getTypeNamePath()] != nil {
             downloadItem(trashItem, shouldReplace: false) // TODO: - android uses FileExistBottomSheet here
         } else {

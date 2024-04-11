@@ -526,7 +526,7 @@
 "routing_attr_allow_intermediate_name" = "Permiteți rute intermediare";
 "routing_attr_avoid_ice_roads_fords_description" = "Fără drumuri cu polei și vaduri.";
 "rendering_attr_moreDetailed_name" = "Mai multe detalii";
-"rendering_attr_contourLines_description" = "Afișare de la nivelul de zoom (necesită date privind linia de contur):";
+"rendering_attr_contourLines_description" = "Afișare începând cu nivelul de zoom (necesită date privind liniile de contur):";
 "routing_attr_driving_style_balance_name" = "Echilibrat";
 "rendering_attr_highway_class_street_name" = "Stradă";
 "routing_attr_avoid_shuttle_train_description" = "Evită folosirea trenurilor de navetă";

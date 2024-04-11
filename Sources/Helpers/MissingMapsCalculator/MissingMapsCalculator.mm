@@ -309,7 +309,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
                     SearchQuery q((uint32_t)(x31 << zoomToLoad), (uint32_t)((x31 + 1) << zoomToLoad), (uint32_t)(y31 << zoomToLoad),
                                   (uint32_t)((y31 + 1) << zoomToLoad));
                     std::vector<RouteSubregion> tempResult;
-                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q, tempResult, false, false, false))
+                    if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q, tempResult))
                     {
                         [pnt.regions insertObject:r.downloadName atIndex:0];
                     }

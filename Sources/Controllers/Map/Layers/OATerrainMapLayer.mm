@@ -105,10 +105,8 @@
 
         config.setOpacityFactor(layerAlpha);
         
-        double verticalExaggerationScale = self.app.data.verticalExaggerationScale;
-#warning "add verticalExaggerationScale to config"
-        
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
         return YES;
     }
     return NO;
@@ -153,19 +151,16 @@
 
 - (void)onVerticalExaggerationScaleChanged
 {
+    __weak __typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mapViewController runWithRenderSync:^{
-            OsmAnd::MapLayerConfiguration config;
-            double verticalExaggerationScale = self.app.data.verticalExaggerationScale;
-#warning "add verticalExaggerationScale to config"
-            // config.setVerticalExaggerationScale(layerAlpha);
-            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+        [weakSelf.mapViewController runWithRenderSync:^{
+            __strong __typeof(weakSelf) strongSelf = weakSelf;
+            if (strongSelf)
+                NSLog(@"verticalExaggerationScale: %f", strongSelf.app.data.verticalExaggerationScale);
+                [strongSelf.mapView setElevationScaleFactor:strongSelf.app.data.verticalExaggerationScale];
         }];
     });
 }
-
-
-
 
 - (OsmAnd::ZoomLevel) getMinZoom
 {

@@ -838,7 +838,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)removeCellsFromSection:(OAGPXTableSectionData *)sectionData cellKeys:(NSArray<NSString *> *)cellKeys
 {
-    [sectionData.subjects enumerateObjectsUsingBlock:^(OAGPXTableCellData * _Nonnull cellData, NSUInteger idx, BOOL * _Nonnull stop) {
+    [sectionData.subjects.copy enumerateObjectsUsingBlock:^(OAGPXTableCellData * _Nonnull cellData, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([cellKeys containsObject:cellData.key])
             [sectionData.subjects removeObject:cellData];
     }];

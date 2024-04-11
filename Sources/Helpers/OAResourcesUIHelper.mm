@@ -1062,9 +1062,8 @@ includeHidden:(BOOL)includeHidden
     if (CLLocationCoordinate2DIsValid(coordinate))
     {
         mapRegions = [[app.worldRegion queryAtLat:coordinate.latitude lon:coordinate.longitude] mutableCopy];
-        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:mapRegions];
         if (mapRegions.count > 0) {
-            [copy enumerateObjectsUsingBlock:^(OAWorldRegion *_Nonnull region, NSUInteger idx, BOOL *_Nonnull stop) {
+            [mapRegions.copy enumerateObjectsUsingBlock:^(OAWorldRegion *_Nonnull region, NSUInteger idx, BOOL *_Nonnull stop) {
                 if (![region contain:coordinate.latitude lon:coordinate.longitude])
                     [mapRegions removeObject:region];
             }];
@@ -2182,6 +2181,205 @@ includeHidden:(BOOL)includeHidden
         }
     }
     return externalMaps;
+}
+
++ (NSArray<OAResourceItem *> *)getMapRegionResourcesToDownloadForRegions:(NSArray<OAWorldRegion *> *)regions
+{
+    if (regions.count == 0)
+        return @[];
+    NSMutableArray<OAResourceItem *> *resources = [NSMutableArray array];
+    for (OAWorldRegion *region in regions)
+    {
+        NSArray<NSString *> *ids = [OAManageResourcesViewController getResourcesInRepositoryIdsByRegion:region];
+        if (ids.count > 0)
+        {
+            for (NSString *resourceId in ids)
+            {
+                const auto& resource = OsmAndApp.instance.resourcesManager->getResourceInRepository(QString::fromNSString(resourceId));
+                if (resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                {
+                    BOOL installed = OsmAndApp.instance.resourcesManager->isResourceInstalled(resource->id);
+                    if (!installed)
+                    {
+                        OARepositoryResourceItem *item = [[OARepositoryResourceItem alloc] init];
+                        item.resourceId = resource->id;
+                        item.resourceType = resource->type;
+                        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                                 inRegion:region
+                                                           withRegionName:YES
+                                                         withResourceType:NO];
+                        item.resource = resource;
+                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];
+                        item.size = resource->size;
+                        item.sizePkg = resource->packageSize;
+                        item.worldRegion = region;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resource->timestamp / 1000)];
+                        [resources addObject:item];
+                    }
+                }
+            }
+        }
+    }
+    return [resources copy];
+}
+
++ (NSArray<OAResourceItem *> *)getMapRegionResourcesToUpdateForRegions:(NSArray<OAWorldRegion *> *)regions
+{
+    if (regions.count == 0)
+        return @[];
+    
+    NSMutableArray<OAResourceItem *> *resources = [NSMutableArray array];
+    const auto& localResources = [OsmAndApp instance].resourcesManager->getLocalResources();
+    if (!localResources.isEmpty())
+    {
+        for (OAWorldRegion *region in regions)
+        {
+            for (const auto& resource : localResources)
+            {
+                if (resource && resource->origin == OsmAnd::ResourcesManager::ResourceOrigin::Installed && resource->type == OsmAnd::ResourcesManager::ResourceType::MapRegion)
+                {
+                    if ([region.resourceTypes containsObject:@((int)OsmAnd::ResourcesManager::ResourceType::MapRegion)]
+                        && !resource->id.isNull() && [resource->id.toLower().toNSString() hasPrefix:region.downloadsIdPrefix])
+                    {
+                        OAOutdatedResourceItem *item = [[OAOutdatedResourceItem alloc] init];
+                        item.resourceId = resource->id;
+                        item.title = [OAResourcesUIHelper titleOfResource:resource
+                                                                 inRegion:region
+                                                           withRegionName:YES
+                                                         withResourceType:NO];
+                        item.resource = resource;
+                        item.downloadTask = [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resource->id.toNSString()]] firstObject];;
+                        item.worldRegion = region;
+                        item.resourceType = resource->type;
+                        
+                        const auto resourceInRepository = OsmAndApp.instance.resourcesManager->getResourceInRepository(item.resourceId);
+                        item.size = resourceInRepository->size;
+                        item.sizePkg = resourceInRepository->packageSize;
+                        item.date = [NSDate dateWithTimeIntervalSince1970:(resourceInRepository->timestamp / 1000)];
+                        [resources addObject:item];
+                    }
+                }
+            }
+        }
+    }
+    return [resources copy];
+}
+
++ (NSString *)formatCLLocationToPointString:(CLLocation *)point
+{
+    return [NSString stringWithFormat:@"%f,%f", point.coordinate.latitude, point.coordinate.longitude];
+}
+
++ (void)onlineCalculateRequestStartPoint:(CLLocation *)startPoint
+                                endPoint:(CLLocation *)endPoint
+                              completion:(LocationArrayCallback)completion
+{
+    NSLog(@"onlineCalculateRequestStartPoint start");
+    NSURLSession *session = [NSURLSession sharedSession];
+    
+    NSString *routeUrlString = @"https://maptile.osmand.net/routing/route";
+    NSString *routeMode = [[OAAppSettings sharedManager].applicationMode get].stringKey;
+    NSString *startPointString = [self formatCLLocationToPointString:startPoint];
+    NSString *endPointString = [self formatCLLocationToPointString:endPoint];
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@?routeMode=%@&points=%@&points=%@", routeUrlString, routeMode, startPointString, endPointString];
+    NSURL *url = [NSURL URLWithString:urlString];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request
+                                            completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        NSLog(@"onlineCalculateRequestStartPoint finish");
+        if (error)
+        {
+            NSLog(@"Error: %@", error);
+            if (completion)
+            {
+                completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:1 userInfo:@{NSLocalizedDescriptionKey: error.localizedDescription}]);
+            }
+        }
+        else
+        {
+            if ([response isKindOfClass:[NSHTTPURLResponse class]])
+            {
+                NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+                if (httpResponse.statusCode == 200)
+                {
+                    if (data)
+                    {
+                        @try
+                        {
+                            NSLog(@"Response: %@", [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding]);
+                            NSDictionary *json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingMutableContainers error:&error];
+                            NSArray *features = json[@"features"];
+                            NSMutableArray *locationArray = [NSMutableArray array];
+                            for (NSDictionary *feature in features)
+                            {
+                                NSDictionary *geometry = feature[@"geometry"];
+                                NSString *geometryType = geometry[@"type"];
+                                if ([geometryType isEqualToString:@"LineString"])
+                                {
+                                    NSArray *coordinates = geometry[@"coordinates"];
+                                    for (NSArray *array in coordinates)
+                                    {
+                                        if (array.count >= 2)
+                                        {
+                                            double latitude = [array[1] doubleValue];
+                                            double longitude = [array[0] doubleValue];
+                                            [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
+                                        }
+                                    }
+                                } 
+                                else if ([geometryType isEqualToString:@"Point"])
+                                {
+                                    NSArray *coordinates = geometry[@"coordinates"];
+                                    if (coordinates.count >= 2)
+                                    {
+                                        double latitude = [coordinates[1] doubleValue];
+                                        double longitude = [coordinates[0] doubleValue];
+                                        [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
+                                    }
+                                }
+
+                            }
+                            NSLog(@"Coordinates array: %@", locationArray);
+                            if (completion)
+                            {
+                                completion([locationArray copy], nil);
+                            }
+                        }
+                        @catch (NSException *e)
+                        {
+                            NSLog(@"NSException: %@", e.reason);
+                            if (completion)
+                            {
+                                completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:2 userInfo:@{NSLocalizedDescriptionKey: e.reason}]);
+                            }
+                        }
+                    } else {
+                        NSLog(@"Error: No data received");
+                        if (completion)
+                        {
+                            completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:3 userInfo:@{NSLocalizedDescriptionKey: @"Error: No data received"}]);
+                        }
+                    }
+                } else {
+                    NSLog(@"Error: Unexpected HTTP status code: %ld", (long)httpResponse.statusCode);
+                    if (completion)
+                    {
+                        completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:4 userInfo:@{NSLocalizedDescriptionKey: @"Error: Unexpected HTTP status code"}]);
+                    }
+                }
+            } else {
+                NSLog(@"Error: Unexpected response type");
+                if (completion)
+                {
+                    completion(nil, [NSError errorWithDomain:@"OnlineCalculateRequestErrorDomain" code:5 userInfo:@{NSLocalizedDescriptionKey: @"Error: Unexpected response type"}]);
+                }
+            }
+        }
+    }];
+    
+    [task resume];
+    [session finishTasksAndInvalidate];
 }
 
 @end

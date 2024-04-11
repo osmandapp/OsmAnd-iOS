@@ -39,6 +39,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OARouteDetailsGraphViewController.h"
 
 #define kMargin 16.0
 #define kButtonsViewHeight 44.0
@@ -939,7 +940,7 @@ static const NSInteger _buttonsCount = 4;
     [self startLocationUpdate];
     [self.menuViewDelegate targetViewOnAppear:[self getVisibleHeight] animated:YES];
     
-    if (self.customController)
+    if (self.customController && ![self.customController isKindOfClass:[OARouteDetailsGraphViewController class]])
         [self.customController onMenuShown];
 }
 

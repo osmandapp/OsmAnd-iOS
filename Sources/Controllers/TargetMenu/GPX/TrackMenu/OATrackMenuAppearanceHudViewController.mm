@@ -600,11 +600,6 @@
     return self.topHeaderContainerView.frame.origin.y + self.topHeaderContainerView.frame.size.height + [OAUtilities getBottomMargin];
 }
 
-- (BOOL)adjustCentering
-{
-    return YES;
-}
-
 - (BOOL)stopChangingHeight:(UIView *)view
 {
     return [view isKindOfClass:[UISlider class]]

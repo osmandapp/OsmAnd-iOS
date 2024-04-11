@@ -427,34 +427,172 @@
     }];
 }
 
+- (UIMenu *)createVisualizedByMenuForCellButton:(UIButton *)button
+{
+    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    
+    UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
+                                             image:nil
+                                        identifier:nil
+                                           handler:^(__kindof UIAction * _Nonnull action) {
+    }];
+    [menuElements addObject:none];
+
+    UIAction *altitude = [UIAction actionWithTitle:OALocalizedString(@"altitude")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+    }];
+    [menuElements addObject:altitude];
+    
+    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+    }];
+    [menuElements addObject:slope];
+    
+    UIAction *fixedHeight = [UIAction actionWithTitle:OALocalizedString(@"fixed_height")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+    }];
+    [menuElements addObject:fixedHeight];
+    
+    
+
+    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
+    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
+        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
+    
+    NSString *title = [menuElements[selectedIndex] title];
+    
+    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+}
+
+- (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
+{
+    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+
+    UIAction *hillshade = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
+                                             image:nil
+                                        identifier:nil
+                                           handler:^(__kindof UIAction * _Nonnull action) {
+//        [_app.data setTerrainType: EOATerrainTypeHillshade];
+//        [self terrainTypeChanged];
+    }];
+    [menuElements addObject:hillshade];
+
+    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+//        [_app.data setTerrainType: EOATerrainTypeSlope];
+//        [self terrainTypeChanged];
+    }];
+    [menuElements addObject:slope];
+
+    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
+    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
+        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
+    
+    NSString *title = [menuElements[selectedIndex] title];
+    
+    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+}
+
+- (UIMenu *)createChevronMenu:(NSString *)title
+                       button:(UIButton *)button
+                 menuElements:(NSArray<UIMenuElement *> *)menuElements
+{
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
+    
+    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
+    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
+    UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
+    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    attachment.image = image;
+    
+    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
+    [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
+    [attributedString appendAttributedString:attachmentString];
+    
+    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
+    
+    return [UIMenu menuWithChildren:menuElements];
+}
+
 - (void)generateData
 {
+    
+//    OATableSectionData *titleSection = [_data createNewSection];
+//    [titleSection addRowFromDictionary:@{
+//        kCellKeyKey : @"terrainType",
+//        kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
+//        kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
+//    }];
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
-    OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
-            kTableKey:@"direction_arrows",
-            kCellType:[OASwitchTableViewCell getCellIdentifier],
-            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
+    
+//    OAGPXTableSectionData *track3DSectionData = [OAGPXTableSectionData withData:@{
+//        kTableKey: @"track_3D",
+//       // kTableSubjects: colorsCells,
+//        kSectionHeaderHeight: @36.
+//    }];
+    
+    OAGPXTableCellData *visualizedByCellData = [OAGPXTableCellData withData:@{
+        kTableKey:@"visualization_3d_visualized_by",
+        kCellType:[OAButtonTableViewCell getCellIdentifier],
+        kCellTitle:OALocalizedString(@"visualization_3d_visualized_by")
     }];
-
-    OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
-            kTableKey:@"start_finish_icons",
-            kCellType:[OASwitchTableViewCell getCellIdentifier],
-            kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
+    OAGPXTableCellData *wallColorCellData = [OAGPXTableCellData withData:@{
+        kTableKey:@"visualization_3d_wall_color",
+        kCellType:[OAButtonTableViewCell getCellIdentifier],
+        kCellTitle:OALocalizedString(@"visualization_3d_wall_color")
+    }];
+    OAGPXTableCellData *trackLineData = [OAGPXTableCellData withData:@{
+        kTableKey:@"visualization_3d_track_line",
+        kCellType:[OAButtonTableViewCell getCellIdentifier],
+        kCellTitle:OALocalizedString(@"visualization_3d_track_line")
     }];
     
-    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
-    
-    OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
-            kTableKey:@"visualization_3D",
-            kCellType:[OAIAPHelper isOsmAndProAvailable] || mapsPlusPurchased
-            ? [OASwitchTableViewCell getCellIdentifier]
-            : [OAButtonTableViewCell getCellIdentifier],
-            kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
-    }];
-
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
-        kTableSubjects: @[directionCellData, startFinishCellData, visualization3DCellData]
+        kTableKey:@"3d_track_section",
+        kSectionHeader: [OALocalizedString(@"track_3d") upperCase],
+        kSectionHeaderHeight: @36.,
+        kTableSubjects: @[visualizedByCellData, wallColorCellData, trackLineData]
     }]];
+    
+//    [OAGPXTableSectionData withData:@{
+//        kTableSubjects: @[visualizedByCellData, wallColorCellData, trackLineData]
+//    }];
+    
+    
+    
+//    OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
+//            kTableKey:@"direction_arrows",
+//            kCellType:[OASwitchTableViewCell getCellIdentifier],
+//            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
+//    }];
+//
+//    OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
+//            kTableKey:@"start_finish_icons",
+//            kCellType:[OASwitchTableViewCell getCellIdentifier],
+//            kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
+//    }];
+//    
+//    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+//    
+//    OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
+//            kTableKey:@"visualization_3D",
+//            kCellType:[OAIAPHelper isOsmAndProAvailable] || mapsPlusPurchased
+//            ? [OASwitchTableViewCell getCellIdentifier]
+//            : [OAButtonTableViewCell getCellIdentifier],
+//            kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
+//    }];
+//
+//    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+//        kTableSubjects: @[directionCellData, startFinishCellData, visualization3DCellData]
+//    }]];
 
     NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
 
@@ -1135,38 +1273,88 @@
     }
     else if ([cellData.type isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
-        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier] forIndexPath:indexPath];
-        [cell leftIconVisibility:NO];
-        [cell titleVisibility:YES];
-        [cell descriptionVisibility:NO];
-        [cell leftEditButtonVisibility:NO];
-        cell.rightContainerConstraint.constant = -3;
-        cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+        OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
+        BOOL is3dTrackSection = [sectionData.key isEqualToString:@"3d_track_section"];
+//       [cellData.key isEqualToString:@"visualization_3d_track_line"]
+//        || [cellData.key isEqualToString:@"visualization_3d_wall_color"]
+//        || [cellData.key isEqualToString:@"visualization_3d_visualized_by"];
+
+            if (is3dTrackSection)
+            {
+                cell.titleLabel.text = cellData.title;
+                [cell setCustomLeftSeparatorInset:YES];
+                [cell descriptionVisibility:NO];
+                cell.selectionStyle = UITableViewCellSelectionStyleNone;
+                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
+                [cell leftIconVisibility:NO];
+                cell.leftIconView.image = nil;
+                [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
+                cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
+                cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+                
+                cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
+                cell.button.showsMenuAsPrimaryAction = YES;
+                cell.button.changesSelectionAsPrimaryAction = YES;
+                return cell;
+            }
+            else
+            {
+                cell.separatorInset = UIEdgeInsetsZero;
+                [cell leftIconVisibility:YES];
+                //                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+                //                cell.leftIconView.tintColor = item.iconTintColor;
+                [cell.button setTitle:nil forState:UIControlStateNormal];
+                
+                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
+                //conf.image = [UIImage imageNamed:item.secondaryIconName];
+                cell.button.configuration = conf;
+                cell.button.menu = nil;
+                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
+                [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
+                return cell;
+            }
+//        }
         
-        cell.button.layer.cornerRadius = 9.0;
-        cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
-        cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-        UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
-        [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
-                     forState:UIControlStateNormal];
-        cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-        [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
         
-        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
-        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
-        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
-        cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-        [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
-              forControlEvents:UIControlEventTouchUpInside];
-        cell.titleLabel.text = cellData.title;
-        outCell = cell;
+        // TODO:
+//        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier] forIndexPath:indexPath];
+//        [cell leftIconVisibility:NO];
+//        [cell titleVisibility:YES];
+//        [cell descriptionVisibility:NO];
+//        [cell leftEditButtonVisibility:NO];
+//        cell.rightContainerConstraint.constant = -3;
+//        cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        
+//        cell.button.layer.cornerRadius = 9.0;
+//        cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
+//        cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
+//        UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
+//        [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
+//                     forState:UIControlStateNormal];
+//        cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+//        [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
+//        
+//        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
+//        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
+//        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
+//        cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
+//        [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
+//              forControlEvents:UIControlEventTouchUpInside];
+//        cell.titleLabel.text = cellData.title;
+//        outCell = cell;
     }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
 
     return outCell;
+}
+
+- (UIMenu *)getMenuForKey:(NSString *)key
+{
+    
 }
 
 #pragma mark - UITableViewDelegate

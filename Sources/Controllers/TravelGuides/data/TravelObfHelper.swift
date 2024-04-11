@@ -777,7 +777,7 @@ final class TravelObfHelper : NSObject {
     
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
         var res = [String]()
-        if let article = getArticleById(articleId: articleId, lang: "en", readGpx: false, callback: nil) {
+        if let article = getArticleById(articleId: articleId, lang: "", readGpx: false, callback: nil) {
             if let articles = cachedArticles[article.generateIdentifier().hashValue] {
                 res.append(contentsOf: articles.keys)
             }

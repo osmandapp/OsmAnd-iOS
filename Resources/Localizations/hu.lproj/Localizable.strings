@@ -1694,7 +1694,7 @@
 "routeInfo_roadClass_description" = "Útvonal vagy nyomvonal színezése az út besorolása szerint.";
 "add_description" = "Leírás hozzáadása";
 "lang_bs" = "bosnyák";
-"shared_string_min_height" = "Legkisebb magasság";
+"shared_string_min_height" = "Min. magasság";
 "lang_pl" = "lengyel";
 "lang_cy" = "walesi";
 "lang_my" = "burmai";
@@ -2109,7 +2109,7 @@
 "shared_string_angle" = "Szög";
 "upload_local_version" = "Hely változat feltöltése";
 "weather_precip_milimeters" = "milliméter";
-"navigate_point_format_DMS" = "Fok:perc:mp (5 tizedessel)";
+"navigate_point_format_DMS" = "Fok:perc:mp (1 tizedessel)";
 "service_is_not_available_please_try_later" = "A szolgáltatás nem érhető el. Próbálja újra később.";
 "backup_restore_data" = "Adatok visszaállítása";
 "get_osmand_live" = "Azösszes funkció feloldásához szerezze be az OsmAnd Live-ot: Napi térképfrissítés korlátlan számú letöltéssel, az összes fizetős és ingyenes bővítmény, Wikipédia, Wikivoyage és sok más.";
@@ -2145,7 +2145,7 @@
 "show_borders_of_downloaded_maps" = "Letöltött térképpel rendelkező területek eltérő színnel";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "shared_string_recorded" = "Előre felvett";
-"navigate_point_format_DM" = "Fok:perc (5 tizedessel)";
+"navigate_point_format_DM" = "Fok:perc (3 tizedessel)";
 "routing_attr_avoid_low_emission_zone_description" = "Alacsony kibocsátású zónák elkerülése";
 "contact_support_description" = "Ha kérdése van, lépjen kapcsolatba velünk: %@.";
 "offline_edition_descr" = "Ha az offline szerkesztés engedélyezve van, akkor az alkalmazás a módosításokat először helyben menti és kérésre tölti fel, ha nincs, akkor pedig azonnal feltölti.";
@@ -2235,7 +2235,7 @@
 "routing_attr_avoid_low_emission_zone_name" = "Alacsony kibocsátású zónák elkerülése";
 "quick_action_contour_lines_descr" = "Gomb, amely a térképen megjeleníti vagy elrejti a szintvonalakat.";
 "not_enough_contributions_descr" = "Legalább %@ változtatás szükséges az elmúlt két hónapos időszakban %@, hogy hozzáférést kapjon a korlátlan óránkénti térképfrissítéshez.";
-"navigate_point_format_D" = "Fok (4 tizedessel)";
+"navigate_point_format_D" = "Fok (5 tizedessel)";
 "shared_string_modified" = "Módosítva";
 "public_transport_ped_route_title" = "Azút gyalogosan körülbelül %@, vagyis lehet, hogy gyorsabb, mint tömegközlekedéssel";
 "shared_string_expires" = "Lejár";
@@ -2495,7 +2495,7 @@
 "gitHub_discussion" = "GitHub vitafórum";
 "verify_account" = "Fiókjának ellenőrzése";
 "upload_poi" = "POI feltöltése";
-"no_widgets_descr" = "Egy vagy több widget hozzáadása a rendelkezésre állók közül.";
+"no_widgets_descr" = "Adjon hozzá egy vagy több widgetet a rendelkezésre állók közül.";
 "map_widget_ant_bicycle_dist_desc" = "Megjeleníti a megtett távolságot";
 "bicycle_scd_device_name" = "Kerékpáros eszköz";
 "specify_number_of_dir_indicators_desc" = "Adja meg az irányjelzők számát.";
@@ -2526,7 +2526,7 @@
 "ant_plus_open_settings" = "Beállítások megnyitása";
 "beats_per_minute_short" = "ütés";
 "help_article_navigation_routing_horse_routing_name" = "Útvonaltervezés lovagláshoz";
-"glide_ratio_to_target" = "Siklószám a célig";
+"glide_ratio_to_target" = "Siklásszám a célig";
 "click_on_widget" = "Kattintson a widgetre";
 "map_markers_history" = "Térképjelölők előzményei";
 "context_menu_read_article" = "Cikk elolvasása";
@@ -2593,7 +2593,7 @@
 "there_are_no_connected_sensors_of_this_type" = "Nincs ilyen típusú érzékelő kapcsolódva";
 "coordinates_format" = "Koordinátaformátum";
 "help_article_troubleshooting_track_recording_issues_name" = "Nyomvonal felvétele";
-"average_glide_ratio" = "Átlagos siklószám";
+"average_glide_ratio" = "Átlagos siklásszám";
 "shared_string_error" = "Hiba";
 "osmand_cloud_deletion_account_warning" = "A fiók és minden fiókadat %@ lesz";
 "map_widget_true_bearing" = "Valódi irány";
@@ -2707,8 +2707,8 @@
 "osmand_cloud_deleted_account_descr" = "Minden fiók- és egyéb adat törölve lett az OsmAnd Cloud-ból.";
 "delete_account" = "Fiók törlése";
 "newest_date_first" = "Először a legújabb dátum";
-"map_widget_glide_average_desc" = "Megjeleníti az átlagos siklószámot a megadott intervallumhoz.";
-"map_widget_group_glide_ratio" = "Siklószám";
+"map_widget_glide_average_desc" = "Megjeleníti az átlagos siklásszámot a megadott intervallumhoz.";
+"map_widget_group_glide_ratio" = "Siklásszám";
 "help_article_start_with_main_menu_name" = "Főmenü";
 "weather_forecast" = "Időjárás-előrejelzés";
 "reset_all_settings_desc" = "Összes beállítás alaphelyzetbe állítása\?";
@@ -2732,7 +2732,7 @@
 "help_article_map_interact_with_map_name" = "Műveletek a térképpel";
 "help_article_start_with_first_steps_name" = "Az első lépések";
 "parking_widget_desc" = "Megjeleníti a képernyő középpontjától a parkolóhelyig tartó távolságot.";
-"map_widget_glide_target_desc" = "Mutatja a célpont eléréséhez szükséges siklószámot.";
+"map_widget_glide_target_desc" = "Mutatja a célpont eléréséhez szükséges siklásszámot.";
 "ble_search_again" = "Keresés újra";
 "complex_widget_alert" = "%@ widget csak a saját sorában helyezhető el.";
 "ant_plus_nothing_found_description" = "Győződjön meg róla, hogy:\n– a Bluetooth be van kapcsolva.\n– az érzékelő aktiválva van.\n– ez a készülék az érzékelő közelében található";
@@ -2740,7 +2740,7 @@
 "map_widget_camera_tilt" = "Kamera dőlése";
 "announcement_time_arrive" = "Érkezés a célponthoz";
 "help_article_start_with_name" = "Az OsmAnd használatának elkezdése";
-"average_glide_time_interval_desc" = "Adja meg a siklószám átlagának kiszámításához használt időintervallumot.";
+"average_glide_time_interval_desc" = "Adja meg a siklásszám átlagának kiszámításához használt időintervallumot.";
 "average_speed_skip_stops" = "Megállások figyelembevétele";
 "help_article_navigation_setup_markers_navigation_name" = "Navigálás jelölőkkel";
 "map_3d_mode_action" = "3D mód";

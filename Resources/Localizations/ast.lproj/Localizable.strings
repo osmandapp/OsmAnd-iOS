@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Riscar: %@\nAséu: %@";
+"day_night_info_description" = "Riscar: %@ \nAséu: %@";
 "day_night_info" = "Day/night info";
 "daynight_mode_auto" = "Riscar/aséu";
 "route_simulation" = "Route simulation";
@@ -726,7 +726,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "Allugamientu";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "Lla %@\nLlo %@";
+"short_location_on_map" = "Lla %@ \nLlo %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -896,7 +896,7 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Mapes adicionales";
 "import_duplicates_title" = "Some items already exist";
-"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported.\n\nSelect an action.";
+"import_duplicates_description" = "OsmAnd already has elements with the same names as those imported. \n \nSelect an action.";
 "keep_both" = "Keep both";
 "keep_both_desc" = "Imported items will be added with prefix";
 "replace_all" = "Trocar too";
@@ -968,7 +968,7 @@
 "reset_to_default" = "Reafitar";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAnd check %@ for duplicates with existing items in the app.\n\nIt may take some time.";
+"checking_for_duplicate_description" = "OsmAnd check %@ for duplicates with existing items in the app. \n \nIt may take some time.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1542,16 +1542,16 @@
 //inapps
 "plugin_nautical_name" = "Nautical map view";
 "product_desc_nautical" = "Nautical map of all world";
-"plugin_nautical_descr" = "This plugin enriches the OsmAnd map and navigation app to also produce nautical maps for boating, sailing, and other types of watersports.\n\nA special map add-on for OsmAnd will provide all nautical navigation marks and chart symbols, for inland as well as for nearshore navigation. The description of each navigation mark provides the details needed to identify them and their meaning (category, shape, color, sequence, reference, etc.).\n\nTo return to one of OsmAnd's conventional map styles, simply either de-activate this plugin again, or change the 'Map style' under 'Configure map' as desired.";
+"plugin_nautical_descr" = "This plugin enriches the OsmAnd map and navigation app to also produce nautical maps for boating, sailing, and other types of watersports. \n \nA special map add-on for OsmAnd will provide all nautical navigation marks and chart symbols, for inland as well as for nearshore navigation. The description of each navigation mark provides the details needed to identify them and their meaning (category, shape, color, sequence, reference, etc.). \n \nTo return to one of OsmAnd\'s conventional map styles, simply either de-activate this plugin again, or change the \'Map style\' under \'Configure map\' as desired.";
 "osmand_parking_plugin_name" = "Parking position";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "Lets you record where your car is parked, including how much parking time remains.\n Both location and time are visible on the dashboard as well as in a map widget. An alarm reminder can be added to the Android calendar.";
+"osmand_parking_plugin_description" = "Lets you record where your car is parked, including how much parking time remains. \n Both location and time are visible on the dashboard as well as in a map widget. An alarm reminder can be added to the Android calendar.";
 "plugin_ski_name" = "Ski map view";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
-"plugin_ski_descr" = "This plugin for OsmAnd puts at your fingertips details of global downhill ski slopes, cross country ski runs, Alpine ski routes, cable cars and ski lifts. Routes and pistes are shown color-coded by difficulty, and depicted in a special \'Winter\' map style which assimilates a snow-colored winter landscape.\n\nActivating this view changes the map style to \'Winter and ski\', showing all landscape features under wintry conditions. This view can be reverted by either de-activating it again here, or by changing the \'Map style\' under \'Configure map\' as desired.";
+"plugin_ski_descr" = "This plugin for OsmAnd puts at your fingertips details of global downhill ski slopes, cross country ski runs, Alpine ski routes, cable cars and ski lifts. Routes and pistes are shown color-coded by difficulty, and depicted in a special \'Winter\' map style which assimilates a snow-colored winter landscape. \n \nActivating this view changes the map style to \'Winter and ski\', showing all landscape features under wintry conditions. This view can be reverted by either de-activating it again here, or by changing the \'Map style\' under \'Configure map\' as desired.";
 "record_plugin_name" = "Rexistru de viaxes";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "This plugin activates the functionality to record and save your tracks by manually touching the GPX logging widget on the map, or also to automatically log all of your navigation routes to a GPX file.\n\n Recorded tracks can be shared with your friends or be used for OSM contributions. Athletes can use recorded tracks to monitor their trainings. Some basic track analysis can be performed directly in OsmAnd, like lap times, average speed etc., and tracks can of course also later be analyzed in special 3rd party analysis tools.";
+"record_plugin_description" = "This plugin activates the functionality to record and save your tracks by manually touching the GPX logging widget on the map, or also to automatically log all of your navigation routes to a GPX file. \n \n Recorded tracks can be shared with your friends or be used for OSM contributions. Athletes can use recorded tracks to monitor their trainings. Some basic track analysis can be performed directly in OsmAnd, like lap times, average speed etc., and tracks can of course also later be analyzed in special 3rd party analysis tools.";
 "osm_editing_plugin_name" = "OpenStreetMap editing";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
 "osm_editing_plugin_description" = "Make OSM contributions like creating or modifying OSM POI objects, opening or commenting OSM notes, and contributing recorded GPX files in OsmAnd by supplying your username and password. OpenStreetMap.org is a community driven, global public domain mapping project.";
@@ -1587,7 +1587,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Contour lines";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "This plugin provides both a contour line overlay and a (relief) hillshade layer to be displayed on top of OsmAnd's standard maps. This functionality will be much appreciated by athletes, hikers, trekkers, and anybody interested in the relief structure of a landscape. (Please note that contour line and/or relief data are separate, additional downloads available after activating the plugin.)\n\nThe global data (between 70° north and 70 ° south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA's Earth Observing System. ASTER is a cooperative effort between NASA, Japan's Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
+"srtm_plugin_description" = "This plugin provides both a contour line overlay and a (relief) hillshade layer to be displayed on top of OsmAnd\'s standard maps. This functionality will be much appreciated by athletes, hikers, trekkers, and anybody interested in the relief structure of a landscape. (Please note that contour line and/or relief data are separate, additional downloads available after activating the plugin.) \n \nThe global data (between 70° north and 70 ° south) is based on measurements by SRTM (Shuttle Radar Topography Mission) and ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), an imaging instrument onboard Terra, the flagship satellite of NASA\'s Earth Observing System. ASTER is a cooperative effort between NASA, Japan\'s Ministry of Economy, Trade and Industry (METI), and Japan Space Systems (J-spacesystems).";
 "wikivoyage_travel_guide" = "Travel Guides";
 "start_editing_card_image_text" = "La guía de viaxes mundial que tol mundu pue editar.";
 "wikivoyage_travel_guide_descr" = "Guides to the most interesting places on the planet, inside OsmAnd, without a connection to the Internet.";
@@ -2151,7 +2151,7 @@
 "rendering_attr_trainLightrailRoutes_name" = "Train routes";
 "rendering_value_pedestrian_name" = "A pie";
 "rendering_attr_highway_class_track_grade5_name" = "Grau 5";
-"routing_attr_height_name" = "Llende d'altor";
+"routing_attr_height_name" = "Llende d\'altor";
 "rendering_attr_piste_type_connection_name" = "Conexón";
 "routing_attr_relief_smoothness_factor_name" = "Select elevation fluctuation";
 "routing_attr_piste_type_downhill_name" = "Alpine and downhill skiing";
@@ -2370,7 +2370,7 @@
 "save_heading_descr" = "Save heading to each track point while recording.";
 "map_updates_are_unavailable_yet" = "Map updates are not yet available. :-(";
 "shared_string_logout" = "Log out";
-"logout_from_osmand_cloud_decsr" = "Log out\?\nYou will need to sign in again to backup or restore data.";
+"logout_from_osmand_cloud_decsr" = "Log out\? \nYou will need to sign in again to backup or restore data.";
 "backup_version_history" = "Version history";
 "use_login_and_password" = "Usar un nome d\'usuariu y una contraseña";
 "activity_type_mountainbike_name" = "Bicicleta de monte";
@@ -2382,13 +2382,13 @@
 "are_you_sure" = "Are you sure\?";
 "simulate_your_location_gpx_descr" = "Simulate your position using a recorded GPX track.";
 "local_backup_descr" = "Back up or restore data from a local file.";
-"osmand_cloud_create_account_descr" = "Introduz la to direición de corréu pa recibir un códigu de verificación\ny enllaciar tolos datos con ella.";
+"osmand_cloud_create_account_descr" = "Introduz la to direición de corréu pa recibir un códigu de verificación \ny enllaciar tolos datos con ella.";
 "sign_in_with_open_street_map" = "Aniciar sesión con OSM";
 "backup_restore_data" = "Restore data";
 "you_can_get_feature_as_part_of_pattern" = "Get“%@” as part of the %@ plan. Comparison:";
 "recalc_angle_dialog_title" = "L\'ángulu mínimu ente\'l mio allugamientu y el camín";
 "verification_code_missing" = "Nun recibí nengún códigu de verificación";
-"backup_delete_all_data_warning" = "Tas a piques de desaniciar tolos datos xubíos anteriormente a OsmAnd Cloud, incluyíu l\'historial de versiones.\n\nNun vas ser a recuperar los datos desaniciaos.";
+"backup_delete_all_data_warning" = "Tas a piques de desaniciar tolos datos xubíos anteriormente a OsmAnd Cloud, incluyíu l\'historial de versiones. \n \nNun vas ser a recuperar los datos desaniciaos.";
 "benefits_for_contributors" = "Benefits for active OSM contributors";
 "delete_all_confirmation" = "Sí, desaniciar too";
 "service_is_not_available_please_try_later" = "El serviciu nun ta disponible, volvi tentalo dempués";
@@ -2422,7 +2422,7 @@
 "select_another_colorization" = "Please select another type of coloring.";
 "renew_subscription" = "Renew subscription";
 "enough_contributions_descr" = "Norabona, collaboresti abondo n\'OpenStreetMap y agora pues esfrutar de los anovamientos ensin llende pa los mapes d\'OsmAnd.";
-"backup_delete_old_data_warning" = "You are about to delete the change history for the previously loaded data.\n\nThe current version of the data will be saved on the server, but you will not be able to revert to the previously made changes.";
+"backup_delete_old_data_warning" = "You are about to delete the change history for the previously loaded data. \n \nThe current version of the data will be saved on the server, but you will not be able to revert to the previously made changes.";
 "shared_string_recorded" = "Recorded";
 "routing_attr_allow_streams_name" = "Allow streams and drains";
 "routing_attr_allow_streams_description" = "Allow streams and drains";
@@ -2444,7 +2444,7 @@
 "mgrs_format_descr" = "OsmAnd uses MGRS, which is similar to the UTM NATO format.";
 "m" = "m";
 "km" = "km";
-"speed_cameras_legal_descr" = "In some countries or regions, the use of speed camera warning applications is prohibited by law.\n\nYou need to make a choice depending on the law of your country.\n\nSelect %@ and you will receive alerts and warnings about speed cameras.\n\nSelect %@. All data related to speed cameras: alerts, notifications, POIs will be deleted until OsmAnd is completely reinstalled.";
+"speed_cameras_legal_descr" = "In some countries or regions, the use of speed camera warning applications is prohibited by law. \n \nYou need to make a choice depending on the law of your country. \n \nSelect %@ and you will receive alerts and warnings about speed cameras. \n \nSelect %@. All data related to speed cameras: alerts, notifications, POIs will be deleted until OsmAnd is completely reinstalled.";
 "speed_cameras_alert" = "Speed cameras alerts in some countries is prohibited by the law.";
 "lang_zh-Hant" = "Chinese (Traditional)";
 "uninstall_speed_cameras" = "Desinstalar los radares de velocidá";
@@ -2520,7 +2520,7 @@
 "no_travel_guides_data_descr" = "Download Wikivoyage travel guides to view articles about places around the world without a connection to the Internet.";
 "shared_string_dark" = "Escuridá";
 "shared_string_explore" = "Esplorar";
-"weather_update_disabled" = "Desactivóse";
+"weather_update_disabled" = "Disabled";
 "map_marker_1st" = "First map marker";
 "upload_poi" = "Upload POI";
 "visibility" = "Visibilidá";

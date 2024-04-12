@@ -701,7 +701,7 @@
 
 - (void)cancelChangesInEditMode
 {
-    [_regionsSelected enumerateObjectsUsingBlock:^(OAWorldRegion *region, NSUInteger idx, BOOL * stop) {
+    [_regionsSelected.copy enumerateObjectsUsingBlock:^(OAWorldRegion *region, NSUInteger idx, BOOL * stop) {
         if ([_weatherHelper isUndefinedDownloadStateFor:region])
         {
             [_regionsOtherCountries addObject:region];

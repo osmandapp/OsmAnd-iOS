@@ -85,7 +85,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Auringon nousu : %@\nAuringon lasku : %@";
+"day_night_info_description" = "Auringon nousu : %@ \nAuringon lasku : %@";
 "day_night_info" = "Päivä/yö info";
 "daynight_mode_auto" = "Auringonnousu/lasku";
 "route_simulation" = "Route simulation";
@@ -445,7 +445,7 @@
 "shared_string_from" = "lähtien";
 "shared_string_time" = "Aika";
 "time_of_day" = "Vuorokaudenaika";
-"shared_string_distance" = "Matka";
+"shared_string_distance" = "Etäisyys";
 "retry" = "Yritä uudelleen";
 "shared_string_enabled" = "Käytössä";
 "shared_string_start_date" = "Start date";
@@ -561,7 +561,7 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-"gpx_parse_error" = "GPX-tiedostosta löytyi ongelmia.\n\nVoit ottaa yhteyttä OsmAndin tukeen asian selvittämiseksi.";
+"gpx_parse_error" = "GPX-tiedostosta löytyi ongelmia. \n \nVoit ottaa yhteyttä OsmAndin tukeen asian selvittämiseksi.";
 "tracks_on_map" = "Näytetyt jäljet";
 "gpx_export_title" = "Vie jälki";
 "gpx_export_select_track" = "Please select track for Export";
@@ -586,7 +586,7 @@
 "gpx_descent" = "Lasku";
 "gpx_updown" = "Up/Down";
 "gpx_uphills_total" = "Uphills total";
-"track_recording" = "Track recording";
+"track_recording" = "Jäljen tallennus";
 "shared_string_currently_recording_track" = "Jälkeä tallennetaan";
 "track_stop_rec" = "Stop recording";
 "gpx_start_new_segment" = "Aloita uusi segmentti";
@@ -694,7 +694,7 @@
 "sett_arr" = "Kartan nuolet";
 "shared_string_location" = "Sijainti";
 "sett_arr_map" = "Kartan keskipiste";
-"short_location_on_map" = "Lev %@\nPit %@";
+"short_location_on_map" = "Lev %@ \nPit %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -729,7 +729,7 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Lisäkartat";
 "import_duplicates_title" = "Joitakin kohteita on jo olemassa";
-"import_duplicates_description" = "OsmAndissa on jo elementtejä, joilla on samat nimet kuin tuoduilla elementeillä.\n\nValitse toiminto.";
+"import_duplicates_description" = "OsmAnd issa on jo elementtejä, joilla on samat nimet kuin tuoduilla elementeillä. \n \nValitse toiminto.";
 "keep_both" = "Pidä molemmat";
 "keep_both_desc" = "Tuodut kohteet lisätään etuliitteen kanssa";
 "replace_all" = "Korvaa kaikki";
@@ -996,7 +996,7 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 "osn_bug_name" = "OSM-huomautus";
-"osm_created" = "Created";
+"osm_created" = "Luotu";
 "poi_remove_success" = "KP poistettiin onnistuneesti";
 "shared_string_modified" = "Muokattu";
 "osm_edit_reopened_note" = "Uudelleen avattu OSM-huomautus";
@@ -1263,7 +1263,7 @@
 "metric_ton" = "tn";
 
 // Help
-"help_first_steps" = "Ensimmäiset askeleet";
+"help_first_steps" = "Alkuaskeleet";
 "first_usage_item" = "Ensimmäinen käyttö";
 "help_first_use_descr" = "How to download maps and set basic settings";
 "help_navigation_descr" = "How to set up navigation";
@@ -1364,7 +1364,7 @@
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
 "record_plugin_name" = "Matkatallennus";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Tämä lisäosa ottaa käyttöön toiminnallisuudet nauhoittaa ja tallentaa jälkiä manuaalisesti koskettamalla GPX-kirjauswidgettiä kartalla, tai myös automaattisesti tallentaa kaikki navigointireitit GPX-tiedostoon.\n\nTallennetut jäljet voidaan jakaa ystävillesi tai käyttää OSM osallistumisissa. Urheilijat voivat käyttää tallennettuja jälkiä harjoittelun seuraamiseen. Jotain perusanalyysejä jäljille voidaan tehdä suoraan OsmAndissa, kuten kierrosaikoja, keskimääräistä nopeutta jne., ja jälkiä voi tietysti myös myöhemmin analysoida erityisissä kolmannen osapuolen analysointityökaluissa.";
+"record_plugin_description" = "Tämä lisäosa ottaa käyttöön toiminnallisuudet nauhoittaa ja tallentaa jälkiä manuaalisesti koskettamalla GPX-kirjauswidgettiä kartalla, tai myös automaattisesti tallentaa kaikki navigointireitit GPX-tiedostoon. \n \nTallennetut jäljet voidaan jakaa ystävillesi tai käyttää OSM osallistumisissa. Urheilijat voivat käyttää tallennettuja jälkiä harjoittelun seuraamiseen. Jotain perusanalyysejä jäljille voidaan tehdä suoraan OsmAndissa, kuten kierrosaikoja, keskimääräistä nopeutta jne., ja jälkiä voi tietysti myös myöhemmin analysoida erityisissä kolmannen osapuolen analysointityökaluissa.";
 "product_title_trip_planning" = "Trip planning";
 "product_desc_trip_planning" = "Plan your trip, add waypoints, measure the distance to your destination using this plugin";
 "product_desc_ext_trip_planning" = "Trip planning plugin allows you to create your trip on the map, save it, measure the distance between points connected with straight lines, etc. Created for preliminary trip planning rather than thorough route building.";
@@ -1395,7 +1395,7 @@
 "purchases_feature_desc_wikipedia" = "Tutustu Wikipediaan offline-tilassa. Artikkelit on jaettu maittain ja alueittain, saatavilla kaikilla kielillä.";
 "srtm_plugin_name" = "Korkeuskäyrät";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Tämä lisäosa tarjoaa korkeuskäyräpeitteen ja (kohokuva) mäkivarjostustason näytettäväksi OsmAnd offline-karttojen päällä. Tätä toiminnallisuutta arvostavat paljon urheilijat, retkeilijät, vuoristoseikkailijat, ja ketkä tahansa maisemien ihailusta kiinnostuneet.\n\nMaailmanlaajuisettiedot (välillä 70° pohjoista ja 70° eteläistä) perustuu mittauksiin jotka on tehnyt SRTM (Shuttle Radar Topography Mission) ja ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), ja NASAn maapallontarkkailujärjestelmän lippulaivasatelliitti Terran mukana kulkeva kuvauslaite. ASTER on yhteistyö NASAn, Japanin talous-, kauppa ja teollisuusministeriön (METI), ja Japanin avaruusjärjestelmien (J-spacesystems) välillä.";
+"srtm_plugin_description" = "Tämä lisäosa tarjoaa korkeuskäyräpeitteen ja (kohokuva) mäkivarjostustason näytettäväksi OsmAnd offline-karttojen päällä. Tätä toiminnallisuutta arvostavat paljon urheilijat, retkeilijät, vuoristoseikkailijat, ja ketkä tahansa maisemien ihailusta kiinnostuneet. \n \nMaailmanlaajuisettiedot (välillä 70° pohjoista ja 70° eteläistä) perustuu mittauksiin jotka on tehnyt SRTM (Shuttle Radar Topography Mission) ja ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer), ja NASAn maapallontarkkailujärjestelmän lippulaivasatelliitti Terran mukana kulkeva kuvauslaite. ASTER on yhteistyö NASAn, Japanin talous-, kauppa ja teollisuusministeriön (METI), ja Japanin avaruusjärjestelmien (J-spacesystems) välillä.";
 "wikivoyage_travel_guide" = "Matkaoppaat";
 "start_editing_card_image_text" = "Ilmainen maailmanlaajuinen matkaopas, jota kuka tahansa voi muokata.";
 "wikivoyage_travel_guide_descr" = "Oppaita planeetan mielenkiintoisimpiin paikkoihin OsmAndin sisällä, ilman Internet-yhteyttä.";
@@ -2337,7 +2337,7 @@
 "are_you_sure" = "Oletko varma?";
 "upload_local_version" = "Lähetä paikallinen versio";
 "copy_poi_name" = "Kopioi KP:n nimi";
-"osmand_cloud_create_account_descr" = "Anna sähköpostiosoitteesi, kaikki tietosi yhdistetään siihen.\nLähetämme sinulle vahvistuskoodin tähän sähköpostiosoitteeseen.";
+"osmand_cloud_create_account_descr" = "Anna sähköpostiosoitteesi, kaikki tietosi yhdistetään siihen. \nLähetämme sinulle vahvistuskoodin tähän sähköpostiosoitteeseen.";
 "rendering_attr_showRunningRoutes_name" = "Juoksureitit";
 "shared_string_progress" = "Edistyminen";
 "backup_delete_types_descr" = "Poistetaanko kaikki vanhentuneen tietolajin tiedot OsmAnd Cloudista\?";
@@ -2354,7 +2354,7 @@
 "duration_ago" = "%@ sitten";
 "routing_attr_avoid_tunnels_name" = "Vältä tunneleita";
 "shared_string_not_included" = "Ei sisälly";
-"logout_from_osmand_cloud_decsr" = "Kirjaudu ulos\?\nSinun on kirjauduttava uudelleen sisään tietojen varmuuskopiointia tai palauttamista varten.";
+"logout_from_osmand_cloud_decsr" = "Kirjaudu ulos\? \nSinun on kirjauduttava uudelleen sisään tietojen varmuuskopiointia tai palauttamista varten.";
 "backup_data" = "Varmuuskopioi data";
 "routing_attr_avoid_tunnels_description" = "Vältä tunneleita";
 "rendering_attr_showFitnessTrails_name" = "Kuntopolut";
@@ -2385,8 +2385,8 @@
 "shared_string_status" = "Tila";
 "pro_features" = "Pro ominaisuus";
 "map_updates_are_unavailable_yet" = "Karttapäivityksiä ei vielä saatavilla. :-(";
-"backup_delete_old_data_warning" = "Olet poistamassa aiemmin ladattujen tietojen muutoshistoriaa.\n\nTietojen nykyinen versio tallennetaan palvelimelle, mutta et voi palata aiemmin tehtyihin muutoksiin.";
-"backup_delete_all_data_warning" = "Olet poistamassa kaikki OsmAnd Cloudiin aiemmin ladatut tiedot, mukaan lukien versiohistorian.\n\nEt voi palauttaa poistettuja tietoja.";
+"backup_delete_old_data_warning" = "Olet poistamassa aiemmin ladattujen tietojen muutoshistoriaa. \n \nTietojen nykyinen versio tallennetaan palvelimelle, mutta et voi palata aiemmin tehtyihin muutoksiin.";
+"backup_delete_all_data_warning" = "Olet poistamassa kaikki OsmAnd Cloudiin aiemmin ladatut tiedot, mukaan lukien versiohistorian. \n \nEt voi palauttaa poistettuja tietoja.";
 "local_backup_descr" = "Varmuuskopioi tai palauta tietoja paikallisesta tiedostosta.";
 "promo_subscription" = "Kampanjatilaus";
 "shared_string_logout" = "Kirjaudu ulos";
@@ -2431,7 +2431,7 @@
 "speed_cameras_alert" = "Nopeusvalvontakameroiden hälytykset on joissakin maissa kielletty lailla.";
 "shared_string_legal" = "Lakiasiat";
 "speed_camera_pois" = "Nopeuskameroiden KP:t";
-"speed_cameras_legal_descr" = "Joissain maissa tai alueilla nopeusvalvontakameroiden varoitussovellusten käyttö on lailla kielletty.\n\nSinun on tehtävä valinta maasi lainsäädännön mukaan.\n\nValitse %@, niin saat hälytyksiä ja varoituksia nopeuskameroista.\n\nValitse %@. Kaikki nopeuskameroihin liittyvät tiedot: hälytykset, ilmoitukset, KP:t poistetaan, kunnes OsmAnd asennetaan kokonaan uudelleen.";
+"speed_cameras_legal_descr" = "Joissain maissa tai alueilla nopeusvalvontakameroiden varoitussovellusten käyttö on lailla kielletty. \n \nSinun on tehtävä valinta maasi lainsäädännön mukaan. \n \nValitse %@, niin saat hälytyksiä ja varoituksia nopeuskameroista. \n \nValitse %@. Kaikki nopeuskameroihin liittyvät tiedot: hälytykset, ilmoitukset, KP:t poistetaan, kunnes OsmAnd asennetaan kokonaan uudelleen.";
 "lang_zh-Hant" = "Kiina (traditionaalinen)";
 "privacy_and_security" = "Yksityisyys ja turvallisuus";
 "icon_group_service" = "Palvelu";
@@ -2577,7 +2577,7 @@
 "routing_attr_hazmat_category_usa_8_name" = "Syövyttävät aineet";
 "rendering_value_small_name" = "Pieni";
 "about_osmAnd" = "Tietoa OsmAnd:ista";
-"shared_string_clear_online_cache" = "Tyhjennä yhteyden välimuisti";
+"shared_string_clear_online_cache" = "Tyhjennä internet-välimuisti";
 "shared_string_wikivoyage" = "Wikivoyage";
 "shared_string_format" = "Muoto";
 "activity_type_water_name" = "Vesi";
@@ -2784,7 +2784,7 @@
 "ant_plus_nothing_found_text" = "Antureita ei voitu löytää";
 "routing_attr_difficulty_preference_no_preference_name" = "Ei valintaa";
 "rendering_attr_depthContourWidth_name" = "Viivan leveys";
-"osmand_cloud_deleting_account_descr" = "Hetken päästä kaikki datasi ja tilisi poistetaan OsmAnd Cloudista.\n\nKaikki laitteella oleva data säilytetään.";
+"osmand_cloud_deleting_account_descr" = "Hetken päästä kaikki datasi ja tilisi poistetaan OsmAnd Cloudista. \n \nKaikki laitteella oleva data säilytetään.";
 "osmand_cloud_deleted_account_descr" = "Tili ja kaikki data poistettiin OsmAnd Cloudista.";
 "cloud_all_changes_uploaded_descr" = "Kaikki tällä laitteella tehdyt muutokset synkronoidaan OsmAnd Cloudiin.";
 "shared_string_delete_immediately" = "Poista heti";
@@ -2809,3 +2809,12 @@
 "help_article_troubleshooting_track_recording_issues_name" = "Jäljen tallennus";
 "help_article_widgets_map_buttons_name" = "Karttapainikkeet";
 "go_to_marker_location" = "Mene markkerin sijaintiin";
+"shared_string_precise" = "Tarkka";
+"ant_plus_searching_text_description" = "Pidä laitetta lähellä anturia. Sinun on kytkettävä anturi päälle, jotta OsmAnd voi löytää sen.";
+"not_recorded" = "Ei tallennettu";
+"new_track" = "Uusi jälki";
+"shared_string_all_colors" = "Kaikki värit";
+"gitHub_discussion" = "GitHub-keskustelu";
+"open_issue_on_gitHub" = "Avaa ilmoitus GitHubissa";
+"help_article_troubleshooting_maps_data_name" = "Kartat&data";
+"ask_question_propose_features" = "Kysy kysymys, ehdota ominaisuuksia";

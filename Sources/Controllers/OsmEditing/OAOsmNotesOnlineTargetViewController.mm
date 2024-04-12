@@ -21,6 +21,7 @@
 #import "OAOsmNotePoint.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAOnlineOsmNoteWrapper.h"
+#import "OAPluginsHelper.h"
 
 @interface OAOsmNotesOnlineTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
@@ -48,7 +49,7 @@
         _icon = icon;
         _point = point;
         _app = [OsmAndApp instance];
-        _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+        _editingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
         _isOpen = _point.opened;
         
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];

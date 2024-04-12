@@ -20,6 +20,7 @@
 #import "OAPlugin.h"
 #import "Localization.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAPluginsHelper.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -682,7 +683,7 @@
 
 - (BOOL) getIsRecording
 {
-    if ([OAPlugin getEnabledPlugin:OAMonitoringPlugin.class])
+    if ([OAPluginsHelper getEnabledPlugin:OAMonitoringPlugin.class])
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if (settings.mapSettingTrackRecording || ([settings.saveTrackToGPX get] && [[OARoutingHelper sharedInstance] isFollowingMode]))
@@ -694,7 +695,7 @@
 - (NSString *)getPluginsInfo:(CLLocation *)location
 {
     NSMutableData *json = [NSMutableData data];
-    [OAPlugin attachAdditionalInfoToRecordedTrack:location json:json];
+    [OAPluginsHelper attachAdditionalInfoToRecordedTrack:location json:json];
     return json.length > 0 ? [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding] : nil;
 }
 

@@ -17,6 +17,7 @@
 #import "OAWeatherToolbar.h"
 #import "OAMapLayers.h"
 #import "OAMapWidgetRegistry.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -117,7 +118,7 @@
 {
     [super updateLayer];
 
-    if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
+    if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [self updateOpacitySliderVisibility];
 

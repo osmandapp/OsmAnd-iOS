@@ -23,6 +23,7 @@
 #import "OADownloadingCellHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kSidePadding 20.0
 #define kTopPadding 6
@@ -72,7 +73,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     self = [super init];
     if (self) {
         _pluginId = pluginId;
-        _plugin = [OAPlugin getPluginById:_pluginId];
+        _plugin = [OAPluginsHelper getPluginById:_pluginId];
         _iapHelper = [OAIAPHelper sharedInstance];
         _app = OsmAndApp.instance;
         _dataLock = [[NSObject alloc] init];
@@ -340,7 +341,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         else
         {
-            [OAPlugin enablePlugin:_plugin enable:NO];
+            [OAPluginsHelper enablePlugin:_plugin enable:NO];
         }
     }
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -354,7 +355,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         if (product)
             [_iapHelper enableProduct:_pluginId];
         else
-            [OAPlugin enablePlugin:_plugin enable:YES];
+            [OAPluginsHelper enablePlugin:_plugin enable:YES];
     }
     
     [self dismissViewControllerAnimated:YES completion:nil];

@@ -30,6 +30,7 @@
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 typedef NS_ENUM(NSInteger, EOAEditsListType)
 {
@@ -424,7 +425,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
         else if (notes.count > 0)
         {
             _pendingNotes = nil;
-            OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
+            OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:notes type:EOAOsmNoteViewConrollerModeUpload];
             notesBottomsheet.delegate = self;
             [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
         }
@@ -455,7 +456,7 @@ typedef NS_ENUM(NSInteger, EOAEditsListType)
     [self refreshData];
     if (_pendingNotes && _pendingNotes.count > 0 && !hasError)
     {
-        OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:EOAOsmNoteViewConrollerModeUpload];
+        OAOsmNoteViewController *notesBottomsheet = [[OAOsmNoteViewController alloc] initWithEditingPlugin:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:_pendingNotes type:EOAOsmNoteViewConrollerModeUpload];
         notesBottomsheet.delegate = self;
         [[OARootViewController instance].mapPanel.navigationController pushViewController:notesBottomsheet animated:YES];
     }

@@ -147,7 +147,7 @@
 
 - (NSString *) getDescription
 {
-    return OALocalizedString(@"weather_plugin_description");
+    return [NSString stringWithFormat:NSLocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
 }
 
 @end

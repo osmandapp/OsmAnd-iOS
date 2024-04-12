@@ -13,6 +13,7 @@
 #import "Localization.h"
 #import "OADonationSettingsViewController.h"
 #import "OACheckBackupSubscriptionTask.h"
+#import "OAAppVersionDependentConstants.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
@@ -613,7 +614,10 @@ static OASubscriptionState *EXPIRED;
     }
     
     RequestProductsCompletionHandler onComplete = ^(BOOL success) {
-        [self checkBackupPurchaseIfNeeded:completionHandler];
+        if (success)
+        	[self checkBackupPurchaseIfNeeded:completionHandler];
+        else if (completionHandler)
+            completionHandler(NO);
     };
 
     NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
@@ -1179,7 +1183,10 @@ static OASubscriptionState *EXPIRED;
                 else
                 {
                     NSLog(@"completeTransaction - %@", transaction.payment.productIdentifier);
-                    [self provideContentForProductIdentifier:transaction.payment.productIdentifier transactionId:transaction.originalTransaction ? transaction.originalTransaction.transactionIdentifier : transaction.transactionIdentifier];
+                    NSString *productId = transaction.payment.productIdentifier;
+                    NSString *transactionId = transaction.originalTransaction ? transaction.originalTransaction.transactionIdentifier : transaction.transactionIdentifier;
+                    [self provideContentForProductIdentifier:productId transactionId:transactionId];
+                    [self sendPurchaseComplete:productId transactionId:transactionId];
                 }
             }
             [[SKPaymentQueue defaultQueue] finishTransaction:transaction];
@@ -1321,6 +1328,25 @@ static OASubscriptionState *EXPIRED;
                                                                                         error:&error] encoding:NSUTF8StringEncoding];
     if (!error && resStr)
         [_settings.purchasedIdentifiers set:resStr];
+}
+
+- (void) sendPurchaseComplete:(NSString * _Nonnull)productIdentifier transactionId:(NSString *)transactionId
+{
+    OsmAndAppInstance app = OsmAndApp.instance;
+    NSMutableDictionary<NSString *, NSString *> *params = [NSMutableDictionary dictionary];
+    [params setObject:productIdentifier forKey:@"purchaseId"];
+    [params setObject:transactionId forKey:@"orderId"];
+    [params setObject:@"ios" forKey:@"os"];
+    [params setObject:OAAppVersionDependentConstants.getVersion forKey:@"version"];
+    [params setObject:[NSString stringWithFormat:@"%d", app.getAppInstalledDays] forKey:@"nd"];
+    [params setObject:[NSString stringWithFormat:@"%d", app.getAppExecCount] forKey:@"ns"];
+    [params setObject:app.getLanguageCode forKey:@"lang"];
+    NSString *aid = app.getUserIosId;
+    if (aid.length > 0)
+        [params setObject:aid forKey:@"aid"];
+
+    NSString *url = @"https://osmand.net/api/purchase-complete";
+    [OANetworkUtilities sendRequestWithUrl:url params:params post:NO async:YES onComplete:nil];
 }
 
 - (void) provideContentForProductIdentifier:(NSString * _Nonnull)productIdentifier transactionId:(NSString *)transactionId

@@ -25,18 +25,18 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (void) sendRequest:(OANetworkRequest *)request
                async:(BOOL)async
-          onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+          onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 + (void) sendRequestWithUrl:(NSString *)url
                      params:(NSDictionary<NSString *, NSString *> *)params
                        post:(BOOL)post
-                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+                 onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 + (void) sendRequestWithUrl:(NSString *)url
                      params:(NSDictionary<NSString *, NSString *> *)params
                        post:(BOOL)post
                       async:(BOOL)async
-                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+                 onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 + (void) sendRequestWithUrl:(NSString *)url
                      params:(NSDictionary<NSString *, NSString *> * _Nullable)params
@@ -44,7 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
                 contentType:(NSString *)contentType
                        post:(BOOL)post
                       async:(BOOL)async
-                 onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
+                 onComplete:(void (^ _Nullable)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 
 + (void) uploadFile:(NSString *)url fileName:(NSString *)fileName params:(NSDictionary<NSString *, NSString *> *)params headers:(NSDictionary<NSString *, NSString *> *)headers data:(NSData *)data gzip:(BOOL)gzip autorizationHeader:(NSString *)autorizationHeader progress:(OAURLSessionProgress *)progress onComplete:(void (^)(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error))onComplete;
 

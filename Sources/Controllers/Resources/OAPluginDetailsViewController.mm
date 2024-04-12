@@ -26,6 +26,9 @@
 #import <SafariServices/SafariServices.h>
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
+#import "OACustomPlugin.h"
+#import "OAOnlinePlugin.h"
 
 #define kPriceButtonTextInset 8.0
 #define kPriceButtonMinTextWidth 80.0
@@ -34,10 +37,11 @@
 
 typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     EOAPluginScreenTypeProduct = 0,
-    EOAPluginScreenTypeCustomPlugin
+    EOAPluginScreenTypeCustomPlugin,
+    EOAPluginScreenTypeOnlinePlugin
 };
 
-@interface OAPluginDetailsViewController () <UITextViewDelegate, SFSafariViewControllerDelegate>
+@interface OAPluginDetailsViewController () <UITextViewDelegate, SFSafariViewControllerDelegate, OAPluginInstallListener>
 
 @end
 
@@ -66,13 +70,25 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     return self;
 }
 
-- (instancetype) initWithCustomPlugin:(OAPlugin *)plugin
+- (instancetype) initWithCustomPlugin:(OACustomPlugin *)plugin
 {
     self = [super initWithNibName:@"OAPluginDetailsViewController" bundle:nil];
     if (self)
     {
         _plugin = plugin;
         _screenType = EOAPluginScreenTypeCustomPlugin;
+        [self commonInit];
+    }
+    return self;
+}
+
+- (instancetype) initWithOnlinePlugin:(OAOnlinePlugin *)plugin
+{
+    self = [super initWithNibName:@"OAPluginDetailsViewController" bundle:nil];
+    if (self)
+    {
+        _plugin = plugin;
+        _screenType = EOAPluginScreenTypeOnlinePlugin;
         [self commonInit];
     }
     return self;
@@ -143,7 +159,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         if (screenshotName)
             screenshotImage = [UIImage imageNamed:screenshotName];
     }
-    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin || _screenType == EOAPluginScreenTypeOnlinePlugin)
     {
         screenshotImage = _plugin.getAssetResourceImage;
     }
@@ -160,7 +176,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         }
         self.icon.contentMode = UIViewContentModeCenter;
     }
-    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin || _screenType == EOAPluginScreenTypeOnlinePlugin)
     {
         logo = [_plugin getLogoResource];
         self.icon.contentMode = UIViewContentModeScaleAspectFit;
@@ -181,7 +197,8 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 {
     [super viewWillAppear:animated];
 
-    [[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
+    if (_screenType == EOAPluginScreenTypeProduct)
+    	[[OARootViewController instance] requestProductsWithProgress:YES reload:NO];
 }
 
 - (void) viewWillLayoutSubviews
@@ -230,7 +247,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         if (!_product.free)
             price = [OALocalizedString(@"buy") uppercaseStringWithLocale:[NSLocale currentLocale]];
     }
-    else if (_screenType == EOAPluginScreenTypeCustomPlugin)
+    else if (_screenType == EOAPluginScreenTypeCustomPlugin || _screenType == EOAPluginScreenTypeOnlinePlugin)
     {
         attrDesc = [OAUtilities attributedStringFromHtmlString:_plugin.getDescription fontSize:17 textColor:[UIColor colorNamed:ACColorNameTextColorPrimary]];
     }
@@ -260,8 +277,20 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         purchased = YES;
         disabled = ![_plugin isEnabled];
     }
-    
-    if (purchased)
+    else if (_screenType == EOAPluginScreenTypeOnlinePlugin)
+    {
+        purchased = YES;
+        disabled = NO;
+    }
+
+    if (_screenType == EOAPluginScreenTypeOnlinePlugin)
+    {
+        self.priceButton.layer.borderWidth = 0.0;
+        self.priceButton.backgroundColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+        self.priceButton.tintColor = [UIColor whiteColor];
+        [self.priceButton setTitle:OALocalizedString(@"shared_string_install") forState:UIControlStateNormal];
+    }
+    else if (purchased)
     {
         [self.priceButton setTitle:@"" forState:UIControlStateNormal];
         if (!disabled)
@@ -339,7 +368,7 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
 
 - (IBAction)deleteButtonClicked:(id)sender
 {
-    [OAPlugin removeCustomPlugin:(OACustomPlugin *)_plugin];
+    [OAPluginsHelper removeCustomPlugin:(OACustomPlugin *)_plugin];
     if (self.delegate)
         [self.delegate onCustomPluginDeleted];
     [self dismissViewController];
@@ -371,9 +400,13 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
     //    [[OARootViewController instance] buyProduct:_product showProgress:YES];
         [OAChoosePlanHelper showChoosePlanScreenWithProduct:_product navController:self.navigationController];
     }
+    else if (_screenType == EOAPluginScreenTypeOnlinePlugin)
+    {
+        [_plugin install:self];
+    }
     else
     {
-        [OAPlugin enablePlugin:_plugin enable:![_plugin isEnabled]];
+        [OAPluginsHelper enablePlugin:_plugin enable:![_plugin isEnabled]];
         [self updatePurchaseButton];
         [self updateSettingsButtonState];
     }
@@ -398,6 +431,13 @@ typedef NS_ENUM(NSInteger, EOAPluginScreenType) {
         return [[UIStoryboard storyboardWithName:@"BLEExternalSensors" bundle:nil] instantiateViewControllerWithIdentifier:@"BLEExternalSensors"];
     }
     return nil;
+}
+
+#pragma mark - OAPluginInstallListener
+
+- (void) onPluginInstall
+{
+    [self.navigationController popToRootViewControllerAnimated:YES];
 }
 
 @end

@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
+#import "OALinks.h"
 
 @interface OAFunctionalAddon()
 
@@ -1691,7 +1692,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return OALocalizedString(@"plugin_nautical_descr");
+    return [NSString stringWithFormat:NSLocalizedString(@"plugin_nautical_descr", nil), k_docs_plugin_nautical];
 }
 
 @end
@@ -1736,7 +1737,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return OALocalizedString(@"record_plugin_description");
+    return [NSString stringWithFormat:NSLocalizedString(@"record_plugin_description", nil), k_docs_plugin_trip_recording];
 }
 
 @end
@@ -1871,7 +1872,8 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return OALocalizedString(@"srtm_plugin_description");
+    return [NSString stringWithFormat:NSLocalizedString(@"srtm_plugin_description", nil), k_docs_plugin_srtm];
+//    return OALocalizedString(@"srtm_plugin_description");
 }
 
 @end
@@ -1916,7 +1918,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return OALocalizedString(@"osm_editing_plugin_description");
+    return [NSString stringWithFormat:NSLocalizedString(@"osm_editing_plugin_description", nil), k_docs_plugin_osm];
 }
 
 @end
@@ -2002,7 +2004,7 @@
 
 - (NSString *) localizedDescriptionExt
 {
-    return OALocalizedString(@"weather_plugin_description");
+    return [NSString stringWithFormat:NSLocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
 }
 
 @end

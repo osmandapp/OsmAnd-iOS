@@ -46,6 +46,7 @@
 #import "OAFavoritesHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
+#import "OAPluginsHelper.h"
 
 #include <algorithm>
 #include <QList>
@@ -84,8 +85,6 @@
 #define kMaxLogFiles 3
 
 #define kAppData @"app_data"
-#define kInstallDate @"install_date"
-#define kNumberOfStarts @"starts_num"
 #define kSubfolderPlaceholder @"_%_"
 #define kBuildVersion @"buildVersion"
 
@@ -196,11 +195,6 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
-        if (![defaults objectForKey:kInstallDate])
-            [[NSUserDefaults standardUserDefaults] setObject:[NSDate date] forKey:kInstallDate];
-        NSInteger ns = [defaults integerForKey:kNumberOfStarts];
-        ns = ns < 0 ? 0 : ns;
-        [defaults setInteger:++ns forKey:kNumberOfStarts];
     }
     return self;
 }
@@ -512,7 +506,6 @@
     
     if (_firstLaunch)
     {
-        [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
         _resourcesManager->installBuiltInTileSources();
         [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
@@ -535,8 +528,6 @@
         }
         if (prevVersion < VERSION_4_2)
         {
-            [[NSUserDefaults standardUserDefaults] setObject:NSDate.date forKey:kInstallDate];
-            
             [OAGPXDatabase.sharedDb save];
             [OAGPXDatabase.sharedDb load];
 
@@ -694,7 +685,7 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
 
-    [OAPlugin initPlugins];
+    [OAPluginsHelper initPlugins];
     [OAPOIHelper sharedInstance];
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
@@ -794,25 +785,10 @@
 - (NSString *) generateIndexesUrl
 {
     NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersionDependentConstants.getAppVersionForUrl];
-    NSDate *installDate = [[NSUserDefaults standardUserDefaults] objectForKey:kInstallDate];
-    if (installDate)
-    {
-        NSInteger nd = [self daysBetween:installDate date2:NSDate.date];
-        if (nd > 0)
-            [res appendFormat:@"&nd=%ld", nd];
-    }
-    [res appendFormat:@"&ns=%ld", [[NSUserDefaults standardUserDefaults] integerForKey:kNumberOfStarts]];
+    [res appendFormat:@"&nd=%d&ns=%d", self.getAppInstalledDays, self.getAppExecCount];
     if (self.getUserIosId.length > 0)
-        [res appendFormat:@"&aid=%@", [self getUserIosId]];
+        [res appendFormat:@"&aid=%@", self.getUserIosId];
     return res;
-}
-
-- (NSInteger) daysBetween:(NSDate *)dt1 date2:(NSDate *)dt2
-{
-    NSUInteger unitFlags = NSCalendarUnitDay;
-    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
-    NSDateComponents *components = [calendar components:unitFlags fromDate:dt1 toDate:dt2 options:0];
-    return [components day] + 1;
 }
 
 - (void) instantiateWeatherResourcesManager
@@ -1335,6 +1311,25 @@
     userIosId = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""];
     [settings.userIosId set:userIosId];
     return userIosId;
+}
+
+- (int) getAppExecCount
+{
+    return (int)[[NSUserDefaults standardUserDefaults] integerForKey:kAppExecCounter];
+}
+
+- (int) getAppInstalledDays
+{
+    NSTimeInterval currentTime = [[NSDate date] timeIntervalSince1970];
+    double appInstalledTime = [[NSUserDefaults standardUserDefaults] doubleForKey:kAppInstalledDate];
+    return (int)((currentTime - appInstalledTime) / (24 * 60 * 60));
+}
+
+- (NSString *) getLanguageCode
+{
+    NSString *language = [[NSLocale preferredLanguages] objectAtIndex:0];
+    NSDictionary *languageDictionary = [NSLocale componentsFromLocaleIdentifier:language];
+    return [languageDictionary objectForKey:NSLocaleLanguageCode];
 }
 
 @end

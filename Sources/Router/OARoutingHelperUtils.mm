@@ -13,6 +13,8 @@
 #import "OAUtilities.h"
 #import "OALocationServices.h"
 #import "OARoutingHelper.h"
+#import "OAAppSettings.h"
+#import "OAMapViewTrackingUtilities.h"
 
 #define CACHE_RADIUS 100000
 #define MAX_BEARING_DEVIATION 45
@@ -176,6 +178,20 @@
         return [[CLLocation alloc] initWithCoordinate:projection.coordinate altitude:projection.altitude horizontalAccuracy:projection.horizontalAccuracy verticalAccuracy:projection.verticalAccuracy course:approximatedBearing speed:projection.speed timestamp:projection.timestamp];
     }
     return projection;
+}
+
++ (void) updateDrivingRegionIfNeeded:(CLLocation *)newStartLocation force:(BOOL)force
+{
+    OAAppSettings *settings = OAAppSettings.sharedManager;
+    if ([settings.drivingRegionAutomatic get])
+    {
+        CLLocation *lastStartLocation = [settings getLastStartPoint];
+        if (lastStartLocation == nil || [OAMapUtils getDistance:newStartLocation.coordinate second:lastStartLocation.coordinate] > CACHE_RADIUS || force)
+        {
+            [[OAMapViewTrackingUtilities instance] detectDrivingRegion:newStartLocation];
+            [settings setLastStartPoint:newStartLocation];
+        }
+    }
 }
 
 @end

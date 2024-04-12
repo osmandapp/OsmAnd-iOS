@@ -72,6 +72,7 @@
 
 // Plugins
 #import "OAPlugin.h"
+#import "OAPluginsHelper.h"
 #import "OAMapillaryPlugin.h"
 #import "OAMonitoringPlugin.h"
 #import "OAOsmAndDevelopmentPlugin.h"

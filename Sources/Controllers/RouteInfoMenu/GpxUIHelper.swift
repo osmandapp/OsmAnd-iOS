@@ -330,7 +330,7 @@ import Charts
             case .speed:
                 return createGPXSpeedDataSet(chartView: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.distance, useRightAxis: useRightAxis, drawFilled: true, calcWithoutGaps: calcWithoutGaps)
             default:
-            return OAPlugin.getOrderedLineDataSet(chart: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.distance, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
+            return OAPluginsHelper.getOrderedLineDataSet(chart: chartView, analysis: analysis, graphType: type, axisType: GPXDataSetAxisType.distance, calcWithoutGaps: calcWithoutGaps, useRightAxis: useRightAxis)
         }
     }
 

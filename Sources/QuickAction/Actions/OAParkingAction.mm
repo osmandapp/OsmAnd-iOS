@@ -15,6 +15,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OATargetPoint.h"
 #import "OAQuickActionType.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -30,7 +31,7 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     
-    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getEnabledPlugin:OAParkingPositionPlugin.class];
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getEnabledPlugin:OAParkingPositionPlugin.class];
     if (plugin)
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;

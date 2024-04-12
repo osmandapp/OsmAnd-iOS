@@ -67,6 +67,7 @@
 #import "OARouteCalculationResult.h"
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
+#import "OAPluginsHelper.h"
 
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
@@ -219,7 +220,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     OAAutoObserverProxy* _framePreparedObserver;
 
     OAAutoObserverProxy* _layersConfigurationObserver;
-
+    
     UIPinchGestureRecognizer* _grZoom;
     CGFloat _initialZoomLevelDuringGesture;
     CGFloat _initialZoomTapPointY;
@@ -1353,6 +1354,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
                             if (_startZooming && zoom != 0)
                                 _mapView.flatZoom = qBound(_mapView.minZoom, _mapView.flatZoom + (float)zoom, _mapView.maxZoom);
+                            
+                            [OAMapViewTrackingUtilities.instance setZoomTime:[[NSDate now] timeIntervalSince1970]];
                         }
                         else
                         {
@@ -2462,7 +2465,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) recreateHeightmapProvider
 {
-    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getEnabledPlugin:OASRTMPlugin.class];
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
     if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
@@ -2476,7 +2479,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
 - (void) updateElevationConfiguration
 {
-    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPlugin getEnabledPlugin:OASRTMPlugin.class];
+    OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
     BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)

@@ -272,6 +272,26 @@ static BOOL _isDeviatedFromRoute = false;
     [_recalcHelper addCalculationProgressCallback:callback];
 }
 
+- (void)newRouteHasMissingOrOutdatedMaps:(NSArray<OAWorldRegion *> *)missingMaps
+                            mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
+                     potentiallyUsedMaps:(NSArray<OAWorldRegion *> *)potentiallyUsedMaps
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        @synchronized (_listeners)
+        {
+            NSMutableArray<id<OARouteInformationListener>> *inactiveListeners = [NSMutableArray array];
+            for (id<OARouteInformationListener> l in _listeners)
+            {
+                if (l && [l respondsToSelector:@selector(newRouteHasMissingOrOutdatedMaps:mapsToUpdate:potentiallyUsedMaps:)])
+                    [l newRouteHasMissingOrOutdatedMaps:missingMaps mapsToUpdate:mapsToUpdate potentiallyUsedMaps:potentiallyUsedMaps];
+                else
+                    [inactiveListeners addObject:l];
+            }
+            [_listeners removeObjectsInArray:inactiveListeners];
+        }
+    });
+}
+
 - (void) newRouteCalculated:(BOOL)newRoute
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{

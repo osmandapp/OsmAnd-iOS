@@ -293,10 +293,9 @@
     {
         const auto point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.latitude, point.longitude));
         NSMutableArray<OAWorldRegion *> *regions = [[self.app.worldRegion queryAtLat:point.latitude lon:point.longitude] mutableCopy];
-        NSArray<OAWorldRegion *> *copy = [NSArray arrayWithArray:regions];
         if (regions.count > 0)
         {
-            [copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            [regions.copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (![region contain:point.latitude lon:point.longitude])
                     [regions removeObject:region];
             }];

@@ -382,10 +382,12 @@ typedef enum {
     for (OAApplicationMode *mode in modes)
     {
         OAMarkerCollection *c = [[OAMarkerCollection alloc] initWithMapView:self.mapView];
-        
+
         c.markerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
+        c.markerCollection->setPriority(std::numeric_limits<int64_t>::max());
+
         OsmAnd::MapMarkerBuilder locationAndCourseMarkerBuilder;
-        
+
         locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(true);
         locationAndCourseMarkerBuilder.setAccuracyCircleBaseColor(OsmAnd::ColorRGB(0x20, 0xad, 0xe5));
         locationAndCourseMarkerBuilder.setBaseOrder(baseOrder--);

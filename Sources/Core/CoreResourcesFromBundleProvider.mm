@@ -28,7 +28,7 @@ QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
                                                         const float displayDensityFactor,
                                                         bool* ok /* = nullptr*/) const
 {
-    NSString* resourcePath = getResourcePath(name, displayDensityFactor);
+    NSString* resourcePath = getResourcePath(name, displayDensityFactor, true);
 
     if (!resourcePath)
     {
@@ -55,7 +55,7 @@ QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
 QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
                                                         bool* ok /* = nullptr*/) const
 {
-    NSString* resourcePath = getResourcePath(name);
+    NSString* resourcePath = getResourcePath(name, true);
 
     if (!resourcePath)
     {
@@ -82,19 +82,19 @@ QByteArray CoreResourcesFromBundleProvider::getResource(const QString& name,
 bool CoreResourcesFromBundleProvider::containsResource(const QString& name,
                                                        const float displayDensityFactor) const
 {
-    NSString* resourcePath = getResourcePath(name, displayDensityFactor);
+    NSString* resourcePath = getResourcePath(name, displayDensityFactor, false);
 
     return ([[NSFileManager defaultManager] fileExistsAtPath:resourcePath] == YES);
 }
 
 bool CoreResourcesFromBundleProvider::containsResource(const QString& name) const
 {
-    NSString* resourcePath = getResourcePath(name);
+    NSString* resourcePath = getResourcePath(name, false);
 
     return ([[NSFileManager defaultManager] fileExistsAtPath:resourcePath] == YES);
 }
 
-NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
+NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name, const bool logErrors)
 {
     NSString* resourceName = nil;
     NSString* resourceType = nil;
@@ -174,7 +174,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
     }
     else
     {
-        OALog(@"Unrecognized resource name '%@'", name.toNSString());
+        if (logErrors)
+            OALog(@"Unrecognized resource name '%@'", name.toNSString());
         return nil;
     }
 
@@ -183,7 +184,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
                                                         inDirectory:resourceDir];
     if (!resourcePath)
     {
-        OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
+        if (logErrors)
+            OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
         return nil;
     }
 
@@ -191,26 +193,20 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name)
 }
 
 NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
-                                                           const float displayDensityFactor)
+                                                           const float displayDensityFactor,
+                                                           const bool logErrors)
 {
     NSString* resourceName = nil;
     NSString* resourceType = nil;
     NSString* resourceDir = nil;
 
-    if (name.startsWith(QLatin1String("map/shields/")))
+    if (name.startsWith(QLatin1String("map/shaders_and_shields/")))
     {
         auto resourceFileName = name;
-        resourceFileName = resourceFileName.replace(QLatin1String("map/shields/"), QLatin1String("h_"));
-        const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
-
-        resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
-        resourceType = resourceFileName.mid(lastDotIndex + 1).toNSString();
-        resourceDir = @"map-shaders-svg";
-    }
-    else if (name.startsWith(QLatin1String("map/shaders/")))
-    {
-        auto resourceFileName = name;
-        resourceFileName = resourceFileName.replace(QLatin1String("map/shaders/"), QLatin1String("h_"));
+        if (name.startsWith(QLatin1String("map/shaders_and_shields/c_")))
+            resourceFileName = resourceFileName.replace(QLatin1String("map/shaders_and_shields/c_"), QLatin1String("c_h_"));
+        else
+            resourceFileName = resourceFileName.replace(QLatin1String("map/shaders_and_shields/"), QLatin1String("h_"));
         const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
@@ -220,7 +216,10 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
     else if (name.startsWith(QLatin1String("map/icons/")))
     {
         auto resourceFileName = name;
-        resourceFileName = resourceFileName.replace(QLatin1String("map/icons/"), QLatin1String("mx_"));
+        if (name.startsWith(QLatin1String("map/icons/c_")))
+            resourceFileName = resourceFileName.replace(QLatin1String("map/icons/c_"), QLatin1String("c_mx_"));
+        else
+            resourceFileName = resourceFileName.replace(QLatin1String("map/icons/"), QLatin1String("mx_"));
         const auto lastDotIndex = resourceFileName.lastIndexOf(QLatin1Char('.'));
 
         resourceName = resourceFileName.mid(0, lastDotIndex).toNSString();
@@ -259,7 +258,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
     }
     else
     {
-        OALog(@"Unrecognized resource name '%@'", name.toNSString());
+        if (logErrors)
+            OALog(@"Unrecognized resource name '%@'", name.toNSString());
         return nil;
     }
 
@@ -268,7 +268,8 @@ NSString* CoreResourcesFromBundleProvider::getResourcePath(const QString& name,
                                                         inDirectory:resourceDir];
     if (!resourcePath)
     {
-        OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
+        if (logErrors)
+            OALog(@"Failed to locate '%@', but it have to be present", name.toNSString());
         return nil;
     }
 

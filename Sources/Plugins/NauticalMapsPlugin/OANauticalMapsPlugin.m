@@ -10,6 +10,7 @@
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OALinks.h"
 
 #define PLUGIN_ID kInAppId_Addon_Nautical
 
@@ -32,7 +33,7 @@
 
 - (NSString *) getDescription
 {
-    return OALocalizedString(@"plugin_nautical_descr");
+    return [NSString stringWithFormat:NSLocalizedString(@"plugin_nautical_descr", nil), k_docs_plugin_nautical];
 }
 
 @end

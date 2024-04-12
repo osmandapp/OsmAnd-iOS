@@ -16,6 +16,7 @@
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAIndexConstants.h"
+#import "OAPluginsHelper.h"
 
 #define APPROXIMATE_FAVOURITE_SIZE_BYTES 470
 
@@ -163,7 +164,7 @@
             }
             else
             {
-                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPlugin getPlugin:OAParkingPositionPlugin.class];
+                OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *) [OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
                 for (OAFavoriteItem *point in duplicate.points)
                 {
                     if (plugin && point.specialPointType == OASpecialPointType.PARKING)

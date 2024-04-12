@@ -303,6 +303,10 @@
     return NO;
 }
 
+- (void)onMenuShown
+{
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFixed;

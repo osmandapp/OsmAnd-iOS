@@ -1805,7 +1805,7 @@ typedef enum
 
 - (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated) || self.targetMenuView.targetPoint.type == OATargetChangePosition)
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated) || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph || self.targetMenuView.targetPoint.type == OATargetChangePosition)
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];

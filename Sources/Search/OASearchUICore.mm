@@ -194,6 +194,7 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
             NSString *localeName2 = o2.localeName == nil ? @"" : o2.localeName;
 
             int cmp = OsmAnd::ICU::ccompare(QString::fromNSString(localeName1), QString::fromNSString(localeName2));
+            OsmAnd::ICU::cleanupCollatorCache(); // TODO level up
             if (cmp != 0)
                 return (NSComparisonResult)cmp;
 
@@ -234,10 +235,12 @@ const static NSArray<NSNumber *> *compareStepValues = @[@(EOATopVisible),
                 }
                 
                 cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->type, a2->type);
+                OsmAnd::ICU::cleanupCollatorCache(); // TODO level up
                 if (cmp != NSOrderedSame)
                     return cmp;
                 
                 cmp = (NSComparisonResult)OsmAnd::ICU::ccompare(a1->subType, a2->subType);
+                OsmAnd::ICU::cleanupCollatorCache(); // TODO level up
                 if (cmp != NSOrderedSame)
                     return cmp;
             }

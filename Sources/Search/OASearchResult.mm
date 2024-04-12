@@ -148,6 +148,7 @@
                 break;
             }
         }
+        OsmAnd::ICU::cleanupCollatorCache();
         if (!wordMatched)
             return NO;
     }

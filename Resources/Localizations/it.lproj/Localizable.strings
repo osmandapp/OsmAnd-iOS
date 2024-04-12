@@ -3060,7 +3060,7 @@
 "degree_celsius" = "°C";
 "change_appearance" = "Cambia aspetto";
 "article_removed_from_bookmark" = " rimosso dai segnalibri.";
-"external_device_forget_sensor_description" = "Il sensore verrà rimosso dall\'elenco. Potrai associare nuovamente questo sensore in qualsiasi momento.";
+"external_device_forget_sensor_description" = "Il sensore verrà rimosso dall'elenco. Potrai associare nuovamente questo sensore in qualsiasi momento.";
 "shared_string_travel_guides" = "Guide di viaggio";
 "ant_plus_searching_text_description" = "Tenere il dispositivo vicino al sensore. Attivare il sensore in modo che OsmAnd possa trovarlo.";
 "cache_cleared" = "Cache rimossa";

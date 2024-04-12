@@ -3120,7 +3120,7 @@
 "help_article_start_with_first_steps_name" = "Primii pași";
 "help_article_start_with_main_menu_name" = "Meniul principal";
 "help_article_troubleshooting_general_name" = "General";
-"help_article_troubleshooting_maps_data_name" = "Hărți și date";
+"help_article_troubleshooting_maps_data_name" = "Hărți&Date";
 "help_article_troubleshooting_track_recording_issues_name" = "Înregistrări GPS";
 "help_article_widgets_name" = "Widgeturi hartă";
 "help_article_widgets_info_widgets_name" = "Widgeturi informaționale";
@@ -3358,4 +3358,3 @@
 "map_widget_glide_average_desc" = "Arată raportul mediu de planare pentru intervalul setat.";
 "map_widget_group_glide_ratio" = "Raport de planare";
 "glide_ratio_to_target" = "Raport de planare până la țintă";
-"distance_during_navigation" = "Distanța în timpul navigației";

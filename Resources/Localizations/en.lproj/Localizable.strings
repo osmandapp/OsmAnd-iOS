@@ -3414,6 +3414,9 @@
 • Enhanced tags support for GPX has been added: link, author, copyright, and keywords\n
 • Improved widget configuration by allowing users to move pages and rows\n
 • Improved track management in the \"My Places\" with subfolders and context menus for tracks and folders\n
+• Roundabout with exit number now shown on CarPlay when navigating\n
+• Control the 3D relief with a new \"Vertical exaggeration\" option for a more dramatic landscape\n
+• Visualize track elevation directly on the map in a dynamic 3D view\n
 • New widgets: \"Glide Ratio\" and \"Sun Position\"\n
 • Customize \"Distance during navigation\": choose between precise or round up numbers\n
 • App language will be used for names on the world overview map instead of local languages\n

@@ -3164,7 +3164,6 @@
 "article_removed_from_bookmark" = " вилучено з закладок.";
 "external_device_forget_sensor_description" = "Датчик буде вилучено зі списку. Ви зможете знову підʼєднати цей датчик у будь-який момент.";
 "detailed_log_file" = "Докладний файл журналу";
-
 "no_bt_permission" = "Дозвіл на використання Bluetooth не надано";
 "shared_string_wrist" = "Запʼястя";
 "shared_string_travel_guides" = "Туристичні путівники";

@@ -39,7 +39,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
-#import "OARouteDetailsGraphViewController.h"
 
 #define kMargin 16.0
 #define kButtonsViewHeight 44.0

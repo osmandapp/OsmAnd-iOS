@@ -50,7 +50,7 @@ final class GlideAverageWidget: GlideBaseWidget {
     }
 
     override func getWidgetState() -> OAWidgetState? {
-        return widgetState
+        widgetState
     }
 
     override func getSettingsData(_ appMode: OAApplicationMode) -> OATableDataModel? {

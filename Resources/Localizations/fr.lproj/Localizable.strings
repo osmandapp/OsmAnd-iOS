@@ -3138,7 +3138,7 @@
 "no_bt_permission" = "L\'autorisation Bluetooth n\'a pasété accordée";
 "shared_string_wrist" = "Poignet";
 "shared_string_travel_guides" = "Guides de voyage";
-"ant_plus_searching_text_description" = "Veuillez rapprocher l\'appareil et le capteur. Vous devez activer le capteur afin qu\'il soit détecté par OsmAnd.";
+"ant_plus_searching_text_description" = "Veuillez rapprocher l'appareil et le capteur. Vous devez activer le capteur afin qu'il soit détecté par OsmAnd.";
 "cache_cleared" = "Cache supprimé";
 "remove_cache" = "Supprimer le cache";
 "map_screen_orientation" = "Orientation de l\'écran";

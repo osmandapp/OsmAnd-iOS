@@ -32,7 +32,7 @@ class WidgetType: NSObject {
 
     var isAllowed: Bool {
         if self == .altitudeMapCenter {
-            if let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
+            if let plugin = OAPluginsHelper.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
                 return plugin.is3DMapsEnabled()
             }
         }
@@ -58,7 +58,7 @@ class WidgetType: NSObject {
 
     func getGroup() -> WidgetGroup? {
         if (group == .altitude) {
-            let plugin: OASRTMPlugin? = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
+            let plugin: OASRTMPlugin? = OAPluginsHelper.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
             if plugin == nil || !(plugin?.is3DMapsEnabled() ?? false) {
                 return nil
             }

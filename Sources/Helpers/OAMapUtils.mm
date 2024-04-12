@@ -342,12 +342,12 @@
     return dx ? atan(dy/dx) : (dy < 0 ? M_PI_2 : -M_PI_2);
 }
 
-+(double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second
++ (double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second
 {
     return OsmAnd::Utilities::distance(first.longitude, first.latitude, second.longitude, second.latitude);
 }
 
-+(double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
++ (double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2
 {
     return OsmAnd::Utilities::distance(lon1, lat1, lon2, lat2);
 }
@@ -360,6 +360,22 @@
 + (BOOL)areLocationEqual:(CLLocation *)l lat:(CGFloat)lat lon:(CGFloat)lon
 {
     return l != nil && [self areLatLonEqual:l.coordinate.latitude lon1:l.coordinate.longitude lat2:lat lon2:lon];
+}
+
++ (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 coordinate2:(CLLocationCoordinate2D)l2 precision:(double)precision
+{
+    if (!CLLocationCoordinate2DIsValid(l1) || !CLLocationCoordinate2DIsValid(l2))
+        return NO;
+    
+    double lat1 = l1.latitude;
+    double lon1 = l1.longitude;
+    double lat2 = l2.latitude;
+    double lon2 = l2.longitude;
+    
+    BOOL latEqual = (isnan(lat1) && isnan(lat2)) || fabs(lat1 - lat2) < precision;
+    BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || fabs(lon1 - lon2) < precision;
+    
+    return latEqual && lonEqual;
 }
 
 + (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 l2:(CLLocationCoordinate2D)l2

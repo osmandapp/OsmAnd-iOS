@@ -269,7 +269,7 @@
     [self saveColorsToEndOfLastUsedIfNeeded:defaultHexColors];
 
     NSMutableArray<NSString *> *customTrackColors = [NSMutableArray arrayWithArray:[_settings.customTrackColors get]];
-    [customTrackColors enumerateObjectsUsingBlock:^(NSString *hexColor, NSUInteger ids, BOOL *stop) {
+    [customTrackColors.copy enumerateObjectsUsingBlock:^(NSString *hexColor, NSUInteger ids, BOOL *stop) {
         if (hexColor.length == 0)
             [customTrackColors removeObject:hexColor];
     }];
@@ -292,7 +292,7 @@
         sortedPositionWithHexColors[@(i)] = customTrackColorsLastUsed[i];
     }
 
-    [_availableColors enumerateObjectsUsingBlock:^(OAColorItem * _Nonnull colorItem, NSUInteger idx, BOOL * _Nonnull stop) {
+    [_availableColors.copy enumerateObjectsUsingBlock:^(OAColorItem * _Nonnull colorItem, NSUInteger idx, BOOL * _Nonnull stop) {
         NSString *hexColor = [colorItem getHexColor];
         NSInteger sortedHexColorIndex = [sortedPositionWithHexColors.allValues indexOfObject:hexColor];
         if (sortedHexColorIndex != NSNotFound)

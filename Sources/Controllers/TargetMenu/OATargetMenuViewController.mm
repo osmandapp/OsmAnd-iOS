@@ -61,6 +61,7 @@
 #import "OATargetAddressViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -200,7 +201,7 @@
                 if (!preferredMapLanguage || preferredMapLanguage.length == 0)
                     preferredMapLanguage = NSLocale.currentLocale.languageCode;
 
-                NSString *locale = [OAPlugin onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
+                NSString *locale = [OAPluginsHelper onGetMapObjectsLocale:targetPoint.targetObj preferredLocale:preferredMapLanguage];
                 if ([locale isEqualToString:@"en"])
                     locale = @"";
 

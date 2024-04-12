@@ -131,12 +131,16 @@
     if (_searching && _currentSearchPhrase.length > 0)
         [cpItems addObject:_searchingItem];
 
+    NSInteger maximumItemCount = (NSInteger)CPListTemplate.maximumItemCount - 1;
     if (res && [res getCurrentSearchResults].count > 0)
     {
         NSArray<OASearchResult *> *searchResultItems = [res getCurrentSearchResults];
         __weak __typeof(self) weakSelf = self;
         for (NSInteger i = 0; i < searchResultItems.count; i++)
         {
+            if (cpItems.count >= maximumItemCount)
+                break;
+
             OASearchResult *sr = searchResultItems[i];
             OAQuickSearchListItem *qsItem = [[OAQuickSearchListItem alloc] initWithSearchResult:sr];
             CPListItem *cpItem = [[CPListItem alloc] initWithText:qsItem.getName

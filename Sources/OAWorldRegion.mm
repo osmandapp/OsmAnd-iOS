@@ -664,7 +664,7 @@
     NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray arrayWithArray:[self queryAtLat:latitude lon:longitude]];
     if (mapRegions.count > 0)
     {
-        [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+        [mapRegions.copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
             if (![region contain:latitude lon:longitude])
                 [mapRegions removeObject:region];
         }];

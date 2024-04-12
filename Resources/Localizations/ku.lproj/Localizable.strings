@@ -169,3 +169,10 @@
 "are_you_sure" = "Te biryar da?";
 "km" = "km";
 "m" = "m";
+"coordinates_format" = "Formata koordînatê";
+"shared_string_view" = "Dîtin";
+"context_menu_read_article" = "\"Gotarê bixwîne \"";
+"short_min" = "m";
+"enter_new_name" = "Navê nû binivîse";
+"shared_string_markers" = "Hêmaker";
+"shared_string_deleted" = "Jêbirî";

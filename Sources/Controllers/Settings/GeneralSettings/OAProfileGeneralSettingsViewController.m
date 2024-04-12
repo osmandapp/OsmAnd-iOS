@@ -332,6 +332,13 @@
         @"icon" : @"ic_custom_angular_unit",
         @"key" : @"angulerMeasurmentUnits",
     }];
+    [unitsAndFormatsArr addObject:@{
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"distance_during_navigation"),
+        @"value" : OALocalizedString([_settings.preciseDistanceNumbers get:self.appMode] ? @"shared_string_precise" : @"shared_string_round_up"),
+        @"icon" : [_settings.preciseDistanceNumbers get:self.appMode] ? @"ic_custom_distance_number_precise" : @"ic_custom_distance_number_rounded",
+        @"key" : @"distanceDuringNavigation",
+    }];
     [otherArr addObject:@{
         @"type" : [OAValueTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"external_input_device"),
@@ -448,12 +455,14 @@
         settingsViewController = [[OACoordinatesFormatViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angulerMeasurmentUnits"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsAngularMeasurmentUnits applicationMode:self.appMode];
+    else if ([itemKey isEqualToString:@"distanceDuringNavigation"])
+        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDistanceDuringNavigation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"externalImputDevice"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsExternalInputDevices applicationMode:self.appMode];
     if (settingsViewController != nil)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"])
+        if ([itemKey isEqualToString:@"app_theme"] || [itemKey isEqualToString:@"screenOrientation"] || [itemKey isEqualToString:@"distanceDuringNavigation"])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];

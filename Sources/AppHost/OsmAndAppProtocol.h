@@ -35,6 +35,8 @@
 @property(nonatomic, readonly) NSString *travelGuidesPath;
 @property(nonatomic, readonly) NSString *gpxTravelPath;
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
+@property(nonatomic, readonly) NSString *routingMapsCachePath;
+
 
 @property(readonly) BOOL initialized;
 
@@ -115,6 +117,9 @@
 - (NSString *) getGroupName:(NSString *)fileName;
 
 - (NSString *) getUserIosId;
+- (int) getAppExecCount;
+- (int) getAppInstalledDays;
+- (NSString *) getLanguageCode;
 
 // Tests only
 - (BOOL) installTestResource:(NSString *)filePath;

@@ -67,6 +67,7 @@
     self = [super init];
     if (self) {
         BOOL isDir = YES;
+        _tmpDir = [NSTemporaryDirectory() stringByAppendingPathComponent:TEMP_DIR_NAME];
         if (![[NSFileManager defaultManager] fileExistsAtPath:_tmpDir isDirectory:&isDir])
             [[NSFileManager defaultManager] createDirectoryAtPath:_tmpDir withIntermediateDirectories:YES attributes:nil error:nil];
     }
@@ -78,9 +79,16 @@
     if (!travelBook)
         return;
 
-    NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
     OAGPXDocument *gpx = (OAGPXDocument *) article.gpxFile.object;
-    [gpx saveTo:tmpFilePath];
+    NSString *tmpFilePath = [_tmpDir stringByAppendingPathComponent:TEMP_GPX_FILE_NAME];
+    if (gpx)
+    {
+        NSString *gpxPath = [OATravelObfHelper.shared createGpxFileWithArticle:article];
+        NSError *error;
+        [NSFileManager.defaultManager copyItemAtPath:gpxPath toPath:tmpFilePath error:&error];
+        if (error)
+            NSLog(@"Error copying file: %@ to %@ - %@", gpxPath, tmpFilePath, [error localizedDescription]);
+    }
     
     OsmAnd::ArchiveWriter archiveWriter;
     BOOL ok = YES;

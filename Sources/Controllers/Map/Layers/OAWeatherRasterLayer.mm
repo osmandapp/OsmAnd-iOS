@@ -17,6 +17,7 @@
 #import "OAWeatherToolbar.h"
 #import "OAMapLayers.h"
 #import "OAMapWidgetRegistry.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>
@@ -117,7 +118,7 @@
 {
     [super updateLayer];
 
-    if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
+    if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [self updateOpacitySliderVisibility];
 
@@ -142,6 +143,8 @@
                 break;
         }
         int64_t dateTimeStep = 60 * 60 * 1000;
+        if ((dateTime - NSDate.date.timeIntervalSince1970 * 1000) > dateTimeStep * 24)
+            dateTimeStep *= 3;
         int64_t dateTimeFirst = dateTime;
         int64_t dateTimeLast = dateTime;
         [self.mapView setDateTime:dateTime];

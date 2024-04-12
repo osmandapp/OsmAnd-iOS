@@ -114,11 +114,12 @@
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
     NSString *gpxFilePath = [OAUtilities getGpxShortPath:_outFile];
     OAGPX *oldGpx = [gpxDb getGPXItem:gpxFilePath];
-    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile];
+    OAGPX *gpx = [gpxDb buildGpxItem:gpxFilePath title:_savedGpxFile.metadata.name desc:_savedGpxFile.metadata.desc bounds:_savedGpxFile.bounds document:_savedGpxFile fetchNearestCity:YES];
     if (oldGpx)
     {
         gpx.showArrows = oldGpx.showArrows;
         gpx.showStartFinish = oldGpx.showStartFinish;
+        gpx.raiseRoutesAboveRelief = oldGpx.raiseRoutesAboveRelief;
         gpx.color = oldGpx.color;
         gpx.coloringType = oldGpx.coloringType;
         gpx.width = oldGpx.width;

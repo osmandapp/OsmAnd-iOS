@@ -13,6 +13,7 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapRendererView.h"
+#import "OAMapUtils.h"
 
 #include <QString>
 
@@ -310,6 +311,62 @@
             return elevatedPoint;
     }
     return OsmAnd::PointI();
+}
+
++ (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon
+{
+    CGPoint screenPoint = [self.class getScreenPointFromLatLon:lat lon:lon];
+    return OsmAnd::PointF(screenPoint.x, screenPoint.y);
+}
+
++ (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
+    int y31 = OsmAnd::Utilities::get31TileNumberX(lat);
+    OsmAnd::PointI point31 = OsmAnd::PointI(x31, y31);
+    CGPoint screenPoint;
+    [mapRenderer obtainScreenPointFromPosition:&point31 toScreen:&screenPoint checkOffScreen:YES];
+    return screenPoint;
+}
+
++ (double) getLocationHeightOrZero:(OsmAnd::PointI)location31
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    double height = [mapRenderer getLocationHeightInMeters:location31];
+    return height > kMinAltitudeValue ? height : 0;
+}
+
++ (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon
+{
+    return [self.class getPoint31FromLatLon:latLon.latitude lon:latLon.longitude];
+}
+
++ (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon
+{
+    int32_t x31 = OsmAnd::Utilities::get31TileNumberX(lon);
+    int32_t y31 = OsmAnd::Utilities::get31TileNumberY(lat);
+    return OsmAnd::PointI(x31, y31);
+}
+
++ (BOOL) containsLatLon:(CLLocation *)location
+{
+    return [self.class containsLatLon:location.coordinate.latitude lon:location.coordinate.longitude];
+}
+
++ (BOOL) containsLatLon:(double)lat lon:(double)lon
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    return [mapRenderer isPositionVisible:[self.class getPoint31FromLatLon:lat lon:lon]];
+}
+
++ (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget
+{
+    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
+    OsmAnd::PointI target31 = [self.class getPoint31FromLatLon:latitude lon:longitude];
+    if (applyNewTarget)
+        [mapRenderer setTarget31:target31];
+    return target31;
 }
 
 @end

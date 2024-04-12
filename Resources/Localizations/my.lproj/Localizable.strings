@@ -817,7 +817,6 @@
 "rendering_attr_surface_asphalt_name" = "ကတ္တရာ";
 "rendering_attr_surface_grass_name" = "မြက်ပင်";
 "routing_attr_avoid_tram_name" = "လမ်းရထားများကိုရှောင်ပါ";
-
 "app_mode_horse" = "မြင်း";
 "app_mode_subway" = "မြေအောက်ရထား";
 "online_webpage_warning" = "စာမျက်နှာကိုအွန်လိုင်းသာရနိုင်သည်။ web browser ဖွင့်ရမလား\?";
@@ -856,7 +855,6 @@
 "application_profiles" = "အက်ပလီကေးရှင်းပရိုဖိုင်းများ";
 "shared_string_total" = "စုစုပေါင်း";
 "map_look_descr" = "မြေပုံမျက်နှာပြင်";
-
 "coordinates_widget_current_location" = "Coordinatesဝစ်ဂျက်";
 "osmand_settings" = "OsmAအပြင်အဆင်များ";
 "show_compass_ruler" = "သံလိုက်အိမ်မြှောင်ကိုဖော်ပြ";
@@ -865,7 +863,7 @@
 "searching_gps" = "GPSရှာဖွေခြင်း";
 "shared_string_wifi_only" = "Wi-Fiပေါ်မှသာ";
 "cubic_m" = "m³";
-"daily_map_updates" = "နာရီ ပိုင်းမြေပုံမွမ်းမံမှုများ";
+"daily_map_updates" = "မြေပုံမွမ်းမံမှုများ";
 "last_intermediate_dest_description" = "ကြားရပ်နေရာထည့်သည်";
 "profile_alert_delete_msg" = "%@ပရိုဖိုင်းကိုသင်ဖျက်လိုကြောင်းသေချာပါလား";
 "add_group" = "အဖွဲ့တစ်ဖွဲ့ထည့်ပါ";
@@ -885,3 +883,13 @@
 "route_add_start_point" = "အစနေရာထည့်ပါ";
 "will_open_at" = "ဖွင့်ချိန်";
 "shared_string_height" = "အမြင့်";
+"context_menu_read_article" = "ဆောင်းပါးဖတ်သည်";
+"wikivoyage_download_pics" = "ပုံများကူးယူပါ";
+"shared_string_deleted" = "ဖျက်လိုက်သည်";
+"send_log" = "logပို့ပါ";
+"shared_string_contents" = "မာတိကာ";
+"shared_string_travel_guides" = "ခရီးသွားလမ်းညွှန်များ";
+"switch_profile" = "ပရိုဖိုင်းကိုပြောင်းလဲမည်";
+"shared_string_result" = "ရလဒ်";
+"shared_string_read" = "ဖတ်ပါ";
+"press_again_to_change_the_map_orientation" = "မြေပုံတည်နေရာကိုပြောင်းလဲရန်နောက်တစ်ကြိမ်အသာပုတ်ပါ";

@@ -41,13 +41,14 @@
 + (double) checkLatitude:(double) latitude;
 + (double) checkLongitude:(double) longitude;
 
-+(double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second;
-+(double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2;
++ (double) getDistance:(CLLocationCoordinate2D)first second:(CLLocationCoordinate2D)second;
++ (double) getDistance:(double)lat1 lon1:(double)lon1 lat2:(double)lat2 lon2:(double)lon2;
 
 + (double) scalarMultiplication:(double)xA yA:(double)yA xB:(double)xB yB:(double)yB xC:(double)xC yC:(double)yC;
 
 + (BOOL)areLocationEqual:(CLLocation *)l1 l2:(CLLocation *)l2;
 + (BOOL)areLocationEqual:(CLLocation *)l lat:(CGFloat)lat lon:(CGFloat)lon;
++ (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 coordinate2:(CLLocationCoordinate2D)l2 precision:(double)precision;
 + (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 l2:(CLLocationCoordinate2D)l2;
 + (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l lat:(CGFloat)lat lon:(CGFloat)lon;
 + (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2;

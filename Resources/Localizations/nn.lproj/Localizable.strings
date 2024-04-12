@@ -349,7 +349,7 @@
 "directions_other" = "Other directions";
 "shared_string_turn" = "Turn";
 "stop_routing_confirm" = "Are you sure you want to stop the navigation?";
-"cancel_route" = "Vil du forkasta ruta?";
+"cancel_route" = "Vil du forkasta ruta\?";
 "route_is_too_long_v2" = "This route may be too long to calculate. Please add intermediate destinations if no result is found within 10 minutes.";
 "navigation_over_track" = "Start navigation along track?";
 "use_displayed_track_for_navigation" = "Do you want to use displayed track for navigation?";
@@ -488,7 +488,7 @@
 "shared_string_from" = "from";
 "shared_string_time" = "Time";
 "time_of_day" = "Time of day";
-"shared_string_distance" = "Distance";
+"shared_string_distance" = "Avstand";
 "shared_string_time_span" = "Time span";
 "shared_string_start_time" = "Start time";
 "shared_string_end_time" = "End time";
@@ -791,7 +791,7 @@
 "weather_precip_enable_descr" = "Enable to view precipitation layer on the map.";
 "weather_contours_enable_descr" = "Enable to view isolines layer on the map.";
 "screen_settings_weather_toolbar" = "Weather toolbar";
-"settings_app_theme" = "Application theme";
+"settings_app_theme" = "Programtema";
 "light_theme" = "Light";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
@@ -1748,7 +1748,6 @@
 "depth_contour_lines" = "Depth contour lines";
 "nautical_depth_points" = "Nautical depth points";
 "depth_contours" = "Depth contours";
-"worldwide_maps" = "Worldwide maps";
 "my_location" = "My Location";
 "all_categories" = "All categories";
 "get_unlimited_access" = "Get unlimited access";
@@ -2035,7 +2034,7 @@
 "purchase_dialog_title" = "Choose plan";
 "purchase_dialog_travel_description" = "Purchase one of the following to receive the offline travel guide functionality:";
 "free_version_message" = "%@ maps to download or update.";
-"get_osmand_live" = "Skaff deg OsmAnd Live for å låsa opp alle funksjonar: Daglege kartoppdateringar med ubegrensa nedlastingar, alle programtillegga, Wikipedia, Wikivoyage og mykje meir.";
+"get_osmand_live" = "Skaff deg OsmAnd Live forå låsa opp alle funksjonar: Daglege kartoppdateringar med ubegrensa nedlastingar, alle programtillegga, Wikipedia, Wikivoyage og mykje meir.";
 "osm_live_subscription" = "OsmAnd Live subscription";
 "cancel_subscription" = "Cancel subscription";
 "wikivoyage_offline" = "Wikivoyage offline";
@@ -2730,7 +2729,6 @@
 "routing_attr_avoid_footways_name" = "Unngå gangvegar";
 "shared_string_location_unknown" = "Posisjonen er ukjend";
 "shared_string_app_profile" = "App-profil";
-"m" = "m";
 "free_downloads" = "Gratis nedlastingar";
 "kg" = "kg";
 "activity_type_running_name" = "Springing";
@@ -2809,7 +2807,7 @@
 "activity_type_motorbike_name" = "Motorsykkel";
 "activity_type_snowmobile_name" = "Snøscooter";
 "av_notes_choose_action_widget_desc" = "Vel handling.";
-"time_to_go_desc" = "Tid i minutt eller timar som trengst for å nå destinasjonen din.";
+"time_to_go_desc" = "Tid i minutt eller timar som trengst forå nå destinasjonen din.";
 "add_page" = "Legg til side";
 "side_marker_eta" = "Estimert tilkomsttid";
 "go_to_marker_location" = "Gå til markørposisjonen";
@@ -2858,7 +2856,12 @@
 "rendering_value_all_name" = "Alle";
 "wikivoyage_download_pics" = "Last ned bilete";
 "restart_is_required_title" = "Omstart er naudsynt";
-"reset_all_settings_desc" = "Tilbakestill alle innstillingane til standard?";
+"reset_all_settings_desc" = "Tilbakestill alle innstillingane til standard\?";
 "rendering_value_sacScale_description" = "Sveitsisk alpinklubb";
 "rotate_map_manual_opt" = "Manuelt rotert (fiksert)";
 "compass_click_desc" = "Trykk på kompasset for å gå til kartorienteringsmodus.";
+"external_device_status_connect" = "Kopla til";
+"audionotes_plugin_name" = "Lyd-/videonotat";
+"lang_zh-Hans" = "Kinesisk– forenkla";
+"map_settings_topography" = "Høgdekurver";
+"m" = "m";

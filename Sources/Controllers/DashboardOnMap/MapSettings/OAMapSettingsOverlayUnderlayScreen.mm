@@ -76,6 +76,7 @@ static NSInteger kButtonsSection;
     OAMapStyleSettings *_styleSettings;
     OAMapStyleParameter *_hidePolygonsParameter;
     OAAutoObserverProxy *_sqlitedbResourcesChangedObserver;
+    NSInteger _installMoreRowIndex;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -88,7 +89,8 @@ static NSInteger kButtonsSection;
     {
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
-        
+        _installMoreRowIndex = -1;
+
         if ([param isEqualToString:@"overlay"]) {
             _mapSettingType = EMapSettingOverlay;
             title = OALocalizedString(@"map_settings_over");
@@ -228,16 +230,21 @@ static NSInteger kButtonsSection;
     {
         return _data[indexPath.section];
     }
-    else if (indexPath.section == 1)
+    else if (indexPath.section == kMapVisibilitySection)
     {
         return _data[indexPath.section][indexPath.row];
     }
-    else if (indexPath.section == 2)
+    else if (indexPath.section == kAvailableLayersSection)
     {
         if (indexPath.row < _onlineMapSources.count)
+        {
             return _data[indexPath.section][indexPath.row];
+        }
         else if (indexPath.row == _onlineMapSources.count)
+        {
+            _installMoreRowIndex = _onlineMapSources.count;
             return _data[indexPath.section][_onlineMapSources.count];
+        }
     }
     else if (indexPath.section == 3 || indexPath.section == 4)
     {
@@ -601,6 +608,9 @@ static NSInteger kButtonsSection;
 
 - (void) switchLayer:(NSInteger)number
 {
+    if (number >= _onlineMapSources.count)
+        return;
+
     OAResourceItem* item = [_onlineMapSources objectAtIndex:number];
     OAMapSource *itemMapSource = nil;
     
@@ -675,8 +685,12 @@ static NSInteger kButtonsSection;
 {
     if (indexPath.section == kAvailableLayersSection)
     {
-        [self switchLayer:indexPath.row];
+        if (indexPath.row == _installMoreRowIndex)
+            [self installMorePressed];
+        else
+            [self switchLayer:indexPath.row];
     }
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
 #pragma mark - OAIconTextDescButtonCellDelegate

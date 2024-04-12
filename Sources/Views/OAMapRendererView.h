@@ -79,6 +79,7 @@ struct CLLocationCoordinate2D;
 - (void)resetElevationDataProvider:(BOOL)forcedUpdate;
 - (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
                      forcedUpdate:(BOOL)forcedUpdate;
+- (void)setElevationScaleFactor:(float)scaleFactor;
 
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;
@@ -132,6 +133,7 @@ struct CLLocationCoordinate2D;
 - (BOOL)convert:(CGPoint)point toLocation:(OsmAnd::PointI*)location;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point;
 - (BOOL)convert:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
+- (BOOL)obtainScreenPointFromPosition:(OsmAnd::PointI*)pos toScreen:(CGPoint*)point checkOffScreen:(BOOL)offScreen;
 
 - (OsmAnd::PointI) getTarget;
 - (OsmAnd::PointI) getTargetScreenPosition;

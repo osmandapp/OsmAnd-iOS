@@ -97,6 +97,7 @@
         _width = [document getWidth:nil];
         _showArrows = [document isShowArrows];
         _showStartFinish = [document isShowStartFinish];
+        _raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
     }
 }
 
@@ -148,7 +149,7 @@
 
 - (OAGPX *) addGpxItem:(NSString *)filePath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
 {
-    OAGPX *gpx = [self buildGpxItem:filePath.lastPathComponent path:filePath title:title desc:desc bounds:bounds document:document];
+    OAGPX *gpx = [self buildGpxItem:filePath.lastPathComponent path:filePath title:title desc:desc bounds:bounds document:document fetchNearestCity:YES];
     NSMutableArray *res = [NSMutableArray array];
     for (OAGPX *item in gpxList)
     {
@@ -171,17 +172,17 @@
     gpxList = res;
 }
 
-- (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) buildGpxItem:(NSString *)fileName title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
-    return [self buildGpxItem:fileName.lastPathComponent path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document];
+    return [self buildGpxItem:fileName.lastPathComponent path:[OsmAndApp.instance.gpxPath stringByAppendingPathComponent:fileName] title:title desc:desc bounds:bounds document:document  fetchNearestCity:fetchNearestCity];
 }
 
-- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document
+- (OAGPX *) buildGpxItem:(NSString *)fileName path:(NSString *)filepath title:(NSString *)title desc:(NSString *)desc bounds:(OAGpxBounds)bounds document:(OAGPXDocument *)document fetchNearestCity:(BOOL)fetchNearestCity
 {
     OAGPXTrackAnalysis *analysis = [document getAnalysis:0];
 
     NSString *nearestCity;
-    if (analysis.locationStart)
+    if (fetchNearestCity && analysis.locationStart)
     {
         OAPOI *nearestCityPOI = [OAGPXUIHelper searchNearestCity:analysis.locationStart.position];
         nearestCity = nearestCityPOI ? nearestCityPOI.nameLocalized : @"";
@@ -237,6 +238,7 @@
     gpx.width = [document getWidth:nil];
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
+    gpx.raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
     
     return gpx;
 }
@@ -415,9 +417,9 @@
         BOOL didAddFiles = [self addNewGpxFiles:existingGpxPaths];
         if (didAddFiles)
         {
-            [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationNewTracksFetched
-                                                                object:self];
+            [self save];
         }
+        [[NSNotificationCenter defaultCenter] postNotificationName:kGPXDBTracksLoaded object:self];
     });
 }
 
@@ -525,6 +527,7 @@
     [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
+    [d setObject:@(gpx.raiseRoutesAboveRelief) forKey:@"raiseRoutesAboveRelief"];
     [d setObject:@(gpx.joinSegments) forKey:@"joinSegments"];
     [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
     [d setObject:gpx.width forKey:@"width"];
@@ -662,6 +665,10 @@
         else if ([key isEqualToString:@"showStartFinish"])
         {
             gpx.showStartFinish = [value boolValue];
+        }
+        else if ([key isEqualToString:@"raiseRoutesAboveRelief"])
+        {
+            gpx.raiseRoutesAboveRelief = [value boolValue];
         }
         else if ([key isEqualToString:@"joinSegments"])
         {

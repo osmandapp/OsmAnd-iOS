@@ -239,6 +239,20 @@
     [self setExtension:@"show_start_finish" value:strValue];
 }
 
+- (BOOL)isRaiseRoutesAboveRelief
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"raise_routes_above_relief"];
+    if (e) {
+        return [e.value isEqualToString:@"true"];
+    }
+    return NO;
+}
+
+- (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief
+{
+    [self setExtension:@"raise_routes_above_relief" value:isRaiseRoutesAboveRelief ? @"true" : @"false"];
+}
+
 + (NSArray<OALink *> *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
 {
     if (!links.isEmpty()) {

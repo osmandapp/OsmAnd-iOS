@@ -24,6 +24,7 @@
 #import "OAGpxRouteApproximation.h"
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
+#import "MissingMapsCalculator.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>
@@ -338,6 +339,7 @@
 @implementation OARouteProvider
 {
     NSMutableSet<NSString *> *_nativeFiles;
+    MissingMapsCalculator *_missingMapsCalculator;
 }
 
 - (instancetype)init
@@ -632,6 +634,11 @@
     return res;
 }
 
+- (MissingMapsCalculator *)missingMapsCalculator
+{
+    return _missingMapsCalculator;
+}
+
 - (OARouteCalculationResult *) applicationModeNotSupported:(OARouteCalculationParams *)params
 {
     return [[OARouteCalculationResult alloc] initWithErrorMessage:[NSString stringWithFormat:@"Application mode '%@' is not supported.", params.mode.variantKey]];
@@ -758,24 +765,38 @@
         const auto& obfMetadata = std::static_pointer_cast<const OsmAnd::ResourcesManager::ObfMetadata>(localResource->metadata);
         if (obfMetadata)
         {
-            OsmAnd::AreaI pBbox31 = OsmAnd::AreaI((int)rect.top, (int)rect.left, (int)rect.bottom, (int)rect.right);
+            OsmAnd::AreaI pBbox31;
+            if (rect)
+                pBbox31 = OsmAnd::AreaI((int)rect.top, (int)rect.left, (int)rect.bottom, (int)rect.right);
+            
             if (zoomLevel == OsmAnd::InvalidZoomLevel)
-                return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, desiredDataTypes);
+                return obfMetadata->obfFile->obfInfo->containsDataFor(rect ? &pBbox31 : NULL, OsmAnd::MinZoomLevel, OsmAnd::MaxZoomLevel, desiredDataTypes);
             else
-                return obfMetadata->obfFile->obfInfo->containsDataFor(&pBbox31, zoomLevel, zoomLevel, desiredDataTypes);
+                return obfMetadata->obfFile->obfInfo->containsDataFor(rect ? &pBbox31 : NULL, zoomLevel, zoomLevel, desiredDataTypes);
         }
     }
     return NO;
 }
 
-- (void) checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
+- (void)checkInitializedForZoomLevelWithEmptyRect:(OsmAnd::ZoomLevel)zoomLevel;
+{
+    [self checkInitialized:zoomLevel leftX:0 rightX:0 bottomY:0 topY:0];
+}
+
+- (void)checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
 {
     @synchronized (self)
     {
         OsmAndAppInstance app = [OsmAndApp instance];
         BOOL useOsmLiveForRouting = [OAAppSettings sharedManager].useOsmLiveForRouting;
         const auto& localResources = app.resourcesManager->getSortedLocalResources();
-        QuadRect *rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
+        QuadRect *rect;
+        BOOL isEmptyRect = leftX == 0 && rightX == 0 && bottomY == 0 && topY == 0;
+        if (!isEmptyRect)
+        {
+            rect = [[QuadRect alloc] initWithLeft:leftX top:topY right:rightX bottom:bottomY];
+        }
+       
         auto dataTypes = OsmAnd::ObfDataTypesMask();
         dataTypes.set(OsmAnd::ObfDataType::Map);
         dataTypes.set(OsmAnd::ObfDataType::Routing);
@@ -789,10 +810,13 @@
                 if (![_nativeFiles containsObject:localPath] && [self containsData:resource->id rect:rect desiredDataTypes:dataTypes zoomLevel:(OsmAnd::ZoomLevel)zoom])
                 {
                     [_nativeFiles addObject:localPath];
+                    cacheBinaryMapFileIfNeeded(resource->localPath.toStdString(), true);
                     initBinaryMapFile(resource->localPath.toStdString(), useOsmLiveForRouting, true);
                 }
             }
         }
+        writeMapFilesCache(app.routingMapsCachePath.UTF8String);
+
         for (const auto* file : getOpenMapFiles())
         {
             BOOL hasLocal = NO;
@@ -835,6 +859,25 @@
             router->setDefaultRoutingConfig();
             router->USE_ONLY_HH_ROUTING = hhRoutingOnly;
         }
+
+        if (router->CALCULATE_MISSING_MAPS)
+        {
+            if (!_missingMapsCalculator)
+            {
+                _missingMapsCalculator = [MissingMapsCalculator new];
+            }
+            NSArray<CLLocation *> *targets = (inters.count > 0) ? [inters arrayByAddingObject:en] : @[en];
+            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:hhRouting || hhRoutingOnly])
+            {
+                OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
+                r.missingMaps = _missingMapsCalculator.missingMaps;
+                r.mapsToUpdate = _missingMapsCalculator.mapsToUpdate;
+                r.potentiallyUsedMaps = _missingMapsCalculator.potentiallyUsedMaps;
+                [_missingMapsCalculator clearResult];
+                return r;
+            }
+        }
+    
         if (complexCtx)
         {
             try

@@ -20,6 +20,7 @@
 #import "OAOpenStreetMapPoint.h"
 #import "OAEditPOIData.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 @interface OAOsmUploadPOIViewController () <UITextViewDelegate, OAAccountSettingDelegate, OAUploadTaskDelegate>
 
@@ -422,7 +423,7 @@
     {
         [self.view endEditing:YES];
         
-        OAUploadOsmPointsAsyncTask *uploadTask = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPlugin getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:_messageText];
+        OAUploadOsmPointsAsyncTask *uploadTask = [[OAUploadOsmPointsAsyncTask alloc] initWithPlugin:(OAOsmEditingPlugin *)[OAPluginsHelper getPlugin:OAOsmEditingPlugin.class] points:_osmPoints closeChangeset:_closeChangeset anonymous:NO comment:_messageText];
         _progressController = [[OAUploadOsmPOINoteViewProgressController alloc] initWithParam:uploadTask];
         _progressController.delegate = self.delegate;
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_progressController];

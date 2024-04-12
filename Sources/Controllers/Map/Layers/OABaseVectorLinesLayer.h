@@ -14,6 +14,8 @@
 
 #define kDefaultWidthMultiplier 7
 
+#define VECTOR_LINE_SCALE_COEF 2.0f
+
 #define COLORIZATION_NONE 0
 #define COLORIZATION_GRADIENT 1
 #define COLORIZATION_SOLID 2

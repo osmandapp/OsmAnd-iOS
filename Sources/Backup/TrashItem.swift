@@ -13,23 +13,22 @@ import Foundation
 final class TrashItem: NSObject {
 
     let oldFile: OARemoteFile
-    let deletedFile: OARemoteFile?
-    var synced: Bool = false
+    let deletedFile: OARemoteFile
 
-    init(oldFile: OARemoteFile, deletedFile: OARemoteFile?) {
+    init(oldFile: OARemoteFile, deletedFile: OARemoteFile) {
         self.oldFile = oldFile
         self.deletedFile = deletedFile
     }
 
     var time: Int {
-        (deletedFile?.updatetimems ?? oldFile.updatetimems) / 1000
+        deletedFile.updatetimems / 1000
     }
 
     var name: String {
         if let settingsItem {
             return BackupUiUtils.getItemName(settingsItem)
         } else {
-            return oldFile.name
+            return BackupUiUtils.getItemName(oldFile.item)
         }
     }
 
@@ -42,24 +41,17 @@ final class TrashItem: NSObject {
     var icon: UIImage? {
         if let settingsItem {
             return BackupUiUtils.getIcon(settingsItem)
+        } else {
+            return BackupUiUtils.getIcon(oldFile.item)
         }
-        return nil
     }
 
     var settingsItem: OASettingsItem? {
-        deletedFile?.item ?? oldFile.item
-    }
-
-    var isLocalDeletion: Bool {
-        deletedFile == nil
+        deletedFile.item
     }
 
     var remoteFiles: [OARemoteFile] {
-        var files = [oldFile]
-        if let deletedFile {
-            files.append(deletedFile)
-        }
-        return files
+        [oldFile, deletedFile]
     }
 
     override var hash: Int {

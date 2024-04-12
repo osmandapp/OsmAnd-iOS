@@ -23,7 +23,10 @@
 - (IBAction)sliderValueChanged:(id)sender
 {
     UISlider *slider = sender;
-    self.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", [slider value] * 100, @"%"];
+    if (self.updateValueCallback)
+        self.updateValueCallback([slider value]);
+    else
+        self.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", [slider value] * 100, @"%"];
 }
 
 @end

@@ -185,7 +185,8 @@
     
     OAGPXDocument *gpx = [article gpxFile].object;
     NSString *filePath = [OsmAndApp.instance.gpxTravelPath stringByAppendingPathComponent:fileName];
-    BOOL succeed = [gpx saveTo:filePath];
+    [gpx saveTo:filePath];
+    [self buildGpx:filePath title:nil gpxDoc:gpx];
     return filePath;
 }
 
@@ -354,9 +355,13 @@
 
 + (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title document:(OAGPXDocumentAdapter *)document
 {
+    return [self buildGpx:path title:title gpxDoc:document.object];
+}
+
++ (OAGPX *) buildGpx:(NSString *)path title:(NSString *)title gpxDoc:(OAGPXDocument *)gpxDoc
+{
     OAGPXDatabase *gpxDb = [OAGPXDatabase sharedDb];
-    OAGPXDocument *gpxDoc = document.object;
-    OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc];
+    OAGPX *gpx = [OAGPXDatabase.sharedDb buildGpxItem:path.lastPathComponent path:path title:title desc:gpxDoc.metadata.desc bounds:gpxDoc.bounds document:gpxDoc fetchNearestCity:YES];
     [gpxDb replaceGpxItem:gpx];
     [gpxDb save];
     return gpx;

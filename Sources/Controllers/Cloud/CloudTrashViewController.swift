@@ -103,7 +103,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
             emptyRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
             emptyRow.key = "empty"
             emptyRow.title = localizedString("trash_is_empty")
-            emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), Self.daysForTrashClearing)
+            emptyRow.descr = String(format: localizedString("trash_is_empty_banner_desc"), "\(Self.daysForTrashClearing)")
             emptyRow.iconTintColor = UIColor.iconColorDefault
         } else {
             let orderedNames = groups.keys.sorted {
@@ -126,13 +126,6 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     private func collectTrashItems() -> [TrashItem] {
         var items: [TrashItem] = []
         if let backup: OAPrepareBackupResult = backupHelper?.backup {
-            let info: OABackupInfo = backup.backupInfo
-            let filesToDelete: NSMutableArray = info.filesToDelete
-            if filesToDelete.count > 0 {
-                for file: OARemoteFile in info.filesToDelete as! [OARemoteFile] {
-                    items.append(TrashItem(oldFile: file, deletedFile: nil))
-                }
-            }
             let oldFiles: [String: OARemoteFile] = backup.getRemoteFiles(.old)
             let deletedFiles: [String: OARemoteFile] = backup.getRemoteFiles(.deleted)
             if !oldFiles.isEmpty && !deletedFiles.isEmpty {
@@ -281,10 +274,10 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
         settingsHelper?.syncSettingsItems(trashItem.oldFile.name,
                                           localFile: nil,
                                           remoteFile: trashItem.oldFile,
-                                          filesType: trashItem.isLocalDeletion ? .unique : .old,
+                                          filesType: .old,
                                           operation: .download,
                                           shouldReplace: shouldReplace,
-                                          restoreDeleted: !trashItem.isLocalDeletion) { (message: String?, details: String?) in
+                                          restoreDeleted: true) { (message: String?, details: String?) in
             OAUtilities.showToast(message, details: details, duration: 4, in: self.view)
         }
     }
@@ -348,22 +341,12 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
     }
 
     func restoreItem(_ trashItem: TrashItem) {
-        guard trashItem.settingsItem != nil else {
-            Self.logger.error("Failed to restore item: \(String(describing: trashItem.oldFile.name)), SettingsItem is null")
-            return
-        }
-        if let deletedFile = trashItem.deletedFile {
-            let trashDeletionListener = TrashDeletionListener(with: String(format: localizedString("cloud_item_restored"), trashItem.name))
-            trashDeletionListener.delegate = self
-            backupHelper?.deleteFilesSync([deletedFile], byVersion: true, listener: trashDeletionListener)
-        }
+        let trashDeletionListener = TrashDeletionListener(with: String(format: localizedString("cloud_item_restored"), trashItem.name))
+        trashDeletionListener.delegate = self
+        backupHelper?.deleteFilesSync([trashItem.deletedFile], byVersion: true, listener: trashDeletionListener)
     }
 
     func downloadItem(_ trashItem: TrashItem) {
-        guard trashItem.settingsItem != nil else {
-            Self.logger.error("Failed to download item: \(String(describing: trashItem.oldFile.name)), SettingsItem is null")
-            return
-        }
         if backupHelper?.backup.localFiles[trashItem.oldFile.getTypeNamePath()] != nil {
             downloadItem(trashItem, shouldReplace: false) // TODO: - android uses FileExistBottomSheet here
         } else {

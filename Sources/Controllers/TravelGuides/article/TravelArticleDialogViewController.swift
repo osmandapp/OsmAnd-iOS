@@ -149,6 +149,14 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         }
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection),
+           let bottomView {
+            bottomView.addBlurEffect(ThemeManager.shared.isLightTheme(), cornerRadius: 0, padding: 0)
+        }
+    }
+    
     func setupBottomButtonsView() {
         bottomView = UIView()
         guard let bottomView else { return }
@@ -494,7 +502,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     }
     
     func printHtmlToDebugFileIfEnabled(_ content: String) {
-        if let developmentPlugin = OAPlugin.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin {
+        if let developmentPlugin = OAPluginsHelper.getPlugin(OAOsmandDevelopmentPlugin.self) as? OAOsmandDevelopmentPlugin {
             if developmentPlugin.isEnabled() {
                 let filepath = OsmAndApp.swiftInstance().travelGuidesPath + "/TravelGuidesDebug.html"
                 do {

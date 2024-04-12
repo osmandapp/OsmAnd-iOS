@@ -13,6 +13,7 @@
 #import "OARouteColorizationHelper.h"
 #import "OAMapUtils.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 
@@ -544,7 +545,7 @@
         [self setTag:OAPointAttributes.pointSpeed hasData:YES];
     if (![self hasData:OAPointAttributes.pointElevation] && !isnan(attribute.elevation) && _totalDistance > 0)
         [self setTag:OAPointAttributes.pointElevation hasData:YES];
-    [OAPlugin analysePoint:self point:point attribute:attribute];
+    [OAPluginsHelper analysePoint:self point:point attribute:attribute];
     [_pointAttributes addObject:attribute];
 }
 

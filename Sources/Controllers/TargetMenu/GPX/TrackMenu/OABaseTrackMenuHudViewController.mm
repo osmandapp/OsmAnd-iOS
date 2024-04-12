@@ -243,7 +243,7 @@
     }
     [self updateAnalysis];
 
-    if (_gpx && !_gpx.nearestCity && _analysis && _analysis.locationStart)
+    if (!_isCurrentTrack && _gpx && !_gpx.nearestCity && _analysis && _analysis.locationStart)
     {
         OAPOI *nearestCity = [OAGPXUIHelper searchNearestCity:_analysis.locationStart.position];
         _gpx.nearestCity = nearestCity ? nearestCity.nameLocalized : @"";
@@ -267,7 +267,7 @@
         else if (_doc)
         {
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
-            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc];
+            OAGPX *gpx = [db buildGpxItem:_gpx.gpxFilePath title:_doc.metadata.name desc:_doc.metadata.desc bounds:_doc.bounds document:_doc fetchNearestCity:NO];
             gpx.nearestCity = _gpx.nearestCity;
             [db replaceGpxItem:gpx];
             [db save];
@@ -335,7 +335,7 @@
     [self.backButton setImage:[self.backButton isDirectionRTL] ? backImage.imageFlippedForRightToLeftLayoutDirection : backImage
                      forState:UIControlStateNormal];
     self.backButton.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-    [self.backButton addBlurEffect:YES cornerRadius:12. padding:0];
+    [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     self.backButton.accessibilityLabel = localizedString(@"shared_string_dismiss");
 
     [self setupView];
@@ -366,6 +366,14 @@
         if (![self isLandscape])
             [self goExpanded];
     } completion:nil];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+        [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
 }
 
 - (void)hide

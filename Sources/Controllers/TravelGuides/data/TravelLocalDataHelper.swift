@@ -86,8 +86,8 @@ final class TravelLocalDataHelper : NSObject {
         if let savedArticle {
             if let index = savedArticles.firstIndex(of: savedArticle) {
                 savedArticles.remove(at: index)
+                dbHelper.removeSavedArticle(savedArticle)
             }
-            dbHelper.removeSavedArticle(savedArticle)
             notifySavedUpdated()
         }
     }

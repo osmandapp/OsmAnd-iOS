@@ -87,5 +87,6 @@
 - (void)configureSimpleLayout;
 - (void)refreshLayout;
 - (OAApplicationMode *_Nonnull)getAppMode;
+- (OAWidgetsPanel *_Nonnull)getWidgetPanel;
 
 @end

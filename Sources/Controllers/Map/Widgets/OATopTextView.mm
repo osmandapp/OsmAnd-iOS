@@ -32,6 +32,7 @@
 #import "OARoutingHelperUtils.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OANativeUtilities.h"
+#import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
@@ -172,7 +173,7 @@
     _textShadowColor = nil;
     _shadowRadius = 0;
     
-    _turnDrawable = [[OATurnDrawable alloc] initWithMini:YES];
+    _turnDrawable = [[OATurnDrawable alloc] initWithMini:YES themeColor:EOATurnDrawableThemeColorMap];
     _turnDrawable.frame = _turnView.bounds;
     _imageView = [[UIImageView alloc] init];
     _imageView.contentMode = UIViewContentModeCenter;
@@ -497,7 +498,7 @@
             {
                 OANextDirectionInfo *nextDirInfo = [_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES];
                 streetName = [_routingHelper getCurrentName:nextDirInfo];
-                _turnDrawable.clr = UIColorFromRGB(color_nav_arrow);
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowColor].currentMapThemeColor;
             }
         }
         else
@@ -507,7 +508,7 @@
             {
                 showClosestWaypointFirstInAddress = NO;
                 streetName = [_routingHelper getCurrentName:[_routingHelper getNextRouteDirectionInfo:_calc1 toSpeak:YES]];
-                _turnDrawable.clr = UIColorFromRGB(color_nav_arrow_distant);
+                _turnDrawable.clr = [UIColor colorNamed:ACColorNameNavArrowDistantColor].currentMapThemeColor;
             }
         }
     }
@@ -727,7 +728,7 @@
     if (!shieldName.isNull() && !shieldName.isEmpty())
     {
         sk_sp<const SkImage> shield;
-        env->obtainTextShield(shieldName, 1.0f, shield);
+        env->obtainShaderOrShield(shieldName, 1.0f, shield);
 
         if (shield)
             textStyle.setBackgroundImage(shield);

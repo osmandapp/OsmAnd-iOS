@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAResourcesUIHelper.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -156,15 +157,19 @@
             [self updateProgressWithDelay:params];
 
         __weak OARouteRecalculationTask *newTaskRef = newTask;
+        __weak __typeof(self) weakSelf = self;
         [newTask setCompletionBlock:^{
             OARouteRecalculationTask *newTask = newTaskRef;
             if (newTask)
             {
-                [_tasks removeObject:newTask];
-                _evalWaitInterval = newTask.evalWaitInterval;
-                _lastRouteCalcError = newTask.routeCalcError;
-                _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
-                _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+                @synchronized (weakSelf)
+                {
+                    [_tasks removeObject:newTask];
+                    _evalWaitInterval = newTask.evalWaitInterval;
+                    _lastRouteCalcError = newTask.routeCalcError;
+                    _lastRouteCalcErrorShort = newTask.routeCalcErrorShort;
+                    _lastTimeEvaluatedRoute = [[NSDate date] timeIntervalSince1970];
+                }
             }
         }];
         [_tasks addObject:newTask];
@@ -216,7 +221,11 @@
     auto calculationProgress = params.calculationProgress;
     if ([self isRouteBeingCalculated])
     {
-        if (_lastTask && _lastTask.params == params)
+        BOOL needUpdateProgress;
+        @synchronized (self) {
+            needUpdateProgress = _lastTask && _lastTask.params == params;
+        }
+        if (needUpdateProgress)
         {
             [callback updateProgress:calculationProgress->getLinearProgress()];
             if (calculationProgress->requestPrivateAccessRouting)
@@ -379,9 +388,18 @@
         _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), OALocalizedString(@"internet_connection_required_for_online_route")];
         _routeCalcErrorShort = OALocalizedString(@"error_calculating_route");
         [self showMessage:_routeCalcError];
+        if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
+        {
+            [self configureNewRouteHasMissingOrOutdatedMaps:res];
+        }
     }
     else
     {
+        if (!_params.inSnapToRoadMode && !_params.inPublicTransportMode)
+        {
+            [self configureNewRouteHasMissingOrOutdatedMaps:res];
+        }
+       
         if (res.errorMessage)
         {
             _routeCalcError = [NSString stringWithFormat:@"%@:\n%@", OALocalizedString(@"error_calculating_route"), res.errorMessage];
@@ -394,6 +412,14 @@
             _routeCalcErrorShort = OALocalizedString(@"empty_route_calculated");
             [self showMessage:_routeCalcError];
         }
+    }
+}
+
+- (void)configureNewRouteHasMissingOrOutdatedMaps:(OARouteCalculationResult *)result
+{
+    if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
+    {
+        [_routingHelper newRouteHasMissingOrOutdatedMaps:result.missingMaps mapsToUpdate:result.mapsToUpdate potentiallyUsedMaps:result.potentiallyUsedMaps];
     }
 }
 

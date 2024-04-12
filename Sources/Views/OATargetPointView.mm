@@ -38,6 +38,7 @@
 #import "OAGPXWptViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kMargin 16.0
 #define kButtonsViewHeight 44.0
@@ -1598,7 +1599,7 @@ static const NSInteger _buttonsCount = 4;
     {
         [_addressLabel setText:OALocalizedString(@"map_widget_parking")];
         [self updateAddressLabel];
-        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+        OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
         if (plugin)
             [OADestinationCell setParkingTimerStr:[NSDate dateWithTimeIntervalSince1970:plugin.getParkingTime / 1000] creationDate:[NSDate dateWithTimeIntervalSince1970:plugin.getStartParkingTime / 1000] label:self.coordinateLabel shortText:NO];
     }

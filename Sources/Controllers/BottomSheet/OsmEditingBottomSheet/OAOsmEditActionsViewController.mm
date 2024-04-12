@@ -30,6 +30,7 @@
 #import "OAOsmBugResult.h"
 #import "OAMapLayers.h"
 #import "OAOsmEditingViewController.h"
+#import "OAPluginsHelper.h"
 
 #define kButtonsDividerTag 150
 #define kMessageFieldIndex 1
@@ -284,7 +285,7 @@
 - (id) initWithPoint:(OAOsmPoint *)point
 {
     _osmPoint = point;
-    return [super initWithParam:(OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class]];
+    return [super initWithParam:(OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class]];
 }
 
 - (void)additionalSetup

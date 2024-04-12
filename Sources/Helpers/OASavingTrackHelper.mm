@@ -20,6 +20,7 @@
 #import "OAPlugin.h"
 #import "Localization.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAPluginsHelper.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -87,6 +88,7 @@
     [currentTrack setWidth:[settings.currentTrackWidth get]];
     [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
     [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+    [currentTrack setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
     [currentTrack setColor:[settings.currentTrackColor get]];
     [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
 }
@@ -393,6 +395,7 @@
             [doc setWidth:[settings.currentTrackWidth get]];
             [doc setShowArrows:[settings.currentTrackShowArrows get]];
             [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            [doc setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
             [doc setColor:[settings.currentTrackColor get]];
             [doc setColoringType:[settings.currentTrackColoringType get].name];
 
@@ -680,7 +683,7 @@
 
 - (BOOL) getIsRecording
 {
-    if ([OAPlugin getEnabledPlugin:OAMonitoringPlugin.class])
+    if ([OAPluginsHelper getEnabledPlugin:OAMonitoringPlugin.class])
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         if (settings.mapSettingTrackRecording || ([settings.saveTrackToGPX get] && [[OARoutingHelper sharedInstance] isFollowingMode]))
@@ -692,7 +695,7 @@
 - (NSString *)getPluginsInfo:(CLLocation *)location
 {
     NSMutableData *json = [NSMutableData data];
-    [OAPlugin attachAdditionalInfoToRecordedTrack:location json:json];
+    [OAPluginsHelper attachAdditionalInfoToRecordedTrack:location json:json];
     return json.length > 0 ? [[NSString alloc] initWithData:json encoding:NSUTF8StringEncoding] : nil;
 }
 
@@ -1084,7 +1087,7 @@
 - (OAGPX *)getCurrentGPX
 {
     [currentTrack applyBounds];
-    return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack];
+    return [[OAGPXDatabase sharedDb] buildGpxItem:OALocalizedString(@"shared_string_currently_recording_track") title:currentTrack.metadata.name desc:currentTrack.metadata.desc bounds:currentTrack.bounds document:currentTrack fetchNearestCity:NO];
 }
 
 @end

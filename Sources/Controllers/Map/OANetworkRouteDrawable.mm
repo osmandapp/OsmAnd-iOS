@@ -68,7 +68,7 @@
     {
         QString shieldName = QStringLiteral("osmc_") + background + QStringLiteral("_bg");
         sk_sp<const SkImage> shield;
-        env->obtainTextShield(shieldName, 1.0f, shield);
+        env->obtainShaderOrShield(shieldName, 1.0f, shield);
         if (shield)
             layers << shield;
     }

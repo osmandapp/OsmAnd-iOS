@@ -116,13 +116,13 @@ class MapWidgetsFactory: NSObject {
         case .heartRate, .bicycleCadence, .bicycleDistance, .bicycleSpeed, .temperature:
             return SensorTextWidget(customId: customId, widgetType: widgetType, appMode: appMode, widgetParams: widgetParams)
         default:
-            return OAPlugin.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
+            return OAPluginsHelper.createMapWidget(widgetType, customId: customId, appMode: appMode, widgetParams: widgetParams)
         }
     }
     
     private func isWidgetCreationAllowed(widgetType: WidgetType) -> Bool {
         if widgetType == .altitudeMapCenter {
-            let plugin = OAPlugin.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
+            let plugin = OAPluginsHelper.getEnabledPlugin(OASRTMPlugin.self) as? OASRTMPlugin
             return plugin != nil && plugin!.is3DMapsEnabled()
         }
         return true

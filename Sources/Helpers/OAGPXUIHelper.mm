@@ -276,6 +276,7 @@
 {
     [gpxFile setShowArrows:gpxItem.showArrows];
     [gpxFile setShowStartFinish:gpxItem.showStartFinish];
+    [gpxFile setRaiseRoutesAboveRelief:gpxItem.raiseRoutesAboveRelief];
     [gpxFile setSplitInterval:gpxItem.splitInterval];
     [gpxFile setSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
     if (gpxItem.color != 0)
@@ -587,11 +588,12 @@
 
     if (newFileName)
     {
-        if ([[NSFileManager defaultManager]
-                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newFileName]])
-            newName = [OAUtilities createNewFileName:newFileName];
-        else
-            newName = newFileName;
+        newName = newFileName;
+        while ([[NSFileManager defaultManager]
+                fileExistsAtPath:[newFolderPath stringByAppendingPathComponent:newName]])
+        {
+            newName = [OAUtilities createNewFileName:newName];
+        }
     }
 
     NSString *newStoringPath = [newFolder stringByAppendingPathComponent:newName];

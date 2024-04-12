@@ -61,6 +61,14 @@
     [self updateBottomButtons];
 }
 
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection] && _isBottomBackgroundViewBlurred)
+        [self.bottomBackgroundView addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:0. padding:0.];
+}
+
 #pragma mark - Base setup UI
 
 - (void)updateBottomButtons

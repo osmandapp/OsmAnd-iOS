@@ -20,6 +20,7 @@
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
+#import "OAPluginsHelper.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
@@ -195,7 +196,7 @@
 
 - (void)downloadForecastByRegion:(OAWorldRegion *)region
 {
-    if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
+    if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
         return;
 
     NSString *regionId = [self.class checkAndGetRegionId:region];

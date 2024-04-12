@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulate your position using a calculated route";
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "സൂര്യോദയം: %@ സൂര്യസ്തമയം: %@";
+"day_night_info_description" = "സൂര്യോദയം: %@  സൂര്യസ്തമയം: %@";
 "day_night_info" = "പകല്‍/രാത്രി വിവരം";
 "daynight_mode_auto" = "സൂര്യോദയം/സൂര്യാസ്തമയം";
 "route_simulation" = "Route simulation";
@@ -726,7 +726,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "സ്ഥാനം";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "അക്ഷാംശം: %@ രേഖാംശം: %@";
+"short_location_on_map" = "അക്ഷാംശം: %@  രേഖാംശം: %@";
 "navigate_point_format_D" = "DDD.DD";
 "navigate_point_format_DM" = "DDD MM.MM";
 "navigate_point_format_DMS" = "\"ഡിഡിഡി എംഎം എസ്എസ്. എസ്എസ് \"";
@@ -1545,7 +1545,7 @@
 "plugin_nautical_descr" = "OsmAnd Nautical Charts is a plugin for OsmAnd Maps & Navigation app. It is a detailed graphical representation of oceans, seas, coastal areas and rivers. The charts can contain various information like sailing routes, navigation lights, dangerous areas, areas where it's allowed or not allowed to sail or dock, etc.\n\nUsage Instructions: it is highly recommended to download nautical basemap in order to see the maps regardless of detailed map presence. To turn on Nautical charts, tap the map button and set map type to Nautical.\n\nNote: All professional sailors are obliged to have official nautical charts on their ships.\n\nOsmAnd Nautical charts are based on the data from OpenSeaMap project. While OpenSeaMap charts at the moment cannot compete with official nautical charts, they can be used by recreational sailors for orientation or route planning.";
 "osmand_parking_plugin_name" = "പാര്‍ക്കിങ്ങ് സ്ഥാനം";
 "product_desc_parking" = "Let you easily memorize when the car was parked and how much time left if the parking is limited by time";
-"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്.കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
+"osmand_parking_plugin_description" = "\"പാര്‍ക്കിങ്ങ് സ്ഥാന അനുബന്ധം എവിടെയാണ് കാര്‍ പാര്‍ക്ക് ചെയ്തത് എന്നും എത്രസമയം കൂടി ലഭ്യമാണ്(സമയപരിമിതമെങ്കില്‍) ഓര്‍മിപ്പിക്കുന്നു.  പാര്‍ക്കിങ്ങ് സ്ഥലവും സമയവും ഓഎസ്എംആന്ഡിന്റെ ഡാഷ്ബോഡിലും ഭൂപത്തിലും കാണാവുന്നതാണ്.കൂടാതെ ആന്ഡ്രോയിഡ് കലണ്ടറിലൊരു  ഓര്‍മ്മക്കത്ത് ചേര്‍ക്കാവുന്നതാണ്.\"";
 "plugin_ski_name" = "സ്കീ ഭൂപടവിന്യാസം";
 "product_desc_skimap" = "Ski slopes for all ski resorts in the world";
 "plugin_ski_descr" = "OsmAnd Ski Maps is a plugin to OsmAnd Maps&Navigation app designed to navigate at winter sports locations. It gives the information about ski pistes, ski lift markers and even colored lines indicating the complexity of each track. You get the info about ski tracks themselves as well as the surrounding infrastructure.\n\nUsage Instructions: Enable the plugin in OsmAnd application, tap the map button and set the map type to Ski maps.";
@@ -2290,7 +2290,7 @@
 "shared_string_view" = "\"കാണുക \"";
 "map_marker_2nd" = "രണ്ടാമത്തെ മാപ്പ് മാര്‍ക്കര്‍";
 "travel_card_download_descr" = "\"ലോകത്തെ വിവിധ സ്ഥലങ്ങളെക്കുറിച്ചുള്ള ലേഖനങ്ങള്‍ ഇന്റെര്‍നെറ്റ് ഇല്ലാതെ കാണാന്‍ വിക്കിവൊയേജ് യാത്രസഹായികള്‍ഡൗണ്‍ലോഡ് ചെയ്യുക \"";
-"map_settings_topography" = "കോണ്ടൂര്‍ ലൈനുക";
+"map_settings_topography" = "\"കോണ്ടൂര്‍ ലൈനുകള്‍ \"";
 "shared_string_bookmark" = "ബുക്ക്മാര്‍ക്ക്";
 "coordinates_format" = "കോഓര്‍ഡിനേറ്റ് രൂപഘടന";
 "image_cache" = "ഇമേജ് ക്യാഷേ";

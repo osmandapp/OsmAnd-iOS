@@ -53,6 +53,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
     double _baseAlpha;
     double _currentAlpha;
     
+    double _baseVerticalExaggerationScale;
+    double _currentVerticalExaggerationScale;
+    
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
     NSIndexPath *_openedPickerIndexPath;
@@ -84,6 +87,12 @@ static const NSInteger kMaxZoomPickerRow = 2;
     _baseMinZoom = _type == EOATerrainTypeHillshade ? _app.data.hillshadeMinZoom : _app.data.slopeMinZoom;
     _baseMaxZoom = _type == EOATerrainTypeHillshade ? _app.data.hillshadeMaxZoom : _app.data.slopeMaxZoom;
     _baseAlpha = _type == EOATerrainTypeHillshade ? _app.data.hillshadeAlpha : _app.data.slopeAlpha;
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        _baseVerticalExaggerationScale = _app.data.verticalExaggerationScale;
+        _currentVerticalExaggerationScale = _baseVerticalExaggerationScale;
+    }
+    
     _minZoom = _baseMinZoom;
     _maxZoom = _baseMaxZoom;
 }
@@ -145,14 +154,57 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [self.backButton setTitle:OALocalizedString(@"shared_string_cancel") forState:UIControlStateNormal];
 }
 
+- (NSString *)getHeaderText
+{
+    NSString *result = nil;
+    switch (_terrainType)
+    {
+        case EOATerrainSettingsTypeVisibility:
+            result = OALocalizedString(@"visibility");
+            break;
+        case EOATerrainSettingsTypeZoomLevels:
+            result = OALocalizedString(@"shared_string_zoom_levels");
+            break;
+        case EOATerrainSettingsTypeVerticalExaggeration:
+            result = OALocalizedString(@"vertical_exaggeration");
+            break;
+    }
+    return result;
+}
+
+- (NSString *)getFooterText
+{
+    NSString *result = nil;
+    switch (_terrainType)
+    {
+        case EOATerrainSettingsTypeVisibility:
+            break;
+        case EOATerrainSettingsTypeZoomLevels:
+            result = OALocalizedString(@"map_settings_zoom_level_description");
+            break;
+        case EOATerrainSettingsTypeVerticalExaggeration:
+            result = OALocalizedString(@"vertical_exaggeration_description");
+            break;
+    }
+    return result;
+}
+
 - (void)generateData
 {
     _data = [OATableDataModel model];
     
     OATableSectionData *topSection = [_data createNewSection];
-    topSection.headerText = _terrainType == EOATerrainSettingsTypeVisibility ? OALocalizedString(@"visibility") : OALocalizedString(@"shared_string_zoom_levels");
-    topSection.footerText = _terrainType == EOATerrainSettingsTypeZoomLevels ? OALocalizedString(@"map_settings_zoom_level_description") : nil;
-    if (_terrainType == EOATerrainSettingsTypeVisibility)
+    topSection.headerText = [self getHeaderText];
+    topSection.footerText = [self getFooterText];
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey : @"verticalExaggerationSlider",
+            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_scale")
+        }];
+    }
+    else if (_terrainType == EOATerrainSettingsTypeVisibility)
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"visibilitySlider",
@@ -160,7 +212,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
             kCellTitleKey : OALocalizedString(@"visibility")
         }];
     }
-    else
+    else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
     {
         [topSection addRowFromDictionary:@{
             kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
@@ -219,7 +271,15 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (CGFloat)initialMenuHeight
 {
-    CGFloat divider = _terrainType == EOATerrainSettingsTypeVisibility ? 3.0 : 2.0;
+    CGFloat divider = 2.0;
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        divider = 2.5;
+    }
+    else if (_terrainType == EOATerrainSettingsTypeVisibility)
+    {
+        divider = 3.0;
+    }
     return ([OAUtilities calculateScreenHeight] / divider) + [OAUtilities getBottomMargin];
 }
 
@@ -246,7 +306,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     : [OAUtilities getLeftMargin] + 10.;
 }
 
-#pragma mark - Aditions
+#pragma mark - Additions
 
 - (void)resetVisibilityValues
 {
@@ -296,7 +356,18 @@ static const NSInteger kMaxZoomPickerRow = 2;
         _isValueChange = YES;
         [self updateApplyButton];
     }
-    
+}
+
+- (void)resetVerticalExaggerationValues
+{
+    [_app.data resetVerticalExaggerationScale];
+    double scale = _app.data.verticalExaggerationScale;
+    if (_currentVerticalExaggerationScale != scale)
+    {
+        _currentVerticalExaggerationScale = scale;
+        _isValueChange = YES;
+        [self updateApplyButton];
+    }
 }
 
 - (void)applyCurrentVisibility
@@ -319,6 +390,11 @@ static const NSInteger kMaxZoomPickerRow = 2;
         _app.data.slopeMinZoom = _minZoom;
         _app.data.slopeMaxZoom = _maxZoom;
     }
+}
+
+- (void)applyVerticalExaggerationScale
+{
+    _app.data.verticalExaggerationScale = _currentVerticalExaggerationScale;
 }
 
 - (NSArray<NSString *> *)getPossibleZoomValues
@@ -344,6 +420,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self resetVisibilityValues];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
         [self resetZoomLevels];
+    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+        [self resetVerticalExaggerationValues];
     
     [self generateData];
     [self.tableView reloadData];
@@ -355,6 +433,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self applyCurrentVisibility];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
         [self applyCurrentZoomLevels];
+    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+        [self applyVerticalExaggerationScale];
     
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
@@ -384,6 +464,10 @@ static const NSInteger kMaxZoomPickerRow = 2;
             _app.data.slopeMaxZoom = _baseMaxZoom;
         }
     }
+    else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
+    }
     
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
@@ -402,6 +486,14 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)sliderValueChanged:(UISlider *)slider
 {
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        _currentVerticalExaggerationScale = slider.value;
+        _app.data.verticalExaggerationScale = _currentVerticalExaggerationScale;
+        _isValueChange = YES;
+        [self updateApplyButton];
+        return;
+    }
     if (_type == EOATerrainTypeHillshade)
     {
         _currentAlpha = slider.value;
@@ -415,6 +507,11 @@ static const NSInteger kMaxZoomPickerRow = 2;
     
     _isValueChange = YES;
     [self updateApplyButton];
+}
+
+- (NSString *)sliderValueString:(float)value
+{
+    return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
 }
 
 #pragma mark - UITableViewDataSource
@@ -456,10 +553,28 @@ static const NSInteger kMaxZoomPickerRow = 2;
         if (cell)
         {
             cell.titleLabel.text = item.title;
-            cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
+            if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+            {
+                __weak OATitleSliderTableViewCell *weakCell = cell;
+                __weak __typeof(self) weakSelf = self;
+                cell.updateValueCallback = ^(float value) {
+                    weakCell.valueLabel.text = [weakSelf sliderValueString:value];
+                };
+                cell.sliderView.minimumValue = 1;
+                cell.sliderView.maximumValue = 3;
+                cell.sliderView.value = _app.data.verticalExaggerationScale;
+                cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
+            }
+            else
+            {
+                cell.updateValueCallback = nil;
+                cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
+                cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
+            }
+           
             [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
             [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-            cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
+            
         }
         return cell;
     }

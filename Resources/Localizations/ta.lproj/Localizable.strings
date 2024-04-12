@@ -57,7 +57,7 @@
 "add_as_first_destination_point" = "Add as first intermediate destination";
 "first_intermediate_dest_description" = "ஆரம்ப நிறுத்தத்தை சேர்க்கிறது";
 "add_as_last_destination_point" = "Add as last intermediate destination";
-"last_intermediate_dest_description" = "இடைநிலை நிறுத்தத்தை சேர்க்கிறது\n";
+"last_intermediate_dest_description" = "இடைநிலை நிறுத்தத்தை சேர்க்கிறது \n";
 "show_poi_over_map" = "Show POI";
 "shared_string_search" = "தேடல்";
 "address_search_desc" = "Address search";
@@ -125,7 +125,7 @@
 // Track recording settings
 "save_global_track_interval" = "பொது பதிவு இடைவெளி";
 "save_global_track_interval_descr" = "Choose logging interval for the general track recording (enabled via the GPX logging widget on the map).";
-"save_track_interval" = "வழிசெலுத்தலின் போது உள்நுழைவு இடைவெளி\n";
+"save_track_interval" = "வழிசெலுத்தலின் போது உள்நுழைவு இடைவெளி \n";
 "logging_interval_navigation_descr" = "Choose logging interval for track recording during navigation";
 "monitoring_min_distance" = "Minimum displacement";
 "logging_min_distance_descr" = "Filter: minimum distance to log a new point";
@@ -208,7 +208,7 @@
 
 "int_seconds" = "seconds";
 "shared_string_never" = "ஒருபோதும்";
-"confirm_every_run" = "எப்போதும் கேள்\n";
+"confirm_every_run" = "எப்போதும் கேள் \n";
 "general_settings_2" = "பொதுவான அமைப்புகள்";
 "general_settings_descr" = "App theme, units, region";
 "routing_settings_descr" = "Configure navigation";
@@ -427,7 +427,7 @@
 "shared_string_select" = "தேர்வு";
 "shared_string_back" = "Back";
 "shared_string_ok" = "எற்க்கிறேன்";
-"shared_string_cancel" = "மறுக்கிறேன்\n";
+"shared_string_cancel" = "மறுக்கிறேன் \n";
 "shared_string_exit" = "வெளியேற";
 "shared_string_close" = "மூடு";
 "shared_string_no" = "இல்லை";
@@ -1741,7 +1741,7 @@
 "free" = "Free %@";
 "first_usage_greeting" = "இணைய இணைப்பு இல்லாமல் திசைகளைப் பெறவும் புதிய இடங்களை கண்டறியவும்";
 "get_started" = "தொடங்குக";
-"first_usage_wizard_desc" = "OsmAndஉங்கள் இருப்பிடத்தை நிர்ணயித்து, அந்தப் பிராந்தியத்திற்கு ஏற்ற வரைபடங்களை பரிந்துரைக்கவும்.\n";
+"first_usage_wizard_desc" = "OsmAndஉங்கள் இருப்பிடத்தை நிர்ணயித்து, அந்தப் பிராந்தியத்திற்கு ஏற்ற வரைபடங்களை பரிந்துரைக்கவும். \n";
 "suggested_maps" = "Suggested maps";
 "suggested_maps_descr" = "These maps are required for the plugin";
 "added_profiles" = "Added profiles";
@@ -1749,7 +1749,7 @@
 "location_not_found" = "இடம் காணப்படவில்லை";
 "search_my_location" = "என் நிலையை கண்டுபிடி";
 "no_inet_connection" = "இணைய இணைப்பு இல்லை";
-"no_inet_connection_desc_map" = "வரைபடங்கள் பதிவிறக்க வேண்டும்.\n";
+"no_inet_connection_desc_map" = "வரைபடங்கள் பதிவிறக்க வேண்டும். \n";
 "try_again" = "Try again";
 "searching" = "Searching…";
 "search_location" = "இடம் தேடுகிறது …";
@@ -1844,7 +1844,7 @@
 "osm_live_payment_renews_monthly" = "மாதாந்திர புதுப்பிப்பு";
 "osm_live_payment_renews_quarterly" = "காலாண்டு புதுப்பிப்பு";
 "osm_live_payment_renews_annually" = "வருடாந்திர புதுப்பிப்பு";
-"default_price_currency_format" = "%.2f %@\n";
+"default_price_currency_format" = "%.2f %@ \n";
 "osm_live_payment_header" = "\"உங்களுக்கு உரிய  கட்டண காலத்தை தேர்ந்தெடுக்கவும்:\"";
 "osm_live_payment_contribute_descr" = "வருவாயின் ஒரு பகுதி OpenStreetMap பங்களிப்பாளர்களுக்கு செல்கிறது.";
 "purchase_dialog_title" = "திட்டத்தைத் தேர்வுசெய்க";
@@ -1858,7 +1858,7 @@
 "wikipedia_offline" = "விக்கிப்பீடியா இணையாநிலை";
 "contour_lines_hillshade_maps" = "விளிம்பு கோடுகள்&மலைநிழல் வரைபடங்கள்";
 "monthly_map_updates" = "வரைபட புதுப்பிப்புகள்: 1 எல்லா மாதமும்2";
-"daily_map_updates" = "வரைபட புதுப்பிப்புகள்:1 எல்லா\nமணிநேரமும் 2";
+"daily_map_updates" = "வரைபட புதுப்பிப்புகள்:1 எல்லா \nமணிநேரமும் 2";
 "index_item_depth_contours_osmand_ext" = "Nautical depth contours";
 "donation_to_osm" = "OpenStreetMapசமூகத்திற்கு நன்கொடை";
 "purchase_unlim_title" = "வாங்க -%@";
@@ -2213,7 +2213,7 @@
 "ios_release_4_0" = "• New! \"Add favorite\" screen with options to select the custom icon, color, and shape\n• Added new \"Coordinates widget\" with coordinates of the current location\n• Added ability to import custom user-defined plugins\n• Significantly extended the import/export functionality\n• Distance by tap moved from the Radius ruler into a separate option\n• Fixed CarPlay app freezes when iPhone screen is turned off\n• Plugins screen moved from the Maps & Resources to the main menu\n• Added Finnish localization\n• Fixed UI in landscape orientation for \"Plan a route\" screen\n• Added support for custom routing and rendering files\n• Fixed performance of markers direction line\n • Fixed issue with importing GPX files with uppercase extensions\n• Fixed issue with \"Follow track\" menu\n• Fixed import of OBF files\n";
 "ios_release_4_1" = "• Completely redesigned interaction with tracks: a new menu with charts, statistics, ability to change the appearance, coloring by speed, height and slope, and track selection on the map• New screen for searching by coordinates in different formats\n• Improved coordinate search in OLC format\n• New user-friendly menu for choosing languages to display Wikipedia articles on the map\n• Added ability to easily load maps of all regions of the country with a couple of clicks.\n• Added contour lines in feet (You need to download additional files)\n• Added ability to download maps by selecting the desired region or country on the map, as well as adding a dialog box with the suggestion to load a missing map of a displayed region\n• New appearance the map control buttons and the ability to change map zoom by double-tapping and swiping.\n• Routes visibility settings are moved higher in the \"Configure map\" screen and are re-organized for better flexibility\n";
 "altitude" = "உயரம்";
-"osm_live_subscriptions" = "சந்தாக்கள்\n";
+"osm_live_subscriptions" = "சந்தாக்கள் \n";
 "osm_live_banner_desc" = "வரம்பற்ற வரைபட பதிவிறக்கங்களைப் பெறுக, மேலும் ஒரு மாதத்திற்கு ஒருமுறை விட மேம்படுத்துங்கள்: வாராந்திர, தினசரிஅல்லது மணிநேரம்.";
 "toast_empty_name_error" = "பெயரிடப்படாத இடம்";
 "shared_string_delete_all" = "அனைத்தையும் நீக்கு";
@@ -2239,7 +2239,7 @@
 
 
 
-"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள்\n";
+"rendering_attr_contourColorScheme_name" = "விளிம்பு கோடுகள் வண்ணங்கள் \n";
 
 
 
@@ -2252,13 +2252,13 @@
 "m" = "மீ";
 
 
-"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9).\n";
+"rendering_attr_noAdminboundaries_description" = "பிராந்திய எல்லைகளை காட்சிப்படுத்த (நிர்வாகம் அளவு 5-9). \n";
 
 
 
 
 
-"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும்\n";
+"routing_attr_avoid_toll_description" = "கட்டண சாலைகள் தவிர்க்கவும் \n";
 "km" = "கி.மீ.";
 
 
@@ -2325,6 +2325,6 @@
 "saved_articles" = "புத்தகக்குறியிட்ட கட்டுரை";
 "image_cache" = "புகைப்படம் மறைவிடம்";
 "map_marker_2nd" = "இரண்டாவது வரைபடம் மார்க்கர்";
-"weather_update_disabled" = "முடக்கப்பட்டது";
+"weather_update_disabled" = "முடக்கியது";
 "shared_string_travel_guides" = "பயண வழிகாட்டிகள்";
 "context_menu_read_article" = "கட்டுரை வாசிக்க";

@@ -3405,3 +3405,13 @@
 "osmand_depelopment_use_special_routing_hh+old" = "Besondere Streckenführung verwenden (HH + alt)";
 "osmand_depelopment_use_special_routing_hh_only" = "Besondere Streckenführung verwenden (nur HH)";
 "online_plugins" = "Online Plugins";
+"vertical_exaggeration" = "Vertikale Vergrößerung";
+"vertical_exaggeration_description" = "Durch Änderung des Skalenwerts können Sie das 3D- Profil hervorheben.";
+"shared_string_scale" = "Maßstab";
+"missing_or_outdated_maps_title" = "Fehlende oder veraltete Karte";
+"required_maps" = "Benötigte Karten";
+"calculate_online" = "Online berechnen";
+"calculate_online_title" = "Die Liste der erforderlichen Karten basiert auf der geradlinigen Route. Um eine genaue Liste der Karten zu erhalten, kann OsmAnd Ihre Route online vorberechnen";
+"required_maps_list" = "Karten, die ebenfalls verwendet werden: %@";
+"missing_or_outdated_maps_description" = "Einige Offline-Karten, die für diese Route benötigt werden, fehlen oder sind nicht auf dem neuesten Stand. Bitte laden Sie diese Karten herunter oder aktualisieren Sie diese.";
+"getting_list_required_maps" = "Abrufen einer Liste der benötigten Karten...";

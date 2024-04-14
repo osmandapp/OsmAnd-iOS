@@ -351,7 +351,7 @@
 "ending_point_too_far" = "Odredište je previše daleko od najbližeg puta.";
 "intermediate_point_too_far" = "Međuodredište %@ je predaleko od najbližeg puta.";
 "arrived_at_destination" = "Stigao si na odredište.";
-"towards" = "prema";
+"towards" = "pravac";
 "route_roundabout" = "Kružni tok: Izađi na izlaz %d. i nastavi";
 "route_roundabout_short" = "Odredi izlaz %d i idi";
 "route_kl" = "Drži levo i nastavi";

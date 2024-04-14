@@ -2887,3 +2887,7 @@
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "send_log" = "שליחת יומן";
 "angular_measeurement_descr" = "החלפת יחידת המידה לאזימוט.";
+"distance_during_navigation" = "מרחק במהלך הניווט";
+"rendering_value_managerName_name" = "לפי שם מנהל";
+"rendering_attr_padusDisplayMode_description" = "לפי סוג גישה או שם מנהל";
+"rendering_value_access_name" = "לפי סוג גישה";

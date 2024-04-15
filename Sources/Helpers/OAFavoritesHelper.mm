@@ -537,9 +537,9 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (void) saveCurrentPointsIntoFile:(BOOL)async
 {
     if (async)
-        [self saveFavoritesIntoFile];
+        [self.class saveFavoritesIntoFile];
     else
-        [self saveFavoritesIntoFileSync];
+        [self.class saveFavoritesIntoFileSync];
 }
 
 + (void) saveFavoritesIntoFile
@@ -553,7 +553,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 //        dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
 //        dispatch_async(dispatch_get_main_queue(), ^{
             NSLog(@"!!! saveFavoritesIntoFile Async 2   %@    %@", _syncObj, _favQueue);
-            [self saveCurrentPointsIntoFile];
+            [self.class saveCurrentPointsIntoFile];
 //            [NSThread sleepForTimeInterval:15.0f];
         });
     }
@@ -562,7 +562,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (void) saveFavoritesIntoFileSync
 {
     NSLog(@"!!! saveFavoritesIntoFile Sync");
-    [self saveCurrentPointsIntoFile];
+    [self.class saveCurrentPointsIntoFile];
 }
     
 + (void) saveCurrentPointsIntoFile

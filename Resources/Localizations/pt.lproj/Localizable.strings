@@ -3391,3 +3391,12 @@
 "track_appearance_3D_visualization" = "Visualização 3D";
 "online_plugins" = "Complementos online";
 "vertical_exaggeration" = "Exagero vertical";
+"vertical_exaggeration_description" = "Ao alterar o valor da escala, pode realçar o relevo 3D.";
+"shared_string_scale" = "Escala";
+"missing_or_outdated_maps_title" = "Mapas em falta ou desatualizados";
+"missing_or_outdated_maps_description" = "Faltam ou não estão atualizados alguns mapas offline necessários para este itinerário. Descarregue ou atualize estes mapas.";
+"required_maps" = "Mapas necessários";
+"calculate_online" = "Calcular online";
+"calculate_online_title" = "A lista de mapas necessários baseia-se no trajeto em linha reta. Para obter uma lista exata de mapas, o OsmAnd pode pré-calcular o seu itinerário online";
+"required_maps_list" = "Mapas que também serão utilizados: %@";
+"getting_list_required_maps" = "A obter uma lista de mapas necessários...";

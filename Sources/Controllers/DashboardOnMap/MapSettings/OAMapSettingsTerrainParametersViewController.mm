@@ -56,6 +56,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
     double _baseVerticalExaggerationScale;
     double _currentVerticalExaggerationScale;
     
+    double _baseGPXVerticalExaggerationScale;
+    double _currentGPXVerticalExaggerationScale;
+    
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
     NSIndexPath *_openedPickerIndexPath;

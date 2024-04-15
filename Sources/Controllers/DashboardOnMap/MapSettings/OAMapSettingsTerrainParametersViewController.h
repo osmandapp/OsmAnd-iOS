@@ -13,7 +13,9 @@ typedef NS_ENUM(NSInteger, EOATerrainSettingsType)
 {
     EOATerrainSettingsTypeVisibility,
     EOATerrainSettingsTypeZoomLevels,
-    EOATerrainSettingsTypeVerticalExaggeration
+    EOATerrainSettingsTypeVerticalExaggeration,
+    EOAGPXSettingsTypeVerticalExaggeration
+    
 };
 
 @protocol OATerrainParametersDelegate

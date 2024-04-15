@@ -89,7 +89,7 @@
     [currentTrack setWidth:[settings.currentTrackWidth get]];
     [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
     [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
-    [currentTrack setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
+    [currentTrack setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
     [currentTrack setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
     [currentTrack setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
     [currentTrack setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
@@ -403,7 +403,7 @@
             [doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
             [doc setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
             
-            [doc setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
+            [doc setVerticalExaggerationScale:[settings.currentTrackVerticalExaggerationScale get]];
             [doc setColor:[settings.currentTrackColor get]];
             [doc setColoringType:[settings.currentTrackColoringType get].name];
 

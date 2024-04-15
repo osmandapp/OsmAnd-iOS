@@ -590,6 +590,8 @@ colorizationScheme:(int)colorizationScheme
     builder.setOutlineColorizationMapping(traceColorizationMapping);
     builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
     
+    builder.setElevationScaleFactor(gpx.verticalExaggerationScale);
+    
     switch (gpx.visualization3dPositionType)
     {
         case EOAGPX3DLineVisualizationPositionTypeTop:

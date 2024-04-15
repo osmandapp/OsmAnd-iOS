@@ -358,7 +358,7 @@ static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlop
 static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
-static NSString * const currentTrackRaiseRoutesAboveReliefKey = @"currentTrackRaiseRoutesAboveReliefKey";
+static NSString * const currentTrackVerticalExaggerationScaleKey = @"currentTrackVerticalExaggerationScale";
 static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
 static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentTrackVisualization3dWallColorType";
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
@@ -4549,7 +4549,7 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
-        _currentTrackRaiseRoutesAboveRelief = [[[OACommonBoolean withKey:currentTrackRaiseRoutesAboveReliefKey defValue:NO] makeGlobal] makeShared];
+        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:1.0] makeGlobal] makeShared];
         _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
         
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeSolid] makeGlobal] makeShared];
@@ -4568,7 +4568,7 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         
-        [_globalPreferences setObject:_currentTrackRaiseRoutesAboveRelief forKey:@"current_track_raise_routes_above_relief"];
+        [_globalPreferences setObject:_currentTrackVerticalExaggerationScale forKey:@"current_track_vertical_exaggeration_scale"];
         [_globalPreferences setObject:_currentTrackVisualization3dByType forKey:@"current_track_visualization_3d_by_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dWallColorType forKey:@"current_track_visualization_3d_wall_color_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];

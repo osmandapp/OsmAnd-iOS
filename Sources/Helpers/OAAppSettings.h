@@ -1180,7 +1180,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
-@property (nonatomic) OACommonBoolean *currentTrackRaiseRoutesAboveRelief;
+@property (nonatomic) OACommonDouble *currentTrackVerticalExaggerationScale;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
 @property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;

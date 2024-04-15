@@ -21,7 +21,7 @@
 @property (nonatomic) CGFloat splitInterval;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) BOOL showStartFinish;
-@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
+@property (nonatomic) CGFloat verticalExaggerationScale;
 @property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;
 @property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
 @property (nonatomic) EOAGPX3DLineVisualizationPositionType visualization3dPositionType;

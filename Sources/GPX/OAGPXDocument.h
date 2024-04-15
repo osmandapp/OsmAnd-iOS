@@ -121,8 +121,9 @@
 - (void) setShowArrows:(BOOL)showArrows;
 - (BOOL) isShowStartFinish;
 - (void) setShowStartFinish:(BOOL)showStartFinish;
-- (BOOL)isRaiseRoutesAboveRelief;
-- (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief;
+
+- (CGFloat)getVerticalExaggerationScale;
+- (void)setVerticalExaggerationScale:(CGFloat)scale;
 
 - (NSString *)getVisualization3dByTypeValue;
 - (void)setVisualization3dByType:(EOAGPX3DLineVisualizationByType)type;

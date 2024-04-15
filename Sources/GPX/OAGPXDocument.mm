@@ -239,18 +239,18 @@
     [self setExtension:@"show_start_finish" value:strValue];
 }
 
-- (BOOL)isRaiseRoutesAboveRelief
+- (CGFloat)getVerticalExaggerationScale
 {
-    OAGpxExtension *e = [self getExtensionByKey:@"raise_routes_above_relief"];
+    OAGpxExtension *e = [self getExtensionByKey:@"vertical_exaggeration_scale"];
     if (e) {
-        return [e.value isEqualToString:@"true"];
+        return [e.value floatValue]?:1.0;
     }
-    return NO;
+    return 1.0;
 }
 
-- (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief
+- (void)setVerticalExaggerationScale:(CGFloat)scale
 {
-    [self setExtension:@"raise_routes_above_relief" value:isRaiseRoutesAboveRelief ? @"true" : @"false"];
+    [self setExtension:@"vertical_exaggeration_scale" value:[NSString stringWithFormat:@"%f",scale]];
 }
 
 - (NSString *)getVisualization3dByTypeValue

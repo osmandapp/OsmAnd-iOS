@@ -49,7 +49,7 @@
 
 @property (nonatomic) NSInteger color;
 @property (nonatomic) BOOL showStartFinish;
-@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
+@property (nonatomic) CGFloat verticalExaggerationScale;
 @property (nonatomic) BOOL joinSegments;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) NSString *width;
@@ -179,7 +179,7 @@
     _backupGpxItem = [[OABackupGpx alloc] init];
     _backupGpxItem.showArrows = self.gpx.showArrows;
     _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
-    _backupGpxItem.raiseRoutesAboveRelief = self.gpx.raiseRoutesAboveRelief;
+    _backupGpxItem.verticalExaggerationScale = self.gpx.verticalExaggerationScale;
     _backupGpxItem.visualization3dByType = self.gpx.visualization3dByType;
     _backupGpxItem.visualization3dWallColorType = self.gpx.visualization3dWallColorType;
     _backupGpxItem.visualization3dPositionType = self.gpx.visualization3dPositionType;
@@ -198,7 +198,7 @@
             OABackupGpx *backupItem = [[OABackupGpx alloc] init];
             backupItem.showArrows = track.showArrows;
             backupItem.showStartFinish = track.showStartFinish;
-            backupItem.raiseRoutesAboveRelief = track.raiseRoutesAboveRelief;
+            backupItem.verticalExaggerationScale = track.verticalExaggerationScale;
             backupItem.visualization3dByType = track.visualization3dByType;
             backupItem.visualization3dWallColorType = track.visualization3dWallColorType;
             backupItem.visualization3dPositionType = track.visualization3dPositionType;
@@ -217,7 +217,7 @@
 {
     self.gpx.showArrows = _backupGpxItem.showArrows;
     self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
-    self.gpx.raiseRoutesAboveRelief = _backupGpxItem.raiseRoutesAboveRelief;
+    self.gpx.verticalExaggerationScale = _backupGpxItem.verticalExaggerationScale;
     self.gpx.visualization3dByType = _backupGpxItem.visualization3dByType;
     self.gpx.visualization3dWallColorType = _backupGpxItem.visualization3dWallColorType;
     self.gpx.visualization3dPositionType = _backupGpxItem.visualization3dPositionType;
@@ -234,7 +234,7 @@
         [self.settings.currentTrackWidth set:_backupGpxItem.width];
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
-        [self.settings.currentTrackRaiseRoutesAboveRelief set:_backupGpxItem.raiseRoutesAboveRelief];
+        [self.settings.currentTrackVerticalExaggerationScale set:_backupGpxItem.verticalExaggerationScale];
         [self.settings.currentTrackVisualization3dByType set:(int)_backupGpxItem.visualization3dByType];
         [self.settings.currentTrackVisualization3dWallColorType set:(int)_backupGpxItem.visualization3dWallColorType];
         [self.settings.currentTrackVisualization3dPositionType set:(int)_backupGpxItem.visualization3dPositionType];
@@ -247,7 +247,7 @@
         [self.doc setWidth:_backupGpxItem.width];
         [self.doc setShowArrows:_backupGpxItem.showArrows];
         [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
-        [self.doc setRaiseRoutesAboveRelief:_backupGpxItem.raiseRoutesAboveRelief];
+        [self.doc setVerticalExaggerationScale:_backupGpxItem.verticalExaggerationScale];
         [self.doc setVisualization3dByType:_backupGpxItem.visualization3dByType];
         [self.doc setVisualization3dWallColorType:_backupGpxItem.visualization3dWallColorType];
         [self.doc setVisualization3dPositionType:_backupGpxItem.visualization3dPositionType];
@@ -264,7 +264,7 @@
             OABackupGpx *bakupItem = _backupGpxItems[i];
             track.showArrows = bakupItem.showArrows;
             track.showStartFinish = bakupItem.showStartFinish;
-            track.raiseRoutesAboveRelief = bakupItem.raiseRoutesAboveRelief;
+            track.verticalExaggerationScale = bakupItem.verticalExaggerationScale;
             track.visualization3dByType = bakupItem.visualization3dByType;
             track.visualization3dWallColorType = bakupItem.visualization3dWallColorType;
             track.visualization3dPositionType = bakupItem.visualization3dPositionType;
@@ -1123,7 +1123,7 @@
             [self.settings.currentTrackWidth set:self.gpx.width];
             [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
             [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
-            [self.settings.currentTrackRaiseRoutesAboveRelief set:self.gpx.raiseRoutesAboveRelief];
+            [self.settings.currentTrackVerticalExaggerationScale set:self.gpx.verticalExaggerationScale];
             [self.settings.currentTrackVisualization3dByType set:(int)self.gpx.visualization3dByType];
             [self.settings.currentTrackVisualization3dWallColorType set:(int)self.gpx.visualization3dWallColorType];
             [self.settings.currentTrackVisualization3dPositionType set:(int)self.gpx.visualization3dPositionType];
@@ -1136,7 +1136,7 @@
             [self.doc setWidth:self.gpx.width];
             [self.doc setShowArrows:self.gpx.showArrows];
             [self.doc setShowStartFinish:self.gpx.showStartFinish];
-            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
+            [self.doc setVerticalExaggerationScale:self.gpx.verticalExaggerationScale];
             [self.doc setVisualization3dByType:self.gpx.visualization3dByType];
             [self.doc setVisualization3dWallColorType:self.gpx.visualization3dWallColorType];
             [self.doc setVisualization3dPositionType:self.gpx.visualization3dPositionType];
@@ -1746,25 +1746,25 @@
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
         }
     }
-    else if ([tableData.key isEqualToString:@"visualization_3D"])
-    {
-        self.gpx.raiseRoutesAboveRelief = toggle;
-        if (_wholeFolderTracks)
-        {
-            for (OAGPX *track in _wholeFolderTracks)
-                track.raiseRoutesAboveRelief = toggle;
-        }
-
-        if (self.isCurrentTrack)
-        {
-            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
-            [[_app updateRecTrackOnMapObservable] notifyEvent];
-        }
-        else
-        {
-            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-        }
-    }
+//    else if ([tableData.key isEqualToString:@"visualization_3D"])
+//    {
+//        self.gpx.raiseRoutesAboveRelief = toggle;
+//        if (_wholeFolderTracks)
+//        {
+//            for (OAGPX *track in _wholeFolderTracks)
+//                track.raiseRoutesAboveRelief = toggle;
+//        }
+//
+//        if (self.isCurrentTrack)
+//        {
+//            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
+//            [[_app updateRecTrackOnMapObservable] notifyEvent];
+//        }
+//        else
+//        {
+//            [[_app updateGpxTracksOnMapObservable] notifyEvent];
+//        }
+//    }
     else if ([tableData.key isEqualToString:@"join_gaps"])
     {
         self.gpx.joinSegments = toggle;
@@ -1788,8 +1788,6 @@
         return self.gpx.showArrows;
     else if ([tableData.key isEqualToString:@"start_finish_icons"])
         return self.gpx.showStartFinish;
-    else if ([tableData.key isEqualToString:@"visualization_3D"])
-        return self.gpx.raiseRoutesAboveRelief;
     else if ([tableData.key isEqualToString:@"join_gaps"])
         return self.gpx.joinSegments;
 
@@ -2133,8 +2131,8 @@
     }
     else if ([tableData.key isEqualToString:@"vertical_exaggeration"])
     {
-        OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeVerticalExaggeration];
-        // TODO;
+        OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOAGPXSettingsTypeVerticalExaggeration];
+        // TODO; EOAGPXSettingsTypeVerticalExaggeration and new controller
         controller.delegate = self;
         [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
     }
@@ -2145,7 +2143,7 @@
             [self.settings.currentTrackWidth resetToDefault];
             [self.settings.currentTrackShowArrows resetToDefault];
             [self.settings.currentTrackShowStartFinish resetToDefault];
-            [self.settings.currentTrackRaiseRoutesAboveRelief resetToDefault];
+            [self.settings.currentTrackVerticalExaggerationScale resetToDefault];
             [self.settings.currentTrackVisualization3dByType resetToDefault];
             [self.settings.currentTrackVisualization3dWallColorType resetToDefault];
             [self.settings.currentTrackVisualization3dPositionType resetToDefault];
@@ -2155,7 +2153,7 @@
             [self.doc setWidth:[self.settings.currentTrackWidth get]];
             [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
-            [self.doc setRaiseRoutesAboveRelief:[self.settings.currentTrackRaiseRoutesAboveRelief get]];
+            [self.doc setVerticalExaggerationScale:[self.settings.currentTrackVerticalExaggerationScale get]];
             
             [self.doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[self.settings.currentTrackVisualization3dByType get]];
             [self.doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[self.settings.currentTrackVisualization3dWallColorType get]];

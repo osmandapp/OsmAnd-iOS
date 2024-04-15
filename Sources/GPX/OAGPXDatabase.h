@@ -61,12 +61,12 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 @property (nonatomic, assign) BOOL showStartFinish;
 @property (nonatomic, assign) BOOL joinSegments;
 @property (nonatomic, assign) BOOL showArrows;
-@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
 
 // 3d visualization
 @property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;
 @property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
 @property (nonatomic) EOAGPX3DLineVisualizationPositionType visualization3dPositionType;
+@property (nonatomic, assign) CGFloat verticalExaggerationScale;
 
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;

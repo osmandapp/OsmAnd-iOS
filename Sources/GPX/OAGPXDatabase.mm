@@ -97,7 +97,7 @@
         _width = [document getWidth:nil];
         _showArrows = [document isShowArrows];
         _showStartFinish = [document isShowStartFinish];
-        _raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
+        _verticalExaggerationScale = [document getVerticalExaggerationScale];
         _visualization3dByType = [OAGPXDatabase lineVisualizationByTypeForName:[document getVisualization3dByTypeValue]];
         _visualization3dWallColorType = [OAGPXDatabase lineVisualizationWallColorTypeForName:[document getVisualization3dWallColorTypeValue]];
         _visualization3dPositionType = [OAGPXDatabase lineVisualizationPositionTypeForName:[document getVisualization3dPositionTypeValue]];
@@ -242,7 +242,7 @@
     gpx.width = [document getWidth:nil];
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
-    gpx.raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
+    gpx.verticalExaggerationScale = [document getVerticalExaggerationScale];
     gpx.visualization3dByType = [self.class lineVisualizationByTypeForName:document.getVisualization3dByTypeValue];
     gpx.visualization3dWallColorType = [self.class lineVisualizationWallColorTypeForName:document.getVisualization3dWallColorTypeValue];
     gpx.visualization3dPositionType = [self.class lineVisualizationPositionTypeForName:document.getVisualization3dPositionTypeValue];
@@ -607,7 +607,7 @@
     [d setObject:@(gpx.metricEnd) forKey:@"metricEnd"];
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
-    [d setObject:@(gpx.raiseRoutesAboveRelief) forKey:@"raiseRoutesAboveRelief"];
+    [d setObject:@(gpx.verticalExaggerationScale) forKey:@"verticalExaggerationScale"];
     [d setObject:@(gpx.visualization3dByType) forKey:@"line3dVisualizationByType"];
     [d setObject:@(gpx.visualization3dWallColorType) forKey:@"line3dVisualizationWallColorType"];
     [d setObject:@(gpx.visualization3dPositionType) forKey:@"line3dVisualizationPositionType"];
@@ -751,9 +751,9 @@
         {
             gpx.showStartFinish = [value boolValue];
         }
-        else if ([key isEqualToString:@"raiseRoutesAboveRelief"])
+        else if ([key isEqualToString:@"verticalExaggerationScale"])
         {
-            gpx.raiseRoutesAboveRelief = [value boolValue];
+            gpx.verticalExaggerationScale = [value floatValue];
         }
         else if ([key isEqualToString:@"line3dVisualizationByType"])
         {

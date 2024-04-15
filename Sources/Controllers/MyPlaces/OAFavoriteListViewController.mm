@@ -717,7 +717,7 @@ static UIViewController *parentController;
                 }
             }
         }
-        [OAFavoritesHelper saveCurrentPointsIntoFile];
+        [OAFavoritesHelper saveCurrentPointsIntoFile:YES];
     }
     [self finishEditing];
     [self.favoriteTableView reloadData];

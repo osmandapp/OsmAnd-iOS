@@ -3737,3 +3737,11 @@
 "visualization_3d_track_line" = "Track line";
 "track_3d" = "3d track";
 "fixed_height" = "Fixed Height";
+"downward_gradient" = "Downward gradient";
+"upward_gradient" = "Upward gradient";
+"shared_string_top" = "Top";
+"shared_string_bottom" = "Bottom";
+"shared_string_top_bottom" = "Top and bottom";
+
+"track_3d_empty_view_title" = "3D Track view";
+"track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";

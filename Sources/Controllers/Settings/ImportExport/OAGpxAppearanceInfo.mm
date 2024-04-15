@@ -27,6 +27,9 @@
         _showArrows = dataItem.showArrows;
         _showStartFinish = dataItem.showStartFinish;
         _raiseRoutesAboveRelief = dataItem.raiseRoutesAboveRelief;
+        _visualization3dByType = dataItem.visualization3dByType;
+        _visualization3dWallColorType = dataItem.visualization3dWallColorType;
+        _visualization3dPositionType = dataItem.visualization3dPositionType;
         _splitType = dataItem.splitType;
         _splitInterval = dataItem.splitInterval;
 //        _scaleType = dataItem.scaleType;
@@ -49,6 +52,11 @@
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";
     json[@"show_start_finish"] = _showStartFinish ? @"true" : @"false";
     json[@"raise_routes_above_relief"] = _raiseRoutesAboveRelief ? @"true" : @"false";
+    
+    json[@"line_3d_visualization_by_type"] = [OAGPXDatabase lineVisualizationByTypeNameForType:_visualization3dByType];
+    json[@"line_3d_visualization_wall_color_type"] = [OAGPXDatabase lineVisualizationWallColorTypeNameForType:_visualization3dWallColorType];
+    json[@"line_3d_visualization_position_type"] = [OAGPXDatabase lineVisualizationPositionTypeNameForType:_visualization3dPositionType];
+    
     json[@"split_type"] = [OAGPXDatabase splitTypeNameByValue:_splitType];
 
     json[@"split_interval"] = [NSString stringWithFormat:@"%f", _splitInterval];
@@ -75,6 +83,12 @@
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];
     gpxAppearanceInfo.showStartFinish = [json[@"show_start_finish"] boolValue];
     gpxAppearanceInfo.raiseRoutesAboveRelief = [json[@"raise_routes_above_relief"] boolValue];
+    
+    gpxAppearanceInfo.visualization3dByType = [OAGPXDatabase lineVisualizationByTypeForName:json[@"line_3d_visualization_by_type"]];
+    
+    gpxAppearanceInfo.visualization3dWallColorType = [OAGPXDatabase lineVisualizationWallColorTypeForName:json[@"line_3d_visualization_wall_color_type"]];
+    gpxAppearanceInfo.visualization3dPositionType = [OAGPXDatabase lineVisualizationPositionTypeForName:json[@"line_3d_visualization_position_type"]];
+    
     gpxAppearanceInfo.splitType = [OAGPXDatabase splitTypeByName:json[@"split_type"]];
     gpxAppearanceInfo.splitInterval = [json[@"split_interval"] floatValue];
     //gpxAppearanceInfo.scaleType = [self getScaleType:json[@"gradient_scale_type"]];

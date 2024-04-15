@@ -148,6 +148,9 @@
     gpx.showArrows = _appearanceInfo.showArrows;
     gpx.showStartFinish = _appearanceInfo.showStartFinish;
     gpx.raiseRoutesAboveRelief = _appearanceInfo.raiseRoutesAboveRelief;
+    gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
+    gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
+    gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;
     gpx.splitType = _appearanceInfo.splitType;
     gpx.splitInterval = _appearanceInfo.splitInterval;
     [gpxDb save];

@@ -286,7 +286,17 @@
                         for (const auto& pt : seg->points)
                         {
                             points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
-                            [elevations addObject:@(pt->elevation)];
+                            switch (gpx.visualization3dByType)
+                            {
+                                case EOAGPX3DLineVisualizationByTypeAltitude:
+                                    [elevations addObject:@(pt->elevation)];
+                                    break;
+                                case EOAGPX3DLineVisualizationByTypeFixedHeight:
+                                    [elevations addObject:@(1000)];
+                                    break;
+                                default:
+                                    break;
+                            }
                         }
                         if (points.size() > 1 && !_cachedColors[key].isEmpty() && segStartIndex < _cachedColors[key].size() && segStartIndex + seg->points.size() - 1 < _cachedColors[key].size())
                         {
@@ -337,7 +347,17 @@
                     for (const auto& pt : route->points)
                     {
                         points.push_back(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt->position)));
-                        [elevations addObject:@(pt->elevation)];
+                        switch (gpx.visualization3dByType)
+                        {
+                            case EOAGPX3DLineVisualizationByTypeAltitude:
+                                [elevations addObject:@(pt->elevation)];
+                                break;
+                            case EOAGPX3DLineVisualizationByTypeFixedHeight:
+                                [elevations addObject:@(1000)];
+                                break;
+                            default:
+                                break;
+                        }
                     }
                     if (isCurrentTrack)
                     {
@@ -411,13 +431,13 @@ colorizationScheme:(int)colorizationScheme
                 .setScreenScale(UIScreen.mainScreen.scale);
         }
         
-        if (gpx.raiseRoutesAboveRelief)
+        if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
         {
             [self configureRaisedLine:builder
                            elevations:elevations
                             colorARGB:colorARGB
                                colors:colors
-                showTransparentTraces:YES
+                                  gpx:gpx
                             lineWidth:lineWidth];
         }
         else
@@ -492,13 +512,13 @@ colorizationScheme:(int)colorizationScheme
                     .setScreenScale(UIScreen.mainScreen.scale);
             }
             
-            if (gpx.raiseRoutesAboveRelief)
+            if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
             {
                 [self configureRaisedLine:builder
                                elevations:elevations
                                 colorARGB:colorARGB
                                    colors:colors
-                    showTransparentTraces:YES
+                                      gpx:gpx
                                 lineWidth:lineWidth];
             }
             else
@@ -525,7 +545,6 @@ colorizationScheme:(int)colorizationScheme
             line->setColorizationScheme(colorizationScheme);
             line->setShowArrows(gpx.showArrows);
         }
-        
     }
 }
 
@@ -533,10 +552,12 @@ colorizationScheme:(int)colorizationScheme
                  elevations:(NSArray <NSNumber *>* _Nullable)elevations
                   colorARGB:(OsmAnd::FColorARGB)colorARGB
                      colors:(const QList<OsmAnd::FColorARGB> &)colors
-      showTransparentTraces:(BOOL)showTransparentTraces
-                  lineWidth:(CGFloat)lineWidth {
-    
+                        gpx:(OAGPX *)gpx
+                  lineWidth:(CGFloat)lineWidth
+{
     auto traceColorizationMapping = QList<OsmAnd::FColorARGB>();
+    BOOL showTransparentTraces = gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeDownwardGradient
+    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
     if (!showTransparentTraces)
         traceColorizationMapping = colors;
     
@@ -569,14 +590,34 @@ colorizationScheme:(int)colorizationScheme
     builder.setOutlineColorizationMapping(traceColorizationMapping);
     builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
     
+    switch (gpx.visualization3dPositionType)
+    {
+        case EOAGPX3DLineVisualizationPositionTypeTop:
+            builder.setElevatedLineVisibility(true);
+            builder.setSurfaceLineVisibility(false);
+            break;
+        case EOAGPX3DLineVisualizationPositionTypeBottom:
+            builder.setElevatedLineVisibility(false);
+            builder.setSurfaceLineVisibility(true);
+            break;
+        case EOAGPX3DLineVisualizationPositionTypeTopBottom:
+            builder.setElevatedLineVisibility(true);
+            builder.setSurfaceLineVisibility(true);
+            break;
+        default:
+            break;
+    }
+    
     if (showTransparentTraces)
     {
         builder.setColorizationScheme(1);
         if (traceColorizationMapping.isEmpty())
-        {   // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
-            builder.setNearOutlineColor(OsmAnd::FColorARGB(0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+        { 
+            BOOL upwardGradient = gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
+            // 0.0f...1.0f - to set up the 3D projection (wall) of the route line onto the plane.
+            builder.setNearOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 0.0f : 1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
             // 1.0f...0.0f - to set up the 3D projection (wall) of the route line onto the plane.
-            builder.setFarOutlineColor(OsmAnd::FColorARGB(1.0f, colorARGB.r, colorARGB.g, colorARGB.b));
+            builder.setFarOutlineColor(OsmAnd::FColorARGB(upwardGradient ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
         }
         else
         {
@@ -587,7 +628,7 @@ colorizationScheme:(int)colorizationScheme
     }
     else
     {
-        builder.setOutlineColor(OsmAnd::FColorARGB(1.0f, 0.8f, 0.8f, 0.8f));
+        builder.setOutlineColor(OsmAnd::FColorARGB(gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSolid ? 1.0f : 0.0f, colorARGB.r, colorARGB.g, colorARGB.b));
     }
     return builder;
 }
@@ -642,7 +683,18 @@ colorizationScheme:(int)colorizationScheme
                 OAWptPt *pt = seg.locationStart;
                 if (pt)
                 {
-                    const auto splitElevation = gpx.raiseRoutesAboveRelief ? pt.elevation : NULL;
+                    CGFloat splitElevation = NULL;
+                    switch (gpx.visualization3dByType) {
+                        case EOAGPX3DLineVisualizationByTypeAltitude:
+                            splitElevation = pt.elevation;
+                            break;
+                        case EOAGPX3DLineVisualizationByTypeFixedHeight:
+                            splitElevation = 1000;
+                            break;
+                        default:
+                            break;
+                    }
+                    
                     const auto pos31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(pt.getLatitude, pt.getLongitude));
                     QString stringValue;
                     if (splitByDistance)
@@ -694,7 +746,7 @@ colorizationScheme:(int)colorizationScheme
         OAGPXDatabase *gpxDb = OAGPXDatabase.sharedDb;
         path = [[gpxDb getFileDir:path] stringByAppendingPathComponent:path.lastPathComponent];
         OAGPX *gpx = [gpxDb getGPXItem:path];
-        const bool raiseRoutesAboveRelief = gpx.raiseRoutesAboveRelief;
+        const bool raiseRoutesAboveRelief = gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone;
         const auto& doc = it.value();
         if ((!gpx && ![path isEqualToString:kCurrentTrack]) || gpx.showStartFinish)
         {
@@ -718,7 +770,7 @@ colorizationScheme:(int)colorizationScheme
                             start = seg->points.first()->position;
                             if (raiseRoutesAboveRelief)
                             {
-                                startPointElevation = seg->points.first()->elevation;
+                                startPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.first()->elevation : 1000;
                             }
                         }
                         else if (i == segments.size() - 1)
@@ -726,7 +778,7 @@ colorizationScheme:(int)colorizationScheme
                             finish = seg->points.last()->position;
                             if (raiseRoutesAboveRelief)
                             {
-                                finishPointElevation = seg->points.last()->elevation;
+                                finishPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.last()->elevation : 1000;
                             }
                         }
                     }
@@ -734,8 +786,9 @@ colorizationScheme:(int)colorizationScheme
                     {
                         if (raiseRoutesAboveRelief)
                         {
-                            startFinishPointsElevations.append(seg->points.first()->elevation);
-                            startFinishPointsElevations.append(seg->points.last()->elevation);
+                            BOOL isAltitude = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude;
+                            startFinishPointsElevations.append(isAltitude ? seg->points.first()->elevation : 1000);
+                            startFinishPointsElevations.append(isAltitude ? seg->points.last()->elevation : 1000);
                         }
                         startFinishPoints.append({
                             OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),

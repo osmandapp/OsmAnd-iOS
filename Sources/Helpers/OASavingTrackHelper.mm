@@ -21,6 +21,7 @@
 #import "Localization.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAPluginsHelper.h"
+#import "OAGPXDatabase.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>
@@ -89,6 +90,9 @@
     [currentTrack setShowArrows:[settings.currentTrackShowArrows get]];
     [currentTrack setShowStartFinish:[settings.currentTrackShowStartFinish get]];
     [currentTrack setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
+    [currentTrack setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
+    [currentTrack setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
+    [currentTrack setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
     [currentTrack setColor:[settings.currentTrackColor get]];
     [currentTrack setColoringType:[settings.currentTrackColoringType get].name];
 }
@@ -395,6 +399,10 @@
             [doc setWidth:[settings.currentTrackWidth get]];
             [doc setShowArrows:[settings.currentTrackShowArrows get]];
             [doc setShowStartFinish:[settings.currentTrackShowStartFinish get]];
+            [doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[settings.currentTrackVisualization3dByType get]];
+            [doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[settings.currentTrackVisualization3dWallColorType get]];
+            [doc setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[settings.currentTrackVisualization3dPositionType get]];
+            
             [doc setRaiseRoutesAboveRelief:[settings.currentTrackRaiseRoutesAboveRelief get]];
             [doc setColor:[settings.currentTrackColor get]];
             [doc setColoringType:[settings.currentTrackColoringType get].name];

@@ -120,6 +120,9 @@
         gpx.showArrows = oldGpx.showArrows;
         gpx.showStartFinish = oldGpx.showStartFinish;
         gpx.raiseRoutesAboveRelief = oldGpx.raiseRoutesAboveRelief;
+        gpx.visualization3dByType = oldGpx.visualization3dByType;
+        gpx.visualization3dWallColorType = oldGpx.visualization3dWallColorType;
+        gpx.visualization3dPositionType = oldGpx.visualization3dPositionType;
         gpx.color = oldGpx.color;
         gpx.coloringType = oldGpx.coloringType;
         gpx.width = oldGpx.width;

@@ -98,6 +98,9 @@
         _showArrows = [document isShowArrows];
         _showStartFinish = [document isShowStartFinish];
         _raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
+        _visualization3dByType = [OAGPXDatabase lineVisualizationByTypeForName:[document getVisualization3dByTypeValue]];
+        _visualization3dWallColorType = [OAGPXDatabase lineVisualizationWallColorTypeForName:[document getVisualization3dWallColorTypeValue]];
+        _visualization3dPositionType = [OAGPXDatabase lineVisualizationPositionTypeForName:[document getVisualization3dPositionTypeValue]];
     }
 }
 
@@ -232,6 +235,7 @@
     gpx.nearestCity = nearestCity;
 
     gpx.splitType = [self.class splitTypeByName:document.getSplitType];
+
     gpx.splitInterval = [document getSplitInterval];
     gpx.color = [document getColor:0];
     gpx.coloringType = [document getColoringType];
@@ -239,6 +243,9 @@
     gpx.showArrows = [document isShowArrows];
     gpx.showStartFinish = [document isShowStartFinish];
     gpx.raiseRoutesAboveRelief = [document isRaiseRoutesAboveRelief];
+    gpx.visualization3dByType = [self.class lineVisualizationByTypeForName:document.getVisualization3dByTypeValue];
+    gpx.visualization3dWallColorType = [self.class lineVisualizationWallColorTypeForName:document.getVisualization3dWallColorTypeValue];
+    gpx.visualization3dPositionType = [self.class lineVisualizationPositionTypeForName:document.getVisualization3dPositionTypeValue];
     
     return gpx;
 }
@@ -267,6 +274,79 @@
         default:
             return @"no_split";
     }
+}
+
++ (NSString *)lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)type
+{
+    switch (type)
+    {
+        case EOAGPX3DLineVisualizationByTypeAltitude:
+            return @"altitude";
+        case EOAGPX3DLineVisualizationByTypeFixedHeight:
+            return @"fixed_heigh";
+        default:
+            return @"none";
+    }
+}
+
++ (EOAGPX3DLineVisualizationByType)lineVisualizationByTypeForName:(NSString *)name
+{
+    if ([name isEqualToString:@"altitude"])
+        return EOAGPX3DLineVisualizationByTypeAltitude;
+    else if ([name isEqualToString:@"fixed_heigh"])
+        return EOAGPX3DLineVisualizationByTypeFixedHeight;
+    return EOAGPX3DLineVisualizationByTypeNone;
+}
+
++ (NSString *)lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)type
+{
+    switch (type) {
+        case EOAGPX3DLineVisualizationWallColorTypeSolid:
+            return @"solid";
+            break;
+        case EOAGPX3DLineVisualizationWallColorTypeDownwardGradient:
+            return @"downward_gradient";
+            break;
+        case EOAGPX3DLineVisualizationWallColorTypeUpwardGradient:
+            return @"upward_gradient";
+            break;
+        default:
+            return @"none";
+    }
+}
+
++ (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *)name
+{
+     if ([name isEqualToString:@"solid"])
+        return EOAGPX3DLineVisualizationWallColorTypeSolid;
+    else if ([name isEqualToString:@"downward_gradient"])
+        return EOAGPX3DLineVisualizationWallColorTypeDownwardGradient;
+    else if ([name isEqualToString:@"upward_gradient"])
+        return EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
+    return EOAGPX3DLineVisualizationWallColorTypeNone;
+}
+
++ (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type
+{
+    switch (type) {
+        case EOAGPX3DLineVisualizationPositionTypeBottom:
+            return @"bottom";
+            break;
+        case EOAGPX3DLineVisualizationPositionTypeTopBottom:
+            return @"top_bottom";
+            break;
+        default:
+            return @"top";
+    }
+}
+
++ (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *)name
+{
+    if ([name isEqualToString:@"bottom"])
+       return EOAGPX3DLineVisualizationPositionTypeBottom;
+   else if ([name isEqualToString:@"top_bottom"])
+       return EOAGPX3DLineVisualizationPositionTypeTopBottom;
+   return EOAGPX3DLineVisualizationPositionTypeTop;
 }
 
 -(OAGPX *)getGPXItem:(NSString *)filePath
@@ -528,6 +608,11 @@
 
     [d setObject:@(gpx.showStartFinish) forKey:@"showStartFinish"];
     [d setObject:@(gpx.raiseRoutesAboveRelief) forKey:@"raiseRoutesAboveRelief"];
+    [d setObject:@(gpx.visualization3dByType) forKey:@"line3dVisualizationByType"];
+    [d setObject:@(gpx.visualization3dWallColorType) forKey:@"line3dVisualizationWallColorType"];
+    [d setObject:@(gpx.visualization3dPositionType) forKey:@"line3dVisualizationPositionType"];
+    
+    
     [d setObject:@(gpx.joinSegments) forKey:@"joinSegments"];
     [d setObject:@(gpx.showArrows) forKey:@"showArrows"];
     [d setObject:gpx.width forKey:@"width"];
@@ -669,6 +754,18 @@
         else if ([key isEqualToString:@"raiseRoutesAboveRelief"])
         {
             gpx.raiseRoutesAboveRelief = [value boolValue];
+        }
+        else if ([key isEqualToString:@"line3dVisualizationByType"])
+        {
+            gpx.visualization3dByType = (EOAGPX3DLineVisualizationByType)[value integerValue];
+        }
+        else if ([key isEqualToString:@"line3dVisualizationWallColorType"])
+        {
+            gpx.visualization3dWallColorType = (EOAGPX3DLineVisualizationWallColorType)[value integerValue];
+        }
+        else if ([key isEqualToString:@"line3dVisualizationPositionType"])
+        {
+            gpx.visualization3dPositionType = (EOAGPX3DLineVisualizationPositionType)[value integerValue];
         }
         else if ([key isEqualToString:@"joinSegments"])
         {

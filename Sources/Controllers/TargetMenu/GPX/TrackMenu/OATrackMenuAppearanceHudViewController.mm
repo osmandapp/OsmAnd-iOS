@@ -39,6 +39,7 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAMapSettingsTerrainParametersViewController.h"
 
 #define kColorsSection 1
 
@@ -54,6 +55,10 @@
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
 @property (nonatomic) EOAGpxSplitType splitType;
+@property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;
+@property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
+@property (nonatomic) EOAGPX3DLineVisualizationPositionType visualization3dPositionType;
+
 @property (nonatomic) double splitInterval;
 
 @end
@@ -85,7 +90,7 @@
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate, OATerrainParametersDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -129,6 +134,7 @@
     NSInteger _splitDataSectionIndex;
     
     NSArray<OAGPX *> *_wholeFolderTracks;
+    LeftIconRightStackTitleDescriptionButtonView *_trackView3DEmptyView;
 }
 
 - (instancetype)initWithGpx:(OAGPX *)gpx state:(OATrackMenuViewControllerState *)state
@@ -174,6 +180,9 @@
     _backupGpxItem.showArrows = self.gpx.showArrows;
     _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
     _backupGpxItem.raiseRoutesAboveRelief = self.gpx.raiseRoutesAboveRelief;
+    _backupGpxItem.visualization3dByType = self.gpx.visualization3dByType;
+    _backupGpxItem.visualization3dWallColorType = self.gpx.visualization3dWallColorType;
+    _backupGpxItem.visualization3dPositionType = self.gpx.visualization3dPositionType;
     _backupGpxItem.coloringType = self.gpx.coloringType;
     _backupGpxItem.color = self.gpx.color;
     _backupGpxItem.width = self.gpx.width;
@@ -190,6 +199,9 @@
             backupItem.showArrows = track.showArrows;
             backupItem.showStartFinish = track.showStartFinish;
             backupItem.raiseRoutesAboveRelief = track.raiseRoutesAboveRelief;
+            backupItem.visualization3dByType = track.visualization3dByType;
+            backupItem.visualization3dWallColorType = track.visualization3dWallColorType;
+            backupItem.visualization3dPositionType = track.visualization3dPositionType;
             backupItem.coloringType = track.coloringType;
             backupItem.color = track.color;
             backupItem.width = track.width;
@@ -206,6 +218,9 @@
     self.gpx.showArrows = _backupGpxItem.showArrows;
     self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
     self.gpx.raiseRoutesAboveRelief = _backupGpxItem.raiseRoutesAboveRelief;
+    self.gpx.visualization3dByType = _backupGpxItem.visualization3dByType;
+    self.gpx.visualization3dWallColorType = _backupGpxItem.visualization3dWallColorType;
+    self.gpx.visualization3dPositionType = _backupGpxItem.visualization3dPositionType;
     
     self.gpx.coloringType = _backupGpxItem.coloringType;
     self.gpx.color = _backupGpxItem.color;
@@ -220,6 +235,9 @@
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
         [self.settings.currentTrackRaiseRoutesAboveRelief set:_backupGpxItem.raiseRoutesAboveRelief];
+        [self.settings.currentTrackVisualization3dByType set:(int)_backupGpxItem.visualization3dByType];
+        [self.settings.currentTrackVisualization3dWallColorType set:(int)_backupGpxItem.visualization3dWallColorType];
+        [self.settings.currentTrackVisualization3dPositionType set:(int)_backupGpxItem.visualization3dPositionType];
         
         [self.settings.currentTrackColoringType set:_backupGpxItem.coloringType.length > 0
                 ? [OAColoringType getNonNullTrackColoringTypeByName:_backupGpxItem.coloringType]
@@ -230,6 +248,10 @@
         [self.doc setShowArrows:_backupGpxItem.showArrows];
         [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
         [self.doc setRaiseRoutesAboveRelief:_backupGpxItem.raiseRoutesAboveRelief];
+        [self.doc setVisualization3dByType:_backupGpxItem.visualization3dByType];
+        [self.doc setVisualization3dWallColorType:_backupGpxItem.visualization3dWallColorType];
+        [self.doc setVisualization3dPositionType:_backupGpxItem.visualization3dPositionType];
+        
         [self.doc setColoringType:_backupGpxItem.coloringType];
         [self.doc setColor:_backupGpxItem.color];
     }
@@ -243,6 +265,9 @@
             track.showArrows = bakupItem.showArrows;
             track.showStartFinish = bakupItem.showStartFinish;
             track.raiseRoutesAboveRelief = bakupItem.raiseRoutesAboveRelief;
+            track.visualization3dByType = bakupItem.visualization3dByType;
+            track.visualization3dWallColorType = bakupItem.visualization3dWallColorType;
+            track.visualization3dPositionType = bakupItem.visualization3dPositionType;
             track.coloringType = bakupItem.coloringType;
             track.color = bakupItem.color;
             track.width = bakupItem.width;
@@ -326,8 +351,8 @@
     [self.tableView registerClass:OATableViewCustomFooterView.class
         forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OAButtonTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAButtonTableViewCell getCellIdentifier]];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:[UITableViewCell getCellIdentifier]];
 }
-
 
 - (void)viewWillAppear:(BOOL)animated
 {
@@ -427,14 +452,114 @@
     }];
 }
 
+- (UIMenu *)createMenuForKey:(NSString *)key button:(UIButton *)button
+{
+    if ([key isEqualToString:@"visualization_3d_visualized_by"])
+    {
+        return [self createVisualizedByMenuForCellButton:button];
+    }
+    else if ([key isEqualToString:@"visualization_3d_wall_color"])
+    {
+        return [self createWallColorMenuForCellButton:button];
+    }
+    else if ([key isEqualToString:@"visualization_3d_track_line"])
+    {
+        return [self createTrackLineMenuForCellButton:button];
+    }
+    NSAssert(NO, @"createMenuForKey key is not implemented");
+    return nil;
+}
+
+- (void)configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
+{
+    self.gpx.visualization3dByType = type;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.visualization3dByType = type;
+    }
+
+    if (self.isCurrentTrack)
+    {
+        [self.doc setVisualization3dByType:self.gpx.visualization3dByType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+    [self generateData];
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+- (void)configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type
+{
+    self.gpx.visualization3dWallColorType = type;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.visualization3dWallColorType = type;
+    }
+
+    if (self.isCurrentTrack)
+    {
+        [self.doc setVisualization3dWallColorType:self.gpx.visualization3dWallColorType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+    [self generateData];
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+- (void)configureVisualizationPositionColorType:(EOAGPX3DLineVisualizationPositionType)type
+{
+    self.gpx.visualization3dPositionType = type;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.visualization3dPositionType = type;
+    }
+
+    if (self.isCurrentTrack)
+    {
+        [self.doc setVisualization3dPositionType:self.gpx.visualization3dPositionType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+    [self generateData];
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
 - (UIMenu *)createVisualizedByMenuForCellButton:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-    
+    __weak __typeof(self) weakSelf = self;
     UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
                                              image:nil
                                         identifier:nil
                                            handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeNone];
     }];
     [menuElements addObject:none];
 
@@ -442,26 +567,19 @@
                                           image:nil
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeAltitude];
     }];
     [menuElements addObject:altitude];
-    
-    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-    }];
-    [menuElements addObject:slope];
     
     UIAction *fixedHeight = [UIAction actionWithTitle:OALocalizedString(@"fixed_height")
                                           image:nil
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeFixedHeight];
     }];
     [menuElements addObject:fixedHeight];
     
-    
-
-    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
+    NSInteger selectedIndex = self.gpx.visualization3dByType;
     if (selectedIndex >= 0 && selectedIndex < menuElements.count)
         ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
     
@@ -470,29 +588,80 @@
     return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
 }
 
-- (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
+- (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-
-    UIAction *hillshade = [UIAction actionWithTitle:OALocalizedString(@"shared_string_hillshade")
+    __weak __typeof(self) weakSelf = self;
+    UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
                                              image:nil
                                         identifier:nil
                                            handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeHillshade];
-//        [self terrainTypeChanged];
+        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeNone];
     }];
-    [menuElements addObject:hillshade];
+    [menuElements addObject:none];
 
-    UIAction *slope = [UIAction actionWithTitle:OALocalizedString(@"shared_string_slope")
+    UIAction *solid = [UIAction actionWithTitle:OALocalizedString(@"track_coloring_solid")
                                           image:nil
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeSlope];
-//        [self terrainTypeChanged];
+        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeSolid];
     }];
-    [menuElements addObject:slope];
+    [menuElements addObject:solid];
+    
+    UIAction *downwardGradient = [UIAction actionWithTitle:OALocalizedString(@"downward_gradient")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeDownwardGradient];
+    }];
+    [menuElements addObject:downwardGradient];
+    
+    UIAction *upwardGradient = [UIAction actionWithTitle:OALocalizedString(@"upward_gradient")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient];
+    }];
+    [menuElements addObject:upwardGradient];
+    
+    NSInteger selectedIndex = self.gpx.visualization3dWallColorType;
+    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
+        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
+    
+    NSString *title = [menuElements[selectedIndex] title];
+    
+    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+}
 
-    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
+- (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button
+{
+    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    __weak __typeof(self) weakSelf = self;
+    UIAction *top = [UIAction actionWithTitle:OALocalizedString(@"shared_string_top")
+                                             image:nil
+                                        identifier:nil
+                                           handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualizationPositionColorType:EOAGPX3DLineVisualizationPositionTypeTop];
+    }];
+    [menuElements addObject:top];
+
+    UIAction *bottom = [UIAction actionWithTitle:OALocalizedString(@"shared_string_bottom")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualizationPositionColorType:EOAGPX3DLineVisualizationPositionTypeBottom];
+    }];
+    [menuElements addObject:bottom];
+    
+    UIAction *topBottom = [UIAction actionWithTitle:OALocalizedString(@"shared_string_top_bottom")
+                                          image:nil
+                                     identifier:nil
+                                        handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf configureVisualizationPositionColorType:EOAGPX3DLineVisualizationPositionTypeTopBottom];
+    }];
+    [menuElements addObject:topBottom];
+    
+    NSInteger selectedIndex = self.gpx.visualization3dPositionType;
     if (selectedIndex >= 0 && selectedIndex < menuElements.count)
         ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
     
@@ -524,62 +693,20 @@
 
 - (void)generateData
 {
-    
-//    OATableSectionData *titleSection = [_data createNewSection];
-//    [titleSection addRowFromDictionary:@{
-//        kCellKeyKey : @"terrainType",
-//        kCellTypeKey : [OAButtonTableViewCell getCellIdentifier],
-//        kCellTitleKey : OALocalizedString(@"srtm_color_scheme")
-//    }];
     NSMutableArray<OAGPXTableSectionData *> *appearanceSections = [NSMutableArray array];
-    
-//    OAGPXTableSectionData *track3DSectionData = [OAGPXTableSectionData withData:@{
-//        kTableKey: @"track_3D",
-//       // kTableSubjects: colorsCells,
-//        kSectionHeaderHeight: @36.
-//    }];
-    
-    OAGPXTableCellData *visualizedByCellData = [OAGPXTableCellData withData:@{
-        kTableKey:@"visualization_3d_visualized_by",
-        kCellType:[OAButtonTableViewCell getCellIdentifier],
-        kCellTitle:OALocalizedString(@"visualization_3d_visualized_by")
+        
+    OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
+            kTableKey:@"direction_arrows",
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
+            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
     }];
-    OAGPXTableCellData *wallColorCellData = [OAGPXTableCellData withData:@{
-        kTableKey:@"visualization_3d_wall_color",
-        kCellType:[OAButtonTableViewCell getCellIdentifier],
-        kCellTitle:OALocalizedString(@"visualization_3d_wall_color")
-    }];
-    OAGPXTableCellData *trackLineData = [OAGPXTableCellData withData:@{
-        kTableKey:@"visualization_3d_track_line",
-        kCellType:[OAButtonTableViewCell getCellIdentifier],
-        kCellTitle:OALocalizedString(@"visualization_3d_track_line")
+
+    OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
+            kTableKey:@"start_finish_icons",
+            kCellType:[OASwitchTableViewCell getCellIdentifier],
+            kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
     
-    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
-        kTableKey:@"3d_track_section",
-        kSectionHeader: [OALocalizedString(@"track_3d") upperCase],
-        kSectionHeaderHeight: @36.,
-        kTableSubjects: @[visualizedByCellData, wallColorCellData, trackLineData]
-    }]];
-    
-//    [OAGPXTableSectionData withData:@{
-//        kTableSubjects: @[visualizedByCellData, wallColorCellData, trackLineData]
-//    }];
-    
-    
-    
-//    OAGPXTableCellData *directionCellData = [OAGPXTableCellData withData:@{
-//            kTableKey:@"direction_arrows",
-//            kCellType:[OASwitchTableViewCell getCellIdentifier],
-//            kCellTitle:OALocalizedString(@"gpx_direction_arrows")
-//    }];
-//
-//    OAGPXTableCellData *startFinishCellData = [OAGPXTableCellData withData:@{
-//            kTableKey:@"start_finish_icons",
-//            kCellType:[OASwitchTableViewCell getCellIdentifier],
-//            kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
-//    }];
-//    
 //    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
 //    
 //    OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
@@ -589,10 +716,10 @@
 //            : [OAButtonTableViewCell getCellIdentifier],
 //            kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
 //    }];
-//
-//    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
-//        kTableSubjects: @[directionCellData, startFinishCellData, visualization3DCellData]
-//    }]];
+
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+        kTableSubjects: @[directionCellData, startFinishCellData]
+    }]];
 
     NSMutableArray<OAGPXTableCellData *> *colorsCells = [NSMutableArray array];
 
@@ -671,6 +798,70 @@
 
     _widthDataSectionIndex = appearanceSections.count;
     [appearanceSections addObject:widthSectionData];
+    
+    NSMutableArray *track3DSectionItems = [NSMutableArray array];
+    
+    // TODO: purchase type and isRelief3D
+    BOOL mapsPlusPurchased = YES;//[OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+    if (mapsPlusPurchased)
+    {
+        // 3d Section
+        OAGPXTableCellData *visualizedByCellData = [OAGPXTableCellData withData:@{
+            kTableKey:@"visualization_3d_visualized_by",
+            kCellType:[OAButtonTableViewCell getCellIdentifier],
+            kCellTitle:OALocalizedString(@"visualization_3d_visualized_by")
+        }];
+        [track3DSectionItems addObject:visualizedByCellData];
+        if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone)
+            {
+            OAGPXTableCellData *wallColorCellData = [OAGPXTableCellData withData:@{
+                kTableKey:@"visualization_3d_wall_color",
+                kCellType:[OAButtonTableViewCell getCellIdentifier],
+                kCellTitle:OALocalizedString(@"visualization_3d_wall_color")
+            }];
+                [track3DSectionItems addObject:wallColorCellData];
+            OAGPXTableCellData *trackLineData = [OAGPXTableCellData withData:@{
+                kTableKey:@"visualization_3d_track_line",
+                kCellType:[OAButtonTableViewCell getCellIdentifier],
+                kCellTitle:OALocalizedString(@"visualization_3d_track_line")
+            }];
+                [track3DSectionItems addObject:trackLineData];
+            // BOOL isRelief3D = [OAIAPHelper isOsmAndProAvailable];
+            // if (isRelief3D && [plugin.enable3DMaps get])
+            //  OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPluginsHelper getPlugin:OASRTMPlugin.class];
+            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
+                // TODO:
+            double scaleValue = _app.data.verticalExaggerationScale;
+            if (scaleValue > 1)
+            {
+                alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
+            }
+            OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{
+                kTableKey:@"vertical_exaggeration",
+                kCellType:[OAValueTableViewCell getCellIdentifier],
+                kCellTitle:OALocalizedString(@"vertical_exaggeration"),
+                kCellIconNameKey:@"ic_custom_terrain_scale",
+                kCellIconTintColor:[UIColor colorNamed:ACColorNameIconColorSelected],
+                kTableValues:@{
+                    @"string_value":alphaValueString,
+                    @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
+                    @"accessibility_value":alphaValueString,
+                    @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
+                },
+            }];
+            [track3DSectionItems addObject:verticalExaggerationData];
+        }
+    }
+
+    [appearanceSections addObject:[OAGPXTableSectionData withData:@{
+        kTableKey:@"3d_track_section",
+        kSectionHeader:[OALocalizedString(@"track_3d") upperCase],
+        kSectionHeaderHeight:@36.,
+        kTableSubjects:mapsPlusPurchased ? track3DSectionItems : @[[OAGPXTableCellData withData:@{
+            kTableKey:@"track_view_3d_empty_state",
+            kCellType:[UITableViewCell getCellIdentifier],
+        }]]
+    }]];
 
     NSMutableArray<OAGPXTableCellData *> *splitCells = [NSMutableArray array];
     OAGPXTableCellData *splitTitleCellData = [OAGPXTableCellData withData:@{
@@ -933,6 +1124,9 @@
             [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
             [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
             [self.settings.currentTrackRaiseRoutesAboveRelief set:self.gpx.raiseRoutesAboveRelief];
+            [self.settings.currentTrackVisualization3dByType set:(int)self.gpx.visualization3dByType];
+            [self.settings.currentTrackVisualization3dWallColorType set:(int)self.gpx.visualization3dWallColorType];
+            [self.settings.currentTrackVisualization3dPositionType set:(int)self.gpx.visualization3dPositionType];
             
             [self.settings.currentTrackColoringType set:self.gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:self.gpx.coloringType]
@@ -943,6 +1137,9 @@
             [self.doc setShowArrows:self.gpx.showArrows];
             [self.doc setShowStartFinish:self.gpx.showStartFinish];
             [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
+            [self.doc setVisualization3dByType:self.gpx.visualization3dByType];
+            [self.doc setVisualization3dWallColorType:self.gpx.visualization3dWallColorType];
+            [self.doc setVisualization3dPositionType:self.gpx.visualization3dPositionType];
             [self.doc setColoringType:self.gpx.coloringType];
             [self.doc setColor:self.gpx.color];
         }
@@ -1276,9 +1473,6 @@
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
         BOOL is3dTrackSection = [sectionData.key isEqualToString:@"3d_track_section"];
-//       [cellData.key isEqualToString:@"visualization_3d_track_line"]
-//        || [cellData.key isEqualToString:@"visualization_3d_wall_color"]
-//        || [cellData.key isEqualToString:@"visualization_3d_visualized_by"];
 
             if (is3dTrackSection)
             {
@@ -1293,7 +1487,7 @@
                 cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
                 cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
                 
-                cell.button.menu = [self createTerrainTypeMenuForCellButton:cell.button];
+                cell.button.menu = [self createMenuForKey:cellData.key button:cell.button];
                 cell.button.showsMenuAsPrimaryAction = YES;
                 cell.button.changesSelectionAsPrimaryAction = YES;
                 return cell;
@@ -1345,16 +1539,48 @@
 //        cell.titleLabel.text = cellData.title;
 //        outCell = cell;
     }
+    else if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]])
+    {
+        OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
+        if ([sectionData.key isEqualToString:@"3d_track_section"])
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[UITableViewCell getCellIdentifier]];
+            if (!_trackView3DEmptyView)
+            {
+                _trackView3DEmptyView = LeftIconRightStackTitleDescriptionButtonView.view;
+                __weak __typeof(self) weakSelf = self;
+                _trackView3DEmptyView.didBottomButtonTapAction = ^{
+                    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:weakSelf.navigationController];
+                };
+                [_trackView3DEmptyView configureWithTitle:OALocalizedString(@"track_3d_empty_view_title")
+                                              description:OALocalizedString(@"track_3d_empty_view_description")
+                                              buttonTitle:OALocalizedString(@"shared_string_get")
+                                                leftImage:[UIImage imageNamed:@"ic_custom_3dtrack_colored"]
+                                       leftImageTintColor:[UIColor colorNamed:ACColorNameIconColorDefault]];
+            }
+            
+            [cell.contentView addSubview:_trackView3DEmptyView];
+            cell.translatesAutoresizingMaskIntoConstraints = NO;
+            _trackView3DEmptyView.translatesAutoresizingMaskIntoConstraints = NO;
+            
+            [cell.contentView addSubview:_trackView3DEmptyView];
+            [NSLayoutConstraint activateConstraints:@[
+                [_trackView3DEmptyView.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor constant:20],
+                [_trackView3DEmptyView.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor constant:-20],
+                [_trackView3DEmptyView.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor constant:20],
+                [_trackView3DEmptyView.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor constant:20],
+            ]];
+            return cell;
+            
+        }
+        return [UITableViewCell new];
+        
+    }
 
     if ([outCell needsUpdateConstraints])
         [outCell updateConstraints];
 
     return outCell;
-}
-
-- (UIMenu *)getMenuForKey:(NSString *)key
-{
-    
 }
 
 #pragma mark - UITableViewDelegate
@@ -1364,14 +1590,19 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OADividerCell getCellIdentifier]])
         return [cellData.values[@"float_value"] floatValue];
-
+    if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]] && [cellData.key isEqualToString:@"track_view_3d_empty_state"])
+    {
+        // TODO:
+        return [[UIFontMetrics defaultMetrics] scaledValueForValue:82] + 104;
+    }
+    
     return UITableViewAutomaticDimension;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     OAGPXTableSectionData *sectionData = _tableData[section];
-    if (section == 0 || sectionData.headerHeight == 0.)
+    if (sectionData.headerHeight == 0.)
         return 0.001;
 
     return sectionData.headerHeight > 0
@@ -1900,6 +2131,13 @@
         colorCollectionViewController.delegate = self;
         [self.navigationController pushViewController:colorCollectionViewController animated:YES];
     }
+    else if ([tableData.key isEqualToString:@"vertical_exaggeration"])
+    {
+        OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOATerrainSettingsTypeVerticalExaggeration];
+        // TODO;
+        controller.delegate = self;
+        [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
+    }
     else if ([tableData.key isEqualToString:@"reset"])
     {
         if (self.isCurrentTrack)
@@ -1908,6 +2146,9 @@
             [self.settings.currentTrackShowArrows resetToDefault];
             [self.settings.currentTrackShowStartFinish resetToDefault];
             [self.settings.currentTrackRaiseRoutesAboveRelief resetToDefault];
+            [self.settings.currentTrackVisualization3dByType resetToDefault];
+            [self.settings.currentTrackVisualization3dWallColorType resetToDefault];
+            [self.settings.currentTrackVisualization3dPositionType resetToDefault];
             [self.settings.currentTrackColoringType resetToDefault];
             [self.settings.currentTrackColor resetToDefault];
             
@@ -1915,6 +2156,11 @@
             [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
             [self.doc setRaiseRoutesAboveRelief:[self.settings.currentTrackRaiseRoutesAboveRelief get]];
+            
+            [self.doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[self.settings.currentTrackVisualization3dByType get]];
+            [self.doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[self.settings.currentTrackVisualization3dWallColorType get]];
+            [self.doc setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)[self.settings.currentTrackVisualization3dPositionType get]];
+        
             [self.doc setColoringType:[self.settings.currentTrackColoringType get].name];
             [self.doc setColor:[self.settings.currentTrackColor get]];
         }
@@ -1983,9 +2229,9 @@
     [self onRightActionButtonPressed:sender.tag];
 }
 
-- (void)onGetFeatureTerrainButtonPressed:(UIButton *)button {
-    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
-}
+//- (void)onGetFeatureTerrainButtonPressed:(UIButton *)button {
+//    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
+//}
 
 #pragma mark - OACollectionTableViewCellDelegate
 
@@ -2131,6 +2377,19 @@
     {
         [self addAndGetNewColorItem:viewController.selectedColor];
     }
+}
+
+#pragma mark - OATerrainParametersDelegate
+
+- (void)onBackTerrainParameters
+{
+    [self generateData];
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void) {
+        [self.tableView reloadData];
+    } completion:nil];
 }
 
 @end

@@ -253,6 +253,47 @@
     [self setExtension:@"raise_routes_above_relief" value:isRaiseRoutesAboveRelief ? @"true" : @"false"];
 }
 
+- (NSString *)getVisualization3dByTypeValue
+{
+   OAGpxExtension *e = [self getExtensionByKey:@"line_3d_visualization_by_type"];
+   if (e) {
+       return e.value;
+   }
+   return nil;
+}
+
+- (void)setVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
+{
+   [self setExtension:@"line_3d_visualization_by_type" value:[OAGPXDatabase lineVisualizationByTypeNameForType:type]];
+}
+
+- (NSString *)getVisualization3dWallColorTypeValue
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"line_3d_visualization_wall_color_type"];
+    if (e) {
+        return e.value;
+    }
+    return nil;
+}
+- (void)setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type
+{
+    [self setExtension:@"line_3d_visualization_wall_color_type" value:[OAGPXDatabase lineVisualizationWallColorTypeNameForType:type]];
+}
+
+- (NSString *)getVisualization3dPositionTypeValue
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"line_3d_visualization_position_type"];
+    if (e) {
+        return e.value;
+    }
+    return nil;
+}
+
+- (void)setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)type
+{
+    [self setExtension:@"line_3d_visualization_position_type" value:[OAGPXDatabase lineVisualizationPositionTypeNameForType:type]];
+}
+
 + (NSArray<OALink *> *)fetchLinks:(QList<OsmAnd::Ref<OsmAnd::GpxDocument::Link>>)links
 {
     if (!links.isEmpty()) {

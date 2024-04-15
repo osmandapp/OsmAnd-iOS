@@ -277,6 +277,10 @@
     [gpxFile setShowArrows:gpxItem.showArrows];
     [gpxFile setShowStartFinish:gpxItem.showStartFinish];
     [gpxFile setRaiseRoutesAboveRelief:gpxItem.raiseRoutesAboveRelief];
+    [gpxFile setVisualization3dByType:gpxItem.visualization3dByType];
+    [gpxFile setVisualization3dWallColorType:gpxItem.visualization3dWallColorType];
+    [gpxFile setVisualization3dPositionType:gpxItem.visualization3dPositionType];
+    
     [gpxFile setSplitInterval:gpxItem.splitInterval];
     [gpxFile setSplitType:[OAGPXDatabase splitTypeNameByValue:gpxItem.splitType]];
     if (gpxItem.color != 0)

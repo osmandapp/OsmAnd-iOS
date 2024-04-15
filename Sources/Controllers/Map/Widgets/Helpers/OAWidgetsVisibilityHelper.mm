@@ -84,28 +84,6 @@
     && ![self isSelectingTilesZone];
 }
 
-- (BOOL)shouldShowTopMapCenterCoordinatesWidget
-{
-    BOOL shouldShow = [self shouldShowTopCoordinatesWidget];
-    if (shouldShow)
-        for (NSString *component in [[_settings.mapInfoControls get] componentsSeparatedByString:SETTINGS_SEPARATOR])
-            if ([component hasPrefix:OAWidgetType.coordinatesMapCenter.id])
-                return YES;
-
-    return [_settings.showMapCenterCoordinatesWidget get] && [_settings.quickActionIsOn get];
-}
-
-- (BOOL)shouldShowTopCurrentLocationCoordinatesWidget
-{
-    BOOL shouldShow = [self shouldShowTopCoordinatesWidget];
-    if (shouldShow)
-        for (NSString *component in [[_settings.mapInfoControls get] componentsSeparatedByString:SETTINGS_SEPARATOR])
-            if ([component hasPrefix:OAWidgetType.coordinatesCurrentLocation.id])
-                return YES;
-
-    return [_settings.showCurrentLocationCoordinatesWidget get] && [_settings.quickActionIsOn get];
-}
-
 - (BOOL)shouldShowTopCoordinatesWidget
 {
     return [_mapPanel isTopControlsVisible] &&

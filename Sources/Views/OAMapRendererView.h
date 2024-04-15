@@ -80,6 +80,8 @@ struct CLLocationCoordinate2D;
 - (void)setElevationConfiguration:(const OsmAnd::ElevationConfiguration&)configuration
                      forcedUpdate:(BOOL)forcedUpdate;
 - (void)setElevationScaleFactor:(float)scaleFactor;
+- (float)getElevationScaleFactor;
+- (void)hideMyLocationCircle;
 
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;

@@ -108,6 +108,7 @@ typedef enum {
     _courseMarkerDay->setIsAccuracyCircleVisible(false);
     _courseMarkerNight->setIsHidden(true);
     _courseMarkerNight->setIsAccuracyCircleVisible(false);
+    [_mapView hideMyLocationCircle];
 }
 
 - (void) setState:(EOAMarkerCollectionState)state
@@ -130,6 +131,7 @@ typedef enum {
 
 - (void) updateState
 {
+    [_mapView hideMyLocationCircle];
     switch (_state)
     {
         case OAMarkerColletionStateStay:

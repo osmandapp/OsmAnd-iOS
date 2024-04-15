@@ -351,6 +351,11 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getElevationScaleFactor();
 }
 
+- (void)hideMyLocationCircle
+{
+    _renderer->setMyLocationRadiusInMeters(0.0f);
+}
+
 - (OsmAnd::PointI)target31
 {
     auto fixedPixel = _renderer->getState().fixedPixel;

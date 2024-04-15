@@ -222,20 +222,28 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
         for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
         {
             CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
-            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:@"trackpointextension"];
+            NSNumber *val = nil;
+            BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
+            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
             if (trackpointextension)
             {
-                for (OAGpxExtension *subextension in trackpointextension.subextensions)
+                if (isSpeedSensorTag)
                 {
-                    if ([subextension.name isEqualToString:tag])
+                    val = [numberFormatter numberFromString:trackpointextension.value];
+                }
+                else
+                {
+                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
                     {
-                        NSNumber *val = [numberFormatter numberFromString:subextension.value];
-                        if (val)
-                            value = val.floatValue;
+                        if ([subextension.name isEqualToString:tag])
+                        {
+                            val = [numberFormatter numberFromString:subextension.value];
+                        }
                     }
                 }
             }
             
+            value = val ? val.floatValue : value;
             [attribute setAttributeValueFor:tag value:value];
             
             if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)

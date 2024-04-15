@@ -33,11 +33,11 @@
 
 @interface OAFavoriteItem : NSObject<OALocationPoint>
 
-@property std::shared_ptr<OsmAnd::IFavoriteLocation> favorite;
-@property CGFloat direction;
-@property NSString* distance;
-@property double distanceMeters;
-@property OASpecialPointType *specialPointType;
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::IFavoriteLocation> favorite;
+@property (nonatomic) CGFloat direction;
+@property (nonatomic) NSString* distance;
+@property (nonatomic) double distanceMeters;
+@property (nonatomic) OASpecialPointType *specialPointType;
 
 - (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite;
 - (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)catagory;

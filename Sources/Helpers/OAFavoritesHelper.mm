@@ -46,9 +46,13 @@ static NSMutableArray<OAFavoriteGroup *> *_favoriteGroups;
 static NSMutableDictionary<NSString *, OAFavoriteGroup *> *_flatGroups;
 static NSArray<NSString *> *_flatBackgroundIcons;
 static NSArray<NSString *> *_flatBackgroundContourIcons;
+static NSOperationQueue *_favQueue;
 
 + (void)initFavorites
 {
+    _favQueue = [[NSOperationQueue alloc] init];
+    _favQueue.maxConcurrentOperationCount = 1;
+
     [self initFavoritesCollection];
 
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -533,50 +537,64 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (void) saveCurrentPointsIntoFile
 {
-    NSMutableDictionary<NSString *, OAFavoriteGroup *> *deletedGroups = [NSMutableDictionary dictionary];
-    NSMutableDictionary<NSString *, OAFavoriteItem *> *deletedPoints = [NSMutableDictionary dictionary];
+    [_favQueue cancelAllOperations];
 
-    NSArray<NSString *> *files = [self getGroupFiles];
-    if (files.count > 0)
-    {
-        for (NSString *file in files)
+    __block NSArray<OAFavoriteGroup *> *favoriteGroups = [[NSArray alloc] initWithArray:_favoriteGroups copyItems:YES];
+    __block NSBlockOperation *operation;
+    operation = [NSBlockOperation blockOperationWithBlock:^{
+
+        if ([operation isCancelled])
+            return;
+
+        NSMutableDictionary<NSString *, OAFavoriteGroup *> *deletedGroups = [NSMutableDictionary dictionary];
+        NSMutableDictionary<NSString *, OAFavoriteItem *> *deletedPoints = [NSMutableDictionary dictionary];
+
+        NSArray<NSString *> *files = [self getGroupFiles];
+        if (files.count > 0)
         {
-            [self loadFileGroups:file groups:deletedGroups];
+            for (NSString *file in files)
+            {
+                [self loadFileGroups:file groups:deletedGroups];
+                if ([operation isCancelled])
+                    return;
+            }
         }
-    }
-    // Get all points from internal file to filter later
-    for (OAFavoriteGroup *group in deletedGroups.allValues)
-    {
-        for (OAFavoriteItem *point in group.points)
-        {
-            deletedPoints[[point getKey]] = point;
-        }
-    }
-    // Hold only deleted points in map
-    for (OAFavoriteItem *point in [self getPointsFromGroups:_favoriteGroups])
-    {
-        [deletedPoints removeObjectForKey:[point getKey]];
-    }
-    // Hold only deleted groups in map
-    for (OAFavoriteGroup *group in _favoriteGroups)
-    {
-        [deletedGroups removeObjectForKey:group.name];
-    }
-    // Save groups to internal file
-//    [self saveFile:_favoriteGroups file:internalFile];
-    // Save groups to external files
-    [self saveFiles:_favoriteGroups deleted:deletedPoints.allKeys];
-    // Save groups to backup file
-    [self backup];
+
+        // Get all points from internal file to filter later
+        for (OAFavoriteGroup *group in deletedGroups.allValues)
+            for (OAFavoriteItem *point in group.points)
+                deletedPoints[[point getKey]] = point;
+
+        // Hold only deleted points in map
+        for (OAFavoriteItem *point in [self getPointsFromGroups:favoriteGroups])
+            [deletedPoints removeObjectForKey:[point getKey]];
+
+        // Hold only deleted groups in map
+        for (OAFavoriteGroup *group in favoriteGroups)
+            [deletedGroups removeObjectForKey:group.name];
+
+        // Save groups to internal file
+        // [self saveFile:_favoriteGroups file:internalFile];
+        // Save groups to external files
+
+        if ([operation isCancelled])
+            return;
+
+        [self saveFiles:favoriteGroups deleted:deletedPoints.allKeys];
+
+        // Save groups to backup file
+        [self backup];
+    }];
+
+    [_favQueue addOperation:operation];
 }
 
 + (NSArray<OAFavoriteItem *> *)getPointsFromGroups:(NSArray<OAFavoriteGroup *> *)groups
 {
     NSMutableArray<OAFavoriteItem *> *favouritePoints = [NSMutableArray array];
     for (OAFavoriteGroup *group in groups)
-    {
         [favouritePoints addObjectsFromArray:group.points];
-    }
+
     return favouritePoints;
 }
 
@@ -639,9 +657,8 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
         // Remove already existing in memory
         NSArray<OAFavoriteItem *> *localPoints = localGroup.points;
         for (OAFavoriteItem *point in localPoints)
-        {
             [all removeObjectForKey:[point getKey]];
-        }
+
         // save favoritePoints from memory in order to update existing
         [localGroup.points addObjectsFromArray:all.allValues];
         // Save file if group changed
@@ -973,9 +990,8 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 {
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     for (OAFavoriteGroup *group in favoriteGroups)
-    {
         [gpx addPointsGroup:[group toPointsGroup]];
-    }
+
     return gpx;
 }
 
@@ -1252,6 +1268,16 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     if (favoriteGroup.points && favoriteGroup.points.count > 0)
         favoriteGroup.isVisible = favoriteGroup.points[0].isVisible;
     return favoriteGroup;
+}
+
+#pragma mark NSCopying
+
+- (id) copyWithZone:(NSZone *)zone
+{
+    OAFavoriteGroup *clone = [[OAFavoriteGroup alloc] initWithPoints:_points name:_name isVisible:_isVisible color:_color];
+    clone.iconName = _iconName;
+    clone.backgroundType = _backgroundType;
+    return clone;
 }
 
 @end

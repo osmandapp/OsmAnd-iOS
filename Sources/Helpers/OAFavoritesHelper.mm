@@ -36,6 +36,9 @@
 #define BACKUP_MAX_COUNT 10
 #define BACKUP_MAX_PER_DAY 3
 
+static NSObject *_syncObj = [[NSObject alloc] init];
+static dispatch_queue_t _favQueue = dispatch_queue_create("favorite_helper_queue", DISPATCH_QUEUE_SERIAL);
+
 @implementation OAFavoritesHelper
 
 static OAObservable *_favoritesCollectionChangedObservable;
@@ -339,7 +342,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
         if (sortAndSave)
         {
             [self sortAll];
-            [self saveCurrentPointsIntoFile];
+            [self saveCurrentPointsIntoFile:YES];
         }
     }
     return res;
@@ -426,7 +429,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     [appearanceCollection selectColor:[appearanceCollection getColorItemWithValue:[[item getColor] toARGBNumber]]];
 
     [self sortAll];
-    [self saveCurrentPointsIntoFile];
+    [self saveCurrentPointsIntoFile:YES];
     return YES;
 }
 
@@ -445,7 +448,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     if (description)
         [item setDescription:description];
     
-    [self saveCurrentPointsIntoFile];
+    [self saveCurrentPointsIntoFile:YES];
     return YES;
 }
 
@@ -477,7 +480,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
             [renamedGroup.points addObjectsFromArray:group.points];
     }
     if (saveImmediately)
-        [self saveCurrentPointsIntoFile];
+        [self saveCurrentPointsIntoFile:YES];   // TODO: false in Android
 }
 
 + (void)updateGroup:(OAFavoriteGroup *)group
@@ -494,7 +497,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     }
     group.iconName = iconName;
     if (saveImmediately)
-        [self saveCurrentPointsIntoFile];
+        [self saveCurrentPointsIntoFile:YES];   // TODO: false in Android
 }
 
 + (void)updateGroup:(OAFavoriteGroup *)group
@@ -511,7 +514,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     }
     group.color = color;
     if (saveImmediately)
-        [self saveCurrentPointsIntoFile];
+        [self saveCurrentPointsIntoFile:YES]; // TODO: false in Android
 }
 
 + (void)updateGroup:(OAFavoriteGroup *)group
@@ -528,15 +531,54 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     }
     group.backgroundType = backgroundIconName;
     if (saveImmediately)
-        [self saveCurrentPointsIntoFile];
+        [self saveCurrentPointsIntoFile:YES];   // TODO: false in Android
 }
 
++ (void) saveCurrentPointsIntoFile:(BOOL)async
+{
+    if (async)
+        [self saveFavoritesIntoFile];
+    else
+        [self saveFavoritesIntoFileSync];
+}
+
++ (void) saveFavoritesIntoFile
+{
+    NSLog(@"!!! saveFavoritesIntoFile Async 0   %@    %@", _syncObj, _favQueue);
+    @synchronized (_syncObj)
+    {
+        NSLog(@"!!! saveFavoritesIntoFile Async 1   %@    %@", _syncObj, _favQueue);
+        dispatch_async(_favQueue, ^{
+//        dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//        dispatch_async(dispatch_get_global_queue (DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0), ^{
+//        dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"!!! saveFavoritesIntoFile Async 2   %@    %@", _syncObj, _favQueue);
+            [self saveCurrentPointsIntoFile];
+//            [NSThread sleepForTimeInterval:15.0f];
+        });
+    }
+}
+
++ (void) saveFavoritesIntoFileSync
+{
+    NSLog(@"!!! saveFavoritesIntoFile Sync");
+    [self saveCurrentPointsIntoFile];
+}
+    
 + (void) saveCurrentPointsIntoFile
 {
+    NSDate *start = [NSDate now];
+    
+    NSMutableArray<OAFavoriteGroup *> *favoriteGroups = [NSMutableArray arrayWithArray:_favoriteGroups];
+    
+    NSLog(@"<   !!! saveCurrentPointsIntoFile 0 start    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     NSMutableDictionary<NSString *, OAFavoriteGroup *> *deletedGroups = [NSMutableDictionary dictionary];
     NSMutableDictionary<NSString *, OAFavoriteItem *> *deletedPoints = [NSMutableDictionary dictionary];
 
     NSArray<NSString *> *files = [self getGroupFiles];
+    NSLog(@"    !!! saveCurrentPointsIntoFile 1 getGroupFiles    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     if (files.count > 0)
     {
         for (NSString *file in files)
@@ -544,6 +586,8 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
             [self loadFileGroups:file groups:deletedGroups];
         }
     }
+    NSLog(@"    !!! saveCurrentPointsIntoFile 2 loadFileGroups    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     // Get all points from internal file to filter later
     for (OAFavoriteGroup *group in deletedGroups.allValues)
     {
@@ -552,22 +596,31 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
             deletedPoints[[point getKey]] = point;
         }
     }
+    NSLog(@"    !!! saveCurrentPointsIntoFile 3 deletedPoints    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     // Hold only deleted points in map
-    for (OAFavoriteItem *point in [self getPointsFromGroups:_favoriteGroups])
+    for (OAFavoriteItem *point in [self getPointsFromGroups:favoriteGroups])
     {
         [deletedPoints removeObjectForKey:[point getKey]];
     }
+    NSLog(@"    !!! saveCurrentPointsIntoFile 4 deletedPoints    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     // Hold only deleted groups in map
-    for (OAFavoriteGroup *group in _favoriteGroups)
+    for (OAFavoriteGroup *group in favoriteGroups)
     {
         [deletedGroups removeObjectForKey:group.name];
     }
+    NSLog(@"    !!! saveCurrentPointsIntoFile 5 deletedGroups    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     // Save groups to internal file
 //    [self saveFile:_favoriteGroups file:internalFile];
     // Save groups to external files
-    [self saveFiles:_favoriteGroups deleted:deletedPoints.allKeys];
+    [self saveFiles:favoriteGroups deleted:deletedPoints.allKeys];
+    NSLog(@"    !!! saveCurrentPointsIntoFile 6 saveFiles    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     // Save groups to backup file
     [self backup];
+    NSLog(@">   !!! saveCurrentPointsIntoFile 7 backup    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
 }
 
 + (NSArray<OAFavoriteItem *> *)getPointsFromGroups:(NSArray<OAFavoriteGroup *> *)groups
@@ -583,9 +636,13 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 + (void)saveFiles:(NSArray<OAFavoriteGroup *> *)localGroups
           deleted:(NSArray<NSString *> *)deleted
 {
+    NSDate *start = [NSDate now];
     NSDictionary<NSString *, OAFavoriteGroup *> *fileGroups = [self loadGroups];
+    NSLog(@"    <   !!! saveFiles 1 loadGroups    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     [self saveFileGroups:localGroups fileGroups:fileGroups];
+    NSLog(@"        !!! saveFiles 2 saveFileGroups    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     [self saveLocalGroups:localGroups fileGroups:fileGroups deleted:deleted];
+    NSLog(@"    >   !!! saveFiles 3 saveLocalGroups    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
 }
 
 + (void)saveFileGroups:(NSArray<OAFavoriteGroup *> *)localGroups
@@ -622,9 +679,13 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
              fileGroups:(NSDictionary<NSString *, OAFavoriteGroup *> *)fileGroups
                 deleted:(NSArray<NSString *> *)deleted
 {
+    NSDate *start = [NSDate now];
+    NSLog(@"        <   !!! saveLocalGroups 1 start    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     for (OAFavoriteGroup *localGroup in localGroups)
     {
         OAFavoriteGroup *fileGroup = fileGroups[localGroup.name];
+        NSLog(@"           <!!! saveLocalGroups 2 fileGroup    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+        
         // Collect non deleted points from external group
         NSMutableDictionary<NSString *, OAFavoriteItem *> *all = [NSMutableDictionary dictionary];
         if (fileGroup)
@@ -635,15 +696,21 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
                 if (![deleted containsObject:key])
                     all[key] = point;
             }
+            NSLog(@"            !!! saveLocalGroups 3 if(fileGroup)    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
         }
+        
         // Remove already existing in memory
         NSArray<OAFavoriteItem *> *localPoints = localGroup.points;
         for (OAFavoriteItem *point in localPoints)
         {
             [all removeObjectForKey:[point getKey]];
         }
+        NSLog(@"            !!! saveLocalGroups 4 localPoints    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+        
         // save favoritePoints from memory in order to update existing
         [localGroup.points addObjectsFromArray:all.allValues];
+        NSLog(@"            !!! saveLocalGroups 5 addObjectsFromArray    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+        
         // Save file if group changed
         if (![localGroup isEqual:fileGroup])
         {
@@ -654,15 +721,22 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
                                         localGroup.name.length > 0 ? app.favoritesGroupNameSeparator : @"",
                                         localGroup.name,
                                         GPX_FILE_EXT]];
+            NSLog(@"            !!! saveLocalGroups 6 fileGroupPath    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+            
             [self saveFile:@[localGroup] file:fileGroupPath];
+            NSLog(@"            !!! saveLocalGroups 7 saveFile    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
         }
+        NSLog(@"           >!!! saveLocalGroups 8 for    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     }
 }
 
 + (void)saveFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups file:(NSString *)file
 {
+    NSDate *start = [NSDate now];
     OAGPXMutableDocument *gpx = [self asGpxFile:favoriteGroups];
+    NSLog(@"            <   !!! saveFile 1 asGpxFile    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     [gpx saveTo:file];
+    NSLog(@"            >   !!! saveFile 1 saveTo    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
 }
 
 + (void) backup
@@ -877,7 +951,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
     }
     [self removeFavoritePoints:favorites favoriteLocations:favoriteLocations];
     if (saveImmediately)
-        [self saveCurrentPointsIntoFile];
+        [self saveCurrentPointsIntoFile:YES]; //TODO: false in Android
 }
 
 + (void)removeFavoritePoints:(NSArray<OAFavoriteItem *> *)favorites favoriteLocations:(const QList< std::shared_ptr<OsmAnd::IFavoriteLocation> > &)favoriteLocations
@@ -921,7 +995,7 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
         }
     }
     if (!isNewFavorite)
-        [self saveCurrentPointsIntoFile];
+        [self saveCurrentPointsIntoFile:YES]; //TODO: false in Android
     return YES;
 }
 
@@ -971,11 +1045,18 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 + (OAGPXMutableDocument *) asGpxFile:(NSArray<OAFavoriteGroup *> *)favoriteGroups
 {
+    NSDate *start = [NSDate now];
+    NSLog(@"                <   !!! asGpxFile start    %2f    %d", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970, favoriteGroups != nil);
     OAGPXMutableDocument *gpx = [[OAGPXMutableDocument alloc] init];
     for (OAFavoriteGroup *group in favoriteGroups)
     {
-        [gpx addPointsGroup:[group toPointsGroup]];
+        NSLog(@"                    !!! asGpxFile for start    %2f    %d", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970, group != nil);
+        OAPointsGroup * foo = [group toPointsGroup];
+        NSLog(@"                    !!! asGpxFile toPointsGroup    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+        [gpx addPointsGroup:foo];
+        NSLog(@"                    !!! asGpxFile addPointsGroup    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     }
+    NSLog(@"                >   !!! asGpxFile end    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     return gpx;
 }
 
@@ -1218,21 +1299,32 @@ static NSArray<NSString *> *_flatBackgroundContourIcons;
 
 - (OAPointsGroup *)toPointsGroup
 {
+    NSDate *start = [NSDate now];
+    NSLog(@"                    <   !!! toPointsGroup 1 start    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     OAPointsGroup *pointsGroup = [[OAPointsGroup alloc] initWithName:_name
                                                             iconName:_iconName
                                                       backgroundType:_backgroundType
                                                                color:_color];
+    NSLog(@"                        !!! toPointsGroup 2 pointsGroup    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+    
     NSMutableArray<OAWptPt *> *points = [NSMutableArray array];
     for (OAFavoriteItem *point in _points)
     {
-        [points addObject:[point toWpt]];
+//        NSLog(@"                        !!! toPointsGroup 30 for start    %2f   %d", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970, _points != nil);
+        OAWptPt *foo = [point toWpt];
+//        NSLog(@"                        !!! toPointsGroup 31 toWpt    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
+        [points addObject:foo];
+//        NSLog(@"                        !!! toPointsGroup 32 addObject    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
     }
+    NSLog(@"                        !!! toPointsGroup 34 for end    %2f   %d", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970, points != nil);
     pointsGroup.points = points;
+    NSLog(@"                        !!! toPointsGroup 3 points    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
 
     std::shared_ptr<OsmAnd::GpxDocument::PointsGroup> pg;
     pg.reset(new OsmAnd::GpxDocument::PointsGroup());
     [OAGPXDocument fillPointsGroup:pg usingPointsGroup:pointsGroup];
     pointsGroup.pg = pg;
+    NSLog(@"                    >   !!! toPointsGroup 4 fillPointsGroup    %2f", [NSDate now].timeIntervalSince1970 - start.timeIntervalSince1970);
 
     return pointsGroup;
 }

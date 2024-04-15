@@ -109,7 +109,7 @@
                            newName:self.editName
                    saveImmediately:NO];
 
-    [OAFavoritesHelper saveCurrentPointsIntoFile];
+    [OAFavoritesHelper saveCurrentPointsIntoFile:YES];
     if (self.delegate)
         [self.delegate onEditorUpdated];
     [self dismissViewController];

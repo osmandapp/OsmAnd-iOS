@@ -48,7 +48,7 @@
 + (BOOL) editFavoriteName:(OAFavoriteItem *)item newName:(NSString *)newName group:(NSString *)group descr:(NSString *)descr address:(NSString *)address;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon;
 + (BOOL) editFavorite:(OAFavoriteItem *)item lat:(double)lat lon:(double)lon description:(NSString *)description;
-+ (void) saveCurrentPointsIntoFile;
++ (void) saveCurrentPointsIntoFile:(BOOL)async;
 
 + (void)updateGroup:(OAFavoriteGroup *)group
             newName:(NSString *)newName

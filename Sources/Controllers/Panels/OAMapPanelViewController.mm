@@ -1521,7 +1521,7 @@ typedef enum
         {
             if (isNone)
             {
-                [self.scrollableHudViewController hide];
+                [self.scrollableHudViewController forceHide];
                 return NO;
             }
             else if (!isWaypoint)
@@ -2707,7 +2707,7 @@ typedef enum
                                                                       openedFromMap:NO]];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
+- (void)openTargetViewWithGPXFromTracksList:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
 {
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:item.bounds.center openedFromMap:NO];
     state.openedFromTracksList = YES;
@@ -3031,7 +3031,7 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
+- (void) openTargetViewFromTracksListWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
 {
     OAGPXDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
     if (doc)
@@ -3040,7 +3040,7 @@ typedef enum
             ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
             : [doc getAnalysis:0];
         OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
-        state.openedFromTracksList = true;
+        state.openedFromTracksList = YES;
         state.selectedStatisticsTab = EOATrackMenuHudSegmentsStatisticsOverviewTab;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];

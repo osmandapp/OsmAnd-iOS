@@ -39,6 +39,7 @@ typedef NS_ENUM(NSUInteger, EOAScrollableMenuHudMode)
 - (void) show:(BOOL)animated state:(EOADraggableMenuState)state onComplete:(void (^)(void))onComplete;
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete;
 - (void) hide;
+- (void) forceHide;
 
 - (void) goExpanded;
 - (void) goMinimized;

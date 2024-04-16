@@ -406,4 +406,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (BOOL) isValidFileName:(NSString *)name;
 
++ (BOOL) isReleaseVersion;
+
 @end

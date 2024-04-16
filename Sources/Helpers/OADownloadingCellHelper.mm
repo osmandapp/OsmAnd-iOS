@@ -30,6 +30,9 @@
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _localResourcesChangedObserver;
     NSArray<OAResourceItem *> *_multipleDownloadingItems;
+    
+    BOOL _shouldCallLocalResourcesChanged;
+    NSMutableArray<id<OADownloadTask>> *_finishedBackgroundDownloadings;
 }
 
 - (instancetype)init
@@ -45,6 +48,8 @@
     _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:OsmAndApp.instance.downloadsManager.progressCompletedObservable];
     _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:OsmAndApp.instance.downloadsManager.completedObservable];
     _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocalResourcesChanged:withKey:) andObserve:OsmAndApp.instance.localResourcesChangedObservable];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+    _finishedBackgroundDownloadings = [NSMutableArray array];
 }
 
 - (void)dealloc
@@ -429,7 +434,7 @@
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil)
+        if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
             return;
 
         [self refreshDownloadingContent:task.key];
@@ -443,7 +448,7 @@
     // Skip all downloads that are not resources
     if (![task.key hasPrefix:@"resource:"])
         return;
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil)
             return;
@@ -455,13 +460,21 @@
                 id<OADownloadTask> nextTask = [OsmAndApp.instance.downloadsManager firstDownloadTasksWithKey:OsmAndApp.instance.downloadsManager.keysOfDownloadTasks[0]];
                 [nextTask resume];
             }
-            [self updateAvailableMaps];
         }
+        
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+            [_finishedBackgroundDownloadings addObject:task];
         else
-        {
-            [self refreshDownloadingContent:task.key];
-        }
+            [self refreshUIOnTaskFinished:task];
     });
+}
+
+- (void)refreshUIOnTaskFinished:(id<OADownloadTask>)task
+{
+    if (task.progressCompleted < 1.0)
+        [self updateAvailableMaps];
+    else
+        [self refreshDownloadingContent:task.key];
 }
 
 - (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
@@ -469,11 +482,34 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil)
             return;
-
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        {
+            _shouldCallLocalResourcesChanged = YES;
+            return;
+        }
+        
         [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
 
         [OAManageResourcesViewController prepareData];
         [self updateAvailableMaps];
+    });
+}
+
+- (void) onApplicationWillEnterForeground
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
+        {
+            id<OADownloadTask> task = [_finishedBackgroundDownloadings firstObject];
+            [self refreshUIOnTaskFinished:task];
+            [_finishedBackgroundDownloadings removeObjectAtIndex:0];
+        }
+        
+        if (_shouldCallLocalResourcesChanged)
+        {
+            [self onLocalResourcesChanged:nil withKey:nil];
+            _shouldCallLocalResourcesChanged = NO;
+        }
     });
 }
 

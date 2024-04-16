@@ -341,16 +341,12 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
-                                    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-                                    {
-                                        _downloadedInBackgroundRegion = foundRegion;
-                                    }
-                                    else
-                                    {
-                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                    dispatch_async(dispatch_get_main_queue(), ^{
+                                        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+                                            _downloadedInBackgroundRegion = foundRegion;
+                                        else
                                             [OAPluginPopupViewController showRegionOnMap:foundRegion];
-                                        });
-                                    }
+                                    });
                                 }
                             }
                             if (foundRegion)

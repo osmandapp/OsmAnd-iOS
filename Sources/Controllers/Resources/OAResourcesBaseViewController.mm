@@ -486,7 +486,7 @@ static BOOL dataInvalidated = NO;
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded || self.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
         {
             self.dataInvalidated = YES;
             return;
@@ -505,7 +505,7 @@ static BOOL dataInvalidated = NO;
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded || self.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
             return;
         
         if (!self.downloadView || !self.downloadView.superview)
@@ -531,7 +531,7 @@ static BOOL dataInvalidated = NO;
         const auto resourceId = QString::fromNSString(nsResourceId);
         const auto resource = _app.resourcesManager->getResource(resourceId);
 
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded || self.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
         {
             if (task.progressCompleted == 1. && ![nsResourceId hasSuffix:@".live.obf"])
                 [_app.data.mapLayerChangeObservable notifyEvent];

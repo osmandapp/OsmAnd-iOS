@@ -119,7 +119,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
     - name: Zip iOS archive
-      run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
+      run: 'zip -r OsmAndMaps.xcarchive.zip . -i OsmAndMaps.xcarchive'
     - name: Upload maps archive zip
       uses: actions/upload-artifact@v2
       with:

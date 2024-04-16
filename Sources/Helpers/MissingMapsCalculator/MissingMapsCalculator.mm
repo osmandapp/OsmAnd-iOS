@@ -11,6 +11,9 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
+#import "OACurrentPositionHelper.h"
+#import "OACustomRegion.h"
+
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
@@ -90,7 +93,6 @@ static const double DISTANCE_SKIP = 10000;
     
     for (auto* file : getOpenMapFiles())
     {
-        
         NSString *regionName = [NSString stringWithCString:file->inputName.c_str()
                                                   encoding:[NSString defaultCStringEncoding]];
         NSString *downloadName = regionName.lastPathComponent;
@@ -270,7 +272,8 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
 {
     NSMutableArray<NSString *> *regions = [NSMutableArray array];
     
-    NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAt:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+    NSArray<OAWorldRegion *> *regionsArray = [_or getWorldRegionsAtWithoutSort:loc.coordinate.latitude longitude:loc.coordinate.longitude];
+    BOOL onlyJointMap = YES;
     
     for (OAWorldRegion *region in regionsArray)
     {
@@ -280,13 +283,15 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
         }
         [regions addObject:regionDownloadId];
+        if (!region.regionJoinMap && !region.regionJoinRoads) {
+            onlyJointMap = NO;
+        }
     }
     [regions sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {
         NSInteger lengthComparisonResult = [@(o1.length) compare:@(o2.length)];
         return (NSComparisonResult)(-lengthComparisonResult);
     }];
-    
-    if (pointsToCheck.count == 0 || ![regions isEqualToArray:_lastKeyNames])
+    if ((pointsToCheck.count == 0 || ![regions isEqualToArray:_lastKeyNames]) && !onlyJointMap)
     {
         MissingMapsCalculatorPoint *pnt = [MissingMapsCalculatorPoint new];
         _lastKeyNames = regions;
@@ -339,7 +344,17 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             [worldRegions addObject:worldRegion];
         }
     }
-    return [[worldRegions sortedArrayUsingDescriptors:@[[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]]] copy];
+    return [[self getSortedByDistanceRegions:worldRegions lat:self.startPoint.coordinate.latitude lon:self.startPoint.coordinate.longitude] copy];
+}
+
+- (NSArray<OAWorldRegion *> *) getSortedByDistanceRegions:(NSArray<OAWorldRegion *> *)array lat:(double)lat lon:(double)lon
+{
+    return [array sortedArrayUsingComparator:^NSComparisonResult(OAWorldRegion *obj1, OAWorldRegion *obj2)
+            {
+        const auto distance1 = OsmAnd::Utilities::distance(lon, lat, obj1.regionCenter.longitude, obj1.regionCenter.latitude);
+        const auto distance2 = OsmAnd::Utilities::distance(lon, lat, obj2.regionCenter.longitude, obj2.regionCenter.latitude);
+        return distance1 > distance2 ? NSOrderedDescending : distance1 < distance2 ? NSOrderedAscending : NSOrderedSame;
+    }];
 }
 
 - (BOOL)addMapEditions:(NSDictionary<NSString *, RegisteredMap *> *)knownMaps

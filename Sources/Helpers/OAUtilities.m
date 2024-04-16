@@ -2925,5 +2925,10 @@ static const double d180PI = 180.0 / M_PI_2;
     }
     return YES;
 }
- 
+
++ (BOOL) isReleaseVersion
+{
+    return ![kDocsLatestVersion containsString:@"future-ios"];
+}
+
 @end

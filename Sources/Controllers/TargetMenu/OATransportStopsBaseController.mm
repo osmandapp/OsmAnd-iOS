@@ -79,14 +79,14 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     
     if (localStop)
     {
-        auto dist = OsmAnd::Utilities::distance(localStop.stop->location.longitude, localStop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
-        [self addRoutes:localRoutes dataInterface:dataInterface s:localStop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+        auto dist = OsmAnd::Utilities::distance(localStop.stop->location.longitude, localStop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
+        [self addRoutes:localRoutes dataInterface:dataInterface s:localStop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:nearbyRoutes];
     }
     
     for (OATransportStop *stop in nearbyStops)
     {
-        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
-        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
+        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:localRoutes];
     }
 }
 
@@ -119,13 +119,13 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     [self.class sortTransportStopsExits:amenityLocation stops:nearbyStops];
     for (OATransportStop *stop in nearbyStops)
     {
-        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
-        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
+        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:localRoutes];
     }
     for (OATransportStop *stop in localStops)
     {
-        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.poi.longitude, self.poi.latitude);
-        [self addRoutes:localRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance];
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
+        [self addRoutes:localRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:nearbyRoutes];
     }
 }
 
@@ -138,9 +138,7 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
     BOOL isSubwayEntrance = [self.poi.type.name isEqualToString:@"subway_entrance"];
     const std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::TransportStopsInAreaSearch::Criteria>(new OsmAnd::TransportStopsInAreaSearch::Criteria);
-    double stopLat = self.poi ? self.poi.latitude : self.transportStop.location.latitude;
-    double stopLon = self.poi ? self.poi.longitude : self.transportStop.location.longitude;
-    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(stopLat, stopLon));
+    const auto& point31 = OsmAnd::Utilities::convertLatLonTo31(self.getLocation);
     auto bbox31 = (OsmAnd::AreaI)OsmAnd::Utilities::boundingBox31FromAreaInMeters(isSubwayEntrance ? SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS : SHOW_STOPS_RADIUS_METERS, point31);
     searchCriteria->bbox31 = bbox31;
 
@@ -185,6 +183,13 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     [nearbyRoutes sortUsingComparator:comparator];
     self.localRoutes = localRoutes;
     self.nearbyRoutes = nearbyRoutes;
+}
+
+- (const OsmAnd::LatLon) getLocation
+{
+    double stopLat = self.poi ? self.poi.latitude : self.transportStop.location.latitude;
+    double stopLon = self.poi ? self.poi.longitude : self.transportStop.location.longitude;
+    return OsmAnd::LatLon(stopLat, stopLon);
 }
 
 + (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity
@@ -337,7 +342,17 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     }];
 }
 
-- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance
++ (BOOL)checkSameRoute:(NSArray<OATransportStopRoute *> *)stopRoutes withRoute:(std::shared_ptr<const OsmAnd::TransportRoute>)route
+{
+    for (OATransportStopRoute *stopRoute in stopRoutes) {
+        if (stopRoute.route->localizedName == route->localizedName) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void) addRoutes:(NSMutableArray<OATransportStopRoute *> *)routes dataInterface:(std::shared_ptr<OsmAnd::ObfDataInterface>)dataInterface s:(std::shared_ptr<const OsmAnd::TransportStop>)s lang:(NSString *)lang transliterate:(BOOL)transliterate dist:(int)dist isSubwayEntrance:(BOOL)isSubwayEntrance otherRoutes:(NSMutableArray<OATransportStopRoute *> *)otherRoutes
 {
     QList< std::shared_ptr<const OsmAnd::TransportRoute> > rts;
     auto stringTable = std::make_shared<OsmAnd::ObfSectionInfo::StringTable>();
@@ -351,6 +366,9 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
             OATransportStopType *t = [OATransportStopType findType:rs->type.toNSString()];
             if (isSubwayEntrance && t.type != TST_SUBWAY && dist > 150)
                 continue;
+            if ([self.class checkSameRoute:routes withRoute:rs] || [self.class checkSameRoute:otherRoutes withRoute:rs]) {
+                continue;
+            }
             r.type = t;
             r.desc = rs->getName(QString::fromNSString(lang), transliterate).toNSString();
             r.stop = s;
@@ -358,7 +376,7 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
             {
                 r.refStop = self.transportStop.stop;
             }
-            else if ([OAUtilities isCoordEqual:self.poi.latitude srcLon:self.poi.longitude destLat:s->location.latitude destLon:s->location.longitude]
+            else if ([OAUtilities isCoordEqual:self.getLocation.latitude srcLon:self.getLocation.longitude destLat:s->location.latitude destLon:s->location.longitude]
                      || (isSubwayEntrance && t.type == TST_SUBWAY))
             {
                 r.refStop = s;

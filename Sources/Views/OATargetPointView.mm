@@ -1758,7 +1758,7 @@ static const NSInteger _buttonsCount = 4;
                 [v removeFromSuperview];
 
         NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self.customController getLocalTransportStopRoutes];
-        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [(OATransportStopsBaseController *)self.customController filterNearbyTransportRoutes:[self.customController getNearbyTransportStopRoutes] filterFromRoutes:localTransportStopRoutes];
+        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self.customController getNearbyTransportStopRoutes];
         _visibleTransportRoutes = [localTransportStopRoutes arrayByAddingObjectsFromArray:nearbyTransportStopRoutes];
         NSInteger stopPlatesCount = 0;
         if (localTransportStopRoutes.count > 0)

@@ -74,7 +74,7 @@ jobs:
     - name: Checkout resources
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/44.7
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-resources
         path: resources
     - name: Select XCode 15.0.1

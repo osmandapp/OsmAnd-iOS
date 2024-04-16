@@ -942,7 +942,7 @@
 "index_item_depth_contours_osmand_ext" = "Lignes de sondes marines";
 "in_app_purchase" = "Achat depuis l\'application";
 "in_app_purchase_desc_ex" = "La validité de votre achat sera permanente.";
-"subscribe_email_desc" = "Inscrivez-vousà notre lettre d\\\'information et téléchargez 3 cartes supplémentaires gratuitement !";
+"subscribe_email_desc" = "Inscrivez-vous à notre lettre d'information et téléchargez 3 cartes supplémentaires gratuitement !";
 "osm_live_payment_desc" = "Abonnement facturé périodiquement. Annulation possible à tout moment depuis Google Play.";
 "osm_live_unlock_updates" = "Déverrouiller les mises à jour des cartes toutes les heures";
 "osm_live_banner_descr" = "Abonnez-vous à OsmAnd Live et obtenez un nombre illimité de mises à jour de cartes <b>toutes les heures</b> et <b>toutes les fonctionnalités</b> incluses de %@";
@@ -1126,7 +1126,7 @@
 "rendering_attr_showMtbRoutes_name" = "Itinéraires pour VTT";
 "routing_attr_allow_expert_description" = "Itinéraires extrêmement difficiles, avec des obstacles et des environnements dangereux.";
 "routeInfo_piste_type_name" = "Type de piste";
-"rendering_attr_showLez_name" = "Afficher les zonesà faibles émissions";
+"rendering_attr_showLez_name" = "Afficher les zones à faibles émissions";
 "rendering_value_highContrastRoads_name" = "Routes avec fort contraste";
 "rendering_attr_highway_class_path_name" = "Chemin";
 "routeInfo_smoothness_name" = "Régularité";
@@ -1186,7 +1186,7 @@
 "rendering_attr_tracktype_grade5_name" = "Non-compact";
 "rendering_value_translucent_lightgreen_name" = "Vert clair translucide";
 "routeInfo_tracktype_name" = "Dureté de la surface";
-"rendering_attr_showLez_description" = "Afficher les zonesà faible émission sur la carte (n\'influe pas sur le calcul d\'itinéraire).";
+"rendering_attr_showLez_description" = "Afficher les zones à faible émission sur la carte (n'influe pas sur le calcul d'itinéraire).";
 "rendering_attr_noPolygons_name" = "Polygones";
 "rendering_attr_hideWaterPolygons_name" = "Eau";
 "rendering_attr_contourColorScheme_description" = "Couleurs des courbes de niveau";
@@ -2602,7 +2602,7 @@
 "shared_string_contributions" = "Contributions";
 "shared_string_refresh" = "Recharger";
 "offline_edition_descr" = "Si le mode d\'édition hors-ligne est activé, les modifications seront enregistrées localement puis envoyées à la demande. Sinon, les modifications seront envoyées immédiatement.";
-"benefits_for_contributors_secondary_descr" = "Connectez-vousà OpenStreetMap pour vérifiez si vous êtes éligible aux mises à jour illimitées.";
+"benefits_for_contributors_secondary_descr" = "Connectez-vous à OpenStreetMap pour vérifiez si vous êtes éligible aux mises à jour illimitées.";
 "map_updates_are_unavailable_yet" = "Les mises à jour de cartes ne sont pas disponibles pour l'instant . :-(";
 "not_enough_contributions_descr" = "Un minimum de %@ modifications au cours des deux derniers mois %@ est requis pour bénéficier de la mise à jour horaire des cartes en illimité.";
 "carplay_available_in_sub_plans" = "Achetez OsmAnd Pro ou Maps+ pour utiliser OsmAnd avec CarPlay.";
@@ -2912,7 +2912,7 @@
 "time_to_go_desc" = "Temps (en minutes ou en heures) nécessaire pour atteindre votre destination.";
 "arrival_time_widget_desc" = "Heure d\'arrivée à destination.";
 "lanes_widgets_desc" = "Affiche la disposition des voies de la route et met enévidence la voie à emprunter pendant la navigation.";
-"map_markers_bar_widget_desc" = "Le widget affiche la distance et la direction de la prochaine marqueà partir de votre position actuelle. Le widget peut être configuré pour afficher 1 ou 2 marque(s).";
+"map_markers_bar_widget_desc" = "Le widget affiche la distance et la direction de la prochaine marque à partir de votre position actuelle. Le widget peut être configuré pour afficher 1 ou 2 marque(s).";
 "coordinates_widget_desc" = "Indique les coordonnées de la position actuelle.";
 "quick_action_coordinates_widget_descr" = "Bouton pour afficher ou masquer le widget Coordonnées sur la carte.";
 "mapillary_widget_descr" = "Permet de contribuer facilementà Mapillary.";
@@ -3379,3 +3379,6 @@
 "rendering_attr_padusHideBoundaries_description" = "Masquer les limites des terrains publiques mais afficher les surfaces";
 "shared_string_round_up" = "Arrondi";
 "shared_string_precise" = "Exact";
+"shared_string_scale" = "Échelle";
+"online_plugins" = "Extensions en ligne";
+"track_appearance_3D_visualization" = "Visualisation 3D";

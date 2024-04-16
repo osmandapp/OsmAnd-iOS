@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulera din position med hjälp av en beräknad rutt";
 "select_avoid_descr" = "Välj vägar du vill undvika under navigering. Du kan antingen välja en väg på kartan eller välja en typ från listan nedan.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Soluppgång: %@\nSolnedgång: %@";
+"day_night_info_description" = "Soluppgång: %@ \nSolnedgång: %@";
 "day_night_info" = "Dag-/nattinformation";
 "daynight_mode_auto" = "Soluppgång/solnedgång";
 "route_simulation" = "Ruttsimulering";
@@ -587,7 +587,7 @@
 "gpx_add_new" = "Lägg till ny fil";
 "gpx_overwrite" = "Skriv över";
 "gpx_cannot_import" = "Kunde inte importera vald GPX-fil";
-"gpx_parse_error" = "Problem hittades med en GPX-fil.\n\nDu kan kontakta OsmAnd support för hjälp att undersöka felet.";
+"gpx_parse_error" = "Problem hittades med en GPX-fil. \n \nDu kan kontakta OsmAnd support för hjälp att undersöka felet.";
 "tracks_on_map" = "Visade spår";
 "gpx_export_title" = "Exportera spår";
 "gpx_export_select_track" = "Välj spår att exportera";
@@ -726,7 +726,7 @@
 "sett_arr" = "Kartpilar";
 "shared_string_location" = "Plats";
 "sett_arr_map" = "Kartans mitt";
-"short_location_on_map" = "Lat %@\nLong %@";
+"short_location_on_map" = "Lat %@ \nLong %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -896,7 +896,7 @@
 "custom_plugins" = "Användaranpassade insticksmoduler";
 "extra_maps_menu_group" = "Extra kartor";
 "import_duplicates_title" = "Några objekt finns redan";
-"import_duplicates_description" = "OsmAnd har redan objekt med samma namn som några av de som importeras.\n\nVälj en åtgärd.";
+"import_duplicates_description" = "OsmAnd har redan objekt med samma namn som några av de som importeras. \n \nVälj en åtgärd.";
 "keep_both" = "Behåll båda";
 "keep_both_desc" = "Objekten kommer att importeras med ett prefix";
 "replace_all" = "Ersätt alla";
@@ -968,7 +968,7 @@
 "reset_to_default" = "Återställ till standard";
 "reset_profile_action_descr" = "Återställ alla profilinställningar till standardvärden. Om du trycker på Återställ kommer alla dina anpassningar att försvinna, detta kan inte ångras.";
 "checking_for_duplicates" = "Letar efter dubbletter...";
-"checking_for_duplicate_description" = "OsmAnd skannar %@ för dubbletter med befintliga objekt i appen.\n\nDet kan ta lite tid.";
+"checking_for_duplicate_description" = "OsmAnd skannar %@ för dubbletter med befintliga objekt i appen. \n \nDet kan ta lite tid.";
 
 // Purchases
 "prch_addons" = "Tillägg";
@@ -1542,7 +1542,7 @@
 //inapps
 "plugin_nautical_name" = "Sjökortsvy";
 "product_desc_nautical" = "Vektorkartor lämpliga för sjökort och båtnavigering";
-"plugin_nautical_descr" = "Berikar kartan med information för båtliv och segling, som fyrar och sjömärken, gästhamnar, förbudsområden, ankring etc. För att använda, ladda ner respektive sjökort och välj kartstilen \'Sjökort\' under \'Konfigurera karta\'.\n\nLäs mer på %@.";
+"plugin_nautical_descr" = "Berikar kartan med information för båtliv och segling, som fyrar och sjömärken, gästhamnar, förbudsområden, ankring etc. För att använda, ladda ner respektive sjökort och välj kartstilen \'Sjökort\' under \'Konfigurera karta\'. \n \nLäs mer på %@.";
 "osmand_parking_plugin_name" = "Parkeringsplats";
 "product_desc_parking" = "Håll koll på parkeringsplatsen och parkeringstiden för din bil";
 "osmand_parking_plugin_description" = "Markera var din bilär parkerad, och sätt en avisering i kalendern när parkeringstiden tar slut. För att sätta ut markören, välj en plats i kartan, gå till \'Åtgärder\' och tryck \'Lägg till parkering\'.";
@@ -1551,10 +1551,10 @@
 "plugin_ski_descr" = "Designad för navigering i vintersportområden: Se alpina pister och liftar samt längdskidspår, färgkodade efter svårighetsgrad eller ledmarkeringar. För att använda, aktivera modulen, gå till \'Konfigurera kartan\' och välj kartstilen \'Vinter och skidor\'.";
 "record_plugin_name" = "Inspelning av resa";
 "product_desc_track_recording" = "Spela in och spara dina turer som GPX-spår";
-"record_plugin_description" = "Spela in dina turer eller träningsrundor, och analysera data som hastighet, ackumulerade höjdmeter, höjdprofil mm. Inspelade spår kan arkiveras, delas med vänner, redigeras och efterbearbetas. \n\nLäs mer på %@.";
+"record_plugin_description" = "Spela in dina turer eller träningsrundor, och analysera data som hastighet, ackumulerade höjdmeter, höjdprofil mm. Inspelade spår kan arkiveras, delas med vänner, redigeras och efterbearbetas.  \n \nLäs mer på %@.";
 "osm_editing_plugin_name" = "OpenStreetMap-redigering";
 "product_desc_osm_editing" = "Förvandla din mobiltelefon till ett kartverktyg";
-"osm_editing_plugin_description" = "Bidra till OpenStreetMap, en global gemenskap som förvaltar en omfattande karta över hela världen och förmedlar uppdaterade öppna data till alla användare.\n\nVägledning för hur du kan redigera kartan finns på vår webbplats %@.";
+"osm_editing_plugin_description" = "Bidra till OpenStreetMap, en global gemenskap som förvaltar en omfattande karta över hela världen och förmedlar uppdaterade öppna data till alla användare. \n \nVägledning för hur du kan redigera kartan finns på vår webbplats %@.";
 "product_desc_mapillary" = "Bilder på gatunivå för att kolla in omgivningarna";
 "plugin_mapillary_descr" = "Bilder med gatunivå-perspektiv. Du kan också bidra med egna bilder. För att se existerande data som ett kartlager, slå på \"Bilder på gatunivå\" i menyn \"Konfigurera kartan\".";
 "product_desc_africa" = "Obegränsad nedladdning av kartor över Afrika";
@@ -1587,7 +1587,7 @@
 "preferred_languages" = "Föredragna språk";
 "srtm_plugin_name" = "Topografi";
 "product_desc_srtm" = "Visualisering av terrängen och landytans form";
-"srtm_plugin_description" = "Terränginformation som höjdkurvor, terrängskuggning och lutningsgrad hjälper dig visualisera hur landskapet och terrängen ser ut i verkligheten, vilket är en stor hjälp för navigering och kan uppskattas av idrottare, vandrare, terrängcyklister och alla som är intresserade av höjdskillnader ilandskapet. Den topografiska informationen kan på kartan representeras av höjdkurvor, terrängskuggning och/eller färgläggning av lutningsgrad.\n\nUnderliggande data baseras på SRTM och ASTER.\n\nLäs mer på %@.";
+"srtm_plugin_description" = "Terränginformation som höjdkurvor, terrängskuggning och lutningsgrad hjälper dig visualisera hur landskapet och terrängen ser ut i verkligheten, vilket är en stor hjälp för navigering och kan uppskattas av idrottare, vandrare, terrängcyklister och alla som är intresserade av höjdskillnader ilandskapet. Den topografiska informationen kan på kartan representeras av höjdkurvor, terrängskuggning och/eller färgläggning av lutningsgrad. \n \nUnderliggande data baseras på SRTM och ASTER. \n \nLäs mer på %@.";
 "wikivoyage_travel_guide" = "Reseguider";
 "start_editing_card_image_text" = "Den fria, världsomspännande reseguiden som alla kan redigera.";
 "wikivoyage_travel_guide_descr" = "Guider till de mest intressanta platserna i världen, inuti OsmAnd, utan en internetanslutning.";
@@ -2300,7 +2300,7 @@
 "routeInfo_roadClass_description" = "Färglägg rutten eller spårlinjen efter vägklassificering.";
 "backup_and_restore" = "Säkerhetskopiera&Återställ";
 "plugin_popup_weather_ask" = "Vänligen aktivera Vädret plugin";
-"weather_plugin_description" = "Tillhandahåller\n- 24-timmars och 7-dagars väderprognos med 5 lager.\n- platsbaserade widgetar\n- temperatur och lufttryck med isolinjer\n\nVäderdatat tillhandahålls av Global Forecast System (GFS, %@).";
+"weather_plugin_description" = "Tillhandahåller \n- 24-timmars och 7-dagars väderprognos med 5 lager. \n- platsbaserade widgetar \n- temperatur och lufttryck med isolinjer \n \nVäderdatat tillhandahålls av Global Forecast System (GFS, %@).";
 "plugin_popup_weather_title" = "Slå på Väder";
 "measurement_units" = "Måttenheter";
 "product_desc_weather" = "Väderprognos timme för timme 7 dagar framåt, på kartan";
@@ -2434,7 +2434,7 @@
 "shared_string_expires" = "Upphör";
 "map_updates_are_unavailable_yet" = "Kartuppdateringarär ännu inte tillgängliga. :-(";
 "copy_poi_name" = "Kopiera POI namn";
-"osmand_cloud_create_account_descr" = "Vänligen ange din e-postadress, en verifikationskod kommer att skickas dit,\noch all din data kommer att länkas till den.";
+"osmand_cloud_create_account_descr" = "Vänligen ange din e-postadress, en verifikationskod kommer att skickas dit, \noch all din data kommer att länkas till den.";
 "shared_string_cross_buy" = "Korsköp";
 "upload_local_version" = "Ladda upp lokal version";
 "local_backup_descr" = "Säkerhetskopiera eller återställ data från en lokal fil.";
@@ -2446,7 +2446,7 @@
 "backup_deleting_all_data" = "Raderar all data…";
 "shared_string_status" = "Status";
 "select_backup_data_descr" = "Välj data och mappar att säkerhetskopiera.";
-"logout_from_osmand_cloud_decsr" = "Logga ut\?\nDu kommer att behöva logga in igen för att säkerhetskopiera eller återställa data.";
+"logout_from_osmand_cloud_decsr" = "Logga ut\? \nDu kommer att behöva logga in igen för att säkerhetskopiera eller återställa data.";
 "weather_precip_milimeters" = "Millimeter";
 "osmand_maps_plus_tagline" = "Få utökade funktioner";
 "shared_string_contributions" = "Bidrag";
@@ -2496,7 +2496,7 @@
 "weather_wind_knots" = "Knop";
 "choose_what_to_restore" = "Välj vad som ska återställas.";
 "si_nm_ft" = "Nautisk mil/fot";
-"backup_delete_all_data_warning" = "Duär på väg att radera all data som tidigare laddats upp till OsmAnd Cloud, inklusive versionshistorik.\n\nDu kommer inte att kunna återställa raderad data.";
+"backup_delete_all_data_warning" = "Duär på väg att radera all data som tidigare laddats upp till OsmAnd Cloud, inklusive versionshistorik. \n \nDu kommer inte att kunna återställa raderad data.";
 "service_is_not_available_please_try_later" = "Tjänsten ej tillgänglig. Vänligen försök igen senare.";
 "login_open_street_map_org" = "Logga in på OpenStreetMap.org";
 "shared_string_selected" = "Markerad(e)";
@@ -2594,7 +2594,7 @@
 "speak_route_deviation" = "Meddela avvikelser från rutten";
 "transport_hazmat_yes_desc" = "Välj tillämplig kategori.";
 "rendering_attr_horseScale_name" = "Svårighetsgrad för ridvägar";
-"simulation_real_mode_desc" = "På raksträckor kommer hastigheten att vara ungefär den högsta tillåtna hastigheten.\nVid korsningar saktar simuleringen ner.\nExtra tidstillägg kommer att tillämpas vid trafiksignaler, stoppskyltar mm.";
+"simulation_real_mode_desc" = "På raksträckor kommer hastigheten att vara ungefär den högsta tillåtna hastigheten. \nVid korsningar saktar simuleringen ner. \nExtra tidstillägg kommer att tillämpas vid trafiksignaler, stoppskyltar mm.";
 "routing_attr_freeride_policy_only_if_necessary_name" = "Endast om detär nödvändigt";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "Åk inte offpist";
 "map_widget_distance_to_intermediate" = "Avstånd till mellanstopp";
@@ -2873,7 +2873,7 @@
 "use_login_and_password_description" = "Använd användarnamn/e-post och lösenord för att logga in på OpenStreetMap.org.";
 "speed_camera_pois" = "Fartkameror";
 "weather_update_parameters_wifi" = "Väderprognosen kommer uppdateras enbart via wifi.";
-"speed_cameras_legal_descr" = "I några länder och regioner är det förbjudet att använda funktioner som varnar för fartkameror.\n\nDu behöver göra ett val beroende på lagstiftningen i ditt land.\n\nVälj %@ så kan du få information och varningar om fartkameror.\n\nVälj %@ så kommer all data om fartkameror raderas (varningar, objekt i kartan etc) tills OsmAnd ominstalleras helt.";
+"speed_cameras_legal_descr" = "I några länder och regioner är det förbjudet att använda funktioner som varnar för fartkameror. \n \nDu behöver göra ett val beroende på lagstiftningen i ditt land. \n \nVälj %@ så kan du få information och varningar om fartkameror. \n \nVälj %@ så kommer all data om fartkameror raderas (varningar, objekt i kartan etc) tills OsmAnd ominstalleras helt.";
 "restart_is_required" = "En omstart krävs för att tillämpa ändringen.";
 "no_widgets_descr" = "Lägg till en eller flera widgetar från listan av tillgängliga widgetar.";
 "announcement_time_prepare" = "Förbered";
@@ -2907,7 +2907,7 @@
 "backup_danger_zone" = "Farozon";
 "verification_code_missing_description" = "Det kan ta 10 minuter. Klicka på knappen nedan om koden inte är i skräppost-mappen.";
 "purchases_feature_desc_nautical" = "Få tillgång till information om havsdjup";
-"backup_delete_old_data_warning" = "Du håller på att radera ändringshistoriken för tidigare inläst data.\n\nAktuell version av datat bevaras på servern, men du kommer inte kunna återgå till tidigare ändringar.";
+"backup_delete_old_data_warning" = "Du håller på att radera ändringshistoriken för tidigare inläst data. \n \nAktuell version av datat bevaras på servern, men du kommer inte kunna återgå till tidigare ändringar.";
 "make_backup_descr" = "Detär många ändringar på den här enheten. Gör gärna en säkerhetskopia av dessa data för att inte förlora det.";
 "backup_delete_types_descr" = "Radera alla data för föråldrade datatyper från OsmAnd Cloud\?";
 "rendering_value_caiScale_description" = "Italienska alpinistföreningen (Club Alpino Italiano)";
@@ -2963,7 +2963,7 @@
 "show_all_tracks" = "Visa alla spår";
 "routing_attr_goods_restrictions_footer_desc" = "Gäller för fordon med gods/varutransporter, minst fyra hjul och max 3,5 ton ('Lätt lastbil').\n\nOm fordonet väger mer än 3,5 ton behöver du använda profilen för 'Tung lastbil'.";
 "send_log" = "Skicka loggfil";
-"copy_build_version" = "%d (%d spår)%d (%d spår)Kopiera byggversion";
+"copy_build_version" = "Kopiera byggversion";
 "most_viewed" = "Mest sedd";
 "shared_string_discard_changes" = "Kassera ändringar";
 "show_map_center" = "Visa koordinater: kartcentrum";
@@ -3182,7 +3182,7 @@
 "purchases_feature_desc_external_sensors" = "Visa och registrera data från externa sensorer: cykelhastighet, cykeleffekt, kadens och puls.";
 "external_sensors_support" = "Stöd för externa sensorer";
 "ant_plus_searching_text_description" = "Håll enheten nära sensorn. Du behöver aktivera sensorn så att OsmAnd kan hitta den.";
-"ant_plus_nothing_found_description" = "Se till att:\n– Bluetooth är på\n– Sensorn är aktiverad\n– Enheten och sensorn är nära varandra";
+"ant_plus_nothing_found_description" = "Se till att: \n– Bluetooth är på \n– Sensorn är aktiverad \n– Enheten och sensorn är nära varandra";
 "ant_plus_open_settings" = "Öppna inställningar";
 "external_device_menu_forget" = "Glöm";
 "external_device_characteristic_cadence" = "Kadens";
@@ -3198,7 +3198,6 @@
 "bicycle_scd_device_name" = "Enhet för cykling";
 "external_device_blood_pressure" = "Blodtryck";
 "shared_string_foot" = "Fot";
-
 "learn_more_about_sensors_link" = "Läs mer om sensorer.";
 "external_device_status_connected" = "Ansluten";
 "bluetooth_found_title" = "Hittade: %d";
@@ -3319,7 +3318,7 @@
 "map_widget_glide_target_desc" = "Visar glidtalet som krävs för att nå målpunkten.";
 "my_places_no_tracks_title" = "Tom mapp";
 "osmand_cloud_deletion_account_warning" = "Ditt konto och all kontoinformation kommer att %@";
-"osmand_cloud_deleting_account_descr" = "Om några ögonblick kommer all din data och ditt konto raderas från OsmAnd Cloud.\n\nData på din enhet berörs inte av detta.";
+"osmand_cloud_deleting_account_descr" = "Om några ögonblick kommer all din data och ditt konto raderas från OsmAnd Cloud. \n \nData på din enhet berörs inte av detta.";
 "average_glide_ratio" = "Genomsnittligt glidtal";
 "osmand_cloud_delete_account_confirmation" = "Radera kontot\?";
 "osmand_cloud_deletion_subscriptions_warning" = "Detta kommer inte avsluta din OsmAnd Pro prenumeration.";
@@ -3334,7 +3333,7 @@
 "delete_folder" = "Radera mapp";
 "manage_subscriptions" = "Hantera prenumerationer.";
 "osmand_cloud_deleted_account_descr" = "Konto och all data har raderats från OsmAnd molntjänst.";
-"verify_account_deletion_descr" = "Vi behöver bekräfta ditt konto innan borttagning.\n\nAnge den e-postadress som du angav vid registrering. Ett engångslösenord kommer att skickas dit.";
+"verify_account_deletion_descr" = "Vi behöver bekräfta ditt konto innan borttagning. \n \nAnge den e-postadress som du angav vid registrering. Ett engångslösenord kommer att skickas dit.";
 "shared_string_move" = "Flytta";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "shared_string_next_event" = "Nästa händelse";

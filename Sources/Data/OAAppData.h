@@ -22,6 +22,8 @@
 
 static const double kHillshadeDefAlpha = 0.45;
 static const double kSlopeDefAlpha = 0.35;
+static const double kExaggerationDefScale = 1.0;
+
 static const NSInteger kHillshadeDefMinZoom = 3;
 static const NSInteger kHillshadeDefMaxZoom = 16;
 static const NSInteger kSlopeDefMinZoom = 3;
@@ -121,10 +123,12 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) double slopeAlpha;
 @property (nonatomic) NSInteger slopeMinZoom;
 @property (nonatomic) NSInteger slopeMaxZoom;
+@property (nonatomic) double verticalExaggerationScale;
 
 @property (readonly) OAObservable* terrainChangeObservable;
 @property (readonly) OAObservable* terrainResourcesChangeObservable;
 @property (readonly) OAObservable* terrainAlphaChangeObservable;
+@property (readonly) OAObservable* verticalExaggerationScaleChangeObservable;
 
 @property (nonatomic) BOOL mapillary;
 @property (readonly) OAObservable* mapillaryChangeObservable;
@@ -193,6 +197,7 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 - (void) resetHillshadeMaxZoom;
 - (void) resetSlopeMinZoom;
 - (void) resetSlopeMaxZoom;
+- (void)resetVerticalExaggerationScale;
 
 - (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode;
 - (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;

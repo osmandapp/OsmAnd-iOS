@@ -21,6 +21,7 @@
 #import "OAWeatherHelper.h"
 #import "OAWeatherPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
+#import "OAPluginsHelper.h"
 
 #define kDefaultZoom 10
 
@@ -387,7 +388,7 @@
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
 
     if ([_layersHandler isAllLayersDisabled])
-        [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] updateWidgetsInfo];
+        [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] updateWidgetsInfo];
 }
 
 #pragma mark - OAWeatherToolbarDelegate

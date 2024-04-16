@@ -101,6 +101,7 @@
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
 #import "OAGPXMutableDocument.h"
+#import "OAPluginsHelper.h"
 
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
@@ -1804,7 +1805,7 @@ typedef enum
 
 - (void) updateTargetPointPosition:(CGFloat)height animated:(BOOL)animated
 {
-    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated) || self.targetMenuView.targetPoint.type == OATargetChangePosition)
+    if ((![self.targetMenuView isLandscape] && self.targetMenuView.showFullScreen) || (self.targetMenuView.targetPoint.type == OATargetImpassableRoadSelection && !_routingHelper.isRouteCalculated) || self.targetMenuView.targetPoint.type == OATargetRouteDetailsGraph || self.targetMenuView.targetPoint.type == OATargetChangePosition)
         return;
     
     Point31 targetPoint31 = [OANativeUtilities convertFromPointI:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(_targetLatitude, _targetLongitude))];
@@ -1922,7 +1923,7 @@ typedef enum
         
         if (self.targetMenuView.targetPoint.type == OATargetParking)
         {
-            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getPlugin:OAParkingPositionPlugin.class];
+            OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getPlugin:OAParkingPositionPlugin.class];
             if (plugin)
                 [plugin clearParkingPosition];
             [self targetHideContextPinMarker];
@@ -2749,6 +2750,7 @@ typedef enum
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             state.pinLocation = item.bounds.center;
+            state.navControllerHistory = nil;
             [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
         }];
         return;
@@ -2836,7 +2838,6 @@ typedef enum
         }
         default:
         {
-            state.navControllerHistory = nil;
             trackMenuHudViewController = [[OATrackMenuHudViewController alloc] initWithGpx:item
                                                                                   routeKey:routeKey
                                                                                      state:state];
@@ -3655,7 +3656,7 @@ typedef enum
 
 - (void) addParking:(OAParkingViewController *)sender
 {
-    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPlugin getEnabledPlugin:OAParkingPositionPlugin.class];
+    OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getEnabledPlugin:OAParkingPositionPlugin.class];
     if (plugin)
     {
         [plugin addOrRemoveParkingEvent:sender.addToCalActive];

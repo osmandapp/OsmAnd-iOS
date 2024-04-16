@@ -173,7 +173,7 @@
     _textShadowColor = nil;
     _shadowRadius = 0;
     
-    _turnDrawable = [[OATurnDrawable alloc] initWithMini:YES];
+    _turnDrawable = [[OATurnDrawable alloc] initWithMini:YES themeColor:EOATurnDrawableThemeColorMap];
     _turnDrawable.frame = _turnView.bounds;
     _imageView = [[UIImageView alloc] init];
     _imageView.contentMode = UIViewContentModeCenter;
@@ -728,7 +728,7 @@
     if (!shieldName.isNull() && !shieldName.isEmpty())
     {
         sk_sp<const SkImage> shield;
-        env->obtainTextShield(shieldName, 1.0f, shield);
+        env->obtainShaderOrShield(shieldName, 1.0f, shield);
 
         if (shield)
             textStyle.setBackgroundImage(shield);

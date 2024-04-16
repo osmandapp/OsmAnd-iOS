@@ -17,6 +17,7 @@
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAFavoritesHelper.h"
+#import "OAPluginsHelper.h"
 
 static OAExportSettingsType * PROFILE;
 static OAExportSettingsType * GLOBAL;
@@ -136,7 +137,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 + (NSArray<OAExportSettingsType *> *)getEnabledTypes
 {
     NSMutableArray<OAExportSettingsType *> *result = [NSMutableArray arrayWithArray:self.getAllValues];
-    OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+    OAOsmEditingPlugin *osmEditingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     if (![osmEditingPlugin isEnabled])
     {
         [result removeObject:OAExportSettingsType.OSM_EDITS];

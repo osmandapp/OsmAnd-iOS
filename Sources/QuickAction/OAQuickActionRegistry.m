@@ -38,8 +38,6 @@
 #import "OAUnsupportedAction.h"
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
-#import "OAShowHideCoordinatesAction.h"
-#import "OAShowHideMapCenterAction.h"
 #import "OAShowHideTemperatureAction.h"
 #import "OAShowHidePressureAction.h"
 #import "OAShowHideWindAction.h"
@@ -47,6 +45,7 @@
 #import "OAShowHidePrecipitationAction.h"
 #import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
+#import "OAPluginsHelper.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -78,7 +77,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     TYPE_ADD_ITEMS = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"quick_action_add_create_items") category:CREATE_CATEGORY iconName:nil];
     TYPE_CONFIGURE_MAP = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"configure_map") category:CONFIGURE_MAP iconName:nil];
     TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
-    TYPE_CONFIGURE_SCREEN = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"layer_map_appearance") category:CONFIGURE_SCREEN iconName:nil];
+//    TYPE_CONFIGURE_SCREEN = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"layer_map_appearance") category:CONFIGURE_SCREEN iconName:nil];
 }
 
 + (OAQuickActionRegistry *)sharedInstance
@@ -161,15 +160,11 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
     [quickActionTypes addObject:OASwitchProfileAction.TYPE];
     
-    // configure screen
-    [quickActionTypes addObject:OAShowHideCoordinatesAction.TYPE];
-    [quickActionTypes addObject:OAShowHideMapCenterAction.TYPE];
-    
-    [OAPlugin registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
-    if ([[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
+    [OAPluginsHelper registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
+    if ([[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
         [quickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
 
-    if ([[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
+    if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [quickActionTypes addObjectsFromArray:@[
                 OAShowHideTemperatureAction.TYPE,
@@ -192,11 +187,11 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     _quickActionTypesStr = [NSDictionary dictionaryWithDictionary:quickActionTypesStr];
     
     NSMutableArray<OAQuickActionType *> *disabledQuickActionTypes = [NSMutableArray new];
-    [OAPlugin registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
-    if (![[OAPlugin getPlugin:OASRTMPlugin.class] isEnabled])
+    [OAPluginsHelper registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
+    if (![[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
         [disabledQuickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
 
-    if (![[OAPlugin getPlugin:OAWeatherPlugin.class] isEnabled])
+    if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [disabledQuickActionTypes addObjectsFromArray:@[
                 OAShowHideTemperatureAction.TYPE,
@@ -313,7 +308,6 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [self filterQuickActions:TYPE_ADD_ITEMS result:result];
     [self filterQuickActions:TYPE_CONFIGURE_MAP result:result];
     [self filterQuickActions:TYPE_NAVIGATION result:result];
-    [self filterQuickActions:TYPE_CONFIGURE_SCREEN result:result];
     return result;
 }
 
@@ -449,6 +443,5 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:nil];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
-
 
 @end

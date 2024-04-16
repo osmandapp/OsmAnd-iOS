@@ -20,6 +20,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAOsmAndFormatter.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAPluginsHelper.h"
 
 #include <GeographicLib/GeoCoords.hpp>
 
@@ -194,7 +195,7 @@
     NSString *url = [NSString stringWithFormat:kShareLink, lat, lon, zoom, lat, lon];
     [results setObject:url forKey:@(POINT_LOCATION_URL)];
 
-    if ([OAPlugin isEnabled:OAOsmEditingPlugin.class])
+    if ([OAPluginsHelper isEnabled:OAOsmEditingPlugin.class])
     {
         NSString *osmUrl = [NSString stringWithFormat:kOsmCoordinatesLink, lat, lon, zoom, lat, lon];
         [results setObject:osmUrl forKey:@(OSM_LOCATION_URL)];

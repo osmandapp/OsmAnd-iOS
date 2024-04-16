@@ -341,6 +341,16 @@ forcedUpdate:(BOOL)forcedUpdate
     _renderer->setElevationAngle([self normalizeElevationAngle:elevationAngle]);
 }
 
+- (void)setElevationScaleFactor:(float)scaleFactor
+{
+    _renderer->setElevationScaleFactor(scaleFactor);
+}
+
+- (float)getElevationScaleFactor
+{
+    return _renderer->getElevationScaleFactor();
+}
+
 - (OsmAnd::PointI)target31
 {
     auto fixedPixel = _renderer->getState().fixedPixel;

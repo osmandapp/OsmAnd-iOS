@@ -22,6 +22,7 @@
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #include <generalRouter.h>
 
@@ -240,11 +241,11 @@ static NSArray<NSString *> *minTrackSpeedNames;
                  @"value" : @([_settings.autoSplitRecording get:self.appMode]),
                  @"type" : [OASwitchTableViewCell getCellIdentifier] }]];
 
-            if ([OAPlugin isEnabled:OAExternalSensorsPlugin.class])
+            if ([OAPluginsHelper isEnabled:OAExternalSensorsPlugin.class])
             {
                 NSInteger devices = 0;
                 NSInteger devicesAll = 0;
-                OAExternalSensorsPlugin *plugin = (OAExternalSensorsPlugin *) [OAPlugin getEnabledPlugin:OAExternalSensorsPlugin.class];
+                OAExternalSensorsPlugin *plugin = (OAExternalSensorsPlugin *) [OAPluginsHelper getEnabledPlugin:OAExternalSensorsPlugin.class];
                 if (plugin)
                 {
                     NSArray<OAWidgetType *> *externalSensorTrackDataType = [plugin getExternalSensorTrackDataType];

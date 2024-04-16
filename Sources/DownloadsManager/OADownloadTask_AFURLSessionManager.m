@@ -16,6 +16,8 @@
 {
     OADownloadsManager* __weak _owner;
     NSProgress* _progress;
+    NSDate *_resumeTime;
+    NSTimeInterval _downloadTimeCounter;
 }
 
 - (instancetype)initUsingManager:(AFURLSessionManager*)manager
@@ -118,6 +120,8 @@
 - (void)commonInit
 {
     _progressCompleted = -1.0f;
+    _resumeTime = NSDate.date;
+    _downloadTimeCounter = 0;
     _error = nil;
     _progressCompletedObservable = [[OAObservable alloc] init];
     _completedObservable = [[OAObservable alloc] init];
@@ -169,9 +173,20 @@
     [_owner notifyTaskDeactivated:self];
     
     if (targetPath)
+    {
         _targetPath = targetPath.path;
-    
+        NSDictionary *attrs = [[NSFileManager defaultManager] attributesOfItemAtPath:_targetPath error:nil];
+        _fileSize = attrs.fileSize / (1024.0 * 1024.0);
+    }
+    else
+    {
+        _fileSize = -1.0;
+    }
+
     _error = error;
+
+    _downloadTimeCounter += [NSDate.date timeIntervalSinceDate:_resumeTime];
+    _downloadTime = _downloadTimeCounter;
 
     OADownloadsManager* owner = _owner;
     if (_task.state == NSURLSessionTaskStateCompleted && owner != nil)
@@ -226,12 +241,14 @@
 
 - (void)resume
 {
+    _resumeTime = NSDate.date;
     [_owner notifyTaskActivated:self];
     [_task resume];
 }
 
 - (void)pause
 {
+    _downloadTimeCounter += [NSDate.date timeIntervalSinceDate:_resumeTime];
     [_task suspend];
     [_owner notifyTaskDeactivated:self];
 }
@@ -253,6 +270,8 @@
 
 @synthesize progressCompletedObservable = _progressCompletedObservable;
 @synthesize progressCompleted = _progressCompleted;
+@synthesize downloadTime = _downloadTime;
+@synthesize fileSize = _fileSize;
 
 @synthesize completedObservable = _completedObservable;
 

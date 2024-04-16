@@ -11,6 +11,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAPlugin.h"
+#import "OAPluginsHelper.h"
 
 @implementation OAMapLayers
 {
@@ -107,7 +108,7 @@
     _weatherContourLayer = [[OAWeatherContourLayer alloc] initWithMapViewController:_mapViewController layerIndex:30 date:_weatherDate];
     [self addLayer:_weatherContourLayer];
     
-    [OAPlugin createLayers];
+    [OAPluginsHelper createLayers];
 }
 
 - (void) destroyLayers
@@ -138,7 +139,7 @@
     for (OAMapLayer *layer in _layers.objectEnumerator)
         [layer updateLayer];
     
-    [OAPlugin refreshLayers];
+    [OAPluginsHelper refreshLayers];
 }
 
 - (void) updateWeatherDate:(NSDate *)date

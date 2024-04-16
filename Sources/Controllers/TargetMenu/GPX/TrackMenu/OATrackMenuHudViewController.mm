@@ -350,6 +350,7 @@
     [super viewWillDisappear:animated];
     _exportController = nil;
     _isViewVisible = YES;
+    [self restoreNavControllerHistoryIfNeeded];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
@@ -405,13 +406,6 @@
                     [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
                 }
             }
-            else if (_reopeningState && _reopeningState.openedFromTracksList)
-            {
-                if ( _navControllerHistory && _navControllerHistory.count > 0)
-                {
-                    [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
-                }
-            }
         }
     }];
 }
@@ -427,6 +421,17 @@
             onComplete();
         [_headerView removeFromSuperview];
     }];
+}
+
+- (void)restoreNavControllerHistoryIfNeeded
+{
+    if (_reopeningState && _reopeningState.openedFromTracksList)
+    {
+        if ( _navControllerHistory && _navControllerHistory.count > 0)
+        {
+            [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
+        }
+    }
 }
 
 - (UIView *)getCustomHeader
@@ -589,9 +594,7 @@
 
 - (BOOL)adjustCentering
 {
-    return ([self openedFromMap] && _wasFirstOpening)
-            || (![self openedFromMap] && _wasFirstOpening)
-            || (![self openedFromMap] && !_wasFirstOpening);
+    return ![self openedFromMap] && !_wasFirstOpening;
 }
 
 - (BOOL)stopChangingHeight:(UIView *)view

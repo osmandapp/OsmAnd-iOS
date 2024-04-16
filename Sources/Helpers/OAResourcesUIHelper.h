@@ -146,6 +146,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 @end
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
+typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError *error);
 
 @class MBProgressHUD;
 
@@ -288,5 +289,12 @@ typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 + (NSArray<NSString *> *) getInstalledResourcePathsByTypes:(QSet<OsmAndResourceType>)resourceTypes includeHidden:(BOOL)includeHidden;
 + (QVector<std::shared_ptr<const OsmAnd::ResourcesManager::LocalResource>>) getExternalMapFilesAt:(OsmAnd::PointI)point routeData:(BOOL)routeData;
+
++ (NSArray<OAResourceItem *> *)getMapRegionResourcesToDownloadForRegions:(NSArray<OAWorldRegion *> *)regions;
++ (NSArray<OAResourceItem *> *)getMapRegionResourcesToUpdateForRegions:(NSArray<OAWorldRegion *> *)regions;
+
++ (void)onlineCalculateRequestStartPoint:(CLLocation *)startPoint
+                                endPoint:(CLLocation *)endPoint
+                              completion:(LocationArrayCallback)completion;
 
 @end

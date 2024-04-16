@@ -22,6 +22,7 @@
 #import "OsmAndApp.h"
 #import "OAApplicationMode.h"
 #import "OAWikipediaPlugin.h"
+#import "OAPluginsHelper.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";
@@ -541,8 +542,14 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         if ([f.filterId isEqualToString:filterId])
             return f;
     }
-    OAPOIUIFilter *ff = [self getFilterById:filterId filters:@[[self getCustomPOIFilter], [self getSearchByNamePOIFilter],
-                                                               [self getTopWikiPoiFilter], [self getShowAllPOIFilter]]];
+    NSMutableArray<OAPOIUIFilter *> *filters = [NSMutableArray array];
+    [filters addObject:[self getCustomPOIFilter]];
+    [filters addObject:[self getSearchByNamePOIFilter]];
+    OAPOIUIFilter *wikiFilter = [self getTopWikiPoiFilter];
+    if (wikiFilter)
+    	[filters addObject:wikiFilter];
+    [filters addObject:[self getShowAllPOIFilter]];
+    OAPOIUIFilter *ff = [self getFilterById:filterId filters:filters];
     if (ff)
         return ff;
 
@@ -623,7 +630,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
             OAPOIUIFilter *f = [[OAPOIUIFilter alloc] initWithBasePoiType:t idSuffix:@""];
             [top addObject:f];
         }
-        [OAPlugin registerCustomPoiFilters:top];
+        [OAPluginsHelper registerCustomPoiFilters:top];
         [top sortUsingComparator:[OAPOIUIFilter getComparator]];
         _cacheTopStandardFilters = top;
     }
@@ -868,7 +875,7 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
 - (void) addSelectedPoiFilter:(OAPOIUIFilter *)filter
 {
     [_selectedPoiFilters addObject:filter];
-    [OAPlugin onPrepareExtraTopPoiFilters:_selectedPoiFilters];
+    [OAPluginsHelper onPrepareExtraTopPoiFilters:_selectedPoiFilters];
     [self saveSelectedPoiFilters];
 }
 
@@ -995,14 +1002,14 @@ static const NSArray<NSString *> *DEL = @[UDF_CAR_AID, UDF_FOR_TOURISTS, UDF_FOO
         NSArray<NSString *> *filters = [storedString componentsSeparatedByString:@","];
         for (NSString *f in filters)
         {
-            if ([f isEqualToString:[NSString stringWithFormat:@"std_%@", OSM_WIKI_CATEGORY]] && ![[OAPlugin getPlugin:OAWikipediaPlugin.class] isEnabled])
+            if ([f isEqualToString:[NSString stringWithFormat:@"std_%@", OSM_WIKI_CATEGORY]] && ![[OAPluginsHelper getPlugin:OAWikipediaPlugin.class] isEnabled])
                 continue;
 
             OAPOIUIFilter *filter = [self getFilterById:f];
             if (filter)
                 [_selectedPoiFilters addObject:filter];
         }
-        [OAPlugin onPrepareExtraTopPoiFilters:_selectedPoiFilters];
+        [OAPluginsHelper onPrepareExtraTopPoiFilters:_selectedPoiFilters];
     }
 }
 

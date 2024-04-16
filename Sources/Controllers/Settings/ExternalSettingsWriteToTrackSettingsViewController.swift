@@ -54,7 +54,7 @@ final class ExternalSettingsWriteToTrackSettingsViewController: OABaseNavbarView
 
     override func generateData() {
         tableData.clearAllData()
-        if let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
+        if let plugin = OAPluginsHelper.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
             let dataTypeSection: OATableSectionData = tableData.createNewSection()
             dataTypeSection.headerText = localizedString("shared_string_data_type")
             for widgetType in plugin.getExternalSensorTrackDataType() {

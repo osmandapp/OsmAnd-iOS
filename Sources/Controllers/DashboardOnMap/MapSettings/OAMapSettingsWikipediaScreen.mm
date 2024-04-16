@@ -24,6 +24,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OADownloadingCellHelper.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kCellTypeMap @"MapCell"
 
@@ -65,7 +66,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         settingsScreen = EMapSettingsScreenWikipedia;
         vwController = viewController;
         tblView = tableView;
-        _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+        _wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class];
         _dataLock = [[NSObject alloc] init];
         _wikipediaEnabled = _app.data.wikipedia;
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
@@ -170,7 +171,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     if ([sender isKindOfClass:[UISwitch class]])
     {
         UISwitch *sw = (UISwitch *) sender;
-        [(OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
+        [(OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
         _wikipediaEnabled = _app.data.wikipedia;
         [_downloadingCellHelper updateAvailableMaps];
     }

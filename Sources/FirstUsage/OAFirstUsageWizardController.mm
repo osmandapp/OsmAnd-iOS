@@ -729,7 +729,7 @@ typedef enum
         OAWorldRegion *selectedRegion = nil;
         if (mapRegions.count > 0)
         {
-            [mapRegions enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            [mapRegions.copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
                 if (![region contain:latLon.latitude lon:latLon.longitude])
                     [mapRegions removeObject:region];
             }];

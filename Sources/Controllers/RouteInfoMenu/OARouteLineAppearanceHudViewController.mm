@@ -838,7 +838,7 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
 
 - (void)removeCellsFromSection:(OAGPXTableSectionData *)sectionData cellKeys:(NSArray<NSString *> *)cellKeys
 {
-    [sectionData.subjects enumerateObjectsUsingBlock:^(OAGPXTableCellData * _Nonnull cellData, NSUInteger idx, BOOL * _Nonnull stop) {
+    [sectionData.subjects.copy enumerateObjectsUsingBlock:^(OAGPXTableCellData * _Nonnull cellData, NSUInteger idx, BOOL * _Nonnull stop) {
         if ([cellKeys containsObject:cellData.key])
             [sectionData.subjects removeObject:cellData];
     }];
@@ -1048,8 +1048,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
                 _selectedType = [self getRouteAppearanceType:OAColoringType.DEFAULT];
                 self.applyButton.userInteractionEnabled = YES;
                 self.applyNavBarButton.userInteractionEnabled = YES;
-                [self.applyButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
-                [self.applyNavBarButton setTitleColor:UIColorFromRGB(color_primary_purple) forState:UIControlStateNormal];
+                [self.applyButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive] forState:UIControlStateNormal];
+                [self.applyNavBarButton setTitleColor:[UIColor colorNamed:ACColorNameIconColorActive] forState:UIControlStateNormal];
             }
             else if (_selectedType.coloringType == OAColoringType.DEFAULT)
             {
@@ -1315,8 +1315,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADividerCell getCellIdentifier] owner:self options:nil];
             cell = (OADividerCell *) nib[0];
-            cell.backgroundColor = UIColor.whiteColor;
-            cell.dividerColor = UIColor.whiteColor;
+            cell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            cell.dividerColor = [UIColor colorNamed:ACColorNameCustomSeparator];
             cell.dividerInsets = UIEdgeInsetsZero;
             cell.separatorInset = UIEdgeInsetsMake(0., self.tableView.frame.size.width, 0., 0.);
             cell.dividerHight = 0.;
@@ -1381,8 +1381,8 @@ static NSArray<OARouteWidthMode *> * WIDTH_MODES = @[OARouteWidthMode.THIN, OARo
             _colorValuesCell.selectionStyle = UITableViewCellSelectionStyleNone;
             _colorValuesCell.separatorInset = UIEdgeInsetsMake(0., DeviceScreenWidth, 0., 0.);
             _colorValuesCell.collectionView.contentInset = UIEdgeInsetsMake(0., 8. , 0., 20.);
-            _colorValuesCell.backgroundColor = UIColor.whiteColor;
-            _colorValuesCell.collectionView.backgroundColor = UIColor.whiteColor;
+            _colorValuesCell.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
+            _colorValuesCell.collectionView.backgroundColor = [UIColor colorNamed:ACColorNameGroupBg];
             _colorValuesCell.collectionView.cellIndex = indexPath;
             _colorValuesCell.collectionView.state = _scrollCellsState;
             _colorValuesCell.collectionView.foldersDelegate = self;

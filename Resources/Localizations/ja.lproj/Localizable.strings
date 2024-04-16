@@ -80,7 +80,7 @@
 "simulate_routing_descr" = "検索されたルートでナビゲーションのシミュレートを行います";
 "select_avoid_descr" = "ナビゲーション中に避けたい道路を選択します。マップ上の道路を選択するか、下のリストから種類を選択できます。";
 "no_active_route" = "現在有効なルートはありません";
-"day_night_info_description" = "日出時刻: %@ \n日没時刻: %@";
+"day_night_info_description" = "日出時刻: %@  \n日没時刻: %@";
 "day_night_info" = "昼/夜判別情報";
 "daynight_mode_auto" = "日出/日没";
 "route_simulation" = "ルートシミュレーション";
@@ -928,7 +928,7 @@
 //inapps
 "plugin_nautical_name" = "航路マップ表示";
 "product_desc_nautical" = "航海ルートのナビゲーションに適したベクターマップ";
-"plugin_nautical_descr" = "航路、ビーコン、海上の危険エリア、航行や係留が禁止されているエリアなどの情報で海図を充実させます。使用するには、対応する海図をダウンロードし[マップ設定]＞[マップスタイル]＞[船舶]を有効にしてください。\n\n詳しくは、%@ をご参照下さい。";
+"plugin_nautical_descr" = "航路、ビーコン、海上の危険エリア、航行や係留が禁止されているエリアなどの情報で海図を充実させます。使用するには、対応する海図をダウンロードし[マップ設定]＞[マップスタイル]＞[船舶]を有効にしてください。 \n\n詳しくは、%@ をご参照下さい。";
 "osmand_parking_plugin_name" = "駐車位置";
 "product_desc_parking" = "車の駐車時間と駐車場所の追跡";
 "osmand_parking_plugin_description" = "車が停まっている場所をマークして、パーキングメーターの有効期限をカレンダーに知らせます。マーカーを設定するには、マップ上を長押しで場所を選択し\"その他\"にて\"駐車位置としてマーク\"をタップします。";
@@ -937,13 +937,13 @@
 "plugin_ski_descr" = "ウィンタースポーツエリアでのナビゲーション用に設計されています。スキー場、スキーリフト、クロスカントリースキーコースを、難易度を示す色のついた線で見ることができます。この拡張機能を利用するには、プラグインを有効にしてから\"マップ設定\"内のマップスタイルで\"ウィンター＆スキー\"を選択します。";
 "record_plugin_name" = "旅程・経路記録";
 "product_desc_track_recording" = "旅程・経路を記録してGPXとして保存";
-"record_plugin_description" = "ドライブやトレーニング時の経路を記録し、速度、累積登坂・降坂、標高プロファイルなどの観点からデータを分析することができます。記録した経路は、アーカイブしたり、友人と共有したり、編集などの後処理も行えます。\n\n詳しくは %@ をご覧下さい。";
+"record_plugin_description" = "ドライブやトレーニング時の経路を記録し、速度、累積登坂・降坂、標高プロファイルなどの観点からデータを分析することができます。記録した経路は、アーカイブしたり、友人と共有したり、編集などの後処理も行えます。 \n \n詳しくは %@ をご覧下さい。";
 "product_title_trip_planning" = "旅程計画";
 "product_desc_trip_planning" = "このプラグインは旅程の計画、細かな経由地点の追加、目的地までの距離の算出に役立ちます";
 "product_desc_ext_trip_planning" = "旅程計画プラグインを使用すると、マップ上に旅程を作成したあと保存し、直線で接続されたポイント間の距離も測定できます。ルートの策定よりも、事前の旅程計画を詰める用途のために作成されました。";
 "osm_editing_plugin_name" = "OpenStreetMap編集";
 "product_desc_osm_editing" = "スマートフォンを地図作成ツールに変える";
-"osm_editing_plugin_description" = "世界地図を包括的に管理し、すべてのユーザーが最新のオープンソースデータを利用できるようにするグローバルコミュニティであるOpenStreetMapに貢献してください。\n\n地図の編集方法は、弊社ウェブサイト %@ に掲載されています。";
+"osm_editing_plugin_description" = "世界地図を包括的に管理し、すべてのユーザーが最新のオープンソースデータを利用できるようにするグローバルコミュニティであるOpenStreetMapに貢献してください。 \n \n地図の編集方法は、弊社ウェブサイト %@ に掲載されています。";
 "product_desc_africa" = "アフリカ向けマップの無制限ダウンロード";
 "product_desc_africa_short" = "アフリカ地域のマップ";
 "product_desc_australia" = "オーストラリア向けマップの無制限ダウンロード";
@@ -967,7 +967,7 @@
 "purchases_feature_desc_wikipedia" = "位置情報に基づいてすべてのWikipedia記事をオフラインで参照できるので、旅行で訪れた場所についてマップをタップするだけで、より詳しく知ることができます。その為には各地域のWikipediaマップファイルを忘れずにダウンロードしてください。";
 "srtm_plugin_name" = "等高線";
 "product_desc_srtm" = "等高線の表示";
-"srtm_plugin_description" = "等高線、起伏、勾配などの地形情報は、地形配置、起伏、航行の可能性などを視覚的に評価するのに役立ちます。地形情報は、勾配の陰影、等高線、勾配の度合いによる色付けでマップに表すことができます。\n\n基礎となるデータは、SRTM(スペースシャトル立体地形データ)およびASTER(資源探査用将来型センサ)に由来します。\n\n詳しくは、https://osmand.net/docs/user/plugins/contour-lines をご参照下さい。";
+"srtm_plugin_description" = "等高線、起伏、勾配などの地形情報は、地形配置、起伏、航行の可能性などを視覚的に評価するのに役立ちます。地形情報は、勾配の陰影、等高線、勾配の度合いによる色付けでマップに表すことができます。 \n \n基礎となるデータは、SRTM(スペースシャトル立体地形データ)およびASTER(資源探査用将来型センサ)に由来します。 \n \n詳しくは、https://osmand.net/docs/user/plugins/contour-lines をご参照下さい。";
 "wikivoyage_travel_guide" = "旅行ガイド";
 "start_editing_card_image_text" = "誰でも自由に編集できる世界規模の旅行ガイドです。";
 "wikivoyage_travel_guide_descr" = "インターネットへ接続せずにOsmAnd上で地球上のあらゆる興味深いスポットのガイドを利用することができます。";
@@ -1689,7 +1689,7 @@
 "profile_type_custom_string" = "カスタムプロファイル";
 "profile_alert_delete_title" = "プロファイルの削除";
 "export_profile" = "プロファイルのエクスポート";
-"gpx_parse_error" = "GPXファイルに問題が見つかりました。\n\nOsmAndのサポートに連絡すれば調査することができます。";
+"gpx_parse_error" = "GPXファイルに問題が見つかりました。 \n \nOsmAndのサポートに連絡すれば調査することができます。";
 "osm_editing_settings_descr" = "このプラグインの設定はすべてのプロファイルに適用されます。";
 "shared_string_required" = "必須";
 "shared_string_email" = "メールアドレス";
@@ -1728,7 +1728,7 @@
 "routing_profile_geocoding" = "ジオコーディング";
 "map_look_descr" = "マップの見た目に関する設定";
 "quick_action_mapillary_hide" = "Mapillaryを非表示";
-"avoid_road" = "避ける道を指定";
+"avoid_road" = "避ける道の指定";
 "arrived_at_destination" = "目的地に到着しました。";
 "quick_action_remove_next_destination" = "最も近い目的地を削除";
 "shared_string_import_complete" = "インポート完了";
@@ -1888,7 +1888,7 @@
 // Route planning
 "plan_route" = "ルートを計画する";
 "downloading" = "ダウンロード中";
-"checking_for_duplicate_description" = "OsmAnd側でアプリ内の既存の項目と重複していないか、%@をチェックします。 \n \n少し時間がかかるかもしれません。";
+"checking_for_duplicate_description" = "OsmAnd側でアプリ内の既存の項目と重複していないか、%@をチェックします。  \n  \n少し時間がかかるかもしれません。";
 "checking_for_duplicates" = "重複要素の確認中...";
 "export_profile_descr" = "すべてのプロファイル設定はエクスポートしたり、別のプロファイルから設定をコピーしたり、プロファイル設定をデフォルトの状態にリセットしたりできます。";
 "profile_sett_descr" = "選択したアプリプロファイルに影響します";
@@ -1904,7 +1904,7 @@
 "copy_from_other_profile_descr" = "設定の全てを任意のプロファイルから選択したプロファイルへコピーできます。 ";
 "added_items" = "追加項目: %@";
 "shared_string_rendering_style" = "レンダリングのスタイル";
-"import_duplicates_description" = "OsmAndには、すでにインポートされたものと同じ名前の項目があります。\n\n対応を選択してください。";
+"import_duplicates_description" = "OsmAnd には、すでにインポートされたものと同じ名前の項目があります。 \n \n対応を選択してください。";
 "export_failed" = "プロファイルをエクスポートできませんでした";
 "nav_type_hint" = "ナビゲーションタイプ";
 "selected_of" = "選択済み - %d/%d";
@@ -2344,12 +2344,12 @@
 "use_login_and_password" = "ユーザー名とパスワードを使用する";
 "last_two_month_total" = "過去2ヶ月間の合計";
 "enough_contributions_descr" = "おめでとうございます。OpenStreetMapに十分な貢献をしたと判断され、無制限のOsmAndマップの更新を受けることができます！";
-"logout_from_osmand_cloud_decsr" = "ログアウトしますか？\nデータをバックアップまたは復元するには、再度ログインする必要があります。";
-"backup_delete_old_data_warning" = "以前ロードしたデータの変更履歴を削除しようとしています。\n\nデータの現在のバージョンはサーバーに保存されますが、以前に行った変更に戻すことはできません。";
+"logout_from_osmand_cloud_decsr" = "ログアウトしますか？ \nデータをバックアップまたは復元するには、再度ログインする必要があります。";
+"backup_delete_old_data_warning" = "以前ロードしたデータの変更履歴を削除しようとしています。 \n \nデータの現在のバージョンはサーバーに保存されますが、以前に行った変更に戻すことはできません。";
 "use_login_and_password_description" = "メールアドレス/ユーザー名とパスワードを使用してOpenStreetMap.orgにログインする。";
 "plugin_popup_weather_title" = "天気を有効にする";
 "local_backup" = "ローカルバックアップ";
-"backup_delete_all_data_warning" = "バージョン履歴を含め、以前にOsmAnd Cloudにアップロードされたすべてのデータを削除しようとしています。\n\n削除されたデータを復元することはできません。";
+"backup_delete_all_data_warning" = "バージョン履歴を含め、以前にOsmAnd Cloudにアップロードされたすべてのデータを削除しようとしています。 \n \n削除されたデータを復元することはできません。";
 "backup_delete_types_descr" = "推奨されない種類のデータすべてをOsmAnd Cloudから削除しますか？";
 "login_open_street_map_org" = "OpenStreetMap.orgにログイン";
 "contributions_may_calculate_with_delay" = "貢献度の計算には数時間程度かかる場合があります。";
@@ -2438,7 +2438,7 @@
 "srtm_unit_format" = "等高線ユニットバリアント";
 "save_heading_descr" = "記録中の各経路地点でのその時の向きも保存します。";
 "no_purchases" = "購入済みのアイテムはありません";
-"osmand_cloud_create_account_descr" = "メールアドレスを入力してください。ワンタイムパスワードが送信されます。\n手続きを進めるとすべてのデータがリンクされます。";
+"osmand_cloud_create_account_descr" = "メールアドレスを入力してください。ワンタイムパスワードが送信されます。 \n手続きを進めるとすべてのデータがリンクされます。";
 "service_is_not_available_please_try_later" = "サービスは利用できません。後ほどもう一度やり直してください。";
 "select_another_colorization" = "別タイプのカラーリングを選択してください。";
 "choose_what_to_restore" = "復元したいものを選択してください。";
@@ -2510,7 +2510,7 @@
 "mgrs_format_descr" = "OsmAndは、UTM NATO形式類似のMGRSを使用します。";
 "m" = "m";
 "km" = "km";
-"speed_cameras_legal_descr" = "一部の国や地域では、スピードカメラ警告機能の使用が法律で禁止されています。\n\n国の法律に基づいて、使用を望むかどうかを決定する必要があります。\n\n『%@』を選択すると、スピードカメラに関するアラートと警告機能を使用できます。\n\n『%@』を選択すると、スピードカメラに関するすべてのデータ(警告、通知、POI)が、OsmAndの再インストールを行うまで削除されます。";
+"speed_cameras_legal_descr" = "一部の国や地域では、スピードカメラ警告機能の使用が法律で禁止されています。 \n \n国の法律に基づいて、使用を望むかどうかを決定する必要があります。 \n \n『%@』を選択すると、スピードカメラに関するアラートと警告機能を使用できます。 \n \n『%@』を選択すると、スピードカメラに関するすべてのデータ(警告、通知、POI)が、OsmAndの再インストールを行うまで削除されます。";
 "lang_zh-Hant" = "中国語 (繁体字)";
 "privacy_and_security" = "プライバシーとセキュリティ";
 "speed_camera_pois" = "スピードカメラPOI";
@@ -2559,7 +2559,7 @@
 "simulation_preview_mode_desc" = "シミュレーションの速度は直線区間で最大となり、交差点でのみ減速します。";
 "speed_mode" = "スピード重視モード";
 "mtb_segment_classification" = "区分の分類";
-"weather_plugin_description" = "提供されるサービスは以下の通りです\n- 5つのレイヤーを備えた 24時間および 7日間の天気予報\n- 位置に応じたウィジェット\n- 温度/気圧の分布図\n\n気象データは、Global Forecast System (GFS、%@) によって提供されています。";
+"weather_plugin_description" = "提供されるサービスは以下の通りです \n- 5つのレイヤーを備えた 24時間および 7日間の天気予報 \n- 位置に応じたウィジェット \n- 温度/気圧の分布図 \n \n気象データは、Global Forecast System (GFS、%@) によって提供されています。";
 "rendering_attr_depthContourColorScheme_name" = "線の色";
 "show_borders_of_downloaded_maps" = "ダウンロードしたマップの境界線を表示";
 "purchases_feature_desc_cross_buy" = "追加料金なしで、さまざまなプラットフォーム(Android/iOS/ウェブ) からサブスクリプション機能を利用できます。";
@@ -2570,7 +2570,7 @@
 "routeInfo_horse_scale_name" = "馬道(手綱さばき)の難易度";
 "rendering_attr_horse_scale_critical_name" = "Critical(経験者のみ)";
 "simulation_preview_mode_title" = "高速プレビューモード";
-"simulation_real_mode_desc" = "直線区間の道路では、速度はおおよその最大許容速度が想定されます。\n交差点では、シミュレーションの速度を落として対応します。\n交通標識や一時停止標識などがある場所では、さらに時間的な余裕が必要であると考慮されます。";
+"simulation_real_mode_desc" = "直線区間の道路では、速度はおおよその最大許容速度が想定されます。 \n交差点では、シミュレーションの速度を落として対応します。 \n交通標識や一時停止標識などがある場所では、さらに時間的な余裕が必要であると考慮されます。";
 "simulation_real_mode_title" = "現実的なシミュレーション";
 "simulation_constant_mode_desc" = "選択された速度でシミュレーションが実行されます。";
 "lang_sat" = "サンタル語";

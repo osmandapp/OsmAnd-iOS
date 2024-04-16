@@ -29,6 +29,11 @@ var duplicatesCount = 0
 
 let iosEnglishKey = "en"
 let androidEnglishKey = ""
+// Test
+// let languageDict = [
+//     "ru" : "ru"
+// ]
+
 let languageDict = [
     "af" : "af",
     "an" : "an",
@@ -112,6 +117,8 @@ let languageDict = [
     "zh-Hant" : "zh-rTW",
 ]
 
+
+
 var allLanguagesDict = languageDict
 allLanguagesDict["en"] = ""
 
@@ -123,11 +130,11 @@ class Main {
         print("START: add_translations script \n")
 
         let path = getOsmandRepositoriesPath()
-        updateGitRepositories(path)
-        copyPhrasesFiles(path)
+        updateGitRepositories(path) 
+        copyPhrasesFiles(path) 
         
         Initialiser.initUpdatingTranslationKeyLists(path)
-        addRoutingParametersIfNeeded(arguments, path)
+        addRoutingParametersIfNeeded(arguments, path) 
         updateTranslations(path)
         
         print("DONE: add_translations script \n")
@@ -297,11 +304,11 @@ class IOSWriter {
     
     static func addTranslations() {
         
-        print("\nTRANSLATING: English \n")
+        print("\nTRANSLATING: English at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
         IOSWriter.makeNewDict(language: iosEnglishKey, iosDict: iosEnglishDict, androidDict: androidEnglishDict)
         
         for language in languageDict {
-            print("\nTRANSLATING: " + language.key + " \n")
+            print("\nTranslating: \(language.key) at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))\n")
             let iosDict = IOSReader.parseTranslationFile(language: language.key)
             let androidDict = AndroidReader.parseTranslationFile(language: language.key)
             IOSWriter.makeNewDict(language: language.key, iosDict: iosDict, androidDict: androidDict)
@@ -311,9 +318,12 @@ class IOSWriter {
     
     static func makeNewDict(language: String, iosDict: [String : String], androidDict: [String : String]) {
         let androidDict = IOSReader.replacePlaceholders(androidDict: androidDict)
+        print("Making dictionary '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")
+                
+
         var newLinesDict: [String:String] = [:]
         var existingLinesDict: [String:String] = [:]
-        
+
         for elem in commonDict! {
             if androidDict.keys.contains(elem.key)
             {
@@ -336,34 +346,87 @@ class IOSWriter {
                 }
             }
         }
-        
+
+        print("Updating lines '\(language)' at \(DateFormatter.localizedString(from: Date(), dateStyle: .medium, timeStyle: .medium))")        
         if existingLinesDict.count > 0 || newLinesDict.count > 0 {
             let fileURL = URL(fileURLWithPath: "./Resources/Localizations/" + language + ".lproj/Localizable.strings")
             do {
                 let fileContent = try String(contentsOf: fileURL)
-                var strings = fileContent.components(separatedBy: ";\n")
-                strings = filterDuplicateStrings(strings, iosDict: iosDict)
-                strings = filterEndingEmptyStrings(strings)
+                let strings = fileContent.components(separatedBy: ";\n")
+                var processedStrings = [String]()
+                // split by comments lines
+                for string in strings {
+                    var line = string
+                    while line.trimmingCharacters(in: .whitespacesAndNewlines).hasPrefix("//") {
+                        if let index = line.firstIndex(of: "\n") {
+                            processedStrings.append(String(line[..<index]) )
+                            line = String(line[line.index(after: index)...]) 
                 
-                for elem in existingLinesDict {
-                    for i in 0 ..< strings.count {
-                        if strings[i].contains("\"" + elem.key + "\"") {
-                            if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] ) {
-                                strings[i] = updstedString
-                            } else {
-                                strings[i] = ""
-                            }
+                        } else {
+                            processedStrings.append(line)
+                            line = "" // No more content after the first line
                         }
                     }
+                    if !line.isEmpty {
+                          processedStrings.append(line)
+                    }
                 }
-                
+                var keyOccurrences = [String: Int]()
+                // First, we populate the keyOccurrences with the keys from iosDict, initializing their counts to 0.
+                iosDict.keys.forEach { keyOccurrences[$0] = 0 }
+                var ind = 0
+                var updatedStrings = [String]()
+                for string in processedStrings {
+                    ind += 1
+                    if string.trimmingCharacters(in: .whitespaces).hasPrefix("//") {
+                    //  print("Comment \(string) ")
+                        updatedStrings.append(string)
+                    } else {
+                        // Split the string into key and value components using the "=" delimiter
+                        let components = string.split(separator: "=", maxSplits: 1).map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+                        // Extract the key, removing the surrounding quotation marks
+                        let key = components.first?.trimmingCharacters(in: CharacterSet(charactersIn: "\""))
+                        if  let key = key, iosDict.keys.contains(key) {
+                            keyOccurrences[key, default: 0] += 1
+                            if keyOccurrences[key]! > 1 {
+                                print("Duplicate key ! \(string) ")
+                            } else {
+                                if let value = existingLinesDict[key], let updatedString = replaceValueText(newValue: filterUnsafeChars(value), inFullString: string)  {
+                                    updatedStrings.append(updatedString)
+                                } else {
+                                    updatedStrings.append(string);
+                                }
+                            }
+                            //if let updstedString = replaceValueText(newValue: filterUnsafeChars(elem.value), inFullString: strings[i] ) 
+                            // if ind % 1000 == 0 {
+                            //     print("Index \(ind) \(key) \(string) ")
+                            // }
+                            
+                            //return keyOccurrences[key]! == 1
+                        } else if string.trimmingCharacters(in: .whitespaces) == "" {
+                            // keep empty lines
+                            updatedStrings.append(string)
+                        } else {
+                            print("Missing key \(string) ")
+                            updatedStrings.append(string)
+                        }
+                    }
+                    
+                }
                 for elem in newLinesDict {
-                    strings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
+                    updatedStrings.append("\"" + elem.key + "\" = \"" + filterUnsafeChars(elem.value) + "\"")
                 }
-                strings.append("")
                 
-                let newFileContent = strings.joined(separator: ";\n")
-                
+                //let newFileContent = strings.joined(separator: ";\n")
+                var newFileContent = ""
+                for string in updatedStrings {
+                    let trim = string.trimmingCharacters(in: .whitespaces)
+                    if trim.hasPrefix("//") || trim == "" {
+                        newFileContent += string + "\n"
+                    } else {
+                        newFileContent += string + ";\n"
+                    }
+                }
                 do {
                     try newFileContent.write(to: fileURL, atomically: true, encoding: String.Encoding.utf8)
                 } catch {
@@ -373,7 +436,7 @@ class IOSWriter {
                 print ("error reading file: \(error)")
             }
         }
-        print(language, "added: ", newLinesDict.count, "   udated: ", existingLinesDict.count, "   deleted duplicates: ", duplicatesCount)
+        print(language, "added: ", newLinesDict.count, "   updated: ", existingLinesDict.count, "   deleted duplicates: ", duplicatesCount)
     }
     
     
@@ -427,51 +490,12 @@ class IOSWriter {
     }
     
     
-    static func filterEndingEmptyStrings(_ stringsArray: [String]) -> [String] {
-        var strings = stringsArray
-        repeat {
-            while strings.last!.hasSuffix("\n") && strings.count > 1
-            {
-                strings[strings.count - 1] = String(strings[strings.count - 1].dropLast())
-            }
-            if strings.last!.count == 0
-            {
-                strings.removeLast()
-            }
-        } while strings.last!.count == 0
-        return strings
-    }
-    
-    
-    static func filterDuplicateStrings(_ stringsArray: [String], iosDict: [String : String]) -> [String]
-    {
-        var strings = stringsArray
-        var linesToDelete = Set<Int>()
-        
-        for key in iosDict.keys {
-            var count = 0
-            for i in 0 ..< strings.count {
-                if strings[i].contains("\"" + key + "\"") {
-                    count += 1
-                    if count > 1 {
-                        linesToDelete.insert(i)
-                    }
-                }
-            }
-        }
-        
-        for i in linesToDelete.sorted(by: >) {
-            strings.remove(at: i)
-        }
-        
-        duplicatesCount = linesToDelete.count
-        return strings
-    }
     
     
     static func filterUnsafeChars(_ text: String) -> String {
         var result: String = text;
         result = result.replacingOccurrences(of: ";", with: ".")
+        result = result.replacingOccurrences(of: "\n", with: " ")
         
         if result.hasPrefix("\"") && !result.hasPrefix("\\\"") {
             result = String(result.dropFirst())
@@ -535,8 +559,8 @@ class Parser: NSObject, XMLParserDelegate {
     func parser(_ parser: XMLParser, didEndElement elementName: String, namespaceURI: String?, qualifiedName qName: String?) {
         if elementName == "string" {
             dict.updateValue(value, forKey: key)
-            value = ""
         }
+        value = ""
     }
 
     func parser(_ parser: XMLParser, foundCharacters string: String) {

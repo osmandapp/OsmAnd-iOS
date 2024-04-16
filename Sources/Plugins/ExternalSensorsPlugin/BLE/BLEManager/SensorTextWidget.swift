@@ -29,7 +29,7 @@ final class SensorTextWidget: OASimpleWidget {
         setIconFor(widgetType)
         self.widgetType = widgetType
         self.appMode = appMode
-        plugin = OAPlugin.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
+        plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         deviceIdPref = registerSensorDevicePref(customId: customId)
         

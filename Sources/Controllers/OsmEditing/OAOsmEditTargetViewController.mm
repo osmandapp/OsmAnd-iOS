@@ -23,6 +23,7 @@
 #import "OAOsmUploadPOIViewController.h"
 #import "OAOsmNoteViewController.h"
 #import "OAOsmEditingPlugin.h"
+#import "OAPluginsHelper.h"
 
 @interface OAOsmEditTargetViewController () <OAOsmEditingBottomSheetDelegate>
 
@@ -51,7 +52,7 @@
         _osmPoint =  point;
         _poiHelper = [OAPOIHelper sharedInstance];
         _app = [OsmAndApp instance];
-        _editingPlugin = (OAOsmEditingPlugin *) [OAPlugin getPlugin:OAOsmEditingPlugin.class];
+        _editingPlugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
         
         self.leftControlButton = [[OATargetMenuControlButton alloc] init];
         self.leftControlButton.title = OALocalizedString(@"shared_string_delete");

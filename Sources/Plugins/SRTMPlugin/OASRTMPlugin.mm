@@ -14,6 +14,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
 #import "Localization.h"
+#import "OALinks.h"
 
 #define PLUGIN_ID kInAppId_Addon_Srtm
 
@@ -64,10 +65,11 @@
     return OALocalizedString(@"srtm_plugin_name");
 }
 
-- (NSString *) getDescription
-{
-    return OALocalizedString(@"srtm_plugin_description");
+- (NSString *)getDescription {
+    return [NSString stringWithFormat:NSLocalizedString(@"srtm_plugin_description", nil), k_docs_plugin_srtm];
 }
+
+
 
 - (BOOL) isHeightmapEnabled
 {

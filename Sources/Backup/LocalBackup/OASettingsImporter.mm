@@ -676,12 +676,12 @@
     {
         if ([item isKindOfClass:OAProfileSettingsItem.class])
         {
-            NSString *bakupPath = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
-            if ([[NSFileManager defaultManager] fileExistsAtPath:bakupPath])
+            NSString *backupPath = [[tempDir stringByAppendingPathComponent:((OAProfileSettingsItem *)item).appMode.stringKey] stringByAppendingPathExtension:@"osf"];
+            if ([[NSFileManager defaultManager] fileExistsAtPath:backupPath])
             {
-                [[NSFileManager defaultManager] removeItemAtPath:bakupPath error:nil];
+                [[NSFileManager defaultManager] removeItemAtPath:backupPath error:nil];
             }
-            OAExportAsyncTask *backupTask = [[OAExportAsyncTask alloc] initWithFile:bakupPath items:@[item] exportItemFiles:YES extensionsFilter:nil];
+            OAExportAsyncTask *backupTask = [[OAExportAsyncTask alloc] initWithFile:backupPath items:@[item] exportItemFiles:YES extensionsFilter:nil];
             [backupTask execute];
         }
     }

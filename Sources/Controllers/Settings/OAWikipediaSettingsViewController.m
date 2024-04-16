@@ -18,6 +18,7 @@
 #import "OsmAndApp.h"
 #import "OAColors.h"
 #import "Localization.h"
+#import "OAPluginsHelper.h"
 
 #import "OsmAnd_Maps-Swift.h"
 
@@ -38,7 +39,7 @@
 - (void)commonInit
 {
     _app = [OsmAndApp instance];
-    _wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getPlugin:OAWikipediaPlugin.class];
+    _wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class];
 }
 
 #pragma mark - UIViewController

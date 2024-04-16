@@ -96,6 +96,7 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
                                                             addEmptyItems:(BOOL)addEmptyItems;
 
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version;
+- (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version silent:(BOOL)silent;
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete;
 - (void) collectSettings:(NSString *)settingsFile latestChanges:(NSString *)latestChanges version:(NSInteger)version delegate:(id<OASettingsImportExportDelegate>)delegate onComplete:(void(^)(BOOL succeed, NSArray<OASettingsItem *> *items))onComplete silent:(BOOL)silent;
 - (void) checkDuplicates:(NSString *)settingsFile items:(NSArray<OASettingsItem *> *)items selectedItems:(NSArray<OASettingsItem *> *)selectedItems delegate:(id<OASettingsImportExportDelegate>)delegate;

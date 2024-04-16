@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulasikan posisi Anda menggunakan rute yang telah dihitung";
 "select_avoid_descr" = "Pilih jalan yang ingin Anda hindari selama navigasi. Anda dapat memilih jalan pada peta atau memilih jenis dari daftar di bawah ini.";
 "no_active_route" = "No active route";
-"day_night_info_description" = "Matahari terbit: %@\nMatahari terbenam: %@";
+"day_night_info_description" = "Matahari terbit: %@ \nMatahari terbenam: %@";
 "day_night_info" = "Info siang/malam";
 "daynight_mode_auto" = "Matahari terbit/terbenam";
 "route_simulation" = "Simulasi rute";
@@ -587,7 +587,7 @@
 "gpx_add_new" = "Add new file";
 "gpx_overwrite" = "Overwrite";
 "gpx_cannot_import" = "Cannot import specified GPX file";
-"gpx_parse_error" = "Masalah ditemukan dengan sebuah berkas GPX.\n\nAnda dapat menghubungi dukungan OsmAnd untuk menyelidiki.";
+"gpx_parse_error" = "Masalah ditemukan dengan sebuah berkas GPX. \n \nAnda dapat menghubungi dukungan OsmAnd untuk menyelidiki.";
 "tracks_on_map" = "Trek yang ditampilkan";
 "gpx_export_title" = "Export track";
 "gpx_export_select_track" = "Please select track for Export";
@@ -726,7 +726,7 @@
 "sett_arr" = "Map arrows";
 "shared_string_location" = "Lokasi";
 "sett_arr_map" = "Map center";
-"short_location_on_map" = "Lat %@\nLon%@";
+"short_location_on_map" = "Lat %@ \nLon%@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -896,7 +896,7 @@
 "custom_plugins" = "Custom plugins";
 "extra_maps_menu_group" = "Peta tambahan";
 "import_duplicates_title" = "Beberapa item sudah ada";
-"import_duplicates_description" = "Elemen yang diimpor sudah ada dalam aplikasi OsmAnd\n\nSilahkan pilih tindakan.";
+"import_duplicates_description" = "Elemen yang diimpor sudah ada dalam aplikasi OsmAnd \n \nSilahkan pilih tindakan.";
 "keep_both" = "Simpan keduanya";
 "keep_both_desc" = "Item yang diimpor akan ditambahkan prefiks";
 "replace_all" = "Ganti semua";
@@ -968,7 +968,7 @@
 "reset_to_default" = "Atur ulang ke default";
 "reset_profile_action_descr" = "Reset all profile settings to installation defaults. Tapping Reset will discard all your changes, this action can't be undone.";
 "checking_for_duplicates" = "Checking for duplicates...";
-"checking_for_duplicate_description" = "OsmAnd periksa %@ untuk duplikat dengan item yang ada di aplikasi.\n\nMungkin perlu beberapa waktu.";
+"checking_for_duplicate_description" = "OsmAnd periksa %@ untuk duplikat dengan item yang ada di aplikasi. \n \nMungkin perlu beberapa waktu.";
 
 // Purchases
 "prch_addons" = "Addons";
@@ -1542,7 +1542,7 @@
 //inapps
 "plugin_nautical_name" = "Tampilan peta laut";
 "product_desc_nautical" = "Peta vektor cocok untuk navigasi rute pelayaran";
-"plugin_nautical_descr" = "Memperkaya peta Anda dengan informasi tentang rute pelayaran, lampu navigasi, zona bahaya bahari, zona dengan batasan pelayaran atau perkaitan, dll. Untuk menggunakan, unduh peta Bahari masing-masing dan aktifkan gaya \"Peta laut\" dalam \"Konfigurasi peta\".\n\nBaca lebih lanjut di %@.";
+"plugin_nautical_descr" = "Memperkaya peta Anda dengan informasi tentang rute pelayaran, lampu navigasi, zona bahaya bahari, zona dengan batasan pelayaran atau perkaitan, dll. Untuk menggunakan, unduh peta Bahari masing-masing dan aktifkan gaya \"Peta laut\" dalam \"Konfigurasi peta\". \n \nBaca lebih lanjut di %@.";
 "osmand_parking_plugin_name" = "Posisi parkir";
 "product_desc_parking" = "Lacak waktu parkir dan lokasi mobil Anda";
 "osmand_parking_plugin_description" = "Tandai di mana mobil Anda diparkir, dan beri tahu kalender Anda ketika meteran parkir akan kedaluwarsa. Untuk menaruh penanda, pilih sebuah tempat di peta, pergi ke \"Tindakan\", dan ketuk \"Tambahkan parkir\".";
@@ -1551,10 +1551,10 @@
 "plugin_ski_descr" = "Dirancang untuk bernavigasi di area olahraga musim dingin. Lihat jalur dan lift ski, dan trek ski perbatasan negara, dengan garis berwarna yang menandakan nilai kerumitan. Untuk menggunakan, aktifkan plugin ini dan juga pergi ke \"Konfigurasi peta\" dan pilih gaya peta \"Musim dingin dan ski\".";
 "record_plugin_name" = "Perekaman perjalanan";
 "product_desc_track_recording" = "Activates the functionality to record and save your tracks";
-"record_plugin_description" = "Rekam perjalanan atau latihan Anda, dan analisa data tentang kecepatan, kenaikan dan keturunan yang terjadi, profil ketinggian, dll. Trek yang direkam dapat diarsip, dibagikan kepada orang lain, disunting, dan diproses setelah itu.\n\nBaca lebih lanjut di %@.";
+"record_plugin_description" = "Rekam perjalanan atau latihan Anda, dan analisa data tentang kecepatan, kenaikan dan keturunan yang terjadi, profil ketinggian, dll. Trek yang direkam dapat diarsip, dibagikan kepada orang lain, disunting, dan diproses setelah itu. \n \nBaca lebih lanjut di %@.";
 "osm_editing_plugin_name" = "Penyuntingan OpenStreetMap";
 "product_desc_osm_editing" = "Make changes to OpenStreetMap directly from OsmAnd";
-"osm_editing_plugin_description" = "Buat kontribusi ke OpenStreetMap, sebuah komunitas global yang membuat peta dunia dan menyediakan data sumber terbuka terbaru kepada pengguna siapa pun.\n\nAnda dapat menemukan petunjuk cara menyunting peta di situs web kami %@.";
+"osm_editing_plugin_description" = "Buat kontribusi ke OpenStreetMap, sebuah komunitas global yang membuat peta dunia dan menyediakan data sumber terbuka terbaru kepada pengguna siapa pun. \n \nAnda dapat menemukan petunjuk cara menyunting peta di situs web kami %@.";
 "product_desc_mapillary" = "Online street-level photos for everyone";
 "plugin_mapillary_descr" = "Citra tampilan tingkat jalan. Anda dapat berkontribusi sendiri. Untuk melihat data yang sudah ada sebagai lapisan peta, aktifkan \"Citra tingkat jalan\" dalam menu \"Konfigurasi peta\".";
 "product_desc_africa" = "Unlimited map downloads for Africa";
@@ -1587,7 +1587,7 @@
 "preferred_languages" = "Preferred languages";
 "srtm_plugin_name" = "Topografi";
 "product_desc_srtm" = "Display of contour lines";
-"srtm_plugin_description" = "Informasi medan, seperti garis kontur, bukitshade, lereng, membantu Anda untuk secara visual menilai peletakan tanah, bantuan, navigabilitas, dan banyak lagi. Informasi topografi dapat di peta diwakili oleh garis kontur, pencukur bantuan dan / atau pewarnaan steepness.\n\nData yang mendasari berasal dari SRTM dan ASTER.\n\nBaca lebih lanjut di %@.";
+"srtm_plugin_description" = "Informasi medan, seperti garis kontur, bukitshade, lereng, membantu Anda untuk secara visual menilai peletakan tanah, bantuan, navigabilitas, dan banyak lagi. Informasi topografi dapat di peta diwakili oleh garis kontur, pencukur bantuan dan / atau pewarnaan steepness. \n \nData yang mendasari berasal dari SRTM dan ASTER. \n \nBaca lebih lanjut di %@.";
 "wikivoyage_travel_guide" = "Panduan Perjalanan";
 "start_editing_card_image_text" = "Penduan perjalanan gratis semua orang bisa berkontribusi.";
 "wikivoyage_travel_guide_descr" = "Panduan tempat-tempat paling menarik di planet ini, di dalam OsmAnd, tanpa perlu tersambung ke internet.";
@@ -2411,7 +2411,7 @@
 "routing_attr_goods_restrictions_name" = "Pengiriman barang";
 "select_another_colorization" = "Mohon pilih tipe pewarnaan yang lain.";
 "recording_delete_confirm" = "Hapus item ini\?";
-"logout_from_osmand_cloud_decsr" = "Keluar\?\nAnda harus masuk lagi untuk mencadangkan atau memulihkan data.";
+"logout_from_osmand_cloud_decsr" = "Keluar\? \nAnda harus masuk lagi untuk mencadangkan atau memulihkan data.";
 "renew_subscription" = "Perbarui langganan";
 "routing_attr_motor_type_hybrid_name" = "Hibrida";
 "local_backup_descr" = "Cadangkan atau pulihkan data dari sebuah file lokal.";
@@ -2460,9 +2460,9 @@
 "benefits_for_contributors_secondary_descr" = "Masuk ke OpenStreetMap untuk periksa jika Anda berhak untuk pembaruan peta bulanan dan per jam tak terbatas.";
 "benefits_for_contributors_primary_descr" = "Kontributor OpenSteetMap.org aktif mungkin berhak untuk pembaruan peta per jam tak terbatas.";
 "backup_delete_all_data" = "Hapus semua data saya";
-"simulation_real_mode_desc" = "Pada ruas jalan lurus, kecepatan akan mendekati kecepatan maksimum yang diizinkan.\nDi persimpangan, simulasi akan melambat.\nHukuman tambahan akan diterapkan pada lampu lalu lintas, rambu berhenti, dll.";
+"simulation_real_mode_desc" = "Pada ruas jalan lurus, kecepatan akan mendekati kecepatan maksimum yang diizinkan. \nDi persimpangan, simulasi akan melambat. \nHukuman tambahan akan diterapkan pada lampu lalu lintas, rambu berhenti, dll.";
 "purchases_feature_desc_cross_buy" = "Gunakan fitur langganan Anda di platform yang berbeda (Android/iOS/web) tanpa biaya tambahan.";
-"backup_delete_old_data_warning" = "Anda akan menghapus riwayat perubahan untuk data yang dimuat sebelumnya.\n\nVersi data saat ini akan disimpan pada server, tetapi Anda tidak akan dapat mengembalikan ke perubahan yang dibuat sebelumnya.";
+"backup_delete_old_data_warning" = "Anda akan menghapus riwayat perubahan untuk data yang dimuat sebelumnya. \n \nVersi data saat ini akan disimpan pada server, tetapi Anda tidak akan dapat mengembalikan ke perubahan yang dibuat sebelumnya.";
 "shared_string_angle_param" = "Sudut: %@°";
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "contact_support" = "Hubungi dukungan";
@@ -2498,14 +2498,14 @@
 "shared_string_logout" = "Keluar";
 "map_updates_are_unavailable_yet" = "Pembaruan peta belum tersedia. :-(";
 "offline_edition_descr" = "Jika penyuntingan luring diaktifkan, maka perubahan akan disimpan secara lokal terlebih dahulu dan diunggah berdasarkan permintaan, jika tidak, perubahan akan segera diunggah.";
-"osmand_cloud_create_account_descr" = "Mohon masukkan alamat surel Anda, sebuah kode verifikasi akan dikirim,\ndan semua data akan ditautkan ke alamat surel.";
+"osmand_cloud_create_account_descr" = "Mohon masukkan alamat surel Anda, sebuah kode verifikasi akan dikirim, \ndan semua data akan ditautkan ke alamat surel.";
 "shared_string_layers" = "Lapisan";
 "show_borders_of_downloaded_maps" = "Tampilkan batasan dari peta terunduh";
 "backup_pause_all" = "Jeda semua";
 "download_heightmap_maps" = "Peta ketinggian";
 "shared_string_contours" = "Kontur";
 "turn_arrows_descr" = "Pilih jika panah arahan ditampilkan pada garis rute.";
-"backup_delete_all_data_warning" = "Anda akan menghapus semua data yang sebelumnya diunggah ke OsmAnd Cloud, termasuk riwayat versi.\n\nAnda tidak akan dapat memulihkan data yang dihapus.";
+"backup_delete_all_data_warning" = "Anda akan menghapus semua data yang sebelumnya diunggah ke OsmAnd Cloud, termasuk riwayat versi. \n \nAnda tidak akan dapat memulihkan data yang dihapus.";
 "shared_string_weather" = "Cuaca";
 "pro_features" = "Fitur pro";
 "compass_always_hidden" = "Selalu tersembunyi";
@@ -2603,12 +2603,12 @@
 "m" = "m";
 "kg" = "kg";
 "osmand_development_plugin_description" = "Menyediakan kemampuan untuk uji dan awakutu OsmAnd: simulasi rute navigasi, periksa performa perenderan layar, periksa performa, dll. Plugin ini tidak dibutuhkan untuk penggunaan aplikasi normal.";
-"weather_plugin_description" = "Menyediakan\n- prakiraan cuaca 24 jam dan 7 hari memberikan 5 lapisan\n- widget berbasis lokasi\n- garis isometrik suhu/tekanan\n\nData cuaca disediakan oleh Sistem Prakiraan Global (GFS, %@).";
+"weather_plugin_description" = "Menyediakan \n- prakiraan cuaca 24 jam dan 7 hari memberikan 5 lapisan \n- widget berbasis lokasi \n- garis isometrik suhu/tekanan \n \nData cuaca disediakan oleh Sistem Prakiraan Global (GFS, %@).";
 "lang_sat" = "Santali";
 "shared_string_height" = "Tinggi";
 "uninstall_speed_cameras" = "Copot kamera kecepatan";
 "lang_zh-Hant" = "Bahasa Mandarin (Tradisional)";
-"speed_cameras_legal_descr" = "Di beberapa negara atau wilayah, penggunaan aplikasi peringatan kamera kecepatan dilarang oleh undang-undang.\n\nAnda perlu membuat pilihan tergantung pada undang-undang negara Anda.\n\nPilih %@ dan Anda akan menerima peringatan dan peringatan tentang kamera kecepatan.\n\nPilih %@. Semua data yang terkait dengan kamera kecepatan: peringatan, pemberitahuan, POI akan dihapus hingga OsmAnd diinstal ulang sepenuhnya.";
+"speed_cameras_legal_descr" = "Di beberapa negara atau wilayah, penggunaan aplikasi peringatan kamera kecepatan dilarang oleh undang-undang. \n \nAnda perlu membuat pilihan tergantung pada undang-undang negara Anda. \n \nPilih %@ dan Anda akan menerima peringatan dan peringatan tentang kamera kecepatan. \n \nPilih %@. Semua data yang terkait dengan kamera kecepatan: peringatan, pemberitahuan, POI akan dihapus hingga OsmAnd diinstal ulang sepenuhnya.";
 "shared_string_keep_active" = "Tetap aktif";
 "speed_camera_pois" = "POI kamera kecepatan";
 "privacy_and_security" = "Privasi dan keamanan";
@@ -2710,7 +2710,7 @@
 "map_3d_mode_action" = "Mode 3D";
 "distance_circles" = "Jarak lingkaran";
 "help_article_start_with_name" = "Mulai dengan OsmAnd";
-"ant_plus_nothing_found_description" = "Pastikan:\n– Bluetooth dinyalakan\n– Sensor diaktifkan\n– Perangkat ini di dekat sensor";
+"ant_plus_nothing_found_description" = "Pastikan: \n– Bluetooth dinyalakan \n– Sensor diaktifkan \n– Perangkat ini di dekat sensor";
 "osmand_cloud_deleted_account_descr" = "Akun dan semua data telah dihapus dari OsmAnd Cloud.";
 "map_widget_target_distance_desc" = "Menampilkan jarak antara kamera dan lokasi sasaran.";
 "purchases_feature_relief_3d_description" = "Miliki dan amati model skala lingkungan Anda atau seluruh benua.";
@@ -2723,7 +2723,7 @@
 "shortest_distance_first" = "Jarak terpendek dahulu";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigasi dengan trek";
 "help_article_search_search_coordinates_name" = "Cari Koordinat";
-"complex_widget_alert" = "%d (%d trek)Widget %@ hanya dapat diletakkan di barisannya sendiri.";
+"complex_widget_alert" = "Widget %@ hanya dapat diletakkan di barisannya sendiri.";
 "import_create_track_files" = "Anda dapat mengimpor, membuat, atau merekam berkas trek menggunakan OsmAnd.";
 "setup" = "Penyiapan";
 "help_article_navigation_guidance_map_during_navigation_name" = "Layar peta saat navigasi";
@@ -2782,7 +2782,7 @@
 "ant_plus_searching_text_description" = "Silakan pegang perangkat dengkat dengan sensor. Anda harus mengaktifkan sensor supaya OsmAnd dapat menemukannya.";
 "map_widget_glide_average_desc" = "Tampilkan rasio glide rata-rata untuk interval set.";
 "start_recording" = "Mulai merekam";
-"verify_account_deletion_descr" = "Kami harus memverifikasi akun Anda sebelum menghapusnya.\n\nSilakan masukkan alamat surel yang Anda gunakan untuk mendaftar. Sebuah kata sandi sekali pakai untuk langkah berikutnya akan dikirim.";
+"verify_account_deletion_descr" = "Kami harus memverifikasi akun Anda sebelum menghapusnya. \n \nSilakan masukkan alamat surel yang Anda gunakan untuk mendaftar. Sebuah kata sandi sekali pakai untuk langkah berikutnya akan dikirim.";
 "map_widget_target_distance" = "Jarak antara kamera ke sasaran";
 "map_widget_trip_recording_downhill" = "Jalan menurun";
 "shared_string_open_track" = "Buka trek";
@@ -2945,7 +2945,7 @@
 "distance_to_intermediate_widget_desc" = "Widget menunjukkan jarak yang tersisa ke titik perantara pertama. Setelah titik perantara dilewati, jarak akan diperbarui ke titik perantara berikutnya.";
 "change_appearance" = "Ubah penampilan";
 "help_article_personal_profiles_name" = "Profil (Pengaturan)";
-"osmand_cloud_deleting_account_descr" = "Dalam beberapa detik, semua data dan akun Anda akan dihapus dari OsmAnd Cloud.\n\nSemua data di perangkat tidak akan disentuh.";
+"osmand_cloud_deleting_account_descr" = "Dalam beberapa detik, semua data dan akun Anda akan dihapus dari OsmAnd Cloud. \n \nSemua data di perangkat tidak akan disentuh.";
 "help_article_navigation_routing_direct_to_point_routing_name" = "Perutean langsung ke titik (Kapal)";
 "upload_poi" = "Unggah POI";
 "shared_string_contents" = "Isi";
@@ -3100,3 +3100,5 @@
 "help_article_start_with_main_menu_name" = "Menu utama";
 "osmand_cloud_delete_account_confirmation" = "Hapus akun\?";
 "distance_during_navigation" = "Jarak selama navigasi";
+"shared_string_precise" = "Persis";
+"shared_string_round_up" = "Dibulatkan";

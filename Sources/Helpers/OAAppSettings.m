@@ -165,9 +165,6 @@ static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
 static NSString * const routeLineWidthKey = @"routeLineWidth";
 static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
 static NSString * const showCompassControlRulerKey = @"showCompassRuler";
-static NSString * const showCurrentLocationCoordinatesWidgetKey = @"showCoordinatesWidget";
-static NSString * const showMapCenterWidgetKey = @"showMapCenterWidget";
-
 static NSString * const showTrafficWarningsKey = @"showTrafficWarnings";
 static NSString * const showPedestrianKey = @"showPedestrian";
 static NSString * const showCamerasKey = @"showCameras";
@@ -4116,16 +4113,11 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
         _showRelativeBearing = [OACommonBoolean withKey:showRelativeBearingKey defValue:YES];
         _showCompassControlRuler = [[[OACommonBoolean withKey:showCompassControlRulerKey defValue:YES] makeGlobal] makeShared];
-        _showCurrentLocationCoordinatesWidget = [OACommonBoolean withKey:showCurrentLocationCoordinatesWidgetKey defValue:NO];
-        _showMapCenterCoordinatesWidget = [OACommonBoolean withKey:showMapCenterWidgetKey defValue:NO];
 
         [_profilePreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
         [_profilePreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];
         [_profilePreferences setObject:_showRelativeBearing forKey:@"show_relative_bearing"];
         [_globalPreferences setObject:_showCompassControlRuler forKey:@"show_compass_ruler"];
-
-        [_profilePreferences setObject:_showCurrentLocationCoordinatesWidget forKey:@"show_coordinates_widget"];
-        [_profilePreferences setObject:_showMapCenterCoordinatesWidget forKey:@"show_map_center_coordinates_widget"];
 
         _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
         [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];

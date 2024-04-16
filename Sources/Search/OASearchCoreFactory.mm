@@ -680,7 +680,7 @@
     {
         LIMIT = 10000;
         BBOX_RADIUS = 500 * 1000;
-        BBOX_RADIUS_INSIDE = 20000 * 1000;
+        BBOX_RADIUS_INSIDE = 5600 * 1000;
         BBOX_RADIUS_POI_IN_CITY = 25 * 1000;
         FIRST_WORD_MIN_LENGTH = 3;
         _types = [OAPOIHelper sharedInstance];
@@ -732,8 +732,8 @@
     const std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>& searchCriteria = std::shared_ptr<OsmAnd::AmenitiesByNameSearch::Criteria>(new OsmAnd::AmenitiesByNameSearch::Criteria);
     
     searchCriteria->name = QString::fromNSString(searchWord);
-    searchCriteria->bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
     searchCriteria->xy31 = OsmAnd::PointI(bbox.centerX, bbox.centerY);
+    const auto bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
 
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
     const auto search = std::shared_ptr<const OsmAnd::AmenitiesByNameSearch>(new OsmAnd::AmenitiesByNameSearch(obfsCollection));
@@ -752,6 +752,10 @@
         if (!r)
             continue;
         searchCriteria->localResources = {r};
+        if ([resId containsString:@"basemap"])
+            searchCriteria->bbox31 = nullptr;
+        else
+            searchCriteria->bbox31 = bbox31;
 
         search->performSearch(*searchCriteria,
                               [self, &limit, &phrase, &lang, transliterate, &nm, &currentResId, &resultMatcher, &ids]
@@ -777,7 +781,9 @@
                                   OAPOI *object = [OAPOIHelper parsePOIByAmenity:amenity];
                                   sr.object = object;
                                   sr.otherNames = [OASearchCoreFactory getAllNames:amenity->localizedNames nativeName:amenity->nativeName];
-                                  sr.localeName = amenity->getName(lang, transliterate).toNSString();
+                                  sr.localeName = amenity->getName(lang, false).toNSString();
+                                  if (transliterate && ![nm matches:sr.localeName])
+                                      sr.localeName = amenity->getName(lang, transliterate).toNSString();
                                   if (![nm matches:sr.localeName] && ![nm matchesMap:sr.otherNames]
                                       && ![nm matchesMap:object.getAdditionalInfo.allValues]) {
                                       return false;

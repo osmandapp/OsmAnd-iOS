@@ -57,7 +57,7 @@ final class MigrationManager: NSObject {
 
     private func changeWidgetIdsMigration1() {
         if let settings = OAAppSettings.sharedManager() {
-            let externalPlugin = OAPlugin.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
+            let externalPlugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
             let externalSensorsPluginPrefs: [OACommonPreference]? = externalPlugin?.getPreferences()
             let changeWidgetIds = [
                 "heartRate": "ant_heart_rate",
@@ -153,7 +153,7 @@ final class MigrationManager: NSObject {
 
     private func changeWidgetPrefs1(_ appMode: OAApplicationMode, oldWidgetIds: [String], changeWidgetIds: [String: String]) {
         if let settings = OAAppSettings.sharedManager(),
-           let plugin = OAPlugin.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
+           let plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin {
             for oldCustomWidgetId in oldWidgetIds {
                 let oldOriginalWidgetId = oldCustomWidgetId.substring(to: Int(oldCustomWidgetId.index(of: MapWidgetInfo.DELIMITER)))
                 if let newOriginalWidgetId = changeWidgetIds[oldOriginalWidgetId] {

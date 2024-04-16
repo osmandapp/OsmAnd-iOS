@@ -18,6 +18,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAMapHudViewController.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kLayersSection 1
 #define kContoursSection 2
@@ -319,7 +320,7 @@
     UISwitch *switchView = (UISwitch *)sender;
     if (switchView)
     {
-        [(OAWeatherPlugin *) [OAPlugin getPlugin:OAWeatherPlugin.class] weatherChanged:switchView.isOn];
+        [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] weatherChanged:switchView.isOn];
         if (switchView.isOn)
         {
             [tblView beginUpdates];

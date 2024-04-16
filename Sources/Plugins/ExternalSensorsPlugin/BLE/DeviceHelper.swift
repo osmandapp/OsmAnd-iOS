@@ -150,7 +150,7 @@ final class DeviceHelper: NSObject {
     
     private func unpairTrackRecordingFor(device: Device) {
         guard let supportedTypes = device.getSupportedWidgetDataFieldTypes(),
-              let plugin = OAPlugin.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
+              let plugin = OAPluginsHelper.getEnabledPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin else { return }
         supportedTypes.forEach {
             let deviceId = plugin.getDeviceId(for: $0, appMode: OAAppSettings.sharedManager().applicationMode.get())
             if !deviceId.isEmpty {

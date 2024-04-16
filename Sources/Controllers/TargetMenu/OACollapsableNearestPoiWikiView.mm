@@ -25,6 +25,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kButtonHeight 36.0
@@ -169,7 +170,7 @@
         }
     }
 
-    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class];
+    OAWikipediaPlugin *wikiPlugin = (OAWikipediaPlugin *) [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
     NSMutableArray *buttons = [NSMutableArray arrayWithCapacity:self.nearestItems.count + 2];
     int i = 0;
     for (OAPOI *poi in self.nearestItems)

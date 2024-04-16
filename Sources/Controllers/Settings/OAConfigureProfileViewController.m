@@ -45,6 +45,7 @@
 #import "OABackupHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAPluginsHelper.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"
@@ -240,7 +241,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
     // Plugins
     NSMutableArray *plugins = [NSMutableArray new];
-    OAPlugin *tripRec = [OAPlugin getEnabledPlugin:OAMonitoringPlugin.class];
+    OAPlugin *tripRec = [OAPluginsHelper getEnabledPlugin:OAMonitoringPlugin.class];
     if (tripRec)
     {
         [plugins addObject:@{
@@ -251,7 +252,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     
-    OAPlugin *osmEdit = [OAPlugin getEnabledPlugin:OAOsmEditingPlugin.class];
+    OAPlugin *osmEdit = [OAPluginsHelper getEnabledPlugin:OAOsmEditingPlugin.class];
     if (osmEdit)
     {
         [plugins addObject:@{
@@ -262,7 +263,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     
-    OAPlugin *developmentPlugin = [OAPlugin getEnabledPlugin:OAOsmandDevelopmentPlugin.class];
+    OAPlugin *developmentPlugin = [OAPluginsHelper getEnabledPlugin:OAOsmandDevelopmentPlugin.class];
     if (developmentPlugin)
     {
         [plugins addObject:@{
@@ -273,7 +274,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     
-    OAPlugin *weather = [OAPlugin getEnabledPlugin:OAWeatherPlugin.class];
+    OAPlugin *weather = [OAPluginsHelper getEnabledPlugin:OAWeatherPlugin.class];
     if (weather)
     {
         [plugins addObject:@{
@@ -284,7 +285,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         }];
     }
     
-    OAPlugin *wikipedia = [OAPlugin getEnabledPlugin:OAWikipediaPlugin.class];
+    OAPlugin *wikipedia = [OAPluginsHelper getEnabledPlugin:OAWikipediaPlugin.class];
     if (wikipedia)
     {
         [plugins addObject:@{
@@ -294,7 +295,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
             @"key" : kWikipediaSettings
         }];
     }
-    OAPlugin *externalSensors = [OAPlugin getEnabledPlugin:OAExternalSensorsPlugin.class];
+    OAPlugin *externalSensors = [OAPluginsHelper getEnabledPlugin:OAExternalSensorsPlugin.class];
     if (externalSensors)
     {
         [plugins addObject:@{

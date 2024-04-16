@@ -13,6 +13,12 @@
 
 @protocol OAWidgetRegistrationDelegate;
 
+@protocol OAPluginInstallListener <NSObject>
+
+- (void) onPluginInstall;
+
+@end
+
 @interface OAPlugin : NSObject
 
 - (OAMapPanelViewController *) getMapPanelViewController;
@@ -35,6 +41,9 @@
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
 - (NSArray<NSString *> *) getWidgetIds;
 
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams;
+- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode  widgetParams:(NSDictionary *)widgetParams;
+
 - (NSArray<OACommonPreference *> * _Nonnull)getPreferences;
 - (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)prefId defValue:(NSString * _Nullable)defValue;
 
@@ -44,51 +53,20 @@
 - (BOOL) isVisible;
 - (BOOL) isEnableByDefault;
 - (void) disable;
+- (void) install:(id<OAPluginInstallListener> _Nullable)callback;
+
 - (NSString *) getHelpFileName;
 - (NSArray<OAQuickActionType *> *) getQuickActionTypes;
 
-+ (void) initPlugins;
-+ (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable;
-+ (BOOL) enablePlugin:(OAPlugin *)plugin enable:(BOOL)enable recreateControls:(BOOL)recreateControls;
-+ (void) refreshLayers;
-+ (NSArray<OAPlugin *> *) getVisiblePlugins;
-+ (NSArray<OAPlugin *> *) getAvailablePlugins;
-+ (NSArray<OAPlugin *> *) getEnabledPlugins;
-+ (NSArray<OAPlugin *> *) getEnabledVisiblePlugins;
-+ (NSArray<OAPlugin *> *) getNotEnabledPlugins;
-+ (NSArray<OAPlugin *> *) getNotEnabledVisiblePlugins;
-+ (OAPlugin *) getEnabledPlugin:(Class) cl;
-+ (OAPlugin *) getPlugin:(Class) cl;
-+ (OAPlugin *) getPluginById:(NSString *)pluginId;
-+ (BOOL) isEnabled:(Class) cl;
-+ (BOOL) onDestinationReached;
-+ (void) createLayers;
-+ (void) updateLocationPlugins:(CLLocation *)location;
-+ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
-+ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
-+ (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
-
-+ (NSArray<OACustomPlugin *> *) getCustomPlugins;
-+ (void) addCustomPlugin:(OACustomPlugin *)plugin;
-+ (void) removeCustomPlugin:(OACustomPlugin *)plugin;
-+ (NSArray<OAWorldRegion *> *) getCustomDownloadRegions;
 - (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
-+ (NSString *)onGetMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters;
-+ (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters;
 - (void)prepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
-+ (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
 - (void)onAnalysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;
 - (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
 
-+ (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
-+ (OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 - (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
-+ (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
-+ (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;
-+ (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
-                     availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
+
 - (void) onInstall;
 - (void) updateLayers;
 - (void) registerLayers;

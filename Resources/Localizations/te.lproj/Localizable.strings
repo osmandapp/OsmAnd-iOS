@@ -2457,7 +2457,7 @@
 "app_mode_utv" = "Side by Side";
 "app_mode_osm" = "OSM";
 "desert" = "Desert";
-"user_login" = "Login";
+"user_login" = "లాగిన్";
 "osmand_cloud_login_descr" = "Please enter the e-mail address you registred with. A one-time password for the next step will be sent to it.";
 "login_footer_full_text" = "Need help? Please contact us at \nsupport@osmand.net";
 "login_footer_email_part" = "support@osmand.net";
@@ -2675,7 +2675,7 @@
 "offline_edition_descr" = "If offline editing is enabled, changes will be saved locally and can only be uploaded manually, otherwise, changes will be uploaded immediately.";
 "open_street_map_login_mode_simple" = "You need to log in to upload your changes.";
 "sign_in_with_open_street_map" = "Sign in with OpenStreetMap";
-"use_login_and_password" = "Use login and password";
+"use_login_and_password" = "వాడుకరి పేరు, సంకేతపదం వాడండి";
 "use_login_and_password_description" = "Use your email/login and password to log in to OpenStreetMap.org.";
 "benefits_for_contributors" = "Benefits for active OSM contributors";
 "benefits_for_contributors_primary_descr" = "Active contributors to OpenStreetMap.org may be entitled to unlimited hourly map updates.";
@@ -2704,11 +2704,14 @@
 "shared_string_height" = "ఎత్తు";
 "shared_string_author" = "రచయిత";
 "shared_string_license" = "లైసెన్స్";
-"shared_string_link" = "లింక్";
+"shared_string_link" = "లంకె";
 "map_widget_sun_position_desc" = "సూర్యోదయం లేదా సూర్యాస్తమయం వరకు సమయాన్ని చూపుతుంది.";
-"complex_widget_alert" = "విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
+"complex_widget_alert" = "%@విడ్జెట్ దాని స్వంత వరుసలో మాత్రమే ఉంచబడుతుంది.";
 "map_widget_sun_position" = "సూర్య స్థానం";
 "shared_string_bookmark" = "ఇష్టాంశం";
 "external_device_any_connected" = "ఏదైనా కనెక్ట్ చేయబడింది";
 "shared_string_open_track" = "తెరుచుకున్న మార్గం";
 "shared_string_next_event" = "తదుపరి ఈవెంట్";
+"rendering_attr_padusHideBoundaries_name" = "బహిరంగ భూ సరిహద్దులను దాచివేయు";
+"shared_string_all_colors" = "అన్ని రంగులు";
+"shared_string_precise" = "ఖచ్చితమైన";

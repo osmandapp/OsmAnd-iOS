@@ -2037,7 +2037,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onMapLayerChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.mapViewLoaded/* || self.view.window == nil*/)
+        if (!self.mapViewLoaded || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground /* || self.view.window == nil*/)
         {
             _mapSourceInvalidated = YES;
             return;

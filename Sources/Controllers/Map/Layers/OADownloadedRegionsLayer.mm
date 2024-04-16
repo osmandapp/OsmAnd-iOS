@@ -59,6 +59,7 @@
 
     OAAutoObserverProxy *_weatherToolbarStateChangeObservable;
     BOOL _needsSettingsForToolbar;
+    BOOL _shouldRefreshOnForeground;
 }
 
 - (NSString *) layerId
@@ -74,6 +75,7 @@
     _weatherToolbarStateChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                                      withHandler:@selector(onWeatherToolbarStateChanged)
                                                                       andObserve:[OARootViewController instance].mapPanel.weatherToolbarStateChangeObservable];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
     _collection = std::make_shared<OsmAnd::PolygonsCollection>();
     _selectedCollection = std::make_shared<OsmAnd::PolygonsCollection>();
     _initDone = YES;
@@ -346,8 +348,22 @@
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateLayer];
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+            _shouldRefreshOnForeground = YES;
+        else
+            [self updateLayer];
     });
+}
+
+- (void) onApplicationWillEnterForeground
+{
+    if (_shouldRefreshOnForeground)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateLayer];
+            _shouldRefreshOnForeground = NO;
+        });
+    }
 }
 
 

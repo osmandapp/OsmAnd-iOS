@@ -39,6 +39,8 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     MBProgressHUD* _progressHUD;
     
     NSObject *_sync;
+    
+    OAWorldRegion *_downloadedInBackgroundRegion;
 }
 
 - (instancetype) init
@@ -51,8 +53,21 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         _app = [OsmAndApp instance];
 
         _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
     return self;
+}
+
+- (void) onApplicationWillEnterForeground
+{
+    if (_downloadedInBackgroundRegion)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [OAPluginPopupViewController showRegionOnMap:_downloadedInBackgroundRegion];
+            _downloadedInBackgroundRegion = nil;
+        });
+    }
 }
 
 - (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
@@ -326,9 +341,16 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
-                                    dispatch_async(dispatch_get_main_queue(), ^{
-                                        [OAPluginPopupViewController showRegionOnMap:foundRegion];
-                                    });
+                                    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+                                    {
+                                        _downloadedInBackgroundRegion = foundRegion;
+                                    }
+                                    else
+                                    {
+                                        dispatch_async(dispatch_get_main_queue(), ^{
+                                            [OAPluginPopupViewController showRegionOnMap:foundRegion];
+                                        });
+                                    }
                                 }
                             }
                             if (foundRegion)

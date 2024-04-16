@@ -357,6 +357,8 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     dispatch_queue_t _searchCitiesSerialQueue;
     dispatch_group_t _searchCitiesGroup;
     NSInteger _searchRequestsCount;
+    
+    BOOL _shouldRefreshOnForeground;
 }
 
 + (OAQuickSearchHelper *) instance
@@ -386,6 +388,8 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                     andObserve:[OsmAndApp instance].localResourcesChangedObservable];
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
     return self;
 }
@@ -493,8 +497,22 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [self setResourcesForSearchUICore];
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+            _shouldRefreshOnForeground = YES;
+        else
+            [self setResourcesForSearchUICore];
     });
+}
+
+- (void) onApplicationWillEnterForeground
+{
+    if (_shouldRefreshOnForeground)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setResourcesForSearchUICore];
+            _shouldRefreshOnForeground = NO;
+        });
+    }
 }
 
 - (void)cancelSearchCities

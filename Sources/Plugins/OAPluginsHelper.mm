@@ -211,6 +211,9 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 
 + (void) refreshLayers
 {
+//    if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+//        return;
+    
     for (OAPlugin *plugin in [self.class getAvailablePlugins])
         [plugin updateLayers];
     dispatch_async(dispatch_get_main_queue(), ^{

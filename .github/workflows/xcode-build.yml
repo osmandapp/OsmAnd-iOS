@@ -45,36 +45,42 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.7
+        ref: refs/heads/master
         path: ios
     - name: Checkout android
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.7
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.7
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.7
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/r4.7
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
+    - name: Checkout help
+      uses: actions/checkout@v3
+      with:
+        ref: refs/heads/master
+        repository: osmandapp/osmandapp.github.io
+        path: help
     - name: Checkout resources
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/44.7
+        ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
         path: resources
     - name: Select XCode 15.0.1

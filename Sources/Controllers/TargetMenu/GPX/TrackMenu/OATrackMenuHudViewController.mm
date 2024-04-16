@@ -126,6 +126,7 @@
 
     EOATrackMenuHudTab _selectedTab;
     OATrackMenuViewControllerState *_reopeningState;
+    BOOL _forceHiding;
 
     NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
@@ -410,6 +411,12 @@
     }];
 }
 
+- (void)forceHide
+{
+    _forceHiding = YES;
+    [super forceHide];
+}
+
 - (void)hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     [super hide:YES duration:duration onComplete:^{
@@ -425,7 +432,7 @@
 
 - (void)restoreNavControllerHistoryIfNeeded
 {
-    if (_reopeningState && _reopeningState.openedFromTracksList)
+    if (!_forceHiding && _reopeningState && _reopeningState.openedFromTracksList)
     {
         if ( _navControllerHistory && _navControllerHistory.count > 0)
         {
@@ -863,10 +870,15 @@
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
            withTypes:(NSArray<NSNumber *> *)types
 {
+    OATrackMenuViewControllerState *state = [self getCurrentStateForAnalyze:types];
+    BOOL openedFromTracksList = state.openedFromTracksList;
+    state.openedFromTracksList = NO;
     [self hide:YES duration:.2 onComplete:^{
+        state.openedFromTrackMenu = YES;
+        state.openedFromTracksList = openedFromTracksList;
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:analysis
-                                                        menuControlState:[self getCurrentStateForAnalyze:types]
+                                                        menuControlState:state
                                                                  isRoute:NO];
     }];
 }
@@ -899,11 +911,16 @@
 
 - (void)editSegment
 {
+    OATrackMenuViewControllerState *state = [self getCurrentState];
+    BOOL openedFromTracksList = state.openedFromTracksList;
+    state.openedFromTracksList = NO;
     [self hide:YES duration:.2 onComplete:^{
+        state.openedFromTrackMenu = YES;
+        state.openedFromTracksList = openedFromTracksList;
         [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showScrollableHudViewController:[
             [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
-                                                      targetMenuState:[self getCurrentState]
+                                                      targetMenuState:state
                                                     adjustMapPosition:NO]];
     }];
 }
@@ -1457,11 +1474,16 @@
 
 - (void)openAppearance
 {
+    OATrackMenuViewControllerState *state = [self getCurrentState];
+    BOOL openedFromTracksList = state.openedFromTracksList;
+    state.openedFromTracksList = NO;
     [self hide:YES duration:.2 onComplete:^{
+        state.openedFromTrackMenu = YES;
+        state.openedFromTracksList = openedFromTracksList;
         [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
-                                                     state:[self getCurrentState]];
+                                                     state:state];
     }];
 }
 

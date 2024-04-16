@@ -2466,7 +2466,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
+    if (!plugin)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];

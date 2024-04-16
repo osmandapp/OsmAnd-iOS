@@ -547,7 +547,7 @@
     NSArray *selectedIndexPaths = [self.tableView indexPathsForSelectedRows];
     if (selectedIndexPaths.count > 0)
     {
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"delete_history_items")
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:[NSString stringWithFormat:OALocalizedString(@"delete_history_items"), @(selectedIndexPaths.count).stringValue]
                                                                        message:[NSString stringWithFormat:OALocalizedString(@"confirm_history_item_delete"), selectedIndexPaths.count]
                                                                 preferredStyle:UIAlertControllerStyleAlert];
         

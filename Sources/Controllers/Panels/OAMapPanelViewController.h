@@ -150,7 +150,7 @@
                  trackHudMode:(EOATrackHudMode)trackHudMode
                         state:(OATrackMenuViewControllerState *)state;
 
-- (void)openTargetViewWithGPX:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory;
+- (void)openTargetViewWithGPXFromTracksList:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory;
 
 - (void) openTargetViewWithDestination:(OADestination *)destination;
 
@@ -166,7 +166,7 @@
                                     analysis:(OAGPXTrackAnalysis *)analysis
                             menuControlState:(OATargetMenuViewControllerState *)menuControlState
                                      isRoute:(BOOL)isRoute;
-- (void) openTargetViewWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack;
+- (void) openTargetViewFromTracksListWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack;
 - (void) openTargetViewWithMovableTarget:(OATargetPoint *)targetPoint;
 - (void) openTargetViewWithNewGpxWptMovableTarget:(OAGPX *)gpx
                                  menuControlState:(OATargetMenuViewControllerState *)menuControlState;

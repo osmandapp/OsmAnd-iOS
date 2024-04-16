@@ -518,7 +518,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     if (aid.length > 0)
        url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
 
-    url = [url stringByAppendingString:@"&nightly=true"];
+    //url = [url stringByAppendingString:@"&nightly=true"]; // for testing
     NSURL *urlObj = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData

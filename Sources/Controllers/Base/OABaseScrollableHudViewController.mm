@@ -461,6 +461,11 @@
     [self hide:YES duration:.2 onComplete:nil];
 }
 
+- (void)forceHide
+{
+    [self hide];
+}
+
 - (void) hide:(BOOL)animated duration:(NSTimeInterval)duration onComplete:(void (^)(void))onComplete
 {
     _isHiding = YES;

@@ -121,6 +121,7 @@
     NSMutableArray<OABackupGpx *> *_backupGpxItems;
 
     OATrackMenuViewControllerState *_reopeningTrackMenuState;
+    BOOL _forceHiding;
     
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
@@ -742,18 +743,22 @@
         if (_reopeningTrackMenuState)
         {
             [self restoreOldValues];
-            if (_reopeningTrackMenuState.openedFromTracksList)
+            if (!_forceHiding)
             {
-                UITabBarController *myPlacesViewController =
-                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                [myPlacesViewController setSelectedIndex:1];
-                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
-            }
-            else
-            {
-                [self.mapPanelViewController openTargetViewWithGPX:self.gpx
-                                                      trackHudMode:EOATrackMenuHudMode
-                                                             state:_reopeningTrackMenuState];
+                if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu)
+                {
+                    UITabBarController *myPlacesViewController =
+                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                    [myPlacesViewController setSelectedIndex:1];
+                    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                }
+                else
+                {
+                    _reopeningTrackMenuState.openedFromTrackMenu = NO;
+                    [self.mapPanelViewController openTargetViewWithGPX:self.gpx
+                                                          trackHudMode:EOATrackMenuHudMode
+                                                                 state:_reopeningTrackMenuState];
+                }
             }
         }
 
@@ -762,6 +767,12 @@
         else
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }];
+}
+
+- (void)forceHide
+{
+    _forceHiding = YES;
+    [super forceHide];
 }
 
 - (void)openColorPickerWithColor:(OAColorItem *)colorItem
@@ -805,7 +816,7 @@
         }
         if (_reopeningTrackMenuState)
         {
-            if (_reopeningTrackMenuState.openedFromTracksList)
+            if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu)
             {
                 UITabBarController *myPlacesViewController =
                         [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
@@ -814,6 +825,7 @@
             }
             else
             {
+                _reopeningTrackMenuState.openedFromTrackMenu = NO;
                 [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                                       trackHudMode:EOATrackMenuHudMode
                                                              state:_reopeningTrackMenuState];

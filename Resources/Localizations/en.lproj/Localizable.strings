@@ -3734,3 +3734,5 @@
 "calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
+
+"osm_id" = "OSM ID";

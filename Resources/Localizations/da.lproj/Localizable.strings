@@ -3401,3 +3401,4 @@
 "getting_list_required_maps" = "Henter en liste over nødvendige kort...";
 "calculate_online_title" = "Listen over nødvendige kort er baseret på ruten i lige linje. For at få en nøjagtig liste over kort kan OsmAnd forudberegne din rute online";
 "average_vertical_speed" = "Gennemsnitlig vertikal hastighed";
+"osm_id" = "OSM ID";

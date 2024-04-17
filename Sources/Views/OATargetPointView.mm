@@ -1757,8 +1757,8 @@ static const NSInteger _buttonsCount = 4;
             if ([v isKindOfClass:[UIButton class]])
                 [v removeFromSuperview];
 
-        NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self.customController getLocalTransportStopRoutes];
-        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self.customController getNearbyTransportStopRoutes];
+        NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self filterTransportRoutes:[self.customController getLocalTransportStopRoutes]];
+        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self filterNearbyTransportRoutes:[self.customController getNearbyTransportStopRoutes] filterFromRoutes:localTransportStopRoutes];
         _visibleTransportRoutes = [localTransportStopRoutes arrayByAddingObjectsFromArray:nearbyTransportStopRoutes];
         NSInteger stopPlatesCount = 0;
         if (localTransportStopRoutes.count > 0)
@@ -1803,6 +1803,43 @@ static const NSInteger _buttonsCount = 4;
     {
         _transportView.hidden = YES;
     }
+}
+
+- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute
+{
+    for (OATransportStopRoute *route in routes)
+        if (route.route->type == transportRoute.route->type && route.route->ref == transportRoute.route->ref)
+            return YES;
+
+    return NO;
+}
+
+- (NSMutableArray<OATransportStopRoute *> *)filterNearbyTransportRoutes:(NSArray<OATransportStopRoute *> *)routes filterFromRoutes:(NSArray<OATransportStopRoute *> *)filterFromRoutes
+{
+    NSMutableArray<OATransportStopRoute *> *nearbyFilteredTransportStopRoutes = [self filterTransportRoutes:routes];
+    if (filterFromRoutes == nil || filterFromRoutes.count == 0)
+        return nearbyFilteredTransportStopRoutes;
+    
+    NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
+    for (OATransportStopRoute *route in nearbyFilteredTransportStopRoutes)
+    {
+        if (![self containsRef:filterFromRoutes transportRoute:route])
+        {
+            [filteredRoutes addObject:route];
+        }
+    }
+    return filteredRoutes;
+}
+
+- (NSMutableArray<OATransportStopRoute *> *) filterTransportRoutes:(NSArray<OATransportStopRoute *> *)routes
+{
+    NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
+    for (OATransportStopRoute *r in routes)
+    {
+        if (![self containsRef:filteredRoutes transportRoute:r])
+            [filteredRoutes addObject:r];
+    }
+    return filteredRoutes;
 }
 
 - (void) onTransportPlatePressed:(id)sender

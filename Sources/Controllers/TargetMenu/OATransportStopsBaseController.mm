@@ -25,42 +25,6 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 
 @implementation OATransportStopsBaseController
 
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute
-{
-    for (OATransportStopRoute *route in routes)
-        if (route.route->type == transportRoute.route->type && route.route->ref == transportRoute.route->ref)
-            return YES;
-
-    return NO;
-}
-
-- (NSMutableArray<OATransportStopRoute *> *)filterNearbyTransportRoutes:(NSArray<OATransportStopRoute *> *)routes filterFromRoutes:(NSArray<OATransportStopRoute *> *)filterFromRoutes
-{
-    if (filterFromRoutes == nil || filterFromRoutes.count == 0)
-        return routes.mutableCopy;
-    
-    NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
-    for (OATransportStopRoute *route in routes)
-    {
-        if (![self containsRef:filterFromRoutes transportRoute:route])
-        {
-            [filteredRoutes addObject:route];
-        }
-    }
-    return filteredRoutes;
-}
-
-- (NSMutableArray<OATransportStopRoute *> *) filterTransportRoutes:(NSArray<OATransportStopRoute *> *)routes
-{
-    NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
-    for (OATransportStopRoute *r in routes)
-    {
-        if (![self containsRef:filteredRoutes transportRoute:r])
-            [filteredRoutes addObject:r];
-    }
-    return filteredRoutes;
-}
-
 - (void)processTransportStop:(const std::shared_ptr<OsmAnd::ObfDataInterface> &)dataInterface isSubwayEntrance:(BOOL)isSubwayEntrance localRoutes:(NSMutableArray<OATransportStopRoute *> *)localRoutes nearbyRoutes:(NSMutableArray<OATransportStopRoute *> *)nearbyRoutes prefLang:(NSString *)prefLang stops:(NSMutableArray<OATransportStop *> *)stops transliterate:(BOOL)transliterate {
     OATransportStop *localStop = nil;
     NSMutableArray<OATransportStop *> *nearbyStops = [NSMutableArray array];
@@ -177,8 +141,6 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
         
         return [o1.desc compare:o2.desc];
     };
-    localRoutes = [self filterTransportRoutes:localRoutes];
-    nearbyRoutes = [self filterTransportRoutes:nearbyRoutes];
     [localRoutes sortUsingComparator:comparator];
     [nearbyRoutes sortUsingComparator:comparator];
     self.localRoutes = localRoutes;

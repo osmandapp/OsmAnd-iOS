@@ -1950,7 +1950,7 @@
 {
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     NSInteger tag = indexPath.section << 10 | indexPath.row;
-    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [cellData.key hasPrefix:@"link_"] || [OAWikiAlgorithms isUrl:cellData.desc] || [cellData.desc isValidEmail];
+    BOOL isWebsite = [cellData.key isEqualToString:kWebsiteCellName] || [cellData.key hasPrefix:@"link_"] || [cellData.key isEqualToString:@"relation_id"] || [OAWikiAlgorithms isUrl:cellData.desc] || [cellData.desc isValidEmail];
     UITableViewCell *outCell = nil;
     if ([cellData.type isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {

@@ -252,7 +252,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             }
             if isShowingVisibleTracks && !recentlyVisibleGpxList.isEmpty && !isSearchActive {
                 let recentlyVisibleSection = tableData.createNewSection()
-                recentlyVisibleSection.headerText = localizedString("recently_visible") + " (\(recentlyVisibleGpxList.count))"
+                recentlyVisibleSection.headerText = String(format: localizedString("recently_visible"), "(\(recentlyVisibleGpxList.count))")
                 for gpx in recentlyVisibleGpxList {
                     let gpxRow = recentlyVisibleSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()

@@ -680,7 +680,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     private func onTrackAnalyzeClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
             let absolutePath = getAbsolutePath(gpx.gpxFilePath)
-            rootVC.mapPanel.openTargetView(withRouteDetailsGraph: absolutePath, isCurrentTrack: isCurrentTrack)
+            rootVC.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: absolutePath, isCurrentTrack: isCurrentTrack)
             navigationController?.popToRootViewController(animated: true)
             navigationController?.setNavigationBarHidden(true, animated: true)
         }
@@ -1143,7 +1143,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                         
                         // Show track context menu above the map.
                         // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
-                        rootVC.mapPanel.openTargetView(with: track, navControllerHistory: currentHistory)
+                        rootVC.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: currentHistory)
                     }
                 }
             }

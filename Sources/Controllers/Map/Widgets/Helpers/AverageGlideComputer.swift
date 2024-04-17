@@ -44,14 +44,23 @@ final class AverageGlideComputer: AverageValueComputer {
         }
     }
 
-    func getFormattedAverageGlideRatio(_ measuredInterval: Int) -> String? {
+    func getFormattedAverage(verticalSpeed: Bool, measuredInterval: Int) -> String? {
         clearExpiredLocations(measuredInterval)
 
         let locationsToUse: [CLLocation] = getLocations()
         if !locationsToUse.isEmpty {
-            let distance = calculateTotalDistance(locationsToUse)
-            let difference = calculateAltitudeDifference(locationsToUse)
-            return GlideUtils.calculateFormattedRatio(distance, altDif: difference)
+            if !verticalSpeed {
+                let distance = calculateTotalDistance(locationsToUse)
+                let difference = calculateAltitudeDifference(locationsToUse)
+                return GlideUtils.calculateFormattedRatio(distance, altDif: difference)
+            } else {
+                let altitudeDifference = calculateAltitudeDifference(locationsToUse)
+                if measuredInterval > 0 {
+                    let verticalSpeedValue = abs(altitudeDifference) / (Double(measuredInterval) / 1000.0)
+                    let roundedVerticalSpeedValue = round(verticalSpeedValue)
+                    return OAOsmAndFormatter.getFormattedSpeed(Float(roundedVerticalSpeedValue))
+                }
+            }
         }
         return nil
     }

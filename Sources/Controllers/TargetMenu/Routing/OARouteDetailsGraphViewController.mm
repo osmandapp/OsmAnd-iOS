@@ -303,6 +303,10 @@
     return NO;
 }
 
+- (void)onMenuShown
+{
+}
+
 - (ETopToolbarType) topToolbarType
 {
     return ETopToolbarTypeFixed;
@@ -410,7 +414,7 @@
 {
     if (_trackMenuControlState)
     {
-        if (_trackMenuControlState.openedFromTracksList)
+        if (_trackMenuControlState.openedFromTracksList && !_trackMenuControlState.openedFromTrackMenu)
         {
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
                 UITabBarController *myPlacesViewController =
@@ -421,6 +425,7 @@
         }
         else
         {
+            _trackMenuControlState.openedFromTrackMenu = NO;
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
                 [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
                                                                    trackHudMode:EOATrackMenuHudMode

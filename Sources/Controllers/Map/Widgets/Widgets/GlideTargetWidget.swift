@@ -32,7 +32,7 @@ final class GlideTargetWidget: GlideBaseWidget {
             guard let self else { return }
 
             forceUpdate = true
-            widgetState.changeToNextState()
+            self.widgetState?.changeToNextState()
             updateInfo()
             setContentTitle(getWidgetName())
         }
@@ -116,11 +116,13 @@ final class GlideTargetWidget: GlideBaseWidget {
             markUpdated()
             if forceUpdate || metricSystemChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
                 cachedTargetAltitude = targetAltitude
-                if let cachedTargetAltitude {
-                    let formattedAltitude: String = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude)
+                if let cachedTargetAltitude, cachedTargetAltitude != GlideTargetWidget.minAltitudeValue,
+                   let formattedAltitude = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude) {
                     let components = formattedAltitude.components(separatedBy: " ")
-                    if components.count > 1 {
-                        setText(formattedAltitude.replacingOccurrences(of: components.last!, with: "").trimWhitespaces(), subtext: components.last)
+                    if components.count == 2 {
+                        let numberPart = components[0]
+                        let unitPart = components[1]
+                        setText(numberPart.trimWhitespaces(), subtext: unitPart)
                     } else {
                         setText(formattedAltitude, subtext: "")
                     }

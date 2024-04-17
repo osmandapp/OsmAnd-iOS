@@ -45,42 +45,36 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         path: ios
     - name: Checkout android
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-core
         path: core
-    - name: Checkout help
-      uses: actions/checkout@v3
-      with:
-        ref: refs/heads/master
-        repository: osmandapp/osmandapp.github.io
-        path: help
     - name: Checkout resources
       uses: actions/checkout@v3
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-resources
         path: resources
     - name: Select XCode 15.0.1
@@ -125,7 +119,7 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
     - name: Zip iOS archive
-      run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
+      run: 'zip -r OsmAndMaps.xcarchive.zip . -i OsmAndMaps.xcarchive'
     - name: Upload maps archive zip
       uses: actions/upload-artifact@v2
       with:

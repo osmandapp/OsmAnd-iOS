@@ -16,6 +16,7 @@
 #import "OARouteKey.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAOsmEditingPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -143,10 +144,13 @@
     {
         NSString *routeTagKey = i.key().toNSString();
         if ([routeTagKey hasPrefix:@"osmc"]
-            || [routeTagKey isEqualToString:@"name"])
+            || [routeTagKey isEqualToString:@"name"]
+            || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
             continue;
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
-        if (!poiType && ![routeTagKey isEqualToString:@"symbol"] && ![routeTagKey isEqualToString:@"colour"])
+        if (!poiType && ![routeTagKey isEqualToString:@"symbol"]
+            && ![routeTagKey isEqualToString:@"colour"]
+            && ![routeTagKey isEqualToString:@"relation_id"])
             continue;
         NSString *routeTagTitle = poiType ? poiType.nameLocalized : @"";
         NSNumber *routeTagOrder = poiType && [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90);
@@ -172,6 +176,10 @@
         else if ([routeTagKey isEqualToString:@"symbol"])
         {
             routeTagTitle = OALocalizedString(@"shared_string_symbol");
+        }
+        else if ([routeTagKey isEqualToString:@"relation_id"])
+        {
+            routeTagTitle = OALocalizedString(@"osm_id");
         }
 
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
@@ -651,6 +659,10 @@
             else if ([cellData.key hasPrefix:@"email_"])
             {
                 [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
+            else if ([cellData.key isEqualToString:@"relation_id"])
+            {
+                [self.trackMenuDelegate openURL:[kOsmRelation stringByAppendingString:cellData.desc] sourceView:sourceView];
             }
             else if ([cellData.key hasPrefix:@"description"])
             {

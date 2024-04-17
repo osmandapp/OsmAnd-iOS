@@ -8,64 +8,47 @@
 
 import Foundation
 
-@objcMembers final class WidgetSizeStyleObjWrapper: NSObject {
-    
-    static func getLabelFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
-        type.labelFontSize
-    }
-    
-    static func getValueFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
-        type.valueFontSize
-    }
-    
-    static func getUnitsFontSizeFor(type: WidgetSizeStyle) -> CGFloat {
-        type.unitsFontSize
-    }
-    
-    static func getTopBottomPadding(type: WidgetSizeStyle) -> CGFloat {
-        type.topBottomPadding
-    }
-    
-    static func getPaddingBetweenIconAndValue(type: WidgetSizeStyle) -> CGFloat {
-        type.paddingBetweenIconAndValue
-    }
-}
+@objc(OAWidgetSizeStyleObjWrapper)
+@objcMembers
+final class WidgetSizeStyleObjWrapper: NSObject {
 
-@objc enum WidgetSizeStyle: NSInteger {
-    case small, medium, large
-    
-    var labelFontSize: CGFloat {
-        switch self {
+    static func getLabelFontSizeFor(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
         case .small, .medium, .large: 11
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
-    
-    var valueFontSize: CGFloat {
-        switch self {
+
+    static func getValueFontSizeFor(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
         case .small: 22
         case .medium: 33
         case .large: 50
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
-    
-    var unitsFontSize: CGFloat {
-        switch self {
+
+    static func getUnitsFontSizeFor(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
         case .small, .medium, .large: 11
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
-    
-    var topBottomPadding: CGFloat {
-        switch self {
+
+    static func getTopBottomPadding(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
         case .small: 7
         case .medium: 10
         case .large: 12
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
-    
-    var paddingBetweenIconAndValue: CGFloat {
-        switch self {
+
+    static func getPaddingBetweenIconAdndValue(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
         case .small: 6
         case .medium, .large: 12
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
 }

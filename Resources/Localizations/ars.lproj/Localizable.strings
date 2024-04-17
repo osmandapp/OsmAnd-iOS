@@ -3076,7 +3076,6 @@
 "external_device_forget_sensor_description" = "سيُحذف من القائمة ستكون قادراً على ربط هذا المستشعرمجدداً في أي وقت.";
 "routing_attr_avoid_footways_description" = "تجنب طرق المشاة";
 "shared_string_height" = "الارتفاع";
-
 "over_wifi_only" = "عبر الواي الفاي فقط";
 "change_language" = "غيَّر اللغة";
 "shared_string_app_profile" = "تطبيق الملف الشخصي";

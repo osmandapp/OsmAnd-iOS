@@ -706,9 +706,23 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_layer resetLayer];
 
         if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
-            [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
-                                trackHudMode:EOATrackMenuHudMode
-                                       state:(OATrackMenuViewControllerState *) _targetMenuState];
+        {
+            OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
+            if (state.openedFromTracksList && !state.openedFromTrackMenu)
+            {
+                UITabBarController *myPlacesViewController =
+                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
+                [myPlacesViewController setSelectedIndex:1];
+                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+            }
+            else
+            {
+                state.openedFromTrackMenu = NO;
+                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
+                                    trackHudMode:EOATrackMenuHudMode
+                                           state:state];
+            }
+        }
     }];
 }
 

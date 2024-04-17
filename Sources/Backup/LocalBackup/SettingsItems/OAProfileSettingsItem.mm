@@ -361,11 +361,13 @@
 {
     OAAppSettings *settings = OAAppSettings.sharedManager;
     NSSet<NSString *> *appModeBeanPrefsIds = [NSSet setWithArray:settings.appModeBeanPrefsIds];
-    for (NSString *key in [settings getPreferences:NO].keyEnumerator)
+    NSMapTable<NSString *, OACommonPreference *> *prefs = [settings getRegisteredPreferences];
+    for (NSString *key in prefs.keyEnumerator)
     {
         if ([appModeBeanPrefsIds containsObject:key])
             continue;
-        OACommonPreference *setting = [settings getPreferenceByKey:key];
+
+        OACommonPreference *setting = [prefs objectForKey:key];
         if (setting)
         {
             NSString *stringValue = [setting toStringValue:self.appMode];

@@ -3414,6 +3414,9 @@
 • Enhanced tags support for GPX has been added: link, author, copyright, and keywords\n
 • Improved widget configuration by allowing users to move pages and rows\n
 • Improved track management in the \"My Places\" with subfolders and context menus for tracks and folders\n
+• Roundabout with exit number now shown on CarPlay when navigating\n
+• Control the 3D relief with a new \"Vertical exaggeration\" option for a more dramatic landscape\n
+• Visualize track elevation directly on the map in a dynamic 3D view\n
 • New widgets: \"Glide Ratio\" and \"Sun Position\"\n
 • Customize \"Distance during navigation\": choose between precise or round up numbers\n
 • App language will be used for names on the world overview map instead of local languages\n
@@ -3677,6 +3680,7 @@
 "upload_to_osm_short" = "Upload to OSM";
 
 "average_glide_ratio" = "Average glide ratio";
+"average_vertical_speed" = "Average vertical speed";
 "glide_ratio_to_target" = "Glide ratio to target";
 "map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
 "map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
@@ -3745,3 +3749,5 @@
 
 "track_3d_empty_view_title" = "3D Track view";
 "track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
+
+"osm_id" = "OSM ID";

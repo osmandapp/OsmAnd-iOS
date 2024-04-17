@@ -9,14 +9,13 @@
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
-#import "OAAppSettings.h"
 
 #define kTextInfoWidgetWidth 94
 #define kTextInfoWidgetHeight 34
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType, OutlineLabel;
+@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle;
 
 @interface OATextInfoWidget : OABaseWidgetView
 
@@ -43,7 +42,7 @@
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
 @property (nonatomic, strong, nullable) UIView *iconWidgetView;
-@property (nonatomic) OACommonInteger *sizeStylePref;
+@property (nonatomic) OACommonWidgetSizeStyle *widgetSizePref;
 
 @property (strong) BOOL(^updateInfoFunction)();
 @property (strong) void(^onClickFunction)(id sender);

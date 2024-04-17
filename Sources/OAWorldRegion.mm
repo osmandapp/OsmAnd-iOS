@@ -71,6 +71,8 @@
         _regionRoadSigns = _worldRegion->regionRoadSigns.toNSString();
         _wikiLink = _worldRegion->wikiLink.toNSString();
         _population = _worldRegion->population.toNSString();
+        _regionJoinMap = _worldRegion->regionJoinMap;
+        _regionJoinRoads = _worldRegion->regionJoinRoads;
         
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
@@ -659,7 +661,20 @@
     return [NSArray arrayWithArray:res];
 }
 
-- (NSArray<OAWorldRegion *> *) getWorldRegionsAt:(double)latitude longitude:(double)longitude
+- (NSArray<OAWorldRegion *> *)getWorldRegionsAtWithoutSort:(double)latitude longitude:(double)longitude
+{
+    NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray arrayWithArray:[self queryAtLat:latitude lon:longitude]];
+    if (mapRegions.count > 0)
+    {
+        [mapRegions.copy enumerateObjectsUsingBlock:^(OAWorldRegion * _Nonnull region, NSUInteger idx, BOOL * _Nonnull stop) {
+            if (![region contain:latitude lon:longitude])
+                [mapRegions removeObject:region];
+        }];
+    }
+    return mapRegions;
+}
+
+- (NSArray<OAWorldRegion *> *)getWorldRegionsAt:(double)latitude longitude:(double)longitude
 {
     NSMutableArray<OAWorldRegion *> *mapRegions = [NSMutableArray arrayWithArray:[self queryAtLat:latitude lon:longitude]];
     if (mapRegions.count > 0)

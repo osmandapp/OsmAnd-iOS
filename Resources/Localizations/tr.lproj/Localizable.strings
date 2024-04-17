@@ -3019,7 +3019,7 @@
 "learn_more_about_sensors_link" = "Sensörler hakkında daha fazla bilgi edinin.";
 "ant_plus_nothing_found_text" = "Herhangi bir sensör bulunamıyor";
 "ble_search_again" = "Tekrar ara";
-"ant_plus_searching_text_description" = "Lütfen aygıtı sensöre yakın tutun. OsmAnd\'ın onu bulabilmesi için sensörü etkinleştirmeniz gerekir.";
+"ant_plus_searching_text_description" = "Lütfen aygıtı sensöre yakın tutun. OsmAnd'ın onu bulabilmesi için sensörü etkinleştirmeniz gerekir.";
 "ant_plus_open_settings" = "Ayarları aç";
 "external_device_forget_sensor_description" = "Sensör listeden kaldırılacak. Bu sensörü istediğiniz zaman tekrar eşleştirebileceksiniz.";
 "external_device_status_disconnect" = "Bağlantıyı kes";

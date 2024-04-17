@@ -17,8 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)shouldShowQuickActionButton;
 - (BOOL)shouldShowMap3DButton;
 - (BOOL)shouldShowFabButton;
-- (BOOL)shouldShowTopMapCenterCoordinatesWidget;
-- (BOOL)shouldShowTopCurrentLocationCoordinatesWidget;
+- (BOOL)shouldShowTopCoordinatesWidget;
 - (BOOL)shouldShowTopMapMarkersWidget;
 - (BOOL)shouldShowBottomMenuButtons;
 - (BOOL)shouldShowZoomButtons;

@@ -25,7 +25,7 @@ class CoordinatesMapCenterWidget: CoordinatesBaseWidget {
     }
 
     override func updateInfo() -> Bool {
-        let visible = OAWidgetsVisibilityHelper.sharedInstance().shouldShowTopMapCenterCoordinatesWidget()
+        let visible = OAWidgetsVisibilityHelper.sharedInstance().shouldShowTopCoordinatesWidget()
         let loc: CLLocation = OARootViewController.instance().mapPanel.mapViewController.getMapLocation()
 
         updateVisibility(visible: visible)

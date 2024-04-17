@@ -1880,7 +1880,7 @@
 "next_segment" = "Следующий сегмент";
 "quick_action_showhide_mapillary_title" = "Показать/скрыть Mapillary";
 "quick_action_mapillary_show" = "Показать Mapillary";
-"quick_action_remove_next_destination" = "Удалить ближайший пункт";
+"quick_action_remove_next_destination" = "Удалить следующий пункт";
 "layer_amenity_label" = "Названия точек";
 "quick_action_mapillary_hide" = "Скрыть Mapillary";
 "shared_string_add_profile" = "Добавить профиль";

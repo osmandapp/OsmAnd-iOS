@@ -948,7 +948,7 @@
 "intermediate_items_sort_by_distance" = "Sortare din ușă în ușă";
 "auto_zoom_farthest" = "La apropiere minimă";
 "auto_zoom_far" = "La apropiere medie";
-"auto_zoom_none" = "Fără zoom automat";
+"auto_zoom_none" = "Fără focalizare automată";
 "gpx_option_calculate_first_last_segment" = "Calculați ruta OsmAnd pentru primul și ultimul segment de rută";
 "use_points_as_intermediates" = "Calcularea traseuluiîntre puncte";
 "error_avoid_specific_road" = "Nu s-a găsit niciun bypass";
@@ -2925,7 +2925,7 @@
 "weather_widget_group_desc" = "Un set de widgeturi ce arată diverse informații despre vreme.";
 "map_widget_group_sunrise_sunset_desc" = "Aceste widgeturi arată informații despre următorul răsărit și apus.";
 "map_widget_group_sunrise_sunset" = "Răsărit, apus";
-"bearing_secondary_desc" = "Puteți modifica formatul de date utilizat în: %@ - %@ - %@.";
+"bearing_secondary_desc" = "Puteți modifica formatul de date utilizat în: %@- %@ - %@.";
 "angular_measeurement" = "Unitate unghiulară";
 "angular_measeurement_descr" = "Modificați în ce azimut se măsoară.";
 "coordinates_format" = "Formatul coordonatelor";
@@ -2963,7 +2963,7 @@
 "trip_recording_downhill_widget_desc" = "Arată suma tuturor coborârilor din călătoria înregistrată.";
 "route_maneuvers_desc" = "Widgeturile de navigație sunt activate în timpul navigației pentru a afișa informații precum distanța, ora de sosire sau durata, următoarele viraje, direcția, numele străzii curente, informații despre benzi, viteza maximă, alerte de apropiere, puncte de interes, puncte intermediare.";
 "widget_panels_descr" = "Selectați partea de ecran pentru a adăuga sau rearanja widgeturile.";
-"distance_circles" = "Cercuri de distanță";
+"distance_circles" = "Distanța-cercuri";
 "true_bearing_wdiget_desc" = "Unghiul dintre nordul geograficși punctul țintă observat din locația dumneavoastră.";
 "shared_string_dark" = "Întunecată";
 "shared_string_light" = "Luminoasă";

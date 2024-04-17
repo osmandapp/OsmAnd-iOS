@@ -464,7 +464,7 @@
         {
             [item setShouldReplace:shouldReplace];
         }
-        [_settingsHelper importSettings:_file items:_settingsItems latestChanges:@"" version:1 delegate:self];
+        [_settingsHelper importSettings:_file items:_settingsItems latestChanges:@"" version:kVersion delegate:self];
     }
 }
 
@@ -620,6 +620,7 @@
         _settingsHelper.importTask = nil;
     }
     [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
+    [[OASettingsHelper sharedInstance] setCurrentBackupVersion:kVersion];
 }
 
 - (void)onDuplicatesChecked:(NSArray<OASettingsItem *> *)duplicates items:(NSArray<OASettingsItem *> *)items

@@ -15,14 +15,13 @@ final class SensorTextWidget: OASimpleWidget {
     
     private(set) var externalDeviceId: String?
     
-    private var useAnyDevicePref: OACommonBoolean?
-    
     private var cachedValue: String?
-    private var deviceIdPref: OACommonPreference?
+    private var deviceIdPref: OACommonString?
     private var appMode: OAApplicationMode!
+    private var plugin: OAExternalSensorsPlugin?
     
-    var shouldUseAnyDevice: Bool {
-        useAnyDevicePref?.get() == true
+    var shouldUseAnyConnectedDevice: Bool {
+        deviceIdPref?.get(appMode) == plugin?.getAnyConnectedDeviceId()
     }
    
     convenience init(customId: String?, widgetType: WidgetType, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
@@ -30,9 +29,9 @@ final class SensorTextWidget: OASimpleWidget {
         setIconFor(widgetType)
         self.widgetType = widgetType
         self.appMode = appMode
+        plugin = OAPluginsHelper.getPlugin(OAExternalSensorsPlugin.self) as? OAExternalSensorsPlugin
         configurePrefs(withId: customId, appMode: appMode, widgetParams: widgetParams)
         deviceIdPref = registerSensorDevicePref(customId: customId)
-        useAnyDevicePref = registerUseAnyDevicePref(customId: customId)
         
         if let id = widgetParams?[SensorTextWidget.externalDeviceIdConst] as? String {
             // For a newly created widget with selected device(not 1st)
@@ -78,13 +77,13 @@ final class SensorTextWidget: OASimpleWidget {
             applyDeviceId()
         }
         if let sensor = getCurrentSensor() {
-            if shouldUseAnyDevice {
+            if shouldUseAnyConnectedDevice {
                 settingRow.descr = localizedString("external_device_any_connected") + ": " + sensor.device.deviceName
             } else {
                 settingRow.descr = sensor.device.deviceName
             }
         } else {
-            settingRow.descr = localizedString(shouldUseAnyDevice ? "external_device_any_connected" : "shared_string_none")
+            settingRow.descr = localizedString(shouldUseAnyConnectedDevice ? "external_device_any_connected" : "shared_string_none")
         }
 
         return data
@@ -100,7 +99,9 @@ final class SensorTextWidget: OASimpleWidget {
     }
     
     func setAnyDevice(use: Bool) {
-        useAnyDevicePref?.set(use, mode: appMode)
+        if use, let plugin {
+            deviceIdPref?.set(plugin.getAnyConnectedDeviceId(), mode: appMode)
+        }
     }
     
     private func updateSensorData(sensor: Sensor?) {
@@ -140,7 +141,7 @@ final class SensorTextWidget: OASimpleWidget {
         guard let widgetType else {
             return nil
         }
-        if shouldUseAnyDevice {
+        if shouldUseAnyConnectedDevice {
             if let device = DeviceHelper.shared.getConnectedDevicesForWidget(type: widgetType)?.first {
                 return device.sensors.compactMap { $0.getSupportedWidgetDataFieldTypes() != nil ? $0 : nil }
                     .first(where: { $0.getSupportedWidgetDataFieldTypes()!.contains(widgetType) })
@@ -161,7 +162,7 @@ final class SensorTextWidget: OASimpleWidget {
     }
     
     private func applyDeviceId() {
-        guard !shouldUseAnyDevice else {
+        guard !shouldUseAnyConnectedDevice else {
             return
         }
         if externalDeviceId == nil || externalDeviceId?.isEmpty ?? false {
@@ -195,20 +196,15 @@ final class SensorTextWidget: OASimpleWidget {
             saveDeviceId(deviceId: externalDeviceId!)
         }
     }
-    
-    private func registerSensorDevicePref(customId: String?) -> OACommonPreference {
-        var prefId = widgetType!.title
-        if let customId, !customId.isEmpty {
-            prefId += customId
+
+    private func registerSensorDevicePref(customId: String?) -> OACommonString? {
+        if let plugin, let widgetId = customId ?? widgetType?.id, let fieldType = plugin.getWidgetDataFieldTypeName(byWidgetId: widgetId) {
+            let prefId = fieldType + (customId ?? "")
+            return OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: plugin.getAnyConnectedDeviceId())
         }
-        return OAAppSettings.sharedManager().registerStringPreference(prefId, defValue: nil).makeProfile() as! OACommonPreference
+        return nil
     }
-    
-    private func registerUseAnyDevicePref(customId: String?) -> OACommonBoolean {
-        let prefId = widgetType!.title + "_useAnyDevicePref_\(customId ?? "")"
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: true)
-    }
-    
+
     private func saveDeviceId(deviceId: String) {
         deviceIdPref?.setValueFrom(deviceId, appMode: appMode)
     }

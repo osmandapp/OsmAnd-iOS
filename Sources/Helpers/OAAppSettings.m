@@ -425,10 +425,13 @@ static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
 // Widgets
-static NSString * const kLeftWidgetPanelOrderKey = @"left_widget_panel_order";
-static NSString * const kRightWidgetPanelOrderKey = @"right_widget_panel_order";
-static NSString * const kTopWidgetPanelOrderKey = @"top_widget_panel_order";
-static NSString * const kBottomWidgetPanelOrderKey = @"bottom_widget_panel_order";
+static NSString * const leftWidgetPanelOrderKey = @"left_widget_panel_order";
+static NSString * const rightWidgetPanelOrderKey = @"right_widget_panel_order";
+static NSString * const topWidgetPanelOrderKey = @"widget_top_panel_order";
+static NSString * const bottomWidgetPanelOrderKey = @"widget_bottom_panel_order";
+
+static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
+static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useHHRoutingKey = @"useHHRoutingKey";
 static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
@@ -3671,6 +3674,76 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
 @end
 
+@implementation OACommonWidgetSizeStyle
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+{
+    OACommonWidgetSizeStyle *obj = [[OACommonWidgetSizeStyle alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAWidgetSizeStyle) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle
+{
+    [super set:widgetSizeStyle];
+}
+
+- (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode
+{
+    [super set:widgetSizeStyle mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"SMALL"])
+        return [self set:EOAWidgetSizeStyleSmall mode:mode];
+    else if ([strValue isEqualToString:@"MEDIUM"])
+        return [self set:EOAWidgetSizeStyleMedium mode:mode];
+    else if ([strValue isEqualToString:@"LARGE"])
+        return [self set:EOAWidgetSizeStyleLarge mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOAWidgetSizeStyleSmall:
+            return @"SMALL";
+        case EOAWidgetSizeStyleLarge:
+            return @"LARGE";
+        default:
+            return @"MEDIUM";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAWidgetSizeStyle defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3822,15 +3895,21 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
         
         // Widgets
-        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:kLeftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
-        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:kRightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
-        _topWidgetPanelOrder = [OACommonListOfStringList withKey:kTopWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
+        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
+        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+
+        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
         [_profilePreferences setObject:_topWidgetPanelOrder forKey:_topWidgetPanelOrder.key];
         [_profilePreferences setObject:_bottomWidgetPanelOrder forKey:_bottomWidgetPanelOrder.key];
+
+        [_profilePreferences setObject:_topWidgetPanelOrderOld forKey:_topWidgetPanelOrderOld.key];
+        [_profilePreferences setObject:_bottomWidgetPanelOrderOld forKey:_bottomWidgetPanelOrderOld.key];
 
         // Map Settings
         _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
@@ -4671,6 +4750,9 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
         for (NSString *key in _profilePreferences.keyEnumerator)
         {
+            if ([key isEqualToString:topWidgetPanelOrderOldKey] || [key isEqualToString:bottomWidgetPanelOrderKeyOld])
+                continue;
+
             [self registerPreference:[self getProfilePreference:key] forKey:key];
         }
         for (NSString *key in _globalPreferences.keyEnumerator)
@@ -4786,6 +4868,16 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         return (OACommonDouble *)[_registeredPreferences objectForKey:key];
     
     OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

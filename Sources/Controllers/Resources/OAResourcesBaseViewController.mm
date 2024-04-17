@@ -520,11 +520,12 @@ static BOOL dataInvalidated = NO;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded || self.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-//        if (!self.isViewLoaded || self.view.window == nil)
             return;
         
         if (!self.downloadView || !self.downloadView.superview)
             [self showDownloadViewForTask:task];
+        if (![task.key hasSuffix:self.downloadView.taskName])
+            return;
         
         [self.downloadView setProgress:[value floatValue]];
         //[self refreshContent:NO];

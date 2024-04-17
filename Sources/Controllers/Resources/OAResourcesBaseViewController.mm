@@ -641,6 +641,7 @@ static BOOL dataInvalidated = NO;
         
         [self updateContent];
         [self.getTableView reloadData];
+        [self refreshDownloadingContent:nil]; // restart all cells animations
     });
 }
 

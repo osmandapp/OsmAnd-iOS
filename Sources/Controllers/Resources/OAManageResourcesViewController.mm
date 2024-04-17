@@ -1416,6 +1416,8 @@ static BOOL _repositoryUpdated = NO;
 {
     @synchronized(_dataLock)
     {
+        BOOL restartAnimations = downloadTaskKey == nil;
+        
         if (_searchController.isActive)
         {
             for (int i = 0; i < _searchResults.count; i++)
@@ -1426,9 +1428,9 @@ static BOOL _repositoryUpdated = NO;
                 id searchResult = _searchResults[i];
                 OAResourceItem *item = (OAResourceItem *) ([searchResult isKindOfClass:OASearchResult.class] ? ((OASearchResult *) searchResult).relatedObject : searchResult);
 
-                if ([[item.downloadTask key] isEqualToString:downloadTaskKey])
+                if (!downloadTaskKey || [[item.downloadTask key] isEqualToString:downloadTaskKey])
                 {
-                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]];
+                    [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0] ];
                     return;
                 }
             }
@@ -1441,9 +1443,9 @@ static BOOL _repositoryUpdated = NO;
             if ([resourceItems[i] isKindOfClass:[OAWorldRegion class]])
                 continue;
             OAResourceItem *item = resourceItems[i];
-            if ([[item.downloadTask key] isEqualToString:downloadTaskKey])
+            if ([[item.downloadTask key] isEqualToString:downloadTaskKey] || restartAnimations)
             {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_resourcesSection]];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_resourcesSection] restartAnimatios:restartAnimations];
                 break;
             }
         }
@@ -1452,9 +1454,9 @@ static BOOL _repositoryUpdated = NO;
         for (int i = 0; i < regionMapItems.count; i++)
         {
             OAResourceItem *item = regionMapItems[i];
-            if (item && [[item.downloadTask key] isEqualToString:downloadTaskKey])
+            if (item && ([[item.downloadTask key] isEqualToString:downloadTaskKey] || restartAnimations))
             {
-                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_regionMapSection]];
+                [self updateDownloadingCellAtIndexPath:[NSIndexPath indexPathForRow:i inSection:_regionMapSection] restartAnimatios:restartAnimations];
             }
             else if ([item isKindOfClass:OAMultipleResourceItem.class])
             {
@@ -2081,6 +2083,11 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath
 {
+    [self updateDownloadingCellAtIndexPath:indexPath restartAnimatios:NO];
+}
+
+- (void) updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath restartAnimatios:(BOOL)restartAnimatios
+{
     UITableViewCell *cell = [_tableView cellForRowAtIndexPath:indexPath];
     
     static NSString * const downloadingResourceCell = @"downloadingResourceCell";
@@ -2150,7 +2157,7 @@ static BOOL _repositoryUpdated = NO;
         else if (item.downloadTask.state == OADownloadTaskStateFinished)
         {
             progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-            if (!progressView.isSpinning)
+            if (!progressView.isSpinning || restartAnimatios)
                 [progressView startSpinProgressBackgroundLayer];
             progressView.progress = 0.0f;
         }
@@ -2158,7 +2165,7 @@ static BOOL _repositoryUpdated = NO;
         {
             progressView.iconPath = [UIBezierPath bezierPath];
             progressView.progress = 0.0;
-            if (!progressView.isSpinning)
+            if (!progressView.isSpinning || restartAnimatios)
                 [progressView startSpinProgressBackgroundLayer];
         }
     }

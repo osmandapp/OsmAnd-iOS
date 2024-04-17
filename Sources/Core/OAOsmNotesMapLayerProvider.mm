@@ -194,6 +194,8 @@ QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> OAOsmNotesMapLayerProvider::buil
     const auto iconClosed = [OANativeUtilities getScaledSkImage:[OANativeUtilities skImageFromPngResource:@"map_osm_note_resolved"]
                                                     scaleFactor:_symbolsScaleFactor];
     QList<std::shared_ptr<OsmAnd::MapSymbolsGroup>> mapSymbolsGroups;
+	if (!iconOpen || !iconClosed)
+        return mapSymbolsGroups;
 
     for (const auto note : _notesCache)
     {

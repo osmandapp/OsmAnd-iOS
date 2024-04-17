@@ -339,6 +339,21 @@
     }];
 }
 
+- (void) restartDownloadingCellsAnimations
+{
+    [self iterateAllCellsWithAction:^(OAResourceItem *item, NSIndexPath *indexPath) {
+        if ([item isKindOfClass:OAMultipleResourceItem.class])
+            item = [self getActiveItemForIndexPath:indexPath useDefautValue:NO];
+        if (item.downloadTask)
+        {
+            UITableViewCell *cell = [_hostTableView cellForRowAtIndexPath:indexPath];
+            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+            if (progressView.isSpinning)
+                [progressView startSpinProgressBackgroundLayer];
+        }
+    }];
+}
+
 #pragma mark - Helpers
 
 - (OAResourceItem *)getResourceByIndex:(NSIndexPath *)indexPath
@@ -430,7 +445,8 @@
     id<OADownloadTask> task = key;
 
     // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"] || ![task.key hasSuffix:@"travel.obf"])
+    NSString *taskKey = task.key;
+    if (![taskKey hasPrefix:@"resource:"] && ![taskKey hasSuffix:@"travel.obf"])
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -510,6 +526,8 @@
             [self onLocalResourcesChanged:nil withKey:nil];
             _shouldCallLocalResourcesChanged = NO;
         }
+        
+        [self restartDownloadingCellsAnimations];
     });
 }
 

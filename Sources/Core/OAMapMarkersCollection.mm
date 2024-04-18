@@ -119,44 +119,46 @@ bool OAMapMarkersCollection::obtainData(
         // SpriteMapSymbol with pinIconBitmap as an icon
         
         sk_sp<SkImage> pinIcon([OANativeUtilities skImageFromPngResource:@"icon_star_fill"]);
-        
-        const std::shared_ptr<OsmAnd::BillboardRasterMapSymbol> pinIconSymbol(new OsmAnd::BillboardRasterMapSymbol(
-                                                                                                   symbolsGroup));
-        pinIconSymbol->order = order++;
-        pinIconSymbol->image = pinIcon;
-        pinIconSymbol->size = OsmAnd::PointI(pinIcon->width(), pinIcon->height());
-        pinIconSymbol->contentClass = OsmAnd::RasterMapSymbol::ContentClass::Icon;
-        pinIconSymbol->content = QString().sprintf(
-                                                   "markerGroup(%p:%p)->pinIconBitmap:%p",
-                                                   this,
-                                                   symbolsGroup.get(),
-                                                   pinIcon.get());
-        pinIconSymbol->languageId = OsmAnd::LanguageId::Invariant;
-        
-        pinIconSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.4486, 30.51348));
-        //pinIconSymbol->offset = OsmAnd::PointI(0, 0);
-        pinIconSymbol->isHidden = false;
-        //pinIconSymbol->modulationColor = OsmAnd::FColorARGB();
-        
-        /*
-        std::shared_ptr<const OsmAnd::MapPrimitiviser::TextSymbol> textSymbol(new OsmAnd::MapPrimitiviser::TextSymbol());
-        
-        const std::shared_ptr<OsmAnd::SymbolRasterizer::RasterizedSpriteSymbol> pinCaptionSymbol(new OsmAnd::SymbolRasterizer::RasterizedSpriteSymbol(symbolsGroup));
-        
-        pinCaptionSymbol->order = order++;
-        pinCaptionSymbol->contentClass = OsmAnd::RasterMapSymbol::ContentClass::Caption;
-        pinCaptionSymbol->content = QString("Test Тест Надпись");
-        pinCaptionSymbol->languageId = OsmAnd::LanguageId::Invariant;
-        
-        pinCaptionSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.4486, 30.51348));
-        //pinCaptionSymbol->offset = OsmAnd::PointI(0, 0);
-        pinCaptionSymbol->isHidden = false;
-        //pinCaptionSymbol->modulationColor = OsmAnd::FColorARGB();
-        */
-        
-        
-        symbolsGroup->symbols.push_back(pinIconSymbol);
-        //symbolsGroup->symbols.push_back(pinCaptionSymbol);
+        if (pinIcon)
+        {
+            const std::shared_ptr<OsmAnd::BillboardRasterMapSymbol> pinIconSymbol(new OsmAnd::BillboardRasterMapSymbol(
+                                                                                                                       symbolsGroup));
+            pinIconSymbol->order = order++;
+            pinIconSymbol->image = pinIcon;
+            pinIconSymbol->size = OsmAnd::PointI(pinIcon->width(), pinIcon->height());
+            pinIconSymbol->contentClass = OsmAnd::RasterMapSymbol::ContentClass::Icon;
+            pinIconSymbol->content = QString().sprintf(
+                                                       "markerGroup(%p:%p)->pinIconBitmap:%p",
+                                                       this,
+                                                       symbolsGroup.get(),
+                                                       pinIcon.get());
+            pinIconSymbol->languageId = OsmAnd::LanguageId::Invariant;
+            
+            pinIconSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.4486, 30.51348));
+            //pinIconSymbol->offset = OsmAnd::PointI(0, 0);
+            pinIconSymbol->isHidden = false;
+            //pinIconSymbol->modulationColor = OsmAnd::FColorARGB();
+            
+            /*
+             std::shared_ptr<const OsmAnd::MapPrimitiviser::TextSymbol> textSymbol(new OsmAnd::MapPrimitiviser::TextSymbol());
+             
+             const std::shared_ptr<OsmAnd::SymbolRasterizer::RasterizedSpriteSymbol> pinCaptionSymbol(new OsmAnd::SymbolRasterizer::RasterizedSpriteSymbol(symbolsGroup));
+             
+             pinCaptionSymbol->order = order++;
+             pinCaptionSymbol->contentClass = OsmAnd::RasterMapSymbol::ContentClass::Caption;
+             pinCaptionSymbol->content = QString("Test Тест Надпись");
+             pinCaptionSymbol->languageId = OsmAnd::LanguageId::Invariant;
+             
+             pinCaptionSymbol->position31 = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(50.4486, 30.51348));
+             //pinCaptionSymbol->offset = OsmAnd::PointI(0, 0);
+             pinCaptionSymbol->isHidden = false;
+             //pinCaptionSymbol->modulationColor = OsmAnd::FColorARGB();
+             */
+            
+            
+            symbolsGroup->symbols.push_back(pinIconSymbol);
+            //symbolsGroup->symbols.push_back(pinCaptionSymbol);
+        }
     }
     
     outData.reset(new OsmAnd::IMapKeyedSymbolsProvider::Data(tmpStr.get(), symbolsGroup));

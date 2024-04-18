@@ -92,6 +92,7 @@
 @implementation OsmAndAppImpl
 {
     BOOL _initializedCore;
+    BOOL _terminating;
 
     NSString* _worldMiniBasemapFilename;
 
@@ -158,6 +159,7 @@
     {
         _initializedCore = NO;
         _initialized = NO;
+        _terminating = NO;
 
         // Get default paths
         _dataPath = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) firstObject];
@@ -468,6 +470,9 @@
                                                              [_resourcesRepositoryUpdatedObservable notifyEventWithKey:self];
                                                          });
 
+    if (_terminating)
+        return NO;
+
     [self instantiateWeatherResourcesManager];
 
     // Check for NSURLIsExcludedFromBackupKey and setup if needed
@@ -504,6 +509,9 @@
         [[NSUserDefaults standardUserDefaults] setObject:[OAAppVersionDependentConstants getBuildVersion] forKey:kBuildVersion];
     }
     
+    if (_terminating)
+        return NO;
+
     if (_firstLaunch)
     {
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
@@ -555,6 +563,10 @@
         }
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
+
+    if (_terminating)
+        return NO;
+
     [self migrateResourcesToDocumentsIfNeeded];
 
     // Copy regions.ocbf to Documents/Resources if needed
@@ -606,6 +618,9 @@
     }
     [self applyExcludedFromBackup:projDbPathLib];
 
+    if (_terminating)
+        return NO;
+
     [OAFavoritesHelper initFavorites];
 
     // Load resources list
@@ -616,16 +631,28 @@
         [self startRepositoryUpdateAsync:YES];
     }
 
+    if (_terminating)
+        return NO;
+
     // Load world regions
     [self loadWorldRegions];
     [OAManageResourcesViewController prepareData];
     [_worldRegion buildResourceGroupItem];
 
+    if (_terminating)
+        return NO;
+
     [[OAWeatherHelper sharedInstance] clearOutdatedCache];
+
+    if (_terminating)
+        return NO;
 
     _defaultRoutingConfig = [self getDefaultRoutingConfig];
     [[OAAvoidSpecificRoads instance] initRouteObjects:NO];
     [self loadRoutingFiles];
+
+    if (_terminating)
+        return NO;
 
     initMapFilesFromCache(_routingMapsCachePath.UTF8String);
 
@@ -652,7 +679,10 @@
     _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                                      withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
                                                                                       andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
-    
+
+    if (_terminating)
+        return NO;
+
     _resourcesInstaller = [[OAResourcesInstaller alloc] init];
 
     _locationServices = [[OALocationServices alloc] initWith:self];
@@ -675,6 +705,9 @@
     [OATerrainLayer sharedInstanceHillshade];
     [OATerrainLayer sharedInstanceSlope];
 
+    if (_terminating)
+        return NO;
+
     OAIAPHelper *iapHelper = [OAIAPHelper sharedInstance];
     [iapHelper resetTestPurchases];
     [iapHelper requestProductsWithCompletionHandler:nil];
@@ -685,13 +718,23 @@
                                                                                     settings.defaultApplicationMode.get;
     [settings setApplicationModePref:initialAppMode];
 
+    if (_terminating)
+        return NO;
+
     [OAPluginsHelper initPlugins];
     [OAMigrationManager.shared migrateIfNeeded:_firstLaunch];
     [OAPOIHelper sharedInstance];
+
+    if (_terminating)
+        return NO;
+
     [OAQuickSearchHelper instance];
     OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     [helper reloadAllPoiFilters];
     [helper loadSelectedPoiFilters];
+
+    if (_terminating)
+        return NO;
 
     _initialized = YES;
     NSLog(@"OsmAndApp initialize finish");
@@ -1074,12 +1117,19 @@
 
 - (void) shutdown
 {
-    [OAQuickSearchHelper.instance cancelSearch:YES];
+    if (_initialized)
+    {
+        [OAQuickSearchHelper.instance cancelSearch:YES];
 
-    [_locationServices stop];
-    _locationServices = nil;
+        [_locationServices stop];
+        _locationServices = nil;
 
-    _downloadsManager = nil;
+        _downloadsManager = nil;
+    }
+    else
+    {
+        _terminating = YES;
+    }
 }
 
 - (NSDictionary*)inflateInitialUserDefaults

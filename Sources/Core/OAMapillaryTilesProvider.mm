@@ -92,6 +92,9 @@ void OAMapillaryTilesProvider::drawPoints(
                                           const std::shared_ptr<const OsmAnd::MvtReader::Tile>& geometryTile,
                                           SkCanvas& canvas)
 {
+    if (!_image)
+        return;
+
     int dzoom = req.zoom - getZoomForRequest(req);
     double mult = (int) pow(2.0, dzoom);
     const auto tileSize31 = (1u << (OsmAnd::ZoomLevel::MaxZoomLevel - req.zoom));

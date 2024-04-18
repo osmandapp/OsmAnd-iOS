@@ -58,13 +58,20 @@
 
 + (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName
 {
+    NSString *resourcePath = nil;
     if ([UIScreen mainScreen].scale > 2.0f)
-        resourceName = [resourceName stringByAppendingString:@"@3x"];
+        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@3x"] ofType:@"png"];
     else if ([UIScreen mainScreen].scale > 1.0f)
-        resourceName = [resourceName stringByAppendingString:@"@2x"];
+        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@2x"] ofType:@"png"];
+    else
+    	resourcePath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"png"];
 
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"png"];
+    if (resourcePath == nil)
+        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@2x"] ofType:@"png"];
+
+    if (resourcePath == nil)
+        resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@3x"] ofType:@"png"];
+
     if (resourcePath == nil)
         return nullptr;
 

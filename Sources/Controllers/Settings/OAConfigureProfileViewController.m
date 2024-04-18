@@ -708,7 +708,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 - (void) restoreCustomModeFromFile:(NSString *)filePath
 {
     _importedFileName = filePath;
-    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:1 delegate:self onComplete:nil silent:YES];
+    [OASettingsHelper.sharedInstance collectSettings:filePath latestChanges:@"" version:kVersion delegate:self onComplete:nil silent:YES];
 }
 
 - (void) resetMapStylesForProfile:(OAApplicationMode *)appMode
@@ -729,7 +729,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (void) importBackupSettingsItems:(nonnull NSString *)file items:(nonnull NSArray<OASettingsItem *> *)items
 {
-    [OASettingsHelper.sharedInstance importSettings:file items:items latestChanges:@"" version:1 delegate:self];
+    [OASettingsHelper.sharedInstance importSettings:file items:items latestChanges:@"" version:kVersion delegate:self];
 }
 
 - (void) updateCopiedOrResetPrefs

@@ -72,6 +72,13 @@ static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
 
 @class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OATravelGuidesState;
 
+typedef NS_ENUM(NSInteger, EOAWidgetSizeStyle)
+{
+    EOAWidgetSizeStyleSmall = 0,
+    EOAWidgetSizeStyleMedium,
+    EOAWidgetSizeStyleLarge
+};
+
 typedef NS_ENUM(NSInteger, EOAScreenOrientation)
 {
     EOAScreenOrientationSystem = -1, //ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
@@ -727,6 +734,17 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @end
 
+@interface OACommonWidgetSizeStyle : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
+
+- (EOAWidgetSizeStyle) get;
+- (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode;
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle;
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode;
+
+@end
+
 @interface OAAppSettings : NSObject
 
 + (OAAppSettings *)sharedManager;
@@ -972,9 +990,12 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Widgets
 
 @property (nonatomic) OACommonListOfStringList *leftWidgetPanelOrder;
-@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrder;
 @property (nonatomic) OACommonListOfStringList *rightWidgetPanelOrder;
+@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrder;
 @property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrder;
+
+@property (nonatomic) OACommonListOfStringList *topWidgetPanelOrderOld;
+@property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrderOld;
 
 // OSM Editing
 @property (nonatomic) OACommonString *osmUserName;
@@ -1082,6 +1103,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;
 - (OACommonDouble *)registerFloatPreference:(NSString *)key defValue:(double)defValue;
+- (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue;
 - (void)resetPreferencesForProfile:(OAApplicationMode *)mode;
 
 // Direction Appearance
@@ -1239,8 +1261,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *userUUID;
 @property (nonatomic) OACommonLong *lastUUIDChangeTimestamp;
 
-@property (nonatomic) OACommonBoolean *useHHRouting;
-@property (nonatomic) OACommonBoolean *useHHRoutingOnly;
+@property (nonatomic) OACommonBoolean *useOldRouting;
 
 - (long) getLastGloblalSettingsModifiedTime;
 - (void) setLastGlobalModifiedTime:(long)timestamp;

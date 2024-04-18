@@ -780,19 +780,22 @@ colorizationScheme:(int)colorizationScheme
         sk_sp<SkImage> startIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start"];
         sk_sp<SkImage> finishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_finish"];
         sk_sp<SkImage> startFinishIcon = [OANativeUtilities skImageFromPngResource:@"map_track_point_start_finish"];
-        _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
-                                                                          UIScreen.mainScreen.scale,
-                                                                          _startFinishPoints,
-                                                                          _splitLabels,
-                                                                          OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startIcon
-                                                                                                  scaleFactor:_textScaleFactor]),
-                                                                          OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:finishIcon
-                                                                                                  scaleFactor:_textScaleFactor]),
-                                                                          OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                                  scaleFactor:_textScaleFactor]),
-                                                                          _startFinishPointsElevations
-                                                                          ));
-        [self.mapView addTiledSymbolsProvider:_startFinishProvider];
+        if (startIcon && finishIcon  && startFinishIcon)
+        {
+            _startFinishProvider.reset(new OsmAnd::GpxAdditionalIconsProvider(self.pointsOrder - 20000,
+                                                                              UIScreen.mainScreen.scale,
+                                                                              _startFinishPoints,
+                                                                              _splitLabels,
+                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startIcon
+                                                                                                                            scaleFactor:_textScaleFactor]),
+                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:finishIcon
+                                                                                                                            scaleFactor:_textScaleFactor]),
+                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
+                                                                                                                            scaleFactor:_textScaleFactor]),
+                                                                              _startFinishPointsElevations
+                                                                              ));
+            [self.mapView addTiledSymbolsProvider:_startFinishProvider];
+        }
     }
 }
 

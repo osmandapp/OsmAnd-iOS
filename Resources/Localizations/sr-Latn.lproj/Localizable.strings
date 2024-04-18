@@ -3398,3 +3398,5 @@
 "calculate_online_title" = "Lista potrebnih mapa je zasnovana na pravolinijskoj ruti. Da biste dobili tačnu listu mapa, OsmAnd može unapred da izračuna vašu rutu na mreži";
 "required_maps_list" = "Mape koje će takođe biti upotrebljene: %@";
 "getting_list_required_maps" = "Preuzimanje liste potrebnih mapa…";
+"average_vertical_speed" = "Prosečna vertikalna brzina";
+"osm_id" = "OSM ID";

@@ -3415,3 +3415,5 @@
 "required_maps_list" = "Karten, die ebenfalls verwendet werden: %@";
 "missing_or_outdated_maps_description" = "Einige Offline-Karten, die für diese Route benötigt werden, fehlen oder sind nicht auf dem neuesten Stand. Bitte laden Sie diese Karten herunter oder aktualisieren Sie diese.";
 "getting_list_required_maps" = "Abrufen einer Liste der benötigten Karten...";
+"osm_id" = "OSM-ID";
+"average_vertical_speed" = "Durchschnittliche vertikale Geschwindigkeit";

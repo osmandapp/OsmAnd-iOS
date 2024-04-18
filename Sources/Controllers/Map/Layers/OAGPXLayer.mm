@@ -37,6 +37,8 @@
 #include <OsmAndCore/Map/GpxAdditionalIconsProvider.h>
 #include <OsmAndCore/SingleSkImage.h>
 
+static const CGFloat elevationMetersDefault = 1000.0;
+
 @interface OAGPXLayer ()
 
 @property (nonatomic) OAGPXAppearanceCollection *appearanceCollection;
@@ -292,7 +294,7 @@
                                     [elevations addObject:@(pt->elevation)];
                                     break;
                                 case EOAGPX3DLineVisualizationByTypeFixedHeight:
-                                    [elevations addObject:@(1000)];
+                                    [elevations addObject:@(elevationMetersDefault)];
                                     break;
                                 default:
                                     break;
@@ -353,7 +355,7 @@
                                 [elevations addObject:@(pt->elevation)];
                                 break;
                             case EOAGPX3DLineVisualizationByTypeFixedHeight:
-                                [elevations addObject:@(1000)];
+                                [elevations addObject:@(elevationMetersDefault)];
                                 break;
                             default:
                                 break;
@@ -692,7 +694,7 @@ colorizationScheme:(int)colorizationScheme
                             splitElevation = pt.elevation;
                             break;
                         case EOAGPX3DLineVisualizationByTypeFixedHeight:
-                            splitElevation = 1000;
+                            splitElevation = elevationMetersDefault;
                             break;
                         default:
                             break;
@@ -773,7 +775,7 @@ colorizationScheme:(int)colorizationScheme
                             start = seg->points.first()->position;
                             if (raiseRoutesAboveRelief)
                             {
-                                startPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.first()->elevation : 1000;
+                                startPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.first()->elevation : elevationMetersDefault;
                             }
                         }
                         else if (i == segments.size() - 1)
@@ -781,7 +783,7 @@ colorizationScheme:(int)colorizationScheme
                             finish = seg->points.last()->position;
                             if (raiseRoutesAboveRelief)
                             {
-                                finishPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.last()->elevation : 1000;
+                                finishPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.last()->elevation : elevationMetersDefault;
                             }
                         }
                     }
@@ -790,8 +792,8 @@ colorizationScheme:(int)colorizationScheme
                         if (raiseRoutesAboveRelief)
                         {
                             BOOL isAltitude = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude;
-                            startFinishPointsElevations.append(isAltitude ? seg->points.first()->elevation : 1000);
-                            startFinishPointsElevations.append(isAltitude ? seg->points.last()->elevation : 1000);
+                            startFinishPointsElevations.append(isAltitude ? seg->points.first()->elevation : elevationMetersDefault);
+                            startFinishPointsElevations.append(isAltitude ? seg->points.last()->elevation : elevationMetersDefault);
                         }
                         startFinishPoints.append({
                             OsmAnd::Utilities::convertLatLonTo31(seg->points.first()->position),

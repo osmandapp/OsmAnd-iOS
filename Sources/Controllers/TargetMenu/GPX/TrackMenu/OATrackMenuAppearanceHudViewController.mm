@@ -380,10 +380,7 @@
             }
         }
     }
-    if (_reopeningTrackMenuState.scrollToSectionIndex != -1 && self.tableView.numberOfSections >= _reopeningTrackMenuState.scrollToSectionIndex) {
-        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_reopeningTrackMenuState.scrollToSectionIndex] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-        _reopeningTrackMenuState.scrollToSectionIndex = -1;
-    }
+    [self scrollToSectionIfNeeded];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -403,6 +400,14 @@
 - (void)applyLocalization
 {
     [self.titleView setText:OALocalizedString(@"shared_string_appearance")];
+}
+
+- (void)scrollToSectionIfNeeded
+{
+    if (_reopeningTrackMenuState.scrollToSectionIndex != -1 && self.tableView.numberOfSections >= _reopeningTrackMenuState.scrollToSectionIndex) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_reopeningTrackMenuState.scrollToSectionIndex] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        _reopeningTrackMenuState.scrollToSectionIndex = -1;
+    }
 }
 
 - (OAGPXTableCellData *) generateDescriptionCellData:(NSString *)key description:(NSString *)description
@@ -493,13 +498,7 @@
     {
         [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
-    [self generateData];
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void) {
-        [self.tableView reloadData];
-    } completion:nil];
+    [self reloadTableWithAnimation];
 }
 
 - (void)configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type
@@ -520,13 +519,7 @@
     {
         [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
-    [self generateData];
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void) {
-        [self.tableView reloadData];
-    } completion:nil];
+    [self reloadTableWithAnimation];
 }
 
 - (void)configureVisualizationPositionColorType:(EOAGPX3DLineVisualizationPositionType)type
@@ -547,13 +540,7 @@
     {
         [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
-    [self generateData];
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void) {
-        [self.tableView reloadData];
-    } completion:nil];
+    [self reloadTableWithAnimation];
 }
 
 - (void)configureVerticalExaggerationScale:(CGFloat)scale
@@ -574,6 +561,11 @@
     {
         [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
+    [self reloadTableWithAnimation];
+}
+
+- (void)reloadTableWithAnimation
+{
     [self generateData];
     [UIView transitionWithView:self.tableView
                       duration:0.35f
@@ -739,16 +731,6 @@
             kCellTitle:OALocalizedString(@"track_show_start_finish_icons")
     }];
     
-//    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
-//    
-//    OAGPXTableCellData *visualization3DCellData = [OAGPXTableCellData withData:@{
-//            kTableKey:@"visualization_3D",
-//            kCellType:[OAIAPHelper isOsmAndProAvailable] || mapsPlusPurchased
-//            ? [OASwitchTableViewCell getCellIdentifier]
-//            : [OAButtonTableViewCell getCellIdentifier],
-//            kCellTitle:OALocalizedString(@"track_appearance_3D_visualization")
-//    }];
-
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
         kTableSubjects: @[directionCellData, startFinishCellData]
     }]];
@@ -833,8 +815,7 @@
     
     NSMutableArray *track3DSectionItems = [NSMutableArray array];
     
-    // TODO: purchase type and isRelief3D
-    BOOL mapsPlusPurchased = YES;//[OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
+    BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
     if (mapsPlusPurchased)
     {
         // 3d Section
@@ -1731,25 +1712,6 @@
             [[_app updateGpxTracksOnMapObservable] notifyEvent];
         }
     }
-//    else if ([tableData.key isEqualToString:@"visualization_3D"])
-//    {
-//        self.gpx.raiseRoutesAboveRelief = toggle;
-//        if (_wholeFolderTracks)
-//        {
-//            for (OAGPX *track in _wholeFolderTracks)
-//                track.raiseRoutesAboveRelief = toggle;
-//        }
-//
-//        if (self.isCurrentTrack)
-//        {
-//            [self.doc setRaiseRoutesAboveRelief:self.gpx.raiseRoutesAboveRelief];
-//            [[_app updateRecTrackOnMapObservable] notifyEvent];
-//        }
-//        else
-//        {
-//            [[_app updateGpxTracksOnMapObservable] notifyEvent];
-//        }
-//    }
     else if ([tableData.key isEqualToString:@"join_gaps"])
     {
         self.gpx.joinSegments = toggle;

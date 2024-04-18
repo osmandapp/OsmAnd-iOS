@@ -404,7 +404,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         // Start next resource download task if such exists
         if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
         {
-            id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
             [nextTask resume];
         }
         else

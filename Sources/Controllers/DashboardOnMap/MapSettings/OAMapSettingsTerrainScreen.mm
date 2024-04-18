@@ -38,9 +38,9 @@
 #import "OAPluginsHelper.h"
 #import "OADownloadingCellHelper.h"
 
-#define kRelief3DCellRowHeight 48.3
-#define kCellTypeMap @"MapCell"
-#define kCellItemKey @"kCellItemKey"
+static float kRelief3DCellRowHeight = 48.3;
+static NSString *kCellTypeMap = @"MapCell";
+static NSString *kCellItemKey = @"kCellItemKey";
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -335,19 +335,19 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)setupDownloadingCellHelper
 {
-    __weak OAMapSettingsTerrainScreen *weakself = self;
+    __weak OAMapSettingsTerrainScreen *weakSelf = self;
     _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
     _downloadingCellHelper.hostViewController = self.vwController;
     _downloadingCellHelper.hostTableView = self.tblView;
     _downloadingCellHelper.hostDataLock = _dataLock;
     
     _downloadingCellHelper.fetchResourcesBlock = ^(){
-        [weakself updateAvailableMaps];
+        [weakSelf updateAvailableMaps];
     };
     
     _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
         
-        OATableRowData *row = [weakself getItem:indexPath];
+        OATableRowData *row = [weakSelf getItem:indexPath];
         if (row)
         {
             OAResourceItem *mapItem = [row objForKey:kCellItemKey];
@@ -358,7 +358,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     };
     
     _downloadingCellHelper.getTableDataModelBlock =  ^OATableDataModel *{
-        return [weakself data];
+        return [weakSelf data];
     };
 }
 

@@ -31,12 +31,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 static BOOL dataInvalidated = NO;
 
 
-@interface OADownloadTaskDTO : NSObject
+@interface OASuspendedDownloadTask : NSObject
 @property id<OADownloadTask> task;
 @property id<OADownloadTask> nextTask;
 @end
 
-@implementation OADownloadTaskDTO
+@implementation OASuspendedDownloadTask
 @end
 
 
@@ -56,7 +56,7 @@ static BOOL dataInvalidated = NO;
     OAAutoObserverProxy* _sqlitedbResourcesChangedObserver;
 
     MBProgressHUD* _deleteResourceProgressHUD;
-    NSMutableArray<OADownloadTaskDTO *> *_finishedBackgroundDownloadings;
+    NSMutableArray<OASuspendedDownloadTask *> *_finishedBackgroundDownloadings;
 }
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -576,7 +576,7 @@ static BOOL dataInvalidated = NO;
         
         id<OADownloadTask> nextTask = nil;
         if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
-            nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
         
         if (task.progressCompleted < 1.0)
         {
@@ -590,35 +590,36 @@ static BOOL dataInvalidated = NO;
                 [_app.data.mapLayerChangeObservable notifyEvent];
         }
         
-        OADownloadTaskDTO *dto = [[OADownloadTaskDTO alloc] init];
-        dto.task = task;
-        dto.nextTask = nextTask;
+        OASuspendedDownloadTask *suspendedTask = [[OASuspendedDownloadTask alloc] init];
+        suspendedTask.task = task;
+        suspendedTask.nextTask = nextTask;
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-            [_finishedBackgroundDownloadings addObject:dto];
+            [_finishedBackgroundDownloadings addObject:suspendedTask];
         else
-            [self refreshUIOnTaskFinished:dto];
+            [self refreshUIOnTaskFinished:suspendedTask];
 
     });
 }
 
-- (void)refreshUIOnTaskFinished:(OADownloadTaskDTO *)dto
+- (void)refreshUIOnTaskFinished:(OASuspendedDownloadTask *)suspendedTask
 {
-    if (dto.task.progressCompleted < 1.0)
+    if (suspendedTask.task.progressCompleted < 1.0)
     {
-        if (dto.nextTask)
+        if (suspendedTask.nextTask)
         {
             //update balance
             double delayInSeconds = 0.5;
+            __weak OAResourcesBaseViewController *weakSelf = self;
             dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
             dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                [self showDownloadViewForTask:dto.nextTask];
+                [weakSelf showDownloadViewForTask:suspendedTask.nextTask];
             });
         }
         [self updateContent];
     }
     else
     {
-        [self refreshDownloadingContent:dto.task.key];
+        [self refreshDownloadingContent:suspendedTask.task.key];
     }
 }
 
@@ -627,8 +628,8 @@ static BOOL dataInvalidated = NO;
     dispatch_async(dispatch_get_main_queue(), ^{
         while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
         {
-            OADownloadTaskDTO *dto = [_finishedBackgroundDownloadings firstObject];
-            [self refreshUIOnTaskFinished:dto];
+            OASuspendedDownloadTask *suspendedTask = [_finishedBackgroundDownloadings firstObject];
+            [self refreshUIOnTaskFinished:suspendedTask];
             [_finishedBackgroundDownloadings removeObjectAtIndex:0];
         }
         

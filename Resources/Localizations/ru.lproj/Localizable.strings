@@ -2817,7 +2817,7 @@
 "help_article_purchases_ios_name" = "Покупки на iOS";
 "help_article_map_legend_ski_map_name" = "Стиль карты «Зимний/лыжный»";
 "ant_plus_open_settings" = "Открыть настройки";
-"map_widget_group_glide_desc" = "Виджеты показывают соотношение планирования к целевому значению или среднему значению планирования для текущего полета.";
+"map_widget_group_glide_desc" = "Виджеты показывают соотношение планирования к целевому значению или среднему значению для текущего полета.";
 "average_speed_time_interval_desc" = "Укажите временной интервал для усреднения скорости.";
 "perform_oauth_authorization" = "Войти через OAuth";
 "help_article_map_legend_osmand_name" = "Стиль карты «OsmAnd»";
@@ -3159,3 +3159,6 @@
 "distance_during_navigation" = "Расстояние во время навигации";
 "shared_string_round_up" = "Округленно";
 "shared_string_precise" = "Точно";
+"vertical_exaggeration_description" = "Изменяя значение масштаба, можно подчеркнуть 3D-рельеф.";
+"vertical_exaggeration" = "Вертикальное увеличение";
+"shared_string_scale" = "Масштаб";

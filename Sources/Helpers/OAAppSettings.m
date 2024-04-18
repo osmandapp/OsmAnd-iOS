@@ -430,8 +430,7 @@ static NSString * const kRightWidgetPanelOrderKey = @"right_widget_panel_order";
 static NSString * const kTopWidgetPanelOrderKey = @"top_widget_panel_order";
 static NSString * const kBottomWidgetPanelOrderKey = @"bottom_widget_panel_order";
 
-static NSString * const useHHRoutingKey = @"useHHRoutingKey";
-static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
+static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @implementation OACompassMode
 
@@ -4662,10 +4661,8 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
         
-        _useHHRouting = [[[OACommonBoolean withKey:useHHRoutingKey defValue:NO] makeGlobal] makeShared];
-        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing"];
-        _useHHRoutingOnly = [[[OACommonBoolean withKey:useHHRoutingOnlyKey defValue:NO] makeGlobal] makeShared];
-        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing_only"];
+        _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
 
         [self fetchImpassableRoads];
 

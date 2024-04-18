@@ -471,7 +471,7 @@
     return nil;
 }
 
-- (void)configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
+- (void) configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
 {
     self.gpx.visualization3dByType = type;
     if (_wholeFolderTracks)
@@ -537,6 +537,33 @@
     if (self.isCurrentTrack)
     {
         [self.doc setVisualization3dPositionType:self.gpx.visualization3dPositionType];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+    [self generateData];
+    [UIView transitionWithView:self.tableView
+                      duration:0.35f
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void) {
+        [self.tableView reloadData];
+    } completion:nil];
+}
+
+- (void)configureVerticalExaggerationScale:(CGFloat)scale
+{
+    self.gpx.verticalExaggerationScale = scale;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.verticalExaggerationScale = scale;
+    }
+
+    if (self.isCurrentTrack)
+    {
+        [self.doc setVerticalExaggerationScale:self.gpx.verticalExaggerationScale];
         [[_app updateRecTrackOnMapObservable] notifyEvent];
     }
     else
@@ -831,8 +858,7 @@
             // if (isRelief3D && [plugin.enable3DMaps get])
             //  OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPluginsHelper getPlugin:OASRTMPlugin.class];
             NSString *alphaValueString = OALocalizedString(@"shared_string_none");
-                // TODO:
-            double scaleValue = _app.data.verticalExaggerationScale;
+            double scaleValue = self.gpx.verticalExaggerationScale;
             if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
@@ -842,7 +868,7 @@
                 kCellType:[OAValueTableViewCell getCellIdentifier],
                 kCellTitle:OALocalizedString(@"vertical_exaggeration"),
                 kCellIconNameKey:@"ic_custom_terrain_scale",
-                kCellIconTintColor:[UIColor colorNamed:ACColorNameIconColorSelected],
+                kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
                 kTableValues:@{
                     @"string_value":alphaValueString,
                     @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
@@ -1480,71 +1506,22 @@
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
         BOOL is3dTrackSection = [sectionData.key isEqualToString:@"3d_track_section"];
-
             if (is3dTrackSection)
             {
                 cell.titleLabel.text = cellData.title;
-                [cell setCustomLeftSeparatorInset:YES];
                 [cell descriptionVisibility:NO];
                 cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
                 [cell leftIconVisibility:NO];
                 cell.leftIconView.image = nil;
                 [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
                 cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
                 cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                
                 cell.button.menu = [self createMenuForKey:cellData.key button:cell.button];
                 cell.button.showsMenuAsPrimaryAction = YES;
                 cell.button.changesSelectionAsPrimaryAction = YES;
                 return cell;
             }
-            else
-            {
-                cell.separatorInset = UIEdgeInsetsZero;
-                [cell leftIconVisibility:YES];
-                //                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-                //                cell.leftIconView.tintColor = item.iconTintColor;
-                [cell.button setTitle:nil forState:UIControlStateNormal];
-                
-                UIButtonConfiguration *conf = [UIButtonConfiguration plainButtonConfiguration];
-                //conf.image = [UIImage imageNamed:item.secondaryIconName];
-                cell.button.configuration = conf;
-                cell.button.menu = nil;
-                [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-                [cell.button addTarget:self action:@selector(showChoosePlanScreen) forControlEvents:UIControlEventTouchUpInside];
-                return cell;
-            }
-//        }
-        
-        
-        // TODO:
-//        OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier] forIndexPath:indexPath];
-//        [cell leftIconVisibility:NO];
-//        [cell titleVisibility:YES];
-//        [cell descriptionVisibility:NO];
-//        [cell leftEditButtonVisibility:NO];
-//        cell.rightContainerConstraint.constant = -3;
-//        cell.button.semanticContentAttribute = UISemanticContentAttributeForceRightToLeft;
-//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-//        
-//        cell.button.layer.cornerRadius = 9.0;
-//        cell.button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 11);
-//        cell.button.imageEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
-//        UIImage *image = [UIImage templateImageNamed:@"ic_small_arrow_forward"];
-//        [cell.button setImage:[cell isDirectionRTL] ? image.imageFlippedForRightToLeftLayoutDirection : image
-//                     forState:UIControlStateNormal];
-//        cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
-//        [cell.button.heightAnchor constraintEqualToConstant:34].active = YES;
-//        
-//        [cell.button setTitle:OALocalizedString(@"shared_string_get") forState:UIControlStateNormal];
-//        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorSecondary] forState:UIControlStateNormal];
-//        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorTertiary];
-//        cell.button.imageView.tintColor = [UIColor colorNamed:ACColorNameButtonTextColorSecondary];
-//        [cell.button addTarget:self action:@selector(onGetFeatureTerrainButtonPressed:)
-//              forControlEvents:UIControlEventTouchUpInside];
-//        cell.titleLabel.text = cellData.title;
-//        outCell = cell;
+        return nil;
     }
     else if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]])
     {
@@ -1599,7 +1576,6 @@
         return [cellData.values[@"float_value"] floatValue];
     if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]] && [cellData.key isEqualToString:@"track_view_3d_empty_state"])
     {
-        // TODO:
         return [[UIFontMetrics defaultMetrics] scaledValueForValue:82] + 104;
     }
     
@@ -2139,7 +2115,13 @@
     else if ([tableData.key isEqualToString:@"vertical_exaggeration"])
     {
         OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOAGPXSettingsTypeVerticalExaggeration];
-        // TODO; EOAGPXSettingsTypeVerticalExaggeration and new controller
+        CGFloat savedVerticalExaggerationScale = self.gpx.verticalExaggerationScale;
+        [controller configureGPXVerticalExaggerationScale:savedVerticalExaggerationScale];
+        __weak __typeof(self) weakSelf = self;
+        controller.applyCallback = ^(CGFloat scale)
+        {
+            [weakSelf configureVerticalExaggerationScale:scale];
+        };
         controller.delegate = self;
         [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
     }
@@ -2233,10 +2215,6 @@
 {
     [self onRightActionButtonPressed:sender.tag];
 }
-
-//- (void)onGetFeatureTerrainButtonPressed:(UIButton *)button {
-//    [OAChoosePlanHelper showChoosePlanScreenWithFeature:OAFeature.TERRAIN navController:self.navigationController];
-//}
 
 #pragma mark - OACollectionTableViewCellDelegate
 

@@ -574,6 +574,9 @@ colorizationScheme:(int)colorizationScheme
     
     if (elevations && elevations.count > 0)
     {
+        if (builder.getElevationScaleFactor() != gpx.verticalExaggerationScale) {
+            builder.setElevationScaleFactor(gpx.verticalExaggerationScale);
+        }
         QList<float> heights;
         for (NSNumber *object in elevations)
         {
@@ -589,8 +592,6 @@ colorizationScheme:(int)colorizationScheme
     builder.setColorizationMapping(traceColorizationMapping);
     builder.setOutlineColorizationMapping(traceColorizationMapping);
     builder.setOutlineWidth(lineWidth * 2.0f / 2.0f);
-    
-    builder.setElevationScaleFactor(gpx.verticalExaggerationScale);
     
     switch (gpx.visualization3dPositionType)
     {

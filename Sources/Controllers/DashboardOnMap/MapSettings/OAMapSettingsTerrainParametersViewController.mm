@@ -100,6 +100,15 @@ static const NSInteger kMaxZoomPickerRow = 2;
     _maxZoom = _baseMaxZoom;
 }
 
+- (void)configureGPXVerticalExaggerationScale:(CGFloat)scale
+{
+    if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    {
+        _baseGPXVerticalExaggerationScale = scale;
+        _currentGPXVerticalExaggerationScale = _baseGPXVerticalExaggerationScale;
+    }
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
@@ -169,6 +178,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
             result = OALocalizedString(@"shared_string_zoom_levels");
             break;
         case EOATerrainSettingsTypeVerticalExaggeration:
+        case EOAGPXSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration");
             break;
     }
@@ -185,6 +195,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
         case EOATerrainSettingsTypeZoomLevels:
             result = OALocalizedString(@"map_settings_zoom_level_description");
             break;
+        case EOAGPXSettingsTypeVerticalExaggeration: // TODO:
         case EOATerrainSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration_description");
             break;
@@ -199,7 +210,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
     OATableSectionData *topSection = [_data createNewSection];
     topSection.headerText = [self getHeaderText];
     topSection.footerText = [self getFooterText];
-    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"verticalExaggerationSlider",
@@ -275,7 +286,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (CGFloat)initialMenuHeight
 {
     CGFloat divider = 2.0;
-    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
     {
         divider = 2.5;
     }
@@ -361,6 +372,24 @@ static const NSInteger kMaxZoomPickerRow = 2;
     }
 }
 
+- (void)resetGPXVerticalExaggerationValues
+{
+    double scale = 1.0;
+    if (_currentGPXVerticalExaggerationScale != scale)
+    {
+        _currentGPXVerticalExaggerationScale = scale;
+        _isValueChange = YES;
+        [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
+        [self updateApplyButton];
+    }
+}
+
+- (void)applyGPXVerticalExaggerationForScale:(CGFloat)scale
+{
+    if (self.applyCallback)
+        self.applyCallback(scale);
+}
+
 - (void)resetVerticalExaggerationValues
 {
     [_app.data resetVerticalExaggerationScale];
@@ -425,6 +454,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self resetZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
         [self resetVerticalExaggerationValues];
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+        [self resetGPXVerticalExaggerationValues];
     
     [self generateData];
     [self.tableView reloadData];
@@ -438,6 +469,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self applyCurrentZoomLevels];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
         [self applyVerticalExaggerationScale];
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+        [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
     
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
@@ -471,7 +504,10 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
     }
-    
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    {
+        [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
+    }
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
             [self.delegate onBackTerrainParameters];
@@ -497,6 +533,20 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self updateApplyButton];
         return;
     }
+    if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    {
+        CGFloat step = 0.1;
+        CGFloat roundedValue = round(slider.value / step) * step;
+        if (_currentGPXVerticalExaggerationScale != roundedValue)
+        {
+            _currentGPXVerticalExaggerationScale = roundedValue;
+            _isValueChange = YES;
+            [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
+            [self updateApplyButton];
+        }
+        return;
+    }
+    
     if (_type == EOATerrainTypeHillshade)
     {
         _currentAlpha = slider.value;
@@ -556,7 +606,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
         if (cell)
         {
             cell.titleLabel.text = item.title;
-            if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+            if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
             {
                 __weak OATitleSliderTableViewCell *weakCell = cell;
                 __weak __typeof(self) weakSelf = self;
@@ -565,7 +615,10 @@ static const NSInteger kMaxZoomPickerRow = 2;
                 };
                 cell.sliderView.minimumValue = 1;
                 cell.sliderView.maximumValue = 3;
-                cell.sliderView.value = _app.data.verticalExaggerationScale;
+                cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
+                ? _app.data.verticalExaggerationScale
+                : _currentGPXVerticalExaggerationScale;
+              
                 cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
             }
             else

@@ -84,6 +84,7 @@
     {
         state.pinLocation = pinLocation;
         state.openedFromMap = openedFromMap;
+        state.scrollToSectionIndex = -1;
     }
     return state;
 }
@@ -641,6 +642,7 @@
     state.lastSelectedTab = _selectedTab;
     state.gpxFilePath = self.gpx.gpxFilePath;
     state.showingState = self.currentState;
+    state.scrollToSectionIndex = -1;
 
     return state;
 }

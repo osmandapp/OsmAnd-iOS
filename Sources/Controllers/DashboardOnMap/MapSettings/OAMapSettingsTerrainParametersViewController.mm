@@ -475,6 +475,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
             [self.delegate onBackTerrainParameters];
+        if (self.hideCallback)
+            self.hideCallback();
     }];
 }
 
@@ -511,6 +513,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
             [self.delegate onBackTerrainParameters];
+        if (self.hideCallback)
+            self.hideCallback();
     }];
 }
 

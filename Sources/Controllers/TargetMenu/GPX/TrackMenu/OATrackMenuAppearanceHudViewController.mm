@@ -90,7 +90,7 @@
 
 @end
 
-@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate, OATerrainParametersDelegate>
+@interface OATrackMenuAppearanceHudViewController() <UITableViewDelegate, UITableViewDataSource, UIScrollViewDelegate, UIColorPickerViewControllerDelegate, OATrackColoringTypeDelegate, OAColorsCollectionCellDelegate, OAColorCollectionDelegate, OACollectionTableViewCellDelegate>
 
 @property (weak, nonatomic) IBOutlet UILabel *titleView;
 @property (weak, nonatomic) IBOutlet UIImageView *titleIconView;
@@ -379,6 +379,10 @@
                 }
             }
         }
+    }
+    if (_reopeningTrackMenuState.scrollToSectionIndex != -1 && self.tableView.numberOfSections >= _reopeningTrackMenuState.scrollToSectionIndex) {
+        [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_reopeningTrackMenuState.scrollToSectionIndex] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+        _reopeningTrackMenuState.scrollToSectionIndex = -1;
     }
 }
 
@@ -854,9 +858,7 @@
                 kCellTitle:OALocalizedString(@"visualization_3d_track_line")
             }];
                 [track3DSectionItems addObject:trackLineData];
-            // BOOL isRelief3D = [OAIAPHelper isOsmAndProAvailable];
-            // if (isRelief3D && [plugin.enable3DMaps get])
-            //  OASRTMPlugin *plugin = (OASRTMPlugin *)[OAPluginsHelper getPlugin:OASRTMPlugin.class];
+                
             NSString *alphaValueString = OALocalizedString(@"shared_string_none");
             double scaleValue = self.gpx.verticalExaggerationScale;
             if (scaleValue > 1)
@@ -2122,8 +2124,20 @@
         {
             [weakSelf configureVerticalExaggerationScale:scale];
         };
-        controller.delegate = self;
-        [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
+        controller.hideCallback = ^{
+            OATrackMenuViewControllerState *state = _reopeningTrackMenuState;
+            BOOL openedFromTracksList = state.openedFromTracksList;
+            state.openedFromTracksList = openedFromTracksList;
+            state.openedFromTrackMenu = YES;
+            state.scrollToSectionIndex = 3;
+            [weakSelf.mapViewController hideContextPinMarker];
+            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+                                                  trackHudMode:EOATrackAppearanceHudMode
+                                                         state:state];
+        };
+        [self hide:YES duration:.2 onComplete:^{
+            [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
+        }];
     }
     else if ([tableData.key isEqualToString:@"reset"])
     {
@@ -2360,19 +2374,6 @@
     {
         [self addAndGetNewColorItem:viewController.selectedColor];
     }
-}
-
-#pragma mark - OATerrainParametersDelegate
-
-- (void)onBackTerrainParameters
-{
-    [self generateData];
-    [UIView transitionWithView:self.tableView
-                      duration:0.35f
-                       options:UIViewAnimationOptionTransitionCrossDissolve
-                    animations:^(void) {
-        [self.tableView reloadData];
-    } completion:nil];
 }
 
 @end

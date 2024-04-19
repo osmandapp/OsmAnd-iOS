@@ -1414,7 +1414,7 @@
     if (decoded.isEmpty())
         decoded = amenity->getDecodedValues();
     
-    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:(withContent ? content : nil) values:(withValues ? values : nil)];
+    [OAPOIHelper processDecodedValues:decoded content:(withContent ? content : nil) values:(withValues ? values : nil)];
     poi.values = values;
     poi.localizedContent = content;
     

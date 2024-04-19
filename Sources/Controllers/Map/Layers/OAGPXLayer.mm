@@ -52,6 +52,7 @@ static const CGFloat elevationMetersDefault = 1000.0;
     BOOL _showCaptionsCache;
     OsmAnd::PointI _hiddenPointPos31;
     double _textScaleFactor;
+    double _elevationScaleFactor;
 
     NSMutableDictionary<NSString *, NSMutableDictionary<NSString *, id> *> *_cachedTracks;
     QHash< QString, QList<OsmAnd::FColorARGB> > _cachedColors;
@@ -372,6 +373,7 @@ static const CGFloat elevationMetersDefault = 1000.0;
                 }
             }
         }
+        // TODO: add in _linesCollection isVolumetric when will ready API. let isVolumetric = elevations.count > 0 && gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
     [self setVectorLineProvider:_linesCollection sync:YES];
@@ -737,6 +739,7 @@ colorizationScheme:(int)colorizationScheme
     [self clearStartFinishPoints];
     [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
+    _elevationScaleFactor = 1.0;
     if (_startFinishProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
@@ -775,6 +778,7 @@ colorizationScheme:(int)colorizationScheme
                             start = seg->points.first()->position;
                             if (raiseRoutesAboveRelief)
                             {
+                                _elevationScaleFactor = gpx.verticalExaggerationScale;
                                 startPointElevation = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude ? seg->points.first()->elevation : elevationMetersDefault;
                             }
                         }
@@ -791,6 +795,7 @@ colorizationScheme:(int)colorizationScheme
                     {
                         if (raiseRoutesAboveRelief)
                         {
+                            _elevationScaleFactor = gpx.verticalExaggerationScale;
                             BOOL isAltitude = gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude;
                             startFinishPointsElevations.append(isAltitude ? seg->points.first()->elevation : elevationMetersDefault);
                             startFinishPointsElevations.append(isAltitude ? seg->points.last()->elevation : elevationMetersDefault);
@@ -850,7 +855,8 @@ colorizationScheme:(int)colorizationScheme
                                                                                                                             scaleFactor:_textScaleFactor]),
                                                                               OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
                                                                                                                             scaleFactor:_textScaleFactor]),
-                                                                              _startFinishPointsElevations
+                                                                              _startFinishPointsElevations,
+                                                                              _elevationScaleFactor
                                                                               ));
             [self.mapView addTiledSymbolsProvider:_startFinishProvider];
         }

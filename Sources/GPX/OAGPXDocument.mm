@@ -243,7 +243,11 @@
 {
     OAGpxExtension *e = [self getExtensionByKey:@"vertical_exaggeration_scale"];
     if (e) {
-        return [e.value floatValue]?:1.0;
+        CGFloat value = [e.value floatValue];
+        if (value && value >= 1.0 && value <= 3.0)
+            return value;
+        else
+            return 1.0;
     }
     return 1.0;
 }

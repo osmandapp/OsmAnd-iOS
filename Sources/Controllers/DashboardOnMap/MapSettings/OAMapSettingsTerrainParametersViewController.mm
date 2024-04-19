@@ -195,7 +195,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
         case EOATerrainSettingsTypeZoomLevels:
             result = OALocalizedString(@"map_settings_zoom_level_description");
             break;
-        case EOAGPXSettingsTypeVerticalExaggeration: // TODO:
+        case EOAGPXSettingsTypeVerticalExaggeration:
+            result = OALocalizedString(@"track_vertical_exaggeration_description");
+            break;
         case EOATerrainSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration_description");
             break;

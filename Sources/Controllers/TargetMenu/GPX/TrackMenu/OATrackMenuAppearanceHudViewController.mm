@@ -404,7 +404,8 @@
 
 - (void)scrollToSectionIfNeeded
 {
-    if (_reopeningTrackMenuState.scrollToSectionIndex != -1 && self.tableView.numberOfSections >= _reopeningTrackMenuState.scrollToSectionIndex) {
+    if (_reopeningTrackMenuState.scrollToSectionIndex != -1 && self.tableView.numberOfSections >= _reopeningTrackMenuState.scrollToSectionIndex)
+    {
         [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:_reopeningTrackMenuState.scrollToSectionIndex] atScrollPosition:UITableViewScrollPositionTop animated:NO];
         _reopeningTrackMenuState.scrollToSectionIndex = -1;
     }
@@ -816,7 +817,9 @@
     NSMutableArray *track3DSectionItems = [NSMutableArray array];
     
     BOOL mapsPlusPurchased = [OAIAPHelper isSubscribedToMaps] || [OAIAPHelper isFullVersionPurchased];
-    if (mapsPlusPurchased)
+    BOOL isOsmAndProAvailable = [OAIAPHelper isOsmAndProAvailable];
+    BOOL isAvailable3DVisualization = mapsPlusPurchased || isOsmAndProAvailable;
+    if (isAvailable3DVisualization)
     {
         // 3d Section
         OAGPXTableCellData *visualizedByCellData = [OAGPXTableCellData withData:@{
@@ -867,7 +870,7 @@
         kTableKey:@"3d_track_section",
         kSectionHeader:[OALocalizedString(@"track_3d") upperCase],
         kSectionHeaderHeight:@36.,
-        kTableSubjects:mapsPlusPurchased ? track3DSectionItems : @[[OAGPXTableCellData withData:@{
+        kTableSubjects:isAvailable3DVisualization ? track3DSectionItems : @[[OAGPXTableCellData withData:@{
             kTableKey:@"track_view_3d_empty_state",
             kCellType:[UITableViewCell getCellIdentifier],
         }]]
@@ -1489,21 +1492,21 @@
         OAButtonTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         OAGPXTableSectionData *sectionData = _tableData[indexPath.section];
         BOOL is3dTrackSection = [sectionData.key isEqualToString:@"3d_track_section"];
-            if (is3dTrackSection)
-            {
-                cell.titleLabel.text = cellData.title;
-                [cell descriptionVisibility:NO];
-                cell.selectionStyle = UITableViewCellSelectionStyleNone;
-                [cell leftIconVisibility:NO];
-                cell.leftIconView.image = nil;
-                [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
-                cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
-                cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-                cell.button.menu = [self createMenuForKey:cellData.key button:cell.button];
-                cell.button.showsMenuAsPrimaryAction = YES;
-                cell.button.changesSelectionAsPrimaryAction = YES;
-                return cell;
-            }
+        if (is3dTrackSection)
+        {
+            cell.titleLabel.text = cellData.title;
+            [cell descriptionVisibility:NO];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            [cell leftIconVisibility:NO];
+            cell.leftIconView.image = nil;
+            [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
+            cell.button.tintColor = [UIColor colorNamed:ACColorNameTextColorActive];
+            cell.button.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.button.menu = [self createMenuForKey:cellData.key button:cell.button];
+            cell.button.showsMenuAsPrimaryAction = YES;
+            cell.button.changesSelectionAsPrimaryAction = YES;
+            return cell;
+        }
         return nil;
     }
     else if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]])

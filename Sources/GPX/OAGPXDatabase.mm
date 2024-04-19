@@ -322,13 +322,15 @@
 
 + (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *)name
 {
+    if ([name isEqualToString:@"none"])
+       return EOAGPX3DLineVisualizationWallColorTypeNone;
      if ([name isEqualToString:@"solid"])
         return EOAGPX3DLineVisualizationWallColorTypeSolid;
     else if ([name isEqualToString:@"downward_gradient"])
         return EOAGPX3DLineVisualizationWallColorTypeDownwardGradient;
     else if ([name isEqualToString:@"upward_gradient"])
         return EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
-    return EOAGPX3DLineVisualizationWallColorTypeNone;
+    return EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
 }
 
 + (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type
@@ -670,6 +672,8 @@
     bounds.topLeft = CLLocationCoordinate2DMake([gpxData[@"top_left_lat"] doubleValue], [gpxData[@"top_left_lon"] doubleValue]);
     bounds.bottomRight = CLLocationCoordinate2DMake([gpxData[@"bottom_right_lat"] doubleValue], [gpxData[@"bottom_right_lon"] doubleValue]);
     gpx.bounds = bounds;
+    gpx.visualization3dWallColorType = EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
+    gpx.verticalExaggerationScale = 1.0;
 
     for (NSString *key in gpxData)
     {

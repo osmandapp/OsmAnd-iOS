@@ -598,8 +598,8 @@ colorizationScheme:(int)colorizationScheme
     switch (gpx.visualization3dPositionType)
     {
         case EOAGPX3DLineVisualizationPositionTypeTop:
-            builder.setElevatedLineVisibility(true);
             builder.setSurfaceLineVisibility(false);
+            builder.setElevatedLineVisibility(true);
             break;
         case EOAGPX3DLineVisualizationPositionTypeBottom:
             builder.setElevatedLineVisibility(false);

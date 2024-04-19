@@ -33,14 +33,14 @@ final class RouteParameterDevelopmentViewController: OABaseSettingsViewControlle
     override func getTitle() -> String? {
         switch parameterType {
         case .routingAlgorithm:
-            return  localizedString("routing_algorithm")
+            return localizedString("routing_algorithm")
         case .autoZoom:
-            return  localizedString("auto_zoom")
+            return localizedString("auto_zoom")
         }
     }
     
     override func getSubtitle() -> String? {
-        String()
+        ""
     }
     
     override func getLeftNavbarButtonTitle() -> String? {

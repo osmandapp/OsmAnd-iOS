@@ -17,7 +17,7 @@ import UIKit
 final class RouteParameterDevelopmentViewController: OABaseSettingsViewController {
     private var parameterType: ParameterType
     
-    init(applicationMode: OAApplicationMode!, parameterType: ParameterType) {
+    init(applicationMode: OAApplicationMode, parameterType: ParameterType) {
         self.parameterType = parameterType
         super.init(appMode: applicationMode)
     }
@@ -30,20 +30,20 @@ final class RouteParameterDevelopmentViewController: OABaseSettingsViewControlle
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
-    override func getTitle() -> String! {
+    override func getTitle() -> String? {
         switch parameterType {
         case .routingAlgorithm:
-            return  localizedString("shared_string_routing_algorithm")
+            return  localizedString("routing_algorithm")
         case .autoZoom:
-            return  localizedString("shared_string_auto_zoom")
+            return  localizedString("auto_zoom")
         }
     }
     
-    override func getSubtitle() -> String! {
+    override func getSubtitle() -> String? {
         String()
     }
     
-    override func getLeftNavbarButtonTitle() -> String! {
+    override func getLeftNavbarButtonTitle() -> String? {
         localizedString("shared_string_cancel")
     }
     
@@ -56,31 +56,33 @@ final class RouteParameterDevelopmentViewController: OABaseSettingsViewControlle
         let section = tableData.createNewSection()
         switch parameterType {
         case .routingAlgorithm:
+            let isUseOldRouting = OAAppSettings.sharedManager().useOldRouting.get()
             let highwayRow = section.createNewRow()
             highwayRow.cellType = OASimpleTableViewCell.getIdentifier()
             highwayRow.key = "highway_hierarchies"
-            highwayRow.title = localizedString("shared_string_highway_hierarchies")
+            highwayRow.title = localizedString("routing_algorithm_highway_hierarchies")
             highwayRow.iconName = "ic_checkmark_default"
-            highwayRow.setObj(localizedString("selected"), forKey: "selected")
+            highwayRow.setObj(!isUseOldRouting, forKey: "selected")
             let aRow = section.createNewRow()
             aRow.cellType = OASimpleTableViewCell.getIdentifier()
             aRow.key = "routing_algorithm_a"
-            aRow.title = localizedString("shared_string_routing_algorithm_a")
+            aRow.title = localizedString("routing_algorithm_a")
             aRow.iconName = "ic_checkmark_default"
-            aRow.setObj(localizedString("selected"), forKey: "selected")
+            aRow.setObj(isUseOldRouting, forKey: "selected")
         case .autoZoom:
+            let isUseV1AutoZoom = OAAppSettings.sharedManager().useV1AutoZoom.get()
             let smoothRow = section.createNewRow()
             smoothRow.cellType = OASimpleTableViewCell.getIdentifier()
             smoothRow.key = "smooth"
-            smoothRow.title = localizedString("shared_string_smooth")
+            smoothRow.title = localizedString("auto_zoom_smooth")
             smoothRow.iconName = "ic_checkmark_default"
-            smoothRow.setObj(localizedString("selected"), forKey: "selected")
+            smoothRow.setObj(!isUseV1AutoZoom, forKey: "selected")
             let discreteRow = section.createNewRow()
             discreteRow.cellType = OASimpleTableViewCell.getIdentifier()
             discreteRow.key = "discrete"
-            discreteRow.title = localizedString("shared_string_discrete")
+            discreteRow.title = localizedString("auto_zoom_discrete")
             discreteRow.iconName = "ic_checkmark_default"
-            discreteRow.setObj(localizedString("selected"), forKey: "selected")
+            discreteRow.setObj(isUseV1AutoZoom, forKey: "selected")
         }
     }
     
@@ -92,5 +94,28 @@ final class RouteParameterDevelopmentViewController: OABaseSettingsViewControlle
         cell.titleLabel.text = item.title
         cell.leftIconView.image = item.obj(forKey: "selected") as? Bool ?? false ? UIImage(named: item.iconName ?? "ic_checkmark_default") : nil
         return cell
+    }
+    
+    override func onRowSelected(_ indexPath: IndexPath?) {
+        guard let indexPath else { return }
+        let item = tableData.item(for: indexPath)
+        guard let key = item.key else { return }
+        switch parameterType {
+        case .routingAlgorithm:
+            selectRoutingAlgorithmSetting(forKey: key)
+        case .autoZoom:
+            selectAutoZoomSetting(forKey: key)
+        }
+        
+        delegate?.onSettingsChanged()
+        dismiss(animated: true)
+    }
+    
+    private func selectRoutingAlgorithmSetting(forKey key: String) {
+        OAAppSettings.sharedManager().useOldRouting.set(key == "routing_algorithm_a")
+    }
+    
+    private func selectAutoZoomSetting(forKey key: String) {
+        OAAppSettings.sharedManager().useV1AutoZoom.set(key == "discrete")
     }
 }

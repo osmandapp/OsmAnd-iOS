@@ -3402,3 +3402,4 @@
 "shared_string_scale" = "Escala";
 "missing_or_outdated_maps_title" = "Mapas ausentes o anticuados";
 "osm_id" = "IDENTIFICADOR OSM";
+"osmand_depelopment_use_old_routing" = "Utilizar la ruta antigua (A*)";

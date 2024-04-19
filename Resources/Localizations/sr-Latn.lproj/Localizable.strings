@@ -3388,9 +3388,9 @@
 "track_appearance_3D_visualization" = "3D vizuelizacija";
 "osmand_depelopment_use_special_routing_hh+old" = "Upotrebi specijalno rutiranje (HH + staro)";
 "online_plugins" = "Mrežni dodaci";
-"vertical_exaggeration" = "Vertikalno poboljšanje";
-"vertical_exaggeration_description" = "Promenom vrednosti razmere, možete istaći 3D reljef.";
-"shared_string_scale" = "Razmera";
+"vertical_exaggeration" = "Vertikalno uvećanje";
+"vertical_exaggeration_description" = "Promenom vrednosti skale možeš naglasiti 3D reljef.";
+"shared_string_scale" = "Skala";
 "missing_or_outdated_maps_title" = "Nedostajajuće ili zastarele mape";
 "missing_or_outdated_maps_description" = "Neke oflajn mape potrebne za ovu rutu nedostaju ili nisu ažurirane. Preuzmite ili ažurirajte ove mape.";
 "required_maps" = "Potrebne Mape";

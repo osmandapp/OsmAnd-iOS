@@ -1664,8 +1664,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "osmand_depelopment_simulate_location_section" = "Simulate";
-"osmand_depelopment_use_special_routing_hh+old" = "Use special routing (HH + old)";
-"osmand_depelopment_use_special_routing_hh_only" = "Use special routing (HH only)";
+"osmand_depelopment_use_old_routing" = "Use old routing (A*)";
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 
 "simulate_in_progress" = "In progress";

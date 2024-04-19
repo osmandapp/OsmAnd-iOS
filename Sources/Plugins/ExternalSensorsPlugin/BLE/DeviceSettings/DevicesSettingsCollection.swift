@@ -84,6 +84,10 @@ final class DevicesSettingsCollection {
                 additionalParams[WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY] = String(describing: size)
                 deviceSettings.additionalParams = additionalParams
                 updateDeviceSettings(item: deviceSettings)
+            } else {
+                let additionalParams = [WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY: String(describing: size)]
+                deviceSettings.additionalParams = additionalParams
+                updateDeviceSettings(item: deviceSettings)
             }
         }
     }

@@ -109,9 +109,10 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                     }
                     if let descr = value as? Float {
                         if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
-                            wheelSize = descr
+                            // to milimeters
+                            wheelSize = descr * 1000
                         }
-                        settingRow.descr = String(descr)
+                        settingRow.descr = String(descr * 1000) + " " + localizedString("shared_string_millimeters").lowercased()
                     }
                  }
             }

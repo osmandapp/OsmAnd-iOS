@@ -24,7 +24,15 @@ final class BLEBikeSensor: Sensor {
     var lastBikeCadenceData: BikeCadenceData?
     var lastBikeSpeedDistanceData: BikeSpeedDistanceData?
     // NOTE: wheelCircumference = wheelSize * pi
-    var wheelSize: Double = 2.086
+    var wheelSize: Double {
+        if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: device.id) {
+            if let size = savedDevice.additionalParams?[WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY],
+            let actualWheelSize = Double(size) {
+                return actualWheelSize
+            }
+        }
+        return WheelDeviceSettings.DEFAULT_WHEEL_CIRCUMFERENCE
+    }
     
     override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         if widgetType == .bicycleCadence {

@@ -12,9 +12,9 @@
 
 @implementation OAGPXDataSetType
 
-+ (NSString *) getTitle:(NSInteger)dst
++ (NSString *) getTitle:(NSInteger)type
 {
-    switch (dst)
+    switch (type)
     {
         case GPXDataSetTypeAltitude:
             return OALocalizedString(@"altitude");
@@ -37,9 +37,9 @@
     }
 }
 
-+ (NSString *) getIconName:(NSInteger)dst
++ (NSString *) getIconName:(NSInteger)type
 {
-    switch (dst)
+    switch (type)
     {
         case GPXDataSetTypeAltitude:
             return @"ic_custom_altitude";
@@ -62,9 +62,9 @@
     }
 }
 
-+ (NSString *) getDataKey:(NSInteger)dst
++ (NSString *) getDataKey:(NSInteger)type
 {
-    switch (dst)
+    switch (type)
     {
         case GPXDataSetTypeAltitude:
             return OAPointAttributes.pointElevation;
@@ -87,9 +87,9 @@
     }
 }
 
-+ (UIColor *) getTextColor:(NSInteger)dst
++ (UIColor *) getTextColor:(NSInteger)type
 {
-    switch (dst)
+    switch (type)
     {
         case GPXDataSetTypeAltitude:
             return [UIColor colorNamed:ACColorNameChartTextColorElevation];
@@ -112,9 +112,9 @@
     }
 }
 
-+ (UIColor *) getFillColor:(NSInteger)dst
++ (UIColor *) getFillColor:(NSInteger)type
 {
-    switch (dst)
+    switch (type)
     {
         case GPXDataSetTypeAltitude:
             return [UIColor colorNamed:ACColorNameChartLineColorElevation];
@@ -137,9 +137,9 @@
     }
 }
 
-+ (NSString *) getMainUnitY:(NSInteger)dst
++ (NSString *) getMainUnitY:(NSInteger)type
 {
-    switch (dst)
+    switch (type)
     {
         case GPXDataSetTypeAltitude:
         {

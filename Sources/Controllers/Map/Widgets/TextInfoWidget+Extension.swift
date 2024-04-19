@@ -7,25 +7,25 @@
 //
 
 extension OATextInfoWidget {
-    @objc var widgetSizeStyle: WidgetSizeStyle {
-        guard sizeStylePref != nil, let style = WidgetSizeStyle(rawValue: NSInteger(sizeStylePref.get(OAAppSettings.sharedManager().applicationMode.get()!))) else {
+    @objc var widgetSizeStyle: EOAWidgetSizeStyle {
+        guard widgetSizePref != nil else {
             return .medium
         }
-        return style
+        return widgetSizePref.get(OAAppSettings.sharedManager().applicationMode.get()!)
     }
     
-    func updateWith(style: WidgetSizeStyle, appMode: OAApplicationMode) {
+    func updateWith(style: EOAWidgetSizeStyle, appMode: OAApplicationMode) {
         refreshLayout()
         guard widgetSizeStyle != style else {
             return
         }
-        sizeStylePref.set(Int32(style.rawValue), mode: appMode)
+        widgetSizePref.set(style, mode: appMode)
     }
 }
 
 extension Array where Element == OATextInfoWidget {
     func updateWithMostFrequentStyle(with appMode: OAApplicationMode) {
-        var styleCounts: [WidgetSizeStyle: Int] = [:]
+        var styleCounts: [EOAWidgetSizeStyle: Int] = [:]
         
         for widget in self {
             let style = widget.widgetSizeStyle

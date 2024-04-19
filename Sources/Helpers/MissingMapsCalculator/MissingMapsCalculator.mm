@@ -63,9 +63,8 @@ static const double DISTANCE_SKIP = 10000;
 - (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
                                     targets:(NSArray<CLLocation *> *)targets
 {
-    bool hhRoutingOnly = [[OAAppSettings sharedManager].useHHRoutingOnly get];
-    bool hhRouting = [[OAAppSettings sharedManager].useHHRouting get];
-    return [self checkIfThereAreMissingMaps:_ctx start:start targets:targets checkHHEditions:hhRoutingOnly || hhRouting];
+    bool oldRouting = [[OAAppSettings sharedManager].useOldRouting get];
+    return [self checkIfThereAreMissingMaps:_ctx start:start targets:targets checkHHEditions:!oldRouting];
 }
 
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
@@ -99,7 +98,7 @@ static const double DISTANCE_SKIP = 10000;
         }
         RegisteredMap *rmap = [RegisteredMap new];
         NSString *rmapDownloadName = [[downloadName stringByDeletingPathExtension] lowerCase];
-        
+    
         rmap.downloadName = rmapDownloadName;
         rmap.reader = file;
         rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
@@ -304,12 +303,15 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             int y31 = OsmAnd::Utilities::get31TileNumberY(loc.coordinate.latitude);
             
             int zoomToLoad = 14;
+            int x = x31 >> zoomToLoad;
+            int y = y31 >> zoomToLoad;
+            
             for (RegisteredMap *r in knownMaps.allValues)
             {
                 if (!r.standard)
                 {
-                    SearchQuery q((uint32_t)(x31 << zoomToLoad), (uint32_t)((x31 + 1) << zoomToLoad), (uint32_t)(y31 << zoomToLoad),
-                                  (uint32_t)((y31 + 1) << zoomToLoad));
+                    SearchQuery q((uint32_t)(x << zoomToLoad), (uint32_t)((x + 1) << zoomToLoad), (uint32_t)(y << zoomToLoad),
+                                  (uint32_t)((y + 1) << zoomToLoad));
                     if (r.reader->routingIndexes.size() > 0 && searchRouteSubregionsForBinaryMapFile(r.reader, &q))
                     {
                         [pnt.regions insertObject:r.downloadName atIndex:0];

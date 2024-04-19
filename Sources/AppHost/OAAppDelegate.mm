@@ -134,10 +134,18 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
         NSLog(@"OAAppDelegate beginBackgroundTask");
 
         // Initialize OsmAnd core
-        [_app initializeCore];
+        if (![_app initializeCore])
+        {
+            NSLog(@"OAAppDelegate failed to initialize core");
+            return;
+        }
 
         // Initialize application in background
-        [_app initialize];
+        if (![_app initialize])
+        {
+            NSLog(@"OAAppDelegate failed to initialize app");
+            return;
+        }
 
         dispatch_async(dispatch_get_main_queue(), ^{
             

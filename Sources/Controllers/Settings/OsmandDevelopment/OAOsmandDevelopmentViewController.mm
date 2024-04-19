@@ -45,8 +45,7 @@ NSString *const kTestHeightmapKey = @"kTestHeightmapKey";
 NSString *const kDisableVertexHillshade = @"kDisableVertexHillshade";
 NSString *const kGenerateHillshadeKey = @"kGenerateHillshadeKey";
 NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
-NSString *const kUseHHRouting = @"kUseHHRouting";
-NSString *const kUseHHRoutingOnly = @"kUseHHRoutingOnly";
+NSString *const kUseOldRouting = @"kUseOldRouting";
 NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
 
 #pragma mark - Initialization
@@ -97,15 +96,9 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
     }];
     [simulationSection addRowFromDictionary:@{
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kUseHHRouting,
-        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_special_routing_hh+old"),
-        @"isOn" : @([[OAAppSettings sharedManager].useHHRouting get])
-    }];
-    [simulationSection addRowFromDictionary:@{
-        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kUseHHRoutingOnly,
-        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_special_routing_hh_only"),
-        @"isOn" : @([[OAAppSettings sharedManager].useHHRoutingOnly get])
+        kCellKeyKey : kUseOldRouting,
+        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_old_routing"),
+        @"isOn" : @([[OAAppSettings sharedManager].useOldRouting get])
     }];
     [_data addSection:simulationSection];
     
@@ -192,10 +185,8 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
     OATableRowData *item = [_data itemForIndexPath:indexPath];
     
-    if ([item.key isEqualToString:kUseHHRouting])
-        [[OAAppSettings sharedManager].useHHRouting set:sender.isOn];
-    else if ([item.key isEqualToString:kUseHHRoutingOnly])        
-        [[OAAppSettings sharedManager].useHHRoutingOnly set:sender.isOn];
+    if ([item.key isEqualToString:kUseOldRouting])
+        [[OAAppSettings sharedManager].useOldRouting set:sender.isOn];
     else if ([item.key isEqualToString:kUseV1AutoZoom])
         [[OAAppSettings sharedManager].useV1AutoZoom set:sender.isOn];
 }

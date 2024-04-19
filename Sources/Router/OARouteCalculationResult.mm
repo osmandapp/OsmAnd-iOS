@@ -212,6 +212,11 @@
     return _initialCalculation;
 }
 
+- (BOOL) hasMissingMaps
+{
+    return _missingMaps.count > 0;
+}
+
 - (void) updateCurrentRoute:(int)currentRoute
 {
     _currentRoute = currentRoute;
@@ -1198,7 +1203,8 @@
                 if (locationIndex > interLocations[currentIntermediate].intValue && [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate] currentLocation:locationIndex] > 50)
                 {
                     OARouteDirectionInfo *toSplit = localDirections[currentDirection];
-                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[currentDirection].averageSpeed turnType:TurnType::ptrStraight()];
+                    // intermediate point should split using average speed from its actual (previous) segment
+                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[MAX(0, currentDirection - 1)].averageSpeed turnType:TurnType::ptrStraight()];
                     info.ref = toSplit.ref;
                     info.streetName = toSplit.streetName;
                     info.routeDataObject = toSplit.routeDataObject;

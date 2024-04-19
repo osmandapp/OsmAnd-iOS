@@ -852,12 +852,11 @@
             intY.push_back(get31TileNumberY(l.coordinate.latitude));
         }
         
-        bool hhRoutingOnly = [[OAAppSettings sharedManager].useHHRoutingOnly get];
-        bool hhRouting = [[OAAppSettings sharedManager].useHHRouting get];
-        if (hhRouting || hhRoutingOnly)
+        bool oldRouting = [[OAAppSettings sharedManager].useOldRouting get];
+        if (!oldRouting)
         {
             router->setDefaultRoutingConfig();
-            router->USE_ONLY_HH_ROUTING = hhRoutingOnly;
+            // router->USE_ONLY_HH_ROUTING = hhRoutingOnly; // set true to debug HH routing
         }
 
         if (router->CALCULATE_MISSING_MAPS)
@@ -867,7 +866,7 @@
                 _missingMapsCalculator = [MissingMapsCalculator new];
             }
             NSArray<CLLocation *> *targets = (inters.count > 0) ? [inters arrayByAddingObject:en] : @[en];
-            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:hhRouting || hhRoutingOnly])
+            if ([_missingMapsCalculator checkIfThereAreMissingMaps:ctx start:st targets:targets checkHHEditions:!oldRouting])
             {
                 OARouteCalculationResult *r = [[OARouteCalculationResult alloc] initWithErrorMessage:[_missingMapsCalculator getErrorMessage]];
                 r.missingMaps = _missingMapsCalculator.missingMaps;

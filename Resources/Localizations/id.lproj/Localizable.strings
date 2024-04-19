@@ -363,7 +363,7 @@
 "route_tshl" = "Belok tajam ke kiri dan pergi";
 "route_tsll" = "Belok sedikit ke kiri dan jalan";
 "route_tu" = "Putar balik dan jalan";
-"route_head" = "Kepala";
+"route_head" = "Maju di";
 "looking_up_address" = "Mencari alamat";
 "no_address_found" = "Tidak ada alamat yang ditentukan";
 "traffic_warning_speed_limit" = "Batas kecepatan";

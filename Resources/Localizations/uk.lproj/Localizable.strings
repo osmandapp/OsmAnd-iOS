@@ -3362,3 +3362,4 @@
 "osmand_cloud_deletion_subscriptions_warning" = "Це не скасує вашу передплату на OsmAnd Pro.";
 "verify_account_deletion_descr" = "Нам потрібно підтвердити ваш обліковий запис, перш ніж видалити його. \n \nВведіть адресу електронної пошти, яку ви зареєстрували. На неї буде надіслано одноразовий пароль для наступного кроку.";
 "cloud_item_restored" = "%@відновлено до Cloud.";
+"track_appearance_3D_visualization" = "3D-візуалізація";

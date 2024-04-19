@@ -64,7 +64,6 @@ final class DevicesSettingsCollection {
         var deviceSettings: DeviceSettings
         switch device.deviceType {
         case .BLE_BICYCLE_SCD:
-            // TODO: ???
             deviceSettings = WheelDeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)
         default:
             deviceSettings = DeviceSettings(deviceId: device.id, deviceType: device.deviceType, deviceName: device.deviceName, deviceEnabled: deviceEnabled)
@@ -76,6 +75,16 @@ final class DevicesSettingsCollection {
         if let deviceSettings = getDeviceSettings(deviceId: id) {
             deviceSettings.deviceName = name
             updateDeviceSettings(item: deviceSettings)
+        }
+    }
+    
+    func changeWheelSize(with id: String, size: Float) {
+        if let deviceSettings = getDeviceSettings(deviceId: id) {
+            if var additionalParams = deviceSettings.additionalParams {
+                additionalParams[WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY] = String(describing: size)
+                deviceSettings.additionalParams = additionalParams
+                updateDeviceSettings(item: deviceSettings)
+            }
         }
     }
     

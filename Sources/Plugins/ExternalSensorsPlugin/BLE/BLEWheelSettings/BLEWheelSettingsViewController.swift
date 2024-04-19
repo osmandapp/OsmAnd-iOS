@@ -10,11 +10,13 @@ import Foundation
 
 final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     var wheelSize: Float!
+    var device: Device!
     var onSaveAction: (() -> Void)?
     
+    // TODO: can use UITextField with leftView as UILabel (millimeters text)
     private var textView: UITextView? {
         didSet {
-            textView?.keyboardType = .namePhonePad
+            textView?.keyboardType = .numberPad
         }
     }
     private var wheelSizeString = ""
@@ -46,10 +48,13 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     
     override func onRightNavbarButtonPressed() {
         if wheelSizeString != String(wheelSize) {
-            // TODO: need ui design
-          //  device.deviceName = wheelSizeString
-           // DeviceHelper.shared.changeDeviceName(with: device.id, name: newDeviceName)
-            onSaveAction?()
+            if let millimeters = Float(wheelSizeString) {
+                let meters = millimeters / 1000.0
+                DeviceHelper.shared.changeWheelSize(with: device.id, size: meters)
+                onSaveAction?()
+            } else {
+                debugPrint("Conversion failed. The string is NOT a float.")
+            }
         }
         dismiss()
     }

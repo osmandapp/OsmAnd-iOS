@@ -110,6 +110,10 @@ final class DeviceHelper: NSObject {
         devicesSettingsCollection.changeDeviceName(with: id, name: name)
     }
     
+    func changeWheelSize(with id: String, size: Float) {
+        devicesSettingsCollection.changeWheelSize(with: id, size: size)
+    }
+    
     private func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
          for peripheral in peripherals {
              if let index = connectedDevices.firstIndex(where: { $0.id == peripheral.identifier.uuidString }) {

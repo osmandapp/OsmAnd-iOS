@@ -192,9 +192,8 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             }
             navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
         } else if item.key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
-            #warning("We are waiting for the design for the controller")
-            /*
             let wheelVC = BLEWheelSettingsViewController()
+            wheelVC.device = device
             wheelVC.wheelSize = wheelSize
             wheelVC.onSaveAction = { [weak self] in
                 guard let self else { return }
@@ -202,7 +201,6 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                 tableView.reloadData()
             }
             navigationController?.present(UINavigationController(rootViewController: wheelVC), animated: true)
-             */
         }
     }
     

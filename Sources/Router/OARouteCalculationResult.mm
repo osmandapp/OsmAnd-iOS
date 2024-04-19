@@ -212,6 +212,11 @@
     return _initialCalculation;
 }
 
+- (BOOL) hasMissingMaps
+{
+    return _missingMaps.count > 0;
+}
+
 - (void) updateCurrentRoute:(int)currentRoute
 {
     _currentRoute = currentRoute;

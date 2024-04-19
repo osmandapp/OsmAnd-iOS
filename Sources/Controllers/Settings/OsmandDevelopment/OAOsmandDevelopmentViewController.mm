@@ -10,7 +10,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
-#import "OAColors.h"
 #import "OALocationSimulation.h"
 #import "OAValueTableViewCell.h"
 #import "OATableRowData.h"
@@ -24,10 +23,7 @@
 #import "OAProducts.h"
 #import "OARootViewController.h"
 #import "OAIndexConstants.h"
-#import "OASwitchTableViewCell.h"
 #import "OAPluginsHelper.h"
-
-#define kCellSwitchIsOnKey @"kCellSwitchIsOnKey"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 
@@ -41,12 +37,6 @@
 }
 
 NSString *const kSimulateLocationKey = @"kSimulateLocationKey";
-NSString *const kTestHeightmapKey = @"kTestHeightmapKey";
-NSString *const kDisableVertexHillshade = @"kDisableVertexHillshade";
-NSString *const kGenerateHillshadeKey = @"kGenerateHillshadeKey";
-NSString *const kGenerateSlopeKey = @"kGenerateSlopeKey";
-NSString *const kUseOldRouting = @"kUseOldRouting";
-NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
 
 #pragma mark - Initialization
 
@@ -94,23 +84,7 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
         kCellDescrKey : isRouteAnimating ? OALocalizedString(@"simulate_in_progress") : @"",
         @"actionBlock" : (^void(){ [weakSelf openSimulateLocationSettings]; })
     }];
-    [simulationSection addRowFromDictionary:@{
-        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kUseOldRouting,
-        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_old_routing"),
-        @"isOn" : @([[OAAppSettings sharedManager].useOldRouting get])
-    }];
     [_data addSection:simulationSection];
-    
-    OATableSectionData *navigationSection = [OATableSectionData sectionData];
-    navigationSection.headerText = OALocalizedString(@"shared_string_navigation");
-    [navigationSection addRowFromDictionary:@{
-        kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellKeyKey : kUseV1AutoZoom,
-        kCellTitleKey : OALocalizedString(@"osmand_depelopment_use_discrete_autozoom"),
-        @"isOn" : @([[OAAppSettings sharedManager].useV1AutoZoom get])
-    }];
-    [_data addSection:navigationSection];
 }
 
 - (NSInteger)sectionsCount
@@ -121,11 +95,6 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
     return [_data sectionDataForIndex:section].headerText;
-}
-
-- (NSString *)getTitleForFooter:(NSInteger)section
-{
-    return [_data sectionDataForIndex:section].footerText;
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
@@ -156,39 +125,7 @@ NSString *const kUseV1AutoZoom = @"kUseV1AutoZoom";
         }
         return cell;
     }
-    else if ([type isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
-    {
-        OASwitchTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
-        if (!cell)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASwitchTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OASwitchTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item.title;
-            cell.switchView.on = [item boolForKey:@"isOn"];
-            cell.switchView.tag = indexPath.section << 10 | indexPath.row;
-            [cell.switchView removeTarget:self action:NULL forControlEvents:UIControlEventValueChanged];
-            [cell.switchView addTarget:self action:@selector(onSwitchPressed:) forControlEvents:UIControlEventValueChanged];            
-        }
-        return cell;
-    }
     return nil;
-}
-
-- (void)onSwitchPressed:(UISwitch *)sender
-{
-    UISwitch *switchView = (UISwitch *) sender;
-    NSIndexPath *indexPath = [NSIndexPath indexPathForRow:switchView.tag & 0x3FF inSection:switchView.tag >> 10];
-    OATableRowData *item = [_data itemForIndexPath:indexPath];
-    
-    if ([item.key isEqualToString:kUseOldRouting])
-        [[OAAppSettings sharedManager].useOldRouting set:sender.isOn];
-    else if ([item.key isEqualToString:kUseV1AutoZoom])
-        [[OAAppSettings sharedManager].useV1AutoZoom set:sender.isOn];
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

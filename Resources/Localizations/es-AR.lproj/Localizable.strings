@@ -3408,3 +3408,6 @@
 "getting_list_required_maps" = "Obteniendo una lista de mapas necesarios…";
 "vertical_exaggeration_description" = "Al cambiar el valor de la escala, puede enfatizar el relieve en 3D.";
 "missing_or_outdated_maps_description" = "Algunos mapas sin conexión necesarios para esta ruta desaparecieron o están desactualizados. Descarga o actualiza estos mapas.";
+"osmand_depelopment_use_old_routing" = "Usar navegación antigua (A*)";
+"average_vertical_speed" = "Velocidad media vertical";
+"osm_id" = "ID de OSM";

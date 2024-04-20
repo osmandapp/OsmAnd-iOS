@@ -3400,3 +3400,4 @@
 "getting_list_required_maps" = "Preuzimanje liste potrebnih mapa…";
 "average_vertical_speed" = "Prosečna vertikalna brzina";
 "osm_id" = "OSM ID";
+"osmand_depelopment_use_old_routing" = "Koristi staro rutiranje (A*)";

@@ -84,7 +84,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     EOATerrainType type = self.app.data.terrainType;
     if (type != EOATerrainTypeDisabled && [[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])

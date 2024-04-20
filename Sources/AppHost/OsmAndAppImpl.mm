@@ -107,6 +107,7 @@
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
 
     BOOL _carPlayActive;
+    BOOL _isInBackground;
 }
 
 @synthesize initialized = _initialized;
@@ -150,6 +151,7 @@
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
 @synthesize carPlayActive = _carPlayActive;
+@synthesize backgroundStateObservable = _backgroundStateObservable;
 
 - (instancetype) init
 {
@@ -640,6 +642,7 @@
     _osmEditsChangeObservable = [[OAObservable alloc] init];
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
     _simulateRoutingObservable = [[OAObservable alloc] init];
+    _backgroundStateObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
@@ -961,6 +964,22 @@
     // TODO toast
 }
 
+- (void)setCarPlayActive:(BOOL)carPlayActive
+{
+    BOOL prevIsInBackground = self.isInBackground;
+
+    _carPlayActive = carPlayActive;
+
+    BOOL isInBackground = self.isInBackground;
+    if (prevIsInBackground != isInBackground)
+        [self.backgroundStateObservable notifyEventWithKey:@(isInBackground)];
+}
+
+- (BOOL) isInBackground
+{
+    return _isInBackground && !self.carPlayActive;
+}
+
 - (void)startRepositoryUpdateAsync:(BOOL)async
 {
     _isRepositoryUpdating = YES;
@@ -1232,6 +1251,9 @@
 
 - (void) onApplicationDidEnterBackground
 {
+    _isInBackground = YES;
+    [self.backgroundStateObservable notifyEventWithKey:@(YES)];
+
     [self saveDataToPermamentStorage];
 
     // In background allow to turn off screen
@@ -1247,7 +1269,11 @@
 
 - (void) onApplicationDidBecomeActive
 {
+    _isInBackground = NO;
+
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
+
+    [self.backgroundStateObservable notifyEventWithKey:@(NO)];
 }
 
 - (void) stopNavigation

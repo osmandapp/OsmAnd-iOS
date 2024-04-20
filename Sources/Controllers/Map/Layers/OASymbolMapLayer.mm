@@ -35,8 +35,9 @@ const static float kTextSize = 13.0f;
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     [self updateCaptionStyle];
     
     return YES;

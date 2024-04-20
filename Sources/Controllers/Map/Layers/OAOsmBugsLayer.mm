@@ -75,7 +75,8 @@ static const NSString* BASE_URL = @"https://api.openstreetmap.org/";
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
     if (_textSize != textSize)

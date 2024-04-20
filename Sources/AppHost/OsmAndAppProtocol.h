@@ -58,6 +58,8 @@
 @property(nonatomic) OAMapViewState* initialURLMapState;
 
 @property (nonatomic) BOOL carPlayActive;
+@property (nonatomic) BOOL isInBackground;
+@property(readonly) OAObservable* backgroundStateObservable;
 
 - (void) loadWorldRegions;
 

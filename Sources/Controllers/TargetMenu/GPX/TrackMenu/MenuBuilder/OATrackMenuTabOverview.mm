@@ -52,32 +52,90 @@
 {
     self.tableData = [OAGPXTableData withData:@{ kTableKey: @"table_tab_overview" }];
 
-    OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_description",
-            kSectionHeader: OALocalizedString(@"shared_string_description"),
-            kSectionHeaderHeight: @56.
-    }];
-    [self.tableData.subjects addObject:descriptionSectionData];
-
-    [self generateDescription];
-    [self generateImageURL];
-
-    if (_imageURL && _imageURL.length > 0)
-        [descriptionSectionData.subjects addObject:[self generateImageCellData]];
-
-    if (_description && _description.length > 0)
+    BOOL hasArticle = NO;
+    if (self.trackMenuDelegate)
     {
-        [descriptionSectionData.subjects addObject:[self generateDescriptionCellData]];
-        [descriptionSectionData.subjects addObject:[self generateEditDescriptionCellData]];
-        [descriptionSectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
+        OAMetadata *metadata = [self.trackMenuDelegate getMetadata];
+        if (metadata)
+        {
+            OAGpxExtension *articleTitleExtension = [metadata getExtensionByKey:@"article_title"];
+            if (articleTitleExtension)
+            {
+                OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
+                    kTableKey: @"sectionWikivoyage",
+                    kSectionHeader: OALocalizedString(@"shared_string_wikivoyage"),
+                    kSectionHeaderHeight: @56.
+                }];
+                [self.tableData.subjects addObject:wikivoyageSectionData];
+                
+                OATravelObfHelper *helper = [OATravelObfHelper shared];
+                OAGpxExtension *articleLangExtension = [metadata getExtensionByKey:@"article_lang"];
+                NSString *lang = articleLangExtension ? articleLangExtension.value : @"en";
+                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension.value lang:lang];
+                if (article)
+                {
+                    hasArticle = YES;
+                    NSString *geoDescription = [article getGeoDescription];
+                    NSString *iconName = @"";
+                    if (article.imageTitle && article.imageTitle.length > 0)
+                    {
+                        iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
+                    }
+                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
+                        kTableKey: @"article",
+                        kCellType: [OAArticleTravelCell getCellIdentifier],
+                        kCellTitle: article.title ? article.title : @"nil",
+                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
+                        kCellRightIconName: iconName,
+                        kTableValues: @{
+                            @"isPartOf": geoDescription ? geoDescription : @"",
+                            @"article": article,
+                            @"lang": lang
+                        }
+                    }];
+                    [wikivoyageSectionData.subjects addObject:articleRow];
+
+                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
+                        kTableKey: @"readArticle",
+                        kCellType: [OASimpleTableViewCell getCellIdentifier],
+                        kCellTitle: OALocalizedString(@"shared_string_read"),
+                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
+                    }];
+                    [wikivoyageSectionData.subjects addObject:readCellData];
+                }
+            }
+        }
+
+        if (!hasArticle)
+        {
+            OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_description",
+                kSectionHeader: OALocalizedString(@"shared_string_description"),
+                kSectionHeaderHeight: @56.
+            }];
+            [self.tableData.subjects addObject:descriptionSectionData];
+            
+            [self generateDescription];
+            [self generateImageURL];
+            
+            if (_imageURL && _imageURL.length > 0)
+                [descriptionSectionData.subjects addObject:[self generateImageCellData]];
+            
+            if (_description && _description.length > 0)
+            {
+                [descriptionSectionData.subjects addObject:[self generateDescriptionCellData]];
+                [descriptionSectionData.subjects addObject:[self generateEditDescriptionCellData]];
+                [descriptionSectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
+            }
+            else
+            {
+                [descriptionSectionData.subjects addObject:[self generateAddDescriptionCellData]];
+            }
+        }
+
+        OARouteKey *key = self.trackMenuDelegate.getRouteKey;
+        [self populateRouteInfoSection:self.tableData routeKey:key];
     }
-    else
-    {
-        [descriptionSectionData.subjects addObject:[self generateAddDescriptionCellData]];
-    }
-    
-    OARouteKey *key = self.trackMenuDelegate.getRouteKey;
-    [self populateRouteInfoSection:self.tableData routeKey:key];
 
     OAGPXTableSectionData *generalSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_general",
@@ -639,6 +697,10 @@
         else if ([tableData.key isEqualToString:@"read_full_description"])
         {
             [self.trackMenuDelegate openDescription];
+        }
+        else if ([tableData.key isEqualToString:@"readArticle"])
+        {
+            [self.trackMenuDelegate openArticleById:tableData.values[@"articleId"] lang:tableData.values[@"lang"]];
         }
         else if ([tableData isKindOfClass:OAGPXTableCellData.class])
         {

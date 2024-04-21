@@ -970,13 +970,15 @@
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:nil]];
             [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
         }
-        if (!_isNewItemAdding && _targetMenuState && [_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+        if (_targetMenuState && [_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
         {
+            OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
+            state.openedFromTrackMenu = NO;
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
             [[OARootViewController instance].mapPanel openTargetViewWithGPX:[db getGPXItem:[
                     [db getFileDir:self.gpxFileName] stringByAppendingPathComponent:self.gpxFileName.lastPathComponent]]
                                                                trackHudMode:EOATrackMenuHudMode
-                                                                      state:_targetMenuState];
+                                                                      state:state];
         }
     }];
 }

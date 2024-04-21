@@ -168,8 +168,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
         if let article = item.obj(forKey: "article") as? TravelArticle {
-            OAAppSettings.sharedManager().travelGuidesState.article = article
-            OAAppSettings.sharedManager().travelGuidesState.wasOpenedFromBookmarks = true
             let vc = TravelArticleDialogViewController(articleId: article.generateIdentifier(), lang: article.lang ?? "")
             vc.delegate = self
             navigationController?.pushViewController(vc, animated: true)
@@ -187,8 +185,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                     let readAction = UIAction(title: localizedString("shared_string_read"), image: UIImage(named: "ic_custom_file_read")) { [weak self] _ in
                         guard let self else { return }
                         lastSelectedIndexPath = indexPath
-                        OAAppSettings.sharedManager().travelGuidesState.article = article
-                        OAAppSettings.sharedManager().travelGuidesState.wasOpenedFromBookmarks = true
                         let vc = TravelArticleDialogViewController(articleId: article.generateIdentifier(), lang: article.lang ?? "")
                         vc.delegate = self
                         navigationController?.pushViewController(vc, animated: true)
@@ -202,7 +198,6 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
                     let pointsAction = UIAction(title: localizedString("shared_string_gpx_points"), image: UIImage(named: "ic_custom_point_markers_outlined")) { [weak self] _ in
                         guard let self else { return }
                         self.view.addSpinner(inCenterOfCurrentView: true)
-                        OAAppSettings.sharedManager().travelGuidesState.article = nil
                         _ = TravelObfHelper.shared.getArticleById(articleId: article.generateIdentifier(), lang: lang, readGpx: true, callback: self)
                     }
                     return UIMenu(title: "", children: [readAction, bookmarkAction, pointsAction])
@@ -227,12 +222,14 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
             OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
             return
         }
-        
-        OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
-        OAAppSettings.sharedManager().travelGuidesState.wasOpenedFromBookmarks = true
+
         OAAppSettings.sharedManager().showGpx([filename], update: true)
-        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .pointsTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
-        dismiss()
+        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: false,
+                                                                           selectedTab: .pointsTab)
+        }
     }
     
     // MARK: UISearchResultsUpdating

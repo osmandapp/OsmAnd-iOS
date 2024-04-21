@@ -708,12 +708,9 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
         {
             OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
-            if (state.openedFromTracksList && !state.openedFromTrackMenu)
+            if (state.openedFromTracksList && !state.openedFromTrackMenu && state.navControllerHistory)
             {
-                UITabBarController *myPlacesViewController =
-                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                [myPlacesViewController setSelectedIndex:1];
-                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                [[OARootViewController instance].navigationController setViewControllers:state.navControllerHistory animated:YES];
             }
             else
             {

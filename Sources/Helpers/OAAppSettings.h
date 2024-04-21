@@ -70,7 +70,7 @@ static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF = 2;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED = 3;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OATravelGuidesState;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 typedef NS_ENUM(NSInteger, EOAWidgetSizeStyle)
 {
@@ -1050,8 +1050,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
-
-@property (nonatomic) OATravelGuidesState *travelGuidesState;
 
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;

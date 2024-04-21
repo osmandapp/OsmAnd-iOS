@@ -55,7 +55,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
     EOADestinationPointType _type;
     EOASortType _sortingType;
     NSTimeInterval _lastUpdate;
-    BOOL _isDecelerating;
+    BOOL _decelerating;
     
     NSMutableArray *_groupsAndFavorites;
     NSMutableArray *_sortedByNameFavoriteItems;
@@ -77,7 +77,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
 - (void)commonInit
 {
     _sortingType = EOASortTypeByGroup;
-    _isDecelerating = NO;
+    _decelerating = NO;
 }
 
 - (void)registerObservers
@@ -86,7 +86,12 @@ typedef NS_ENUM(NSInteger, EOASortType)
                                                 withHandler:_type == EOADestinationPointTypeFavorite
                                                             ? @selector(updateDistanceAndDirectionFavorites)
                                                             : @selector(updateDistanceAndDirectionMarkers)
-                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver]];
+                                                 andObserve:[OsmAndApp instance].locationServices.updateLocationObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:_type == EOADestinationPointTypeFavorite
+                                                            ? @selector(updateDistanceAndDirectionFavorites)
+                                                            : @selector(updateDistanceAndDirectionMarkers)
+                                                 andObserve:[OsmAndApp instance].locationServices.updateHeadingObserver]];
 }
 
 #pragma mark - UIViewController
@@ -354,40 +359,43 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (void)updateDistanceAndDirectionMarkers:(BOOL)forceUpdate
 {
-    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
-        return;
-    
-    _lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    [_destinationItems enumerateObjectsUsingBlock:^(OADestinationItem* itemData, NSUInteger idx, BOOL *stop) {
+    @synchronized(self)
+    {
+        if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
+            return;
 
-        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          itemData.destination.longitude, itemData.destination.latitude);
-        
-        itemData.distance = distance;
-        itemData.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
-        CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.destination.latitude longitude:itemData.destination.longitude]];
-        itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-        
-    }];
-    
-    if (_isDecelerating)
-        return;
-    
-    [self refreshVisibleMarkers];
+        _lastUpdate = [[NSDate date] timeIntervalSince1970];
+
+        OsmAndAppInstance app = [OsmAndApp instance];
+        // Obtain fresh location and heading
+        CLLocation* newLocation = app.locationServices.lastKnownLocation;
+        if (!newLocation)
+            return;
+
+        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+
+        [_destinationItems enumerateObjectsUsingBlock:^(OADestinationItem* itemData, NSUInteger idx, BOOL *stop) {
+
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              itemData.destination.longitude, itemData.destination.latitude);
+
+            itemData.distance = distance;
+            itemData.distanceStr = [OAOsmAndFormatter getFormattedDistance:distance];
+            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:itemData.destination.latitude longitude:itemData.destination.longitude]];
+            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+
+        }];
+
+        if (_decelerating)
+            return;
+
+        [self refreshVisibleMarkers];
+    }
 }
 
 - (void)updateDistanceAndDirectionFavorites
@@ -397,52 +405,55 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (void)updateDistanceAndDirectionFavorites:(BOOL)forceUpdate
 {
-    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
-        return;
+    @synchronized(self)
+    {
+        if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
+            return;
 
-    _lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    [_sortedByDistFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
-        const auto& favoritePosition31 = itemData.favorite->getPosition31();
-        const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
-        const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
-        
-        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          favoriteLon, favoriteLat);
-        
-        
-        
-        itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
-        itemData.distanceMeters = distance;
-        CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
-        itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-        
-    }];
-    
-    if ([_sortedByDistFavoriteItems count] > 0) {
-        NSArray *sortedArray = [_sortedByDistFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
-            return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+        _lastUpdate = [[NSDate date] timeIntervalSince1970];
+
+        OsmAndAppInstance app = [OsmAndApp instance];
+        // Obtain fresh location and heading
+        CLLocation* newLocation = app.locationServices.lastKnownLocation;
+        if (!newLocation)
+            return;
+
+        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+
+        [_sortedByDistFavoriteItems enumerateObjectsUsingBlock:^(OAFavoriteItem* itemData, NSUInteger idx, BOOL *stop) {
+            const auto& favoritePosition31 = itemData.favorite->getPosition31();
+            const auto favoriteLon = OsmAnd::Utilities::get31LongitudeX(favoritePosition31.x);
+            const auto favoriteLat = OsmAnd::Utilities::get31LatitudeY(favoritePosition31.y);
+
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              favoriteLon, favoriteLat);
+
+
+
+            itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
+            itemData.distanceMeters = distance;
+            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:favoriteLat longitude:favoriteLon]];
+            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+
         }];
-        [_sortedByDistFavoriteItems setArray:sortedArray];
+
+        if ([_sortedByDistFavoriteItems count] > 0) {
+            NSArray *sortedArray = [_sortedByDistFavoriteItems sortedArrayUsingComparator:^NSComparisonResult(OAFavoriteItem* obj1, OAFavoriteItem* obj2) {
+                return obj1.distanceMeters > obj2.distanceMeters ? NSOrderedDescending : obj1.distanceMeters < obj2.distanceMeters ? NSOrderedAscending : NSOrderedSame;
+            }];
+            [_sortedByDistFavoriteItems setArray:sortedArray];
+        }
+
+        if (_decelerating)
+            return;
+
+        [self refreshVisibleFavorites];
     }
-    
-    if (_isDecelerating)
-        return;
-    
-    [self refreshVisibleFavorites];
 }
 
 - (OAFavoriteItem *)getSortedFavoriteItem:(NSIndexPath *)indexPath
@@ -549,7 +560,7 @@ typedef NS_ENUM(NSInteger, EOASortType)
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    _isDecelerating = YES;
+    _decelerating = YES;
 }
 
 // Load images for all onscreen rows when scrolling is finished
@@ -557,14 +568,14 @@ typedef NS_ENUM(NSInteger, EOASortType)
 {
     if (!decelerate)
     {
-        _isDecelerating = NO;
+        _decelerating = NO;
         //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    _isDecelerating = NO;
+    _decelerating = NO;
     //[self refreshVisibleRows];
 }
 

@@ -24,6 +24,7 @@
 #import "OARouteCalculationResult.h"
 #import "OAMapUtils.h"
 #import "OARoutingHelperUtils.h"
+#import "OAMapLayers.h"
 
 #include <commonOsmAndCore.h>
 
@@ -60,7 +61,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     BOOL _drivingRegionUpdated;
     
     OAAutoObserverProxy *_locationServicesStatusObserver;
-    OAAutoObserverProxy *_locationServicesUpdateObserver;
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
     OAAutoObserverProxy *_mapModeObserver;
     
     OAMapMode _lastMapMode;
@@ -113,9 +115,12 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                                                                     withHandler:@selector(onLocationServicesStatusChanged)
                                                                      andObserve:_app.locationServices.statusObservable];
 
-        _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(onLocationServicesUpdate)
-                                                                     andObserve:_app.locationServices.updateObserver];
+        _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onLocationUpdate)
+                                                             andObserve:_app.locationServices.updateLocationObserver];
+        _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onHeadingUpdate)
+                                                            andObserve:_app.locationServices.updateHeadingObserver];
 
         //addTargetPointListener(app);
         //addMapMarkersListener(app);
@@ -273,7 +278,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     }
 }
 
-- (void) onLocationServicesUpdate
+- (void) onLocationUpdate
 {
     if ([_settings.useV1AutoZoom get])
     {
@@ -310,9 +315,10 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             }
         }
         
+        NSLog(@"LOCATION = %f, %f (%.0f:%.0f)", location.coordinate.latitude, location.coordinate.longitude, location.course, _myLocation.course);
+
         if (_mapViewController)
         {
-            OAMapRendererView *renderer = _mapViewController.mapView;
             if ([self isMapLinkedToLocation] && location)
             {
                 double rotation = NAN;
@@ -368,12 +374,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         }
         
         [_mapViewController updateLocation:location heading:location.course];
-        
-        /*
-            // Add notifications if needed
-            dashboard.updateMyLocation(location);
-            contextMenu.updateMyLocation(location);
-        */
     });
 }
 
@@ -415,6 +415,71 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     [self startMoving:location.coordinate.latitude finalLon:location.coordinate.longitude zoomParams:zoomParams pendingRotation:NO finalRotation:rotation movingTime:movingTime notifyListener:NO finishAnimationCallback:^{
         _movingToMyLocation = NO;
     }];
+}
+
+- (void) onHeadingUpdate
+{
+    if ([_settings.useV1AutoZoom get])
+    {
+        [self onLocationServicesUpdateV1];
+        return;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+
+        if (!_mapViewController || ![_mapViewController isViewLoaded])
+        {
+            _needsLocationUpdate = YES;
+            return;
+        }
+
+        _needsLocationUpdate = NO;
+
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+        bool sameHeading = _heading == newHeading;
+        _heading = newHeading;
+
+        if (_mapViewController && (!sameHeading))
+        {
+            // Wait for Map Mode changing animation if any, to prevent animation lags
+            if (!newLocation || (CACurrentMediaTime() - _startChangingMapModeTime < kHalfSecondAnimatonTime))
+            {
+                [_mapViewController.mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
+                return;
+            }
+            if (_app.mapMode == OAMapModePositionTrack || [_settings.rotateMap get] == ROTATE_MAP_COMPASS)
+            {
+                _mapView.mapAnimator->pause();
+
+                CLLocationDirection direction = [self calculateDirectionWithLocation:newLocation heading:newHeading applyViewAngleVisibility:YES];
+
+                const auto azimuthAnimation = _mapView.mapAnimator->getCurrentAnimation(kLocationServicesAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+                _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::Azimuth);
+
+                NSTimeInterval timeSinceLasGestureRotating = [NSDate now].timeIntervalSince1970 - _mapViewController.lastRotatingByGestureTime.timeIntervalSince1970;
+
+                if (direction >= 0 && timeSinceLasGestureRotating > 1)
+                {
+                    if (azimuthAnimation)
+                    {
+                        _mapView.mapAnimator->cancelAnimation(azimuthAnimation);
+                        _mapView.mapAnimator->animateAzimuthTo(direction, azimuthAnimation->getDuration() - azimuthAnimation->getTimePassed(), OsmAnd::MapAnimator::TimingFunction::Linear, kLocationServicesAnimationKey);
+                    }
+                    else
+                    {
+                        _mapView.mapAnimator->animateAzimuthTo(direction,
+                                                            kOneSecondAnimatonTime,
+                                                            OsmAnd::MapAnimator::TimingFunction::Linear,
+                                                            kLocationServicesAnimationKey);
+                    }
+                }
+
+                _mapView.mapAnimator->resume();
+            }
+            [_mapViewController.mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
+        }
+    });
 }
 
 - (void) stopAnimatingSync
@@ -791,7 +856,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 
 - (void) refreshLocation
 {
-    [self onLocationServicesUpdate];
+    [self onLocationUpdate];
 }
 
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location
@@ -901,7 +966,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     _mapViewController = mapViewController;
     _mapView = _mapViewController.mapView;
     if (_needsLocationUpdate)
-        [self onLocationServicesUpdate];
+        [self onLocationUpdate];
 }
 
 - (void) switchToRoutePlanningMode
@@ -1035,7 +1100,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 - (void) resetDrivingRegionUpdate
 {
     _drivingRegionUpdated = NO;
-    [self onLocationServicesUpdate];
+    [self onLocationUpdate];
 }
 
 - (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio

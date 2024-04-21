@@ -40,7 +40,6 @@ typedef enum
 
 - (NSArray *)getSelectedItems;
 
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 
 @property NSTimeInterval lastUpdate;

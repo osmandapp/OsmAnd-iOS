@@ -43,7 +43,8 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 @property (readonly) CLLocationDirection lastKnownHeading;
 @property (readonly) CLLocationDirection lastKnownMagneticHeading;
 @property (readonly) CLLocationDegrees lastKnownDeclination;
-@property (readonly) OAObservable *updateObserver;
+@property (readonly) OAObservable *updateLocationObserver;
+@property (readonly) OAObservable *updateHeadingObserver;
 @property (readonly) OAObservable *updateFirstTimeObserver;
 @property (readonly) OALocationSimulation *locationSimulation;
 

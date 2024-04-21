@@ -59,6 +59,12 @@ typedef enum {
 @property (nonatomic) OsmAnd::MapMarker::OnSurfaceIconKey locationMainIconKeyNight;
 @property (nonatomic) OsmAnd::MapMarker::OnSurfaceIconKey locationHeadingIconKeyNight;
 
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::MapMarker> straightLocationMarkerDay;
+@property (nonatomic) OsmAnd::MapMarker::OnSurfaceIconKey straightLocationMainIconKeyDay;
+
+@property (nonatomic, assign) std::shared_ptr<OsmAnd::MapMarker> straightLocationMarkerNight;
+@property (nonatomic) OsmAnd::MapMarker::OnSurfaceIconKey straightLocationMainIconKeyNight;
+
 @property (nonatomic, assign) std::shared_ptr<OsmAnd::MapMarker> locationMarkerLostDay;
 @property (nonatomic) OsmAnd::MapMarker::OnSurfaceIconKey locationMainIconKeyLostDay;
 
@@ -608,7 +614,7 @@ typedef enum {
         [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90 visible:visible];
         [c updateOtherLocations:newTarget31 horizontalAccuracy:newLocation.horizontalAccuracy heading:newLocation.course - 90];
     }
-    else if (_mapViewTrackingUtilities.showViewAngle)
+    else //if (_mapViewTrackingUtilities.showViewAngle)
     {
         c.state = OAMarkerColletionStateStay;
         [c updateLocation:newTarget31 animationDuration:animationDuration horizontalAccuracy:newLocation.horizontalAccuracy heading:newHeading visible:visible];

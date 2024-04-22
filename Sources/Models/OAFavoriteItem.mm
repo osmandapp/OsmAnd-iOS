@@ -373,10 +373,15 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (UIColor *) getColor
 {
-    return [UIColor colorWithRed:self.favorite->getColor().r/255.0
-                           green:self.favorite->getColor().g/255.0
-                            blue:self.favorite->getColor().b/255.0
-                           alpha:self.favorite->getColor().a/255.0];
+    const auto color = self.favorite->getColor();
+    if (color.argb != 0)
+    {
+        return [UIColor colorWithRed:color.r/255.0
+                               green:color.g/255.0
+                                blue:color.b/255.0
+                               alpha:color.a/255.0];
+    }
+    return [OADefaultFavorite getDefaultColor];
 }
 
 - (void) setColor:(UIColor *)color

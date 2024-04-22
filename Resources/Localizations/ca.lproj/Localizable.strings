@@ -2578,3 +2578,5 @@
 "external_device_details_battery" = "Bateria";
 "map_widget_next_sunset" = "Propera posta de sol";
 "map_widget_ant_bicycle_power_desc" = "Mostra la potència de sortida del ciclista, que s\'usa per a moure la bicicleta endavant";
+"shared_string_scale" = "Escala";
+"vertical_exaggeration" = "Accentuació vertical";

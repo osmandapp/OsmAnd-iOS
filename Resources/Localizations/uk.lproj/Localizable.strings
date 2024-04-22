@@ -3363,3 +3363,13 @@
 "verify_account_deletion_descr" = "Нам потрібно підтвердити ваш обліковий запис, перш ніж видалити його. \n \nВведіть адресу електронної пошти, яку ви зареєстрували. На неї буде надіслано одноразовий пароль для наступного кроку.";
 "cloud_item_restored" = "%@відновлено до Cloud.";
 "track_appearance_3D_visualization" = "3D-візуалізація";
+"rendering_attr_padusDisplayMode_description" = "За типом доступу або ім'ям менеджера";
+"distance_during_navigation" = "Відстань під час навігації";
+"rendering_attr_padusHideBoundaries_name" = "Приховати межі громадських земель";
+"rendering_attr_padusHideBoundaries_description" = "Приховати межі громадських земель, але залишити зони";
+"rendering_value_managerName_name" = "За ім'ям менеджера";
+"rendering_value_access_name" = "За типом доступу";
+"vertical_exaggeration" = "Вертикальне перебільшення";
+"vertical_exaggeration_description" = "Змінюючи значення масштабу, ви можете підкреслити 3D-рельєф.";
+"shared_string_scale" = "масштаб";
+"rendering_attr_padusDisplayMode_name" = "Режим відображення земель загального користування";

@@ -13,12 +13,12 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     var device: Device!
     var onSaveAction: (() -> Void)?
     
-    // TODO: can use UITextField with leftView as UILabel (millimeters text)
-    private var textView: UITextView? {
+    private var textField: UITextField? {
         didSet {
-            textView?.keyboardType = .numberPad
+            textField?.keyboardType = .numberPad
         }
     }
+
     private var wheelSizeString = ""
     
     override func viewDidLoad() {
@@ -30,7 +30,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        textView?.becomeFirstResponder()
+        textField?.becomeFirstResponder()
     }
     
     override func getTitle() -> String {
@@ -67,8 +67,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
         tableData.clearAllData()
         let section = tableData.createNewSection()
         let name = section.createNewRow()
-        
-        name.cellType = OATextMultilineTableViewCell.getIdentifier()
+        name.cellType = OAInputTableViewCell.getIdentifier()
         name.key = "name_key"
         name.title = wheelSizeString
     }
@@ -76,21 +75,21 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         var outCell: UITableViewCell? = nil
-        if item.cellType == OATextMultilineTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OATextMultilineTableViewCell.getIdentifier()) as? OATextMultilineTableViewCell
+        if item.cellType == OAInputTableViewCell.getIdentifier() {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAInputTableViewCell.getIdentifier()) as? OAInputTableViewCell
             if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OATextMultilineTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OATextMultilineTableViewCell
+                let nib = Bundle.main.loadNibNamed(OAInputTableViewCell.getIdentifier(), owner: self, options: nil)
+                cell = nib?.first as? OAInputTableViewCell
                 cell?.leftIconVisibility(false)
-                cell?.textView.isUserInteractionEnabled = true
-                cell?.textView.isEditable = true
-                cell?.textView.delegate = self
-                cell?.textView.returnKeyType = .done
-                cell?.textView.enablesReturnKeyAutomatically = true
+                cell?.inputField.isUserInteractionEnabled = true
+                cell?.inputField.delegate = self
+                cell?.inputField.returnKeyType = .done
+                cell?.inputField.enablesReturnKeyAutomatically = true
             }
             if let cell {
-                textView = cell.textView
-                cell.textView.text = item.title
+                textField = cell.inputField
+                cell.titleLabel.text = localizedString("shared_string_millimeters")
+                cell.inputField.text = item.title
                 cell.clearButton.removeTarget(nil, action: nil, for: .touchUpInside)
                 cell.clearButton.addTarget(self, action: #selector(onClearButtonPressed), for: .touchUpInside)
                 cell.clearButton.tintColor = UIColor.buttonBgColorDisabled
@@ -98,6 +97,15 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
             outCell = cell
         }
         return outCell
+    }
+    
+    private func updateFileNameFromEditText(name: String) {
+        let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
+        if !text.isEmpty {
+            wheelSizeString = text
+            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.iconColorActive)
+        }
     }
     
     @objc private func onClearButtonPressed() {
@@ -108,31 +116,13 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     }
 }
 
-extension BLEWheelSettingsViewController: UITextViewDelegate {
-    
-    func textViewDidChange(_ textView: UITextView) {
-        updateFileNameFromEditText(name: textView.text)
-    }
-    
-    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        if text == "\n" {
-            textView.resignFirstResponder()
-            return false;
+extension BLEWheelSettingsViewController: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if let currentText = textField.text, let textRange = Range(range, in: currentText) {
+            let updatedText = currentText.replacingCharacters(in: textRange, with: string)
+            updateFileNameFromEditText(name: updatedText)
         }
-        return true;
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        
         return true
-    }
-    
-    private func updateFileNameFromEditText(name: String) {
-        let text = name.trimmingCharacters(in: .whitespacesAndNewlines)
-        navigationItem.setRightBarButtonItems(isEnabled: false, with: UIColor.buttonBgColorDisabled)
-        if !text.isEmpty {
-            wheelSizeString = text
-            navigationItem.setRightBarButtonItems(isEnabled: true, with: UIColor.buttonBgColorPrimary)
-        }
     }
 }

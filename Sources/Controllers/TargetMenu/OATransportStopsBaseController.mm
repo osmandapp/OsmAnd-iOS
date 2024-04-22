@@ -147,15 +147,15 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 }
 
 - (void)addTransportStopRoutes:(const std::shared_ptr<OsmAnd::ObfDataInterface> &)dataInterface isSubwayEntrance:(BOOL)isSubwayEntrance localRoutes:(NSMutableArray<OATransportStopRoute *> *)localRoutes localStops:(NSMutableArray<OATransportStop *> *)localStops nearbyRoutes:(NSMutableArray<OATransportStopRoute *> *)nearbyRoutes nearbyStops:(NSMutableArray<OATransportStop *> *)nearbyStops prefLang:(NSString *)prefLang transliterate:(BOOL)transliterate {
-    for (OATransportStop *stop in nearbyStops)
-    {
-        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
-        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:localRoutes];
-    }
     for (OATransportStop *stop in localStops)
     {
         auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
         [self addRoutes:localRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:nearbyRoutes];
+    }
+    for (OATransportStop *stop in nearbyStops)
+    {
+        auto dist = OsmAnd::Utilities::distance(stop.stop->location.longitude, stop.stop->location.latitude, self.getLocation.longitude, self.getLocation.latitude);
+        [self addRoutes:nearbyRoutes dataInterface:dataInterface s:stop.stop lang:prefLang transliterate:transliterate dist:dist isSubwayEntrance:isSubwayEntrance otherRoutes:localRoutes];
     }
 }
 
@@ -328,7 +328,7 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
 + (BOOL)checkSameRoute:(NSArray<OATransportStopRoute *> *)stopRoutes withRoute:(std::shared_ptr<const OsmAnd::TransportRoute>)route
 {
     for (OATransportStopRoute *stopRoute in stopRoutes) {
-        if (stopRoute.route->offset == route->offset) {
+        if (stopRoute.route->compareRoute(route)) {
             return YES;
         }
     }

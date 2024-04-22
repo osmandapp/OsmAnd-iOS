@@ -75,6 +75,9 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     
     NSTimeInterval _startChangingMapModeTime;
     NSTimeInterval _compassRequest;
+
+    CLLocation *_myLocation;
+    CLLocationDirection _heading;
 }
 
 + (OAMapViewTrackingUtilities *)instance
@@ -102,6 +105,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         _app = [OsmAndApp instance];
         _settings = [OAAppSettings sharedManager];
         _myLocation = _app.locationServices.lastKnownLocation;
+        _heading = -1;
         _autoZoomBySpeedHelper = [[OAAutoZoomBySpeedHelper alloc] init];
         _routingHelper = [OARoutingHelper sharedInstance];
         
@@ -295,6 +299,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         }
         
         CLLocation *location = _app.locationServices.lastKnownLocation;
+        CLLocationDirection heading = _app.locationServices.lastKnownHeading;
         CLLocation *prevLocation = _myLocation;
         NSTimeInterval movingTime = (prevLocation && location) ? (location.timestamp.timeIntervalSince1970 - prevLocation.timestamp.timeIntervalSince1970) : 0;
         _myLocation = location;
@@ -314,8 +319,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 });
             }
         }
-        
-        NSLog(@"LOCATION = %f, %f (%.0f:%.0f)", location.coordinate.latitude, location.coordinate.longitude, location.course, _myLocation.course);
 
         if (_mapViewController)
         {
@@ -373,7 +376,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
             }
         }
         
-        [_mapViewController updateLocation:location heading:location.course];
+        [_mapViewController updateLocation:location heading:heading];
     });
 }
 
@@ -448,7 +451,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
                 [_mapViewController.mapLayers.myPositionLayer updateLocation:newLocation heading:newHeading];
                 return;
             }
-            if (_app.mapMode == OAMapModePositionTrack || [_settings.rotateMap get] == ROTATE_MAP_COMPASS)
+            if ([_settings.rotateMap get] == ROTATE_MAP_COMPASS)
             {
                 _mapView.mapAnimator->pause();
 
@@ -492,7 +495,6 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 {
     [self stopAnimatingSync];
     
-    CLLocation *startLatLon = [self getMapLocation];
     float startZoom = _mapView.zoom;
     float startRotation = _mapView.azimuth;
     
@@ -857,6 +859,8 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 - (void) refreshLocation
 {
     [self onLocationUpdate];
+    _heading = -1;
+    [self onHeadingUpdate];
 }
 
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location

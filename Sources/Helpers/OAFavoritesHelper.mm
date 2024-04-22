@@ -194,11 +194,13 @@ static NSOperationQueue *_favQueue;
         NSInteger number = 1;
         NSString *index;
         NSString *name = [item getName];
+        NSString *category = [item getCategory];
         BOOL duplicatesFound = NO;
         for (OAFavoriteItem *favoriteItem in favorites)
         {
-            if ([name isEqualToString:[favoriteItem getName]]
-                && [[item getCategory] isEqualToString:[favoriteItem getCategory]]
+            NSString *favoriteItemName = [favoriteItem getName];
+            if ([name isEqualToString:favoriteItemName]
+                && [category isEqualToString:[favoriteItem getCategory]]
                 && ![item isEqual:favoriteItem])
             {
                 if (!duplicatesFound)
@@ -209,7 +211,7 @@ static NSOperationQueue *_favQueue;
                 duplicatesFound = YES;
                 number++;
                 index = [NSString stringWithFormat:@" (%li)", number];
-                [favoriteItem setName:[[favoriteItem getName] stringByAppendingString:index]];
+                [favoriteItem setName:[favoriteItemName stringByAppendingString:index]];
             }
         }
     }

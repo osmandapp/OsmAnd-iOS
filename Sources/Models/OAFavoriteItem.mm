@@ -112,6 +112,9 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 
 @implementation OAFavoriteItem
+{
+    NSString *_name;
+}
 
 - (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite
 {
@@ -302,10 +305,12 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getName
 {
-    if (!self.favorite->getTitle().isNull())
-        return self.favorite->getTitle().toNSString();
-    else
-        return @"";
+    if (_name)
+        return _name;
+    
+    QString title = self.favorite->getTitle();
+    _name = title.isNull() ? @"" : title.toNSString();
+    return _name;
 }
 
 - (void) setName:(NSString *)name
@@ -690,15 +695,14 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 + (NSString *) toStringDate:(NSDate *)date
 {
-    if (!date)
+    if (!date || [date timeIntervalSince1970] <= 0)
         return nil;
     NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
     [dateFormatter setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd_HH:mm:ss"];
     NSString *dateString = [dateFormatter stringFromDate:date];
-    [dateFormatter setDateFormat:@"HH:mm:ss"];
-    NSString *timeString = [dateFormatter stringFromDate:date];
-    return [NSString stringWithFormat:@"%@T%@Z",dateString, timeString];
+    dateString = [dateString stringByReplacingOccurrencesOfString:@"_" withString:@"T"];
+    return  [dateString stringByAppendingString:@"Z"];
 }
 
 - (UIImage *) getCompositeIcon

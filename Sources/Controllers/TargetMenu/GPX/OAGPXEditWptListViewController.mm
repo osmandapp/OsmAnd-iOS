@@ -38,6 +38,9 @@
 
 @implementation OAGPXEditWptListViewController
 {
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
+
     OAMultiselectableHeaderView *_headerView;
     BOOL _localEditing;
 }
@@ -104,41 +107,44 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ((isMoving || isDecelerating) && !forceUpdate)
-        return;
-    
-    if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
-        return;
-    
-    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    // Obtain fresh location and heading
-    CLLocation* newLocation = _app.locationServices.lastKnownLocation;
-    if (!newLocation)
+    @synchronized(self)
     {
-        return;
+        if ((isMoving || isDecelerating) && !forceUpdate)
+            return;
+
+        if ([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 && !forceUpdate)
+            return;
+
+        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
+
+        // Obtain fresh location and heading
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation;
+        if (!newLocation)
+        {
+            return;
+        }
+        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
+
+        [self.unsortedPoints enumerateObjectsUsingBlock:^(OAGpxWptItem* itemData, NSUInteger idx, BOOL *stop) {
+            OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
+            const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
+            const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
+            const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
+
+            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                              newLocation.coordinate.latitude,
+                                                              wptLon, wptLat);
+
+            itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
+            itemData.distanceMeters = distance;
+            CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
+            itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+
+        }];
+
+        [self refreshVisibleRows];
     }
-    CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f) ? newLocation.course : newHeading;
-    
-    [self.unsortedPoints enumerateObjectsUsingBlock:^(OAGpxWptItem* itemData, NSUInteger idx, BOOL *stop) {
-        OsmAnd::LatLon latLon(itemData.point.position.latitude, itemData.point.position.longitude);
-        const auto& wptPosition31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-        const auto wptLon = OsmAnd::Utilities::get31LongitudeX(wptPosition31.x);
-        const auto wptLat = OsmAnd::Utilities::get31LatitudeY(wptPosition31.y);
-        
-        const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          wptLon, wptLat);
-        
-        itemData.distance = [OAOsmAndFormatter getFormattedDistance:distance];
-        itemData.distanceMeters = distance;
-        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:wptLat longitude:wptLon]];
-        itemData.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-        
-    }];
-    
-    [self refreshVisibleRows];
 }
 
 - (void)refreshVisibleRows
@@ -172,18 +178,27 @@
     
     [self.tableView setEditing:YES];
     
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:_app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(updateDistanceAndDirection)
+                                                         andObserve:_app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(updateDistanceAndDirection)
+                                                        andObserve:_app.locationServices.updateHeadingObserver];
 }
 
 - (void)doViewDisappear
 {
     [self.tableView setEditing:NO];
 
-    if (self.locationServicesUpdateObserver) {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+    if (_locationUpdateObserver) 
+    {
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
+    }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
     }
 }
 

@@ -106,7 +106,11 @@
     
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(updateDistanceAndDirection)
-                                                 andObserve:app.locationServices.updateObserver]];
+                                                 andObserve:app.locationServices.updateLocationObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateHeadingObserver]];
+
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(onPointRemove:withKey:)
                                                  andObserve:[OAHistoryHelper sharedInstance].historyPointRemoveObservable]];
@@ -456,44 +460,47 @@
 
 - (void)updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([self.tableView isEditing])
-        return;
-    
-    if (([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 || _isAnimating) && !forceUpdate)
-        return;
-    self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    OsmAndAppInstance app = [OsmAndApp instance];
-    // Obtain fresh location and heading
-    CLLocation* newLocation = app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
-    CLLocationDirection newDirection =
-    (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
-    ? newLocation.course
-    : newHeading;
-    
-    for (HistoryTableGroup *group in self.groupsAndItems)
+    @synchronized(self)
     {
-        for (HistoryTableItem *dataItem in group.groupItems)
+        if ([self.tableView isEditing])
+            return;
+        
+        if (([[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3 || _isAnimating) && !forceUpdate)
+            return;
+        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
+        
+        OsmAndAppInstance app = [OsmAndApp instance];
+        // Obtain fresh location and heading
+        CLLocation* newLocation = app.locationServices.lastKnownLocation;
+        if (!newLocation)
+            return;
+        
+        CLLocationDirection newHeading = app.locationServices.lastKnownHeading;
+        CLLocationDirection newDirection =
+        (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        ? newLocation.course
+        : newHeading;
+        
+        for (HistoryTableGroup *group in self.groupsAndItems)
         {
-            const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                              newLocation.coordinate.latitude,
-                                                              dataItem.item.longitude, dataItem.item.latitude);
-            
-            dataItem.distance = [OAOsmAndFormatter getFormattedDistance:distance];
-            dataItem.distanceMeters = distance;
-            CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:dataItem.item.latitude longitude:dataItem.item.longitude]];
-            dataItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            for (HistoryTableItem *dataItem in group.groupItems)
+            {
+                const auto distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                                  newLocation.coordinate.latitude,
+                                                                  dataItem.item.longitude, dataItem.item.latitude);
+                
+                dataItem.distance = [OAOsmAndFormatter getFormattedDistance:distance];
+                dataItem.distanceMeters = distance;
+                CGFloat itemDirection = [app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:dataItem.item.latitude longitude:dataItem.item.longitude]];
+                dataItem.direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+            }
         }
+        
+        if (isDecelerating)
+            return;
+        
+        [self refreshVisibleRows];
     }
-    
-    if (isDecelerating)
-        return;
-    
-    [self refreshVisibleRows];
 }
 
 - (NSTimeInterval)beginningOfToday

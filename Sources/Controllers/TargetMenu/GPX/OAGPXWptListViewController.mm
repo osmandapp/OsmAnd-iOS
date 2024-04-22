@@ -40,6 +40,8 @@
 
 @implementation OAGPXWptListViewController
 {
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
     OAMultiselectableHeaderView *_sortedHeaderView;
     NSArray *_unsortedHeaderViews;
 }
@@ -161,16 +163,25 @@
     [self generateData];
     [self updateDistanceAndDirection:YES];
 
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:_app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(updateDistanceAndDirection)
+                                                         andObserve:_app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(updateDistanceAndDirection)
+                                                         andObserve:_app.locationServices.updateHeadingObserver];
 }
 
 - (void)doViewDisappear
 {
-    if (self.locationServicesUpdateObserver) {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+    if (_locationUpdateObserver) 
+    {
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
+    }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
     }
 }
 

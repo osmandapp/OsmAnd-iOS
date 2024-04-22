@@ -115,7 +115,8 @@
     _lastLocation = nil;
     _lastHeading = NAN;
     _lastMagneticHeading = NAN;
-    _updateObserver = [[OAObservable alloc] init];
+    _updateLocationObserver = [[OAObservable alloc] init];
+    _updateHeadingObserver = [[OAObservable alloc] init];
     _updateFirstTimeObserver = [[OAObservable alloc] init];
 
     _locationSimulation = [[OALocationSimulation alloc] init];
@@ -394,7 +395,8 @@
     }
 }
 
-@synthesize updateObserver = _updateObserver;
+@synthesize updateLocationObserver = _updateLocationObserver;
+@synthesize updateHeadingObserver = _updateHeadingObserver;
 @synthesize updateFirstTimeObserver = _updateFirstTimeObserver;
 
 - (void) updateDeviceOrientation
@@ -690,7 +692,7 @@
     @synchronized(_lock)
     {
         _lastLocation = updatedLocation;
-        [_updateObserver notifyEvent];
+        [_updateLocationObserver notifyEvent];
     }
 }
 
@@ -763,8 +765,8 @@
     {
         _lastHeading = newHeading.trueHeading;
         _lastMagneticHeading = newHeading.magneticHeading;
-        if (![_locationSimulation isRouteAnimating])
-            [_updateObserver notifyEvent];
+        //if (![_locationSimulation isRouteAnimating])
+            [_updateHeadingObserver notifyEvent];
     }
 }
 

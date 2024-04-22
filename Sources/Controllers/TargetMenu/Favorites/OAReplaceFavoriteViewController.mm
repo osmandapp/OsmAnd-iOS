@@ -96,7 +96,10 @@ typedef NS_ENUM(NSInteger, EOASortingMode) {
 {
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(updateDistanceAndDirection)
-                                                 andObserve:_app.locationServices.updateObserver]];
+                                                 andObserve:_app.locationServices.updateLocationObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:_app.locationServices.updateHeadingObserver]];
 }
 
 #pragma mark - UIViewController

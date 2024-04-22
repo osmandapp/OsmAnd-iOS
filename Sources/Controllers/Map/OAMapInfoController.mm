@@ -101,30 +101,6 @@
     ]];
 }
 
-- (void)configureShadowForWidgets:(NSArray<UIView *> *)views
-{
-    for (UIView *view in views)
-    {
-        auto containerView = [[ShadowTransporentTouchesPassView alloc] init];
-        containerView.layer.cornerRadius = 7;
-        containerView.layer.shadowOpacity = 1;
-        containerView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.31].CGColor;
-        containerView.layer.shadowOffset = CGSizeMake(0, 4);
-        containerView.layer.shadowRadius = 7;
-        containerView.layer.shouldRasterize = true;
-        containerView.layer.rasterizationScale = [UIScreen mainScreen].scale;
-        
-        containerView.translatesAutoresizingMaskIntoConstraints = NO;
-        [view addSubview:containerView];
-        [NSLayoutConstraint activateConstraints:@[
-            [containerView.topAnchor constraintEqualToAnchor:view.topAnchor],
-            [containerView.leftAnchor constraintEqualToAnchor:view.leftAnchor],
-            [containerView.bottomAnchor constraintEqualToAnchor:view.bottomAnchor],
-            [containerView.rightAnchor constraintEqualToAnchor:view.rightAnchor]
-        ]];
-    }
-}
-
 - (void)updateLayout
 {
     [self layoutWidgets];
@@ -206,11 +182,7 @@
         // for showing shadows
         _topPanelController.view.layer.masksToBounds = NO;
         _bottomPanelController.view.layer.masksToBounds = NO;
-        
-        [self configureShadowForWidgets:@[mapHudViewController.middleWidgetsView,
-                                          mapHudViewController.leftWidgetsView,
-                                          mapHudViewController.rightWidgetsView]];
-        
+
         _topShadowContainerView = [ShadowPathView new];
         [self configureShadowForWidget:_topPanelController.view containerView:_topShadowContainerView top:YES];
         _bottomShadowContainerView = [ShadowPathView new];

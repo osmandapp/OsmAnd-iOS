@@ -2400,7 +2400,7 @@
 "animate_my_location_descr" = "Tranziția lină a locației pe hartă în timpul navigării";
 "precipitation_hide" = "Ascundeți precipitațiile";
 "backup_error_invalid_token" = "Tokenul nu este valid";
-"osmand_cloud_create_account_descr" = "\"Introduceți adresa voastră de e-mail, un cod de verificare va fi trimis acolo, \nși toate datele  vor fi asociate acesteia.\"";
+"osmand_cloud_create_account_descr" = "Vă rugăm să introduceți adresa dumneavoastră de e-mail, un cod de verificare va fi trimis acolo,\n\nși toate datele dumneavoastră vor fi legate de acesta.";
 "weather_temperature_celsius" = "Celsius";
 "weather_pressure_hectopascals" = "Hectopascali";
 "weather_pressure_inches_of_mercury" = "Inci coloană de mercur";

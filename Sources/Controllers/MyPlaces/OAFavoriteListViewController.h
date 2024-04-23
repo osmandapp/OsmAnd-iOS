@@ -19,7 +19,6 @@
 @property (weak, nonatomic) IBOutlet UIButton *colorButton;
 @property (weak, nonatomic) IBOutlet UIButton *deleteButton;
 
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 
 @property NSTimeInterval lastUpdate;

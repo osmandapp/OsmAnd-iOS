@@ -15,7 +15,7 @@
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
 #import "OsmAnd_Maps-Swift.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "GeneratedAssetSymbols.h"
 
 static NSString * const kLinkInternalType = @"internal_link";
@@ -220,7 +220,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     
     NSArray *aboutOsmAndItems = @[
         @{@"title": OALocalizedString(@"osmAnd_team"), @"descr": @"", @"icon": @"ic_custom_logo_osmand", @"url": kOsmAndTeam},
-        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [OAAppVersionDependentConstants getBuildVersion]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
+        @{@"title": OALocalizedString(@"help_what_is_new"), @"descr": [NSString stringWithFormat:@"%@ %@", OALocalizedString(@"OsmAnd Maps"), [OAAppVersion getBuildVersion]], @"icon": @"ic_custom_clipboard", @"url": kDocsLatestVersion},
         @{@"title": OALocalizedString(@"testFlight"), @"descr": OALocalizedString(@"download_install_beta_version"), @"icon": @"ic_custom_download", @"url": kTestFlight}
     ];
     
@@ -374,7 +374,7 @@ static NSString * const kLinkExternalType = @"ext_link";
 
 - (void)copyBuildVersion
 {
-    [UIPasteboard generalPasteboard].string = [OAAppVersionDependentConstants getBuildVersion];
+    [UIPasteboard generalPasteboard].string = [OAAppVersion getBuildVersion];
 }
 
 - (void)sendLogFile

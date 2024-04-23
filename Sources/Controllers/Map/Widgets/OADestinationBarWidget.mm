@@ -44,7 +44,8 @@
     CLLocationCoordinate2D _location;
     CLLocationDirection _direction;
 
-    OAAutoObserverProxy* _locationServicesUpdateObserver;
+    OAAutoObserverProxy* _locationUpdateObserver;
+    OAAutoObserverProxy* _headingUpdateObserver;
 
     OAAutoObserverProxy* _destinationsChangeObserver;
     OAAutoObserverProxy* _mapLocationObserver;
@@ -543,22 +544,30 @@
 
 - (void) startLocationUpdate
 {
-    if (_helper.sortedDestinations.count == 0 || _locationServicesUpdateObserver)
+    if (_helper.sortedDestinations.count == 0 || _locationUpdateObserver)
         return;
 
     OsmAndAppInstance app = [OsmAndApp instance];
 
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(doLocationUpdate)
-                                                                     andObserve:app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(doLocationUpdate)
+                                                         andObserve:app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(doLocationUpdate)
+                                                        andObserve:app.locationServices.updateHeadingObserver];
 }
 
 - (void) stopLocationUpdate
 {
-    if (_locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
     {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
+    }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
     }
 }
 

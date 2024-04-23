@@ -17,7 +17,8 @@ class DestinationsListViewController: OABaseButtonsViewController {
     private var activeIndexPath: IndexPath?
     private var isDecelerating = false
     private var lastUpdate: TimeInterval?
-    
+    private let lock = NSLock()
+
     private var editMode: Bool = false {
         didSet {
             tableView.setEditing(editMode, animated: true)
@@ -34,8 +35,8 @@ class DestinationsListViewController: OABaseButtonsViewController {
     override func registerObservers() {
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
         let updateDistanceAndDirectionSelector = #selector(updateDistanceAndDirection as () -> Void)
-        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateObserver))
-        
+        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateLocationObserver))
+        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateHeadingObserver))
     }
     
     //MARK: - UIViewController
@@ -257,14 +258,20 @@ class DestinationsListViewController: OABaseButtonsViewController {
     }
 
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
+        lock.lock()
+
         if isDecelerating || editMode {
-            return;
+            lock.unlock()
+            return
         }
         if let lastUpdate, (Date.now.timeIntervalSince1970 - lastUpdate < 0.3), !forceUpdate {
+            lock.unlock()
             return
         }
         lastUpdate = Date.now.timeIntervalSince1970
         refreshVisibleRows()
+
+        lock.unlock()
     }
 
     private func refreshVisibleRows() {

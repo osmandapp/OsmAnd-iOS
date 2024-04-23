@@ -14,7 +14,7 @@
 #import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAMapUtils.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OANativeUtilities.h"
 
@@ -845,7 +845,7 @@
     [self fillExtensions:document];
     [self fillNetworkRouteKeys:document];
 
-    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 }
 
 - (void) fillNetworkRouteKeys:(const std::shared_ptr<OsmAnd::GpxDocument> &)doc

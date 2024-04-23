@@ -71,7 +71,7 @@
 
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
@@ -3128,7 +3128,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                         }
                     }
                 
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -3193,7 +3193,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                         break;
                     }
                 }
-                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+                doc->saveTo(QString::fromNSString(self.foundWptDocPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
                 // update map
                 dispatch_async(dispatch_get_main_queue(), ^{
@@ -3251,7 +3251,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
                 OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
                 [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
 
-                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+                doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
                 self.foundWpt = wpt;
                 self.foundWptDocPath = gpxFileName;
@@ -3287,7 +3287,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             OAGPXAppearanceCollection *appeacaneCollection = [OAGPXAppearanceCollection sharedInstance];
             [appeacaneCollection selectColor:[appeacaneCollection getColorItemWithValue:[wpt getColor:0]]];
 
-            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+            doc->saveTo(QString::fromNSString(gpxFileName), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[self.foundWptDocPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];
@@ -3381,7 +3381,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 
                 // update map
                 if (updateMap)
@@ -3422,7 +3422,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
             
             // update map
             if (updateMap)
@@ -3465,7 +3465,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             _selectedGpxHelper.activeGpx.remove(QString::fromNSString(oldPath));
             _selectedGpxHelper.activeGpx[QString::fromNSString(docPath)] = doc;
             
-            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
             
             return YES;
         }
@@ -3485,7 +3485,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
         [OAGPXDocument fillMetadata:m usingMetadata:metadata];
         
-        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+        doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
         
         return YES;
     }
@@ -3539,7 +3539,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
             
             if (found)
             {
-                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+                doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
                 [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
                 [[OAGPXDatabase sharedDb] save];
@@ -3575,7 +3575,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         
         if (found)
         {
-            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+            doc->saveTo(QString::fromNSString(docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 
             [[OAGPXDatabase sharedDb] updateGPXItemPointsCount:[docPath lastPathComponent] pointsCount:doc->points.count()];
             [[OAGPXDatabase sharedDb] save];

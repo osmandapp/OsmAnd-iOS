@@ -1663,6 +1663,13 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
+"routing_algorithm" = "Routing algorithm";
+"auto_zoom" = "Auto-zoom";
+"shared_string_development" = "Development";
+"routing_algorithm_highway_hierarchies" = "Highway hierarchies";
+"routing_algorithm_a" = "A*";
+"auto_zoom_smooth" = "Smooth";
+"auto_zoom_discrete" = "Discrete";
 "osmand_depelopment_simulate_location_section" = "Simulate";
 "osmand_depelopment_use_old_routing" = "Use old routing (A*)";
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";

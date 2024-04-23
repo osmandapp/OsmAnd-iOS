@@ -7,7 +7,7 @@
 //
 
 #import "OAWebClient.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 
 #define kTimeout 60.0 * 5.0 // 5 minutes
 #define kDefaultUserAgent @"OsmAndiOS"
@@ -63,7 +63,7 @@ QByteArray OAWebClient::downloadData(
     if (url != nullptr && !url.isEmpty())
     {
         NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[url.toNSString() stringByAddingPercentEncodingWithAllowedCharacters:NSCharacterSet.URLQueryAllowedCharacterSet]] cachePolicy:NSURLRequestReloadIgnoringCacheData timeoutInterval:kTimeout];
-        [request addValue:(userAgent.isNull() || userAgent.isEmpty()) ? OAAppVersionDependentConstants.getAppVersionForUrl : userAgent.toNSString() forHTTPHeaderField:@"User-Agent"];
+        [request addValue:(userAgent.isNull() || userAgent.isEmpty()) ? OAAppVersion.getVersionForUrl : userAgent.toNSString() forHTTPHeaderField:@"User-Agent"];
 
         unsigned int responseCode = 0;
         NSURLResponse __block *response = nil;

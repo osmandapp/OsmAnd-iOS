@@ -67,6 +67,7 @@
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
+- (BOOL) hasTrkPtWithElevation;
 - (BOOL) hasRoute;
 - (BOOL) isRoutesPoints;
 

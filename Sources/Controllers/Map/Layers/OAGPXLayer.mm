@@ -103,7 +103,7 @@ static const CGFloat elevationMetersDefault = 1000.0;
     {
         OAGPX *gpx = cachedTrack[@"gpx"];
         OAGPXDocument *doc = cachedTrack[@"doc"];
-        if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPt])
+        if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPtWithElevation])
         {
             hasVolumetricSymbols = YES;
             break;
@@ -144,9 +144,6 @@ static const CGFloat elevationMetersDefault = 1000.0;
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
 {
-    if (reset)
-        [self resetLayer];
-
     if (_cachedTracks.count > 0)
     {
         [_cachedTracks.allKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -157,6 +154,23 @@ static const CGFloat elevationMetersDefault = 1000.0;
                 _cachedColors.remove(qKey);
             }
         }];
+    }
+
+    if (reset)
+    {
+        if (!gpxDocs.isEmpty())
+        {
+            for (auto it = gpxDocs.begin(); it != gpxDocs.end(); ++it)
+            {
+                if (!it.value())
+                    continue;
+                QString key = it.key();
+                NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[key.toNSString()];
+                if (!cachedTrack || [key.toNSString() isEqualToString:kCurrentTrack])
+                    [self addTrackToCached:key value:it.value()];
+            }
+        }
+        [self resetLayer];
     }
 
     _gpxDocs = gpxDocs;
@@ -183,6 +197,42 @@ static const CGFloat elevationMetersDefault = 1000.0;
     return color;
 }
 
+- (void)addTrackToCached:(QString)key value:(std::shared_ptr<const OsmAnd::GpxDocument>)value
+{
+    if (!value)
+        return;
+
+    BOOL isCurrentTrack = [key.toNSString() isEqualToString:kCurrentTrack];
+    NSString *filePath = key.toNSString();
+    if (![_cachedTracks.allKeys containsObject:filePath] || isCurrentTrack)
+    {
+        OAGPX *gpx;
+        OAGPXDocument *doc;
+        if (isCurrentTrack)
+            gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
+        else
+            gpx = [self getGpxItem:key];
+        
+        if (isCurrentTrack)
+        {
+            doc = [OASavingTrackHelper sharedInstance].currentTrack;
+        }
+        else
+        {
+            doc = [[OAGPXDocument alloc] initWithGpxDocument:std::const_pointer_cast<OsmAnd::GpxDocument>(value)];
+            doc.path = gpx.absolutePath;
+        }
+        
+        NSMutableDictionary<NSString *, id> *cachedTrack = [NSMutableDictionary dictionary];
+        cachedTrack[@"gpx"] = gpx;
+        cachedTrack[@"doc"] = doc;
+        cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
+        cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
+        _cachedTracks[filePath] = cachedTrack;
+        _cachedColors[key] = QList<OsmAnd::FColorARGB>();
+    }
+}
+
 - (void) refreshGpxTracks
 {
     if (!_gpxDocs.empty())
@@ -191,47 +241,21 @@ static const CGFloat elevationMetersDefault = 1000.0;
         int lineId = 1;
         for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
         {
-            QString key = it.key();
             if (!it.value())
                 continue;
-
-            BOOL isCurrentTrack = [key.toNSString() isEqualToString:kCurrentTrack];
-            OAGPX *gpx;
-            OAGPXDocument *doc;
             auto doc_ = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
-
+            QString key = it.key();
+            BOOL isCurrentTrack = [key.toNSString() isEqualToString:kCurrentTrack];
             NSString *filePath = key.toNSString();
             NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[filePath];
             if (!cachedTrack || isCurrentTrack)
             {
-                if (isCurrentTrack)
-                    gpx = [[OASavingTrackHelper sharedInstance] getCurrentGPX];
-                else
-                    gpx = [self getGpxItem:key];
-
-                if (isCurrentTrack)
-                {
-                    doc = [OASavingTrackHelper sharedInstance].currentTrack;
-                }
-                else
-                {
-                    doc = [[OAGPXDocument alloc] initWithGpxDocument:doc_];
-                    doc.path = gpx.absolutePath;
-                }
-
-                cachedTrack = [NSMutableDictionary dictionary];
-                cachedTrack[@"gpx"] = gpx;
-                cachedTrack[@"doc"] = doc;
-                cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
-                cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                _cachedTracks[filePath] = cachedTrack;
-                _cachedColors[key] = QList<OsmAnd::FColorARGB>();
+                [self addTrackToCached:key value:it.value()];
+                cachedTrack = _cachedTracks[filePath];
             }
-            else
-            {
-                gpx = cachedTrack[@"gpx"];
-                doc = cachedTrack[@"doc"];
-            }
+
+            OAGPX *gpx = cachedTrack[@"gpx"];
+            OAGPXDocument *doc = cachedTrack[@"doc"];
 
             OAColoringType *type = gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]

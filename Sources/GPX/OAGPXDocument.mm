@@ -1095,13 +1095,36 @@
     return _points.count > 0;
 }
 
+- (BOOL) hasTrkPtWithElevation
+{
+    return [self hasTrkPt:YES];
+}
+
 - (BOOL) hasTrkPt
 {
-    for (OATrack *t in _tracks)
-        for (OATrkSegment *ts in t.segments)
-            if (ts.points.count > 0)
-                return YES;
+    return [self hasTrkPt:NO];
+}
 
+- (BOOL) hasTrkPt:(BOOL)withElevation
+{
+    for (OATrack *t in _tracks)
+    {
+        for (OATrkSegment *ts in t.segments)
+        {
+            if (withElevation)
+            {
+                for (OAWptPt *tPt in ts.points)
+                {
+                    if (tPt.elevation > 0)
+                        return YES;
+                }
+            }
+            else if (ts.points.count > 0)
+            {
+                return YES;
+            }
+        }
+    }
     return NO;
 }
 

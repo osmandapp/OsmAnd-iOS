@@ -1164,7 +1164,7 @@
 "osmand_live_donation_switch_title" = "Donație către comunitatea OpenStreetMap";
 "osmand_live_donation_header" = "Setări pentru donații";
 "osmand_live_last_changed" = "Ultima modificare a hărții: %@";
-"osmand_live" = "OsmAnd în direct";
+"osmand_live" = "OsmAnd Live";
 "res_mapsres" = "Hărți & Resurse";
 "select_profile" = "Selectați profilul";
 "segments_count" = "Segmentul %d";

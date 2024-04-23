@@ -17,7 +17,7 @@
 #import "OADestinationItem.h"
 #import "OAGPXMutableDocument.h"
 #import "OAGPXDocumentPrimitives.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAColors.h"
 
 #define kMarkersChanged @"markers_modified_time"

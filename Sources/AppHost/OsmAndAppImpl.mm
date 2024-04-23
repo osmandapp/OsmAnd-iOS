@@ -19,7 +19,7 @@
 #import "OALog.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAManageResourcesViewController.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAPOIHelper.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
@@ -81,6 +81,7 @@
 #define VERSION_3_14 3.14
 #define VERSION_4_2 4.2
 #define VERSION_4_4_1 4.41
+#define VERSION_4_7_4 4.74
 
 #define kMaxLogFiles 3
 
@@ -444,7 +445,7 @@
                                                          QString::fromNSString(NSTemporaryDirectory()),
                                                          QString::fromNSString(_hiddenMapsPath),
                                                          QString::fromNSString(_cachePath),
-                                                         QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
+                                                         QString::fromNSString(OAAppVersion.getVersion),
                                                          QString::fromNSString(@"https://download.osmand.net"),
                                                          QString::fromNSString([self generateIndexesUrl]),
                                                          _webClient));
@@ -491,13 +492,13 @@
         [self applyExcludedFromBackup:filePath];
     }
     
-    float currentVersion = [[[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"] floatValue];
+    float currentVersion = OAAppVersion.getVersionNumber;
     float prevVersion = [[NSUserDefaults standardUserDefaults] objectForKey:@"appVersion"] ? [[NSUserDefaults standardUserDefaults] floatForKey:@"appVersion"] : 0.;
     
     NSString *prevBuildVersion = [[NSUserDefaults standardUserDefaults] stringForKey:kBuildVersion];
     if (prevBuildVersion)
     {
-        NSString *buildVersion = [OAAppVersionDependentConstants getBuildVersion];
+        NSString *buildVersion = [OAAppVersion getBuildVersion];
         if (![prevBuildVersion isEqualToString:buildVersion])
         {
             [OAAppSettings sharedManager].shouldShowWhatsNewScreen = YES;
@@ -506,7 +507,7 @@
     }
     else
     {
-        [[NSUserDefaults standardUserDefaults] setObject:[OAAppVersionDependentConstants getBuildVersion] forKey:kBuildVersion];
+        [[NSUserDefaults standardUserDefaults] setObject:[OAAppVersion getBuildVersion] forKey:kBuildVersion];
     }
     
     if (_terminating)
@@ -551,16 +552,17 @@
         }
         if (prevVersion < VERSION_4_4_1)
         {
-            OAAppSettings *app = [OAAppSettings sharedManager];
+            OAAppSettings *settings = [OAAppSettings sharedManager];
             for (OAApplicationMode *appMode in OAApplicationMode.values)
             {
-                NSInteger value = [app.activeMarkers get:appMode];
+                NSInteger value = [settings.activeMarkers get:appMode];
                 if (value == 0)
-                    [app.activeMarkers set:ONE_ACTIVE_MARKER mode:appMode];
+                    [settings.activeMarkers set:ONE_ACTIVE_MARKER mode:appMode];
                 else if (value == 1)
-                    [app.activeMarkers set:TWO_ACTIVE_MARKERS mode:appMode];
+                    [settings.activeMarkers set:TWO_ACTIVE_MARKERS mode:appMode];
             }
         }
+
         [[NSUserDefaults standardUserDefaults] setFloat:currentVersion forKey:@"appVersion"];
     }
 
@@ -828,7 +830,7 @@
 
 - (NSString *) generateIndexesUrl
 {
-    NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersionDependentConstants.getAppVersionForUrl];
+    NSMutableString *res = [NSMutableString stringWithFormat:@"https://download.osmand.net/get_indexes?gzip&osmandver=%@", OAAppVersion.getVersionForUrl];
     [res appendFormat:@"&nd=%d&ns=%d", self.getAppInstalledDays, self.getAppExecCount];
     if (self.getUserIosId.length > 0)
         [res appendFormat:@"&aid=%@", self.getUserIosId];
@@ -1073,7 +1075,7 @@
                                                              QString::fromNSString(NSTemporaryDirectory()),
                                                              QString::fromNSString(_hiddenMapsPath),
                                                              QString::fromNSString(_cachePath),
-                                                             QString::fromNSString([[NSBundle mainBundle] objectForInfoDictionaryKey: @"CFBundleShortVersionString"]),
+                                                             QString::fromNSString(OAAppVersion.getVersion),
                                                              QString::fromNSString(@"https://download.osmand.net"),
                                                              QString::fromNSString([self generateIndexesUrl]),
                                                              _webClient));

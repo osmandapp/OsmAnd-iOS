@@ -23,6 +23,7 @@
 #import "OACloudBackupViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAUtilities.h"
+#import "OAAppVersion.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -544,7 +545,7 @@ typedef enum
         case SEARCH_LOCATION:
             if (_searchLocationByIp)
             {
-                NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+                NSString *ver = OAAppVersion.getVersion;
                 /*
                 try {
                     pms.put("aid", Secure.getString(app.getContentResolver(), Secure.ANDROID_ID));

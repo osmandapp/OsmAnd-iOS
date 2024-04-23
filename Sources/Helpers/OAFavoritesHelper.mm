@@ -20,7 +20,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OAPlugin.h"
 #import "OAIndexConstants.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OANativeUtilities.h"
 #import "OAFavoritesSettingsItem.h"

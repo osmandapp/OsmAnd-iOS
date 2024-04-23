@@ -2041,7 +2041,7 @@
 		DA5A816326C563A700F274C7 /* OADaytimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A799B26C563A000F274C7 /* OADaytimeAppearance.m */; };
 		DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A799D26C563A000F274C7 /* OANighttimeAppearance.m */; };
 		DA5A816526C563A700F274C7 /* OAApplicationMode.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79A026C563A000F274C7 /* OAApplicationMode.m */; };
-		DA5A816626C563A700F274C7 /* OAAppVersionDependentConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79A326C563A000F274C7 /* OAAppVersionDependentConstants.m */; };
+		DA5A816626C563A700F274C7 /* OAAppVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79A326C563A000F274C7 /* OAAppVersion.m */; };
 		DA5A816726C563A700F274C7 /* OAUrlImageCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79A826C563A000F274C7 /* OAUrlImageCard.m */; };
 		DA5A816826C563A700F274C7 /* OAWikiImageCard.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79A926C563A000F274C7 /* OAWikiImageCard.mm */; };
 		DA5A816A26C563A700F274C7 /* OAImageCard.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79AB26C563A000F274C7 /* OAImageCard.m */; };
@@ -5955,9 +5955,9 @@
 		DA5A799F26C563A000F274C7 /* OADaytimeAppearance.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OADaytimeAppearance.h; sourceTree = "<group>"; };
 		DA5A79A026C563A000F274C7 /* OAApplicationMode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAApplicationMode.m; sourceTree = "<group>"; };
 		DA5A79A226C563A000F274C7 /* OAIndexConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAIndexConstants.h; sourceTree = "<group>"; };
-		DA5A79A326C563A000F274C7 /* OAAppVersionDependentConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAppVersionDependentConstants.m; sourceTree = "<group>"; };
+		DA5A79A326C563A000F274C7 /* OAAppVersion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAppVersion.m; sourceTree = "<group>"; };
 		DA5A79A426C563A000F274C7 /* OASizes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASizes.h; sourceTree = "<group>"; };
-		DA5A79A526C563A000F274C7 /* OAAppVersionDependentConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppVersionDependentConstants.h; sourceTree = "<group>"; };
+		DA5A79A526C563A000F274C7 /* OAAppVersion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAAppVersion.h; sourceTree = "<group>"; };
 		DA5A79A626C563A000F274C7 /* OAColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAColors.h; sourceTree = "<group>"; };
 		DA5A79A826C563A000F274C7 /* OAUrlImageCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAUrlImageCard.m; sourceTree = "<group>"; };
 		DA5A79A926C563A000F274C7 /* OAWikiImageCard.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWikiImageCard.mm; sourceTree = "<group>"; };
@@ -11121,8 +11121,8 @@
 		DA5A79A126C563A000F274C7 /* Constants */ = {
 			isa = PBXGroup;
 			children = (
-				DA5A79A526C563A000F274C7 /* OAAppVersionDependentConstants.h */,
-				DA5A79A326C563A000F274C7 /* OAAppVersionDependentConstants.m */,
+				DA5A79A526C563A000F274C7 /* OAAppVersion.h */,
+				DA5A79A326C563A000F274C7 /* OAAppVersion.m */,
 				DA5A79A626C563A000F274C7 /* OAColors.h */,
 				DA5A79A226C563A000F274C7 /* OAIndexConstants.h */,
 				DA5A79A426C563A000F274C7 /* OASizes.h */,
@@ -17295,7 +17295,7 @@
 				DA5A838D26C563A800F274C7 /* OAPluginDetailsViewController.mm in Sources */,
 				DA5A818826C563A700F274C7 /* OANavAutoZoomMapAction.m in Sources */,
 				FA740D452A80DC3F00BD12DC /* CloudIntroductionButtonsView.swift in Sources */,
-				DA5A816626C563A700F274C7 /* OAAppVersionDependentConstants.m in Sources */,
+				DA5A816626C563A700F274C7 /* OAAppVersion.m in Sources */,
 				320F71292A8251730071C0E7 /* TravelArticle.swift in Sources */,
 				DA5A84E526C563A900F274C7 /* OAWaypointsMainScreen.mm in Sources */,
 				DA5A82E426C563A800F274C7 /* OAColorsTableViewCell.m in Sources */,
@@ -18311,7 +18311,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.6.2.1;
+				CURRENT_PROJECT_VERSION = 4.7.3.1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
@@ -18333,7 +18333,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.3;
 				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -18376,7 +18376,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 4.6.2.1;
+				CURRENT_PROJECT_VERSION = 4.7.3.1;
 				DEVELOPMENT_TEAM = LM67P5MQ23;
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = LM67P5MQ23;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -18396,7 +18396,7 @@
 					"$(inherited)",
 					"$(PROJECT_DIR)",
 				);
-				MARKETING_VERSION = 4.6.2;
+				MARKETING_VERSION = 4.7.3;
 				OBJROOT = $SYMROOT;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

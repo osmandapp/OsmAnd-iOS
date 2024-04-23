@@ -27,6 +27,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OAAppVersion.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -871,7 +872,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 + (void)startBackgroundDownloadOf:(NSURL *)resourceUrl resourceId:(NSString *)resourceId resourceName:(NSString *)name
 {
     // Create download tasks
-    NSString* ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString* ver = OAAppVersion.getVersion;
     NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [resourceUrl absoluteString], params];
     NSURL *url = [NSURL URLWithString:urlString];
@@ -1554,7 +1555,7 @@ includeHidden:(BOOL)includeHidden
             return;
         [[OAWeatherHelper sharedInstance] preparingForDownloadForecastByRegion:item.worldRegion regionId:regionId];
 
-        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *ver = OAAppVersion.getVersion;
         // https://osmand.net/download?&weather=yes&file=Weather_Angola_africa.tifsqlite.zip
         NSString *downloadsIdPrefix = [item.worldRegion.downloadsIdPrefix stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[item.worldRegion.downloadsIdPrefix substringToIndex:1] capitalizedString]];
         NSString *pureUrlString = [[NSString alloc] initWithFormat:@"https://osmand.net/download?&weather=yes&file=Weather_%@%@", downloadsIdPrefix, @"tifsqlite.zip"];
@@ -1592,7 +1593,7 @@ includeHidden:(BOOL)includeHidden
     else
     {
         // Create download tasks
-        NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *ver = OAAppVersion.getVersion;
         NSURL *pureUrl = item.resource->url.toNSURL();
         NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
         NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];
@@ -1656,7 +1657,7 @@ includeHidden:(BOOL)includeHidden
            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
 {
     // Create download tasks
-    NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *ver = OAAppVersion.getVersion;
     NSURL *pureUrl = resource->url.toNSURL();
     NSString *params = [[NSString stringWithFormat:@"&event=2&osmandver=OsmAndIOs+%@", ver] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *urlString = [[NSString alloc] initWithFormat:@"%@%@", [pureUrl absoluteString], params];

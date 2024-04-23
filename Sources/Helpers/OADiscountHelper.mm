@@ -24,7 +24,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIUIFilter.h"
 #import "OAChoosePlanHelper.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 
 const static NSString *URL = @"https://osmand.net/api/motd";
 
@@ -191,7 +191,7 @@ const static NSString *URL = @"https://osmand.net/api/motd";
     
     OsmAndAppInstance app = OsmAndApp.instance;
     NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@",
-                     URL, OAAppVersionDependentConstants.getVersion, app.getAppInstalledDays, app.getAppExecCount, app.getLanguageCode];
+                     URL, OAAppVersion.getVersion, app.getAppInstalledDays, app.getAppExecCount, app.getLanguageCode];
     NSString *aid = app.getUserIosId;
     if (aid.length > 0)
        url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];

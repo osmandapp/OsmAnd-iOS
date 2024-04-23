@@ -101,7 +101,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     CLLocation *_searchLocation;
     NSString *_region;
-    OAAutoObserverProxy *_locationUpdateObserver;
     NSTimeInterval _lastUpdate;
     NSString *_distanceString;
     NSNumber *_direction;
@@ -128,6 +127,17 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     return self;
 }
 
+- (void)registerObservers
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateLocationObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateHeadingObserver]];
+}
+
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
@@ -136,9 +146,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillShow:) name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyboardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(updateDistanceAndDirection)
-                                                         andObserve:_app.locationServices.updateObserver];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
@@ -146,11 +153,6 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     [super viewWillDisappear:animated];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
-    if (_locationUpdateObserver)
-    {
-        [_locationUpdateObserver detach];
-        _locationUpdateObserver = nil;
-    }
 }
 
 - (void) viewDidLoad
@@ -854,43 +856,46 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
 
 - (void) updateDistanceAndDirection:(BOOL)forceUpdate
 {
-    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
-        return;
-    _lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    if (!_searchLocation)
+    @synchronized (self)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self updateLocationCell:nil];
-        });
-        return;
-    }
+        if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.3 && !forceUpdate)
+            return;
+        _lastUpdate = [[NSDate date] timeIntervalSince1970];
 
-    // Obtain fresh location and heading
-    CLLocation* newLocation = _app.locationServices.lastKnownLocation ? _app.locationServices.lastKnownLocation : [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
-    double distance = NAN;
-    CLLocationDirection newDirection = 0;
-    if (newLocation)
-    {
-        CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
-        newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
+        if (!_searchLocation)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self updateLocationCell:nil];
+            });
+            return;
+        }
+
+        // Obtain fresh location and heading
+        CLLocation* newLocation = _app.locationServices.lastKnownLocation ? _app.locationServices.lastKnownLocation : [[OARootViewController instance].mapPanel.mapViewController getMapLocation];
+        double distance = NAN;
+        CLLocationDirection newDirection = 0;
+        if (newLocation)
+        {
+            CLLocationDirection newHeading = _app.locationServices.lastKnownHeading;
+            newDirection = (newLocation.speed >= 1 /* 3.7 km/h */ && newLocation.course >= 0.0f)
             ? newLocation.course
             : newHeading;
-        
-        distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
-                                                          newLocation.coordinate.latitude,
-                                                          _searchLocation.coordinate.longitude, _searchLocation.coordinate.latitude);
-    }
 
-    _distanceString = isnan(distance) ? @"" : [OAOsmAndFormatter getFormattedDistance:distance];
-    CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude]];
-    double direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
-    _direction = [NSNumber numberWithDouble:direction];
-    _currentLatLon = newLocation;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateLocationCell:_searchLocation];
-    });
+            distance = OsmAnd::Utilities::distance(newLocation.coordinate.longitude,
+                                                   newLocation.coordinate.latitude,
+                                                   _searchLocation.coordinate.longitude, _searchLocation.coordinate.latitude);
+        }
+
+        _distanceString = isnan(distance) ? @"" : [OAOsmAndFormatter getFormattedDistance:distance];
+        CGFloat itemDirection = [_app.locationServices radiusFromBearingToLocation:[[CLLocation alloc] initWithLatitude:_searchLocation.coordinate.latitude longitude:_searchLocation.coordinate.longitude]];
+        double direction = OsmAnd::Utilities::normalizedAngleDegrees(itemDirection - newDirection) * (M_PI / 180);
+        _direction = [NSNumber numberWithDouble:direction];
+        _currentLatLon = newLocation;
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self updateLocationCell:_searchLocation];
+        });
+    }
 }
 
 #pragma mark - UITableViewDelegate

@@ -54,7 +54,7 @@
 #import "OAMapHudViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

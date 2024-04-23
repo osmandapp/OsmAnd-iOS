@@ -111,15 +111,15 @@
 @property UINavigationController* navController;
 @property UIView* parentView;
 
-@property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-
 @end
 
 static const NSInteger _buttonsCount = 4;
 
 @implementation OATargetPointView
 {
-    
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
+
     CALayer *_horizontalRouteLine;
 
     CGFloat _headerY;
@@ -265,20 +265,29 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) startLocationUpdate
 {
-    if (self.locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
         return;
     
     OsmAndAppInstance app = [OsmAndApp instance];
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(doLocationUpdate)
-                                                                     andObserve:app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(doLocationUpdate)
+                                                         andObserve:app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(doLocationUpdate)
+                                                        andObserve:app.locationServices.updateHeadingObserver];
 }
 
 - (void) stopLocationUpdate
 {
-    if (self.locationServicesUpdateObserver) {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+    if (_locationUpdateObserver) 
+    {
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
+    }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
     }
 }
 

@@ -115,7 +115,8 @@
     OATrackMenuUIBuilder *_uiBuilder;
     OAGPXUIHelper *_gpxUIHelper;
 
-    OAAutoObserverProxy *_locationServicesUpdateObserver;
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
     NSTimeInterval _lastUpdate;
 
     UIDocumentInteractionController *_exportController;
@@ -657,9 +658,12 @@
 - (void)startLocationServices
 {
     [self updateDistanceAndDirection:YES];
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(updateDistanceAndDirection)
-                                                                 andObserve:_app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(updateDistanceAndDirection)
+                                                         andObserve:_app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(updateDistanceAndDirection)
+                                                        andObserve:_app.locationServices.updateHeadingObserver];
 }
 
 - (void)updateGpxData:(BOOL)replaceGPX updateDocument:(BOOL)updateDocument
@@ -1733,10 +1737,15 @@
 
 - (void)stopLocationServices
 {
-    if (_locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
     {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
+    }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
     }
 }
 

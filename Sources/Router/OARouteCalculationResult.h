@@ -108,5 +108,6 @@ struct RouteSegmentResult;
 - (void) updateNextVisiblePoint:(int) nextPoint location:(CLLocation *) mp;
 - (int) getDistanceFromPoint:(int) locationIndex;
 - (BOOL) isPointPassed:(int)locationIndex;
+- (BOOL) hasMissingMaps;
 
 @end

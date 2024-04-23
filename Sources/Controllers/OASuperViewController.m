@@ -20,16 +20,6 @@
 
 #pragma mark - Initialization
 
-- (void)dealloc
-{
-    [NSNotificationCenter.defaultCenter removeObserver:self];
-
-    for (OAAutoObserverProxy *observer in _observers)
-    {
-        [observer detach];
-    }
-}
-
 // use addNotification:selector: method here
 // notifications will be automatically added in viewWillAppear: and removed in dealloc
 - (void)registerNotifications
@@ -43,9 +33,17 @@
 }
 
 // use addObserver: method here
-// observers will be automatically added in viewWillAppear: and removed in dealloc
+// observers will be automatically added in viewDidAppear: and removed in viewWillDisappear:
 - (void)registerObservers
 {
+}
+
+- (void)unregisterNotificationsAndObservers
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+
+    for (OAAutoObserverProxy *observer in _observers)
+        [observer detach];
 }
 
 // do not override
@@ -64,6 +62,11 @@
     [self addAccessibilityLabels];
 
     _observers = [NSMutableArray array];
+}
+
+- (void)viewDidAppear:(BOOL)animated
+{
+    [super viewDidAppear:animated];
 
     // for content size category
     [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
@@ -71,6 +74,13 @@
     [self registerNotifications];
 
     [self registerObservers];
+}
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+    [super viewWillDisappear:animated];
+
+    [self unregisterNotificationsAndObservers];
 }
 
 - (void)viewDidLayoutSubviews

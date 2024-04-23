@@ -26,7 +26,7 @@
 #import "QuadRect.h"
 #import "OAMapUtils.h"
 #import "OARouteImporter.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
@@ -1284,7 +1284,7 @@ colorizationScheme:(int)colorizationScheme
             const auto& doc = activeGpx[QString::fromNSString(item.docPath)];
             if (doc != nullptr)
             {
-                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+                doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
                 docs[QString::fromNSString(item.docPath)] = doc;
                 [self refreshGpxTracks:docs];

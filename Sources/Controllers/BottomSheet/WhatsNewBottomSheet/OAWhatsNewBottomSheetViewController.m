@@ -8,7 +8,7 @@
 //
 
 #import "OAWhatsNewBottomSheetViewController.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OASimpleTableViewCell.h"
 #import "Localization.h"
 #import "OALinks.h"
@@ -63,8 +63,8 @@
 
 - (NSMutableAttributedString *)getAttributedContentText
 {
-    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), OAAppVersionDependentConstants.getVersion];
-    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersionDependentConstants getShortAppVersion]]);
+    NSString *title = [NSString stringWithFormat:OALocalizedString(@"latest_version"), OAAppVersion.getVersion];
+    NSString *description = OALocalizedString([NSString stringWithFormat:@"ios_release_%@", [OAAppVersion getVersionWithSeparator:@"_"]]);
     
     NSString *labelText = [NSString stringWithFormat:@"%@\n\n%@", title, description];
     NSRange boldRange = NSMakeRange(0, title.length);

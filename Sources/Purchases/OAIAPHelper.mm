@@ -13,7 +13,7 @@
 #import "Localization.h"
 #import "OADonationSettingsViewController.h"
 #import "OACheckBackupSubscriptionTask.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";
@@ -620,7 +620,7 @@ static OASubscriptionState *EXPIRED;
             completionHandler(NO);
     };
 
-    NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *ver = OAAppVersion.getVersion;
 
     [OANetworkUtilities sendRequestWithUrl:@"https://osmand.net/api/subscriptions/active" params:@{ @"os" : @"ios", @"version" : ver } post:NO onComplete:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error)
     {
@@ -1337,7 +1337,7 @@ static OASubscriptionState *EXPIRED;
     [params setObject:productIdentifier forKey:@"purchaseId"];
     [params setObject:transactionId forKey:@"orderId"];
     [params setObject:@"ios" forKey:@"os"];
-    [params setObject:OAAppVersionDependentConstants.getVersion forKey:@"version"];
+    [params setObject:OAAppVersion.getVersion forKey:@"version"];
     [params setObject:[NSString stringWithFormat:@"%d", app.getAppInstalledDays] forKey:@"nd"];
     [params setObject:[NSString stringWithFormat:@"%d", app.getAppExecCount] forKey:@"ns"];
     [params setObject:app.getLanguageCode forKey:@"lang"];

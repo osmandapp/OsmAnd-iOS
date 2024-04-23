@@ -69,7 +69,8 @@
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
     OAAutoObserverProxy* _framePreparedObserver;
-    OAAutoObserverProxy* _locationServicesUpdateObserver;
+    OAAutoObserverProxy* _locationUpdateObserver;
+    OAAutoObserverProxy* _headingUpdateObserver;
     OAAutoObserverProxy* _mapZoomObserver;
     OAAutoObserverProxy* _mapSourceUpdatedObserver;
 
@@ -227,10 +228,13 @@
                                                            withHandler:@selector(onMapRendererFramePrepared)
                                                             andObserve:[OARootViewController instance].mapPanel.mapViewController.framePreparedObservable];
         
-        _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(onLocationServicesUpdate)
-                                                                     andObserve:[OsmAndApp instance].locationServices.updateObserver];
-        
+        _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                            withHandler:@selector(onLocationUpdate)
+                                                             andObserve:[OsmAndApp instance].locationServices.updateLocationObserver];
+        _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onLocationUpdate)
+                                                            andObserve:[OsmAndApp instance].locationServices.updateHeadingObserver];
+
         _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                      withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                       andObserve:[OARootViewController instance].mapPanel.mapViewController.zoomObservable];
@@ -283,7 +287,7 @@
     [self updateRuler];
 }
 
-- (void) onLocationServicesUpdate
+- (void) onLocationUpdate
 {
     [self updateCurrentLocationAddress];
     [self updateInfo];

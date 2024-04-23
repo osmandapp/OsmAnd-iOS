@@ -1164,7 +1164,7 @@
 "osmand_live_donation_switch_title" = "Donație către comunitatea OpenStreetMap";
 "osmand_live_donation_header" = "Setări pentru donații";
 "osmand_live_last_changed" = "Ultima modificare a hărții: %@";
-"osmand_live" = "OsmAnd Live";
+"osmand_live" = "OsmAnd în direct";
 "res_mapsres" = "Hărți & Resurse";
 "select_profile" = "Selectați profilul";
 "segments_count" = "Segmentul %d";
@@ -2058,7 +2058,7 @@
 "coords_format_descr_quick_search" = "Puteți schimba formatul coordonatelor pentru profil în Setări generale";
 "shared_string_width" = "Lățime";
 "navigate_point_format_unknown" = "Format necunoscut";
-"track_coloring_solid" = "Solid";
+"track_coloring_solid" = "Solidă";
 "attribute" = "Atribut";
 "gpx_split_interval" = "Interval de divizare";
 "reset_to_original" = "Resetează la original";
@@ -2080,7 +2080,7 @@
 "shared_string_end_time" = "Timpul final";
 "distance_moving" = "Distanța corectată";
 "parked_at" = "parcat la";
-"icon_group_industrial" = "Industrial";
+"icon_group_industrial" = "Industrială";
 "icon_group_education" = "Educație";
 "route_points" = "Puncte de traseu";
 "connect_rp" = "Conectarea punctelor de rută";
@@ -2400,7 +2400,7 @@
 "animate_my_location_descr" = "Tranziția lină a locației pe hartă în timpul navigării";
 "precipitation_hide" = "Ascundeți precipitațiile";
 "backup_error_invalid_token" = "Tokenul nu este valid";
-"osmand_cloud_create_account_descr" = "Vă rugăm să introduceți adresa dumneavoastră de e-mail, un cod de verificare va fi trimis acolo,\n\nși toate datele dumneavoastră vor fi legate de acesta.";
+"osmand_cloud_create_account_descr" = "Vă rugăm să introduceți adresa dumneavoastră de e-mail, un cod de verificare va fi trimis acolo,\nși toate datele dumneavoastră vor fi legate de acesta.";
 "weather_temperature_celsius" = "Celsius";
 "weather_pressure_hectopascals" = "Hectopascali";
 "weather_pressure_inches_of_mercury" = "Inci coloană de mercur";
@@ -2554,7 +2554,7 @@
 "cloud_contains_newer_changes" = "Versiunea OsmAnd Cloud conține modificări mai noi.";
 "dowload_cloud_version" = "Descărcați versiunea cloud";
 "shared_string_progress" = "Progres";
-"activity_type_mountainbike_name" = "Mountain bike";
+"activity_type_mountainbike_name" = "Bicicletă de munte";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Arată trasee MTB IMBA";
 "mtb_imba_full" = "Asociația Internațională de Ciclism Montan";
 "backup_version_history" = "Istoricul versiunilor";
@@ -2581,7 +2581,7 @@
 "shared_string_not_included" = "Nu este inclus";
 "backup_deleting_all_data" = "Seșterg toate datele…";
 "shared_string_download_update" = "Descărcați actualizarea";
-"cloud_conflict" = "Conflict";
+"cloud_conflict" = "Conflictul";
 "logout_from_osmand_cloud_decsr" = "Vă deconectați\? \nVa trebui să vă conectați din nou pentru a face backup sau a restaura date.";
 "backup_delete_all_data_in_progress" = "Vă rugăm să așteptați până când OsmAnd va șterge toate datele dumneavoastră din cloud. Toate datele de pe dispozitiv rămân neatinse.";
 "backup_delete_types_descr" = "Ștergeți toate datele pentru tipurile de date depreciate din OsmAnd Cloud\?";

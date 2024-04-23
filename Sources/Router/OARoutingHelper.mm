@@ -477,9 +477,8 @@ static BOOL _isDeviatedFromRoute = false;
                     if (diff > diffToNext)
                     {
                         NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
-                                                processed = true;
+                        processed = true;
                     }
-                    processed = true;
                 }
             }
         }

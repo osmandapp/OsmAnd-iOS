@@ -129,8 +129,10 @@
     else if ([tag isEqualToString:@"mtb"])
         return @"activity_type_mountainbike_name";
     else if ([tag isEqualToString:@"horse"])
-        return @"activity_type_riding_name";
-    return @"activity_type_hiking_name";
+        return @"app_mode_horse";
+    else if ([tag isEqualToString:@"hiking"])
+        return @"activity_type_hiking_name";
+    return @"";
 }
 
 @end

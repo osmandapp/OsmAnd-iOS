@@ -98,7 +98,19 @@ static const CGFloat elevationMetersDefault = 1000.0;
     [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
-    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
+    BOOL hasVolumetricSymbols;
+    for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
+    {
+        OAGPX *gpx = cachedTrack[@"gpx"];
+        OAGPXDocument *doc = cachedTrack[@"doc"];
+        if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPt])
+        {
+            hasVolumetricSymbols = YES;
+            break;
+        }
+    }
+    
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
     
     _gpxDocs.clear();
 }
@@ -373,7 +385,6 @@ static const CGFloat elevationMetersDefault = 1000.0;
                 }
             }
         }
-        // TODO: add in _linesCollection isVolumetric when will ready API. let isVolumetric = elevations.count > 0 && gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone
         [self.mapView addKeyedSymbolsProvider:_linesCollection];
     }
     [self setVectorLineProvider:_linesCollection sync:YES];

@@ -3418,3 +3418,9 @@
 "osm_id" = "OSM-ID";
 "average_vertical_speed" = "Durchschnittliche vertikale Geschwindigkeit";
 "osmand_depelopment_use_old_routing" = "Altes Routing verwenden (A*)";
+"shared_string_development" = "Entwicklung";
+"routing_algorithm_a" = "A*";
+"auto_zoom_smooth" = "Glatt";
+"routing_algorithm" = "Routing-Algorithmus";
+"auto_zoom" = "Auto-Zoom";
+"routing_algorithm_highway_hierarchies" = "Autobahnhierarchien";

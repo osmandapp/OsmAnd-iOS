@@ -123,13 +123,13 @@
 {
     [_favorite setName:data.name];
     [_favorite setDescription:data.descr];
-    [_favorite setCategory:data.category];
     [_favorite setColor:data.color];
     [_favorite setIcon:data.icon];
     [_favorite setBackgroundIcon:data.backgroundIcon];
     [_favorite setAddress:data.address];
     if (newPoint)
     {
+        [_favorite setCategory:data.category];
         [OAFavoritesHelper addFavorite:_favorite];
     }
     else

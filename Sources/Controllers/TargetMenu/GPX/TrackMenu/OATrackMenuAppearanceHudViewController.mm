@@ -1086,12 +1086,9 @@
             [self restoreOldValues];
             if (!_forceHiding)
             {
-                if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu)
+                if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu && _reopeningTrackMenuState.navControllerHistory)
                 {
-                    UITabBarController *myPlacesViewController =
-                    [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                    [myPlacesViewController setSelectedIndex:1];
-                    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                    [[OARootViewController instance].navigationController setViewControllers:_reopeningTrackMenuState.navControllerHistory animated:YES];
                 }
                 else
                 {
@@ -1163,12 +1160,9 @@
         }
         if (_reopeningTrackMenuState)
         {
-            if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu)
+            if (_reopeningTrackMenuState.openedFromTracksList && !_reopeningTrackMenuState.openedFromTrackMenu && _reopeningTrackMenuState.navControllerHistory)
             {
-                UITabBarController *myPlacesViewController =
-                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                [myPlacesViewController setSelectedIndex:1];
-                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                [[OARootViewController instance].navigationController setViewControllers:_reopeningTrackMenuState.navControllerHistory animated:YES];
             }
             else
             {

@@ -50,4 +50,28 @@ extension UINavigationController {
       pushViewController(viewController, animated: animated)
       CATransaction.commit()
     }
+
+    @objc func saveCurrentStateForScrollableHud() -> [UIViewController] {
+        var newCurrentHistory = viewControllers
+        if !viewControllers.isEmpty {
+            var newHistory: [UIViewController] = Array()
+            var rootViewControllerIndex = 0
+            for i in 0...newCurrentHistory.count - 1 {
+                let vc = newCurrentHistory[i]
+                if vc is OARootViewController {
+                    rootViewControllerIndex = i
+                } else {
+                    newHistory.append(vc)
+                }
+            }
+            newHistory.append(newCurrentHistory[rootViewControllerIndex])
+            newCurrentHistory.insert(newCurrentHistory.remove(at: rootViewControllerIndex), at: 0)
+            setViewControllers(newHistory, animated: true)
+
+            // Example:
+            // Show track context menu above the map.
+            // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
+        }
+        return newCurrentHistory
+    }
 }

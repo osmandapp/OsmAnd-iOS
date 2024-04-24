@@ -8,6 +8,8 @@
 
 import Foundation
 
+@objc(OATravelGuidesImageCacheHelper)
+@objcMembers
 final class TravelGuidesImageCacheHelper : OAWebImagesCacheHelper {
     
     static let sharedDatabase = TravelGuidesImageCacheHelper()

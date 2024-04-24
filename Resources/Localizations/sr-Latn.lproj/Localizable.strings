@@ -3401,3 +3401,10 @@
 "average_vertical_speed" = "Prosečna vertikalna brzina";
 "osm_id" = "OSM ID";
 "osmand_depelopment_use_old_routing" = "Koristi staro rutiranje (A*)";
+"routing_algorithm" = "Algoritam rutiranja";
+"auto_zoom" = "Auto-zum";
+"shared_string_development" = "Razvoj";
+"routing_algorithm_highway_hierarchies" = "Hijerarhija autoputeva";
+"auto_zoom_smooth" = "Glatko";
+"auto_zoom_discrete" = "Diskretno";
+"routing_algorithm_a" = "A*";

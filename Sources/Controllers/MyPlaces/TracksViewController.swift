@@ -649,16 +649,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
         updateAllFoldersVCData()
     }
-    
+
     private func onTrackAppearenceClicked(track: OAGPX?, isCurrentTrack: Bool) {
         guard let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track else { return }
-        let state = OATrackMenuViewControllerState()
-        state.openedFromTracksList = true
-        state.gpxFilePath = track?.gpxFilePath
-        rootVC.mapPanel.openTargetView(with: gpx, trackHudMode: .appearanceHudMode, state: state)
-        navigationController?.popToRootViewController(animated: true)
+        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+            let state = OATrackMenuViewControllerState()
+            state.openedFromTracksList = true
+            state.gpxFilePath = track?.gpxFilePath
+            state.navControllerHistory = newCurrentHistory
+            rootVC.mapPanel.openTargetView(with: gpx, trackHudMode: .appearanceHudMode, state: state)
+        }
     }
-    
+
     private func onTrackNavigationClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
         guard let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track else { return }
         if gpx.totalTracks > 1 {
@@ -679,10 +681,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onTrackAnalyzeClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            let absolutePath = getAbsolutePath(gpx.gpxFilePath)
-            rootVC.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: absolutePath, isCurrentTrack: isCurrentTrack)
-            navigationController?.popToRootViewController(animated: true)
-            navigationController?.setNavigationBarHidden(true, animated: true)
+            if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                let state = OATrackMenuViewControllerState()
+                state.navControllerHistory = newCurrentHistory
+                state.openedFromTracksList = true
+                state.selectedStatisticsTab = .overviewTab
+                let absolutePath = getAbsolutePath(gpx.gpxFilePath)
+                navigationController?.setNavigationBarHidden(true, animated: true)
+                rootVC.mapPanel.openTargetViewFromTracksList(withRouteDetailsGraph: absolutePath,
+                                                             isCurrentTrack: isCurrentTrack,
+                                                             state: state)
+            }
         }
     }
     
@@ -701,13 +710,14 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private func onTrackEditClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            rootVC.mapPanel.mapViewController.hideContextPinMarker()
-            let state = OATrackMenuViewControllerState()
-            state.openedFromTracksList = true
-            state.gpxFilePath = gpx.gpxFilePath
-            let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
-            rootVC.mapPanel.showScrollableHudViewController(vc)
-            navigationController?.popToRootViewController(animated: true)
+            if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                let state = OATrackMenuViewControllerState()
+                state.openedFromTracksList = true
+                state.gpxFilePath = gpx.gpxFilePath
+                state.navControllerHistory = newCurrentHistory
+                let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
+                rootVC.mapPanel.showScrollableHudViewController(vc)
+            }
         }
     }
     
@@ -1128,24 +1138,13 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 }
             }
         } else if item.key == trackKey {
-            if let trackPath = item.obj(forKey: pathKey) as? String {
-                if let track = rootFolder.getTrackByPath(trackPath) {
-                    // Show map in the front.
-                    // before: [RootVC, MyPlacesTabBar, Folder1, Folder2]
-                    // after [MyPlacesTabBar, Folder1, Folder2, RootVC]
-                    if let currentHistory = navigationController?.viewControllers, !currentHistory.isEmpty {
-                        var newHistory: [UIViewController] = Array()
-                        let rootViewController = currentHistory[0]
-                        newHistory.append(contentsOf: currentHistory)
-                        newHistory.remove(at: 0)
-                        newHistory.append(rootViewController)
-                        navigationController?.setViewControllers(newHistory, animated: true)
-                        
-                        // Show track context menu above the map.
-                        // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
-                        rootVC.mapPanel.openTargetViewWithGPX(fromTracksList: track, navControllerHistory: currentHistory)
-                    }
-                }
+            if let trackPath = item.obj(forKey: pathKey) as? String,
+               let track = rootFolder.getTrackByPath(trackPath),
+               let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
+                                                                               navControllerHistory: newCurrentHistory,
+                                                                               fromTrackMenu: false,
+                                                                               selectedTab: .overviewTab)
             }
         } else if item.key == recordingTrackKey {
             if savingHelper.hasData() {

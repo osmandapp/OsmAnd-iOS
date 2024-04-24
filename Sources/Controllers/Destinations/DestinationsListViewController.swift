@@ -114,7 +114,13 @@ class DestinationsListViewController: OABaseButtonsViewController {
             }
             if let cell = cell {
                 cell.titleLabel.text = destinationItem.destination.desc
-                cell.leftIconView.image = UIImage(named: destinationItem.destination.markerResourceName.appending("_small"))
+                var imageName = ""
+                if let markerResourceName = destinationItem.destination.markerResourceName {
+                    imageName = markerResourceName
+                } else {
+                    imageName = "ic_destination_pin_1"
+                }
+                cell.leftIconView.image = UIImage(named: imageName.appending("_small"))
                 if let descriptionStr = destinationItem.distanceStr, !descriptionStr.isEmpty {
                     cell.descriptionVisibility(true)
                     let attributes: [NSAttributedString.Key: Any] = [

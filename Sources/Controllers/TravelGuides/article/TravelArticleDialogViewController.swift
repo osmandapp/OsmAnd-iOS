@@ -142,11 +142,6 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
         
         setupBottomButtonsView()
-        if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
-            restoreState()
-        } else {
-            populateArticle()
-        }
     }
     
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
@@ -337,18 +332,14 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         if gpx == nil {
             gpx = OATravelGuidesHelper.buildGpx(file, title: article.title, document: article.gpxFile)
         }
-        
-        saveState()
-        if let onOpenArticlePoints = delegate?.onOpenArticlePoints {
-            onOpenArticlePoints()
-        }
-        OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
-        
         OAAppSettings.sharedManager().showGpx([file], update: true)
-        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: .pointsTab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
-        
-        navigationController?.popToRootViewController(animated: true)
-        dismiss()
+        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+            let fromTrackMenu = OARootViewController.instance().mapPanel.scrollableHudViewController != nil
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: fromTrackMenu,
+                                                                           selectedTab: .pointsTab)
+        }
     }
     
     @objc private func onBookmarkButtonClicked() {
@@ -376,38 +367,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     }
     
     // MARK: Data
-    
-    func saveState() {
-        if let state = OAAppSettings.sharedManager().travelGuidesState {
-            state.article = article
-            state.articleId = articleId
-            state.selectedLang = selectedLang
-            state.langs = langs
-            state.nightMode = nightMode
-            state.gpxFile = gpxFile
-            state.gpx = gpx
-        }
-    }
-    
-    func restoreState() {
-        if let state = OAAppSettings.sharedManager().travelGuidesState {
-            article = state.article
-            articleId = state.articleId
-            selectedLang = state.selectedLang
-            langs = state.langs
-            nightMode = state.nightMode
-            gpxFile = state.gpxFile
-            gpx = state.gpx
-            
-            title = getTitle()
-            updateNavbar()
-            applyLocalization()
-            updateTrackButton(processing: false, gpxFile: state.gpxFile)
-            loadWebView()
-        }
-        OAAppSettings.sharedManager().travelGuidesState.resetData()
-    }
-    
+
     override func getContent() -> String! {
         cachedHtml
     }

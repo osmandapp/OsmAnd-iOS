@@ -3761,7 +3761,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits, mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, mapSettingTrackRecording=_mapSettingTrackRecording;
-@synthesize travelGuidesState=_travelGuidesState;
 
 + (OAAppSettings*) sharedManager
 {
@@ -3785,7 +3784,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
-        _travelGuidesState = [OATravelGuidesState shared];
         
         _applicationMode = [[[OACommonAppMode withKey:applicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_applicationMode forKey:@"application_mode"];

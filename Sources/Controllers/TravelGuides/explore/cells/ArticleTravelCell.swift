@@ -13,8 +13,9 @@ protocol TravelGuideCellCashable {
     func noImageIconVisibility(_ show: Bool)
 }
 
+@objc(OAArticleTravelCell)
+@objcMembers
 final class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
-    
 
     @IBOutlet weak var arcticleTitle: UILabel!
     @IBOutlet weak var arcticleDescription: UILabel!
@@ -32,7 +33,11 @@ final class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
         super.layoutSubviews()
         updateSaveButton()
     }
-    
+
+    override static func getIdentifier() -> String {
+        self.reuseIdentifier 
+    }
+
     func setImage(data: Data) {
         imagePreview.image = UIImage(data: data)
     }
@@ -44,7 +49,11 @@ final class ArticleTravelCell: UITableViewCell, TravelGuideCellCashable {
     func noImageIconVisibility(_ show: Bool) {
         noImageIcon.isHidden = !show
     }
-    
+
+    func bookmarkIconVisibility(_ show: Bool) {
+        bookmarkIcon.isHidden = !show
+    }
+
     func updateSaveButton() {
         DispatchQueue.main.async {
             if let article = self.article {

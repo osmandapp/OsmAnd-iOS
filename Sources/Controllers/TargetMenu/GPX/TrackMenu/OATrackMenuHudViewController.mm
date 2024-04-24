@@ -113,6 +113,7 @@
     OARouteLineChartHelper *_routeLineChartHelper;
     OATrackMenuUIBuilder *_uiBuilder;
     OAGPXUIHelper *_gpxUIHelper;
+    OATravelGuidesImageCacheHelper *_imagesCacheHelper;
 
     OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_headingUpdateObserver;
@@ -128,6 +129,7 @@
     EOATrackMenuHudTab _selectedTab;
     OATrackMenuViewControllerState *_reopeningState;
     BOOL _forceHiding;
+    BOOL _pushedNewScreen;
 
     NSMutableDictionary<NSString *, NSMutableArray<OAGpxWptItem *> *> *_waypointGroups;
     NSArray<NSString *> *_waypointSortedGroupNames;
@@ -212,6 +214,7 @@
     _app = [OsmAndApp instance];
     _routeLineChartHelper = [self getLineChartHelper];
     _gpxUIHelper = [[OAGPXUIHelper alloc] init];
+    _imagesCacheHelper = [OATravelGuidesImageCacheHelper sharedDatabase];
 
     [self setupUIBuilder];
 }
@@ -287,6 +290,7 @@
 {
     [super viewDidAppear:animated];
     _wasFirstOpening = YES;
+    _pushedNewScreen = NO;
 }
 
 - (void)viewWillTransitionToSize:(CGSize)size withTransitionCoordinator:(id<UIViewControllerTransitionCoordinator>)coordinator
@@ -374,41 +378,6 @@
 {
     [self hide:YES duration:.2 onComplete:^{
         [self.mapViewController hideContextPinMarker];
-
-        if (![self openedFromMap])
-        {
-            if (OAAppSettings.sharedManager.travelGuidesState.wasWatchingGpx)
-            {
-                if (OAAppSettings.sharedManager.travelGuidesState.wasOpenedFromBookmarks)
-                {
-                    OAAppSettings.sharedManager.travelGuidesState.wasWatchingGpx = false;
-                    OAAppSettings.sharedManager.travelGuidesState.wasOpenedFromBookmarks = false;
-                    UITabBarController *myPlacesViewController =
-                            [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                    
-                    NSUInteger travelTabIndex = 2;
-                    if ([OAIAPHelper sharedInstance].osmEditing.isActive)
-                        travelTabIndex += 1;
-                    
-                    [myPlacesViewController setSelectedIndex:travelTabIndex];
-                    [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
-                    
-                    if (OAAppSettings.sharedManager.travelGuidesState.article)
-                    {
-                        OATravelArticleIdentifier *articleId = [OAAppSettings.sharedManager.travelGuidesState.article generateIdentifier];
-                        NSString *lang = OAAppSettings.sharedManager.travelGuidesState.article.lang;
-                        OAAppSettings.sharedManager.travelGuidesState.article = nil;
-                        OATravelArticleDialogViewController *articleVc = [[OATravelArticleDialogViewController alloc] initWithArticleId:articleId lang:lang];
-                        [[OARootViewController instance].navigationController pushViewController:articleVc animated:YES];
-                    }
-                }
-                else
-                {
-                    OATravelExploreViewController *vc = [[OATravelExploreViewController alloc] init];
-                    [[OARootViewController instance].navigationController pushViewController:vc animated:YES];
-                }
-            }
-        }
     }];
 }
 
@@ -433,9 +402,9 @@
 
 - (void)restoreNavControllerHistoryIfNeeded
 {
-    if (!_forceHiding && _reopeningState && _reopeningState.openedFromTracksList)
+    if (!_forceHiding && !_pushedNewScreen && _reopeningState && _reopeningState.openedFromTracksList)
     {
-        if ( _navControllerHistory && _navControllerHistory.count > 0)
+        if (_navControllerHistory && _navControllerHistory.count > 0)
         {
             [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
         }
@@ -874,12 +843,10 @@
 - (void)openAnalysis:(OAGPXTrackAnalysis *)analysis
            withTypes:(NSArray<NSNumber *> *)types
 {
-    OATrackMenuViewControllerState *state = [self getCurrentStateForAnalyze:types];
-    BOOL openedFromTracksList = state.openedFromTracksList;
-    state.openedFromTracksList = NO;
+    _pushedNewScreen = YES;
     [self hide:YES duration:.2 onComplete:^{
+        OATrackMenuViewControllerState *state = [self getCurrentStateForAnalyze:types];
         state.openedFromTrackMenu = YES;
-        state.openedFromTracksList = openedFromTracksList;
         [self.mapPanelViewController openTargetViewWithRouteDetailsGraph:self.doc
                                                                 analysis:analysis
                                                         menuControlState:state
@@ -915,13 +882,10 @@
 
 - (void)editSegment
 {
-    OATrackMenuViewControllerState *state = [self getCurrentState];
-    BOOL openedFromTracksList = state.openedFromTracksList;
-    state.openedFromTracksList = NO;
+    _pushedNewScreen = YES;
     [self hide:YES duration:.2 onComplete:^{
+        OATrackMenuViewControllerState *state = [self getCurrentState];
         state.openedFromTrackMenu = YES;
-        state.openedFromTracksList = openedFromTracksList;
-        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController showScrollableHudViewController:[
             [OARoutePlanningHudViewController alloc] initWithFileName:self.gpx.gpxFilePath
                                                       targetMenuState:state
@@ -1224,9 +1188,12 @@
 
 - (void)openNewWaypointScreen
 {
+    _pushedNewScreen = YES;
     [self hide:YES duration:.2 onComplete:^{
+        OATrackMenuViewControllerState *state = [self getCurrentState];
+        state.openedFromTrackMenu = YES;
         [self.mapPanelViewController openTargetViewWithNewGpxWptMovableTarget:self.gpx
-                                                             menuControlState:[self getCurrentState]];
+                                                             menuControlState:state];
     }];
 }
 
@@ -1354,6 +1321,11 @@
     return self.doc.metadata.copyright;
 }
 
+- (OAMetadata *)getMetadata;
+{
+    return self.doc.metadata;
+}
+
 - (NSString *)getKeywords
 {
     return self.doc.metadata.keywords;
@@ -1478,13 +1450,10 @@
 
 - (void)openAppearance
 {
-    OATrackMenuViewControllerState *state = [self getCurrentState];
-    BOOL openedFromTracksList = state.openedFromTracksList;
-    state.openedFromTracksList = NO;
+    _pushedNewScreen = YES;
     [self hide:YES duration:.2 onComplete:^{
+        OATrackMenuViewControllerState *state = [self getCurrentState];
         state.openedFromTrackMenu = YES;
-        state.openedFromTracksList = openedFromTracksList;
-        [self.mapViewController hideContextPinMarker];
         [self.mapPanelViewController openTargetViewWithGPX:self.gpx
                                               trackHudMode:EOATrackAppearanceHudMode
                                                      state:state];
@@ -1509,14 +1478,13 @@
         if (![[OARoutingHelper sharedInstance] isFollowingMode])
             [self.mapPanelViewController.mapActions stopNavigationWithoutConfirm];
 
+        _pushedNewScreen = YES;
         [self.mapPanelViewController.mapActions enterRoutePlanningModeGivenGpx:self.gpx
                                                                           from:nil
                                                                       fromName:nil
                                                 useIntermediatePointsByDefault:YES
                                                                     showDialog:YES];
-        [self hide:YES duration:.2 onComplete:^{
-            [self.mapViewController hideContextPinMarker];
-        }];
+        [self hide];
     }
 }
 
@@ -1569,6 +1537,7 @@
 
 - (void)openDescription
 {
+    _pushedNewScreen = YES;
     OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:[self generateDescription] isNew:NO isEditing:NO readOnly:NO];
     editDescController.delegate = self;
     [self.navigationController pushViewController:editDescController animated:YES];
@@ -1576,6 +1545,7 @@
 
 - (void)openDescriptionEditor
 {
+    _pushedNewScreen = YES;
     OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:[self generateDescription] isNew:NO isEditing:YES readOnly:NO];
     editDescController.delegate = self;
     [self.navigationController pushViewController:editDescController animated:YES];
@@ -1583,6 +1553,7 @@
 
 - (void)openDescriptionReadOnly:(NSString *)description
 {
+    _pushedNewScreen = YES;
     OAEditDescriptionViewController *routeDescController = [[OAEditDescriptionViewController alloc] initWithDescription:description
                                                                                                                   isNew:NO
                                                                                                               isEditing:NO
@@ -1614,6 +1585,7 @@
 
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem
 {
+    _forceHiding = YES;
     [self hide:YES duration:.2 onComplete:^{
         [self.mapPanelViewController openTargetViewWithWpt:gpxWptItem pushed:NO];
     }];
@@ -1670,6 +1642,13 @@
     return points;
 }
 
+- (void)openArticleById:(OATravelArticleIdentifier *)articleId lang:(NSString *)lang
+{
+    _pushedNewScreen = YES;
+    OATravelArticleDialogViewController *vc = [[OATravelArticleDialogViewController alloc] initWithArticleId:articleId lang:lang];
+    [self.navigationController pushViewController:vc animated:YES];
+}
+
 - (void)showAlertDeleteTrack
 {
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:self.isCurrentTrack ? OALocalizedString(@"track_clear_q") : OALocalizedString(@"gpx_remove") preferredStyle:UIAlertControllerStyleAlert];
@@ -1693,11 +1672,8 @@
             [[OAGPXDatabase sharedDb] removeGpxItem:self.gpx.gpxFilePath];
         }
 
-        [self hide:YES duration:.2 onComplete:^{
-            [self.mapViewController hideContextPinMarker];
-        }];
-    }]
-    ];
+        [self hide];
+    }]];
 
     [self presentViewController:alert animated:YES completion:nil];
 }
@@ -1729,6 +1705,7 @@
 
 - (void) openUploadGpxToOSM
 {
+    _pushedNewScreen = YES;
     OAOsmUploadGPXViewConroller *vc = [[OAOsmUploadGPXViewConroller alloc] initWithGPXItems:@[self.gpx]];
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -1871,9 +1848,7 @@
                                                                   fromName:nil
                                             useIntermediatePointsByDefault:YES
                                                                 showDialog:YES];
-    [self hide:YES duration:.2 onComplete:^{
-        [self.mapViewController hideContextPinMarker];
-    }];
+    [self hide];
 }
 
 #pragma mark - UITabBarDelegate
@@ -2436,6 +2411,57 @@
             }
         }
         outCell =  cell;
+    }
+    else if ([cellData.type isEqualToString:[OAArticleTravelCell getCellIdentifier]])
+    {
+        OAArticleTravelCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAArticleTravelCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAArticleTravelCell getCellIdentifier] owner:self options:nil];
+            cell = (OAArticleTravelCell *) [nib objectAtIndex:0];
+            [cell imageVisibility:YES];
+            [cell bookmarkIconVisibility:NO];
+            cell.imagePreview.contentMode = UIViewContentModeScaleAspectFill;
+            cell.imagePreview.layer.cornerRadius = 11;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        }
+        if (cell)
+        {
+            cell.article = cellData.values[@"article"];
+            cell.articleLang = cellData.values[@"lang"];
+            cell.arcticleTitle.text = cellData.title;
+            cell.arcticleDescription.text = cellData.desc;
+            cell.regionLabel.text = cellData.values[@"isPartOf"];
+
+            NSString *iconName = cellData.rightIconName;
+            OADownloadMode *downloadMode = _app.data.travelGuidesImagesDownloadMode;
+            if (iconName.length > 0 && downloadMode)
+            {
+                //fetch image from db. if not found -  start async downloading.
+                [_imagesCacheHelper fetchSingleImageByURL:iconName customKey:nil downloadMode:downloadMode onlyNow:NO onComplete:^(NSString *imageData) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        if (imageData && imageData.length > 0)
+                        {
+                            UIImage *image = [OAImageToStringConverter base64StringToImage:imageData];
+                            if (image)
+                            {
+                                cell.imagePreview.image = image;
+                                [cell noImageIconVisibility:NO];
+                            }
+                        }
+                        else
+                        {
+                            [cell noImageIconVisibility:YES];
+                        }
+                    });
+                }];
+            }
+            else
+            {
+                [cell noImageIconVisibility:YES];
+            }
+            outCell = cell;
+        }
     }
 
     if ([outCell needsUpdateConstraints])

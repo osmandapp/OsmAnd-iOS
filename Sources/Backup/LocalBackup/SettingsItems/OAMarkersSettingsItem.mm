@@ -169,9 +169,7 @@
 
 - (NSString *) getResourceName:(NSString *)color
 {
-    if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_orange) toHexString]] || [color isEqualToString:@"#FF9800"])
-        return @"ic_destination_pin_1";
-    else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_teal) toHexString]] || [color isEqualToString:@"#26A69A"])
+    if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_teal) toHexString]] || [color isEqualToString:@"#26A69A"])
         return @"ic_destination_pin_2";
     else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_green) toHexString]] || [color isEqualToString:@"#73B825"])
         return @"ic_destination_pin_3";
@@ -183,7 +181,7 @@
         return @"ic_destination_pin_6";
     else if ([color isEqualToString:[UIColorFromRGB(marker_pin_color_blue) toHexString]])
         return @"ic_destination_pin_7";
-    return nil;
+    return @"ic_destination_pin_1";
 }
 
 - (BOOL) readFromFile:(NSString *)filePath error:(NSError * _Nullable *)error

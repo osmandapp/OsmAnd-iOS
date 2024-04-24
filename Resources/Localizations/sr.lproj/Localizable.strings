@@ -2271,7 +2271,7 @@
 "routing_attr_only_permitted_ways_name" = "Изричито дозвољени путеви";
 "routing_attr_prefer_horse_routes_description" = "Радије бирај коњске путање";
 "routing_attr_prefer_horse_routes_name" = "Омиљени путеви коња";
-"horseback_riding" = "Јахање коња";
+"horseback_riding" = "Јахање";
 "routing_attr_allow_gate_description" = "Дозволи употребу капија";
 "shared_string_open_street_map" = "ОпенСтритМап";
 "routing_attr_only_permitted_streets_name" = "Изричито дозвољене улице";
@@ -3403,3 +3403,10 @@
 "average_vertical_speed" = "Просечна вертикална брзина";
 "osm_id" = "ОСМ ИД";
 "osmand_depelopment_use_old_routing" = "Koristi staro rutiranje (A*)";
+"auto_zoom_smooth" = "Гладко";
+"routing_algorithm" = "Алгоритам рутирања";
+"auto_zoom" = "Ауто-зум";
+"shared_string_development" = "Развој";
+"routing_algorithm_highway_hierarchies" = "Хијерархија аутопутева";
+"routing_algorithm_a" = "А*";
+"auto_zoom_discrete" = "Дискретно";

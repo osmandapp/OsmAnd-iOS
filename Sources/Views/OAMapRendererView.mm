@@ -351,6 +351,21 @@ forcedUpdate:(BOOL)forcedUpdate
     return _renderer->getElevationScaleFactor();
 }
 
+- (void)setMyLocationCircleColor:(OsmAnd::FColorARGB)color
+{
+    _renderer->setMyLocationColor(color);
+}
+
+- (void)setMyLocationCirclePosition:(OsmAnd::PointI)location31
+{
+    _renderer->setMyLocation31(location31);
+}
+
+- (void)setMyLocationCircleRadius:(float)radiusInMeters
+{
+    _renderer->setMyLocationRadiusInMeters(radiusInMeters);
+}
+
 - (OsmAnd::PointI)target31
 {
     auto fixedPixel = _renderer->getState().fixedPixel;

@@ -119,6 +119,8 @@ typedef enum {
     _courseMarkerDay->setIsAccuracyCircleVisible(false);
     _courseMarkerNight->setIsHidden(true);
     _courseMarkerNight->setIsAccuracyCircleVisible(false);
+    [_mapView setMyLocationCircleRadius:(0.0f)];
+    
 }
 
 - (void) setState:(EOAMarkerCollectionState)state
@@ -141,6 +143,10 @@ typedef enum {
 
 - (void) updateState
 {
+    auto circleColor = OsmAnd::FColorRGB();
+    auto circleLocation31 = OsmAnd::PointI();
+    float circleRadius = 0.0f;
+    bool withCircle = false;
     switch (_state)
     {
         case OAMarkerColletionStateStay:
@@ -151,9 +157,23 @@ typedef enum {
             _courseMarkerNight->setIsHidden(true);
             _locationMarkerLostDay->setIsHidden(true);
             _locationMarkerLostNight->setIsHidden(true);
-
+            
             _locationMarkerDay->setIsHidden(_mode != OAMarkerColletionModeDay);
             _locationMarkerNight->setIsHidden(_mode != OAMarkerColletionModeNight);
+            if (_mode == OAMarkerColletionModeDay)
+            {
+                circleColor = _locationMarkerDay->accuracyCircleBaseColor;
+                circleLocation31 = _locationMarkerDay->getPosition();
+                circleRadius = _locationMarkerDay->getAccuracyCircleRadius();
+                withCircle = true;
+            }
+            else if (_mode == OAMarkerColletionModeNight)
+            {
+                circleColor = _locationMarkerNight->accuracyCircleBaseColor;
+                circleLocation31 = _locationMarkerNight->getPosition();
+                circleRadius = _locationMarkerNight->getAccuracyCircleRadius();
+                withCircle = true;
+            }
             break;
         }
         case OAMarkerColletionStateStayStraight:
@@ -164,9 +184,23 @@ typedef enum {
             _courseMarkerNight->setIsHidden(true);
             _locationMarkerLostDay->setIsHidden(true);
             _locationMarkerLostNight->setIsHidden(true);
-
+            
             _straightLocationMarkerDay->setIsHidden(_mode != OAMarkerColletionModeDay);
             _straightLocationMarkerNight->setIsHidden(_mode != OAMarkerColletionModeNight);
+            if (_mode == OAMarkerColletionModeDay)
+            {
+                circleColor = _straightLocationMarkerDay->accuracyCircleBaseColor;
+                circleLocation31 = _straightLocationMarkerDay->getPosition();
+                circleRadius = _straightLocationMarkerDay->getAccuracyCircleRadius();
+                withCircle = true;
+            }
+            else if (_mode == OAMarkerColletionModeNight)
+            {
+                circleColor = _straightLocationMarkerNight->accuracyCircleBaseColor;
+                circleLocation31 = _straightLocationMarkerNight->getPosition();
+                circleRadius = _straightLocationMarkerNight->getAccuracyCircleRadius();
+                withCircle = true;
+            }
             break;
         }
         case OAMarkerColletionStateMove:
@@ -177,9 +211,23 @@ typedef enum {
             _straightLocationMarkerNight->setIsHidden(true);
             _locationMarkerLostDay->setIsHidden(true);
             _locationMarkerLostNight->setIsHidden(true);
-
+            
             _courseMarkerDay->setIsHidden(_mode != OAMarkerColletionModeDay);
             _courseMarkerNight->setIsHidden(_mode != OAMarkerColletionModeNight);
+            if (_mode == OAMarkerColletionModeDay)
+            {
+                circleColor = _courseMarkerDay->accuracyCircleBaseColor;
+                circleLocation31 = _courseMarkerDay->getPosition();
+                circleRadius = _courseMarkerDay->getAccuracyCircleRadius();
+                withCircle = true;
+            }
+            else if (_mode == OAMarkerColletionModeNight)
+            {
+                circleColor = _courseMarkerNight->accuracyCircleBaseColor;
+                circleLocation31 = _courseMarkerNight->getPosition();
+                circleRadius = _courseMarkerNight->getAccuracyCircleRadius();
+                withCircle = true;
+            }
             break;
         }
         case OAMarkerColletionStateOutdatedLocation:
@@ -190,13 +238,34 @@ typedef enum {
             _straightLocationMarkerNight->setIsHidden(true);
             _courseMarkerDay->setIsHidden(true);
             _courseMarkerNight->setIsHidden(true);
-
+            
             _locationMarkerLostDay->setIsHidden(_mode != OAMarkerColletionModeDay);
             _locationMarkerLostNight->setIsHidden(_mode != OAMarkerColletionModeNight);
+            if (_mode == OAMarkerColletionModeDay)
+            {
+                circleColor = _locationMarkerLostDay->accuracyCircleBaseColor;
+                circleLocation31 = _locationMarkerLostDay->getPosition();
+                circleRadius = _locationMarkerLostDay->getAccuracyCircleRadius();
+                withCircle = true;
+            }
+            else if (_mode == OAMarkerColletionModeNight)
+            {
+                circleColor = _locationMarkerLostNight->accuracyCircleBaseColor;
+                circleLocation31 = _locationMarkerLostNight->getPosition();
+                circleRadius = _locationMarkerLostNight->getAccuracyCircleRadius();
+                withCircle = true;
+            }
             break;
         }
         default:
             break;
+    }
+    if (withCircle) {
+        [_mapView setMyLocationCircleColor:(circleColor.withAlpha(0.2f))];
+        [_mapView setMyLocationCirclePosition:(circleLocation31)];
+        [_mapView setMyLocationCircleRadius:(circleRadius)];
+    } else {
+        [_mapView setMyLocationCircleRadius:(0.0f)];
     }
 }
 
@@ -208,6 +277,7 @@ typedef enum {
     {
         marker->setIsAccuracyCircleVisible(true);
         marker->setAccuracyCircleRadius(horizontalAccuracy);
+        [_mapView setMyLocationCircleRadius:(horizontalAccuracy)];
 
         _mapView.mapMarkersAnimator->cancelAnimations(marker);
         if (animationDuration > 0)
@@ -219,6 +289,7 @@ typedef enum {
         else
         {
             marker->setPosition(target31);
+            [_mapView setMyLocationCirclePosition:(target31)];
             if (iconKey)
                 marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
         }

@@ -3403,3 +3403,10 @@
 "average_vertical_speed" = "Gennemsnitlig vertikal hastighed";
 "osm_id" = "OSM ID";
 "osmand_depelopment_use_old_routing" = "Brug gammel ruteberegning (A*)";
+"auto_zoom" = "Auto-zoom";
+"routing_algorithm_highway_hierarchies" = "Motorvejs-hierarkier";
+"auto_zoom_smooth" = "Jævn";
+"auto_zoom_discrete" = "Diskret";
+"routing_algorithm" = "Ruteberegning-algoritme";
+"shared_string_development" = "Udvikling";
+"routing_algorithm_a" = "A*";

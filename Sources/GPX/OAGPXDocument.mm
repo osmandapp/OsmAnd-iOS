@@ -1115,7 +1115,7 @@
             {
                 for (OAWptPt *tPt in ts.points)
                 {
-                    if (tPt.elevation > 0)
+                    if (!isnan(tPt.elevation))
                         return YES;
                 }
             }

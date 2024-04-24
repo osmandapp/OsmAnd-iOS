@@ -27,7 +27,6 @@
     OASettingsHelper *_settingsHelper;
     OAApplicationMode *_appMode;
 
-    BOOL _exportStarted;
     BOOL _shouldOpenSettingsOnInit;
     BOOL _shouldOpenMyPlacesOnInit;
     BOOL _shouldOpenResourcesOnInit;
@@ -108,17 +107,22 @@
 
 - (NSString *)getTitle
 {
-    return _exportStarted ? OALocalizedString(@"shared_string_preparing") : _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
+    return _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
 }
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return _exportStarted ? nil : [super getRightNavbarButtons];
+    return [super getRightNavbarButtons];
 }
 
 - (NSAttributedString *)getTableHeaderDescriptionAttr
 {
-    NSString *exportSelectDescr = _exportStarted ? @"" : [OALocalizedString(@"export_profile_select_descr") stringByAppendingString:@"\n"];
+    return [self getTableHeaderDescriptionAttr:NO];
+}
+
+- (NSAttributedString *)getTableHeaderDescriptionAttr:(BOOL)exporting
+{
+    NSString *exportSelectDescr = exporting ? @"" : [OALocalizedString(@"export_profile_select_descr") stringByAppendingString:@"\n"];
     long itemsSize = [self calculateItemsSize:self.getSelectedItems];
     NSString *approximateFileSize = [NSString stringWithFormat:@"%@: %@",
                                         OALocalizedString(@"approximate_file_size"),
@@ -131,24 +135,10 @@
     return descriptionAttr;
 }
 
-- (NSString *)getBottomButtonTitle
-{
-    return _exportStarted ? @"" : [super getBottomButtonTitle];
-}
-
 #pragma mark - Table data
 
 - (void)generateData
 {
-    if (_exportStarted)
-    {
-        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
-        group.type = [OAProgressTitleCell getCellIdentifier];
-        group.groupName = OALocalizedString(@"preparing_file");
-        self.data = @[group];
-        return;
-    }
-
     [super generateData];
 
     if (_shouldOpenSettingsOnInit)
@@ -200,8 +190,28 @@
 
 - (void)shareProfile
 {
-    _exportStarted = YES;
-    [self updateUI];
+    [UIView transitionWithView:self.view
+                      duration:.2
+                       options:UIViewAnimationOptionTransitionCrossDissolve
+                    animations:^(void)
+                    {
+                        self.title = OALocalizedString(@"shared_string_preparing");
+                        [self.navigationItem setRightBarButtonItems:nil animated:YES];
+                        [self hideBottomButtons];
+
+                        self.tableView.tableHeaderView = [OAUtilities setupTableHeaderViewWithText:[self getTableHeaderDescriptionAttr:YES]
+                                                                                        isBigTitle:NO
+                                                                                     rightIconName:nil
+                                                                                         tintColor:nil
+                                                                                   parentViewWidth:self.view.frame.size.width];
+
+                        OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
+                        group.type = [OAProgressTitleCell getCellIdentifier];
+                        group.groupName = OALocalizedString(@"preparing_file");
+                        self.data = @[group];
+                        [self.tableView reloadData];
+                    }
+                    completion:nil];
 
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
     NSArray<OASettingsItem *> *settingsItems = [settingsHelper prepareSettingsItems:self.getSelectedItems settingsItems:@[] doExport:YES];

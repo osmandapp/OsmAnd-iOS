@@ -62,7 +62,7 @@
 
 - (void) onPostExecute:(BOOL)success
 {
-    [_settingsHelper.exportTasks removeObjectForKey:_filePath];
+    [_settingsHelper removeExportTaskForFilepath:_filePath];
     if (_settingsExportDelegate)
         [_settingsExportDelegate onSettingsExportFinished:_filePath succeed:success];
 }

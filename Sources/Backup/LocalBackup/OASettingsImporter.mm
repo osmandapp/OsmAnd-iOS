@@ -510,7 +510,7 @@
 
 - (void) onPreExecute
 {
-    OAImportAsyncTask* importTask = _settingsHelper.importTask;
+    OAImportAsyncTask* importTask = [_settingsHelper getImportTask];
     if (importTask != nil && ![importTask isImportDone] && (self.delegate || self.onImportComplete))
     {
         if (self.delegate)
@@ -519,12 +519,13 @@
             self.onImportComplete(NO, _items);
     }
     
-    _settingsHelper.importTask = self;
+    [_settingsHelper setImportTask:self];
 }
  
 - (NSArray<OASettingsItem *> *) doInBackground
 {
-    switch (_importType) {
+    switch (_importType)
+    {
         case EOAImportTypeCollect:
             @try {
                 return [_importer collectItems:_filePath];

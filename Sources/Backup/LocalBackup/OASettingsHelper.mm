@@ -86,6 +86,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     __weak OAImportSettingsViewController *_importDataVC;
     NSInteger _currentBackupVersion;
+    OAImportAsyncTask *_importTask;
+    NSMutableDictionary<NSString *, OAExportAsyncTask *> *_exportTasks;
 }
 
 + (OASettingsHelper *) sharedInstance
@@ -104,8 +106,24 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     if (self)
     {
         _currentBackupVersion = kVersion;
+        _exportTasks = [NSMutableDictionary dictionary];
     }
     return self;
+}
+
+- (OAImportAsyncTask *)getImportTask
+{
+    return _importTask;
+}
+
+- (void)setImportTask:(OAImportAsyncTask *)importTask
+{
+    _importTask = importTask;
+}
+
+- (void)removeExportTaskForFilepath:(NSString *)filePath
+{
+    [_exportTasks removeObjectForKey:filePath];
 }
 
 - (NSInteger)getCurrentBackupVersion

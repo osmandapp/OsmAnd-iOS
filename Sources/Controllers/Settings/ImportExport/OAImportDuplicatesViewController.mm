@@ -92,7 +92,7 @@
 
 - (void)postInit
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    OAImportAsyncTask *importTask = [_settingsHelper getImportTask];
     if (!importTask)
     {
         if (!_settingsItems)
@@ -180,7 +180,7 @@
 
 - (void)generateData
 {
-    if (_importStarted || [_settingsHelper.importTask getImportType] == EOAImportTypeImport)
+    if (_importStarted || [[_settingsHelper getImportTask] getImportType] == EOAImportTypeImport)
     {
         _data = @[@[@{
             @"cellType": [OAActivityViewWithTitleCell getCellIdentifier],
@@ -617,7 +617,7 @@
     {
         OAImportCompleteViewController* importCompleteVC = [[OAImportCompleteViewController alloc] initWithSettingsItems:[OASettingsHelper getSettingsToOperate:items importComplete:YES addEmptyItems:NO] fileName:[_file lastPathComponent]];
         [self showViewController:importCompleteVC];
-        _settingsHelper.importTask = nil;
+        [_settingsHelper setImportTask:nil];
     }
     [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     [[OASettingsHelper sharedInstance] setCurrentBackupVersion:kVersion];

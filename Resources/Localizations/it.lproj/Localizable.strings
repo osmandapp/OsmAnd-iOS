@@ -3373,9 +3373,11 @@
 "shared_string_scale" = "Scala";
 "missing_or_outdated_maps_title" = "Mappe mancanti o obsolete";
 "missing_or_outdated_maps_description" = "Alcune mappe richieste per questo percorso mancano o non sono aggiornate. Scarica o aggiorna queste mappe.";
-"vertical_exaggeration_description" = "Modificando il valore della scala, puoi enfatizzare il rilievo 3D.";
+"vertical_exaggeration_description" = "Cambiando il valore della scala puoi enfatizzare i rilievi 3D.";
 "getting_list_required_maps" = "Ottieni un elenco delle mappe richieste...";
 "required_maps" = "Mappe richieste";
 "average_vertical_speed" = "Velocità verticale media";
 "osm_id" = "OSM ID";
 "calculate_online_title" = "L'elenco delle mappe richieste si basa sul percorso in linea retta. Per ottenere un elenco accurato delle mappe, OsmAnd può precalcolare il percorso online";
+"auto_zoom_smooth" = "Liscio";
+"vertical_exaggeration" = "Esagerazione verticale";

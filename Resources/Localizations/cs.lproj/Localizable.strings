@@ -3374,3 +3374,4 @@
 "shared_string_deleting_complete" = "Mazání dokončeno";
 "shared_string_discard_changes" = "Zahodit změny";
 "action_cant_be_undone" = "Tuto akci nelze vzít zpět.";
+"shared_string_scale" = "Měřítko";

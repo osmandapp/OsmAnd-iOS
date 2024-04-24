@@ -2111,7 +2111,7 @@
 "routing_attr_allow_gate_name" = "Permitir usar puertas";
 "edit_track" = "Editar traza";
 "gpx_split_interval_none_descr" = "Elige la opción de división deseada: por tiempo o por distancia.";
-"horseback_riding" = "Cabalgata";
+"horseback_riding" = "Equitación";
 "upload_to_openstreetmap" = "Subir a OpenStreetMap";
 "backup_error_gzip_only_supported_upload" = "El archivo debe enviarse en formato«.gzip»";
 "icon_group_nautical" = "Náutico";
@@ -3403,3 +3403,10 @@
 "missing_or_outdated_maps_title" = "Mapas ausentes o anticuados";
 "osm_id" = "IDENTIFICADOR OSM";
 "osmand_depelopment_use_old_routing" = "Utilizar la ruta antigua (A*)";
+"routing_algorithm" = "Algoritmo de ruta";
+"auto_zoom" = "Zoom automático";
+"shared_string_development" = "Desarrollo";
+"routing_algorithm_a" = "A*";
+"auto_zoom_smooth" = "Suave";
+"auto_zoom_discrete" = "Discreto";
+"routing_algorithm_highway_hierarchies" = "Jerarquías de carreteras";

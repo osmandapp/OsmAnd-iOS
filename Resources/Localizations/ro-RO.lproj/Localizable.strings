@@ -3369,7 +3369,7 @@
 "osmand_depelopment_use_discrete_autozoom" = "Autozoom discret (versiunea veche)";
 "required_maps_list" = "Hărți care vor fi, de asemenea, utilizate: %@";
 "track_appearance_3D_visualization" = "Vizualizare 3D";
-"shared_string_scale" = "Scala";
+"shared_string_scale" = "Scală";
 "missing_or_outdated_maps_title" = "Hărți lipsă sau învechite";
 "osm_id" = "ID OSM";
 "vertical_exaggeration" = "Exagerare verticală";

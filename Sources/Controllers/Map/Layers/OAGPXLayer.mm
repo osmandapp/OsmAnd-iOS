@@ -98,20 +98,7 @@ static const CGFloat elevationMetersDefault = 1000.0;
     [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
     [self.mapView removeKeyedSymbolsProvider:_linesCollection];
 
-    BOOL hasVolumetricSymbols;
-    for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
-    {
-        OAGPX *gpx = cachedTrack[@"gpx"];
-        OAGPXDocument *doc = cachedTrack[@"doc"];
-        if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPtWithElevation])
-        {
-            hasVolumetricSymbols = YES;
-            break;
-        }
-    }
-    
-    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
-    
+    _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
     _gpxDocs.clear();
 }
 
@@ -144,38 +131,36 @@ static const CGFloat elevationMetersDefault = 1000.0;
 
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
 {
+    if (reset)
+        [self resetLayer];
+
+    _gpxDocs = gpxDocs;
+    [self refreshCachedTracks];
+    [self refreshGpxTracks];
+}
+
+- (void)refreshCachedTracks
+{
     if (_cachedTracks.count > 0)
     {
         [_cachedTracks.allKeys enumerateObjectsUsingBlock:^(NSString * _Nonnull key, NSUInteger idx, BOOL * _Nonnull stop) {
             QString qKey = QString::fromNSString(key);
-            if (!gpxDocs.contains(qKey))
+            if (!_gpxDocs.contains(qKey))
             {
                 [_cachedTracks removeObjectForKey:key];
                 _cachedColors.remove(qKey);
             }
         }];
     }
-
-    if (reset)
-    {
-        if (!gpxDocs.isEmpty())
-        {
-            for (auto it = gpxDocs.begin(); it != gpxDocs.end(); ++it)
-            {
-                if (!it.value())
-                    continue;
-                QString key = it.key();
-                NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[key.toNSString()];
-                if (!cachedTrack || [key.toNSString() isEqualToString:kCurrentTrack])
-                    [self addTrackToCached:key value:it.value()];
-            }
-        }
-        [self resetLayer];
-    }
-
-    _gpxDocs = gpxDocs;
     
-    [self refreshGpxTracks];
+    for (auto it = _gpxDocs.begin(); it != _gpxDocs.end(); ++it)
+    {
+        if (!it.value())
+            continue;
+        NSString *key = it.key().toNSString();
+        if (![_cachedTracks.allKeys containsObject:key] || [key isEqualToString:kCurrentTrack])
+            [self addTrackToCached:it.key() value:it.value()];
+    }
 }
 
 - (OAGPX *)getGpxItem:(const QString &)filename
@@ -235,6 +220,20 @@ static const CGFloat elevationMetersDefault = 1000.0;
 
 - (void) refreshGpxTracks
 {
+    BOOL hasVolumetricSymbols;
+    for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
+    {
+        OAGPX *gpx = cachedTrack[@"gpx"];
+        OAGPXDocument *doc = cachedTrack[@"doc"];
+        if (gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeNone && [doc hasTrkPtWithElevation])
+        {
+            hasVolumetricSymbols = YES;
+            break;
+        }
+    }
+    if (_linesCollection->hasVolumetricSymbols != hasVolumetricSymbols)
+        _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>(hasVolumetricSymbols);
+
     if (!_gpxDocs.empty())
     {
         int baseOrder = self.baseOrder;
@@ -245,17 +244,13 @@ static const CGFloat elevationMetersDefault = 1000.0;
                 continue;
             auto doc_ = std::const_pointer_cast<OsmAnd::GpxDocument>(it.value());
             QString key = it.key();
-            BOOL isCurrentTrack = [key.toNSString() isEqualToString:kCurrentTrack];
-            NSString *filePath = key.toNSString();
-            NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[filePath];
-            if (!cachedTrack || isCurrentTrack)
-            {
-                [self addTrackToCached:key value:it.value()];
-                cachedTrack = _cachedTracks[filePath];
-            }
-
+            NSString *keyStr = key.toNSString();
+            BOOL isCurrentTrack = [keyStr isEqualToString:kCurrentTrack];
+            NSMutableDictionary<NSString *, id> *cachedTrack = _cachedTracks[keyStr];
             OAGPX *gpx = cachedTrack[@"gpx"];
             OAGPXDocument *doc = cachedTrack[@"doc"];
+            if (!gpx || !doc)
+                continue;
 
             OAColoringType *type = gpx.coloringType.length > 0
                     ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]

@@ -3424,3 +3424,4 @@
 "routing_algorithm" = "Routing-Algorithmus";
 "auto_zoom" = "Auto-Zoom";
 "routing_algorithm_highway_hierarchies" = "Autobahnhierarchien";
+"auto_zoom_discrete" = "Schrittweise";

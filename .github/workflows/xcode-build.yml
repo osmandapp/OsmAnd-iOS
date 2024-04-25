@@ -61,7 +61,7 @@ jobs:
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-core-legacy

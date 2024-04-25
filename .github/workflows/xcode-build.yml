@@ -45,6 +45,7 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v3
       with:
+        repository: $GITHUB_REPOSITORY
         ref: refs/heads/r4.7
         path: ios
     - name: Checkout android

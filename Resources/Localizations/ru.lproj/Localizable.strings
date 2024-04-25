@@ -3162,3 +3162,4 @@
 "vertical_exaggeration_description" = "Изменяя значение масштаба, можно подчеркнуть 3D-рельеф.";
 "vertical_exaggeration" = "Вертикальное увеличение";
 "shared_string_scale" = "Масштаб";
+"required_maps" = "Требуемые карты";

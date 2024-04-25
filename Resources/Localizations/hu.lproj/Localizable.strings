@@ -2849,3 +2849,4 @@
 "vertical_exaggeration_description" = "A skálaérték megváltoztatásával kiemelheti a 3D domborzatot.";
 "vertical_exaggeration" = "Függőleges eltúlzás";
 "shared_string_scale" = "Skála";
+"required_maps" = "Szükséges térképek";

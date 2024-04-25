@@ -45,8 +45,8 @@ jobs:
     - name: Checkout ios
       uses: actions/checkout@v3
       with:
-        repository: $GITHUB_REPOSITORY
         ref: refs/heads/r4.7
+        repository: osmandapp/OsmAnd-iOS
         path: ios
     - name: Checkout android
       uses: actions/checkout@v3

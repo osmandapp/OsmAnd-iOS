@@ -77,7 +77,7 @@ sk_sp<SkImage> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::share
         color = OsmAnd::FColorARGB(a,r,g,b);
     }
     
-    QString iconId = QString("%1_%2_%3%4").arg(QString::number(color.a + color.r + color.g + color.b), iconName, backgroundIconName, size) + QString("_%1").arg(_symbolsScaleFactor, 0, 'f', 2);;
+    QString iconId = QString("a:%1_r:%2_g:%3_b:%4_%5_%6%7_%8").arg(QString::number(color.a), QString::number(color.r), QString::number(color.g), QString::number(color.b), iconName, backgroundIconName, size).arg(_symbolsScaleFactor, 0, 'f', 2);
     
     const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;

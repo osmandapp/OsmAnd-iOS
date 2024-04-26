@@ -113,7 +113,20 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 @implementation OAFavoriteItem
 {
+    NSString *_key;
     NSString *_name;
+    NSString *_description;
+    NSString *_address;
+    NSString *_icon;
+    NSString *_backgroundIcon;
+    UIColor *_color;
+    NSString *_amenityOriginName;
+    NSString *_comment;
+    OAPOI *_amenity;
+    NSString *_category;
+    NSString *_categoryDisplayName;
+    NSDate *_timestamp;
+    NSDate *_pickupTime;
 }
 
 - (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite
@@ -305,7 +318,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getKey
 {
-    return [NSString stringWithFormat:@"%@%@%@", [self getName], kDelimiter, [self getCategory]];
+    if (_key)
+        return _key;
+    
+    _key = [NSString stringWithFormat:@"%@%@%@", [self getName], kDelimiter, [self getCategory]];
+    return _key;
 }
 
 - (NSString *) getName
@@ -327,76 +344,105 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getDescription
 {
+    if (_description)
+        return _description;
+    
     if (!self.favorite->getDescription().isNull())
-        return self.favorite->getDescription().toNSString();
+        _description = self.favorite->getDescription().toNSString();
     else
-        return @"";
+        _description = @"";
+    return _description;
 }
 
 - (void) setDescription:(NSString *)description
 {
+    _description = description;
     self.favorite->setDescription(QString::fromNSString(description));
 }
 
 - (NSString *) getAddress
 {
+    if (_address)
+        return _address;
+    
     if (!self.favorite->getAddress().isNull())
-        return self.favorite->getAddress().toNSString();
+        _address = self.favorite->getAddress().toNSString();
     else
-        return @"";
+        _address = @"";
+    return _address;
 }
 
 - (void) setAddress:(NSString *)address
 {
+    _address = address;
     self.favorite->setAddress(QString::fromNSString(address));
 }
 
 - (NSString *) getIcon
 {
+    if (_icon)
+        return _icon;
+    
     if (!self.favorite->getIcon().isNull())
-    {
-        return self.favorite->getIcon().toNSString();
-    }
-    return @"special_star";
+        _icon = self.favorite->getIcon().toNSString();
+    else
+        _icon = @"special_star";
+    return _icon;
 }
 
 - (void) setIcon:(NSString *)icon
 {
+    _icon = icon;
     self.favorite->setIcon(QString::fromNSString(icon));
 }
 
 - (NSString *) getBackgroundIcon
 {
-    
+    if (_backgroundIcon)
+        return _backgroundIcon;
     if (!self.favorite->getBackground().isNull())
     {
         NSString *iconName = self.favorite->getBackground().toNSString();
         if ([[OAFavoritesHelper getFlatBackgroundIconNamesList] containsObject:iconName])
-            return iconName;
+        {
+            _backgroundIcon = iconName;
+            return _backgroundIcon;
+        }
     }
-    return @"circle";
+    _backgroundIcon = @"circle";
+    return _backgroundIcon;
 }
 
 - (void) setBackgroundIcon:(NSString *)backgroundIcon
 {
+    _backgroundIcon = backgroundIcon;
     self.favorite->setBackground(QString::fromNSString(backgroundIcon));
 }
 
 - (UIColor *) getColor
 {
+    if (_color)
+        return _color;
+    
     const auto color = self.favorite->getColor();
     if (color.argb != 0)
     {
-        return [UIColor colorWithRed:color.r/255.0
+        _color = [UIColor colorWithRed:color.r/255.0
                                green:color.g/255.0
                                 blue:color.b/255.0
                                alpha:color.a/255.0];
+        
     }
-    return [OADefaultFavorite getDefaultColor];
+    else
+    {
+        _color = [OADefaultFavorite getDefaultColor];
+    }
+    return _color;
 }
 
 - (void) setColor:(UIColor *)color
 {
+    _color = color;
     CGFloat r,g,b,a;
     [color getRed:&r
             green:&g
@@ -408,30 +454,47 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getAmenityOriginName
 {
+    if (_amenityOriginName)
+        return _amenityOriginName;
+    
     if (!self.favorite->getAmenityOriginName().isNull())
-        return self.favorite->getAmenityOriginName().toNSString();
+    {
+        _amenityOriginName = self.favorite->getAmenityOriginName().toNSString();
+        return _amenityOriginName;
+    }
     return nil;
 }
 
 - (void) setAmenityOriginName:(NSString *)amenityOriginName
 {
+    _amenityOriginName = amenityOriginName;
     self.favorite->setAmenityOriginName(QString::fromNSString(amenityOriginName));
 }
 
 - (NSString *) getComment
 {
+    if (_comment)
+        return _comment;
+    
     if (!self.favorite->getAmenityOriginName().isNull())
-        return self.favorite->getComment().toNSString();
+    {
+        _comment = self.favorite->getComment().toNSString();
+        return _comment;
+    }
     return nil;
 }
 
 - (void) setComment:(NSString *)comment
 {
+    _comment = comment;
     self.favorite->setComment(QString::fromNSString(comment));
 }
 
 - (OAPOI *) getAmenity
 {
+    if (_amenity)
+        return _amenity;
+    
     const QHash<QString, QString> extensionsToRead = self.favorite->getExtensions();
     if (!extensionsToRead.empty())
     {
@@ -439,13 +502,15 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
         for (const auto& extension : OsmAnd::rangeOf(extensionsToRead))
             extensions[extension.key().toNSString()] = extension.value().toNSString();
 
-        return [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        _amenity = [OAPOI fromTagValue:extensions privatePrefix:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
+        return _amenity;
     }
     return nil;
 }
 
 - (void) setAmenity:(OAPOI *)amenity
 {
+    _amenity = amenity;
     if (amenity)
     {
         NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
@@ -467,20 +532,29 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSString *) getCategory
 {
+    if (_category)
+        return _category;
+    
     if (!self.favorite->getGroup().isEmpty())
-        return self.favorite->getGroup().toNSString();
+        _category = self.favorite->getGroup().toNSString();
     else
-        return @"";
+        _category = @"";
+    return _category;
 }
 
 - (NSString *) getCategoryDisplayName
 {
-    return [OAFavoriteGroup getDisplayName:[self getCategory]];
+    if (_categoryDisplayName)
+        return _categoryDisplayName;
+    
+    _categoryDisplayName = [OAFavoriteGroup getDisplayName:[self getCategory]];
+    return _categoryDisplayName;
 }
 
 
 - (void) setCategory:(NSString *)category
 {
+    _category = category;
     self.favorite->setGroup(QString::fromNSString(category));
     [self initPersonalType];
 }
@@ -517,13 +591,17 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSDate *) getTimestamp
 {
+    if (_timestamp)
+        return _timestamp;
+    
     if (!self.favorite->getTime().isNull())
     {
         NSString *timeString = self.favorite->getTime().toNSString();
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        return [dateFormat dateFromString:timeString];
+        _timestamp = [dateFormat dateFromString:timeString];
+        return _timestamp;
     }
     else
     {
@@ -533,6 +611,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setTimestamp:(NSDate *)timestamp
 {
+    _timestamp = timestamp;
     NSString *savingString = [self.class toStringDate:timestamp];
     if (savingString)
         self.favorite->setTime(QString::fromNSString(savingString));
@@ -542,13 +621,17 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (NSDate *) getPickupTime
 {
+    if (_pickupTime)
+        return _pickupTime;
+    
     if (!self.favorite->getPickupTime().isNull())
     {
         NSString *timeString = self.favorite->getPickupTime().toNSString();
         NSDateFormatter *dateFormat = [[NSDateFormatter alloc] init];
         [dateFormat setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss'Z'"];
         [dateFormat setTimeZone:[NSTimeZone timeZoneWithAbbreviation:@"UTC"]];
-        return [dateFormat dateFromString:timeString];
+        _pickupTime = [dateFormat dateFromString:timeString];
+        return _pickupTime;
     }
     else
     {
@@ -558,6 +641,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setPickupTime:(NSDate *)timestamp
 {
+    _pickupTime = timestamp;
     NSString *savingString = [self.class toStringDate:timestamp];
     if (savingString)
         self.favorite->setPickupTime(QString::fromNSString(savingString));

@@ -3102,3 +3102,7 @@
 "distance_during_navigation" = "Jarak selama navigasi";
 "shared_string_precise" = "Persis";
 "shared_string_round_up" = "Dibulatkan";
+"vertical_exaggeration" = "Pembesaran vertikal";
+"required_maps" = "Peta yang Diperlukan";
+"shared_string_scale" = "Skala";
+"vertical_exaggeration_description" = "Dengan mengubah nilai skala, Anda dapat memperjelas relief 3D.";

@@ -1197,7 +1197,7 @@ static NSOperationQueue *_favQueue;
 
 - (UIColor *) color
 {
-    if ([_color toRGBNumber])
+    if ([_color toRGBNumber] != 0)
         return [UIColor colorRGB:_color equalToColorRGB:UIColor.whiteColor] ? [OADefaultFavorite getDefaultColor] : _color;
     else
         return [OADefaultFavorite getDefaultColor];

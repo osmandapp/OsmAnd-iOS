@@ -134,6 +134,7 @@
     }
     else
     {
+        // Category will be setted in editFavoriteName()
         [OAFavoritesHelper editFavoriteName:_favorite newName:data.name group:data.category descr:[_favorite getDescription] address:[_favorite getAddress]];
     }
 }

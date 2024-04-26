@@ -320,6 +320,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setName:(NSString *)name
 {
+    _name = name;
     self.favorite->setTitle(QString::fromNSString(name));
     [self initPersonalType];
 }

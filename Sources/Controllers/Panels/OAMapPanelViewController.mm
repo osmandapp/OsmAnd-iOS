@@ -1896,7 +1896,7 @@ typedef enum
 - (void) targetPointEditFavorite:(OAFavoriteItem *)item
 {
     [self targetHideContextPinMarker];
-    [self targetHideMenu:.3 backButtonClicked:NO onComplete:nil];
+    [self targetHideMenu:.3 backButtonClicked:YES onComplete:nil];
     OAEditPointViewController *controller = [[OAEditPointViewController alloc] initWithFavorite:item];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];

@@ -3384,3 +3384,4 @@
 "track_appearance_3D_visualization" = "Visualisation 3D";
 "vertical_exaggeration_description" = "En modifiant la valeur de l'échelle, vous pouvez accentuer le relief 3D.";
 "vertical_exaggeration" = "Accentuation verticale";
+"required_maps" = "Cartes requises";

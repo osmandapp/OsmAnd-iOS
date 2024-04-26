@@ -14,7 +14,7 @@ final class GlideTargetWidget: GlideBaseWidget {
 
     private static let minAltitudeValue = -20000.0
 
-    private let widgetState: GlideTargetWidgetState?
+    private var widgetState: GlideTargetWidgetState?
     private var cachedCurrentLocation: CLLocation?
     private var cachedCurrentAltitude: Double?
     private var cachedTargetLocation: CLLocationCoordinate2D?
@@ -24,9 +24,9 @@ final class GlideTargetWidget: GlideBaseWidget {
     private var forceUpdate = false // Becomes 'true' when widget state switches
 
     init(with widgetState: GlideTargetWidgetState, customId: String?, appMode: OAApplicationMode, widgetParams: ([String: Any])? = nil) {
-        self.widgetState = widgetState
         super.init(.glideTarget, customId: customId, appMode: appMode, widgetParams: widgetParams)
-        
+        self.widgetState = widgetState
+
         updateInfo()
         onClickFunction = { [weak self] _ in
             guard let self else { return }
@@ -41,7 +41,6 @@ final class GlideTargetWidget: GlideBaseWidget {
     }
 
     override init(frame: CGRect) {
-        widgetState = GlideTargetWidgetState(nil)
         super.init(frame: frame)
     }
 
@@ -99,30 +98,30 @@ final class GlideTargetWidget: GlideBaseWidget {
         let targetLocation: CLLocationCoordinate2D? = getTargetLocation()
         let locationChanged: Bool = !OAMapUtils.areLatLonEqual(targetLocation ?? kCLLocationCoordinate2DInvalid,
                                                                l2: cachedTargetLocation ?? kCLLocationCoordinate2DInvalid)
-
+        
         let metricSystemChanged: Bool = isUpdateNeeded()
         let updateNeeded = locationChanged || metricSystemChanged
-
+        
         if !forceUpdate && !updateNeeded && !isTimeToUpdate(GlideBaseWidget.longUpdateIntervalMillis) {
             // Avoid too frequent calculations
             return
         }
-
+        
         cachedTargetLocation = targetLocation
-
+        
         calculateAltitude(targetLocation ?? kCLLocationCoordinate2DInvalid) { [weak self] targetAltitude in
             guard let self else { return }
-
+            
             markUpdated()
             if forceUpdate || metricSystemChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
                 cachedTargetAltitude = targetAltitude
-                if let cachedTargetAltitude, cachedTargetAltitude != GlideTargetWidget.minAltitudeValue,
-                   let formattedAltitude = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude) {
-                    let components = formattedAltitude.components(separatedBy: " ")
-                    if components.count == 2 {
-                        let numberPart = components[0]
-                        let unitPart = components[1]
-                        setText(numberPart.trimWhitespaces(), subtext: unitPart)
+                if let cachedTargetAltitude, cachedTargetAltitude != GlideTargetWidget.minAltitudeValue {
+                    let formattedAltitude = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude)
+                    let components = formattedAltitude?.components(separatedBy: " ")
+                    if components?.count == 2 {
+                        let numberPart = components?[0]
+                        let unitPart = components?[1]
+                        setText(numberPart?.trimWhitespaces(), subtext: unitPart)
                     } else {
                         setText(formattedAltitude, subtext: "")
                     }
@@ -158,16 +157,16 @@ final class GlideTargetWidget: GlideBaseWidget {
             guard let self else { return }
 
             markUpdated()
-            if targetAltitude == GlideTargetWidget.minAltitudeValue {
-                setText("-", subtext: "")
-            } else if forceUpdate || anyChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
+            if forceUpdate || anyChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
                 cachedTargetAltitude = targetAltitude
                 let ratio: String? = calculateFormattedRatio(currentLocation, a1: currentAltitude, l2: targetLocation, a2: targetAltitude)
                 if forceUpdate || cachedFormattedRatio != ratio {
                     cachedFormattedRatio = ratio
-                    setText(cachedFormattedRatio, subtext: "")
-                } else {
-                    setText("-", subtext: "")
+                    if let cachedFormattedRatio {
+                        setText(cachedFormattedRatio, subtext: "")
+                    } else {
+                        setText("-", subtext: "")
+                    }
                 }
             }
         }

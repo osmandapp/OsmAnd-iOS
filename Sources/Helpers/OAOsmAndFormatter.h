@@ -52,9 +52,9 @@
 + (NSString *)getFormattedPassedTime:(NSTimeInterval)time def:(NSString *)def;
 + (NSString *)getFormattedDateTime:(NSTimeInterval)time;
 + (NSString *)getFormattedDate:(NSTimeInterval)time;
-+ (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
-+ (NSString *)getFormattedSpeed:(float)metersperseconds drive:(BOOL)drive;
 + (NSString *)getFormattedSpeed:(float)metersperseconds;
++ (NSString *)getFormattedSpeed:(float)metersperseconds speedSystem:(EOASpeedConstant)speedSystem;
++ (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedAlt:(double)alt;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;

@@ -58,7 +58,9 @@ final class AverageGlideComputer: AverageValueComputer {
                 if measuredInterval > 0 {
                     let verticalSpeedValue = abs(altitudeDifference) / (Double(measuredInterval) / 1000.0)
                     let roundedVerticalSpeedValue = round(verticalSpeedValue)
-                    return OAOsmAndFormatter.getFormattedSpeed(Float(roundedVerticalSpeedValue))
+                    let speedSystem: EOASpeedConstant = OASpeedConstant.imperial(OAAppSettings.sharedManager().speedSystem.get())
+                        ? .FEET_PER_SECOND : .METERS_PER_SECOND
+                    return OAOsmAndFormatter.getFormattedSpeed(Float(roundedVerticalSpeedValue), speedSystem: speedSystem)
                 }
             }
         }

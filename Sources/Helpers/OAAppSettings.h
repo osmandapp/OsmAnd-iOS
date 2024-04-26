@@ -171,7 +171,8 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
     METERS_PER_SECOND,
     MINUTES_PER_MILE,
     MINUTES_PER_KILOMETER,
-    NAUTICALMILES_PER_HOUR
+    NAUTICALMILES_PER_HOUR,
+    FEET_PER_SECOND
 };
 
 @interface OASpeedConstant : NSObject

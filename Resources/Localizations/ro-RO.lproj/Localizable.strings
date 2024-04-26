@@ -2239,7 +2239,7 @@
 "routing_attr_only_permitted_ways_description" = "Folosește numai căile (trasee, poteci etc.) care sunt permise în mod expres";
 "routing_attr_prefer_horse_routes_description" = "Preferă rute pentru cai";
 "routing_attr_prefer_horse_routes_name" = "Preferă rute pentru cai";
-"horseback_riding" = "Călărie";
+"horseback_riding" = "Echitație";
 "turn_arrows_descr" = "Selectați dacă săgețile de viraj sunt indicate pe linia traseului.";
 "turn_arrows" = "Săgeți pentru viraje";
 "routeInfo_winter_ice_road_description" = "Colorează ruta sau linia traseului după clasificarea sa ca drum de iarnă.";

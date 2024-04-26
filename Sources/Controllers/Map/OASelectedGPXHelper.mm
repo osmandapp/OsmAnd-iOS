@@ -94,10 +94,11 @@
             loading = YES;
         }
     }
+    NSArray<NSString *> *mapSettingVisibleGpx = [_settings.mapSettingVisibleGpx get];
     for (auto it = _activeGpx.begin(); it != _activeGpx.end(); )
     {
         NSString *gpxFilePath = [OAUtilities getGpxShortPath:it.key().toNSString()];
-        if (![_settings.mapSettingVisibleGpx.get containsObject:gpxFilePath])
+        if (![mapSettingVisibleGpx containsObject:gpxFilePath])
             it = _activeGpx.erase(it);
         else
             ++it;

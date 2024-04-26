@@ -3741,5 +3741,20 @@
 "calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
+"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height";
+
+"visualization_3d_visualized_by" = "Visualized by";
+"visualization_3d_wall_color" = "Wall color";
+"visualization_3d_track_line" = "Track line";
+"track_3d" = "3d track";
+"fixed_height" = "Fixed Height";
+"downward_gradient" = "Downward gradient";
+"upward_gradient" = "Upward gradient";
+"shared_string_top" = "Top";
+"shared_string_bottom" = "Bottom";
+"shared_string_top_bottom" = "Top and bottom";
+
+"track_3d_empty_view_title" = "3D Track view";
+"track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
 
 "osm_id" = "OSM ID";

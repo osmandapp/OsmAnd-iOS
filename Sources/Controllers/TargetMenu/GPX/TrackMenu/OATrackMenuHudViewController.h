@@ -110,6 +110,8 @@
 @property (nonatomic, assign) BOOL openedFromMap;
 @property (nonatomic, assign) BOOL openedFromTracksList;
 @property (nonatomic, assign) BOOL openedFromTrackMenu;
+@property (nonatomic, assign) NSInteger scrollToSectionIndex;
+
 
 // Uses for reopening previous screens (with all NavController history) after opening track on map from MyPlaces
 @property (nonatomic, nullable) NSArray<UIViewController *> *navControllerHistory;

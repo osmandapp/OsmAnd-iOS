@@ -503,7 +503,7 @@
 "voice_provider" = "Guidage vocal";
 "shared_string_sound" = "Son";
 "fast_route_mode" = "Itinéraire le plus rapide";
-"fast_route_mode_descr" = "Activer pour calculer l\'itinéraire le plus rapide ou Désactiver pour calculer l\'itinéraire le plus économe en carburant";
+"fast_route_mode_descr" = "Activer pour calculer l'itinéraire le plus rapide ou désactiver pour calculer l'itinéraire le plus économe en carburant.";
 "avoid_in_routing_title" = "Éviter…";
 "avoid_in_routing_descr_" = "Éviter certains types de route";
 "prefer_in_routing_title" = "Privilégier…";

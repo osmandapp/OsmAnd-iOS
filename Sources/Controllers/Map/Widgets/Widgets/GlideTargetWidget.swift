@@ -158,7 +158,9 @@ final class GlideTargetWidget: GlideBaseWidget {
             guard let self else { return }
 
             markUpdated()
-            if forceUpdate || anyChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
+            if targetAltitude == GlideTargetWidget.minAltitudeValue {
+                setText("-", subtext: "")
+            } else if forceUpdate || anyChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
                 cachedTargetAltitude = targetAltitude
                 let ratio: String? = calculateFormattedRatio(currentLocation, a1: currentAltitude, l2: targetLocation, a2: targetAltitude)
                 if forceUpdate || cachedFormattedRatio != ratio {

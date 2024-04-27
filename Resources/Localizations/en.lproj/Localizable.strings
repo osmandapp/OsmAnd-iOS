@@ -1998,6 +1998,7 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
+"ft_s" = "ft/s";
 
 "metric_ton" = "t";
 "kg" = "kg";

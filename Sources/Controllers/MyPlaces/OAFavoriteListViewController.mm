@@ -1477,20 +1477,17 @@ static UIViewController *parentController;
         {
             NSDictionary *groupData = _data[selectedItem.section][0];
             FavoriteTableGroup *group = groupData[@"group"];
-            OAFavoriteItem* item = group.favoriteGroup.points[selectedItem.row - 1];
-            if (item)
+            NSInteger index = selectedItem.row - 1;
+            OAFavoriteItem* item = group.favoriteGroup.points[index];
+            if (item && group.isOpen)
             {
-                NSInteger itemIndex = [group.favoriteGroup.points indexOfObject:item];
-                if (itemIndex != NSNotFound && group.isOpen)
-                {
-                    [self.favoriteTableView beginUpdates];
-                    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
-                    NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
-                    if (sortedItemIndex != NSNotFound)
-                        _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
-                    [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
-                    [self.favoriteTableView endUpdates];
-                }
+                [self.favoriteTableView beginUpdates];
+                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[item]];
+                NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
+                if (sortedItemIndex != NSNotFound)
+                    _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
+                [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
+                [self.favoriteTableView endUpdates];
             }
         }
     }

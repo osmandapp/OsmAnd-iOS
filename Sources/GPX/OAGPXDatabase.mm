@@ -40,7 +40,6 @@
 
 - (void)setVerticalExaggerationScale:(CGFloat)verticalExaggerationScale {
     _verticalExaggerationScale = verticalExaggerationScale;
-    NSLog(@"Vertical exaggeration scale set to: %f", verticalExaggerationScale);
 }
 
 - (BOOL)isTempTrack

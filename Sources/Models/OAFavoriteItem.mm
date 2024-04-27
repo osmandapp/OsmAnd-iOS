@@ -337,9 +337,10 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setName:(NSString *)name
 {
-    _name = name;
     self.favorite->setTitle(QString::fromNSString(name));
     [self initPersonalType];
+    _name = nil;
+    _key = nil;
 }
 
 - (NSString *) getDescription
@@ -356,8 +357,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setDescription:(NSString *)description
 {
-    _description = description;
     self.favorite->setDescription(QString::fromNSString(description));
+    _description = nil;
 }
 
 - (NSString *) getAddress
@@ -374,8 +375,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setAddress:(NSString *)address
 {
-    _address = address;
     self.favorite->setAddress(QString::fromNSString(address));
+    _address = nil;
 }
 
 - (NSString *) getIcon
@@ -392,8 +393,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setIcon:(NSString *)icon
 {
-    _icon = icon;
     self.favorite->setIcon(QString::fromNSString(icon));
+    _icon = nil;
 }
 
 - (NSString *) getBackgroundIcon
@@ -415,8 +416,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setBackgroundIcon:(NSString *)backgroundIcon
 {
-    _backgroundIcon = backgroundIcon;
     self.favorite->setBackground(QString::fromNSString(backgroundIcon));
+    _backgroundIcon = nil;
 }
 
 - (UIColor *) getColor
@@ -442,7 +443,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setColor:(UIColor *)color
 {
-    _color = color;
     CGFloat r,g,b,a;
     [color getRed:&r
             green:&g
@@ -450,6 +450,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
             alpha:&a];
     
     self.favorite->setColor(OsmAnd::FColorARGB(a,r,g,b));
+    _color = nil;
 }
 
 - (NSString *) getAmenityOriginName
@@ -467,8 +468,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setAmenityOriginName:(NSString *)amenityOriginName
 {
-    _amenityOriginName = amenityOriginName;
     self.favorite->setAmenityOriginName(QString::fromNSString(amenityOriginName));
+    _amenityOriginName = nil;
 }
 
 - (NSString *) getComment
@@ -486,8 +487,8 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setComment:(NSString *)comment
 {
-    _comment = comment;
     self.favorite->setComment(QString::fromNSString(comment));
+    _comment = nil;
 }
 
 - (OAPOI *) getAmenity
@@ -510,7 +511,6 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setAmenity:(OAPOI *)amenity
 {
-    _amenity = amenity;
     if (amenity)
     {
         NSDictionary<NSString *, NSString *> *extensions = [amenity toTagValue:PRIVATE_PREFIX osmPrefix:OSM_PREFIX];
@@ -518,6 +518,7 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
             self.favorite->setExtension(QString::fromNSString(key), QString::fromNSString(value));
         }];
     }
+    _amenity = nil;
 }
 
 - (BOOL) isVisible
@@ -554,9 +555,11 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setCategory:(NSString *)category
 {
-    _category = category;
     self.favorite->setGroup(QString::fromNSString(category));
     [self initPersonalType];
+    _category = nil;
+    _categoryDisplayName = nil;
+    _key = nil;
 }
 
 - (void) initAltitude
@@ -611,12 +614,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setTimestamp:(NSDate *)timestamp
 {
-    _timestamp = timestamp;
     NSString *savingString = [self.class toStringDate:timestamp];
     if (savingString)
         self.favorite->setTime(QString::fromNSString(savingString));
     else
         self.favorite->setTime(QString());
+
+    _timestamp = nil;
 }
 
 - (NSDate *) getPickupTime
@@ -641,12 +645,13 @@ static NSArray<OASpecialPointType *> *_values = @[_home, _work, _parking];
 
 - (void) setPickupTime:(NSDate *)timestamp
 {
-    _pickupTime = timestamp;
     NSString *savingString = [self.class toStringDate:timestamp];
     if (savingString)
         self.favorite->setPickupTime(QString::fromNSString(savingString));
     else
         self.favorite->setPickupTime(QString());
+
+    _pickupTime = nil;
 }
 
 - (bool) getCalendarEvent

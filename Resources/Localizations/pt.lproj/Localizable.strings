@@ -3403,3 +3403,10 @@
 "osmand_depelopment_use_old_routing" = "Utilizar o antigo roteamento (A*)";
 "average_vertical_speed" = "Velocidade vertical média";
 "osm_id" = "ID do OSM";
+"routing_algorithm" = "Algoritmo de roteamento";
+"auto_zoom" = "Ampliação automática";
+"shared_string_development" = "Desenvolvimento";
+"routing_algorithm_highway_hierarchies" = "Hierarquias de estradas";
+"routing_algorithm_a" = "A*";
+"auto_zoom_smooth" = "Suave";
+"auto_zoom_discrete" = "Discreto";

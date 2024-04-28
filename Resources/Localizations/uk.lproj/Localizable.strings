@@ -3215,7 +3215,7 @@
 "help_article_navigation_routing_direct_to_point_routing_name" = "Маршрутизація від точки до точки (Човен)";
 "help_article_navigation_guidance_map_during_navigation_name" = "Екран мапи під час навігації";
 "paired_sensors" = "Сполучені датчики";
-"help_article_navigation_guidance_name" = "Вказівки";
+"help_article_navigation_guidance_name" = "Навігаційні вказівки";
 "help_article_personal_profiles_name" = "Профілі (Налаштування)";
 "help_article_navigation_routing_car_based_routing_name" = "Автомаршрути (вантажівки, мотоцикли)";
 "general_settings" = "Загальні";
@@ -3373,3 +3373,4 @@
 "vertical_exaggeration_description" = "Змінюючи значення масштабу, ви можете підкреслити 3D-рельєф.";
 "shared_string_scale" = "масштаб";
 "rendering_attr_padusDisplayMode_name" = "Режим відображення земель загального користування";
+"required_maps" = "Необхідні мапи";

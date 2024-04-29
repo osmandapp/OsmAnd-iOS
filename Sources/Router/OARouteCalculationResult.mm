@@ -212,6 +212,11 @@
     return _initialCalculation;
 }
 
+- (BOOL) hasMissingMaps
+{
+    return _missingMaps.count > 0;
+}
+
 - (void) updateCurrentRoute:(int)currentRoute
 {
     _currentRoute = currentRoute;
@@ -603,8 +608,11 @@
     if (_simulatedLocations.count == 0)
     {
         for (CLLocation *l in _locations)
-        {
             [_simulatedLocations addObject:[[OASimulatedLocation alloc] initWithLocation:l]];
+
+        bool passedIndexes[_simulatedLocations.count];
+        for (int i = 0; i < _simulatedLocations.count; i++) {
+            passedIndexes[i] = false;
         }
         for (int routeInd = 0; routeInd < _segments.size(); routeInd++)
         {
@@ -614,23 +622,24 @@
             while (i != s->getEndPointIndex() || routeInd == _segments.size() - 1)
             {
                 LatLon point = s->getPoint(i);
+                int k = 0;
                 for (OASimulatedLocation *sd in _simulatedLocations)
                 {
+                    if (passedIndexes[k++])
+                        continue;
+
                     if ([OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.latitude destination:point.lat] &&
                         [OAUtilities doublesEqualUpToDigits:5 source:sd.coordinate.longitude destination:point.lon])
                     {
+                        passedIndexes[k - 1] = true;
                         [sd setHighwayType:[NSString stringWithUTF8String:s->object->getHighway().c_str()]];
                         [sd setSpeedLimit:s->object->getMaximumSpeed(YES)];
-                        if (s->object->hasTrafficLightAt(i))
-                        {
-                            [sd setTrafficLight:YES];
-                        }
+                        [sd setTrafficLight:s->object->hasTrafficLightAt(i)];
                     }
                 }
                 if (i == s->getEndPointIndex())
-                {
                     break;
-                }
+
                 i += plus ? 1 : -1;
             }
         }
@@ -1198,7 +1207,8 @@
                 if (locationIndex > interLocations[currentIntermediate].intValue && [self.class getDistanceToLocation:locations p:intermediates[currentIntermediate] currentLocation:locationIndex] > 50)
                 {
                     OARouteDirectionInfo *toSplit = localDirections[currentDirection];
-                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[currentDirection].averageSpeed turnType:TurnType::ptrStraight()];
+                    // intermediate point should split using average speed from its actual (previous) segment
+                    OARouteDirectionInfo *info = [[OARouteDirectionInfo alloc] initWithAverageSpeed:localDirections[MAX(0, currentDirection - 1)].averageSpeed turnType:TurnType::ptrStraight()];
                     info.ref = toSplit.ref;
                     info.streetName = toSplit.streetName;
                     info.routeDataObject = toSplit.routeDataObject;

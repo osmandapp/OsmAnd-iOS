@@ -31,7 +31,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAWeatherPlugin.h"
 #import "OAExternalSensorsPlugin.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAOnlinePlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -513,12 +513,14 @@ static NSMutableArray<OAPlugin *> *allPlugins;
 {
     OsmAndAppInstance app = OsmAndApp.instance;
     NSString *url = [NSString stringWithFormat:@"%@?os=ios&version=%@&nd=%d&ns=%d&lang=%@",
-                     ONLINE_PLUGINS_URL, OAAppVersionDependentConstants.getVersion, app.getAppInstalledDays, app.getAppExecCount, app.getLanguageCode];
+                     ONLINE_PLUGINS_URL, OAAppVersion.getVersion, app.getAppInstalledDays, app.getAppExecCount, app.getLanguageCode];
     NSString *aid = app.getUserIosId;
     if (aid.length > 0)
        url = [url stringByAppendingString:[NSString stringWithFormat:@"&aid=%@", aid]];
 
-    url = [url stringByAppendingString:@"&nightly=true"];
+    if (!OAUtilities.isReleaseVersion)
+        url = [url stringByAppendingString:@"&nightly=true"];
+
     NSURL *urlObj = [NSURL URLWithString:url];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:urlObj
                                                            cachePolicy:NSURLRequestReloadIgnoringLocalCacheData

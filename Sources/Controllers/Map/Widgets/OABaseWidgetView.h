@@ -41,6 +41,9 @@
 - (void)updateSimpleLayout;
 - (void)updatesSeparatorsColor:(UIColor *_Nonnull)color;
 
+- (void)updateHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority;
+- (void)updateHeightConstraint:(NSLayoutConstraint * _Nullable)constraint;
+
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref;
 - (OACommonPreference * _Nullable ) getWidgetSettingsPrefToReset:(OAApplicationMode *_Nonnull)appMode;
 - (void) copySettings:(OAApplicationMode *_Nonnull)appMode customId:(NSString *_Nullable)customId;

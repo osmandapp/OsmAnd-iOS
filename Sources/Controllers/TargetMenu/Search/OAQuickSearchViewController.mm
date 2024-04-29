@@ -109,8 +109,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tabs;
 
-
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 @property NSTimeInterval lastUpdate;
 
@@ -180,6 +178,17 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 {
     [_btnCancel setTitle:OALocalizedString(@"shared_string_hide") forState:UIControlStateNormal];
     [_bottomTextBtn setTitle:OALocalizedString(@"shared_string_save") forState:UIControlStateNormal];
+}
+
+- (void)registerObservers
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateLocationObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateHeadingObserver]];
 }
 
 - (void)viewDidLoad
@@ -275,11 +284,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
     [self setupView];
 
-    OsmAndAppInstance app = [OsmAndApp instance];
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:app.locationServices.updateObserver];
-
     [self registerForKeyboardNotifications];
 
     [super viewWillAppear:animated];
@@ -307,12 +311,6 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     [super viewWillDisappear:animated];
 
     self.paused = YES;
-
-    if (self.locationServicesUpdateObserver)
-    {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
-    }
 
     [self unregisterKeyboardNotifications];
 
@@ -1007,15 +1005,18 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)updateDistanceAndDirection
 {
-    if (_paused || _cancelPrev || _searchNearMapCenter || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
-        return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        self.lastUpdate = [[NSDate date] timeIntervalSince1970];
-        [_tableController updateDistanceAndDirection];
-        [_historyViewController updateDistanceAndDirection];
-        [_addressViewController updateDistanceAndDirection];
-    });
+    @synchronized(self)
+    {
+        if (_paused || _cancelPrev || _searchNearMapCenter || [[NSDate date] timeIntervalSince1970] - self.lastUpdate < 0.3)
+            return;
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.lastUpdate = [[NSDate date] timeIntervalSince1970];
+            [_tableController updateDistanceAndDirection];
+            [_historyViewController updateDistanceAndDirection];
+            [_addressViewController updateDistanceAndDirection];
+        });
+    }
 }
 
 - (void) updateHint

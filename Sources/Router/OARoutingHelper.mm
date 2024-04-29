@@ -38,6 +38,7 @@
 #define DEFAULT_GPS_TOLERANCE 12
 #define POSITION_TOLERANCE 60
 #define POS_TOLERANCE_DEVIATION_MULTIPLIER 2
+#define MAX_POSSIBLE_SPEED 140 // 504 km/h
 
 static NSInteger GPS_TOLERANCE = DEFAULT_GPS_TOLERANCE;
 static double ARRIVAL_DISTANCE_FACTOR = 1;
@@ -68,6 +69,7 @@ static double ARRIVAL_DISTANCE_FACTOR = 1;
     NSMutableArray<CLLocation *> *_intermediatePoints;
     CLLocation *_lastProjection;
     CLLocation *_lastFixedLocation;
+    CLLocation *_lastGoodRouteLocation;
     
     OAApplicationMode *_mode;
     
@@ -465,7 +467,8 @@ static BOOL _isDeviatedFromRoute = false;
                     _deviceHasBearing = YES;
                 }
                 // lastFixedLocation.bearingTo -  gives artefacts during u-turn, so we avoid for devices with bearing
-                if ([currentLocation hasBearing] || (!_deviceHasBearing && _lastFixedLocation))
+                if ((currentRoute > 0 || newCurrentRoute > 0) &&
+                        ([currentLocation hasBearing] || (!_deviceHasBearing && _lastFixedLocation)))
                 {
                     float bearingToRoute = [currentLocation bearingTo:routeNodes[currentRoute]];
                     float bearingRouteNext = [routeNodes[newCurrentRoute] bearingTo:routeNodes[newCurrentRoute + 1]];
@@ -475,9 +478,8 @@ static BOOL _isDeviatedFromRoute = false;
                     if (diff > diffToNext)
                     {
                         NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
-                                                processed = true;
+                        processed = true;
                     }
-                    processed = true;
                 }
             }
         }
@@ -640,6 +642,18 @@ static BOOL _isDeviatedFromRoute = false;
     return false;
 }
 
+- (BOOL)isLocationJumping:(CLLocation *)currentLocation targetPointsChanged:(BOOL)targetPointsChanged {
+    if ([_route hasMissingMaps] && _lastGoodRouteLocation != nil && !targetPointsChanged) {
+        NSTimeInterval time = [currentLocation.timestamp timeIntervalSinceDate:_lastGoodRouteLocation.timestamp];
+        CLLocationDistance dist = [currentLocation distanceFromLocation:_lastGoodRouteLocation];
+        if (time > 0) {
+            double speed = dist / (time / 1000);
+            return speed > MAX_POSSIBLE_SPEED;
+        }
+    }
+    return NO;
+}
+
 - (CLLocation *) setCurrentLocation:(CLLocation *)currentLocation returnUpdatedLocation:(BOOL)returnUpdatedLocation previousRoute:(OARouteCalculationResult *)previousRoute targetPointsChanged:(BOOL)targetPointsChanged
 {
     CLLocation *locationProjection = currentLocation;
@@ -666,7 +680,7 @@ static BOOL _isDeviatedFromRoute = false;
         // 0. Route empty or needs to be extended? Then re-calculate route.
         if ([_route isEmpty])
         {
-            calculateRoute = true;
+            calculateRoute = ![_route hasMissingMaps] || [self isLocationJumping:currentLocation targetPointsChanged:targetPointsChanged];
         }
         else
         {
@@ -684,9 +698,13 @@ static BOOL _isDeviatedFromRoute = false;
             
             // 2. Analyze if we need to recalculate route
             // >100m off current route (sideways) or parameter (for Straight line)
-            if (currentRoute > 0 && allowableDeviation > 0)
+            if (allowableDeviation > 0)
             {
-                distOrth = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
+                if (currentRoute == 0) {
+                    distOrth = [currentLocation distanceFromLocation:routeNodes[currentRoute]]; // deviation at the start
+                } else {
+                    distOrth = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
+                }
                 if (distOrth > allowableDeviation)
                 {
                     NSLog(@"Recalculate route, because correlation  : %f", distOrth);

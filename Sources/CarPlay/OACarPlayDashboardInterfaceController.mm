@@ -71,7 +71,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     CPMapButton *_3DModeMapButton;
     BOOL _wasIn3DBeforePreview;
 
-    OAAutoObserverProxy *_locationServicesUpdateObserver;
+    OAAutoObserverProxy *_locationUpdateObserver;
     OAAutoObserverProxy *_map3DModeObserver;
     OANextDirectionInfo *_currentDirectionInfo;
     
@@ -567,9 +567,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     return maneuver;
 }
 
-// MARK: Location service updates
+// MARK: Location updates
 
-- (void) onLocationServicesUpdate
+- (void) onLocationUpdate
 {
     if (_navigationSession)
     {
@@ -646,9 +646,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (void)onIntefaceControllerAttached
 {
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesUpdate)
-                                                                 andObserve:[OsmAndApp instance].locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onLocationUpdate)
+                                                         andObserve:[OsmAndApp instance].locationServices.updateLocationObserver];
     _map3DModeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                    withHandler:@selector(onMap3dModeUpdated)
                                                     andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
@@ -659,10 +659,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 - (void)onIntefaceControllerDetached
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
-    if (_locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
     {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
     }
 }
 

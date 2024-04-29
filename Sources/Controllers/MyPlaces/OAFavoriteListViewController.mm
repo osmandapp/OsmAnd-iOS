@@ -67,17 +67,19 @@
 @end
 
 @interface OAFavoriteListViewController () <OAMultiselectableHeaderDelegate, OAEditorDelegate, OAEditGroupViewControllerDelegate, OAEditColorViewControllerDelegate, UIDocumentPickerDelegate, UISearchResultsUpdating, UISearchBarDelegate>
-{
 
-    BOOL isDecelerating;
-}
-    @property (strong, nonatomic) NSArray*  menuItems;
-    @property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
-    @property NSUInteger sortingType;
+@property (strong, nonatomic) NSArray*  menuItems;
+@property (strong, nonatomic) NSMutableArray*  sortedFavoriteItems;
+@property NSUInteger sortingType;
+
 @end
 
 @implementation OAFavoriteListViewController
 {
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
+    BOOL _decelerating;
+
     OAMultiselectableHeaderView *_sortedHeaderView;
     OAMultiselectableHeaderView *_menuHeaderView;
     NSArray *_unsortedHeaderViews;
@@ -117,7 +119,7 @@ static UIViewController *parentController;
     [super viewDidLoad];
 
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    isDecelerating = NO;
+    _decelerating = NO;
     self.sortingType = 0;
     self.view.backgroundColor = [UIColor colorNamed:ACColorNameViewBg];
 
@@ -334,7 +336,7 @@ static UIViewController *parentController;
             [self.sortedFavoriteItems setArray:sortedArray];
         }
 
-        if (isDecelerating)
+        if (_decelerating)
             return;
 
         [self refreshVisibleRows];
@@ -402,9 +404,12 @@ static UIViewController *parentController;
     [self updateDistanceAndDirection:YES];
 
     OsmAndAppInstance app = [OsmAndApp instance];
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(updateDistanceAndDirection)
-                                                                     andObserve:app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(updateDistanceAndDirection)
+                                                         andObserve:app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(updateDistanceAndDirection)
+                                                        andObserve:app.locationServices.updateHeadingObserver];
     [self applySafeAreaMargins];
     
     [self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -431,11 +436,17 @@ static UIViewController *parentController;
 {
     [super viewWillDisappear:animated];
 
-    if (self.locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
     {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
     }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
+    }
+
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillShowNotification object:nil];
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillHideNotification object:nil];
     self.definesPresentationContext = NO;
@@ -1466,20 +1477,17 @@ static UIViewController *parentController;
         {
             NSDictionary *groupData = _data[selectedItem.section][0];
             FavoriteTableGroup *group = groupData[@"group"];
-            OAFavoriteItem* item = group.favoriteGroup.points[selectedItem.row - 1];
-            if (item)
+            NSInteger index = selectedItem.row - 1;
+            OAFavoriteItem* item = group.favoriteGroup.points[index];
+            if (item && group.isOpen)
             {
-                NSInteger itemIndex = [group.favoriteGroup.points indexOfObject:item];
-                if (itemIndex != NSNotFound && group.isOpen)
-                {
-                    [self.favoriteTableView beginUpdates];
-                    [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[group.favoriteGroup.points[itemIndex]]];
-                    NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
-                    if (sortedItemIndex != NSNotFound)
-                        _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
-                    [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
-                    [self.favoriteTableView endUpdates];
-                }
+                [self.favoriteTableView beginUpdates];
+                [OAFavoritesHelper deleteFavoriteGroups:nil andFavoritesItems:@[item]];
+                NSInteger sortedItemIndex = _isFiltered ? [_filteredItems indexOfObject:item] : [self.sortedFavoriteItems indexOfObject:item];
+                if (sortedItemIndex != NSNotFound)
+                    _isFiltered ? [_filteredItems removeObjectAtIndex:sortedItemIndex] : [self.sortedFavoriteItems removeObjectAtIndex:sortedItemIndex];
+                [self.favoriteTableView deleteRowsAtIndexPaths:@[selectedItem] withRowAnimation:UITableViewRowAnimationLeft];
+                [self.favoriteTableView endUpdates];
             }
         }
     }
@@ -1565,7 +1573,7 @@ static UIViewController *parentController;
 
 - (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView
 {
-    isDecelerating = YES;
+    _decelerating = YES;
 }
 
 // Load images for all onscreen rows when scrolling is finished
@@ -1573,14 +1581,14 @@ static UIViewController *parentController;
 {
     if (!decelerate)
     {
-        isDecelerating = NO;
+        _decelerating = NO;
         //[self refreshVisibleRows];
     }
 }
 
 - (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView
 {
-    isDecelerating = NO;
+    _decelerating = NO;
     //[self refreshVisibleRows];
 }
 

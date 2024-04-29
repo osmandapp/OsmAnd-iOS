@@ -19,6 +19,25 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
     EOAGpxSplitTypeTime
 };
 
+typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationByType) {
+    EOAGPX3DLineVisualizationByTypeNone = 0,
+    EOAGPX3DLineVisualizationByTypeAltitude,
+    EOAGPX3DLineVisualizationByTypeFixedHeight
+};
+
+typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationWallColorType) {
+    EOAGPX3DLineVisualizationWallColorTypeNone = 0,
+    EOAGPX3DLineVisualizationWallColorTypeSolid,
+    EOAGPX3DLineVisualizationWallColorTypeDownwardGradient,
+    EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
+};
+
+typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
+    EOAGPX3DLineVisualizationPositionTypeTop = 0,
+    EOAGPX3DLineVisualizationPositionTypeBottom,
+    EOAGPX3DLineVisualizationPositionTypeTopBottom,
+};
+
 @class OAGPXTrackAnalysis;
 @class OAWptPt, OAGPXDocument;
 
@@ -42,7 +61,12 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 @property (nonatomic, assign) BOOL showStartFinish;
 @property (nonatomic, assign) BOOL joinSegments;
 @property (nonatomic, assign) BOOL showArrows;
-@property (nonatomic, assign) BOOL raiseRoutesAboveRelief;
+
+// 3d visualization
+@property (nonatomic) EOAGPX3DLineVisualizationByType visualization3dByType;
+@property (nonatomic) EOAGPX3DLineVisualizationWallColorType visualization3dWallColorType;
+@property (nonatomic) EOAGPX3DLineVisualizationPositionType visualization3dPositionType;
+@property (nonatomic, assign) CGFloat verticalExaggerationScale;
 
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
@@ -113,5 +137,14 @@ typedef NS_ENUM(NSInteger, EOAGpxSplitType) {
 
 + (EOAGpxSplitType) splitTypeByName:(NSString *)splitName;
 + (NSString *) splitTypeNameByValue:(EOAGpxSplitType)splitType;
+
++ (NSString *)lineVisualizationByTypeNameForType:(EOAGPX3DLineVisualizationByType)type;
++ (EOAGPX3DLineVisualizationByType)lineVisualizationByTypeForName:(NSString *)name;
+
++ (NSString *)lineVisualizationWallColorTypeNameForType:(EOAGPX3DLineVisualizationWallColorType)type;
++ (EOAGPX3DLineVisualizationWallColorType)lineVisualizationWallColorTypeForName:(NSString *)name;
+
++ (NSString *)lineVisualizationPositionTypeNameForType:(EOAGPX3DLineVisualizationPositionType)type;
++ (EOAGPX3DLineVisualizationPositionType)lineVisualizationPositionTypeForName:(NSString *)name;
 
 @end

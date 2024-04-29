@@ -54,7 +54,7 @@
 #import "OAMapHudViewController.h"
 #import "OAOsmAndFormatter.h"
 #import "OATrackMenuHudViewController.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -706,9 +706,20 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
         [_layer resetLayer];
 
         if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
-            [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
-                                trackHudMode:EOATrackMenuHudMode
-                                       state:(OATrackMenuViewControllerState *) _targetMenuState];
+        {
+            OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
+            if (state.openedFromTracksList && !state.openedFromTrackMenu && state.navControllerHistory)
+            {
+                [[OARootViewController instance].navigationController setViewControllers:state.navControllerHistory animated:YES];
+            }
+            else
+            {
+                state.openedFromTrackMenu = NO;
+                [_mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_fileName]
+                                    trackHudMode:EOATrackMenuHudMode
+                                           state:state];
+            }
+        }
     }];
 }
 

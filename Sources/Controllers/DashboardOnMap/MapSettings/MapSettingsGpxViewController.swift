@@ -100,6 +100,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     private var isTracksAvailable = false
     private var isVisibleTracksAvailable = false
     private var importHelper: OAGPXImportUIHelper?
+    private let lock = NSLock()
     weak var delegate: MapSettingsGpxViewControllerDelegate?
 
     private lazy var sortButton: UIButton = {
@@ -133,7 +134,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     override func registerObservers() {
         let app: OsmAndAppProtocol = OsmAndApp.swiftInstance()
         let updateDistanceAndDirectionSelector = #selector(updateDistanceAndDirection as () -> Void)
-        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateObserver))
+        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateLocationObserver))
+        addObserver(OAAutoObserverProxy(self, withHandler: updateDistanceAndDirectionSelector, andObserve: app.locationServices.updateHeadingObserver))
     }
     
     override func viewDidLoad() {
@@ -252,7 +254,7 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
             }
             if isShowingVisibleTracks && !recentlyVisibleGpxList.isEmpty && !isSearchActive {
                 let recentlyVisibleSection = tableData.createNewSection()
-                recentlyVisibleSection.headerText = localizedString("recently_visible") + " (\(recentlyVisibleGpxList.count))"
+                recentlyVisibleSection.headerText = String(format: localizedString("recently_visible"), "(\(recentlyVisibleGpxList.count))")
                 for gpx in recentlyVisibleGpxList {
                     let gpxRow = recentlyVisibleSection.createNewRow()
                     gpxRow.cellType = OASimpleTableViewCell.getIdentifier()
@@ -749,7 +751,15 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
     }
     
     func updateDistanceAndDirection(_ forceUpdate: Bool) {
-        guard isTracksAvailable, currentSortType == .nearest, forceUpdate || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5 else { return }
+        lock.lock()
+        
+        guard isTracksAvailable, currentSortType == .nearest, forceUpdate 
+                || Date.now.timeIntervalSince1970 - (lastUpdate ?? 0) >= 0.5
+        else {
+            lock.unlock()
+            return
+        }
+
         lastUpdate = Date.now.timeIntervalSince1970
         sortTracks()
         generateData()
@@ -759,6 +769,8 @@ final class MapSettingsGpxViewController: OABaseNavbarSubviewViewController {
                 self.updateSelectedRows()
             }
         }
+
+        lock.unlock()
     }
     
     @objc private func segmentChanged(_ control: UISegmentedControl) {

@@ -22,7 +22,6 @@
 @implementation OADeleteWaypointsViewController
 {
     OsmAndAppInstance _app;
-    OAAutoObserverProxy *_locationServicesUpdateObserver;
     NSTimeInterval _lastUpdate;
 
     OAGPXTableData *_tableData;
@@ -44,6 +43,17 @@
     return self;
 }
 
+- (void)registerObservers
+{
+    OsmAndAppInstance app = [OsmAndApp instance];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateLocationObserver]];
+    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
+                                                withHandler:@selector(updateDistanceAndDirection)
+                                                 andObserve:app.locationServices.updateHeadingObserver]];
+}
+
 #pragma mark - UIViewController
 
 - (void)viewDidLoad
@@ -56,20 +66,11 @@
     self.tableView.allowsMultipleSelectionDuringEditing = YES;
 
     [self updateDistanceAndDirection];
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(updateDistanceAndDirection)
-                                                                 andObserve:_app.locationServices.updateObserver];
 }
 
 -(void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-
-    if (_locationServicesUpdateObserver)
-    {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
-    }
 
     if (self.trackMenuDelegate)
         [self.trackMenuDelegate refreshLocationServices];
@@ -309,27 +310,30 @@
 
 - (void)updateDistanceAndDirection
 {
-    if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.5)
-        return;
-    
-    _lastUpdate = [[NSDate date] timeIntervalSince1970];
-    
-    // Obtain fresh location and heading
-    CLLocation *newLocation = _app.locationServices.lastKnownLocation;
-    if (!newLocation)
-        return;
-    
-    dispatch_async(dispatch_get_main_queue(), ^{
-        NSArray<NSIndexPath *> *visibleRows = [self.tableView indexPathsForVisibleRows];
-        for (NSIndexPath *visibleRow in visibleRows)
-        {
-            OAGPXTableCellData *cellData = _tableData.subjects[visibleRow.section].subjects[visibleRow.row];
-            if (self.trackMenuDelegate)
-                [self.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
-        }
-        [self.tableView reloadRowsAtIndexPaths:visibleRows
-                              withRowAnimation:UITableViewRowAnimationNone];
-    });
+    @synchronized(self)
+    {
+        if ([[NSDate date] timeIntervalSince1970] - _lastUpdate < 0.5)
+            return;
+
+        _lastUpdate = [[NSDate date] timeIntervalSince1970];
+
+        // Obtain fresh location and heading
+        CLLocation *newLocation = _app.locationServices.lastKnownLocation;
+        if (!newLocation)
+            return;
+
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSArray<NSIndexPath *> *visibleRows = [self.tableView indexPathsForVisibleRows];
+            for (NSIndexPath *visibleRow in visibleRows)
+            {
+                OAGPXTableCellData *cellData = _tableData.subjects[visibleRow.section].subjects[visibleRow.row];
+                if (self.trackMenuDelegate)
+                    [self.trackMenuDelegate updateProperty:@"update_distance_and_direction" tableData:cellData];
+            }
+            [self.tableView reloadRowsAtIndexPaths:visibleRows
+                                  withRowAnimation:UITableViewRowAnimationNone];
+        });
+    }
 }
 
 - (OAGpxWptItem *)getGpxWptItem:(NSInteger)section row:(NSInteger)row
@@ -484,25 +488,15 @@
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                               style:UIAlertActionStyleDefault
                                             handler:^(UIAlertAction * _Nonnull action)
-                      {
-        if (_locationServicesUpdateObserver)
         {
-            [_locationServicesUpdateObserver detach];
-            _locationServicesUpdateObserver = nil;
+            for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
+                if (self.trackMenuDelegate)
+                    [self.trackMenuDelegate deleteWaypointsGroup:groupName
+                                               selectedWaypoints:_selectedWaypointGroups[groupName]];
+
+            [self dismissViewController];
         }
-        
-        for (NSString *groupName in _selectedWaypointGroups.keyEnumerator)
-        {
-            if (self.trackMenuDelegate)
-            {
-                [self.trackMenuDelegate deleteWaypointsGroup:groupName
-                                           selectedWaypoints:_selectedWaypointGroups[groupName]];
-            }
-        }
-        
-        [self dismissViewController];
-    }
-                     ]];
+    ]];
     
     [self presentViewController:alert animated:YES completion:nil];
 }

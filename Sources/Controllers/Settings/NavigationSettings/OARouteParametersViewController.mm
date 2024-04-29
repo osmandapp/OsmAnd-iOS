@@ -140,6 +140,7 @@
     NSMutableArray *tableData = [NSMutableArray array];
     NSMutableArray *otherArr = [NSMutableArray array];
     NSMutableArray *parametersArr = [NSMutableArray array];
+    NSMutableArray *developmentArr = [NSMutableArray array];
     [otherArr addObject:@{
         @"type" : [OADeviceScreenTableViewCell getCellIdentifier],
         @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
@@ -369,8 +370,28 @@
             @"key" : @"roadSpeeds"
         }];
     }
+    if ([OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
+    {
+        [developmentArr addObject:
+         @{
+            @"key" : @"routing_algorithm",
+            @"title" : OALocalizedString(@"routing_algorithm"),
+            @"icon" : [UIImage templateImageNamed:@"ic_custom_route_points"],
+            @"value" : OALocalizedString([_settings.useOldRouting get] ? @"routing_algorithm_a" : @"routing_algorithm_highway_hierarchies"),
+            @"type" : [OAValueTableViewCell getCellIdentifier]
+        }];
+        [developmentArr addObject:
+         @{
+            @"key" : @"auto_zoom",
+            @"title" : OALocalizedString(@"auto_zoom"),
+            @"icon" : [UIImage templateImageNamed:@"ic_custom_zoom_level"],
+            @"value" : OALocalizedString([_settings.useV1AutoZoom get] ? @"auto_zoom_discrete" : @"auto_zoom_smooth"),
+            @"type" : [OAValueTableViewCell getCellIdentifier]
+        }];
+    }
     [tableData addObject:otherArr];
     [tableData addObject:parametersArr];
+    [tableData addObject:developmentArr];
     _data = [NSArray arrayWithArray:tableData];
 }
 
@@ -495,6 +516,14 @@
     return _data.count;
 }
 
+- (NSString *)getTitleForHeader:(NSInteger)section
+{
+    if (section == 2 && [OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
+        return OALocalizedString(@"shared_string_development");
+    
+    return nil;
+}
+
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
@@ -522,11 +551,18 @@
         settingsViewController = [[OARoadSpeedsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angleStraight"])
         settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
+    else if ([itemKey isEqualToString:@"routing_algorithm"])
+        settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeRoutingAlgorithm];
+    else if ([itemKey isEqualToString:@"auto_zoom"])
+        settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeAutoZoom];
 
     if (settingsViewController)
     {
         settingsViewController.delegate = self;
-        [self showModalViewController:settingsViewController];
+        if ([itemKey isEqualToString:@"routing_algorithm"] || [itemKey isEqualToString:@"auto_zoom"])
+            [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
+        else
+            [self showModalViewController:settingsViewController];
     }
 }
 

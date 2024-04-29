@@ -16,6 +16,7 @@
 #import "OARouteKey.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAOsmEditingPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -51,32 +52,90 @@
 {
     self.tableData = [OAGPXTableData withData:@{ kTableKey: @"table_tab_overview" }];
 
-    OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"section_description",
-            kSectionHeader: OALocalizedString(@"shared_string_description"),
-            kSectionHeaderHeight: @56.
-    }];
-    [self.tableData.subjects addObject:descriptionSectionData];
-
-    [self generateDescription];
-    [self generateImageURL];
-
-    if (_imageURL && _imageURL.length > 0)
-        [descriptionSectionData.subjects addObject:[self generateImageCellData]];
-
-    if (_description && _description.length > 0)
+    BOOL hasArticle = NO;
+    if (self.trackMenuDelegate)
     {
-        [descriptionSectionData.subjects addObject:[self generateDescriptionCellData]];
-        [descriptionSectionData.subjects addObject:[self generateEditDescriptionCellData]];
-        [descriptionSectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
+        OAMetadata *metadata = [self.trackMenuDelegate getMetadata];
+        if (metadata)
+        {
+            OAGpxExtension *articleTitleExtension = [metadata getExtensionByKey:@"article_title"];
+            if (articleTitleExtension)
+            {
+                OAGPXTableSectionData *wikivoyageSectionData = [OAGPXTableSectionData withData:@{
+                    kTableKey: @"sectionWikivoyage",
+                    kSectionHeader: OALocalizedString(@"shared_string_wikivoyage"),
+                    kSectionHeaderHeight: @56.
+                }];
+                [self.tableData.subjects addObject:wikivoyageSectionData];
+                
+                OATravelObfHelper *helper = [OATravelObfHelper shared];
+                OAGpxExtension *articleLangExtension = [metadata getExtensionByKey:@"article_lang"];
+                NSString *lang = articleLangExtension ? articleLangExtension.value : @"en";
+                OATravelArticle *article = [helper getArticleByTitle:articleTitleExtension.value lang:lang];
+                if (article)
+                {
+                    hasArticle = YES;
+                    NSString *geoDescription = [article getGeoDescription];
+                    NSString *iconName = @"";
+                    if (article.imageTitle && article.imageTitle.length > 0)
+                    {
+                        iconName = [OATravelArticle getImageUrlWithImageTitle:article.imageTitle ? article.imageTitle : @"" thumbnail:NO];
+                    }
+                    OAGPXTableCellData *articleRow = [OAGPXTableCellData withData:@{
+                        kTableKey: @"article",
+                        kCellType: [OAArticleTravelCell getCellIdentifier],
+                        kCellTitle: article.title ? article.title : @"nil",
+                        kCellDesc: [OATravelGuidesHelper getPatrialContent:article.content],
+                        kCellRightIconName: iconName,
+                        kTableValues: @{
+                            @"isPartOf": geoDescription ? geoDescription : @"",
+                            @"article": article,
+                            @"lang": lang
+                        }
+                    }];
+                    [wikivoyageSectionData.subjects addObject:articleRow];
+
+                    OAGPXTableCellData *readCellData = [OAGPXTableCellData withData:@{
+                        kTableKey: @"readArticle",
+                        kCellType: [OASimpleTableViewCell getCellIdentifier],
+                        kCellTitle: OALocalizedString(@"shared_string_read"),
+                        kTableValues: @{ @"articleId": [article generateIdentifier], @"lang": lang }
+                    }];
+                    [wikivoyageSectionData.subjects addObject:readCellData];
+                }
+            }
+        }
+
+        if (!hasArticle)
+        {
+            OAGPXTableSectionData *descriptionSectionData = [OAGPXTableSectionData withData:@{
+                kTableKey: @"section_description",
+                kSectionHeader: OALocalizedString(@"shared_string_description"),
+                kSectionHeaderHeight: @56.
+            }];
+            [self.tableData.subjects addObject:descriptionSectionData];
+            
+            [self generateDescription];
+            [self generateImageURL];
+            
+            if (_imageURL && _imageURL.length > 0)
+                [descriptionSectionData.subjects addObject:[self generateImageCellData]];
+            
+            if (_description && _description.length > 0)
+            {
+                [descriptionSectionData.subjects addObject:[self generateDescriptionCellData]];
+                [descriptionSectionData.subjects addObject:[self generateEditDescriptionCellData]];
+                [descriptionSectionData.subjects addObject:[self generateReadFullDescriptionCellData]];
+            }
+            else
+            {
+                [descriptionSectionData.subjects addObject:[self generateAddDescriptionCellData]];
+            }
+        }
+
+        OARouteKey *key = self.trackMenuDelegate.getRouteKey;
+        [self populateRouteInfoSection:self.tableData routeKey:key];
     }
-    else
-    {
-        [descriptionSectionData.subjects addObject:[self generateAddDescriptionCellData]];
-    }
-    
-    OARouteKey *key = self.trackMenuDelegate.getRouteKey;
-    [self populateRouteInfoSection:self.tableData routeKey:key];
 
     OAGPXTableSectionData *generalSectionData = [OAGPXTableSectionData withData:@{
             kTableKey: @"section_general",
@@ -133,7 +192,7 @@
             kTableKey: @"route",
             kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"layer_route"),
-            kCellDesc: OALocalizedString([NSString stringWithFormat:@"activity_type_%@_name", [self tagToActivity:tag]])
+            kCellDesc: OALocalizedString([self tagToActivity:tag])
     }];
     [infoSectionData.subjects addObject:routeCellData];
 
@@ -143,10 +202,13 @@
     {
         NSString *routeTagKey = i.key().toNSString();
         if ([routeTagKey hasPrefix:@"osmc"]
-            || [routeTagKey isEqualToString:@"name"])
+            || [routeTagKey isEqualToString:@"name"]
+            || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
             continue;
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
-        if (!poiType && ![routeTagKey isEqualToString:@"symbol"] && ![routeTagKey isEqualToString:@"colour"])
+        if (!poiType && ![routeTagKey isEqualToString:@"symbol"]
+            && ![routeTagKey isEqualToString:@"colour"]
+            && ![routeTagKey isEqualToString:@"relation_id"])
             continue;
         NSString *routeTagTitle = poiType ? poiType.nameLocalized : @"";
         NSNumber *routeTagOrder = poiType && [poiType isKindOfClass:OAPOIType.class] ? @(((OAPOIType *) poiType).order) : @(90);
@@ -173,6 +235,10 @@
         {
             routeTagTitle = OALocalizedString(@"shared_string_symbol");
         }
+        else if ([routeTagKey isEqualToString:@"relation_id"])
+        {
+            routeTagTitle = OALocalizedString(@"osm_id");
+        }
 
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
                 kTableKey: routeTagKey,
@@ -198,12 +264,14 @@
 - (NSString *)tagToActivity:(NSString *)tag
 {
     if ([tag isEqualToString:@"bicycle"])
-        return @"cycling";
+        return @"activity_type_cycling_name";
     else if ([tag isEqualToString:@"mtb"])
-        return @"mountainbike";
+        return @"activity_type_mountainbike_name";
     else if ([tag isEqualToString:@"horse"])
-        return @"riding";
-    return tag;
+        return @"app_mode_horse";
+    else if ([tag isEqualToString:@"hiking"])
+        return @"activity_type_hiking_name";
+    return @"";
 }
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText
@@ -632,6 +700,10 @@
         {
             [self.trackMenuDelegate openDescription];
         }
+        else if ([tableData.key isEqualToString:@"readArticle"])
+        {
+            [self.trackMenuDelegate openArticleById:tableData.values[@"articleId"] lang:tableData.values[@"lang"]];
+        }
         else if ([tableData isKindOfClass:OAGPXTableCellData.class])
         {
             OAGPXTableCellData *cellData = (OAGPXTableCellData *) tableData;
@@ -651,6 +723,10 @@
             else if ([cellData.key hasPrefix:@"email_"])
             {
                 [self.trackMenuDelegate openURL:cellData.desc sourceView:sourceView];
+            }
+            else if ([cellData.key isEqualToString:@"relation_id"])
+            {
+                [self.trackMenuDelegate openURL:[kOsmRelation stringByAppendingString:cellData.desc] sourceView:sourceView];
             }
             else if ([cellData.key hasPrefix:@"description"])
             {

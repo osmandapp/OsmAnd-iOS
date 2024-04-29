@@ -20,19 +20,15 @@
 
 #pragma mark - Initialization
 
-- (void)dealloc
+// use addNotification:selector: method here
+// notifications will be automatically added in viewDidLoad: and removed in dealloc
+- (void)registerNotifications
 {
-    [NSNotificationCenter.defaultCenter removeObserver:self];
-
-    for (OAAutoObserverProxy *observer in _observers)
-    {
-        [observer detach];
-    }
 }
 
-// use addNotification:selector: method here
-// notifications will be automatically added in viewWillAppear: and removed in dealloc
-- (void)registerNotifications
+// use addObserver: method here
+// observers will be automatically added in viewDidLoad: and removed in dealloc
+- (void)registerObservers
 {
 }
 
@@ -42,17 +38,29 @@
     [NSNotificationCenter.defaultCenter addObserver:self selector:selector name:name object:nil];
 }
 
-// use addObserver: method here
-// observers will be automatically added in viewWillAppear: and removed in dealloc
-- (void)registerObservers
-{
-}
-
 // do not override
 - (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer
 {
     [_observers addObject:observer];
     return observer;
+}
+
+- (void)registerNotificationsAndObservers
+{
+    // for content size category
+    [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
+    // for other
+    [self registerNotifications];
+
+    [self registerObservers];
+}
+
+- (void)unregisterNotificationsAndObservers
+{
+    [NSNotificationCenter.defaultCenter removeObserver:self];
+
+    for (OAAutoObserverProxy *observer in _observers)
+        [observer detach];
 }
 
 #pragma mark - UIViewController
@@ -65,12 +73,12 @@
 
     _observers = [NSMutableArray array];
 
-    // for content size category
-    [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
-    // for other
-    [self registerNotifications];
+    [self registerNotificationsAndObservers];
+}
 
-    [self registerObservers];
+- (void) dealloc
+{
+    [self unregisterNotificationsAndObservers];
 }
 
 - (void)viewDidLayoutSubviews

@@ -38,8 +38,6 @@
 #import "OAUnsupportedAction.h"
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
-#import "OAShowHideCoordinatesAction.h"
-#import "OAShowHideMapCenterAction.h"
 #import "OAShowHideTemperatureAction.h"
 #import "OAShowHidePressureAction.h"
 #import "OAShowHideWindAction.h"
@@ -79,7 +77,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     TYPE_ADD_ITEMS = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"quick_action_add_create_items") category:CREATE_CATEGORY iconName:nil];
     TYPE_CONFIGURE_MAP = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"configure_map") category:CONFIGURE_MAP iconName:nil];
     TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
-    TYPE_CONFIGURE_SCREEN = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"layer_map_appearance") category:CONFIGURE_SCREEN iconName:nil];
+//    TYPE_CONFIGURE_SCREEN = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"layer_map_appearance") category:CONFIGURE_SCREEN iconName:nil];
 }
 
 + (OAQuickActionRegistry *)sharedInstance
@@ -161,10 +159,6 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [quickActionTypes addObject:OANavStartStopAction.TYPE];
     [quickActionTypes addObject:OANavResumePauseAction.TYPE];
     [quickActionTypes addObject:OASwitchProfileAction.TYPE];
-    
-    // configure screen
-    [quickActionTypes addObject:OAShowHideCoordinatesAction.TYPE];
-    [quickActionTypes addObject:OAShowHideMapCenterAction.TYPE];
     
     [OAPluginsHelper registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
     if ([[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
@@ -314,7 +308,6 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     [self filterQuickActions:TYPE_ADD_ITEMS result:result];
     [self filterQuickActions:TYPE_CONFIGURE_MAP result:result];
     [self filterQuickActions:TYPE_NAVIGATION result:result];
-    [self filterQuickActions:TYPE_CONFIGURE_SCREEN result:result];
     return result;
 }
 
@@ -450,6 +443,5 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:arr options:NSJSONWritingPrettyPrinted error:nil];
     return [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
 }
-
 
 @end

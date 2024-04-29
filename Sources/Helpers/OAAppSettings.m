@@ -165,9 +165,6 @@ static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
 static NSString * const routeLineWidthKey = @"routeLineWidth";
 static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
 static NSString * const showCompassControlRulerKey = @"showCompassRuler";
-static NSString * const showCurrentLocationCoordinatesWidgetKey = @"showCoordinatesWidget";
-static NSString * const showMapCenterWidgetKey = @"showMapCenterWidget";
-
 static NSString * const showTrafficWarningsKey = @"showTrafficWarnings";
 static NSString * const showPedestrianKey = @"showPedestrian";
 static NSString * const showCamerasKey = @"showCameras";
@@ -358,7 +355,10 @@ static NSString * const currentTrackSlopeGradientPaletteKey = @"currentTrackSlop
 static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
-static NSString * const currentTrackRaiseRoutesAboveReliefKey = @"currentTrackRaiseRoutesAboveReliefKey";
+static NSString * const currentTrackVerticalExaggerationScaleKey = @"currentTrackVerticalExaggerationScale";
+static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
+static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentTrackVisualization3dWallColorType";
+static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
 
 static NSString * const customTrackColorsKey = @"customTrackColors";
 static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
@@ -428,13 +428,15 @@ static NSString * const lastUUIDChangeTimestampKey = @"lastUUIDChangeTimestamp";
 static NSString * const kShowHeightmapsKey = @"showHeightmaps";
 
 // Widgets
-static NSString * const kLeftWidgetPanelOrderKey = @"left_widget_panel_order";
-static NSString * const kRightWidgetPanelOrderKey = @"right_widget_panel_order";
-static NSString * const kTopWidgetPanelOrderKey = @"top_widget_panel_order";
-static NSString * const kBottomWidgetPanelOrderKey = @"bottom_widget_panel_order";
+static NSString * const leftWidgetPanelOrderKey = @"left_widget_panel_order";
+static NSString * const rightWidgetPanelOrderKey = @"right_widget_panel_order";
+static NSString * const topWidgetPanelOrderKey = @"widget_top_panel_order";
+static NSString * const bottomWidgetPanelOrderKey = @"widget_bottom_panel_order";
 
-static NSString * const useHHRoutingKey = @"useHHRoutingKey";
-static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
+static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
+static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
+
+static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @implementation OACompassMode
 
@@ -3674,6 +3676,76 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
 @end
 
+@implementation OACommonWidgetSizeStyle
+
+@dynamic defValue;
+
++ (instancetype) withKey:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+{
+    OACommonWidgetSizeStyle *obj = [[OACommonWidgetSizeStyle alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOAWidgetSizeStyle) get
+{
+    return [super get];
+}
+
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle
+{
+    [super set:widgetSizeStyle];
+}
+
+- (EOAWidgetSizeStyle) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOAWidgetSizeStyle)widgetSizeStyle mode:(OAApplicationMode *)mode
+{
+    [super set:widgetSizeStyle mode:mode];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:@"SMALL"])
+        return [self set:EOAWidgetSizeStyleSmall mode:mode];
+    else if ([strValue isEqualToString:@"MEDIUM"])
+        return [self set:EOAWidgetSizeStyleMedium mode:mode];
+    else if ([strValue isEqualToString:@"LARGE"])
+        return [self set:EOAWidgetSizeStyleLarge mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOAWidgetSizeStyleSmall:
+            return @"SMALL";
+        case EOAWidgetSizeStyleLarge:
+            return @"LARGE";
+        default:
+            return @"MEDIUM";
+    }
+}
+
+- (void) resetToDefault
+{
+    EOAWidgetSizeStyle defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOAWidgetSizeStyle) ((NSNumber *) pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+@end
+
 @implementation OAAppSettings
 {
     NSMapTable<NSString *, OACommonBoolean *> *_customBooleanRoutingProps;
@@ -3692,7 +3764,6 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
 
 @synthesize settingShowMapRulet=_settingShowMapRulet, settingMapLanguageShowLocal=_settingMapLanguageShowLocal;
 @synthesize mapSettingShowFavorites=_mapSettingShowFavorites, mapSettingShowPoiLabel=_mapSettingShowPoiLabel, mapSettingShowOfflineEdits=_mapSettingShowOfflineEdits, mapSettingShowOnlineNotes=_mapSettingShowOnlineNotes, mapSettingTrackRecording=_mapSettingTrackRecording;
-@synthesize travelGuidesState=_travelGuidesState;
 
 + (OAAppSettings*) sharedManager
 {
@@ -3716,7 +3787,6 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _registeredPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _globalPreferences = [NSMapTable strongToStrongObjectsMapTable];
         _profilePreferences = [NSMapTable strongToStrongObjectsMapTable];
-        _travelGuidesState = [OATravelGuidesState shared];
         
         _applicationMode = [[[OACommonAppMode withKey:applicationModeKey defValue:OAApplicationMode.DEFAULT] makeGlobal] makeShared];
         [_globalPreferences setObject:_applicationMode forKey:@"application_mode"];
@@ -3825,15 +3895,21 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _shouldShowWhatsNewScreen = [[NSUserDefaults standardUserDefaults] objectForKey:shouldShowWhatsNewScreenKey] ? [[NSUserDefaults standardUserDefaults] boolForKey:shouldShowWhatsNewScreenKey] : YES;
         
         // Widgets
-        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:kLeftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
-        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:kRightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
-        _topWidgetPanelOrder = [OACommonListOfStringList withKey:kTopWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
-        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:kBottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+        _leftWidgetPanelOrder = [OACommonListOfStringList withKey:leftWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel leftPanel] getOriginalOrder]]];
+        _rightWidgetPanelOrder = [OACommonListOfStringList withKey:rightWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel rightPanel] getOriginalOrder]]];
+        _topWidgetPanelOrder = [OACommonListOfStringList withKey:topWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrder = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKey defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
+
+        _topWidgetPanelOrderOld = [OACommonListOfStringList withKey:topWidgetPanelOrderOldKey defValue:@[[[OAWidgetsPanel topPanel] getOriginalOrder]]];
+        _bottomWidgetPanelOrderOld = [OACommonListOfStringList withKey:bottomWidgetPanelOrderKeyOld defValue:@[[[OAWidgetsPanel bottomPanel] getOriginalOrder]]];
         
         [_profilePreferences setObject:_leftWidgetPanelOrder forKey:_leftWidgetPanelOrder.key];
         [_profilePreferences setObject:_rightWidgetPanelOrder forKey:_rightWidgetPanelOrder.key];
         [_profilePreferences setObject:_topWidgetPanelOrder forKey:_topWidgetPanelOrder.key];
         [_profilePreferences setObject:_bottomWidgetPanelOrder forKey:_bottomWidgetPanelOrder.key];
+
+        [_profilePreferences setObject:_topWidgetPanelOrderOld forKey:_topWidgetPanelOrderOld.key];
+        [_profilePreferences setObject:_bottomWidgetPanelOrderOld forKey:_bottomWidgetPanelOrderOld.key];
 
         // Map Settings
         _mapSettingShowFavorites = [OACommonBoolean withKey:mapSettingShowFavoritesKey defValue:YES];
@@ -4037,16 +4113,11 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _showIntermediateArrivalTime = [OACommonBoolean withKey:showIntermediateArrivalTimeKey defValue:YES];
         _showRelativeBearing = [OACommonBoolean withKey:showRelativeBearingKey defValue:YES];
         _showCompassControlRuler = [[[OACommonBoolean withKey:showCompassControlRulerKey defValue:YES] makeGlobal] makeShared];
-        _showCurrentLocationCoordinatesWidget = [OACommonBoolean withKey:showCurrentLocationCoordinatesWidgetKey defValue:NO];
-        _showMapCenterCoordinatesWidget = [OACommonBoolean withKey:showMapCenterWidgetKey defValue:NO];
 
         [_profilePreferences setObject:_showArrivalTime forKey:@"show_arrival_time"];
         [_profilePreferences setObject:_showIntermediateArrivalTime forKey:@"show_intermediate_arrival_time"];
         [_profilePreferences setObject:_showRelativeBearing forKey:@"show_relative_bearing"];
         [_globalPreferences setObject:_showCompassControlRuler forKey:@"show_compass_ruler"];
-
-        [_profilePreferences setObject:_showCurrentLocationCoordinatesWidget forKey:@"show_coordinates_widget"];
-        [_profilePreferences setObject:_showMapCenterCoordinatesWidget forKey:@"show_map_center_coordinates_widget"];
 
         _positionPlacementOnMap = [OACommonInteger withKey:positionPlacementOnMapKey defValue:EOAPositionPlacementAuto];
         [_profilePreferences setObject:_positionPlacementOnMap forKey:@"position_placement_on_map"];
@@ -4546,8 +4617,11 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
-        _currentTrackRaiseRoutesAboveRelief = [[[OACommonBoolean withKey:currentTrackRaiseRoutesAboveReliefKey defValue:NO] makeGlobal] makeShared];
+        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:1.0] makeGlobal] makeShared];
+        _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
         
+        _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
+        _currentTrackVisualization3dPositionType = [[[OACommonInteger withKey:currentTrackVisualization3dPositionTypeKey defValue:EOAGPX3DLineVisualizationPositionTypeTop] makeGlobal] makeShared];
         
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
@@ -4562,7 +4636,10 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         [_globalPreferences setObject:_currentTrackShowArrows forKey:@"current_track_show_arrows"];
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         
-        [_globalPreferences setObject:_currentTrackRaiseRoutesAboveRelief forKey:@"current_track_raise_routes_above_relief"];
+        [_globalPreferences setObject:_currentTrackVerticalExaggerationScale forKey:@"current_track_vertical_exaggeration_scale"];
+        [_globalPreferences setObject:_currentTrackVisualization3dByType forKey:@"current_track_visualization_3d_by_type"];
+        [_globalPreferences setObject:_currentTrackVisualization3dWallColorType forKey:@"current_track_visualization_3d_wall_color_type"];
+        [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
         
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
         [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
@@ -4670,15 +4747,16 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         _mapScreenOrientation = [OACommonInteger withKey:mapScreenOrientationKey defValue:EOAScreenOrientationSystem];
         [_profilePreferences setObject:_mapScreenOrientation forKey:@"map_screen_orientation"];
         
-        _useHHRouting = [[[OACommonBoolean withKey:useHHRoutingKey defValue:NO] makeGlobal] makeShared];
-        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing"];
-        _useHHRoutingOnly = [[[OACommonBoolean withKey:useHHRoutingOnlyKey defValue:NO] makeGlobal] makeShared];
-        [_globalPreferences setObject:_useHHRouting forKey:@"use_hh_routing_only"];
+        _useOldRouting = [[[OACommonBoolean withKey:useOldRoutingKey defValue:NO] makeGlobal] makeShared];
+        [_globalPreferences setObject:_useOldRouting forKey:@"use_old_routing"];
 
         [self fetchImpassableRoads];
 
         for (NSString *key in _profilePreferences.keyEnumerator)
         {
+            if ([key isEqualToString:topWidgetPanelOrderOldKey] || [key isEqualToString:bottomWidgetPanelOrderKeyOld])
+                continue;
+
             [self registerPreference:[self getProfilePreference:key] forKey:key];
         }
         for (NSString *key in _globalPreferences.keyEnumerator)
@@ -4794,6 +4872,16 @@ static NSString * const useHHRoutingOnlyKey = @"useHHRoutingOnlyKey";
         return (OACommonDouble *)[_registeredPreferences objectForKey:key];
     
     OACommonDouble *p = [OACommonDouble withKey:key defValue:defValue];
+    [self registerPreference:p forKey:key];
+    return p;
+}
+
+- (OACommonWidgetSizeStyle *)registerWidgetSizeStylePreference:(NSString *)key defValue:(EOAWidgetSizeStyle)defValue
+{
+    if ([_registeredPreferences objectForKey:key])
+        return (OACommonWidgetSizeStyle *) [_registeredPreferences objectForKey:key];
+    
+    OACommonWidgetSizeStyle *p = [OACommonWidgetSizeStyle withKey:key defValue:defValue];
     [self registerPreference:p forKey:key];
     return p;
 }

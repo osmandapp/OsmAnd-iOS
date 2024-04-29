@@ -432,14 +432,10 @@
     
     NSArray<OAResourceItem *> *resources = [NSArray arrayWithArray:[_missingMapsResources arrayByAddingObjectsFromArray:_mapsToUpdateResources]];
     
-    NSArray *sortedRegionsMaps = [resources sortedArrayUsingComparator:^NSComparisonResult(OAResourceItem *obj1, OAResourceItem *obj2) {
-        return [obj1.title compare:obj2.title];
-    }];
-    
-    if (sortedRegionsMaps.count > 0)
+    if (resources.count > 0)
     {
-        _resourcesItems = sortedRegionsMaps;
-        _selectedResourcesItems = [sortedRegionsMaps mutableCopy];
+        _resourcesItems = resources;
+        _selectedResourcesItems = [resources mutableCopy];
         [self.tableView reloadData];
     }
 }

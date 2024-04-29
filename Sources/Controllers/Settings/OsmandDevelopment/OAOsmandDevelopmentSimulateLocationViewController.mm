@@ -286,7 +286,7 @@ NSString *const kStartStopButtonKey = @"kStartStopButtonKey";
         NSString * fullPath = [_app.gpxPath stringByAppendingPathComponent:_selectedTrackName];
         OAGPXDocument *gpxDocument = [[OAGPXDocument alloc] initWithGpxFile:fullPath];
         OAGPXRouteParamsBuilder *gpxParamsBuilder = [[OAGPXRouteParamsBuilder alloc] initWithDoc:gpxDocument];
-        [_app.locationServices.locationSimulation startAnimationThread:[gpxParamsBuilder getSimulatedLocations] useLocationTime:NO coeff:speedup];
+        [_app.locationServices.locationSimulation startAnimationThread:[gpxParamsBuilder getSimulatedLocations] useLocationTime:YES coeff:speedup];
     }
     else
     {

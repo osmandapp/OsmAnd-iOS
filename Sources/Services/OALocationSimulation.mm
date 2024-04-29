@@ -56,8 +56,7 @@
 {
     if (![self isRouteAnimating])
     {
-        NSArray<OASimulatedLocation *> *currentRoute =  [[[OARoutingHelper sharedInstance] getRoute] getImmutableSimulatedLocations];
-        if (!currentRoute || currentRoute.count == 0)
+        if ([[[OARoutingHelper sharedInstance] getRoute] isEmpty])
         {
             [OAAlertBottomSheetViewController showAlertWithTitle:OALocalizedString(@"route_simulation")
                                                        titleIcon:@"ic_custom_alert"
@@ -66,7 +65,7 @@
         }
         else
         {
-            [self startAnimationThread:currentRoute useLocationTime:false coeff:1];
+            [self startAnimationThread:nil useLocationTime:false coeff:1];
         }
     }
     else
@@ -84,10 +83,26 @@
     
     _routeAnimation = [[NSThread alloc] initWithBlock:^{
         
-        NSMutableArray<OASimulatedLocation *> *directions = [NSMutableArray arrayWithArray:directionsArray];
-        OASimulatedLocation *current = directions.count == 0 ? nil : [[OASimulatedLocation alloc] initWithSimulatedLocation:directions[0]];
+        NSMutableArray<OASimulatedLocation *> *directions;
+        if (!directionsArray)
+        {
+            NSArray<OASimulatedLocation *> *currentRoute =  [[[OARoutingHelper sharedInstance] getRoute] getImmutableSimulatedLocations];
+            directions = [NSMutableArray arrayWithArray:currentRoute];
+        }
+        else
+        {
+            directions = [NSMutableArray arrayWithArray:directionsArray];
+        }
+
+        if (directions.count == 0)
+        {
+            [self stop];
+            return;
+        }
+
+        OASimulatedLocation *current = [[OASimulatedLocation alloc] initWithSimulatedLocation:directions[0]];
         [directions removeObjectAtIndex:0];
-        
+
         OASimulatedLocation *prev = current;
         NSTimeInterval prevTime = !current ? 0 : [current.timestamp timeIntervalSince1970];
         double meters = [self metersToGoInFiveSteps:directions current:current];

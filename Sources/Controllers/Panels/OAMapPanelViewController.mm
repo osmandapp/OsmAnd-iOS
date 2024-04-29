@@ -1521,7 +1521,7 @@ typedef enum
         {
             if (isNone)
             {
-                [self.scrollableHudViewController hide];
+                [self.scrollableHudViewController forceHide];
                 return NO;
             }
             else if (!isWaypoint)
@@ -2707,11 +2707,16 @@ typedef enum
                                                                       openedFromMap:NO]];
 }
 
-- (void)openTargetViewWithGPX:(OAGPX *)item navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
+- (void)openTargetViewWithGPXFromTracksList:(OAGPX *)item
+                       navControllerHistory:(NSArray<UIViewController *> *)navControllerHistory
+                              fromTrackMenu:(BOOL)fromTrackMenu
+                                selectedTab:(EOATrackMenuHudTab)selectedTab
 {
     OATrackMenuViewControllerState *state = [OATrackMenuViewControllerState withPinLocation:item.bounds.center openedFromMap:NO];
     state.openedFromTracksList = YES;
+    state.openedFromTrackMenu = fromTrackMenu;
     state.navControllerHistory = navControllerHistory;
+    state.lastSelectedTab = selectedTab;
     [self openTargetViewWithGPX:item trackHudMode:EOATrackMenuHudMode state:state];
 }
 
@@ -2750,14 +2755,14 @@ typedef enum
     {
         [_scrollableHudViewController hide:YES duration:0.2 onComplete:^{
             state.pinLocation = item.bounds.center;
-            state.navControllerHistory = nil;
+            if (!state.openedFromTrackMenu)
+                state.navControllerHistory = nil;
             [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
         }];
         return;
     }
     [self doShowGpxItem:item items:items routeKey:routeKey state:state trackHudMode:trackHudMode];
 }
-
 
 - (void)doShowGpxItem:(OAGPX *)item
                 items:(NSArray<OAGPX *> *)items
@@ -3031,7 +3036,9 @@ typedef enum
     }];
 }
 
-- (void) openTargetViewWithRouteDetailsGraph:(NSString *)gpxFilepath isCurrentTrack:(BOOL)isCurrentTrack
+- (void) openTargetViewFromTracksListWithRouteDetailsGraph:(NSString *)gpxFilepath
+                                            isCurrentTrack:(BOOL)isCurrentTrack
+                                                     state:(OATrackMenuViewControllerState *)state;
 {
     OAGPXDocument *doc = isCurrentTrack ? [OASavingTrackHelper.sharedInstance currentTrack] : [[OAGPXDocument alloc] initWithGpxFile:gpxFilepath];
     if (doc)
@@ -3039,9 +3046,7 @@ typedef enum
         OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
             ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
             : [doc getAnalysis:0];
-        OATrackMenuViewControllerState *state = [[OATrackMenuViewControllerState alloc] init];
-        state.openedFromTracksList = true;
-        state.selectedStatisticsTab = EOATrackMenuHudSegmentsStatisticsOverviewTab;
+        state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
     }

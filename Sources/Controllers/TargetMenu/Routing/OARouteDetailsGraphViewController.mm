@@ -414,17 +414,15 @@
 {
     if (_trackMenuControlState)
     {
-        if (_trackMenuControlState.openedFromTracksList)
+        if (_trackMenuControlState.openedFromTracksList && !_trackMenuControlState.openedFromTrackMenu && _trackMenuControlState.navControllerHistory)
         {
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
-                UITabBarController *myPlacesViewController =
-                                        [[UIStoryboard storyboardWithName:@"MyPlaces" bundle:nil] instantiateInitialViewController];
-                [myPlacesViewController setSelectedIndex:1];
-                [[OARootViewController instance].navigationController pushViewController:myPlacesViewController animated:YES];
+                [[OARootViewController instance].navigationController setViewControllers:_trackMenuControlState.navControllerHistory animated:YES];
             }];
         }
         else
         {
+            _trackMenuControlState.openedFromTrackMenu = NO;
             [[OARootViewController instance].mapPanel targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
                 [[OARootViewController instance].mapPanel openTargetViewWithGPX:[[OAGPXDatabase sharedDb] getGPXItem:_trackMenuControlState.gpxFilePath]
                                                                    trackHudMode:EOATrackMenuHudMode

@@ -85,6 +85,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 @implementation OASettingsHelper
 {
     __weak OAImportSettingsViewController *_importDataVC;
+    NSInteger _currentBackupVersion;
 }
 
 + (OASettingsHelper *) sharedInstance
@@ -95,6 +96,26 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         _sharedInstance = [[OASettingsHelper alloc] init];
     });
     return _sharedInstance;
+}
+
+- (instancetype)init
+{
+    self = [super init];
+    if (self)
+    {
+        _currentBackupVersion = kVersion;
+    }
+    return self;
+}
+
+- (NSInteger)getCurrentBackupVersion
+{
+    return _currentBackupVersion;
+}
+
+- (void)setCurrentBackupVersion:(NSInteger)version
+{
+    _currentBackupVersion = version;
 }
 
 - (void) collectSettings:(NSString *)settingsFile 
@@ -909,7 +930,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     [self checkDuplicates:file items:pluginItems selectedItems:pluginItems onComplete:^(NSArray<OASettingsItem *> *duplicates, NSArray<OASettingsItem *> *items) {
         for (OASettingsItem *item in items)
             item.shouldReplace = YES;
-        [self importSettings:file items:items latestChanges:@"" version:1 onComplete:onImportComplete];
+        [self importSettings:file items:items latestChanges:@"" version:kVersion onComplete:onImportComplete];
     }];
 }
 
@@ -925,6 +946,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
     }
     _importTask = nil;
+    _currentBackupVersion = kVersion;
 }
 
 - (void) onSettingsCollectFinished:(BOOL)succeed empty:(BOOL)empty items:(NSArray<OASettingsItem *> *)items

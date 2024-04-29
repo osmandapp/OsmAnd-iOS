@@ -18,8 +18,8 @@
 #define kOsmAndGoPathPrefix @"/go"
 #define kOsmAndMapPathPrefix @"/map"
 
-//#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-3-released"
-#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
+#define kDocsLatestVersion @"https://docs.osmand.net/blog/osmand-ios-4-7-released"
+//#define kDocsLatestVersion  @"https://docs.osmand.net/docs/versions/future-ios"
 #define kBlogGuideline  @"https://osmand.net/blog/guideline-pt"
 
 #define kSupportEmail @"support@osmand.net"
@@ -42,6 +42,7 @@ static NSString * const kTroubleshootingNavigation = @"https://docs.osmand.net/d
 static NSString * const kTroubleshootingTrackRecording =  @"https://docs.osmand.net/docs/user/troubleshooting/track-recording-issues/";
 static NSString * const kTroubleshootingBaseURL = @"https://osmand.net/docs/user/troubleshooting/";
 static NSString * const kOsmAndUserBaseURL = @"https://osmand.net/docs/user/";
+static NSString * const kOsmRelation = @"https://openstreetmap.org/relation/";
 static NSString * const k_docs_plugin_trip_recording = @"https://osmand.net/docs/user/plugins/trip-recording";
 static NSString * const k_docs_plugin_nautical = @"https://osmand.net/docs/user/plugins/nautical-charts";
 static NSString * const k_docs_plugin_osm = @"https://osmand.net/docs/user/plugins/osm-editing";

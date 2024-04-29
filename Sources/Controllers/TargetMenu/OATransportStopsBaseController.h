@@ -15,10 +15,6 @@
 @property (nonatomic) OAPOI *poi;
 @property (nonatomic) OATransportStop *transportStop;
 
-- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute;
-- (NSMutableArray<OATransportStopRoute *> *)filterNearbyTransportRoutes:(NSArray<OATransportStopRoute *> *)routes filterFromRoutes:(NSArray<OATransportStopRoute *> *)filterFromRoutes;
-- (NSMutableArray<OATransportStopRoute *> *) filterTransportRoutes:(NSArray<OATransportStopRoute *> *)routes;
-
 - (void) processTransportStop;
 + (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity;
 

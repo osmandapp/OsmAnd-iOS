@@ -8,7 +8,7 @@
 
 #import "OAGPXMutableDocument.h"
 #import "OAUtilities.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OANativeUtilities.h"
 
@@ -540,7 +540,7 @@
 {
     [self updateDocAndMetadata];
     [self applyBounds];
-    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersionDependentConstants getAppVersionWithBundle]));
+    return document->saveTo(QString::fromNSString(filename), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
 }
 
 - (OAGPXTrackAnalysis*) getAnalysis:(long)fileTimestamp

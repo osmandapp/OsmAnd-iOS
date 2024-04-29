@@ -14,6 +14,8 @@
 
 #import <Foundation/Foundation.h>
 
+static const NSInteger kVersion = 2;
+
 @class OAImportAsyncTask, OAExportAsyncTask;
 @class OASettingsItem;
 
@@ -111,5 +113,8 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
 - (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *) getSettingsByCategory:(BOOL)addProfiles;
 
 - (NSArray<OASettingsItem *> *) getFilteredSettingsItems:(NSArray<OAExportSettingsType *> *)settingsTypes addProfiles:(BOOL)addProfiles doExport:(BOOL)doExport;
+
+- (NSInteger)getCurrentBackupVersion;
+- (void)setCurrentBackupVersion:(NSInteger)version;
 
 @end

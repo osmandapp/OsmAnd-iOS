@@ -17,7 +17,7 @@
 #define kWidgetModeEnabled 0x2
 #define KWidgetModeAvailable 0x4
 #define kWidgetModeDefault 0x8
-#define kWidgetModeMatchingPanels 0x16
+#define kWidgetModeMatchingPanels 0x10
 
 #define kWidgetRegisteredNotification @"onWidgetRegistered"
 #define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"

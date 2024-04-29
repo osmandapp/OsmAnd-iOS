@@ -29,7 +29,6 @@
 
 - (NSArray *)getSelectedItems;
 
-@property (strong, nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
 @property CGFloat azimuthDirection;
 @property (weak, nonatomic) id<OAGPXEditWptListViewControllerDelegate> delegate;
 

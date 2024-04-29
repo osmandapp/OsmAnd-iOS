@@ -42,7 +42,7 @@
 #import "OAExportSettingsType.h"
 #import "OABaseBackupTypesViewController.h"
 #import "OAExportBackupTask.h"
-#import "OAAppVersionDependentConstants.h"
+#import "OAAppVersion.h"
 #import "OATableDataModel.h"
 #import "OATableRowData.h"
 #import "OATableCollapsableRowData.h"
@@ -804,7 +804,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
         MFMailComposeViewController *mailCont = [[MFMailComposeViewController alloc] init];
         mailCont.mailComposeDelegate = self;
         [mailCont setSubject:OALocalizedString(@"backup_and_restore")];
-        NSString *body = [NSString stringWithFormat:@"%@\n%@", _backup.error, [OAAppVersionDependentConstants getAppVersionWithBundle]];
+        NSString *body = [NSString stringWithFormat:@"%@\n%@", _backup.error, [OAAppVersion getFullVersionWithAppName]];
         [mailCont setToRecipients:[NSArray arrayWithObject:OALocalizedString(@"login_footer_email_part")]];
         [mailCont setMessageBody:body isHTML:NO];
         [self presentViewController:mailCont animated:YES completion:nil];

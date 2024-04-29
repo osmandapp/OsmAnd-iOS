@@ -23,6 +23,7 @@
 #import "OACloudBackupViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAUtilities.h"
+#import "OAAppVersion.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -544,7 +545,7 @@ typedef enum
         case SEARCH_LOCATION:
             if (_searchLocationByIp)
             {
-                NSString *ver = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+                NSString *ver = OAAppVersion.getVersion;
                 /*
                 try {
                     pms.put("aid", Secure.getString(app.getContentResolver(), Secure.ANDROID_ID));
@@ -946,7 +947,7 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls
     NSString *path = urls[0].path;
     NSString *extension = [[path pathExtension] lowercaseString];
     if ([extension caseInsensitiveCompare:@"osf"] == NSOrderedSame)
-        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:1];
+        [OASettingsHelper.sharedInstance collectSettings:urls[0].path latestChanges:@"" version:kVersion];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle

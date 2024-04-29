@@ -111,15 +111,15 @@
 @property UINavigationController* navController;
 @property UIView* parentView;
 
-@property (nonatomic) OAAutoObserverProxy* locationServicesUpdateObserver;
-
 @end
 
 static const NSInteger _buttonsCount = 4;
 
 @implementation OATargetPointView
 {
-    
+    OAAutoObserverProxy *_locationUpdateObserver;
+    OAAutoObserverProxy *_headingUpdateObserver;
+
     CALayer *_horizontalRouteLine;
 
     CGFloat _headerY;
@@ -265,20 +265,29 @@ static const NSInteger _buttonsCount = 4;
 
 - (void) startLocationUpdate
 {
-    if (self.locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
         return;
     
     OsmAndAppInstance app = [OsmAndApp instance];
-    self.locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                    withHandler:@selector(doLocationUpdate)
-                                                                     andObserve:app.locationServices.updateObserver];
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(doLocationUpdate)
+                                                         andObserve:app.locationServices.updateLocationObserver];
+    _headingUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(doLocationUpdate)
+                                                        andObserve:app.locationServices.updateHeadingObserver];
 }
 
 - (void) stopLocationUpdate
 {
-    if (self.locationServicesUpdateObserver) {
-        [self.locationServicesUpdateObserver detach];
-        self.locationServicesUpdateObserver = nil;
+    if (_locationUpdateObserver) 
+    {
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
+    }
+    if (_headingUpdateObserver)
+    {
+        [_headingUpdateObserver detach];
+        _headingUpdateObserver = nil;
     }
 }
 
@@ -1757,8 +1766,8 @@ static const NSInteger _buttonsCount = 4;
             if ([v isKindOfClass:[UIButton class]])
                 [v removeFromSuperview];
 
-        NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self.customController getLocalTransportStopRoutes];
-        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self.customController getNearbyTransportStopRoutes];
+        NSArray<OATransportStopRoute *> *localTransportStopRoutes = [self filterTransportRoutes:[self.customController getLocalTransportStopRoutes]];
+        NSArray<OATransportStopRoute *> *nearbyTransportStopRoutes = [self filterNearbyTransportRoutes:[self.customController getNearbyTransportStopRoutes] filterFromRoutes:localTransportStopRoutes];
         _visibleTransportRoutes = [localTransportStopRoutes arrayByAddingObjectsFromArray:nearbyTransportStopRoutes];
         NSInteger stopPlatesCount = 0;
         if (localTransportStopRoutes.count > 0)
@@ -1803,6 +1812,43 @@ static const NSInteger _buttonsCount = 4;
     {
         _transportView.hidden = YES;
     }
+}
+
+- (BOOL) containsRef:(NSArray<OATransportStopRoute *> *)routes transportRoute:(OATransportStopRoute *)transportRoute
+{
+    for (OATransportStopRoute *route in routes)
+        if (route.route->type == transportRoute.route->type && route.route->ref == transportRoute.route->ref)
+            return YES;
+
+    return NO;
+}
+
+- (NSMutableArray<OATransportStopRoute *> *)filterNearbyTransportRoutes:(NSArray<OATransportStopRoute *> *)routes filterFromRoutes:(NSArray<OATransportStopRoute *> *)filterFromRoutes
+{
+    NSMutableArray<OATransportStopRoute *> *nearbyFilteredTransportStopRoutes = [self filterTransportRoutes:routes];
+    if (filterFromRoutes == nil || filterFromRoutes.count == 0)
+        return nearbyFilteredTransportStopRoutes;
+    
+    NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
+    for (OATransportStopRoute *route in nearbyFilteredTransportStopRoutes)
+    {
+        if (![self containsRef:filterFromRoutes transportRoute:route])
+        {
+            [filteredRoutes addObject:route];
+        }
+    }
+    return filteredRoutes;
+}
+
+- (NSMutableArray<OATransportStopRoute *> *) filterTransportRoutes:(NSArray<OATransportStopRoute *> *)routes
+{
+    NSMutableArray<OATransportStopRoute *> *filteredRoutes = [NSMutableArray array];
+    for (OATransportStopRoute *r in routes)
+    {
+        if (![self containsRef:filteredRoutes transportRoute:r])
+            [filteredRoutes addObject:r];
+    }
+    return filteredRoutes;
 }
 
 - (void) onTransportPlatePressed:(id)sender

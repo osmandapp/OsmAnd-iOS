@@ -12,7 +12,7 @@
 #import "OATrackMenuHudViewControllerConstants.h"
 
 @class LineChartView;
-@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink;
+@class OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OATravelArticleIdentifier;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 
@@ -59,6 +59,7 @@
 - (NSString *)getGpxFileSize;
 - (OAAuthor *)getAuthor;
 - (OACopyright *)getCopyright;
+- (OAMetadata *)getMetadata;
 - (NSString *)getKeywords;
 - (NSArray<OALink *> *)getLinks;
 - (NSString *)getCreatedOn;
@@ -81,6 +82,7 @@
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;
 - (void)openURL:(NSString *)url sourceView:(UIView *)sourceView;
+- (void)openArticleById:(OATravelArticleIdentifier *)articleId lang:(NSString *)lang;
 - (void)showAlertDeleteTrack;
 - (void)showAlertRenameTrack;
 - (void)openUploadGpxToOSM;
@@ -107,9 +109,12 @@
 @property (nonatomic, assign) EOADraggableMenuState showingState;
 @property (nonatomic, assign) BOOL openedFromMap;
 @property (nonatomic, assign) BOOL openedFromTracksList;
+@property (nonatomic, assign) BOOL openedFromTrackMenu;
+@property (nonatomic, assign) NSInteger scrollToSectionIndex;
+
 
 // Uses for reopening previous screens (with all NavController history) after opening track on map from MyPlaces
-@property (nonatomic, assign, nullable) NSArray<UIViewController *> *navControllerHistory;
+@property (nonatomic, nullable) NSArray<UIViewController *> *navControllerHistory;
 
 @end
 

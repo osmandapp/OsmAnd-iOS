@@ -44,8 +44,8 @@
     OAAutoObserverProxy* _destinationShowObserver;
     OAAutoObserverProxy* _destinationHideObserver;
     OAAutoObserverProxy* _destinationsChangeObserver;
-    OAAutoObserverProxy* _locationServicesUpdateObserver;
-    
+    OAAutoObserverProxy* _locationUpdateObserver;
+
     OATargetPointsHelper *_targetPoints;
     OADestinationsLineWidget *_destinationLayerWidget;
 
@@ -85,10 +85,10 @@
                                                             withHandler:@selector(onDestinationsChange:)
                                                              andObserve:self.app.data.destinationsChangeObservable];
 
-    _locationServicesUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                withHandler:@selector(onLocationServicesUpdate)
-                                                                 andObserve:self.app.locationServices.updateObserver];
-    
+    _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onLocationUpdate)
+                                                         andObserve:self.app.locationServices.updateLocationObserver];
+
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 
     _linesCollection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -145,10 +145,10 @@
         [_destinationsChangeObserver detach];
         _destinationsChangeObserver = nil;
     }
-    if (_locationServicesUpdateObserver)
+    if (_locationUpdateObserver)
     {
-        [_locationServicesUpdateObserver detach];
-        _locationServicesUpdateObserver = nil;
+        [_locationUpdateObserver detach];
+        _locationUpdateObserver = nil;
     }
 }
 
@@ -587,7 +587,7 @@
 
 #pragma mark - LocationServicesUpdate
 
-- (void) onLocationServicesUpdate
+- (void) onLocationUpdate
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self drawDestinationLines];

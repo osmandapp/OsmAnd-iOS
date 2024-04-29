@@ -54,9 +54,7 @@ final class WidgetPageViewController: UIViewController {
             for widgetView in widgetViews {
                 widgetView.isSimpleLayout = false
                 widgetView.adjustSize()
-                let constraint = widgetView.heightAnchor.constraint(greaterThanOrEqualToConstant: widgetView.frame.size.height)
-                constraint.priority = .defaultHigh
-                constraint.isActive = true
+                widgetView.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widgetView.frame.size.height, priority: .defaultHigh)
                 stackView.addArrangedSubview(widgetView)
             }
         }
@@ -101,13 +99,11 @@ final class WidgetPageViewController: UIViewController {
                     height += widget.frame.size.height
                 }
                 
-                var constraint = widget.heightAnchor.constraint(equalToConstant: widget.frame.size.height)
-                
                 if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
-                    constraint = widget.heightAnchor.constraint(greaterThanOrEqualToConstant: widget.frame.size.height)
+                    widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
+                } else {
+                    widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.equal, constant: widget.frame.size.height, priority: .defaultHigh)
                 }
-                constraint.priority = .defaultHigh
-                constraint.isActive = true
             }
         }
         return (width, height)
@@ -127,15 +123,17 @@ extension WidgetPageViewController {
     
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
+        let height: CGFloat
         if !WidgetType.isComplexWidget(widget.widgetType?.id ?? "") {
             widget.isSimpleLayout = true
             widget.updateSimpleLayout()
-            widget.heightAnchor.constraint(greaterThanOrEqualToConstant: 44).isActive = true
+            height = 44
         } else {
             widget.isSimpleLayout = false
             // NOTE: not isComplex widget has static height (waiting redesign)
-            widget.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+            height = 50
         }
+        widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: height, priority: .defaultHigh)
         widget.showBottomSeparator(false)
         widget.showRightSeparator(false)
     }

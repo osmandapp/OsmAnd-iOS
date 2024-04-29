@@ -217,7 +217,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                 kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
                 kCellTitleKey : OALocalizedString(@"vertical_exaggeration"),
                 kCellIconNameKey : @"ic_custom_terrain_scale",
-                kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorSelected],
+                kCellIconTintColor : [UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
                 @"value" : alphaValueString,
             }];
         }

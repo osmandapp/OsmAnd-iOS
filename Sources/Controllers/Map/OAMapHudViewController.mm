@@ -224,6 +224,10 @@
     _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(handleLongPressCompass:)];
     _longPress.delaysTouchesBegan = YES;
     [self.compassBox addGestureRecognizer:_longPress];
+
+    [self.leftWidgetsView addShadow];
+    [self.rightWidgetsView addShadow];
+    [self.middleWidgetsView addShadow];
 }
 
 - (CGFloat) getExtraScreenOffset
@@ -1180,11 +1184,20 @@
         if (_toolbarViewController && _toolbarViewController.view.superview)
             _toolbarViewController.view.alpha = isToolbarAllowed ? 1. : 0.;
         if (self.mapInfoController.topPanelController)
+        {
             self.mapInfoController.topPanelController.view.alpha = !isTopPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
+            [self.middleWidgetsView showShadow:self.mapInfoController.topPanelController.view.alpha == 1.];
+        }
         if (self.mapInfoController.leftPanelController)
+        {
             self.mapInfoController.leftPanelController.view.alpha = isWeatherToolbarVisible || !isLeftPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
+            [self.leftWidgetsView showShadow:self.mapInfoController.leftPanelController.view.alpha == 1.];
+        }
         if (self.mapInfoController.rightPanelController)
+        {
             self.mapInfoController.rightPanelController.view.alpha = isWeatherToolbarVisible ? 1. : !isRightPanelVisible || !isPanelAllowed || isToolbarVisible ? 0. : 1.;
+            [self.rightWidgetsView showShadow:self.mapInfoController.rightPanelController.view.alpha == 1.];
+        }
         if (self.downloadMapWidget)
             self.downloadMapWidget.alpha = isButtonsVisible ? 1. : 0.;
         

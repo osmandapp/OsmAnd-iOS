@@ -132,6 +132,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (void) addSpinner;
 - (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView;
 - (void) removeSpinner;
+- (void) addShadow;
+- (void) showShadow:(BOOL)show;
 - (UIImage *) toUIImage;
 
 @end
@@ -405,5 +407,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (int) convertCharToDist:(NSString *)ch firstLetter:(NSString *)firstLetter firstDist:(int)firstDist mult1:(int)mult1 mult2:(int)mult2;
 
 + (BOOL) isValidFileName:(NSString *)name;
+
++ (BOOL) isReleaseVersion;
 
 @end

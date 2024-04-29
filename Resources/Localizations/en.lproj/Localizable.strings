@@ -1663,9 +1663,15 @@
 "osm_failed_uploads" = "Failed";
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
+"routing_algorithm" = "Routing algorithm";
+"auto_zoom" = "Auto-zoom";
+"shared_string_development" = "Development";
+"routing_algorithm_highway_hierarchies" = "Highway hierarchies";
+"routing_algorithm_a" = "A*";
+"auto_zoom_smooth" = "Smooth";
+"auto_zoom_discrete" = "Discrete";
 "osmand_depelopment_simulate_location_section" = "Simulate";
-"osmand_depelopment_use_special_routing_hh+old" = "Use special routing (HH + old)";
-"osmand_depelopment_use_special_routing_hh_only" = "Use special routing (HH only)";
+"osmand_depelopment_use_old_routing" = "Use old routing (A*)";
 "osmand_depelopment_use_discrete_autozoom" = "Discrete autozoom (old version)";
 
 "simulate_in_progress" = "In progress";
@@ -1992,6 +1998,7 @@
 "min_mile" = "min/m";
 "min_km" = "min/km";
 "m_s" = "m/s";
+"ft_s" = "ft/s";
 
 "metric_ton" = "t";
 "kg" = "kg";
@@ -3680,6 +3687,7 @@
 "upload_to_osm_short" = "Upload to OSM";
 
 "average_glide_ratio" = "Average glide ratio";
+"average_vertical_speed" = "Average vertical speed";
 "glide_ratio_to_target" = "Glide ratio to target";
 "map_widget_glide_average_desc" = "Shows the average glide ratio for the set interval.";
 "map_widget_glide_target_desc" = "Shows the glide ratio needed to reach the target point.";
@@ -3734,3 +3742,20 @@
 "calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
+"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height";
+
+"visualization_3d_visualized_by" = "Visualized by";
+"visualization_3d_wall_color" = "Wall color";
+"visualization_3d_track_line" = "Track line";
+"track_3d" = "3d track";
+"fixed_height" = "Fixed Height";
+"downward_gradient" = "Downward gradient";
+"upward_gradient" = "Upward gradient";
+"shared_string_top" = "Top";
+"shared_string_bottom" = "Bottom";
+"shared_string_top_bottom" = "Top and bottom";
+
+"track_3d_empty_view_title" = "3D Track view";
+"track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
+
+"osm_id" = "OSM ID";

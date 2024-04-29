@@ -23,8 +23,7 @@
 
 #define kLastUsedExternalSensorKey @"kLastUsedExternalSensorKey"
 
-NSString * const OATrackRecordingNone = @"OATrackRecordingNone";
-NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
+NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_write_sensor_data_to_track_key";
 
 @implementation OAExternalSensorsPlugin
 {
@@ -41,12 +40,12 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
     if (self)
     {
         _lastUsedSensor = [OACommonBoolean withKey:kLastUsedExternalSensorKey defValue:NO];
-        
-        _speedSensorWriteToTrackDeviceID = [OACommonString withKey:@"speed_sensor_write_to_track_device" defValue:OATrackRecordingNone];
-        _cadenceSensorWriteToTrackDeviceID = [OACommonString withKey:@"cadence_sensor_write_to_track_device" defValue:OATrackRecordingNone];
-        _heartSensorWriteToTrackDeviceID = [OACommonString withKey:@"heart_rate_sensor_write_to_track_device" defValue:OATrackRecordingNone];
-        _temperatureSensorWriteToTrackDeviceID = [OACommonString withKey:@"temperature_sensor_write_to_track_device" defValue:OATrackRecordingNone];
-        
+
+        _speedSensorWriteToTrackDeviceID = [self registerStringPreference:@"speed_sensor_write_to_track_device" defValue:@""];
+        _cadenceSensorWriteToTrackDeviceID = [self registerStringPreference:@"cadence_sensor_write_to_track_device" defValue:@""];
+        _heartSensorWriteToTrackDeviceID = [self registerStringPreference:@"heart_rate_sensor_write_to_track_device" defValue:@""];
+        _temperatureSensorWriteToTrackDeviceID = [self registerStringPreference:@"temperature_sensor_write_to_track_device" defValue:@""];
+
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.heartRate appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleCadence appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleDistance appModes:@[]];
@@ -98,6 +97,30 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
              OAWidgetType.bicycleCadence,
              OAWidgetType.bicycleSpeed,
              OAWidgetType.temperature];
+}
+
+- (NSString *)getAnyConnectedDeviceId
+{
+    return OATrackRecordingAnyConnectedDevice;
+}
+
+- (NSString *)getWidgetDataFieldTypeNameByWidgetId:(NSString *)widgetId
+{
+    NSString *origWidgetId = [widgetId containsString:OAMapWidgetInfo.DELIMITER]
+        ? [widgetId substringToIndex:[widgetId indexOf:OAMapWidgetInfo.DELIMITER]]
+        : widgetId;
+
+    if ([origWidgetId isEqualToString:OAWidgetType.temperature.id])
+        return @"TEMPERATURE";
+    if ([origWidgetId isEqualToString:OAWidgetType.heartRate.id])
+        return @"HEART_RATE";
+    if ([origWidgetId isEqualToString:OAWidgetType.bicycleSpeed.id])
+        return @"BIKE_SPEED";
+    if ([origWidgetId isEqualToString:OAWidgetType.bicycleCadence.id])
+        return @"BIKE_CADENCE";
+    if ([origWidgetId isEqualToString:OAWidgetType.bicycleDistance.id])
+        return @"BIKE_DISTANCE";
+    return nil;
 }
 
 - (void)createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams
@@ -157,10 +180,10 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
     if (deviceIdPref)
     {
         NSString *deviceId = [deviceIdPref get:selectedAppMode];
-        if (deviceId && ![deviceId isEqualToString:OATrackRecordingNone])
+        if (deviceId && deviceId.length > 0)
         {
             OADevice *device = nil;
-            if ([deviceId isEqualToString:OATrackRecordingAnyConnected])
+            if ([deviceId isEqualToString:[self getAnyConnectedDeviceId]])
                 device = [[OADeviceHelper shared] getConnectedDevicesForWidgetWithType:widgetType].firstObject;
             else
                 device = [[OADeviceHelper shared] getPairedDevicesForType:widgetType deviceId:deviceId];
@@ -222,20 +245,28 @@ NSString * const OATrackRecordingAnyConnected = @"OATrackRecordingAnyConnected";
         for (NSString *tag in OASensorAttributesUtils.sensorGpxTags)
         {
             CGFloat value = ([OAPointAttributes.sensorTagTemperatureW isEqualToString:tag] || [OAPointAttributes.sensorTagTemperatureA isEqualToString:tag]) ? NAN : 0;
-            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:@"trackpointextension"];
+            NSNumber *val = nil;
+            BOOL isSpeedSensorTag = [tag isEqualToString:@"speed_sensor"];
+            OAGpxExtension *trackpointextension = [((OAWptPt *) point) getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
             if (trackpointextension)
             {
-                for (OAGpxExtension *subextension in trackpointextension.subextensions)
+                if (isSpeedSensorTag)
                 {
-                    if ([subextension.name isEqualToString:tag])
+                    val = [numberFormatter numberFromString:trackpointextension.value];
+                }
+                else
+                {
+                    for (OAGpxExtension *subextension in trackpointextension.subextensions)
                     {
-                        NSNumber *val = [numberFormatter numberFromString:subextension.value];
-                        if (val)
-                            value = val.floatValue;
+                        if ([subextension.name isEqualToString:tag])
+                        {
+                            val = [numberFormatter numberFromString:subextension.value];
+                        }
                     }
                 }
             }
             
+            value = val ? val.floatValue : value;
             [attribute setAttributeValueFor:tag value:value];
             
             if (![analysis hasData:tag] && [attribute hasValidValueFor:tag] && analysis.totalDistance > 0)

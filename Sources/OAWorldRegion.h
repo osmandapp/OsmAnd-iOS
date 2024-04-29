@@ -31,6 +31,8 @@
 @property (readonly) NSString* regionRoadSigns;
 @property (readonly) NSString* wikiLink;
 @property (readonly) NSString* population;
+@property (readonly) BOOL regionJoinMap;
+@property (readonly) BOOL regionJoinRoads;
 
 @property (readonly) CLLocationCoordinate2D bboxTopLeft;
 @property (readonly) CLLocationCoordinate2D bboxBottomRight;
@@ -54,6 +56,7 @@
 
 - (NSArray<OAWorldRegion *> *) queryAtLat:(double)lat lon:(double)lon;
 - (NSArray<OAWorldRegion *> *) getWorldRegionsAt:(double)latitude longitude:(double)longitude;
+- (NSArray<OAWorldRegion *> *)getWorldRegionsAtWithoutSort:(double)latitude longitude:(double)longitude;
 - (OAWorldRegion *) findAtLat:(double)latitude lon:(double)longitude;
 - (NSString *) getCountryNameAtLat:(double)latitude lon:(double)longitude;
 - (double) getArea;

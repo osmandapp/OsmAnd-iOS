@@ -58,8 +58,7 @@
     
     _currentGraphPosition = std::make_shared<OsmAnd::MapMarkersCollection>();
     _currentGraphXAxisPositions = std::make_shared<OsmAnd::MapMarkersCollection>();
-    
-    
+
     _xAxisLocationIcon = [OANativeUtilities skImageFromPngResource:@"map_mapillary_location"];
     
     OsmAnd::MapMarkerBuilder locationMarkerBuilder;
@@ -171,9 +170,10 @@
     canvas.drawCircle(bitmapSize / 2, bitmapSize  / 2, (bitmapSize - strokeWidth) / 2, paint);
 
     const auto arrowImage = [OANativeUtilities skImageFromPngResource:@"map_direction_arrow_small"];
-    canvas.drawImage(arrowImage,
-                     (bitmapSize - arrowImage->width()) / 2.0f,
-                     (bitmapSize - arrowImage->height()) / 2.0f);
+    if (arrowImage)
+        canvas.drawImage(arrowImage,
+                        (bitmapSize - arrowImage->width()) / 2.0f,
+                        (bitmapSize - arrowImage->height()) / 2.0f);
 
     canvas.flush();
     return bitmap.asImage();
@@ -260,7 +260,8 @@
         
         for (CLLocation *location in trackPoints.xAxisPoints)
         {
-            xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
+            if (_xAxisLocationIcon)
+            	xAxisMarkerBuilder.addOnMapSurfaceIcon(_locationIconKey, OsmAnd::SingleSkImage(_xAxisLocationIcon));
             const auto& marker = xAxisMarkerBuilder.buildAndAddToCollection(_currentGraphXAxisPositions);
             marker->setPosition(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(location.coordinate.latitude, location.coordinate.longitude)));
         }

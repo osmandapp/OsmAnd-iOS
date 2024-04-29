@@ -27,7 +27,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         }
     }
     
-    var wheelSize: Float?
+    var wheelSizeInMillimeters: Float?
     
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
@@ -109,10 +109,9 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                     }
                     if let descr = value as? Float {
                         if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
-                            // to milimeters
-                            wheelSize = descr * 1000
+                            wheelSizeInMillimeters = descr
                         }
-                        settingRow.descr = String(descr * 1000) + " " + localizedString("shared_string_millimeters").lowercased()
+                        settingRow.descr = String(descr) + " " + localizedString("shared_string_millimeters").lowercased()
                     }
                  }
             }
@@ -195,7 +194,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         } else if item.key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
             let wheelVC = BLEWheelSettingsViewController()
             wheelVC.device = device
-            wheelVC.wheelSize = wheelSize
+            wheelVC.wheelSize = wheelSizeInMillimeters
             wheelVC.onSaveAction = { [weak self] in
                 guard let self else { return }
                 generateData()

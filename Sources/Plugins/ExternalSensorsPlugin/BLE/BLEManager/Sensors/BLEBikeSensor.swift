@@ -24,15 +24,7 @@ final class BLEBikeSensor: Sensor {
     var lastBikeCadenceData: BikeCadenceData?
     var lastBikeSpeedDistanceData: BikeSpeedDistanceData?
     // NOTE: wheelCircumference = wheelSize * pi
-    var wheelSize: Double {
-        if let savedDevice = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: device.id) {
-            if let size = savedDevice.additionalParams?[WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY],
-            let actualWheelSize = Double(size) {
-                return actualWheelSize
-            }
-        }
-        return WheelDeviceSettings.DEFAULT_WHEEL_CIRCUMFERENCE
-    }
+    var wheelSize: Double = WheelDeviceSettings.DEFAULT_WHEEL_CIRCUMFERENCE / 1000
     
     override func getLastSensorDataList(for widgetType: WidgetType) -> [SensorData]? {
         if widgetType == .bicycleCadence {
@@ -61,7 +53,6 @@ final class BLEBikeSensor: Sensor {
     
     private func decodeSpeedCharacteristic(data: Data, result: (Result<Void, Error>) -> Void) throws {
         let characteristic = try CyclingCharacteristic(data: data)
-        
         characteristic.travelDistance(with: wheelSize)
             .flatMap { totalTravelDistance = $0; return updateBikeSpeedDistanceData() }
         characteristic.distance(oldCharacteristic, wheelCircumference: wheelSize)
@@ -70,9 +61,9 @@ final class BLEBikeSensor: Sensor {
             .flatMap { speed = $0; return updateBikeSpeedDistanceData() }
         
         characteristic.gearRatio(oldCharacteristic)
-            .flatMap { gearRatio = $0; return updateeBikeCadenceData() }
+            .flatMap { gearRatio = $0; return updateBikeCadenceData() }
         characteristic.cadence(oldCharacteristic)
-            .flatMap { cadence = $0; return updateeBikeCadenceData() }
+            .flatMap { cadence = $0; return updateBikeCadenceData() }
         
         oldCharacteristic = characteristic
         result(.success)
@@ -87,7 +78,7 @@ final class BLEBikeSensor: Sensor {
         debugPrint(lastBikeSpeedDistanceData?.description as Any)
     }
     
-    private func updateeBikeCadenceData() {
+    private func updateBikeCadenceData() {
         lastBikeSpeedDistanceData = nil
         lastBikeCadenceData = BikeCadenceData(timestamp: Date.now.timeIntervalSince1970,
                                               gearRatio: gearRatio,

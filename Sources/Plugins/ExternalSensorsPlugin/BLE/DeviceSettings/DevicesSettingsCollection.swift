@@ -12,27 +12,6 @@ final class DevicesSettingsCollection {
     
     private let storage = UserDefaults.standard
     
-    //    private static DEVICES_SETTINGS_PREF_ID = "external_devices_settings"
-    //
-    //    private final CommonPreference<String> preference;
-    //    private final Gson gson;
-    //    private final Map<String, DeviceSettings> settings = new HashMap<>();
-    //    private List<DevicePreferencesListener> listeners = new ArrayList<>();
-    
-    
-    //    public interface DevicePreferencesListener {
-    //        void onDeviceEnabled(@NonNull String deviceId);
-    //
-    //        void onDeviceDisabled(@NonNull String deviceId);
-    //    }
-    
-    //    public DevicesSettingsCollection(@NonNull ExternalSensorsPlugin plugin) {
-    //        gson = new GsonBuilder().create();
-    //        preference = plugin.registerStringPref(DEVICES_SETTINGS_PREF_ID, "");
-    //        readSettings();
-    //    }
-    
-    
     var hasPairedDevices: Bool {
         if let deviceSettingsArray: [DeviceSettings] = storage[.deviceSettings], !deviceSettingsArray.isEmpty {
            return true
@@ -72,24 +51,17 @@ final class DevicesSettingsCollection {
     }
     
     func changeDeviceName(with id: String, name: String) {
-        if let deviceSettings = getDeviceSettings(deviceId: id) {
-            deviceSettings.deviceName = name
-            updateDeviceSettings(item: deviceSettings)
-        }
+        guard let deviceSettings = getDeviceSettings(deviceId: id) else { return }
+        deviceSettings.deviceName = name
+        updateDeviceSettings(item: deviceSettings)
     }
     
-    func changeWheelSize(with id: String, size: Float) {
-        if let deviceSettings = getDeviceSettings(deviceId: id) {
-            if var additionalParams = deviceSettings.additionalParams {
-                additionalParams[WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY] = String(describing: size)
-                deviceSettings.additionalParams = additionalParams
-                updateDeviceSettings(item: deviceSettings)
-            } else {
-                let additionalParams = [WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY: String(describing: size)]
-                deviceSettings.additionalParams = additionalParams
-                updateDeviceSettings(item: deviceSettings)
-            }
-        }
+    func changeDeviceParameter(with id: String,
+                               key: String,
+                               value: String) {
+        guard let deviceSettings = getDeviceSettings(deviceId: id) else { return }
+        deviceSettings.setDeviceProperty(key: key, value: value)
+        updateDeviceSettings(item: deviceSettings)
     }
     
     private func addDeviceSettings(item: DeviceSettings) {
@@ -109,4 +81,3 @@ final class DevicesSettingsCollection {
         }
     }
 }
-

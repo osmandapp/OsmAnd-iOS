@@ -47,15 +47,14 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     }
     
     override func onRightNavbarButtonPressed() {
-        if wheelSizeString != String(wheelSize) {
-            if let millimeters = Float(wheelSizeString) {
-                let meters = millimeters / 1000.0
-                DeviceHelper.shared.changeWheelSize(with: device.id, size: meters)
-                onSaveAction?()
-            } else {
-                debugPrint("Conversion failed. The string is NOT a float.")
-            }
+        guard wheelSizeString != String(wheelSize),
+              Float(wheelSizeString) != nil else {
+            return
         }
+        DeviceHelper.shared.changeDeviceParameter(with: device.id,
+                                                  key: WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY,
+                                                  value: wheelSizeString)
+        onSaveAction?()
         dismiss()
     }
     

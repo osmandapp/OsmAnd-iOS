@@ -66,4 +66,10 @@ final class BLEBikeSCDDevice: Device {
     override func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
+    
+    func setWheelCircumference(wheelCircumference: Float) {
+        if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
+            sensor.wheelSize = Double(wheelCircumference / 1000)
+        }
+    }
 }

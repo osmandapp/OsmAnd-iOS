@@ -346,7 +346,15 @@
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
-    [self updateLayer];
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateLayer];
+    });
 }
 
 - (void)onWeatherToolbarStateChanged

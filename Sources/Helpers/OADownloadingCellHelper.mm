@@ -31,6 +31,9 @@
     OAAutoObserverProxy* _localResourcesChangedObserver;
     NSArray<OAResourceItem *> *_multipleDownloadingItems;
     
+    BOOL _resourcesInvalidated;
+    OAAutoObserverProxy *_backgroundStateObserver;
+
     BOOL _shouldCallLocalResourcesChanged;
     NSMutableArray<id<OADownloadTask>> *_finishedBackgroundDownloadings;
 }
@@ -45,15 +48,29 @@
 
 - (void)commonInit
 {
-    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) andObserve:OsmAndApp.instance.downloadsManager.progressCompletedObservable];
-    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:OsmAndApp.instance.downloadsManager.completedObservable];
-    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onLocalResourcesChanged:withKey:) andObserve:OsmAndApp.instance.localResourcesChangedObservable];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+    _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self 
+                                                              withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:) 
+                                                               andObserve:OsmAndApp.instance.downloadsManager.progressCompletedObservable];
+    _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) 
+                                                                andObserve:OsmAndApp.instance.downloadsManager.completedObservable];
+    _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                               withHandler:@selector(onLocalResourcesChanged:withKey:) 
+                                                                andObserve:OsmAndApp.instance.localResourcesChangedObservable];
+    _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                          andObserve:OsmAndApp.instance.backgroundStateObservable];
+
     _finishedBackgroundDownloadings = [NSMutableArray array];
 }
 
 - (void)dealloc
 {
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
     if (_downloadTaskProgressObserver)
     {
         [_downloadTaskProgressObserver detach];
@@ -442,6 +459,9 @@
 
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
+    if (OsmAndApp.instance.isInBackground)
+        return;
+
     id<OADownloadTask> task = key;
 
     // Skip all downloads that are not resources
@@ -450,7 +470,7 @@
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil || OsmAndApp.instance.isInBackground)
             return;
 
         [self refreshDownloadingContent:task.key];
@@ -478,7 +498,7 @@
             }
         }
         
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        if (OsmAndApp.instance.isInBackground)
             [_finishedBackgroundDownloadings addObject:task];
         else
             [self refreshUIOnTaskFinished:task];
@@ -495,15 +515,16 @@
 
 - (void)onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
+	if (OsmAndApp.instance.isInBackground)
+    {
+        _resourcesInvalidated = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil)
             return;
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-        {
-            _shouldCallLocalResourcesChanged = YES;
-            return;
-        }
-        
+
         [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
 
         [OAManageResourcesViewController prepareData];
@@ -511,26 +532,32 @@
     });
 }
 
-- (void) onApplicationWillEnterForeground
+- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
+    if ([key isKindOfClass:NSNumber.class])
+    {
+        BOOL isInBackground = ((NSNumber *)key).boolValue;
+        if (!isInBackground)
         {
-            id<OADownloadTask> task = [_finishedBackgroundDownloadings firstObject];
-            [self refreshUIOnTaskFinished:task];
-            [_finishedBackgroundDownloadings removeObjectAtIndex:0];
-        }
-        
-        if (_shouldCallLocalResourcesChanged)
-        {
-            [self onLocalResourcesChanged:nil withKey:nil];
-            _shouldCallLocalResourcesChanged = NO;
-        }
-        
-        [self restartDownloadingCellsAnimations];
-    });
-}
+            dispatch_async(dispatch_get_main_queue(), ^{
+                while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
+                {
+                    id<OADownloadTask> task = [_finishedBackgroundDownloadings firstObject];
+                    [self refreshUIOnTaskFinished:task];
+                    [_finishedBackgroundDownloadings removeObjectAtIndex:0];
+                }
 
+                if (_resourcesInvalidated)
+                {
+                    [self onLocalResourcesChanged:nil withKey:nil];
+                    _resourcesInvalidated = NO;
+                }
+
+                [self restartDownloadingCellsAnimations];
+            });
+        }
+    }
+}
 
 #pragma mark - OADownloadMultipleResourceDelegate
 

@@ -358,7 +358,8 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     dispatch_group_t _searchCitiesGroup;
     NSInteger _searchRequestsCount;
     
-    BOOL _shouldRefreshOnForeground;
+    BOOL _resourcesInvalidated;
+    OAAutoObserverProxy *_backgroundStateObserver;
 }
 
 + (OAQuickSearchHelper *) instance
@@ -385,13 +386,29 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         _searchCitiesGroup = dispatch_group_create();
         _searchRequestsCount = 0;
 
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                              andObserve:OsmAndApp.instance.backgroundStateObservable];
+
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onLocalResourcesChanged:withKey:)
                                                                     andObserve:[OsmAndApp instance].localResourcesChangedObservable];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
     }
     return self;
+}
+
+- (void) dealloc
+{
+    if (_localResourcesChangedObserver)
+    {
+        [_localResourcesChangedObserver detach];
+        _localResourcesChangedObserver = nil;
+    }
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
 }
 
 - (OASearchUICore *) getCore
@@ -494,25 +511,32 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     [[_core getSearchSettings] setRegions:app.worldRegion];
 }
 
-- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-            _shouldRefreshOnForeground = YES;
-        else
-            [self setResourcesForSearchUICore];
-    });
+    if ([key isKindOfClass:NSNumber.class])
+    {
+        BOOL isInBackground = ((NSNumber *)key).boolValue;
+        if (!isInBackground && _resourcesInvalidated)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self setResourcesForSearchUICore];
+                _resourcesInvalidated = NO;
+            });
+        }
+    }
 }
 
-- (void) onApplicationWillEnterForeground
+- (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
-    if (_shouldRefreshOnForeground)
+    if (OsmAndApp.instance.isInBackground)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self setResourcesForSearchUICore];
-            _shouldRefreshOnForeground = NO;
-        });
+        _resourcesInvalidated = YES;
+        return;
     }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setResourcesForSearchUICore];
+    });
 }
 
 - (void)cancelSearchCities

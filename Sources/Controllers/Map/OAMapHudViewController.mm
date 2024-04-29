@@ -1088,7 +1088,7 @@
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil || [UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackground)
             return;
         
         if (!_downloadView)

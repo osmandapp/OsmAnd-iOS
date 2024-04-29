@@ -1238,7 +1238,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         // In background, don't change screen turn-off setting
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
+        if (self.isInBackground)
             return;
         
         [self updateScreenTurnOffSetting];

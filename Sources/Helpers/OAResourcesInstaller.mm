@@ -35,12 +35,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OsmAndAppInstance _app;
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy *_backgroundStateObserver;
 
     MBProgressHUD* _progressHUD;
     
     NSObject *_sync;
     
-    OAWorldRegion *_downloadedInBackgroundRegion;
+    OAWorldRegion *_lastDownloadedRegionInBackground;
 }
 
 - (instancetype) init
@@ -52,21 +53,42 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         
         _app = [OsmAndApp instance];
 
-        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onApplicationWillEnterForeground) name:UIApplicationWillEnterForegroundNotification object:nil];
+        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                    andObserve:_app.downloadsManager.completedObservable];
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                              andObserve:_app.downloadsManager.completedObservable];
     }
     return self;
 }
 
-- (void) onApplicationWillEnterForeground
+- (void)dealloc
 {
-    if (_downloadedInBackgroundRegion)
+    if (_backgroundStateObserver)
     {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [OAPluginPopupViewController showRegionOnMap:_downloadedInBackgroundRegion];
-            _downloadedInBackgroundRegion = nil;
-        });
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
+}
+
+- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
+{
+    if ([key isKindOfClass:NSNumber.class])
+    {
+        BOOL isInBackground = ((NSNumber *)key).boolValue;
+        if (!isInBackground && _lastDownloadedRegionInBackground)
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [OAPluginPopupViewController showRegionOnMap:_lastDownloadedRegionInBackground];
+                _lastDownloadedRegionInBackground = nil;
+            });
+        }
     }
 }
 
@@ -342,8 +364,8 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-                                            _downloadedInBackgroundRegion = foundRegion;
+                                        if (_app.isInBackground)
+                                            _lastDownloadedRegionInBackground = foundRegion;
                                         else
                                             [OAPluginPopupViewController showRegionOnMap:foundRegion];
                                     });

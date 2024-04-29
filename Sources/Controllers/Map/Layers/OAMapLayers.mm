@@ -114,8 +114,8 @@
     [OAPluginsHelper createLayers];
 
     _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(onBackgroundStateChanged:withKey:)
-                                                         andObserve:OsmAndApp.instance.backgroundStateObservable];
+                                                         withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                          andObserve:OsmAndApp.instance.backgroundStateObservable];
 }
 
 - (void) destroyLayers
@@ -211,11 +211,6 @@
 {
     for (OAMapLayer *layer in _layers.objectEnumerator)
         [layer didReceiveMemoryWarning];
-}
-
-- (void) onApplicationWillEnterForeground
-{
-
 }
 
 @end

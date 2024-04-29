@@ -38,11 +38,11 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     }
     
     override func getLeftNavbarButtonTitle() -> String {
-        localizedString("shared_string_close")
+        localizedString("shared_string_cancel")
     }
     
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
-        let saveBarButton = createRightNavbarButton(localizedString("shared_string_save"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)
+        let saveBarButton = createRightNavbarButton(localizedString("shared_string_apply"), iconName: nil, action: #selector(onRightNavbarButtonPressed), menu: nil)
         return [saveBarButton!]
     }
     

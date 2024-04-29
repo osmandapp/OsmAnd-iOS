@@ -110,8 +110,18 @@ final class DeviceHelper: NSObject {
         devicesSettingsCollection.changeDeviceName(with: id, name: name)
     }
     
-    func changeWheelSize(with id: String, size: Float) {
-        devicesSettingsCollection.changeWheelSize(with: id, size: size)
+    func changeDeviceParameter(with id: String,
+                               key: String,
+                               value: String) {
+        devicesSettingsCollection.changeDeviceParameter(with: id,
+                                                        key: key,
+                                                        value: value)
+        if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
+            if let connectedDevice = connectedDevices.first(where: { $0.id == id }) as? BLEBikeSCDDevice,
+               let wheelCircumference = Float(value) {
+                connectedDevice.setWheelCircumference(wheelCircumference: wheelCircumference)
+            }
+        }
     }
     
     private func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {

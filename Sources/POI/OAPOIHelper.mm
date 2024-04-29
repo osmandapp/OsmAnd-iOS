@@ -980,7 +980,6 @@
                                     [processedPoi addObject:@(am->id.id)];
                                     OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
                                     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
-                                    [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                     if (publish)
                                     {
                                         done = publish(poi);
@@ -1043,11 +1042,9 @@
                                         (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
                                         {
                                             const auto &am = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
-                                            const auto decodedValues = am->getDecodedValues();
-        
-                                            OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES decodedValues:decodedValues];
+
+                                            OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
-                                            [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi decodedValues:decodedValues];
                                             
                                             if (publish)
                                             {
@@ -1339,14 +1336,9 @@
 
 + (OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry withValues:(BOOL)withValues withContent:(BOOL)withContent
 {
-    return [self.class parsePOI:resultEntry withValues:withValues withContent:withContent];
-}
-
-+ (OAPOI *) parsePOI:(const OsmAnd::ISearch::IResultEntry&)resultEntry withValues:(BOOL)withValues withContent:(BOOL)withContent decodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues
-{
     const auto& amenity = ((OsmAnd::AmenitiesByNameSearch::ResultEntry&)resultEntry).amenity;
     OAPOIType *type = [self.class parsePOITypeByAmenity:amenity];
-    return [self.class parsePOIByAmenity:amenity type:type withValues:withValues withContent:withContent decodedValues:decodedValues];
+    return [self.class parsePOIByAmenity:amenity type:type withValues:withValues withContent:withContent];
 }
 
 + (OAPOIType *) parsePOITypeByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity
@@ -1387,11 +1379,6 @@
 
 + (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity type:(OAPOIType *)type withValues:(BOOL)withValues withContent:(BOOL)withContent
 {
-    return [self.class parsePOIByAmenity:amenity type:type withValues:withValues withContent:withContent decodedValues:QList<OsmAnd::Amenity::DecodedValue>()];
-}
-
-+ (OAPOI *) parsePOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity type:(OAPOIType *)type withValues:(BOOL)withValues withContent:(BOOL)withContent decodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues
-{
     if (!type || type.mapOnly || [[OAAppSettings sharedManager] isTypeDisabled:amenity->subType.toNSString()])
         return nil;
     
@@ -1410,11 +1397,7 @@
     
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    QList<OsmAnd::Amenity::DecodedValue> decoded = decodedValues;
-    if (decoded.isEmpty())
-        decoded = amenity->getDecodedValues();
-    
-    [OAPOIHelper processDecodedValues:decoded content:(withContent ? content : nil) values:(withValues ? values : nil)];
+    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:(withContent ? content : nil) values:(withValues ? values : nil)];
     poi.values = values;
     poi.localizedContent = content;
     
@@ -1444,18 +1427,9 @@
 
 + (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi
 {
-    [self.class fetchValuesContentPOIByAmenity:amenity poi:poi decodedValues:QList<OsmAnd::Amenity::DecodedValue>()];
-}
-
-+ (void) fetchValuesContentPOIByAmenity:(const std::shared_ptr<const OsmAnd::Amenity> &)amenity poi:(OAPOI *)poi decodedValues:(QList<OsmAnd::Amenity::DecodedValue>)decodedValues
-{
     NSMutableDictionary *content = [NSMutableDictionary dictionary];
     NSMutableDictionary *values = [NSMutableDictionary dictionary];
-    QList<OsmAnd::Amenity::DecodedValue> decoded = decodedValues;
-    if (decoded.isEmpty())
-        decoded = amenity->getDecodedValues();
-    
-    [OAPOIHelper processDecodedValues:decoded content:content values:values];
+    [OAPOIHelper processDecodedValues:amenity->getDecodedValues() content:content values:values];
     poi.values = values;
     poi.localizedContent = content;
 }

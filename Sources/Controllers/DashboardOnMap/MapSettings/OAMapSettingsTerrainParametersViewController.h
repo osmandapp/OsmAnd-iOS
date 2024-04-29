@@ -13,7 +13,8 @@ typedef NS_ENUM(NSInteger, EOATerrainSettingsType)
 {
     EOATerrainSettingsTypeVisibility,
     EOATerrainSettingsTypeZoomLevels,
-    EOATerrainSettingsTypeVerticalExaggeration
+    EOATerrainSettingsTypeVerticalExaggeration,
+    EOAGPXSettingsTypeVerticalExaggeration
 };
 
 @protocol OATerrainParametersDelegate
@@ -22,11 +23,17 @@ typedef NS_ENUM(NSInteger, EOATerrainSettingsType)
 
 @end
 
+typedef void(^OAControllerActionFloatValueCallback)(CGFloat value);
+typedef void(^OAControllerHideCallback)();
+
 @interface OAMapSettingsTerrainParametersViewController : OABaseScrollableHudViewController
 
 @property (nonatomic, readonly) EOATerrainSettingsType terrainType;
+@property (nonatomic, copy, nullable) OAControllerActionFloatValueCallback applyCallback;
+@property (nonatomic, copy, nullable) OAControllerHideCallback hideCallback;
 
 - (instancetype)initWithSettingsType:(EOATerrainSettingsType)terrainType;
+- (void)configureGPXVerticalExaggerationScale:(CGFloat)scale;
 
 @property (nonatomic, weak) id<OATerrainParametersDelegate> delegate;
 

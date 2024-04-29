@@ -47,6 +47,6 @@ final class GlideTargetWidgetState: OAWidgetState {
         if let customId, !customId.isEmpty {
             prefId += "_\(customId)"
         }
-        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false)
+        return OAAppSettings.sharedManager().registerBooleanPreference(prefId, defValue: false).makeProfile() as! OACommonBoolean
     }
 }

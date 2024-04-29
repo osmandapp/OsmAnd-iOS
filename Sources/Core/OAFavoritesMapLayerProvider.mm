@@ -68,7 +68,19 @@ sk_sp<SkImage> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::share
     QString iconName = isFullSize ? fav->getIcon() : QStringLiteral("");
     QString backgroundIconName = backgroundImageNameByType(fav->getBackground());
     QString size = isFullSize ? QStringLiteral("_full") : QStringLiteral("_small");
-    QString iconId = QString::number(fav->getColor().a + fav->getColor().r + fav->getColor().g + fav->getColor().b) + QStringLiteral("_") + iconName + QStringLiteral("_") + backgroundIconName + size + QString("_%1").arg(_symbolsScaleFactor, 0, 'f', 2);
+    
+    auto color = fav->getColor();
+    if (color.argb == 0)
+    {
+        CGFloat r,g,b,a;
+        [[OADefaultFavorite getDefaultColor] getRed:&r green:&g blue:&b alpha:&a];
+        color = OsmAnd::FColorARGB(a,r,g,b);
+    }
+    
+    QString iconId = QString("%1_%2_%3%4_%5")
+        .arg(QString::number(color.argb), iconName, backgroundIconName, size)
+        .arg(_symbolsScaleFactor, 0, 'f', 2);
+
     const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;
     if (bitmapIt == _iconsCache.end())

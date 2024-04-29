@@ -10,6 +10,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OACommonTypes.h"
 #import <CoreLocation/CoreLocation.h>
+#import "OAGPXDatabase.h"
 
 #include <QList>
 #include <QHash>
@@ -19,7 +20,7 @@
 #define kDefaultWptGroupName @""
 
 @class OAGPXTrackAnalysis;
-@class OASplitMetric, QuadRect, OAApplicationMode;
+@class OASplitMetric, QuadRect, OAApplicationMode, OAGPXDatabase;
 
 @interface OAGPXDocument : OAGpxExtensions
 
@@ -66,6 +67,7 @@
 - (BOOL) hasRtePt;
 - (BOOL) hasWptPt;
 - (BOOL) hasTrkPt;
+- (BOOL) hasTrkPtWithElevation;
 - (BOOL) hasRoute;
 - (BOOL) isRoutesPoints;
 
@@ -120,8 +122,18 @@
 - (void) setShowArrows:(BOOL)showArrows;
 - (BOOL) isShowStartFinish;
 - (void) setShowStartFinish:(BOOL)showStartFinish;
-- (BOOL)isRaiseRoutesAboveRelief;
-- (void)setRaiseRoutesAboveRelief:(BOOL)isRaiseRoutesAboveRelief;
+
+- (CGFloat)getVerticalExaggerationScale;
+- (void)setVerticalExaggerationScale:(CGFloat)scale;
+
+- (NSString *)getVisualization3dByTypeValue;
+- (void)setVisualization3dByType:(EOAGPX3DLineVisualizationByType)type;
+
+- (NSString *)getVisualization3dWallColorTypeValue;
+- (void)setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type;
+
+- (NSString *)getVisualization3dPositionTypeValue;
+- (void)setVisualization3dPositionType:(EOAGPX3DLineVisualizationPositionType)type;
 
 - (OATrack *) getGeneralTrack;
 - (OATrkSegment *) getGeneralSegment;

@@ -43,36 +43,37 @@ jobs:
     #   run: brew install gnupg
     ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - name: Checkout ios
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/master
+        repository: osmandapp/OsmAnd-iOS
         path: ios
     - name: Checkout android
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd
         path: android
     - name: Checkout build
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-build
         path: build
     - name: Checkout core legacy
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
     - name: Checkout core
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-core
         path: core
     - name: Checkout resources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: refs/heads/master
         repository: osmandapp/OsmAnd-resources
@@ -93,7 +94,7 @@ jobs:
         DOWNLOAD_PREBUILT_QT_FILES: ${{ github.event.inputs.download_qt_ios_library }} 
       run: exec ios/prepare.sh --sync_translations
     - name: Upload qt-ios-prebuilt
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: qt-ios-prebuilt.zip
         path: qt-ios-prebuilt.zip
@@ -121,7 +122,7 @@ jobs:
     - name: Zip iOS archive
       run: 'zip -r OsmAndMaps.xcarchive.zip . -i OsmAndMaps.xcarchive'
     - name: Upload maps archive zip
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
          name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
          path: OsmAndMaps.xcarchive.zip
@@ -136,7 +137,7 @@ jobs:
             -allowProvisioningUpdates 
             -exportArchive' 
     - name: Upload maps archive
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
         path: 'OsmAnd Maps.ipa'

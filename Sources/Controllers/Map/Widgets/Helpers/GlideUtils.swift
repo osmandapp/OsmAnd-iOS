@@ -26,7 +26,7 @@ final class GlideUtils: NSObject {
 
     static func calculateFormattedRatio(_ l1: CLLocationCoordinate2D, l2: CLLocationCoordinate2D, a1: Double, a2: Double) -> String {
         let distance = OAMapUtils.getDistance(l1.latitude, lon1: l1.longitude, lat2: l2.latitude, lon2: l2.longitude)
-        return calculateFormattedRatio(distance, altDif: a2 - a1)
+        return calculateFormattedRatio(distance, altDif: a1 - a2)
     }
 
     static func calculateFormattedRatio(_ distance: Double, altDif: Double) -> String {

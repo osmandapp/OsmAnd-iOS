@@ -16,6 +16,7 @@
     BOOL _nightMode;
     UIView *_separatorBottomView;
     UIView *_separatorRightView;
+    NSLayoutConstraint *_heightConstraint;
 }
 
 - (instancetype)initWithType:(OAWidgetType *)type
@@ -68,6 +69,57 @@
 - (void)updatesSeparatorsColor:(UIColor *)color
 {
     _separatorBottomView.backgroundColor = _separatorRightView.backgroundColor = color;
+}
+
+- (void)replaceHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority
+{
+    if (_heightConstraint)
+        _heightConstraint.active = NO;
+
+    switch (relation)
+    {
+        case NSLayoutRelationLessThanOrEqual:
+            _heightConstraint = [self.heightAnchor constraintLessThanOrEqualToConstant:constant];
+            break;
+        case NSLayoutRelationEqual:
+            _heightConstraint = [self.heightAnchor constraintEqualToConstant:constant];
+            break;
+        case NSLayoutRelationGreaterThanOrEqual:
+            _heightConstraint = [self.heightAnchor constraintGreaterThanOrEqualToConstant:constant];
+            break;
+
+        default:
+            _heightConstraint = nil;
+            break;
+    }
+    if (_heightConstraint)
+    {
+        _heightConstraint.priority = priority;
+        _heightConstraint.active = YES;
+    }
+}
+
+- (void)updateHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority
+{
+    if (_heightConstraint && _heightConstraint.isActive)
+    {
+        if (_heightConstraint.relation != relation || _heightConstraint.constant != constant || _heightConstraint.priority != priority)
+            [self replaceHeightConstraintWithRelation:relation constant:constant priority:priority];
+    }
+    else
+    {
+        [self replaceHeightConstraintWithRelation:relation constant:constant priority:priority];
+    }
+}
+
+- (void)updateHeightConstraint:(NSLayoutConstraint * _Nullable)constraint
+{
+    if (_heightConstraint)
+        _heightConstraint.active = NO;
+
+    _heightConstraint = constraint;
+    if (_heightConstraint)
+        _heightConstraint.active = YES;
 }
 
 - (OACommonBoolean * _Nullable ) getWidgetVisibilityPref {

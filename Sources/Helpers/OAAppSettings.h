@@ -171,7 +171,8 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
     METERS_PER_SECOND,
     MINUTES_PER_MILE,
     MINUTES_PER_KILOMETER,
-    NAUTICALMILES_PER_HOUR
+    NAUTICALMILES_PER_HOUR,
+    FEET_PER_SECOND
 };
 
 @interface OASpeedConstant : NSObject
@@ -1198,7 +1199,11 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
-@property (nonatomic) OACommonBoolean *currentTrackRaiseRoutesAboveRelief;
+@property (nonatomic) OACommonDouble *currentTrackVerticalExaggerationScale;
+@property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
+@property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
+@property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
+
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;

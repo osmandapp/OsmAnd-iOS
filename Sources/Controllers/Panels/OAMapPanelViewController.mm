@@ -3046,6 +3046,7 @@ typedef enum
         OAGPXTrackAnalysis *analysis = !isCurrentTrack && [doc getGeneralTrack] && [doc getGeneralSegment]
             ? [OAGPXTrackAnalysis segment:0 seg:doc.generalSegment]
             : [doc getAnalysis:0];
+        state.scrollToSectionIndex = -1;
         state.routeStatistics = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSpeed)];
         [self openTargetViewWithRouteDetailsGraph:doc analysis:analysis menuControlState:state];
     }

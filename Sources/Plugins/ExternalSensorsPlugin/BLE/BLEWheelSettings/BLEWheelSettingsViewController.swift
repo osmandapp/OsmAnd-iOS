@@ -24,7 +24,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        wheelSizeString = String(wheelSize)
+        wheelSizeString = wheelSize.cleanValue
         generateData()
     }
     
@@ -73,7 +73,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
-        var outCell: UITableViewCell? = nil
+        var outCell: UITableViewCell?
         if item.cellType == OAInputTableViewCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAInputTableViewCell.getIdentifier()) as? OAInputTableViewCell
             if cell == nil {
@@ -87,6 +87,7 @@ final class BLEWheelSettingsViewController: OABaseNavbarViewController {
             }
             if let cell {
                 textField = cell.inputField
+                cell.clearButtonVisibility(false)
                 cell.titleLabel.text = localizedString("shared_string_millimeters")
                 cell.inputField.text = item.title
                 cell.clearButton.removeTarget(nil, action: nil, for: .touchUpInside)
@@ -123,5 +124,11 @@ extension BLEWheelSettingsViewController: UITextFieldDelegate {
         }
         
         return true
+    }
+}
+
+private extension Float {
+    var cleanValue: String {
+        truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
     }
 }

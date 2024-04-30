@@ -19,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 
 @property (nonatomic) CLLocation *startPoint;
-@property (nonatomic) CLLocation *endPoint;
 
 - (instancetype)init;
 
@@ -27,8 +26,6 @@ NS_ASSUME_NONNULL_BEGIN
                              start:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions;
-- (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
-                                    targets:(NSArray<CLLocation *> *)targets;
 - (void)clearResult;
 - (NSString *)getErrorMessage;
 

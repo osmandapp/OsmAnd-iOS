@@ -2171,11 +2171,20 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     //[self showProgressHUD];
     
     @synchronized(_rendererSync)
-    {
+    { 
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get]);
+        double mapDensity = [settings.mapDensity get];
+        double mapDensityAligned;
+        if (mapDensity > 2)
+            mapDensityAligned = 2.0;
+        else if (mapDensity > 1)
+            mapDensityAligned = 1.0;
+        else
+            mapDensityAligned = mapDensity;
+
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * mapDensityAligned);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen

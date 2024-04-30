@@ -184,7 +184,9 @@ final class GlideTargetWidget: GlideBaseWidget {
     }
 
     private func calculateAltitude(_ location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
-        completion(CLLocationCoordinate2DIsValid(location) ? OAMapUtils.getAltitudeForLatLon(location) : Self.minAltitudeValue)
+        completion(CLLocationCoordinate2DIsValid(location)
+                   ? OARootViewController.instance().mapPanel.mapViewController.getAltitudeForLatLon(location)
+                   : Self.minAltitudeValue)
     }
 
     private func calculateFormattedRatio(_ l1: CLLocation?, a1: Double?, l2: CLLocationCoordinate2D?, a2: Double?) -> String? {

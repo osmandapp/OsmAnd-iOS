@@ -475,45 +475,50 @@
     NSLog(@"onCalculateOnlineButtonPressed");
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
-        _isActiveOnlineCalculateRequest = YES;
-        [self selectAllCells:NO];
-        [self reloadDataWithAnimated:NO completion:nil];
-        __weak __typeof(self) weakSelf = self;
-        OARouteProvider *routeProvider = [OARoutingHelper sharedInstance].getRouteProvider;
-        auto missingMapsCalculator = [routeProvider missingMapsCalculator];
-        [self.navigationItem setRightBarButtonItemsisEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
-        [OAResourcesUIHelper onlineCalculateRequestStartPoint:missingMapsCalculator.startPoint endPoint:missingMapsCalculator.endPoint completion:^(NSArray<CLLocation *> *locations, NSError *error) {
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
-            [strongSelf onlineCalculateFinishState];
-            if (!error && locations.count > 0)
-            {
-                CLLocation *startPoint = locations[0];
-                NSMutableArray *targetsPointsArray = [locations mutableCopy];
-                [targetsPointsArray removeObjectAtIndex:0];
-                if ([missingMapsCalculator checkIfThereAreMissingMapsWithStart:startPoint targets:targetsPointsArray])
+        auto missingMapsCalculator = [MissingMapsCalculator new];
+        OARouteCalculationResult *prevRoute = [OARoutingHelper.sharedInstance getRoute];
+        if (prevRoute != nil
+            && prevRoute.missingMapsPoints != nil
+            && prevRoute.missingMapsRoutingContext != nullptr) {
+            _isActiveOnlineCalculateRequest = YES;
+            [self selectAllCells:NO];
+            [self reloadDataWithAnimated:NO completion:nil];
+            [self.navigationItem setRightBarButtonItemsisEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
+            __weak __typeof(self) weakSelf = self;
+            [OAResourcesUIHelper onlineCalculateRequestWithRouteCalculationResult:prevRoute completion:^(NSArray<CLLocation *> *locations, NSError *error) {
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+                [strongSelf onlineCalculateFinishState];
+                if (!error && locations.count > 0)
                 {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
-                                                             mapsToUpdate:missingMapsCalculator.mapsToUpdate
-                                                      potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
-                        [missingMapsCalculator clearResult];
-                        [strongSelf selectAllCells:YES];
-                    });
+                    bool oldRouting = [[OAAppSettings sharedManager].useOldRouting get];
+                    if ([missingMapsCalculator checkIfThereAreMissingMaps:prevRoute.missingMapsRoutingContext start:prevRoute.missingMapsPoints.firstObject targets:locations checkHHEditions:!oldRouting])
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
+                                                                 mapsToUpdate:missingMapsCalculator.mapsToUpdate
+                                                          potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
+                            [prevRoute setMissingMaps:missingMapsCalculator.missingMaps
+                                         mapsToUpdate:missingMapsCalculator.mapsToUpdate
+                                             usedMaps:missingMapsCalculator.potentiallyUsedMaps ctx:prevRoute.missingMapsRoutingContext points:prevRoute.missingMapsPoints];
+                            [missingMapsCalculator clearResult];
+                            [strongSelf selectAllCells:YES];
+                        });
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [strongSelf reloadDataWithAnimated:NO completion:nil];
+                            [strongSelf selectAllCells:YES];
+                        });
+                    }
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [strongSelf reloadDataWithAnimated:NO completion:nil];
                         [strongSelf selectAllCells:YES];
                     });
                 }
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf reloadDataWithAnimated:NO completion:nil];
-                    [strongSelf selectAllCells:YES];
-                });
-            }
-        }];
+            }];
+        }
     }
     else
     {

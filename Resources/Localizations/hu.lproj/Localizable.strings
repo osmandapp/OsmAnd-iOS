@@ -2593,7 +2593,7 @@
 "there_are_no_connected_sensors_of_this_type" = "Nincs ilyen típusú érzékelő kapcsolódva";
 "coordinates_format" = "Koordinátaformátum";
 "help_article_troubleshooting_track_recording_issues_name" = "Nyomvonal felvétele";
-"average_glide_ratio" = "Átlagos siklásszám";
+"average_glide_ratio" = "Átlagos siklószám";
 "shared_string_error" = "Hiba";
 "osmand_cloud_deletion_account_warning" = "A fiók és minden fiókadat %@ lesz";
 "map_widget_true_bearing" = "Valódi irány";

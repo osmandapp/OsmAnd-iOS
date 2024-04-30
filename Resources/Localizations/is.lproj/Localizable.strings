@@ -3354,3 +3354,14 @@
 "shared_string_next_event" = "Næsti atburður";
 "not_recorded" = "Ekki skráð";
 "my_places_no_tracks_title" = "Tóm mappa";
+"downward_gradient" = "Litstigull niður";
+"upward_gradient" = "Litstigull upp";
+"required_maps" = "Nauðsynleg kort";
+"vertical_exaggeration" = "Lóðrétt ýking";
+"rendering_attr_padusDisplayMode_description" = "Eftir tegund aðgangs eða nafni stjórnanda";
+"distance_during_navigation" = "Vegalengd á meðan leiðsögn stendur";
+"auto_zoom_smooth" = "Mjúkt";
+"auto_zoom_discrete" = "Óáberandi";
+"shared_string_scale" = "Kvarði";
+"rendering_value_access_name" = "Eftir tegund aðgangs";
+"rendering_value_managerName_name" = "Eftir nafni stjórnanda";

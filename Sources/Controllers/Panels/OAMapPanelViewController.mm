@@ -2473,8 +2473,7 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     if ((_activeTargetType == OATargetNone || _activeTargetActive)
-            && self.targetMenuView.targetPoint.type == OATargetFavorite
-            && ![OAFavoriteListViewController popToParent])
+            && self.targetMenuView.targetPoint.type == OATargetFavorite)
         [self.navigationController popViewControllerAnimated:YES];
 
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{

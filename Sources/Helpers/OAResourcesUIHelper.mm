@@ -2337,18 +2337,7 @@ includeHidden:(BOOL)includeHidden
                                             [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
                                         }
                                     }
-                                } 
-                                else if ([geometryType isEqualToString:@"Point"])
-                                {
-                                    NSArray *coordinates = geometry[@"coordinates"];
-                                    if (coordinates.count >= 2)
-                                    {
-                                        double latitude = [coordinates[1] doubleValue];
-                                        double longitude = [coordinates[0] doubleValue];
-                                        [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
-                                    }
                                 }
-
                             }
                             NSLog(@"Coordinates array: %@", locationArray);
                             if (completion)

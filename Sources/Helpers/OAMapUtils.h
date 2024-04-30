@@ -53,6 +53,4 @@
 + (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l lat:(CGFloat)lat lon:(CGFloat)lon;
 + (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2;
 
-+ (double)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon;
-
 @end

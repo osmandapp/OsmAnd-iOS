@@ -2475,7 +2475,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin)
+    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -3815,6 +3815,30 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateTapRulerLayer
 {
     [self.mapLayers.rulerByTapControlLayer updateLayer];
+}
+
+- (CGFloat)getAltitudeForFixedPixel
+{
+    return [self getAltitudeForPoint:_mapView.fixedPixel];
+}
+
+- (CGFloat)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon
+{
+    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    return [self getAltitudeForPoint:point];
+}
+
+- (CGFloat)getAltitudeForPoint:(OsmAnd::PointI)point
+{
+    QList<float> heights = [self getHeightsForPoints:QList<OsmAnd::PointI>({point})];
+    return heights.count() > 0 ? heights[0] : kMinAltitudeValue;
+}
+
+- (QList<float>)getHeightsForPoints:(QList<OsmAnd::PointI>)points
+{
+    QList<float> heights;
+    _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
+    return heights;
 }
 
 @end

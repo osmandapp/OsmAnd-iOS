@@ -69,8 +69,6 @@
 + (UIColor *) getOpeningHoursColor:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 + (NSAttributedString *) getOpeningHoursDescr:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 
-+ (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint;
-+ (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint;
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint;
 + (double) getLocationHeightOrZero:(OsmAnd::PointI)location31;
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;

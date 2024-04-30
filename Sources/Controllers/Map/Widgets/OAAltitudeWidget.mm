@@ -85,8 +85,7 @@
         }
         case EOAAltitudeWidgetTypeMapCenter:
         {
-            OsmAnd::PointI screenPoint = [OARootViewController instance].mapPanel.mapViewController.mapView.fixedPixel;
-            return [OANativeUtilities getAltitudeForPixelPoint:screenPoint];
+            return [[OARootViewController instance].mapPanel.mapViewController getAltitudeForFixedPixel];
         }
     }
     return kMinAltitudeValue;

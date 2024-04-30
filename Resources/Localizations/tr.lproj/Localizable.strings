@@ -3292,3 +3292,7 @@
 "average_vertical_speed" = "Ortalama dikey hız";
 "osmand_depelopment_use_discrete_autozoom" = "Ayrık otomatik yakınlaştırma (eski sürüm)";
 "download_images_settings_footer" = "Resim indirme herhangi bir ağ üzerinden etkinleştirilebilir. Mobil veri kullanılabilir.";
+"shared_string_bottom" = "Alt";
+"shared_string_top" = "Üst";
+"visualization_3d_wall_color" = "Duvar rengi";
+"shared_string_top_bottom" = "Üst ve alt";

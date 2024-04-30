@@ -3410,3 +3410,17 @@
 "auto_zoom_smooth" = "Suave";
 "auto_zoom_discrete" = "Discreto";
 "routing_algorithm_highway_hierarchies" = "Jerarquías de carreteras";
+"upward_gradient" = "Pendiente ascendente";
+"shared_string_top_bottom" = "Arriba y abajo";
+"track_3d_empty_view_description" = "¡Descubre la ruta en 3D interactivo! Visualiza la altitud, la velocidad y más directamente en el mapa.";
+"ft_s" = "pies/s";
+"track_vertical_exaggeration_description" = "Al cambiar el valor de la escala, puede cambiar la altura de la pista 3D";
+"visualization_3d_visualized_by" = "Visualizado por";
+"visualization_3d_wall_color" = "Color de las paredes";
+"visualization_3d_track_line" = "Línea de la vía";
+"track_3d" = "Visualización en 3D";
+"fixed_height" = "Altura fija";
+"downward_gradient" = "Pendiente descendente";
+"shared_string_top" = "Arriba";
+"shared_string_bottom" = "Abajo";
+"track_3d_empty_view_title" = "Vista de ruta en 3D";

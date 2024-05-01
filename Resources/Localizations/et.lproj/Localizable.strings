@@ -81,7 +81,7 @@
 "simulate_routing_descr" = "Simuleeri oma asukohta kasutades arvutatud teekonda";
 "select_avoid_descr" = "Vali navigeerimise ajal välditavad teed. Võid valida tee kaardil või tee liigi allolevast loetelust.";
 "no_active_route" = "Aktiivne teekond puudub";
-"day_night_info_description" = "Päikesetõus: %@  \nPäikeseloojang: %@";
+"day_night_info_description" = "Päikesetõus: %@ \nPäikeseloojang: %@";
 "day_night_info" = "Päeva/öö teave";
 "daynight_mode_auto" = "Päikesetõus/loojang";
 "route_simulation" = "Teekonna simuleerimine";
@@ -521,7 +521,7 @@
 "sett_arr" = "Kaardi nooled";
 "shared_string_location" = "Asukoht";
 "sett_arr_map" = "Kaardi keskkoht";
-"short_location_on_map" = "Lai %@  \nPik %@";
+"short_location_on_map" = "Lai %@ \nPik %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -1680,8 +1680,8 @@
 "add_online_source" = "Võrguallika lisamine";
 "map_settings_show_slider_map" = "Näita kaardil liugurit";
 "shared_string_legend" = "Tingmärgid";
-"map_settings_add_maps_slopes" = "Nõlvade kuvamiseks on vaja täiendavaid kaarte";
-"map_settings_add_maps_hillshade" = "Kõrgusreljeefi kuvamiseks on vaja täiendavaid kaarte";
+"map_settings_add_maps_slopes" = "Nõlvade kuvamiseks on vaja täiendavaid kaarte.";
+"map_settings_add_maps_hillshade" = "Kõrgusreljeefi kuvamiseks on vaja täiendavaid kaarte.";
 "move_map_to_select_area" = "Soovitud ala valimiseks liiguta kaarti.";
 "preview_of_selected_zoom_levels" = "Valitud suumitasemete eelvaade";
 "download_size" = "Allalaaditava faili suurus";
@@ -1734,7 +1734,7 @@
 "res_online_url_descr" = "Kirjuta või kopeeri veebiallika aadress";
 "res_online_name_descr" = "Sisesta veebiallika nimi";
 "allow_3d_descr" = "Kui soovid näha kaarti poolruumilises 2.5D vaates, siis luba see seadistus";
-"enable_hillshade" = "Maastikuandmete kuvamiseks luba see seadistus";
+"enable_hillshade" = "Maastikuandmete kuvamiseks luba see seadistus.";
 "enable_contour_lines" = "Kõrgusjoonete kuvamiseks kaardil luba see seadistus";
 "osm_editing_access_descr" = "Sa võid näha kõiki kohalikus nutiseadmes tehtud muudatusi ja märkusi %@ vaates. Juba üleslaaditud andmeid OsmAnd enam ei kuva.";
 "metric_ton" = "t";

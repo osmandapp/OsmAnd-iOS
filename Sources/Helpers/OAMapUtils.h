@@ -16,6 +16,8 @@
 #define MAX_LONGITUDE 180.0
 #define LONGITUDE_TURN 360.0
 
+#define kMinAltitudeValue -20000.0
+
 @class OAPOI;
 @class QuadRect;
 
@@ -52,5 +54,7 @@
 + (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l1 l2:(CLLocationCoordinate2D)l2;
 + (BOOL)areLatLonEqual:(CLLocationCoordinate2D)l lat:(CGFloat)lat lon:(CGFloat)lon;
 + (BOOL)areLatLonEqual:(CGFloat)lat1 lon1:(CGFloat)lon1 lat2:(CGFloat)lat2 lon2:(CGFloat)lon2;
+
++ (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(CGFloat height))callback;
 
 @end

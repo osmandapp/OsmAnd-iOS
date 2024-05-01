@@ -10,6 +10,9 @@
 #import "OANativeUtilities.h"
 #import "OAPOI.h"
 #import "QuadRect.h"
+#import "OARootViewController.h"
+#import "OAMapRendererView.h"
+#import "OAHeightsResolverTask.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -394,6 +397,53 @@
     BOOL latEqual = (isnan(lat1) && isnan(lat2)) || (abs(lat1 - lat2) < 0.00001);
     BOOL lonEqual = (isnan(lon1) && isnan(lon2)) || (abs(lon1 - lon2) < 0.00001);
     return latEqual && lonEqual;
+}
+
++ (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(CGFloat height))callback
+{
+    if (CLLocationCoordinate2DIsValid(latLon))
+    {
+        CGFloat altitude = [OAMapUtils getAltitudeForLatLon:latLon];
+        if (altitude != kMinAltitudeValue)
+        {
+            callback(altitude);
+        }
+        else
+        {
+            NSArray<CLLocation *> *points = @[[[CLLocation alloc] initWithLatitude:latLon.latitude longitude:latLon.longitude]];
+            HeightsResolverTaskCallback heightsCallback = ^(NSArray<NSNumber *> *heights) {
+                callback(heights.count > 0 ? heights.firstObject.floatValue : kMinAltitudeValue);
+            };
+            OAHeightsResolverTask *task = [[OAHeightsResolverTask alloc] initWithPoints:points callback:heightsCallback];
+            [task execute];
+        }
+    }
+    else
+    {
+        callback(kMinAltitudeValue);
+    }
+}
+
++ (CGFloat)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon
+{
+    return CLLocationCoordinate2DIsValid(latLon) ? [self getAltitudeForLatLon:latLon.latitude lon:latLon.longitude] : kMinAltitudeValue;
+}
+
++ (CGFloat)getAltitudeForLatLon:(double)lat lon:(double)lon
+{
+    OsmAnd::PointI elevatedPoint = [OANativeUtilities getPoint31FromLatLon:lat lon:lon];
+    return [self getAltitudeForElevatedPoint:elevatedPoint];
+}
+
++ (CGFloat)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
+{
+    CGFloat altitude = kMinAltitudeValue;
+    if (elevatedPoint != OsmAnd::PointI())
+    {
+        OAMapRendererView *mapRenderer = [OARootViewController instance].mapPanel.mapViewController.mapView;
+        altitude = [mapRenderer getLocationHeightInMeters:elevatedPoint];
+    }
+    return altitude;
 }
 
 @end

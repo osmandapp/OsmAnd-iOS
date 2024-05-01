@@ -49,30 +49,32 @@
 
 - (BOOL)updateInfo
 {
-    double altitude = [self getAltitudeInMeters];
-    if (altitude != kMinAltitudeValue)
-    {
-        int newAltitude = (int) altitude;
-        if ([self isUpdateNeeded] || _cachedAltitude != newAltitude)
+    void (^callback)(CGFloat) = ^(CGFloat height) {
+        if (height != kMinAltitudeValue)
         {
-            _cachedAltitude = newAltitude;
-            NSString *formattedAltitude = [OAOsmAndFormatter getFormattedAlt:_cachedAltitude];
-            int index = [formattedAltitude lastIndexOf:@" "];
-            if (index == -1)
-                [self setText:formattedAltitude subtext:nil];
-            else
-                [self setText:[formattedAltitude substringToIndex:index] subtext:[formattedAltitude substringFromIndex:index + 1]];
+            int newAltitude = (int) height;
+            if ([self isUpdateNeeded] || _cachedAltitude != newAltitude)
+            {
+                _cachedAltitude = newAltitude;
+                NSString *formattedAltitude = [OAOsmAndFormatter getFormattedAlt:_cachedAltitude];
+                int index = [formattedAltitude lastIndexOf:@" "];
+                if (index == -1)
+                    [self setText:formattedAltitude subtext:nil];
+                else
+                    [self setText:[formattedAltitude substringToIndex:index] subtext:[formattedAltitude substringFromIndex:index + 1]];
+            }
         }
-    }
-    else if (_cachedAltitude != 0)
-    {
-        _cachedAltitude = 0;
-        [self setText:@"-" subtext:nil];
-    }
+        else if (_cachedAltitude != 0)
+        {
+            _cachedAltitude = 0;
+            [self setText:@"-" subtext:nil];
+        }
+    };
+    [self getAltitudeInMeters:callback];
     return YES;
 }
 
-- (double)getAltitudeInMeters
+- (void)getAltitudeInMeters:(void (^ _Nonnull)(CGFloat height))callback
 {
     switch (_widgetType)
     {
@@ -80,15 +82,23 @@
         {
             CLLocation *loc = _app.locationServices.lastKnownLocation;
             if (loc && loc.verticalAccuracy >= 0)
-                return loc.altitude;
+                callback(loc.altitude);
+            else
+                callback(kMinAltitudeValue);
             break;
         }
         case EOAAltitudeWidgetTypeMapCenter:
         {
-            return [[OARootViewController instance].mapPanel.mapViewController getAltitudeForFixedPixel];
+            OsmAnd::PointI centerPoint = [OARootViewController instance].mapPanel.mapViewController.mapView.fixedPixel;
+            CLLocationCoordinate2D centerLatLon = [OANativeUtilities getLatLonFromElevatedPixel:centerPoint];
+            [OAMapUtils getAltitudeForLatLon:centerLatLon callback:callback];
+            break;
+        }
+        default:
+        {
+            callback(kMinAltitudeValue);
         }
     }
-    return kMinAltitudeValue;
 }
 
 - (BOOL) isMetricSystemDepended

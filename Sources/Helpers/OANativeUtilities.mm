@@ -290,16 +290,23 @@
     return nil;
 }
 
++ (CLLocationCoordinate2D)getLatLonFromElevatedPixel:(OsmAnd::PointI)screenPoint
+{
+    OsmAnd::PointI point31 = [self get31FromElevatedPixel:screenPoint];
+    double lat = OsmAnd::Utilities::get31LatitudeY(point31.y);
+    double lon = OsmAnd::Utilities::get31LongitudeX(point31.x);
+    return CLLocationCoordinate2DMake(lat, lon);
+}
+
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint
 {
+    OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
     if (screenPoint != OsmAnd::PointI())
     {
         OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
-        OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
-        if ([mapRenderer getLocationFromElevatedPoint:screenPoint location31:&elevatedPoint])
-            return elevatedPoint;
+        [mapRenderer getLocationFromElevatedPoint:screenPoint location31:&elevatedPoint];
     }
-    return OsmAnd::PointI();
+    return elevatedPoint;
 }
 
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon

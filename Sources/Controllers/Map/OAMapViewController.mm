@@ -3817,27 +3817,21 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     [self.mapLayers.rulerByTapControlLayer updateLayer];
 }
 
-- (CGFloat)getAltitudeForFixedPixel
+- (NSArray<NSNumber *> * _Nonnull)getHeightsForPoints:(NSArray<CLLocation *> * _Nonnull)points
 {
-    return [self getAltitudeForPoint:_mapView.fixedPixel];
-}
+    QList<OsmAnd::PointI> qPoints;
+    for (CLLocation *point in points)
+    {
+        qPoints.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
+    }
 
-- (CGFloat)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon
-{
-    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
-    return [self getAltitudeForPoint:point];
-}
-
-- (CGFloat)getAltitudeForPoint:(OsmAnd::PointI)point
-{
-    QList<float> heights = [self getHeightsForPoints:QList<OsmAnd::PointI>({point})];
-    return heights.count() > 0 ? heights[0] : kMinAltitudeValue;
-}
-
-- (QList<float>)getHeightsForPoints:(QList<OsmAnd::PointI>)points
-{
-    QList<float> heights;
-    _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
+    QList<float> qHeights;
+    _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, qPoints, qHeights);
+    NSMutableArray<NSNumber *> *heights = [NSMutableArray array];
+    for (float qHeight : qHeights)
+    {
+        [heights addObject:@(qHeight)];
+    }
     return heights;
 }
 

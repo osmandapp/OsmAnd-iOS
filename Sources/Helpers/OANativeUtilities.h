@@ -27,8 +27,6 @@
 
 #include <OsmAndCore/LatLon.h>
 
-#define kMinAltitudeValue -20000
-
 @interface UIColor (nsColorNative)
 
 - (OsmAnd::FColorARGB) toFColorARGB;
@@ -69,6 +67,7 @@
 + (UIColor *) getOpeningHoursColor:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 + (NSAttributedString *) getOpeningHoursDescr:(std::vector<std::shared_ptr<OpeningHoursParser::OpeningHours::Info>>)openingHoursInfo;
 
++ (CLLocationCoordinate2D)getLatLonFromElevatedPixel:(OsmAnd::PointI)screenPoint;
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint;
 + (double) getLocationHeightOrZero:(OsmAnd::PointI)location31;
 + (OsmAnd::PointI) getPoint31FromLatLon:(OsmAnd::LatLon)latLon;

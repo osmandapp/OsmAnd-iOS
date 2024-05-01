@@ -99,13 +99,18 @@ jobs:
         LANG: "en_US.UTF-8"
       run: exec ios/prepare.sh #--sync_translations
     - name: Configure iOS OsmAndCore
+      env:
+        LANG: "en_US.UTF-8"
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Build iOS OsmAndCore
+      env:
+        LANG: "en_US.UTF-8"
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Creating iOS archive
       env:
+        LANG: "en_US.UTF-8"
         BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
         RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
       run: 'xcodebuild
@@ -120,6 +125,8 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
     - name: Zip iOS archive
+      env:
+        LANG: "en_US.UTF-8"
       run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
     - name: Upload maps archive zip
       uses: actions/upload-artifact@v4
@@ -131,6 +138,8 @@ jobs:
     # - name: Unzip iOS archive
     #   run: 'unzip OsmAndMaps.xcarchive.zip'  
     - name: Export iOS archive
+      env:
+        LANG: "en_US.UTF-8"
       run: 'xcodebuild -archivePath OsmAndMaps.xcarchive 
             -exportOptionsPlist ios/exportOptions.plist 
             -exportPath . 
@@ -143,6 +152,7 @@ jobs:
         path: 'OsmAnd Maps.ipa'
     - name: Publish TestFlight
       env:
+        LANG: "en_US.UTF-8"
         APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
         APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
       run: 'xcrun altool --upload-app -t ios -f "OsmAnd Maps.ipa" -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'

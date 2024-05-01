@@ -729,6 +729,7 @@ colorizationScheme:(int)colorizationScheme
                             splitElevation = elevationMetersDefault;
                             break;
                         default:
+                            splitElevation = NAN;
                             break;
                     }
                     

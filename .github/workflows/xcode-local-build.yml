@@ -73,13 +73,6 @@ jobs:
         repository: osmandapp/OsmAnd-core
         path: core
         clean: false
-    - name: Checkout help
-      uses: actions/checkout@v4
-      with:
-        ref: refs/heads/master
-        repository: osmandapp/osmandapp.github.io
-        path: help
-        clean: false
     - name: Checkout resources
       uses: actions/checkout@v4
       with:

@@ -16,7 +16,7 @@
 }
 
 - (instancetype)initWithPoints:(NSArray<CLLocation *> *)points
-                    callback:(HeightsResolverTaskCallback)callback
+                      callback:(HeightsResolverTaskCallback)callback
 {
     self = [super init];
     if (self)
@@ -37,12 +37,12 @@
     });
 }
 
-- (NSArray<NSNumber *> *)doInBackground
+- (NSArray<NSNumber *> * _Nonnull)doInBackground
 {
     return [[OARootViewController instance].mapPanel.mapViewController getHeightsForPoints:_points];
 }
 
-- (void)onPostExecute:(NSArray<NSNumber *> *)heights
+- (void)onPostExecute:(NSArray<NSNumber *> * _Nonnull)heights
 {
     if (_callback)
         _callback(heights);

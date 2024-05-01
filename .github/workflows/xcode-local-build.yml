@@ -95,6 +95,8 @@ jobs:
         USER_KEY: ${{ secrets.USER_KEY }}
       run: 'security unlock-keychain -p ${USER_KEY} ~/Library/Keychains/login.keychain-db'
     - name: Build QtCore & prepare build
+      env:
+        LANG: "en_US.UTF-8"
       run: exec ios/prepare.sh #--sync_translations
     - name: Configure iOS OsmAndCore
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'

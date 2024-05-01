@@ -3375,3 +3375,7 @@
 "shared_string_discard_changes" = "Zahodit změny";
 "action_cant_be_undone" = "Tuto akci nelze vzít zpět.";
 "shared_string_scale" = "Měřítko";
+"routing_algorithm" = "algoritmus navigace";
+"auto_zoom" = "Auto-přiblížení";
+"shared_string_development" = "Vývoj";
+"online_plugins" = "Online pluginy";

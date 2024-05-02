@@ -53,39 +53,41 @@ extension UINavigationController {
 
     @objc func saveCurrentStateForScrollableHud() -> [UIViewController] {
         var newCurrentHistory = viewControllers
-        if !viewControllers.isEmpty {
-            var newHistory: [UIViewController] = Array()
-            var rootViewControllerIndex = 0
-            for i in 0...newCurrentHistory.count - 1 {
-                let vc = newCurrentHistory[i]
-                if vc is OARootViewController {
-                    rootViewControllerIndex = i
-                } else {
-                    newHistory.append(vc)
-                }
-            }
-            newHistory.append(newCurrentHistory[rootViewControllerIndex])
-            newCurrentHistory.insert(newCurrentHistory.remove(at: rootViewControllerIndex), at: 0)
-            setViewControllers(newHistory, animated: true)
-
-            // Example:
-            // Show track context menu above the map.
-            // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
+        guard !viewControllers.isEmpty else {
+            return newCurrentHistory
         }
+
+        var newHistory = [UIViewController]()
+        var rootViewControllerIndex = 0
+        for i in 0...newCurrentHistory.count - 1 {
+            let vc = newCurrentHistory[i]
+            if vc is OARootViewController {
+                rootViewControllerIndex = i
+            } else {
+                newHistory.append(vc)
+            }
+        }
+        newHistory.append(newCurrentHistory[rootViewControllerIndex])
+        newCurrentHistory.insert(newCurrentHistory.remove(at: rootViewControllerIndex), at: 0)
+        setViewControllers(newHistory, animated: true)
+
+        // Example:
+        // Show track context menu above the map.
+        // [MyPlacesTabBar, Folder1, Folder2, RootVC, TrackContectMenu]
         return newCurrentHistory
     }
 
     @objc func restoreForceHidingScrollableHud() {
-        if !viewControllers.isEmpty {
-            var newHistory: [UIViewController] = Array()
-            for i in 0...viewControllers.count - 1 {
-                let vc = viewControllers[i]
-                if vc is OARootViewController {
-                    newHistory.append(vc)
-                    break
-                }
+        guard !viewControllers.isEmpty else { return }
+
+        var newHistory = [UIViewController]()
+        for i in 0...viewControllers.count - 1 {
+            let vc = viewControllers[i]
+            if vc is OARootViewController {
+                newHistory.append(vc)
+                break
             }
-            setViewControllers(newHistory, animated: true)
         }
+        setViewControllers(newHistory, animated: true)
     }
 }

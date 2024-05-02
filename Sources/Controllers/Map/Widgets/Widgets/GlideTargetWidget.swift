@@ -115,7 +115,7 @@ final class GlideTargetWidget: GlideBaseWidget {
             markUpdated()
             if forceUpdate || metricSystemChanged || !GlideUtils.areAltitudesEqual(cachedTargetAltitude, targetAltitude) {
                 cachedTargetAltitude = targetAltitude
-                if let cachedTargetAltitude, cachedTargetAltitude != GlideTargetWidget.minAltitudeValue {
+                if let cachedTargetAltitude, cachedTargetAltitude > GlideTargetWidget.minAltitudeValue {
                     let formattedAltitude = OAOsmAndFormatter.getFormattedAlt(cachedTargetAltitude)
                     let components = formattedAltitude?.components(separatedBy: " ")
                     if components?.count == 2 {
@@ -183,10 +183,16 @@ final class GlideTargetWidget: GlideBaseWidget {
         return nil
     }
 
-    private func calculateAltitude(_ location: CLLocationCoordinate2D, completion: @escaping (Double?) -> Void) {
-        completion(CLLocationCoordinate2DIsValid(location)
-                   ? OARootViewController.instance().mapPanel.mapViewController.getAltitudeForLatLon(location)
-                   : Self.minAltitudeValue)
+    private func calculateAltitude(_ location: CLLocationCoordinate2D, callback: @escaping (Double) -> Void) {
+        if CLLocationCoordinate2DIsValid(location) {
+            OARootViewController.instance().mapPanel.mapViewController.getAltitudeForLatLon(location, callback: { altitude in
+                DispatchQueue.main.async {
+                    callback(Double(altitude))
+                }
+            })
+        } else {
+            callback(Self.minAltitudeValue)
+        }
     }
 
     private func calculateFormattedRatio(_ l1: CLLocation?, a1: Double?, l2: CLLocationCoordinate2D?, a2: Double?) -> String? {

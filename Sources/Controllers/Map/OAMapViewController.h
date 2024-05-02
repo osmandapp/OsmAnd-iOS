@@ -213,7 +213,7 @@
 
 - (void) updateTapRulerLayer;
 
-- (CGFloat)getAltitudeForFixedPixel;
-- (CGFloat)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon;
+- (void)getAltitudeForMapCenter:(void (^ _Nonnull)(float height))callback;
+- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(float height))callback;
 
 @end

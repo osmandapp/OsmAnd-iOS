@@ -3410,3 +3410,17 @@
 "routing_algorithm_a" = "A*";
 "auto_zoom_smooth" = "Suave";
 "auto_zoom_discrete" = "Discreto";
+"ft_s" = "pés/s";
+"track_vertical_exaggeration_description" = "Ao alterar o valor da escala, é possível alterar a altura do trilho 3D";
+"shared_string_top_bottom" = "Topo e base";
+"upward_gradient" = "Gradiente ascendente";
+"visualization_3d_visualized_by" = "Visualizado por";
+"visualization_3d_wall_color" = "Cor da parede";
+"visualization_3d_track_line" = "Linha do trilho";
+"track_3d" = "Trilho 3D";
+"fixed_height" = "Altura fixa";
+"downward_gradient" = "Gradiente descendente";
+"shared_string_top" = "Topo";
+"shared_string_bottom" = "Base";
+"track_3d_empty_view_title" = "Vista 3D do trilho";
+"track_3d_empty_view_description" = "Explore o trilho em 3D interativo! Visualize a altura, a velocidade e muito mais diretamente no mapa.";

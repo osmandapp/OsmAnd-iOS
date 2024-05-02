@@ -403,7 +403,11 @@
 
 - (void)restoreNavControllerHistoryIfNeeded
 {
-    if (!_forceHiding && !_pushedNewScreen && _reopeningState && _reopeningState.openedFromTracksList)
+    if (_forceHiding)
+    {
+        [[OARootViewController instance].navigationController restoreForceHidingScrollableHud];
+    }
+    else if (!_pushedNewScreen && _reopeningState && _reopeningState.openedFromTracksList)
     {
         if (_navControllerHistory && _navControllerHistory.count > 0)
         {

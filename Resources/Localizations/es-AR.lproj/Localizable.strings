@@ -3418,3 +3418,17 @@
 "routing_algorithm_highway_hierarchies" = "Jerarquías viales";
 "auto_zoom_smooth" = "Suave";
 "auto_zoom_discrete" = "Discreto";
+"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D";
+"ft_s" = "ft/s";
+"visualization_3d_visualized_by" = "Visualizado por";
+"visualization_3d_wall_color" = "Color del muro";
+"visualization_3d_track_line" = "Línea de la traza";
+"track_3d" = "Traza 3D";
+"fixed_height" = "Altura uniforme";
+"downward_gradient" = "Gradiente descendente";
+"upward_gradient" = "Gradiente ascendente";
+"shared_string_top" = "Arriba";
+"shared_string_bottom" = "Abajo";
+"shared_string_top_bottom" = "Arriba y abajo";
+"track_3d_empty_view_title" = "Ver traza 3D";
+"track_3d_empty_view_description" = "¡Explora la traza en 3D interactivo! Visualiza la altura, la velocidad y más, directamente en el mapa.";

@@ -2171,7 +2171,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     //[self showProgressHUD];
     
     @synchronized(_rendererSync)
-    { 
+    {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
         double mapDensity = [settings.mapDensity get];
@@ -2475,7 +2475,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin)
+    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];

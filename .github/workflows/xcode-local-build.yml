@@ -39,50 +39,44 @@ jobs:
     #   run: brew install gnupg
     ### Checks-out repository under $GITHUB_WORKSPACE, so job can access it
     - name: Checkout ios
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
+        repository: osmandapp/OsmAnd-iOS
         path: ios
         clean: false
     - name: Checkout android
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd
         path: android
         clean: false
     - name: Checkout build
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-build
         path: build
         clean: false
     - name: Checkout core legacy
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-core-legacy
         path: core-legacy
         clean: false
     - name: Checkout core
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-core
         path: core
         clean: false
-    - name: Checkout help
-      uses: actions/checkout@v3
-      with:
-        ref: refs/heads/master
-        repository: osmandapp/osmandapp.github.io
-        path: help
-        clean: false
     - name: Checkout resources
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
-        ref: refs/heads/master
+        ref: refs/heads/r4.7
         repository: osmandapp/OsmAnd-resources
         path: resources
         clean: false
@@ -92,24 +86,33 @@ jobs:
     #   run: sudo patch /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/13.0.0/include/ia32intrin.h ios/.github/workflows/__bsfd.patch  
     #- name: Setup provisioning profile
     #  env:
+    #    USER_KEY: ${{ secrets.USER_KEY }}
     #    IOS_KEYS: ${{ secrets.IOS_KEYS }}
     #    PASSWORD_KEYCHAIN_EXPORT: ${{ secrets.PASSWORD_KEYCHAIN_EXPORT }}
-    #  run: .github/secrets/decrypt_secrets.sh
+    #  run: .github/secrets/install_cer.sh
+    #  #run: .github/secrets/decrypt_secrets.sh
     #  working-directory: ios
     - name: Setup keychain
       env:
         USER_KEY: ${{ secrets.USER_KEY }}
       run: 'security unlock-keychain -p ${USER_KEY} ~/Library/Keychains/login.keychain-db'
     - name: Build QtCore & prepare build
+      env:
+        LANG: "en_US.UTF-8"
       run: exec ios/prepare.sh #--sync_translations
     - name: Configure iOS OsmAndCore
+      env:
+        LANG: "en_US.UTF-8"
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target ZERO_CHECK -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Build iOS OsmAndCore
+      env:
+        LANG: "en_US.UTF-8"
       run: 'xcodebuild -project OsmAnd_projects.xcodeproj -target OsmAndCore_static_standalone -sdk iphoneos -configuration Release'
       working-directory: baked/fat-ios-clang.xcode
     - name: Creating iOS archive
       env:
+        LANG: "en_US.UTF-8"
         BUILD_IOS_VERSION: ${{ github.event.inputs.buildversion }} 
         RELEASE_IOS_VERSION: ${{ github.event.inputs.releaseversion }} 
       run: 'xcodebuild
@@ -124,9 +127,11 @@ jobs:
             PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
     - name: Zip iOS archive
+      env:
+        LANG: "en_US.UTF-8"
       run: 'zip -r OsmAndMaps.xcarchive.zip OsmAndMaps.xcarchive'
     - name: Upload maps archive zip
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
          name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.xcarchive.zip
          path: OsmAndMaps.xcarchive.zip
@@ -135,18 +140,21 @@ jobs:
     # - name: Unzip iOS archive
     #   run: 'unzip OsmAndMaps.xcarchive.zip'  
     - name: Export iOS archive
+      env:
+        LANG: "en_US.UTF-8"
       run: 'xcodebuild -archivePath OsmAndMaps.xcarchive 
             -exportOptionsPlist ios/exportOptions.plist 
             -exportPath . 
             -allowProvisioningUpdates 
             -exportArchive' 
     - name: Upload maps archive
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: OsmAndMaps-${{ github.event.inputs.releaseversion }}.${{ github.event.inputs.buildversion }}.ipa
         path: 'OsmAnd Maps.ipa'
     - name: Publish TestFlight
       env:
+        LANG: "en_US.UTF-8"
         APPLEID_USERNAME: ${{ secrets.APPLEID_USERNAME }}
         APPLEID_PASSWORD: ${{ secrets.APPLEID_PASSWORD }}
       run: 'xcrun altool --upload-app -t ios -f "OsmAnd Maps.ipa" -u "$APPLEID_USERNAME" -p "$APPLEID_PASSWORD" --verbose'

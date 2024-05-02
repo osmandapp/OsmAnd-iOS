@@ -74,4 +74,18 @@ extension UINavigationController {
         }
         return newCurrentHistory
     }
+
+    @objc func restoreForceHidingScrollableHud() {
+        if !viewControllers.isEmpty {
+            var newHistory: [UIViewController] = Array()
+            for i in 0...viewControllers.count - 1 {
+                let vc = viewControllers[i]
+                if vc is OARootViewController {
+                    newHistory.append(vc)
+                    break
+                }
+            }
+            setViewControllers(newHistory, animated: true)
+        }
+    }
 }

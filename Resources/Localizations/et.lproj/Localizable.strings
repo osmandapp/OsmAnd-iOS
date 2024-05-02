@@ -101,7 +101,7 @@
 "rotate_map_compass_opt" = "Kompassi suund";
 "rotate_map_bearing_opt" = "Liikumissuund";
 "rotate_map_north_opt" = "Ei pöörle (põhi alati üleval)";
-"driving_region_descr" = "Vali sõidupiirkond: USA, Euroopa, UK, Aasia ja teised.";
+"driving_region_descr" = "Vali sõidupiirkond: USA, Euroopa, Suurbritannia, Aasia ja midagi muud.";
 "driving_region" = "Sõidupiirkond";
 "shared_string_automatic" = "Automaatne";
 // Trip recording settings
@@ -124,7 +124,7 @@
 "map_widget_next_turn" = "Järgmine pöörang";
 "map_widget_next_turn_small" = "Järgmine pöörang (väike)";
 "map_widget_next_next_turn" = "Teiseks järgmine pöörang";
-"always_center_position_on_map" = "Kuva asukoht alati keskel";
+"always_center_position_on_map" = "Sinu asukoht on alati keskel";
 "map_widget_appearance_rem" = "Järelolevad elemendid";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Vahepealne sihtkoht";
@@ -144,7 +144,7 @@
 "map_widget_left" = "Vasakpoolne paneel";
 "layer_map_appearance" = "Ekraani seadistamine";
 "map_markers" = "Kaardimarkerid";
-"confirm_usage_speed_cameras" = "Paljudes riikides (Saksamaal, Prantsusmaal, Itaalias ja mujal) on kiiruskaamera hoiatuste kasutamine ebaseaduslik. OsmAnd ei võta vastutust seaduse rikkumiste korral. Palun vajuta \'Jah\' ainult kui sul on õigus seda funktsiooni kasutada.";
+"confirm_usage_speed_cameras" = "Paljudes riikides (Saksamaal, Prantsusmaal, Itaalias ja mujal) on kiiruskaamera hoiatuste kasutamine ebaseaduslik. OsmAnd ei võta vastutust seaduse rikkumiste korral. Palun vajuta „Jah“ ainult siis, kui sul on õigus seda funktsioonaalsust kasutada.";
 "show_traffic_warnings" = "Liiklushoiatused";
 "show_pedestrian_warnings" = "Jalakäijate ülekäigurajad";
 "show_cameras" = "Kiiruskaamerad";
@@ -1847,7 +1847,7 @@
 "ios_release_3_90" = "• Tutvustasime funktsiooni \"Teekonna planeerimine\", et kavandada tuleviku teekondi. See lubab luua teekonna segmente kasutades erinevat tüüpi navigeerimist\n• Lisatud võimalus lubada kompass tööriistale \"Radiaaljoonlaud\"\n• Lisatud võimalus \"Huvipunktide siltide ülekate\", mis lubab kuvada lemmikuid, teekonna kontrollpunkte ja markereid kaardil\n• Lisatud uued kiirtegevused kontuurjoonte kuvamisele ja maastikule kaardil, rakenduse profiili muutmine ja lähima vahepunkti kustutamine\n• Parandati probleemid puuduva Wikipeedia otsingukategooriaga\n• Seadete importimine: parandati vigu, lisati kõigi OsmAnd toetatud andmetüüpide tugi\n• OpenStreetMap'i muutmine: parandati aja valija ja taastatai muudatuse kommentaari kohendamine\n";
 "ios_release_3_80" = "• Kehtestatud \"rakendusprofiilid\" koos sõltumatute seadistustega\n• Uus seadete paigutus profiilide ja tüüpide kaupa: navigatsioon, üldised, kaart ja ekraan.\n• Võimalus importida või eksportida profiili seadeid\n• Lisatud andmeallikad veebifotode jaoks\n• Lisatud võimalus laadida veebikaarte vahemällu\n• Parandatud \"Otsingu\" algoritmid\n";
 "shared_string_max" = "Suurim";
-"shared_string_min" = "Min.";
+"shared_string_min" = "Min";
 "road_speeds" = "Kiirused teedel";
 "road_max_speed_descr" = "Määrab kõigi marsruudil olevate teede maksimaalse sõidukiiruse. Alandab prioriteeti maanteedel, mille võimalik kiirus on üle maksimaalse.";
 "road_min_speed_descr" = "Määrab kõigi marsruudil olevate teede minimaalse sõidukiiruse. Tõstab prioriteedi maanteedele, mille soovitatav kiirus on alla miinimumi.";

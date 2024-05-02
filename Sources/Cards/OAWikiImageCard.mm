@@ -29,18 +29,10 @@
     return self;
 }
 
-- (NSString *)getUrlWithCommonAttributions:(BOOL)isWikimediaCategory;
+- (NSString *)getUrlWithCommonAttributions
 {
-    if (!isWikimediaCategory)
-    {
-        NSString *url = [NSString stringWithFormat:@"%@%@%@", WIKIMEDIA_COMMONS_URL, WIKIMEDIA_FILE, _wikiMediaTag];
-        return url;
-    }
-    else
-    {
-        NSString *url = [NSString stringWithFormat:@"%@%@", WIKIMEDIA_COMMONS_URL, _wikiMediaTag];
-        return url;
-    }
+    NSString *url = [NSString stringWithFormat:@"%@%@%@", WIKIMEDIA_COMMONS_URL, WIKIMEDIA_FILE, _wikiMediaTag];
+    return url;
 }
 
 @end
@@ -58,24 +50,17 @@
 @implementation OAWikiImageCard
 {
     NSString *_urlWithCommonAttributions;
-    BOOL _isWikimediaCategory;
 }
 
 @dynamic type, title, url, imageUrl, topIcon;
 
 - (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage type:(NSString *)type
 {
-    return [self initWithWikiImage:wikiImage type:type wikimediaCategory:NO];
-}
-
-- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage type:(NSString *)type wikimediaCategory:(BOOL)isWikimediaCategory
-{
     self = [super init];
     if (self)
     {
-        _isWikimediaCategory = isWikimediaCategory;
         self.type = type;
-        _urlWithCommonAttributions =  [wikiImage getUrlWithCommonAttributions:_isWikimediaCategory];
+        _urlWithCommonAttributions =  [wikiImage getUrlWithCommonAttributions];
         if (self.topIcon.length == 0)
             self.topIcon = @"ic_custom_logo_wikimedia.png";
         [self setImageUrl:@""];

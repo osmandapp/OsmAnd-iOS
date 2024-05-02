@@ -290,7 +290,7 @@
     return nil;
 }
 
-+ (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint
++ (float)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint
 {
     if (screenPoint != OsmAnd::PointI())
     {
@@ -302,10 +302,9 @@
     return kMinAltitudeValue;
 }
 
-+ (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
++ (float)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
 {
-    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
-    return [mapRenderer getLocationHeightInMeters:elevatedPoint];
+    return [OARootViewController.instance.mapPanel.mapViewController.mapView getLocationHeightInMeters:elevatedPoint];
 }
 
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint

@@ -538,6 +538,7 @@
 		460679FB27708A980076740B /* OARouteLineAppearanceHudViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */; };
 		460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
+		460E3E8C2BE3A523001070B0 /* OAGeoTiffCollectionEnvironment.mm in Sources */ = {isa = PBXBuildFile; fileRef = 460E3E8B2BE3A522001070B0 /* OAGeoTiffCollectionEnvironment.mm */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
 		460EC9E42B1F3104006BE95A /* btn_map_2d_mode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */; };
 		460EC9E52B1F3104006BE95A /* btn_map_3d_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */; };
@@ -4063,6 +4064,8 @@
 		460679FA27708A980076740B /* OARouteLineAppearanceHudViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OARouteLineAppearanceHudViewController.xib; sourceTree = "<group>"; };
 		460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLoginMainViewController.xib; sourceTree = "<group>"; };
 		460767112A49F86400AF63F2 /* WikiAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiAlgorithms.swift; sourceTree = "<group>"; };
+		460E3E8A2BE3A510001070B0 /* OAGeoTiffCollectionEnvironment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGeoTiffCollectionEnvironment.h; sourceTree = "<group>"; };
+		460E3E8B2BE3A522001070B0 /* OAGeoTiffCollectionEnvironment.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGeoTiffCollectionEnvironment.mm; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
 		460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_2d_mode@3x.png"; path = "Resources/Icons/btn_map_2d_mode@3x.png"; sourceTree = "<group>"; };
 		460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_3d_mode@2x.png"; path = "Resources/Icons/btn_map_3d_mode@2x.png"; sourceTree = "<group>"; };
@@ -12733,18 +12736,21 @@
 		DA5A7EC426C563A400F274C7 /* Map */ = {
 			isa = PBXGroup;
 			children = (
-				46E32494284A6AC800F95084 /* Toolbars */,
 				DA5A7ECE26C563A400F274C7 /* Layers */,
+				46E32494284A6AC800F95084 /* Toolbars */,
+				DA5A7F1526C563A400F274C7 /* Widgets */,
 				DA5A7F0226C563A400F274C7 /* OADestination.h */,
 				DA5A7F1026C563A400F274C7 /* OADestination.mm */,
+				DA5A857426C5680700F274C7 /* OADestinationBarWidget.xib */,
 				DA5A7EC926C563A400F274C7 /* OADestinationCell.h */,
 				DA5A7ECC26C563A400F274C7 /* OADestinationCell.mm */,
 				DA5A7F0726C563A400F274C7 /* OADestinationsHelper.h */,
 				DA5A7ECB26C563A400F274C7 /* OADestinationsHelper.mm */,
-				DA5A857426C5680700F274C7 /* OADestinationBarWidget.xib */,
 				DA5A7F0626C563A400F274C7 /* OADiscountToolbarViewController.h */,
 				DA5A7EC826C563A400F274C7 /* OADiscountToolbarViewController.mm */,
 				DA5A7F0E26C563A400F274C7 /* OADiscountToolbarViewController.xib */,
+				460E3E8A2BE3A510001070B0 /* OAGeoTiffCollectionEnvironment.h */,
+				460E3E8B2BE3A522001070B0 /* OAGeoTiffCollectionEnvironment.mm */,
 				DA5A7F0D26C563A400F274C7 /* OAHudButton.h */,
 				DA5A7ECA26C563A400F274C7 /* OAHudButton.m */,
 				DA5A7F0526C563A400F274C7 /* OAMapActions.h */,
@@ -12755,28 +12761,27 @@
 				DA5A7F0A26C563A400F274C7 /* OAMapInfoController.h */,
 				DA5A7F4826C563A400F274C7 /* OAMapInfoController.mm */,
 				DA5A7EC726C563A400F274C7 /* OAMapModeHeaders.h */,
+				DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */,
+				DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */,
+				8A31787327E1D8A800CA8AA4 /* OAMapRendererEnvironment.h */,
+				8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */,
 				DA5A7F0126C563A400F274C7 /* OAMapViewController.h */,
 				DA5A7ECD26C563A400F274C7 /* OAMapViewController.mm */,
+				DA8DC39B2A0E2247006C116B /* OAMapViewHelper.h */,
+				DA8DC39C2A0E2247006C116B /* OAMapViewHelper.mm */,
 				DA5A7F0426C563A400F274C7 /* OAMapViewTrackingUtilities.h */,
 				DA5A7F0826C563A400F274C7 /* OAMapViewTrackingUtilities.mm */,
 				DA5A7F1326C563A400F274C7 /* OAMultiDestinationCell.h */,
 				DA5A7EC626C563A400F274C7 /* OAMultiDestinationCell.mm */,
+				DA21F1B929BA101E004985BA /* OANetworkRouteDrawable.h */,
+				DA21F1BA29BA101E004985BA /* OANetworkRouteDrawable.mm */,
+				DA35963029B0A00A009DF4D6 /* OARouteKey.h */,
+				DA35963129B0A00A009DF4D6 /* OARouteKey.mm */,
 				DA5A7F0C26C563A400F274C7 /* OASelectedGPXHelper.h */,
 				DA5A7F1426C563A400F274C7 /* OASelectedGPXHelper.mm */,
 				DA5A7F0F26C563A400F274C7 /* OAToolbarViewController.h */,
 				DA5A7F1126C563A400F274C7 /* OAToolbarViewController.mm */,
 				DA5A7F0026C563A400F274C7 /* OAToolbarViewController.xib */,
-				DA5A7F1526C563A400F274C7 /* Widgets */,
-				DA377DDE27BBBB19004B4EBD /* OAMapPresentationEnvironment.h */,
-				DA377DDF27BBBB19004B4EBD /* OAMapPresentationEnvironment.mm */,
-				8A31787327E1D8A800CA8AA4 /* OAMapRendererEnvironment.h */,
-				8A31787427E1D8A800CA8AA4 /* OAMapRendererEnvironment.mm */,
-				DA35963029B0A00A009DF4D6 /* OARouteKey.h */,
-				DA35963129B0A00A009DF4D6 /* OARouteKey.mm */,
-				DA21F1B929BA101E004985BA /* OANetworkRouteDrawable.h */,
-				DA21F1BA29BA101E004985BA /* OANetworkRouteDrawable.mm */,
-				DA8DC39B2A0E2247006C116B /* OAMapViewHelper.h */,
-				DA8DC39C2A0E2247006C116B /* OAMapViewHelper.mm */,
 			);
 			path = Map;
 			sourceTree = "<group>";
@@ -16786,6 +16791,7 @@
 				32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
 				DA5A84EF26C563A900F274C7 /* OAHelpViewController.mm in Sources */,
+				460E3E8C2BE3A523001070B0 /* OAGeoTiffCollectionEnvironment.mm in Sources */,
 				DA5A812926C563A700F274C7 /* OAMapillaryTilesProvider.mm in Sources */,
 				DA5A855626C563A900F274C7 /* OALocationServices.mm in Sources */,
 				4603FD222AD4B97600525A93 /* OABaseNavbarSubviewViewController.m in Sources */,

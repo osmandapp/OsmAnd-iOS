@@ -2,12 +2,18 @@
 //  OAGeoTiffCollectionEnvironment.h
 //  OsmAnd
 //
-//  Created by Дмитро Скалій on 02.05.2024.
+//  Created by Skalii on 02.05.2024.
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-#ifndef OAGeoTiffCollectionEnvironment_h
-#define OAGeoTiffCollectionEnvironment_h
+#import <Foundation/Foundation.h>
 
+#include <OsmAndCore/IGeoTiffCollection.h>
 
-#endif /* OAGeoTiffCollectionEnvironment_h */
+@interface OAGeoTiffCollectionEnvironment : NSObject
+
+@property (nonatomic, readonly, assign) std::shared_ptr<OsmAnd::IGeoTiffCollection> geoTiffCollection;
+
+- (instancetype)initWithGeoTiffCollection:(const std::shared_ptr<OsmAnd::IGeoTiffCollection>&)geoTiffCollection;
+
+@end

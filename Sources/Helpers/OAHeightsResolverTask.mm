@@ -8,6 +8,11 @@
 
 #import "OAHeightsResolverTask.h"
 #import "OARootViewController.h"
+#import "OAMapRendererView.h"
+#import "OAGeoTiffCollectionEnvironment.h"
+
+#include <OsmAndCore/Utilities.h>
+#include <OsmAndCore/IGeoTiffCollection.h>
 
 @implementation OAHeightsResolverTask
 {
@@ -39,7 +44,21 @@
 
 - (NSArray<NSNumber *> * _Nonnull)doInBackground
 {
-    return [[OARootViewController instance].mapPanel.mapViewController getHeightsForPoints:_points];
+    OAMapViewController *mapViewController = [OARootViewController instance].mapPanel.mapViewController;
+    QList<OsmAnd::PointI> qPoints;
+    for (CLLocation *point in _points)
+    {
+        qPoints.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
+    }
+
+    QList<float> qHeights;
+    [mapViewController geoTiffCollectionEnvironment].geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, mapViewController.mapView.elevationDataTileSize, qPoints, qHeights);
+    NSMutableArray<NSNumber *> *heights = [NSMutableArray array];
+    for (float qHeight : qHeights)
+    {
+        [heights addObject:@(qHeight)];
+    }
+    return heights;
 }
 
 - (void)onPostExecute:(NSArray<NSNumber *> * _Nonnull)heights

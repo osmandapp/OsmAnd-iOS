@@ -60,6 +60,7 @@
 @class OAWorldRegion;
 @class OAMapRendererEnvironment;
 @class OAMapPresentationEnvironment;
+@class OAGeoTiffCollectionEnvironment;
 @class OAGPXDocument;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
@@ -104,6 +105,7 @@
 
 @property (readonly) OAMapRendererEnvironment *mapRendererEnv;
 @property (readonly) OAMapPresentationEnvironment *mapPresentationEnv;
+@property (readonly) OAGeoTiffCollectionEnvironment *geoTiffCollectionEnvironment;
 
 @property (nonatomic, assign) BOOL isCarPlayActive;
 @property (nonatomic, assign) BOOL isCarPlayDashboardActive;
@@ -212,7 +214,5 @@
 - (void) updateElevationConfiguration;
 
 - (void) updateTapRulerLayer;
-
-- (NSArray<NSNumber *> * _Nonnull)getHeightsForPoints:(NSArray<CLLocation *> * _Nonnull)points;
 
 @end

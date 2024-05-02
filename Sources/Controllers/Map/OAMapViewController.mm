@@ -53,6 +53,7 @@
 #import "OARouteStatistics.h"
 #import "OAMapRendererEnvironment.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAGeoTiffCollectionEnvironment.h"
 #import "OAWeatherHelper.h"
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OASRTMPlugin.h"
@@ -3812,27 +3813,14 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return [[OAMapPresentationEnvironment alloc] initWithEnvironment:_mapPresentationEnvironment];
 }
 
+- (OAGeoTiffCollectionEnvironment *)geoTiffCollectionEnvironment
+{
+    return [[OAGeoTiffCollectionEnvironment alloc] initWithGeoTiffCollection:_geoTiffCollection];
+}
+
 - (void) updateTapRulerLayer
 {
     [self.mapLayers.rulerByTapControlLayer updateLayer];
-}
-
-- (NSArray<NSNumber *> * _Nonnull)getHeightsForPoints:(NSArray<CLLocation *> * _Nonnull)points
-{
-    QList<OsmAnd::PointI> qPoints;
-    for (CLLocation *point in points)
-    {
-        qPoints.append(OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(point.coordinate.latitude, point.coordinate.longitude)));
-    }
-
-    QList<float> qHeights;
-    _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, qPoints, qHeights);
-    NSMutableArray<NSNumber *> *heights = [NSMutableArray array];
-    for (float qHeight : qHeights)
-    {
-        [heights addObject:@(qHeight)];
-    }
-    return heights;
 }
 
 @end

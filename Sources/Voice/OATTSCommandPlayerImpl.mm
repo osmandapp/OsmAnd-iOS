@@ -73,14 +73,18 @@
     }
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:toSpeak];
     utterance.voice = [self voiceToUse];
-    [utterance setRate:0.5f];
+    utterance.prefersAssistiveTechnologySettings = YES;
     [synthesizer speakUtterance:utterance];
 }
 
 - (AVSpeechSynthesisVoice *)voiceToUse {
+    AVSpeechSynthesisVoice *systemPreferredVoice = [AVSpeechSynthesisVoice voiceWithLanguage:voiceProvider];
+    if (systemPreferredVoice) {
+        return systemPreferredVoice;
+    }
+
     NSArray<AVSpeechSynthesisVoice *> *allVoices = [AVSpeechSynthesisVoice speechVoices];
     NSMutableArray<AVSpeechSynthesisVoice *> *allEnhancedVoicesForLanguage = [[NSMutableArray alloc] init];
-
     for (AVSpeechSynthesisVoice *voice in allVoices) {
         if (voice.quality == AVSpeechSynthesisVoiceQualityEnhanced && [voice.language hasPrefix:voiceProvider]) {
             [allEnhancedVoicesForLanguage insertObject:voice atIndex:0];

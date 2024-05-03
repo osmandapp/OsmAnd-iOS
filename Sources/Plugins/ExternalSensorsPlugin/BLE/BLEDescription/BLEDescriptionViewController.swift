@@ -17,6 +17,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         didSet {
             device.didChangeCharacteristic = { [weak self] in
                 guard let self else { return }
+                headerView.updateActiveServiceImage()
                 generateData()
                 tableView.reloadData()
             }
@@ -41,7 +42,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 
         configureHeader()
         headerView.configure(device: device)
-        headerView.didPaireDevicedAction = { [weak self] in
+        headerView.didPaireDeviceAction = { [weak self] in
             guard let self else { return }
             generateData()
             tableView.reloadData()

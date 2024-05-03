@@ -77,6 +77,11 @@
     return UIStatusBarStyleLightContent;
 }
 
+- (BOOL)isNavbarVisible
+{
+    return YES;
+}
+
 -(void)applyLocalization
 {
     [[self.viewControllers objectAtIndex:0] setTitle:OALocalizedString(@"favorites_item")];

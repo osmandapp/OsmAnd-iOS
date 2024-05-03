@@ -31,8 +31,7 @@
 
 - (NSString *)getUrlWithCommonAttributions
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@%@", WIKIMEDIA_COMMONS_URL, WIKIMEDIA_FILE, _wikiMediaTag];
-    return url;
+    return [NSString stringWithFormat:@"%@%@%@", WIKIMEDIA_COMMONS_URL, WIKIMEDIA_FILE, _wikiMediaTag];
 }
 
 @end

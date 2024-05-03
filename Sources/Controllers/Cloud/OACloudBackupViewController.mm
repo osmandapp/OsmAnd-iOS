@@ -19,7 +19,6 @@
 #import "OATitleIconProgressbarCell.h"
 #import "OAValueTableViewCell.h"
 #import "OARightIconTableViewCell.h"
-#import "FFCircularProgressView+isSpinning.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMainSettingsViewController.h"
 #import "OANetworkSettingsHelper.h"

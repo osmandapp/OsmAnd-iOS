@@ -8,6 +8,7 @@
 
 #import "OADownloadingCellHelper.h"
 #import "OAResourcesUIHelper.h"
+#import "OARightIconTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAManageResourcesViewController.h"
 #import "OARootViewController.h"
@@ -69,7 +70,7 @@
 
 #pragma mark - Cell setup
 
-- (UITableViewCell *)setupSwiftCell:(OAResourceSwiftItem *)swiftMapItem indexPath:(NSIndexPath *)indexPath
+- (OARightIconTableViewCell *)setupSwiftCell:(OAResourceSwiftItem *)swiftMapItem indexPath:(NSIndexPath *)indexPath
 {
     if (swiftMapItem)
     {
@@ -78,7 +79,7 @@
     return nil;
 }
 
-- (UITableViewCell *)setupCell:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath
+- (OARightIconTableViewCell *)setupCell:(OAResourceItem *)mapItem indexPath:(NSIndexPath *)indexPath
 {
     if ([mapItem isKindOfClass:OAMultipleResourceItem.class])
         mapItem = [self getActiveItemForIndexPath:indexPath useDefautValue:YES];
@@ -92,63 +93,64 @@
     NSString *title = mapItem.title;
     mapItem.disabled = [self isDisabled:mapItem];
 
-    UITableViewCell* cell = [_hostTableView dequeueReusableCellWithIdentifier:cellTypeId];
+    OARightIconTableViewCell* cell = [_hostTableView dequeueReusableCellWithIdentifier:cellTypeId];
     if (cell == nil)
     {
-        if ([cellTypeId isEqualToString:repositoryResourceCell])
-        {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            UIImage* iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
-            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-            [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-            [cell setAccessoryView:btnAcc];
-        }
-        else if ([cellTypeId isEqualToString:downloadingResourceCell])
-        {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:cellTypeId];
-            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-            progressView.iconView = [[UIView alloc] init];
-            cell.accessoryView = progressView;
-        }
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
+        cell = (OARightIconTableViewCell *) nib[0];
+        [cell leftIconVisibility:YES];
+        [cell descriptionVisibility:YES];
+        cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+        cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+        cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
     }
+    
+    if ([cellTypeId isEqualToString:repositoryResourceCell])
+    {
+        cell.accessoryView = nil;
+        [cell rightIconVisibility:YES];
+        cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
+        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+    }
+    else if ([cellTypeId isEqualToString:downloadingResourceCell])
+    {
+        [cell rightIconVisibility:NO];
+        FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+        progressView.iconView = [[UIView alloc] init];
+        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.accessoryView = progressView;
+    }
+    
     if ([cellTypeId isEqualToString:repositoryResourceCell])
     {
         if (!mapItem.disabled)
         {
-            cell.textLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-            UIImage *iconImage = [UIImage templateImageNamed:@"ic_custom_download"];
-            UIButton *btnAcc = [UIButton buttonWithType:UIButtonTypeSystem];
-            [btnAcc removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
-            [btnAcc addTarget:self action: @selector(accessoryButtonTapped:withEvent:) forControlEvents: UIControlEventTouchUpInside];
-            [btnAcc setImage:iconImage forState:UIControlStateNormal];
-            btnAcc.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            btnAcc.frame = CGRectMake(0.0, 0.0, 30.0, 50.0);
-            [cell setAccessoryView:btnAcc];
+            cell.accessoryView = nil;
+            [cell rightIconVisibility:YES];
+            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         }
         else
         {
-            cell.textLabel.textColor = [UIColor lightGrayColor];
             cell.accessoryView = nil;
+            [cell rightIconVisibility:NO];
+            cell.titleLabel.textColor = [UIColor lightGrayColor];
         }
     }
-
-    cell.imageView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
-    cell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    cell.textLabel.text = title;
-    if (cell.detailTextLabel != nil)
-        cell.detailTextLabel.text = subtitle;
+    else if ([cellTypeId isEqualToString:downloadingResourceCell])
+    {
+        [cell rightIconVisibility:NO];
+        FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
+        progressView.iconView = [[UIView alloc] init];
+        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.accessoryView = progressView;
+    }
+    
+    cell.leftIconView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
+    cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+    cell.titleLabel.text = title;
+    cell.descriptionLabel.text = subtitle;
 
     if ([cellTypeId isEqualToString:downloadingResourceCell])
         [self updateDownloadingCell:cell indexPath:indexPath mapItem:mapItem];
@@ -270,12 +272,12 @@
 - (void)updateDownloadingCellAtIndexPath:(NSIndexPath *)indexPath mapItem:(OAResourceItem *)mapItem
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        UITableViewCell *cell = [_hostTableView cellForRowAtIndexPath:indexPath];
+        OARightIconTableViewCell *cell = [_hostTableView cellForRowAtIndexPath:indexPath];
         [self updateDownloadingCell:cell indexPath:indexPath mapItem:mapItem];
     });
 }
 
-- (void)updateDownloadingCell:(UITableViewCell *)cell indexPath:(NSIndexPath *)indexPath mapItem:(OAResourceItem *)mapItem
+- (void)updateDownloadingCell:(OARightIconTableViewCell *)cell indexPath:(NSIndexPath *)indexPath mapItem:(OAResourceItem *)mapItem
 {
     if ([mapItem isKindOfClass:OAMultipleResourceItem.class])
         mapItem = [self getActiveItemForIndexPath:indexPath useDefautValue:NO];
@@ -423,16 +425,17 @@
 - (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
     id<OADownloadTask> task = key;
+    NSString *taskKey = task.key;
 
     // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"] || ![task.key hasSuffix:@"travel.obf"])
+    if (![taskKey hasPrefix:@"resource:"] && ![taskKey hasSuffix:@"travel.obf"])
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil)
             return;
 
-        [self refreshDownloadingContent:task.key];
+        [self refreshDownloadingContent:taskKey];
     });
 }
 

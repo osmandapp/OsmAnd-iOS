@@ -27,6 +27,21 @@ fi
 # Prepare iOS dependencies via CocoaPods
 "$SRCLOC/Scripts/install_pods.sh"
 
+# Getting the Xcode version
+xcode_version=$(xcodebuild -version | grep "Xcode")
+
+# Using awk to extract only the Xcode version number
+xcode_version_number=$(echo "$xcode_version" | awk '{print $2}')
+
+# Comparing the version with 15.3
+if (( $(echo "$xcode_version_number >= 15.3" | bc -l) )); then
+    echo "Xcode version $xcode_version_number greater than or equal to 15.3"
+	# The script will replace the source code of libxslt with the compatible one from the 'BRCybertron' pod
+	"$SRCLOC/Scripts/change_libxslt_resources_for_BRCybertron_pod.sh"
+else
+    echo "Xcode version $xcode_version_number less than 15.3"
+fi
+
 # Download all shipped resources
 "$SRCLOC/Scripts/download-shipped-resources.sh"
 

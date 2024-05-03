@@ -16,6 +16,15 @@
 #import "OAPOI.h"
 #import "OAAbstractCard.h"
 
+typedef NS_ENUM(NSInteger, EOAWikiImageType) {
+    EOAWikiImageTypeWikimedia = 0,
+    EOAWikiImageTypeWikidata,
+};
+
+static NSArray<NSNumber *> *cardTypes = @[@(EOAWikiImageTypeWikimedia), @(EOAWikiImageTypeWikidata)];
+
+static NSString * const kWikipediaShortLink = @".wikipedia.org/wiki/";
+
 @interface OAWikiImageHelper ()
 
 typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *cards);
@@ -25,8 +34,8 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 
 @implementation OAWikiImageHelper
 {
-    BOOL _wikidataCardsReady;
-    BOOL _wikimediaCardsReady;
+    NSMutableArray<NSNumber *> *_cardTypesReady;
+    NSMutableArray<OAWikiImage *> *_foundImages;
 }
 
 + (OAWikiImageHelper *)sharedInstance
@@ -46,18 +55,144 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
 
     _addOtherImagesFunction = addOtherImagesOnComplete;
     NSMutableArray <OAAbstractCard *> *cards = [NSMutableArray new];
-    NSString *wikimediaTagContent = nil;
-    NSString *wikidataTagContent = nil;
+
     if ([targetObj isKindOfClass:OAPOI.class])
     {
         OAPOI *poi = targetObj;
-        wikimediaTagContent = poi.values[WIKIMEDIA_COMMONS_TAG];
-        wikidataTagContent = poi.values[WIKIDATA_TAG];
+
+        NSString *wikiCategory = @"";
+        NSString *wikidataId = @"";
+        NSString *url = @"";
+        NSArray<NSString *> *keys = poi.values.allKeys;
+        if ([keys containsObject:WIKIMEDIA_COMMONS_TAG])
+        {
+            NSString *wikimediaCommons = poi.values[WIKIMEDIA_COMMONS_TAG];
+            if ([wikimediaCommons hasPrefix:WIKIMEDIA_FILE])
+            {
+                NSString *imageFileName = [wikimediaCommons stringByReplacingOccurrencesOfString:WIKIMEDIA_FILE withString:@""];
+                OAWikiImage *wikiImage = [self getWikiImage:imageFileName];
+                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
+                if (card)
+                    [cards addObject:card];
+            }
+            else if ([wikimediaCommons hasPrefix:WIKIMEDIA_CATEGORY])
+            {
+                wikiCategory = [wikimediaCommons stringByReplacingOccurrencesOfString:WIKIMEDIA_CATEGORY withString:@""];
+                url = [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"category=", wikiCategory];
+            }
+        }
+        if ([keys containsObject:WIKIDATA_TAG])
+        {
+            wikidataId = poi.values[WIKIDATA_TAG];
+            url = url.length == 0
+                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"article=", wikidataId]
+                : [url stringByAppendingFormat:@"&%@%@", @"article=", wikidataId];
+        }
+        if ([keys containsObject:WIKIPEDIA_TAG])
+        {
+            NSString *wikiTitle = poi.values[WIKIPEDIA_TAG];
+
+            NSInteger urlInd = [wikiTitle indexOf:kWikipediaShortLink];
+            if (urlInd > 0)
+            {
+                NSString *prefix = [wikiTitle substringToIndex:urlInd];
+                NSString *lang = [[prefix substringFromIndex:[prefix lastIndexOf:@"/"] + 1] stringByReplacingOccurrencesOfString:@"/" withString:@""];
+                NSString *title = [wikiTitle substringFromIndex:urlInd + kWikipediaShortLink.length];
+                wikiTitle = [NSString stringWithFormat:@"%@:%@", lang, title];
+            }
+
+            url = url.length == 0
+                ? [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"wiki=", wikiTitle]
+                : [url stringByAppendingFormat:@"&%@%@", @"wiki=", wikiTitle];
+        }
+
+        if (USE_OSMAND_WIKI_API)
+        {
+            if (url.length > 0)
+            {
+                url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+                [self addOsmandAPIImageList:url cards:cards];
+            }
+            else
+            {
+                [self runCallback:cards];
+            }
+        }
+        else
+        {
+            if (wikidataId.length == 0 && wikiCategory.length == 0)
+            {
+                [self runCallback:cards];
+            }
+            else
+            {
+                _cardTypesReady = [NSMutableArray array];
+                _foundImages = [NSMutableArray array];
+                
+                if (wikidataId.length == 0)
+                    [_cardTypesReady addObject:@(EOAWikiImageTypeWikidata)];
+                else
+                    [self addWikidataImageCards:wikidataId cards:cards];
+                
+                if (wikiCategory.length == 0)
+                    [_cardTypesReady addObject:@(EOAWikiImageTypeWikimedia)];
+                else
+                    [self addWikimediaCardsFromCategory:wikiCategory cards:cards depth:0 prepared:YES];
+            }
+        }
     }
-    _wikidataCardsReady = NO;
-    _wikimediaCardsReady = NO;
-    [self addWikimediaCards:wikimediaTagContent cards:cards];
-    [self addWikidataCards:wikidataTagContent cards:cards];
+    else
+    {
+        [self runCallback:cards];
+    }
+}
+
+- (void)addOsmandAPIImageList:(NSString *)url cards:(NSMutableArray<OAAbstractCard *> *)cards
+{
+    NSURL *urlObj = [NSURL URLWithString:url];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (((NSHTTPURLResponse *)response).statusCode == 200)
+        {
+            if (data && !error)
+            {
+                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                if (!error && jsonDict)
+                {
+                    try {
+                        NSArray<NSString *> *images = jsonDict[@"features"];
+                        for (NSString *image in images)
+                        {
+                            OAWikiImage *wikiImage = [self getOsmandApiWikiImage:image];
+                            if (wikiImage)
+                            {
+                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:wikiImage type:@"wikimedia-photo"];
+                                if (card)
+                                    [cards addObject:card];
+                            }
+                        }
+                    }
+                    catch(NSException *e)
+                    {
+                        NSLog(@"OsmandApi photos json serialising error: %@", e.reason);
+                    }
+                }
+                else
+                {
+                    NSLog(@"OsmandApi photos error parsing json: %@", error);
+                }
+            }
+            else
+            {
+                NSLog(@"OsmandApi photos error: %@", error);
+            }
+        }
+        else
+        {
+            NSLog(@"Error retrieving OsmandApi photos: %@", error);
+        }
+        [self runCallback:cards];
+    }] resume];
 }
 
 - (OAWikiImage *)getOsmandApiWikiImage:(NSString *)imageUrl
@@ -91,158 +226,91 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     return [[OAWikiImage alloc] initWithWikiMediaTag:urlSafeFileName imageName:imageName imageStubUrl:imageStubUrl imageHiResUrl:imageHiResUrl];
 }
 
-- (void)addOsmandAPIWikimediaImageListByCategory:(NSString *)categoryName
-                                cards:(NSMutableArray<OAAbstractCard *> *)cards
+- (void)runCallback:(NSMutableArray<OAAbstractCard *> *)cards
 {
-    NSString *url = [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"category=", categoryName];
-    [self addOsmandAPIImageList:url cards:cards byCategory:YES];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (_addOtherImagesFunction)
+            _addOtherImagesFunction(cards);
+    });
 }
 
-- (void)addOsmandAPIWikidataImageList:(NSString *)wikidataTagContent
-                                cards:(NSMutableArray<OAAbstractCard *> *)cards
-{
-    NSString *url = [NSString stringWithFormat:@"%@%@%@", OSMAND_API_ENDPOINT, @"article=", wikidataTagContent];
-    [self addOsmandAPIImageList:url cards:cards byCategory:NO];
-}
+//
+// if
+// USE_OSMAND_WIKI_API == NO
+//
 
-- (void)addOsmandAPIImageList:(NSString *)url
-                        cards:(NSMutableArray<OAAbstractCard *> *)cards
-                   byCategory:(BOOL)byCategory
+- (void)readyToAddWithType:(EOAWikiImageType)type cards:(NSMutableArray<OAAbstractCard *> *)cards
 {
-    url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL *urlObj = [[NSURL alloc] initWithString:url];
-    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-    [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
-        if (((NSHTTPURLResponse *)response).statusCode == 200)
+    [_cardTypesReady addObject:@(type)];
+    if (_cardTypesReady.count == cardTypes.count && _addOtherImagesFunction)
+    {
+        if (_foundImages.count > 0)
         {
-            if (data)
+            NSMutableSet<NSString *> *filteredImages = [NSMutableSet setWithArray:[_foundImages valueForKey:@"imageStubUrl"]];
+            for (OAWikiImage *image in _foundImages)
             {
-                NSError *error;
-                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-                NSArray<NSString *> *images = jsonDict[@"features"];
-                if (!error && images)
+                if (filteredImages.count == 0)
+                    break;
+                if ([filteredImages containsObject:image.imageStubUrl])
                 {
-                    for (NSString *image in images)
-                    {
-                        OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getOsmandApiWikiImage:image] type:@"wikimedia-photo" wikimediaCategory:NO];
-                        if (card)
-                            [resultCards addObject:card];
-                    }
+                    [filteredImages removeObject:image.imageStubUrl];
+                    OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:image type:@"wikimedia-photo"];
+                    if (card)
+                        [cards addObject:card];
                 }
             }
         }
-        else
-        {
-            NSLog(@"Error retrieving Wikimedia photos (OsmandApi): %@", error);
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [cards addObjectsFromArray:resultCards];
-            if (byCategory)
-            {
-                _wikimediaCardsReady = YES;
-                if (_wikidataCardsReady)
-                    _addOtherImagesFunction(cards);
-            }
-            else
-            {
-                _wikidataCardsReady = YES;
-                if (_wikimediaCardsReady)
-                    _addOtherImagesFunction(cards);
-            }
-        });
-    }] resume];
+        _foundImages = nil;
+        _cardTypesReady = nil;
+        _addOtherImagesFunction(cards);
+    }
 }
 
-
-- (void)addWikidataCards:(NSString *)wikidataTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards
+- (void)addWikidataImageCards:(NSString *)wikidataId cards:(NSMutableArray<OAAbstractCard *> *)cards
 {
-    if (wikidataTagContent)
-    {
-        if (USE_OSMAND_WIKI_API)
+    NSString *safeWikidataTagContent = [wikidataId stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+    NSURL *urlObj = [NSURL URLWithString:[NSString stringWithFormat:@"%@%@%@%@", WIKIDATA_API_ENDPOINT, WIKIDATA_ACTION, safeWikidataTagContent, FORMAT_JSON]];
+    NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
+    [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
-            [self addOsmandAPIWikidataImageList:wikidataTagContent cards:cards];
-        }
-        else if ([wikidataTagContent hasPrefix:WIKIDATA_PREFIX])
-        {
-            NSString *safeWikidataTagContent = [wikidataTagContent stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-            NSURL *urlObj = [[NSURL alloc] initWithString: [NSString stringWithFormat:@"%@%@%@%@", WIKIDATA_API_ENDPOINT, WIKIDATA_ACTION, safeWikidataTagContent, FORMAT_JSON]];
-            NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
-            [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-                OAWikiImageCard *resultCard = nil;
-                if (((NSHTTPURLResponse *)response).statusCode == 200)
+            if (data && !error)
+            {
+                NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                if (!error && jsonDict)
                 {
-                    if (data && !error)
-                    {
-                        NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-                        if (jsonDict)
+                    try {
+                        NSArray *records = jsonDict[@"claims"][@"P18"];
+                        if (records && records.count > 0)
                         {
-                            try {
-                                NSArray *records = jsonDict[@"claims"][@"P18"];
-                                if (records && records.count > 0)
-                                {
-                                    NSString *imageName = records.firstObject[@"mainsnak"][@"datavalue"][@"value"];
-                                    if (imageName)
-                                        resultCard = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:imageName] type:@"wikidata-photo"];
-                                }
-                            }
-                            catch(NSException *e)
-                            {
-                                NSLog(@"Wikidata image json serialising error");
-                            }
+                            NSString *imageName = records.firstObject[@"mainsnak"][@"datavalue"][@"value"];
+                            if (imageName)
+                                [_foundImages addObject:[self getWikiImage:imageName]];
                         }
+                    }
+                    catch(NSException *e)
+                    {
+                        NSLog(@"Wikidata photos json serialising error: %@", e.reason);
                     }
                 }
                 else
                 {
-                    NSLog(@"Error retrieving Wikidata photos: %@", error);
+                    NSLog(@"Wikidata photos error parsing json: %@", error);
                 }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (resultCard)
-                        [cards addObject:resultCard];
-                    _wikidataCardsReady = YES;
-                    if (_wikimediaCardsReady)
-                        _addOtherImagesFunction(cards);
-                });
-            }] resume];
+            }
+            else
+            {
+                NSLog(@"Wikidata photos error: %@", error);
+            }
         }
-    }
-    else
-    {
-        _wikidataCardsReady = YES;
-        if (_wikimediaCardsReady)
-            _addOtherImagesFunction(cards);
-    }
-}
-
-- (void)addWikimediaCards:(NSString *)wikiMediaTagContent cards:(NSMutableArray<OAAbstractCard *> *)cards
-{
-    if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:WIKIMEDIA_FILE])
-    {
-        NSString *fileName = [wikiMediaTagContent stringByReplacingOccurrencesOfString:WIKIMEDIA_FILE withString:@""];
-        OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:fileName] type:@"wikimedia-photo"];
-        if (card)
-        {
-            [cards addObject:card];
-            _wikimediaCardsReady = YES;
-            if (_wikidataCardsReady)
-                _addOtherImagesFunction(cards);
-        }
-    }
-    else if (wikiMediaTagContent && [wikiMediaTagContent hasPrefix:WIKIMEDIA_CATEGORY])
-    {
-        NSString *categoryName = [wikiMediaTagContent stringByReplacingOccurrencesOfString:WIKIMEDIA_CATEGORY withString:@""];
-        if (USE_OSMAND_WIKI_API)
-            [self addOsmandAPIWikimediaImageListByCategory:categoryName cards:cards];
         else
-            [self addWikimediaCardsFromCategory:categoryName cards:cards depth:0 prepared:YES];
-    }
-    else
-    {
-        _wikimediaCardsReady = YES;
-        if (_wikidataCardsReady)
-            _addOtherImagesFunction(cards);
-    }
+        {
+            NSLog(@"Error retrieving Wikidata photos: %@", error);
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self readyToAddWithType:EOAWikiImageTypeWikidata cards:cards];
+        });
+    }] resume];
 }
 
 - (void)addWikimediaCardsFromCategory:(NSString *)categoryName
@@ -253,50 +321,60 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
     __block BOOL ready = prepared;
     NSString *url = [NSString stringWithFormat:@"%@%@%@%@%@%@", WIKIMEDIA_API_ENDPOINT, WIKIMEDIA_ACTION, WIKIMEDIA_CATEGORY, categoryName, CM_LIMIT, FORMAT_JSON];
     url = [url stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
-    NSURL *urlObj = [[NSURL alloc] initWithString:url];
+    NSURL *urlObj = [NSURL URLWithString:url];
     NSURLSession *session = [NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];
     [[session dataTaskWithURL:urlObj completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        NSMutableArray<OAAbstractCard *> *resultCards = [NSMutableArray array];
         if (((NSHTTPURLResponse *)response).statusCode == 200)
         {
-            if (data)
+            if (data && !error)
             {
-                NSError *error;
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
-                NSDictionary *cms = jsonDict[@"query"][@"categorymembers"];
-                if (!error && cms)
+                if (!error && jsonDict)
                 {
-                    NSMutableArray<NSString *> *subCategories = [NSMutableArray array];
-                    for (NSDictionary *cm in cms)
-                    {
-                        NSString *memberTitle = cm[@"title"];
-                        if (memberTitle)
+                    try {
+                        NSDictionary *cms = jsonDict[@"query"][@"categorymembers"];
+                        NSMutableArray<NSString *> *subCategories = [NSMutableArray array];
+                        for (NSDictionary *cm in cms)
                         {
-                            if ([memberTitle hasPrefix:WIKIMEDIA_CATEGORY])
+                            NSString *memberTitle = cm[@"title"];
+                            if (memberTitle)
                             {
-                                ready = NO;
-                                [subCategories addObject:memberTitle];
+                                if ([memberTitle hasPrefix:WIKIMEDIA_CATEGORY])
+                                {
+                                    ready = NO;
+                                    [subCategories addObject:memberTitle];
+                                }
+                                else
+                                {
+                                    [_foundImages addObject:[self getWikiImage:memberTitle]];
+                                }
                             }
-                            else
+                        }
+                        if (depth < DEPT_CAT_LIMIT)
+                        {
+                            for (NSInteger i = 0; i < subCategories.count; i ++)
                             {
-                                OAWikiImageCard *card = [[OAWikiImageCard alloc] initWithWikiImage:[self getWikiImage:memberTitle] type:@"wikimedia-photo" wikimediaCategory:YES];
-                                if (card)
-                                    [resultCards addObject:card];
+                                NSString *subCategory = subCategories[i];
+                                [self addWikimediaCardsFromCategory:subCategory
+                                                              cards:cards
+                                                              depth:depth + 1
+                                                           prepared:i == subCategories.count - 1];
                             }
                         }
                     }
-                    if (depth < DEPT_CAT_LIMIT)
+                    catch(NSException *e)
                     {
-                        for (NSInteger i = 0; i < subCategories.count; i ++)
-                        {
-                            NSString *subCategory = subCategories[i];
-                            [self addWikimediaCardsFromCategory:subCategory
-                                                          cards:cards
-                                                          depth:depth + 1
-                                                       prepared:i == subCategories.count - 1];
-                        }
+                        NSLog(@"Wikimedia photos json serialising error: %@", e.reason);
                     }
                 }
+                else
+                {
+                    NSLog(@"Wikimedia photos error parsing json: %@", error);
+                }
+            }
+            else
+            {
+                NSLog(@"Wikimedia photos error: %@", error);
             }
         }
         else
@@ -306,10 +384,7 @@ typedef void(^OAWikiImageHelperOtherImages)(NSMutableArray<OAAbstractCard *> *ca
         if (ready)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [cards addObjectsFromArray:resultCards];
-                _wikimediaCardsReady = YES;
-                if (_wikidataCardsReady)
-                    _addOtherImagesFunction(cards);
+                [self readyToAddWithType:EOAWikiImageTypeWikimedia cards:cards];
             });
         }
     }] resume];

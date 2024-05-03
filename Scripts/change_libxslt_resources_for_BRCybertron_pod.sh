@@ -60,9 +60,12 @@ if [ ! -d "$source_dir/libxslt-1.1.34/libexslt" ] || [ ! -d "$source_dir/libxslt
     exit 1
 fi
 
+# clear destination_dir
+rm -rf "$destination_dir"/*
+
 # Copy folders to the destination folder with replacement
-cp -Rf "$source_dir/libxslt-1.1.34/libxslt" "$destination_dir"
-cp -Rf "$source_dir/libxslt-1.1.34/libexslt" "$destination_dir"
+cp -R "$source_dir/libxslt-1.1.34/libxslt" "$destination_dir"
+cp -R "$source_dir/libxslt-1.1.34/libexslt" "$destination_dir"
 
 echo "The libexslt and libxslt folders were successfully copied and replaced in $destination_dir"
 

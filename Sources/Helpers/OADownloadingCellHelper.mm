@@ -84,16 +84,12 @@
     if ([mapItem isKindOfClass:OAMultipleResourceItem.class])
         mapItem = [self getActiveItemForIndexPath:indexPath useDefautValue:YES];
     
-    static NSString* const repositoryResourceCell = @"repositoryResourceCell";
-    static NSString* const downloadingResourceCell = @"downloadingResourceCell";
-   
-    NSString* cellTypeId = mapItem.downloadTask ? downloadingResourceCell : repositoryResourceCell;
     uint64_t _sizePkg = mapItem.sizePkg;
     NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:mapItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
     NSString *title = mapItem.title;
     mapItem.disabled = [self isDisabled:mapItem];
 
-    OARightIconTableViewCell* cell = [_hostTableView dequeueReusableCellWithIdentifier:cellTypeId];
+    OARightIconTableViewCell* cell = [_hostTableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -103,58 +99,40 @@
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
         cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+        cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
     }
     
-    if ([cellTypeId isEqualToString:repositoryResourceCell])
+    cell.titleLabel.text = title;
+    cell.descriptionLabel.text = subtitle;
+    cell.leftIconView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
+    
+    if (mapItem.downloadTask)
     {
-        cell.accessoryView = nil;
-        [cell rightIconVisibility:YES];
-        cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
-        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-    }
-    else if ([cellTypeId isEqualToString:downloadingResourceCell])
-    {
+        // Cell is downloading
         [cell rightIconVisibility:NO];
         FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
         progressView.iconView = [[UIView alloc] init];
         progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
         cell.accessoryView = progressView;
+        [self updateDownloadingCell:cell indexPath:indexPath mapItem:mapItem];
     }
-    
-    if ([cellTypeId isEqualToString:repositoryResourceCell])
+    else
     {
-        if (!mapItem.disabled)
+        // Cell is not downloading
+        cell.accessoryView = nil;
+        if (mapItem.disabled)
         {
-            cell.accessoryView = nil;
-            [cell rightIconVisibility:YES];
-            cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
-            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            [cell rightIconVisibility:NO];
         }
         else
         {
-            cell.accessoryView = nil;
-            [cell rightIconVisibility:NO];
-            cell.titleLabel.textColor = [UIColor lightGrayColor];
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            [cell rightIconVisibility:YES];
         }
     }
-    else if ([cellTypeId isEqualToString:downloadingResourceCell])
-    {
-        [cell rightIconVisibility:NO];
-        FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-        progressView.iconView = [[UIView alloc] init];
-        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        cell.accessoryView = progressView;
-    }
-    
-    cell.leftIconView.image = [OAResourceType getIcon:mapItem.resourceType templated:YES];
-    cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-    cell.titleLabel.text = title;
-    cell.descriptionLabel.text = subtitle;
-
-    if ([cellTypeId isEqualToString:downloadingResourceCell])
-        [self updateDownloadingCell:cell indexPath:indexPath mapItem:mapItem];
-
     return cell;
 }
 
@@ -180,14 +158,6 @@
 
 
 #pragma mark - Actions
-
-- (void)accessoryButtonTapped:(UIControl *)button withEvent:(UIEvent *)event
-{
-    NSIndexPath *indexPath = [_hostTableView indexPathForRowAtPoint:[[[event touchesForView:button] anyObject] locationInView:_hostTableView]];
-
-    if (indexPath)
-        [self onItemClicked:indexPath];
-}
 
 - (void)onItemClicked:(NSIndexPath *)indexPath
 {

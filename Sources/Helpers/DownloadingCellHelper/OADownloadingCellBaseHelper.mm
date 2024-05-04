@@ -128,10 +128,7 @@
     if (isDownloading)
     {
         [cell rightIconVisibility:NO];
-        FFCircularProgressView* progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
-        progressView.iconView = [[UIView alloc] init];
-        progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        cell.accessoryView = progressView;
+        _cells[resourceId] = cell;
         [self updateCellProgressForResourceId:resourceId];
     }
     else

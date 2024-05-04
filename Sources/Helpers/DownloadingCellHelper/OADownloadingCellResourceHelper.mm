@@ -209,6 +209,12 @@
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setProgressForResourceId:taskKey progress:progress status:EOAItemStatusFinishedType];
+            
+            if ([OsmAndApp.instance.downloadsManager.keysOfDownloadTasks count] > 0)
+            {
+                id<OADownloadTask> nextTask = [OsmAndApp.instance.downloadsManager firstDownloadTasksWithKey:OsmAndApp.instance.downloadsManager.keysOfDownloadTasks[0]];
+                [nextTask resume];
+            }
         });
     }
 }

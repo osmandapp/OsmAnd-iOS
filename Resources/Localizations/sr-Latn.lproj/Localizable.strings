@@ -3408,3 +3408,17 @@
 "auto_zoom_smooth" = "Glatko";
 "auto_zoom_discrete" = "Diskretno";
 "routing_algorithm_a" = "A*";
+"ft_s" = "ft/s";
+"track_vertical_exaggeration_description" = "Promenom vrednosti na skali možeš promeniti visinu 3D staze";
+"upward_gradient" = "Gradijent na gore";
+"shared_string_top_bottom" = "Vrh i dno";
+"track_3d_empty_view_title" = "3D prikaz Staze";
+"visualization_3d_visualized_by" = "Vizualizirano od";
+"visualization_3d_wall_color" = "Boja zida";
+"visualization_3d_track_line" = "Linija staze";
+"track_3d" = "3D staza";
+"fixed_height" = "Fiksna Visina";
+"downward_gradient" = "Gradijent na dole";
+"shared_string_top" = "Vrh";
+"shared_string_bottom" = "Dno";
+"track_3d_empty_view_description" = "Istraži stazu u interaktivnom 3D! Vizualiziraj visinu, brzinu i još toga direktno na mapi.";

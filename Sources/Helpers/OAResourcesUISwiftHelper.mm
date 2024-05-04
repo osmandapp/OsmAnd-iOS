@@ -60,6 +60,12 @@
     return [res isInstalled];
 }
 
+- (NSString *) resourceId
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.resourceId.toNSString();
+}
+
 @end
 
 

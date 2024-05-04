@@ -89,7 +89,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
++ (NSString *)getIconName:(OsmAndResourceType)type
 {
     NSString *imageNamed;
     switch (type)
@@ -136,6 +136,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             imageNamed = @"ic_custom_map";
             break;
     }
+    return imageNamed;
+}
+
++ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
+{
+    NSString *imageNamed = [self.class getIconName:type];
     return templated ? [UIImage templateImageNamed:imageNamed] : [UIImage imageNamed:imageNamed];
 }
 

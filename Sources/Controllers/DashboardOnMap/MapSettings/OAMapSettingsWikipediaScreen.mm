@@ -22,7 +22,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
-#import "OADownloadingCellHelper.h"
+#import "OADownloadingCellResourceHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 
@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     EOAMapSettingsWikipediaSectionAvailable
 };
 
-@interface OAMapSettingsWikipediaScreen () <OAWikipediaScreenDelegate>
+@interface OAMapSettingsWikipediaScreen () <OAWikipediaScreenDelegate, OADownloadingCellResourceHelperDelegate>
 
 @end
 
@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
-    OADownloadingCellHelper *_downloadingCellHelper;
+    OADownloadingCellResourceHelper *_downloadingCellResoucsesHelper;
 
     OAWikipediaPlugin *_wikiPlugin;
     NSArray<OARepositoryResourceItem *> *_mapItems;
@@ -72,41 +72,24 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         _mapViewController = [OARootViewController instance].mapPanel.mapViewController;
         
         [self setupDownloadingCellHelper];
-        [self initData];
+        [self updateResources];
     }
     return self;
 }
 
 - (void)setupDownloadingCellHelper
 {
-    __weak OAMapSettingsWikipediaScreen *weakself = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = self.vwController;
-    _downloadingCellHelper.hostTableView = self.tblView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
-    
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        
-        CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
-        _mapItems = (NSArray<OARepositoryResourceItem *> *) [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
-        [weakself initData];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        
-        NSDictionary *item = [weakself getItem:indexPath];
-        if (item)
-        {
-            OAResourceItem *mapItem = item[@"item"];
-            if (mapItem)
-                return mapItem;
-        }
-        return nil;
-    };
-    
-    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return [weakself data];
-    };
+    _downloadingCellResoucsesHelper =  [[OADownloadingCellResourceHelper alloc] init];
+    _downloadingCellResoucsesHelper.hostViewController = self.vwController;
+    _downloadingCellResoucsesHelper.hostTableView = self.tblView;
+    _downloadingCellResoucsesHelper.delegate = self;
+}
+
+- (void) updateResources
+{
+    CLLocationCoordinate2D coordinate = [OAResourcesUIHelper getMapLocation];
+    _mapItems = (NSArray<OARepositoryResourceItem *> *) [OAResourcesUIHelper findIndexItemsAt:coordinate type:OsmAndResourceType::WikiMapRegion includeDownloaded:NO limit:-1 skipIfOneDownloaded:YES];
+    [self initData];
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data
@@ -157,7 +140,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     [self.tblView registerClass:OATableViewCustomFooterView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomFooterView getCellIdentifier]];
     self.tblView.estimatedRowHeight = kEstimatedRowHeight;
 
-    [_downloadingCellHelper updateAvailableMaps];
+    [self updateResources];
 }
 
 - (void)onRotation
@@ -173,7 +156,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
         UISwitch *sw = (UISwitch *) sender;
         [(OAWikipediaPlugin *) [OAPluginsHelper getPlugin:OAWikipediaPlugin.class] wikipediaChanged:sw.isOn];
         _wikipediaEnabled = _app.data.wikipedia;
-        [_downloadingCellHelper updateAvailableMaps];
+        [self updateResources];
     }
 }
 
@@ -274,7 +257,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = item[@"item"];
-        return [_downloadingCellHelper setupCell:mapItem indexPath:indexPath];
+        return [_downloadingCellResoucsesHelper getOrCreateCellForResourceId:mapItem.resourceId.toNSString() resourceItem:mapItem];
     }
 
     return nil;
@@ -368,8 +351,19 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     }
     else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
     {
-        [_downloadingCellHelper onItemClicked:indexPath];
+        OAResourceItem *mapItem = item[@"item"];
+        [_downloadingCellResoucsesHelper onRowSelectedWith:mapItem.resourceId.toNSString()];
+        
     }
+}
+
+#pragma mark - OADownloadingCellResourceHelperDelegate
+
+- (void)onDownldedResourceInstalled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateResources];
+    });
 }
 
 #pragma mark - OAWikipediaScreenDelegate

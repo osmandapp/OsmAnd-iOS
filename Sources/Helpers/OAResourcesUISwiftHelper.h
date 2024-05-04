@@ -18,6 +18,7 @@
 
 - (instancetype) initWithItem:(id)objcResourceItem;
 
+- (NSString *) resourceId;
 - (NSString *) title;
 - (NSString *) type;
 - (NSString *) formatedSize;

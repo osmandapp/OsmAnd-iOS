@@ -47,14 +47,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-typedef NS_ENUM(NSInteger, EOAItemStatusType)
-{
-    EOAItemStatusNone = -1,
-    EOAItemStatusStartedType = 0,
-    EOAItemStatusInProgressType,
-    EOAItemStatusFinishedType
-};
-
 @interface OAStatusBackupTableViewController () <OAOnPrepareBackupListener, OAStatusBackupDelegate>
 
 @end

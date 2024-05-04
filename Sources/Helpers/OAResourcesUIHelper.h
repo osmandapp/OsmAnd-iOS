@@ -54,6 +54,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 + (instancetype)withType:(OsmAndResourceType)type;
 + (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
++ (NSString *)getIconName:(OsmAndResourceType)type;
 + (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated;
 + (NSInteger)getOrderIndex:(NSNumber *)type;
 + (OsmAndResourceType)resourceTypeByScopeId:(NSString *)scopeId;

@@ -54,13 +54,6 @@
 #import <MessageUI/MessageUI.h>
 #import <MessageUI/MFMailComposeViewController.h>
 
-typedef NS_ENUM(NSInteger, EOAItemStatusType)
-{
-    EOAItemStatusStartedType = 0,
-    EOAItemStatusInProgressType,
-    EOAItemStatusFinishedType
-};
-
 @interface OACloudBackupViewController () <UITableViewDelegate, UITableViewDataSource, OAOnPrepareBackupListener, OAOnDeleteAccountListener, OABackupTypesDelegate, MFMailComposeViewControllerDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tblView;

@@ -378,6 +378,7 @@
 		32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */; };
 		32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */; };
 		32473DD62A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */; };
+		325536E62BE8177000F429A8 /* OADownloadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 325536E52BE816D800F429A8 /* OADownloadingCell.xib */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
 		325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 325B6A0426D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m */; };
 		325CFBEB2B5052E000090DF2 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325CFBEA2B5052E000090DF2 /* TracksViewController.swift */; };
@@ -3857,6 +3858,7 @@
 		32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUISwiftHelper.mm; sourceTree = "<group>"; };
 		32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesNavigationViewController.swift; sourceTree = "<group>"; };
 		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		325536E52BE816D800F429A8 /* OADownloadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADownloadingCell.xib; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B6A0326D9239800D8B67C /* OAQuickSearchCoordinateFormatsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinateFormatsViewController.h; sourceTree = "<group>"; };
@@ -8293,6 +8295,7 @@
 		32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */ = {
 			isa = PBXGroup;
 			children = (
+				325536E52BE816D800F429A8 /* OADownloadingCell.xib */,
 				32D24D1C2BE52AE2000FA504 /* OADownloadingCellBaseHelper.h */,
 				32D24D1D2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm */,
 				32D24D202BE54E9F000FA504 /* OADownloadingCellResourceHelper.h */,
@@ -13461,6 +13464,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
 				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
@@ -13563,7 +13567,6 @@
 				460767112A49F86400AF63F2 /* WikiAlgorithms.swift */,
 				321DD7542A77A8C2003223F7 /* OADownloadingCellHelper.h */,
 				321DD7552A77A8E5003223F7 /* OADownloadingCellHelper.mm */,
-				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */,
@@ -14654,6 +14657,7 @@
 				321251472A4B2081006C44BD /* ic_custom_2d@3x.png in Resources */,
 				DA0D163A281BEEF500CEEF58 /* map_turn_roundabout_left_dark@2x.png in Resources */,
 				1571CE2A24ADEE2F00083F92 /* ic_custom_ruler@2x.png in Resources */,
+				325536E62BE8177000F429A8 /* OADownloadingCell.xib in Resources */,
 				46B9E78C29B2298F00FA802D /* ic_navbar_languge@3x.png in Resources */,
 				336CAAB324AF63520085BF0A /* ic_custom_transport_bus@3x.png in Resources */,
 				326B4FB2257FD0FC00ABAB1D /* ic_action_motorboat@2x.png in Resources */,

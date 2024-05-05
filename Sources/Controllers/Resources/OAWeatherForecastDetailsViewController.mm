@@ -106,7 +106,7 @@
     _downloadingCellResourceHelper.hostTableView = self.tableView;
     _downloadingCellResourceHelper.isBoldStyle = YES;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
-    _downloadingCellResourceHelper.isRghtIconAlwaysVisible = YES;
+    _downloadingCellResourceHelper.isRightIconAlwaysVisible = YES;
 }
 
 #pragma mark - Base UI
@@ -297,22 +297,9 @@
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
-            if (([item[@"key"] isEqualToString:@"update_now_cell"] && _localResourceItem.downloadTask != nil && _localResourceItem.downloadTask.state == OADownloadTaskStateRunning))
-            {
-                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
-                progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-
-                cell.accessoryView = progressView;
-                cell.rightIconView.image = nil;
-                hasRightIcon = NO;
-            }
-            else
-            {
-                cell.accessoryView = nil;
-                cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
-                cell.rightIconView.tintColor = item[@"right_icon_color"];
-            }
+            cell.accessoryView = nil;
+            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
+            cell.rightIconView.tintColor = item[@"right_icon_color"];
             [cell rightIconVisibility:hasRightIcon];
         }
         return cell;

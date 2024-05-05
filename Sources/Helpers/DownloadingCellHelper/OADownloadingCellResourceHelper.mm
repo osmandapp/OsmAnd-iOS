@@ -8,7 +8,6 @@
 
 #import "OADownloadingCellResourceHelper.h"
 #import "OAResourcesUIHelper.h"
-#import "OARightIconTableViewCell.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "GeneratedAssetSymbols.h"
@@ -140,15 +139,20 @@
 
 #pragma mark - Cell setup methods
 
-- (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
+- (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
 {
     if (!_resourceItems[resourceId])
+    {
         _resourceItems[resourceId] = resourceItem;
+    
+        if (resourceItem.downloadTask)
+            [self saveStatus:EOAItemStatusInProgressType resourceId:resourceId];
+    }
     
     return [super getOrCreateCell:resourceId];
 }
 
-- (OARightIconTableViewCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem
+- (OADownloadingCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem
 {
     if (swiftResourceItem && swiftResourceItem.objcResourceItem)
     {
@@ -162,14 +166,14 @@
 }
 
 // Override
-- (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId
+- (OADownloadingCell *) getOrCreateCell:(NSString *)resourceId
 {
     // use new method instead
     return nil;
 }
 
 // Override
-- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId
+- (OADownloadingCell *) setupCell:(NSString *)resourceId
 {
     OAResourceItem *resourceItem = _resourceItems[resourceId];
     if (resourceItem)
@@ -181,7 +185,7 @@
         BOOL isDownloading = [self isDownloading:resourceId];
         
         // get cell with default settings
-        OARightIconTableViewCell *cell = [super setupCell:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:[self getRightIconName] isDownloading:isDownloading];
+        OADownloadingCell *cell = [super setupCell:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:[self getRightIconName] isDownloading:isDownloading];
         
         if ([self isDisabled:resourceId])
         {

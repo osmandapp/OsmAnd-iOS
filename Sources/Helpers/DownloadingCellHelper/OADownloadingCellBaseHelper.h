@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OARightIconTableViewCell.h"
 
 typedef NS_ENUM(NSInteger, EOAItemStatusType)
 {
@@ -16,7 +17,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     EOAItemStatusFinishedType
 };
 
-@class OARightIconTableViewCell;
+@interface OADownloadingCell : OARightIconTableViewCell
+
+@end
+
 
 @interface OADownloadingCellBaseHelper : NSObject
 
@@ -25,7 +29,8 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 @property (nonatomic) NSString *rightIconName;
 @property (nonatomic) BOOL isBoldStyle;
 @property (nonatomic) BOOL isAlwaysClickable;
-@property (nonatomic) BOOL isRghtIconAlwaysVisible;
+@property (nonatomic) BOOL isRightIconAlwaysVisible;
+@property (nonatomic) BOOL isShevronInsteadRightIcon;
 @property (nonatomic) BOOL isDownloadedRecolored;
 
 
@@ -34,13 +39,14 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (void) startDownload:(NSString *)resourceId;
 - (void) stopDownload:(NSString *)resourceId;
 
-- (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId;
-- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId;
-- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading;
+- (OADownloadingCell *) getOrCreateCell:(NSString *)resourceId;
+- (OADownloadingCell *) setupCell:(NSString *)resourceId;
+- (OADownloadingCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading;
 - (NSString *) getRightIconName;
 
 - (void) onCellClicked:(NSString *)resourceId;
 
+- (void) refreshCellProgresses;
 - (void) refreshCellProgress:(NSString *)resourceId;
 - (void) setCellProgress:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status;
 - (void) saveStatus:(EOAItemStatusType)status resourceId:(NSString *)resourceId;

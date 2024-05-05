@@ -8,13 +8,17 @@
 
 #import "OADownloadingCellBaseHelper.h"
 #import "OAResourcesUIHelper.h"
-#import "OARightIconTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
+@implementation OADownloadingCell
+
+@end
+
+
 @implementation OADownloadingCellBaseHelper
 {
-    NSMutableDictionary<NSString *, OARightIconTableViewCell *> *_cells;
+    NSMutableDictionary<NSString *, OADownloadingCell *> *_cells;
     NSMutableDictionary<NSString *, NSNumber *> *_statuses;
     NSMutableDictionary<NSString *, NSNumber *> *_progresses;
 }
@@ -67,14 +71,14 @@
 
 #pragma mark - Cell setup methods
 
-- (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId
+- (OADownloadingCell *) getOrCreateCell:(NSString *)resourceId
 {
     if (!_statuses[resourceId])
         _statuses[resourceId] = @(EOAItemStatusNone);
     if (!_progresses[resourceId])
         _progresses[resourceId] = @(0.);
     
-    OARightIconTableViewCell *cell = _cells[resourceId];
+    OADownloadingCell *cell = _cells[resourceId];
     if (!cell)
     {
         cell = [self setupCell:resourceId];
@@ -84,25 +88,25 @@
 }
 
 // Override in subclass
-- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId
+- (OADownloadingCell *) setupCell:(NSString *)resourceId
 {
     return [self setupCell:resourceId title:@"" isTitleBold:NO desc:nil leftIconName:nil rightIconName:nil isDownloading:NO];
 }
 
 // Override in subclass
-- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading
+- (OADownloadingCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading
 {
     if (!_hostTableView)
         return nil;
     
-    OARightIconTableViewCell *cell = _cells[resourceId];
+    OADownloadingCell *cell = _cells[resourceId];
     if (cell == nil)
-        cell = [_hostTableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+        cell = [_hostTableView dequeueReusableCellWithIdentifier:[OADownloadingCell getCellIdentifier]];
     
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
-        cell = (OARightIconTableViewCell *) nib[0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadingCell getCellIdentifier] owner:self options:nil];
+        cell = (OADownloadingCell *) nib[0];
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
@@ -161,22 +165,30 @@
     return cell;
 }
 
-- (void) setupRightIconForIdleCell:(OARightIconTableViewCell *)cell rightIconName:(NSString *)rightIconName resourceId:(NSString *)resourceId
+- (void) setupRightIconForIdleCell:(OADownloadingCell *)cell rightIconName:(NSString *)rightIconName resourceId:(NSString *)resourceId
 {
-    cell.accessoryView = nil;
-    cell.accessoryType = UITableViewCellAccessoryNone;
-    if (rightIconName && rightIconName.length > 0)
+    if (_isShevronInsteadRightIcon)
     {
-        cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
-        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        if ([self isInstalled:resourceId] && !_isRghtIconAlwaysVisible)
-            [cell rightIconVisibility:NO];
-        else
-            [cell rightIconVisibility:YES];
+        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else
     {
-        [cell rightIconVisibility:NO];
+        cell.accessoryView = nil;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+        if (rightIconName && rightIconName.length > 0)
+        {
+            cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            if ([self isInstalled:resourceId] && !_isRightIconAlwaysVisible)
+                [cell rightIconVisibility:NO];
+            else
+                [cell rightIconVisibility:YES];
+        }
+        else
+        {
+            [cell rightIconVisibility:NO];
+        }
     }
 }
 
@@ -205,7 +217,17 @@
 
 #pragma mark - Cell progress update methods
 
-// Override in subclass
+- (void) refreshCellProgresses
+{
+    for (NSString *resourceId in [_cells allKeys])
+    {
+        OADownloadingCell *cell = _cells[resourceId];
+        FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
+        if (progressView && progressView.isSpinning)
+            [progressView startSpinProgressBackgroundLayer];
+    }
+}
+
 - (void) refreshCellProgress:(NSString *)resourceId
 {
     float progress = _progresses[resourceId] ? _progresses[resourceId].floatValue : 0.;
@@ -218,11 +240,11 @@
     [self saveStatus:status resourceId:resourceId];
     [self saveProgress:progress resourceId:resourceId];
     
-    OARightIconTableViewCell *cell = _cells[resourceId];
+    OADownloadingCell *cell = _cells[resourceId];
     if (cell)
     {
         FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-        if (!progressView && status != EOAItemStatusFinishedType)
+        if (!progressView && status != EOAItemStatusFinishedType && status != EOAItemStatusNone)
         {
             progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
             progressView.iconView = [[UIView alloc] init];
@@ -244,7 +266,10 @@
             progressView.iconPath = nil;
             if (progressView.isSpinning)
                 [progressView stopSpinProgressBackgroundLayer];
-            progressView.progress = progress - 0.001;
+            float visualProgress = progress - 0.001;
+            if (visualProgress < 0.001)
+                visualProgress = 0.001;
+            progressView.progress = visualProgress;
         }
         else if (status == EOAItemStatusFinishedType)
         {

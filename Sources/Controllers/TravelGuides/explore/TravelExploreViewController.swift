@@ -566,7 +566,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         lastSelectedIndexPath = indexPath
         if item.cellType == "kDownloadCellKey" {
             let resource = getSwiftResourceByIndex(indexPath: indexPath)
-            downloadingCellResourceHelper.onRowSelected(with: resource?.resourceId())
+            downloadingCellResourceHelper.onCellClicked(resource?.resourceId())
             
         } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
             if let article = item.obj(forKey: "article") as? TravelArticle {

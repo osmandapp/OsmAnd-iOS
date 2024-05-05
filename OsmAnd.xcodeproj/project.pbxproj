@@ -483,6 +483,8 @@
 		32CA48C02A5D50E900DE76FD /* Geomagnetism.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */; };
 		32CCE2972AD81AF100AAADFA /* SearchTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32CCE2962AD81AF100AAADFA /* SearchTravelCell.xib */; };
 		32CCE2992AD81AFE00AAADFA /* SearchTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32CCE2982AD81AFE00AAADFA /* SearchTravelCell.swift */; };
+		32D24D1E2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32D24D1D2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm */; };
+		32D24D222BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32D24D212BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm */; };
 		32D253AD27F336C100324717 /* OACloudAccountVerificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A027F336BF00324717 /* OACloudAccountVerificationViewController.m */; };
 		32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32D253A127F336BF00324717 /* OACloudBackupViewController.xib */; };
 		32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 32D253A227F336BF00324717 /* OABaseCloudBackupViewController.m */; };
@@ -3995,6 +3997,10 @@
 		32CA48BF2A5D50E900DE76FD /* Geomagnetism.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Geomagnetism.swift; sourceTree = "<group>"; };
 		32CCE2962AD81AF100AAADFA /* SearchTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchTravelCell.xib; sourceTree = "<group>"; };
 		32CCE2982AD81AFE00AAADFA /* SearchTravelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchTravelCell.swift; sourceTree = "<group>"; };
+		32D24D1C2BE52AE2000FA504 /* OADownloadingCellBaseHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadingCellBaseHelper.h; sourceTree = "<group>"; };
+		32D24D1D2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadingCellBaseHelper.mm; sourceTree = "<group>"; };
+		32D24D202BE54E9F000FA504 /* OADownloadingCellResourceHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadingCellResourceHelper.h; sourceTree = "<group>"; };
+		32D24D212BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadingCellResourceHelper.mm; sourceTree = "<group>"; };
 		32D2539D27F336BE00324717 /* OACloudBackupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudBackupViewController.h; sourceTree = "<group>"; };
 		32D2539E27F336BF00324717 /* OACloudAccountLoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountLoginViewController.h; sourceTree = "<group>"; };
 		32D2539F27F336BF00324717 /* OACloudAccountVerificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OACloudAccountVerificationViewController.h; sourceTree = "<group>"; };
@@ -8282,6 +8288,17 @@
 				326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */,
 			);
 			path = "Geomagnetism-Swift";
+			sourceTree = "<group>";
+		};
+		32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */ = {
+			isa = PBXGroup;
+			children = (
+				32D24D1C2BE52AE2000FA504 /* OADownloadingCellBaseHelper.h */,
+				32D24D1D2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm */,
+				32D24D202BE54E9F000FA504 /* OADownloadingCellResourceHelper.h */,
+				32D24D212BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm */,
+			);
+			path = DownloadingCellHelper;
 			sourceTree = "<group>";
 		};
 		32E1EAA02AB87B7200CE13B6 /* search */ = {
@@ -13546,6 +13563,7 @@
 				460767112A49F86400AF63F2 /* WikiAlgorithms.swift */,
 				321DD7542A77A8C2003223F7 /* OADownloadingCellHelper.h */,
 				321DD7552A77A8E5003223F7 /* OADownloadingCellHelper.mm */,
+				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */,
@@ -16770,6 +16788,7 @@
 				465DB48629AF5BA3007F5989 /* OACarPlayTrackResultListController.mm in Sources */,
 				DA5A821326C563A700F274C7 /* OAPluginInstalledViewController.mm in Sources */,
 				461FB12E298801FA00097673 /* OAAnnounceTimeDistances.m in Sources */,
+				32D24D1E2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm in Sources */,
 				DA5A839226C563A800F274C7 /* OAOnlineTilesEditingViewController.mm in Sources */,
 				468443402B83C57A006B8E62 /* CheckCodeCommand.swift in Sources */,
 				465DB48929AF9F6C007F5989 /* OACarPlayFavoriteResultListController.mm in Sources */,
@@ -17566,6 +17585,7 @@
 				4641A4652B98B4A5000D8B32 /* GlideTargetWidget.swift in Sources */,
 				DA5A84B726C563A900F274C7 /* OATrackSegmentsViewController.mm in Sources */,
 				DAABE4E32A13752000569F71 /* OAAverageSpeedComputer.m in Sources */,
+				32D24D222BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm in Sources */,
 				05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */,
 				DA5A852726C563A900F274C7 /* OAOverlayUnderlayView.m in Sources */,
 				46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */,

@@ -352,7 +352,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = item[@"item"];
-        [_downloadingCellResoucsesHelper onRowSelectedWith:mapItem.resourceId.toNSString()];
+        [_downloadingCellResoucsesHelper onCellClicked:mapItem.resourceId.toNSString()];
         
     }
 }

@@ -31,16 +31,9 @@
     return self;
 }
 
-- (void) saveStatus:(EOAItemStatusType)status resourceId:(NSString *)resourceId
-{
-    _statuses[resourceId] = @(status);
-}
+#pragma mark - Resource methods
 
-- (void) saveProgress:(float)progress resourceId:(NSString *)resourceId
-{
-    _progresses[resourceId] = @(progress);
-}
-
+// Override in subclass
 - (BOOL) isInstalled:(NSString *)resourceId
 {
     if (_statuses[resourceId])
@@ -52,7 +45,26 @@
     return NO;
 }
 
-- (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId
+// Override in subclass
+- (BOOL) isDownloading:(NSString *)resourceId
+{
+    return NO;
+}
+
+- (void) startDownload:(NSString *)resourceId
+{
+    // Override in subclass
+}
+
+- (void) stopDownload:(NSString *)resourceId
+{
+    // Override in subclass
+}
+
+
+#pragma mark - Cell setup methods
+
+- (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId
 {
     if (!_statuses[resourceId])
         _statuses[resourceId] = @(EOAItemStatusNone);
@@ -62,19 +74,20 @@
     OARightIconTableViewCell *cell = _cells[resourceId];
     if (!cell)
     {
-        cell = [self setupCellForResourceId:resourceId];
+        cell = [self setupCell:resourceId];
         _cells[resourceId] = cell;
     }
     return cell;
 }
 
-- (OARightIconTableViewCell *) setupCellForResourceId:(NSString *)resourceId
+// Override in subclass
+- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId
 {
-    // Override in subclass
-    return [self setupCellForResourceId:resourceId title:@"" isTitleBold:NO desc:nil leftIconName:nil rightIconName:nil isDownloading:NO];
+    return [self setupCell:resourceId title:@"" isTitleBold:NO desc:nil leftIconName:nil rightIconName:nil isDownloading:NO];
 }
 
-- (OARightIconTableViewCell *) setupCellForResourceId:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading
+// Override in subclass
+- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading
 {
     if (!_hostTableView)
         return nil;
@@ -129,7 +142,7 @@
     {
         [cell rightIconVisibility:NO];
         _cells[resourceId] = cell;
-        [self updateCellProgressForResourceId:resourceId];
+        [self refreshCellProgress:resourceId];
     }
     else
     {
@@ -155,15 +168,36 @@
     return cell;
 }
 
-- (void) updateCellProgressForResourceId:(NSString *)resourceId
+
+#pragma mark - Cell behavior methods
+
+// Default on click behavior
+- (void) onCellClicked:(NSString *)resourceId
 {
-    // Override in subclass
-    float progress = _progresses[resourceId] ? _progresses[resourceId].floatValue : 0.;
-    EOAItemStatusType status = _statuses[resourceId] ? ((EOAItemStatusType) _statuses[resourceId].intValue) : EOAItemStatusNone;
-    [self setProgressForResourceId:resourceId progress:progress status:EOAItemStatusNone];
+    if (![self isInstalled:resourceId])
+    {
+        if (![self isDownloading:resourceId])
+            [self startDownload:resourceId];
+        else
+            [self stopDownload:resourceId];
+    }
+    else
+    {
+        // do nothing
+    }
 }
 
-- (void) setProgressForResourceId:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status
+#pragma mark - Cell progress update methods
+
+// Override in subclass
+- (void) refreshCellProgress:(NSString *)resourceId
+{
+    float progress = _progresses[resourceId] ? _progresses[resourceId].floatValue : 0.;
+    EOAItemStatusType status = _statuses[resourceId] ? ((EOAItemStatusType) _statuses[resourceId].intValue) : EOAItemStatusNone;
+    [self setCellProgress:resourceId progress:progress status:status];
+}
+
+- (void) setCellProgress:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status
 {
     [self saveStatus:status resourceId:resourceId];
     [self saveProgress:progress resourceId:resourceId];
@@ -222,6 +256,16 @@
             cell.accessoryView = nil;
         }
     }
+}
+
+- (void) saveStatus:(EOAItemStatusType)status resourceId:(NSString *)resourceId
+{
+    _statuses[resourceId] = @(status);
+}
+
+- (void) saveProgress:(float)progress resourceId:(NSString *)resourceId
+{
+    _progresses[resourceId] = @(progress);
 }
 
 @end

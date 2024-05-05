@@ -22,17 +22,21 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 @property (weak, nonatomic) UITableView *hostTableView;
 
-- (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId;
+- (BOOL) isInstalled:(NSString *)resourceId;
+- (BOOL) isDownloading:(NSString *)resourceId;
+- (void) startDownload:(NSString *)resourceId;
+- (void) stopDownload:(NSString *)resourceId;
 
-- (OARightIconTableViewCell *) setupCellForResourceId:(NSString *)resourceId;
-- (OARightIconTableViewCell *) setupCellForResourceId:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading;
+- (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId;
+- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId;
+- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading;
 
-- (void) updateCellProgressForResourceId:(NSString *)resourceId;
+- (void) onCellClicked:(NSString *)resourceId;
 
+- (void) refreshCellProgress:(NSString *)resourceId;
+- (void) setCellProgress:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status;
 - (void) saveStatus:(EOAItemStatusType)status resourceId:(NSString *)resourceId;
 - (void) saveProgress:(float)progress resourceId:(NSString *)resourceId;
-- (void) setProgressForResourceId:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status;
-- (BOOL) isInstalled:(NSString *)resourceId;
 
 - (void) onDownloadTaskProgressChanged:(NSString *)resourceId progress:(float)progress;
 - (void) onDownloadTaskFinished:(NSString *)resourceId;

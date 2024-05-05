@@ -60,12 +60,70 @@
     }
 }
 
+#pragma mark - Resource methods
+
+- (BOOL) isDisabled:(NSString *)resourceId
+{
+    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    if (resourceItem)
+    {
+        OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
+        if ((resourceItem.resourceType == OsmAndResourceType::WikiMapRegion) && ![iapHelper.wiki isActive])
+            return YES;
+        else if ((resourceItem.resourceType == OsmAndResourceType::SrtmMapRegion || resourceItem.resourceType == OsmAndResourceType::HillshadeRegion || resourceItem.resourceType == OsmAndResourceType::SlopeRegion)
+                 && ![iapHelper.srtm isActive])
+            return YES;
+    }
+    return NO;
+}
+
+// Override
+- (BOOL) isInstalled:(NSString *)resourceId
+{
+    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    if (resourceItem)
+        return resourceItem.isInstalled || [super isInstalled:resourceId];
+    return NO;
+}
+
+// Override
+- (BOOL) isDownloading:(NSString *)resourceId
+{
+    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    if (resourceItem)
+        return resourceItem.downloadTask != nil;
+    return NO;
+}
+
+// Override
+- (void) startDownload:(NSString *)resourceId
+{
+    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    if (resourceItem)
+        [OAResourcesUIHelper offerDownloadAndInstallOf:((OARepositoryResourceItem *)resourceItem) onTaskCreated:nil onTaskResumed:nil];
+}
+
+// Override
+- (void) stopDownload:(NSString *)resourceId
+{
+    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    if (resourceItem)
+    {
+        [OAResourcesUIHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+            if (_hostViewController)
+                [_hostViewController presentViewController:alert animated:YES completion:nil];
+        }];
+    }
+}
+
+#pragma mark - Cell setup methods
+
 - (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
 {
     if (!_resourceItems[resourceId])
         _resourceItems[resourceId] = resourceItem;
     
-    return [super getOrCreateCellForResourceId:resourceId];
+    return [super getOrCreateCell:resourceId];
 }
 
 - (OARightIconTableViewCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem
@@ -76,20 +134,20 @@
         if (!_resourceItems[resourceId])
             _resourceItems[resourceId] = resourceItem;
         
-        return [super getOrCreateCellForResourceId:resourceId];
+        return [super getOrCreateCell:resourceId];
     }
     return nil;
 }
 
 // Override
-- (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId
+- (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId
 {
     // use new method instead
     return nil;
 }
 
 // Override
-- (OARightIconTableViewCell *) setupCellForResourceId:(NSString *)resourceId
+- (OARightIconTableViewCell *) setupCell:(NSString *)resourceId
 {
     OAResourceItem *resourceItem = _resourceItems[resourceId];
     if (resourceItem)
@@ -100,82 +158,60 @@
         NSString *iconName = [OAResourceType getIconName:resourceItem.resourceType];
         BOOL isDownloading = resourceItem.downloadTask;
         
-        OARightIconTableViewCell *cell = [super setupCellForResourceId:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:@"ic_custom_download" isDownloading:isDownloading];
+        // get cell with default settings
+        OARightIconTableViewCell *cell = [super setupCell:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:@"ic_custom_download" isDownloading:isDownloading];
         
         if ([self isInstalled:resourceId])
         {
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             [cell rightIconVisibility:NO];
         }
-        if ([self isDisabled:resourceItem])
+        if ([self isDisabled:resourceId])
         {
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
             [cell rightIconVisibility:NO];
         }
-        
         return cell;
     }
     return nil;
 }
 
-- (void) onRowSelectedWith:(NSString *)resourceId
+#pragma mark - Cell behavior methods
+
+// Override
+- (void) onCellClicked:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
-    if (resourceItem)
+    if (![self isInstalled:resourceId])
     {
-        if (![self isInstalled:resourceId])
+        if (![self isDownloading:resourceId])
         {
-            if (resourceItem.downloadTask == nil)
-            {
-                //Start new downloading
-                OARepositoryResourceItem *resItem = (OARepositoryResourceItem *) resourceItem;
-                if ([self isDisabled:resourceItem])
-                    [self showPopup:resourceItem];
-                else
-                    [OAResourcesUIHelper offerDownloadAndInstallOf:resItem onTaskCreated:nil onTaskResumed:nil];
-            }
-            else if ([resourceItem isKindOfClass:[OARepositoryResourceItem class]])
-            {
-                //Stop current downloading
-                [OAResourcesUIHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
-                    if (_hostViewController)
-                        [_hostViewController presentViewController:alert animated:YES completion:nil];
-                }];
-            }
+            if (![self isDisabled:resourceId])
+                [self startDownload:resourceId];
+            else
+                [self showActivatePluginPopup:resourceId];
+        }
+        else
+        {
+            [self stopDownload:resourceId];
         }
     }
+    else
+    {
+        // do nothing
+    }
 }
 
-- (BOOL)isDisabled:(OAResourceItem *)resourceItem
-{
-    OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
-    if ((resourceItem.resourceType == OsmAndResourceType::WikiMapRegion) && ![iapHelper.wiki isActive])
-        return YES;
-    else if ((resourceItem.resourceType == OsmAndResourceType::SrtmMapRegion || resourceItem.resourceType == OsmAndResourceType::HillshadeRegion || resourceItem.resourceType == OsmAndResourceType::SlopeRegion)
-        && ![iapHelper.srtm isActive])
-        return YES;
-    
-    return NO;
-}
-
-- (BOOL) isInstalled:(NSString *)resourceId
+- (void)showActivatePluginPopup:(NSString *)resourceId
 {
     OAResourceItem *resourceItem = _resourceItems[resourceId];
     if (resourceItem)
     {
-        return resourceItem.isInstalled || [super isInstalled:resourceId];
+        if (resourceItem.resourceType == OsmAndResourceType::WikiMapRegion)
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
+        else if (resourceItem.resourceType == OsmAndResourceType::SrtmMapRegion || resourceItem.resourceType == OsmAndResourceType::HillshadeRegion || resourceItem.resourceType == OsmAndResourceType::SlopeRegion)
+            [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
     }
-    return NO;
 }
-
-- (void)showPopup:(OAResourceItem *)mapItem
-{
-    if (mapItem.resourceType == OsmAndResourceType::WikiMapRegion)
-        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-    else if (mapItem.resourceType == OsmAndResourceType::SrtmMapRegion || mapItem.resourceType == OsmAndResourceType::HillshadeRegion || mapItem.resourceType == OsmAndResourceType::SlopeRegion)
-        [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
-}
-
 
 #pragma mark - Downloading cell progress observer's methods
 
@@ -191,7 +227,7 @@
     if (resourceItem)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [super setProgressForResourceId:taskKey progress:progress status:EOAItemStatusInProgressType];
+            [super setCellProgress:taskKey progress:progress status:EOAItemStatusInProgressType];
         });
     }
 }
@@ -208,8 +244,10 @@
     if (resourceItem)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self setProgressForResourceId:taskKey progress:progress status:EOAItemStatusFinishedType];
             
+            [self setCellProgress:taskKey progress:progress status:EOAItemStatusFinishedType];
+            
+            // Start next downloading if needed
             if ([OsmAndApp.instance.downloadsManager.keysOfDownloadTasks count] > 0)
             {
                 id<OADownloadTask> nextTask = [OsmAndApp.instance.downloadsManager firstDownloadTasksWithKey:OsmAndApp.instance.downloadsManager.keysOfDownloadTasks[0]];

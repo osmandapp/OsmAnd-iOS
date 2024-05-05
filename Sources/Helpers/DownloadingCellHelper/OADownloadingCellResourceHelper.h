@@ -28,6 +28,4 @@
 - (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem;
 - (OARightIconTableViewCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem;
 
-- (void) onRowSelectedWith:(NSString *)resourceId;
-
 @end

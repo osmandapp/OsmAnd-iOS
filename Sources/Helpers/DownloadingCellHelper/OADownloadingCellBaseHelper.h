@@ -22,6 +22,13 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 @property (weak, nonatomic) UITableView *hostTableView;
 
+@property (nonatomic) NSString *rightIconName;
+@property (nonatomic) BOOL isBoldStyle;
+@property (nonatomic) BOOL isAlwaysClickable;
+@property (nonatomic) BOOL isRghtIconAlwaysVisible;
+@property (nonatomic) BOOL isDownloadedRecolored;
+
+
 - (BOOL) isInstalled:(NSString *)resourceId;
 - (BOOL) isDownloading:(NSString *)resourceId;
 - (void) startDownload:(NSString *)resourceId;

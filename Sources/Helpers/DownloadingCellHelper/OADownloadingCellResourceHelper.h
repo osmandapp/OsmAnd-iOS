@@ -22,8 +22,10 @@
 
 @interface OADownloadingCellResourceHelper : OADownloadingCellBaseHelper
 
-@property (weak, nonatomic) UIViewController *hostViewController;
 @property (weak, nonatomic) id<OADownloadingCellResourceHelperDelegate> delegate;
+@property (weak, nonatomic) UIViewController *hostViewController;
+
+@property (nonatomic) BOOL stopWithAlertMessage;
 
 - (OARightIconTableViewCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem;
 - (OARightIconTableViewCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem;

@@ -91,7 +91,7 @@
 {
     OAResourceItem *resourceItem = _resourceItems[resourceId];
     if (resourceItem)
-        return resourceItem.downloadTask != nil;
+        return resourceItem.downloadTask != nil && [super isDownloading:resourceId];
     return NO;
 }
 
@@ -106,14 +106,36 @@
 // Override
 - (void) stopDownload:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
-    if (resourceItem)
+    if (_stopWithAlertMessage)
     {
-        [OAResourcesUIHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
-            if (_hostViewController)
-                [_hostViewController presentViewController:alert animated:YES completion:nil];
-        }];
+        OAResourceItem *resourceItem = _resourceItems[resourceId];
+        if (resourceItem)
+        {
+            [OAResourcesUIHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+                if (_hostViewController)
+                    [_hostViewController presentViewController:alert animated:YES completion:nil];
+            }];
+        }
     }
+    else
+    {
+        // Stop immediately
+        id<OADownloadTask> task = [self getDownloadTask:resourceId];
+        if (task)
+            [task stop];
+    }
+    
+}
+
+- (id<OADownloadTask>) getDownloadTask:(NSString*)resourceId
+{
+    return [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
+- (BOOL) isUndefinedDownloadState:(NSString*)resourceId
+{
+    auto state = [self getDownloadTask:resourceId].state;
+    return state != OADownloadTaskStateRunning && state != OADownloadTaskStateFinished;
 }
 
 #pragma mark - Cell setup methods
@@ -156,16 +178,11 @@
         NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:resourceItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
         NSString *title = resourceItem.title;
         NSString *iconName = [OAResourceType getIconName:resourceItem.resourceType];
-        BOOL isDownloading = resourceItem.downloadTask;
+        BOOL isDownloading = [self isDownloading:resourceId];
         
         // get cell with default settings
         OARightIconTableViewCell *cell = [super setupCell:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:@"ic_custom_download" isDownloading:isDownloading];
         
-        if ([self isInstalled:resourceId])
-        {
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            [cell rightIconVisibility:NO];
-        }
         if ([self isDisabled:resourceId])
         {
             cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
@@ -181,7 +198,7 @@
 // Override
 - (void) onCellClicked:(NSString *)resourceId
 {
-    if (![self isInstalled:resourceId])
+    if (![self isInstalled:resourceId] || self.isAlwaysClickable)
     {
         if (![self isDownloading:resourceId])
         {
@@ -219,8 +236,13 @@
 {
     id<OADownloadTask> task = key;
     NSString *taskKey = task.key;
-    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
     float progress = ((NSNumber *)value).floatValue;
+    
+    // Skip all downloads that are not resources
+    if (![taskKey hasPrefix:@"resource:"])
+        return;
+    
+    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
     
     // Skip downloadings from another screens
     OAResourceItem *resourceItem = _resourceItems[taskKey];
@@ -236,8 +258,14 @@
 {
     id<OADownloadTask> task = key;
     NSString *taskKey = task.key;
-    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
     float progress = task.progressCompleted;
+    
+    // Skip all downloads that are not resources
+    if (![taskKey hasPrefix:@"resource:"])
+        return;
+    
+    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
+
 
     // Skip downloadings from another screens
     OAResourceItem *resourceItem = _resourceItems[taskKey];

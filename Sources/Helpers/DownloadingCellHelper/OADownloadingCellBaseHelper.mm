@@ -48,6 +48,9 @@
 // Override in subclass
 - (BOOL) isDownloading:(NSString *)resourceId
 {
+    NSNumber *status = _statuses[resourceId];
+    if (status)
+        return status.integerValue == EOAItemStatusInProgressType;
     return NO;
 }
 
@@ -92,7 +95,10 @@
     if (!_hostTableView)
         return nil;
     
-    OARightIconTableViewCell* cell = [_hostTableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+    OARightIconTableViewCell *cell = _cells[resourceId];
+    if (cell == nil)
+        cell = [_hostTableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
+    
     if (cell == nil)
     {
         NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARightIconTableViewCell getCellIdentifier] owner:self options:nil];
@@ -100,22 +106,26 @@
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
+        cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
     }
     
     if (leftIconName && leftIconName.length > 0)
     {
         [cell leftIconVisibility:YES];
         cell.leftIconView.image = [UIImage templateImageNamed:leftIconName];
-        cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+        if ([self isInstalled:resourceId] && _isDownloadedRecolored)
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        else
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
+        
     }
     else
     {
         [cell leftIconVisibility:NO];
     }
     
-    cell.titleLabel.text = title;
-    if (isTitleBold)
+    cell.titleLabel.text = title ? title : @"";
+    if (isTitleBold || _isBoldStyle)
     {
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
@@ -149,16 +159,12 @@
         cell.accessoryView = nil;
         if (rightIconName && rightIconName.length > 0)
         {
-            if (![self isInstalled:resourceId])
-            {
-                [cell rightIconVisibility:YES];
-                cell.rightIconView.image = [UIImage templateImageNamed:@"ic_custom_download"];
-                cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            }
-            else
-            {
+            cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
+            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            if ([self isInstalled:resourceId] && !_isRghtIconAlwaysVisible)
                 [cell rightIconVisibility:NO];
-            }
+            else
+                [cell rightIconVisibility:YES];
         }
         else
         {
@@ -168,13 +174,17 @@
     return cell;
 }
 
+- (NSString *) getRightIconName
+{
+    return _rightIconName ? _rightIconName : @"ic_custom_download";
+}
 
 #pragma mark - Cell behavior methods
 
 // Default on click behavior
 - (void) onCellClicked:(NSString *)resourceId
 {
-    if (![self isInstalled:resourceId])
+    if (![self isInstalled:resourceId] || _isAlwaysClickable)
     {
         if (![self isDownloading:resourceId])
             [self startDownload:resourceId];
@@ -243,15 +253,17 @@
             if (progress < 1)
             {
                 // Downloading interupted by user
-                [cell rightIconVisibility:YES];
+//                [cell rightIconVisibility:YES];
                 [self saveStatus:EOAItemStatusNone resourceId:resourceId];
             }
             else
             {
                 // Downloading success
-                [cell rightIconVisibility:NO];
-                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+//                [cell rightIconVisibility:NO];
+//                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             }
+            cell = [self setupCell:resourceId];
+            
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.accessoryView = nil;
         }

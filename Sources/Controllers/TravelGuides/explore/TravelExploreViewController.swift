@@ -291,6 +291,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         downloadingCellResourceHelper = OADownloadingCellResourceHelper()
         downloadingCellResourceHelper.hostViewController = self
         downloadingCellResourceHelper.hostTableView = self.tableView
+        downloadingCellResourceHelper.stopWithAlertMessage = false
+        downloadingCellResourceHelper.isDownloadedRecolored = true
     }
     
     func headerCellsCountInResourcesSection() -> Int {

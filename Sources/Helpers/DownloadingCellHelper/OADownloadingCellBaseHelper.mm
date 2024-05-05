@@ -156,22 +156,28 @@
     }
     else
     {
-        cell.accessoryView = nil;
-        if (rightIconName && rightIconName.length > 0)
-        {
-            cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
-            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            if ([self isInstalled:resourceId] && !_isRghtIconAlwaysVisible)
-                [cell rightIconVisibility:NO];
-            else
-                [cell rightIconVisibility:YES];
-        }
-        else
-        {
-            [cell rightIconVisibility:NO];
-        }
+        [self setupRightIconForIdleCell:cell rightIconName:rightIconName resourceId:resourceId];
     }
     return cell;
+}
+
+- (void) setupRightIconForIdleCell:(OARightIconTableViewCell *)cell rightIconName:(NSString *)rightIconName resourceId:(NSString *)resourceId
+{
+    cell.accessoryView = nil;
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    if (rightIconName && rightIconName.length > 0)
+    {
+        cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
+        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        if ([self isInstalled:resourceId] && !_isRghtIconAlwaysVisible)
+            [cell rightIconVisibility:NO];
+        else
+            [cell rightIconVisibility:YES];
+    }
+    else
+    {
+        [cell rightIconVisibility:NO];
+    }
 }
 
 - (NSString *) getRightIconName
@@ -253,19 +259,9 @@
             if (progress < 1)
             {
                 // Downloading interupted by user
-//                [cell rightIconVisibility:YES];
                 [self saveStatus:EOAItemStatusNone resourceId:resourceId];
             }
-            else
-            {
-                // Downloading success
-//                [cell rightIconVisibility:NO];
-//                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            }
-            cell = [self setupCell:resourceId];
-            
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            cell.accessoryView = nil;
+            [self setupRightIconForIdleCell:cell rightIconName:[self getRightIconName] resourceId:resourceId];
         }
     }
 }

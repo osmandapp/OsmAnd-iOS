@@ -181,7 +181,7 @@
         BOOL isDownloading = [self isDownloading:resourceId];
         
         // get cell with default settings
-        OARightIconTableViewCell *cell = [super setupCell:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:@"ic_custom_download" isDownloading:isDownloading];
+        OARightIconTableViewCell *cell = [super setupCell:resourceId title:title isTitleBold:NO desc:subtitle leftIconName:iconName rightIconName:[self getRightIconName] isDownloading:isDownloading];
         
         if ([self isDisabled:resourceId])
         {

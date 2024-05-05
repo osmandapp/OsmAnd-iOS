@@ -37,6 +37,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 - (OARightIconTableViewCell *) getOrCreateCell:(NSString *)resourceId;
 - (OARightIconTableViewCell *) setupCell:(NSString *)resourceId;
 - (OARightIconTableViewCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading;
+- (NSString *) getRightIconName;
 
 - (void) onCellClicked:(NSString *)resourceId;
 

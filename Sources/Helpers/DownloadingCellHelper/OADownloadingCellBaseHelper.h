@@ -17,6 +17,15 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
     EOAItemStatusFinishedType
 };
 
+typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
+{
+    EOADownloadingCellRightIconTypeHideIconAfterDownloading = 0,
+    EOADownloadingCellRightIconTypeShowIconAlways,
+    EOADownloadingCellRightIconTypeShowShevronAlways,
+    EOADownloadingCellRightIconTypeShowShevronAfterDownloading,
+    EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading,
+};
+
 @interface OADownloadingCell : OARightIconTableViewCell
 
 @end
@@ -27,12 +36,10 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 @property (weak, nonatomic) UITableView *hostTableView;
 
 @property (nonatomic) NSString *rightIconName;
-@property (nonatomic) BOOL isBoldStyle;
+@property (nonatomic) BOOL isBoldTitleStyle;
 @property (nonatomic) BOOL isAlwaysClickable;
-@property (nonatomic) BOOL isRightIconAlwaysVisible;
-@property (nonatomic) BOOL isShevronInsteadRightIcon;
 @property (nonatomic) BOOL isDownloadedRecolored;
-
+@property (nonatomic) EOADownloadingCellRightIconType rightIconStyle;
 
 - (BOOL) isInstalled:(NSString *)resourceId;
 - (BOOL) isDownloading:(NSString *)resourceId;

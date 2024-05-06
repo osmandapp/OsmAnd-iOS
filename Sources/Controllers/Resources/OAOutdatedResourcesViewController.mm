@@ -46,7 +46,7 @@
     OASubscriptionBannerCardView *_subscriptionBannerView;
     
     UIBarButtonItem *_updateAllButton;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    OADownloadingCellResourceHelper * _downloadingCellResourceHelper;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -145,7 +145,7 @@
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostTableView = self.tableView;
-    _downloadingCellResourceHelper.isRightIconAlwaysVisible = YES;
+    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowIconAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
 }
 

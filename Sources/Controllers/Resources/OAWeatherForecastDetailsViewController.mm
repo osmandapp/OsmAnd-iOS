@@ -104,9 +104,9 @@
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostTableView = self.tableView;
-    _downloadingCellResourceHelper.isBoldStyle = YES;
+    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowIconAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
-    _downloadingCellResourceHelper.isRightIconAlwaysVisible = YES;
+    _downloadingCellResourceHelper.isBoldTitleStyle = YES;
 }
 
 #pragma mark - Base UI

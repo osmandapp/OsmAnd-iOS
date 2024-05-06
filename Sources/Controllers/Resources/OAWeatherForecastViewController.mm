@@ -194,8 +194,8 @@
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostTableView = self.tableView;
+    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowShevronAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
-    _downloadingCellResourceHelper.isShevronInsteadRightIcon = YES;
 }
 
 - (void)setupView
@@ -889,9 +889,6 @@
         [cell descriptionVisibility:YES];
         cell.titleLabel.text = item[@"title"];
         cell.descriptionLabel.attributedText = item[@"description"];
-        
-        
-        
         return cell;
     }
     if ([item[@"type"] isEqualToString:[OASimpleTableViewCell getCellIdentifier]])

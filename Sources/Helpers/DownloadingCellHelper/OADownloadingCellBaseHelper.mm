@@ -129,7 +129,7 @@
     }
     
     cell.titleLabel.text = title ? title : @"";
-    if (isTitleBold || _isBoldStyle)
+    if (isTitleBold || _isBoldTitleStyle)
     {
         cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
         cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorActive];
@@ -167,28 +167,43 @@
 
 - (void) setupRightIconForIdleCell:(OADownloadingCell *)cell rightIconName:(NSString *)rightIconName resourceId:(NSString *)resourceId
 {
-    if (_isShevronInsteadRightIcon)
+    BOOL showIcon = NO;
+    cell.accessoryView = nil;
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    [cell rightIconVisibility:NO];
+    
+    if (_rightIconStyle == EOADownloadingCellRightIconTypeHideIconAfterDownloading)
     {
-        cell.accessoryView = nil;
+        showIcon = ![self isInstalled:resourceId];
+    }
+    else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowIconAlways)
+    {
+        showIcon = YES;
+    }
+    else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowShevronAlways)
+    {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
-    else
+    else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowShevronAfterDownloading)
     {
-        cell.accessoryView = nil;
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        if (rightIconName && rightIconName.length > 0)
-        {
-            cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
-            cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-            if ([self isInstalled:resourceId] && !_isRightIconAlwaysVisible)
-                [cell rightIconVisibility:NO];
-            else
-                [cell rightIconVisibility:YES];
-        }
+        if ([self isInstalled:resourceId])
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         else
-        {
-            [cell rightIconVisibility:NO];
-        }
+            showIcon = YES;
+    }
+    else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading)
+    {
+        if ([self isInstalled:resourceId])
+            cell.accessoryType = UITableViewCellAccessoryDetailDisclosureButton;
+        else
+            showIcon = YES;
+    }
+    
+    if (showIcon)
+    {
+        cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
+        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        [cell rightIconVisibility:YES];
     }
 }
 

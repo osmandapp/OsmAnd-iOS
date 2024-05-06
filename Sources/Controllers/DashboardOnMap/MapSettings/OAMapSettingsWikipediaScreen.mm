@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
-    OADownloadingCellResourceHelper *_downloadingCellResoucsesHelper;
+    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
 
     OAWikipediaPlugin *_wikiPlugin;
     NSArray<OARepositoryResourceItem *> *_mapItems;
@@ -79,10 +79,11 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResoucsesHelper =  [[OADownloadingCellResourceHelper alloc] init];
-    _downloadingCellResoucsesHelper.hostViewController = self.vwController;
-    _downloadingCellResoucsesHelper.hostTableView = self.tblView;
-    _downloadingCellResoucsesHelper.delegate = self;
+    _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
+    _downloadingCellResourceHelper.hostViewController = self.vwController;
+    _downloadingCellResourceHelper.hostTableView = self.tblView;
+    _downloadingCellResourceHelper.delegate = self;
+    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (void) updateResources
@@ -257,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = item[@"item"];
-        return [_downloadingCellResoucsesHelper getOrCreateCellForResourceId:mapItem.resourceId.toNSString() resourceItem:mapItem];
+        return [_downloadingCellResourceHelper getOrCreateCellForResourceId:mapItem.resourceId.toNSString() resourceItem:mapItem];
     }
 
     return nil;
@@ -352,7 +353,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     else if (indexPath.section == EOAMapSettingsWikipediaSectionAvailable && [item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = item[@"item"];
-        [_downloadingCellResoucsesHelper onCellClicked:mapItem.resourceId.toNSString()];
+        [_downloadingCellResourceHelper onCellClicked:mapItem.resourceId.toNSString()];
         
     }
 }

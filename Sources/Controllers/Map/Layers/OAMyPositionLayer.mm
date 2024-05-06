@@ -18,6 +18,10 @@
 #import "OANavigationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OARootViewController.h"
+#import "OAMapLayers.h"
+#import "OARouteLayer.h"
+#import "OARoutingHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -269,15 +273,39 @@ typedef enum {
     }
 }
 
+- (BOOL)isLocationSnappedToRoad
+{
+    OARouteLayer *routeLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer;
+    CLLocation *projection = [routeLayer getLastRouteProjection];
+    CLLocation *pointLocation = [self getPointLocation];
+    return [[OAAppSettings sharedManager].snapToRoad get] && projection == pointLocation;
+}
+
+- (CLLocation *)getPointLocation
+{
+    CLLocation *location;
+    if ([[OARoutingHelper sharedInstance] isFollowingMode] && [[OAAppSettings sharedManager].snapToRoad get]) {
+        OARouteLayer *routeLayer = [OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer;
+        location = [routeLayer getLastRouteProjection];
+    }
+    return location ? location : [OsmAndApp instance].locationServices.lastKnownLocation;
+}
+
+//- (BOOL)shouldShowHeading
+//{
+//    return _mapViewTrackingUtilities.showViewAngle && [self isLocationSnappedToRoad];
+//}
+
 - (void) updateLocation:(OsmAnd::PointI)target31 animationDuration:(float)animationDuration horizontalAccuracy:(CLLocationAccuracy)horizontalAccuracy heading:(CLLocationDirection)heading visible:(BOOL)visible
 {
     std::shared_ptr<OsmAnd::MapMarker> marker = [self getActiveMarker];
     OsmAnd::MapMarker::OnSurfaceIconKey iconKey = [self getActiveIconKey];
     if (marker)
     {
+        BOOL withCircle = ![self isLocationSnappedToRoad];
         marker->setIsAccuracyCircleVisible(true);
         marker->setAccuracyCircleRadius(horizontalAccuracy);
-        [_mapView setMyLocationCircleRadius:(horizontalAccuracy)];
+        [_mapView setMyLocationCircleRadius:(withCircle ? horizontalAccuracy : 0.0)];
 
         _mapView.mapMarkersAnimator->cancelAnimations(marker);
         if (animationDuration > 0)

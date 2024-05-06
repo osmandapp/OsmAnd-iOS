@@ -19,5 +19,6 @@
 
 - (NSInteger)getCustomRouteWidthMin;
 - (NSInteger)getCustomRouteWidthMax;
+- (CLLocation *)getLastRouteProjection;
 
 @end

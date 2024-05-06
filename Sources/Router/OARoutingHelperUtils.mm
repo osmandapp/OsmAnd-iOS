@@ -152,8 +152,9 @@
 
 + (CLLocation *) approximateBearingIfNeeded:(OARoutingHelper *)helper projection:(CLLocation *)projection location:(CLLocation *)location previousRouteLocation:(CLLocation *)previousRouteLocation currentRouteLocation:(CLLocation *)currentRouteLocation nextRouteLocation:(CLLocation *)nextRouteLocation
 {
+    double dist = [location distanceFromLocation:projection];
     double maxDist = [helper getMaxAllowedProjectDist:currentRouteLocation];
-    if ([location distanceFromLocation:projection] >= maxDist)
+    if (dist >= maxDist)
         return projection;
     
     double projectionOffsetN = [OAMapUtils getProjectionCoeff:location fromLocation:previousRouteLocation toLocation:currentRouteLocation];
@@ -162,17 +163,13 @@
     double segmentsBearingDelta = [OAMapUtils unifyRotationDiff:currentSegmentBearing targetRotate:nextSegmentBearing] * projectionOffsetN;
     double approximatedBearing = [OAMapUtils normalizeDegrees360:currentSegmentBearing + segmentsBearingDelta];
     
-    BOOL setApproximated;
-    if ([location hasBearing])
+    BOOL setApproximated = YES;
+    if ([location hasBearing] && dist >= maxDist / 2)
     {
         double rotationDiff = [OAMapUtils unifyRotationDiff:location.course targetRotate:approximatedBearing];
         setApproximated = abs(rotationDiff) < MAX_BEARING_DEVIATION;
     }
-    else
-    {
-        setApproximated = YES;
-    }
-    
+
     if (setApproximated)
     {
         return [[CLLocation alloc] initWithCoordinate:projection.coordinate altitude:projection.altitude horizontalAccuracy:projection.horizontalAccuracy verticalAccuracy:projection.verticalAccuracy course:approximatedBearing speed:projection.speed timestamp:projection.timestamp];

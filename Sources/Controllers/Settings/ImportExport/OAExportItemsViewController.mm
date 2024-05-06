@@ -107,7 +107,7 @@
 
 - (NSString *)getTitle
 {
-    return _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
+    return OALocalizedString(_appMode ? @"export_profile" : @"shared_string_export");
 }
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons

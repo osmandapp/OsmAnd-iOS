@@ -118,12 +118,18 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
 - (void)setImportTask:(OAImportAsyncTask *)importTask
 {
-    _importTask = importTask;
+    @synchronized(self)
+    {
+        _importTask = importTask;
+    }
 }
 
 - (void)removeExportTaskForFilepath:(NSString *)filePath
 {
-    [_exportTasks removeObjectForKey:filePath];
+    @synchronized(self)
+    {
+        [_exportTasks removeObjectForKey:filePath];
+    }
 }
 
 - (NSInteger)getCurrentBackupVersion

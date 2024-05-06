@@ -176,7 +176,7 @@
         [self updateCacheSize];
     
     if (_downloadingCellResourceHelper)
-        [_downloadingCellResourceHelper refreshCellProgresses];
+        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

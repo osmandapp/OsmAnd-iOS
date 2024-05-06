@@ -46,7 +46,7 @@ typedef NS_ENUM(NSInteger, EOAItemStatusType)
 
 - (void) onCellClicked:(NSString *)resourceId;
 
-- (void) refreshCellProgresses;
+- (void) refreshCellSpinners;
 - (void) refreshCellProgress:(NSString *)resourceId;
 - (void) setCellProgress:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status;
 - (void) saveStatus:(EOAItemStatusType)status resourceId:(NSString *)resourceId;

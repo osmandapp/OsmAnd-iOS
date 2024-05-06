@@ -217,7 +217,7 @@
 
 #pragma mark - Cell progress update methods
 
-- (void) refreshCellProgresses
+- (void) refreshCellSpinners
 {
     for (NSString *resourceId in [_cells allKeys])
     {

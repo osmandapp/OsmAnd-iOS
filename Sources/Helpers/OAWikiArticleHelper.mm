@@ -381,11 +381,13 @@
 + (NSString *) fromHtml:(NSString *)htmlText
 {
     //method to replace Java Html.fromHtml()
-    NSString *result;
-    NSAttributedString *attrString = [OAUtilities attributedStringFromHtmlString:htmlText fontSize:17 textColor:nil];
-    if (attrString)
-        result = attrString.string;
-    return result;
+    NSRange r;
+    NSString *s = htmlText;
+    while ((r = [s rangeOfString:@"<[^>]+>" options:NSRegularExpressionSearch]).location != NSNotFound)
+        s = [s stringByReplacingCharactersInRange:r withString:@""];
+    while ((r = [s rangeOfString:@"(?=&#)(.*)(?<=;)" options:NSRegularExpressionSearch]).location != NSNotFound)
+        s = [s stringByReplacingCharactersInRange:r withString:@""];
+    return s;
 }
 
 + (NSString *) normalizeFileUrl:(NSString *)url

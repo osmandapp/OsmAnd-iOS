@@ -3094,3 +3094,9 @@
 "network" = "Sarea";
 "shared_string_foot" = "Oina";
 "transport_hazmat_yes_desc" = "Aukeratu dagokion kategoria.";
+"auto_zoom_discrete" = "Diskretua";
+"required_maps" = "Behar diren mapak";
+"shared_string_scale" = "Eskala";
+"vertical_exaggeration_description" = "Eskalaren balioa aldatuz, 3D erliebea nabarmendu dezakezu.";
+"vertical_exaggeration" = "Gehitze bertikala";
+"distance_during_navigation" = "Distantzia nabigazioan zehar";

@@ -81,7 +81,7 @@
 "simulate_routing_descr" = "Simuleeri oma asukohta kasutades arvutatud teekonda";
 "select_avoid_descr" = "Vali navigeerimise ajal välditavad teed. Võid valida tee kaardil või tee liigi allolevast loetelust.";
 "no_active_route" = "Aktiivne teekond puudub";
-"day_night_info_description" = "Päikesetõus: %@  \nPäikeseloojang: %@";
+"day_night_info_description" = "Päikesetõus: %@ \nPäikeseloojang: %@";
 "day_night_info" = "Päeva/öö teave";
 "daynight_mode_auto" = "Päikesetõus/loojang";
 "route_simulation" = "Teekonna simuleerimine";
@@ -101,7 +101,7 @@
 "rotate_map_compass_opt" = "Kompassi suund";
 "rotate_map_bearing_opt" = "Liikumissuund";
 "rotate_map_north_opt" = "Ei pöörle (põhi alati üleval)";
-"driving_region_descr" = "Vali sõidupiirkond: USA, Euroopa, UK, Aasia ja teised.";
+"driving_region_descr" = "Vali sõidupiirkond: USA, Euroopa, Suurbritannia, Aasia ja midagi muud.";
 "driving_region" = "Sõidupiirkond";
 "shared_string_automatic" = "Automaatne";
 // Trip recording settings
@@ -124,7 +124,7 @@
 "map_widget_next_turn" = "Järgmine pöörang";
 "map_widget_next_turn_small" = "Järgmine pöörang (väike)";
 "map_widget_next_next_turn" = "Teiseks järgmine pöörang";
-"always_center_position_on_map" = "Kuva asukoht alati keskel";
+"always_center_position_on_map" = "Sinu asukoht on alati keskel";
 "map_widget_appearance_rem" = "Järelolevad elemendid";
 "map_widget_compass" = "Kompass";
 "map_widget_intermediate_distance" = "Vahepealne sihtkoht";
@@ -144,7 +144,7 @@
 "map_widget_left" = "Vasakpoolne paneel";
 "layer_map_appearance" = "Ekraani seadistamine";
 "map_markers" = "Kaardimarkerid";
-"confirm_usage_speed_cameras" = "Paljudes riikides (Saksamaal, Prantsusmaal, Itaalias ja mujal) on kiiruskaamera hoiatuste kasutamine ebaseaduslik. OsmAnd ei võta vastutust seaduse rikkumiste korral. Palun vajuta \'Jah\' ainult kui sul on õigus seda funktsiooni kasutada.";
+"confirm_usage_speed_cameras" = "Paljudes riikides (Saksamaal, Prantsusmaal, Itaalias ja mujal) on kiiruskaamera hoiatuste kasutamine ebaseaduslik. OsmAnd ei võta vastutust seaduse rikkumiste korral. Palun vajuta „Jah“ ainult siis, kui sul on õigus seda funktsioonaalsust kasutada.";
 "show_traffic_warnings" = "Liiklushoiatused";
 "show_pedestrian_warnings" = "Jalakäijate ülekäigurajad";
 "show_cameras" = "Kiiruskaamerad";
@@ -426,7 +426,7 @@
 "shared_string_waypoints" = "Teekonnapunktid";
 "gpx_points" = "Punkt(id)";
 "shared_string_export" = "Ekspordi";
-"import_export" = "Import/Eksport";
+"import_export" = "Import/eksport";
 "import_tracks" = "Impordi teekondi";
 "gpx_import_already_exists" = "Määratud teekonna fail on juba nimekirjas. Palun vali tegevus.";
 "gpx_add_new" = "Lisa uus fail";
@@ -521,7 +521,7 @@
 "sett_arr" = "Kaardi nooled";
 "shared_string_location" = "Asukoht";
 "sett_arr_map" = "Kaardi keskkoht";
-"short_location_on_map" = "Lai %@  \nPik %@";
+"short_location_on_map" = "Lai %@ \nPik %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -1680,13 +1680,13 @@
 "add_online_source" = "Võrguallika lisamine";
 "map_settings_show_slider_map" = "Näita kaardil liugurit";
 "shared_string_legend" = "Tingmärgid";
-"map_settings_add_maps_slopes" = "Nõlvade kuvamiseks on vaja täiendavaid kaarte";
-"map_settings_add_maps_hillshade" = "Kõrgusreljeefi kuvamiseks on vaja täiendavaid kaarte";
+"map_settings_add_maps_slopes" = "Nõlvade kuvamiseks on vaja täiendavaid kaarte.";
+"map_settings_add_maps_hillshade" = "Kõrgusreljeefi kuvamiseks on vaja täiendavaid kaarte.";
 "move_map_to_select_area" = "Soovitud ala valimiseks liiguta kaarti.";
 "preview_of_selected_zoom_levels" = "Valitud suumitasemete eelvaade";
 "download_size" = "Allalaaditava faili suurus";
 "number_of_tiles" = "Paanide arv";
-"update_tile" = "Uuenda kaart";
+"update_tile" = "Uuenda";
 "shared_string_maximum" = "Maksimum";
 "shared_string_meters" = "meetrit";
 "shared_string_tones" = "toonid";
@@ -1734,7 +1734,7 @@
 "res_online_url_descr" = "Kirjuta või kopeeri veebiallika aadress";
 "res_online_name_descr" = "Sisesta veebiallika nimi";
 "allow_3d_descr" = "Kui soovid näha kaarti poolruumilises 2.5D vaates, siis luba see seadistus";
-"enable_hillshade" = "Maastikuandmete kuvamiseks luba see seadistus";
+"enable_hillshade" = "Maastikuandmete kuvamiseks luba see seadistus.";
 "enable_contour_lines" = "Kõrgusjoonete kuvamiseks kaardil luba see seadistus";
 "osm_editing_access_descr" = "Sa võid näha kõiki kohalikus nutiseadmes tehtud muudatusi ja märkusi %@ vaates. Juba üleslaaditud andmeid OsmAnd enam ei kuva.";
 "metric_ton" = "t";
@@ -1847,7 +1847,7 @@
 "ios_release_3_90" = "• Tutvustasime funktsiooni \"Teekonna planeerimine\", et kavandada tuleviku teekondi. See lubab luua teekonna segmente kasutades erinevat tüüpi navigeerimist\n• Lisatud võimalus lubada kompass tööriistale \"Radiaaljoonlaud\"\n• Lisatud võimalus \"Huvipunktide siltide ülekate\", mis lubab kuvada lemmikuid, teekonna kontrollpunkte ja markereid kaardil\n• Lisatud uued kiirtegevused kontuurjoonte kuvamisele ja maastikule kaardil, rakenduse profiili muutmine ja lähima vahepunkti kustutamine\n• Parandati probleemid puuduva Wikipeedia otsingukategooriaga\n• Seadete importimine: parandati vigu, lisati kõigi OsmAnd toetatud andmetüüpide tugi\n• OpenStreetMap'i muutmine: parandati aja valija ja taastatai muudatuse kommentaari kohendamine\n";
 "ios_release_3_80" = "• Kehtestatud \"rakendusprofiilid\" koos sõltumatute seadistustega\n• Uus seadete paigutus profiilide ja tüüpide kaupa: navigatsioon, üldised, kaart ja ekraan.\n• Võimalus importida või eksportida profiili seadeid\n• Lisatud andmeallikad veebifotode jaoks\n• Lisatud võimalus laadida veebikaarte vahemällu\n• Parandatud \"Otsingu\" algoritmid\n";
 "shared_string_max" = "Suurim";
-"shared_string_min" = "Min.";
+"shared_string_min" = "Min";
 "road_speeds" = "Kiirused teedel";
 "road_max_speed_descr" = "Määrab kõigi marsruudil olevate teede maksimaalse sõidukiiruse. Alandab prioriteeti maanteedel, mille võimalik kiirus on üle maksimaalse.";
 "road_min_speed_descr" = "Määrab kõigi marsruudil olevate teede minimaalse sõidukiiruse. Tõstab prioriteedi maanteedele, mille soovitatav kiirus on alla miinimumi.";
@@ -2634,3 +2634,4 @@
 "trash_is_empty_banner_desc" = "OsmAnd Cloud pilvest kustutatud failid on siin saadaval %@ päeva.";
 "complex_widget_alert" = "%@ vidin võib asuda vaid omaette reas.";
 "shared_string_precise" = "Täpne";
+"simulation_real_mode_title" = "Realistlik simulatsioon";

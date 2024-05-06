@@ -214,9 +214,13 @@
     [_contextLayer exitChangePositionMode:_movedPoint applyNewPosition:NO];
     [_mapPanelViewController targetHideMenu:0.3 backButtonClicked:YES onComplete:^{
         if ([_targetMenuState isKindOfClass:OATrackMenuViewControllerState.class])
+        {
+            OATrackMenuViewControllerState *state = (OATrackMenuViewControllerState *) _targetMenuState;
+            state.openedFromTrackMenu = NO;
             [_mapPanelViewController openTargetViewWithGPX:_gpx
                                               trackHudMode:EOATrackMenuHudMode
-                                                     state:(OATrackMenuViewControllerState *) _targetMenuState];
+                                                     state:state];
+        }
     }];
 
 }

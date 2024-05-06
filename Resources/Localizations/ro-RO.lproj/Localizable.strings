@@ -2058,7 +2058,7 @@
 "coords_format_descr_quick_search" = "Puteți schimba formatul coordonatelor pentru profil în Setări generale";
 "shared_string_width" = "Lățime";
 "navigate_point_format_unknown" = "Format necunoscut";
-"track_coloring_solid" = "Solidă";
+"track_coloring_solid" = "Solid";
 "attribute" = "Atribut";
 "gpx_split_interval" = "Interval de divizare";
 "reset_to_original" = "Resetează la original";
@@ -3369,7 +3369,7 @@
 "osmand_depelopment_use_discrete_autozoom" = "Autozoom discret (versiunea veche)";
 "required_maps_list" = "Hărți care vor fi, de asemenea, utilizate: %@";
 "track_appearance_3D_visualization" = "Vizualizare 3D";
-"shared_string_scale" = "Scala";
+"shared_string_scale" = "Scală";
 "missing_or_outdated_maps_title" = "Hărți lipsă sau învechite";
 "osm_id" = "ID OSM";
 "vertical_exaggeration" = "Exagerare verticală";
@@ -3382,3 +3382,11 @@
 "calculate_online_title" = "Lista de hărți necesare se bazează pe traseul în linie dreaptă. Pentru a obține o listă precisă de hărți, OsmAnd vă poate precalcula traseul online";
 "average_glide_ratio_time_interval_desc" = "Afișează raportul mediu de planare sau viteza verticală pentru intervalul setat.";
 "online_plugins" = "Plugin-uri online";
+"osmand_depelopment_use_old_routing" = "Utilizați vechea rută (A*)";
+"routing_algorithm" = "Algoritm de rutare";
+"auto_zoom" = "Auto-zoom";
+"shared_string_development" = "Dezvoltare";
+"routing_algorithm_highway_hierarchies" = "Ierarhii de autostradă";
+"routing_algorithm_a" = "A*";
+"auto_zoom_smooth" = "Neted";
+"auto_zoom_discrete" = "Discret";

@@ -41,7 +41,7 @@
 
 - (instancetype)initWithFavorite:(std::shared_ptr<OsmAnd::IFavoriteLocation>)favorite;
 - (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)catagory;
-- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(NSDate *)timestamp;
+- (instancetype)initWithLat:(double)lat lon:(double)lon name:(NSString *)name category:(NSString *)category altitude:(double)altitude timestamp:(int)timestamp;
 
 - (void) initPersonalType;
 - (BOOL) isSpecialPoint;

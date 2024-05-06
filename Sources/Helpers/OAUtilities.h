@@ -132,6 +132,8 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 - (void) addSpinner;
 - (void) addSpinnerInCenterOfCurrentView:(BOOL)inCurrentView;
 - (void) removeSpinner;
+- (void) addShadow;
+- (void) showShadow:(BOOL)show;
 - (UIImage *) toUIImage;
 
 @end

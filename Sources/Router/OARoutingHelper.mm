@@ -467,7 +467,8 @@ static BOOL _isDeviatedFromRoute = false;
                     _deviceHasBearing = YES;
                 }
                 // lastFixedLocation.bearingTo -  gives artefacts during u-turn, so we avoid for devices with bearing
-                if ([currentLocation hasBearing] || (!_deviceHasBearing && _lastFixedLocation))
+                if ((currentRoute > 0 || newCurrentRoute > 0) &&
+                        ([currentLocation hasBearing] || (!_deviceHasBearing && _lastFixedLocation)))
                 {
                     float bearingToRoute = [currentLocation bearingTo:routeNodes[currentRoute]];
                     float bearingRouteNext = [routeNodes[newCurrentRoute] bearingTo:routeNodes[newCurrentRoute + 1]];
@@ -477,9 +478,8 @@ static BOOL _isDeviatedFromRoute = false;
                     if (diff > diffToNext)
                     {
                         NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
-                                                processed = true;
+                        processed = true;
                     }
-                    processed = true;
                 }
             }
         }
@@ -698,9 +698,13 @@ static BOOL _isDeviatedFromRoute = false;
             
             // 2. Analyze if we need to recalculate route
             // >100m off current route (sideways) or parameter (for Straight line)
-            if (currentRoute > 0 && allowableDeviation > 0)
+            if (allowableDeviation > 0)
             {
-                distOrth = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
+                if (currentRoute == 0) {
+                    distOrth = [currentLocation distanceFromLocation:routeNodes[currentRoute]]; // deviation at the start
+                } else {
+                    distOrth = [OAMapUtils getOrthogonalDistance:currentLocation fromLocation:routeNodes[currentRoute - 1] toLocation:routeNodes[currentRoute]];
+                }
                 if (distOrth > allowableDeviation)
                 {
                     NSLog(@"Recalculate route, because correlation  : %f", distOrth);

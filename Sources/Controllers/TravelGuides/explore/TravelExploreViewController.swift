@@ -13,7 +13,6 @@ protocol TravelExploreViewControllerDelegate: AnyObject {
     @objc optional func populateData(resetData: Bool)
     @objc optional func onDataLoaded()
     @objc optional func openArticle(article: TravelArticle, lang: String?)
-    @objc optional func onOpenArticlePoints()
     func close()
 }
 
@@ -54,7 +53,15 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         searchResults = []
         imagesCacheHelper = TravelGuidesImageCacheHelper.sharedDatabase
     }
-    
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        downloadingResources = []
+        setupDownloadingCellHelper()
+        populateData(resetData: true)
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         searchController = UISearchController(searchResultsController: nil)
@@ -72,18 +79,8 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         navigationItem.leftItemsSupplementBackButton = true
         navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
         screenMode = .popularArticles
-        downloadingResources = []
-        setupDownloadingCellHelper()
         savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
-        
-        if !isGpxPointsOpening {
-            if OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx {
-                restoreState()
-            } else {
-                populateData(resetData: true)
-            }
-        }
     }
     
     // MARK: Data
@@ -106,43 +103,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         task.delegate = self
         task.execute()
     }
-    
-    func saveState() {
-        if let state = OAAppSettings.sharedManager().travelGuidesState {
-            state.downloadingResources = downloadingResources
-            state.exploreTabTableData = tableData
-            state.lastSelectedIndexPath = lastSelectedIndexPath
-        }
-    }
-    
-    func restoreState() {
-        if let state = OAAppSettings.sharedManager().travelGuidesState {
-            setupDownloadingCellHelper()
-            downloadingResources = state.downloadingResources
-            lastSelectedIndexPath = state.lastSelectedIndexPath
-            
-            if let exploreTabTableData = state.exploreTabTableData, tableData != exploreTabTableData {
-                tableData.clearAllData()
-                for i in 0..<exploreTabTableData.sectionCount() {
-                    tableData.addSection(exploreTabTableData.sectionData(for: i))
-                }
-            }
-            tableView.reloadData()
-            if let lastSelectedIndexPath = state.lastSelectedIndexPath {
-                tableView.scrollToRow(at: lastSelectedIndexPath, at: .middle, animated: false)
-            }
-        }
-        
-        let wasOpenedTravelGpx = OAAppSettings.sharedManager().travelGuidesState.article == nil
-        if wasOpenedTravelGpx {
-            OAAppSettings.sharedManager().travelGuidesState.resetData()
-        } else {
-            let vc = TravelArticleDialogViewController.init()
-            vc.delegate = self
-            show(vc)
-        }
-    }
-    
+
     override func generateData() {
         
         tableData.clearAllData()
@@ -690,11 +651,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         isGpxPointsOpening = true
         dismiss()
     }
-    
-    func onOpenArticlePoints() {
-        saveState()
-    }
-    
+
     // MARK: GpxReadDelegate
     
     func onGpxFileRead(gpxFile: OAGPXDocumentAdapter?, article: TravelArticle) {
@@ -709,14 +666,14 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
             return
         }
-        
-        saveState()
-        OAAppSettings.sharedManager().travelGuidesState.wasWatchingGpx = true
-        
+
         OAAppSettings.sharedManager().showGpx([filename], update: true)
-        let tab: EOATrackMenuHudTab = isPointsReadingMode ? .pointsTab : .overviewTab
-        OARootViewController.instance().mapPanel.openTargetView(with: gpx, selectedTab: tab, selectedStatisticsTab: .overviewTab, openedFromMap: false)
-        dismiss()
+        if let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+            OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: gpx,
+                                                                           navControllerHistory: newCurrentHistory,
+                                                                           fromTrackMenu: false,
+                                                                           selectedTab: .pointsTab)
+        }
     }
     
     // MARK: Search

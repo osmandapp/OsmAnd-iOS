@@ -21,8 +21,14 @@
 #pragma mark - Initialization
 
 // use addNotification:selector: method here
-// notifications will be automatically added in viewWillAppear: and removed in dealloc
+// notifications will be automatically added in viewDidLoad: and removed in dealloc
 - (void)registerNotifications
+{
+}
+
+// use addObserver: method here
+// observers will be automatically added in viewDidLoad: and removed in dealloc
+- (void)registerObservers
 {
 }
 
@@ -32,10 +38,21 @@
     [NSNotificationCenter.defaultCenter addObserver:self selector:selector name:name object:nil];
 }
 
-// use addObserver: method here
-// observers will be automatically added in viewDidAppear: and removed in viewWillDisappear:
-- (void)registerObservers
+// do not override
+- (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer
 {
+    [_observers addObject:observer];
+    return observer;
+}
+
+- (void)registerNotificationsAndObservers
+{
+    // for content size category
+    [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
+    // for other
+    [self registerNotifications];
+
+    [self registerObservers];
 }
 
 - (void)unregisterNotificationsAndObservers
@@ -44,13 +61,6 @@
 
     for (OAAutoObserverProxy *observer in _observers)
         [observer detach];
-}
-
-// do not override
-- (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer
-{
-    [_observers addObject:observer];
-    return observer;
 }
 
 #pragma mark - UIViewController
@@ -62,24 +72,12 @@
     [self addAccessibilityLabels];
 
     _observers = [NSMutableArray array];
+
+    [self registerNotificationsAndObservers];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void) dealloc
 {
-    [super viewDidAppear:animated];
-
-    // for content size category
-    [self addNotification:UIContentSizeCategoryDidChangeNotification selector:@selector(onContentSizeChanged:)];
-    // for other
-    [self registerNotifications];
-
-    [self registerObservers];
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-
     [self unregisterNotificationsAndObservers];
 }
 

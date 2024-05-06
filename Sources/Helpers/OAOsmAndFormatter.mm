@@ -27,6 +27,7 @@ static NSString * const _unitsMph = OALocalizedString(@"mile_per_hour");
 static NSString * const _unitsMinKm = OALocalizedString(@"min_km");
 static NSString * const _unitsMinMi = OALocalizedString(@"min_mile");
 static NSString * const _unitsmps = OALocalizedString(@"m_s");
+static NSString * const _unitsfts = OALocalizedString(@"ft_s");
 static NSArray<NSNumber *> *roundingBounds = nil;
 
 + (NSString*) getFormattedTimeHM:(NSTimeInterval)timeInterval
@@ -370,21 +371,36 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     return [self getFormattedAlt:alt mc:mc valueUnitArray:nil];
 }
 
++ (NSString *)getFormattedSpeed:(float)metersperseconds
+{
+    return [self getFormattedSpeed:metersperseconds
+                       speedSystem:[[OAAppSettings sharedManager].speedSystem get]];
+}
+
++ (NSString *)getFormattedSpeed:(float)metersperseconds
+                    speedSystem:(EOASpeedConstant)speedSystem
+{
+    return [self getFormattedSpeed:metersperseconds
+                       speedSystem:speedSystem
+                             drive:NO
+                    valueUnitArray:nil];
+}
+
 + (NSString *)getFormattedSpeed:(float)metersperseconds valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
-    return [self getFormattedSpeed:metersperseconds drive:NO valueUnitArray:valueUnitArray];
+    return [self getFormattedSpeed:metersperseconds
+                       speedSystem:[[OAAppSettings sharedManager].speedSystem get]
+                             drive:NO
+                    valueUnitArray:valueUnitArray];
 }
 
-+ (NSString *)getFormattedSpeed:(float) metersperseconds
++ (NSString *)getFormattedSpeed:(float)metersperseconds
+                    speedSystem:(EOASpeedConstant)speedSystem
+                          drive:(BOOL)drive
+                 valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
-    return [self getFormattedSpeed:metersperseconds drive:NO valueUnitArray:nil];
-}
-
-+ (NSString *)getFormattedSpeed:(float) metersperseconds drive:(BOOL)drive valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
-{
-    OAAppSettings* settings = [OAAppSettings sharedManager];
     float kmh = metersperseconds * 3.6f;
-    if ([settings.speedSystem get] == KILOMETERS_PER_HOUR)
+    if (speedSystem == KILOMETERS_PER_HOUR)
     {
         int kmh10 = (int) (kmh * 10.0f);
         if (kmh >= 20)
@@ -394,7 +410,7 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         // calculate 2.0 km/h instead of 2 km/h in order to not stress UI text lengh
         return [self getFormattedLowSpeed:kmh10 / 10.0f unit:_unitsKmh valueUnitArray:valueUnitArray];
     }
-    else if ([settings.speedSystem get] == MILES_PER_HOUR)
+    else if (speedSystem == MILES_PER_HOUR)
     {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_MILE;
         int mph10 = (int) (mph * 10.0f);
@@ -404,7 +420,7 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         }
         return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsMph valueUnitArray:valueUnitArray];
     }
-    else if ([settings.speedSystem get] == NAUTICALMILES_PER_HOUR)
+    else if (speedSystem == NAUTICALMILES_PER_HOUR)
     {
         float mph = kmh * METERS_IN_KILOMETER / METERS_IN_ONE_NAUTICALMILE;
         int mph10 = (int) (mph * 10.0f);
@@ -414,7 +430,7 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         }
         return [self getFormattedLowSpeed:mph10 / 10.0f unit:_unitsNm valueUnitArray:valueUnitArray];
     }
-    else if ([settings.speedSystem get] == MINUTES_PER_KILOMETER)
+    else if (speedSystem == MINUTES_PER_KILOMETER)
     {
         if (metersperseconds < 0.111111111)
         {
@@ -436,7 +452,7 @@ static NSArray<NSNumber *> *roundingBounds = nil;
             return [OAUtilities getFormattedValue:value unit:_unitsMinKm];
         }
     }
-    else if ([settings.speedSystem get] == MINUTES_PER_MILE)
+    else if (speedSystem == MINUTES_PER_MILE)
     {
         if (metersperseconds < 0.111111111)
         {
@@ -455,6 +471,16 @@ static NSArray<NSNumber *> *roundingBounds = nil;
             int mph10 = round(minPerM * 10.0f);
             return [self getFormattedLowSpeed: mph10/10.0f unit:_unitsMinMi valueUnitArray:valueUnitArray];
         }
+    }
+    else if (speedSystem == FEET_PER_SECOND)
+    {
+        float fts = metersperseconds * FEET_IN_ONE_METER;
+        if (fts >= 10)
+        {
+            return [self getFormattedSpeed:fts unit:_unitsfts valueUnitArray:valueUnitArray];
+        }
+        int fts10 = round(fts * 10.0f);
+        return [self getFormattedLowSpeed:fts10 / 10.0f unit:_unitsfts valueUnitArray:valueUnitArray];
     }
     else
     {

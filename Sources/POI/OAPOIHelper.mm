@@ -980,7 +980,6 @@
                                     [processedPoi addObject:@(am->id.id)];
                                     OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
                                     poi.distanceMeters = OsmAnd::Utilities::squareDistance31(location, am->position31);
-                                    [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                     if (publish)
                                     {
                                         done = publish(poi);
@@ -1046,7 +1045,6 @@
 
                                             OAPOI *poi = [OAPOIHelper parsePOI:resultEntry withValues:YES withContent:YES];
                                             poi.distanceMeters = OsmAnd::Utilities::squareDistance31(_myLocation, am->position31);
-                                            [OAPOIHelper fetchValuesContentPOIByAmenity:am poi:poi];
                                             
                                             if (publish)
                                             {

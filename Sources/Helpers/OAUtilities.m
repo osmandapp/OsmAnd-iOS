@@ -42,6 +42,8 @@
 #define kNavItemStackViewWithCenterIconTag -994
 #define kCenterIconInNavItemStackViewTag -993
 
+#define kShadowViewTag -992
+
 @implementation UIBezierPath (util)
 
 /**
@@ -892,6 +894,39 @@
             break;
         }
     }
+}
+
+- (void) addShadow
+{
+    OAShadowTransporentTouchesPassView *shadowView = [self viewWithTag:kShadowViewTag];
+    if (shadowView)
+        return;
+
+    shadowView = [[OAShadowTransporentTouchesPassView alloc] init];
+    shadowView.tag = kShadowViewTag;
+    shadowView.layer.cornerRadius = 7;
+    shadowView.layer.shadowOpacity = 1;
+    shadowView.layer.shadowColor = [UIColor colorWithRed:0.0 green:0 blue:0 alpha:0.31].CGColor;
+    shadowView.layer.shadowOffset = CGSizeMake(0, 4);
+    shadowView.layer.shadowRadius = 7;
+    shadowView.layer.shouldRasterize = true;
+    shadowView.layer.rasterizationScale = [UIScreen mainScreen].scale;
+
+    shadowView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self addSubview:shadowView];
+    [NSLayoutConstraint activateConstraints:@[
+        [shadowView.topAnchor constraintEqualToAnchor:self.topAnchor],
+        [shadowView.leftAnchor constraintEqualToAnchor:self.leftAnchor],
+        [shadowView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+        [shadowView.rightAnchor constraintEqualToAnchor:self.rightAnchor]
+    ]];
+}
+
+- (void) showShadow:(BOOL)show
+{
+    OAShadowTransporentTouchesPassView *shadowView = [self viewWithTag:kShadowViewTag];
+    if (shadowView && shadowView.hidden == show)
+        shadowView.hidden = !show;
 }
 
 - (UIImage *) toUIImage
@@ -2845,6 +2880,7 @@ static const double d180PI = 180.0 / M_PI_2;
         hud.mode = MBProgressHUDModeText;
         hud.margin = 10.f;
         hud.yOffset = view.frame.size.height / 2 - 100;
+        hud.cornerRadius = 18.f;
         hud.removeFromSuperViewOnHide = YES;
         hud.userInteractionEnabled = NO;
 

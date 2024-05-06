@@ -34,6 +34,7 @@ class ShadowTransporentView: UIView {
     }
 }
 
+@objc(OAShadowTransporentTouchesPassView)
 @objcMembers
 final class ShadowTransporentTouchesPassView: ShadowTransporentView {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {

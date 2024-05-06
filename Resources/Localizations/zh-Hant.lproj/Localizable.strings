@@ -3307,3 +3307,4 @@
 "vertical_exaggeration_description" = "透過變更比例尺的值，您可以強調 3D 地形。";
 "vertical_exaggeration" = "垂直誇大";
 "shared_string_scale" = "比例尺";
+"required_maps" = "所需的地圖";

@@ -176,7 +176,7 @@ class WidgetsListViewController: OABaseNavbarSubviewViewController {
     }
     
     private func showToastForComplexWidget(_ widgetTitle: String) {
-        OAUtilities.showToast(String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), details: nil, duration: 4, in: view)
+        OAUtilities.showToast("", details: String(format: localizedString("complex_widget_alert"), arguments: [widgetTitle]), duration: 4, in: view)
     }
     
     @objc private func onWidgetAdded(notification: NSNotification) {

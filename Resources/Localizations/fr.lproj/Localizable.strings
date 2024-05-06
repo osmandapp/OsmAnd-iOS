@@ -257,7 +257,7 @@
 "go_to_map" = "Afficher la carte";
 "current_track" = "Trace actuelle";
 "from_location" = "loin";
-"will_close_at" = "Fermeà";
+"will_close_at" = "Ferme à";
 "time_will_open" = "S'ouvrira dans";
 "change_group" = "Changer de groupe";
 "change_color" = "Modifier la couleur";
@@ -503,7 +503,7 @@
 "voice_provider" = "Guidage vocal";
 "shared_string_sound" = "Son";
 "fast_route_mode" = "Itinéraire le plus rapide";
-"fast_route_mode_descr" = "Activer pour calculer l\'itinéraire le plus rapide ou Désactiver pour calculer l\'itinéraire le plus économe en carburant";
+"fast_route_mode_descr" = "Activer pour calculer l'itinéraire le plus rapide ou désactiver pour calculer l'itinéraire le plus économe en carburant.";
 "avoid_in_routing_title" = "Éviter…";
 "avoid_in_routing_descr_" = "Éviter certains types de route";
 "prefer_in_routing_title" = "Privilégier…";
@@ -3384,3 +3384,4 @@
 "track_appearance_3D_visualization" = "Visualisation 3D";
 "vertical_exaggeration_description" = "En modifiant la valeur de l'échelle, vous pouvez accentuer le relief 3D.";
 "vertical_exaggeration" = "Accentuation verticale";
+"required_maps" = "Cartes requises";

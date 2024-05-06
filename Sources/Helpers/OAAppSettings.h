@@ -70,7 +70,7 @@ static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF = 2;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED = 3;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
 
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState, OATravelGuidesState;
+@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 typedef NS_ENUM(NSInteger, EOAWidgetSizeStyle)
 {
@@ -171,7 +171,8 @@ typedef NS_ENUM(NSInteger, EOASpeedConstant)
     METERS_PER_SECOND,
     MINUTES_PER_MILE,
     MINUTES_PER_KILOMETER,
-    NAUTICALMILES_PER_HOUR
+    NAUTICALMILES_PER_HOUR,
+    FEET_PER_SECOND
 };
 
 @interface OASpeedConstant : NSObject
@@ -1051,8 +1052,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Custom plugins
 @property (nonatomic) NSString *customPluginsJson;
 
-@property (nonatomic) OATravelGuidesState *travelGuidesState;
-
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode;
 - (void) setApplicationModePref:(OAApplicationMode *)applicationMode markAsLastUsed:(BOOL)markAsLastUsed;
 
@@ -1200,7 +1199,11 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *currentTrackWidth;
 @property (nonatomic) OACommonBoolean *currentTrackShowArrows;
 @property (nonatomic) OACommonBoolean *currentTrackShowStartFinish;
-@property (nonatomic) OACommonBoolean *currentTrackRaiseRoutesAboveRelief;
+@property (nonatomic) OACommonDouble *currentTrackVerticalExaggerationScale;
+@property (nonatomic) OACommonInteger *currentTrackVisualization3dByType;
+@property (nonatomic) OACommonInteger *currentTrackVisualization3dWallColorType;
+@property (nonatomic) OACommonInteger *currentTrackVisualization3dPositionType;
+
 @property (nonatomic) OACommonStringList *customTrackColors;
 @property (nonatomic) OACommonStringList *customTrackColorsLastUsed;
 @property (nonatomic) OACommonStringList *lastUsedFavIcons;

@@ -58,9 +58,12 @@
 
 + (sk_sp<SkImage>) createCompositeBitmapFromFavorite:(const std::shared_ptr<OsmAnd::IFavoriteLocation> &)fav isFullSize:(BOOL)isFullSize scale:(float)scale
 {
-    UIColor *color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:fav->getColor().a/255.0];
-    if (!color)
+    UIColor *color;
+    if (fav->getColor().argb == 0)
         color = [OADefaultFavorite getDefaultColor];
+    else
+        color = [UIColor colorWithRed:fav->getColor().r/255.0 green:fav->getColor().g/255.0 blue:fav->getColor().b/255.0 alpha:fav->getColor().a/255.0];
+    
     NSString *shapeName = fav->getBackground().toNSString();
     if (!shapeName || shapeName.length == 0)
         shapeName = @"circle";

@@ -116,7 +116,7 @@ final class TravelObfHelper : NSObject {
             
             for reader in getReaders() {
                 if let filter {
-                    foundAmenities.append(contentsOf: searchAmenity(lat: latLon.latitude, lon: latLon.longitude, reader: reader, searchRadius: searchRadius, zoom: 15, searchFilter: filter, lang: nil) )
+                    foundAmenities.append(contentsOf: searchAmenity(lat: latLon.latitude, lon: latLon.longitude, reader: reader, searchRadius: searchRadius, zoom: 15, searchFilter: ROUTE_TRACK, lang: nil) )
                 }
             }
             
@@ -714,7 +714,14 @@ final class TravelObfHelper : NSObject {
             return nil
         }
     }
-    
+
+    func getArticleBy(title: String, lang: String) -> TravelArticle? {
+        guard let article = localDataHelper.getArticle(title: title, lang: lang) else {
+            return getArticleByTitle(title: title, lang: lang, readGpx: false, callback: nil)
+        }
+        return article
+    }
+
     func getArticleByTitle(title: String, lang: String, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         getArticleByTitle(title: title, rect: QuadRect(), lang: lang, readGpx: readGpx, callback: callback)
     }

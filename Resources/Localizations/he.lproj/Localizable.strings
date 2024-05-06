@@ -2891,3 +2891,7 @@
 "rendering_value_managerName_name" = "לפי שם מנהל";
 "rendering_attr_padusDisplayMode_description" = "לפי סוג גישה או שם מנהל";
 "rendering_value_access_name" = "לפי סוג גישה";
+"shared_string_author" = "יוצר";
+"shared_string_license" = "רישיון";
+"shared_string_link" = "קישור";
+"shared_string_keywords" = "מילות מפתח";

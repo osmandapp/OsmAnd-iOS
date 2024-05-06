@@ -6,7 +6,7 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-// Usign for cells with round downloading indicator.
+// Using for cells with round downloading indicator.
 // For all resouces cells like from Maps&Reources screen.
 // Exept CountourLines. Use for it OADownloadingCellMultipleResourceHelper
 
@@ -29,5 +29,12 @@
 
 - (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem;
 - (OADownloadingCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem;
+
+- (OAResourceItem *) getResource:(NSString *)resourceId;
+- (void) saveResource:(OAResourceItem *)resource resourceId:(NSString *)resourceId;
+- (BOOL) isDisabled:(NSString *)resourceId;
+- (NSArray<NSString *> *) getAllResourceIds;
+
+- (void)showActivatePluginPopup:(NSString *)resourceId;
 
 @end

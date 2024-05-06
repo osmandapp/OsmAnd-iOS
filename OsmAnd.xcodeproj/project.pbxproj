@@ -379,6 +379,7 @@
 		32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */; };
 		32473DD62A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */; };
 		325536E62BE8177000F429A8 /* OADownloadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 325536E52BE816D800F429A8 /* OADownloadingCell.xib */; };
+		325536F32BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
 		325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 325B6A0426D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m */; };
 		325CFBEB2B5052E000090DF2 /* TracksViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 325CFBEA2B5052E000090DF2 /* TracksViewController.swift */; };
@@ -3859,6 +3860,8 @@
 		32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesNavigationViewController.swift; sourceTree = "<group>"; };
 		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
 		325536E52BE816D800F429A8 /* OADownloadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADownloadingCell.xib; sourceTree = "<group>"; };
+		325536F12BE9232100F429A8 /* OADownloadingCellMultipleResourceHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadingCellMultipleResourceHelper.h; sourceTree = "<group>"; };
+		325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadingCellMultipleResourceHelper.mm; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B6A0326D9239800D8B67C /* OAQuickSearchCoordinateFormatsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinateFormatsViewController.h; sourceTree = "<group>"; };
@@ -8300,6 +8303,8 @@
 				32D24D1D2BE52AF4000FA504 /* OADownloadingCellBaseHelper.mm */,
 				32D24D202BE54E9F000FA504 /* OADownloadingCellResourceHelper.h */,
 				32D24D212BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm */,
+				325536F12BE9232100F429A8 /* OADownloadingCellMultipleResourceHelper.h */,
+				325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */,
 			);
 			path = DownloadingCellHelper;
 			sourceTree = "<group>";
@@ -16924,6 +16929,7 @@
 				DA5A81D426C563A700F274C7 /* OAAbstractCommandPlayer.mm in Sources */,
 				32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */,
 				DA5A83A826C563A800F274C7 /* OAOsmNotesOnlineTargetViewController.mm in Sources */,
+				325536F32BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm in Sources */,
 				DA5A839426C563A800F274C7 /* OAOutdatedResourcesViewController.mm in Sources */,
 				DA5A832126C563A800F274C7 /* OAShapesTableViewCell.m in Sources */,
 				DA5A836826C563A800F274C7 /* OARouteAvoidTransportSettingsViewController.mm in Sources */,

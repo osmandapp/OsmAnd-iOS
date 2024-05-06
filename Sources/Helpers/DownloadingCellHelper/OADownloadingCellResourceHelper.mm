@@ -61,9 +61,24 @@
 
 #pragma mark - Resource methods
 
+- (NSArray<NSString *> *) getAllResourceIds
+{
+    return [_resourceItems allKeys];
+}
+
+- (OAResourceItem *) getResource:(NSString *)resourceId
+{
+    return _resourceItems[resourceId];
+}
+
+- (void) saveResource:(OAResourceItem *)resource resourceId:(NSString *)resourceId;
+{
+    _resourceItems[resourceId] = resource;
+}
+
 - (BOOL) isDisabled:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    OAResourceItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
     {
         OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
@@ -79,7 +94,7 @@
 // Override
 - (BOOL) isInstalled:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    OAResourceItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
         return resourceItem.isInstalled || [super isInstalled:resourceId];
     return NO;
@@ -88,7 +103,7 @@
 // Override
 - (BOOL) isDownloading:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    OAResourceItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
         return resourceItem.downloadTask != nil && [super isDownloading:resourceId];
     return NO;
@@ -97,7 +112,7 @@
 // Override
 - (void) startDownload:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    OAResourceItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
         [OAResourcesUIHelper offerDownloadAndInstallOf:((OARepositoryResourceItem *)resourceItem) onTaskCreated:nil onTaskResumed:nil];
 }
@@ -107,7 +122,7 @@
 {
     if (_stopWithAlertMessage)
     {
-        OAResourceItem *resourceItem = _resourceItems[resourceId];
+        OAResourceItem *resourceItem = [self getResource:resourceId];
         if (resourceItem)
         {
             [OAResourcesUIHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
@@ -141,9 +156,9 @@
 
 - (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
 {
-    if (!_resourceItems[resourceId])
+    if (![self getResource:resourceId])
     {
-        _resourceItems[resourceId] = resourceItem;
+        [self saveResource:resourceItem resourceId:resourceId];
     
         if (resourceItem.downloadTask)
             [self saveStatus:EOAItemStatusInProgressType resourceId:resourceId];
@@ -157,25 +172,15 @@
     if (swiftResourceItem && swiftResourceItem.objcResourceItem)
     {
         OAResourceItem *resourceItem = (OAResourceItem *)swiftResourceItem.objcResourceItem;
-        if (!_resourceItems[resourceId])
-            _resourceItems[resourceId] = resourceItem;
-        
-        return [super getOrCreateCell:resourceId];
+        return [self getOrCreateCellForResourceId:resourceId resourceItem:resourceItem];
     }
-    return nil;
-}
-
-// Override
-- (OADownloadingCell *) getOrCreateCell:(NSString *)resourceId
-{
-    // use new method instead
     return nil;
 }
 
 // Override
 - (OADownloadingCell *) setupCell:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    OAResourceItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
     {
         uint64_t _sizePkg = resourceItem.sizePkg;
@@ -224,7 +229,7 @@
 
 - (void)showActivatePluginPopup:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = _resourceItems[resourceId];
+    OAResourceItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
     {
         if (resourceItem.resourceType == OsmAndResourceType::WikiMapRegion)
@@ -247,9 +252,10 @@
         return;
     
     taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
+    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
     
     // Skip downloadings from another screens
-    OAResourceItem *resourceItem = _resourceItems[taskKey];
+    OAResourceItem *resourceItem = [self getResource:taskKey];
     if (resourceItem)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -269,10 +275,10 @@
         return;
     
     taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
-
+    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
 
     // Skip downloadings from another screens
-    OAResourceItem *resourceItem = _resourceItems[taskKey];
+    OAResourceItem *resourceItem = [self getResource:taskKey];
     if (resourceItem)
     {
         dispatch_async(dispatch_get_main_queue(), ^{

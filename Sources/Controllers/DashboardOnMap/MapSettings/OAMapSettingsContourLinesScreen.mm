@@ -33,7 +33,7 @@
 #import "OADownloadMultipleResourceViewController.h"
 #import "OASegmentedSlider.h"
 #import "OALinks.h"
-#import "OADownloadingCellHelper.h"
+#import "OADownloadingCellMultipleResourceHelper.h"
 #import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -57,7 +57,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate>
+@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate, OADownloadingCellResourceHelperDelegate>
 
 @end
 
@@ -68,7 +68,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
     OAMapStyleSettings *_styleSettings;
-    OADownloadingCellHelper *_downloadingCellHelper;
+    OADownloadingCellMultipleResourceHelper *_downloadingCellResourceHelper;
     NSObject *_dataLock;
 
     NSArray<NSArray *> *_data;
@@ -203,7 +203,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     _currentColor = [_visibleColorValues indexOfObject:colorParameter.value.length == 0 ? _defaultColorScheme : colorParameter.value];
     
-    [_downloadingCellHelper updateAvailableMaps];
+    [self fetchResources];
     [self generateData];
 }
 
@@ -281,6 +281,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [availableMapsArr addObject:@{
                 @"type" : kCellTypeMap,
                 @"item" : item,
+                @"resourceId" : [_downloadingCellResourceHelper getResourceId:item]
             }];
         }
 
@@ -344,31 +345,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)setupDownloadingCellHelper
 {
-    __weak OAMapSettingsContourLinesScreen *weakself = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = self.vwController;
-    _downloadingCellHelper.hostTableView = self.tblView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
-    
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        [weakself fetchResources];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        
-        NSDictionary *item = [weakself getItem:indexPath];
-        if (item)
-        {
-            OAResourceItem *mapItem = item[@"item"];
-            if (mapItem)
-                return mapItem;
-        }
-        return nil;
-    };
-    
-    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return [weakself data];
-    };
+    _downloadingCellResourceHelper = [[OADownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellResourceHelper.hostViewController = self.vwController;
+    _downloadingCellResourceHelper.hostTableView = self.tblView;
+    _downloadingCellResourceHelper.delegate = self;
+    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data
@@ -597,7 +578,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = item[@"item"];
-        return [_downloadingCellHelper setupCell:mapItem indexPath:indexPath];
+        NSString *resourceId = item[@"resourceId"];
+        return [_downloadingCellResourceHelper getOrCreateCellForResourceId:resourceId resourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeInfo])
     {
@@ -713,7 +695,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        [_downloadingCellHelper onItemClicked:indexPath];
+        NSString *resourceId = item[@"resourceId"];
+        [_downloadingCellResourceHelper onCellClicked:resourceId];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeButton])
     {
@@ -810,5 +793,15 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
+#pragma mark - OADownloadingCellResourceHelperDelegate
+
+- (void)onDownldedResourceInstalled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self fetchResources];
+        [self generateData];
+        [self.tblView reloadData];
+    });
+}
 
 @end

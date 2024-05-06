@@ -3410,3 +3410,17 @@
 "routing_algorithm_highway_hierarchies" = "Хијерархија аутопутева";
 "routing_algorithm_a" = "А*";
 "auto_zoom_discrete" = "Дискретно";
+"downward_gradient" = "Надоле градијент";
+"ft_s" = "ft/s";
+"track_vertical_exaggeration_description" = "Променом вредности размере, можете променити висину 3Д стазе";
+"fixed_height" = "Фиксна Висина";
+"shared_string_top" = "Врх";
+"upward_gradient" = "Градијент навише";
+"visualization_3d_visualized_by" = "Визуализовано од";
+"visualization_3d_wall_color" = "Боја зида";
+"visualization_3d_track_line" = "Линија стазе";
+"track_3d" = "3Д путања";
+"shared_string_bottom" = "Дно";
+"shared_string_top_bottom" = "Врх и дно";
+"track_3d_empty_view_title" = "ЗД приказ Путање";
+"track_3d_empty_view_description" = "Истражите путању у интерактивном 3Д! Визуелизујте висину, брзину и још много тога директно на мапи.";

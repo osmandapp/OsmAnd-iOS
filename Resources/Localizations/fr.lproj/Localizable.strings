@@ -257,7 +257,7 @@
 "go_to_map" = "Afficher la carte";
 "current_track" = "Trace actuelle";
 "from_location" = "loin";
-"will_close_at" = "Fermeà";
+"will_close_at" = "Ferme à";
 "time_will_open" = "S'ouvrira dans";
 "change_group" = "Changer de groupe";
 "change_color" = "Modifier la couleur";

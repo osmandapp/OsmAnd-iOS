@@ -1135,7 +1135,7 @@
 "routing_attr_avoid_borders_name" = "Brez mejnih prehodov";
 "routing_attr_piste_type_sled_name" = "Sani";
 "rendering_attr_highway_class_bridleway_name" = "Jahalna steza";
-"routing_attr_avoid_borders_description" = "Izogni se mednarodnim mejnim prehodom";
+"routing_attr_avoid_borders_description" = "Izogni se prečkanju mednarodnih mejnih prehodov";
 "routing_attr_driving_style_name" = "Način vožnje";
 "routing_attr_piste_type_sled_description" = "Strmine za sankanje.";
 "routing_attr_allow_classic_only_name" = "Dovoli le običajne poti";
@@ -2019,7 +2019,7 @@
 "routing_attr_goods_restrictions_description" = "Upoštevaj dovoljenja za dostop za lahka tovorna vozila (blago)";
 "rendering_attr_showMtbScaleIMBATrails_description" = "Prikaži namenske poti za gorsko kolesarjenje.";
 "rendering_attr_depthContourWidth_description" = "Širina izobat (črt za globino)";
-"routing_attr_avoid_4wd_only_name" = "Izogibaj se cest zaštirikolesni pogon";
+"routing_attr_avoid_4wd_only_name" = "Brez cest za štirikolesni pogon";
 "rendering_attr_natureReserves_name" = "Naravni rezervat";
 "rendering_attr_horse_scale_impossible_name" = "nemogoča";
 "routing_attr_difficulty_preference_advanced_name" = "Napreden";

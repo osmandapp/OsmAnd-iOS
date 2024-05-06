@@ -426,7 +426,7 @@
 "shared_string_waypoints" = "Teekonnapunktid";
 "gpx_points" = "Punkt(id)";
 "shared_string_export" = "Ekspordi";
-"import_export" = "Import/Eksport";
+"import_export" = "Import/eksport";
 "import_tracks" = "Impordi teekondi";
 "gpx_import_already_exists" = "Määratud teekonna fail on juba nimekirjas. Palun vali tegevus.";
 "gpx_add_new" = "Lisa uus fail";
@@ -1686,7 +1686,7 @@
 "preview_of_selected_zoom_levels" = "Valitud suumitasemete eelvaade";
 "download_size" = "Allalaaditava faili suurus";
 "number_of_tiles" = "Paanide arv";
-"update_tile" = "Uuenda kaart";
+"update_tile" = "Uuenda";
 "shared_string_maximum" = "Maksimum";
 "shared_string_meters" = "meetrit";
 "shared_string_tones" = "toonid";
@@ -2634,3 +2634,4 @@
 "trash_is_empty_banner_desc" = "OsmAnd Cloud pilvest kustutatud failid on siin saadaval %@ päeva.";
 "complex_widget_alert" = "%@ vidin võib asuda vaid omaette reas.";
 "shared_string_precise" = "Täpne";
+"simulation_real_mode_title" = "Realistlik simulatsioon";

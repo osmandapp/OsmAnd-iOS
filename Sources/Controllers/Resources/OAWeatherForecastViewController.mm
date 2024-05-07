@@ -1262,7 +1262,7 @@
         OAWorldRegion *region = (OAWorldRegion *) forecastCell[@"region"];
         NSString *regionId = [OAWeatherHelper checkAndGetRegionId:region];
         forecastCell[@"description"] = [OAWeatherHelper getStatusInfoDescription:regionId];
-        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+        [self.tableView reloadRowsAtIndexPaths:@[_selectedIndexPath] withRowAnimation:UITableViewRowAnimationNone];
     }
 }
 

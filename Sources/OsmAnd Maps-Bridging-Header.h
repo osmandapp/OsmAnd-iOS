@@ -21,7 +21,6 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
-#import "OADownloadingCellHelper.h"
 #import "OADownloadingCellResourceHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"

@@ -48,6 +48,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OADownloadingCellResourceHelper.h"
+#import "OADownloadingCellMultipleResourceHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -84,7 +85,8 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
-    OADownloadingCellResourceHelper * _downloadingCellResourceHelper;
+    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    OADownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
 
     NSObject *_dataLock;
 
@@ -344,20 +346,19 @@ static BOOL _repositoryUpdated = NO;
     if (_doNotSearch || _currentScope == kLocalResourcesScope)
         self.navigationItem.searchController = nil;
 
-    //TODO: uncomment
-//    _weatherSizeCalculatedObserver =
-//            [[OAAutoObserverProxy alloc] initWith:self
-//                                      withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
-//                                       andObserve:_weatherHelper.weatherSizeCalculatedObserver];
-//
-//    if ([self shouldDisplayWeatherForecast:self.region])
-//        [_weatherHelper calculateCacheSize:self.region onComplete:nil];
-//
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
-//    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
+    _weatherSizeCalculatedObserver =
+            [[OAAutoObserverProxy alloc] initWith:self
+                                      withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
+                                       andObserve:_weatherHelper.weatherSizeCalculatedObserver];
+
+    if ([self shouldDisplayWeatherForecast:self.region])
+        [_weatherHelper calculateCacheSize:self.region onComplete:nil];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(resourceInstallationFailed:) name:OAResourceInstallationFailedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRequested:) name:OAIAPProductsRequestSucceedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productRestored:) name:OAIAPProductsRestoredNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reachabilityChanged:) name:kReachabilityChangedNotification object:nil];
     
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
@@ -367,6 +368,8 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
+    [_downloadingCellResourceHelper refreshCellSpinners];
+    [_downloadingCellMultipleResourceHelper refreshCellSpinners];
     
     if (!_viewAppeared)
     {
@@ -426,8 +429,7 @@ static BOOL _repositoryUpdated = NO;
         [_subscribeEmailView updateColorForCALayer];
         _horizontalLine.backgroundColor = [[UIColor colorNamed:ACColorNameCustomSeparator] CGColor];
         
-        //TODO: uncomment
-//        [self.tableView reloadData];
+        [self.tableView reloadData];
     }
 }
 
@@ -436,6 +438,10 @@ static BOOL _repositoryUpdated = NO;
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostTableView = self.tableView;
     _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    
+    _downloadingCellMultipleResourceHelper  = [[OADownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellMultipleResourceHelper.hostTableView = self.tableView;
+    _downloadingCellMultipleResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
 }
 
 - (UIView *) getMiddleView
@@ -2782,8 +2788,6 @@ static BOOL _repositoryUpdated = NO;
 
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
-        //TODO: implement after creating MultupleResourcesHelper
-        
         OAMultipleResourceItem *item = (OAMultipleResourceItem *) item_;
         UIColor *color = [UIColor colorNamed:ACColorNameIconColorDisabled];
         NSArray<OAResourceItem *> *items = [self.region hasGroupItems] ? [self.region.groupItem getItems:item.resourceType] : item.items;
@@ -2795,11 +2799,13 @@ static BOOL _repositoryUpdated = NO;
                 break;
             }
         }
-        cell.imageView.image = [OAResourceType getIcon:item.resourceType templated:YES];
-        cell.imageView.tintColor = color;
-        cell.textLabel.text = title;
-        if (cell.detailTextLabel != nil)
-            cell.detailTextLabel.text = subtitle;
+        NSString *resourceId = [_downloadingCellMultipleResourceHelper getResourceId:item];
+        OADownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCellForResourceId:resourceId resourceItem:item];
+        downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
+        downloadingCell.leftIconView.tintColor = color;
+        downloadingCell.titleLabel.text = title;
+        downloadingCell.descriptionLabel.text = subtitle;
+        return downloadingCell;
     }
     else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {

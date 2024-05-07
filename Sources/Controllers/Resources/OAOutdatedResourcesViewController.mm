@@ -108,7 +108,8 @@
     [self setupSubscriptionBanner];
     [self updateContent];
     [self prepareContent];
-    [_downloadingCellResourceHelper refreshCellSpinners];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void)viewWillLayoutSubviews

@@ -81,6 +81,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         screenMode = .popularArticles
         savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
         localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
+        downloadingCellResourceHelper.refreshCellSpinners()
     }
     
     // MARK: Data

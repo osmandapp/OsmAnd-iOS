@@ -98,6 +98,8 @@
 {
     [super viewDidAppear:animated];
     [_weatherHelper calculateCacheSize:_region onComplete:nil];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void) setupDownloadingCellHelper

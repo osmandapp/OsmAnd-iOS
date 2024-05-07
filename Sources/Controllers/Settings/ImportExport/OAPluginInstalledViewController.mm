@@ -115,6 +115,11 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     [super viewWillAppear:animated];
     
     [self configureNavigationBar];
+    
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
+    if (_downloadingCellMultipleResourceHelper)
+        [_downloadingCellMultipleResourceHelper refreshCellSpinners];
 }
 
 - (void)configureNavigationBar

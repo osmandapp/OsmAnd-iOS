@@ -368,8 +368,6 @@ static BOOL _repositoryUpdated = NO;
 - (void) viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    [_downloadingCellResourceHelper refreshCellSpinners];
-    [_downloadingCellMultipleResourceHelper refreshCellSpinners];
     
     if (!_viewAppeared)
     {
@@ -396,6 +394,11 @@ static BOOL _repositoryUpdated = NO;
         }
     }
     _viewAppeared = YES;
+    
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
+    if (_downloadingCellMultipleResourceHelper)
+        [_downloadingCellMultipleResourceHelper refreshCellSpinners];
 }
 
 - (void) viewWillDisappear:(BOOL)animated

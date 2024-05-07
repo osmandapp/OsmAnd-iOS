@@ -2557,21 +2557,6 @@ static BOOL _repositoryUpdated = NO;
                 [cell setAccessoryView:btnAcc];
             }
         }
-        else if ([cellTypeId isEqualToString:downloadingResourceCell])
-        {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle
-                                          reuseIdentifier:cellTypeId];
-
-            cell.textLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-            cell.detailTextLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
-            cell.detailTextLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
-
-            FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, 25.0f, 25.0f)];
-            progressView.iconView = [[UIView alloc] init];
-            progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-
-            cell.accessoryView = progressView;
-        }
     }
 
     // Try to allocate cell from own table, since it may be configured there
@@ -2731,50 +2716,6 @@ static BOOL _repositoryUpdated = NO;
                     break;
                 }
             }
-        }
-    }
-    else if ([cellTypeId isEqualToString:downloadingResourceCell])
-    {
-        OAResourceItem *item = [item_ isKindOfClass:OAMultipleResourceItem.class] && downloadingMultipleItem
-                ? downloadingMultipleItem
-                : (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-
-        if (item.resourceType != OsmAndResourceType::WeatherForecast)
-        {
-            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-
-            float progressCompleted = item.downloadTask.progressCompleted;
-            if (progressCompleted >= 0.001f && item.downloadTask.state == OADownloadTaskStateRunning)
-            {
-                progressView.iconPath = nil;
-                if (progressView.isSpinning)
-                    [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted - 0.001;
-            }
-            else if (item.downloadTask.state == OADownloadTaskStateFinished)
-            {
-                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                progressView.progress = 0.0f;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-            }
-            else
-            {
-                progressView.iconPath = [UIBezierPath bezierPath];
-                progressView.progress = 0.0;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [progressView setNeedsDisplay];
-            }
-        }
-        else
-        {
-            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            progressView.iconPath = [UIBezierPath bezierPath];
-            progressView.progress = 0.0;
-            if (!progressView.isSpinning)
-                [progressView startSpinProgressBackgroundLayer];
-            [progressView setNeedsDisplay];
         }
     }
     else if ([cellTypeId isEqualToString:[OATextMultilineTableViewCell getCellIdentifier]])

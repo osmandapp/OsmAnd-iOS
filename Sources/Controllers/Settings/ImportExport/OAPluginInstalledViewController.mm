@@ -20,7 +20,8 @@
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
-#import "OADownloadingCellHelper.h"
+#import "OADownloadingCellResourceHelper.h"
+#import "OADownloadingCellMultipleResourceHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
@@ -35,7 +36,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAPluginInstalledViewController () <UITableViewDelegate, UITableViewDataSource>
+@interface OAPluginInstalledViewController () <UITableViewDelegate, UITableViewDataSource, OADownloadingCellResourceHelperDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *disableButton;
 @property (weak, nonatomic) IBOutlet UIButton *enableButton;
@@ -64,7 +65,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSArray<OAApplicationMode *> *_addedAppModes;
     
     OAIAPHelper *_iapHelper;
-    OADownloadingCellHelper *_downloadingCellHelper;
+    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    OADownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
     NSObject *_dataLock;
 }
 
@@ -149,7 +151,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void) setupView
 {
-    [_downloadingCellHelper updateAvailableMaps];
+    [self fetchResources];
     [self generateData];
 }
 
@@ -171,7 +173,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [suggestedMapsSection addObject: @{
             @"sectionType" : [NSNumber numberWithInt:EOAPluginSectionTypeSuggestedMaps],
             @"type" : kCellTypeMap,
-            @"item" : item
+            @"item" : item,
+            @"resourceId" : item.resourceId.toNSString()
         }];
     }
     for (OAMultipleResourceItem* item in _mapMultipleItems)
@@ -179,6 +182,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [suggestedMapsSection addObject:@{
             @"type" : kCellTypeMultyMap,
             @"item" : item,
+            @"resourceId" : [_downloadingCellMultipleResourceHelper getResourceId:item]
         }];
     }
 
@@ -204,23 +208,17 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void)setupDownloadingCellHelper
 {
-    __weak OAPluginInstalledViewController *weakself = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = self;
-    _downloadingCellHelper.hostTableView = self.tableView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
+    _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
+    _downloadingCellResourceHelper.hostViewController = self;
+    _downloadingCellResourceHelper.hostTableView = self.tableView;
+    _downloadingCellResourceHelper.delegate = self;
+    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
     
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        [weakself fetchResources];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        return [weakself getMapItem:indexPath];
-    };
-    
-    _downloadingCellHelper.getTableDataBlock = ^NSArray<NSArray<NSDictionary *> *> *{
-        return [weakself data];
-    };
+    _downloadingCellMultipleResourceHelper = [[OADownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellMultipleResourceHelper.hostViewController = self;
+    _downloadingCellMultipleResourceHelper.hostTableView = self.tableView;
+    _downloadingCellMultipleResourceHelper.delegate = self;
+    _downloadingCellMultipleResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data
@@ -384,12 +382,16 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         }
         return cell;
     }
-    else if ([item[@"type"] isEqualToString:kCellTypeMap] || [item[@"type"] isEqualToString:kCellTypeMultyMap])
+    else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceItem *mapItem = [self getMapItem:indexPath];
-        return [_downloadingCellHelper setupCell:mapItem indexPath:indexPath];
+        return [_downloadingCellResourceHelper getOrCreateCellForResourceId:item[@"resourceId"] resourceItem:mapItem];
     }
-    
+    else if ([item[@"type"] isEqualToString:kCellTypeMultyMap])
+    {
+        OAResourceItem *mapItem = [self getMapItem:indexPath];
+        return [_downloadingCellMultipleResourceHelper getOrCreateCellForResourceId:item[@"resourceId"] resourceItem:mapItem];
+    }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
         OASwitchTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OASwitchTableViewCell getCellIdentifier]];
@@ -509,7 +511,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void) tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    [_downloadingCellHelper onItemClicked:indexPath];
+    [self onItemPressed:indexPath];
 }
 
 - (OAResourceItem *) getMapItem:(NSIndexPath *)indexPath
@@ -529,7 +531,25 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void) onItemPressed:(NSIndexPath *)indexPath
 {
-    [_downloadingCellHelper onItemClicked:indexPath];
+    NSDictionary *dataItem = _data[indexPath.section][indexPath.row];
+    if ([dataItem[@"type"] isEqualToString:kCellTypeMap])
+    {
+        [_downloadingCellResourceHelper onCellClicked:dataItem[@"resourceId"]];
+    }
+    else if ([dataItem[@"type"] isEqualToString:kCellTypeMultyMap])
+    {
+        [_downloadingCellMultipleResourceHelper onCellClicked:dataItem[@"resourceId"]];
+    }
+}
+
+#pragma mark - OADownloadingCellResourceHelperDelegate
+
+- (void) onDownldedResourceInstalled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupView];
+        [self.tableView reloadData];
+    });
 }
 
 @end

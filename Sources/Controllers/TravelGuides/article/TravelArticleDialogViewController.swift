@@ -366,6 +366,17 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         present(ac, animated: true)
     }
     
+    private func handleGeoUrl(_ url: String) {
+        let coordinatesString = url.replacingOccurrences(of: "geo:", with: "")
+        let coordinates = coordinatesString.split(separator: ",").map(String.init)
+        if coordinates.count == 2, let latitude = Double(coordinates[0]), let longitude = Double(coordinates[1]) {
+            DispatchQueue.main.async { [weak self] in
+                self?.navigationController?.popToRootViewController(animated: true)
+                OATravelGuidesHelper.showContextMenu(withLatitude: latitude, longitude: longitude)
+            }
+        }
+    }
+    
     // MARK: Data
 
     override func getContent() -> String! {
@@ -523,6 +534,9 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
             decisionHandler(.cancel)
         } else if isWebPage {
             OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
+            decisionHandler(.cancel)
+        } else if newUrl.contains(PREFIX_GEO) {
+            handleGeoUrl(newUrl)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)

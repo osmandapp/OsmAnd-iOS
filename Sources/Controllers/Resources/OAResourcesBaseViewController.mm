@@ -257,10 +257,6 @@ static BOOL dataInvalidated = NO;
 {
 }
 
-- (void) refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-}
-
 - (void) updateDisplayItem:(OAResourceItem *)item
 {
 }
@@ -513,8 +509,6 @@ static BOOL dataInvalidated = NO;
         
         [self.downloadView setProgress:[value floatValue]];
         //[self refreshContent:NO];
-        [self refreshDownloadingContent:task.key];
-        
     });
 }
 
@@ -580,8 +574,6 @@ static BOOL dataInvalidated = NO;
             if ((resource != nullptr && resource->type == OsmAndResourceType::MapRegion)
                 || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
                 [_app.data.mapLayerChangeObservable notifyEvent];
-
-            [self refreshDownloadingContent:task.key];
         }
 
     });

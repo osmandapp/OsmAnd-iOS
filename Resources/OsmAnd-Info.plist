@@ -9,7 +9,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>${PRODUCT_NAME}</string>
+	<string>LVN MAP</string>
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
@@ -183,8 +183,6 @@
 		<key>NSAllowsArbitraryLoads</key>
 		<true/>
 	</dict>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>Advertisement would like to use bluetooth.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>OsmAnd needs Bluetooth to find and connect to Bluetooth LE sensors.</string>
 	<key>NSCalendarsUsageDescription</key>

@@ -43,6 +43,7 @@
 
 @interface OANativeUtilities : NSObject
 
++ (NSString *)getScaledResourceName:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName;
 + (sk_sp<SkImage>) skImageFromResourcePath:(NSString *)resourcePath;
 + (sk_sp<SkImage>) skImageFromNSData:(const NSData *)data;

@@ -114,8 +114,8 @@
 
 + (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude
 {
-    OAMapPanelViewController* mapPanel = [OARootViewController instance].mapPanel;
-    OAMapViewController* mapVC = mapPanel.mapViewController;
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAMapViewController *mapVC = mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
     [mapPanel showContextMenu:targetPoint];

@@ -2055,6 +2055,7 @@ static BOOL _repositoryUpdated = NO;
     OAResourceItem *downloadingMultipleItem = nil;
 
     id item_ = nil;
+    OALocalResourceItem *localItem = nil;
     if ([self isFiltering])
     {
         item_ = _searchResults[indexPath.row];
@@ -2444,16 +2445,16 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _localSqliteSection)
         {
             OASqliteDbResourceItem *item = _localSqliteItems[indexPath.row];
+            localItem = item;
             cellTypeId = localResourceCell;
-            
             title = item.title;
             subtitle = [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile];
         }
         else if (indexPath.section == _localOnlineTileSourcesSection)
         {
             OALocalResourceItem *item = _localOnlineTileSources[indexPath.row];
+            localItem = item;
             cellTypeId = localResourceCell;
-            
             title = item.title;
             if ([item isKindOfClass:OASqliteDbResourceItem.class])
                 subtitle = [NSString stringWithFormat:@"%@ • %@", OALocalizedString(@"online_map"), [NSByteCountFormatter stringFromByteCount:item.size countStyle:NSByteCountFormatterCountStyleFile]];
@@ -2463,6 +2464,7 @@ static BOOL _repositoryUpdated = NO;
         else if (indexPath.section == _localTravelSection)
         {
             OALocalResourceItem *item = _localTravelItems[indexPath.row];
+            localItem = item;
             cellTypeId = localResourceCell;
             title = item.title;
             if (item.size > 0)
@@ -2624,6 +2626,18 @@ static BOOL _repositoryUpdated = NO;
             }
         }
     }
+    
+    if ([cellTypeId isEqualToString:localResourceCell])
+    {
+        cell.textLabel.text = title;
+        if (cell.detailTextLabel != nil)
+            cell.detailTextLabel.text = subtitle;
+        if (localItem)
+        {
+            cell.imageView.image = [OAResourceType getIcon:localItem.resourceType templated:YES];
+            cell.imageView.tintColor = UIColorFromRGB(resource_installed_icon_color);
+        }
+    }
 
     if ([item_ isKindOfClass:OAMultipleResourceItem.class] && ([self.region hasGroupItems] || ((OAResourceItem *) item_).resourceType == OsmAndResourceType::SrtmMapRegion))
     {
@@ -2783,19 +2797,16 @@ static BOOL _repositoryUpdated = NO;
 
 - (void)tableView:(UITableView *)tableView accessoryButtonTappedForRowWithIndexPath:(NSIndexPath *)indexPath
 {
-    id item;
-    if ([self isFiltering])
-        item = _searchResults[indexPath.row];
-    else
-        item = [self getItemByIndexPath:indexPath];
-
-    if (item == nil)
-        return;
-
-    [self onItemClicked:item];
+    [self onCellClicked:indexPath];
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self onCellClicked:indexPath];
+    [tableView deselectRowAtIndexPath:indexPath animated:true];
+}
+
+- (void) onCellClicked:(NSIndexPath *)indexPath
 {
     id item = nil;
     if ([self isFiltering])
@@ -2843,11 +2854,10 @@ static BOOL _repositoryUpdated = NO;
         }
         else if ([item isKindOfClass:OALocalResourceItem.class])
         {
-            [self showDetailsOf:item];
+            if (![item isKindOfClass:OASqliteDbResourceItem.class] && ![item isKindOfClass:OAOnlineTilesResourceItem.class])
+                [self showDetailsOf:item];
         }
     }
-    
-    [tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath

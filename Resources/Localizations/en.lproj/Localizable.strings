@@ -1134,6 +1134,7 @@
 "shared_string_precise" = "Precise";
 "shared_string_round_up" = "Round up";
 "distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
+"display_position_automatic_descr" = "Depends on Map orientation: bottom for movement direction, center for all others.";
 "units_and_formats" = "Units&formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";

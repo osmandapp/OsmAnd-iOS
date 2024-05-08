@@ -367,13 +367,11 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
     }
     
     private func handleGeoUrl(_ url: String) {
-        let coordinatesString = url.replacingOccurrences(of: "geo:", with: "")
-        let coordinates = coordinatesString.split(separator: ",").map(String.init)
+        let coordinatesString = url.replacingOccurrences(of: "geo:", with: "").trimmingCharacters(in: .whitespaces)
+        let coordinates = coordinatesString.components(separatedBy: ",")
         if coordinates.count == 2, let latitude = Double(coordinates[0]), let longitude = Double(coordinates[1]) {
-            DispatchQueue.main.async { [weak self] in
-                self?.navigationController?.popToRootViewController(animated: true)
-                OATravelGuidesHelper.showContextMenu(withLatitude: latitude, longitude: longitude)
-            }
+            navigationController?.popToRootViewController(animated: true)
+            OATravelGuidesHelper.showContextMenu(withLatitude: latitude, longitude: longitude)
         }
     }
     

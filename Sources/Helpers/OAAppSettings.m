@@ -167,6 +167,7 @@ static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
 static NSString * const showCompassControlRulerKey = @"showCompassRuler";
 static NSString * const showTrafficWarningsKey = @"showTrafficWarnings";
 static NSString * const showPedestrianKey = @"showPedestrian";
+static NSString * const showSpeedLimitWarningsKey = @"show_speed_limit_warnings";
 static NSString * const showCamerasKey = @"showCameras";
 static NSString * const showTunnelsKey = @"showTunnels";
 static NSString * const showLanesKey = @"showLanes";
@@ -4275,6 +4276,9 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         _showPedestrian = [OACommonBoolean withKey:showPedestrianKey defValue:NO];
         [_showPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
+
+        _showSpeedLimitWarnings = [OACommonBoolean withKey:showSpeedLimitWarningsKey defValue:NO];
+        [_profilePreferences setObject:_showSpeedLimitWarnings forKey:showSpeedLimitWarningsKey];
 
         _showCameras = [OACommonBoolean withKey:showCamerasKey defValue:NO];
         [_profilePreferences setObject:_showCameras forKey:@"show_cameras"];

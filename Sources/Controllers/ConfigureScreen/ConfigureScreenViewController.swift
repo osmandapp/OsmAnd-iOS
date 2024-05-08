@@ -65,15 +65,6 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let buttonsSection = tableData!.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
         populateCompassRow(buttonsSection.createNewRow())
-        let distByTapRow = buttonsSection.createNewRow()
-        distByTapRow.title = localizedString("map_widget_distance_by_tap")
-        distByTapRow.iconName = "ic_action_ruler_line"
-        distByTapRow.iconTint = Int(appMode!.getIconColor())
-        distByTapRow.key = "map_widget_distance_by_tap"
-        distByTapRow.accessibilityLabel = distByTapRow.title
-        distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
-        distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
-        distByTapRow.cellType = OASwitchTableViewCell.getIdentifier()
         
         let quickActionsCount = OAQuickActionRegistry.sharedInstance().getQuickActionsCount()
         let quickActionsEnabled = settings.quickActionIsOn.get()
@@ -101,6 +92,27 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         map3dModeRow.cellType = OAValueTableViewCell.getIdentifier()
         map3dModeRow.accessibilityLabel = map3dModeRow.title
         map3dModeRow.accessibilityValue = map3dModeRow.descr
+        
+        let otherSection = tableData.createNewSection()
+        otherSection.headerText = localizedString("other_location")
+        let positionMapRow = otherSection.createNewRow()
+        positionMapRow.title = localizedString("position_on_map")
+        positionMapRow.iconName = getLocationPositionIcon()
+        positionMapRow.iconTintColor = UIColor(rgb: Int(appMode.getIconColor()))
+        positionMapRow.key = "position_on_map"
+        positionMapRow.descr = getLocationPositionValue()
+        positionMapRow.cellType = OAValueTableViewCell.getIdentifier()
+        positionMapRow.accessibilityLabel = positionMapRow.title
+        positionMapRow.accessibilityValue = positionMapRow.descr
+        let distByTapRow = otherSection.createNewRow()
+        distByTapRow.title = localizedString("map_widget_distance_by_tap")
+        distByTapRow.iconName = "ic_action_ruler_line"
+        distByTapRow.iconTint = Int(appMode.getIconColor())
+        distByTapRow.key = "map_widget_distance_by_tap"
+        distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
+        distByTapRow.cellType = OASwitchTableViewCell.getIdentifier()
+        distByTapRow.accessibilityLabel = distByTapRow.title
+        distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
     }
     
     func populateCompassRow(_ row: OATableRowData) {
@@ -169,6 +181,34 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     func onNewProfilePressed() {
         let vc = OACreateProfileViewController()
         self.navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    private func getLocationPositionIcon() -> String {
+        guard let placement = EOAPositionPlacement(rawValue: Int(OAAppSettings.sharedManager().positionPlacementOnMap.get(appMode))) else { return "" }
+        switch placement {
+        case .auto:
+            return "ic_custom_display_position_automatic"
+        case .center:
+            return "ic_custom_display_position_center"
+        case .bottom:
+            return "ic_custom_display_position_bottom"
+        @unknown default:
+            return ""
+        }
+    }
+    
+    private func getLocationPositionValue() -> String {
+        guard let placement = EOAPositionPlacement(rawValue: Int(OAAppSettings.sharedManager().positionPlacementOnMap.get(appMode))) else { return "" }
+        switch placement {
+        case .auto:
+            return localizedString("shared_string_automatic")
+        case .center:
+            return localizedString("position_on_map_center")
+        case .bottom:
+            return localizedString("position_on_map_bottom")
+        @unknown default:
+            return ""
+        }
     }
 }
 
@@ -269,6 +309,10 @@ extension ConfigureScreenViewController {
             let vc = Map3dModeButtonVisibilityViewController()
             vc.delegate = self
             showMediumSheetViewController(vc, isLargeAvailable: false)
+        } else if data.key == "position_on_map" {
+            let vc = OAProfileGeneralSettingsParametersViewController(type: EOAProfileGeneralSettingsDisplayPosition, applicationMode: appMode)
+            vc?.delegate = self
+            showMediumSheetViewController(vc, isLargeAvailable: false)
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {
@@ -283,5 +327,17 @@ extension ConfigureScreenViewController {
         generateData()
         tableView.reloadData()
     }
+}
 
+extension ConfigureScreenViewController: OASettingsDataDelegate {
+    func onSettingsChanged() {
+        generateData()
+        tableView.reloadData()
+    }
+    
+    func closeSettingsScreenWithRouteInfo() {
+    }
+    
+    func openNavigationSettings() {
+    }
 }

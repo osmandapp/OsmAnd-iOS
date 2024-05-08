@@ -51,6 +51,7 @@
 - (OAMapWidgetInfo *) getWidgetInfoById:(NSString *)widgetId;
 - (NSMutableOrderedSet<OAMapWidgetInfo *> *)getWidgetsForPanel:(OAWidgetsPanel *)panel;
 - (OAMapWidgetInfo *)getWidgetInfoForType:(OAWidgetType *)widgetType;
+- (NSArray<OAMapWidgetInfo *> *)getWidgetInfosForType:(OAWidgetType *)widgetType;
 - (void) updateWidgetsInfo:(OAApplicationMode *)appMode;
 
 - (BOOL) isWidgetVisible:(NSString *)widgetId;

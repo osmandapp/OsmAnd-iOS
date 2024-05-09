@@ -123,5 +123,7 @@
 
 - (void) updateCurrentLocationAddress;
 - (BOOL)hasTopWidget;
+- (BOOL)isRightPanelVisible;
+- (BOOL)isLeftPanelVisible;
 
 @end

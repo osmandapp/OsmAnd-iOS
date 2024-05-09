@@ -217,6 +217,27 @@
     return _missingMaps.count > 0;
 }
 
+- (void)setMissingMaps:(NSArray<OAWorldRegion *> *)missingMaps
+          mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
+              usedMaps:(NSArray<OAWorldRegion *> *)usedMaps
+                   ctx:(std::shared_ptr<RoutingContext>)ctx
+                points:(NSArray<CLLocation *> *)points
+{
+    _missingMaps = missingMaps;
+    _mapsToUpdate = mapsToUpdate;
+    _potentiallyUsedMaps = usedMaps;
+    if (_missingMaps.count == 0 && _mapsToUpdate.count == 0) 
+    {
+        _missingMapsRoutingContext = nil;
+        _missingMapsPoints = nil;
+    }
+    else
+    {
+        _missingMapsPoints = points;
+        _missingMapsRoutingContext = ctx;
+    }
+}
+
 - (void) updateCurrentRoute:(int)currentRoute
 {
     _currentRoute = currentRoute;

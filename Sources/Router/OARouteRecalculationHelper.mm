@@ -419,6 +419,7 @@
 {
     if (result.missingMaps.count > 0 || result.mapsToUpdate.count > 0)
     {
+        [_routingHelper setRoute:result];
         [_routingHelper newRouteHasMissingOrOutdatedMaps:result.missingMaps mapsToUpdate:result.mapsToUpdate potentiallyUsedMaps:result.potentiallyUsedMaps];
     }
 }

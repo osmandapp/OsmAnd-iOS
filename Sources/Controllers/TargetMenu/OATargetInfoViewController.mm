@@ -527,7 +527,7 @@
     if (imageTagContent)
         urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_image=%@", imageTagContent]];
     if (mapillaryTagContent)
-        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&osm_mapillary_key=%@", mapillaryTagContent]];
+        urlString = [urlString stringByAppendingString:[NSString stringWithFormat:@"&mapillary=%@", mapillaryTagContent]];
 
     NSInteger cardsCount = cards.count;
     NSURL *urlObj = [[NSURL alloc] initWithString:[[urlString stringByReplacingOccurrencesOfString:@" "  withString:@"_"] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
@@ -543,8 +543,8 @@
                 NSDictionary *jsonDict = [NSJSONSerialization JSONObjectWithData:safeCharsData options:NSJSONReadingAllowFragments error:&error];
                 if (jsonDict)
                 {
-                    NSArray<NSDictionary *> *features = jsonDict[@"features"];
-                    if (features.count == 0)
+                    NSArray<NSDictionary *> *images = jsonDict[@"features"];
+                    if (images.count == 0)
                     {
                         dispatch_async(dispatch_get_main_queue(), ^{
                             [self onOtherCardsReady:newCards rowInfo:nearbyImagesRowInfo];
@@ -552,8 +552,8 @@
                     }
                     else
                     {
-                        NSInteger __block count = features.count;
-                        for (NSDictionary *dict in features)
+                        NSInteger __block count = images.count;
+                        for (NSDictionary *dict in images)
                         {
                             dispatch_async(dispatch_get_main_queue(), ^{
                                 [self getCard:dict onComplete:^(OAAbstractCard *card) {

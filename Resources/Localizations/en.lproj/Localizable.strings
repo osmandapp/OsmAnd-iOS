@@ -3637,6 +3637,7 @@
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
+"short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";
 "not_recorded" = "Not recorded";
@@ -3759,3 +3760,4 @@
 "track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
 
 "osm_id" = "OSM ID";
+"shared_string_millimeters" = "Millimeters";

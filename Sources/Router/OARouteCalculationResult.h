@@ -54,6 +54,9 @@ struct RouteSegmentResult;
 @property (nonatomic) NSArray<OAWorldRegion *> * mapsToUpdate;
 @property (nonatomic) NSArray<OAWorldRegion *> * potentiallyUsedMaps;
 
+@property (nonatomic) NSArray<CLLocation *> * missingMapsPoints;
+@property (nonatomic) std::shared_ptr<RoutingContext> missingMapsRoutingContext;
+
 
 - (instancetype) initWithErrorMessage:(NSString *)errorMessage;
 
@@ -109,5 +112,10 @@ struct RouteSegmentResult;
 - (int) getDistanceFromPoint:(int) locationIndex;
 - (BOOL) isPointPassed:(int)locationIndex;
 - (BOOL) hasMissingMaps;
+- (void)setMissingMaps:(NSArray<OAWorldRegion *> *)missingMaps
+          mapsToUpdate:(NSArray<OAWorldRegion *> *)mapsToUpdate
+              usedMaps:(NSArray<OAWorldRegion *> *)usedMaps
+                   ctx:(std::shared_ptr<RoutingContext>)ctx
+                points:(NSArray<CLLocation *> *)points;
 
 @end

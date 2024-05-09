@@ -293,8 +293,7 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (NSArray<OAResourceItem *> *)getMapRegionResourcesToDownloadForRegions:(NSArray<OAWorldRegion *> *)regions;
 + (NSArray<OAResourceItem *> *)getMapRegionResourcesToUpdateForRegions:(NSArray<OAWorldRegion *> *)regions;
 
-+ (void)onlineCalculateRequestStartPoint:(CLLocation *)startPoint
-                                endPoint:(CLLocation *)endPoint
-                              completion:(LocationArrayCallback)completion;
++ (void)onlineCalculateRequestWithRouteCalculationResult:(OARouteCalculationResult *)routeCalculationResult
+                                              completion:(LocationArrayCallback)completion;
 
 @end

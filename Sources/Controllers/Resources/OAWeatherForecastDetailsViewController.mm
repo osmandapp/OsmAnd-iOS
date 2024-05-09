@@ -89,6 +89,7 @@
 {
     [super viewWillAppear:animated];
     [self generateData];
+    [_downloadingCellResourceHelper cleanCellCache];
     [self.tableView reloadData];
     if (self.delegate)
         [self.delegate onUpdateForecast];
@@ -444,6 +445,7 @@
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
         if (self.delegate)
             [self.delegate onUpdateForecast];
@@ -469,6 +471,7 @@
         if (!self.isViewLoaded)
             return;
         [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
         if (self.delegate)
             [self.delegate onUpdateForecast];
@@ -489,6 +492,7 @@
 - (void)onAutoUpdateSelected
 {
     [self generateData];
+    [_downloadingCellResourceHelper cleanCellCache];
     [self.tableView reloadData];
 }
 

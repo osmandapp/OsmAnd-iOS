@@ -135,6 +135,7 @@
 - (void)updateData
 {
     [self generateData];
+    [_downloadingCellCloudHelper cleanCellCache];
     [self.tableView reloadData];
 }
 

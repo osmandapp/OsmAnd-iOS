@@ -231,6 +231,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                   skipIfOneDownloaded:YES];
 
     [self initData];
+    [_downloadingCellResourceHelper cleanCellCache];
     [UIView transitionWithView:tblView
                       duration:.35
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -646,6 +647,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self initData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tblView reloadData];
     });
 }

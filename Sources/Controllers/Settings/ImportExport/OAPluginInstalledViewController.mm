@@ -282,6 +282,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     
     _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
     [self generateData];
+    [_downloadingCellResourceHelper cleanCellCache];
+    [_downloadingCellMultipleResourceHelper cleanCellCache];
     [self.tableView reloadData];
 }
 
@@ -560,6 +562,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupView];
+        [_downloadingCellResourceHelper cleanCellCache];
+        [_downloadingCellMultipleResourceHelper cleanCellCache];
         [self.tableView reloadData];
     });
 }

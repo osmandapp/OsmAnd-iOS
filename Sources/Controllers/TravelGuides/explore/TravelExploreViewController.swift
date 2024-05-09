@@ -316,6 +316,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     @objc func update() {
         DispatchQueue.main.async {
             self.generateData()
+            self.downloadingCellResourceHelper.cleanCellCache()
             self.tableView.reloadData()
         }
     }
@@ -646,6 +647,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             guard let self else { return }
             self.isDataLoaded = true
             self.generateData()
+            self.downloadingCellResourceHelper.cleanCellCache()
             self.tableView.reloadData()
             self.view.removeSpinner()
         }

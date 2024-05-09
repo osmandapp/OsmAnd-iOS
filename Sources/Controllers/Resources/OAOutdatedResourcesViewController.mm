@@ -202,6 +202,7 @@
 {
     @synchronized(_dataLock)
     {
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
     }
 }

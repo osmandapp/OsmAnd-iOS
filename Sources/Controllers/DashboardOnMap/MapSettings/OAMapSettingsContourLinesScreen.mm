@@ -394,6 +394,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             
             _mapMultipleItems = [NSArray arrayWithArray:_collectedRegionMultipleMapItems];
             [self generateData];
+            [_downloadingCellResourceHelper cleanCellCache];
             [tblView reloadData];
         }
     }];
@@ -758,6 +759,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
        parameter.value = switchView.isOn ? [_settings.contourLinesZoom get] : @"disabled";
        [_styleSettings save:parameter];
        [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
        [tblView reloadData];
     }
 }
@@ -800,6 +802,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     dispatch_async(dispatch_get_main_queue(), ^{
         [self fetchResources];
         [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tblView reloadData];
     });
 }

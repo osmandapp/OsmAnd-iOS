@@ -629,6 +629,7 @@
                 [self updateSearchBarVisible];
                 [self setupView];
                 [self.tableView setContentOffset:CGPointZero animated:NO];
+                [_downloadingCellResourceHelper cleanCellCache];
                 [self.tableView reloadData];
                 
                 NSArray<NSString *> *regionIds = [_weatherHelper getRegionIdsForDownloadedWeatherForecast];
@@ -776,6 +777,7 @@
                                 [self.navigationController.navigationBar.topItem setLeftBarButtonItem: _editMode ? _cancelButton : nil animated:YES];
                                 [self setupView];
                                 [self.tableView setContentOffset:CGPointZero animated:NO];
+                                [_downloadingCellResourceHelper cleanCellCache];
                                 [self.tableView reloadData];
 
                                 if (_editMode)
@@ -822,6 +824,7 @@
             [self setupSearchControllerWithFilter:NO];
             _searchResults = @[];
             [self setupView];
+            [_downloadingCellResourceHelper cleanCellCache];
             [self.tableView reloadData];
             return;
         }
@@ -848,6 +851,7 @@
         _searchResults = [[startsWithResult arrayByAddingObjectsFromArray:onlyContainsResult] sortedArrayUsingComparator:_regionsComparator];
         [self setupSearchControllerWithFilter:YES];
         [self setupView];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
     }
 }
@@ -1030,6 +1034,7 @@
         [_weatherHelper downloadForecastsByRegionIds:[_weatherHelper getRegionIdsForDownloadedWeatherForecast]];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self setupView];
+            [_downloadingCellResourceHelper cleanCellCache];
             [self.tableView reloadData];
         });
     }
@@ -1084,6 +1089,7 @@
                                                                 {
                                                                     [CATransaction begin];
                                                                     [CATransaction setCompletionBlock:^{
+                                                                        [_downloadingCellResourceHelper cleanCellCache];
                                                                         [self.tableView reloadData];
                                                                     }];
                                                                     [self.tableView beginUpdates];

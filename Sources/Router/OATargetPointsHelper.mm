@@ -591,9 +591,8 @@
             NSString *pointName = [self getLocationName:_pointToStart.point];
             [_pointToStart.pointDescription setName:pointName];
             [_app.data setPointToStart:_pointToStart];
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
                 _isSearchingStart = NO;
             });
         });
@@ -609,9 +608,8 @@
             NSString *pointName = [self getLocationName:_myLocationToStart.point];
             [_myLocationToStart.pointDescription setName:pointName];
             [_app.data setMyLocationToStart:_myLocationToStart];;
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
                 _isSearchingMyLocation = NO;
             });
         });
@@ -627,9 +625,8 @@
             NSString *pointName = [self getLocationName:_pointToNavigate.point];
             [_pointToNavigate.pointDescription setName:pointName];
             [_app.data setPointToNavigate:_pointToNavigate];
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
                 _isSearchingDestination = NO;
             });
         });
@@ -643,9 +640,8 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:point.point];
             [point.pointDescription setName:pointName];
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
             });
         });
     }

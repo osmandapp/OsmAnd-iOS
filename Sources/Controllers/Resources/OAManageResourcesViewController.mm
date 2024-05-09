@@ -412,6 +412,11 @@ static BOOL _repositoryUpdated = NO;
         [_weatherSizeCalculatedObserver detach];
         _weatherSizeCalculatedObserver = nil;
     }
+    
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
+    if (_downloadingCellMultipleResourceHelper)
+        [_downloadingCellMultipleResourceHelper cleanCellCache];
 
     [[NSNotificationCenter defaultCenter] removeObserver:self];
     [self.navigationController setNavigationBarHidden:YES animated:NO];

@@ -61,6 +61,11 @@
 
 #pragma mark - Resource methods
 
+- (BOOL) helperHasItemFor:(NSString *)resourceId
+{
+    return _resourceItems[resourceId] != nil;
+}
+
 - (NSArray<NSString *> *) getAllResourceIds
 {
     return [_resourceItems allKeys];
@@ -243,47 +248,25 @@
 
 - (void)onDownloadResourceTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
-    id<OADownloadTask> task = key;
-    NSString *taskKey = task.key;
     float progress = ((NSNumber *)value).floatValue;
-    
-    // Skip all downloads that are not resources
-    if (![taskKey hasPrefix:@"resource:"])
-        return;
-    
-    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
-    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
-    
-    // Skip downloadings from another screens
-    OAResourceItem *resourceItem = [self getResource:taskKey];
-    if (resourceItem)
+    NSString *resourceId = [self getResourceIdFromNotificationKey:key andValue:value];
+    if ([self helperHasItemFor:resourceId])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            [super setCellProgress:taskKey progress:progress status:EOAItemStatusInProgressType];
+            [super setCellProgress:resourceId progress:progress status:EOAItemStatusInProgressType];
         });
     }
 }
 
 - (void)onDownloadResourceTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
 {
-    id<OADownloadTask> task = key;
-    NSString *taskKey = task.key;
-    float progress = task.progressCompleted;
-    
-    // Skip all downloads that are not resources
-    if (![taskKey hasPrefix:@"resource:"])
-        return;
-    
-    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
-    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
-
-    // Skip downloadings from another screens
-    OAResourceItem *resourceItem = [self getResource:taskKey];
-    if (resourceItem)
+    float progress = ((NSNumber *)value).floatValue;
+    NSString *resourceId = [self getResourceIdFromNotificationKey:key andValue:value];
+    if (resourceId && [self helperHasItemFor:resourceId])
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             
-            [self setCellProgress:taskKey progress:progress status:EOAItemStatusFinishedType];
+            [self setCellProgress:resourceId progress:progress status:EOAItemStatusFinishedType];
             
             // Start next downloading if needed
             if ([OsmAndApp.instance.downloadsManager.keysOfDownloadTasks count] > 0)
@@ -300,12 +283,33 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!_hostViewController.isViewLoaded || _hostViewController.view.window == nil)
             return;
-
+        
         [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
         [OAManageResourcesViewController prepareData];
         if (_delegate && [_delegate respondsToSelector:@selector(onDownldedResourceInstalled)])
             [_delegate onDownldedResourceInstalled];
     });
+}
+
+- (NSString *) getResourceIdFromNotificationKey:(id)key andValue:(id)value
+{
+    // When we're creating a cell Contour Lines resource, we don't know which subfile user will download (srtm or srtmf).
+    // But we're allready need a "resourceId" key for dictionary at this moment.
+    // Anyway, user allowed to download and store only type of Contour Line resource (srtm or srtmf file).
+    // So on cell creating we can use any common key for booth of them. Let it be "srtm".
+    //
+    // "resource:africa.srtmf" -> "africa.srtm"
+    
+    id<OADownloadTask> task = key;
+    NSString *taskKey = task.key;
+    
+    // Skip all downloads that are not resources
+    if (![taskKey hasPrefix:@"resource:"])
+        return nil;
+    
+    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"resource:" withString:@""];
+    taskKey = [taskKey stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
+    return taskKey;
 }
 
 @end

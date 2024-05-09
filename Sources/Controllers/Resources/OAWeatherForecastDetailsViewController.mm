@@ -102,6 +102,13 @@
         [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
+}
+
 - (void) setupDownloadingCellHelper
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];

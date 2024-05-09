@@ -84,6 +84,11 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         downloadingCellResourceHelper.refreshCellSpinners()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        downloadingCellResourceHelper.cleanCellCache()
+    }
+    
     // MARK: Data
     
     override func getTitle() -> String! {

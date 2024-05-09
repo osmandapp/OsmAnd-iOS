@@ -122,6 +122,13 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [_downloadingCellMultipleResourceHelper refreshCellSpinners];
 }
 
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
+}
+
 - (void)configureNavigationBar
 {
     [self.navigationController setNavigationBarHidden:NO animated:YES];

@@ -37,4 +37,7 @@
 
 - (void)showActivatePluginPopup:(NSString *)resourceId;
 
+- (void) onDownloadTaskProgressChanged:(NSString *)resourceId progress:(float)progress;
+- (void) onDownloadTaskFinished:(NSString *)resourceId;
+
 @end

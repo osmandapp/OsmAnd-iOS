@@ -22,6 +22,8 @@ typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
     EOADownloadingCellRightIconTypeHideIconAfterDownloading = 0,
     EOADownloadingCellRightIconTypeShowIconAlways,
     EOADownloadingCellRightIconTypeShowShevronAlways,
+    EOADownloadingCellRightIconTypeShowIconAndShevronAlways,
+    EOADownloadingCellRightIconTypeShowShevronBeforeDownloading,
     EOADownloadingCellRightIconTypeShowShevronAfterDownloading,
     EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading,
 };
@@ -36,11 +38,13 @@ typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
 @property (weak, nonatomic) UITableView *hostTableView;
 
 @property (nonatomic) NSString *rightIconName;
+@property (nonatomic) NSString *rightIconColorName;
 @property (nonatomic) BOOL isBoldTitleStyle;
 @property (nonatomic) BOOL isAlwaysClickable;
 @property (nonatomic) BOOL isDownloadedRecolored;
 @property (nonatomic) EOADownloadingCellRightIconType rightIconStyle;
 
+- (BOOL) helperHasItemFor:(NSString *)resourceId;
 - (BOOL) isInstalled:(NSString *)resourceId;
 - (BOOL) isDownloading:(NSString *)resourceId;
 - (void) startDownload:(NSString *)resourceId;
@@ -50,6 +54,7 @@ typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
 - (OADownloadingCell *) setupCell:(NSString *)resourceId;
 - (OADownloadingCell *) setupCell:(NSString *)resourceId title:(NSString *)title isTitleBold:(BOOL)isTitleBold desc:(NSString *)desc leftIconName:(NSString *)leftIconName rightIconName:(NSString *)rightIconName isDownloading:(BOOL)isDownloading;
 - (NSString *) getRightIconName;
+- (NSString *) getRightIconColorName;
 
 - (void) onCellClicked:(NSString *)resourceId;
 
@@ -58,8 +63,6 @@ typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
 - (void) setCellProgress:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status;
 - (void) saveStatus:(EOAItemStatusType)status resourceId:(NSString *)resourceId;
 - (void) saveProgress:(float)progress resourceId:(NSString *)resourceId;
-
-- (void) onDownloadTaskProgressChanged:(NSString *)resourceId progress:(float)progress;
-- (void) onDownloadTaskFinished:(NSString *)resourceId;
+- (void) cleanCellCache;
 
 @end

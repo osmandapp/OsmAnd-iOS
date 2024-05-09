@@ -132,6 +132,8 @@
     [super viewWillDisappear:animated];
     
     [self.navigationController setNavigationBarHidden:YES animated:NO];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
 }
 
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection

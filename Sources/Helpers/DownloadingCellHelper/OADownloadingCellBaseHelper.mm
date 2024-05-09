@@ -37,6 +37,11 @@
 
 #pragma mark - Resource methods
 
+- (BOOL) helperHasItemFor:(NSString *)resourceId
+{
+    return _statuses[resourceId] != nil;
+}
+
 // Override in subclass
 - (BOOL) isInstalled:(NSString *)resourceId
 {
@@ -109,7 +114,7 @@
         cell = (OADownloadingCell *) nib[0];
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
-        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.rightIconView.tintColor = [UIColor colorNamed:[self getRightIconColorName]];
         cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
     }
     
@@ -184,6 +189,19 @@
     {
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
+    else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowIconAndShevronAlways)
+    {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        showIcon = YES;
+    }
+    else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowShevronBeforeDownloading)
+    {
+        if (![self isInstalled:resourceId])
+        {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            showIcon = YES;
+        }
+    }
     else if (_rightIconStyle == EOADownloadingCellRightIconTypeShowShevronAfterDownloading)
     {
         if ([self isInstalled:resourceId])
@@ -202,7 +220,7 @@
     if (showIcon)
     {
         cell.rightIconView.image = [UIImage templateImageNamed:[self getRightIconName]];
-        cell.rightIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.rightIconView.tintColor = [UIColor colorNamed:[self getRightIconColorName]];
         [cell rightIconVisibility:YES];
     }
 }
@@ -210,6 +228,11 @@
 - (NSString *) getRightIconName
 {
     return _rightIconName ? _rightIconName : @"ic_custom_download";
+}
+
+- (NSString *) getRightIconColorName
+{
+    return _rightIconColorName ? _rightIconColorName : ACColorNameIconColorActive;
 }
 
 #pragma mark - Cell behavior methods
@@ -252,6 +275,9 @@
 
 - (void) setCellProgress:(NSString *)resourceId progress:(float)progress status:(EOAItemStatusType)status
 {
+    if (![self helperHasItemFor:resourceId])
+        return;
+    
     [self saveStatus:status resourceId:resourceId];
     [self saveProgress:progress resourceId:resourceId];
     
@@ -314,6 +340,11 @@
 - (void) saveProgress:(float)progress resourceId:(NSString *)resourceId
 {
     _progresses[resourceId] = @(progress);
+}
+
+- (void) cleanCellCache
+{
+    [_cells removeAllObjects];
 }
 
 @end

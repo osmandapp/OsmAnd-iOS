@@ -188,6 +188,8 @@
         [_weatherSizeCalculatedObserver detach];
         _weatherSizeCalculatedObserver = nil;
     }
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
 }
 
 - (void) setupDownloadingCellHelper

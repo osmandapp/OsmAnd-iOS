@@ -377,6 +377,7 @@
 		32464B7E2A6FCC6700DA6980 /* TravelExploreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32464B7D2A6FCC6700DA6980 /* TravelExploreViewController.swift */; };
 		32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */; };
 		32473DD62A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */; };
+		3252D6412BEBD4F5006BDB82 /* OADownloadingCellCloudHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3252D6402BEBD4F5006BDB82 /* OADownloadingCellCloudHelper.mm */; };
 		325536E62BE8177000F429A8 /* OADownloadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 325536E52BE816D800F429A8 /* OADownloadingCell.xib */; };
 		325536F32BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */; };
 		325B69FD26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */; };
@@ -3856,6 +3857,8 @@
 		32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUISwiftHelper.mm; sourceTree = "<group>"; };
 		32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesNavigationViewController.swift; sourceTree = "<group>"; };
 		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		3252D63F2BEBD4E5006BDB82 /* OADownloadingCellCloudHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadingCellCloudHelper.h; sourceTree = "<group>"; };
+		3252D6402BEBD4F5006BDB82 /* OADownloadingCellCloudHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadingCellCloudHelper.mm; sourceTree = "<group>"; };
 		325536E52BE816D800F429A8 /* OADownloadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OADownloadingCell.xib; sourceTree = "<group>"; };
 		325536F12BE9232100F429A8 /* OADownloadingCellMultipleResourceHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadingCellMultipleResourceHelper.h; sourceTree = "<group>"; };
 		325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadingCellMultipleResourceHelper.mm; sourceTree = "<group>"; };
@@ -8302,6 +8305,8 @@
 				32D24D212BE54EAE000FA504 /* OADownloadingCellResourceHelper.mm */,
 				325536F12BE9232100F429A8 /* OADownloadingCellMultipleResourceHelper.h */,
 				325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */,
+				3252D63F2BEBD4E5006BDB82 /* OADownloadingCellCloudHelper.h */,
+				3252D6402BEBD4F5006BDB82 /* OADownloadingCellCloudHelper.mm */,
 			);
 			path = DownloadingCellHelper;
 			sourceTree = "<group>";
@@ -17304,6 +17309,7 @@
 				32D253AF27F336C100324717 /* OABaseCloudBackupViewController.m in Sources */,
 				DA5A81C026C563A700F274C7 /* OASearchByNameFilter.mm in Sources */,
 				DA5A834C26C563A800F274C7 /* OAWebViewCell.m in Sources */,
+				3252D6412BEBD4F5006BDB82 /* OADownloadingCellCloudHelper.mm in Sources */,
 				DA5A847726C563A900F274C7 /* OALanesControl.mm in Sources */,
 				DA5A82F026C563A800F274C7 /* OARadiusCell.m in Sources */,
 				DA5A854526C563A900F274C7 /* OAXmlImportHandler.mm in Sources */,

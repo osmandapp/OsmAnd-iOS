@@ -3439,3 +3439,5 @@
 "track_vertical_exaggeration_description" = "Durch Ändern des Skalenwerts kannst du die Höhe der 3D-Spur ändern";
 "shared_string_bottom" = "Unten";
 "track_3d_empty_view_description" = "Entdecke die Strecke in interaktivem 3D! Visualisiere Höhe, Geschwindigkeit und mehr direkt auf der Karte.";
+"short_min" = "m";
+"shared_string_millimeters" = "Millimeter";

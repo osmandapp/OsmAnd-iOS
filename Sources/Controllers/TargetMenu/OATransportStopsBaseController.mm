@@ -142,6 +142,10 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     };
     [localRoutes sortUsingComparator:comparator];
     [nearbyRoutes sortUsingComparator:comparator];
+    if (!_stopType && localRoutes && localRoutes.count > 0)
+    {
+        _stopType = localRoutes[0].type;
+    }
     self.localRoutes = localRoutes;
     self.nearbyRoutes = nearbyRoutes;
 }

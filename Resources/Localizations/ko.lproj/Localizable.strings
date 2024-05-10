@@ -2566,3 +2566,6 @@
 "simulate_in_progress" = "진행 중";
 "required_maps" = "Required 지도";
 "change_language" = "언어 변경 Language";
+"quick_action_map_overlay" = "지도 overlay 변경";
+"quick_action_map_underlay" = "지도 밑줄 변경";
+"quick_action_map_style" = "지도 스타일 변경";

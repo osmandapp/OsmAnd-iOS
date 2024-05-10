@@ -2564,3 +2564,5 @@
 "empty_purchases_description" = "구매가 여기에 표시되지 않는 경우, \"%@\"를 탭하거나 지원 팀에 문의하십시오.";
 "apply_to_existing" = "기존에 적용";
 "simulate_in_progress" = "진행 중";
+"required_maps" = "Required 지도";
+"change_language" = "언어 변경 Language";

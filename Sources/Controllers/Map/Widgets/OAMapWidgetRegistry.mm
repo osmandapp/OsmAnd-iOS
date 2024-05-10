@@ -286,6 +286,17 @@
     _allWidgets = newAllWidgets;
 }
 
+- (NSArray<OAMapWidgetInfo *> *)getWidgetInfosForType:(OAWidgetType *)widgetType
+{
+    NSMutableArray<OAMapWidgetInfo *> *widgets = [NSMutableArray array];
+    for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)
+    {
+        if (widgetInfo.getWidgetType == widgetType)
+            [widgets addObject:widgetInfo];
+    }
+    return [widgets copy];
+}
+
 - (OAMapWidgetInfo *)getWidgetInfoForType:(OAWidgetType *)widgetType
 {
     for (OAMapWidgetInfo *widgetInfo in self.getAllWidgets)

@@ -31,6 +31,8 @@
 
 + (void) searchAmenity:(NSString *)searchQuery x:(int)x y:(int)y left:(int)left right:(int)right top:(int)top bottom:(int)bottom reader:(NSString *)reader searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish;
 
++ (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude;
+
 + (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang;
 
 + (NSArray<NSString *> *) getTravelGuidesObfList;

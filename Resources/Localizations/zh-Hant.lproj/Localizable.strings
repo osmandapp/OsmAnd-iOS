@@ -3304,3 +3304,7 @@
 "distance_during_navigation" = "導航時的距離";
 "shared_string_round_up" = "大約";
 "shared_string_precise" = "精確";
+"vertical_exaggeration_description" = "透過變更比例尺的值，您可以強調 3D 地形。";
+"vertical_exaggeration" = "垂直誇大";
+"shared_string_scale" = "比例尺";
+"required_maps" = "所需的地圖";

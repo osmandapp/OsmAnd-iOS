@@ -36,6 +36,10 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         startAsyncInit()
     }
     
+    override func isNavbarVisible() -> Bool {
+        true
+    }
+    
     func startAsyncInit() {
         self.view.addSpinner(inCenterOfCurrentView: true)
         DispatchQueue.global(qos: .default).async {

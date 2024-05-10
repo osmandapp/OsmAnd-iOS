@@ -20,7 +20,10 @@ final class BLEBikeSCDDevice: Device {
     }
     
     override var getServiceConnectedImage: UIImage {
-        UIImage(named: "widget_sensor_bicycle_power")!
+        if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor, sensor.lastBikeCadenceData != nil {
+            return UIImage(named: "widget_sensor_cadence")!
+        }
+        return UIImage(named: "widget_sensor_speed")!
     }
     
     override var getDataFields: [[String: String]]? {

@@ -1307,8 +1307,8 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
-    if (_activeTargetType == OATargetGPX)
-        [self hideScrollableHudViewController];
+    if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
+        [_scrollableHudViewController forceHide];
 
     if (self.isNewContextMenuDisabled)
         return;

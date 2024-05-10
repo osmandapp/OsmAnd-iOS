@@ -371,7 +371,7 @@
 "shared_string_not_set" = "未設定";
 "shared_string_reset" = "リセット";
 "shared_string_read_more" = "続きを読む";
-"shared_string_on" = "On";
+"shared_string_on" = "有効";
 "shared_string_off" = "OFF";
 "offline_maps" = "オフラインマップ";
 "shared_string_download_map" = "マップをダウンロード";
@@ -2929,3 +2929,7 @@
 "visibility" = "確認可能";
 "map_widget_trip_recording_downhill" = "下り坂";
 "map_widget_ant_bicycle_speed_desc" = "移動速度を表示";
+"rendering_attr_showToll_name" = "料金制限の表示";
+"free_favorites_backup_description" = "OsmAnd Cloudに登録すると、お気に入りと設定を無料でバックアップできます。";
+"free_favorites_backup" = "お気に入りバックアップ(無料)";
+"rendering_attr_showToll_description" = "道路の料金制限を表示します";

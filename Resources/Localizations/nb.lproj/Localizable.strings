@@ -3037,3 +3037,5 @@
 "cache_size" = "Hurtiglagerstørrelse";
 "parking_widget_desc" = "Viser avstanden fra skjermsenter til parkeringsplassen din.";
 "map_widget_target_distance_desc" = "Viser avstanden fra kameraet til målstedet.";
+"shared_string_keywords" = "Nøkkelord";
+"required_maps" = "Påkrevde kart";

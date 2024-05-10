@@ -2880,6 +2880,7 @@ static const double d180PI = 180.0 / M_PI_2;
         hud.mode = MBProgressHUDModeText;
         hud.margin = 10.f;
         hud.yOffset = view.frame.size.height / 2 - 100;
+        hud.cornerRadius = 18.f;
         hud.removeFromSuperViewOnHide = YES;
         hud.userInteractionEnabled = NO;
 

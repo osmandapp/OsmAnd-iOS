@@ -24,7 +24,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAMapAlgorithms.h"
-
+#import "OAMapLayers.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -112,6 +112,14 @@
     [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuery categoryNames:categoryNames poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
++ (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAMapViewController *mapVC = mapPanel.mapViewController;
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    targetPoint.centerMap = YES;
+    [mapPanel showContextMenu:targetPoint];
+}
 
 + (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang
 {

@@ -2171,7 +2171,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     //[self showProgressHUD];
     
     @synchronized(_rendererSync)
-    { 
+    {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
         double mapDensity = [settings.mapDensity get];
@@ -2475,7 +2475,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin)
+    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -3815,6 +3815,45 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateTapRulerLayer
 {
     [self.mapLayers.rulerByTapControlLayer updateLayer];
+}
+
+- (void)getAltitudeForMapCenter:(void (^ _Nonnull)(float height))callback
+{
+    auto centerPixel = _mapView.getCenterPixel;
+    OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
+    if ([_mapView getLocationFromElevatedPoint:centerPixel location31:&elevatedPoint])
+        [self getAltitudeForPoint:elevatedPoint callback:callback];
+    else
+        callback(kMinAltitudeValue);
+}
+
+- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(float height))callback
+{
+    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    return [self getAltitudeForPoint:point callback:callback];
+}
+
+- (void)getAltitudeForPoint:(OsmAnd::PointI)point callback:(void (^ _Nonnull)(float height))callback
+{
+    double altitude = [_mapView getLocationHeightInMeters:point];
+    if (altitude > kMinAltitudeValue)
+    {
+        callback(altitude);
+    }
+    else
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            QList<float> heights = [self getHeightsForPoints:QList<OsmAnd::PointI>({point})];
+            callback(heights.count() > 0 ? heights[0] : kMinAltitudeValue);
+        });
+    }
+}
+
+- (QList<float>)getHeightsForPoints:(QList<OsmAnd::PointI>)points
+{
+    QList<float> heights;
+    _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
+    return heights;
 }
 
 @end

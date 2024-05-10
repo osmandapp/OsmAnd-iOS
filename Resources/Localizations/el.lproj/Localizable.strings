@@ -1949,3 +1949,8 @@
 "gpx_analyze" = "Ανάλυση";
 "stats_select_graph_data" = "Επιλογή δεδομένων γραφήματος";
 "mapil_no_images" = "Δεν έχουμε φωτογραφίες για αυτήν την τοποθεσία.";
+"testFlight" = "TestFlight";
+"product_desc_development" = "Για προγραμματιστές και έμπειρους χρήστες";
+"product_desc_weather" = "24ωρη πρόγνωση καιρού των επόμενων 7 ημερών στον χάρτη";
+"download_install_beta_version" = "Λήψη και εγκατάσταση beta εκδόσεων του OsmAnd";
+"online_plugins" = "Διαδικτυακές επεκτάσεις";

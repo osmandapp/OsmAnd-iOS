@@ -12,6 +12,7 @@ import Foundation
 @objc(OAWidgetStateDelegate)
 protocol WidgetStateDelegate: AnyObject {
     func onWidgetStateChanged()
+    @objc optional func updateQuickActionData()
 }
 
 @objc(OAConfigureScreenViewController)
@@ -280,6 +281,11 @@ extension ConfigureScreenViewController {
     
     // MARK: WidgetStateDelegate
     @objc func onWidgetStateChanged() {
+        generateData()
+        tableView.reloadData()
+    }
+    
+    func updateQuickActionData() {
         generateData()
         tableView.reloadData()
     }

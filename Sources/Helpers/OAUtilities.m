@@ -213,6 +213,15 @@
     return img;
 }
 
++ (UIImage *) mapSvgImageNamed:(NSString *)name renderingMode:(UIImageRenderingMode)mode
+{
+    UIImage *img = [OASvgHelper mapImageNamed:name];
+    if (img)
+        img = [img imageWithRenderingMode:mode];
+    
+    return img;
+}
+
 + (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];

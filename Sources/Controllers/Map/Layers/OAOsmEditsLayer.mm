@@ -154,21 +154,34 @@
         {
             NSDictionary<NSString *, OAPOIType *> *poiTypeMap = [OAPOIHelper.sharedInstance getAllTranslatedNames:NO];
             OAPOIType *type = poiTypeMap[poiTranslation.lowerCase];
-            auto iconId = QString::fromNSString(type.name);
-            const auto bitmapIt = _iconsCache.find(iconId);
-            if (bitmapIt == _iconsCache.end())
+            if (type)
             {
-                bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:type.name isFullSize:YES icon:type.icon scale:_textSize];
-                _iconsCache[iconId] = bitmap;
-            }
-            else
-            {
-                bitmap = bitmapIt.value();
+                auto iconId = QString::fromNSString(type.name);
+                const auto bitmapIt = _iconsCache.find(iconId);
+                if (bitmapIt == _iconsCache.end())
+                {
+                    bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit)
+                                                                     shapeName:@"circle"
+                                                                      iconName:type.name
+                                                                    isFullSize:YES
+                                                                          icon:type.icon
+                                                                         scale:_textSize];
+                    _iconsCache[iconId] = bitmap;
+                }
+                else
+                {
+                    bitmap = bitmapIt.value();
+                }
             }
         }
-        else
+        if (!bitmap)
         {
-            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) shapeName:@"circle" iconName:@"ic_custom_poi" isFullSize:YES icon:[UIImage imageNamed:@"ic_custom_poi"] scale:_textSize];
+            bitmap = [OACompoundIconUtils createCompositeIconWithcolor:UIColorFromARGB(color_osm_edit) 
+                                                             shapeName:@"circle"
+                                                              iconName:@"ic_custom_poi"
+                                                            isFullSize:YES
+                                                                  icon:[UIImage imageNamed:@"ic_custom_poi"]
+                                                                 scale:_textSize];
         }
     }
     else

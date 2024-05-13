@@ -2563,7 +2563,7 @@
 "help_article_personal_name" = "Adataim";
 "map_widget_next_sunset" = "Következő napnyugta";
 "help_article_map_point_layers_on_map_name" = "Pontok a térképen";
-"map_widget_group_glide_desc" = "A widgetek a célhoz vezető vagy az aktuális útra vonatkozó átlagos siklásszámot mutatják.";
+"map_widget_group_glide_desc" = "A widgetek a célhoz vezető vagy az aktuális útra vonatkozó átlagos siklószámot mutatják.";
 "shared_string_wikivoyage" = "Wikivoyage";
 "activity_type_riding_name" = "Lovaglás";
 "apply_only_to_new_points" = "Alkalmazás csak az új pontokra";

@@ -177,7 +177,7 @@
         targetPoint.type = OATargetTransportStop;
         targetPoint.location = item.location;        
         targetPoint.targetObj = item;
-        if(item.transportStopAggregated.localTransportStops.count == 0 && item.poi)
+        if (item.transportStopAggregated && item.transportStopAggregated.localTransportStops.count == 0 && item.poi)
         {
             targetPoint.title = item.poi.name;
         } else {

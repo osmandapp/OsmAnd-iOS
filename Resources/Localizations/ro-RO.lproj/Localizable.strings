@@ -363,7 +363,7 @@
 "speak_traffic_warnings" = "Avertismente din trafic";
 "save_global_track_interval" = "Interval general deînregistrare";
 "shared_string_color_magenta" = "Purpuriu";
-"shared_string_show_on_map" = "Arată pe hartă";
+"shared_string_show_on_map" = "Afișare pe hartă";
 "mapillary_menu_title_tile_cache" = "Cache pentru segmente";
 "driving_region" = "Regiuneaîn care se conduce";
 "map_widget_top_text" = "Nume stradă";
@@ -3198,7 +3198,7 @@
 "map_widget_ant_bicycle_dist_desc" = "Afișați distanța parcursă";
 "cleared_travel_search_history" = "Istoric căutat";
 "shared_string_hide_from_map" = "Ascunde de pe hartă";
-"shared_string_open_track" = "Înregistrare deschisă";
+"shared_string_open_track" = "Deschide traseu";
 "there_are_no_connected_sensors_of_this_type" = "Nu există senzori de acest tip conectați";
 "folder_tracks_count" = "%d înregistrări";
 "map_widget_ant_heart_rate" = "Puls";

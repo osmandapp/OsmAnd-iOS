@@ -116,7 +116,7 @@
 "shared_string_download" = "Télécharger";
 "shared_string_no_thanks" = "Pas nécessaire";
 "download_now" = "Télécharger la carte maintenant";
-"download_tab_local" = "Installé";
+"download_tab_local" = "Taille";
 "res_search_world" = "Rechercher dans le monde entier";
 "res_world_map" = "Carte du monde";
 "download_tab_updates" = "Mises à jour";
@@ -1853,7 +1853,7 @@
 "markers_history" = "Historique des marqueurs";
 
 // Resources
-"shared_string_resources" = "Ressources";
+"shared_string_resources" = "Téléchargés";
 "public_transport_warning_descr_blog" = "Pour savoir comment OsmAnd calcule les itinéraires, visitez notre blog.";
 "calc_pedestrian_route" = "Calculer l'itinéraire piéton";
 "public_transport_ped_route_title" = "L\'itinéraire piéton est approximativement de %@ et peut-être plus rapide qu\'en transport en commun";

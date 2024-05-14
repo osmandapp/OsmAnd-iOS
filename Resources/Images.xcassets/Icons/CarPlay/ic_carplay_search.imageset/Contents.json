@@ -1,6 +1,20 @@
 {
   "images" : [
     {
+      "filename" : "ic_carplay_search 1.svg",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "ic_carplay_search_night 1.svg",
+      "idiom" : "universal"
+    },
+    {
       "filename" : "ic_carplay_search.svg",
       "idiom" : "car"
     },

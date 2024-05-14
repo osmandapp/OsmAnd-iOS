@@ -1,6 +1,20 @@
 {
   "images" : [
     {
+      "filename" : "btn_map_zoom_in_light 1.svg",
+      "idiom" : "universal"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "btn_map_zoom_in_dark 1.svg",
+      "idiom" : "universal"
+    },
+    {
       "filename" : "btn_map_zoom_in_light.svg",
       "idiom" : "car"
     },
@@ -20,6 +34,7 @@
     "version" : 1
   },
   "properties" : {
+    "preserves-vector-representation" : true,
     "template-rendering-intent" : "original"
   }
 }

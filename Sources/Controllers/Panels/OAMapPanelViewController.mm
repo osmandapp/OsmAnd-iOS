@@ -596,7 +596,7 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (CGFloat) getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
+- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -1650,130 +1650,11 @@ typedef enum
     [self targetGoToPoint];
 }
 
-//- (OsmAnd::LatLon)getCenterLatLon
-//{
-//    return OsmAnd::Utilities::convert31ToLatLon([self getCenter31]);
-//}
-//
-//- (OsmAnd::PointI)getCenter31
-//{
-//    OAMapRendererView *mapRendererView = _mapViewController.mapView;
-//    OsmAnd::PointI target31;
-//    auto centerPixel = mapRendererView.getCenterPixel;
-//    [mapRendererView convert:CGPointMake(centerPixel.x, centerPixel.y) toLocation:&target31];
-//    return target31;
-//}
-
-- (BOOL)isLocationVisible:(double)latitude
-                longitude:(double)longitude
-                     zoom:(float)zoom
+- (CGSize)getScreenBBox
 {
-    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
-    OsmAnd::AreaI visibleArea = [renderView getVisibleBBox31];
-    
-    const auto latLon = OsmAnd::LatLon(latitude, longitude);
-    const auto point = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    
-    BOOL contains = visibleArea.contains(point);
-    
-    int left = (int) floor(visibleArea.left());
-    int top = (int) floor(visibleArea.top());
-    int width = (int) (ceil(visibleArea.right()) - left);
-    int height = (int) (ceil(visibleArea.bottom()) - top);
-    
-    CGRect rect = CGRectMake(left, top, width, height);
-    
-    if (CGRectContainsPoint(rect, CGPointMake(point.x, point.y))) {
-        NSLog(@"Точка находится внутри прямоугольника.");
-    } else {
-        NSLog(@"Точка находится за пределами прямоугольника.");
-    }
-    
-    int x31 = OsmAnd::Utilities::get31TileNumberX(longitude);
-    int y31 = OsmAnd::Utilities::get31TileNumberY(latitude);
-    
-    int x = x31 >> (31 - (int)zoom);
-    int y = y31 >> (31 - (int)zoom);
-    
-    const auto topLeft = OsmAnd::Utilities::convert31ToLatLon(visibleArea.topLeft);
-    const auto bottomRight = OsmAnd::Utilities::convert31ToLatLon(visibleArea.bottomRight);
-
-    int x1 = OsmAnd::Utilities::getTileNumberX(zoom, topLeft.longitude);
-    int y1 = OsmAnd::Utilities::getTileNumberY(zoom, topLeft.latitude);
-    
-    int x2 = OsmAnd::Utilities::getTileNumberX(zoom, bottomRight.longitude);
-    int y2 = OsmAnd::Utilities::getTileNumberY(zoom, bottomRight.latitude);
-    OsmAnd::AreaI tileArea;
-    tileArea.topLeft = OsmAnd::PointI(x1, y1);
-    tileArea.bottomRight = OsmAnd::PointI(x2, y2);
-    
-    OsmAnd::PointI location31(x, y);
-    BOOL contains1 = tileArea.contains(point);
-    BOOL contains2 = tileArea.contains(location31);
-    
-    int left1 = (int) floor(tileArea.left());
-    int top1 = (int) floor(tileArea.top());
-    int width1 = (int) (ceil(tileArea.right()) - left1);
-    int height1 = (int) (ceil(tileArea.bottom()) - top1);
-    
-    CGRect rect1 = CGRectMake(left1, top1, width1, height1);
-    
-    if (CGRectContainsPoint(rect1, CGPointMake(location31.x, location31.y))) {
-        NSLog(@"Точка находится внутри прямоугольника.");
-    } else {
-        NSLog(@"Точка находится за пределами прямоугольника.");
-    }
-    
-    return (tileArea.topLeft.x > location31.x
-            && tileArea.topLeft.y > location31.y
-            && tileArea.bottomRight.x > location31.x
-            && tileArea.bottomRight.y > location31.y);
-}
-
-- (BOOL)containsLatLon:(float)latitude lon:(float)longitude zoom:(float)zoom {
-    
-    BOOL isLocationVisible = [self isLocationVisible:latitude longitude:longitude zoom:zoom];
-    return isLocationVisible;
-    
-    int x31Test = OsmAnd::Utilities::get31TileNumberX(longitude);
-    int y31Test = OsmAnd::Utilities::get31TileNumberY(latitude);
-    
-    int x = x31Test << (int)zoom;
-    int y = y31Test << (int)zoom;
-    
-//    int x31Test1 = OsmAnd::Utilities::get31TileNumberX(longitude, zoom);
-//    int y31Test1 = OsmAnd::Utilities::get31TileNumberY(latitude, zoom);
-//    
-//    int x1 = x31Test << (int)zoom;
-//    int y1 = y31Test << (int)zoom;
-    
-    
-//    int x1 = x31Test >> (int)zoom;
-//    int y1 = y31Test >> (int)zoom;
-    
-    OsmAnd::PointI point = OsmAnd::PointI(x, y);
-    
-    //auto pos31 = OsmAnd::Utilities::convertLatLonTo31(latLon);
-    CGPoint screenPoint;
-    [_mapViewController.mapView convert:&point toScreen:&screenPoint checkOffScreen:YES];
-   // return screenPoint;
-    
-   // int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
-   /*
-    int x31 = OsmAnd::Utilities::get31TileNumberX(longitude);
-    int y31 = OsmAnd::Utilities::get31TileNumberY(longitude);
-    
-    int x = x31 >> (int)zoom;
-    int y = y31 >> (int)zoom;
-    */
-    
-   // OsmAnd::PointF point = [OANativeUtilities getPixelFromLatLon:latitude lon:longitude];
-    
-    CGSize size = [[UIScreen mainScreen] bounds].size;
-    CGFloat pixWidth = size.width;
-    CGFloat pixHeight = size.height;
-    
-    return point.x >= 0.0 && point.x <= pixWidth && point.y >= 0.0 && point.y <= pixHeight;
+    BOOL landscape = [self.scrollableHudViewController isLandscape];
+    return CGSizeMake(landscape ? DeviceScreenWidth - [self.scrollableHudViewController getLandscapeViewWidth] : DeviceScreenWidth,
+                      landscape ? DeviceScreenHeight : DeviceScreenHeight - [self.scrollableHudViewController getViewHeight]);
 }
 
 - (void)goToTargetPointWithZoom:(float)zoom
@@ -1782,25 +1663,26 @@ typedef enum
     renderView.azimuth = 0.0;
     renderView.elevationAngle = 90.0;
     
-    CLLocationCoordinate2D location = _targetMenuView.targetPoint.location;
-    OsmAnd::PointI target31 = renderView.target31; // center map 31 coord
-    renderView.fixedPixel
-  //  [_mapViewController getMapLocation] .. 
+    CLLocationCoordinate2D topLeft = _targetMenuView.targetPoint.location;
+    CLLocationCoordinate2D bottomRight = [_mapViewController getMapLocation].coordinate;
+        
+    OAGpxBounds bounds;
+    bounds.topLeft = topLeft; // search point
+    bounds.bottomRight = bottomRight; // map center
+    bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
+    bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
     
-   // OsmAnd::LatLon prevCenterLatLon = [self getCenterLatLon];
-    float currentZoom = zoom;
-    while (![self containsLatLon:location.latitude lon:location.longitude zoom:currentZoom] && currentZoom > zoom - MAX_ZOOM_OUT_STEPS) {
-        currentZoom -= 1;
+    float currentZoom = MIN([self getZoomForBounds:bounds mapSize:[self getScreenBBox]], zoom);
+    if (currentZoom != zoom && currentZoom < zoom - MAX_ZOOM_OUT_STEPS)
+    {
+        currentZoom = zoom;
     }
-    
-    BOOL containsPrevious = [self containsLatLon:location.latitude lon:location.longitude zoom:currentZoom];
-    renderView.zoom = containsPrevious ? currentZoom : zoom;
-    
-   // renderView.zoom = zoom;
+        
+    renderView.zoom = currentZoom;
     
     _mainMapAzimuth = 0.0;
     _mainMapElevationAngle = 90.0;
-    _mainMapZoom = zoom;
+    _mainMapZoom = currentZoom;
     
     [self targetGoToPoint];
 }
@@ -3443,14 +3325,9 @@ typedef enum
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;
 
-    BOOL landscape = [self.scrollableHudViewController isLandscape];
-    CGSize screenBBox = CGSizeMake(
-            landscape ? DeviceScreenWidth - [self.scrollableHudViewController getLandscapeViewWidth] : DeviceScreenWidth,
-            landscape ? DeviceScreenHeight : DeviceScreenHeight - [self.scrollableHudViewController getViewHeight]);
-
     [self displayAreaOnMap:item.bounds
                       zoom:0.
-                screenBBox:screenBBox
+                screenBBox:[self getScreenBBox]
                bottomInset:0.
                  leftInset:0.
                   topInset:0.
@@ -3556,8 +3433,8 @@ typedef enum
                 animated:(BOOL)animated
 {
     OAGpxBounds bounds;
-    bounds.topLeft = topLeft; // search point
-    bounds.bottomRight = bottomRight; // map center
+    bounds.topLeft = topLeft;
+    bounds.bottomRight = bottomRight;
     bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
     bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
 

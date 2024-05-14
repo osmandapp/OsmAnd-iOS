@@ -278,11 +278,11 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     }];
     
     if (type == EOACarPlayButtonTypeZoomIn)
-        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_in_day"];
+        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_in"];
     else if (type == EOACarPlayButtonTypeZoomOut)
-        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_out_day"];
+        mapButton.image = [UIImage imageNamed:@"btn_map_zoom_out"];
     else if (type == EOACarPlayButtonTypeCenterMap)
-        mapButton.image = [UIImage imageNamed:@"btn_map_current_location_day"];
+        mapButton.image = [UIImage imageNamed:@"btn_map_current_location"];
     else if (type == EOACarPlayButtonType3D)
         mapButton.image = [UIImage imageNamed:[OAMapViewTrackingUtilities.instance isIn3dMode] ? @"btn_map_2d_mode" : @"btn_map_3d_mode"];
     

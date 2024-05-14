@@ -151,6 +151,7 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATextInputFloatingCell.h"
+#import "OAInputTableViewCell.h"
 
 // Views
 #import "OASegmentedSlider.h"

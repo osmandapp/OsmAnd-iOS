@@ -47,7 +47,6 @@ static const double DISTANCE_SKIP = 10000;
 {
     OAWorldRegion *_or;
     NSMutableArray<NSString *> *_lastKeyNames;
-    std::shared_ptr<RoutingContext> _ctx;
 }
 
 - (instancetype)init
@@ -60,24 +59,12 @@ static const double DISTANCE_SKIP = 10000;
     return self;
 }
 
-- (BOOL)checkIfThereAreMissingMapsWithStart:(CLLocation *)start
-                                    targets:(NSArray<CLLocation *> *)targets
-{
-    bool oldRouting = [[OAAppSettings sharedManager].useOldRouting get];
-    return [self checkIfThereAreMissingMaps:_ctx start:start targets:targets checkHHEditions:!oldRouting];
-}
-
 - (BOOL)checkIfThereAreMissingMaps:(std::shared_ptr<RoutingContext>)ctx
                              start:(CLLocation *)start
                            targets:(NSArray<CLLocation *> *)targets
                    checkHHEditions:(BOOL)checkHHEditions
 {
-    _ctx = ctx;
     self.startPoint = start;
-    if (targets.count > 0)
-    {
-        self.endPoint = targets.lastObject;
-    }
     
     NSTimeInterval tm = [NSDate timeIntervalSinceReferenceDate];
     _lastKeyNames = [NSMutableArray new];
@@ -114,11 +101,17 @@ static const double DISTANCE_SKIP = 10000;
     }
     
     CLLocation *end = nil;
+    CLLocation *prev = start;
     for (int i = 0; i < [targets count]; i++)
     {
-        CLLocation *prev = (i == 0) ? start : targets[i - 1];
         end = targets[i];
+        if ([OAMapUtils getDistance:prev.coordinate second:end.coordinate] < DISTANCE_SKIP) {
+            // skip point they too close
+            continue;
+        }
+        
         [self split:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck pnt:prev next:end];
+        prev = end;
     }
     
     if (end != nil)
@@ -246,10 +239,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
          next:(CLLocation *)next
 {
     double distance = [OAMapUtils getDistance:pnt.coordinate second:next.coordinate];
-    if (distance < DISTANCE_SKIP) {
-        // skip point they too close
-    }
-    else if (distance < kDISTANCE_SPLIT)
+    if (distance < kDISTANCE_SPLIT)
     {
         [self addPoint:ctx knownMaps:knownMaps pointsToCheck:pointsToCheck point:pnt];
     }

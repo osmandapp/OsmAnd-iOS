@@ -1309,8 +1309,8 @@ typedef enum
 
 - (void) showContextMenuWithPoints:(NSArray<OATargetPoint *> *)targetPoints
 {
-    if (_activeTargetType == OATargetGPX)
-        [self hideScrollableHudViewController];
+    if (_activeTargetType == OATargetGPX && _scrollableHudViewController)
+        [_scrollableHudViewController forceHide];
 
     if (self.isNewContextMenuDisabled)
         return;
@@ -2630,8 +2630,7 @@ typedef enum
         [self restoreFromContextMenuMode];
     
     if ((_activeTargetType == OATargetNone || _activeTargetActive)
-            && self.targetMenuView.targetPoint.type == OATargetFavorite
-            && ![OAFavoriteListViewController popToParent])
+            && self.targetMenuView.targetPoint.type == OATargetFavorite)
         [self.navigationController popViewControllerAnimated:YES];
 
     [self.targetMenuView hide:YES duration:animationDuration onComplete:^{

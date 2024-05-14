@@ -21,14 +21,12 @@
 
 - (instancetype)initWithWikiMediaTag:(NSString *)wikiMediaTag imageName:(NSString *)imageName imageStubUrl:(NSString *)imageStubUrl imageHiResUrl:(NSString *)imageHiResUrl;
 
-- (NSString *)getUrlWithCommonAttributions:(BOOL)isWikimediaCategory;
+- (NSString *)getUrlWithCommonAttributions;
 
 @end
 
 @interface OAWikiImageCard : OAImageCard
 
 - (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage type:(NSString *)type;
-
-- (instancetype)initWithWikiImage:(OAWikiImage *)wikiImage type:(NSString *)type wikimediaCategory:(BOOL)isWikimediaCategory;
 
 @end

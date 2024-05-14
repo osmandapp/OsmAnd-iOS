@@ -675,11 +675,11 @@
 "map_widget_next_turn" = "Prochaine bifurcation";
 "shared_string_turn" = "Bifurcation";
 "day_off_label" = "fermé";
-"open_from" = "Ouvreà";
+"open_from" = "Ouvre à";
 "open_till" = "Ouvert jusqu\'à";
-"will_open_at" = "Ouvreà";
-"will_open_on" = "Ouvreà";
-"will_open_tomorrow_at" = "Ouvre demainà";
+"will_open_at" = "Ouvre à";
+"will_open_on" = "Ouvre à";
+"will_open_tomorrow_at" = "Ouvre demain à";
 "simulate_routing_descr" = "Simulez votre position en utilisant un itinéraire";
 "route_simulation" = "Simulation d'itinéraire";
 "map_mode" = "Mode Carte";
@@ -711,7 +711,7 @@
 "clear_all_intermediates" = "Effacer toutes lesétapes";
 "shared_string_options" = "Options";
 "cancel_navigation" = "Arrêter le guidage";
-"transport_nearby_routes_within" = "Lignesà moins de";
+"transport_nearby_routes_within" = "Lignes à moins de";
 "transport_nearby_routes" = "À moins de";
 "shared_string_previous" = "Précédent";
 "show_poi_over_map" = "Afficher la sur-couche points d\'intérêt";
@@ -3216,7 +3216,7 @@
 "help_article_navigation_setup_route_details_name" = "Détails de l\'itinéraire";
 "help_article_navigation_setup_route_navigation_name" = "Préparation de l\'itinéraire";
 "shared_string_link" = "Lien";
-"help_article_navigation_routing_pedestrian_routing_name" = "Navigationà pied";
+"help_article_navigation_routing_pedestrian_routing_name" = "Navigation à pied";
 "help_article_navigation_setup_gpx_navigation_name" = "Naviguer par trace";
 "help_article_navigation_routing_online_routing_name" = "Guidage en ligne";
 "help_article_map_map_context_menu_name" = "Menu contextuel de la carte";
@@ -3233,8 +3233,8 @@
 "help_article_navigation_auto_car_name" = "Android Auto";
 "shared_string_setup_route" = "Définir un itinéraire";
 "help_article_widgets_info_widgets_name" = "Gadgets d\'information";
-"help_article_navigation_routing_horse_routing_name" = "Navigationà cheval";
-"help_article_navigation_routing_ski_routing_name" = "Navigationà ski";
+"help_article_navigation_routing_horse_routing_name" = "Navigation à cheval";
+"help_article_navigation_routing_ski_routing_name" = "Navigation à ski";
 "help_article_widgets_name" = "Gadgets de la carte";
 "help_article_personal_name" = "Mes données";
 "help_article_purchases_android_name" = "Achats Android";

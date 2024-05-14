@@ -3422,3 +3422,5 @@
 "shared_string_top" = "Vrh";
 "shared_string_bottom" = "Dno";
 "track_3d_empty_view_description" = "Istraži stazu u interaktivnom 3D! Vizualiziraj visinu, brzinu i još toga direktno na mapi.";
+"short_min" = "m";
+"shared_string_millimeters" = "Milimetara";

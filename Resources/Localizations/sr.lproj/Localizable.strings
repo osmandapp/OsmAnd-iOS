@@ -1999,7 +1999,7 @@
 "rendering_attr_surface_ground_name" = "Земља";
 "routing_attr_height_obstacles_description" = "Планирано време путовања ће се одразити на утицај узбрдица. Поставке путање могу помоћи да се избегну стрме узбрдице:";
 "rendering_attr_currentTrackColor_description" = "Боја ГПИкс-а";
-"routing_attr_driving_style_speed_name" = "Краће путање";
+"routing_attr_driving_style_speed_name" = "Краће руте";
 "routing_attr_avoid_sett_description" = "Избегавај калдрму";
 "rendering_attr_hikingRoutesOSMC_description" = "Приказуј путеве према путањама ОСМЦ-а.";
 "rendering_value_car_name" = "Кола";
@@ -3424,3 +3424,5 @@
 "shared_string_top_bottom" = "Врх и дно";
 "track_3d_empty_view_title" = "ЗД приказ Путање";
 "track_3d_empty_view_description" = "Истражите путању у интерактивном 3Д! Визуелизујте висину, брзину и још много тога директно на мапи.";
+"short_min" = "м";
+"shared_string_millimeters" = "Милиметара";

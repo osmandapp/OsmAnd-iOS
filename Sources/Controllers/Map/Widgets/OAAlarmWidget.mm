@@ -129,6 +129,7 @@
     BOOL cams = [_settings.showCameras get];
     BOOL peds = [_settings.showPedestrian get];
     BOOL tunnels = [_settings.showTunnels get];
+    BOOL speedLimitExceed = [_settings.showSpeedLimitWarnings get];
     BOOL visible = false;
     if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
     {
@@ -237,6 +238,8 @@
                     visible = cams;
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;
+                else if (alarm.type == AIT_SPEED_LIMIT)
+                    visible = speedLimitExceed;
                 else if (alarm.type == AIT_TUNNEL)
                     visible = tunnels;
                 else

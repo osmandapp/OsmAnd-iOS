@@ -10,5 +10,6 @@ import Foundation
 
 final class WheelDeviceSettings: DeviceSettings {
     static let WHEEL_CIRCUMFERENCE_KEY = "WHEEL_CIRCUMFERENCE_KEY"
-    static let DEFAULT_WHEEL_CIRCUMFERENCE = 2.086
+    // in millimeters
+    static let DEFAULT_WHEEL_CIRCUMFERENCE: Double = 2086
 }

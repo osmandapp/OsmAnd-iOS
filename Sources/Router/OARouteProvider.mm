@@ -1080,7 +1080,18 @@
     if (params.intermediates)
         inters = [NSArray arrayWithArray:params.intermediates];
     
-    return [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+    OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+    NSMutableArray<CLLocation *> *points = [NSMutableArray array];
+    [points addObject:start];
+    [points addObjectsFromArray:inters];
+    [points addObject:end];
+    [result setMissingMaps:result.missingMaps
+              mapsToUpdate:result.mapsToUpdate
+                  usedMaps:result.potentiallyUsedMaps
+                       ctx:env.ctx
+                    points:points];
+
+    return result;
 }
 
 - (OARouteCalculationResult *) calculateOsmAndRouteWithIntermediatePoints:(OARouteCalculationParams *)routeParams intermediates:(NSArray<CLLocation *> *)intermediates connectRtePts:(BOOL)connectRtePts

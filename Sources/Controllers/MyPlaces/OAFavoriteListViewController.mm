@@ -1264,6 +1264,12 @@ static UIViewController *parentController;
     }
     if (cell)
     {
+        if (dataIndex >= groupData.favoriteGroup.points.count)
+        {
+            // TODO: Hot fix to avoid crash. Should be fixed properly!
+            [self generateData];
+            return cell;
+        }
         OAFavoriteItem* item = [groupData.favoriteGroup.points objectAtIndex:dataIndex];
         [cell.titleView setText:[item getDisplayName]];
         cell = [self setupPoiIconForCell:cell withFavaoriteItem:item];

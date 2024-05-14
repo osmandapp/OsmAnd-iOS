@@ -957,6 +957,16 @@
     return [_mapInfoController.topPanelController hasWidgets];
 }
 
+- (BOOL)isRightPanelVisible
+{
+    return _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
+}
+
+- (BOOL)isLeftPanelVisible
+{
+    return _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
+}
+
 - (void) updateBottomButtonsLayout
 {
     CGFloat x = [self getExtraScreenOffset];
@@ -1157,8 +1167,8 @@
     BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
     BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
     BOOL isTopPanelVisible = _mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets];
-    BOOL isLeftPanelVisible = _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
-    BOOL isRightPanelVisible = _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
+    BOOL isLeftPanelVisible = [self isLeftPanelVisible];
+    BOOL isRightPanelVisible = [self isRightPanelVisible];
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance

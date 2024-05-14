@@ -941,6 +941,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;
 @property (nonatomic) OACommonBoolean *showPedestrian;
+@property (nonatomic) OACommonBoolean *showSpeedLimitWarnings;
 @property (nonatomic) OACommonBoolean *showCameras;
 @property (nonatomic) OACommonBoolean *showTunnels;
 @property (nonatomic) OACommonBoolean *showLanes;

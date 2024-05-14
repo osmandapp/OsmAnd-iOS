@@ -169,8 +169,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)commonInit
 {
-    self.searchQuery = @"";
-    self.searchType = OAQuickSearchType::REGULAR;
+    _searchQuery = @"";
+    _searchType = OAQuickSearchType::REGULAR;
     _runSearchFirstTime = YES;
 }
 
@@ -454,7 +454,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             break;
     }
     _barActionType = type;
-    [self.view setNeedsLayout];
+    if (self.isViewLoaded)
+	    [self.view setNeedsLayout];
 }
 
 - (void)updateTabsVisibility:(BOOL)show
@@ -802,7 +803,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
         [self updateSearchNearMapCenterLabel];
 
-        [self.view setNeedsLayout];
+        if (self.isViewLoaded)
+	        [self.view setNeedsLayout];
     }
 }
 
@@ -1429,7 +1431,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [self runSearch];
     }
 
-    [self.view setNeedsLayout];
+    if (self.isViewLoaded)
+	    [self.view setNeedsLayout];
 }
 
 - (void) goToPoint:(double)latitude longitude:(double)longitude

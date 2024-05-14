@@ -12,7 +12,7 @@
 #define WIKIMEDIA_API_ENDPOINT @"https://commons.wikimedia.org/w/api.php"
 #define WIKIDATA_ACTION @"?action=wbgetclaims&property=P18&entity="
 #define WIKIMEDIA_ACTION @"?action=query&list=categorymembers&cmtitle="
-#define CM_LIMIT @"&cmlimit=500"
+#define CM_LIMIT @"&cmlimit=100"
 #define FORMAT_JSON @"&format=json"
 #define IMAGE_BASE_URL @"https://commons.wikimedia.org/wiki/Special:FilePath/"
 
@@ -21,11 +21,10 @@
 #define WIKIMEDIA_CATEGORY @"Category:"
 #define WIKIMEDIA_WIDTH @"?width="
 
-#define THUMB_SIZE 500
+#define THUMB_SIZE 480
 
-static NSString * const OSMAND_API_ENDPOINT = @"https://osmand.net/api/";
-static NSString * const OSMAND_API_WIKIDATA_ARTICLE_ACTION = @"wiki_place?article=";
-static NSString * const OSMAND_API_WIKIDATA_CATEGORY_ACTION = @"wiki_place?category=";
+static NSString * const OSMAND_API_ENDPOINT = @"https://osmand.net/api/wiki_place?";
+static const NSInteger DEPT_CAT_LIMIT = 1;
 static const BOOL USE_OSMAND_WIKI_API = YES;
 
 @class OARowInfo;

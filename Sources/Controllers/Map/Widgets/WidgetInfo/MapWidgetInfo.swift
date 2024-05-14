@@ -201,6 +201,4 @@ class MapWidgetInfo: NSObject, Comparable {
     override var description: String {
         return key
     }
-
 }
-

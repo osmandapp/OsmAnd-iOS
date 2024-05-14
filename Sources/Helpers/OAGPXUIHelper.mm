@@ -58,7 +58,7 @@
     OAGPXDocument *_exportingGpxDoc;
     BOOL _isExportingCurrentTrack;
     UIDocumentInteractionController *_exportController;
-    UIViewController *_exportingHostVC;
+    UIViewController __weak *_exportingHostVC;
     id<OATrackSavingHelperUpdatableDelegate> _exportingHostVCDelegate;
 }
 
@@ -631,9 +631,8 @@
     if (openTrack)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
-        if (gpx)
+        if (gpx && _exportingHostVC)
         {
-            
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
                 [OARootViewController.instance.mapPanel targetHideContextPinMarker];
                 [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
@@ -766,7 +765,7 @@
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller
         willBeginSendingToApplication:(NSString *)application
 {
-    if ([application isEqualToString:@"net.osmand.maps"])
+    if ([application isEqualToString:@"net.osmand.maps"] && _exportingHostVC)
     {
         [_exportController dismissMenuAnimated:YES];
         _exportFilePath = nil;

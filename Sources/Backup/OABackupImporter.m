@@ -513,11 +513,10 @@
         if ([[OASettingsItemType typeName:EOASettingsItemTypeProfile] isEqualToString:type])
         {
             NSMutableDictionary *appMode = [NSMutableDictionary dictionary];
-            NSRange rOriginal = [@"profile_" rangeOfString:fileName];
+            NSRange rOriginal = [fileName rangeOfString:@"profile_"];
             NSString *name = fileName;
             if (NSNotFound != rOriginal.location)
                 name = [fileName stringByReplacingCharactersInRange:rOriginal withString:@""];
-            
             if ([name.pathExtension isEqualToString:@"json"])
                 name = [name stringByDeletingPathExtension];
             appMode[@"stringKey"] = name;

@@ -1834,12 +1834,12 @@ typedef enum
 
 - (void) targetZoomIn
 {
-    [_mapViewController animatedZoomIn];
+    [_mapViewController zoomIn];
 }
 
 - (void) targetZoomOut
 {
-    [_mapViewController animatedZoomOut];
+    [_mapViewController zoomOut];
     [_mapViewController calculateMapRuler];
 }
 

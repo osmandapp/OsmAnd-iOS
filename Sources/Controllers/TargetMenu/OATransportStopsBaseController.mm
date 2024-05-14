@@ -143,6 +143,10 @@ static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
     };
     [localRoutes sortUsingComparator:comparator];
     [nearbyRoutes sortUsingComparator:comparator];
+    if (!_stopType && localRoutes && localRoutes.count > 0)
+    {
+        _stopType = localRoutes[0].type;
+    }
     self.localRoutes = localRoutes;
     self.nearbyRoutes = nearbyRoutes;
 }

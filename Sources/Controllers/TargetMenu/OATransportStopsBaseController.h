@@ -8,12 +8,13 @@
 
 #import "OATargetInfoViewController.h"
 
-@class OATransportStopRoute, OAPOI, OATransportStop;
+@class OATransportStopRoute, OAPOI, OATransportStop, OATransportStopType;
 
 @interface OATransportStopsBaseController : OATargetInfoViewController
 
 @property (nonatomic) OAPOI *poi;
 @property (nonatomic) OATransportStop *transportStop;
+@property (nonatomic) OATransportStopType *stopType;
 
 - (void) processTransportStop;
 + (OATransportStop *) findNearestTransportStopForAmenity:(OAPOI *)amenity;

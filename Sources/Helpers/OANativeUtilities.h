@@ -77,6 +77,7 @@
 + (OsmAnd::PointI) getPoint31FromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointF) getPixelFromLatLon:(double)lat lon:(double)lon;
 + (CGPoint) getScreenPointFromLatLon:(double)lat lon:(double)lon;
++ (CGPoint) getScreenPointYFromLatLon:(double)lat lon:(double)lon;
 + (OsmAnd::PointI) calculateTarget31:(double)latitude longitude:(double)longitude applyNewTarget:(BOOL)applyNewTarget;
 
 + (BOOL) containsLatLon:(CLLocation *)location;

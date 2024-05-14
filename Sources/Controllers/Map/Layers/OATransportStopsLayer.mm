@@ -15,6 +15,8 @@
 #import "OATransportStop.h"
 #import "OAMapStyleSettings.h"
 #import "OATransportStopRoute.h"
+#import "OATransportStopAggregated.h"
+#import "OAPOI.h"
 
 #include "OACoreResourcesTransportRouteIconProvider.h"
 
@@ -175,7 +177,12 @@
         targetPoint.type = OATargetTransportStop;
         targetPoint.location = item.location;        
         targetPoint.targetObj = item;
-        targetPoint.title = item.name;
+        if (item.transportStopAggregated && item.transportStopAggregated.localTransportStops.count == 0 && item.poi)
+        {
+            targetPoint.title = item.poi.name;
+        } else {
+            targetPoint.title = item.name;
+        }
         
         targetPoint.sortIndex = (NSInteger)targetPoint.type;
         return targetPoint;

@@ -43,7 +43,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         for panel in WidgetsPanel.values {
             let widgetsCount = getWidgetsCount(panel: panel)
             let row = widgetsSection.createNewRow()
-            row.cellType = OAValueTableViewCell.getIdentifier()
+            row.cellType = OAValueTableViewCell.reuseIdentifier
             row.title = panel.title
             row.iconName = panel.iconName
             row.setObj(panel, forKey: "panel")
@@ -60,7 +60,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         transparencyRow.key = "map_widget_transparent"
         transparencyRow.accessibilityLabel = localizedString("map_widget_transparent")
         transparencyRow.setObj(NSNumber(value: settings.transparentMapTheme.get()), forKey: Self.selectedKey)
-        transparencyRow.cellType = OASwitchTableViewCell.getIdentifier()
+        transparencyRow.cellType = OASwitchTableViewCell.reuseIdentifier
         
         let buttonsSection = tableData!.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
@@ -77,7 +77,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
         quickActionRow.key = "quick_action"
         quickActionRow.iconName = "ic_custom_quick_action"
-        quickActionRow.cellType = OAValueTableViewCell.getIdentifier()
+        quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
         quickActionRow.accessibilityLabel = quickActionRow.title
         quickActionRow.accessibilityValue = quickActionRow.descr
         
@@ -89,7 +89,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         map3dModeRow.descr = OAMap3DModeVisibility.getTitle(selected3dMode) ?? ""
         map3dModeRow.iconTintColor = isMap3DVisible ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
         map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(selected3dMode)
-        map3dModeRow.cellType = OAValueTableViewCell.getIdentifier()
+        map3dModeRow.cellType = OAValueTableViewCell.reuseIdentifier
         map3dModeRow.accessibilityLabel = map3dModeRow.title
         map3dModeRow.accessibilityValue = map3dModeRow.descr
         
@@ -101,7 +101,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         positionMapRow.iconTintColor = UIColor(rgb: Int(appMode.getIconColor()))
         positionMapRow.key = "position_on_map"
         positionMapRow.descr = getLocationPositionValue()
-        positionMapRow.cellType = OAValueTableViewCell.getIdentifier()
+        positionMapRow.cellType = OAValueTableViewCell.reuseIdentifier
         positionMapRow.accessibilityLabel = positionMapRow.title
         positionMapRow.accessibilityValue = positionMapRow.descr
         let distByTapRow = otherSection.createNewRow()
@@ -110,7 +110,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         distByTapRow.iconTint = Int(appMode.getIconColor())
         distByTapRow.key = "map_widget_distance_by_tap"
         distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
-        distByTapRow.cellType = OASwitchTableViewCell.getIdentifier()
+        distByTapRow.cellType = OASwitchTableViewCell.reuseIdentifier
         distByTapRow.accessibilityLabel = distByTapRow.title
         distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
     }
@@ -127,7 +127,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         row.key = "compass"
         row.iconTintColor = appMode != nil ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
         row.iconName = OACompassMode.getIconName(compassMode)
-        row.cellType = OAValueTableViewCell.getIdentifier()
+        row.cellType = OAValueTableViewCell.reuseIdentifier
     }
     
     override func viewDidLoad() {
@@ -193,6 +193,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         case .bottom:
             return "ic_custom_display_position_bottom"
         @unknown default:
+            debugPrint("Unknown EOAPositionPlacement value: \(placement). Using default icon.")
             return ""
         }
     }
@@ -207,6 +208,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         case .bottom:
             return localizedString("position_on_map_bottom")
         @unknown default:
+            debugPrint("Unknown EOAPositionPlacement value: \(placement). Using default value.")
             return ""
         }
     }
@@ -222,10 +224,10 @@ extension ConfigureScreenViewController {
     
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData!.item(for: indexPath)
-        if item.cellType == OAValueTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
+        if item.cellType == OAValueTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell
             if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
+                let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.reuseIdentifier, owner: self, options: nil)
                 cell = nib?.first as? OAValueTableViewCell
                 cell?.accessoryType = .disclosureIndicator
                 cell?.descriptionVisibility(false)
@@ -241,10 +243,10 @@ extension ConfigureScreenViewController {
                 applyAccessibility(cell, item)
             }
             return cell
-        } else if item.cellType == OASwitchTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.getIdentifier()) as? OASwitchTableViewCell
+        } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as? OASwitchTableViewCell
             if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASwitchTableViewCell.getIdentifier(), owner: self, options: nil)
+                let nib = Bundle.main.loadNibNamed(OASwitchTableViewCell.reuseIdentifier, owner: self, options: nil)
                 cell = nib?.first as? OASwitchTableViewCell
                 cell?.descriptionVisibility(false)
             }

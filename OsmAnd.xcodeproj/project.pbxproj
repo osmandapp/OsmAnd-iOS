@@ -539,10 +539,6 @@
 		460743A828C10B2900F13A7A /* OAOsmLoginMainViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */; };
 		460767122A49F86400AF63F2 /* WikiAlgorithms.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460767112A49F86400AF63F2 /* WikiAlgorithms.swift */; };
 		460E9AC12B71111000411854 /* CloudTrashItemMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */; };
-		460EC9E42B1F3104006BE95A /* btn_map_2d_mode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */; };
-		460EC9E52B1F3104006BE95A /* btn_map_3d_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */; };
-		460EC9E62B1F3104006BE95A /* btn_map_2d_mode@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E22B1F3103006BE95A /* btn_map_2d_mode@2x.png */; };
-		460EC9E72B1F3104006BE95A /* btn_map_3d_mode@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 460EC9E32B1F3104006BE95A /* btn_map_3d_mode@3x.png */; };
 		4611DF3A28569C5000885FD1 /* OASubscriptionBannerCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */; };
 		4613BFA62A93DECC004385FB /* ic_custom_screen_side_right_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */; };
 		4613BFA72A93DECC004385FB /* ic_custom_screen_side_bottom_48@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */; };
@@ -576,8 +572,6 @@
 		462BF6DC2B7E8347003ECA2C /* DeleteAccountCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */; };
 		462F13EB283FD0D400B73795 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */; };
 		462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 462F13EA283FD0D300B73795 /* OAOsmLiveFeaturesCardView.m */; };
-		4631377529AE6CB3000B0258 /* ic_carplay_history@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4631377329AE6CB3000B0258 /* ic_carplay_history@3x.png */; };
-		4631377629AE6CB3000B0258 /* ic_carplay_history@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4631377429AE6CB3000B0258 /* ic_carplay_history@2x.png */; };
 		4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */; };
 		46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */; };
 		4635DDE82A02A7DE00D36203 /* ColorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635DDE72A02A7DE00D36203 /* ColorItem.swift */; };
@@ -658,18 +652,6 @@
 		4657490E2B6803710006046B /* TrashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490D2B6803710006046B /* TrashItem.swift */; };
 		465749102B68129B0006046B /* BackupUiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490F2B68129B0006046B /* BackupUiUtils.swift */; };
 		465749122B681E620006046B /* TrashGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 465749112B681E620006046B /* TrashGroup.swift */; };
-		465B935229BF7805008F476F /* ic_carplay_history_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */; };
-		465B935329BF7805008F476F /* ic_carplay_history_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */; };
-		465B935429BF7805008F476F /* ic_carplay_favorites_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */; };
-		465B935529BF7805008F476F /* ic_carplay_map_markers_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934929BF7804008F476F /* ic_carplay_map_markers_night@2x.png */; };
-		465B935629BF7805008F476F /* ic_carplay_map_markers_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934A29BF7804008F476F /* ic_carplay_map_markers_night@3x.png */; };
-		465B935729BF7805008F476F /* ic_carplay_favorites_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934B29BF7804008F476F /* ic_carplay_favorites_night@3x.png */; };
-		465B935829BF7805008F476F /* ic_carplay_poi_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934C29BF7804008F476F /* ic_carplay_poi_night@3x.png */; };
-		465B935929BF7805008F476F /* ic_carplay_poi_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934D29BF7804008F476F /* ic_carplay_poi_night@2x.png */; };
-		465B935A29BF7805008F476F /* ic_carplay_search_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934E29BF7804008F476F /* ic_carplay_search_night@2x.png */; };
-		465B935B29BF7805008F476F /* ic_carplay_search_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B934F29BF7805008F476F /* ic_carplay_search_night@3x.png */; };
-		465B935C29BF7805008F476F /* ic_carplay_tracks_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B935029BF7805008F476F /* ic_carplay_tracks_night@2x.png */; };
-		465B935D29BF7805008F476F /* ic_carplay_tracks_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465B935129BF7805008F476F /* ic_carplay_tracks_night@3x.png */; };
 		465C1F992ABB6D09001B99FA /* ic_navbar_list@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465C1F972ABB6D08001B99FA /* ic_navbar_list@2x.png */; };
 		465C1F9A2ABB6D09001B99FA /* ic_navbar_list@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 465C1F982ABB6D08001B99FA /* ic_navbar_list@3x.png */; };
 		465D7E21295494000099B206 /* OATextMultilineTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */; };
@@ -2969,16 +2951,6 @@
 		DA86AF7626454AC600627B66 /* left_menu_icon_plugins@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA86AF7426454AC600627B66 /* left_menu_icon_plugins@2x.png */; };
 		DA8713212994F64A0087BC7F /* regions.ocbf in Resources */ = {isa = PBXBuildFile; fileRef = DA8713202994F6490087BC7F /* regions.ocbf */; };
 		DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */ = {isa = PBXBuildFile; fileRef = DA879FD7227C23C5007E7817 /* hu-formal_tts.js */; };
-		DA8A927F25DE8B4A00F5320A /* ic_carplay_favorites@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927525DE8B4700F5320A /* ic_carplay_favorites@3x.png */; };
-		DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927625DE8B4800F5320A /* ic_carplay_search@2x.png */; };
-		DA8A928125DE8B4A00F5320A /* ic_carplay_search@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927725DE8B4800F5320A /* ic_carplay_search@3x.png */; };
-		DA8A928225DE8B4A00F5320A /* ic_carplay_favorites@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927825DE8B4800F5320A /* ic_carplay_favorites@2x.png */; };
-		DA8A928325DE8B4A00F5320A /* ic_carplay_tracks@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927925DE8B4800F5320A /* ic_carplay_tracks@3x.png */; };
-		DA8A928425DE8B4A00F5320A /* ic_carplay_tracks@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927A25DE8B4800F5320A /* ic_carplay_tracks@2x.png */; };
-		DA8A928525DE8B4A00F5320A /* ic_carplay_map_markers@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927B25DE8B4900F5320A /* ic_carplay_map_markers@3x.png */; };
-		DA8A928625DE8B4A00F5320A /* ic_carplay_poi@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927C25DE8B4900F5320A /* ic_carplay_poi@3x.png */; };
-		DA8A928725DE8B4A00F5320A /* ic_carplay_map_markers@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927D25DE8B4900F5320A /* ic_carplay_map_markers@2x.png */; };
-		DA8A928825DE8B4A00F5320A /* ic_carplay_poi@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8A927E25DE8B4A00F5320A /* ic_carplay_poi@2x.png */; };
 		DA8AD07C291D3A850092385B /* ic_custom_cloud_download_outline@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8AD078291D3A830092385B /* ic_custom_cloud_download_outline@3x.png */; };
 		DA8AD07D291D3A850092385B /* ic_custom_cloud_download_outline@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8AD079291D3A830092385B /* ic_custom_cloud_download_outline@2x.png */; };
 		DA8AD07E291D3A850092385B /* ic_custom_cloud_upload_outline@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DA8AD07A291D3A830092385B /* ic_custom_cloud_upload_outline@3x.png */; };
@@ -3112,12 +3084,6 @@
 		DAC849B926CFAD9900018091 /* img_download_map_colored@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC849B726CFAD9900018091 /* img_download_map_colored@2x.png */; };
 		DAC849BA26CFAD9900018091 /* img_download_map_colored@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAC849B826CFAD9900018091 /* img_download_map_colored@3x.png */; };
 		DACBB96425D2BEA300378C47 /* CarPlay.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DACBB96325D2BEA200378C47 /* CarPlay.framework */; };
-		DACBB99325D690DC00378C47 /* btn_map_zoom_in_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB98D25D690D900378C47 /* btn_map_zoom_in_day@2x.png */; };
-		DACBB99425D690DC00378C47 /* btn_map_zoom_out_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB98E25D690D900378C47 /* btn_map_zoom_out_day@2x.png */; };
-		DACBB99525D690DC00378C47 /* btn_map_zoom_out_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB98F25D690D900378C47 /* btn_map_zoom_out_day@3x.png */; };
-		DACBB99625D690DC00378C47 /* btn_map_zoom_in_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB99025D690DB00378C47 /* btn_map_zoom_in_day@3x.png */; };
-		DACBB99D25D6979900378C47 /* btn_map_current_location_day@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB99A25D6979800378C47 /* btn_map_current_location_day@2x.png */; };
-		DACBB99F25D6979900378C47 /* btn_map_current_location_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DACBB99C25D6979800378C47 /* btn_map_current_location_day@3x.png */; };
 		DACF784427E3441700A8A218 /* OABackupHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = DACF784327E3441600A8A218 /* OABackupHelper.mm */; };
 		DAD2203E2913AF010052B967 /* OATableCollapsableRowData.m in Sources */ = {isa = PBXBuildFile; fileRef = DAD2203D2913AF010052B967 /* OATableCollapsableRowData.m */; };
 		DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAD3FD122A4599F500BFA03A /* WidgetConfigurationViewController.swift */; };
@@ -3340,10 +3306,6 @@
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
-		FAF7920A2A77F80900CE5F79 /* ic_carplay_navigation@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */; };
-		FAF7920B2A77F80900CE5F79 /* ic_carplay_navigation_night@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */; };
-		FAF7920C2A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */; };
-		FAF7920D2A77F80900CE5F79 /* ic_carplay_navigation@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */; };
 		FAF7920F2A780F2500CE5F79 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */; };
 /* End PBXBuildFile section */
 
@@ -4027,10 +3989,6 @@
 		460743A728C10B2900F13A7A /* OAOsmLoginMainViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAOsmLoginMainViewController.xib; sourceTree = "<group>"; };
 		460767112A49F86400AF63F2 /* WikiAlgorithms.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiAlgorithms.swift; sourceTree = "<group>"; };
 		460E9AC02B71111000411854 /* CloudTrashItemMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudTrashItemMenuViewController.swift; sourceTree = "<group>"; };
-		460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_2d_mode@3x.png"; path = "Resources/Icons/btn_map_2d_mode@3x.png"; sourceTree = "<group>"; };
-		460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_3d_mode@2x.png"; path = "Resources/Icons/btn_map_3d_mode@2x.png"; sourceTree = "<group>"; };
-		460EC9E22B1F3103006BE95A /* btn_map_2d_mode@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_2d_mode@2x.png"; path = "Resources/Icons/btn_map_2d_mode@2x.png"; sourceTree = "<group>"; };
-		460EC9E32B1F3104006BE95A /* btn_map_3d_mode@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_3d_mode@3x.png"; path = "Resources/Icons/btn_map_3d_mode@3x.png"; sourceTree = "<group>"; };
 		4611DF3928569C5000885FD1 /* OASubscriptionBannerCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionBannerCardView.xib; sourceTree = "<group>"; };
 		4613BF9E2A93DECA004385FB /* ic_custom_screen_side_right_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_right_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_right_48@2x.png"; sourceTree = "<group>"; };
 		4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_screen_side_bottom_48@2x.png"; path = "Resources/Icons/ic_custom_screen_side_bottom_48@2x.png"; sourceTree = "<group>"; };
@@ -4071,8 +4029,6 @@
 		462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountCommand.swift; sourceTree = "<group>"; };
 		462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = OAOsmLiveFeaturesCardView.xib; sourceTree = "<group>"; };
 		462F13EA283FD0D300B73795 /* OAOsmLiveFeaturesCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmLiveFeaturesCardView.m; sourceTree = "<group>"; };
-		4631377329AE6CB3000B0258 /* ic_carplay_history@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history@3x.png"; path = "Resources/Icons/CarPlay/ic_carplay_history@3x.png"; sourceTree = "<group>"; };
-		4631377429AE6CB3000B0258 /* ic_carplay_history@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history@2x.png"; path = "Resources/Icons/CarPlay/ic_carplay_history@2x.png"; sourceTree = "<group>"; };
 		4631377729AE6D45000B0258 /* OACarPlayHistoryListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayHistoryListController.h; sourceTree = "<group>"; };
 		4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayHistoryListController.mm; sourceTree = "<group>"; };
 		46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherForecastViewController.xib; sourceTree = "<group>"; };
@@ -4157,18 +4113,6 @@
 		4657490D2B6803710006046B /* TrashItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashItem.swift; sourceTree = "<group>"; };
 		4657490F2B68129B0006046B /* BackupUiUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackupUiUtils.swift; sourceTree = "<group>"; };
 		465749112B681E620006046B /* TrashGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashGroup.swift; sourceTree = "<group>"; };
-		465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@3x.png"; path = "Resources/Icons/ic_carplay_history_night@3x.png"; sourceTree = "<group>"; };
-		465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_history_night@2x.png"; path = "Resources/Icons/ic_carplay_history_night@2x.png"; sourceTree = "<group>"; };
-		465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_favorites_night@2x.png"; path = "Resources/Icons/ic_carplay_favorites_night@2x.png"; sourceTree = "<group>"; };
-		465B934929BF7804008F476F /* ic_carplay_map_markers_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_map_markers_night@2x.png"; path = "Resources/Icons/ic_carplay_map_markers_night@2x.png"; sourceTree = "<group>"; };
-		465B934A29BF7804008F476F /* ic_carplay_map_markers_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_map_markers_night@3x.png"; path = "Resources/Icons/ic_carplay_map_markers_night@3x.png"; sourceTree = "<group>"; };
-		465B934B29BF7804008F476F /* ic_carplay_favorites_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_favorites_night@3x.png"; path = "Resources/Icons/ic_carplay_favorites_night@3x.png"; sourceTree = "<group>"; };
-		465B934C29BF7804008F476F /* ic_carplay_poi_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_poi_night@3x.png"; path = "Resources/Icons/ic_carplay_poi_night@3x.png"; sourceTree = "<group>"; };
-		465B934D29BF7804008F476F /* ic_carplay_poi_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_poi_night@2x.png"; path = "Resources/Icons/ic_carplay_poi_night@2x.png"; sourceTree = "<group>"; };
-		465B934E29BF7804008F476F /* ic_carplay_search_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_search_night@2x.png"; path = "Resources/Icons/ic_carplay_search_night@2x.png"; sourceTree = "<group>"; };
-		465B934F29BF7805008F476F /* ic_carplay_search_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_search_night@3x.png"; path = "Resources/Icons/ic_carplay_search_night@3x.png"; sourceTree = "<group>"; };
-		465B935029BF7805008F476F /* ic_carplay_tracks_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_tracks_night@2x.png"; path = "Resources/Icons/ic_carplay_tracks_night@2x.png"; sourceTree = "<group>"; };
-		465B935129BF7805008F476F /* ic_carplay_tracks_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_carplay_tracks_night@3x.png"; path = "Resources/Icons/ic_carplay_tracks_night@3x.png"; sourceTree = "<group>"; };
 		465C1F972ABB6D08001B99FA /* ic_navbar_list@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_list@2x.png"; path = "Resources/Icons/ic_navbar_list@2x.png"; sourceTree = "<group>"; };
 		465C1F982ABB6D08001B99FA /* ic_navbar_list@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_list@3x.png"; path = "Resources/Icons/ic_navbar_list@3x.png"; sourceTree = "<group>"; };
 		465D7E1E295493DF0099B206 /* OATextMultilineTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATextMultilineTableViewCell.h; sourceTree = "<group>"; };
@@ -7518,16 +7462,6 @@
 		DA86AF7426454AC600627B66 /* left_menu_icon_plugins@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_icon_plugins@2x.png"; path = "Resources/Icons/left_menu_icon_plugins@2x.png"; sourceTree = "<group>"; };
 		DA8713202994F6490087BC7F /* regions.ocbf */ = {isa = PBXFileReference; lastKnownFileType = file; name = regions.ocbf; path = Resources/Shipped/regions.ocbf; sourceTree = "<group>"; };
 		DA879FD7227C23C5007E7817 /* hu-formal_tts.js */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.javascript; name = "hu-formal_tts.js"; path = "../resources/voice/hu-formal/hu-formal_tts.js"; sourceTree = "<group>"; };
-		DA8A927525DE8B4700F5320A /* ic_carplay_favorites@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_favorites@3x.png"; sourceTree = "<group>"; };
-		DA8A927625DE8B4800F5320A /* ic_carplay_search@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_search@2x.png"; sourceTree = "<group>"; };
-		DA8A927725DE8B4800F5320A /* ic_carplay_search@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_search@3x.png"; sourceTree = "<group>"; };
-		DA8A927825DE8B4800F5320A /* ic_carplay_favorites@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_favorites@2x.png"; sourceTree = "<group>"; };
-		DA8A927925DE8B4800F5320A /* ic_carplay_tracks@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_tracks@3x.png"; sourceTree = "<group>"; };
-		DA8A927A25DE8B4800F5320A /* ic_carplay_tracks@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_tracks@2x.png"; sourceTree = "<group>"; };
-		DA8A927B25DE8B4900F5320A /* ic_carplay_map_markers@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_map_markers@3x.png"; sourceTree = "<group>"; };
-		DA8A927C25DE8B4900F5320A /* ic_carplay_poi@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_poi@3x.png"; sourceTree = "<group>"; };
-		DA8A927D25DE8B4900F5320A /* ic_carplay_map_markers@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_map_markers@2x.png"; sourceTree = "<group>"; };
-		DA8A927E25DE8B4A00F5320A /* ic_carplay_poi@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_poi@2x.png"; sourceTree = "<group>"; };
 		DA8AD078291D3A830092385B /* ic_custom_cloud_download_outline@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_download_outline@3x.png"; path = "Resources/Icons/ic_custom_cloud_download_outline@3x.png"; sourceTree = "<group>"; };
 		DA8AD079291D3A830092385B /* ic_custom_cloud_download_outline@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_download_outline@2x.png"; path = "Resources/Icons/ic_custom_cloud_download_outline@2x.png"; sourceTree = "<group>"; };
 		DA8AD07A291D3A830092385B /* ic_custom_cloud_upload_outline@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cloud_upload_outline@3x.png"; path = "Resources/Icons/ic_custom_cloud_upload_outline@3x.png"; sourceTree = "<group>"; };
@@ -7682,12 +7616,6 @@
 		DAC849B726CFAD9900018091 /* img_download_map_colored@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_download_map_colored@2x.png"; path = "Resources/Icons/img_download_map_colored@2x.png"; sourceTree = "<group>"; };
 		DAC849B826CFAD9900018091 /* img_download_map_colored@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_download_map_colored@3x.png"; path = "Resources/Icons/img_download_map_colored@3x.png"; sourceTree = "<group>"; };
 		DACBB96325D2BEA200378C47 /* CarPlay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CarPlay.framework; path = System/Library/Frameworks/CarPlay.framework; sourceTree = SDKROOT; };
-		DACBB98D25D690D900378C47 /* btn_map_zoom_in_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_zoom_in_day@2x.png"; path = "Resources/Icons/btn_map_zoom_in_day@2x.png"; sourceTree = "<group>"; };
-		DACBB98E25D690D900378C47 /* btn_map_zoom_out_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_zoom_out_day@2x.png"; path = "Resources/Icons/btn_map_zoom_out_day@2x.png"; sourceTree = "<group>"; };
-		DACBB98F25D690D900378C47 /* btn_map_zoom_out_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_zoom_out_day@3x.png"; path = "Resources/Icons/btn_map_zoom_out_day@3x.png"; sourceTree = "<group>"; };
-		DACBB99025D690DB00378C47 /* btn_map_zoom_in_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_zoom_in_day@3x.png"; path = "Resources/Icons/btn_map_zoom_in_day@3x.png"; sourceTree = "<group>"; };
-		DACBB99A25D6979800378C47 /* btn_map_current_location_day@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_current_location_day@2x.png"; path = "Resources/Icons/btn_map_current_location_day@2x.png"; sourceTree = "<group>"; };
-		DACBB99C25D6979800378C47 /* btn_map_current_location_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "btn_map_current_location_day@3x.png"; path = "Resources/Icons/btn_map_current_location_day@3x.png"; sourceTree = "<group>"; };
 		DACF784227E3441600A8A218 /* OABackupHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABackupHelper.h; sourceTree = "<group>"; };
 		DACF784327E3441600A8A218 /* OABackupHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OABackupHelper.mm; sourceTree = "<group>"; };
 		DAD2203C2913AF010052B967 /* OATableCollapsableRowData.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATableCollapsableRowData.h; sourceTree = "<group>"; };
@@ -7920,10 +7848,6 @@
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
-		FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation@3x.png"; sourceTree = "<group>"; };
-		FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation_night@2x.png"; sourceTree = "<group>"; };
-		FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation_night@3x.png"; sourceTree = "<group>"; };
-		FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ic_carplay_navigation@2x.png"; sourceTree = "<group>"; };
 		FAF7920E2A780F2500CE5F79 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -8313,18 +8237,6 @@
 				32E2D2FE29B9DB5500A17D0B /* ic_custom_coordinates_location@3x.png */,
 				32E2D2FF29B9DB5600A17D0B /* ic_custom_coordinates_map_center@2x.png */,
 				32E2D30029B9DB5600A17D0B /* ic_custom_coordinates_map_center@3x.png */,
-				465B934829BF7803008F476F /* ic_carplay_favorites_night@2x.png */,
-				465B934B29BF7804008F476F /* ic_carplay_favorites_night@3x.png */,
-				465B934729BF7803008F476F /* ic_carplay_history_night@2x.png */,
-				465B934629BF7803008F476F /* ic_carplay_history_night@3x.png */,
-				465B934929BF7804008F476F /* ic_carplay_map_markers_night@2x.png */,
-				465B934A29BF7804008F476F /* ic_carplay_map_markers_night@3x.png */,
-				465B934D29BF7804008F476F /* ic_carplay_poi_night@2x.png */,
-				465B934C29BF7804008F476F /* ic_carplay_poi_night@3x.png */,
-				465B934E29BF7804008F476F /* ic_carplay_search_night@2x.png */,
-				465B934F29BF7805008F476F /* ic_carplay_search_night@3x.png */,
-				465B935029BF7805008F476F /* ic_carplay_tracks_night@2x.png */,
-				465B935129BF7805008F476F /* ic_carplay_tracks_night@3x.png */,
 				C558A29929B1355900E79DDB /* ic_custom_direction_manual_day@2x.png */,
 				C558A29A29B1355A00E79DDB /* ic_custom_direction_manual_day@3x.png */,
 				C558A29529B1355800E79DDB /* ic_custom_direction_manual_night@2x.png */,
@@ -8333,8 +8245,6 @@
 				C558A29829B1355900E79DDB /* ic_custom_direction_manual@3x.png */,
 				46B9E79829B23B8200FA802D /* ic_custom_export_outlined@2x.png */,
 				46B9E79729B23B8100FA802D /* ic_custom_export_outlined@3x.png */,
-				4631377429AE6CB3000B0258 /* ic_carplay_history@2x.png */,
-				4631377329AE6CB3000B0258 /* ic_carplay_history@3x.png */,
 				32210DAE298929AF005D16CB /* ic_custom_map_pin_outlined@2x.png */,
 				32210DB0298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png */,
 				32210DAF298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@2x.png */,
@@ -8530,12 +8440,6 @@
 				844499871AAA1FFA00ACA20D /* bt_bought_addon@3x.png */,
 				8444994A1AAA1FC000ACA20D /* bt_buy_addon@2x.png */,
 				8444994B1AAA1FC000ACA20D /* bt_buy_addon@3x.png */,
-				DACBB99A25D6979800378C47 /* btn_map_current_location_day@2x.png */,
-				DACBB99C25D6979800378C47 /* btn_map_current_location_day@3x.png */,
-				DACBB98D25D690D900378C47 /* btn_map_zoom_in_day@2x.png */,
-				DACBB99025D690DB00378C47 /* btn_map_zoom_in_day@3x.png */,
-				DACBB98E25D690D900378C47 /* btn_map_zoom_out_day@2x.png */,
-				DACBB98F25D690D900378C47 /* btn_map_zoom_out_day@3x.png */,
 				DA4C50EA25DD604E0096B60A /* CarPlay */,
 				8441CB211B1370580033AC95 /* change_item_color@2x.png */,
 				8441CB221B1370580033AC95 /* change_item_color@3x.png */,
@@ -8588,10 +8492,6 @@
 				DA84E84821D77EE0006954D0 /* ic_action_osmand_logo_banner@3x.png */,
 				DAB048EF21CB729000275456 /* ic_action_plus@2x.png */,
 				DAB048F121CB729000275456 /* ic_action_plus@3x.png */,
-				460EC9E22B1F3103006BE95A /* btn_map_2d_mode@2x.png */,
-				460EC9E02B1F3102006BE95A /* btn_map_2d_mode@3x.png */,
-				460EC9E12B1F3102006BE95A /* btn_map_3d_mode@2x.png */,
-				460EC9E32B1F3104006BE95A /* btn_map_3d_mode@3x.png */,
 				465C1F972ABB6D08001B99FA /* ic_navbar_list@2x.png */,
 				465C1F982ABB6D08001B99FA /* ic_navbar_list@3x.png */,
 				4613BF9F2A93DECA004385FB /* ic_custom_screen_side_bottom_48@2x.png */,
@@ -10645,16 +10545,6 @@
 			isa = PBXGroup;
 			children = (
 				DA0D15DA281BEEF400CEEF58 /* DirectionArrows */,
-				DA8A927825DE8B4800F5320A /* ic_carplay_favorites@2x.png */,
-				DA8A927525DE8B4700F5320A /* ic_carplay_favorites@3x.png */,
-				DA8A927D25DE8B4900F5320A /* ic_carplay_map_markers@2x.png */,
-				DA8A927B25DE8B4900F5320A /* ic_carplay_map_markers@3x.png */,
-				DA8A927E25DE8B4A00F5320A /* ic_carplay_poi@2x.png */,
-				DA8A927C25DE8B4900F5320A /* ic_carplay_poi@3x.png */,
-				DA8A927625DE8B4800F5320A /* ic_carplay_search@2x.png */,
-				DA8A927725DE8B4800F5320A /* ic_carplay_search@3x.png */,
-				DA8A927A25DE8B4800F5320A /* ic_carplay_tracks@2x.png */,
-				DA8A927925DE8B4800F5320A /* ic_carplay_tracks@3x.png */,
 			);
 			name = CarPlay;
 			path = Resources/Icons/CarPlay;
@@ -14141,10 +14031,6 @@
 		FAF792052A77F7F000CE5F79 /* CarPlay */ = {
 			isa = PBXGroup;
 			children = (
-				FAF792072A77F80800CE5F79 /* ic_carplay_navigation_night@2x.png */,
-				FAF792082A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png */,
-				FAF792092A77F80900CE5F79 /* ic_carplay_navigation@2x.png */,
-				FAF792062A77F80800CE5F79 /* ic_carplay_navigation@3x.png */,
 			);
 			path = CarPlay;
 			sourceTree = "<group>";
@@ -14349,7 +14235,6 @@
 				84F3A9631B4ECF2700D16EBC /* ic_trip_visitedpoint@3x.png in Resources */,
 				848A14D61B223A4C00A31AE7 /* bg_title@2x.png in Resources */,
 				DA1BC120233F9B01004DAF78 /* ic_custom_search@2x.png in Resources */,
-				465B935529BF7805008F476F /* ic_carplay_map_markers_night@2x.png in Resources */,
 				DAD3FD212A49925600BFA03A /* ic_action_ruler_circle_hide@2x.png in Resources */,
 				847F8FD11EE07CFC00CF5EA5 /* ic_search_empty_state@3x.png in Resources */,
 				8433947B1FF4FA38006205A5 /* ding.aiff in Resources */,
@@ -14388,7 +14273,6 @@
 				46B4A7D92841183D008AE194 /* ic_custom_label_sale@3x.png in Resources */,
 				8454DA2A1B2F172C00E5A5C5 /* menu_direction_icon_2@2x.png in Resources */,
 				323BD8ED2628850400D255ED /* ic_bg_point_comment_bottom@3x.png in Resources */,
-				DA8A928525DE8B4A00F5320A /* ic_carplay_map_markers@3x.png in Resources */,
 				DA1340B2243DC5A70039D214 /* ic_action_skiing@3x.png in Resources */,
 				DA1340D4243DC5A80039D214 /* ic_action_trekking_dark@3x.png in Resources */,
 				DAB048F621CB729100275456 /* ic_action_plus@3x.png in Resources */,
@@ -14503,7 +14387,6 @@
 				DA1994B3224CDAF200B25BB0 /* ic_custom_delete@2x.png in Resources */,
 				3296B4A327F8790800108AF7 /* ic_custom_terrain_flat@3x.png in Resources */,
 				46453B2528352449001F9A3A /* ic_custom_osmand_pro_logo_colored_big@3x.png in Resources */,
-				DA8A928025DE8B4A00F5320A /* ic_carplay_search@2x.png in Resources */,
 				DA7FA55E2695DCFB0044F05A /* fi_tts.js in Resources */,
 				DAC849B626CF97EE00018091 /* OADownloadMapWidget.xib in Resources */,
 				46E9AD9428DC89DD00CC55F9 /* OASwitchTableViewCell.xib in Resources */,
@@ -14559,7 +14442,6 @@
 				0AD1F3AB26CC034900EE4DFD /* ic_custom_multi_download@2x.png in Resources */,
 				DA1341C6243DC5A90039D214 /* ic_action_sail_boat_dark@3x.png in Resources */,
 				DA03184222DF0E50008FC564 /* ic_custom_boat@2x.png in Resources */,
-				465B935429BF7805008F476F /* ic_carplay_favorites_night@2x.png in Resources */,
 				8433947F1FF4FA38006205A5 /* inclination_left.aiff in Resources */,
 				46BA4848281C2F3500C04F14 /* ic_custom_poi_name@3x.png in Resources */,
 				4613BFA92A93DECC004385FB /* ic_custom_screen_side_left_48@3x.png in Resources */,
@@ -14623,7 +14505,6 @@
 				15BDDE9C24DAF3A800079C83 /* ic_custom_copy@2x.png in Resources */,
 				DA5A827326C563A700F274C7 /* OAPublicTransportRouteShieldCell.xib in Resources */,
 				326B4FB4257FD0FC00ABAB1D /* ic_action_motorboat@3x.png in Resources */,
-				465B935A29BF7805008F476F /* ic_carplay_search_night@2x.png in Resources */,
 				DA68B3A8233B81DB00F5ACCC /* ic_custom_fuel@2x.png in Resources */,
 				DA0D1625281BEEF500CEEF58 /* map_turn_slight_right_dark@3x.png in Resources */,
 				DA357C5122A636CC00A1F82D /* ic_custom_coordinates@2x.png in Resources */,
@@ -14649,7 +14530,6 @@
 				BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */,
 				FA44BF3F2A71123D000D2F5F /* ic_custom_osmand_start_logo_big@2x.png in Resources */,
 				8A7672232281A5150098DE84 /* ic_action_location_color@3x.png in Resources */,
-				DACBB99625D690DC00378C47 /* btn_map_zoom_in_day@3x.png in Resources */,
 				323BD8F92628850400D255ED /* ic_bg_point_comment_center@3x.png in Resources */,
 				DA5A82D026C563A800F274C7 /* OADeviceScreenTableViewCell.xib in Resources */,
 				DA1340CE243DC5A70039D214 /* ic_action_taxi@2x.png in Resources */,
@@ -14681,7 +14561,6 @@
 				8463101E1A8E8951005B39F2 /* Images.xcassets in Resources */,
 				DA5A841126C563A800F274C7 /* OATargetAddressViewController.xib in Resources */,
 				DA835FFE23438512003374B5 /* ic_small_arrow_down@2x.png in Resources */,
-				465B935729BF7805008F476F /* ic_carplay_favorites_night@3x.png in Resources */,
 				DAAE21E62269D6010006E016 /* ic_custom_my_places@3x.png in Resources */,
 				DA5A82A726C563A700F274C7 /* OAGPXRecTableViewCell.xib in Resources */,
 				8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */,
@@ -14692,7 +14571,6 @@
 				32210DB4298929B0005D16CB /* ic_custom_map_pin_outlined@3x.png in Resources */,
 				DA5F6A13245844A100C7DF71 /* map_public_transport_transfer@2x.png in Resources */,
 				843257881A9DADE300A7964E /* ic_gpx_points@2x.png in Resources */,
-				DA8A928325DE8B4A00F5320A /* ic_carplay_tracks@3x.png in Resources */,
 				DABA3DE922686E72005BB777 /* ic_tabbar_favorites@3x.png in Resources */,
 				DAEC05F32296C6C500045298 /* ic_custom_trouble@2x.png in Resources */,
 				323BD8EA2628850400D255ED /* ic_bg_point_octagon_center_small@2x.png in Resources */,
@@ -14725,7 +14603,6 @@
 				46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */,
 				0CF5859D2440745F0081238D /* ic_custom_direction_widget_two@3x.png in Resources */,
 				84451A371AA050B3003F4D8D /* ic_close@3x.png in Resources */,
-				465B935D29BF7805008F476F /* ic_carplay_tracks_night@3x.png in Resources */,
 				0CF585952440745F0081238D /* ic_custom_direction_widget_one@3x.png in Resources */,
 				8441CB551B1370580033AC95 /* move_items@3x.png in Resources */,
 				DAC588662108996C008B7763 /* nl_tts.js in Resources */,
@@ -14813,10 +14690,8 @@
 				32119B4728477CC8005E1E0C /* img_plugin_mapillary.jpg in Resources */,
 				84E442101AF8A07500F87542 /* track_new_segement@2x.png in Resources */,
 				8476E2D61F6C1EEC00EC274F /* map_pedestrian_location_view_angle_night@3x.png in Resources */,
-				460EC9E72B1F3104006BE95A /* btn_map_3d_mode@3x.png in Resources */,
 				DA2EC7D529FFB76A00ECEB37 /* ic_custom_screen_side_bottom@2x.png in Resources */,
 				DA8EE7F8246D446400069A6D /* ic_custom_no_route@3x.png in Resources */,
-				DA8A927F25DE8B4A00F5320A /* ic_carplay_favorites@3x.png in Resources */,
 				C5879A49299FB96300F53249 /* uk_tts.js in Resources */,
 				323BD9092628850400D255ED /* ic_bg_point_circle_bottom@2x.png in Resources */,
 				323BD90D2628850400D255ED /* ic_bg_point_square_top@3x.png in Resources */,
@@ -15218,7 +15093,6 @@
 				DA0D163D281BEEF500CEEF58 /* map_turn_sharp_left@3x.png in Resources */,
 				157F3CF024A23A94000A66F0 /* ic_custom_undo_button@3x.png in Resources */,
 				8476E2B01F6C1EEC00EC274F /* map_default_location@2x.png in Resources */,
-				FAF7920B2A77F80900CE5F79 /* ic_carplay_navigation_night@2x.png in Resources */,
 				DAF3454722F4482B009E2EB6 /* ic_custom_compound_action_background@2x.png in Resources */,
 				DA5A843926C563A800F274C7 /* OAChangePositionViewController.xib in Resources */,
 				DA5A83A026C563A800F274C7 /* OAOsmEditTargetViewController.xib in Resources */,
@@ -15259,7 +15133,6 @@
 				8A7672212281A5150098DE84 /* ic_action_location_color@2x.png in Resources */,
 				8A755A5F21CBF92400E42699 /* ic_live_nautical_depth@3x.png in Resources */,
 				3AC639E51A2200E6001D5E57 /* icon_favorite_direction@2x.png in Resources */,
-				460EC9E42B1F3104006BE95A /* btn_map_2d_mode@3x.png in Resources */,
 				DA32845226CBC0460036BA73 /* ic_custom_stop@2x.png in Resources */,
 				97EF50D92AB1D926005E861B /* map_action_paragliding@3x.png in Resources */,
 				DA6D0792255173C5004FE017 /* ic_custom_add_point_after@3x.png in Resources */,
@@ -15300,12 +15173,10 @@
 				DA1341BA243DC5A90039D214 /* map_action_openstreetmap_logo@2x.png in Resources */,
 				4613BFAA2A93DECC004385FB /* ic_custom_screen_side_left_48@2x.png in Resources */,
 				DA1341C0243DC5A90039D214 /* ic_action_bicycle_dark@3x.png in Resources */,
-				465B935229BF7805008F476F /* ic_carplay_history_night@3x.png in Resources */,
 				FA9628E22AFCFB57004B7DEF /* SectionHeaderFooterButton.xib in Resources */,
 				DA32846726CBF76B0036BA73 /* img_plugin_wikipedia.jpg in Resources */,
 				DAE08335253F0953009B5A11 /* ic_custom_save_to_file@2x.png in Resources */,
 				3296B48627F8790800108AF7 /* ic_navbar_pencil@3x.png in Resources */,
-				4631377529AE6CB3000B0258 /* ic_carplay_history@3x.png in Resources */,
 				DAA8890B241BCD2A0057722C /* ic_small_arrow_forward@3x.png in Resources */,
 				DA52CDEB24AE087F00CC309D /* img_help_width_limit_day@3x.png in Resources */,
 				DA0D1633281BEEF500CEEF58 /* map_turn_roundabout_right@2x.png in Resources */,
@@ -15346,7 +15217,6 @@
 				DA1340B6243DC5A70039D214 /* map_action_car_dark@3x.png in Resources */,
 				8A755A7721CBF92400E42699 /* ic_live_wikivoyage@2x.png in Resources */,
 				8476E2DC1F6C1EEC00EC274F /* map_pedestrian_location_view_angle@3x.png in Resources */,
-				DA8A928225DE8B4A00F5320A /* ic_carplay_favorites@2x.png in Resources */,
 				0CEF2C3F24B7237800BAAC4B /* ic_action_wheelchair@3x.png in Resources */,
 				8476E28C1F6C1EEC00EC274F /* map_car_location_view_angle_night@2x.png in Resources */,
 				84C41DF51AB8600D0089EABB /* ic_destination_pin_2@2x.png in Resources */,
@@ -15408,7 +15278,6 @@
 				DA2EC78929FBBE0400ECEB37 /* warnings_railways_us@2x.png in Resources */,
 				DA5A828426C563A700F274C7 /* OAHomeWorkCollectionViewCell.xib in Resources */,
 				323BD9032628850400D255ED /* ic_bg_point_circle_bottom_small@3x.png in Resources */,
-				DACBB99F25D6979900378C47 /* btn_map_current_location_day@3x.png in Resources */,
 				DA134100243DC5A80039D214 /* ic_action_aircraft@2x.png in Resources */,
 				464C9B4428E49793006F57B7 /* ic_custom_globe_upload@3x.png in Resources */,
 				DAE08339253F0953009B5A11 /* ic_custom_add_to_track@3x.png in Resources */,
@@ -15462,7 +15331,6 @@
 				DA134200243DC5A90039D214 /* ic_action_snowmobile@3x.png in Resources */,
 				845E06A61B5FF17400DFC2A7 /* ic_plugin_parking@2x.png in Resources */,
 				8476E28E1F6C1EEC00EC274F /* map_car_location_view_angle_night@3x.png in Resources */,
-				FAF7920A2A77F80900CE5F79 /* ic_carplay_navigation@3x.png in Resources */,
 				B24745C127F862C300C18C3F /* OAWeatherLayerSettingsViewController.xib in Resources */,
 				46BA4841281C2EF900C04F14 /* ic_custom_internet_access_fee@3x.png in Resources */,
 				8490B1DD2068E22B007694A5 /* ic_small_turn_right@2x.png in Resources */,
@@ -15494,7 +15362,6 @@
 				DA13A02B2345FA0100C1A1A8 /* ic_custom_forbid_private_access@3x.png in Resources */,
 				DA32846826CBF76B0036BA73 /* img_plugin_trip_recording.jpg in Resources */,
 				DA0D1643281BEEF500CEEF58 /* map_turn_left@2x.png in Resources */,
-				460EC9E52B1F3104006BE95A /* btn_map_3d_mode@2x.png in Resources */,
 				DA23424A23477F33003911B8 /* ic_custom_undo@3x.png in Resources */,
 				46453AED28352375001F9A3A /* ic_custom_carplay_colored_big@3x.png in Resources */,
 				C5ACFCD72AD59F6E00EA92F6 /* list_warnings_tunnel@2x.png in Resources */,
@@ -15536,7 +15403,6 @@
 				DAB625B12125A8E700E6AF2E /* ko_tts.js in Resources */,
 				DA1341E4243DC5A90039D214 /* ic_action_subway@2x.png in Resources */,
 				46453B2B2835245F001F9A3A /* ic_custom_pro_features_colored@3x.png in Resources */,
-				FAF7920D2A77F80900CE5F79 /* ic_carplay_navigation@2x.png in Resources */,
 				DAB172C82229221F00041307 /* ic_custom_edit@3x.png in Resources */,
 				DA134120243DC5A80039D214 /* ic_action_personal_transporter@3x.png in Resources */,
 				DA68B3E7233B822F00F5ACCC /* ic_profile_browsemap@2x.png in Resources */,
@@ -15577,7 +15443,6 @@
 				DA45DA74230EE05A0083DFA2 /* img_mapstyle_offroad@3x.png in Resources */,
 				DA518838217F5642007FCC47 /* ic_ruler_center@3x.png in Resources */,
 				05028F7B2A12A12A003FECD0 /* slopes_main.txt in Resources */,
-				DACBB99D25D6979900378C47 /* btn_map_current_location_day@2x.png in Resources */,
 				DA13419C243DC5A80039D214 /* ic_action_utv@2x.png in Resources */,
 				DA2EC7D929FFB76A00ECEB37 /* ic_navbar_screen_side_bottom@2x.png in Resources */,
 				84D81EE51AA30404001098FD /* ic_destination_arrow_small@2x.png in Resources */,
@@ -15720,7 +15585,6 @@
 				461A3F0429F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib in Resources */,
 				845E06A91B5FF17400DFC2A7 /* ic_plugin_parking@3x.png in Resources */,
 				4613BFA82A93DECC004385FB /* ic_custom_screen_side_right_48@3x.png in Resources */,
-				465B935C29BF7805008F476F /* ic_carplay_tracks_night@2x.png in Resources */,
 				8415030D1DEED6AE007FAC50 /* ic_wifi_off@2x.png in Resources */,
 				C5879A4F299FC8AC00F53249 /* sl_tts.js in Resources */,
 				3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */,
@@ -15729,7 +15593,6 @@
 				843E5CFF1AB341E000BE14BE /* icon_remove@3x.png in Resources */,
 				323BD8F22628850400D255ED /* ic_bg_point_square_top_small@3x.png in Resources */,
 				DA83602B23449C6B003374B5 /* ic_custom_options@2x.png in Resources */,
-				DA8A928125DE8B4A00F5320A /* ic_carplay_search@3x.png in Resources */,
 				DAE08321253F0953009B5A11 /* ic_custom_save_complete@3x.png in Resources */,
 				465C1F9A2ABB6D09001B99FA /* ic_navbar_list@3x.png in Resources */,
 				DA134126243DC5A80039D214 /* ic_action_helicopter@2x.png in Resources */,
@@ -15800,7 +15663,6 @@
 				845E07251B60E72300DFC2A7 /* ic_checkmark_small_enable@2x.png in Resources */,
 				323BD90A2628850400D255ED /* ic_bg_point_square_center@3x.png in Resources */,
 				DA83600623438512003374B5 /* ic_small_arrow_down@3x.png in Resources */,
-				DACBB99325D690DC00378C47 /* btn_map_zoom_in_day@2x.png in Resources */,
 				DA13410C243DC5A80039D214 /* map_action_car_dark@2x.png in Resources */,
 				DA13A0312345FA0100C1A1A8 /* ic_custom_altitude_and_slope@3x.png in Resources */,
 				46DF1D8128C21B4300135D94 /* img_openstreetmap_logo_big@3x.png in Resources */,
@@ -15819,7 +15681,6 @@
 				336CAAAB24AF63520085BF0A /* ic_custom_transport_subway@2x.png in Resources */,
 				DA134162243DC5A80039D214 /* map_action_motorcycle@2x.png in Resources */,
 				336CAAB124AF63520085BF0A /* ic_custom_transport_stop@2x.png in Resources */,
-				465B935329BF7805008F476F /* ic_carplay_history_night@2x.png in Resources */,
 				DAF345AD22F4482C009E2EB6 /* ic_custom_navigation_arrow@3x.png in Resources */,
 				DA0D1626281BEEF500CEEF58 /* map_turn_left_dark@3x.png in Resources */,
 				323BD9102628850400D255ED /* ic_bg_point_comment_center_small@2x.png in Resources */,
@@ -15988,7 +15849,6 @@
 				DA5A838B26C563A800F274C7 /* OAOsmAndLiveSelectionViewController.xib in Resources */,
 				780AB029242B3730001DF5EF /* ic_custom_safari@3x.png in Resources */,
 				32A365B22B07B4F500485401 /* ic_custom_help_outlined@2x.png in Resources */,
-				DACBB99525D690DC00378C47 /* btn_map_zoom_out_day@3x.png in Resources */,
 				DA13413E243DC5A80039D214 /* ic_action_scooter@3x.png in Resources */,
 				DA80D9A62716CC1800445DAF /* map_track_point_start@2x.png in Resources */,
 				DA5A82DD26C563A800F274C7 /* OAGPXRouteRoundCell.xib in Resources */,
@@ -16129,7 +15989,6 @@
 				DAE0831F253F0953009B5A11 /* ic_custom_new_segment@3x.png in Resources */,
 				32B50ADD26BBE3C7002E6C92 /* ic_custom_drawer@2x.png in Resources */,
 				466F1993298121FF00E00134 /* img_speed_camera_warning@2x.png in Resources */,
-				DA8A928825DE8B4A00F5320A /* ic_carplay_poi@2x.png in Resources */,
 				8A6CBCAA21CE25F0004033C7 /* img_logo_38dp_sea_depth@3x.png in Resources */,
 				DABF8195228BDE9300651A91 /* map_mapillary_photo_dot@3x.png in Resources */,
 				DA8AD07F291D3A850092385B /* ic_custom_cloud_upload_outline@2x.png in Resources */,
@@ -16142,7 +16001,6 @@
 				323BD8EF2628850400D255ED /* ic_bg_point_square_bottom_small@3x.png in Resources */,
 				8476E2E01F6C1EEC00EC274F /* map_pedestrian_location@2x.png in Resources */,
 				8A755A7121CBF92400E42699 /* ic_live_monthly_updates@3x.png in Resources */,
-				DA8A928425DE8B4A00F5320A /* ic_carplay_tracks@2x.png in Resources */,
 				3AC639F51A220A96001D5E57 /* icon_edit@2x.png in Resources */,
 				C5CD4CF329EFE6AC00B35C3D /* ic_navbar_upload_to_openstreetmap_outlined@2x.png in Resources */,
 				32A7EE16261BBF6C00F7A697 /* bg_point_octagon_contour@2x.png in Resources */,
@@ -16161,7 +16019,6 @@
 				468AADE528C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png in Resources */,
 				3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,
 				845E06201B5956E800DFC2A7 /* ic_destination_pin_5_small@2x.png in Resources */,
-				460EC9E62B1F3104006BE95A /* btn_map_2d_mode@2x.png in Resources */,
 				DA5A82A926C563A700F274C7 /* OAMapillaryContributeCell.xib in Resources */,
 				9762EDC22AA09367007531E7 /* map_action_baby_transport@3x.png in Resources */,
 				15B4E48E24AB3F8600119365 /* ic_custom_minimal_distance@3x.png in Resources */,
@@ -16182,7 +16039,6 @@
 				DA2EC7A529FBBE0400ECEB37 /* ic_action_time_to_distance@3x.png in Resources */,
 				8432579A1A9DAE4100A7964E /* ic_arrow_down@3x.png in Resources */,
 				3266C96326B150D6007A9187 /* ic_custom_openplacereview_logo@3x.png in Resources */,
-				DA8A928625DE8B4A00F5320A /* ic_carplay_poi@3x.png in Resources */,
 				DA5F21FA229551A300B0D7B6 /* ic_custom_mapillary_symbol@3x.png in Resources */,
 				84CC52561AA5DD55000063CF /* three_dots@2x.png in Resources */,
 				DA83601F23449C6B003374B5 /* ic_custom_slider@3x.png in Resources */,
@@ -16199,10 +16055,8 @@
 				DA5F21EE229551A300B0D7B6 /* ic_custom_hide@2x.png in Resources */,
 				84F3A9901B501C5800D16EBC /* ic_destination_arrow@3x.png in Resources */,
 				DA0D1618281BEEF500CEEF58 /* map_turn_uturn_right_dark@3x.png in Resources */,
-				FAF7920C2A77F80900CE5F79 /* ic_carplay_navigation_night@3x.png in Resources */,
 				32309A752698D22F005751F5 /* ic_custom_direction_compass_night@3x.png in Resources */,
 				97EF50D82AB1D926005E861B /* ic_action_paragliding@2x.png in Resources */,
-				465B935829BF7805008F476F /* ic_carplay_poi_night@3x.png in Resources */,
 				DA52CE0F24AE087F00CC309D /* ic_custom_contrast@2x.png in Resources */,
 				84669650207CD7E000BA971B /* ic_action_clear_all@3x.png in Resources */,
 				84EE2DDF1AFD149F007C9A94 /* map_banner@2x.png in Resources */,
@@ -16246,7 +16100,6 @@
 				DA2483E62927916700189AF2 /* OAStatusBackupViewController.xib in Resources */,
 				DA291846290ABCF300231CFE /* ic_custom_letter_outlined@2x.png in Resources */,
 				32D253AE27F336C100324717 /* OACloudBackupViewController.xib in Resources */,
-				DA8A928725DE8B4A00F5320A /* ic_carplay_map_markers@2x.png in Resources */,
 				B247459A27F4A5FB00C18C3F /* ic_custom_cloud_upload@3x.png in Resources */,
 				DA2DC41B23B2116300F40D1D /* ic_custom_arrow_down@3x.png in Resources */,
 				DA2EC7E429FFB76A00ECEB37 /* ic_navbar_screen_side_bottom@3x.png in Resources */,
@@ -16254,7 +16107,6 @@
 				DA5A829B26C563A700F274C7 /* OAIconTextDescButtonCell.xib in Resources */,
 				846310081A8E463B005B39F2 /* default.render.xml in Resources */,
 				845E06051B5956E800DFC2A7 /* ic_arrow_open@2x.png in Resources */,
-				465B935B29BF7805008F476F /* ic_carplay_search_night@3x.png in Resources */,
 				DA5A83E026C563A800F274C7 /* OAEditDescriptionViewController.xib in Resources */,
 				DA32847D26CC01BA0036BA73 /* export_items@3x.png in Resources */,
 				B247459627F4A57300C18C3F /* ic_custom_cloud_done@3x.png in Resources */,
@@ -16299,7 +16151,6 @@
 				DA22DC4E25C05F130070FFCA /* ic_custom_split_after@2x.png in Resources */,
 				DA1BC11A233F9B01004DAF78 /* ic_custom_point_to_point@3x.png in Resources */,
 				DA0D161D281BEEF500CEEF58 /* map_turn_roundabout_left@3x.png in Resources */,
-				465B935629BF7805008F476F /* ic_carplay_map_markers_night@3x.png in Resources */,
 				8A4D03E527A6DF2300B8A778 /* temperature_color.txt in Resources */,
 				15B4E49A24AB3FD700119365 /* list_warnings_speed_camera@2x.png in Resources */,
 				323BD9042628850400D255ED /* ic_bg_point_circle_center_small@2x.png in Resources */,
@@ -16335,7 +16186,6 @@
 				DA0D161B281BEEF500CEEF58 /* map_turn_continue_dark@2x.png in Resources */,
 				DA8660852268A2870041F57D /* ic_custom_show_on_map@2x.png in Resources */,
 				DA5A826826C563A700F274C7 /* OAIconBackgroundCollectionViewCell.xib in Resources */,
-				DACBB99425D690DC00378C47 /* btn_map_zoom_out_day@2x.png in Resources */,
 				8AE0194A24505C8B00DA5C33 /* ic_small_arrow_forward@2x.png in Resources */,
 				336CAAB424AF63520085BF0A /* ic_custom_transport_tram@3x.png in Resources */,
 				DA0D1619281BEEF500CEEF58 /* map_turn_left_dark@2x.png in Resources */,
@@ -16401,7 +16251,6 @@
 				8AB2BBC523ACBAEB00D2AD03 /* desert.render.xml in Resources */,
 				DA2EC72829FBBE0300ECEB37 /* ic_action_relative_bearing@2x.png in Resources */,
 				158DE49125AEF31B007C1B57 /* ic_destination_pin_6_small@2x.png in Resources */,
-				4631377629AE6CB3000B0258 /* ic_carplay_history@2x.png in Resources */,
 				DAF3459D22F4482C009E2EB6 /* ic_custom_text_field_name@2x.png in Resources */,
 				DA5A840A26C563A800F274C7 /* OAMapDownloadController.xib in Resources */,
 				DA5A83A626C563A800F274C7 /* OAOpeningHoursSelectionViewController.xib in Resources */,
@@ -16425,7 +16274,6 @@
 				3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,
 				8415030B1DEED6AE007FAC50 /* ic_refresh@3x.png in Resources */,
 				DA0D1624281BEEF500CEEF58 /* map_turn_continue_dark@3x.png in Resources */,
-				465B935929BF7805008F476F /* ic_carplay_poi_night@2x.png in Resources */,
 				DA1341E6243DC5A90039D214 /* ic_action_horse@2x.png in Resources */,
 				8AE0194C24505C8B00DA5C33 /* ic_custom_offline@3x.png in Resources */,
 				8480E6A91F7BF8FC009A0FDE /* left_menu_icon_resources@3x.png in Resources */,

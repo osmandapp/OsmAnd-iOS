@@ -329,7 +329,7 @@
 {
     OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
     int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
-    int y31 = OsmAnd::Utilities::get31TileNumberX(lat);
+    int y31 = OsmAnd::Utilities::get31TileNumberY(lat);
     OsmAnd::PointI point31 = OsmAnd::PointI(x31, y31);
     CGPoint screenPoint;
     [mapRenderer obtainScreenPointFromPosition:&point31 toScreen:&screenPoint checkOffScreen:YES];

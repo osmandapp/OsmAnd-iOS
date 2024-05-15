@@ -216,6 +216,10 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
 
 // TableView
 extension ConfigureScreenViewController {
+    override func registerCells() {
+        addCell(OAValueTableViewCell.reuseIdentifier)
+        addCell(OASwitchTableViewCell.reuseIdentifier)
+    }
     
     fileprivate func applyAccessibility(_ cell: UITableViewCell, _ item: OATableRowData) {
         cell.accessibilityLabel = item.accessibilityLabel
@@ -225,48 +229,35 @@ extension ConfigureScreenViewController {
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData!.item(for: indexPath)
         if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as? OAValueTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.reuseIdentifier, owner: self, options: nil)
-                cell = nib?.first as? OAValueTableViewCell
-                cell?.accessoryType = .disclosureIndicator
-                cell?.descriptionVisibility(false)
-            }
-            if let cell {
-                let isCustomLeftSeparatorInset = item.bool(forKey: "isCustomLeftSeparatorInset")
-                cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
-                cell.separatorInset = .zero
-                cell.valueLabel.text = item.descr
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                cell.leftIconView.tintColor = item.iconTintColor
-                cell.titleLabel.text = item.title
-                applyAccessibility(cell, item)
-            }
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
+            cell.accessoryType = .disclosureIndicator
+            cell.descriptionVisibility(false)
+            let isCustomLeftSeparatorInset = item.bool(forKey: "isCustomLeftSeparatorInset")
+            cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
+            cell.separatorInset = .zero
+            cell.valueLabel.text = item.descr
+            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.tintColor = item.iconTintColor
+            cell.titleLabel.text = item.title
+            applyAccessibility(cell, item)
             return cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as? OASwitchTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASwitchTableViewCell.reuseIdentifier, owner: self, options: nil)
-                cell = nib?.first as? OASwitchTableViewCell
-                cell?.descriptionVisibility(false)
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
+            cell.descriptionVisibility(false)
+            cell.leftIconVisibility(!(item.iconName?.isEmpty ?? true))
+            if !cell.leftIconView.isHidden {
+                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
             }
-            if let cell {
-                cell.leftIconVisibility(!(item.iconName?.isEmpty ?? true))
-                if !cell.leftIconView.isHidden {
-                    cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                }
-                let selected = item.bool(forKey: Self.selectedKey)
-                cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
-                cell.titleLabel.text = item.title
 
-                cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                cell.switchView.isOn = selected
-                cell.switchView.tag = indexPath.section << 10 | indexPath.row
-                cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
-
-                applyAccessibility(cell, item)
-                return cell
-            }
+            let selected = item.bool(forKey: Self.selectedKey)
+            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
+            cell.titleLabel.text = item.title
+            cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
+            cell.switchView.isOn = selected
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row
+            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
+            applyAccessibility(cell, item)
+            return cell
         }
         return nil
     }

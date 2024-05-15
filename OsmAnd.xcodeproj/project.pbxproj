@@ -3355,9 +3355,9 @@
 		FAA650662ADD4C9F0020DCEA /* UIImage+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */; };
 		FAA650682ADD8D0D0020DCEA /* BLEInitHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */; };
 		FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */; };
-		FABAEAF72BF4B1D4005DA0ED /* hs_scnd_hillshade.txt in Resources */ = {isa = PBXBuildFile; fileRef = FABAEAF42BF4B1D3005DA0ED /* hs_scnd_hillshade.txt */; };
-		FABAEAF82BF4B1D4005DA0ED /* clr_slope.txt in Resources */ = {isa = PBXBuildFile; fileRef = FABAEAF52BF4B1D3005DA0ED /* clr_slope.txt */; };
-		FABAEAF92BF4B1D4005DA0ED /* hs_main_hillshade.txt in Resources */ = {isa = PBXBuildFile; fileRef = FABAEAF62BF4B1D3005DA0ED /* hs_main_hillshade.txt */; };
+		FABAEAFD2BF4B5D6005DA0ED /* hs_main_hillshade.txt in Resources */ = {isa = PBXBuildFile; fileRef = FABAEAFA2BF4B5D6005DA0ED /* hs_main_hillshade.txt */; };
+		FABAEAFE2BF4B5D6005DA0ED /* hs_scnd_hillshade.txt in Resources */ = {isa = PBXBuildFile; fileRef = FABAEAFB2BF4B5D6005DA0ED /* hs_scnd_hillshade.txt */; };
+		FABAEAFF2BF4B5D6005DA0ED /* clr_slope.txt in Resources */ = {isa = PBXBuildFile; fileRef = FABAEAFC2BF4B5D6005DA0ED /* clr_slope.txt */; };
 		FAC166212B21BEF900D63755 /* Util.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166162B21BEF700D63755 /* Util.swift */; };
 		FAC166222B21BEF900D63755 /* PeripheralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166172B21BEF800D63755 /* PeripheralProxy.swift */; };
 		FAC166232B21BEF900D63755 /* DescriptorValue.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166182B21BEF800D63755 /* DescriptorValue.swift */; };
@@ -7970,9 +7970,9 @@
 		FAA650652ADD4C9F0020DCEA /* UIImage+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+Extension.swift"; sourceTree = "<group>"; };
 		FAA650672ADD8D0D0020DCEA /* BLEInitHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEInitHeader.swift; sourceTree = "<group>"; };
 		FAB6E7E32AC5A9FD00A82987 /* UIButton+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+Extension.swift"; sourceTree = "<group>"; };
-		FABAEAF42BF4B1D3005DA0ED /* hs_scnd_hillshade.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hs_scnd_hillshade.txt; sourceTree = "<group>"; };
-		FABAEAF52BF4B1D3005DA0ED /* clr_slope.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = clr_slope.txt; sourceTree = "<group>"; };
-		FABAEAF62BF4B1D3005DA0ED /* hs_main_hillshade.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = hs_main_hillshade.txt; sourceTree = "<group>"; };
+		FABAEAFA2BF4B5D6005DA0ED /* hs_main_hillshade.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hs_main_hillshade.txt; path = ../resources/heightmap/hs_main_hillshade.txt; sourceTree = "<group>"; };
+		FABAEAFB2BF4B5D6005DA0ED /* hs_scnd_hillshade.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hs_scnd_hillshade.txt; path = ../resources/heightmap/hs_scnd_hillshade.txt; sourceTree = "<group>"; };
+		FABAEAFC2BF4B5D6005DA0ED /* clr_slope.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = clr_slope.txt; path = ../resources/heightmap/clr_slope.txt; sourceTree = "<group>"; };
 		FAC166162B21BEF700D63755 /* Util.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Util.swift; sourceTree = "<group>"; };
 		FAC166172B21BEF800D63755 /* PeripheralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PeripheralProxy.swift; sourceTree = "<group>"; };
 		FAC166182B21BEF800D63755 /* DescriptorValue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DescriptorValue.swift; sourceTree = "<group>"; };
@@ -8074,9 +8074,9 @@
 		05028F752A12A102003FECD0 /* heightmap */ = {
 			isa = PBXGroup;
 			children = (
-				FABAEAF52BF4B1D3005DA0ED /* clr_slope.txt */,
-				FABAEAF62BF4B1D3005DA0ED /* hs_main_hillshade.txt */,
-				FABAEAF42BF4B1D3005DA0ED /* hs_scnd_hillshade.txt */,
+				FABAEAFC2BF4B5D6005DA0ED /* clr_slope.txt */,
+				FABAEAFA2BF4B5D6005DA0ED /* hs_main_hillshade.txt */,
+				FABAEAFB2BF4B5D6005DA0ED /* hs_scnd_hillshade.txt */,
 			);
 			name = heightmap;
 			sourceTree = "<group>";
@@ -14694,6 +14694,7 @@
 				8431E7741B380D010063C9AF /* ic_dialog_export@2x.png in Resources */,
 				3AFEEE361A0E34FD00900A47 /* icon_star_fill@2x.png in Resources */,
 				0A8D1A1626FBA1750042444C /* ic_small_ascent@2x.png in Resources */,
+				FABAEAFE2BF4B5D6005DA0ED /* hs_scnd_hillshade.txt in Resources */,
 				DA2EC78A29FBBE0400ECEB37 /* warnings_speed_limit_ca@2x.png in Resources */,
 				DAF3456922F4482C009E2EB6 /* ic_custom_folder@3x.png in Resources */,
 				DAB6EA742284153A00DE1A56 /* tr_tts.js in Resources */,
@@ -15366,7 +15367,6 @@
 				DA1340D6243DC5A80039D214 /* map_action_scooter@3x.png in Resources */,
 				DA5A844226C563A900F274C7 /* OAUsernameFilterViewController.xib in Resources */,
 				DA5A839F26C563A800F274C7 /* OABaseScrollableHudViewController.xib in Resources */,
-				FABAEAF82BF4B1D4005DA0ED /* clr_slope.txt in Resources */,
 				DA1BC12A233F9B01004DAF78 /* ic_custom_reverse@3x.png in Resources */,
 				C54260232AA0F90700E76C00 /* ic_custom_3d_relief@2x.png in Resources */,
 				46C78C0A28BD16A30019FF69 /* OAStorageStateValuesCell.xib in Resources */,
@@ -15687,7 +15687,6 @@
 				B247458D27F48A9000C18C3F /* ic_action_cloud_smile_face_colored@2x.png in Resources */,
 				4613BFAB2A93DECC004385FB /* ic_custom_screen_side_top_48@2x.png in Resources */,
 				DA5A82DA26C563A800F274C7 /* OAShapesCollectionViewCell.xib in Resources */,
-				FABAEAF92BF4B1D4005DA0ED /* hs_main_hillshade.txt in Resources */,
 				DA0C642121245BA800B2A350 /* hr_tts.js in Resources */,
 				DA2EC70129FBBE0300ECEB37 /* warnings_limit@2x.png in Resources */,
 				844E07F21E44D8E900EFC525 /* ic_action_world_globe@3x.png in Resources */,
@@ -15886,6 +15885,7 @@
 				8476E2E21F6C1EEC00EC274F /* map_pedestrian_location@3x.png in Resources */,
 				DAA4EDF1240E85B800F16073 /* ic_custom_download@2x.png in Resources */,
 				DABA3DEF22686E72005BB777 /* ic_custom_upload@3x.png in Resources */,
+				FABAEAFF2BF4B5D6005DA0ED /* clr_slope.txt in Resources */,
 				32E2A6E027206ACF00F018B5 /* OAQuickSearchCoordinateFormatsViewController.xib in Resources */,
 				DAE79D36260E1B4800E2EE11 /* ic_system_checkbox_indeterminate@3x.png in Resources */,
 				84E442131AF8A07500F87542 /* track_new_segement@3x.png in Resources */,
@@ -16017,7 +16017,6 @@
 				843257971A9DAE4100A7964E /* ic_arrow_down@2x.png in Resources */,
 				DA5A846926C563A900F274C7 /* OADiscountToolbarViewController.xib in Resources */,
 				32B50ABE26BBDA0D002E6C92 /* ic_custom_shop_bag@3x.png in Resources */,
-				FABAEAF72BF4B1D4005DA0ED /* hs_scnd_hillshade.txt in Resources */,
 				0AA3BB9126EB540100A9885D /* ic_custom_appearance@2x.png in Resources */,
 				842432001AEFDD1900925821 /* ic_action_rec_stop@3x.png in Resources */,
 				DA879FD8227C23C5007E7817 /* hu-formal_tts.js in Resources */,
@@ -16481,6 +16480,7 @@
 				DA0D1619281BEEF500CEEF58 /* map_turn_left_dark@2x.png in Resources */,
 				8420C1D11B42F2AC004EDAE6 /* ic_dialog_rename@3x.png in Resources */,
 				8476E2D01F6C1EEC00EC274F /* map_pedestrian_location_night@3x.png in Resources */,
+				FABAEAFD2BF4B5D6005DA0ED /* hs_main_hillshade.txt in Resources */,
 				1565BAFD256C6CFC003C6278 /* ic_control_knob@2x.png in Resources */,
 				DA5A848826C563A900F274C7 /* OAPlanningPopupBaseViewController.xib in Resources */,
 				DA0D161C281BEEF500CEEF58 /* map_turn_keep_right_dark@2x.png in Resources */,

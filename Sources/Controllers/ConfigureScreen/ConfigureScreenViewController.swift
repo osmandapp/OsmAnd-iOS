@@ -287,7 +287,7 @@ extension ConfigureScreenViewController {
         tableView.reloadData()
     }
     
-    func updateQuickActionData() {
+    private func updateQuickActionData() {
         generateData()
         tableView.reloadData()
     }

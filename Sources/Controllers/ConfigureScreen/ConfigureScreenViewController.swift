@@ -330,15 +330,15 @@ extension ConfigureScreenViewController {
     }
 }
 
-    extension ConfigureScreenViewController: OASettingsDataDelegate {
-        func onSettingsChanged() {
-            generateData()
-            tableView.reloadData()
-        }
-        
-        func closeSettingsScreenWithRouteInfo() {
-        }
-        
-        func openNavigationSettings() {
-        }
+extension ConfigureScreenViewController: OASettingsDataDelegate {
+    func onSettingsChanged() {
+        generateData()
+        tableView.reloadData()
     }
+    
+    func closeSettingsScreenWithRouteInfo() {
+    }
+    
+    func openNavigationSettings() {
+    }
+}

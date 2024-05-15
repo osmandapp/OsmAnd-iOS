@@ -312,7 +312,8 @@
 {
     [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
     [_registry.quickActionListChangedObservable notifyEvent];
-    [self.delegate updateQuickActionData];
+    if (self.quickActionUpdateCallback)
+        self.quickActionUpdateCallback();
 }
 
 - (NSInteger)getScreensCount
@@ -457,7 +458,8 @@
 {
     [self generateData];
     [self.tableView reloadData];
-    [self.delegate updateQuickActionData];
+    if (self.quickActionUpdateCallback)
+        self.quickActionUpdateCallback();
 }
 
 @end

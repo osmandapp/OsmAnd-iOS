@@ -12,7 +12,6 @@ import Foundation
 @objc(OAWidgetStateDelegate)
 protocol WidgetStateDelegate: AnyObject {
     func onWidgetStateChanged()
-    @objc optional func updateQuickActionData()
 }
 
 @objc(OAConfigureScreenViewController)
@@ -261,6 +260,9 @@ extension ConfigureScreenViewController {
         if data.key == "quick_action" {
             let vc = OAQuickActionListViewController()!
             vc.delegate = self
+            vc.quickActionUpdateCallback = { [weak self] in
+                self?.updateQuickActionData()
+            }
             self.navigationController?.pushViewController(vc, animated: true)
         } else if data.key == "compass" {
             let vc = CompassVisibilityViewController()

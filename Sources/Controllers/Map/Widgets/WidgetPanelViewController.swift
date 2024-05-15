@@ -105,7 +105,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     
     func calculateContentSize() -> CGSize {
         var width: CGFloat = 0
-        var height: CGFloat = pages.isEmpty ? 0 : Self.contentHeight
+        var height: CGFloat = 0
         if hasWidgets() {
             for (idx, page) in pages.enumerated() {
                 let widgetSize = (page as? WidgetPageViewController)?.layoutWidgets() ?? (0, 0)
@@ -115,6 +115,9 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
                 width = max(width, widgetSize.0)
             }
             height = max(height, Self.contentHeight)
+            if width == 0, isHorizontal {
+                width = (OAUtilities.isLandscapeIpadAware() ? CGFloat(kInfoViewLandscapeWidthPad) : OAUtilities.calculateScreenWidth())
+            }
         }
         
         return CGSize(width: width, height: height)
@@ -189,10 +192,8 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
     func hasWidgets() -> Bool {
         if !widgetPages.isEmpty {
             for widgetPage in widgetPages {
-                for widget in widgetPage {
-                    if !widget.isHidden {
-                        return true
-                    }
+                for widget in widgetPage where !widget.isHidden {
+                    return true
                 }
             }
         }
@@ -226,9 +227,7 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
             pageContainerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
             pageContainerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: isHorizontal ? 0 : -Self.borderWidth),
             pageContainerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: isHorizontal ? 0 : Self.borderWidth),
-            pageContainerView.bottomAnchor.constraint(equalTo: pageControl.topAnchor),
-            pageContainerView.widthAnchor.constraint(equalToConstant: 0),
-            pageContainerView.heightAnchor.constraint(equalToConstant: Self.contentHeight)
+            pageContainerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: isHorizontal ? 0 : -Self.borderWidth)
         ])
         
         // Add the page view controller as a child view controller
@@ -257,24 +256,26 @@ final class WidgetPanelViewController: UIViewController, OAWidgetListener {
         guard UIApplication.shared.mainScene != nil else { return }
         let contentSize = calculateContentSize()
         let mapHudViewController = OARootViewController.instance().mapPanel.hudViewController
+        let frameHeight = 4.0
         if self == mapHudViewController?.mapInfoController?.leftPanelController {
-            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width
+            let pageHeight = mapHudViewController?.mapInfoController.leftPanelController.pageControlHeightConstraint.constant ?? 0.0
+            mapHudViewController?.leftWidgetsViewWidthConstraint.constant = contentSize.width > 0 ? contentSize.width + frameHeight : 0
+            mapHudViewController?.leftWidgetsViewHeightConstraint.constant = contentSize.height > 0
+                ? contentSize.height + pageHeight + frameHeight : 0
         } else if self == mapHudViewController?.mapInfoController?.rightPanelController {
-            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width
+            let pageHeight = mapHudViewController?.mapInfoController.rightPanelController.pageControlHeightConstraint.constant ?? 0.0
+            mapHudViewController?.rightWidgetsViewWidthConstraint.constant = contentSize.width > 0 ? contentSize.width + frameHeight : 0
+            mapHudViewController?.rightWidgetsViewHeightConstraint.constant = contentSize.height > 0
+                ? contentSize.height + pageHeight + frameHeight : 0
         } else if self == mapHudViewController?.mapInfoController?.topPanelController.specialPanelController {
             mapHudViewController?.middleWidgetsViewWidthConstraint.constant = contentSize.width
             mapHudViewController?.middleWidgetsViewHeightConstraint.constant = contentSize.height
-        }
-
-        // Update the height constraint of the container view
-        for constraint in pageContainerView.constraints {
-            if constraint.firstItem === pageContainerView {
-                if constraint.firstAttribute == .height {
-                    constraint.constant = contentSize.height
-                } else if constraint.firstAttribute == .width {
-                    constraint.constant = contentSize.width
-                }
-            }
+        } else if self == mapHudViewController?.mapInfoController?.topPanelController {
+            mapHudViewController?.topWidgetsViewWidthConstraint.constant = contentSize.width
+            mapHudViewController?.topWidgetsViewHeightConstraint.constant = contentSize.height
+        } else if self == mapHudViewController?.mapInfoController?.bottomPanelController {
+            mapHudViewController?.bottomWidgetsViewWidthConstraint.constant = contentSize.width
+            mapHudViewController?.bottomWidgetsViewHeightConstraint.constant = contentSize.height
         }
         view.isHidden = !hasWidgets()
         view.layoutIfNeeded()
@@ -338,7 +339,7 @@ extension WidgetPanelViewController: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         guard completed,
               let currentVC = pageViewController.viewControllers?.first,
-              let _ = pages.firstIndex(of: currentVC) else { return }
+              pages.firstIndex(of: currentVC) != nil else { return }
         isInTransition = false
         pageControl.currentPage = currentIndex
         updateContainerSize()

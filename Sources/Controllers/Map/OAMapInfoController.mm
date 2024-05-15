@@ -398,13 +398,7 @@
 
 - (void) layoutWidgets
 {
-    BOOL portrait = ![OAUtilities isLandscape];
-
     BOOL hasTopWidgets = [_topPanelController hasWidgets];
-    BOOL hasTopSpecialWidgets = [_topPanelController.specialPanelController hasWidgets];
-    BOOL hasLeftWidgets = [_leftPanelController hasWidgets];
-    BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
-    BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
 
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
@@ -420,63 +414,15 @@
         _rulerControl.center = _rulerControl.superview.center;
     }
 
-    _mapHudViewController.topWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
-
-    if ((hasTopWidgets || hasTopSpecialWidgets) && _lastUpdateTime == 0)
+    if ((hasTopWidgets || [_topPanelController.specialPanelController hasWidgets]) && _lastUpdateTime == 0)
         [[OARootViewController instance].mapPanel updateToolbar];
 
-    if (hasTopWidgets)
-    {
-        _mapHudViewController.topWidgetsViewHeightConstraint.constant = [_topPanelController calculateContentSize].height;
-        _mapHudViewController.topWidgetsView.layer.masksToBounds = NO;
-        
-        [self updateShadowView:_topShadowContainerView direction:ShadowPathDirectionBottom];
-    }
-    else
-    {
-        _mapHudViewController.topWidgetsViewHeightConstraint.constant = 0.;
-        _mapHudViewController.topWidgetsView.layer.masksToBounds = YES;
-    }
+    _mapHudViewController.topWidgetsView.layer.masksToBounds = !hasTopWidgets;
+    [self updateShadowView:_topShadowContainerView direction:ShadowPathDirectionBottom];
+    _mapHudViewController.middleWidgetsViewYConstraint.constant = kWidgetsTopPadding;
 
-    if (hasTopSpecialWidgets)
-    {
-        _mapHudViewController.middleWidgetsViewYConstraint.constant = kWidgetsTopPadding;
-        CGSize specialPanelSize = [_topPanelController.specialPanelController calculateContentSize];
-        _mapHudViewController.middleWidgetsViewWidthConstraint.constant = specialPanelSize.width;
-        _mapHudViewController.middleWidgetsViewHeightConstraint.constant = specialPanelSize.height;
-    }
-    else
-    {
-        _mapHudViewController.middleWidgetsViewHeightConstraint.constant = 0.;
-    }
-
-    if (hasLeftWidgets)
-    {
-        CGSize leftSize = [_leftPanelController calculateContentSize];
-        CGFloat pageControlHeight = _leftPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = leftSize.height + pageControlHeight + (_leftPanelController.view.layer.borderWidth * 2);
-        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = leftSize.width;
-    }
-    else
-    {
-        _mapHudViewController.leftWidgetsViewHeightConstraint.constant = 0.;
-        _mapHudViewController.leftWidgetsViewWidthConstraint.constant = 0.;
-    }
-
-    _mapHudViewController.bottomWidgetsViewWidthConstraint.constant = [OAUtilities isLandscapeIpadAware] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth;
-    if (hasBottomWidgets)
-    {
-        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = [_bottomPanelController calculateContentSize].height;
-        _mapHudViewController.bottomWidgetsView.layer.masksToBounds = NO;
-        
-        [self updateShadowView:_bottomShadowContainerView direction:ShadowPathDirectionTop];
-    }
-    else
-    {
-        _mapHudViewController.bottomWidgetsViewHeightConstraint.constant = 0;
-        _mapHudViewController.bottomWidgetsView.layer.masksToBounds = YES;
-    }
-
+    _mapHudViewController.bottomWidgetsView.layer.masksToBounds = ![_bottomPanelController hasWidgets];
+    [self updateShadowView:_bottomShadowContainerView direction:ShadowPathDirectionTop];
 
     OAMapRendererView *mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
     CGFloat topOffset = _mapHudViewController.topWidgetsViewHeightConstraint.constant;
@@ -487,30 +433,19 @@
         bottomOffset += _mapHudViewController.bottomBarViewHeightConstraint.constant;
     [mapView setTopOffsetOfViewSize:topOffset bottomOffset:bottomOffset];
 
-    if (hasRightWidgets)
-    {
-        CGSize rightSize = [_rightPanelController calculateContentSize];
-        CGFloat pageControlHeight = _rightPanelController.pages.count > 1 ? 16 : 0;
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = rightSize.height + pageControlHeight + (_rightPanelController.view.layer.borderWidth * 2);
-        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = rightSize.width;
-    }
-    else
-    {
-        _mapHudViewController.rightWidgetsViewHeightConstraint.constant = 0.;
-        _mapHudViewController.rightWidgetsViewWidthConstraint.constant = 0.;
-    }
     CGFloat leftRightWidgetsViewTopConstraintConstant = hasTopWidgets ? 1 : 0;
     if ([OAUtilities isLandscapeIpadAware])
     {
-        if (hasLeftWidgets)
+        if ([_leftPanelController hasWidgets] || [_rightPanelController hasWidgets])
         {
             leftRightWidgetsViewTopConstraintConstant = _mapHudViewController.topWidgetsViewHeightConstraint.constant > 0 ? -_mapHudViewController.topWidgetsViewHeightConstraint.constant : kWidgetsTopPadding;
-        } else
+        }
+        else
         {
             leftRightWidgetsViewTopConstraintConstant = -_mapHudViewController.topWidgetsViewHeightConstraint.constant + 16;
         }
     }
-    
+
     _mapHudViewController.leftWidgetsViewTopConstraint.constant =
     _mapHudViewController.rightWidgetsViewTopConstraint.constant = leftRightWidgetsViewTopConstraintConstant;
 
@@ -519,7 +454,7 @@
         if (_lastUpdateTime == 0)
             [[OARootViewController instance].mapPanel updateToolbar];
         
-        if (portrait)
+        if (![OAUtilities isLandscape])
         {
             _downloadMapWidget.frame = CGRectMake(0, _mapHudViewController.statusBarView.frame.size.height, DeviceScreenWidth, 155.);
         }
@@ -647,6 +582,7 @@
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 
     [self recreateWidgetsPanel:_topPanelController panel:OAWidgetsPanel.topPanel appMode:appMode];
+    [_topPanelController.specialPanelController updateWidgetSizes];
     [self recreateWidgetsPanel:_bottomPanelController panel:OAWidgetsPanel.bottomPanel appMode:appMode];
     [self recreateWidgetsPanel:_leftPanelController panel:OAWidgetsPanel.leftPanel appMode:appMode];
     [self recreateWidgetsPanel:_rightPanelController panel:OAWidgetsPanel.rightPanel appMode:appMode];

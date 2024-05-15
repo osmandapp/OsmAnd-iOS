@@ -128,7 +128,7 @@
                         <constraint firstAttribute="bottom" secondItem="2RZ-GK-954" secondAttribute="bottom" id="bNi-In-1bI"/>
                         <constraint firstItem="8m9-Ym-Yya" firstAttribute="top" secondItem="K8g-PT-gdL" secondAttribute="bottom" id="cXy-oN-mfY"/>
                         <constraint firstAttribute="rightMargin" secondItem="8m9-Ym-Yya" secondAttribute="right" constant="-10" id="cbg-nq-EYB"/>
-                        <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
+                        <constraint firstItem="8m9-Ym-Yya" firstAttribute="bottom" relation="lessThanOrEqual" secondItem="2RZ-GK-954" secondAttribute="top" priority="999" id="kSQ-Gc-881"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="top" secondItem="w1v-g4-GFe" secondAttribute="top" id="l7W-kJ-xAQ"/>
                         <constraint firstItem="K8g-PT-gdL" firstAttribute="centerX" secondItem="w1v-g4-GFe" secondAttribute="centerX" id="nd0-KQ-Ihp"/>
                         <constraint firstAttribute="trailingMargin" secondItem="2RZ-GK-954" secondAttribute="trailing" priority="999" constant="-8" id="oaV-Cz-WGl"/>
@@ -279,7 +279,7 @@
         <image name="ic_custom_search.png" width="30" height="30"/>
         <image name="ic_custom_umbrella.png" width="30" height="30"/>
         <namedColor name="widgetBgColor">
-            <color red="1" green="1" blue="1" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

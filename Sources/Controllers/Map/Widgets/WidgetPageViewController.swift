@@ -85,7 +85,7 @@ final class WidgetPageViewController: UIViewController {
             height = fittingSize.height
         } else {
             let lastVisibleWidget = widgetViews.last(where: { !$0.isHidden })
-            for widget in widgetViews {
+            for widget in widgetViews where !widget.isHidden {
                 widget.showBottomSeparator(widget != lastVisibleWidget)
                 widget.translatesAutoresizingMaskIntoConstraints = false
                 widget.adjustSize()
@@ -95,9 +95,7 @@ final class WidgetPageViewController: UIViewController {
                     rect.size.width = width
                     widget.frame = rect
                 }
-                if !widget.isHidden {
-                    height += widget.frame.size.height
-                }
+                height += widget.frame.size.height
                 
                 if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
                     widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
@@ -160,8 +158,8 @@ extension WidgetPageViewController {
                 }
             }
             // show right separator
-            items.enumerated().forEach { idx, widget in
-                widget.showRightSeparator(idx != items.count - 1)
+            visibleWidgets.enumerated().forEach { idx, widget in
+                widget.showRightSeparator(idx != visibleWidgets.count - 1)
             }
         }
         updateHorizontalSeparatorVisibilityAndBackground(for: stackView.subviews)

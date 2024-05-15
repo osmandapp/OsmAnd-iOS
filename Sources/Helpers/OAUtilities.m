@@ -213,13 +213,24 @@
     return img;
 }
 
-+ (UIImage *) mapSvgImageNamed:(NSString *)name renderingMode:(UIImageRenderingMode)mode
++ (UIImage *) imageNamed:(NSString *)name renderingMode:(UIImageRenderingMode)mode shouldSearchInMapSVGResource:(BOOL)shouldSearchInMapSVGResource
 {
-    UIImage *img = [OASvgHelper mapImageNamed:name];
-    if (img)
-        img = [img imageWithRenderingMode:mode];
+    if (!name)
+        return nil;
     
-    return img;
+    UIImage *image = [UIImage templateImageNamed:name];
+    if (image && mode != UIImageRenderingModeAlwaysTemplate)
+    {
+        image = [image imageWithRenderingMode:mode];
+    }
+    else if (!image && shouldSearchInMapSVGResource)
+    {
+        image = [OASvgHelper mapImageNamed:name];
+        if (image)
+            image = [image imageWithRenderingMode:mode];
+    }
+    
+    return image;
 }
 
 + (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale

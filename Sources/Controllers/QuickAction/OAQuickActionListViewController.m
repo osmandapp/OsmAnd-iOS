@@ -214,7 +214,7 @@
     if (cell)
     {
         [cell.textView setText:action.getName];
-        [cell.iconView setImage:[UIImage templateImageNamed:action.getIconResName] ?: [UIImage mapSvgImageNamed:action.getIconResName]];
+        [cell.iconView setImage:[UIImage imageNamed:action.getIconResName renderingMode:UIImageRenderingModeAlwaysTemplate shouldSearchInMapSVGResource:YES]];
         [cell.iconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];

@@ -85,7 +85,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) rtlImageNamed:(NSString *)imageName;
 + (UIImage *) svgImageNamed:(NSString *)path;
 + (UIImage *) mapSvgImageNamed:(NSString *)name;
-+ (UIImage *) mapSvgImageNamed:(NSString *)name renderingMode:(UIImageRenderingMode)mode;
++ (UIImage *) imageNamed:(NSString *)name renderingMode:(UIImageRenderingMode)mode shouldSearchInMapSVGResource:(BOOL)shouldSearchInMapSVGResource;
 + (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale;
 + (UIImage *) mapSvgImageNamed:(NSString *)name width:(float)width height:(float)height;
 

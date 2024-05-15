@@ -816,7 +816,7 @@ typedef NS_ENUM(NSInteger, EOAQuickSearchCoordinatesTextField)
     OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
     sr.objectType = LOCATION;
     sr.location = location;
-    sr.preferredZoom = 15;
+    sr.preferredZoom = PREFERRED_DEFAULT_ZOOM;
     sr.object = _searchLocation;
     return sr;
 }

@@ -52,7 +52,6 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 -(BOOL)search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
@@ -62,7 +61,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         sr.objectType = FAVORITE;
         sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
                                                  longitude:point.favorite->getLatLon().longitude];
-        sr.preferredZoom = 17;
+        sr.preferredZoom = PREFERRED_FAVORITE_ZOOM;
         if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
         {
             [resultMatcher publish:sr];
@@ -97,7 +96,6 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
 
 - (BOOL) search:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
-    OsmAndAppInstance app = [OsmAndApp instance];
     for (OAFavoriteItem *point in [OAFavoritesHelper getFavoriteItems])
     {
         OASearchResult *sr = [[OASearchResult alloc] initWithPhrase:phrase];
@@ -107,7 +105,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         sr.objectType = FAVORITE;
         sr.location = [[CLLocation alloc] initWithLatitude:point.favorite->getLatLon().latitude
                                                  longitude:point.favorite->getLatLon().longitude];
-        sr.preferredZoom = 17;
+        sr.preferredZoom = PREFERRED_FAVORITES_GROUP_ZOOM;
         NSString *group = [point getCategory];
         if (group && group.length > 0 && [[phrase getFirstUnknownNameStringMatcher] matches:group])
             [resultMatcher publish:sr];
@@ -141,7 +139,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         sr.localeName = gpxInfo.gpxTitle;
         sr.relatedObject = gpxInfo;
         sr.priority = SEARCH_TRACK_OBJECT_PRIORITY;
-        sr.preferredZoom = 17;
+        sr.preferredZoom = PREFERRED_GPX_FILE_ZOOM;
         if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
             [resultMatcher publish:sr];
         else
@@ -226,7 +224,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
             //sr.localeRelatedObjectName = app.getRegions().getCountryName(sr.location);
             sr.localeRelatedObjectName = i < _paths.count ? [_paths[i] lastPathComponent] : OALocalizedString(@"shared_string_currently_recording_track");
             sr.relatedGpx = gpx;
-            sr.preferredZoom = 17;
+            sr.preferredZoom = PREFERRED_WPT_ZOOM;
             if ([phrase getFullSearchPhrase].length <= 1 && [phrase isNoSelectedType])
                 [resultMatcher publish:sr];
             else
@@ -322,7 +320,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
             sr.object = point;
             sr.objectType = RECENT_OBJ;
             sr.location = [[CLLocation alloc] initWithLatitude:point.latitude longitude:point.longitude];
-            sr.preferredZoom = 17;
+            sr.preferredZoom = PREFERRED_DEFAULT_RECENT_ZOOM;
             publish = YES;
         }
         if (publish)

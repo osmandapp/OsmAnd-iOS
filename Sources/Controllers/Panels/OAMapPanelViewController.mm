@@ -120,6 +120,8 @@
 #define kMaxRoadDistanceInMeters 1000
 #define kMaxZoom 22.0f
 
+static int MAX_ZOOM_OUT_STEPS = 2;
+
 typedef enum
 {
     EOATargetPoint = 0,
@@ -160,7 +162,7 @@ typedef enum
     OsmAnd::PointI _mainMapTarget31;
     float _mainMapZoom;
     float _mainMapAzimuth;
-    float _mainMapEvelationAngle;
+    float _mainMapElevationAngle;
     
     NSString *_formattedTargetName;
     double _targetLatitude;
@@ -517,7 +519,7 @@ typedef enum
         _mainMapTarget31 = renderView.target31;
         _mainMapZoom = renderView.zoom;
         _mainMapAzimuth = renderView.azimuth;
-        _mainMapEvelationAngle = renderView.elevationAngle;
+        _mainMapElevationAngle = renderView.elevationAngle;
     }
 }
 
@@ -530,7 +532,7 @@ typedef enum
     _mainMapTarget31 = renderView.target31;
     _mainMapZoom = renderView.zoom;
     _mainMapAzimuth = renderView.azimuth;
-    _mainMapEvelationAngle = renderView.elevationAngle;
+    _mainMapElevationAngle = renderView.elevationAngle;
 }
 
 - (void) prepareMapForReuse:(Point31)destinationPoint zoom:(CGFloat)zoom newAzimuth:(float)newAzimuth newElevationAngle:(float)newElevationAngle animated:(BOOL)animated
@@ -594,7 +596,7 @@ typedef enum
     renderView.elevationAngle = newElevationAngle;
 }
 
-- (CGFloat) getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
+- (CGFloat)getZoomForBounds:(OAGpxBounds)mapBounds mapSize:(CGSize)mapSize
 {
     OAMapRendererView* renderView = (OAMapRendererView*)_mapViewController.view;
     
@@ -691,7 +693,7 @@ typedef enum
     mapView.target31 = _mainMapTarget31;
     mapView.zoom = _mainMapZoom;
     mapView.azimuth = _mainMapAzimuth;
-    mapView.elevationAngle = _mainMapEvelationAngle;
+    mapView.elevationAngle = _mainMapElevationAngle;
     
     _mapViewController.minimap = NO;
 }
@@ -704,7 +706,7 @@ typedef enum
     {
         OAMapRendererView* mapView = (OAMapRendererView*)_mapViewController.view;
         mapView.azimuth = _mainMapAzimuth;
-        mapView.elevationAngle = _mainMapEvelationAngle;
+        mapView.elevationAngle = _mainMapElevationAngle;
         [_mapViewController goToPosition:[OANativeUtilities convertFromPointI:_mainMapTarget31] andZoom:_mainMapZoom animated:YES];
     }
     
@@ -1367,7 +1369,7 @@ typedef enum
     || _activeTargetType == OATargetTerrainParametersSettings;
 }
 
-- (void) showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState
+- (void)showContextMenu:(OATargetPoint *)targetPoint saveState:(BOOL)saveState preferredZoom:(float)preferredZoom
 {
     if (_activeTargetType == OATargetGPX)
         [self hideScrollableHudViewController];
@@ -1405,7 +1407,7 @@ typedef enum
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
         
         if (targetPoint.centerMap)
-            [self goToTargetPointDefault];
+            [self goToTargetPointWithZoom:preferredZoom];
         
         if (_targetMenuView.needsManualContextMode)
             [self enterContextMenuMode];
@@ -1462,7 +1464,7 @@ typedef enum
         __weak OAMapPanelViewController *weakSelf = self;
         _gpxNetworkTask = [[OANetworkRouteSelectionTask alloc] initWithRouteKey:targetPoint.targetObj area:targetPoint.values[@"area"]];
         [_gpxNetworkTask execute:^(OAGPXDocument *gpxFile) {
-            [self hideProgress];
+            [weakSelf hideProgress];
             if (!gpxFile)
                 return;
             OAGPXDatabase *db = [OAGPXDatabase sharedDb];
@@ -1491,7 +1493,7 @@ typedef enum
     }
     else
     {
-        [self showContextMenu:targetPoint saveState:YES];
+        [self showContextMenu:targetPoint saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
     }
 }
 
@@ -1642,8 +1644,45 @@ typedef enum
     renderView.zoom = kDefaultFavoriteZoomOnShow;
     
     _mainMapAzimuth = 0.0;
-    _mainMapEvelationAngle = 90.0;
+    _mainMapElevationAngle = 90.0;
     _mainMapZoom = kDefaultFavoriteZoomOnShow;
+    
+    [self targetGoToPoint];
+}
+
+- (CGSize)getScreenBBox
+{
+    BOOL landscape = [self.scrollableHudViewController isLandscape];
+    return CGSizeMake(landscape ? DeviceScreenWidth - [self.scrollableHudViewController getLandscapeViewWidth] : DeviceScreenWidth,
+                      landscape ? DeviceScreenHeight : DeviceScreenHeight - [self.scrollableHudViewController getViewHeight]);
+}
+
+- (void)goToTargetPointWithZoom:(float)zoom
+{
+    OAMapRendererView *renderView = (OAMapRendererView*)_mapViewController.view;
+    renderView.azimuth = 0.0;
+    renderView.elevationAngle = 90.0;
+    
+    CLLocationCoordinate2D topLeft = _targetMenuView.targetPoint.location;
+    CLLocationCoordinate2D bottomRight = [_mapViewController getMapLocation].coordinate;
+        
+    OAGpxBounds bounds;
+    bounds.topLeft = topLeft; // search point
+    bounds.bottomRight = bottomRight; // map center
+    bounds.center.latitude = bottomRight.latitude / 2.0 + topLeft.latitude / 2.0;
+    bounds.center.longitude = bottomRight.longitude / 2.0 + topLeft.longitude / 2.0;
+    
+    float currentZoom = MIN([self getZoomForBounds:bounds mapSize:[self getScreenBBox]], zoom);
+    if (currentZoom != zoom && currentZoom < zoom - MAX_ZOOM_OUT_STEPS)
+    {
+        currentZoom = zoom;
+    }
+        
+    renderView.zoom = currentZoom;
+    
+    _mainMapAzimuth = 0.0;
+    _mainMapElevationAngle = 90.0;
+    _mainMapZoom = currentZoom;
     
     [self targetGoToPoint];
 }
@@ -1656,7 +1695,7 @@ typedef enum
     renderView.zoom = kDefaultMapillaryZoomOnShow;
     
     _mainMapAzimuth = 0.0;
-    _mainMapEvelationAngle = 90.0;
+    _mainMapElevationAngle = 90.0;
     _mainMapZoom = kDefaultMapillaryZoomOnShow;
     
     [self targetGoToPoint];
@@ -2525,7 +2564,10 @@ typedef enum
         return nil;
 }
 
-- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState
+- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item
+                             pushed:(BOOL)pushed
+                          saveState:(BOOL)saveState
+                      preferredZoom:(float)preferredZoom
 {
     OATargetPoint *targetPoint = [_mapViewController.mapLayers.favoritesLayer getTargetPointCpp:item.favorite.get()];
     if (targetPoint)
@@ -2544,22 +2586,27 @@ typedef enum
         [self enterContextMenuMode];
         
         [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
-            [self goToTargetPointDefault];
+            [self goToTargetPointWithZoom:preferredZoom];
         }];
     }
 }
 
-- (void) openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
+- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed
 {
-    return [self openTargetViewWithFavorite:item pushed:pushed saveState:YES];
+    return [self openTargetViewWithFavorite:item pushed:pushed saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
 }
 
-- (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed
+- (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed preferredZoom:(float)preferredZoom
 {
-    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES];
+    return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom];
 }
 
-- (void) openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed saveState:(BOOL)saveState
+- (void)openTargetViewWithAddress:(OAAddress *)address
+                             name:(NSString *)name
+                         typeName:(NSString *)typeName
+                           pushed:(BOOL)pushed
+                        saveState:(BOOL)saveState
+                    preferredZoom:(float)preferredZoom
 {
     double lat = address.latitude;
     double lon = address.longitude;
@@ -2596,7 +2643,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:saveState showFullMenu:NO onComplete:^{
-        [self goToTargetPointDefault];
+        [self goToTargetPointWithZoom:preferredZoom];
     }];
 }
 
@@ -2636,7 +2683,7 @@ typedef enum
     [_targetMenuView setTargetPoint:targetPoint];
     
     [self showTargetPointMenu:NO showFullMenu:showFullMenu onComplete:^{
-        [self goToTargetPointDefault];
+        [self goToTargetPointWithZoom:item.preferredZoom];
 
         if (_targetMenuView.needsManualContextMode)
             [self enterContextMenuMode];
@@ -3278,14 +3325,9 @@ typedef enum
     if (item.bounds.topLeft.latitude == DBL_MAX)
         return;
 
-    BOOL landscape = [self.scrollableHudViewController isLandscape];
-    CGSize screenBBox = CGSizeMake(
-            landscape ? DeviceScreenWidth - [self.scrollableHudViewController getLandscapeViewWidth] : DeviceScreenWidth,
-            landscape ? DeviceScreenHeight : DeviceScreenHeight - [self.scrollableHudViewController getViewHeight]);
-
     [self displayAreaOnMap:item.bounds
                       zoom:0.
-                screenBBox:screenBBox
+                screenBBox:[self getScreenBBox]
                bottomInset:0.
                  leftInset:0.
                   topInset:0.

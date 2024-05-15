@@ -123,8 +123,6 @@ jobs:
             -archivePath OsmAndMaps.xcarchive
             CURRENT_PROJECT_VERSION="${RELEASE_IOS_VERSION}.${BUILD_IOS_VERSION}"
             MARKETING_VERSION="${RELEASE_IOS_VERSION}"
-            CODE_SIGN_IDENTITY="iPhone Distribution"
-            PROVISIONING_PROFILE_SPECIFIER="Github Build"
             archive | xcpretty'
     - name: Zip iOS archive
       env:

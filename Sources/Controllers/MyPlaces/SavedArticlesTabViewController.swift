@@ -14,7 +14,7 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
     
     var tableData = OATableDataModel()
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
-    var savedArticlesObserver: OAAutoObserverProxy = OAAutoObserverProxy()
+    var savedArticlesObserver: OAAutoObserverProxy?
     var isGpxReading = false
     var searchController = UISearchController()
     var isSearchActive = false
@@ -50,6 +50,10 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         }
     }
     
+    deinit {
+        savedArticlesObserver?.detach()
+    }
+
     @objc func update() {
         DispatchQueue.main.async {
             self.generateData()

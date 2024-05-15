@@ -3432,3 +3432,5 @@
 "shared_string_top_bottom" = "Arriba y abajo";
 "track_3d_empty_view_title" = "Ver traza 3D";
 "track_3d_empty_view_description" = "¡Explora la traza en 3D interactivo! Visualiza la altura, la velocidad y más, directamente en el mapa.";
+"shared_string_millimeters" = "Milímetros";
+"short_min" = "m";

@@ -22,6 +22,7 @@
 static NSInteger const ROUNDING_ERROR = 3;
 static NSInteger const SHOW_STOPS_RADIUS_METERS = 150;
 static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
+static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
 
 @implementation OATransportStopsBaseController
 
@@ -142,6 +143,10 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     };
     [localRoutes sortUsingComparator:comparator];
     [nearbyRoutes sortUsingComparator:comparator];
+    if (!_stopType && localRoutes && localRoutes.count > 0)
+    {
+        _stopType = localRoutes[0].type;
+    }
     self.localRoutes = localRoutes;
     self.nearbyRoutes = nearbyRoutes;
 }
@@ -199,7 +204,8 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
             NSString *stopName = [[stop name] lowercaseString];
             
             if (([stopName containsString:amenityName] || [amenityName containsString:stopName])
-                && (!nearestStop 
+                && OsmAnd::Utilities::distance(stop.stop->location,OsmAnd::LatLon(lat, lon)) < MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS
+                && (!nearestStop
                     || [OAUtilities isCoordEqual:nearestStop.location destLat:stop.location]
                     || [OAUtilities isCoordEqual:stop.location destLat:CLLocationCoordinate2DMake(lat, lon)])
                 )
@@ -256,7 +262,11 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     OATransportStopAggregated *stopAggregated = [[OATransportStopAggregated alloc] init];
     stopAggregated.amenity = amenity;
     OsmAnd::LatLon amenityLocation = OsmAnd::LatLon(amenity.latitude, amenity.longitude);
- 
+    NSArray<OATransportStop *> *amenityStops = [NSMutableArray array];
+    if ([amenity.type.name isEqualToString:@"subway_entrance"])
+    {
+        amenityStops = [self.class findSubwayStopsForAmenityExit:transportStops amenityExitLocation:amenityLocation];
+    }
     for (OATransportStop *stop in transportStops)
     {
         stop.transportStopAggregated = stopAggregated;
@@ -271,8 +281,8 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
         {
             for (const auto exit : stopExits)
             {
-                const auto loc = exit->location;
-                if (OsmAnd::Utilities::distance(loc, amenityLocation) < ROUNDING_ERROR)
+                const auto exitLocation = exit->location;
+                if (OsmAnd::Utilities::distance(exitLocation, amenityLocation) < ROUNDING_ERROR || [self.class hasCommonExit:exitLocation amenityStops:amenityStops])
                 {
                     stopOnSameExitAdded = YES;
                     [stopAggregated addLocalTransportStop:stop];
@@ -295,6 +305,38 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     [self.class sortTransportStopsExits:amenityLocation stops:stopAggregated.localTransportStops];
     [self.class sortTransportStopsExits:amenityLocation stops:stopAggregated.nearbyTransportStops];
     return stopAggregated;
+}
+
++ (BOOL) hasCommonExit:(OsmAnd::LatLon)exit amenityStops:(NSArray<OATransportStop *> *)amenityStops
+{
+    if (!amenityStops)
+        return NO;
+    for (OATransportStop *amenityStop in amenityStops)
+    {
+        for (const auto &amenityExit : amenityStop.stop->exits)
+        {
+            if (OsmAnd::Utilities::distance(exit, amenityExit->location) < ROUNDING_ERROR)
+                return YES;
+        }
+    }
+    return NO;
+}
+
++ (NSArray<OATransportStop *> *) findSubwayStopsForAmenityExit:(NSArray<OATransportStop *> *)transportStops amenityExitLocation:(OsmAnd::LatLon)amenityExitLocation
+{
+    NSMutableArray<OATransportStop *> *foundStops = [NSMutableArray array];
+    for (OATransportStop *stop in transportStops)
+    {
+        for (const auto &exit : stop.stop->exits)
+        {
+            if (OsmAnd::Utilities::distance(exit->location, amenityExitLocation) < ROUNDING_ERROR)
+            {
+                [foundStops addObject:stop];
+                break;
+            }
+        }
+    }
+    return foundStops;
 }
 
 + (void) sortTransportStopsExits:(OsmAnd::LatLon)latLon stops:(NSMutableArray<OATransportStop *> *)stops

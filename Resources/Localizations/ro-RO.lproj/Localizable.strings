@@ -1126,7 +1126,7 @@
 "select_distance_route_will_recalc" = "Selectați distanța după care traseul va fi recalculat.";
 "recalculate_route_distance_promo" = "Traseul va fi recalculat dacă distanța de la traseu până la locația curentă este mai mare decât valoarea selectată.";
 "recalculate_wrong_dir" = "Recalcularea traseului în caz de direcție inversă";
-"recalculate_route" = "Recalcularea rutei";
+"recalculate_route" = "Recalculează ruta";
 "import_routing_file_descr" = "Puteți importa un fișier de rutare din orice aplicație de stocare în cloud deschizându-l în OsmAnd.";
 "select_nav_profile_dialog_message" = "\'Tip de navigație\' selectează modul de calcul al rutelor, cu motoare de rutare disponibile offline și online.";
 "routing_attr_freeride_policy_description" = "\"Freeride\"și \"Off-piste\" sunt trasee și pasaje neoficiale. De obicei, acestea sunt neamenajate, neîntreținute și nu sunt verificate seara. Intrați pe propriul risc.";

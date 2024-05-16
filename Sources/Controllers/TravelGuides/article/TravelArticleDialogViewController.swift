@@ -363,6 +363,9 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         let items = [URL(string: articleUrl)!]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
+        let topRightCorner = CGRect(x: view.frame.width, y: 0, width: 0, height: 0)
+        ac.popoverPresentationController?.sourceRect = topRightCorner
+        ac.popoverPresentationController?.sourceView = view
         present(ac, animated: true)
     }
     

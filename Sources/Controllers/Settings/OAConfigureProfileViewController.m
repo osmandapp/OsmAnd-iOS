@@ -648,7 +648,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
         else if ([targetScreenKey isEqualToString:kProfileAppearanceSettings])
             settingsScreen = [[OAProfileAppearanceViewController alloc] initWithProfile:_appMode];
         else if ([targetScreenKey isEqualToString:kExportProfileSettings])
-            settingsScreen = [[OAExportItemsViewController alloc] initWithAppMode:_appMode];
+            settingsScreen = [[OAExportItemsViewController alloc] initWithAppMode:_appMode hostVC:self];
         else if ([targetScreenKey isEqualToString:kTrackRecordingSettings])
             settingsScreen = [[OATripRecordingSettingsViewController alloc] initWithSettingsType:kTripRecordingSettingsScreenGeneral applicationMode:_appMode];
         else if ([targetScreenKey isEqualToString:kOsmEditsSettings])

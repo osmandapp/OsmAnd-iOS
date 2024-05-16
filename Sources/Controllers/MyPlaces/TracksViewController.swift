@@ -603,7 +603,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let exportFilePaths = selectedFolder.getAllTracksFilePaths()
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
-        let vc = OAExportItemsViewController(tracks: exportFilePaths)
+        let vc = OAExportItemsViewController(tracks: exportFilePaths, hostVC: self)
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -698,9 +698,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
-    private func onTrackShareClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
+    private func onTrackShareClicked(_ track: OAGPX?, isCurrentTrack: Bool, touchPointArea: CGRect) {
         if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            gpxHelper.openExport(forTrack: gpx, gpxDoc: nil, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self)
+            gpxHelper.openExport(forTrack: gpx, gpxDoc: nil, isCurrentTrack: isCurrentTrack, in: self, hostViewControllerDelegate: self, touchPointArea: touchPointArea)
         }
     }
     
@@ -1178,7 +1178,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [renameAction])
                 
                 let exportAction = UIAction(title: localizedString("shared_string_export"), image: UIImage.icCustomExportOutlined) { [weak self] _ in
-                    self?.onFolderExportButtonClicked(selectedFolderName)
+                    guard let self else { return }
+                    let cellScreenArea = self.view.convert(self.tableView.rectForRow(at: indexPath), from: self.tableView)
+                    self.onFolderExportButtonClicked(selectedFolderName)
                 }
                 let moveAction = UIAction(title: localizedString("shared_string_move"), image: UIImage.icCustomFolderMoveOutlined) { [weak self] _ in
                     self?.onFolderMoveButtonClicked(selectedFolderName)
@@ -1225,7 +1227,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 let secondButtonsSection = UIMenu(title: "", options: .displayInline, children: [analyzeAction])
                 
                 let shareAction = UIAction(title: localizedString("shared_string_share"), image: UIImage.icCustomExportOutlined) { [weak self] _ in
-                    self?.onTrackShareClicked(track, isCurrentTrack: isCurrentTrack)
+                    guard let self else { return }
+                    let cellScreenArea = self.view.convert(self.tableView.rectForRow(at: indexPath), from: self.tableView)
+                    self.onTrackShareClicked(track, isCurrentTrack: isCurrentTrack, touchPointArea: cellScreenArea)
                 }
                 let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
                     self?.onTrackUploadToOsmClicked(track, isCurrentTrack: isCurrentTrack)

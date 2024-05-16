@@ -1467,9 +1467,10 @@
     }];
 }
 
-- (void)openExport
+- (void)openExport:(UIView *)sourceView;
 {
-    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil];
+    CGRect clickedButtonScreenArea = [self.tableView convertRect:sourceView.frame fromView:sourceView];
+    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:clickedButtonScreenArea];
 }
 
 - (void)openNavigation

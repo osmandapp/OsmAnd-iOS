@@ -864,12 +864,14 @@ static UIViewController *parentController;
 - (IBAction) shareButtonClicked:(id)sender
 {
     // Share selected favorites
-    [self shareItems:_selectedItems];
+    UIButton *clickedButton = (UIButton *)sender;
+    CGRect clickedButtonScreenArea = [self.view convertRect:clickedButton.frame fromView:clickedButton];
+    [self shareItems:_selectedItems sourceRect:clickedButtonScreenArea];
     [self finishEditing];
     [self generateData];
 }
 
-- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems
+- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems sourceRect:(CGRect)sourceRect
 {
     if ([selectedItems count] == 0)
     {
@@ -914,7 +916,7 @@ static UIViewController *parentController;
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl] applicationActivities:nil];
     activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = self.view.frame;
+    activityViewController.popoverPresentationController.sourceRect = sourceRect;
     activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
     };
@@ -1082,7 +1084,8 @@ static UIViewController *parentController;
             {
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
             }
-            [self shareItems:indexPaths];
+            CGRect cellScreenArea = [self.view convertRect:[self.favoriteTableView rectForRowAtIndexPath:indexPath] fromView:self.favoriteTableView];
+            [self shareItems:indexPaths sourceRect:cellScreenArea];
         }];
         shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
         [menuElements addObject:shareAction];

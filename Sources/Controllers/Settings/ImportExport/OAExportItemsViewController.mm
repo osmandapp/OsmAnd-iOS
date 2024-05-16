@@ -26,6 +26,7 @@
 {
     OASettingsHelper *_settingsHelper;
     OAApplicationMode *_appMode;
+    UIViewController *_hostVC;
 
     BOOL _exportStarted;
     BOOL _shouldOpenSettingsOnInit;
@@ -35,31 +36,33 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode hostVC:(UIViewController *)hostVC
 {
     self = [super init];
     if (self)
     {
         _appMode = appMode;
         _shouldOpenSettingsOnInit = YES;
+        _hostVC = hostVC;
         [self postInit];
     }
     return self;
 }
 
-- (instancetype)initWithTracks:(NSArray<NSString *> *)tracks
+- (instancetype)initWithTracks:(NSArray<NSString *> *)tracks hostVC:(UIViewController *)hostVC
 {
     self = [super init];
     if (self)
     {
         self.selectedItemsMap[OAExportSettingsType.TRACKS] = tracks;
         _shouldOpenMyPlacesOnInit = YES;
+        _hostVC = hostVC;
         [self postInit];
     }
     return self;
 }
 
-- (instancetype)initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems
+- (instancetype)initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems hostVC:(UIViewController *)hostVC
 {
     self = [super init];
     if (self)
@@ -71,11 +74,12 @@
     return self;
 }
 
-- (instancetype)initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems;
+- (instancetype)initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems hostVC:(UIViewController *)hostVC
 {
     self = [super init];
     if (self)
     {
+        _hostVC = hostVC;
         for (OAExportSettingsType *type in typesItems.allKeys)
         {
             self.selectedItemsMap[type] = typesItems[type];
@@ -272,15 +276,19 @@
     if (succeed)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
-            OARootViewController *rootVC = [OARootViewController instance];
-            UIViewController *topViewController = rootVC.presentedViewController ?: rootVC;
-            UIActivityViewController *activityViewController =
-            [[UIActivityViewController alloc] initWithActivityItems:@[[NSURL fileURLWithPath:file]]
-                                              applicationActivities:nil];
-            activityViewController.popoverPresentationController.sourceView = topViewController.view;
-            activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(topViewController.view.bounds), CGRectGetMidY(topViewController.view.bounds), 0., 0.);
-            activityViewController.popoverPresentationController.permittedArrowDirections = 0;
-            [topViewController presentViewController:activityViewController animated:YES completion:nil];
+            if (!_hostVC)
+                _hostVC = [OARootViewController instance];
+            NSURL *url = [NSURL fileURLWithPath:file];
+            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
+            UIPopoverPresentationController *presentationController = (UIPopoverPresentationController*)activityViewController.presentationController;
+            presentationController.sourceView = _hostVC.view;
+            presentationController.sourceRect = activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(_hostVC.view.bounds), CGRectGetMidY(_hostVC.view.bounds), 0, 0);
+            presentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+            
+            activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+                [NSFileManager.defaultManager removeItemAtURL:url error:nil];
+            };
+            [_hostVC presentViewController:activityViewController animated:YES completion:nil];
         });
     }
 }

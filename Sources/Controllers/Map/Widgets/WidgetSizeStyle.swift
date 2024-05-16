@@ -44,7 +44,7 @@ final class WidgetSizeStyleObjWrapper: NSObject {
         }
     }
 
-    static func getPaddingBetweenIconAdndValue(type: EOAWidgetSizeStyle) -> CGFloat {
+    static func getPaddingBetweenIconAndValue(type: EOAWidgetSizeStyle) -> CGFloat {
         switch type {
         case .small: 6
         case .medium, .large: 12

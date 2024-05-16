@@ -494,7 +494,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     CGFloat labelFontSize = [OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle];
     CGFloat valueFontSize = [OAWidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle];
     CGFloat unitsFontSize = [OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle];
-    CGFloat paddingBetweenIconAdndValue = [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAdndValueWithType:self.widgetSizeStyle];
+    CGFloat paddingBetweenIconAdndValue = [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle];
 
     self.nameLabel.font = [UIFont scaledSystemFontOfSize:labelFontSize weight:UIFontWeightMedium];
     self.nameLabel.textColor = _contentTitleColor;

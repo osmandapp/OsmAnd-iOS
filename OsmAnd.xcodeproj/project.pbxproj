@@ -3268,8 +3268,6 @@
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
-		FA1B27802BF5E1D000D84EB4 /* SpeedometerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA1B277F2BF5E1CF00D84EB4 /* SpeedometerView.xib */; };
-		FA1B27822BF5F17C00D84EB4 /* SpeedometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA1B27812BF5F17B00D84EB4 /* SpeedometerView.swift */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
@@ -7874,8 +7872,6 @@
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
-		FA1B277F2BF5E1CF00D84EB4 /* SpeedometerView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SpeedometerView.xib; sourceTree = "<group>"; };
-		FA1B27812BF5F17B00D84EB4 /* SpeedometerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerView.swift; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
@@ -13318,7 +13314,6 @@
 		DA5A804326C563A500F274C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				FA1B277E2BF5E1B300D84EB4 /* SpeedometerView */,
 				FA4195572AAB55D4007CBBAB /* ShadowTransporentView */,
 				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
@@ -13926,15 +13921,6 @@
 				DA5A7D8726C563A300F274C7 /* OACustomSourceDetailsViewController.xib */,
 			);
 			path = OACustomSourceDetailsViewController;
-			sourceTree = "<group>";
-		};
-		FA1B277E2BF5E1B300D84EB4 /* SpeedometerView */ = {
-			isa = PBXGroup;
-			children = (
-				FA1B277F2BF5E1CF00D84EB4 /* SpeedometerView.xib */,
-				FA1B27812BF5F17B00D84EB4 /* SpeedometerView.swift */,
-			);
-			path = SpeedometerView;
 			sourceTree = "<group>";
 		};
 		FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */ = {
@@ -15802,7 +15788,6 @@
 				DA5A829C26C563A700F274C7 /* OAProgressBarCell.xib in Resources */,
 				DA13A0272345FA0100C1A1A8 /* ic_custom_avoid_motorways@2x.png in Resources */,
 				DA6471B522CF5433008F937F /* ic_custom_unlimited_downloads@2x.png in Resources */,
-				FA1B27802BF5E1D000D84EB4 /* SpeedometerView.xib in Resources */,
 				DA5A843026C563A800F274C7 /* OARouteTargetSelectionViewController.xib in Resources */,
 				C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */,
 				842431F41AEFDD1900925821 /* ic_action_rec_start@2x.png in Resources */,
@@ -17044,7 +17029,6 @@
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
-				FA1B27822BF5F17C00D84EB4 /* SpeedometerView.swift in Sources */,
 				325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */,
 				462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */,
 				DA5A833426C563A800F274C7 /* OAShapesCollectionViewCell.m in Sources */,

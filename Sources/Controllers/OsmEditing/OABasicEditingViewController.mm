@@ -269,6 +269,8 @@ static const NSInteger _contactInfoSectionCount = 5;
                 break;
             case 3:
                 cell.inputField.textView.keyboardType = UIKeyboardTypeURL;
+                cell.inputField.textView.autocapitalizationType = UITextAutocapitalizationTypeNone;
+                cell.inputField.textView.autocorrectionType = UITextAutocorrectionTypeNo;
                 break;
             default:
                 break;

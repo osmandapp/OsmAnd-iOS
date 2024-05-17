@@ -28,9 +28,6 @@
 @end
 
 @implementation OATransportStopViewController
-{
-    OATransportStopType *_stopType;
-}
 
 - (instancetype) initWithTransportStop:(OATransportStop *)transportStop;
 {
@@ -53,11 +50,11 @@
 
 - (UIImage *) getIcon
 {
-    if (!_stopType)
+    if (!self.stopType)
         return [OATargetInfoViewController getIcon:@"mx_public_transport"];
     else
     {
-        NSString *resId = _stopType.topResId;
+        NSString *resId = self.stopType.topResId;
         if (resId.length > 0)
             return [OATargetInfoViewController getIcon:resId];
         else

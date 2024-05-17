@@ -55,36 +55,6 @@
 
 #pragma mark - Table data
 
-- (NSString *)getLocationPositionValue
-{
-    switch ([_settings.positionPlacementOnMap get:self.appMode]) {
-        case EOAPositionPlacementAuto:
-            return OALocalizedString(@"shared_string_automatic");
-        case EOAPositionPlacementCenter:
-            return OALocalizedString(@"position_on_map_center");
-        case EOAPositionPlacementBottom:
-            return OALocalizedString(@"position_on_map_bottom");
-            
-        default:
-            return @"";
-    }
-}
-
-- (NSString *)getLocationPositionIcon
-{
-    switch ([_settings.positionPlacementOnMap get:self.appMode]) {
-        case EOAPositionPlacementAuto:
-            return @"ic_custom_display_position_automatic";
-        case EOAPositionPlacementCenter:
-            return @"ic_custom_display_position_center";
-        case EOAPositionPlacementBottom:
-            return @"ic_custom_display_position_bottom";
-            
-        default:
-            return @"";
-    }
-}
-
 - (void)generateData
 {
     NSString *appThemeValue;
@@ -146,9 +116,6 @@
         rotateScreenValue = OALocalizedString(@"map_orientation_default");
         rotateScreenIcon = @"ic_custom_iphone_portrait_settings";
     }
-    
-    NSString *positionMapValue = [self getLocationPositionValue];
-    NSString *positionMapIcon = [self getLocationPositionIcon];
     
     NSString *drivingRegionValue;
     if ([_settings.drivingRegionAutomatic get:self.appMode])
@@ -279,13 +246,6 @@
         @"icon" : rotateMapIcon,
         @"no_tint" : @YES,
         @"key" : @"map_orientation",
-    }];
-    [appearanceArr addObject:@{
-        @"type" : [OAValueTableViewCell getCellIdentifier],
-        @"title" : OALocalizedString(@"position_on_map"),
-        @"value" : positionMapValue,
-        @"icon" : positionMapIcon,
-        @"key" : @"position_on_map",
     }];
     if (![OAUtilities isIPad])
     {
@@ -443,8 +403,6 @@
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsMapOrientation applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"screenOrientation"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsScreenOrientation applicationMode:self.appMode];
-    else if ([itemKey isEqualToString:@"position_on_map"])
-        settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDisplayPosition applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"drivingRegion"])
         settingsViewController = [[OAProfileGeneralSettingsParametersViewController alloc] initWithType:EOAProfileGeneralSettingsDrivingRegion applicationMode:self.appMode];
     else if ([itemKey isEqualToString:@"lengthUnits"])

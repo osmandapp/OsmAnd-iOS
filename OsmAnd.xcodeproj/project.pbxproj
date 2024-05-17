@@ -645,6 +645,7 @@
 		464C9B4528E49793006F57B7 /* ic_custom_device_download@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4128E49792006F57B7 /* ic_custom_device_download@2x.png */; };
 		464CE4272B56C8E7001F4DAE /* OASimpleWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 464CE4262B56C8E7001F4DAE /* OASimpleWidget.m */; };
 		464FF36B2B309488001D855E /* SensorAttributesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464FF36A2B309488001D855E /* SensorAttributesUtils.swift */; };
+		46548DAA2BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */; };
 		4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */; };
 		4657490E2B6803710006046B /* TrashItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490D2B6803710006046B /* TrashItem.swift */; };
 		465749102B68129B0006046B /* BackupUiUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4657490F2B68129B0006046B /* BackupUiUtils.swift */; };
@@ -4171,6 +4172,7 @@
 		464CE4252B56C8D9001F4DAE /* OASimpleWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimpleWidget.h; sourceTree = "<group>"; };
 		464CE4262B56C8E7001F4DAE /* OASimpleWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASimpleWidget.m; sourceTree = "<group>"; };
 		464FF36A2B309488001D855E /* SensorAttributesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SensorAttributesUtils.swift; sourceTree = "<group>"; };
+		46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultMapButtonsViewController.swift; sourceTree = "<group>"; };
 		4655EB3128E30A9700FA2E25 /* OAStatusBackupConflictDetailsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAStatusBackupConflictDetailsViewController.h; sourceTree = "<group>"; };
 		4655EB3228E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAStatusBackupConflictDetailsViewController.m; sourceTree = "<group>"; };
 		4657490D2B6803710006046B /* TrashItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrashItem.swift; sourceTree = "<group>"; };
@@ -13771,6 +13773,7 @@
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
 				DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */,
 				32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */,
+				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
 			);
 			path = ConfigureScreen;
 			sourceTree = "<group>";
@@ -17679,6 +17682,7 @@
 				FAB6E7E42AC5A9FD00A82987 /* UIButton+Extension.swift in Sources */,
 				32119B552848D921005E1E0C /* OAOsmandDevelopmentSimulateSpeedSelectorViewController.m in Sources */,
 				DA35963229B0A00A009DF4D6 /* OARouteKey.mm in Sources */,
+				46548DAA2BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift in Sources */,
 				DA5A847B26C563A900F274C7 /* OATurnDrawable.mm in Sources */,
 				FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */,
 				DAD5B4CF288E80EC009CF611 /* OAOperationLog.m in Sources */,

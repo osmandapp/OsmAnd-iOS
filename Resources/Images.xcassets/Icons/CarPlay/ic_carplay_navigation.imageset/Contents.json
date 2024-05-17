@@ -13,20 +13,6 @@
       ],
       "filename" : "ic_carplay_navigation_night 1.svg",
       "idiom" : "universal"
-    },
-    {
-      "filename" : "ic_carplay_navigation.svg",
-      "idiom" : "car"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "ic_carplay_navigation_night.svg",
-      "idiom" : "car"
     }
   ],
   "info" : {

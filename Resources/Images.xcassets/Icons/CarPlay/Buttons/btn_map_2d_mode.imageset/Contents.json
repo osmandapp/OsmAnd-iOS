@@ -13,20 +13,6 @@
       ],
       "filename" : "btn_map_2d_mode_dark 1.svg",
       "idiom" : "universal"
-    },
-    {
-      "filename" : "btn_map_2d_mode_light.svg",
-      "idiom" : "car"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "btn_map_2d_mode_dark.svg",
-      "idiom" : "car"
     }
   ],
   "info" : {

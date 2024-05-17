@@ -13,20 +13,6 @@
       ],
       "filename" : "btn_map_zoom_out_dark 1.svg",
       "idiom" : "universal"
-    },
-    {
-      "filename" : "btn_map_zoom_out_light.svg",
-      "idiom" : "car"
-    },
-    {
-      "appearances" : [
-        {
-          "appearance" : "luminosity",
-          "value" : "dark"
-        }
-      ],
-      "filename" : "btn_map_zoom_out_dark.svg",
-      "idiom" : "car"
     }
   ],
   "info" : {

@@ -3762,3 +3762,4 @@
 
 "osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
+"shared_string_millimeters_short" = "mm";

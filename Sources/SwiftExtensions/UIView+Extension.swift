@@ -121,10 +121,32 @@ extension UIView {
 }
 
 extension UIView {
-    var heightConstraint: NSLayoutConstraint? {
+    var heightGreaterThanOrEqualConstraint: NSLayoutConstraint? {
         get {
             constraints.first(where: {
                 $0.firstAttribute == .height && $0.relation == .greaterThanOrEqual
+            })
+        }
+        set {
+            setNeedsLayout()
+        }
+    }
+    
+    var heightEqualConstraint: NSLayoutConstraint? {
+        get {
+            constraints.first(where: {
+                $0.firstAttribute == .height && $0.relation == .equal
+            })
+        }
+        set {
+            setNeedsLayout()
+        }
+    }
+    
+    var widthEqualConstraint: NSLayoutConstraint? {
+        get {
+            constraints.first(where: {
+                $0.firstAttribute == .width && $0.relation == .equal
             })
         }
         set {

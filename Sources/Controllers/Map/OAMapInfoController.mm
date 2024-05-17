@@ -65,6 +65,8 @@
     OAWeatherToolbar *_weatherToolbar;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
+    
+    SpeedometerView *_speedometerView;
 
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -406,7 +408,14 @@
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
-
+    if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
+    {
+        CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
+        
+        _speedometerView.center = CGPointMake(_speedometerView.bounds.size.width / 2 + [OAUtilities getLeftMargin],
+                                              optionsButtonFrame.origin.y - _speedometerView.bounds.size.height / 2);
+    }
+    
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
         CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
@@ -643,6 +652,13 @@
     [_alarmControl removeFromSuperview];
     _alarmControl.delegate = self;
     [_mapHudViewController.view addSubview:_alarmControl];
+    
+    [_speedometerView removeFromSuperview];
+    _speedometerView.delegate = self;
+    [_mapHudViewController.view addSubview:_speedometerView];
+    
+    [_speedometerView updateWidgetSizeTest];
+    [_speedometerView layoutIfNeeded];
 
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 
@@ -741,6 +757,9 @@
     _alarmControl = [[OAAlarmWidget alloc] init];
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
+    
+    _speedometerView = [SpeedometerView initView];
+    _speedometerView.delegate = self;
 
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;

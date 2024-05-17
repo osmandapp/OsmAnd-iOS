@@ -145,7 +145,7 @@ extension WidgetPageViewController {
                 // NOTE: use adjustSize for Complex widget
                 if WidgetType.isComplexWidget(firstWidget.widgetType?.id ?? "") {
                     firstWidget.adjustSize()
-                    firstWidget.heightConstraint?.constant = firstWidget.frame.height
+                    firstWidget.heightGreaterThanOrEqualConstraint?.constant = firstWidget.frame.height
                 }
                 firstWidget.isFullRow = true
                 if let widget = firstWidget as? OATextInfoWidget {

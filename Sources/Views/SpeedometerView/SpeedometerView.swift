@@ -8,18 +8,8 @@
 
 import Foundation
 
-extension SpeedometerView {
-    static func getCurrentSpeedViewMaxHeightWidthFor(type: EOAWidgetSizeStyle) -> Float {
-        switch type {
-        case .small: 56
-        case .medium: 72
-        case .large: 96
-        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-        }
-    }
-}
-
-final class SpeedometerView: UIView {
+@objcMembers
+final class SpeedometerView: OATextInfoWidget {
     @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var leadingPositionConstraint: NSLayoutConstraint!
@@ -36,7 +26,7 @@ final class SpeedometerView: UIView {
             speedLimitEUView.isHidden = true
         }
     }
-    @IBOutlet private weak var speedLimitNAMView: UIView!{
+    @IBOutlet private weak var speedLimitNAMView: UIView! {
         didSet {
             speedLimitNAMView.isHidden = true
         }
@@ -64,17 +54,51 @@ final class SpeedometerView: UIView {
         //enum case
     }
     
-//    private func setupCarPlayConstraints() {
-//        centerPositionXConstraint.isActive = true
-//        leadingPositionConstraint.isActive = false
-//        trailingPositionConstraint.isActive = false
+    static var initView: SpeedometerView? {
+        UINib(nibName: String(describing: self), bundle: nil)
+            .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
+    }
+        
+    func updateWidgetSize() {
+        let maxHeightWidth = getCurrentSpeedViewMaxHeightWidth()
+        [speedView, speedLimitNAMView, speedLimitNAMView].forEach {
+            $0.heightEqualConstraint?.constant = maxHeightWidth
+            $0.widthEqualConstraint?.constant = maxHeightWidth
+        }
+    }
+    
+    func updateWidgetSizeTest() {
+        //[[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium]
+        let settings = OAAppSettings.sharedManager()!
+        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: EOAWidgetSizeStyle(rawValue: 1)!)
+        updateWith(style: EOAWidgetSizeStyle(rawValue: 0)!, appMode: settings.applicationMode.get())
+        updateWidgetSize()
+        layoutIfNeeded()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+            self.updateWith(style: EOAWidgetSizeStyle(rawValue: 1)!, appMode: settings.applicationMode.get())
+            self.updateWidgetSize()
+            self.layoutIfNeeded()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                self.updateWith(style: EOAWidgetSizeStyle(rawValue: 2)!, appMode: settings.applicationMode.get())
+                self.updateWidgetSize()
+                self.layoutIfNeeded()
+            }
+        }
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+    }
+    
+//    override func invalidateIntrinsicContentSize() {
+//        getCurrentSpeedViewMaxHeightWidth()
 //    }
-//    
-//    private func setupPreviewConstraints() {
-//        centerPositionXConstraint.isActive = true
-//        leadingPositionConstraint.isActive = false
-//        trailingPositionConstraint.isActive = false
-//    }
+    
+    override var intrinsicContentSize: CGSize {
+        let size = getCurrentSpeedViewMaxHeightWidth()
+        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        return CGSize(width: fittingSize.width, height: fittingSize.height)
+    }
     
     func configure() {
         centerPositionYConstraint.isActive = true
@@ -102,6 +126,11 @@ final class SpeedometerView: UIView {
         configureStackPosition()
     }
     
+    override func updateInfo() -> Bool {
+        // TODO:
+        return true
+    }
+    
     private func configureStackPosition() {
         guard isCarPlay else { return }
         if let itemView = contentStackView.subviews.first {
@@ -111,6 +140,17 @@ final class SpeedometerView: UIView {
             
             contentStackView.insertArrangedSubview(itemView, at: 1)
             contentStackView.setNeedsLayout()
+        }
+    }
+}
+
+extension SpeedometerView {
+    func getCurrentSpeedViewMaxHeightWidth() -> CGFloat {
+        switch widgetSizeStyle {
+        case .small: 56
+        case .medium: 72
+        case .large: 96
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
 }

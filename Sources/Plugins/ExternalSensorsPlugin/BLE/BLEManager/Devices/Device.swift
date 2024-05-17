@@ -95,9 +95,9 @@ class Device: NSObject {
         return nil
     }
     
-    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
-        
-    }
+    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
+    
+    func configure() {}
     
     func addObservers() {
         NotificationCenter.default.removeObserver(self)

@@ -77,6 +77,7 @@ final class DeviceHelper: NSObject {
                 device.deviceName = savedDevice.deviceName
                 device.deviceType = savedDevice.deviceType
                 device.setPeripheral(peripheral: peripheral)
+                device.configure()
                 device.addObservers()
                 return device
             } else {
@@ -118,7 +119,7 @@ final class DeviceHelper: NSObject {
                                                         value: value)
         if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
             if let connectedDevice = connectedDevices.first(where: { $0.id == id }) as? BLEBikeSCDDevice,
-               let wheelCircumference = Float(value) {
+               let wheelCircumference = Double(value) {
                 connectedDevice.setWheelCircumference(wheelCircumference: wheelCircumference)
             }
         }

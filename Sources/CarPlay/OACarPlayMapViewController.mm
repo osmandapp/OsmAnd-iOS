@@ -227,12 +227,12 @@
 
 - (void)onZoomInPressed
 {
-    [_mapVc animatedZoomIn];
+    [_mapVc zoomIn];
 }
 
 - (void)onZoomOutPressed
 {
-    [_mapVc animatedZoomOut];
+    [_mapVc zoomOut];
 }
 
 - (void)onCenterMapPressed

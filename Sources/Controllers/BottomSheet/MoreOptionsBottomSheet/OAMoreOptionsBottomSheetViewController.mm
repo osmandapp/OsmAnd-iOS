@@ -130,8 +130,9 @@
         for (OAFunctionalAddon *addon in _iapHelper.functionalAddons)
         {
             if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Edit_Waypoint]
-                && _iapHelper.trackRecording.isActive
-                && (_targetPoint.type == OATargetWpt) && [_targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]] && !((OAGpxWptItem *)_targetPoint.targetObj).routePoint)
+                && (_targetPoint.type == OATargetWpt) 
+                && [_targetPoint.targetObj isKindOfClass:[OAGpxWptItem class]]
+                && !((OAGpxWptItem *)_targetPoint.targetObj).routePoint)
             {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_edit_waypoint",
@@ -139,8 +140,7 @@
                                   @"type" : [OASimpleTableViewCell getCellIdentifier] } ];
             }
             else if ([addon.addonId isEqualToString:kId_Addon_TrackRecording_Add_Waypoint]
-                && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX)
-                && _iapHelper.trackRecording.isActive) {
+                && (_targetPoint.type != OATargetWpt && _targetPoint.type != OATargetGPX)) {
                 [arr addObject:@{ @"title" : addon.titleShort,
                                   @"key" : @"addon_add_waypoint",
                                   @"img" : addon.imageName,

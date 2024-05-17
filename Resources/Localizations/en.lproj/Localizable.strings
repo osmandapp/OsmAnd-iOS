@@ -3762,3 +3762,7 @@
 
 "osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
+
+"edit_tilesource_maxzoom" = "Maximum zoom";
+"edit_tilesource_minzoom" = "Minimum zoom";
+"shared_string_millimeters_short" = "mm";

@@ -144,7 +144,7 @@
     dispatch_async(dispatch_get_main_queue(), ^{
         [self setupMap3dModeButtonVisibility];
         [_map3dModeFloatingButton updateColorsForPressedState: NO];
-        if ([OAMapViewTrackingUtilities.instance isIn3dMode])
+        if ([OAMapViewTrackingUtilities.instance is3DMode])
         {
             [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_2d"] forState:UIControlStateNormal];
             _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
@@ -212,7 +212,7 @@
 
     BOOL hideButton = [_settings.map3dMode get] == EOAMap3DModeVisibilityHidden ||
     ([_settings.map3dMode get] == EOAMap3DModeVisibilityVisibleIn3DMode &&
-        ![OAMapViewTrackingUtilities.instance isIn3dMode])  ||
+        ![OAMapViewTrackingUtilities.instance is3DMode])  ||
     [mapPanel isContextMenuVisible] ||
     [mapPanel gpxModeActive] ||
     [mapPanel isRouteInfoVisible] ||

@@ -538,7 +538,7 @@
             : _historyType == EOAHistorySettingsTypeSearch ? OAExportSettingsType.SEARCH_HISTORY
             : OAExportSettingsType.NAVIGATION_HISTORY;
     OAExportItemsViewController *exportItemsViewController =
-        [[OAExportItemsViewController alloc] initWithType:exportSettingsType selectedItems:selectedItems hostVC:self];
+        [[OAExportItemsViewController alloc] initWithType:exportSettingsType selectedItems:selectedItems];
     [self.navigationController pushViewController:exportItemsViewController animated:YES];
 }
 

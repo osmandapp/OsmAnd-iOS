@@ -22,13 +22,18 @@
 #define kMyPlacesSectionIndex 1
 #define kResourcesSectionIndex 2
 
+typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
+    EOAExportItemsViewControllerStateTypeInited,
+    EOAExportItemsViewControllerStateTypeExportStarted,
+    EOAExportItemsViewControllerStateTypeExportDone
+};
+
 @implementation OAExportItemsViewController
 {
     OASettingsHelper *_settingsHelper;
     OAApplicationMode *_appMode;
-    UIViewController *_hostVC;
-
-    BOOL _exportStarted;
+    
+    EOAExportItemsViewControllerStateType _state;
     BOOL _shouldOpenSettingsOnInit;
     BOOL _shouldOpenMyPlacesOnInit;
     BOOL _shouldOpenResourcesOnInit;
@@ -36,33 +41,31 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithAppMode:(OAApplicationMode *)appMode hostVC:(UIViewController *)hostVC
+- (instancetype)initWithAppMode:(OAApplicationMode *)appMode
 {
     self = [super init];
     if (self)
     {
         _appMode = appMode;
         _shouldOpenSettingsOnInit = YES;
-        _hostVC = hostVC;
         [self postInit];
     }
     return self;
 }
 
-- (instancetype)initWithTracks:(NSArray<NSString *> *)tracks hostVC:(UIViewController *)hostVC
+- (instancetype)initWithTracks:(NSArray<NSString *> *)tracks
 {
     self = [super init];
     if (self)
     {
         self.selectedItemsMap[OAExportSettingsType.TRACKS] = tracks;
         _shouldOpenMyPlacesOnInit = YES;
-        _hostVC = hostVC;
         [self postInit];
     }
     return self;
 }
 
-- (instancetype)initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems hostVC:(UIViewController *)hostVC
+- (instancetype)initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems
 {
     self = [super init];
     if (self)
@@ -74,12 +77,11 @@
     return self;
 }
 
-- (instancetype)initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems hostVC:(UIViewController *)hostVC
+- (instancetype)initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems
 {
     self = [super init];
     if (self)
     {
-        _hostVC = hostVC;
         for (OAExportSettingsType *type in typesItems.allKeys)
         {
             self.selectedItemsMap[type] = typesItems[type];
@@ -98,6 +100,7 @@
 - (void)commonInit
 {
     _settingsHelper = [OASettingsHelper sharedInstance];
+    _state = EOAExportItemsViewControllerStateTypeInited;
     self.itemsMap = [_settingsHelper getSettingsByCategory:YES];
     self.itemTypes = self.itemsMap.allKeys;
 }
@@ -112,17 +115,17 @@
 
 - (NSString *)getTitle
 {
-    return _exportStarted ? OALocalizedString(@"shared_string_preparing") : _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
+    return _state == EOAExportItemsViewControllerStateTypeExportStarted ? OALocalizedString(@"shared_string_preparing") : _appMode ? OALocalizedString(@"export_profile") : OALocalizedString(@"shared_string_export");
 }
 
 - (NSArray<UIBarButtonItem *> *)getRightNavbarButtons
 {
-    return _exportStarted ? nil : [super getRightNavbarButtons];
+    return _state == EOAExportItemsViewControllerStateTypeInited ? [super getRightNavbarButtons] : nil;
 }
 
 - (NSAttributedString *)getTableHeaderDescriptionAttr
 {
-    NSString *exportSelectDescr = _exportStarted ? @"" : [OALocalizedString(@"export_profile_select_descr") stringByAppendingString:@"\n"];
+    NSString *exportSelectDescr = _state == EOAExportItemsViewControllerStateTypeInited ? [OALocalizedString(@"export_profile_select_descr") stringByAppendingString:@"\n"] : @"";
     long itemsSize = [self calculateItemsSize:self.getSelectedItems];
     NSString *approximateFileSize = [NSString stringWithFormat:@"%@: %@",
                                         OALocalizedString(@"approximate_file_size"),
@@ -137,38 +140,43 @@
 
 - (NSString *)getBottomButtonTitle
 {
-    return _exportStarted ? @"" : [super getBottomButtonTitle];
+    return _state == EOAExportItemsViewControllerStateTypeInited ? [super getBottomButtonTitle] : @"";
 }
 
 #pragma mark - Table data
 
 - (void)generateData
 {
-    if (_exportStarted)
+    if (_state == EOAExportItemsViewControllerStateTypeInited)
+    {
+        [super generateData];
+
+        if (_shouldOpenSettingsOnInit)
+        {
+            self.data[kSettingsSectionIndex].isOpen = YES;
+            _shouldOpenSettingsOnInit = NO;
+        }
+        if (_shouldOpenMyPlacesOnInit)
+        {
+            self.data[kMyPlacesSectionIndex].isOpen = YES;
+            _shouldOpenMyPlacesOnInit = NO;
+        }
+        if (_shouldOpenResourcesOnInit)
+        {
+            self.data[kResourcesSectionIndex].isOpen = YES;
+            _shouldOpenResourcesOnInit = NO;
+        }
+    }
+    else if (_state == EOAExportItemsViewControllerStateTypeExportStarted)
     {
         OATableCollapsableGroup *group = [[OATableCollapsableGroup alloc] init];
         group.type = [OAProgressTitleCell getCellIdentifier];
         group.groupName = OALocalizedString(@"preparing_file");
         self.data = @[group];
-        return;
     }
-
-    [super generateData];
-
-    if (_shouldOpenSettingsOnInit)
+    else if (_state == EOAExportItemsViewControllerStateTypeExportDone)
     {
-        self.data[kSettingsSectionIndex].isOpen = YES;
-        _shouldOpenSettingsOnInit = NO;
-    }
-    if (_shouldOpenMyPlacesOnInit)
-    {
-        self.data[kMyPlacesSectionIndex].isOpen = YES;
-        _shouldOpenMyPlacesOnInit = NO;
-    }
-    if (_shouldOpenResourcesOnInit)
-    {
-        self.data[kResourcesSectionIndex].isOpen = YES;
-        _shouldOpenResourcesOnInit = NO;
+        self.data = @[];
     }
 }
 
@@ -204,7 +212,7 @@
 
 - (void)shareProfile
 {
-    _exportStarted = YES;
+    _state = EOAExportItemsViewControllerStateTypeExportStarted;
     [self updateUI];
 
     OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
@@ -271,26 +279,31 @@
 
 - (void)onSettingsExportFinished:(NSString *)file succeed:(BOOL)succeed
 {
-    [self.navigationController popViewControllerAnimated:YES];
-    
-    if (succeed)
-    {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!_hostVC)
-                _hostVC = [OARootViewController instance];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        _state = EOAExportItemsViewControllerStateTypeExportDone;
+        [self updateUI];
+        
+        if (succeed)
+        {
             NSURL *url = [NSURL fileURLWithPath:file];
             UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
             UIPopoverPresentationController *presentationController = (UIPopoverPresentationController*)activityViewController.presentationController;
-            presentationController.sourceView = _hostVC.view;
-            presentationController.sourceRect = activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(_hostVC.view.bounds), CGRectGetMidY(_hostVC.view.bounds), 0, 0);
-            presentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+            presentationController.sourceView = self.view;
+            
+            if ([OAUtilities isIPad])
+            {
+                presentationController.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), self.view.bounds.size.height, 0, 0);
+                presentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
+            }
             
             activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+                [self.navigationController popViewControllerAnimated:YES];
                 [NSFileManager.defaultManager removeItemAtURL:url error:nil];
             };
-            [_hostVC presentViewController:activityViewController animated:YES completion:nil];
-        });
-    }
+            
+            [self presentViewController:activityViewController animated:YES completion:nil];
+        }
+    });
 }
 
 @end

@@ -536,7 +536,7 @@
                         OAExportSettingsType.SEARCH_HISTORY : [historyHelper getPointsHavingTypes:historyHelper.searchTypes limit:0],
                         OAExportSettingsType.NAVIGATION_HISTORY : [historyHelper getPointsFromNavigation:0]
                     };
-                    [self.navigationController pushViewController:[[OAExportItemsViewController alloc] initWithTypes:typesItems hostVC:self] animated:YES];
+                    [self.navigationController pushViewController:[[OAExportItemsViewController alloc] initWithTypes:typesItems] animated:YES];
                 }
                 else
                 {

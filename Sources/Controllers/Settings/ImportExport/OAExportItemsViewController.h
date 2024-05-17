@@ -14,10 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAExportItemsViewController : OABaseSettingsListViewController
 
-- (instancetype) initWithAppMode:(OAApplicationMode *)appMode hostVC:(UIViewController *)hostVC;
-- (instancetype) initWithTracks:(NSArray<NSString *> *)tracks hostVC:(UIViewController *)hostVC;
-- (instancetype) initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems hostVC:(UIViewController *)hostVC;
-- (instancetype) initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems hostVC:(UIViewController *)hostVC;
+- (instancetype) initWithAppMode:(OAApplicationMode *)appMode;
+- (instancetype) initWithTracks:(NSArray<NSString *> *)tracks;
+- (instancetype) initWithType:(OAExportSettingsType *)type selectedItems:(NSArray *)selectedItems;
+- (instancetype) initWithTypes:(NSDictionary<OAExportSettingsType *, NSArray<id> *> *)typesItems;
 
 @end
 

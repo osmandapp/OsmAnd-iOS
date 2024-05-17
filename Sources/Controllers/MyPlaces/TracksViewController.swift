@@ -603,7 +603,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         let exportFilePaths = selectedFolder.getAllTracksFilePaths()
         let state = OATrackMenuViewControllerState()
         state.openedFromTracksList = true
-        let vc = OAExportItemsViewController(tracks: exportFilePaths, hostVC: self)
+        let vc = OAExportItemsViewController(tracks: exportFilePaths)
         navigationController?.pushViewController(vc, animated: true)
     }
     

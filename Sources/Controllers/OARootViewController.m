@@ -923,7 +923,7 @@ typedef enum : NSUInteger {
 - (void) panUp
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
-        [self.mapPanel.mapViewController animatedZoomIn];
+        [self.mapPanel.mapViewController zoomIn];
     else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
         [self.mapPanel.mapViewController animatedPanUp];
 }
@@ -931,7 +931,7 @@ typedef enum : NSUInteger {
 - (void) panDown
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == WUNDERLINQ_EXTERNAL_DEVICE)
-        [self.mapPanel.mapViewController animatedZoomOut];
+        [self.mapPanel.mapViewController zoomOut];
     else if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
         [self.mapPanel.mapViewController animatedPanDown];
 }
@@ -952,7 +952,7 @@ typedef enum : NSUInteger {
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
     {
-        [self.mapPanel.mapViewController animatedZoomOut];
+        [self.mapPanel.mapViewController zoomOut];
         [self.mapPanel.mapViewController calculateMapRuler];
     }
 }
@@ -960,7 +960,7 @@ typedef enum : NSUInteger {
 - (void) zoomIn
 {
     if ([[OAAppSettings sharedManager].settingExternalInputDevice get] == GENERIC_EXTERNAL_DEVICE)
-        [self.mapPanel.mapViewController animatedZoomIn];
+        [self.mapPanel.mapViewController zoomIn];
 }
 
 - (void) recenterMap

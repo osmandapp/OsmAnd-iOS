@@ -22,6 +22,7 @@
 static NSInteger const ROUNDING_ERROR = 3;
 static NSInteger const SHOW_STOPS_RADIUS_METERS = 150;
 static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
+static NSInteger const MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS = 20;
 
 @implementation OATransportStopsBaseController
 
@@ -142,6 +143,10 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
     };
     [localRoutes sortUsingComparator:comparator];
     [nearbyRoutes sortUsingComparator:comparator];
+    if (!_stopType && localRoutes && localRoutes.count > 0)
+    {
+        _stopType = localRoutes[0].type;
+    }
     self.localRoutes = localRoutes;
     self.nearbyRoutes = nearbyRoutes;
 }
@@ -199,7 +204,8 @@ static NSInteger const SHOW_SUBWAY_STOPS_FROM_ENTRANCES_RADIUS_METERS = 400;
             NSString *stopName = [[stop name] lowercaseString];
             
             if (([stopName containsString:amenityName] || [amenityName containsString:stopName])
-                && (!nearestStop 
+                && OsmAnd::Utilities::distance(stop.stop->location,OsmAnd::LatLon(lat, lon)) < MAX_DISTANCE_BETWEEN_AMENITY_AND_LOCAL_STOPS
+                && (!nearestStop
                     || [OAUtilities isCoordEqual:nearestStop.location destLat:stop.location]
                     || [OAUtilities isCoordEqual:stop.location destLat:CLLocationCoordinate2DMake(lat, lon)])
                 )

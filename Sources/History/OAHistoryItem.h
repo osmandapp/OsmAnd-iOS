@@ -48,4 +48,6 @@ typedef NS_ENUM(NSInteger, OAHistoryType)
 - (UIImage *)icon;
 - (NSString *) getPointDescriptionType;
 
+- (float)preferredZoom;
+
 @end

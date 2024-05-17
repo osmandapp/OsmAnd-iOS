@@ -259,6 +259,8 @@ static const NSInteger _contactInfoSectionCount = 5;
     else if (indexPath.section == _contactInfoSectionIndex)
     {
         OATextInputFloatingCell *cell = _contactInfoItems[indexPath.row];
+        cell.inputField.textView.autocapitalizationType = UITextAutocapitalizationTypeSentences;
+        cell.inputField.textView.autocorrectionType = UITextAutocorrectionTypeDefault;
         switch (indexPath.row)
         {
             case 1:

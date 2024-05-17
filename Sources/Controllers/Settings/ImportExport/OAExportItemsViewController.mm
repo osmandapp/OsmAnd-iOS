@@ -289,12 +289,9 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
             UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
             UIPopoverPresentationController *presentationController = (UIPopoverPresentationController*)activityViewController.presentationController;
             presentationController.sourceView = self.view;
-            
+            presentationController.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), self.view.bounds.size.height, 0, 0);
             if ([OAUtilities isIPad])
-            {
-                presentationController.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), self.view.bounds.size.height, 0, 0);
                 presentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
-            }
             
             activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
                 [self.navigationController popViewControllerAnimated:YES];

@@ -120,7 +120,6 @@
     OAAutoObserverProxy *_headingUpdateObserver;
     NSTimeInterval _lastUpdate;
 
-    UIDocumentInteractionController *_exportController;
     OATrackMenuHeaderView *_headerView;
     OAGPXTableData *_tableData;
 
@@ -355,7 +354,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    _exportController = nil;
     _isViewVisible = YES;
     [self restoreNavControllerHistoryIfNeeded];
 }
@@ -1467,11 +1465,21 @@
     }];
 }
 
-- (void)openExport:(UIView *)sourceView;
+- (void)openExport:(UIView *)sourceView
 {
-    NSIndexPath *indexPath = [self.tableView indexPathForCell:(UITableViewCell *)sourceView];
-    CGRect cellScreenArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
-    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:cellScreenArea];
+    CGRect touchPointArea = CGRect();
+    if ([sourceView isKindOfClass:UIButton.class])
+    {
+        UIButton *topButtonShare = (UIButton *)sourceView;
+        touchPointArea = [self.view convertRect:topButtonShare.bounds fromView:topButtonShare];
+    }
+    else if ([sourceView isKindOfClass:UITableViewCell.class])
+    {
+        UITableViewCell *actionsTabCell = (UITableViewCell *)sourceView;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:actionsTabCell];
+        touchPointArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
+    }
+    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:touchPointArea];
 }
 
 - (void)openNavigation

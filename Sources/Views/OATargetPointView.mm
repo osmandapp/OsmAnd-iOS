@@ -2106,9 +2106,12 @@ static const NSInteger _buttonsCount = 4;
                                                                                                  shareCoordinates,
                                                                                                  shareGeo]
     ];
-
+    
+    UIButton *button = (UIButton *)sender;
+    CGRect buttonScreenArea = [self convertRect:button.frame fromView:button];
+    
     activityViewController.popoverPresentationController.sourceView = self;
-    activityViewController.popoverPresentationController.sourceRect = _backView2.frame;
+    activityViewController.popoverPresentationController.sourceRect = buttonScreenArea;
     activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard];
 
     [self.navController presentViewController:activityViewController

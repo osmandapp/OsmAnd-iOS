@@ -559,7 +559,7 @@
     UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[self getUrl]]
                                                                                          applicationActivities:nil];
     activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = self.topButton.frame;
+    activityViewController.popoverPresentationController.sourceRect = [self.view convertRect:self.topButton.frame fromView:self.topButton];
     [self.navigationController presentViewController:activityViewController animated:YES completion:nil];
 }
 

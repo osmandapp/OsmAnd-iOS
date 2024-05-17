@@ -47,6 +47,8 @@
 
 #define FavoriteTableGroup _(FavoriteTableGroup)
 
+static const NSInteger _exportButtonIndex = 1;
+
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;
     @property OAFavoriteGroup *favoriteGroup;
@@ -953,8 +955,13 @@ static UIViewController *parentController;
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
                                       applicationActivities:nil];
+    
+    //export button is on last section, last row
+    NSIndexPath *exportButtonIndex = [NSIndexPath indexPathForRow:_exportButtonIndex inSection:_data.count - 1];
+    CGRect exportCellScreenArea = [self.view convertRect:[self.favoriteTableView rectForRowAtIndexPath:exportButtonIndex] fromView:self.favoriteTableView];
+    
     activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = _exportButton.frame;
+    activityViewController.popoverPresentationController.sourceRect = exportCellScreenArea;
     activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
         [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
     };

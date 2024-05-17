@@ -353,17 +353,10 @@
 {
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
     UIColor *selectedColor;
-    if (_isNewItemAdding)
-    {
-        if (_editPointType == EOAEditPointTypeFavorite)
-            selectedColor = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
-        else
-            selectedColor = [_pointHandler getColor];
-    }
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
+        selectedColor = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
     else
-    {
         selectedColor = [_pointHandler getColor];
-    }
     if (!selectedColor)
         selectedColor = [OADefaultFavorite getDefaultColor];
     

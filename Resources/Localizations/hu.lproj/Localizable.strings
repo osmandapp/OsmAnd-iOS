@@ -2019,7 +2019,7 @@
 "osm_delete_confirmation_descr" = "Törölni szeretné ezt a POI-t?";
 
 // Route planning
-"plan_route" = "Egyútvonal tervezése";
+"plan_route" = "Útvonal tervezése";
 "add_folder" = "Mappa hozzáadása";
 "err_profile_import" = "Hiba az elemadatok olvasásakor: %@";
 "move_point" = "Pont mozgatása";

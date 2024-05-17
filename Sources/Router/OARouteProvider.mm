@@ -973,8 +973,10 @@
         [resultMatcher publish:approx];
         return true;
     };
-    
+
+    env.router->setUseGeometryBasedApproximation(true);
     env.router->searchGpxRoute(gctx, points, resultAcceptor);
+
     return gctx;
 }
 

@@ -93,14 +93,15 @@
         [self.tableView reloadData];
 }
 
-+ (void) goToPoint:(double)latitude longitude:(double)longitude
++ (void) goToPoint:(double)latitude longitude:(double)longitude preferredZoom:(float)preferredZoom
 {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
     targetPoint.centerMap = YES;
-    [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO];}
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:preferredZoom];
+}
 
-+ (void) goToPoint:(OAPOI *)poi
++ (void)goToPoint:(OAPOI *)poi preferredZoom:(float)preferredZoom
 {
     OAMapViewController* mapVC = [OARootViewController instance].mapPanel.mapViewController;
     OATargetPoint *targetPoint = [mapVC.mapLayers.poiLayer getTargetPoint:poi];
@@ -108,10 +109,10 @@
     NSString *addr = [[OAReverseGeocoder instance] lookupAddressAtLat:poi.latitude lon:poi.longitude];
     targetPoint.addressFound = addr && addr.length > 0;
     targetPoint.titleAddress = addr;
-    [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO];
+    [[OARootViewController instance].mapPanel showContextMenu:targetPoint saveState:NO preferredZoom:preferredZoom];
 }
 
-+ (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate
++ (void) showHistoryItemOnMap:(OAHistoryItem *)item lang:(NSString *)lang transliterate:(BOOL)transliterate preferredZoom:(float)preferredZoom
 {
     BOOL originFound = NO;
     if (item.hType == OAHistoryTypePOI)
@@ -119,7 +120,7 @@
         OAPOI *poi = [OAPOIHelper findPOIByName:item.name lat:item.latitude lon:item.longitude];
         if (poi)
         {
-            [self.class goToPoint:poi];
+            [self.class goToPoint:poi preferredZoom:preferredZoom];
             originFound = YES;
         }
     }
@@ -251,7 +252,7 @@
                 OAPOI *poi = (OAPOI *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [self.class goToPoint:poi];
+                    [self.class goToPoint:poi preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -268,7 +269,7 @@
                 {
                     NSString *lang = [[searchResult.requiredSearchPhrase getSettings] getLang];
                     BOOL transliterate = [[searchResult.requiredSearchPhrase getSettings] isTransliterate];
-                    [self.class showHistoryItemOnMap:item lang:lang transliterate:transliterate];
+                    [self.class showHistoryItemOnMap:item lang:lang transliterate:transliterate preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -302,7 +303,7 @@
                 OAAddress *address = (OAAddress *)searchResult.object;
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:address name:[OAQuickSearchListItem getName:searchResult] typeName:[OAQuickSearchListItem getTypeName:searchResult] pushed:NO];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:address name:[OAQuickSearchListItem getName:searchResult] typeName:[OAQuickSearchListItem getTypeName:searchResult] pushed:NO preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -336,7 +337,7 @@
                 
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO saveState:NO];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:building name:name typeName:typeNameHouse pushed:NO saveState:NO preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -355,7 +356,7 @@
                 
                 if (searchType == OAQuickSearchType::REGULAR)
                 {
-                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO saveState:NO];
+                    [[OARootViewController instance].mapPanel openTargetViewWithAddress:streetIntersection name:[OAQuickSearchListItem getName:searchResult] typeName:typeNameIntersection pushed:NO saveState:NO preferredZoom:searchResult.preferredZoom];
                 }
                 else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                 {
@@ -371,7 +372,7 @@
                 {
                     if (searchType == OAQuickSearchType::REGULAR)
                     {
-                        [self.class goToPoint:searchResult.location.coordinate.latitude longitude:searchResult.location.coordinate.longitude];
+                        [self.class goToPoint:searchResult.location.coordinate.latitude longitude:searchResult.location.coordinate.longitude preferredZoom:searchResult.preferredZoom];
                     }
                     else if (searchType == OAQuickSearchType::START_POINT || searchType == OAQuickSearchType::DESTINATION || searchType == OAQuickSearchType::INTERMEDIATE || searchType == OAQuickSearchType::HOME || searchType == OAQuickSearchType::WORK)
                     {

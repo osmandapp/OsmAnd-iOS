@@ -25,13 +25,15 @@
 #import "OAMapRendererViewProtocol.h"
 #import "OAObservable.h"
 
-#define kViewportScale 1.0f
-#define kViewportBottomScale 1.5f
+static const float kViewportScale = 1.0f;
+static const float kViewportBottomScale = 1.5f;
 
-#define kSymbolsUpdateInterval 2000
+static const int kSymbolsUpdateInterval = 2000;
 
-#define kObfRasterLayer 0
-#define kObfSymbolSection 1
+static const int kObfRasterLayer = 0;
+static const int kObfSymbolSection = 1;
+
+static const float kMinAllowedElevationAngle = 10.0f;
 
 #define _DECLARE_ENTRY(name)                                                                                                \
     OAMapRendererViewStateEntry##name = (NSUInteger)OsmAnd::MapRendererStateChange::name

@@ -10,12 +10,14 @@
 
 @interface OAZoom : NSObject
 
+- (instancetype) initWitZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom;
 - (instancetype) initWithBaseZoom:(int)baseZoom zoomFloatPart:(float)zoomFloatPart minZoom:(int)minZoom maxZoom:(int)maxZoom;
 
 - (int) getBaseZoom;
 - (float) getZoomFloatPart;
 - (float) getZoomAnimation;
 - (BOOL) isZoomInAllowed;
+- (BOOL) isZoomOutAllowed;
 
 - (void) zoomIn;
 - (void) zoomOut;

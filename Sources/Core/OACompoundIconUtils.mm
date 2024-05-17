@@ -87,8 +87,8 @@
         return result;
 
     // color filled background icon
-    NSString *backgroundIconName = [NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName];
-    UIImage *img = [self getIcon:backgroundIconName defaultIconName:@"ic_bg_point_circle_center"];
+    NSString *backgroundIconName = [OANativeUtilities getScaledResourceName:[NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName]];
+    UIImage *img = [self getIcon:backgroundIconName defaultIconName:[OANativeUtilities getScaledResourceName:@"ic_bg_point_circle_center"]];
     img = [OAUtilities tintImageWithColor:img color:color];
     auto backgroundIcon = [OANativeUtilities skImageFromCGImage:img.CGImage];
     if (!backgroundIcon)

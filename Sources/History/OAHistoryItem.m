@@ -10,6 +10,7 @@
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OASearchCoreFactory.h"
 
 @implementation OAHistoryItem
 
@@ -110,6 +111,22 @@
             return POINT_TYPE_TARGET;
         default:
             return POINT_TYPE_LOCATION;
+    }
+}
+
+- (float)preferredZoom
+{
+    switch (_hType) {
+        case OAHistoryTypePOI:
+            return PREFERRED_POI_ZOOM;
+        case OAHistoryTypeWpt:
+            return PREFERRED_WPT_ZOOM;
+        case OAHistoryTypeAddress:
+            return PREFERRED_STREET_INTERSECTION_ZOOM;
+        case OAHistoryTypeFavorite:
+            return PREFERRED_FAVORITE_ZOOM;
+        default:
+            return PREFERRED_DEFAULT_ZOOM;
     }
 }
 

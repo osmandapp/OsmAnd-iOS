@@ -1298,7 +1298,12 @@ colorizationScheme:(int)colorizationScheme
 
 - (BOOL) isObjectMovable:(id)object
 {
-    return [object isKindOfClass:OAGpxWptItem.class];
+    if ([object isKindOfClass:OAGpxWptItem.class])
+    {
+        OAGpxWptItem *item = (OAGpxWptItem *)object;
+        return !item.routePoint;
+    }
+    return NO;
 }
 
 - (void) applyNewObjectPosition:(id)object position:(CLLocationCoordinate2D)position

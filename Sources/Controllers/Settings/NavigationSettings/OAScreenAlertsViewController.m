@@ -224,10 +224,11 @@
 
 - (NSString *)getSpeedLimitIcon
 {
-    OAApplicationMode *mode = [_settings.applicationMode get];
-    if ([_settings.drivingRegion get:mode] == DR_US)
+    EOADrivingRegion drivingRegion = [_settings.drivingRegion get:[_settings.applicationMode get]];
+    
+    if (drivingRegion == DR_US)
         return @"list_warnings_speed_limit_us";
-    else if ([_settings.drivingRegion get:mode] == DR_CANADA)
+    else if (drivingRegion == DR_CANADA)
         return @"list_warnings_speed_limit_ca";
     return @"list_warnings_limit";
 }

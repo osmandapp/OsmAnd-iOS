@@ -1469,8 +1469,9 @@
 
 - (void)openExport:(UIView *)sourceView;
 {
-    CGRect clickedButtonScreenArea = [self.tableView convertRect:sourceView.frame fromView:sourceView];
-    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:clickedButtonScreenArea];
+    NSIndexPath *indexPath = [self.tableView indexPathForCell:(UITableViewCell *)sourceView];
+    CGRect cellScreenArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
+    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:cellScreenArea];
 }
 
 - (void)openNavigation

@@ -44,11 +44,12 @@
 
 - (BOOL)isObjectMovable:(id)object
 {
-    BOOL movable = NO;
     if ([object isKindOfClass:OAGpxWptItem.class])
-        movable = ((OAGpxWptItem *)object).docPath == nil;
-    
-    return movable;
+    {
+        OAGpxWptItem *item = (OAGpxWptItem *)object;
+        return item.docPath == nil && !item.routePoint;
+    }
+    return NO;
 }
 
 @end

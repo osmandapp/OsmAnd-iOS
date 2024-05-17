@@ -33,15 +33,16 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kButtonWidth 50.0
-#define kButtonOffset 16.0
-#define kButtonHeight 50.0
-#define kWidgetsOffset 3.0
-#define kDistanceMeters 100.0
-
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+static const float kButtonWidth = 50.0;
+static const float kButtonOffset = 16.0;
+static const float kButtonHeight = 50.0;
+static const float kWidgetsOffset = 3.0;
+static const float kDistanceMeters = 100.0;
+
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol>
 
@@ -630,12 +631,12 @@
 
 - (IBAction) onZoomInButtonClicked:(id)sender
 {
-    [_mapViewController animatedZoomIn];
+    [_mapViewController zoomInAndAdjustTiltAngle];
 }
 
 - (IBAction) onZoomOutButtonClicked:(id)sender
 {
-    [_mapViewController animatedZoomOut];
+    [_mapViewController zoomOutAndAdjustTiltAngle];
     [_mapViewController calculateMapRuler];
 }
 

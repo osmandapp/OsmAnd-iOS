@@ -43,6 +43,22 @@ static const int SEARCH_AMENITY_BY_NAME_API_PRIORITY_IF_3_CHAR = 700;
 static const double SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE = 0.001;
 static const double SEARCH_AMENITY_BY_NAME_TOWN_PRIORITY_DISTANCE = 0.005;
 
+// Define constants for preferred zoom levels
+static const int PREFERRED_STREET_ZOOM = 17;
+static const int PREFERRED_INDEX_ITEM_ZOOM = 17;
+static const int PREFERRED_BUILDING_ZOOM = 16;
+static const int PREFERRED_COUNTRY_ZOOM = 7;
+static const int PREFERRED_CITY_ZOOM = 13;
+static const int PREFERRED_POI_ZOOM = 16;
+static const int PREFERRED_WPT_ZOOM = 16;
+static const int PREFERRED_GPX_FILE_ZOOM = 17;
+static const int PREFERRED_DEFAULT_RECENT_ZOOM = 17;
+static const int PREFERRED_FAVORITES_GROUP_ZOOM = 17;
+static const int PREFERRED_FAVORITE_ZOOM = 16;
+static const int PREFERRED_STREET_INTERSECTION_ZOOM = 16;
+static const int PREFERRED_REGION_ZOOM = 6;
+static const int PREFERRED_DEFAULT_ZOOM = 15;
+
 @class OAObjectType, OAPOIBaseType, OASearchResult;
 
 @interface OASearchBaseAPI : OASearchCoreAPI

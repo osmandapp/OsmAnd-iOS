@@ -13,6 +13,6 @@
 @interface OAQuickActionListViewController : OABaseButtonsViewController
 
 @property (nonatomic, weak) id<OAWidgetStateDelegate> delegate;
-@property (nonatomic, copy) void (^quickActionUpdateCallback)(void);
+@property (nonatomic, copy, nullable) void (^quickActionUpdateCallback)(void);
 
 @end

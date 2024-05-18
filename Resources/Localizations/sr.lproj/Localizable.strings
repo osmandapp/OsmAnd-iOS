@@ -3426,3 +3426,5 @@
 "track_3d_empty_view_description" = "Истражите путању у интерактивном 3Д! Визуелизујте висину, брзину и још много тога директно на мапи.";
 "short_min" = "м";
 "shared_string_millimeters" = "Милиметара";
+"display_position_automatic_descr" = "Зависи од усмерења карте: дно за смер кретања, средиште за све остало.";
+"shared_string_millimeters_short" = "mm";

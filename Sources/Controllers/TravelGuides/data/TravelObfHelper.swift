@@ -26,7 +26,7 @@ final class TravelObfHelper : NSObject {
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
     private var popularArticles = PopularArticles()
-    private var cachedArticles: [Int : [String:TravelArticle] ] = [:]
+    private let cachedArticles = ConcurrentDictionary<Int, [String:TravelArticle]>()
     private let localDataHelper: TravelLocalDataHelper
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
@@ -169,7 +169,7 @@ final class TravelObfHelper : NSObject {
             var i = articles.values.makeIterator()
             if let next = i.next() {
                 let newArticleId = next.generateIdentifier()
-                cachedArticles[newArticleId.hashValue] = articles
+                cachedArticles.setValue(articles, forKey: newArticleId.hashValue)
                 article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
             }
         }
@@ -479,7 +479,7 @@ final class TravelObfHelper : NSObject {
     
     func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
-        let articles = cachedArticles[articleId.hashValue]
+        let articles = cachedArticles.getValue(forKey: articleId.hashValue)
         if let articles {
             if lang == nil || lang!.length == 0 {
                 let ac = articles.values
@@ -766,7 +766,7 @@ final class TravelObfHelper : NSObject {
     
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
         var a: TravelArticle? = nil
-        for articles in cachedArticles.values {
+        for articles in cachedArticles.getAllValues() {
             for article in articles.values {
                 if article.title == title {
                     a = article
@@ -785,7 +785,7 @@ final class TravelObfHelper : NSObject {
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
         var res = [String]()
         if let article = getArticleById(articleId: articleId, lang: "", readGpx: false, callback: nil) {
-            if let articles = cachedArticles[article.generateIdentifier().hashValue] {
+            if let articles = cachedArticles.getValue(forKey: article.generateIdentifier().hashValue) {
                 res.append(contentsOf: articles.keys)
             }
         } else {

@@ -3427,3 +3427,5 @@
 "shared_string_millimeters" = "Milímetros";
 "shared_string_millimeters_short" = "mm";
 "display_position_automatic_descr" = "Depende de la orientación del mapa: abajo para la dirección del movimiento, centro para todos los demás.";
+"edit_tilesource_minzoom" = "Zum mínimo";
+"edit_tilesource_maxzoom" = "Zum máximo";

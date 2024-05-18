@@ -360,12 +360,14 @@ final class TravelObfHelper : NSObject {
         sortedResults.sort { (sr1, sr2) -> Bool in
             let titleA = sr1.getArticleTitle() ?? ""
             let titleB = sr2.getArticleTitle() ?? ""
-            let titleAContainsQuery = titleA.containsCaseInsensitive(text: searchQuery)
-            let titleBContainsQuery = titleB.containsCaseInsensitive(text: searchQuery)
-            if titleA.caseInsensitiveCompare(searchQuery) == .orderedSame {
+            let collatorContains: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_CONTAINS)
+            let titleAContainsQuery = collatorContains.matches(titleA)
+            let titleBContainsQuery = collatorContains.matches(titleB)
+            let collatorEquals: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_EQUALS)
+            if collatorEquals.matches(titleA) {
                 return true
             }
-            if titleB.caseInsensitiveCompare(searchQuery) == .orderedSame {
+            if  collatorEquals.matches(titleB) {
                 return false
             }
             if titleAContainsQuery && titleBContainsQuery {

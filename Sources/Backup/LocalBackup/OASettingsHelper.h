@@ -79,10 +79,11 @@ typedef NS_ENUM(NSInteger, EOAImportType) {
 
 @interface OASettingsHelper : NSObject
 
-@property (nonatomic) OAImportAsyncTask* importTask;
-@property (nonatomic) NSMutableDictionary<NSString*, OAExportAsyncTask*>* exportTasks;
-
 + (OASettingsHelper *) sharedInstance;
+
+- (OAImportAsyncTask *)getImportTask;
+- (void)setImportTask:(OAImportAsyncTask *)importTask;
+- (void)removeExportTaskForFilepath:(NSString *)filePath;
 
 + (NSDictionary<OAExportSettingsCategory *, OASettingsCategoryItems *> *)getSettingsToOperateByCategory:(NSArray<OASettingsItem *> *)items
                                                                                          importComplete:(BOOL)importComplete

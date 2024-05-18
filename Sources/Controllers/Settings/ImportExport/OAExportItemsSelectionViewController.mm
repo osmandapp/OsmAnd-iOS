@@ -71,8 +71,9 @@
         _type = type;
         
         OASettingsHelper *settingsHelper = OASettingsHelper.sharedInstance;
-        if (settingsHelper.importTask)
-            _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString(settingsHelper.importTask.getFile)).getItems();
+        OAImportAsyncTask *importTask = [settingsHelper getImportTask];
+        if (importTask)
+            _archiveItems = OsmAnd::ArchiveReader(QString::fromNSString([importTask getFile])).getItems();
     }
     return self;
 }

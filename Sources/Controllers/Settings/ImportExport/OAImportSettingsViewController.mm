@@ -45,7 +45,7 @@
 
 - (void)postInit
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
+    OAImportAsyncTask *importTask = [_settingsHelper getImportTask];
     if (!_isNewItems && importTask && _settingsItems)
     {
         if (!_file)
@@ -81,7 +81,7 @@
 {
     [super viewWillAppear:animated];
 
-    if ([_settingsHelper.importTask isImportDone])
+    if ([[_settingsHelper getImportTask] isImportDone])
     {
         self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
         [self resetActivityIndicatorLabel];
@@ -93,8 +93,8 @@
 
 - (NSString *)getTitle
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
-    EOAImportType importTaskType = _isNewItems || [_settingsHelper.importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
+    OAImportAsyncTask *importTask = [_settingsHelper getImportTask];
+    EOAImportType importTaskType = _isNewItems || [importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
     if (importTaskType == EOAImportTypeCheckDuplicates)
         return OALocalizedString(@"shared_string_preparing");
     else if (importTaskType == EOAImportTypeImport)
@@ -105,8 +105,8 @@
 
 - (NSString *)getTableHeaderDescription
 {
-    OAImportAsyncTask *importTask = _settingsHelper.importTask;
-    EOAImportType importTaskType = _isNewItems || [_settingsHelper.importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
+    OAImportAsyncTask *importTask = [_settingsHelper getImportTask];
+    EOAImportType importTaskType = _isNewItems || [importTask isImportDone] ? EOAImportTypeCollect : [importTask getImportType];
     if (importTaskType == EOAImportTypeCheckDuplicates)
         return [NSString stringWithFormat:OALocalizedString(@"checking_for_duplicate_description"), _file.lastPathComponent];
     else if (importTaskType == EOAImportTypeImport)
@@ -183,7 +183,7 @@
         [self showViewController:importCompleteVC];
         [OAUtilities denyAccessToFile:_file removeFromInbox:YES];
     }
-    _settingsHelper.importTask = nil;
+    [_settingsHelper setImportTask:nil];
     [[OASettingsHelper sharedInstance] setCurrentBackupVersion:kVersion];
 }
 

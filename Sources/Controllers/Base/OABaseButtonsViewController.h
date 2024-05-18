@@ -39,6 +39,7 @@ typedef NS_ENUM(NSInteger, EOABaseButtonColorScheme)
 
 - (void)updateBottomButtons;
 - (void)setupBottomButtons;
+- (void)hideBottomButtons;
 
 - (UILayoutConstraintAxis)getBottomAxisMode;
 - (EOABaseBottomColorScheme)getBottomColorScheme;

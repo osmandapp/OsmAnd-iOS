@@ -200,6 +200,13 @@
     self.separatorBottomView.hidden = !hasBottomButtons || ![self isBottomSeparatorVisible];
 }
 
+- (void)hideBottomButtons;
+{
+    self.separatorBottomView.hidden = YES;
+    self.bottomBackgroundView.hidden = YES;
+    self.bottomStackView.hidden = YES;
+}
+
 - (void)setupBottomFonts
 {
     self.topButton.titleLabel.font = [self getButtonFont:[self getTopButtonColorScheme]];

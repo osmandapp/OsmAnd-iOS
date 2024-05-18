@@ -3424,3 +3424,7 @@
 "shared_string_bottom" = "Base";
 "track_3d_empty_view_title" = "Vista 3D do trilho";
 "track_3d_empty_view_description" = "Explore o trilho em 3D interativo! Visualize a altura, a velocidade e muito mais diretamente no mapa.";
+"shared_string_millimeters_short" = "mm";
+"display_position_automatic_descr" = "Depende da orientação do mapa: em baixo para a direção do movimento, ao centro para todas as outras.";
+"short_min" = "m";
+"shared_string_millimeters" = "Milímetros";

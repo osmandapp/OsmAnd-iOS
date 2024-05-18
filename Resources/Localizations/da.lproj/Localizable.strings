@@ -3426,3 +3426,5 @@
 "visualization_3d_wall_color" = "Vægfarve";
 "short_min" = "m";
 "shared_string_millimeters" = "Millimeter";
+"display_position_automatic_descr" = "Afhænger af kortorientering: Bund for bevægelsesretning, centrum for alle andre.";
+"shared_string_millimeters_short" = "mm";

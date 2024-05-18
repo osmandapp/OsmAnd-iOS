@@ -3441,3 +3441,7 @@
 "track_3d_empty_view_description" = "Entdecke die Strecke in interaktivem 3D! Visualisiere Höhe, Geschwindigkeit und mehr direkt auf der Karte.";
 "short_min" = "m";
 "shared_string_millimeters" = "Millimeter";
+"shared_string_millimeters_short" = "mm";
+"display_position_automatic_descr" = "Abhängig von der Kartenausrichtung: unten für Bewegungsrichtung, mittig für alles andere.";
+"edit_tilesource_maxzoom" = "Maximale Vergrößerung";
+"edit_tilesource_minzoom" = "Minimale Vergrößerung";

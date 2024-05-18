@@ -3428,3 +3428,5 @@
 "shared_string_millimeters" = "Millimeter";
 "display_position_automatic_descr" = "Afhænger af kortorientering: Bund for bevægelsesretning, centrum for alle andre.";
 "shared_string_millimeters_short" = "mm";
+"edit_tilesource_minzoom" = "Minimum zoom";
+"edit_tilesource_maxzoom" = "Maksimal zoom";

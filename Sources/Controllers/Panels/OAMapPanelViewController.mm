@@ -906,7 +906,6 @@ typedef enum
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
-    [self.targetMenuView quickHide];
     [self targetHideContextPinMarker];
     [self hideContextMenu];
 

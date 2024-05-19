@@ -11,7 +11,6 @@ import Foundation
 class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfileBottomSheetDelegate, WidgetStateDelegate {
 
     weak var delegate: MapButtonsDelegate?
-
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
 

@@ -123,21 +123,20 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
         defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
-        
-        let quickActionsCount = OAQuickActionRegistry.sharedInstance().getQuickActionsCount()
-        let quickActionsEnabled = settings.quickActionIsOn.get()
-        let actionsString = quickActionsEnabled ? String(quickActionsCount) : localizedString("shared_string_off")
-        let quickActionRow = buttonsSection.createNewRow()
-        quickActionRow.title = localizedString("configure_screen_quick_action")
-        quickActionRow.descr = quickActionsEnabled ? String(format: localizedString("ltr_or_rtl_combine_via_colon"),
-                                                            localizedString("shared_string_actions"),
-                                                            actionsString) : actionsString
-        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
-        quickActionRow.key = "quick_action"
-        quickActionRow.iconName = "ic_custom_quick_action"
-        quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
-        quickActionRow.accessibilityLabel = quickActionRow.title
-        quickActionRow.accessibilityValue = quickActionRow.descr
+
+        var customButtonsEnabledCount = 0
+        if settings.quickActionIsOn.get() {
+            customButtonsEnabledCount += 1
+        }
+        let customButtonsRow = buttonsSection.createNewRow()
+        customButtonsRow.key = "customButtons"
+        customButtonsRow.title = localizedString("custom_buttons")
+        customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(customButtonsEnabledCount)", "1")
+        customButtonsRow.iconTintColor = customButtonsEnabledCount > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
+        customButtonsRow.iconName = "ic_custom_quick_action"
+        customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
+        customButtonsRow.accessibilityLabel = customButtonsRow.title
+        customButtonsRow.accessibilityValue = customButtonsRow.descr
         
         let otherSection = tableData.createNewSection()
         otherSection.headerText = localizedString("other_location")
@@ -285,12 +284,12 @@ extension ConfigureScreenViewController {
 
     override func onRowSelected(_ indexPath: IndexPath) {
         let data = tableData.item(for: indexPath)
-        if data.key == "quick_action" {
-            let vc = OAQuickActionListViewController()
-            vc?.delegate = self
-            show(vc)
-        } else if data.key == "defaultButtons" {
+        if data.key == "defaultButtons" {
             let vc = DefaultMapButtonsViewController()
+            vc.delegate = self
+            show(vc)
+        } else if data.key == "customButtons" {
+            let vc = CustomMapButtonsViewController()
             vc.delegate = self
             show(vc)
         } else if data.key == "position_on_map" {

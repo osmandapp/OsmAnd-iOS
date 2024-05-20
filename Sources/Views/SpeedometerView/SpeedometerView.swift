@@ -17,9 +17,8 @@ final class SpeedometerView: OATextInfoWidget {
     
     @IBOutlet private weak var contentStackView: UIStackView!
     
-    @IBOutlet private weak var speedView: UIView!
-    @IBOutlet private weak var valueSpeedLabel: UILabel!
-    @IBOutlet private weak var unitSpeedLabel: UILabel!
+    @IBOutlet private weak var speedometerSpeedView: SpeedometerSpeedView!
+    @IBOutlet private weak var speedometerSpeedViewWidthConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var speedLimitEUView: UIView! {
         didSet {
@@ -50,9 +49,9 @@ final class SpeedometerView: OATextInfoWidget {
 //        }
 //    }
     
-    class SpeedometerViewConfig {
-        //enum case
-    }
+//    class SpeedometerViewConfig {
+//        //enum case
+//    }
     
     static var initView: SpeedometerView? {
         UINib(nibName: String(describing: self), bundle: nil)
@@ -61,7 +60,7 @@ final class SpeedometerView: OATextInfoWidget {
         
     func updateWidgetSize() {
         let maxHeightWidth = getCurrentSpeedViewMaxHeightWidth()
-        [speedView, speedLimitNAMView, speedLimitNAMView].forEach {
+        [speedometerSpeedView, speedLimitNAMView, speedLimitNAMView].forEach {
             $0.heightEqualConstraint?.constant = maxHeightWidth
             $0.widthEqualConstraint?.constant = maxHeightWidth
         }
@@ -70,20 +69,22 @@ final class SpeedometerView: OATextInfoWidget {
     func updateWidgetSizeTest() {
         //[[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium]
         let settings = OAAppSettings.sharedManager()!
-        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: EOAWidgetSizeStyle(rawValue: 1)!)
-        updateWith(style: EOAWidgetSizeStyle(rawValue: 0)!, appMode: settings.applicationMode.get())
+        let widgetSizeStyleLocal = EOAWidgetSizeStyle(rawValue: 2)!
+        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: widgetSizeStyleLocal)
+        updateWith(style:widgetSizeStyleLocal, appMode: settings.applicationMode.get())
         updateWidgetSize()
-        layoutIfNeeded()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-            self.updateWith(style: EOAWidgetSizeStyle(rawValue: 1)!, appMode: settings.applicationMode.get())
-            self.updateWidgetSize()
-            self.layoutIfNeeded()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-                self.updateWith(style: EOAWidgetSizeStyle(rawValue: 2)!, appMode: settings.applicationMode.get())
-                self.updateWidgetSize()
-                self.layoutIfNeeded()
-            }
-        }
+        
+//        layoutIfNeeded()
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//            self.updateWith(style: EOAWidgetSizeStyle(rawValue: 1)!, appMode: settings.applicationMode.get())
+//            self.updateWidgetSize()
+//            self.layoutIfNeeded()
+//            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+//                self.updateWith(style: EOAWidgetSizeStyle(rawValue: 2)!, appMode: settings.applicationMode.get())
+//                self.updateWidgetSize()
+//                self.layoutIfNeeded()
+//            }
+//        }
     }
     
     override func layoutSubviews() {
@@ -101,6 +102,10 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     func configure() {
+        updateWidgetSizeTest()
+        speedometerSpeedView.configureWith(widgetSizeStyle: EOAWidgetSizeStyle(rawValue: 2)!)
+        let size = getCurrentSpeedViewMaxHeightWidth()
+        speedometerSpeedViewWidthConstraint.constant = size
         centerPositionYConstraint.isActive = true
         if isPreview {
             centerPositionXConstraint.isActive = true
@@ -109,11 +114,11 @@ final class SpeedometerView: OATextInfoWidget {
         } else {
             centerPositionXConstraint.isActive = false
             if isCarPlay {
-                speedView.layer.cornerRadius = 10
+                layer.cornerRadius = 10
                 leadingPositionConstraint.isActive = false
                 trailingPositionConstraint.isActive = true
             } else {
-                speedView.layer.cornerRadius = 6
+                layer.cornerRadius = 6
                 leadingPositionConstraint.isActive = true
                 trailingPositionConstraint.isActive = false
             }

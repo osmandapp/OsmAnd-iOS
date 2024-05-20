@@ -1,0 +1,87 @@
+//
+//  SpeedometerSpeedView.swift
+//  OsmAnd Maps
+//
+//  Created by Oleksandr Panchenko on 20.05.2024.
+//  Copyright © 2024 OsmAnd. All rights reserved.
+//
+
+import Foundation
+
+final class SpeedometerSpeedView: UIView {
+    @IBOutlet private weak var topConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var bottomConstraint: NSLayoutConstraint!
+    
+    @IBOutlet private weak var leadingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var trailingConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var stackView: UIStackView!
+    
+    @IBOutlet private weak var valueSpeedLabel: UILabel!
+    @IBOutlet private weak var unitSpeedLabel: UILabel!
+    
+    private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
+    
+    func configureWith(widgetSizeStyle: EOAWidgetSizeStyle) {
+        self.widgetSizeStyle = widgetSizeStyle
+        // scaled?
+        valueSpeedLabel.font = UIFont.systemFont(ofSize: speedValueFontSize, weight: .semibold)
+        configureConstraints()
+    }
+    
+    func updateInfo() {
+        
+    }
+    
+    private func configureConstraints() {
+        topConstraint.constant = speedValueTopPadding
+        bottomConstraint.constant = speedValueBottomPadding
+        leadingConstraint.constant = speedValueLeadingTrailingPadding
+        trailingConstraint.constant = leadingConstraint.constant
+        // TODO: mb remove stackView
+        stackView.spacing = speedValueStackViewSpacing
+    }
+}
+
+extension SpeedometerSpeedView {
+    private var speedValueTopPadding: CGFloat {
+        switch widgetSizeStyle {
+        case .small, .medium: 3
+        case .large: 6
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+    
+    private var speedValueBottomPadding: CGFloat {
+        switch widgetSizeStyle {
+        case .small: 8
+        case .medium: 9
+        case .large: 12
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+    
+    private var speedValueLeadingTrailingPadding: CGFloat {
+        switch widgetSizeStyle {
+        case .small: 10
+        case .medium, .large: 12
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+    
+    private var speedValueStackViewSpacing: CGFloat {
+        switch widgetSizeStyle {
+        case .small: 3
+        case .medium, .large: 6
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+    
+    private var speedValueFontSize: CGFloat {
+        switch widgetSizeStyle {
+        case .small: 22
+        case .medium: 33
+        case .large: 50
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+}

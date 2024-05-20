@@ -3363,6 +3363,7 @@
 		FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */; };
 		FAC1662A2B21BEF900D63755 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661F2B21BEF900D63755 /* Peripheral.swift */; };
 		FAC1662B2B21BEF900D63755 /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166202B21BEF900D63755 /* CentralProxy.swift */; };
+		FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
@@ -7972,6 +7973,7 @@
 		FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDPath.swift; sourceTree = "<group>"; };
 		FAC1661F2B21BEF900D63755 /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
 		FAC166202B21BEF900D63755 /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
+		FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerSpeedView.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
@@ -14057,6 +14059,7 @@
 		FA83EAA32BF6538B00DBF321 /* SpeedometerView */ = {
 			isa = PBXGroup;
 			children = (
+				FAC5D4172BFB560400E9E658 /* SpeedView */,
 				FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */,
 				FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */,
 			);
@@ -14192,6 +14195,14 @@
 				FAC166162B21BEF700D63755 /* Util.swift */,
 			);
 			path = SwiftyBluetooth;
+			sourceTree = "<group>";
+		};
+		FAC5D4172BFB560400E9E658 /* SpeedView */ = {
+			isa = PBXGroup;
+			children = (
+				FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */,
+			);
+			path = SpeedView;
 			sourceTree = "<group>";
 		};
 		FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */ = {
@@ -17206,6 +17217,7 @@
 				DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */,
 				32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */,
 				3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */,
+				FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,

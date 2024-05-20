@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "ic_carplay_search 1.svg",
+      "filename" : "ic_carplay_search.svg",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "ic_carplay_search_night 1.svg",
+      "filename" : "ic_carplay_search_night.svg",
       "idiom" : "universal"
     }
   ],

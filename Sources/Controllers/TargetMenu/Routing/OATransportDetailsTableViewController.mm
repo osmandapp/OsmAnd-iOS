@@ -512,7 +512,7 @@
                     UIImage *img = [[OATargetInfoViewController getIcon:imageName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
                     img = smallIcon ? [[OAUtilities resizeImage:img newSize:CGSizeMake(16., 16.)] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate] : img;
                     [cell.iconView setImage:img];
-                    cell.iconView.tintColor = smallIcon ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected];
+                    cell.iconView.tintColor = [UIColor colorNamed: smallIcon ? ACColorNameIconColorSecondary : ACColorNameIconColorSelected];
                     [cell showOutiline:YES];
                     cell.iconView.contentMode = UIViewContentModeCenter;
                 }

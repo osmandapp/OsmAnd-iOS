@@ -867,13 +867,12 @@ static UIViewController *parentController;
 {
     // Share selected favorites
     UIButton *clickedButton = (UIButton *)sender;
-    CGRect clickedButtonScreenArea = [self.view convertRect:clickedButton.frame fromView:clickedButton];
-    [self shareItems:_selectedItems sourceRect:clickedButtonScreenArea sounceItem:clickedButton];
+    [self shareItems:_selectedItems sounceItem:clickedButton];
     [self finishEditing];
     [self generateData];
 }
 
-- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems sourceRect:(CGRect)sourceRect sounceItem:(UIView *)sounceItem
+- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems sounceItem:(UIView *)sounceItem
 {
     if ([selectedItems count] == 0)
     {
@@ -951,17 +950,10 @@ static UIViewController *parentController;
     
     //export button is on last section, last row
     NSIndexPath *exportButtonIndex = [NSIndexPath indexPathForRow:_exportButtonIndex inSection:_data.count - 1];
-    CGRect exportCellScreenArea = [self.view convertRect:[self.favoriteTableView rectForRowAtIndexPath:exportButtonIndex] fromView:self.favoriteTableView];
-    
-    activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = exportCellScreenArea;
-    activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+    UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:exportButtonIndex];
+    [self showActivity:@[favoritesUrl] sourceView:cell barButtonItem:nil completionWithItemsHandler:^{
         [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
-    };
-    
-    [self presentViewController:activityViewController
-                       animated:YES
-                     completion:nil];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -1084,10 +1076,9 @@ static UIViewController *parentController;
             {
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
             }
-            CGRect cellScreenArea = [self.view convertRect:[self.favoriteTableView rectForRowAtIndexPath:indexPath] fromView:self.favoriteTableView];
             
             UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:indexPath];
-            [self shareItems:indexPaths sourceRect:cellScreenArea sounceItem:cell];
+            [self shareItems:indexPaths sounceItem:cell];
         }];
         shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
         [menuElements addObject:shareAction];

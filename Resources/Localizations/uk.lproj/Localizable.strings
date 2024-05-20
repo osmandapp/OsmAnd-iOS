@@ -603,7 +603,7 @@
 "general_settings_2" = "Загальні налаштування";
 "general_settings_descr" = "Налаштування екрана та загальні параметри застосунку.";
 "routing_settings_descr" = "Визначити параметри навігації.";
-"auto_zoom_none" = "Без автомасштабування";
+"auto_zoom_none" = "Без автоматичного зуму";
 "auto_zoom_close" = "Докладний масштаб";
 "auto_zoom_far" = "Середній масштаб";
 "auto_zoom_farthest" = "Загальний масштаб";
@@ -1198,7 +1198,7 @@
 "quick_action_toggle_notes_descr" = "Натискання на цю кнопку покаже або сховає онлайн-примітки OSM.";
 "quick_action_toggle_edits_descr" = "Натискання на цю кнопку покаже або сховає офлайн-примітки OSM.";
 "quick_action_edit_list" = "Редагувати список швидких дій";
-"quick_action_hillshade_descr" = "Кнопка, що показує чи приховує рельєф на мапі.";
+"quick_action_hillshade_descr" = "Кнопка, щоб показати або приховати тінь на мапі.";
 "show_hillshade" = "Показати відтінення рельєфу";
 "hide_hillshade" = "Сховати відтінення рельєфу";
 "toggle_contour_lines" = "Показати/сховати ізолінії";
@@ -2835,7 +2835,7 @@
 "map_widget_zoom_level" = "Масштаб";
 "map_widget_target_distance" = "Відстань від камери до цілі";
 "wikivoyage_download_pics" = "Завантажити зображення";
-"map_widget_camera_tilt" = "Нахил камери";
+"map_widget_camera_tilt" = "Нахиляння камери";
 "map_widget_camera_distance" = "Висота від землі до камери";
 "change_language" = "Зміна мови";
 "dont_download" = "Не завантажувати";
@@ -2997,7 +2997,7 @@
 "ruler_circles" = "Кола лінійки";
 "shared_string_dark" = "Темна";
 "true_bearing_wdiget_desc" = "Кут між напрямком на північ та цільовою точкою, який спостерігається з вашого поточного місця перебування.";
-"map_3d_mode_action" = "3D-режим";
+"map_3d_mode_action" = "Режим 3D";
 "visible_in_3d_mode" = "Видимий у 3D-режимі";
 "map_3d_mode_description" = "Рух двома пальцями вздовж екрану, вгору-вниз, дозволяє змінювати кут нахилу мапи.";
 "map_2d_mode_action" = "2D режим";
@@ -3167,7 +3167,7 @@
 "no_bt_permission" = "Дозвіл на використання Bluetooth не надано";
 "shared_string_wrist" = "Запʼястя";
 "shared_string_travel_guides" = "Туристичні путівники";
-"ant_plus_searching_text_description" = "Тримайте пристрій близько до датчика. Датчик повинен бути активований, щоб OsmAnd міг його знайти.";
+"ant_plus_searching_text_description" = "Будь ласка, тримайте пристрій близько до датчика. Вам потрібно активувати датчик, щоб OsmAnd зміг його знайти.";
 "testFlight" = "TestFlight";
 "report_an_issues" = "Повідомити про проблему";
 "telegram_chats" = "Телеграм-бесіди";
@@ -3229,7 +3229,7 @@
 "help_article_map_map_context_menu_name" = "Контекстне меню мапи";
 "help_article_navigation_car_play_name" = "CarPlay";
 "help_article_personal_import_export_name" = "Імпорт / Експорт";
-"help_article_widgets_radius_ruler_name" = "Радіусна лінійка та лінійка";
+"help_article_widgets_radius_ruler_name" = "Радіус-лінійка та лінійка";
 "help_article_troubleshooting_track_recording_issues_name" = "Запис треку";
 "help_article_map_legend_nautical_map_name" = "Стиль морської мапи";
 "help_article_plan_route_name" = "План маршруту";
@@ -3427,3 +3427,8 @@
 "shared_string_bottom" = "Низ";
 "shared_string_top_bottom" = "Верх та низ";
 "track_3d_empty_view_title" = "Відображення 3D доріжки";
+"shared_string_millimeters_short" = "мм";
+"edit_tilesource_minzoom" = "Мінімальне масштабування";
+"display_position_automatic_descr" = "Залежить від орієнтації мапи: внизу - для напрямку руху, в центрі - для всіх інших.";
+"shared_string_millimeters" = "Міліметри";
+"edit_tilesource_maxzoom" = "Максимальне масштабування";

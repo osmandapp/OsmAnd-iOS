@@ -1302,7 +1302,7 @@
 "allow_3d" = "2,5D-s nézet engedélyezése";
 "shared_string_next" = "Következő";
 "poi_overlay" = "POI-rátétréteg";
-"icon_group_amenity" = "Hasznosés fontos létesítmény";
+"icon_group_amenity" = "Hasznos és fontos létesítmény";
 "angular_units" = "Szögmérés mértékegysége";
 "get_discount_first_few_parts" = "%@ az első %@";
 "get_discount_first_part" = "%@ az első %@";

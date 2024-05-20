@@ -3382,3 +3382,9 @@
 "remove_folder_with_files_descr" = "Är du säker på att du vill ta bort \"%@\"-mappen och alla %d spår?";
 "action_cant_be_undone" = "Denna åtgärd kan inte ångras.";
 "osmand_cloud_delete_account_descr" = "Är du säker på att du vill radera OsmAnd Cloud-kontot?";
+"vertical_exaggeration_description" = "Genom att ändra på skalningsvärdet kan du framhäva 3D-reliefen.";
+"downward_gradient" = "Nedåtgående gradient";
+"upward_gradient" = "Uppåtgående gradient";
+"auto_zoom_smooth" = "Jämn";
+"auto_zoom_discrete" = "Diskret";
+"shared_string_scale" = "Skala";

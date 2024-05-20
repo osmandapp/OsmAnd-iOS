@@ -27,6 +27,44 @@ import UIKit
     }
 }
 
+extension UIViewController {
+    @objc func showActivity(_ items: [Any],
+                            sourceView: UIView,
+                            barButtonItem: UIBarButtonItem?,
+                            completionWithItemsHandler: (() -> Void)? = nil) {
+        self.showActivity(items, applicationActivities: nil, excludedActivityTypes: nil, sourceView: sourceView, sourceRect: CGRect(), barButtonItem: barButtonItem, permittedArrowDirections: .any, completionWithItemsHandler: completionWithItemsHandler)
+    }
+    
+    @objc func showActivity(_ items: [Any],
+                            applicationActivities: [UIActivity]? = nil,
+                            excludedActivityTypes: [UIActivity.ActivityType]? = nil,
+                            sourceView: UIView,
+                            sourceRect: CGRect = CGRect(),
+                            barButtonItem: UIBarButtonItem?,
+                            permittedArrowDirections: UIPopoverArrowDirection = .any,
+                            completionWithItemsHandler: (() -> Void)? = nil) {
+        
+        let activityViewController = UIActivityViewController(activityItems: items, applicationActivities: applicationActivities)
+        activityViewController.excludedActivityTypes = excludedActivityTypes
+        
+        if let popoverPresentationController = activityViewController.popoverPresentationController {
+            popoverPresentationController.sourceView = sourceView
+            if let barButtonItem {
+                popoverPresentationController.barButtonItem = barButtonItem
+            } else if sourceRect != CGRectZero {
+                popoverPresentationController.sourceRect = sourceRect
+                popoverPresentationController.permittedArrowDirections = permittedArrowDirections
+            }
+        }
+        
+        activityViewController.completionWithItemsHandler = { _, _, _, _ in
+            completionWithItemsHandler?()
+        }
+        
+        present(activityViewController, animated: true, completion: nil)
+    }
+}
+
 extension UINavigationItem {
     @objc (setRightBarButtonItemsisEnabled:tintColor:)
     func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {

@@ -362,8 +362,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         let articleUrl = "https://osmand.net/travel?title=" + title + "&lang=" + lang!
         
         let items = [URL(string: articleUrl)!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        present(ac, animated: true)
+        showActivity(items, sourceView: view, barButtonItem: navigationItem.rightBarButtonItem)
     }
     
     // MARK: Data

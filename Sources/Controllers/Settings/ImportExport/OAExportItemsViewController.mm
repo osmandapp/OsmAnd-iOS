@@ -285,8 +285,9 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
         
         if (succeed)
         {
-            NSURL *fileUrl = [NSURL fileURLWithPath:file];
-            [self showActivityAtScreenBottom:@[fileUrl] sourceView:self.view completionWithItemsHandler:^{
+            NSURL *fileUrl = [NSURL fileURLWithPath:file];            
+            CGRect bottomScreenCenterPoint = CGRectMake(CGRectGetMidX(self.view.bounds), self.view.bounds.size.height, 0, 0);
+            [self showActivity:@[fileUrl] applicationActivities:nil excludedActivityTypes:nil sourceView:self.view sourceRect:bottomScreenCenterPoint barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionDown completionWithItemsHandler:^{
                 [self.navigationController popViewControllerAnimated:YES];
                 [NSFileManager.defaultManager removeItemAtURL:fileUrl error:nil];
             }];

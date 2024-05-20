@@ -28,13 +28,6 @@ import UIKit
 }
 
 extension UIViewController {
-    @objc func showActivityAtScreenBottom(_ items: [Any],
-                                          sourceView: UIView,
-                                          completionWithItemsHandler: (() -> Void)? = nil) {
-        let bottomScreenCenterPoint = CGRectMake(CGRectGetMidX(sourceView.bounds), sourceView.bounds.height, 0, 0)
-        showActivity(items, excludedActivityTypes: nil, sourceView: sourceView, sourceRect: bottomScreenCenterPoint, barButtonItem: nil, permittedArrowDirections: .down, completionWithItemsHandler: completionWithItemsHandler)
-    }
-    
     @objc func showActivity(_ items: [Any],
                             sourceView: UIView,
                             barButtonItem: UIBarButtonItem?,
@@ -58,7 +51,7 @@ extension UIViewController {
             popoverPresentationController.sourceView = sourceView
             if let barButtonItem {
                 popoverPresentationController.barButtonItem = barButtonItem
-            } else if sourceRect != CGRect() {
+            } else if sourceRect != CGRectZero {
                 popoverPresentationController.sourceRect = sourceRect
                 popoverPresentationController.permittedArrowDirections = permittedArrowDirections
             }

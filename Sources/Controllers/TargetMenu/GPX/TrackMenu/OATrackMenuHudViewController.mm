@@ -1467,7 +1467,7 @@
 
 - (void)openExport:(UIView *)sourceView
 {
-    CGRect touchPointArea = CGRect();
+    CGRect touchPointArea = CGRectZero;
     if ([sourceView isKindOfClass:UIButton.class])
     {
         UIButton *topButtonShare = (UIButton *)sourceView;

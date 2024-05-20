@@ -394,12 +394,7 @@ static NSString * const kLinkExternalType = @"ext_link";
     if (files.count > 0)
     {
         NSString *latestLogFile = [logsPath stringByAppendingPathComponent:[files firstObject]];
-        NSURL *logFileURL = [NSURL fileURLWithPath:latestLogFile];
-        
-        UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[logFileURL] applicationActivities:nil];
-        activityViewController.popoverPresentationController.sourceView = self.view;
-        activityViewController.popoverPresentationController.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds),            self.view.bounds.size.height, 0, 0);
-        [self presentViewController:activityViewController animated:YES completion:nil];
+        [self showActivityAtScreenBottom:@[[NSURL fileURLWithPath:latestLogFile]] sourceView:self.view  completionWithItemsHandler:nil];
     }
 }
 

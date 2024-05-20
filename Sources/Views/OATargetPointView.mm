@@ -2108,15 +2108,8 @@ static const NSInteger _buttonsCount = 4;
     ];
     
     UIButton *button = (UIButton *)sender;
-    CGRect buttonScreenArea = [self convertRect:button.frame fromView:button];
     
-    activityViewController.popoverPresentationController.sourceView = self;
-    activityViewController.popoverPresentationController.sourceRect = buttonScreenArea;
-    activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard];
-
-    [self.navController presentViewController:activityViewController
-                                     animated:YES
-                                   completion:^{ }];
+    [self.navController showActivity:items applicationActivities:@[shareClipboard, shareAddress, sharePOIName, shareCoordinates, shareGeo] excludedActivityTypes:nil sourceView:button sourceRect:CGRect() barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
 
     [self.menuViewDelegate targetPointShare];
 }

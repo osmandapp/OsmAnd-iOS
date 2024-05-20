@@ -362,14 +362,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         let articleUrl = "https://osmand.net/travel?title=" + title + "&lang=" + lang!
         
         let items = [URL(string: articleUrl)!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        
-        if let popover = ac.popoverPresentationController {
-            popover.sourceView = view
-            popover.barButtonItem = navigationItem.rightBarButtonItem
-            popover.permittedArrowDirections = .up
-        }
-        present(ac, animated: true)
+        showActivity(items, sourceView: view, barButtonItem: navigationItem.rightBarButtonItem)
     }
     
     // MARK: Data

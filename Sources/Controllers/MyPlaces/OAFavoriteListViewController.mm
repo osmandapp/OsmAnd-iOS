@@ -868,12 +868,12 @@ static UIViewController *parentController;
     // Share selected favorites
     UIButton *clickedButton = (UIButton *)sender;
     CGRect clickedButtonScreenArea = [self.view convertRect:clickedButton.frame fromView:clickedButton];
-    [self shareItems:_selectedItems sourceRect:clickedButtonScreenArea];
+    [self shareItems:_selectedItems sourceRect:clickedButtonScreenArea sounceItem:clickedButton];
     [self finishEditing];
     [self generateData];
 }
 
-- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems sourceRect:(CGRect)sourceRect
+- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems sourceRect:(CGRect)sourceRect sounceItem:(UIView *)sounceItem
 {
     if ([selectedItems count] == 0)
     {
@@ -915,17 +915,10 @@ static UIViewController *parentController;
     [OAFavoritesHelper saveFile:groups.allValues file:fullFilename];
 
     NSURL *favoritesUrl = [NSURL fileURLWithPath:fullFilename];
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl] applicationActivities:nil];
-    activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = sourceRect;
-    activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
-    };
 
-    [self presentViewController:activityViewController
-                       animated:YES
-                     completion:nil];
+    [self showActivity:@[favoritesUrl] sourceView:sounceItem barButtonItem:nil completionWithItemsHandler:^{
+        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
+    }];
 }
 
 - (IBAction)goRootScreen:(id)sender
@@ -1092,7 +1085,9 @@ static UIViewController *parentController;
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
             }
             CGRect cellScreenArea = [self.view convertRect:[self.favoriteTableView rectForRowAtIndexPath:indexPath] fromView:self.favoriteTableView];
-            [self shareItems:indexPaths sourceRect:cellScreenArea];
+            
+            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:indexPath];
+            [self shareItems:indexPaths sourceRect:cellScreenArea sounceItem:cell];
         }];
         shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
         [menuElements addObject:shareAction];

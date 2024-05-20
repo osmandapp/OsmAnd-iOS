@@ -1179,7 +1179,6 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 
                 let exportAction = UIAction(title: localizedString("shared_string_export"), image: UIImage.icCustomExportOutlined) { [weak self] _ in
                     guard let self else { return }
-                    let cellScreenArea = self.view.convert(self.tableView.rectForRow(at: indexPath), from: self.tableView)
                     self.onFolderExportButtonClicked(selectedFolderName)
                 }
                 let moveAction = UIAction(title: localizedString("shared_string_move"), image: UIImage.icCustomFolderMoveOutlined) { [weak self] _ in

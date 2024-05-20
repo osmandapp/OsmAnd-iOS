@@ -285,20 +285,11 @@ typedef NS_ENUM(NSInteger, EOAExportItemsViewControllerStateType) {
         
         if (succeed)
         {
-            NSURL *url = [NSURL fileURLWithPath:file];
-            UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[url] applicationActivities:nil];
-            UIPopoverPresentationController *presentationController = (UIPopoverPresentationController*)activityViewController.presentationController;
-            presentationController.sourceView = self.view;
-            presentationController.sourceRect = CGRectMake(CGRectGetMidX(self.view.bounds), self.view.bounds.size.height, 0, 0);
-            if ([OAUtilities isIPad])
-                presentationController.permittedArrowDirections = UIPopoverArrowDirectionDown;
-            
-            activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
+            NSURL *fileUrl = [NSURL fileURLWithPath:file];
+            [self showActivityAtScreenBottom:@[fileUrl] sourceView:self.view completionWithItemsHandler:^{
                 [self.navigationController popViewControllerAnimated:YES];
-                [NSFileManager.defaultManager removeItemAtURL:url error:nil];
-            };
-            
-            [self presentViewController:activityViewController animated:YES completion:nil];
+                [NSFileManager.defaultManager removeItemAtURL:fileUrl error:nil];
+            }];
         }
     });
 }

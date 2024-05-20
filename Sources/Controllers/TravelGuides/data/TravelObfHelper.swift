@@ -357,13 +357,13 @@ final class TravelObfHelper : NSObject {
     
     func sortSearchResults(results: [TravelSearchResult], searchQuery: String) -> [TravelSearchResult] {
         var sortedResults = results
+        let collatorContains: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_CONTAINS)
+        let collatorEquals: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_EQUALS)
         sortedResults.sort { (sr1, sr2) -> Bool in
             let titleA = sr1.getArticleTitle() ?? ""
             let titleB = sr2.getArticleTitle() ?? ""
-            let collatorContains: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_CONTAINS)
             let titleAContainsQuery = collatorContains.matches(titleA)
             let titleBContainsQuery = collatorContains.matches(titleB)
-            let collatorEquals: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_EQUALS)
             if collatorEquals.matches(titleA) {
                 return true
             }

@@ -309,17 +309,17 @@ final class TravelObfHelper : NSObject {
                             var l1 = a
                             var l2 = b
                             if l1 == appLang {
-                                l1 = "1";
+                                l1 = "1"
                             }
                             if l2 == appLang {
-                                l2 = "1";
+                                l2 = "1"
                             }
                             if !appLangEn {
                                 if l1 == "en" {
-                                    l1 = "2";
+                                    l1 = "2"
                                 }
                                 if l2 == "en" {
-                                    l2 = "2";
+                                    l2 = "2"
                                 }
                             }
                             return l1 < l2
@@ -331,10 +331,8 @@ final class TravelObfHelper : NSObject {
                         cacheTravelArticles(file: file, amenity: amenity, lang: appLang, readPoints: false, callback: nil)
                     }
                 }
-                
-                
             }
-            res = sortSearchResults(results: res)
+            res = sortSearchResults(results: res, searchQuery: searchQuery)
         }
         return res
     }
@@ -357,11 +355,33 @@ final class TravelObfHelper : NSObject {
         return langs
     }
     
-    func sortSearchResults(results: [TravelSearchResult]) -> [TravelSearchResult] {
+    func sortSearchResults(results: [TravelSearchResult], searchQuery: String) -> [TravelSearchResult] {
         var sortedResults = results
-        sortedResults.sort { a, b in
-            let titleA = a.getArticleTitle() ?? ""
-            let titleB = b.getArticleTitle() ?? ""
+        let collatorContains: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_CONTAINS)
+        let collatorEquals: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_EQUALS)
+        sortedResults.sort { (sr1, sr2) -> Bool in
+            let titleA = sr1.getArticleTitle() ?? ""
+            let titleB = sr2.getArticleTitle() ?? ""
+            let titleAContainsQuery = collatorContains.matches(titleA)
+            let titleBContainsQuery = collatorContains.matches(titleB)
+            if collatorEquals.matches(titleA) {
+                return true
+            }
+            if  collatorEquals.matches(titleB) {
+                return false
+            }
+            if titleAContainsQuery && titleBContainsQuery {
+                return titleA < titleB
+            }
+            if titleAContainsQuery {
+                return true
+            }
+            if titleBContainsQuery {
+                return false
+            }
+            if titleA == titleB {
+                return sr1.isPartOf ?? "" < sr2.isPartOf ?? ""
+            }
             return titleA < titleB
         }
         return sortedResults
@@ -435,7 +455,7 @@ final class TravelObfHelper : NSObject {
             var searchResult = headerObjs[header]
             var results = navMap[header]
             if results != nil {
-                results = sortSearchResults(results: results!)
+                results = sortSearchResults(results: results!, searchQuery: header)
                 let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: nil)
                 searchResult = searchResult != nil ? searchResult : emptyResult
                 res[searchResult!] = results

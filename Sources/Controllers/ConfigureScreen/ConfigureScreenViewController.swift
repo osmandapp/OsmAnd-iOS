@@ -111,11 +111,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         speedomenterRow.accessibilityLabel = speedomenterRow.title
         speedomenterRow.accessibilityValue = speedomenterRow.descr
         if settings.showSpeedometer.get() {
-            if settings.nightMode {
-                speedomenterRow.iconName = "widget_speed_night"
-            } else {
-                speedomenterRow.iconName = "widget_speed_day"
-            }
+            speedomenterRow.iconName = "widget_speed"
             speedomenterRow.iconTintColor = nil
         } else {
             speedomenterRow.iconName = "ic_custom_speedometer_outlined"
@@ -215,8 +211,12 @@ extension ConfigureScreenViewController {
                 cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
                 cell.separatorInset = .zero
                 cell.valueLabel.text = item.descr
-                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-                cell.leftIconView.tintColor = item.iconTintColor
+                if let iconTintColor = item.iconTintColor {
+                    cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                    cell.leftIconView.tintColor = iconTintColor
+                } else if let iconName = item.iconName {
+                    cell.leftIconView.image = UIImage(named: iconName)
+                }
                 cell.titleLabel.text = item.title
                 applyAccessibility(cell, item)
             }

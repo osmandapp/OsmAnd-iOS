@@ -19,6 +19,7 @@ protocol WidgetStateDelegate: AnyObject {
 class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectionDelegate, WidgetStateDelegate {
 
     private static let selectedKey = "selected"
+    private let kWidgetsInfoKey = "widget_info"
     
     private var widgetRegistry: OAMapWidgetRegistry?
     private var appMode: OAApplicationMode! {
@@ -101,6 +102,25 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         map3dModeRow.cellType = OAValueTableViewCell.getIdentifier()
         map3dModeRow.accessibilityLabel = map3dModeRow.title
         map3dModeRow.accessibilityValue = map3dModeRow.descr
+        
+        let speedomenterRow = buttonsSection.createNewRow()
+        speedomenterRow.cellType = OAValueTableViewCell.getIdentifier()
+        speedomenterRow.key = "shared_string_speedometer"
+        speedomenterRow.title = localizedString("shared_string_speedometer")
+        speedomenterRow.descr = settings.showSpeedometer.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
+        speedomenterRow.accessibilityLabel = speedomenterRow.title
+        speedomenterRow.accessibilityValue = speedomenterRow.descr
+        if settings.showSpeedometer.get() {
+            if settings.nightMode {
+                speedomenterRow.iconName = "widget_speed_night"
+            } else {
+                speedomenterRow.iconName = "widget_speed_day"
+            }
+            speedomenterRow.iconTintColor = nil
+        } else {
+            speedomenterRow.iconName = "ic_custom_speedometer_outlined"
+            speedomenterRow.iconTintColor = UIColor.iconColorDefault
+        }
     }
     
     func populateCompassRow(_ row: OATableRowData) {
@@ -269,6 +289,10 @@ extension ConfigureScreenViewController {
             let vc = Map3dModeButtonVisibilityViewController()
             vc.delegate = self
             showMediumSheetViewController(vc, isLargeAvailable: false)
+        } else if data.key == "shared_string_speedometer" {
+            let vc = SpeedometerWidgetSettingsViewController()
+            vc.delegate = self
+            show(vc)
         } else {
             let panel = data.obj(forKey: "panel") as? WidgetsPanel
             if let panel {

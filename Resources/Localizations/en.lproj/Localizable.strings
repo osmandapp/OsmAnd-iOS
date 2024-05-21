@@ -3761,3 +3761,9 @@
 
 "osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
+
+"shared_string_speedometer" = "Speedometer";
+"speedometer_description" = "Shows your current speed as reported via GPS";
+"speed_limit_warning" = "Speed limit warning";
+"shared_string_always" = "Always";
+"when_exceeded" = "When exceeded";

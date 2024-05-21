@@ -8,7 +8,7 @@
 
 #import "OAPublicTransportPointCell.h"
 #import "OAUtilities.h"
-#import "OAColors.h"
+#import "GeneratedAssetSymbols.h"
 
 #define kIconSizeBig 30.0
 #define kIconSizeSmall 24.0
@@ -33,7 +33,7 @@
 - (void) showOutiline:(BOOL)show
 {
     if (show)
-        _iconView.layer.borderColor = UIColorFromRGB(color_tint_gray).CGColor;
+        _iconView.layer.borderColor = [UIColor colorNamed:ACColorNameCustomSeparator].CGColor;
     else
         _iconView.layer.borderColor = UIColor.clearColor.CGColor;
 }

@@ -213,26 +213,6 @@
     return img;
 }
 
-+ (UIImage *) imageNamed:(NSString *)name renderingMode:(UIImageRenderingMode)mode shouldSearchInMapSVGResource:(BOOL)shouldSearchInMapSVGResource
-{
-    if (!name)
-        return nil;
-    
-    UIImage *image = [UIImage templateImageNamed:name];
-    if (image && mode != UIImageRenderingModeAlwaysTemplate)
-    {
-        image = [image imageWithRenderingMode:mode];
-    }
-    else if (!image && shouldSearchInMapSVGResource)
-    {
-        image = [OASvgHelper mapImageNamed:name];
-        if (image)
-            image = [image imageWithRenderingMode:mode];
-    }
-    
-    return image;
-}
-
 + (UIImage *) mapSvgImageNamed:(NSString *)name scale:(float)scale
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];

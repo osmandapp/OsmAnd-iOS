@@ -411,6 +411,17 @@
     return _actions[6 * indexPath.section + indexPath.row];
 }
 
+- (UIImage *)imageForAction:(OAQuickAction *)action
+{
+    OAQuickActionType *actionType = action.actionType;
+    NSArray *specialActionTypes = @[@"osmpoi.add", @"poi.showhide"];
+    NSString *actionIconName = [action getIconResName];
+    if ([specialActionTypes containsObject:action.getActionTypeId] && ![actionIconName isEqualToString:actionType.iconName])
+        return [[UIImage mapSvgImageNamed:actionIconName] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
+    else
+        return [UIImage templateImageNamed:actionIconName];
+}
+
 - (void) onDragged:(UIPanGestureRecognizer *)recognizer
 {
     CGFloat velocity = [recognizer velocityInView:self.superview].y;
@@ -552,7 +563,7 @@
         resultCell.actionTitleView.text = action.getActionStateName;
         [resultCell.actionTitleView setEnabled:isEnabled];
         resultCell.actionTitleView.textColor = isDayMode ? UIColorFromRGB(color_quick_action_text) : UIColorFromRGB(color_text_secondary_night);
-        resultCell.imageView.image = [UIImage imageNamed:action.getIconResName renderingMode:UIImageRenderingModeAlwaysTemplate shouldSearchInMapSVGResource:YES];
+        resultCell.imageView.image = [self imageForAction:action];
         resultCell.imageView.tintColor = [(isDayMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_primary_night)) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
         if (resultCell.imageView.subviews.count > 0)
             [[resultCell.imageView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];

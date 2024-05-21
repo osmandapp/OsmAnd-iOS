@@ -411,7 +411,7 @@
     if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
     {
         CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
-        _speedometerView.frame = CGRectMake(0, 0, 96, 96);
+        _speedometerView.frame = CGRectMake(0, 0, _speedometerView.intrinsicContentSize.width, _speedometerView.intrinsicContentSize.height);
         _speedometerView.center = CGPointMake(_speedometerView.bounds.size.width / 2 + [OAUtilities getLeftMargin],
                                               optionsButtonFrame.origin.y - _speedometerView.bounds.size.height / 2);
     }
@@ -659,6 +659,7 @@
     
     [_speedometerView configure];
     [_speedometerView layoutIfNeeded];
+    _speedometerView.hidden = YES;
 
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 

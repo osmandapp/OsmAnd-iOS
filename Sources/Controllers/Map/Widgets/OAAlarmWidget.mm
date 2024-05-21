@@ -231,7 +231,7 @@
                 text = nil;
                 bottomText = nil;
             }
-            visible = (text &&  text.length > 0) || (locImgId.length > 0);
+            visible = (text && text.length > 0) || (locImgId.length > 0);
             if (visible)
             {
                 if (alarm.type == AIT_SPEED_CAMERA)
@@ -239,7 +239,7 @@
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;
                 else if (alarm.type == AIT_SPEED_LIMIT)
-                    visible = speedLimitExceed;
+                    visible = NO;//speedLimitExceed;
                 else if (alarm.type == AIT_TUNNEL)
                     visible = tunnels;
                 else

@@ -18,61 +18,82 @@ final class SpeedometerView: OATextInfoWidget {
     @IBOutlet private weak var contentStackView: UIStackView!
     
     @IBOutlet private weak var speedometerSpeedView: SpeedometerSpeedView!
-    @IBOutlet private weak var speedometerSpeedViewWidthConstraint: NSLayoutConstraint!
+   // @IBOutlet private weak var speedometerSpeedViewWidthConstraint: NSLayoutConstraint!
     
-    @IBOutlet private weak var speedLimitEUView: UIView! {
+    @IBOutlet private weak var speedLimitEUView: SpeedLimitView! {
         didSet {
             speedLimitEUView.isHidden = true
         }
     }
-    @IBOutlet private weak var speedLimitNAMView: UIView! {
+    @IBOutlet private weak var speedLimitNAMView: SpeedLimitView! {
         didSet {
             speedLimitNAMView.isHidden = true
         }
     }
-    @IBOutlet private weak var unitSpeedLimitNAMLabel: UILabel! {
-        didSet {
-            unitSpeedLimitNAMLabel.text = localizedString("shared_string_maximum")
-        }
-    }
-    @IBOutlet private weak var valueSpeedLimitLabel: UILabel!
+    
+    let settings = OAAppSettings.sharedManager()!
+    
+    var style = EOAWidgetSizeStyle(rawValue: 2)!
     
     var isCarPlay = false
     var isPreview = false
-    
-//    var currentSpeedWidth: Float {
-//        static func getCurrentSpeedWidthFor(type: EOAWidgetSizeStyle) -> CGFloat {
-//            switch type {
-//            case .small, .medium, .large: 11
-//            @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
-//            }
-//        }
-//    }
-    
-//    class SpeedometerViewConfig {
-//        //enum case
-//    }
     
     static var initView: SpeedometerView? {
         UINib(nibName: String(describing: self), bundle: nil)
             .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
     }
-        
-    func updateWidgetSize() {
-        let maxHeightWidth = getCurrentSpeedViewMaxHeightWidth()
-        [speedometerSpeedView, speedLimitNAMView, speedLimitNAMView].forEach {
-            $0.heightEqualConstraint?.constant = maxHeightWidth
-            $0.widthEqualConstraint?.constant = maxHeightWidth
+    
+    func isVisibleSpeedLimitView() -> Bool {
+        let showSpeedLimitWarnings = settings.showSpeedLimitWarnings.get()
+        if !showSpeedLimitWarnings {
+            return false
         }
+        
+//        let _rh = OARoutingHelper.sharedInstance()
+//        let _app = OsmAndApp.swiftInstance()
+//        let _trackingUtilities = OAMapViewTrackingUtilities.instance()
+//        let _locationProvider = _app?.locationServices
+//        //let _wh = OAWaypointHelper.sharedInstance()
+//        let _currentPositionHelper = OACurrentPositionHelper.instance()
+//        let trafficWarnings = settings.showTrafficWarnings.get()
+//        let cams = settings.showCameras.get()
+//      //  let peds = settings.showPedestrian.get()
+//        //let tunnels = settings.showTunnels.get()
+//        var visible = false
+
+//        if (_rh.isFollowingMode() || _trackingUtilities.isMapLinkedToLocation()) && (trafficWarnings || cams) {
+//            var alarm: OAAlarmInfo?
+//            
+//            if _rh.isFollowingMode() && !OARoutingHelper.isDeviatedFromRoute() && !_rh.getCurrentGPXRoute() {
+////                alarm = _wh.getMostImportantAlarm(_settings.speedSystem.get(), showCameras: cams)
+//            } else {
+//                if let loc = _app.locationServices.lastKnownLocation,
+//                   let ro = _currentPositionHelper.getLastKnownRouteSegment(loc) {
+//                    alarm = _wh.calculateMostImportantAlarm(ro, loc: loc, mc: _settings.metricSystem.get(), sc: _settings.speedSystem.get(), showCameras: cams)
+//                }
+//            }
+//            
+//            if let alarm, alarm.type == AIT_SPEED_LIMIT {
+//                // Handle alarm
+//            }
+//        }
+        
+        return false
     }
+        
+//    func updateWidgetSize() {
+//        let maxHeightWidth = getCurrentSpeedViewMaxHeightWidth()
+//        [speedometerSpeedView, speedLimitNAMView, speedLimitNAMView].forEach {
+//            $0.heightEqualConstraint?.constant = maxHeightWidth
+//            $0.widthEqualConstraint?.constant = maxHeightWidth
+//        }
+//    }
     
     func updateWidgetSizeTest() {
         //[[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium]
-        let settings = OAAppSettings.sharedManager()!
-        let widgetSizeStyleLocal = EOAWidgetSizeStyle(rawValue: 2)!
-        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: widgetSizeStyleLocal)
-        updateWith(style:widgetSizeStyleLocal, appMode: settings.applicationMode.get())
-        updateWidgetSize()
+        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: style)
+        updateWith(style: style, appMode: settings.applicationMode.get())
+       // updateWidgetSize()
         
 //        layoutIfNeeded()
 //        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -96,16 +117,37 @@ final class SpeedometerView: OATextInfoWidget {
 //    }
     
     override var intrinsicContentSize: CGSize {
-        let size = getCurrentSpeedViewMaxHeightWidth()
         let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        return CGSize(width: fittingSize.width, height: fittingSize.height)
+        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
     
     func configure() {
         updateWidgetSizeTest()
-        speedometerSpeedView.configureWith(widgetSizeStyle: EOAWidgetSizeStyle(rawValue: 2)!)
-        let size = getCurrentSpeedViewMaxHeightWidth()
-        speedometerSpeedViewWidthConstraint.constant = size
+        let width = getCurrentSpeedViewMaxHeightWidth()
+        let settings = OAAppSettings.sharedManager()!
+        let drivingRegion = settings.drivingRegion.get()
+        
+        if drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA  {
+            speedLimitEUView.isHidden = true
+            speedLimitNAMView.isHidden = false
+        } else {
+            speedLimitEUView.isHidden = false
+            speedLimitNAMView.isHidden = true
+        }
+//
+//        if (drivingRegion == DR_US)
+//            return @"list_warnings_speed_limit_us";
+//        else if (drivingRegion == DR_CANADA)
+//            return @"list_warnings_speed_limit_ca";
+//        return @"list_warnings_limit";
+        // TODO:
+        // EU – img_speedlimit_eu
+        // USA, Canada – img_speedlimit_nam
+        speedometerSpeedView.configureWith(widgetSizeStyle: style, width: width)
+        speedLimitEUView.configureWith(widgetSizeStyle: style, width: width)
+        speedLimitNAMView.configureWith(widgetSizeStyle: style, width: width)
+//        let size = getCurrentSpeedViewMaxHeightWidth()
+//        speedometerSpeedViewWidthConstraint.constant = size
         centerPositionYConstraint.isActive = true
         if isPreview {
             centerPositionXConstraint.isActive = true

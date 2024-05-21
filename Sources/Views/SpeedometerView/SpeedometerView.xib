@@ -7,35 +7,34 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
-        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SpeedometerView" customModule="OsmAnd_Maps" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+            <rect key="frame" x="0.0" y="0.0" width="209" height="94"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="-6" translatesAutoresizingMaskIntoConstraints="NO" id="4Mc-7N-XiW">
-                    <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                    <rect key="frame" x="0.0" y="0.0" width="164" height="94"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jOs-Ww-k6k" userLabel="SpeedView" customClass="SpeedometerSpeedView" customModule="OsmAnd_Maps" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="56" height="56"/>
+                            <rect key="frame" x="0.0" y="0.0" width="56" height="94"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vak-yP-0PE">
-                                    <rect key="frame" x="5" y="5" width="46" height="46"/>
+                                    <rect key="frame" x="5" y="5" width="46" height="84"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="75" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="omp-fK-gNM">
-                                            <rect key="frame" x="0.0" y="0.0" width="46" height="33"/>
-                                            <color key="backgroundColor" name="chartSliderLine"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="46" height="71"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                             <color key="textColor" name="widgetValueColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Km/h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tp0-En-Uqk">
-                                            <rect key="frame" x="0.0" y="33" width="46" height="13"/>
-                                            <color key="backgroundColor" name="navArrowDistantColor"/>
+                                            <rect key="frame" x="0.0" y="71" width="46" height="13"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="13" id="7PL-c0-fTx"/>
                                             </constraints>
@@ -44,10 +43,10 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                     </subviews>
-                                    <color key="backgroundColor" name="buttonBgColorDisruptive"/>
+                                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </stackView>
                             </subviews>
-                            <color key="backgroundColor" systemColor="systemOrangeColor"/>
+                            <color key="backgroundColor" name="widgetBgColor"/>
                             <constraints>
                                 <constraint firstAttribute="trailing" secondItem="vak-yP-0PE" secondAttribute="trailing" constant="5" id="Brx-2g-ejh"/>
                                 <constraint firstAttribute="width" constant="56" id="Lfn-GS-x1T"/>
@@ -59,6 +58,18 @@
                                 <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
                                     <real key="value" value="6"/>
                                 </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
+                                    <size key="value" width="0.0" height="2"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
+                                    <real key="value" value="0.5"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
+                                    <real key="value" value="4"/>
+                                </userDefinedRuntimeAttribute>
+                                <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
+                                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="bottomConstraint" destination="S3D-yZ-H3Z" id="5xF-aK-HLP"/>
@@ -68,37 +79,50 @@
                                 <outlet property="trailingConstraint" destination="Brx-2g-ejh" id="dc3-4S-prL"/>
                                 <outlet property="unitSpeedLabel" destination="Tp0-En-Uqk" id="uyN-Ut-5YJ"/>
                                 <outlet property="valueSpeedLabel" destination="omp-fK-gNM" id="JRM-oi-UXd"/>
+                                <outlet property="withConstraint" destination="Lfn-GS-x1T" id="OrS-1V-l0m"/>
                             </connections>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zzy-rU-I3b" userLabel="SpeedLimitEUView">
-                            <rect key="frame" x="90" y="0.0" width="96" height="141"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zzy-rU-I3b" userLabel="SpeedLimitEUView" customClass="SpeedLimitView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                            <rect key="frame" x="50" y="0.0" width="60" height="94"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_speedlimit_eu" translatesAutoresizingMaskIntoConstraints="NO" id="7SN-NG-hEv">
-                                    <rect key="frame" x="40" y="85" width="56" height="56"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_speedlimit_eu" translatesAutoresizingMaskIntoConstraints="NO" id="7SN-NG-hEv">
+                                    <rect key="frame" x="0.0" y="0.0" width="60" height="94"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G83-V4-Hdg">
-                                    <rect key="frame" x="19.333333333333314" y="-12" width="64.666666666666671" height="141"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G83-V4-Hdg">
+                                    <rect key="frame" x="8" y="8" width="44" height="78"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="50"/>
                                     <color key="textColor" name="widgetValueColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
+                            <constraints>
+                                <constraint firstAttribute="bottom" secondItem="G83-V4-Hdg" secondAttribute="bottom" constant="8" id="21g-TS-rc2"/>
+                                <constraint firstAttribute="trailing" secondItem="G83-V4-Hdg" secondAttribute="trailing" constant="8" id="3di-XS-2Cw"/>
+                                <constraint firstAttribute="bottom" secondItem="7SN-NG-hEv" secondAttribute="bottom" id="6Ka-GD-sxT"/>
+                                <constraint firstAttribute="trailing" secondItem="7SN-NG-hEv" secondAttribute="trailing" id="IAO-pO-4cJ"/>
+                                <constraint firstItem="7SN-NG-hEv" firstAttribute="top" secondItem="Zzy-rU-I3b" secondAttribute="top" id="Jhx-Cl-1V3"/>
+                                <constraint firstItem="7SN-NG-hEv" firstAttribute="leading" secondItem="Zzy-rU-I3b" secondAttribute="leading" id="Nuw-wp-gNv"/>
+                                <constraint firstItem="G83-V4-Hdg" firstAttribute="top" secondItem="Zzy-rU-I3b" secondAttribute="top" constant="8" id="O6V-oz-ZWf"/>
+                                <constraint firstItem="G83-V4-Hdg" firstAttribute="leading" secondItem="Zzy-rU-I3b" secondAttribute="leading" constant="8" id="Xjz-Lo-VlF"/>
+                                <constraint firstAttribute="width" constant="60" id="cNZ-Q8-bkW"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="valueSpeedLimitLabel" destination="G83-V4-Hdg" id="dtJ-Cy-Mte"/>
+                                <outlet property="withConstraint" destination="cNZ-Q8-bkW" id="L5v-Sy-QvT"/>
+                            </connections>
                         </view>
-                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Raq-ej-jOf" userLabel="SpeedLimitNAMView">
-                            <rect key="frame" x="180" y="0.0" width="96" height="141"/>
-                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Raq-ej-jOf" userLabel="SpeedLimitNAMView" customClass="SpeedLimitView" customModule="OsmAnd_Maps" customModuleProvider="target">
+                            <rect key="frame" x="104" y="0.0" width="60" height="94"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_speedlimit_nam" translatesAutoresizingMaskIntoConstraints="NO" id="MTv-eX-coq">
-                                    <rect key="frame" x="0.0" y="0.0" width="96" height="141"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_speedlimit_nam" translatesAutoresizingMaskIntoConstraints="NO" id="MTv-eX-coq">
+                                    <rect key="frame" x="0.0" y="0.0" width="96" height="96"/>
                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 </imageView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MSL-69-DpR">
-                                    <rect key="frame" x="15.000000000000028" y="14" width="66" height="115"/>
+                                    <rect key="frame" x="3" y="2" width="54" height="73"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIMIT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eGy-ju-0zK">
-                                            <rect key="frame" x="0.0" y="0.0" width="66" height="13"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="54" height="13"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="13" id="a21-S1-YNC"/>
                                             </constraints>
@@ -107,7 +131,7 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ni7-XM-Bte">
-                                            <rect key="frame" x="0.0" y="13" width="66" height="102"/>
+                                            <rect key="frame" x="0.0" y="13" width="54" height="60"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="50"/>
                                             <color key="textColor" name="widgetValueColor"/>
                                             <nil key="highlightedColor"/>
@@ -115,23 +139,30 @@
                                     </subviews>
                                 </stackView>
                             </subviews>
+                            <constraints>
+                                <constraint firstItem="MSL-69-DpR" firstAttribute="leading" secondItem="Raq-ej-jOf" secondAttribute="leading" constant="3" id="FZd-4w-zIb"/>
+                                <constraint firstAttribute="width" constant="60" id="JkS-Qw-cOV"/>
+                                <constraint firstAttribute="trailing" secondItem="MSL-69-DpR" secondAttribute="trailing" constant="3" id="bk3-zE-oHz"/>
+                                <constraint firstItem="MSL-69-DpR" firstAttribute="top" secondItem="Raq-ej-jOf" secondAttribute="top" constant="2" id="fPb-jj-B4i"/>
+                            </constraints>
+                            <connections>
+                                <outlet property="titleSpeedLimitLabel" destination="eGy-ju-0zK" id="YLU-lS-e8d"/>
+                                <outlet property="valueSpeedLimitLabel" destination="ni7-XM-Bte" id="SnE-AL-MJb"/>
+                                <outlet property="withConstraint" destination="JkS-Qw-cOV" id="Fsb-1F-s7L"/>
+                            </connections>
                         </view>
                     </subviews>
-                    <variation key="default">
-                        <mask key="subviews">
-                            <exclude reference="Zzy-rU-I3b"/>
-                            <exclude reference="Raq-ej-jOf"/>
-                        </mask>
-                    </variation>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                 </stackView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
-            <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
-                <constraint firstItem="G83-V4-Hdg" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="Y0M-NE-lsL"/>
+                <constraint firstItem="Zzy-rU-I3b" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="LTY-Ks-LRe"/>
                 <constraint firstItem="4Mc-7N-XiW" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="Yog-Y8-kCl"/>
                 <constraint firstItem="4Mc-7N-XiW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="aYr-0E-DrW"/>
                 <constraint firstItem="jOs-Ww-k6k" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="abV-1f-Sd4"/>
+                <constraint firstItem="Raq-ej-jOf" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="fgd-A1-eFQ"/>
                 <constraint firstAttribute="trailing" secondItem="4Mc-7N-XiW" secondAttribute="trailing" id="gb7-dz-8bq"/>
                 <constraint firstItem="4Mc-7N-XiW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="iYB-Vm-dPf"/>
                 <constraint firstAttribute="trailing" secondItem="4Mc-7N-XiW" secondAttribute="trailing" id="nsG-kK-Rto"/>
@@ -141,6 +172,7 @@
             <variation key="default">
                 <mask key="constraints">
                     <exclude reference="xPf-Qv-Zau"/>
+                    <exclude reference="gb7-dz-8bq"/>
                     <exclude reference="nsG-kK-Rto"/>
                     <exclude reference="aYr-0E-DrW"/>
                 </mask>
@@ -153,25 +185,16 @@
                 <outlet property="speedLimitEUView" destination="Zzy-rU-I3b" id="SUQ-Xb-SdY"/>
                 <outlet property="speedLimitNAMView" destination="Raq-ej-jOf" id="WKN-2D-LuI"/>
                 <outlet property="speedometerSpeedView" destination="jOs-Ww-k6k" id="Lsg-Rs-2lE"/>
-                <outlet property="speedometerSpeedViewWidthConstraint" destination="Lfn-GS-x1T" id="jrb-QX-E7c"/>
                 <outlet property="trailingPositionConstraint" destination="gb7-dz-8bq" id="gZQ-Sv-XeK"/>
-                <outlet property="unitSpeedLimitNAMLabel" destination="eGy-ju-0zK" id="tIj-Fa-zFz"/>
-                <outlet property="valueSpeedLimitLabel" destination="ni7-XM-Bte" id="5DN-qV-grD"/>
             </connections>
-            <point key="canvasLocation" x="41.221374045801525" y="68.309859154929583"/>
+            <point key="canvasLocation" x="93.89312977099236" y="76.760563380281695"/>
         </view>
     </objects>
     <resources>
         <image name="img_speedlimit_eu" width="56" height="56"/>
         <image name="img_speedlimit_nam" width="56" height="56"/>
-        <namedColor name="buttonBgColorDisruptive">
-            <color red="0.90588235294117647" green="0.11372549019607843" blue="0.21176470588235294" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="chartSliderLine">
-            <color red="0.0" green="0.0" blue="0.0" alpha="0.30000001192092896" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="navArrowDistantColor">
-            <color red="0.75294117647058822" green="0.75294117647058822" blue="0.75294117647058822" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        <namedColor name="widgetBgColor">
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="widgetUnitsColor">
             <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
@@ -179,11 +202,5 @@
         <namedColor name="widgetValueColor">
             <color red="0.0" green="0.0" blue="0.0" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
-        <systemColor name="systemOrangeColor">
-            <color red="1" green="0.58431372549019611" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </systemColor>
     </resources>
 </document>

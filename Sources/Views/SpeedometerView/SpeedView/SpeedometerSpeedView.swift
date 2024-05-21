@@ -12,6 +12,8 @@ final class SpeedometerSpeedView: UIView {
     @IBOutlet private weak var topConstraint: NSLayoutConstraint!
     @IBOutlet private weak var bottomConstraint: NSLayoutConstraint!
     
+    @IBOutlet private weak var withConstraint: NSLayoutConstraint!
+    
     @IBOutlet private weak var leadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var trailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var stackView: UIStackView!
@@ -19,17 +21,67 @@ final class SpeedometerSpeedView: UIView {
     @IBOutlet private weak var valueSpeedLabel: UILabel!
     @IBOutlet private weak var unitSpeedLabel: UILabel!
     
-    private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
+    let LOW_SPEED_THRESHOLD_MPS = 6.0
+    let UPDATE_THRESHOLD_MPS = 0.1
+    let LOW_SPEED_UPDATE_THRESHOLD_MPS = 0.015 // Update more often while walking/running
     
-    func configureWith(widgetSizeStyle: EOAWidgetSizeStyle) {
+    private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
+    private var cachedSpeed = 0.0
+    private var cachedMetricSystem = -1
+    
+    func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
+        
+        withConstraint.constant = width
         // scaled?
         valueSpeedLabel.font = UIFont.systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
     }
     
-    func updateInfo() {
-        
+//    func isUpdateNeeded() -> Bool {
+//        true
+//    }
+    
+//    func isUpdateNeeded() -> Bool {
+//        var res = false
+//        
+//        let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager()!.metricSystem.get()
+//        res = res || cachedMetricSystem != metricSystem
+//        _cachedMetricSystem = metricSystem
+//
+//        return res
+//    }
+    
+    func updateInfo() -> Bool {
+        if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
+            let currentSpeed = lastKnownLocation.speed
+            if currentSpeed >= 0 {
+                let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
+                
+                if /*isUpdateNeeded() ||*/ abs(currentSpeed - cachedSpeed) > updateThreshold {
+                    cachedSpeed = currentSpeed
+                    let valueUnitArray: NSMutableArray = []
+                    OAOsmAndFormatter.getFormattedSpeed(Float(currentSpeed), valueUnitArray: valueUnitArray)
+                    if let result = getValueAndUnit(with: valueUnitArray) {
+                        valueSpeedLabel.text = result.value
+                        unitSpeedLabel.text = result.unit
+                    }
+                }
+            } else if cachedSpeed != 0 {
+                cachedSpeed = 0
+                valueSpeedLabel.text = "-"
+            }
+        }
+        return false
+    }
+    
+    private func getValueAndUnit(with valueUnitArray: NSMutableArray) -> (value: String, unit: String)? {
+        guard valueUnitArray.count == 2,
+              let value = valueUnitArray[0] as? String,
+              let unit = valueUnitArray[1] as? String else {
+            return nil
+        }
+        return (value: value, unit: unit)
     }
     
     private func configureConstraints() {

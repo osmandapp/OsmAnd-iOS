@@ -694,6 +694,7 @@
         for (OAWptPt *rtePt in [self.doc getRoutePoints])
         {
             OAGpxWptItem *rtePtItem = [OAGpxWptItem withGpxWpt:rtePt];
+            rtePtItem.routePoint = YES;
             NSMutableArray<OAGpxWptItem *> *rtePtsGroup = _waypointGroups[OALocalizedString(@"route_points")];
             if (!rtePtsGroup)
             {

@@ -9,7 +9,7 @@
 	<key>provisioningProfiles</key>
 	<dict>
 		<key>net.osmand.maps</key>
-		<string>Github Build</string>
+		<string>Github Build (self hosted)</string>
 	</dict>
 </dict>
 </plist>

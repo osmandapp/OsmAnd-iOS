@@ -70,9 +70,20 @@ final class BLEBikeSCDDevice: Device {
         sensors.forEach { $0.update(with: characteristic, result: result) }
     }
     
-    func setWheelCircumference(wheelCircumference: Float) {
-        if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor {
-            sensor.wheelSize = Double(wheelCircumference / 1000)
-        }
+    override func configure() {
+        guard let wheelCircumference = getWheelCircumference() else { return }
+        setWheelCircumference(wheelCircumference: wheelCircumference)
+    }
+    
+    func setWheelCircumference(wheelCircumference: Double) {
+        guard let sensor = sensors.compactMap({ $0 as? BLEBikeSensor }).first else { return }
+        sensor.wheelSize = wheelCircumference / 1000
+    }
+    
+    private func getWheelCircumference() -> Double? {
+        guard let settings = DeviceHelper.shared.devicesSettingsCollection.getDeviceSettings(deviceId: id),
+              let wheelCircumference = settings.additionalParams?[WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY],
+              let value = Double(wheelCircumference) else { return nil }
+        return value
     }
 }

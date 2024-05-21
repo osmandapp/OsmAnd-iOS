@@ -117,10 +117,10 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
 
         let speedomenterRow = otherSection.createNewRow()
-        speedomenterRow.cellType = OAValueTableViewCell.getIdentifier()
+        speedomenterRow.cellType = OAValueTableViewCell.reuseIdentifier
         speedomenterRow.key = "shared_string_speedometer"
         speedomenterRow.title = localizedString("shared_string_speedometer")
-        speedomenterRow.descr = settings.showSpeedometer.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
+        speedomenterRow.descr = localizedString(settings.showSpeedometer.get() ? "shared_string_on" : "shared_string_off")
         speedomenterRow.accessibilityLabel = speedomenterRow.title
         speedomenterRow.accessibilityValue = speedomenterRow.descr
         if settings.showSpeedometer.get() {
@@ -128,7 +128,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             speedomenterRow.iconTintColor = nil
         } else {
             speedomenterRow.iconName = "ic_custom_speedometer_outlined"
-            speedomenterRow.iconTintColor = UIColor.iconColorDefault
+            speedomenterRow.iconTintColor = .iconColorDefault
         }
     }
     

@@ -8,9 +8,7 @@
 
 import Foundation
 
-@objc(OASpeedometerWidgetSettingsViewController)
-@objcMembers
-class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, WidgetStateDelegate {
+final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, WidgetStateDelegate {
     
     private static let selectedKey = "isSelected"
     private static let valuesKey = "values"
@@ -31,6 +29,8 @@ class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, Widge
     
     override func registerCells() {
         addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
+        addCell(OAValueTableViewCell.reuseIdentifier)
+        addCell(OASwitchTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -43,12 +43,12 @@ class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, Widge
         switchCellSection.footerText = showSpeedometer ?  "" : localizedString("speedometer_description")
         
         let turnOnRow = switchCellSection.createNewRow()
-        turnOnRow.cellType = OASwitchTableViewCell.getIdentifier()
+        turnOnRow.cellType = OASwitchTableViewCell.reuseIdentifier
         turnOnRow.key = Self.turnOnRowKey
         turnOnRow.title = localizedString("shared_string_speedometer")
         turnOnRow.accessibilityLabel = turnOnRow.title
-        turnOnRow.accessibilityValue = showSpeedometer ? localizedString("shared_string_on") : localizedString("shared_string_off")
-        turnOnRow.setObj(NSNumber(value: showSpeedometer), forKey: Self.selectedKey)
+        turnOnRow.accessibilityValue = localizedString( showSpeedometer ? "shared_string_on" : "shared_string_off")
+        turnOnRow.setObj(showSpeedometer, forKey: Self.selectedKey)
         
         if showSpeedometer
         {
@@ -60,7 +60,7 @@ class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, Widge
             previewSpeedometerRow.cellType = Self.previewSpeedometerRowKey
             
             let sellectSizeRow = sellectSizeSection.createNewRow()
-            sellectSizeRow.cellType = SegmentImagesWithRightLableTableViewCell.getIdentifier()
+            sellectSizeRow.cellType = SegmentImagesWithRightLableTableViewCell.reuseIdentifier
             sellectSizeRow.title = localizedString("shared_string_size")
             sellectSizeRow.setObj(["ic_custom20_height_s", "ic_custom20_height_m", "ic_custom20_height_l"], forKey: Self.valuesKey)
             if let size = settings.speedometerSize {
@@ -70,7 +70,7 @@ class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, Widge
             settingsSection.headerText = localizedString("shared_string_settings")
             
             let speedLimitWarningRow = settingsSection.createNewRow()
-            speedLimitWarningRow.cellType = OAValueTableViewCell.getIdentifier()
+            speedLimitWarningRow.cellType = OAValueTableViewCell.reuseIdentifier
             speedLimitWarningRow.key = Self.speedLimitWarningRowKey
             speedLimitWarningRow.title = localizedString("speed_limit_warning")
             speedLimitWarningRow.descr = settings.showSpeedLimitWarning?.toHumanString()
@@ -83,64 +83,46 @@ class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, Widge
         guard let tableData else { return nil }
         let item = tableData.item(for: indexPath)
         
-        if item.cellType == OAValueTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.getIdentifier()) as? OAValueTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OAValueTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OAValueTableViewCell
-                cell?.accessoryType = .disclosureIndicator
-                cell?.descriptionVisibility(false)
-                cell?.leftIconVisibility(false)
-            }
-            if let cell {
-                cell.valueLabel.text = item.descr
-                cell.titleLabel.text = item.title
-                cell.accessibilityLabel = item.accessibilityLabel
-                cell.accessibilityValue = item.accessibilityValue
-            }
+        if item.cellType == OAValueTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
+            cell.accessoryType = .disclosureIndicator
+            cell.descriptionVisibility(false)
+            cell.leftIconVisibility(false)
+            cell.valueLabel.text = item.descr
+            cell.titleLabel.text = item.title
+            cell.accessibilityLabel = item.accessibilityLabel
+            cell.accessibilityValue = item.accessibilityValue
             return cell
-        } else if item.cellType == OASwitchTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.getIdentifier()) as? OASwitchTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(OASwitchTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? OASwitchTableViewCell
-                cell?.descriptionVisibility(false)
-                cell?.leftIconVisibility(false)
+        } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as! OASwitchTableViewCell
+            cell.descriptionVisibility(false)
+            cell.leftIconVisibility(false)
+            let selected = item.bool(forKey: Self.selectedKey)
+            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
+            cell.titleLabel.text = item.title
+            cell.accessibilityLabel = item.accessibilityLabel
+            cell.accessibilityValue = item.accessibilityValue
+            cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
+            cell.switchView.isOn = selected
+            cell.switchView.tag = indexPath.section << 10 | indexPath.row
+            cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
+            return cell
+        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.reuseIdentifier {
+            var cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
+            cell.selectionStyle = .none
+            if let icons = item.obj(forKey: Self.valuesKey) as? [String], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
+                let widgetSizeStyle = sizePref.get()
+                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
-            if let cell {
-                let selected = item.bool(forKey: Self.selectedKey)
-                cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
-                cell.titleLabel.text = item.title
-                cell.accessibilityLabel = item.accessibilityLabel
-                cell.accessibilityValue = item.accessibilityValue
-                cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
-                cell.switchView.isOn = selected
-                cell.switchView.tag = indexPath.section << 10 | indexPath.row
-                cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
-                return cell
+            if let title = item.string(forKey: "title") {
+                cell.configureTitle(title: title)
             }
-        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.getIdentifier() {
-            var cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as? SegmentImagesWithRightLableTableViewCell
-            if cell == nil {
-                let nib = Bundle.main.loadNibNamed(SegmentImagesWithRightLableTableViewCell.getIdentifier(), owner: self, options: nil)
-                cell = nib?.first as? SegmentImagesWithRightLableTableViewCell
+            cell.didSelectSegmentIndex = { [weak self] index in
+                guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
+                sizePref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: OAAppSettings.sharedManager().applicationMode.get())
             }
-            if let cell {
-                cell.selectionStyle = .none
-                if let icons = item.obj(forKey: Self.valuesKey) as? [String], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
-                    let widgetSizeStyle = sizePref.get()
-                    cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
-                }
-                if let title = item.string(forKey: "title") {
-                    cell.configureTitle(title: title)
-                }
-                cell.didSelectSegmentIndex = { [weak self] index in
-                    guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
-                    sizePref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: OAAppSettings.sharedManager().applicationMode.get())
-                }
-                
-                return cell
-            }
+            
+            return cell
         } else if item.cellType == Self.previewSpeedometerRowKey {
             //TODO: implement preview cell
             var cell = tableView.dequeueReusableCell(withIdentifier: Self.previewSpeedometerRowKey) as? UITableViewCell
@@ -166,10 +148,7 @@ class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, Widge
     }
     
     @objc func onSwitchClick(_ sender: Any) -> Bool {
-        guard let tableData else { return false }
-        guard let sw = sender as? UISwitch else {
-            return false
-        }
+        guard let tableData, let sw = sender as? UISwitch else { return false }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)

@@ -8,9 +8,7 @@
 
 import Foundation
 
-@objc(OASpeedLimitWarningViewController)
-@objcMembers
-class SpeedLimitWarningViewController: OABaseNavbarViewController {
+final class SpeedLimitWarningViewController: OABaseNavbarViewController {
     
     weak var delegate: WidgetStateDelegate?
     
@@ -20,34 +18,32 @@ class SpeedLimitWarningViewController: OABaseNavbarViewController {
         let section = tableData.createNewSection()
         
         let alwaysRow = section.createNewRow()
-        alwaysRow.cellType = OASimpleTableViewCell.getIdentifier()
+        alwaysRow.cellType = OASimpleTableViewCell.reuseIdentifier
         alwaysRow.title = OACommonSpeedLimitWarningState.toHumanString(.always)
         alwaysRow.setObj(isAlwaysRowSelected, forKey: "isSelected")
         alwaysRow.accessibilityLabel = title
         
         let whenExceededRow = section.createNewRow()
-        whenExceededRow.cellType = OASimpleTableViewCell.getIdentifier()
+        whenExceededRow.cellType = OASimpleTableViewCell.reuseIdentifier
         whenExceededRow.title = OACommonSpeedLimitWarningState.toHumanString(.whenExceeded)
         whenExceededRow.setObj(!isAlwaysRowSelected, forKey: "isSelected")
         whenExceededRow.accessibilityLabel = title
     }
     
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+    }
+    
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
-        var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-        if cell == nil {
-            let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-            cell = nib?.first as? OASimpleTableViewCell
-            cell?.tintColor = UIColor.iconColorActive
-            cell?.descriptionVisibility(false)
-            cell?.leftIconVisibility(false)
-        }
-        if let cell = cell {
-            let isSelected = item.bool(forKey: "isSelected")
-            cell.titleLabel.text = item.title
-            cell.accessoryType = isSelected ? .checkmark : .none
-            cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")
-        }
+        let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
+        cell.tintColor = UIColor.iconColorActive
+        cell.descriptionVisibility(false)
+        cell.leftIconVisibility(false)
+        let isSelected = item.bool(forKey: "isSelected")
+        cell.titleLabel.text = item.title
+        cell.accessoryType = isSelected ? .checkmark : .none
+        cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")
         return cell
     }
     
@@ -62,6 +58,6 @@ class SpeedLimitWarningViewController: OABaseNavbarViewController {
     override func onRowSelected(_ indexPath: IndexPath!) {
         OAAppSettings.sharedManager().showSpeedLimitWarning.set(indexPath.row == 0 ? .always : .whenExceeded)
         delegate?.onWidgetStateChanged()
-        self.dismiss()
+        dismiss()
     }
 }

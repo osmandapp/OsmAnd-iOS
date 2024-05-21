@@ -105,6 +105,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         positionMapRow.cellType = OAValueTableViewCell.reuseIdentifier
         positionMapRow.accessibilityLabel = positionMapRow.title
         positionMapRow.accessibilityValue = positionMapRow.descr
+        
         let distByTapRow = otherSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
         distByTapRow.iconName = "ic_action_ruler_line"
@@ -115,7 +116,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         distByTapRow.accessibilityLabel = distByTapRow.title
         distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
 
-        let speedomenterRow = buttonsSection.createNewRow()
+        let speedomenterRow = otherSection.createNewRow()
         speedomenterRow.cellType = OAValueTableViewCell.getIdentifier()
         speedomenterRow.key = "shared_string_speedometer"
         speedomenterRow.title = localizedString("shared_string_speedometer")

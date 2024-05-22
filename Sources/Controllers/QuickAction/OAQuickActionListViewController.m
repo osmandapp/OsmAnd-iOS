@@ -214,7 +214,7 @@
     if (cell)
     {
         [cell.textView setText:action.getName];
-        [cell.iconView setImage:[self imageForAction:action]];
+        [cell.iconView setImage:[action getActionIcon]];
         [cell.iconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -345,17 +345,6 @@
     OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
     actionScreen.delegate = self;
     [self.navigationController pushViewController:actionScreen animated:YES];
-}
-
-- (UIImage *)imageForAction:(OAQuickAction *)action
-{
-    OAQuickActionType *actionType = action.actionType;
-    NSArray *specialActionTypes = @[@"osmpoi.add", @"poi.showhide"];
-    NSString *actionIconName = [action getIconResName];
-    if ([specialActionTypes containsObject:action.getActionTypeId] && ![actionIconName isEqualToString:actionType.iconName])
-        return [UIImage mapSvgImageNamed:actionIconName];
-    else
-        return [UIImage templateImageNamed:actionIconName];
 }
 
 #pragma mark - Selectors

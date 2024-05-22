@@ -75,6 +75,12 @@ static OAQuickActionType *ACTION_TYPE;
     return categoryIconName.length == 0 ? [super getIconResName] : categoryIconName;
 }
 
+- (UIImage *)getActionIcon
+{
+    NSString *actionIconName = [self getIconResName];
+    return [actionIconName isEqualToString:self.actionType.iconName] ? [UIImage templateImageNamed:actionIconName] : [UIImage mapSvgImageNamed:actionIconName];
+}
+
 - (OAPOIType *) getPoiType
 {
     NSString *poiTypeTranslation = [self getPoiTypeTranslation];

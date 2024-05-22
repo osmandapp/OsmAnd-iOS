@@ -821,7 +821,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
 
 - (NSArray<OAWptPt *> *) setPoints:(OAGpxRouteApproximation *)gpxApproximation originalPoints:(NSArray<OAWptPt *> *)originalPoints mode:(OAApplicationMode *)mode
 {
-	if (gpxApproximation == nil || gpxApproximation.gpxApproximation->finalPoints.size() == 0 || gpxApproximation.gpxApproximation->result.size() == 0)
+	if (gpxApproximation == nil || gpxApproximation.gpxApproximation->finalPoints.size() == 0 || gpxApproximation.gpxApproximation->fullRoute.size() == 0)
 		return nil;
 	
 	NSMutableArray<OAWptPt *> *routePoints = [NSMutableArray array];

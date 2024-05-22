@@ -54,6 +54,7 @@
 
 @implementation OATravelGuidesHelper
 
+NSArray *wikivoyageOSMTags = @[@"wikidata", @"wikipedia", @"opening_hours", @"address", @"email", @"fax", @"directions", @"price", @"phone"];
 
 + (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish
 {
@@ -148,7 +149,18 @@
     {
         wptPt.type = [OAUtilities capitalizeFirstLetter:category];
     }
-    
+    for (NSString *key in [amenity getAdditionalInfo].allKeys)
+    {
+        if (![wikivoyageOSMTags containsObject:key])
+        {
+            continue;
+        }
+        NSString *amenityValue = [amenity getAdditionalInfo][key];
+        if (amenityValue)
+        {
+            [wptPt setExtension:key value:amenityValue];
+        }
+    }
     return wptPt;
 }
 

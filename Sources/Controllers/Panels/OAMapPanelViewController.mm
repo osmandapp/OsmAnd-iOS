@@ -906,7 +906,8 @@ typedef enum
     
     [self createShadowButton:@selector(closeDashboard) withLongPressEvent:nil topView:_dashboard.view];
     
-    [self.targetMenuView quickHide];
+    [self targetHideContextPinMarker];
+    [self hideContextMenu];
 
     self.sidePanelController.recognizesPanGesture = NO;
 }
@@ -1873,12 +1874,12 @@ typedef enum
 
 - (void) targetZoomIn
 {
-    [_mapViewController animatedZoomIn];
+    [_mapViewController zoomIn];
 }
 
 - (void) targetZoomOut
 {
-    [_mapViewController animatedZoomOut];
+    [_mapViewController zoomOut];
     [_mapViewController calculateMapRuler];
 }
 

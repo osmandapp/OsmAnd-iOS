@@ -21,9 +21,9 @@
 #include <OsmAndCore/Map/SlopeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
 
-static NSString * const SLOPE_MAIN_COLOR_FILENAME = @"clr_slope";
-static NSString * const HILLSHADE_MAIN_COLOR_FILENAME = @"hs_main_hillshade";
-static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hs_scnd_hillshade";
+static NSString * const SLOPE_MAIN_COLOR_FILENAME = @"slope_default";
+static NSString * const HILLSHADE_MAIN_COLOR_FILENAME = @"hillshade_main_default";
+static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_default";
 
 @implementation OATerrainMapLayer
 {

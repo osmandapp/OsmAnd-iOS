@@ -2,7 +2,7 @@
   "images" : [
     {
       "filename" : "ic_carplay_search.svg",
-      "idiom" : "car"
+      "idiom" : "universal"
     },
     {
       "appearances" : [
@@ -12,7 +12,7 @@
         }
       ],
       "filename" : "ic_carplay_search_night.svg",
-      "idiom" : "car"
+      "idiom" : "universal"
     }
   ],
   "info" : {

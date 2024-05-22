@@ -3434,3 +3434,7 @@
 "track_3d_empty_view_description" = "¡Explora la traza en 3D interactivo! Visualiza la altura, la velocidad y más, directamente en el mapa.";
 "shared_string_millimeters" = "Milímetros";
 "short_min" = "m";
+"shared_string_millimeters_short" = "mm";
+"edit_tilesource_minzoom" = "Zum mínimo";
+"display_position_automatic_descr" = "Depende de la orientación del mapa: «Abajo» para «Dirección del movimiento», «Centro» para el resto.";
+"edit_tilesource_maxzoom" = "Zum máximo";

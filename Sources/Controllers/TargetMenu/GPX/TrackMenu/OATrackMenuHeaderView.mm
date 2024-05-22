@@ -551,7 +551,7 @@
 - (void)onExportPressed:(id)sender
 {
     if (self.trackMenuDelegate)
-        [self.trackMenuDelegate openExport];
+        [self.trackMenuDelegate openExport:((UIButton *)sender)];
 }
 
 - (void)onNavigationPressed:(id)sender

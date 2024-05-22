@@ -73,7 +73,7 @@
 - (CLLocationCoordinate2D)getPinLocation;
 - (OARouteKey *)getRouteKey;
 - (void)openAppearance;
-- (void)openExport;
+- (void)openExport:(UIView *)sourceView;
 - (void)openNavigation;
 - (void)openDescription;
 - (void)openDescriptionEditor;

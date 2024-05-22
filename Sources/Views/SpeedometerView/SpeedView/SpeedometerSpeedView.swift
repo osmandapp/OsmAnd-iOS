@@ -33,32 +33,17 @@ final class SpeedometerSpeedView: UIView {
         self.widgetSizeStyle = widgetSizeStyle
         
         withConstraint.constant = width
-        // scaled?
         valueSpeedLabel.font = UIFont.systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
     }
     
-//    func isUpdateNeeded() -> Bool {
-//        true
-//    }
-    
-//    func isUpdateNeeded() -> Bool {
-//        var res = false
-//        
-//        let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager()!.metricSystem.get()
-//        res = res || cachedMetricSystem != metricSystem
-//        _cachedMetricSystem = metricSystem
-//
-//        return res
-//    }
-    
-    func updateInfo() -> Bool {
+    func updateInfo() {
         if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
             let currentSpeed = lastKnownLocation.speed
             if currentSpeed >= 0 {
                 let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
                 
-                if /*isUpdateNeeded() ||*/ abs(currentSpeed - cachedSpeed) > updateThreshold {
+                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold {
                     cachedSpeed = currentSpeed
                     let valueUnitArray: NSMutableArray = []
                     OAOsmAndFormatter.getFormattedSpeed(Float(currentSpeed), valueUnitArray: valueUnitArray)
@@ -72,7 +57,17 @@ final class SpeedometerSpeedView: UIView {
                 valueSpeedLabel.text = "-"
             }
         }
-        return false
+    }
+    
+    private func isUpdateNeeded() -> Bool {
+        var res = false
+        if let metricSystem: EOAMetricsConstant = OAAppSettings.sharedManager()?.metricSystem.get() {
+            res = cachedMetricSystem != metricSystem.rawValue
+            if res {
+                cachedMetricSystem = metricSystem.rawValue
+            }
+        }
+        return res
     }
     
     private func getValueAndUnit(with valueUnitArray: NSMutableArray) -> (value: String, unit: String)? {
@@ -89,7 +84,6 @@ final class SpeedometerSpeedView: UIView {
         bottomConstraint.constant = speedValueBottomPadding
         leadingConstraint.constant = speedValueLeadingTrailingPadding
         trailingConstraint.constant = leadingConstraint.constant
-        // TODO: mb remove stackView
         stackView.spacing = speedValueStackViewSpacing
     }
 }

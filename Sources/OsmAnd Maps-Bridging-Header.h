@@ -50,6 +50,7 @@
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OAHistoryViewController.h"
 #import "OAAppDelegate.h"
+#import "SpeedViewWrapper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"

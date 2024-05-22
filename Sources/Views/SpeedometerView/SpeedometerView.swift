@@ -17,8 +17,11 @@ final class SpeedometerView: OATextInfoWidget {
     
     @IBOutlet private weak var contentStackView: UIStackView!
     
-    @IBOutlet private weak var speedometerSpeedView: SpeedometerSpeedView!
-   // @IBOutlet private weak var speedometerSpeedViewWidthConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var speedometerSpeedView: SpeedometerSpeedView! {
+        didSet {
+            speedometerSpeedView.isHidden = true
+        }
+    }
     
     @IBOutlet private weak var speedLimitEUView: SpeedLimitView! {
         didSet {
@@ -32,53 +35,20 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     let settings = OAAppSettings.sharedManager()!
-    
     var style = EOAWidgetSizeStyle(rawValue: 2)!
     
     var isCarPlay = false
     var isPreview = false
+    
+    let speedViewWrapper = SpeedViewWrapper()
     
     static var initView: SpeedometerView? {
         UINib(nibName: String(describing: self), bundle: nil)
             .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
     }
     
-    func isVisibleSpeedLimitView() -> Bool {
-        let showSpeedLimitWarnings = settings.showSpeedLimitWarnings.get()
-        if !showSpeedLimitWarnings {
-            return false
-        }
-        
-//        let _rh = OARoutingHelper.sharedInstance()
-//        let _app = OsmAndApp.swiftInstance()
-//        let _trackingUtilities = OAMapViewTrackingUtilities.instance()
-//        let _locationProvider = _app?.locationServices
-//        //let _wh = OAWaypointHelper.sharedInstance()
-//        let _currentPositionHelper = OACurrentPositionHelper.instance()
-//        let trafficWarnings = settings.showTrafficWarnings.get()
-//        let cams = settings.showCameras.get()
-//      //  let peds = settings.showPedestrian.get()
-//        //let tunnels = settings.showTunnels.get()
-//        var visible = false
-
-//        if (_rh.isFollowingMode() || _trackingUtilities.isMapLinkedToLocation()) && (trafficWarnings || cams) {
-//            var alarm: OAAlarmInfo?
-//            
-//            if _rh.isFollowingMode() && !OARoutingHelper.isDeviatedFromRoute() && !_rh.getCurrentGPXRoute() {
-////                alarm = _wh.getMostImportantAlarm(_settings.speedSystem.get(), showCameras: cams)
-//            } else {
-//                if let loc = _app.locationServices.lastKnownLocation,
-//                   let ro = _currentPositionHelper.getLastKnownRouteSegment(loc) {
-//                    alarm = _wh.calculateMostImportantAlarm(ro, loc: loc, mc: _settings.metricSystem.get(), sc: _settings.speedSystem.get(), showCameras: cams)
-//                }
-//            }
-//            
-//            if let alarm, alarm.type == AIT_SPEED_LIMIT {
-//                // Handle alarm
-//            }
-//        }
-        
-        return false
+    var speedLimitText: NSString? {
+        speedViewWrapper.speedLimitText() as NSString?
     }
         
 //    func updateWidgetSize() {
@@ -90,64 +60,19 @@ final class SpeedometerView: OATextInfoWidget {
 //    }
     
     func updateWidgetSizeTest() {
-        //[[OAAppSettings sharedManager] registerWidgetSizeStylePreference:prefId defValue:EOAWidgetSizeStyleMedium]
         widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: style)
         updateWith(style: style, appMode: settings.applicationMode.get())
-       // updateWidgetSize()
-        
-//        layoutIfNeeded()
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//            self.updateWith(style: EOAWidgetSizeStyle(rawValue: 1)!, appMode: settings.applicationMode.get())
-//            self.updateWidgetSize()
-//            self.layoutIfNeeded()
-//            DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
-//                self.updateWith(style: EOAWidgetSizeStyle(rawValue: 2)!, appMode: settings.applicationMode.get())
-//                self.updateWidgetSize()
-//                self.layoutIfNeeded()
-//            }
-//        }
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-    }
-    
-//    override func invalidateIntrinsicContentSize() {
-//        getCurrentSpeedViewMaxHeightWidth()
-//    }
-    
-    override var intrinsicContentSize: CGSize {
-        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
     
     func configure() {
+        isHidden = true
         updateWidgetSizeTest()
+
         let width = getCurrentSpeedViewMaxHeightWidth()
-        let settings = OAAppSettings.sharedManager()!
-        let drivingRegion = settings.drivingRegion.get()
-        
-        if drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA  {
-            speedLimitEUView.isHidden = true
-            speedLimitNAMView.isHidden = false
-        } else {
-            speedLimitEUView.isHidden = false
-            speedLimitNAMView.isHidden = true
-        }
-//
-//        if (drivingRegion == DR_US)
-//            return @"list_warnings_speed_limit_us";
-//        else if (drivingRegion == DR_CANADA)
-//            return @"list_warnings_speed_limit_ca";
-//        return @"list_warnings_limit";
-        // TODO:
-        // EU – img_speedlimit_eu
-        // USA, Canada – img_speedlimit_nam
         speedometerSpeedView.configureWith(widgetSizeStyle: style, width: width)
         speedLimitEUView.configureWith(widgetSizeStyle: style, width: width)
         speedLimitNAMView.configureWith(widgetSizeStyle: style, width: width)
-//        let size = getCurrentSpeedViewMaxHeightWidth()
-//        speedometerSpeedViewWidthConstraint.constant = size
+
         centerPositionYConstraint.isActive = true
         if isPreview {
             centerPositionXConstraint.isActive = true
@@ -165,17 +90,49 @@ final class SpeedometerView: OATextInfoWidget {
                 trailingPositionConstraint.isActive = false
             }
         }
-        // TODO: property 
-        speedLimitEUView.isHidden = false
-        // EU – img_speedlimit_eu
-        // USA, Canada – img_speedlimit_nam
-        
-        configureStackPosition()
     }
     
     override func updateInfo() -> Bool {
-        // TODO:
+        updateSpeedometerSpeedView()
+        updateSpeedLimitView()
+        isHidden = speedometerSpeedView.isHidden && speedLimitEUView.isHidden && speedLimitNAMView.isHidden
+       
         return true
+    }
+    
+    override var intrinsicContentSize: CGSize {
+        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
+    }
+    
+    private func updateSpeedometerSpeedView() {
+        // TODO:
+        if true {
+            speedometerSpeedView.isHidden = false
+            speedometerSpeedView.updateInfo()
+        } else {
+            speedometerSpeedView.isHidden = true
+        }
+    }
+    
+    private func updateSpeedLimitView() {
+        guard let settings = OAAppSettings.sharedManager() else { return }
+        let drivingRegion = settings.drivingRegion.get()
+        
+        speedLimitEUView.isHidden = true
+        speedLimitNAMView.isHidden = true
+        
+        if drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA {
+            if let value = speedLimitText as? String {
+                speedLimitNAMView.isHidden = false
+                speedLimitNAMView.updateWith(value: value)
+            }
+        } else {
+            if let value = speedLimitText as? String {
+                speedLimitEUView.isHidden = false
+                speedLimitEUView.updateWith(value: value)
+            }
+        }
     }
     
     private func configureStackPosition() {

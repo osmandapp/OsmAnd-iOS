@@ -18,6 +18,10 @@ final class SpeedLimitView: UIView {
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
     
+    func updateWith(value: String) {
+        valueSpeedLimitLabel.text = value
+    }
+    
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
         

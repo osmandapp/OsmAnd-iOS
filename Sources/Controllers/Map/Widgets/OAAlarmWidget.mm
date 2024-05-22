@@ -153,24 +153,10 @@
             BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
             BOOL isCanadianRegion = region == DR_CANADA;
 
-            NSString  *locImgId = @"warnings_limit";
+            NSString *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
-            if (alarm.type == AIT_SPEED_LIMIT)
-            {
-                if (isCanadianRegion)
-                {
-                    locImgId = @"warnings_speed_limit_ca";
-                    bottomText = [OASpeedConstant toShortString:[_settings.speedSystem get]];
-                }
-                else if (americanSigns)
-                {
-                    locImgId = @"warnings_speed_limit_us";
-                    //else case is done by drawing red ring
-                }
-                text = @(alarm.intValue).stringValue;
-            }
-            else if (alarm.type == AIT_SPEED_CAMERA)
+            if (alarm.type == AIT_SPEED_CAMERA)
             {
                 locImgId = @"warnings_speed_camera";
             }
@@ -239,7 +225,7 @@
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;
                 else if (alarm.type == AIT_SPEED_LIMIT)
-                    visible = NO;//speedLimitExceed;
+                    visible = NO;
                 else if (alarm.type == AIT_TUNNEL)
                     visible = tunnels;
                 else

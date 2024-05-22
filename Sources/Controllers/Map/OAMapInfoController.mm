@@ -408,18 +408,18 @@
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
+    CGFloat _speedometerViewYPosition = 0.0;
     if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
     {
-        CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
-        _speedometerView.frame = CGRectMake(0, 0, _speedometerView.intrinsicContentSize.width, _speedometerView.intrinsicContentSize.height);
-        _speedometerView.center = CGPointMake(_speedometerView.bounds.size.width / 2 + [OAUtilities getLeftMargin],
-                                              optionsButtonFrame.origin.y - _speedometerView.bounds.size.height / 2);
+        _speedometerView.frame = CGRectMake(20, _mapHudViewController.optionsMenuButton.frame.origin.y - _speedometerView.intrinsicContentSize.height - 20, _speedometerView.intrinsicContentSize.width, _speedometerView.intrinsicContentSize.height);
+        _speedometerViewYPosition = _speedometerView.frame.origin.y;
     }
     
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
+        CGFloat positionY = _speedometerViewYPosition != 0.0 ? _speedometerViewYPosition :  _mapHudViewController.optionsMenuButton.frame.origin.y;
         CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
-        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
+        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], positionY - _alarmControl.bounds.size.height / 2);
     }
 
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
@@ -655,11 +655,9 @@
     
     [_speedometerView removeFromSuperview];
     _speedometerView.delegate = self;
-    [_mapHudViewController.view addSubview:_speedometerView];
     
+    [_mapHudViewController.view addSubview:_speedometerView];
     [_speedometerView configure];
-    [_speedometerView layoutIfNeeded];
-    _speedometerView.hidden = YES;
 
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 
@@ -759,8 +757,13 @@
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
     
+    if (_speedometerView)
+        [_speedometerView removeFromSuperview];
+    
     _speedometerView = [SpeedometerView initView];
     _speedometerView.delegate = self;
+    [widgetsToUpdate addObject:_speedometerView];
+
 
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;

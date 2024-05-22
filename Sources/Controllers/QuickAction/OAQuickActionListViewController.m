@@ -20,7 +20,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
-#import "OAQuickActionType.h"
+
 #import <AudioToolbox/AudioServices.h>
 
 #define kEnableSection 0

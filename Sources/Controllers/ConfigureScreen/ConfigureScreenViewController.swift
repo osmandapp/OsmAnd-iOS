@@ -248,7 +248,7 @@ extension ConfigureScreenViewController {
             if !cell.leftIconView.isHidden {
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
             }
-            
+
             let selected = item.bool(forKey: Self.selectedKey)
             cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
             cell.titleLabel.text = item.title

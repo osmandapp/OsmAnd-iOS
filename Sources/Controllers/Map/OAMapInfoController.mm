@@ -52,6 +52,10 @@
 
 @interface OAMapInfoController () <OAWeatherLayerSettingsDelegate, OAWidgetPanelDelegate>
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerHeightConstraint;
+
 @end
 
 @implementation OAMapInfoController
@@ -398,6 +402,11 @@
     view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
 }
 
+- (void)viewWillTransition
+{
+    [self layoutWidgets];
+}
+
 - (void) layoutWidgets
 {
     BOOL portrait = ![OAUtilities isLandscape];
@@ -409,16 +418,25 @@
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
     CGFloat _speedometerViewYPosition = 0.0;
+    NSLog(@"optionsMenuButton: X %f", _mapHudViewController.optionsMenuButton.frame.origin.x);
+    NSLog(@"optionsMenuButton: Y %f", _mapHudViewController.optionsMenuButton.frame.origin.y);
     if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
     {
-        _speedometerView.frame = CGRectMake(20, _mapHudViewController.optionsMenuButton.frame.origin.y - _speedometerView.intrinsicContentSize.height - 20, _speedometerView.intrinsicContentSize.width, _speedometerView.intrinsicContentSize.height);
-        _speedometerViewYPosition = _speedometerView.frame.origin.y;
+        self.speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
+        CGFloat optionsMenuButtonOffsetY = _mapHudViewController.optionsMenuButton.frame.origin.y;
+        self.speedometerTopConstraint.constant = optionsMenuButtonOffsetY - _speedometerView.intrinsicContentSize.height - 16;
+        // NOTE: when opened context menu optionsMenuButton.frame.origin.x has value -34. Perhaps, by this method, the 'menu' button is hidden from the screen.
+        CGFloat optionsMenuButtonOffsetX = _mapHudViewController.optionsMenuButton.frame.origin.x;
+        if (optionsMenuButtonOffsetX < 0)
+            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x - _speedometerView.intrinsicContentSize.width;
+        else
+            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x;
+        _speedometerViewYPosition = self.speedometerTopConstraint.constant;
     }
     
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
         CGFloat positionY = _speedometerViewYPosition != 0.0 ? _speedometerViewYPosition :  _mapHudViewController.optionsMenuButton.frame.origin.y;
-        CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
         _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], positionY - _alarmControl.bounds.size.height / 2);
     }
 
@@ -657,7 +675,15 @@
     _speedometerView.delegate = self;
     
     [_mapHudViewController.view addSubview:_speedometerView];
+    // TODO: constraint count
+    self.speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:72];
+    self.speedometerHeightConstraint.active = YES;
+    self.speedometerLeftConstraint = [_speedometerView.leftAnchor constraintEqualToAnchor:_mapHudViewController.view.leftAnchor constant:16];
+        self.speedometerLeftConstraint.active = YES;
+    self.speedometerTopConstraint = [_speedometerView.topAnchor constraintEqualToAnchor:_mapHudViewController.view.topAnchor constant:30];
+    self.speedometerTopConstraint.active = YES;
     [_speedometerView configure];
+    _speedometerView.hidden = NO;
 
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 
@@ -761,6 +787,8 @@
         [_speedometerView removeFromSuperview];
     
     _speedometerView = [SpeedometerView initView];
+    _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
+    _speedometerView.hidden = YES;
     _speedometerView.delegate = self;
     [widgetsToUpdate addObject:_speedometerView];
 

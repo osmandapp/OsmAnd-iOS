@@ -31,13 +31,17 @@ final class SpeedometerSpeedView: UIView {
     
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
-        
+        layer.masksToBounds = false
         withConstraint.constant = width
         valueSpeedLabel.font = UIFont.systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
     }
     
     func updateInfo() {
+        guard OARoutingHelper.sharedInstance().isFollowingMode() else {
+            valueSpeedLabel.text = "-"
+            return
+        }
         if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
             let currentSpeed = lastKnownLocation.speed
             if currentSpeed >= 0 {

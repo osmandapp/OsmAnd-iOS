@@ -13,27 +13,27 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="SpeedometerView" customModule="OsmAnd_Maps" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="209" height="94"/>
+            <rect key="frame" x="0.0" y="0.0" width="206" height="72"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <stackView opaque="NO" contentMode="scaleToFill" spacing="-6" translatesAutoresizingMaskIntoConstraints="NO" id="4Mc-7N-XiW">
-                    <rect key="frame" x="0.0" y="0.0" width="164" height="94"/>
+                    <rect key="frame" x="0.0" y="0.0" width="188" height="72"/>
                     <subviews>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jOs-Ww-k6k" userLabel="SpeedView" customClass="SpeedometerSpeedView" customModule="OsmAnd_Maps" customModuleProvider="target">
-                            <rect key="frame" x="0.0" y="0.0" width="56" height="94"/>
+                            <rect key="frame" x="0.0" y="0.0" width="56" height="72"/>
                             <subviews>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="vak-yP-0PE">
-                                    <rect key="frame" x="5" y="5" width="46" height="84"/>
+                                    <rect key="frame" x="5" y="5" width="46" height="62"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="75" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="omp-fK-gNM">
-                                            <rect key="frame" x="0.0" y="0.0" width="46" height="71"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="75" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="omp-fK-gNM">
+                                            <rect key="frame" x="0.0" y="0.0" width="46" height="49"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="22"/>
                                             <color key="textColor" name="widgetValueColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Km/h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tp0-En-Uqk">
-                                            <rect key="frame" x="0.0" y="71" width="46" height="13"/>
+                                            <rect key="frame" x="0.0" y="49" width="46" height="13"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="13" id="7PL-c0-fTx"/>
@@ -62,13 +62,13 @@
                                     <size key="value" width="0.0" height="2"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                    <real key="value" value="0.5"/>
+                                    <real key="value" value="1"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                    <real key="value" value="4"/>
+                                    <real key="value" value="5"/>
                                 </userDefinedRuntimeAttribute>
                                 <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                    <color key="value" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                    <color key="value" white="0.0" alpha="0.34548323675496689" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </userDefinedRuntimeAttribute>
                             </userDefinedRuntimeAttributes>
                             <connections>
@@ -83,28 +83,28 @@
                             </connections>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Zzy-rU-I3b" userLabel="SpeedLimitEUView" customClass="SpeedLimitView" customModule="OsmAnd_Maps" customModuleProvider="target">
-                            <rect key="frame" x="50" y="0.0" width="60" height="94"/>
+                            <rect key="frame" x="50" y="0.0" width="72" height="72"/>
                             <subviews>
                                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_speedlimit_eu" translatesAutoresizingMaskIntoConstraints="NO" id="7SN-NG-hEv">
-                                    <rect key="frame" x="0.0" y="0.0" width="60" height="94"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="72" height="72"/>
                                 </imageView>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G83-V4-Hdg">
-                                    <rect key="frame" x="8" y="8" width="44" height="78"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G83-V4-Hdg">
+                                    <rect key="frame" x="11" y="9" width="50" height="53"/>
                                     <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="50"/>
                                     <color key="textColor" name="widgetValueColor"/>
                                     <nil key="highlightedColor"/>
                                 </label>
                             </subviews>
                             <constraints>
-                                <constraint firstAttribute="bottom" secondItem="G83-V4-Hdg" secondAttribute="bottom" constant="8" id="21g-TS-rc2"/>
-                                <constraint firstAttribute="trailing" secondItem="G83-V4-Hdg" secondAttribute="trailing" constant="8" id="3di-XS-2Cw"/>
+                                <constraint firstAttribute="bottom" secondItem="G83-V4-Hdg" secondAttribute="bottom" constant="10" id="21g-TS-rc2"/>
+                                <constraint firstAttribute="trailing" secondItem="G83-V4-Hdg" secondAttribute="trailing" constant="11" id="3di-XS-2Cw"/>
                                 <constraint firstAttribute="bottom" secondItem="7SN-NG-hEv" secondAttribute="bottom" id="6Ka-GD-sxT"/>
                                 <constraint firstAttribute="trailing" secondItem="7SN-NG-hEv" secondAttribute="trailing" id="IAO-pO-4cJ"/>
                                 <constraint firstItem="7SN-NG-hEv" firstAttribute="top" secondItem="Zzy-rU-I3b" secondAttribute="top" id="Jhx-Cl-1V3"/>
                                 <constraint firstItem="7SN-NG-hEv" firstAttribute="leading" secondItem="Zzy-rU-I3b" secondAttribute="leading" id="Nuw-wp-gNv"/>
-                                <constraint firstItem="G83-V4-Hdg" firstAttribute="top" secondItem="Zzy-rU-I3b" secondAttribute="top" constant="8" id="O6V-oz-ZWf"/>
-                                <constraint firstItem="G83-V4-Hdg" firstAttribute="leading" secondItem="Zzy-rU-I3b" secondAttribute="leading" constant="8" id="Xjz-Lo-VlF"/>
-                                <constraint firstAttribute="width" constant="60" id="cNZ-Q8-bkW"/>
+                                <constraint firstItem="G83-V4-Hdg" firstAttribute="top" secondItem="Zzy-rU-I3b" secondAttribute="top" constant="9" id="O6V-oz-ZWf"/>
+                                <constraint firstItem="G83-V4-Hdg" firstAttribute="leading" secondItem="Zzy-rU-I3b" secondAttribute="leading" constant="11" id="Xjz-Lo-VlF"/>
+                                <constraint firstAttribute="width" constant="72" id="cNZ-Q8-bkW"/>
                             </constraints>
                             <connections>
                                 <outlet property="valueSpeedLimitLabel" destination="G83-V4-Hdg" id="dtJ-Cy-Mte"/>
@@ -112,17 +112,17 @@
                             </connections>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Raq-ej-jOf" userLabel="SpeedLimitNAMView" customClass="SpeedLimitView" customModule="OsmAnd_Maps" customModuleProvider="target">
-                            <rect key="frame" x="104" y="0.0" width="60" height="94"/>
+                            <rect key="frame" x="116" y="0.0" width="72" height="72"/>
                             <subviews>
-                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="img_speedlimit_nam" translatesAutoresizingMaskIntoConstraints="NO" id="MTv-eX-coq">
-                                    <rect key="frame" x="0.0" y="0.0" width="96" height="96"/>
-                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img_speedlimit_nam" translatesAutoresizingMaskIntoConstraints="NO" id="MTv-eX-coq">
+                                    <rect key="frame" x="0.0" y="0.0" width="72" height="72"/>
                                 </imageView>
                                 <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="MSL-69-DpR">
-                                    <rect key="frame" x="3" y="2" width="54" height="73"/>
+                                    <rect key="frame" x="13" y="13" width="46" height="46"/>
                                     <subviews>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="LIMIT" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eGy-ju-0zK">
-                                            <rect key="frame" x="0.0" y="0.0" width="54" height="13"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="46" height="13"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="13" id="a21-S1-YNC"/>
                                             </constraints>
@@ -131,7 +131,8 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="60" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="17" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ni7-XM-Bte">
-                                            <rect key="frame" x="0.0" y="13" width="54" height="60"/>
+                                            <rect key="frame" x="0.0" y="13" width="46" height="33"/>
+                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="50"/>
                                             <color key="textColor" name="widgetValueColor"/>
                                             <nil key="highlightedColor"/>
@@ -140,13 +141,22 @@
                                 </stackView>
                             </subviews>
                             <constraints>
-                                <constraint firstItem="MSL-69-DpR" firstAttribute="leading" secondItem="Raq-ej-jOf" secondAttribute="leading" constant="3" id="FZd-4w-zIb"/>
-                                <constraint firstAttribute="width" constant="60" id="JkS-Qw-cOV"/>
-                                <constraint firstAttribute="trailing" secondItem="MSL-69-DpR" secondAttribute="trailing" constant="3" id="bk3-zE-oHz"/>
-                                <constraint firstItem="MSL-69-DpR" firstAttribute="top" secondItem="Raq-ej-jOf" secondAttribute="top" constant="2" id="fPb-jj-B4i"/>
+                                <constraint firstItem="MTv-eX-coq" firstAttribute="leading" secondItem="Raq-ej-jOf" secondAttribute="leading" id="0yq-zn-uf8"/>
+                                <constraint firstItem="MSL-69-DpR" firstAttribute="leading" secondItem="Raq-ej-jOf" secondAttribute="leading" constant="13" id="FZd-4w-zIb"/>
+                                <constraint firstAttribute="trailing" secondItem="MTv-eX-coq" secondAttribute="trailing" id="GA3-JD-1qs"/>
+                                <constraint firstAttribute="width" constant="72" id="JkS-Qw-cOV"/>
+                                <constraint firstItem="MTv-eX-coq" firstAttribute="top" secondItem="Raq-ej-jOf" secondAttribute="top" id="WUg-tI-8j3"/>
+                                <constraint firstAttribute="bottom" secondItem="MSL-69-DpR" secondAttribute="bottom" constant="13" id="abK-tB-qwZ"/>
+                                <constraint firstAttribute="trailing" secondItem="MSL-69-DpR" secondAttribute="trailing" constant="13" id="bk3-zE-oHz"/>
+                                <constraint firstItem="MSL-69-DpR" firstAttribute="top" secondItem="Raq-ej-jOf" secondAttribute="top" constant="13" id="fPb-jj-B4i"/>
+                                <constraint firstAttribute="bottom" secondItem="MTv-eX-coq" secondAttribute="bottom" id="fQG-1R-Sjf"/>
                             </constraints>
                             <connections>
+                                <outlet property="bottomStackViewConstraint" destination="abK-tB-qwZ" id="1et-rn-Goi"/>
+                                <outlet property="leadingStackViewConstraint" destination="FZd-4w-zIb" id="6HR-qE-fZh"/>
                                 <outlet property="titleSpeedLimitLabel" destination="eGy-ju-0zK" id="YLU-lS-e8d"/>
+                                <outlet property="topStackViewConstraint" destination="fPb-jj-B4i" id="tVJ-rl-Bw3"/>
+                                <outlet property="trailingStackViewConstraint" destination="bk3-zE-oHz" id="z6I-AJ-3wW"/>
                                 <outlet property="valueSpeedLimitLabel" destination="ni7-XM-Bte" id="SnE-AL-MJb"/>
                                 <outlet property="withConstraint" destination="JkS-Qw-cOV" id="Fsb-1F-s7L"/>
                             </connections>
@@ -163,8 +173,8 @@
                 <constraint firstItem="4Mc-7N-XiW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="aYr-0E-DrW"/>
                 <constraint firstItem="jOs-Ww-k6k" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="abV-1f-Sd4"/>
                 <constraint firstItem="Raq-ej-jOf" firstAttribute="height" secondItem="iN0-l3-epB" secondAttribute="height" id="fgd-A1-eFQ"/>
-                <constraint firstAttribute="trailing" secondItem="4Mc-7N-XiW" secondAttribute="trailing" id="gb7-dz-8bq"/>
-                <constraint firstItem="4Mc-7N-XiW" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="iYB-Vm-dPf"/>
+                <constraint firstAttribute="right" secondItem="4Mc-7N-XiW" secondAttribute="right" id="gb7-dz-8bq"/>
+                <constraint firstItem="4Mc-7N-XiW" firstAttribute="left" secondItem="iN0-l3-epB" secondAttribute="left" id="iYB-Vm-dPf"/>
                 <constraint firstAttribute="trailing" secondItem="4Mc-7N-XiW" secondAttribute="trailing" id="nsG-kK-Rto"/>
                 <constraint firstItem="4Mc-7N-XiW" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="xPf-Qv-Zau"/>
             </constraints>
@@ -181,13 +191,13 @@
                 <outlet property="centerPositionXConstraint" destination="xPf-Qv-Zau" id="Czl-Z1-qAC"/>
                 <outlet property="centerPositionYConstraint" destination="Yog-Y8-kCl" id="Y3D-Ot-jA8"/>
                 <outlet property="contentStackView" destination="4Mc-7N-XiW" id="X4b-Ae-ZhO"/>
-                <outlet property="leadingPositionConstraint" destination="iYB-Vm-dPf" id="mfh-z8-Xpy"/>
+                <outlet property="leftPositionConstraint" destination="iYB-Vm-dPf" id="mfh-z8-Xpy"/>
+                <outlet property="rightPositionConstraint" destination="gb7-dz-8bq" id="gZQ-Sv-XeK"/>
                 <outlet property="speedLimitEUView" destination="Zzy-rU-I3b" id="SUQ-Xb-SdY"/>
                 <outlet property="speedLimitNAMView" destination="Raq-ej-jOf" id="WKN-2D-LuI"/>
                 <outlet property="speedometerSpeedView" destination="jOs-Ww-k6k" id="Lsg-Rs-2lE"/>
-                <outlet property="trailingPositionConstraint" destination="gb7-dz-8bq" id="gZQ-Sv-XeK"/>
             </connections>
-            <point key="canvasLocation" x="93.89312977099236" y="76.760563380281695"/>
+            <point key="canvasLocation" x="91.603053435114504" y="76.760563380281695"/>
         </view>
     </objects>
     <resources>

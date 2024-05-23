@@ -12,8 +12,8 @@ import Foundation
 final class SpeedometerView: OATextInfoWidget {
     @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var leadingPositionConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var trailingPositionConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var rightPositionConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var contentStackView: UIStackView!
     
@@ -25,11 +25,13 @@ final class SpeedometerView: OATextInfoWidget {
     
     @IBOutlet private weak var speedLimitEUView: SpeedLimitView! {
         didSet {
+            speedLimitEUView.speedLimitRegion = .EU
             speedLimitEUView.isHidden = true
         }
     }
     @IBOutlet private weak var speedLimitNAMView: SpeedLimitView! {
         didSet {
+            speedLimitNAMView.speedLimitRegion = .NAM
             speedLimitNAMView.isHidden = true
         }
     }
@@ -50,46 +52,10 @@ final class SpeedometerView: OATextInfoWidget {
     var speedLimitText: NSString? {
         speedViewWrapper.speedLimitText() as NSString?
     }
-        
-//    func updateWidgetSize() {
-//        let maxHeightWidth = getCurrentSpeedViewMaxHeightWidth()
-//        [speedometerSpeedView, speedLimitNAMView, speedLimitNAMView].forEach {
-//            $0.heightEqualConstraint?.constant = maxHeightWidth
-//            $0.widthEqualConstraint?.constant = maxHeightWidth
-//        }
-//    }
     
-    func updateWidgetSizeTest() {
-        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: style)
-        updateWith(style: style, appMode: settings.applicationMode.get())
-    }
-    
-    func configure() {
-        isHidden = true
-        updateWidgetSizeTest()
-
-        let width = getCurrentSpeedViewMaxHeightWidth()
-        speedometerSpeedView.configureWith(widgetSizeStyle: style, width: width)
-        speedLimitEUView.configureWith(widgetSizeStyle: style, width: width)
-        speedLimitNAMView.configureWith(widgetSizeStyle: style, width: width)
-
-        centerPositionYConstraint.isActive = true
-        if isPreview {
-            centerPositionXConstraint.isActive = true
-            leadingPositionConstraint.isActive = false
-            trailingPositionConstraint.isActive = false
-        } else {
-            centerPositionXConstraint.isActive = false
-            if isCarPlay {
-                layer.cornerRadius = 10
-                leadingPositionConstraint.isActive = false
-                trailingPositionConstraint.isActive = true
-            } else {
-                layer.cornerRadius = 6
-                leadingPositionConstraint.isActive = true
-                trailingPositionConstraint.isActive = false
-            }
-        }
+    override var intrinsicContentSize: CGSize {
+        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
     
     override func updateInfo() -> Bool {
@@ -100,9 +66,40 @@ final class SpeedometerView: OATextInfoWidget {
         return true
     }
     
-    override var intrinsicContentSize: CGSize {
-        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
+    func updateWidgetSizeTest() {
+        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: style)
+        updateWith(style: style, appMode: settings.applicationMode.get())
+    }
+    
+    func configure() {
+        isHidden = false
+        updateWidgetSizeTest()
+        let isDirectionRTL = isDirectionRTL()
+        contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
+
+        let width = getCurrentSpeedViewMaxHeightWidth()
+        speedometerSpeedView.configureWith(widgetSizeStyle: style, width: width)
+        speedLimitEUView.configureWith(widgetSizeStyle: style, width: width)
+        speedLimitNAMView.configureWith(widgetSizeStyle: style, width: width)
+
+        centerPositionYConstraint.isActive = true
+        if isPreview {
+            centerPositionXConstraint.isActive = true
+            leftPositionConstraint.isActive = false
+            rightPositionConstraint.isActive = false
+        } else {
+            centerPositionXConstraint.isActive = false
+            if isCarPlay {
+                layer.cornerRadius = 10
+                // TODO: isCarPlay
+                leftPositionConstraint.isActive = false
+                rightPositionConstraint.isActive = true
+            } else {
+                layer.cornerRadius = 6
+                leftPositionConstraint.isActive = true
+                rightPositionConstraint.isActive = false
+            }
+        }
     }
     
     private func updateSpeedometerSpeedView() {
@@ -121,6 +118,9 @@ final class SpeedometerView: OATextInfoWidget {
         
         speedLimitEUView.isHidden = true
         speedLimitNAMView.isHidden = true
+        
+//        speedLimitEUView.isHidden = false
+//        speedLimitEUView.updateWith(value: "35")
         
         if drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA {
             if let value = speedLimitText as? String {

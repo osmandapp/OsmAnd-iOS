@@ -34,13 +34,14 @@
 
 - (instancetype)init {
     self = [super init];
-    if (self) {
+    if (self)
+    {
         [self commonInit];
     }
     return self;
 }
 
-- (void) commonInit
+- (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
     _rh = [OARoutingHelper sharedInstance];

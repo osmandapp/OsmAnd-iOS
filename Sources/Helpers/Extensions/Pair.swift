@@ -9,6 +9,11 @@
 import Foundation
 
 struct Pair<T : Comparable, U : Comparable> : Hashable where T : Hashable, U : Hashable {
-  let first: T
-  let second: U
+    let first: T
+    let second: U
+
+    init(_ first: T, _ second: U) {
+        self.first = first
+        self.second = second
+    }
 }

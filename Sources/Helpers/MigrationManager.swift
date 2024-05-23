@@ -66,31 +66,36 @@ final class MigrationManager: NSObject {
             if let jsonData = settings.quickActionsList.get()?.data(using: .utf8),
                let arr = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
                 let changeQuickActionIntStringIds = [
-                    Pair(first: 4, second: "transport.showhide"): Pair(first: QuickActionIds.showHideTransportLinesActionId.rawValue, second: "transport.showhide"),
-                    Pair(first: 31, second: "osmedit.showhide"): Pair(first: QuickActionIds.showHideLocalOsmChangesActionId.rawValue, second: "osmedit.showhide"),
-                    Pair(first: 32, second: "nav.directions"): Pair(first: QuickActionIds.navDirectionsFromActionId.rawValue, second: "nav.directions"),
-                    Pair(first: 36, second: "weather.temperature.showhide"): Pair(first: QuickActionIds.showHideTemperatureLayerActionId.rawValue, second: "temperature.layer.showhide"),
-                    Pair(first: 37, second: "weather.pressure.showhide"): Pair(first: QuickActionIds.showHideAirPressureLayerActionId.rawValue, second: "pressure.layer.showhide"),
-                    Pair(first: 38, second: "weather.wind.showhide"): Pair(first: QuickActionIds.showHideWindLayerActionId.rawValue, second: "wind.layer.showhide"),
-                    Pair(first: 39, second: "weather.cloud.showhide"): Pair(first: QuickActionIds.showHideCloudLayerActionId.rawValue, second: "cloud.layer.showhide"),
-                    Pair(first: 40, second: "weather.precipitation.showhide"): Pair(first: QuickActionIds.showHidePrecipitationLayerActionId.rawValue, second: "precipitation.layer.showhide")
+                    Pair(4, "transport.showhide"): OAShowHideTransportLinesAction.type(),
+                    Pair(31, "osmedit.showhide"): OAShowHideLocalOSMChanges.type(),
+                    Pair(32, "nav.directions"): OANavDirectionsFromAction.type(),
+                    Pair(36, "weather.temperature.showhide"): OAShowHideTemperatureAction.type(),
+                    Pair(37, "weather.pressure.showhide"): OAShowHidePressureAction.type(),
+                    Pair(38, "weather.wind.showhide"): OAShowHideWindAction.type(),
+                    Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.type(),
+                    Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.type()
                 ]
                 var mutableArr = arr
                 for i in 0..<mutableArr.count {
                     var data = mutableArr[i]
                     let id = data["type"] as? Int
                     let stringId = data["actionType"] as? String
-                    if let index = changeQuickActionIntStringIds.firstIndex(where: { (id == -1 && $0.value.second == stringId) || $0.key.first == id || $0.key.second == stringId }) {
-                        let newValues = changeQuickActionIntStringIds[index].value
-                        data["type"] = newValues.first
-                        data["actionType"] = newValues.second
-                        mutableArr[i] = data
+                    if let index = changeQuickActionIntStringIds.firstIndex(where: { (id == -1 && $0.value?.stringId == stringId) || $0.key.first == id || $0.key.second == stringId }) {
+                        if let quickActionType = changeQuickActionIntStringIds[index].value {
+                            data["type"] = quickActionType.id
+                            data["actionType"] = quickActionType.stringId
+                            if let oldName = data["name"] as? String,
+                               (oldName.contains(changeQuickActionIntStringIds[index].key.second) || oldName.contains(quickActionType.stringId)) {
+                                data["name"] = quickActionType.name
+                            }
+                            mutableArr[i] = data
+                        }
                     }
                 }
                 if !dictionariesAreEqual(arr, mutableArr) {
                     if let jsonData = try? JSONSerialization.data(withJSONObject: mutableArr, options: .prettyPrinted) {
                         if let jsonString = String(data: jsonData, encoding: .utf8) {
-                            settings.quickActionsList.set(jsonString/*, mode: mode*/)
+                            settings.quickActionsList.set(jsonString)
                         }
                     }
                 }

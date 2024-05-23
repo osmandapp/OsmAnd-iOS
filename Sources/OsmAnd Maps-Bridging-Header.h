@@ -34,7 +34,6 @@
 #import "OAMapUtils.h"
 #import "OADestination.h"
 #import "OACollatorStringMatcher.h"
-#import "OAQuickAction.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -188,3 +187,14 @@
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
 #import "OANetworkUtilities.h"
+
+// Quick actions
+#import "OAQuickAction.h"
+#import "OAShowHideTransportLinesAction.h"
+#import "OAShowHideLocalOSMChanges.h"
+#import "OANavDirectionsFromAction.h"
+#import "OAShowHideTemperatureAction.h"
+#import "OAShowHidePressureAction.h"
+#import "OAShowHideWindAction.h"
+#import "OAShowHideCloudAction.h"
+#import "OAShowHidePrecipitationAction.h"

@@ -4526,6 +4526,10 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
         
         _showSpeedometer = [OACommonBoolean withKey:showSpeedometerKey defValue:NO];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.CAR];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.TRUCK];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.MOTORCYCLE];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.MOPED];
         [_profilePreferences setObject:_showSpeedometer forKey:@"show_speedometer"];
         
         _speedometerSize = [OACommonWidgetSizeStyle withKey:speedometerSizeKey defValue:EOAWidgetSizeStyleMedium];

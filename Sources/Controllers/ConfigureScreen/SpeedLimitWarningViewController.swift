@@ -37,7 +37,7 @@ final class SpeedLimitWarningViewController: OABaseNavbarViewController {
     override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
         let item = tableData.item(for: indexPath)
         let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
-        cell.tintColor = UIColor.iconColorActive
+        cell.tintColor = .iconColorActive
         cell.descriptionVisibility(false)
         cell.leftIconVisibility(false)
         let isSelected = item.bool(forKey: "isSelected")

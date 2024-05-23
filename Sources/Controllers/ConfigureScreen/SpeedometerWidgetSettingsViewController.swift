@@ -31,6 +31,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
         addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(OASwitchTableViewCell.reuseIdentifier)
+        addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -50,8 +51,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
         turnOnRow.accessibilityValue = localizedString( showSpeedometer ? "shared_string_on" : "shared_string_off")
         turnOnRow.setObj(showSpeedometer, forKey: Self.selectedKey)
         
-        if showSpeedometer
-        {
+        if showSpeedometer {
             let sellectSizeSection = tableData.createNewSection()
             sellectSizeSection.footerText = localizedString("speedometer_description")
             
@@ -98,7 +98,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
             let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
+            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : .iconColorDefault
             cell.titleLabel.text = item.title
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue
@@ -125,14 +125,11 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
             return cell
         } else if item.cellType == Self.previewSpeedometerRowKey {
             //TODO: implement preview cell
-            var cell = tableView.dequeueReusableCell(withIdentifier: Self.previewSpeedometerRowKey) as? UITableViewCell
-            if cell == nil {
-                cell = UITableViewCell.init(style: .default, reuseIdentifier: Self.previewSpeedometerRowKey)
-            }
-            if let cell {
-                cell.backgroundColor = UIColor.blue
-                return cell
-            }
+            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
+            cell.backgroundColor = .mapStyleWater
+            cell.titleLabel.text = nil
+            cell.descriptionLabel.text = nil
+            return cell
         }
         return nil
     }

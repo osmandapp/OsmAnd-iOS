@@ -58,7 +58,7 @@
             [ctx trimAfter:_pointPosition];
         }
     }
-    [self.measurementLayer updateLayer];
+    [self.measurementLayer resetLayer];
 }
 
 - (void) undo

@@ -58,4 +58,9 @@
     [_measurementLayer updateLayer];
 }
 
+- (void) resetMap
+{
+    [_measurementLayer resetLayer];
+}
+
 @end

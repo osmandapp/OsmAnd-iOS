@@ -83,6 +83,9 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
         if data.key == "quickAction" {
             let vc = OAQuickActionListViewController()
             vc?.delegate = self
+            vc?.quickActionUpdateCallback = { [weak self] in
+                self?.onSettingsChanged()
+            }
             show(vc)
         }
     }

@@ -1992,7 +1992,6 @@
 		DA5A817726C563A700F274C7 /* MGSwipeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D026C563A000F274C7 /* MGSwipeTableCell.m */; };
 		DA5A817826C563A700F274C7 /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D326C563A000F274C7 /* MGSwipeButton.m */; };
 		DA5A817926C563A700F274C7 /* OAQuickActionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D526C563A000F274C7 /* OAQuickActionRegistry.m */; };
-		DA5A817A26C563A700F274C7 /* OAQuickActionType.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D626C563A000F274C7 /* OAQuickActionType.m */; };
 		DA5A817B26C563A700F274C7 /* OAFavoriteAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D826C563A000F274C7 /* OAFavoriteAction.mm */; };
 		DA5A817C26C563A700F274C7 /* OAAddOSMBugAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D926C563A000F274C7 /* OAAddOSMBugAction.m */; };
 		DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79DB26C563A000F274C7 /* OAMapSourceAction.mm */; };
@@ -5852,7 +5851,6 @@
 		DA5A79D226C563A000F274C7 /* MGSwipeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeTableCell.h; sourceTree = "<group>"; };
 		DA5A79D326C563A000F274C7 /* MGSwipeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGSwipeButton.m; sourceTree = "<group>"; };
 		DA5A79D526C563A000F274C7 /* OAQuickActionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionRegistry.m; sourceTree = "<group>"; };
-		DA5A79D626C563A000F274C7 /* OAQuickActionType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionType.m; sourceTree = "<group>"; };
 		DA5A79D826C563A000F274C7 /* OAFavoriteAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteAction.mm; sourceTree = "<group>"; };
 		DA5A79D926C563A000F274C7 /* OAAddOSMBugAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddOSMBugAction.m; sourceTree = "<group>"; };
 		DA5A79DA26C563A000F274C7 /* OANavReplaceDestinationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavReplaceDestinationAction.h; sourceTree = "<group>"; };
@@ -5921,7 +5919,6 @@
 		DA5A7A1B26C563A000F274C7 /* OAAddPOIAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddPOIAction.mm; sourceTree = "<group>"; };
 		DA5A7A1C26C563A000F274C7 /* OASwitchProfileAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASwitchProfileAction.m; sourceTree = "<group>"; };
 		DA5A7A1D26C563A000F274C7 /* OAMapStyleAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapStyleAction.h; sourceTree = "<group>"; };
-		DA5A7A1E26C563A000F274C7 /* OAQuickActionType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickActionType.h; sourceTree = "<group>"; };
 		DA5A7A1F26C563A000F274C7 /* OAQuickActionRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickActionRegistry.h; sourceTree = "<group>"; };
 		DA5A7A2126C563A000F274C7 /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAWorldRegion+Protected.h"; sourceTree = "<group>"; };
@@ -10986,8 +10983,6 @@
 				DA5A79D726C563A000F274C7 /* Actions */,
 				DA5A7A1F26C563A000F274C7 /* OAQuickActionRegistry.h */,
 				DA5A79D526C563A000F274C7 /* OAQuickActionRegistry.m */,
-				DA5A7A1E26C563A000F274C7 /* OAQuickActionType.h */,
-				DA5A79D626C563A000F274C7 /* OAQuickActionType.m */,
 				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
 				460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */,
 			);
@@ -16574,7 +16569,6 @@
 				DA5A81AC26C563A700F274C7 /* OASearchUICore.mm in Sources */,
 				DA5A817C26C563A700F274C7 /* OAAddOSMBugAction.m in Sources */,
 				DA5A834B26C563A800F274C7 /* OATitleDescrDraggableCell.m in Sources */,
-				DA5A817A26C563A700F274C7 /* OAQuickActionType.m in Sources */,
 				DA5A856526C563A900F274C7 /* OAExitInfo.m in Sources */,
 				DA5A83E926C563A800F274C7 /* OAWikiMenuViewController.m in Sources */,
 				DA4ABF192876DA6800B996EF /* OAQuickActionsSettingsItem.mm in Sources */,

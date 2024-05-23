@@ -22,6 +22,7 @@
 
 - (instancetype) initWithActionType:(OAQuickActionType *)type;
 - (instancetype) initWithAction:(OAQuickAction *)action;
+- (void) commonInit;
 
 -(NSString *) getIconResName;
 -(NSString *) getSecondaryIconName;
@@ -43,6 +44,7 @@
 -(BOOL) isActionWithSlash;
 -(NSString *) getActionText;
 -(NSString *) getActionStateName;
+- (CLLocation *) getMapLocation;
 
 -(void) execute;
 -(void) drawUI;

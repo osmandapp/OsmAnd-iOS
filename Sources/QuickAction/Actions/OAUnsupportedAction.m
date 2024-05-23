@@ -7,12 +7,8 @@
 //
 
 #import "OAUnsupportedAction.h"
-#import "OAQuickActionType.h"
 #import "OARootViewController.h"
-
-#define kName @"name"
-#define kActionType @"actionType"
-#define kParams @"params"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -66,8 +62,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:-1 stringId:@"unsupported.action" class:self.class name:OALocalizedString(@"unsupported_action") category:UNSUPPORTED iconName:@"ic_custom_alert" secondaryIconName:nil editable:NO];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsUnsupportedId stringId:@"unsupported.action" cl:self.class] name:OALocalizedString(@"unsupported_action")] iconName:@"ic_custom_alert"] category:EOAQuickActionTypeCategoryUnsupported] nonEditable];
     return TYPE;
 }
 

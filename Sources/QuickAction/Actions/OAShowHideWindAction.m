@@ -7,8 +7,8 @@
 //
 
 #import "OAShowHideWindAction.h"
-#import "OAQuickActionType.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -38,17 +38,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-    {
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:38
-                                                    stringId:@"weather.wind.showhide"
-                                                       class:self.class
-                                                        name:OALocalizedString(@"toggle_wind")
-                                                    category:CONFIGURE_MAP
-                                                    iconName:@"ic_custom_wind"
-                                           secondaryIconName:nil
-                                                    editable:NO];
-    }
-
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId stringId:@"wind.layer.showhide" cl:self.class] name:OALocalizedString(@"toggle_wind")] iconName:@"ic_custom_wind"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

@@ -33,6 +33,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAMapUtils.h"
 #import "OADestination.h"
+#import "OAQuickAction.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

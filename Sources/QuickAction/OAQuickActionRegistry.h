@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAQuickActionType *) TYPE_CONFIGURE_MAP;
 + (OAQuickActionType *) TYPE_NAVIGATION;
 + (OAQuickActionType *) TYPE_CONFIGURE_SCREEN;
++ (OAQuickActionType *) TYPE_SETTINGS;
++ (OAQuickActionType *) TYPE_OPEN;
 
 -(NSArray<OAQuickAction *> *) getQuickActions;
 

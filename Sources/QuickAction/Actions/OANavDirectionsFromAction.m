@@ -7,12 +7,9 @@
 //
 
 #import "OANavDirectionsFromAction.h"
-#import "OAQuickActionType.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAMapRendererView.h"
-
-#include <OsmAndCore/Utilities.h>
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -26,9 +23,9 @@ static OAQuickActionType *TYPE;
 - (void)execute
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    const auto latLon = OsmAnd::Utilities::convert31ToLatLon(mapPanel.mapViewController.mapView.target31);
+    CLLocation *latLon = [self getMapLocation];
     OATargetPoint *p = [[OATargetPoint alloc] init];
-    p.location = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
+    p.location = CLLocationCoordinate2DMake(latLon.coordinate.latitude, latLon.coordinate.longitude);
     [mapPanel navigateFrom:p];
 }
 
@@ -40,10 +37,8 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:32 stringId:@"nav.directions" class:self.class name:OALocalizedString(@"context_menu_item_directions_from") category:NAVIGATION iconName:@"ic_action_directions_from" secondaryIconName:nil editable:NO];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId stringId:@"nav.directions" cl:self.class] name:OALocalizedString(@"context_menu_item_directions_from")] iconName:@"ic_action_directions_from"] category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
-
 
 @end

@@ -9,21 +9,23 @@
 #import "OAShowHideTransportLinesAction.h"
 #import "OAPublicTransportOptionsBottomSheet.h"
 #import "OAMapStyleSettings.h"
-#import "OAQuickActionType.h"
-
-#define KEY_DIALOG @"dialog"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
 @implementation OAShowHideTransportLinesAction
 {
-    OAMapStyleSettings* _styleSettings;
+    OAMapStyleSettings *_styleSettings;
 }
 
 - (instancetype)init
 {
-    _styleSettings = [OAMapStyleSettings sharedInstance];
     return [super initWithActionType:self.class.TYPE];
+}
+
+- (void)commonInit
+{
+    _styleSettings = [OAMapStyleSettings sharedInstance];
 }
 
 - (void)execute
@@ -57,8 +59,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"transport.showhide" class:self.class name:OALocalizedString(@"toggle_public_transport") category:CONFIGURE_MAP iconName:@"ic_custom_transport_bus" secondaryIconName:nil editable:NO];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId stringId:@"transport.showhide" cl:self.class] name:OALocalizedString(@"toggle_public_transport")] iconName:@"ic_custom_transport_bus"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

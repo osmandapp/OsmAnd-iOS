@@ -8,7 +8,7 @@
 
 #import "OAQuickAction.h"
 
-#define KEY_DIALOG @"dialog"
+static NSString * const kDialog = @"dialog";
 
 @interface OASwitchableAction<ObjectType> : OAQuickAction
 

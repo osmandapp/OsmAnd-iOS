@@ -14,7 +14,6 @@
 #import "OrderedDictionary.h"
 #import "OAButtonTableViewCell.h"
 #import "OASizes.h"
-#import "OAQuickActionType.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -105,7 +104,7 @@
     NSString *currSectionName = @"";
     for (OAQuickActionType *action in all)
     {
-        if (action.identifier == 0)
+        if (action.id == 0)
         {
             if (actionsInSection && actionsInSection.count > 0)
                 [mapping setObject:[NSArray arrayWithArray:actionsInSection] forKey:currSectionName];
@@ -174,7 +173,7 @@
             if (cell.leftIconView.subviews.count > 0)
                 [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
             
-            if (action.hasSecondaryIcon)
+            if (action.secondaryIconName != nil)
             {
                 OAQuickAction *act = [action createNew];
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);

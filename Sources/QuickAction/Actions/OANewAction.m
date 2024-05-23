@@ -9,7 +9,7 @@
 #import "OANewAction.h"
 #import "OAAddQuickActionViewController.h"
 #import "OARootViewController.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -29,8 +29,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:1 stringId:@"new" class:self.class name:OALocalizedString(@"quick_action_new_action") category:-1 iconName:@"ic_custom_add" secondaryIconName:nil editable:NO];
-       
+        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId stringId:@"new" cl:self.class] name:OALocalizedString(@"quick_action_new_action")] iconName:@"ic_custom_add"] nonEditable];
     return TYPE;
 }
 

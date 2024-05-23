@@ -14,40 +14,47 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OsmAndApp.h"
-#import "OAQuickActionType.h"
 #import "OAButtonTableViewCell.h"
 #import "OASimpleTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define KEY_FILTERS @"filters"
+static NSString * const kFilters = @"filters";
 
 static OAQuickActionType *TYPE;
 
 @implementation OAShowHidePoiAction
+{
+    OAPOIFiltersHelper *_helper;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _helper = [OAPOIFiltersHelper sharedInstance];
+}
+
 - (void)execute
 {
-    OAPOIFiltersHelper *pf = [OAPOIFiltersHelper sharedInstance];
     NSArray<OAPOIUIFilter *> *poiFilters = [self loadPoiFilters];
     OAMapViewController *mapVC = [OARootViewController instance].mapPanel.mapViewController;
     if (![self isCurrentFilters])
     {
-        [pf clearSelectedPoiFilters];
+        [_helper clearSelectedPoiFilters];
         
         for (OAPOIUIFilter *filter in poiFilters)
         {
             if (filter.isStandardFilter)
                 [filter removeUnsavedFilterByName];
     
-            [pf addSelectedPoiFilter:filter];
+            [_helper addSelectedPoiFilter:filter];
         }
     } else
     {
-        [pf clearSelectedPoiFilters];
+        [_helper clearSelectedPoiFilters];
     }
     [mapVC updatePoiLayer];
     
@@ -56,17 +63,16 @@ static OAQuickActionType *TYPE;
 
 - (NSString *) getIconResName
 {
-    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     NSArray<NSString *> *filtersIds = [NSArray new];
     
-    NSString *filtersIdsJson = self.getParams[KEY_FILTERS];
+    NSString *filtersIdsJson = self.getParams[kFilters];
     if (filtersIdsJson && [filtersIdsJson trim].length != 0)
         filtersIds = [NSArray arrayWithArray:[filtersIdsJson componentsSeparatedByString:@","]];
     
     if ([filtersIds count] == 0)
         return [super getIconResName];
     
-    OAPOIUIFilter *filter = [helper getFilterById:filtersIds[0]];
+    OAPOIUIFilter *filter = [_helper getFilterById:filtersIds[0]];
     if (!filter)
         return [super getIconResName];
     
@@ -85,7 +91,7 @@ static OAQuickActionType *TYPE;
 - (BOOL) isCurrentFilters
 {
     NSArray<OAPOIUIFilter *> *poiFilters = [self loadPoiFilters];
-    NSSet<OAPOIUIFilter *> *selected = [OAPOIFiltersHelper sharedInstance].getSelectedPoiFilters;
+    NSSet<OAPOIUIFilter *> *selected = _helper.getSelectedPoiFilters;
     
     if (poiFilters.count != selected.count)
         return NO;
@@ -96,10 +102,9 @@ static OAQuickActionType *TYPE;
 
 -(NSArray<OAPOIUIFilter *> *) loadPoiFilters
 {
-    OAPOIFiltersHelper *helper = [OAPOIFiltersHelper sharedInstance];
     NSArray<NSString *> *filters = [NSArray new];
     
-    NSString *filtersId = self.getParams[KEY_FILTERS];
+    NSString *filtersId = self.getParams[kFilters];
     
     if (filtersId && [filtersId trim].length != 0)
         filters = [NSArray arrayWithArray:[filtersId componentsSeparatedByString:@","]];
@@ -109,7 +114,7 @@ static OAQuickActionType *TYPE;
     
     for (NSString *f in filters)
     {
-        OAPOIUIFilter *filter = [helper getFilterById:f];
+        OAPOIUIFilter *filter = [_helper getFilterById:f];
         
         if (filter)
             [poiFilters addObject:filter];
@@ -159,7 +164,7 @@ static OAQuickActionType *TYPE;
         if (i < items.count - 2)
             [filters appendString:@","];
     }
-    [params setObject:[NSString stringWithString:filters] forKey:KEY_FILTERS];
+    [params setObject:[NSString stringWithString:filters] forKey:kFilters];
     self.params = [NSDictionary dictionaryWithDictionary:params];
     return filters && filters.length > 0;
 }
@@ -187,8 +192,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:5 stringId:@"poi.showhide" class:self.class name:OALocalizedString(@"toggle_poi") category:CONFIGURE_MAP iconName:@"ic_custom_poi" secondaryIconName:nil];
-       
+        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId stringId:@"poi.showhide" cl:self.class] name:OALocalizedString(@"toggle_poi")] iconName:@"ic_custom_poi"] category:EOAQuickActionTypeCategoryConfigureMap];
     return TYPE;
 }
 

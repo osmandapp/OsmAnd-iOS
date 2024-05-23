@@ -17,7 +17,6 @@
 #import "OAQuickActionRegistry.h"
 #import "OAAutoObserverProxy.h"
 #import "OAActionConfigurationViewController.h"
-#import "OAQuickActionType.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kButtonContainerHeight 60.0
@@ -534,7 +533,7 @@
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickAction *action = [self getAction:indexPath];
-        if (!action || action.actionType.identifier == 0)
+        if (!action || action.actionType.id == 0)
         {
             cell.hidden = YES;
             return cell;

@@ -7,8 +7,8 @@
 //
 
 #import "OAShowHideTemperatureAction.h"
-#import "OAQuickActionType.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -38,17 +38,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-    {
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:36
-                                                    stringId:@"weather.temperature.showhide"
-                                                       class:self.class
-                                                        name:OALocalizedString(@"toggle_temperature")
-                                                    category:CONFIGURE_MAP
-                                                    iconName:@"ic_custom_thermometer"
-                                           secondaryIconName:nil
-                                                    editable:NO];
-    }
-
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTemperatureLayerActionId stringId:@"temperature.layer.showhide" cl:self.class] name:OALocalizedString(@"toggle_temperature")] iconName:@"ic_custom_thermometer"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

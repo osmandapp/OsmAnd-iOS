@@ -11,8 +11,6 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAQuickActionRegistry.h"
-#import "OAQuickActionType.h"
-
 #import "OAUnsupportedAction.h"
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"

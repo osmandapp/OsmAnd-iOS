@@ -10,14 +10,11 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
-#import "OAMapRendererView.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OATargetPoint.h"
-#import "OAQuickActionType.h"
 #import "OAPluginsHelper.h"
-
-#include <OsmAndCore/Utilities.h>
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -30,19 +27,17 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    
     OAParkingPositionPlugin *plugin = (OAParkingPositionPlugin *)[OAPluginsHelper getEnabledPlugin:OAParkingPositionPlugin.class];
     if (plugin)
     {
-        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-        OAMapViewController *mapVC = mapPanel.mapViewController;
-        const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(mapVC.mapView.target31);
-        CLLocationCoordinate2D point = CLLocationCoordinate2DMake(latLon.latitude, latLon.longitude);
-        
+        CLLocation *latLon = [self getMapLocation];
+        CLLocationCoordinate2D point = CLLocationCoordinate2DMake(latLon.coordinate.latitude, latLon.coordinate.longitude);
+
         OATargetPoint *targetPoint = [[OATargetPoint alloc] init];
         targetPoint.type = OATargetParking;
         targetPoint.location = point;
-        
+
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         [mapPanel showContextMenu:targetPoint];
         [mapPanel targetPointParking];
     }
@@ -56,8 +51,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:7 stringId:@"parking.add" class:self.class name:OALocalizedString(@"quick_action_add_parking") category:CREATE_CATEGORY iconName:@"ic_custom_parking" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
-       
+        TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId stringId:@"parking.add" cl:self.class] name:OALocalizedString(@"quick_action_add_parking")] iconName:@"ic_custom_parking"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory] nonEditable];
     return TYPE;
 }
 

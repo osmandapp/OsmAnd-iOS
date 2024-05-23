@@ -7,8 +7,8 @@
 //
 
 #import "OAShowHidePressureAction.h"
-#import "OAQuickActionType.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -38,17 +38,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-    {
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:37
-                                                    stringId:@"weather.pressure.showhide"
-                                                       class:self.class
-                                                        name:OALocalizedString(@"toggle_pressure")
-                                                    category:CONFIGURE_MAP
-                                                    iconName:@"ic_custom_air_pressure"
-                                           secondaryIconName:nil
-                                                    editable:NO];
-    }
-
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideAirPressureLayerActionId stringId:@"pressure.layer.showhide" cl:self.class] name:OALocalizedString(@"toggle_pressure")] iconName:@"ic_custom_air_pressure"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

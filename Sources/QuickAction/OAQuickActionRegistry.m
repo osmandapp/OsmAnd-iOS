@@ -13,7 +13,6 @@
 #import "OAIAPHelper.h"
 #import "OAMapSourceAction.h"
 #import "OAMapStyleAction.h"
-#import "OAQuickActionType.h"
 #import "OANewAction.h"
 #import "OAFavoriteAction.h"
 #import "OAGPXAction.h"
@@ -46,6 +45,7 @@
 #import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kType @"type"
 #define kName @"name"
@@ -58,6 +58,8 @@ static OAQuickActionType *TYPE_ADD_ITEMS;
 static OAQuickActionType *TYPE_CONFIGURE_MAP;
 static OAQuickActionType *TYPE_NAVIGATION;
 static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
+static OAQuickActionType *TYPE_SETTINGS;
+static OAQuickActionType *TYPE_OPEN;
 
 @implementation OAQuickActionRegistry
 {
@@ -74,10 +76,12 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
 
 + (void)initialize
 {
-    TYPE_ADD_ITEMS = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"quick_action_add_create_items") category:CREATE_CATEGORY iconName:nil];
-    TYPE_CONFIGURE_MAP = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"configure_map") category:CONFIGURE_MAP iconName:nil];
-    TYPE_NAVIGATION = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"routing_settings") category:NAVIGATION iconName:nil];
-//    TYPE_CONFIGURE_SCREEN = [[OAQuickActionType alloc] initWithIdentifier:0 stringId:@"" class:nil name:OALocalizedString(@"layer_map_appearance") category:CONFIGURE_SCREEN iconName:nil];
+    TYPE_ADD_ITEMS = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""] name:OALocalizedString(@"quick_action_add_create_items")] category:EOAQuickActionTypeCategoryCreateCategory];
+    TYPE_CONFIGURE_MAP = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""] name:OALocalizedString(@"configure_map")] category:EOAQuickActionTypeCategoryConfigureMap];
+    TYPE_NAVIGATION = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""] name:OALocalizedString(@"routing_settings")] category:EOAQuickActionTypeCategoryNavigation];
+    TYPE_CONFIGURE_SCREEN = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""] name:OALocalizedString(@"layer_map_appearance")] category:EOAQuickActionTypeCategoryConfigureScreen];
+    TYPE_SETTINGS = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""] name:OALocalizedString(@"shared_string_settings")] category:EOAQuickActionTypeCategorySettings];
+    TYPE_OPEN = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""] name:OALocalizedString(@"shared_string_open")] category:EOAQuickActionTypeCategoryOpen];
 }
 
 + (OAQuickActionRegistry *)sharedInstance
@@ -108,6 +112,16 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
 + (OAQuickActionType *) TYPE_CONFIGURE_SCREEN
 {
     return TYPE_CONFIGURE_SCREEN;
+}
+
++ (OAQuickActionType *) TYPE_SETTINGS
+{
+    return TYPE_SETTINGS;
+}
+
++ (OAQuickActionType *) TYPE_OPEN
+{
+    return TYPE_OPEN;
 }
 
 - (instancetype)init
@@ -179,7 +193,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
     for (OAQuickActionType *qt in quickActionTypes)
     {
-        [quickActionTypesInt setObject:qt forKey:@(qt.identifier)];
+        [quickActionTypesInt setObject:qt forKey:@(qt.id)];
         [quickActionTypesStr setObject:qt forKey:qt.stringId];
     }
     _quickActionTypes = [NSArray arrayWithArray:quickActionTypes];
@@ -206,7 +220,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     NSMutableDictionary<NSString *, OAQuickActionType *> *disabledQuickActionTypesStr = [NSMutableDictionary new];
     for (OAQuickActionType *qt in disabledQuickActionTypes)
     {
-        [disabledQuickActionTypesInt setObject:qt forKey:@(qt.identifier)];
+        [disabledQuickActionTypesInt setObject:qt forKey:@(qt.id)];
         [disabledQuickActionTypesStr setObject:qt forKey:qt.stringId];
     }
     _disabledQuickActionTypes = [NSArray arrayWithArray:disabledQuickActionTypes];
@@ -317,7 +331,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
     NSMutableSet<NSNumber *> *set = [NSMutableSet new];
     for (OAQuickAction *qa in _quickActions)
     {
-        [set addObject:@(qa.actionType.identifier)];
+        [set addObject:@(qa.actionType.id)];
     }
     for (OAQuickActionType *t in _quickActionTypes)
     {
@@ -325,7 +339,7 @@ static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
         {
             if (!t.actionEditable)
             {
-                BOOL instanceInList = [set containsObject:@(t.identifier)];
+                BOOL instanceInList = [set containsObject:@(t.id)];
                 if (!instanceInList)
                 {
                     [result addObject:t];

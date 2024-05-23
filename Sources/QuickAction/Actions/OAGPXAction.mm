@@ -20,18 +20,16 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"
-#import "OAQuickActionType.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAFavoritesHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#include <OsmAndCore/Utilities.h>
-
-#define KEY_NAME @"name"
-#define KEY_DIALOG @"dialog"
-#define KEY_CATEGORY_NAME @"category_name"
-#define KEY_CATEGORY_COLOR @"category_color"
+static NSString * const kName = @"name";
+static NSString * const kDialog = @"dialog";
+static NSString * const kCategoryName = @"category_name";
+static NSString * const kCategoryColor =  @"category_color";
 
 static OAQuickActionType *TYPE;
 
@@ -44,12 +42,12 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    const auto& latLon = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
-    NSString *title = self.getParams[KEY_NAME];
+    CLLocation *latLon = [self getMapLocation];
+    NSString *title = self.getParams[kName];
     if (!title || title.length == 0)
-        title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.latitude lon:latLon.longitude];
+        title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
     
-    [self addWaypoint:latLon.latitude lon:latLon.longitude title:title autoFill:![self.getParams[KEY_DIALOG] boolValue]];
+    [self addWaypoint:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
 }
 
 - (void) addWaypoint:(double)lat lon:(double)lon title:(NSString *)title autoFill:(BOOL)autoFill
@@ -62,10 +60,10 @@ static OAQuickActionType *TYPE;
 
 - (void)addWaypointWithDialog:(double)lat lon:(double)lon title:(NSString *)title
 {
-    if (self.getParams[KEY_CATEGORY_COLOR])
-        [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[KEY_CATEGORY_COLOR] integerValue] forKey:kFavoriteDefaultColorKey];
-    if (self.getParams[KEY_CATEGORY_NAME])
-        [[NSUserDefaults standardUserDefaults] setObject:self.getParams[KEY_CATEGORY_NAME] forKey:kFavoriteDefaultGroupKey];
+    if (self.getParams[kCategoryColor])
+        [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[kCategoryColor] integerValue] forKey:kFavoriteDefaultColorKey];
+    if (self.getParams[kCategoryName])
+        [[NSUserDefaults standardUserDefaults] setObject:self.getParams[kCategoryName] forKey:kFavoriteDefaultGroupKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
     OAMapViewController *mapVC = mapPanel.mapViewController;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
@@ -83,11 +81,11 @@ static OAQuickActionType *TYPE;
 
 - (void) addWaypointSilent:(double)lat lon:(double)lon title:(NSString *)title
 {
-    NSString *groupName = self.getParams[KEY_CATEGORY_NAME];
+    NSString *groupName = self.getParams[kCategoryName];
     UIColor* color;
-    if (self.getParams[KEY_CATEGORY_COLOR])
+    if (self.getParams[kCategoryColor])
     {
-        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+        NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
         OAFavoriteColor *favCol = [OADefaultFavorite builtinColors][defaultColor];
         color = favCol.color;
     }
@@ -144,17 +142,17 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"shared_string_options")];
     [data setObject:@[@{
                           @"type" : [OAInputTableViewCell getCellIdentifier],
-                          @"key" : KEY_NAME,
-                          @"title" : self.getParams[KEY_NAME] ? self.getParams[KEY_NAME] : @"",
+                          @"key" : kName,
+                          @"title" : self.getParams[kName] ? self.getParams[kName] : @"",
                           @"hint" : OALocalizedString(@"quick_action_template_name"),
                           @"img" : @"ic_custom_text_field_name"
                           },
@@ -163,20 +161,20 @@ static OAQuickActionType *TYPE;
                           }
                       ] forKey:kSectionNoName];
     
-    NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[KEY_CATEGORY_COLOR] integerValue]];
+    NSInteger defaultColor = [OADefaultFavorite getValidBuiltInColorNumber:[self.getParams[kCategoryColor] integerValue]];
     OAFavoriteColor *color = [OADefaultFavorite builtinColors][defaultColor];
     
     [data setObject:@[@{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
-                          @"key" : KEY_CATEGORY_NAME,
+                          @"key" : kCategoryName,
                           @"title" : OALocalizedString(@"fav_group"),
-                          @"value" : self.getParams[KEY_CATEGORY_NAME] ? self.getParams[KEY_CATEGORY_NAME] : OALocalizedString(@"favorites_item"),
+                          @"value" : self.getParams[kCategoryName] ? self.getParams[kCategoryName] : OALocalizedString(@"favorites_item"),
                           @"color" : @(defaultColor),
                           @"img" : @"ic_custom_folder"
                           },
                       @{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
-                          @"key" : KEY_CATEGORY_COLOR,
+                          @"key" : kCategoryColor,
                           @"title" : OALocalizedString(@"shared_string_color"),
                           @"value" : color ? color.name : @"",
                           @"color" : @(defaultColor)
@@ -196,14 +194,14 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            else if ([item[@"key"] isEqualToString:KEY_NAME])
-                [params setValue:item[@"title"] forKey:KEY_NAME];
-            else if ([item[@"key"] isEqualToString:KEY_CATEGORY_NAME])
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
+            else if ([item[@"key"] isEqualToString:kName])
+                [params setValue:item[@"title"] forKey:kName];
+            else if ([item[@"key"] isEqualToString:kCategoryName])
             {
-                [params setValue:item[@"value"] forKey:KEY_CATEGORY_NAME];
-                [params setValue:item[@"color"] forKey:KEY_CATEGORY_COLOR];
+                [params setValue:item[@"value"] forKey:kCategoryName];
+                [params setValue:item[@"color"] forKey:kCategoryColor];
             }
         }
     }
@@ -214,8 +212,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:6 stringId:@"gpx.add" class:self.class name:OALocalizedString(@"add_gpx_waypoint") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsGpxActionId stringId:@"gpx.add" cl:self.class] name:OALocalizedString(@"add_gpx_waypoint")] iconName:@"ic_custom_favorites"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory];
     return TYPE;
 }
 

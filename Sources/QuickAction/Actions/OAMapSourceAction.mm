@@ -13,14 +13,14 @@
 #import "Localization.h"
 #import "OAAppData.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
-#import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define LAYER_OSM_VECTOR @"type_default"
-#define KEY_SOURCE @"source"
+static NSString * const kLayerOsmVector = @"type_default";
+static NSString * const kSource = @"source";
 
 static OAQuickActionType *TYPE;
 
@@ -44,7 +44,7 @@ static OAQuickActionType *TYPE;
     NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     if (sources.count > 0)
     {
-        BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
+        BOOL showBottomSheetStyles = [self.getParams[kDialog] boolValue];
         if (showBottomSheetStyles)
         {
             OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeSource];
@@ -79,7 +79,7 @@ static OAQuickActionType *TYPE;
     OsmAndAppInstance app = [OsmAndApp instance];
     NSString *variant = params.firstObject;
     NSString *name = params.count > 1 ? params[params.count - 1] : @"";
-    if ([variant isEqualToString:LAYER_OSM_VECTOR])
+    if ([variant isEqualToString:kLayerOsmVector])
     {
         OAMapSource *mapSource = app.data.prevOfflineSource;
         if (!mapSource)
@@ -107,7 +107,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getTranslatedItemName:(NSString *)item
 {
-    if ([item isEqualToString:LAYER_OSM_VECTOR])
+    if ([item isEqualToString:kLayerOsmVector])
         return OALocalizedString(@"vector_data");
     else
         return item;
@@ -131,7 +131,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getListKey
 {
-    return KEY_SOURCE;
+    return kSource;
 }
 
 - (OrderedDictionary *)getUIModel
@@ -139,9 +139,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -175,13 +175,13 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                 [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }
-    [params setObject:sources forKey:KEY_SOURCE];
+    [params setObject:sources forKey:kSource];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
 }
@@ -189,8 +189,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:17 stringId:@"mapsource.change" class:self.class name:OALocalizedString(@"quick_action_map_source") category:CONFIGURE_MAP iconName:@"ic_custom_show_on_map" secondaryIconName:nil];
-       
+        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId stringId:@"mapsource.change" cl:self.class] name:OALocalizedString(@"quick_action_map_source")] iconName:@"ic_custom_show_on_map"] category:EOAQuickActionTypeCategoryConfigureMap];
     return TYPE;
 }
 

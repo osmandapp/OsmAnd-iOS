@@ -9,18 +9,13 @@
 #import "OAAddOSMBugAction.h"
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
-#import "OARootViewController.h"
-#import "OAMapPanelViewController.h"
-#import "OAMapRendererView.h"
-#import "OAQuickActionType.h"
 #import "OAMultilineTextViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#include <OsmAndCore/Utilities.h>
-
-#define KEY_MESSAGE @"message"
-#define KEY_DIALOG @"dialog"
+static NSString * const kMessage = @"message";
+static NSString * const kDialog = @"dialog";
 
 static OAQuickActionType *TYPE;
 
@@ -28,21 +23,19 @@ static OAQuickActionType *TYPE;
 
 - (instancetype)init
 {
-    return [super initWithActionType:self.class.TYPE];
+    return [super initWithActionType:TYPE];
 }
 
 - (void)execute
 {
     OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getEnabledPlugin:OAOsmEditingPlugin.class];
-
     if (plugin)
     {
-        const auto& latLon = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
-        
+        CLLocation *latLon = [self getMapLocation];
         if (self.getParams.count == 0)
-            [plugin openOsmNote:latLon.latitude longitude:latLon.longitude message:@"" autoFill:YES];
+            [plugin openOsmNote:latLon.coordinate.latitude longitude:latLon.coordinate.longitude message:@"" autoFill:YES];
         else
-            [plugin openOsmNote:latLon.latitude longitude:latLon.longitude message:self.getParams[KEY_MESSAGE] autoFill:![self.getParams[KEY_DIALOG] boolValue]];
+            [plugin openOsmNote:latLon.coordinate.latitude longitude:latLon.coordinate.longitude message:self.getParams[kMessage] autoFill:![self.getParams[kDialog] boolValue]];
     }
 }
 
@@ -51,9 +44,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -61,8 +54,8 @@ static OAQuickActionType *TYPE;
     [data setObject:@[@{
                           @"type" : [OAMultilineTextViewCell getCellIdentifier],
                           @"hint" : OALocalizedString(@"quick_action_enter_message"),
-                          @"title" : self.getParams[KEY_MESSAGE] ? self.getParams[KEY_MESSAGE] : @"",
-                          @"key" : KEY_MESSAGE
+                          @"title" : self.getParams[kMessage] ? self.getParams[kMessage] : @"",
+                          @"key" : kMessage
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_bug_descr")
@@ -79,21 +72,20 @@ static OAQuickActionType *TYPE;
         for (NSUInteger i = 0; i < arr.count; i++)
         {
             NSDictionary *item = arr[i];
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
-            if ([item[@"key"] isEqualToString:KEY_MESSAGE])
-                [params setValue:item[@"title"] forKey:KEY_MESSAGE];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
+            if ([item[@"key"] isEqualToString:kMessage])
+                [params setValue:item[@"title"] forKey:kMessage];
         }
     }
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
-    return params[KEY_MESSAGE] && params;
+    return params[kMessage] && params;
 }
 
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:12 stringId:@"osmbug.add" class:self.class name:OALocalizedString(@"quick_action_add_osm_bug") category:CREATE_CATEGORY iconName:@"ic_action_osm_note" secondaryIconName:@"ic_custom_compound_action_add"];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId stringId:@"osmbug.add" cl:self.class] name:OALocalizedString(@"quick_action_add_osm_bug")] iconName:@"ic_action_osm_note"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory];
     return TYPE;
 }
 

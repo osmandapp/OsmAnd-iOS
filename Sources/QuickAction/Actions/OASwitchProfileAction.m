@@ -7,7 +7,6 @@
 //
 
 #import "OASwitchProfileAction.h"
-#import "OAQuickActionType.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
@@ -16,8 +15,9 @@
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define KEY_PROFILES @"profiles"
+static NSString * const kProfiles = @"profiles";
 
 static OAQuickActionType *TYPE;
 
@@ -25,16 +25,7 @@ static OAQuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
-}
-
-- (void)commonInit
-{
+    return [super initWithActionType:self.class.TYPE];
 }
 
 - (void)execute
@@ -45,7 +36,7 @@ static OAQuickActionType *TYPE;
     if (profiles.count == 0)
         return;
     
-    BOOL showDialog = [[self getParams][KEY_DIALOG] boolValue];
+    BOOL showDialog = [[self getParams][kDialog] boolValue];
     if (showDialog)
     {
         OAProfileSelectionBottomSheetViewController *bottomSheet = [[OAProfileSelectionBottomSheetViewController alloc] initWithParam:self];
@@ -64,21 +55,18 @@ static OAQuickActionType *TYPE;
             break;
         }
     }
-    
-    NSString *nextProfile = profiles[0];
+
+    NSMutableArray<NSString *> *nextProfile = [NSMutableArray arrayWithObject:profiles[0]];
     if (index >= 0 && index + 1 < profiles.count)
-        nextProfile = profiles[index + 1];
-    
+        nextProfile[0] = profiles[index + 1];
     [self executeWithParams:nextProfile];
 }
 
-- (void)executeWithParams:(NSString *)params
+- (void)executeWithParams:(NSArray<NSString *> *)params
 {
-    OAApplicationMode *appMode = [self getModeForKey:params];
+    OAApplicationMode *appMode = [self getModeForKey:params.firstObject];
     if (appMode)
-    {
         [OAAppSettings.sharedManager setApplicationModePref:appMode];
-    }
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item
@@ -86,7 +74,7 @@ static OAQuickActionType *TYPE;
     return item;
 }
 
--(NSString *) getAddBtnText
+- (NSString *)getAddBtnText
 {
     return OALocalizedString(@"shared_string_add_profile");
 }
@@ -103,7 +91,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getListKey
 {
-    return KEY_PROFILES;
+    return kProfiles;
 }
 
 - (OrderedDictionary *)getUIModel
@@ -111,9 +99,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -155,9 +143,9 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
+            if ([item[@"key"] isEqualToString:kDialog])
             {
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+                [params setValue:item[@"value"] forKey:kDialog];
             }
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
             {
@@ -184,8 +172,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:32 stringId:@"profile.change" class:self.class name:OALocalizedString(@"change_application_profile") category:NAVIGATION iconName:@"ic_custom_manage_profiles" secondaryIconName:nil];
-
+        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId stringId:@"profile.change" cl:self.class] name:OALocalizedString(@"change_application_profile")] iconName:@"ic_custom_manage_profiles"] category:EOAQuickActionTypeCategoryNavigation];
     return TYPE;
 }
 

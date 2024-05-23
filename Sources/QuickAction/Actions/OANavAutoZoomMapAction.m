@@ -8,21 +8,28 @@
 
 #import "OANavAutoZoomMapAction.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
 @implementation OANavAutoZoomMapAction
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings.autoZoomMap set:![settings.autoZoomMap get]];
+    [_settings.autoZoomMap set:![_settings.autoZoomMap get]];
 }
 
 - (NSString *)getActionText
@@ -32,7 +39,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    return [[OAAppSettings sharedManager].autoZoomMap get];
+    return [_settings.autoZoomMap get];
 }
 
 - (NSString *)getActionStateName
@@ -43,8 +50,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:23 stringId:@"nav.autozoom" class:self.class name:OALocalizedString(@"quick_action_auto_zoom") category:NAVIGATION iconName:@"ic_navbar_search" secondaryIconName:nil editable:NO];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId stringId:@"nav.autozoom" cl:self.class] name:OALocalizedString(@"quick_action_auto_zoom")] iconName:@"ic_navbar_search"] category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

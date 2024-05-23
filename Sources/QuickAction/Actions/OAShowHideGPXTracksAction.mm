@@ -10,31 +10,38 @@
 #import "OAAppSettings.h"
 #import "OASelectedGPXHelper.h"
 #import "OsmAndApp.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
 @implementation OAShowHideGPXTracksAction
+{
+    OASelectedGPXHelper *_helper;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _helper = [OASelectedGPXHelper instance];
+}
+
 - (void)execute
 {
-    OASelectedGPXHelper *helper = [OASelectedGPXHelper instance];
-    if (helper.isShowingAnyGpxFiles)
-        [helper clearAllGpxFilesToShow:YES];
+    if (_helper.isShowingAnyGpxFiles)
+        [_helper clearAllGpxFilesToShow:YES];
     else
-        [helper restoreSelectedGpxFiles];
+        [_helper restoreSelectedGpxFiles];
     
     [[OsmAndApp instance].mapSettingsChangeObservable notifyEvent];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [OASelectedGPXHelper instance].isShowingAnyGpxFiles;
+    return _helper.isShowingAnyGpxFiles;
 }
 
 - (NSString *)getActionText
@@ -50,8 +57,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:28 stringId:@"gpx.showhide" class:self.class name:OALocalizedString(@"show_hide_gpx") category:CONFIGURE_MAP iconName:@"ic_custom_trip" secondaryIconName:nil editable:NO];
-       
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId stringId:@"gpx.showhide" cl:self.class] name:OALocalizedString(@"show_hide_gpx")] iconName:@"ic_custom_trip"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

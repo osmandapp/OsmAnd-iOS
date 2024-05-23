@@ -7,9 +7,9 @@
 //
 
 #import "OAShowHideMapillaryAction.h"
-#import "OAQuickActionType.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -52,8 +52,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:33 stringId:@"mapillary.showhide" class:self.class name:OALocalizedString(@"quick_action_showhide_mapillary_title") category:CONFIGURE_MAP iconName:@"ic_custom_mapillary_symbol" secondaryIconName:nil editable:NO];
-    
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId stringId:@"mapillary.showhide" cl:self.class] name:OALocalizedString(@"quick_action_showhide_mapillary_title")] iconName:@"ic_custom_mapillary_symbol"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

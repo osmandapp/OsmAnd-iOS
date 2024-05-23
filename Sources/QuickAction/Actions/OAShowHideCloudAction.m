@@ -7,8 +7,8 @@
 //
 
 #import "OAShowHideCloudAction.h"
-#import "OAQuickActionType.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
@@ -38,17 +38,7 @@ static OAQuickActionType *TYPE;
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-    {
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:39
-                                                    stringId:@"weather.cloud.showhide"
-                                                       class:self.class
-                                                        name:OALocalizedString(@"toggle_cloud")
-                                                    category:CONFIGURE_MAP
-                                                    iconName:@"ic_custom_clouds"
-                                           secondaryIconName:nil
-                                                    editable:NO];
-    }
-
+        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideCloudLayerActionId stringId:@"cloud.layer.showhide" cl:self.class] name:OALocalizedString(@"toggle_cloud")] category:EOAQuickActionTypeCategoryConfigureMap] iconName:@"ic_custom_clouds"] nonEditable];
     return TYPE;
 }
 

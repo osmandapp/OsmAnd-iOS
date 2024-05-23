@@ -11,30 +11,37 @@
 #import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
 @implementation OANavResumePauseAction
+{
+    OARoutingHelper *_helper;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _helper = [OARoutingHelper sharedInstance];
+}
+
 - (void)execute
 {
-    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
-    if (routingHelper.isRoutePlanningMode)
+    if (_helper.isRoutePlanningMode)
     {
-        [routingHelper setRoutePlanningMode:NO];
-        [routingHelper setFollowingMode:YES];
+        [_helper setRoutePlanningMode:NO];
+        [_helper setFollowingMode:YES];
     }
     else
     {
-        [routingHelper setRoutePlanningMode:YES];
-        [routingHelper setFollowingMode:NO];
-        [routingHelper setPauseNaviation:YES];
+        [_helper setRoutePlanningMode:YES];
+        [_helper setFollowingMode:NO];
+        [_helper setPauseNaviation:YES];
     }
     [[OAMapViewTrackingUtilities instance] switchToRoutePlanningMode];
     [[OARootViewController instance].mapPanel refreshMap];
@@ -42,12 +49,12 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionEnabled
 {
-    return [OARoutingHelper sharedInstance].isRouteCalculated;
+    return _helper.isRouteCalculated;
 }
 
 - (NSString *)getSecondaryIconName
 {
-    if ([OARoutingHelper sharedInstance].isRoutePlanningMode)
+    if (_helper.isRoutePlanningMode)
         return @"ic_custom_compound_action_pause";
     return @"ic_custom_compound_action_play";
 }
@@ -59,18 +66,16 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-    if (!helper.isRouteCalculated || helper.isRoutePlanningMode)
+    if (!_helper.isRouteCalculated || _helper.isRoutePlanningMode)
         return OALocalizedString(@"resume_nav");
-    
+
     return OALocalizedString(@"pause_nav");
 }
 
 + (OAQuickActionType *) TYPE
 {
     if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:26 stringId:@"nav.resumepause" class:self.class name:OALocalizedString(@"quick_action_resume_pause_navigation") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:@"ic_custom_compound_action_add" editable:NO];
-       
+        TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId stringId:@"nav.resumepause" cl:self.class] name:OALocalizedString(@"quick_action_resume_pause_navigation")] iconName:@"ic_custom_navigation_arrow"] secondaryIconName:@"ic_custom_compound_action_add"]  category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

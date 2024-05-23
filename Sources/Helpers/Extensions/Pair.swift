@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Pair<T, U> {
+struct Pair<T : Comparable, U : Comparable> : Hashable where T : Hashable, U : Hashable {
   let first: T
   let second: U
 }

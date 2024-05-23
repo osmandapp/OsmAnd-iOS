@@ -177,15 +177,15 @@ static OAQuickActionType *TYPE_OPEN;
     [OAPluginsHelper registerQuickActionTypesPlugins:quickActionTypes disabled:NO];
     if ([[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
         [quickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
-
+    
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [quickActionTypes addObjectsFromArray:@[
-                OAShowHideTemperatureAction.TYPE,
-                OAShowHidePressureAction.TYPE,
-                OAShowHideWindAction.TYPE,
-                OAShowHideCloudAction.TYPE,
-                OAShowHidePrecipitationAction.TYPE
+            OAShowHideTemperatureAction.TYPE,
+            OAShowHidePressureAction.TYPE,
+            OAShowHideWindAction.TYPE,
+            OAShowHideCloudAction.TYPE,
+            OAShowHidePrecipitationAction.TYPE
         ]];
     }
     
@@ -204,18 +204,18 @@ static OAQuickActionType *TYPE_OPEN;
     [OAPluginsHelper registerQuickActionTypesPlugins:disabledQuickActionTypes disabled:YES];
     if (![[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
         [disabledQuickActionTypes addObjectsFromArray:@[OAContourLinesAction.TYPE, OATerrainAction.TYPE]];
-
+    
     if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         [disabledQuickActionTypes addObjectsFromArray:@[
-                OAShowHideTemperatureAction.TYPE,
-                OAShowHidePressureAction.TYPE,
-                OAShowHideWindAction.TYPE,
-                OAShowHideCloudAction.TYPE,
-                OAShowHidePrecipitationAction.TYPE
+            OAShowHideTemperatureAction.TYPE,
+            OAShowHidePressureAction.TYPE,
+            OAShowHideWindAction.TYPE,
+            OAShowHideCloudAction.TYPE,
+            OAShowHidePrecipitationAction.TYPE
         ]];
     }
-
+    
     NSMutableDictionary<NSNumber *, OAQuickActionType *> *disabledQuickActionTypesInt = [NSMutableDictionary new];
     NSMutableDictionary<NSString *, OAQuickActionType *> *disabledQuickActionTypesStr = [NSMutableDictionary new];
     for (OAQuickActionType *qt in disabledQuickActionTypes)
@@ -227,6 +227,11 @@ static OAQuickActionType *TYPE_OPEN;
     _disabledQuickActionTypesInt = [NSDictionary dictionaryWithDictionary:disabledQuickActionTypesInt];
     _disabledQuickActionTypesStr = [NSDictionary dictionaryWithDictionary:disabledQuickActionTypesStr];
 
+    [self updateQuickActions];
+}
+
+- (void)updateQuickActions
+{
     // reparse to get new quick actions
     _quickActions = [self parseActiveActionsList:_settings.quickActionsList.get];
 }

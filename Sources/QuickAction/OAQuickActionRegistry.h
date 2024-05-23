@@ -29,6 +29,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (OAQuickActionType *) TYPE_SETTINGS;
 + (OAQuickActionType *) TYPE_OPEN;
 
+- (void) updateQuickActions;
 -(NSArray<OAQuickAction *> *) getQuickActions;
 
 -(void) addQuickAction:(OAQuickAction *) action;

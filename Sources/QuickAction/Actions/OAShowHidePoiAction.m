@@ -83,6 +83,12 @@ static OAQuickActionType *TYPE;
         return [super getIconResName];
 }
 
+- (UIImage *)getActionIcon
+{
+    NSString *actionIconName = [self getIconResName];
+    return [actionIconName isEqualToString:self.actionType.iconName] ? [UIImage templateImageNamed:actionIconName] : [UIImage mapSvgImageNamed:actionIconName];
+}
+
 - (BOOL)isActionWithSlash
 {
     return [self isCurrentFilters];

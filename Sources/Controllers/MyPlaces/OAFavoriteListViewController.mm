@@ -47,6 +47,8 @@
 
 #define FavoriteTableGroup _(FavoriteTableGroup)
 
+static const NSInteger _exportButtonIndex = 1;
+
 @interface FavoriteTableGroup : NSObject
     @property BOOL isOpen;
     @property OAFavoriteGroup *favoriteGroup;
@@ -864,12 +866,13 @@ static UIViewController *parentController;
 - (IBAction) shareButtonClicked:(id)sender
 {
     // Share selected favorites
-    [self shareItems:_selectedItems];
+    UIButton *clickedButton = (UIButton *)sender;
+    [self shareItems:_selectedItems sounceItem:clickedButton];
     [self finishEditing];
     [self generateData];
 }
 
-- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems
+- (void)shareItems:(NSArray<NSIndexPath *> *)selectedItems sounceItem:(UIView *)sounceItem
 {
     if ([selectedItems count] == 0)
     {
@@ -911,17 +914,10 @@ static UIViewController *parentController;
     [OAFavoritesHelper saveFile:groups.allValues file:fullFilename];
 
     NSURL *favoritesUrl = [NSURL fileURLWithPath:fullFilename];
-    UIActivityViewController *activityViewController =
-    [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl] applicationActivities:nil];
-    activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = self.view.frame;
-    activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
-    };
 
-    [self presentViewController:activityViewController
-                       animated:YES
-                     completion:nil];
+    [self showActivity:@[favoritesUrl] sourceView:sounceItem barButtonItem:nil completionWithItemsHandler:^{
+        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
+    }];
 }
 
 - (IBAction)goRootScreen:(id)sender
@@ -951,15 +947,13 @@ static UIViewController *parentController;
     UIActivityViewController *activityViewController =
     [[UIActivityViewController alloc] initWithActivityItems:@[favoritesUrl]
                                       applicationActivities:nil];
-    activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = _exportButton.frame;
-    activityViewController.completionWithItemsHandler = ^void(UIActivityType activityType, BOOL completed, NSArray *returnedItems, NSError *activityError) {
-        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
-    };
     
-    [self presentViewController:activityViewController
-                       animated:YES
-                     completion:nil];
+    //export button is on last section, last row
+    NSIndexPath *exportButtonIndex = [NSIndexPath indexPathForRow:_exportButtonIndex inSection:_data.count - 1];
+    UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:exportButtonIndex];
+    [self showActivity:@[favoritesUrl] sourceView:cell barButtonItem:nil completionWithItemsHandler:^{
+        [NSFileManager.defaultManager removeItemAtURL:favoritesUrl error:nil];
+    }];
 }
 
 #pragma mark - UITableViewDataSource
@@ -1082,7 +1076,9 @@ static UIViewController *parentController;
             {
                 [indexPaths addObject:[NSIndexPath indexPathForRow:i inSection:indexPath.section]];
             }
-            [self shareItems:indexPaths];
+            
+            UITableViewCell *cell = [self.favoriteTableView cellForRowAtIndexPath:indexPath];
+            [self shareItems:indexPaths sounceItem:cell];
         }];
         shareAction.accessibilityLabel = OALocalizedString(@"shared_string_share");
         [menuElements addObject:shareAction];

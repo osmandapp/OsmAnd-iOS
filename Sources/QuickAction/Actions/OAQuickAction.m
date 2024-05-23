@@ -62,6 +62,11 @@ static NSInteger SEQ = 0;
     return _actionType ? _actionType.iconName : nil;
 }
 
+- (UIImage *)getActionIcon
+{
+    return [UIImage templateImageNamed:[self getIconResName]];
+}
+
 - (NSString *)getSecondaryIconName
 {
     return _actionType ? _actionType.secondaryIconName : nil;

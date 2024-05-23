@@ -2554,7 +2554,7 @@
 "cloud_contains_newer_changes" = "Versiunea OsmAnd Cloud conține modificări mai noi.";
 "dowload_cloud_version" = "Descărcați versiunea cloud";
 "shared_string_progress" = "Progres";
-"activity_type_mountainbike_name" = "Bicicletă de munte";
+"activity_type_mountainbike_name" = "Mountain bike";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Arată trasee MTB IMBA";
 "mtb_imba_full" = "Asociația Internațională de Ciclism Montan";
 "backup_version_history" = "Istoricul versiunilor";
@@ -3369,14 +3369,14 @@
 "osmand_depelopment_use_discrete_autozoom" = "Autozoom discret (versiunea veche)";
 "required_maps_list" = "Hărți care vor fi, de asemenea, utilizate: %@";
 "track_appearance_3D_visualization" = "Vizualizare 3D";
-"shared_string_scale" = "Scală";
+"shared_string_scale" = "Scară";
 "missing_or_outdated_maps_title" = "Hărți lipsă sau învechite";
 "osm_id" = "ID OSM";
 "vertical_exaggeration" = "Exagerare verticală";
 "calculate_online" = "Calculați online";
 "ios_release_4_7" = "• Panouri widget îmbunătățite în partea de sus și de jos pentru a găzdui toate widgeturile\n• Gestionare îmbunătățită pentru pistele vizibile pe hartă\n• Actualizat \"Analiză pe hartă\" cu posibilitatea de a afișa măsurători de la senzori\n• A fost adăugat suport îmbunătățit pentru etichete pentru GPX: link, autor, copyright și cuvinte cheie\n• A fost îmbunătățită configurarea widgeturilor, permițând utilizatorilor să mute paginile și rândurile\n• Gestionarea îmbunătățită a pistelor în \"My Places\" cu subfoldere și meniuri contextuale pentru piste și dosare\n• Sens giratoriu cu numărul de ieșire afișat acum pe CarPlay în timpul navigării\n• Controlul reliefului 3D cu o nouă opțiune \"Exagerare verticală\" pentru un peisaj mai dramatic\n• Vizualizați altitudinea pistei direct pe hartă într-o vizualizare 3D dinamică\n• Noi widget-uri: \"Glide Ratio\" și \"Sun Position\"\n• Personalizați \"Distanța în timpul navigației\": alegeți între numere precise sau rotunjite în sus\n• Limba aplicației va fi utilizată pentru denumirile de pe harta de ansamblu a lumii în locul limbilor locale\n• OsmAnd Cloud: A fost adăugată posibilitatea de a vă gestiona datele, inclusiv restaurarea fișierelor șterse și ștergerea contului dvs.\n• A fost adăugat suportul pentru etichete suplimentare pentru rutele turistice\n• A fost reparat widget-ul \"Coordonate\" unde, în unele cazuri, ultimele cifre erau omise\n• S-a reparat comportamentul butonului \"Mod 3D\": atingerea butonului nu salva unghiul de înclinare\n• S-a fixat culoarea barei de stare pentru versiunile mai vechi de iOS\n• Corectarea gesturilor de rotire și de ciupire pentru a mări harta pentru aplicația care rulează pe macOS\n";
 "average_vertical_speed" = "Viteza verticală medie";
-"vertical_exaggeration_description" = "Prin modificarea valorii scalei, puteți accentua relieful 3D.";
+"vertical_exaggeration_description" = "Prin modificarea valorii scării, puteți accentua relieful 3D.";
 "missing_or_outdated_maps_description" = "Unele hărți offline necesare pentru acest traseu lipsesc sau nu sunt actualizate. Vă rugăm să descărcați sau să actualizați aceste hărți.";
 "required_maps" = "Hărți necesare";
 "calculate_online_title" = "Lista de hărți necesare se bazează pe traseul în linie dreaptă. Pentru a obține o listă precisă de hărți, OsmAnd vă poate precalcula traseul online";

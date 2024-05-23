@@ -214,7 +214,7 @@
     if (cell)
     {
         [cell.textView setText:action.getName];
-        [cell.iconView setImage:[UIImage templateImageNamed:action.getIconResName]];
+        [cell.iconView setImage:[action getActionIcon]];
         [cell.iconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -312,6 +312,8 @@
 {
     [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
     [_registry.quickActionListChangedObservable notifyEvent];
+    if (self.quickActionUpdateCallback)
+        self.quickActionUpdateCallback();
 }
 
 - (NSInteger)getScreensCount
@@ -456,6 +458,8 @@
 {
     [self generateData];
     [self.tableView reloadData];
+    if (self.quickActionUpdateCallback)
+        self.quickActionUpdateCallback();
 }
 
 @end

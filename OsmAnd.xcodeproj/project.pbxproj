@@ -3194,7 +3194,7 @@
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
-		FA186E482BFCF15A007EE77D /* SpeedViewWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedViewWrapper.mm */; };
+		FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
@@ -7730,8 +7730,8 @@
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
-		FA186E462BFCF15A007EE77D /* SpeedViewWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedViewWrapper.h; sourceTree = "<group>"; };
-		FA186E472BFCF15A007EE77D /* SpeedViewWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedViewWrapper.mm; sourceTree = "<group>"; };
+		FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedLimitWrapper.h; sourceTree = "<group>"; };
+		FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitWrapper.mm; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
@@ -13849,8 +13849,8 @@
 		FA83EAA32BF6538B00DBF321 /* SpeedometerView */ = {
 			isa = PBXGroup;
 			children = (
-				FA186E462BFCF15A007EE77D /* SpeedViewWrapper.h */,
-				FA186E472BFCF15A007EE77D /* SpeedViewWrapper.mm */,
+				FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */,
+				FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */,
 				FAC5D42F2BFC7F3400E9E658 /* SpeedLimitView */,
 				FAC5D4172BFB560400E9E658 /* SpeedView */,
 				FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */,
@@ -16924,7 +16924,7 @@
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
-				FA186E482BFCF15A007EE77D /* SpeedViewWrapper.mm in Sources */,
+				FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,

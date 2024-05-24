@@ -6,8 +6,6 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 @objcMembers
 final class SpeedometerView: OATextInfoWidget {
     @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
@@ -37,33 +35,20 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     let settings = OAAppSettings.sharedManager()!
-    var style = EOAWidgetSizeStyle(rawValue: 2)!
     
+    var style = EOAWidgetSizeStyle(rawValue: 2)!
     var isCarPlay = false
     var isPreview = false
-    
-    let speedViewWrapper = SpeedViewWrapper()
     
     static var initView: SpeedometerView? {
         UINib(nibName: String(describing: self), bundle: nil)
             .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
     }
     
-    var speedLimitText: NSString? {
+    private lazy var speedViewWrapper = SpeedLimitWrapper()
+    
+    private var speedLimitText: NSString? {
         speedViewWrapper.speedLimitText() as NSString?
-    }
-    
-    override var intrinsicContentSize: CGSize {
-        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
-    }
-    
-    override func updateInfo() -> Bool {
-        updateSpeedometerSpeedView()
-        updateSpeedLimitView()
-        isHidden = speedometerSpeedView.isHidden && speedLimitEUView.isHidden && speedLimitNAMView.isHidden
-       
-        return true
     }
     
     func updateWidgetSizeTest() {
@@ -102,6 +87,19 @@ final class SpeedometerView: OATextInfoWidget {
         }
     }
     
+    override var intrinsicContentSize: CGSize {
+        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
+    }
+    
+    override func updateInfo() -> Bool {
+        updateSpeedometerSpeedView()
+        updateSpeedLimitView()
+        isHidden = speedometerSpeedView.isHidden && speedLimitEUView.isHidden && speedLimitNAMView.isHidden
+       
+        return true
+    }
+    
     private func updateSpeedometerSpeedView() {
         // TODO:
         if true {
@@ -123,27 +121,24 @@ final class SpeedometerView: OATextInfoWidget {
 //        speedLimitEUView.updateWith(value: "35")
         
         if drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA {
-            if let value = speedLimitText as? String {
-                speedLimitNAMView.isHidden = false
-                speedLimitNAMView.updateWith(value: value)
-            }
+            setupSpeedLimitWith(view: speedLimitNAMView)
+//            if let value = speedLimitText as? String {
+//                speedLimitNAMView.isHidden = false
+//                speedLimitNAMView.updateWith(value: value)
+//            }
         } else {
-            if let value = speedLimitText as? String {
-                speedLimitEUView.isHidden = false
-                speedLimitEUView.updateWith(value: value)
-            }
+            setupSpeedLimitWith(view: speedLimitEUView)
+//            if let value = speedLimitText as? String {
+//                speedLimitEUView.isHidden = false
+//                speedLimitEUView.updateWith(value: value)
+//            }
         }
     }
     
-    private func configureStackPosition() {
-        guard isCarPlay else { return }
-        if let itemView = contentStackView.subviews.first {
-            contentStackView.removeArrangedSubview(itemView)
-            contentStackView.setNeedsLayout()
-            contentStackView.layoutIfNeeded()
-            
-            contentStackView.insertArrangedSubview(itemView, at: 1)
-            contentStackView.setNeedsLayout()
+    private func setupSpeedLimitWith(view: SpeedLimitView) {
+        if let value = speedLimitText as? String {
+            view.isHidden = false
+            view.updateWith(value: value)
         }
     }
 }

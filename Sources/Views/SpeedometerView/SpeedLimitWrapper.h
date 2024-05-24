@@ -1,5 +1,5 @@
 //
-//  SpeedViewWrapper.h
+//  SpeedLimitWrapper.h
 //  OsmAnd Maps
 //
 //  Created by Oleksandr Panchenko on 21.05.2024.
@@ -8,7 +8,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SpeedViewWrapper : NSObject
+@interface SpeedLimitWrapper : NSObject
 
 - (nullable NSString *)speedLimitText;
 

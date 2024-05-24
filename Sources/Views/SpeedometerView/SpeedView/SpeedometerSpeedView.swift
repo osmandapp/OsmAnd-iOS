@@ -6,18 +6,13 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-import Foundation
-
 final class SpeedometerSpeedView: UIView {
     @IBOutlet private weak var topConstraint: NSLayoutConstraint!
     @IBOutlet private weak var bottomConstraint: NSLayoutConstraint!
-    
     @IBOutlet private weak var withConstraint: NSLayoutConstraint!
-    
     @IBOutlet private weak var leadingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var trailingConstraint: NSLayoutConstraint!
     @IBOutlet private weak var stackView: UIStackView!
-    
     @IBOutlet private weak var valueSpeedLabel: UILabel!
     @IBOutlet private weak var unitSpeedLabel: UILabel!
     

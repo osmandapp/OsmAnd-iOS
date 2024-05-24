@@ -108,7 +108,7 @@
                             </constraints>
                             <connections>
                                 <outlet property="valueSpeedLimitLabel" destination="G83-V4-Hdg" id="dtJ-Cy-Mte"/>
-                                <outlet property="withConstraint" destination="cNZ-Q8-bkW" id="L5v-Sy-QvT"/>
+                                <outlet property="widthConstraint" destination="cNZ-Q8-bkW" id="L5v-Sy-QvT"/>
                             </connections>
                         </view>
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Raq-ej-jOf" userLabel="SpeedLimitNAMView" customClass="SpeedLimitView" customModule="OsmAnd_Maps" customModuleProvider="target">
@@ -158,7 +158,7 @@
                                 <outlet property="topStackViewConstraint" destination="fPb-jj-B4i" id="tVJ-rl-Bw3"/>
                                 <outlet property="trailingStackViewConstraint" destination="bk3-zE-oHz" id="z6I-AJ-3wW"/>
                                 <outlet property="valueSpeedLimitLabel" destination="ni7-XM-Bte" id="SnE-AL-MJb"/>
-                                <outlet property="withConstraint" destination="JkS-Qw-cOV" id="Fsb-1F-s7L"/>
+                                <outlet property="widthConstraint" destination="JkS-Qw-cOV" id="Fsb-1F-s7L"/>
                             </connections>
                         </view>
                     </subviews>

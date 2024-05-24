@@ -1,12 +1,12 @@
 //
-//  SpeedViewWrapper.mm
+//  SpeedLimitWrapper.mm
 //  OsmAnd Maps
 //
 //  Created by Oleksandr Panchenko on 21.05.2024.
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-#import "SpeedViewWrapper.h"
+#import "SpeedLimitWrapper.h"
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
 #import "OAMapViewTrackingUtilities.h"
@@ -15,7 +15,7 @@
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
 
-@implementation SpeedViewWrapper
+@implementation SpeedLimitWrapper
 {
     OAMapViewTrackingUtilities *_trackingUtilities;
     OALocationServices *_locationProvider;
@@ -54,8 +54,8 @@
 
 - (NSString *)speedLimitText
 {
-    BOOL speedLimitExceed = [_settings.showSpeedLimitWarnings get];
-    if (!speedLimitExceed)
+    BOOL isVisible = [_settings.showScreenAlerts get] && [_settings.showSpeedLimitWarnings get];
+    if (!isVisible)
     {
         return nil;
     }

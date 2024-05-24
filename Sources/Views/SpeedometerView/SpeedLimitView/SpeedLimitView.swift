@@ -11,7 +11,7 @@ enum SpeedLimitRegion {
 }
 
 final class SpeedLimitView: UIView {
-    @IBOutlet private weak var withConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var widthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var valueSpeedLimitLabel: UILabel!
     @IBOutlet private weak var titleSpeedLimitLabel: UILabel! {
         didSet {
@@ -26,11 +26,7 @@ final class SpeedLimitView: UIView {
     var speedLimitRegion: SpeedLimitRegion = .EU
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-    
-    func updateWith(value: String) {
-        valueSpeedLimitLabel.text = value
-    }
-    
+        
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
         
@@ -39,8 +35,12 @@ final class SpeedLimitView: UIView {
         setupConstraints(width: width)
     }
     
+    func updateWith(value: String) {
+        valueSpeedLimitLabel.text = value
+    }
+    
     private func setupConstraints(width: CGFloat) {
-        withConstraint.constant = width
+        widthConstraint.constant = width
         
         if case .NAM = speedLimitRegion {
             topStackViewConstraint.constant = topStackViewPadding

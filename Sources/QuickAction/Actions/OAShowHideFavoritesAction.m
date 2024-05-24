@@ -22,6 +22,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideFavoritesActionId
+                                            stringId:@"favorites.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_fav")]
+              iconName:@"ic_custom_favorites"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
@@ -44,8 +55,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideFavoritesActionId stringId:@"favorites.showhide" cl:self.class] name:OALocalizedString(@"toggle_fav")] iconName:@"ic_custom_favorites"]  category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

@@ -20,6 +20,18 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId
+                                             stringId:@"nav.destination.remove"
+                                                   cl:self.class]
+                name:OALocalizedString(@"quick_action_remove_next_destination")]
+               iconName:@"ic_action_intermediate"]
+              secondaryIconName:@"ic_custom_compound_action_remove"] 
+             category:EOAQuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)execute
 {
     OATargetPointsHelper *targetPointsHelper = [OATargetPointsHelper sharedInstance];
@@ -55,8 +67,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId stringId:@"nav.destination.remove" cl:self.class] name:OALocalizedString(@"quick_action_remove_next_destination")] iconName:@"ic_action_intermediate"] secondaryIconName:@"ic_custom_compound_action_remove"]  category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

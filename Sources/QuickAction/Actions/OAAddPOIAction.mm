@@ -35,6 +35,16 @@ static OAQuickActionType *ACTION_TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    ACTION_TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId
+                                                  stringId:@"osmpoi.add"
+                                                        cl:self.class]
+                     name:OALocalizedString(@"quick_action_add_poi")]
+                    iconName:@"ic_action_create_poi"]
+                   category:EOAQuickActionTypeCategoryCreateCategory];
+}
+
 - (void) execute
 {
     OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
@@ -196,8 +206,6 @@ static OAQuickActionType *ACTION_TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!ACTION_TYPE)
-        ACTION_TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId stringId:@"osmpoi.add" cl:self.class] name:OALocalizedString(@"quick_action_add_poi")] iconName:@"ic_action_create_poi"] category:EOAQuickActionTypeCategoryCreateCategory];
     return ACTION_TYPE;
 }
 

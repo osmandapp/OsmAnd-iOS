@@ -9,7 +9,6 @@
 #import "OAParkingAction.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OATargetPoint.h"
@@ -23,6 +22,18 @@ static OAQuickActionType *TYPE;
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId
+                                             stringId:@"parking.add"
+                                                   cl:self.class]
+                name:OALocalizedString(@"quick_action_add_parking")]
+               iconName:@"ic_custom_parking"]
+              secondaryIconName:@"ic_custom_compound_action_add"]
+             category:EOAQuickActionTypeCategoryCreateCategory]
+            nonEditable];
 }
 
 - (void)execute
@@ -50,8 +61,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId stringId:@"parking.add" cl:self.class] name:OALocalizedString(@"quick_action_add_parking")] iconName:@"ic_custom_parking"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory] nonEditable];
     return TYPE;
 }
 

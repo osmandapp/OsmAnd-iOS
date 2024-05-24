@@ -39,6 +39,16 @@ static OAQuickActionType *TYPE;
     return self;
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId
+                                           stringId:@"mapsource.change"
+                                                 cl:self.class]
+              name:OALocalizedString(@"quick_action_map_source")]
+             iconName:@"ic_custom_show_on_map"]
+            category:EOAQuickActionTypeCategoryConfigureMap];
+}
+
 - (void)execute
 {
     NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
@@ -188,8 +198,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId stringId:@"mapsource.change" cl:self.class] name:OALocalizedString(@"quick_action_map_source")] iconName:@"ic_custom_show_on_map"] category:EOAQuickActionTypeCategoryConfigureMap];
     return TYPE;
 }
 

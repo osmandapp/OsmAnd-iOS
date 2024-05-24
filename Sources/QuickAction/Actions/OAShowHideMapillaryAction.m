@@ -20,6 +20,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId
+                                            stringId:@"mapillary.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_showhide_mapillary_title")]
+              iconName:@"ic_custom_mapillary_symbol"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)execute
 {
     if (OAIAPHelper.sharedInstance.mapillary.disabled)
@@ -51,8 +62,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId stringId:@"mapillary.showhide" cl:self.class] name:OALocalizedString(@"quick_action_showhide_mapillary_title")] iconName:@"ic_custom_mapillary_symbol"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

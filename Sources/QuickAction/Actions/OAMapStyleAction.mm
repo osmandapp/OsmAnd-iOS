@@ -28,12 +28,17 @@ static OAQuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        [self commonInit];
-    }
-    return self;
+    return [super initWithActionType:self.class.TYPE];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapStyleActionId
+                                           stringId:@"mapstyle.change"
+                                                 cl:self.class]
+              name:OALocalizedString(@"quick_action_map_style")]
+             iconName:@"ic_custom_map_style"]
+            category:EOAQuickActionTypeCategoryConfigureMap];
 }
 
 - (void)commonInit
@@ -45,11 +50,13 @@ static OAQuickActionType *TYPE;
     OAApplicationMode *mode = [OAAppSettings sharedManager].applicationMode.get;
     QList< std::shared_ptr<const OsmAnd::ResourcesManager::Resource> > mapStyles;
     const auto localResources = app.resourcesManager->getLocalResources();
-    for(const auto& localResource : localResources)
+    for (const auto& localResource : localResources)
+    {
         if (localResource->type == OsmAnd::ResourcesManager::ResourceType::MapStyle)
             mapStyles.push_back(localResource);
+    }
     
-    for(const auto& resource : mapStyles)
+    for (const auto& resource : mapStyles)
     {
         const auto& mapStyle = std::static_pointer_cast<const OsmAnd::ResourcesManager::MapStyleMetadata>(resource->metadata)->mapStyle;
 
@@ -230,9 +237,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapStyleActionId stringId:@"mapstyle.change" cl:self.class] name:OALocalizedString(@"quick_action_map_style")] iconName:@"ic_custom_map_style"] category:EOAQuickActionTypeCategoryConfigureMap];
-       
     return TYPE;
 }
 

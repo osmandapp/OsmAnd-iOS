@@ -24,6 +24,18 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavReplaceDestinationActionId
+                                             stringId:@"nav.destination.replace"
+                                                   cl:self.class]
+                name:OALocalizedString(@"quick_action_replace_destination")]
+               iconName:@"ic_action_target"]
+              secondaryIconName:@"ic_custom_compound_action_replace"]
+             category:EOAQuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)execute
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -42,9 +54,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavReplaceDestinationActionId stringId:@"nav.destination.replace" cl:self.class] name:OALocalizedString(@"quick_action_replace_destination")] iconName:@"ic_action_target"] secondaryIconName:@"ic_custom_compound_action_replace"]  category:EOAQuickActionTypeCategoryNavigation] nonEditable];
-       
     return TYPE;
 }
 

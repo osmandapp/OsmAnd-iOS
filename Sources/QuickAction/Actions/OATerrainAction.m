@@ -20,6 +20,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId
+                                            stringId:@"terrain.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_hillshade")]
+              iconName:@"ic_custom_hillshade"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)execute
 {
     OAAppData *data = [OsmAndApp instance].data;
@@ -57,8 +68,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId stringId:@"terrain.showhide" cl:self.class] name:OALocalizedString(@"toggle_hillshade")] iconName:@"ic_custom_hillshade"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

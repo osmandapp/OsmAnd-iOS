@@ -21,6 +21,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId
+                                            stringId:@"marker.add"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_add_marker")]
+              iconName:@"ic_custom_favorites"]
+             secondaryIconName:@"ic_custom_compound_action_add"]
+            category:EOAQuickActionTypeCategoryCreateCategory];
+}
+
 - (void)execute
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -35,9 +46,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId stringId:@"marker.add" cl:self.class] name:OALocalizedString(@"quick_action_add_marker")] iconName:@"ic_custom_favorites"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory];
-       
     return TYPE;
 }
 

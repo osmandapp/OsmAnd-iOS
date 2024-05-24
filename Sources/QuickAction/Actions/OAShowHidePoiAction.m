@@ -32,6 +32,16 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId
+                                           stringId:@"poi.showhide"
+                                                 cl:self.class]
+              name:OALocalizedString(@"toggle_poi")]
+             iconName:@"ic_custom_poi"]
+            category:EOAQuickActionTypeCategoryConfigureMap];
+}
+
 - (void)commonInit
 {
     _helper = [OAPOIFiltersHelper sharedInstance];
@@ -197,8 +207,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId stringId:@"poi.showhide" cl:self.class] name:OALocalizedString(@"toggle_poi")] iconName:@"ic_custom_poi"] category:EOAQuickActionTypeCategoryConfigureMap];
     return TYPE;
 }
 

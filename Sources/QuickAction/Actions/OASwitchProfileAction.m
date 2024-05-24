@@ -22,15 +22,32 @@ static NSString * const kProfiles = @"profiles";
 static OAQuickActionType *TYPE;
 
 @implementation OASwitchProfileAction
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype) init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId
+                                           stringId:@"profile.change"
+                                                 cl:self.class]
+              name:OALocalizedString(@"change_application_profile")]
+             iconName:@"ic_custom_manage_profiles"]
+            category:EOAQuickActionTypeCategoryNavigation];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
     NSArray<NSString *> *profiles = self.getParams[kSwitchProfileStringKeys];
     
     if (profiles.count == 0)
@@ -45,7 +62,7 @@ static OAQuickActionType *TYPE;
     }
     
     int index = -1;
-    NSString *currentProfile = settings.applicationMode.get.stringKey;
+    NSString *currentProfile = _settings.applicationMode.get.stringKey;
     
     for (int idx = 0; idx < profiles.count; idx++)
     {
@@ -66,7 +83,7 @@ static OAQuickActionType *TYPE;
 {
     OAApplicationMode *appMode = [self getModeForKey:params.firstObject];
     if (appMode)
-        [OAAppSettings.sharedManager setApplicationModePref:appMode];
+        [_settings setApplicationModePref:appMode];
 }
 
 - (NSString *)getTranslatedItemName:(NSString *)item
@@ -171,8 +188,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId stringId:@"profile.change" cl:self.class] name:OALocalizedString(@"change_application_profile")] iconName:@"ic_custom_manage_profiles"] category:EOAQuickActionTypeCategoryNavigation];
     return TYPE;
 }
 

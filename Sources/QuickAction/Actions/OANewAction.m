@@ -20,6 +20,16 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId
+                                           stringId:@"new"
+                                                 cl:self.class]
+              name:OALocalizedString(@"quick_action_new_action")]
+             iconName:@"ic_custom_add"]
+            nonEditable];
+}
+
 - (void)execute
 {
     OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] init];
@@ -28,8 +38,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId stringId:@"new" cl:self.class] name:OALocalizedString(@"quick_action_new_action")] iconName:@"ic_custom_add"] nonEditable];
     return TYPE;
 }
 

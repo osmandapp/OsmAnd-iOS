@@ -19,6 +19,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId
+                                            stringId:@"wind.layer.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_wind")]
+              iconName:@"ic_custom_wind"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)execute
 {
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -37,8 +48,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId stringId:@"wind.layer.showhide" cl:self.class] name:OALocalizedString(@"toggle_wind")] iconName:@"ic_custom_wind"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

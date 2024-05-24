@@ -20,6 +20,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId
+                                            stringId:@"nav.directions"
+                                                  cl:self.class]
+               name:OALocalizedString(@"context_menu_item_directions_from")]
+              iconName:@"ic_action_directions_from"]
+             category:EOAQuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)execute
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -36,8 +47,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId stringId:@"nav.directions" cl:self.class] name:OALocalizedString(@"context_menu_item_directions_from")] iconName:@"ic_action_directions_from"] category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

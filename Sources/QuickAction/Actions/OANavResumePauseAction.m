@@ -25,6 +25,18 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId
+                                             stringId:@"nav.resumepause"
+                                                   cl:self.class]
+                name:OALocalizedString(@"quick_action_resume_pause_navigation")]
+               iconName:@"ic_custom_navigation_arrow"]
+              secondaryIconName:@"ic_custom_compound_action_add"]
+             category:EOAQuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)commonInit
 {
     _helper = [OARoutingHelper sharedInstance];
@@ -74,8 +86,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId stringId:@"nav.resumepause" cl:self.class] name:OALocalizedString(@"quick_action_resume_pause_navigation")] iconName:@"ic_custom_navigation_arrow"] secondaryIconName:@"ic_custom_compound_action_add"]  category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

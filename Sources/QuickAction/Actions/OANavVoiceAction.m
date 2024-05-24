@@ -24,6 +24,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId
+                                            stringId:@"nav.voice"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_navigation_voice")]
+              iconName:@"ic_custom_sound"]
+             category:EOAQuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)execute
 {
     BOOL voice = [_settings.voiceMute get];
@@ -47,8 +58,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId stringId:@"nav.voice" cl:self.class] name:OALocalizedString(@"quick_action_navigation_voice")] iconName:@"ic_custom_sound"] category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

@@ -22,6 +22,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId
+                                            stringId:@"osmedit.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_local_edits")]
+              iconName:@"ic_custom_osm_edits"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
@@ -49,8 +60,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId stringId:@"osmedit.showhide" cl:self.class] name:OALocalizedString(@"toggle_local_edits")] iconName:@"ic_custom_osm_edits"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

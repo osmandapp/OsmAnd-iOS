@@ -22,6 +22,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId
+                                            stringId:@"nav.autozoom"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_auto_zoom")]
+              iconName:@"ic_navbar_search"]
+             category:EOAQuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
@@ -49,8 +60,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId stringId:@"nav.autozoom" cl:self.class] name:OALocalizedString(@"quick_action_auto_zoom")] iconName:@"ic_navbar_search"] category:EOAQuickActionTypeCategoryNavigation] nonEditable];
     return TYPE;
 }
 

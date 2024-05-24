@@ -24,6 +24,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId
+                                            stringId:@"contourlines.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_contour_lines")]
+              iconName:@"ic_custom_contour_lines"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
@@ -69,8 +80,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId stringId:@"contourlines.showhide" cl:self.class] name:OALocalizedString(@"toggle_contour_lines")] iconName:@"ic_custom_contour_lines"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

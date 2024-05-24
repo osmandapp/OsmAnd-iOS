@@ -26,6 +26,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId
+                                            stringId:@"osmbug.add"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_add_osm_bug")]
+              iconName:@"ic_action_osm_note"]
+             secondaryIconName:@"ic_custom_compound_action_add"]
+            category:EOAQuickActionTypeCategoryCreateCategory];
+}
+
 - (void)execute
 {
     OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getEnabledPlugin:OAOsmEditingPlugin.class];
@@ -84,8 +95,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId stringId:@"osmbug.add" cl:self.class] name:OALocalizedString(@"quick_action_add_osm_bug")] iconName:@"ic_action_osm_note"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory];
     return TYPE;
 }
 

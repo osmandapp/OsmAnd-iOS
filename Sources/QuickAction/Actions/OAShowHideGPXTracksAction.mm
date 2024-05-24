@@ -24,6 +24,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId
+                                            stringId:@"gpx.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"show_hide_gpx")]
+              iconName:@"ic_custom_trip"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)commonInit
 {
     _helper = [OASelectedGPXHelper instance];
@@ -56,8 +67,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId stringId:@"gpx.showhide" cl:self.class] name:OALocalizedString(@"show_hide_gpx")] iconName:@"ic_custom_trip"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

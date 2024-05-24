@@ -33,15 +33,24 @@ static OAQuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        _styleSettings = [OAMapStyleSettings sharedInstance];
-        _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    return [super initWithActionType:self.class.TYPE];
+}
 
-        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
-    }
-    return self;
+- (void)commonInit
+{
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+    _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
+                                           stringId:@"mapunderlay.change"
+                                                 cl:self.class]
+              name:OALocalizedString(@"quick_action_map_underlay")]
+             iconName:@"ic_custom_underlay_map"]
+            category:EOAQuickActionTypeCategoryConfigureMap];
 }
 
 - (void) execute
@@ -201,8 +210,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId stringId:@"mapunderlay.change" cl:self.class] name:OALocalizedString(@"quick_action_map_underlay")] iconName:@"ic_custom_underlay_map"] category:EOAQuickActionTypeCategoryConfigureMap];
     return TYPE;
 }
 

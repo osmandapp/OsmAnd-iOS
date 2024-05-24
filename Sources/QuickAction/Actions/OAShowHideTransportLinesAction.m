@@ -18,6 +18,17 @@ static OAQuickActionType *TYPE;
     OAMapStyleSettings *_styleSettings;
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId
+                                            stringId:@"transport.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_public_transport")]
+              iconName:@"ic_custom_transport_bus"]
+             category:EOAQuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
@@ -58,8 +69,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId stringId:@"transport.showhide" cl:self.class] name:OALocalizedString(@"toggle_public_transport")] iconName:@"ic_custom_transport_bus"] category:EOAQuickActionTypeCategoryConfigureMap] nonEditable];
     return TYPE;
 }
 

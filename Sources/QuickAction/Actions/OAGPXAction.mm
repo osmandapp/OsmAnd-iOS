@@ -9,8 +9,6 @@
 #import "OAGPXAction.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAMapRendererView.h"
-#import "OAMapViewController.h"
 #import "OAFavoriteViewController.h"
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
@@ -40,6 +38,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsGpxActionId
+                                            stringId:@"gpx.add"
+                                                  cl:self.class]
+               name:OALocalizedString(@"add_gpx_waypoint")]
+              iconName:@"ic_custom_favorites"]
+             secondaryIconName:@"ic_custom_compound_action_add"]
+            category:EOAQuickActionTypeCategoryCreateCategory];
+}
+
 - (void)execute
 {
     CLLocation *latLon = [self getMapLocation];
@@ -65,7 +74,6 @@ static OAQuickActionType *TYPE;
     if (self.getParams[kCategoryName])
         [[NSUserDefaults standardUserDefaults] setObject:self.getParams[kCategoryName] forKey:kFavoriteDefaultGroupKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAMapViewController *mapVC = mapPanel.mapViewController;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
     if ([OAFavoritesHelper hasFavoriteAt:point])
         return;
@@ -211,8 +219,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsGpxActionId stringId:@"gpx.add" cl:self.class] name:OALocalizedString(@"add_gpx_waypoint")] iconName:@"ic_custom_favorites"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory];
     return TYPE;
 }
 

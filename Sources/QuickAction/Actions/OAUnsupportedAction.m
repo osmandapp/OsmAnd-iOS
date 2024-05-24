@@ -26,6 +26,17 @@ static OAQuickActionType *TYPE;
     return self;
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsUnsupportedId
+                                            stringId:@"unsupported.action"
+                                                  cl:self.class]
+               name:OALocalizedString(@"unsupported_action")]
+              iconName:@"ic_custom_alert"]
+             category:EOAQuickActionTypeCategoryUnsupported]
+            nonEditable];
+}
+
 - (NSString *)getActionTypeId
 {
     return _actionTypeId;
@@ -61,8 +72,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsUnsupportedId stringId:@"unsupported.action" cl:self.class] name:OALocalizedString(@"unsupported_action")] iconName:@"ic_custom_alert"] category:EOAQuickActionTypeCategoryUnsupported] nonEditable];
     return TYPE;
 }
 

@@ -9,7 +9,6 @@
 #import "OAFavoriteAction.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAMapViewController.h"
 #import "OAFavoritesHelper.h"
 #import "OADefaultFavorite.h"
 #import "OATargetPoint.h"
@@ -38,6 +37,17 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsFavoriteActionId
+                                            stringId:@"fav.add"
+                                                  cl:self.class]
+               name:OALocalizedString(@"ctx_mnu_add_fav")]
+              iconName:@"ic_custom_favorites"]
+             secondaryIconName:@"ic_custom_compound_action_add"]
+            category:EOAQuickActionTypeCategoryCreateCategory];
+}
+
 - (void)execute
 {
     CLLocation *latLon = [self getMapLocation];
@@ -48,13 +58,13 @@ static OAQuickActionType *TYPE;
     [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
 }
 
-- (void)addFavoriteWithDialog:(double)lat lon:(double)lon title:(NSString *)title {
+- (void)addFavoriteWithDialog:(double)lat lon:(double)lon title:(NSString *)title
+{
     if (self.getParams[kCategoryColor])
         [[NSUserDefaults standardUserDefaults] setInteger:[self.getParams[kCategoryColor] integerValue] forKey:kFavoriteDefaultColorKey];
     if (self.getParams[kCategoryName])
         [[NSUserDefaults standardUserDefaults] setObject:self.getParams[kCategoryName] forKey:kFavoriteDefaultGroupKey];
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    OAMapViewController *mapVC = mapPanel.mapViewController;
     CLLocationCoordinate2D point = CLLocationCoordinate2DMake(lat, lon);
     if ([OAFavoritesHelper hasFavoriteAt:point])
         return;
@@ -200,8 +210,6 @@ static OAQuickActionType *TYPE;
 
 + (OAQuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsFavoriteActionId stringId:@"fav.add" cl:self.class] name:OALocalizedString(@"ctx_mnu_add_fav")] iconName:@"ic_custom_favorites"] secondaryIconName:@"ic_custom_compound_action_add"] category:EOAQuickActionTypeCategoryCreateCategory];
     return TYPE;
 }
 

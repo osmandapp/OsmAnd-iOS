@@ -54,7 +54,7 @@
 
 @implementation OATravelGuidesHelper
 
-NSArray *wikivoyageOSMTags = @[@"wikidata", @"wikipedia", @"opening_hours", @"address", @"email", @"fax", @"directions", @"price", @"phone"];
+static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia", @"opening_hours", @"address", @"email", @"fax", @"directions", @"price", @"phone"];
 
 + (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish
 {

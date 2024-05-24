@@ -15,6 +15,7 @@
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"
 #import "OASwitchProfileAction.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135
 
@@ -143,6 +144,9 @@
     NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
     if (itemsJson.count == 0)
         return;
+
+    if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] <= OAMigrationManager.importExportVersionMigration2)
+        itemsJson = [[OAMigrationManager shared] changeJsonMigrationToV3:itemsJson];
 
     for (id object in itemsJson)
     {

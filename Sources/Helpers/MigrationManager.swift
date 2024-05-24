@@ -13,6 +13,7 @@ import Foundation
 final class MigrationManager: NSObject {
 
     static let importExportVersionMigration1 = 1
+    static let importExportVersionMigration2 = 2
 
     enum MigrationKey: String {
         case migrationChangeWidgetIds1Key
@@ -285,7 +286,7 @@ final class MigrationManager: NSObject {
         return newWidgetsList
     }
 
-    func changeJsonMigration(_ json: [String: String]) -> [String: String] {
+    func changeJsonMigrationToV2(_ json: [String: String]) -> [String: String] {
 
         // change keys inside old json import file after "Migration 1"
 
@@ -325,6 +326,36 @@ final class MigrationManager: NSObject {
                 }
             }
             return (settingKey, value)
+        })
+    }
+
+    func changeJsonMigrationToV3(_ jsonArray: [[String: String]]) -> [[String: String]] {
+
+        // change keys inside old json import file after "Migration 2"
+
+        let changeQuickActionStringIds = [
+            "weather.temperature.showhide": "temperature.layer.showhide",
+            "weather.pressure.showhide": "pressure.layer.showhide",
+            "weather.wind.showhide": "wind.layer.showhide",
+            "weather.cloud.showhide": "cloud.layer.showhide",
+            "weather.precipitation.showhide": "precipitation.layer.showhide"
+        ]
+
+        return Array(jsonArray.map {
+            var json = $0
+            if let stringId = json["actionType"], changeQuickActionStringIds.keys.contains(stringId) {
+                return Dictionary(uniqueKeysWithValues: json.map({
+                    let key = $0
+                    var value = $1
+                    if key == "actionType", let newValue = changeQuickActionStringIds[value] {
+                        return (key, newValue)
+                    } else {
+                        return (key, value)
+                    }
+                }))
+            } else {
+                return json
+            }
         })
     }
 }

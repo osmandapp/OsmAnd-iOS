@@ -293,6 +293,9 @@ extension ConfigureScreenViewController {
         if data.key == "quick_action" {
             let vc = OAQuickActionListViewController()!
             vc.delegate = self
+            vc.quickActionUpdateCallback = { [weak self] in
+                self?.updateQuickActionData()
+            }
             self.navigationController?.pushViewController(vc, animated: true)
         } else if data.key == "compass" {
             let vc = CompassVisibilityViewController()
@@ -317,6 +320,11 @@ extension ConfigureScreenViewController {
     
     // MARK: WidgetStateDelegate
     @objc func onWidgetStateChanged() {
+        generateData()
+        tableView.reloadData()
+    }
+    
+    private func updateQuickActionData() {
         generateData()
         tableView.reloadData()
     }

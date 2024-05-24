@@ -267,7 +267,9 @@
         }
         else if ([key isEqualToString:@"save_changes"])
         {
-            [self.delegate saveChangesSelected];
+            [self hide:YES completion:^{
+                [self.delegate saveChangesSelected];
+            }];
         }
         else if ([key isEqualToString:@"save_new_track"])
         {

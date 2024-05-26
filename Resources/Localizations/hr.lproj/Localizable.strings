@@ -188,7 +188,7 @@
 "speak_traffic_warnings" = "Najavi prometna upozorenja";
 "shared_string_gpx_waypoints" = "Track waypoints";
 "speak_favorites" = "Najavi favorite u blizini";
-"speak_poi" = "Najavi POI";
+"speak_poi" = "POI u blizini";
 "speak_pedestrian" = "Najaviti pješačke prijelaze";
 "show_tunnels" = "Tunnels";
 
@@ -1242,7 +1242,7 @@
 
 // Mapillary
 "mapil_no_inet_descr" = "You need Internet connection to view Mapillary photos.";
-"mapil_images_nearby" = "Images nearby";
+"mapil_images_nearby" = "Slike u blizini";
 "mapil_no_images" = "We do not have photos for this location.";
 "shared_string_add_photos" = "Add photos";
 "improve_coverage_mapillary" = "Improve photo coverage with Mapillary";
@@ -2314,3 +2314,4 @@
 "activity_type_car_name" = "Auto";
 "activity_type_winter_name" = "Zima";
 "weather_update_disabled" = "Onemogućeno";
+"images" = "Slike";

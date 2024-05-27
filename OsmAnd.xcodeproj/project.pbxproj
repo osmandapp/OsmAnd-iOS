@@ -461,6 +461,8 @@
 		32B50ADE26BBE3C7002E6C92 /* ic_custom_map_location_follow@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD626BBE3C6002E6C92 /* ic_custom_map_location_follow@2x.png */; };
 		32B50ADF26BBE3C7002E6C92 /* ic_custom_map_location_follow@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD726BBE3C6002E6C92 /* ic_custom_map_location_follow@3x.png */; };
 		32B50AE026BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32B50AD826BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png */; };
+		32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */; };
+		32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */; };
 		32BD81AC259B5C9B00A54BB5 /* ic_custom_manage_profiles@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */; };
 		32BD81B0259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */; };
 		32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */; };
@@ -3890,6 +3892,8 @@
 		32B50AD626BBE3C6002E6C92 /* ic_custom_map_location_follow@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_follow@2x.png"; path = "Resources/Icons/ic_custom_map_location_follow@2x.png"; sourceTree = "<group>"; };
 		32B50AD726BBE3C6002E6C92 /* ic_custom_map_location_follow@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_follow@3x.png"; path = "Resources/Icons/ic_custom_map_location_follow@3x.png"; sourceTree = "<group>"; };
 		32B50AD826BBE3C7002E6C92 /* ic_custom_map_location_free@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_free@3x.png"; path = "Resources/Icons/ic_custom_map_location_free@3x.png"; sourceTree = "<group>"; };
+		32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RouteInfoListItemCell.xib; sourceTree = "<group>"; };
+		32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteInfoListItemCell.swift; sourceTree = "<group>"; };
 		32BD81A9259B5C9A00A54BB5 /* ic_custom_manage_profiles@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@2x.png"; path = "Resources/Icons/ic_custom_manage_profiles@2x.png"; sourceTree = "<group>"; };
 		32BD81AB259B5C9B00A54BB5 /* ic_custom_manage_profiles@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_manage_profiles@3x.png"; path = "Resources/Icons/ic_custom_manage_profiles@3x.png"; sourceTree = "<group>"; };
 		32BFF097299137D60023D067 /* OAUploadGPXFilesTask.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAUploadGPXFilesTask.m; sourceTree = "<group>"; };
@@ -11798,6 +11802,7 @@
 				461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */,
 				461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */,
 				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */,
+				32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */,
 			);
 			path = Cells;
 			sourceTree = "<group>";
@@ -11918,6 +11923,7 @@
 				467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */,
 				461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */,
 				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */,
+				32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */,
 			);
 			path = Xibs;
 			sourceTree = "<group>";
@@ -14811,6 +14817,7 @@
 				DA2EC65B29FBBE0300ECEB37 /* widget_marker_triangle_pin_5@2x.png in Resources */,
 				DA0D1630281BEEF500CEEF58 /* map_turn_slight_left@3x.png in Resources */,
 				DA1341F4243DC5A90039D214 /* ic_action_horse@3x.png in Resources */,
+				32BBDC9C2C049B0C0090D37E /* RouteInfoListItemCell.xib in Resources */,
 				DA5A82C626C563A800F274C7 /* OAWaypointCell.xib in Resources */,
 				84EE2DE21AFD149F007C9A94 /* map_banner@3x.png in Resources */,
 				DA52CE0524AE087F00CC309D /* img_help_height_limit_day@3x.png in Resources */,
@@ -17152,6 +17159,7 @@
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
 				DA5A831426C563A800F274C7 /* OARouteInfoLegendCell.m in Sources */,
 				DA5A812D26C563A700F274C7 /* IOAMapTiledCollectionProvider.mm in Sources */,
+				32BBDC9B2C0497CF0090D37E /* RouteInfoListItemCell.swift in Sources */,
 				FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */,
 				0590D19C2BF88AF400C62AF5 /* ConcurrentDictionary.swift in Sources */,
 				DA5A845926C563A900F274C7 /* OAMeasurementToolLayer.mm in Sources */,

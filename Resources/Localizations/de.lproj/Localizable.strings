@@ -1542,7 +1542,7 @@
 "offline_raster_map" = "Offline-Rasterkarte";
 "offline_raster_maps" = "Offline-Rasterkarten";
 "osmand_parking_warning" = "Warnung";
-"clear_tiles_warning" = "Durch die Anwendung dieserÄnderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
+"clear_tiles_warning" = "Durch die Anwendung dieser Änderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
 "change_object_posiotion" = "Position des Objekts ändern";
 "move_marker_bottom_sheet_title" = "Karte bewegen, um die Position der Markierung zu verändern";
 "online_raster_maps" = "Online-Rasterkarten";

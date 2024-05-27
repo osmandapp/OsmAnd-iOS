@@ -441,7 +441,7 @@
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
         CGFloat positionY = _speedometerViewYPosition != 0.0 ? _speedometerViewYPosition :  _mapHudViewController.optionsMenuButton.frame.origin.y;
-        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], positionY - _alarmControl.bounds.size.height / 2);
+        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin] + 6, positionY - _alarmControl.bounds.size.height / 2);
     }
 
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)

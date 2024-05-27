@@ -142,15 +142,4 @@ extension UIView {
             setNeedsLayout()
         }
     }
-    
-    var widthEqualConstraint: NSLayoutConstraint? {
-        get {
-            constraints.first(where: {
-                $0.firstAttribute == .width && $0.relation == .equal
-            })
-        }
-        set {
-            setNeedsLayout()
-        }
-    }
 }

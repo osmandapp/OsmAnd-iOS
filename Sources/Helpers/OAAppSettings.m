@@ -213,6 +213,9 @@ static NSString * const showDistanceRulerKey = @"showDistanceRuler";
 static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
 static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
+static NSString * const showSpeedometerKey = @"show_speedometer";
+static NSString * const speedometerSizeKey = @"speedometer_size";
+static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
 
 static NSString * const osmUserNameKey = @"osm_user_name";
 static NSString * const userOsmBugNameKey = @"userOsmBugName";
@@ -2353,6 +2356,100 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
+@implementation OACommonSpeedLimitWarningState
+
+@dynamic defValue;
+
+static NSString *kStateAlwaysKey = @"ALWAYS";
+static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
+
++ (instancetype) withKey:(NSString *)key defValue:(EOASpeedLimitWarningState)defValue
+{
+    OACommonSpeedLimitWarningState *obj = [[OACommonSpeedLimitWarningState alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOASpeedLimitWarningState) get
+{
+    return [super get];
+}
+
+- (EOASpeedLimitWarningState) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOASpeedLimitWarningState)value
+{
+    [super set:(int)value];
+}
+
+- (void) set:(EOASpeedLimitWarningState)value mode:(OAApplicationMode *)mode
+{
+    [super set:(int)value mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOASpeedLimitWarningState defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOASpeedLimitWarningState)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kStateAlwaysKey])
+        return [self set:EOASpeedLimitWarningStateAlways mode:mode];
+    else if ([strValue isEqualToString:kWhenExceededKey])
+        return [self set:EOASpeedLimitWarningStateWhenExceeded mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOASpeedLimitWarningStateAlways:
+            return kStateAlwaysKey;
+        case EOASpeedLimitWarningStateWhenExceeded:
+            return kWhenExceededKey;
+        default:
+            return @"";
+    }
+}
+
+- (NSString *) toHumanString
+{
+    return [self toHumanString:[self appMode]];
+}
+
+- (NSString *) toHumanString:(OAApplicationMode *)mode
+{
+    return [self.class toHumanString:[self get:mode]];
+}
+
++ (NSString *) toHumanString:(EOASpeedLimitWarningState)value
+{
+    switch (value)
+    {
+        case EOASpeedLimitWarningStateAlways:
+            return OALocalizedString(@"shared_string_always");
+        case EOASpeedLimitWarningStateWhenExceeded:
+            return OALocalizedString(@"when_exceeded");
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonAutoZoomMap
 
 @dynamic defValue;
@@ -4430,6 +4527,20 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [_profilePreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
         [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
         [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
+        
+        _showSpeedometer = [OACommonBoolean withKey:showSpeedometerKey defValue:NO];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.CAR];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.TRUCK];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.MOTORCYCLE];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.MOPED];
+        [_profilePreferences setObject:_showSpeedometer forKey:@"show_speedometer"];
+        
+        _speedometerSize = [OACommonWidgetSizeStyle withKey:speedometerSizeKey defValue:EOAWidgetSizeStyleMedium];
+        [_speedometerSize setModeDefaultValue:EOAWidgetSizeStyleSmall mode:OAApplicationMode.CAR];
+        [self registerPreference:_speedometerSize forKey:speedometerSizeKey];
+        
+        _showSpeedLimitWarning = [OACommonSpeedLimitWarningState withKey:showSpeedLimitWarningKey defValue:EOASpeedLimitWarningStateWhenExceeded];
+        [self registerPreference:_showSpeedLimitWarning forKey:showSpeedLimitWarningKey];
         
         _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisible] makeShared];
         _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];

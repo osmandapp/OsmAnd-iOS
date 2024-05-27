@@ -2360,6 +2360,9 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @dynamic defValue;
 
+static NSString *kStateAlwaysKey = @"ALWAYS";
+static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
+
 + (instancetype) withKey:(NSString *)key defValue:(EOASpeedLimitWarningState)defValue
 {
     OACommonSpeedLimitWarningState *obj = [[OACommonSpeedLimitWarningState alloc] init];
@@ -2403,9 +2406,9 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 - (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
 {
-    if ([strValue isEqualToString:@"ALWAYS"])
+    if ([strValue isEqualToString:kStateAlwaysKey])
         return [self set:EOASpeedLimitWarningStateAlways mode:mode];
-    else if ([strValue isEqualToString:@"WHAN_EXCEEDED"])
+    else if ([strValue isEqualToString:kWhenExceededKey])
         return [self set:EOASpeedLimitWarningStateWhenExceeded mode:mode];
 }
 
@@ -2414,9 +2417,9 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     switch ([self get:mode])
     {
         case EOASpeedLimitWarningStateAlways:
-            return @"ALWAYS";
+            return kStateAlwaysKey;
         case EOASpeedLimitWarningStateWhenExceeded:
-            return @"WHAN_EXCEEDED";
+            return kWhenExceededKey;
         default:
             return @"";
     }

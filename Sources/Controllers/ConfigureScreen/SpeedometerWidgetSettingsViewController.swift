@@ -52,14 +52,14 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
         turnOnRow.setObj(showSpeedometer, forKey: Self.selectedKey)
         
         if showSpeedometer {
-            let sellectSizeSection = tableData.createNewSection()
-            sellectSizeSection.footerText = localizedString("speedometer_description")
+            let selectSizeSection = tableData.createNewSection()
+            selectSizeSection.footerText = localizedString("speedometer_description")
             
             //TODO: implement preview cell
-            let previewSpeedometerRow = sellectSizeSection.createNewRow()
+            let previewSpeedometerRow = selectSizeSection.createNewRow()
             previewSpeedometerRow.cellType = Self.previewSpeedometerRowKey
             
-            let sellectSizeRow = sellectSizeSection.createNewRow()
+            let sellectSizeRow = selectSizeSection.createNewRow()
             sellectSizeRow.cellType = SegmentImagesWithRightLableTableViewCell.reuseIdentifier
             sellectSizeRow.title = localizedString("shared_string_size")
             sellectSizeRow.setObj(["ic_custom20_height_s", "ic_custom20_height_m", "ic_custom20_height_l"], forKey: Self.valuesKey)
@@ -84,7 +84,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
         let item = tableData.item(for: indexPath)
         
         if item.cellType == OAValueTableViewCell.reuseIdentifier {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier) as! OAValueTableViewCell
             cell.accessoryType = .disclosureIndicator
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
@@ -94,7 +94,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
             cell.accessibilityValue = item.accessibilityValue
             return cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as! OASwitchTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier) as! OASwitchTableViewCell
             cell.descriptionVisibility(false)
             cell.leftIconVisibility(false)
             let selected = item.bool(forKey: Self.selectedKey)
@@ -108,7 +108,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
             cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             return cell
         } else if item.cellType == SegmentImagesWithRightLableTableViewCell.reuseIdentifier {
-            var cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: Self.valuesKey) as? [String], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = sizePref.get()
@@ -117,15 +117,15 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
             }
-            cell.didSelectSegmentIndex = { [weak self] index in
-                guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
+            cell.didSelectSegmentIndex = { index in
+                guard let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
                 sizePref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: OAAppSettings.sharedManager().applicationMode.get())
             }
             
             return cell
         } else if item.cellType == Self.previewSpeedometerRowKey {
             //TODO: implement preview cell
-            var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
             cell.backgroundColor = .mapStyleWater
             cell.titleLabel.text = nil
             cell.descriptionLabel.text = nil

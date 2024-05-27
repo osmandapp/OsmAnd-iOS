@@ -38,6 +38,7 @@ final class SpeedometerSpeedView: UIView {
             valueSpeedLabel.text = previewValueDefault
             isHidden = false
         }
+        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     func updateInfo() {

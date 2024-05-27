@@ -70,7 +70,7 @@
     [super viewWillDisappear:animated];
 
     if (self.delegate)
-        [self.delegate onIntefaceControllerDetached];
+        [self.delegate onInterfaceControllerDetached];
 }
 
 - (void)viewDidLayoutSubviews

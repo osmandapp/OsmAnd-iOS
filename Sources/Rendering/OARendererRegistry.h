@@ -13,6 +13,7 @@
 #define TOURING_VIEW @"Touring view (contrast and details)"
 #define WINTER_SKI_RENDER @"Winter and ski"
 #define NAUTICAL_RENDER @"Nautical"
+#define MARINE_RENDER @"Marine"
 #define TOPO_RENDER @"Topo"
 #define OSM_CARTO_RENDER @"OSM-carto"
 #define OFFROAD_RENDER @"Offroad"

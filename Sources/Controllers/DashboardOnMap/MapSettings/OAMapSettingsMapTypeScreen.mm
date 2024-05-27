@@ -126,6 +126,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             continue;
         if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
             continue;
+        if ([mapStyleInfo[@"title"] isEqualToString:MARINE_RENDER] && ![iapHelper.nautical isActive])
+            continue;
         if ([item.mapSource.resourceId isEqualToString:@"mapnik.render.xml"] && ![_app.data.lastMapSource isEqual:item.mapSource])
             continue;
         if ([item.mapSource.resourceId hasSuffix:RENDER_ADDON])

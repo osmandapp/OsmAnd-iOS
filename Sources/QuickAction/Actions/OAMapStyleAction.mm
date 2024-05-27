@@ -72,6 +72,8 @@ static OAQuickActionType *TYPE;
             continue;
         if ([mapStyleInfo[@"title"] isEqualToString:NAUTICAL_RENDER] && ![iapHelper.nautical isActive])
             continue;
+        if ([mapStyleInfo[@"title"] isEqualToString:MARINE_RENDER] && ![iapHelper.nautical isActive])
+            continue;
 
         sourceMapping[mapSource.name] = mapSource;
     }

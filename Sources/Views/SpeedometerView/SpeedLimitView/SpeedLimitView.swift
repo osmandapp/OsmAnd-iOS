@@ -23,16 +23,24 @@ final class SpeedLimitView: UIView {
     @IBOutlet private weak var leadingStackViewConstraint: NSLayoutConstraint!
     @IBOutlet private weak var trailingStackViewConstraint: NSLayoutConstraint!
     
+    let previewValueDefault = "85"
+    
     var speedLimitRegion: SpeedLimitRegion = .EU
+    var isPreview = false
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-        
+    
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
         self.widgetSizeStyle = widgetSizeStyle
         
         valueSpeedLimitLabel.font = UIFont.systemFont(ofSize: speedLimitValueFontSize, weight: .semibold)
         
         setupConstraints(width: width)
+        
+        if isPreview {
+            updateWith(value: previewValueDefault)
+            isHidden = OAAppSettings.sharedManager().showSpeedLimitWarning.get() == .whenExceeded
+        }
     }
     
     func updateWith(value: String) {

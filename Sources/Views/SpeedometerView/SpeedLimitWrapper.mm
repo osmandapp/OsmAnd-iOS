@@ -18,18 +18,13 @@
 @implementation SpeedLimitWrapper
 {
     OAMapViewTrackingUtilities *_trackingUtilities;
-    OALocationServices *_locationProvider;
     OARoutingHelper *_rh;
     OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAWaypointHelper *_wh;
     OACurrentPositionHelper *_currentPositionHelper;
     
-    NSString *_imgId;
-    NSString *_textString;
-    NSString *_bottomTextString;
-    
-    BOOL _carPlayMode;
+    NSString *_lastSpeedLimitValue;
 }
 
 - (instancetype)init {
@@ -47,7 +42,6 @@
     _rh = [OARoutingHelper sharedInstance];
     _app = [OsmAndApp instance];
     _trackingUtilities = [OAMapViewTrackingUtilities instance];
-    _locationProvider = _app.locationServices;
     _wh = [OAWaypointHelper sharedInstance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
 }
@@ -80,8 +74,13 @@
         }
         if (alarm && alarm.type == AIT_SPEED_LIMIT)
         {
-            return @(alarm.intValue).stringValue;
+            _lastSpeedLimitValue = @(alarm.intValue).stringValue;
+            return _lastSpeedLimitValue;
         }
+    }
+    if ([_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateAlways && _lastSpeedLimitValue)
+    {
+        return _lastSpeedLimitValue;
     }
     return nil;
 }

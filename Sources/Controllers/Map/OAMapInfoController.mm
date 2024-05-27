@@ -114,6 +114,12 @@
     [self execOnDraw];
 }
 
+- (void)updateSpeedometer
+{
+    [_speedometerView configure];
+    [self updateLayout];
+}
+
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
 {
     self = [super init];
@@ -418,8 +424,6 @@
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
     CGFloat _speedometerViewYPosition = 0.0;
-    NSLog(@"optionsMenuButton: X %f", _mapHudViewController.optionsMenuButton.frame.origin.x);
-    NSLog(@"optionsMenuButton: Y %f", _mapHudViewController.optionsMenuButton.frame.origin.y);
     if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
     {
         self.speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
@@ -675,15 +679,23 @@
     _speedometerView.delegate = self;
     
     [_mapHudViewController.view addSubview:_speedometerView];
-    // TODO: constraint count
-    self.speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:72];
-    self.speedometerHeightConstraint.active = YES;
+    if (!self.speedometerHeightConstraint)
+    {
+        self.speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
+        self.speedometerHeightConstraint.active = YES;
+    }
+
+    if (!self.speedometerLeftConstraint)
+    {
     self.speedometerLeftConstraint = [_speedometerView.leftAnchor constraintEqualToAnchor:_mapHudViewController.view.leftAnchor constant:16];
-        self.speedometerLeftConstraint.active = YES;
-    self.speedometerTopConstraint = [_speedometerView.topAnchor constraintEqualToAnchor:_mapHudViewController.view.topAnchor constant:30];
+    }
+    self.speedometerLeftConstraint.active = YES;
+    if (!self.speedometerTopConstraint)
+    {
+        self.speedometerTopConstraint = [_speedometerView.topAnchor constraintEqualToAnchor:_mapHudViewController.view.topAnchor];
+    }
     self.speedometerTopConstraint.active = YES;
     [_speedometerView configure];
-    _speedometerView.hidden = NO;
 
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 
@@ -784,14 +796,19 @@
     [widgetsToUpdate addObject:_alarmControl];
     
     if (_speedometerView)
+    {
         [_speedometerView removeFromSuperview];
+        [NSLayoutConstraint deactivateConstraints:@[self.speedometerHeightConstraint, self.speedometerTopConstraint, self.speedometerLeftConstraint]];
+        self.speedometerHeightConstraint = nil;
+        self.speedometerTopConstraint = nil;
+        self.speedometerLeftConstraint = nil;
+    }
     
     _speedometerView = [SpeedometerView initView];
     _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
     _speedometerView.hidden = YES;
     _speedometerView.delegate = self;
     [widgetsToUpdate addObject:_speedometerView];
-
 
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;

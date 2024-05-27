@@ -64,5 +64,6 @@
 
 - (void)updateLayout;
 - (void)viewWillTransition;
+- (void)updateSpeedometer;
 
 @end

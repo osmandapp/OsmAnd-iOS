@@ -33,10 +33,12 @@ final class SpeedometerView: OATextInfoWidget {
             speedLimitNAMView.isHidden = true
         }
     }
-    
+    // swiftlint:disable force_unwrapping
     let settings = OAAppSettings.sharedManager()!
-    
-    var style = EOAWidgetSizeStyle(rawValue: 2)!
+    // swiftlint:enable force_unwrapping
+
+    var sizeStyle: EOAWidgetSizeStyle = .medium
+   
     var isCarPlay = false
     var isPreview = false
     
@@ -45,38 +47,42 @@ final class SpeedometerView: OATextInfoWidget {
             .instantiate(withOwner: nil, options: nil)[0] as? SpeedometerView
     }
     
+    var isDrivingRegionNAM: Bool {
+        let drivingRegion = settings.drivingRegion.get()
+        return drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA
+    }
+    
     private lazy var speedViewWrapper = SpeedLimitWrapper()
     
     private var speedLimitText: NSString? {
         speedViewWrapper.speedLimitText() as NSString?
     }
     
-    func updateWidgetSizeTest() {
-        widgetSizePref = settings.registerWidgetSizeStylePreference("updateWidgetSizeTest", defValue: style)
-        updateWith(style: style, appMode: settings.applicationMode.get())
+    override var intrinsicContentSize: CGSize {
+        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
+        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
     
     func configure() {
-        isHidden = false
-        updateWidgetSizeTest()
+        sizeStyle = settings.speedometerSize.get()
+        
         let isDirectionRTL = isDirectionRTL()
         contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
-
-        let width = getCurrentSpeedViewMaxHeightWidth()
-        speedometerSpeedView.configureWith(widgetSizeStyle: style, width: width)
-        speedLimitEUView.configureWith(widgetSizeStyle: style, width: width)
-        speedLimitNAMView.configureWith(widgetSizeStyle: style, width: width)
+        
+        updateComponents()
 
         centerPositionYConstraint.isActive = true
         if isPreview {
+            isHidden = false
             centerPositionXConstraint.isActive = true
             leftPositionConstraint.isActive = false
             rightPositionConstraint.isActive = false
         } else {
+            isHidden = !settings.showSpeedometer.get()
             centerPositionXConstraint.isActive = false
             if isCarPlay {
                 layer.cornerRadius = 10
-                // TODO: isCarPlay
+                // TODO: isCarPlay https://github.com/osmandapp/OsmAnd-iOS/issues/3668
                 leftPositionConstraint.isActive = false
                 rightPositionConstraint.isActive = true
             } else {
@@ -86,13 +92,13 @@ final class SpeedometerView: OATextInfoWidget {
             }
         }
     }
-    
-    override var intrinsicContentSize: CGSize {
-        let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
-        return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
-    }
-    
+
     override func updateInfo() -> Bool {
+        guard settings.showSpeedometer.get() else {
+            isHidden = true
+            return false
+        }
+        updateComponents()
         updateSpeedometerSpeedView()
         updateSpeedLimitView()
         isHidden = speedometerSpeedView.isHidden && speedLimitEUView.isHidden && speedLimitNAMView.isHidden
@@ -100,52 +106,46 @@ final class SpeedometerView: OATextInfoWidget {
         return true
     }
     
-    private func updateSpeedometerSpeedView() {
-        // TODO:
-        if true {
-            speedometerSpeedView.isHidden = false
-            speedometerSpeedView.updateInfo()
+    private func updateComponents() {
+        let width = getCurrentSpeedViewMaxHeightWidth()
+        speedometerSpeedView.isPreview = isPreview
+        speedometerSpeedView.configureWith(widgetSizeStyle: sizeStyle, width: width)
+        if isDrivingRegionNAM {
+            speedLimitNAMView.isPreview = isPreview
+            speedLimitNAMView.configureWith(widgetSizeStyle: sizeStyle, width: width)
         } else {
-            speedometerSpeedView.isHidden = true
+            speedLimitEUView.isPreview = isPreview
+            speedLimitEUView.configureWith(widgetSizeStyle: sizeStyle, width: width)
         }
     }
     
+    private func updateSpeedometerSpeedView() {
+        speedometerSpeedView.isHidden = false
+        speedometerSpeedView.updateInfo()
+    }
+    
     private func updateSpeedLimitView() {
-        guard let settings = OAAppSettings.sharedManager() else { return }
-        let drivingRegion = settings.drivingRegion.get()
-        
         speedLimitEUView.isHidden = true
         speedLimitNAMView.isHidden = true
         
-//        speedLimitEUView.isHidden = false
-//        speedLimitEUView.updateWith(value: "35")
-        
-        if drivingRegion == EOADrivingRegion.DR_US || drivingRegion == EOADrivingRegion.DR_CANADA {
+        if isDrivingRegionNAM {
             setupSpeedLimitWith(view: speedLimitNAMView)
-//            if let value = speedLimitText as? String {
-//                speedLimitNAMView.isHidden = false
-//                speedLimitNAMView.updateWith(value: value)
-//            }
         } else {
             setupSpeedLimitWith(view: speedLimitEUView)
-//            if let value = speedLimitText as? String {
-//                speedLimitEUView.isHidden = false
-//                speedLimitEUView.updateWith(value: value)
-//            }
         }
     }
     
     private func setupSpeedLimitWith(view: SpeedLimitView) {
-        if let value = speedLimitText as? String {
-            view.isHidden = false
-            view.updateWith(value: value)
-        }
+        guard let value = speedLimitText as? String else { return }
+        
+        view.isHidden = false
+        view.updateWith(value: value)
     }
 }
 
 extension SpeedometerView {
     func getCurrentSpeedViewMaxHeightWidth() -> CGFloat {
-        switch widgetSizeStyle {
+        switch sizeStyle {
         case .small: 56
         case .medium: 72
         case .large: 96

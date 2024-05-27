@@ -811,7 +811,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     section.footerText = OALocalizedString(@"simple_widget_footer");
     
     OATableRowData *widgetStyleRow = section.createNewRow;
-    widgetStyleRow.cellType = SegmentImagesWithRightLableTableViewCell.getCellIdentifier;
+    widgetStyleRow.cellType = SegmentImagesWithRightLabelTableViewCell.getCellIdentifier;
     widgetStyleRow.title = OALocalizedString(@"shared_string_height");
     [widgetStyleRow setObj:self.widgetSizePref forKey:@"prefSegment"];
     [widgetStyleRow setObj:@"simpleWidget" forKey:@"behaviour"];

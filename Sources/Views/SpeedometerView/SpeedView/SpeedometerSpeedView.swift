@@ -16,9 +16,12 @@ final class SpeedometerSpeedView: UIView {
     @IBOutlet private weak var valueSpeedLabel: UILabel!
     @IBOutlet private weak var unitSpeedLabel: UILabel!
     
-    let LOW_SPEED_THRESHOLD_MPS = 6.0
-    let UPDATE_THRESHOLD_MPS = 0.1
-    let LOW_SPEED_UPDATE_THRESHOLD_MPS = 0.015 // Update more often while walking/running
+    private let LOW_SPEED_THRESHOLD_MPS = 6.0
+    private let UPDATE_THRESHOLD_MPS = 0.1
+    private let LOW_SPEED_UPDATE_THRESHOLD_MPS = 0.015 // Update more often while walking/running
+    private let previewValueDefault = "85"
+    
+    var isPreview = false
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
     private var cachedSpeed = 0.0
@@ -30,11 +33,16 @@ final class SpeedometerSpeedView: UIView {
         withConstraint.constant = width
         valueSpeedLabel.font = UIFont.systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
+        
+        if isPreview {
+            valueSpeedLabel.text = previewValueDefault
+            isHidden = false
+        }
     }
     
     func updateInfo() {
         guard OARoutingHelper.sharedInstance().isFollowingMode() else {
-            valueSpeedLabel.text = "-"
+            valueSpeedLabel.text = "0"
             return
         }
         if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
@@ -53,7 +61,7 @@ final class SpeedometerSpeedView: UIView {
                 }
             } else if cachedSpeed != 0 {
                 cachedSpeed = 0
-                valueSpeedLabel.text = "-"
+                valueSpeedLabel.text = "0"
             }
         }
     }

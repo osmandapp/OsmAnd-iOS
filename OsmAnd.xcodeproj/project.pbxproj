@@ -797,6 +797,7 @@
 		78AC698E23AB7BE1006C3DDE /* left_menu_configure_screen@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */; };
 		78D57B8B238D2FFD0068CF48 /* ic_custom_hillshade@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B87238D2FFC0068CF48 /* ic_custom_hillshade@2x.png */; };
 		78D57B8D238D2FFD0068CF48 /* ic_custom_hillshade@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 78D57B88238D2FFD0068CF48 /* ic_custom_hillshade@3x.png */; };
+		818F239B2C04EBF100A488C9 /* marine.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 818F239A2C04EBF000A488C9 /* marine.render.xml */; };
 		81AE516126298A3600BDF947 /* libGeographicLib_STATIC.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */; };
 		840C9FB61CF353C500F2F991 /* ic_coordinates_location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DCF1CF338E400BF3D96 /* ic_coordinates_location@2x.png */; };
 		840C9FB81CF353C800F2F991 /* ic_coordinates_location@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 84BA1DD01CF338E400BF3D96 /* ic_coordinates_location@3x.png */; };
@@ -4286,6 +4287,7 @@
 		78AC698923AB7BE0006C3DDE /* left_menu_configure_screen@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "left_menu_configure_screen@2x.png"; path = "Resources/Icons/left_menu_configure_screen@2x.png"; sourceTree = "<group>"; };
 		78D57B87238D2FFC0068CF48 /* ic_custom_hillshade@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hillshade@2x.png"; path = "Resources/Icons/ic_custom_hillshade@2x.png"; sourceTree = "<group>"; };
 		78D57B88238D2FFD0068CF48 /* ic_custom_hillshade@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_hillshade@3x.png"; path = "Resources/Icons/ic_custom_hillshade@3x.png"; sourceTree = "<group>"; };
+		818F239A2C04EBF000A488C9 /* marine.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = marine.render.xml; path = ../resources/rendering_styles/marine.render.xml; sourceTree = "<group>"; };
 		81AE516026298A3600BDF947 /* libGeographicLib_STATIC.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; path = libGeographicLib_STATIC.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		8401FCF61EE46B7F00238915 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8401FCF71EE46C2600238915 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -9732,6 +9734,7 @@
 		84630FC81A8E1947005B39F2 /* styles */ = {
 			isa = PBXGroup;
 			children = (
+				818F239A2C04EBF000A488C9 /* marine.render.xml */,
 				DA73EF7329A3B5410071935D /* publictransportroutes.addon.render.xml */,
 				DAF50C6F299D111B006AAF2E /* osmassistant.addon.render.xml */,
 				DAF50C6B299BB269006AAF2E /* routes.addon.render.xml */,
@@ -14565,6 +14568,7 @@
 				8A755A5321CBF92400E42699 /* ic_live_unlimited_downloads@2x.png in Resources */,
 				DA23424423477F33003911B8 /* ic_custom_route@3x.png in Resources */,
 				8431E78F1B383A190063C9AF /* ic_average_speed@3x.png in Resources */,
+				818F239B2C04EBF100A488C9 /* marine.render.xml in Resources */,
 				97BCFBEA287D9152003AFFB2 /* ic_custom_shop_bag_48@2x.png in Resources */,
 				DA22DC5E25C05F130070FFCA /* ic_custom_split_before@2x.png in Resources */,
 				DA5A827226C563A700F274C7 /* OAFilledButtonCell.xib in Resources */,

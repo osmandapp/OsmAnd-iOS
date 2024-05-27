@@ -20,7 +20,6 @@ final class SpeedometerView: OATextInfoWidget {
             speedometerSpeedView.isHidden = true
         }
     }
-    
     @IBOutlet private weak var speedLimitEUView: SpeedLimitView! {
         didSet {
             speedLimitEUView.speedLimitRegion = .EU
@@ -128,11 +127,7 @@ final class SpeedometerView: OATextInfoWidget {
         speedLimitEUView.isHidden = true
         speedLimitNAMView.isHidden = true
         
-        if isDrivingRegionNAM {
-            setupSpeedLimitWith(view: speedLimitNAMView)
-        } else {
-            setupSpeedLimitWith(view: speedLimitEUView)
-        }
+        setupSpeedLimitWith(view: isDrivingRegionNAM ? speedLimitNAMView : speedLimitEUView)
     }
     
     private func setupSpeedLimitWith(view: SpeedLimitView) {

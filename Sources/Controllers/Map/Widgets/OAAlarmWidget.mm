@@ -242,7 +242,7 @@
                     _textString = text;
                     _textView.text = _textString;
                     CGRect f = _textView.frame;
-                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns && !isCanadianRegion ? (_carPlayMode ? 4. : 10) : 0;
+                    f.origin.y = 0;
                     _textView.frame = f;
                 }
                 if (![self stringEquals:bottomText b:_bottomTextString])

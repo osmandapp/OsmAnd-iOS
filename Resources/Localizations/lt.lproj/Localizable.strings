@@ -480,7 +480,7 @@
 "shared_string_max" = "Maks.";
 "shared_string_wifi_only" = "Tik Wi-Fi";
 "shared_string_turn_off" = "Išjungti";
-"shared_strings_all_regions" = "All regions";
+"shared_strings_all_regions" = "Visi regionai";
 "regions" = "Regionai";
 "shared_string_width" = "Plotis";
 "shared_string_interval" = "Interval";
@@ -918,7 +918,7 @@
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
-"app_restart_required" = "Application restart required to apply some settings.";
+"app_restart_required" = "Norint pritaikyti kai kuriuos nustatymus, reikia iš naujo paleisti programą.";
 "shared_string_finish" = "Pabaiga";
 "added_items" = "Added items: %@";
 "copy_from_other_profile" = "Kopijuoti iš kito profilio";
@@ -1071,7 +1071,7 @@
 "weekly" = "Kas savaitę";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"update_frequency" = "Update frequency";
+"update_frequency" = "Atnaujinimo dažnumas";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "donations" = "Paremti";
@@ -1997,7 +1997,7 @@
 "rendering_attr_hideNonVehicleHighways_name" = "Ne automobiliams skirti greitkeliai";
 "rendering_value_translucent_pink_name" = "Permatoma rožinė";
 "rendering_attr_surface_ground_name" = "Žemė";
-"routing_attr_height_obstacles_description" = "Maršrutai gali išvengti stiprių kalnų.";
+"routing_attr_height_obstacles_description" = "Numatomas kelionės laikas atspindės aukščio poveikį. Maršruto pasirinkimas gali padėti išvengti stačių įkalnių:";
 "rendering_attr_currentTrackColor_description" = "GPX spalva";
 "routing_attr_driving_style_speed_name" = "Trumpesni maršrutai";
 "routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
@@ -2604,3 +2604,13 @@
 "osmand_cloud_create_account_descr" = "Įveskite savo el. pašto adresą, ten bus atsiųstas patvirtinimo kodas,\nir visi jūsų duomenys bus su juo susieti.";
 "osmand_cloud_login_descr" = "Įveskite el. pašto adresą, kuriuo užsiregistravote. Juo bus išsiųstas vienkartinis slaptažodis.";
 "choose_what_to_restore" = "Pasirinkite, ką atkurti.";
+"activity_type_snowmobile_name" = "Sniego motociklas";
+"activity_type_winter_name" = "Žiema";
+"routing_attr_driving_style_description" = "Pasirinkite vairavimo tikslą, kad gautumėte trumpesnį, greitesnį ar saugesnį maršrutą";
+"activity_type_motorbike_name" = "Motoroleris";
+"activity_type_racing_name" = "Lenktynės";
+"activity_type_riding_name" = "Jojimas";
+"activity_type_car_name" = "Automobilis";
+"activity_type_hiking_name" = "Žygiavimas";
+"activity_type_water_name" = "Vanduo";
+"activity_type_cycling_name" = "Važiavimas dviračiu";

@@ -521,6 +521,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     return [self isLandscapeIPadAware] ? 0.0 : kAdditionalRouteDetailsOffset;
 }
 
+- (BOOL) showTopViewInFullscreen
+{
+    return YES;
+}
+
 - (BOOL) hasTopToolbar
 {
     return YES;

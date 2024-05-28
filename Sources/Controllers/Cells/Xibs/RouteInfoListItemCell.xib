@@ -70,16 +70,16 @@
                                                 <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
                                                 <subviews>
                                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Zvf-to-QQV">
-                                                        <rect key="frame" x="4" y="4" width="22" height="22"/>
+                                                        <rect key="frame" x="8" y="4" width="14" height="22"/>
                                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                     </imageView>
                                                 </subviews>
                                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="trailing" secondItem="Zvf-to-QQV" secondAttribute="trailing" constant="4" id="1bn-bH-e6p"/>
+                                                    <constraint firstAttribute="trailing" secondItem="Zvf-to-QQV" secondAttribute="trailing" constant="8" id="1bn-bH-e6p"/>
                                                     <constraint firstAttribute="bottom" secondItem="Zvf-to-QQV" secondAttribute="bottom" constant="4" id="A4x-gq-16S"/>
                                                     <constraint firstItem="Zvf-to-QQV" firstAttribute="top" secondItem="9W6-rj-Y6M" secondAttribute="top" constant="4" id="UOH-5A-CRY"/>
-                                                    <constraint firstItem="Zvf-to-QQV" firstAttribute="leading" secondItem="9W6-rj-Y6M" secondAttribute="leading" constant="4" id="dAv-dd-5mg"/>
+                                                    <constraint firstItem="Zvf-to-QQV" firstAttribute="leading" secondItem="9W6-rj-Y6M" secondAttribute="leading" constant="8" id="dAv-dd-5mg"/>
                                                     <constraint firstAttribute="height" constant="30" id="vci-hW-GHY"/>
                                                     <constraint firstAttribute="width" constant="30" id="wc4-Wv-P5z"/>
                                                 </constraints>

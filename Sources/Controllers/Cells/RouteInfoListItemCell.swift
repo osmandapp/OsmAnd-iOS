@@ -21,7 +21,8 @@ final class RouteInfoListItemCell: UITableViewCell {
     @IBOutlet private weak var bottomImageBorderViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var bottomImageStackView: UIStackView!
     
-    let bottomImageViewDefaultSize: CGFloat = 30
+    let bottomImageViewDefaultWidth: CGFloat = 30
+    let bottomImageViewInnerHeight: CGFloat = 22
     
     var leftTurnIconDrawable: OATurnDrawable?
     
@@ -58,10 +59,8 @@ final class RouteInfoListItemCell: UITableViewCell {
             bottomImageBorderView.layer.borderWidth = 2
             bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
             
-            bottomImageBorderViewWidthConstraint.constant = image.size.width / (image.size.height / bottomImageViewDefaultSize)
-            if bottomImageBorderViewWidthConstraint.constant < bottomImageViewDefaultSize {
-                bottomImageBorderViewWidthConstraint.constant = bottomImageViewDefaultSize
-            }
+            bottomImageBorderViewWidthConstraint.constant = image.size.width / (image.size.height / bottomImageViewInnerHeight)
+            bottomImageBorderViewWidthConstraint.constant += 16
         } else {
             bottomImageStackView.isHidden = true
         }

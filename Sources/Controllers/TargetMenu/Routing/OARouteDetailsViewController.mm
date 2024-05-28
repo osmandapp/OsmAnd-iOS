@@ -36,6 +36,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OALanesDrawable.h"
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 #import <Charts/Charts-Swift.h>
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -127,11 +128,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
-    RouteInfoListItemCell *cell = [_tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell getCellIdentifier]];
+    OARouteInfoListItemCell *cell = [_tableView dequeueReusableCellWithIdentifier:[OARouteInfoListItemCell getCellIdentifier]];
     if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[RouteInfoListItemCell getCellIdentifier] owner:self options:nil];
-        cell = (RouteInfoListItemCell *)[nib objectAtIndex:0];
+        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoListItemCell getCellIdentifier] owner:self options:nil];
+        cell = (OARouteInfoListItemCell *)[nib objectAtIndex:0];
     }
     if (cell)
     {
@@ -144,6 +145,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         turnDrawable.frame = CGRectMake(0, 0, size, size);
         [turnDrawable setClr:[UIColor colorNamed:ACColorNameTextColorPrimary]];
         [turnDrawable setNeedsDisplay];
+        [cell setLeftTurnIconDrawable:turnDrawable];
         [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
         
         vector<int> lanes = model.turnType->getLanes();

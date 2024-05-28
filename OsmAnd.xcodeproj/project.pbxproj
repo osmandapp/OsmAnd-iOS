@@ -3882,6 +3882,7 @@
 		32ADB42A25D2EC2900F5C634 /* ic_dialog_move@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_dialog_move@2x.png"; path = "Resources/Icons/ic_dialog_move@2x.png"; sourceTree = "<group>"; };
 		32AFDC7D2A9500D800809EE0 /* TravelArticleDialogViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelArticleDialogViewController.swift; sourceTree = "<group>"; };
 		32B383112AEFDE2D0072A3FB /* TravelGuidesImageCacheHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesImageCacheHelper.swift; sourceTree = "<group>"; };
+		32B451832C062CA2003390C9 /* OATurnDrawable+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OATurnDrawable+cpp.h"; sourceTree = "<group>"; };
 		32B50ABB26BBDA0A002E6C92 /* ic_custom_shop_bag@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag@2x.png"; path = "Resources/Icons/ic_custom_shop_bag@2x.png"; sourceTree = "<group>"; };
 		32B50ABC26BBDA0B002E6C92 /* ic_custom_shop_bag@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_shop_bag@3x.png"; path = "Resources/Icons/ic_custom_shop_bag@3x.png"; sourceTree = "<group>"; };
 		32B50AD126BBE3C3002E6C92 /* ic_custom_map_location_free@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_map_location_free@2x.png"; path = "Resources/Icons/ic_custom_map_location_free@2x.png"; sourceTree = "<group>"; };
@@ -12668,6 +12669,7 @@
 				DA5A7F4626C563A400F274C7 /* OATopTextView.h */,
 				DA5A7F3B26C563A400F274C7 /* OATopTextView.mm */,
 				DA5A7F1F26C563A400F274C7 /* OATurnDrawable.h */,
+				32B451832C062CA2003390C9 /* OATurnDrawable+cpp.h */,
 				DA5A7F2E26C563A400F274C7 /* OATurnDrawable.mm */,
 				DA5A7F3926C563A400F274C7 /* OATurnPathHelper.h */,
 				DA5A7F3326C563A400F274C7 /* OATurnPathHelper.mm */,

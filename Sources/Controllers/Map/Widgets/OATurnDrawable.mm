@@ -7,12 +7,15 @@
 //
 
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
+#import "OATurnPathHelper.h"
 #import "OAUtilities.h"
 #import "GeneratedAssetSymbols.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OATurnDrawable
 {
+    std::shared_ptr<TurnType> _turnType;
     BOOL _mini;
     EOATurnDrawableThemeColor _themeColor;
     UIColor *_routeDirectionColor;
@@ -89,6 +92,11 @@
         _routeDirectionColor = [self getThemeColor:[UIColor colorNamed:ACColorNameNavArrowDistantColor]];
 
     [self setNeedsDisplay];
+}
+
+- (std::shared_ptr<TurnType>) turnType
+{
+    return _turnType;
 }
 
 - (BOOL) setTurnType:(std::shared_ptr<TurnType>)turnType

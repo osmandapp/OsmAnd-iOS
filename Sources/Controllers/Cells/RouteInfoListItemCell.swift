@@ -8,6 +8,8 @@
 
 import UIKit
 
+@objc(OARouteInfoListItemCell)
+@objcMembers
 final class RouteInfoListItemCell: UITableViewCell {
     
     @IBOutlet private weak var leftImageView: UIImageView!
@@ -21,27 +23,33 @@ final class RouteInfoListItemCell: UITableViewCell {
     
     let bottomImageViewDefaultSize: CGFloat = 30
     
-    override class func getIdentifier() -> String! {
+    var leftTurnIconDrawable: OATurnDrawable?
+    
+    override class func getIdentifier() -> String {
         "RouteInfoListItemCell"
     }
     
-    @objc func setLeftImageView(image: UIImage?) {
+    func setLeftImageView(image: UIImage?) {
         leftImageView.image = image
     }
     
-    @objc func setTopLeftLabel(text: String?) {
+    func setleftTurnIconDrawable(drawable: OATurnDrawable) {
+        leftTurnIconDrawable = drawable
+    }
+    
+    func setTopLeftLabel(text: String?) {
         topLeftLabel.text = text
     }
     
-    @objc func setTopRightLabel(text: String?) {
+    func setTopRightLabel(text: String?) {
         topRightLabel.text = text
     }
     
-    @objc func setBottomLabel(text: String?) {
+    func setBottomLabel(text: String?) {
         bottomLabel.text = text
     }
     
-    @objc func setBottomLanesImage(image: UIImage?) {
+    func setBottomLanesImage(image: UIImage?) {
         if let image {
             bottomImageStackView.isHidden = false
             bottomImageView.image = image
@@ -56,6 +64,22 @@ final class RouteInfoListItemCell: UITableViewCell {
             }
         } else {
             bottomImageStackView.isHidden = true
+        }
+    }
+    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
+            self.refreshLeftIcon()
+        }
+    }
+    
+    private func refreshLeftIcon() {
+        if let leftTurnIconDrawable {
+            leftTurnIconDrawable.clr = (traitCollection.userInterfaceStyle == .dark) ? .white : .black
+            leftTurnIconDrawable.setNeedsDisplay()
+            let recoloredImage = leftTurnIconDrawable.toUIImage()
+            setLeftImageView(image: recoloredImage)
         }
     }
 }

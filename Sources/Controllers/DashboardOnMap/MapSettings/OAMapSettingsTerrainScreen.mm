@@ -303,7 +303,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
+    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
     _downloadingCellResourceHelper.hostViewController = self.vwController;
     [_downloadingCellResourceHelper setHostTableView:self.tblView];
     _downloadingCellResourceHelper.delegate = self;

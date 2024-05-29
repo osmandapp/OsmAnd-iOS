@@ -220,7 +220,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
+    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
     _downloadingCellResourceHelper.hostViewController = self;
     [_downloadingCellResourceHelper setHostTableView:self.tableView];
     _downloadingCellResourceHelper.delegate = self;

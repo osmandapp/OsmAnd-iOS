@@ -226,10 +226,6 @@
             [self stopDownload:resourceId];
         }
     }
-    else
-    {
-        // do nothing
-    }
 }
 
 - (void)showActivatePluginPopup:(NSString *)resourceId

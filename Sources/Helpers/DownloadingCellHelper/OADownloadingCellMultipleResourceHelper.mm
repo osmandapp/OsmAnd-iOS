@@ -157,10 +157,6 @@
                 [self stopDownload:downloadingItem.resourceId.toNSString()];
         }
     }
-    else
-    {
-        // do nothing
-    }
 }
 
 #pragma mark - OADownloadMultipleResourceDelegate

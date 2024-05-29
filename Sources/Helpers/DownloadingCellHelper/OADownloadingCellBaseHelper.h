@@ -35,8 +35,8 @@ typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
 
 @interface OADownloadingCellBaseHelper : NSObject
 
-@property (nonatomic) NSString *rightIconName;
-@property (nonatomic) NSString *rightIconColorName;
+@property (nonatomic, copy) NSString *rightIconName;
+@property (nonatomic, copy) NSString *rightIconColorName;
 @property (nonatomic) BOOL isBoldTitleStyle;
 @property (nonatomic) BOOL isAlwaysClickable;
 @property (nonatomic) BOOL isDownloadedRecolored;

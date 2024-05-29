@@ -261,10 +261,6 @@
         else
             [self stopDownload:resourceId];
     }
-    else
-    {
-        // do nothing
-    }
 }
 
 #pragma mark - Cell progress update methods

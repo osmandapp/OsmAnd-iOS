@@ -77,8 +77,6 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         navigationItem.leftItemsSupplementBackButton = true
         navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
         screenMode = .popularArticles
-        savedArticlesObserver = OAAutoObserverProxy(self, withHandler: #selector(update), andObserve: TravelObfHelper.shared.getBookmarksHelper().observable)
-        localResourcesChangedObserver = OAAutoObserverProxy(self, withHandler: #selector(populateAndUpdate), andObserve: OsmAndApp.swiftInstance().localResourcesChangedObservable)
         downloadingCellResourceHelper.refreshCellSpinners()
     }
     

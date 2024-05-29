@@ -415,9 +415,9 @@ final class TravelObfHelper : NSObject {
             parts = []
         }
         
-        var navMap = [String : [TravelSearchResult]]()
+        var navMap = [String: [TravelSearchResult]]()
         var headers = [String]()
-        var headerObjs = [String : TravelSearchResult]()
+        var headerObjs = [String: TravelSearchResult]()
         if !parts.isEmpty {
             headers.append(contentsOf: parts)
             if let isParentOf = article.isParentOf, !isParentOf.isEmpty {
@@ -425,9 +425,13 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        for header in headers {
-            
-            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang, lat: article.lat, lon: article.lon) else {continue}
+        for var header in headers {
+            var parentLang = lang
+            if header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) {
+                parentLang = "en"
+            }
+            header = TravelGuidesUtils.getTitleWithotPrefix(title: header)
+            guard let parentArticle = getParentArticleByTitle(title: header, lang: parentLang, lat: article.lat, lon: article.lon) else {continue}
 
             navMap[header] = [TravelSearchResult]()
             if let unseparatedText = parentArticle.isParentOf {
@@ -435,7 +439,7 @@ final class TravelObfHelper : NSObject {
                 for childSubsequence in isParentOf {
                     let childTitle = String(childSubsequence)
                     if !childTitle.isEmpty {
-                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang])
+                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                         var resultList = navMap[header]
                         if resultList == nil {
                             resultList = []
@@ -450,8 +454,9 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        var res: [TravelSearchResult : [TravelSearchResult]] = [:]
-        for header in headers {
+        var res: [TravelSearchResult: [TravelSearchResult]] = [:]
+        for var header in headers {
+            header = TravelGuidesUtils.getTitleWithotPrefix(title: header)
             var searchResult = headerObjs[header]
             var results = navMap[header]
             if results != nil {

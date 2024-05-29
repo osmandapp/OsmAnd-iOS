@@ -432,7 +432,7 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         
         guard let aggregatedPartOf = article.aggregatedPartOf else { return "" }
         if !aggregatedPartOf.isEmpty {
-            let aggregatedPartOfArrayOrig = aggregatedPartOf.split(separator: ",")
+            let aggregatedPartOfArrayOrig = aggregatedPartOf.split(separator: ",").map { TravelGuidesUtils.getTitleWithotPrefix(title: String($0)) }
             if !aggregatedPartOfArrayOrig.isEmpty {
                 let current = aggregatedPartOfArrayOrig[0]
                 sb += "<a href=\"#showNavigation\" style=\"text-decoration: none\"> <div class=\"nav-bar" + nightModeClass + "\">"

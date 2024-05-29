@@ -114,9 +114,9 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
         if let article, let parts = article.aggregatedPartOf {
             names = parts
                 .split(separator: ",")
+                .map { TravelGuidesUtils.getTitleWithotPrefix(title: String($0)) }
                 .reversed()
-                .map { String($0) }
-            
+        
             if navigationMap.count > names.count {
                 if let title = article.title {
                     names.append(title)

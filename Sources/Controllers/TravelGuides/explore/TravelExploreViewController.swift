@@ -223,7 +223,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     let resultRow = section.createNewRow()
                     resultRow.cellType = SearchTravelCell.getIdentifier()
                     resultRow.title = item.articleTitle
-                    resultRow.descr = item.isPartOf
+                    resultRow.descr = TravelGuidesUtils.getTitleWithotPrefix(title: item.isPartOf)
                     resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
                     if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                         resultRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: true)

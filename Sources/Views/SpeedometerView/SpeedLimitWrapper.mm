@@ -53,7 +53,6 @@
     
     if (!showScreenAlerts || !showSpeedLimitWarnings)
     {
-        NSLog(@"showSpeedLimitWarnings false");
         return nil;
     }
     

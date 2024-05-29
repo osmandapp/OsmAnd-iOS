@@ -16,15 +16,16 @@ final class SpeedometerSpeedView: UIView {
     @IBOutlet private weak var valueSpeedLabel: UILabel!
     @IBOutlet private weak var unitSpeedLabel: UILabel!
     
+    var isPreview = false
+    
     private let LOW_SPEED_THRESHOLD_MPS = 6.0
     private let UPDATE_THRESHOLD_MPS = 0.1
     private let LOW_SPEED_UPDATE_THRESHOLD_MPS = 0.015 // Update more often while walking/running
     private let previewValueDefault: Int = 85
     
-    var isPreview = false
-    
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-    private var cachedSpeed = 0.0
+    private let UNDEFINED_SPEED = -1.0
+    private var cachedSpeed = -1.0
     private var cachedMetricSystem = -1
     
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
@@ -47,14 +48,20 @@ final class SpeedometerSpeedView: UIView {
             if currentSpeed >= 0 {
                 let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
                 
-                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold {
+                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold || cachedSpeed == -1 {
                     cachedSpeed = currentSpeed
                     updateSpeedValueAndUnit(with: Float(cachedSpeed))
                 }
-            } else if cachedSpeed != 0 {
+                isHidden = false
+            } else if cachedSpeed != 0.0 {
                 cachedSpeed = 0
                 updateSpeedValueAndUnit(with: Float(cachedSpeed))
+                isHidden = false
+            } else {
+                isHidden = true
             }
+        } else {
+            isHidden = true
         }
     }
     

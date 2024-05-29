@@ -37,6 +37,7 @@ final class SpeedometerView: OATextInfoWidget {
     // swiftlint:enable force_unwrapping
 
     var sizeStyle: EOAWidgetSizeStyle = .medium
+    var didChangeIsVisible: (() -> Void)?
    
     var isCarPlay = false
     var isPreview = false
@@ -78,7 +79,7 @@ final class SpeedometerView: OATextInfoWidget {
             leftPositionConstraint.isActive = false
             rightPositionConstraint.isActive = false
         } else {
-            isHidden = !settings.showSpeedometer.get()
+            isHidden = true
             centerPositionXConstraint.isActive = false
             if isCarPlay {
                 layer.cornerRadius = 10
@@ -101,8 +102,15 @@ final class SpeedometerView: OATextInfoWidget {
         updateComponents()
         updateSpeedometerSpeedView()
         updateSpeedLimitView()
-        isHidden = speedometerSpeedView.isHidden && speedLimitEUView.isHidden && speedLimitNAMView.isHidden
-       
+        var isChangedVisible = false
+        if !speedometerSpeedView.isHidden && isHidden {
+            isChangedVisible = true
+        }
+        isHidden = speedometerSpeedView.isHidden
+        if isChangedVisible {
+            didChangeIsVisible?()
+        }
+      
         return true
     }
     
@@ -120,7 +128,6 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     private func updateSpeedometerSpeedView() {
-        speedometerSpeedView.isHidden = false
         speedometerSpeedView.updateInfo()
     }
     
@@ -132,8 +139,10 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     private func setupSpeedLimitWith(view: SpeedLimitView) {
-        guard let value = speedLimitText as? String else { return }
-        
+        guard let value = speedLimitText as? String else { 
+            view.isHidden = true
+            return
+        }
         view.isHidden = false
         view.updateWith(value: value)
     }

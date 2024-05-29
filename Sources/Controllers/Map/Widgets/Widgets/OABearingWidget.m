@@ -60,8 +60,6 @@ static const int INVALID_BEARING = -1000;
 
 - (BOOL) updateInfo
 {
-    BOOL relative = [[OAAppSettings sharedManager].showRelativeBearing get];
-    [self setContentTitle:relative ? OALocalizedString(@"map_widget_bearing") : OALocalizedString(@"map_widget_magnetic_bearing")];
     int b = [self getBearing];
     EOAAngularConstant angularUnits = [[OAAppSettings sharedManager].angularUnits get];
     if (_cachedAngularUnits != angularUnits)
@@ -72,9 +70,14 @@ static const int INVALID_BEARING = -1000;
     {
         _cachedDegrees = b;
         if (b != INVALID_BEARING)
+        {
+            BOOL relative = [[OAAppSettings sharedManager].showRelativeBearing get];
             [self setText:[NSString stringWithFormat:@"%@%@", [OAOsmAndFormatter getFormattedAzimuth:b], relative ? @"" : @" M"] subtext:nil];
+        }
         else
+        {
             [self setText:nil subtext:nil];
+        }
         
         return YES;
     }

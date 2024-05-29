@@ -2106,14 +2106,10 @@ static const NSInteger _buttonsCount = 4;
                                                                                                  shareCoordinates,
                                                                                                  shareGeo]
     ];
-
-    activityViewController.popoverPresentationController.sourceView = self;
-    activityViewController.popoverPresentationController.sourceRect = _backView2.frame;
-    activityViewController.excludedActivityTypes = @[UIActivityTypeCopyToPasteboard];
-
-    [self.navController presentViewController:activityViewController
-                                     animated:YES
-                                   completion:^{ }];
+    
+    UIButton *button = (UIButton *)sender;
+    
+    [self.navController showActivity:items applicationActivities:@[shareClipboard, shareAddress, sharePOIName, shareCoordinates, shareGeo] excludedActivityTypes:nil sourceView:button sourceRect:CGRect() barButtonItem:nil permittedArrowDirections:UIPopoverArrowDirectionAny completionWithItemsHandler:nil];
 
     [self.menuViewDelegate targetPointShare];
 }

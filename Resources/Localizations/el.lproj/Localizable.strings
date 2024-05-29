@@ -1949,3 +1949,28 @@
 "gpx_analyze" = "Ανάλυση";
 "stats_select_graph_data" = "Επιλογή δεδομένων γραφήματος";
 "mapil_no_images" = "Δεν έχουμε φωτογραφίες για αυτήν την τοποθεσία.";
+"testFlight" = "TestFlight";
+"product_desc_development" = "Για προγραμματιστές και έμπειρους χρήστες";
+"product_desc_weather" = "24ωρη πρόγνωση καιρού των επόμενων 7 ημερών στον χάρτη";
+"download_install_beta_version" = "Λήψη και εγκατάσταση beta εκδόσεων του OsmAnd";
+"online_plugins" = "Διαδικτυακές επεκτάσεις";
+"shared_string_maximum" = "Μέγιστο";
+"res_mapsres" = "Χάρτες & πόροι";
+"res_world_map" = "Παγκόσμιος χάρτης";
+"worldwide_maps" = "Παγκόσμιοι χάρτες";
+"res_worldwide" = "Παγκόσμια";
+"res_wmap" = "Προεπισκόπηση παγκόσμιου χάρτη";
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Έχετε την πιο πρόσφατη έκδοση: %@";
+"subscription_banner_free_maps_title" = "Μπορείτε να κατεβάσετε %i χάρτες δωρεάν.";
+"purchases_feature_desc_unlimited_map_download" = "Απόκτησε απεριόριστες λήψεις χαρτών εκτός σύνδεσης για όλες τις ηπείρους και περιοχές.";
+"subscription_banner_free_maps_description" = "Απόκτησε απεριόριστες λήψεις και ενημερώσεις χάρτη.";
+"res_search_world" = "Αναζήτηση χαρτών";
+"shared_strings_all_regions" = "Όλες οι περιοχές";
+"shared_string_clear_cache" = "Εκκαθάριση μνήμης cache";
+"edit_tilesource_minzoom" = "Ελάχιστο ζουμ";
+"edit_tilesource_maxzoom" = "Μέγιστο ζουμ";

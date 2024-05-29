@@ -19,6 +19,7 @@
 #import "OAPOIFilter.h"
 #import "OAPOICategory.h"
 #import "OAMapUtils.h"
+#import "OASearchCoreFactory.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -43,7 +44,7 @@
     self = [super init];
     if (self)
     {
-        self.preferredZoom = 15;
+        self.preferredZoom = PREFERRED_DEFAULT_ZOOM;
         self.requiredSearchPhrase = sp;
         _unknownPhraseMatchWeight = 0;
     }

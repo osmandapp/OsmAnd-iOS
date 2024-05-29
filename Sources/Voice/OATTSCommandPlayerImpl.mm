@@ -73,21 +73,18 @@
     }
     AVSpeechUtterance *utterance = [AVSpeechUtterance speechUtteranceWithString:toSpeak];
     utterance.voice = [self voiceToUse];
-    [utterance setRate:0.5f];
+    utterance.prefersAssistiveTechnologySettings = YES;
     [synthesizer speakUtterance:utterance];
 }
 
 - (AVSpeechSynthesisVoice *)voiceToUse {
-    NSArray<AVSpeechSynthesisVoice *> *allVoices = [AVSpeechSynthesisVoice speechVoices];
-    NSMutableArray<AVSpeechSynthesisVoice *> *allEnhancedVoicesForLanguage = [[NSMutableArray alloc] init];
-
-    for (AVSpeechSynthesisVoice *voice in allVoices) {
-        if (voice.quality == AVSpeechSynthesisVoiceQualityEnhanced && [voice.language hasPrefix:voiceProvider]) {
-            [allEnhancedVoicesForLanguage insertObject:voice atIndex:0];
-        }
+    AVSpeechSynthesisVoice *systemPreferredVoice = [AVSpeechSynthesisVoice voiceWithLanguage:voiceProvider];
+    if (systemPreferredVoice) {
+        return systemPreferredVoice;
+    } else {
+        NSLog(@"[OATTSCommandPlayerImpl] Invalid or unsupported locale identifier: %@, using current system language", voiceProvider);
+        return [AVSpeechSynthesisVoice voiceWithLanguage:[AVSpeechSynthesisVoice currentLanguageCode]];
     }
-
-    return allEnhancedVoicesForLanguage.firstObject ? : [AVSpeechSynthesisVoice voiceWithLanguage:voiceProvider];
 }
 
 - (OACommandBuilder *)newCommandBuilder {

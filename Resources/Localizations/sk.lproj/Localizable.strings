@@ -2827,3 +2827,9 @@
 "shared_string_round_up" = "Zaokrúhlené";
 "shared_string_precise" = "Presné";
 "shared_string_all_colors" = "Všetky farby";
+"shared_string_scale" = "Mierka";
+"vertical_exaggeration_description" = "Zmenou hodnoty mierky môžete zvýrazniť 3D reliéf.";
+"vertical_exaggeration" = "Vertikálne zvýraznenie";
+"downward_gradient" = "Gradient smerujúci nadol";
+"upward_gradient" = "Gradient smerujúci nahor";
+"required_maps" = "Potrebné mapy";

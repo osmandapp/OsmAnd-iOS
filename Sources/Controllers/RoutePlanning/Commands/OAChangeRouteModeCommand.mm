@@ -132,9 +132,15 @@
 
 - (NSArray<OAWptPt *> *) getPairAt:(NSInteger)pointIndex
 {
+    NSMutableArray<OAWptPt *> *res = [NSMutableArray array];
     OAWptPt *first = pointIndex >= 0 && pointIndex < _newPoints.count ? _newPoints[pointIndex] : nil;
+    if (first)
+        [res addObject:first];
     OAWptPt *second = pointIndex >= 0 && pointIndex < _newPoints.count - 1 ? _newPoints[pointIndex + 1] : nil;
-    return @[first, second];
+    if (second)
+        [res addObject:second];
+
+    return [NSArray arrayWithArray:res];
 }
 
 - (void) executeCommand

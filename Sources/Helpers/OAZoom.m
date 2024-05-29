@@ -30,6 +30,13 @@
     return self;
 }
 
+- (instancetype) initWitZoom:(float)zoom minZoom:(int)minZoom maxZoom:(int)maxZoom
+{
+    int baseZoom = floor(zoom);
+    float zoomFloatPart = zoom - baseZoom;
+    return [self initWithBaseZoom:baseZoom zoomFloatPart:zoomFloatPart minZoom:minZoom maxZoom:maxZoom];
+}
+
 - (int) getBaseZoom
 {
     return _baseZoom;

@@ -23,6 +23,7 @@
 #define CUISINE_TAG @"cuisine"
 #define WIKIDATA_TAG @"wikidata"
 #define WIKIMEDIA_COMMONS_TAG @"wikimedia_commons"
+#define WIKIPEDIA_TAG @"wikipedia"
 #define MAPILLARY_TAG @"mapillary"
 #define DISH_TAG @"dish"
 #define POI_REF @"ref"

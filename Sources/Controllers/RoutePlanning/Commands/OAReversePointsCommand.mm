@@ -56,6 +56,7 @@
     }
     _newPoints = [NSArray arrayWithArray:newPoints];
     [self executeCommand];
+    [self refreshMap];
     return YES;
 }
 

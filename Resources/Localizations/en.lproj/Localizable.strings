@@ -1134,6 +1134,7 @@
 "shared_string_precise" = "Precise";
 "shared_string_round_up" = "Round up";
 "distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
+"display_position_automatic_descr" = "Depends on Map orientation: bottom for movement direction, center for all others.";
 "units_and_formats" = "Units&formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
@@ -2983,7 +2984,7 @@
 "app_mode_horse" = "Horse";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
-"horseback_riding" = "Horseback riding";
+"horseback_riding" = "Riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Scooter";
@@ -3761,3 +3762,12 @@
 
 "osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
+
+"shared_string_speedometer" = "Speedometer";
+"speedometer_description" = "Shows your current speed as reported via GPS";
+"speed_limit_warning" = "Speed limit warning";
+"shared_string_always" = "Always";
+"when_exceeded" = "When exceeded";
+"edit_tilesource_maxzoom" = "Maximum zoom";
+"edit_tilesource_minzoom" = "Minimum zoom";
+"shared_string_millimeters_short" = "mm";

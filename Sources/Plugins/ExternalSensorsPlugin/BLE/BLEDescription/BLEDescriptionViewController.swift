@@ -17,6 +17,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         didSet {
             device.didChangeCharacteristic = { [weak self] in
                 guard let self else { return }
+                headerView.updateActiveServiceImage()
                 generateData()
                 tableView.reloadData()
             }
@@ -41,7 +42,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 
         configureHeader()
         headerView.configure(device: device)
-        headerView.didPaireDevicedAction = { [weak self] in
+        headerView.didPaireDeviceAction = { [weak self] in
             guard let self else { return }
             generateData()
             tableView.reloadData()
@@ -107,11 +108,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                     if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
                         settingRow.title = localizedString("wheel_circumference")
                     }
-                    if let descr = value as? Float {
+                    if let floatValue = value as? Float {
                         if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
-                            wheelSizeInMillimeters = descr
+                            wheelSizeInMillimeters = floatValue
                         }
-                        settingRow.descr = String(descr) + " " + localizedString("shared_string_millimeters").lowercased()
+                        settingRow.descr = String(format: "%.0f", floatValue) + " " + localizedString("shared_string_millimeters_short")
                     }
                  }
             }

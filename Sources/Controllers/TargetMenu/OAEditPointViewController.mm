@@ -352,7 +352,14 @@
 - (void)setupColors
 {
     _appearanceCollection = [OAGPXAppearanceCollection sharedInstance];
-    UIColor *selectedColor = _isNewItemAdding ? [OAFavoritesHelper getGroupByName:self.groupTitle].color : [_pointHandler getColor];
+    UIColor *selectedColor;
+    if (_isNewItemAdding && _editPointType == EOAEditPointTypeFavorite)
+        selectedColor = [OAFavoritesHelper getGroupByName:[OAFavoriteGroup convertDisplayNameToGroupIdName:self.groupTitle]].color;
+    else
+        selectedColor = [_pointHandler getColor];
+    if (!selectedColor)
+        selectedColor = [OADefaultFavorite getDefaultColor];
+    
     _selectedColorItem = [_appearanceCollection getColorItemWithValue:[selectedColor toARGBNumber]];
     _sortedColorItems = [NSMutableArray arrayWithArray:[_appearanceCollection getAvailableColorsSortingByLastUsed]];
 }

@@ -33,6 +33,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAMapUtils.h"
 #import "OADestination.h"
+#import "OACollatorStringMatcher.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -98,6 +99,7 @@
 #import "OABaseButtonsViewController.h"
 #import "OABaseNavbarSubviewViewController.h"
 #import "OAQuickActionListViewController.h"
+#import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACreateProfileViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmLoginMainViewController.h"

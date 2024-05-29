@@ -537,6 +537,26 @@ typedef NS_ENUM(NSInteger, EOATerrainType)
 
 @end
 
+typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
+{
+    EOASpeedLimitWarningStateAlways = 0,
+    EOASpeedLimitWarningStateWhenExceeded
+};
+
+@interface OACommonSpeedLimitWarningState : OACommonInteger
+
++ (instancetype) withKey:(NSString *)key defValue:(EOASpeedLimitWarningState)defValue;
+
+- (EOASpeedLimitWarningState) get;
+- (EOASpeedLimitWarningState) get:(OAApplicationMode *)mode;
+- (void) set:(EOASpeedLimitWarningState)value;
+- (void) set:(EOASpeedLimitWarningState)value mode:(OAApplicationMode *)mode;
+- (NSString *) toHumanString;
+- (NSString *) toHumanString:(OAApplicationMode *)mode;
++ (NSString *) toHumanString:(EOASpeedLimitWarningState)value;
+
+@end
+
 @interface OACommonAutoZoomMap : OACommonInteger
 
 + (instancetype) withKey:(NSString *)key defValue:(EOAAutoZoomMap)defValue;
@@ -941,6 +961,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonBoolean *showScreenAlerts;
 @property (nonatomic) OACommonBoolean *showTrafficWarnings;
 @property (nonatomic) OACommonBoolean *showPedestrian;
+@property (nonatomic) OACommonBoolean *showSpeedLimitWarnings;
 @property (nonatomic) OACommonBoolean *showCameras;
 @property (nonatomic) OACommonBoolean *showTunnels;
 @property (nonatomic) OACommonBoolean *showLanes;
@@ -997,6 +1018,10 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 
 @property (nonatomic) OACommonListOfStringList *topWidgetPanelOrderOld;
 @property (nonatomic) OACommonListOfStringList *bottomWidgetPanelOrderOld;
+
+@property (nonatomic) OACommonBoolean *showSpeedometer;
+@property (nonatomic) OACommonWidgetSizeStyle *speedometerSize;
+@property (nonatomic) OACommonSpeedLimitWarningState *showSpeedLimitWarning;
 
 // OSM Editing
 @property (nonatomic) OACommonString *osmUserName;

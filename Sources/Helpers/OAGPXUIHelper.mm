@@ -58,7 +58,7 @@
     OAGPXDocument *_exportingGpxDoc;
     BOOL _isExportingCurrentTrack;
     UIDocumentInteractionController *_exportController;
-    UIViewController *_exportingHostVC;
+    UIViewController __weak *_exportingHostVC;
     id<OATrackSavingHelperUpdatableDelegate> _exportingHostVCDelegate;
 }
 
@@ -502,7 +502,7 @@
     }];
 }
 
-- (void)openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate
+- (void)openExportForTrack:(OAGPX *)gpx gpxDoc:(id)gpxDoc isCurrentTrack:(BOOL)isCurrentTrack inViewController:(UIViewController *)hostViewController hostViewControllerDelegate:(id)hostViewControllerDelegate touchPointArea:(CGRect)touchPointArea
 {
     _isExportingCurrentTrack = isCurrentTrack;
     _exportingHostVC = hostViewController;
@@ -549,7 +549,7 @@
     _exportController.UTI = @"com.topografix.gpx";
     _exportController.delegate = self;
     _exportController.name = _exportFileName;
-    [_exportController presentOptionsMenuFromRect:CGRectZero inView:_exportingHostVC.view animated:YES];
+    [_exportController presentOptionsMenuFromRect:touchPointArea inView:_exportingHostVC.view animated:YES];
 }
 
 - (void)copyGPXToNewFolder:(NSString *)newFolderName
@@ -631,9 +631,8 @@
     if (openTrack)
     {
         OAGPX *gpx = [[OAGPXDatabase sharedDb] getGPXItem:[newFolderName stringByAppendingPathComponent:newFileName]];
-        if (gpx)
+        if (gpx && _exportingHostVC)
         {
-            
             [_exportingHostVC dismissViewControllerAnimated:YES completion:^{
                 [OARootViewController.instance.mapPanel targetHideContextPinMarker];
                 [OARootViewController.instance.mapPanel openTargetViewWithGPX:gpx];
@@ -766,7 +765,7 @@
 - (void)documentInteractionController:(UIDocumentInteractionController *)controller
         willBeginSendingToApplication:(NSString *)application
 {
-    if ([application isEqualToString:@"net.osmand.maps"])
+    if ([application isEqualToString:@"net.osmand.maps"] && _exportingHostVC)
     {
         [_exportController dismissMenuAnimated:YES];
         _exportFilePath = nil;

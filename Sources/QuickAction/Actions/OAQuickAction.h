@@ -25,6 +25,7 @@
 
 -(NSString *) getIconResName;
 -(NSString *) getSecondaryIconName;
+-(UIImage *) getActionIcon;
 -(BOOL) hasSecondaryIcon;
 
 -(long) getId;

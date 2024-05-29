@@ -1388,7 +1388,7 @@
 "shared_string_finish" = "完成";
 "shared_string_routing" = "路徑";
 "import_duplicates_title" = "一些項目已存在";
-"import_duplicates_description" = " OsmAnd已有與匯入的名稱相同的元素。 \n \n選取動作。";
+"import_duplicates_description" = "OsmAnd 已有與匯入的名稱相同的元素。\n\n選取動作。";
 "keep_both_desc" = "匯入的項目將會加入前綴";
 "keep_both" = "保留雙方";
 "replace_all" = "取代全部";
@@ -3304,3 +3304,7 @@
 "distance_during_navigation" = "導航時的距離";
 "shared_string_round_up" = "大約";
 "shared_string_precise" = "精確";
+"vertical_exaggeration_description" = "透過變更比例尺的值，您可以強調 3D 地形。";
+"vertical_exaggeration" = "垂直誇大";
+"shared_string_scale" = "比例尺";
+"required_maps" = "所需的地圖";

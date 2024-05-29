@@ -2448,7 +2448,7 @@
 "rendering_attr_showMtbScale_name" = "Pokaż skalę MTB";
 "routing_attr_motor_type_name" = "Paliwo zużywane przez silnik";
 "benefits_for_contributors_primary_descr" = "Aktywni współtwórcy OpenStreetMap.org mogą być uprawnieni do nieograniczonych godzinnych aktualizacji map.";
-"no_purchases" = "Nie maszżadnych zakupów";
+"no_purchases" = "Nie masz żadnych zakupów";
 "compass_always_visible" = "Zawsze widoczny";
 "activity_type_mountainbike_name" = "Rower górski";
 "routing_attr_motor_type_gas_name" = "CNG";
@@ -3137,3 +3137,11 @@
 "osmand_cloud_delete_account_confirmation" = "Usunąć konto\?";
 "shared_string_all_colors" = "Wszystkie kolory";
 "shared_string_precise" = "Precyzyjnie";
+"no_track_files" = "Nie masz żadnych plików ścieżek";
+"help_article_plugins_custom_name" = "Pakiet niestandardowy";
+"shared_string_setup_route" = "Wyznacz trasę";
+"add_widget" = "Dodaj widżet";
+"widget_panels_descr" = "Wybierz część ekranu do dodania lub przesunięcia widżetów";
+"poi_operator" = "Zarządca";
+"add_row" = "Dodaj wiersz";
+"help_article_plugins_openplacereviews_name" = "OpenPlaceReviews";

@@ -362,8 +362,16 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
         let articleUrl = "https://osmand.net/travel?title=" + title + "&lang=" + lang!
         
         let items = [URL(string: articleUrl)!]
-        let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
-        present(ac, animated: true)
+        showActivity(items, sourceView: view, barButtonItem: navigationItem.rightBarButtonItem)
+    }
+    
+    private func handleGeoUrl(_ url: String) {
+        let coordinatesString = url.replacingOccurrences(of: "geo:", with: "").trimmingCharacters(in: .whitespaces)
+        let coordinates = coordinatesString.components(separatedBy: ",")
+        if coordinates.count == 2, let latitude = Double(coordinates[0]), let longitude = Double(coordinates[1]) {
+            navigationController?.popToRootViewController(animated: true)
+            OATravelGuidesHelper.showContextMenu(withLatitude: latitude, longitude: longitude)
+        }
     }
     
     // MARK: Data
@@ -523,6 +531,9 @@ final class TravelArticleDialogViewController: OABaseWebViewController, TravelAr
             decisionHandler(.cancel)
         } else if isWebPage {
             OAWikiArticleHelper.warnAboutExternalLoad(newUrl, sourceView: self.webView)
+            decisionHandler(.cancel)
+        } else if newUrl.contains(PREFIX_GEO) {
+            handleGeoUrl(newUrl)
             decisionHandler(.cancel)
         } else {
             decisionHandler(.allow)

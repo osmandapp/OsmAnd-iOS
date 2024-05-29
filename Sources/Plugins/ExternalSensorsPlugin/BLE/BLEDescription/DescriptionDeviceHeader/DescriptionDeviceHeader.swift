@@ -18,7 +18,7 @@ final class DescriptionDeviceHeader: UIView {
     @IBOutlet private weak var connectButton: UIButton!
     
     var onUpdateConnectStateAction: ((DeviceState) -> Void)?
-    var didPaireDevicedAction: (() -> Void)?
+    var didPaireDeviceAction: (() -> Void)?
     
     private var device: Device?
     
@@ -31,11 +31,16 @@ final class DescriptionDeviceHeader: UIView {
         configureStartStateActivityView(with: device.state)
         if BLEManager.shared.getBluetoothState() != .poweredOn {
             debugPrint("getBluetoothState: is not active")
-            changeDisconnecteState(device: device)
+            changeDisconnectedState(device: device)
         }
     }
     
-    private func changeDisconnecteState(device: Device) {
+    func updateActiveServiceImage() {
+        guard let device else { return }
+        deviceImageView.image = device.getServiceConnectedImage
+    }
+    
+    private func changeDisconnectedState(device: Device) {
         configureConnectButtonTitle(with: .connected)
         deviceImageView.image = device.getServiceConnectedImage.noir
         connectActivityView.stopAnimating()
@@ -91,7 +96,7 @@ final class DescriptionDeviceHeader: UIView {
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
                 if !isPairedDevice {
-                    didPaireDevicedAction?()
+                    didPaireDeviceAction?()
                 }
                 configureConnectButtonTitle(with: .disconnected)
                 discoverServices(serviceUUIDs: nil)
@@ -100,7 +105,7 @@ final class DescriptionDeviceHeader: UIView {
                 if let error = error as? SBError {
                     switch error {
                     case .invalidPeripheral:
-                        changeDisconnecteState(device: device)
+                        changeDisconnectedState(device: device)
                     default: break
                     }
                 }
@@ -168,7 +173,7 @@ final class DescriptionDeviceHeader: UIView {
                 if let error = error as? SBError {
                     switch error {
                     case .invalidPeripheral:
-                        changeDisconnecteState(device: device)
+                        changeDisconnectedState(device: device)
                     default: break
                     }
                 }

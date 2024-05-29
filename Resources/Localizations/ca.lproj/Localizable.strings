@@ -1328,7 +1328,7 @@
 "rendering_attr_hideProposed_name" = "Objectes proposats";
 "rendering_attr_busRoutes_name" = "Rutes de bus";
 "rendering_attr_piste_difficulty_novice_name" = "Novell";
-"rendering_attr_alpineHiking_description" = "Representació dels camins segons l'escala SAC (Club Alpí Suís).";
+"rendering_attr_alpineHiking_description" = "Tipus de classificació de la dificultat de les rutes.";
 "routing_attr_short_way_description" = "Ruta més curta optimitzada (baix consum)";
 "rendering_attr_smoothness_excellent_name" = "Excel·lent";
 "rendering_attr_highway_class_bridleway_name" = "Ruta eqüestre";
@@ -2578,3 +2578,9 @@
 "external_device_details_battery" = "Bateria";
 "map_widget_next_sunset" = "Propera posta de sol";
 "map_widget_ant_bicycle_power_desc" = "Mostra la potència de sortida del ciclista, que s\'usa per a moure la bicicleta endavant";
+"shared_string_scale" = "Escala";
+"vertical_exaggeration" = "Accentuació vertical";
+"rendering_attr_showRunningRoutes_name" = "Rutes per a córrer";
+"rendering_attr_showRunningRoutes_description" = "Mostrar rutes per a córrer";
+"street_level_imagery" = "Imatges a nivell de carrer";
+"rendering_attr_alpineHiking_name" = "Classificació de la dificultat";

@@ -225,6 +225,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
                     resultRow.title = item.articleTitle
                     resultRow.descr = TravelGuidesUtils.getTitleWithotPrefix(title: item.isPartOf)
                     resultRow.setObj("ic_custom_history", forKey: "noImageIcon")
+                    resultRow.setObj(item.lang, forKey: "lang")
                     if let imageTitle = item.imageTitle, !imageTitle.isEmpty {
                         resultRow.iconName = TravelArticle.getImageUrl(imageTitle: imageTitle, thumbnail: true)
                     }
@@ -573,21 +574,19 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         lastSelectedIndexPath = indexPath
         if item.cellType == "kDownloadCellKey" {
             downloadingCellHelper.onItemClicked(indexPath)
-            
-        } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
+        } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier() {
             if let article = item.obj(forKey: "article") as? TravelArticle {
                 let lang = item.string(forKey: "lang") ?? ""
                 openArticle(article: article, lang: lang)
             }
-            
         } else if item.cellType == SearchTravelCell.getIdentifier() {
             var articleId = item.obj(forKey: "articleId") as? TravelArticleIdentifier
-            let lang = OAUtilities.currentLang() ?? ""
+            let lang = item.obj(forKey: "lang") as? String ?? OAUtilities.currentLang() ?? ""
             if articleId == nil {
                 articleId = TravelObfHelper.shared.getArticleId(title: item.title ?? "", lang: lang)
             }
             if let articleId {
-                let language = lang == "" ? "eng" : lang
+                let language = lang.isEmpty ? "en" : lang
                 if let article = TravelObfHelper.shared.getArticleById(articleId: articleId, lang: language, readGpx: false, callback: nil) {
                     TravelObfHelper.shared.getBookmarksHelper().addToHistory(article: article)
                     openArticle(article: article, lang: lang)

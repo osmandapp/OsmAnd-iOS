@@ -80,11 +80,10 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                     row.iconName = "ic_custom_file_info"
                     row.setObj(false, forKey: "isHeader")
                     row.setObj(subheaderItem.articleId, forKey: "article")
+                    row.setObj(subheaderItem.langs?[0] ?? "en", forKey: "lang")
                 }
             }
-            
         } else {
-            
             let regionNames = getRegionNames()
             for i in 0..<regionNames.count {
                 
@@ -97,6 +96,7 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
                     row.iconName = "ic_custom_book_info"
                     row.setObj(headerItem.articleId, forKey: "article")
                     row.setObj(i, forKey: "index")
+                    row.setObj(headerItem.langs?[0] ?? "en", forKey: "lang")
                     
                     if let subItems = navigationMap[headerItem] {
                         if !subItems.isEmpty {
@@ -220,9 +220,10 @@ final class TravelGuidesNavigationViewController : OABaseNavbarViewController {
     
     override func onRowSelected(_ indexPath: IndexPath!) {
         let item = tableData.item(for: indexPath)
-        if let articleId = item.obj(forKey: "article") as? TravelArticleIdentifier {
+        if let articleId = item.obj(forKey: "article") as? TravelArticleIdentifier,
+            let lang = item.obj(forKey: "lang") as? String {
             if let delegate, let title = articleId.title {
-                delegate.openArticleByTitle(title: title, newSelectedLang: selectedLang)
+                delegate.openArticleByTitle(title: title, newSelectedLang: lang)
             }
             dismiss()
         }

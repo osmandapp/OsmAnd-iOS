@@ -426,10 +426,7 @@ final class TravelObfHelper : NSObject {
         }
         
         for var header in headers {
-            var parentLang = lang
-            if header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) {
-                parentLang = "en"
-            }
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
             header = TravelGuidesUtils.getTitleWithotPrefix(title: header)
             guard let parentArticle = getParentArticleByTitle(title: header, lang: parentLang, lat: article.lat, lon: article.lon) else {continue}
 
@@ -456,12 +453,13 @@ final class TravelObfHelper : NSObject {
         
         var res: [TravelSearchResult: [TravelSearchResult]] = [:]
         for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
             header = TravelGuidesUtils.getTitleWithotPrefix(title: header)
             var searchResult = headerObjs[header]
             var results = navMap[header]
             if results != nil {
                 results = sortSearchResults(results: results!, searchQuery: header)
-                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: nil)
+                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                 searchResult = searchResult != nil ? searchResult : emptyResult
                 res[searchResult!] = results
             }

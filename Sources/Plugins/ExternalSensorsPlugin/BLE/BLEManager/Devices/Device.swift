@@ -119,6 +119,7 @@ class Device: NSObject {
     }
     
     func didDisconnectDevice() {
+        debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
         NotificationCenter.default.post(name: .DeviceDisconnected,
                                         object: nil,
                                         userInfo: [Self.identifier: self.id])

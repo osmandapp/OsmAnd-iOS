@@ -112,7 +112,7 @@
 - (void) setupDownloadingCellHelper
 {
     _downloadingCellCloudHelper = [[OADownloadingCellCloudHelper alloc] init];
-    _downloadingCellCloudHelper.hostTableView = self.tableView;
+    [_downloadingCellCloudHelper setHostTableView:self.tableView];
     _downloadingCellCloudHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowShevronBeforeDownloading;
     if (_tableType == EOARecentChangesConflicts)
     {

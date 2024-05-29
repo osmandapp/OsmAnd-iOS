@@ -444,11 +444,11 @@ static BOOL _repositoryUpdated = NO;
 - (void) setupDownloadingCellHelper
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
-    _downloadingCellResourceHelper.hostTableView = self.tableView;
+    [_downloadingCellResourceHelper setHostTableView:self.tableView];
     _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
     
     _downloadingCellMultipleResourceHelper  = [[OADownloadingCellMultipleResourceHelper alloc] init];
-    _downloadingCellMultipleResourceHelper.hostTableView = self.tableView;
+    [_downloadingCellMultipleResourceHelper setHostTableView:self.tableView];
     _downloadingCellMultipleResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
 }
 
@@ -2653,7 +2653,7 @@ static BOOL _repositoryUpdated = NO;
         {
             if (_app.resourcesManager->isResourceInstalled(resourceItem.resourceId))
             {
-                color = UIColorFromRGB(resource_installed_icon_color);
+                color = [UIColor colorNamed:ACColorNameResourceInstalledIconColor];
                 break;
             }
         }

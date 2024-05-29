@@ -222,13 +222,13 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostViewController = self;
-    _downloadingCellResourceHelper.hostTableView = self.tableView;
+    [_downloadingCellResourceHelper setHostTableView:self.tableView];
     _downloadingCellResourceHelper.delegate = self;
     _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
     
     _downloadingCellMultipleResourceHelper = [[OADownloadingCellMultipleResourceHelper alloc] init];
     _downloadingCellMultipleResourceHelper.hostViewController = self;
-    _downloadingCellMultipleResourceHelper.hostTableView = self.tableView;
+    [_downloadingCellMultipleResourceHelper setHostTableView:self.tableView];
     _downloadingCellMultipleResourceHelper.delegate = self;
     _downloadingCellMultipleResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
 }

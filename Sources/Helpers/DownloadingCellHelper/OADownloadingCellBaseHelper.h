@@ -35,14 +35,15 @@ typedef NS_ENUM(NSInteger, EOADownloadingCellRightIconType)
 
 @interface OADownloadingCellBaseHelper : NSObject
 
-@property (weak, nonatomic) UITableView *hostTableView;
-
 @property (nonatomic) NSString *rightIconName;
 @property (nonatomic) NSString *rightIconColorName;
 @property (nonatomic) BOOL isBoldTitleStyle;
 @property (nonatomic) BOOL isAlwaysClickable;
 @property (nonatomic) BOOL isDownloadedRecolored;
 @property (nonatomic) EOADownloadingCellRightIconType rightIconStyle;
+
+- (UITableView *) hostTableView;
+- (void) setHostTableView:(UITableView *)tableView;
 
 - (BOOL) helperHasItemFor:(NSString *)resourceId;
 - (BOOL) isInstalled:(NSString *)resourceId;

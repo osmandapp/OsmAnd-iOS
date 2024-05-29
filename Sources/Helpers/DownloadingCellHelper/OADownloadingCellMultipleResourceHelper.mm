@@ -170,8 +170,8 @@
     _multipleDownloadingItems = selectedItems;
     [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:selectedItems onTaskCreated:^(id<OADownloadTask> task) {
         [self refreshMultipleDownloadTasks];
-        if (self.hostTableView)
-            [self.hostTableView reloadData];
+        if ([self hostTableView])
+            [[self hostTableView] reloadData];
     } onTaskResumed:^(id<OADownloadTask> task) {
     }];
 }

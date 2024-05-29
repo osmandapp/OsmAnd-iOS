@@ -113,7 +113,7 @@
 - (void) setupDownloadingCellHelper
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
-    _downloadingCellResourceHelper.hostTableView = self.tableView;
+    [_downloadingCellResourceHelper setHostTableView:self.tableView];
     _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowIconAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
     _downloadingCellResourceHelper.isBoldTitleStyle = YES;

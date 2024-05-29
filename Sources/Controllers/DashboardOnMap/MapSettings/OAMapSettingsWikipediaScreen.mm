@@ -81,7 +81,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 {
     _downloadingCellResourceHelper = [[OADownloadingCellResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostViewController = self.vwController;
-    _downloadingCellResourceHelper.hostTableView = self.tblView;
+    [_downloadingCellResourceHelper setHostTableView:self.tblView];
     _downloadingCellResourceHelper.delegate = self;
     _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
 }

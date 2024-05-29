@@ -21,6 +21,7 @@
     NSMutableDictionary<NSString *, OADownloadingCell *> *_cells;
     NSMutableDictionary<NSString *, NSNumber *> *_statuses;
     NSMutableDictionary<NSString *, NSNumber *> *_progresses;
+    __weak UITableView *_hostTableView;
 }
 
 - (instancetype)init
@@ -33,6 +34,17 @@
         _progresses = [NSMutableDictionary dictionary];
     }
     return self;
+}
+
+- (UITableView *) hostTableView
+{
+    return _hostTableView;
+}
+
+- (void) setHostTableView:(UITableView *)tableView
+{
+    _hostTableView = tableView;
+    [self registerCells];
 }
 
 #pragma mark - Resource methods
@@ -76,6 +88,12 @@
 
 #pragma mark - Cell setup methods
 
+- (void) registerCells
+{
+    if (_hostTableView)
+        [_hostTableView registerNib:[UINib nibWithNibName:[OADownloadingCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OADownloadingCell getCellIdentifier]];
+}
+
 - (OADownloadingCell *) getOrCreateCell:(NSString *)resourceId
 {
     if (!_statuses[resourceId])
@@ -106,12 +124,8 @@
     
     OADownloadingCell *cell = _cells[resourceId];
     if (cell == nil)
-        cell = [_hostTableView dequeueReusableCellWithIdentifier:[OADownloadingCell getCellIdentifier]];
-    
-    if (cell == nil)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OADownloadingCell getCellIdentifier] owner:self options:nil];
-        cell = (OADownloadingCell *) nib[0];
+        cell = [_hostTableView dequeueReusableCellWithIdentifier:[OADownloadingCell getCellIdentifier]];
         cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDefault];
         cell.rightIconView.tintColor = [UIColor colorNamed:[self getRightIconColorName]];

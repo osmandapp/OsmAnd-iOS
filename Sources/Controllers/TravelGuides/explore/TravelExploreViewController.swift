@@ -294,10 +294,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         return nil
     }
     
-    func setupDownloadingCellHelper() {
+    private func setupDownloadingCellHelper() {
         downloadingCellResourceHelper = OADownloadingCellResourceHelper()
         downloadingCellResourceHelper.hostViewController = self
-        downloadingCellResourceHelper.hostTableView = self.tableView
+        downloadingCellResourceHelper.setHostTableView(tableView)
         downloadingCellResourceHelper.rightIconStyle = .hideIconAfterDownloading
         downloadingCellResourceHelper.isDownloadedRecolored = true
         downloadingCellResourceHelper.stopWithAlertMessage = false

@@ -347,7 +347,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _downloadingCellResourceHelper = [[OADownloadingCellMultipleResourceHelper alloc] init];
     _downloadingCellResourceHelper.hostViewController = self.vwController;
-    _downloadingCellResourceHelper.hostTableView = self.tblView;
+    [_downloadingCellResourceHelper setHostTableView:self.tblView];
     _downloadingCellResourceHelper.delegate = self;
     _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
 }

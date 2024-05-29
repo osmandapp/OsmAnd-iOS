@@ -48,21 +48,13 @@
 
 - (NSString *)speedLimitText
 {
-    BOOL showScreenAlerts = [_settings.showScreenAlerts get];
-    BOOL showSpeedLimitWarnings = [_settings.showSpeedLimitWarnings get];
-    
-    if (!showScreenAlerts || !showSpeedLimitWarnings)
-    {
-        return nil;
-    }
-    
     EOASpeedConstant speedFormat = [_settings.speedSystem get];
     BOOL whenExceeded = [_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateWhenExceeded;
     
     OAAlarmInfo *alarm = [_wh getSpeedLimitAlarm:speedFormat whenExceeded:whenExceeded];
     if (!alarm)
     {
-       CLLocation *lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+        CLLocation *lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
         if (lastKnownLocation)
         {
             std::shared_ptr<RouteDataObject> road;

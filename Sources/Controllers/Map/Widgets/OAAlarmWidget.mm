@@ -129,6 +129,7 @@
     BOOL cams = [_settings.showCameras get];
     BOOL peds = [_settings.showPedestrian get];
     BOOL tunnels = [_settings.showTunnels get];
+    BOOL speedLimitExceed = [_settings.showSpeedLimitWarnings get];
     BOOL visible = false;
     if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
     {
@@ -155,7 +156,21 @@
             NSString *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
-            if (alarm.type == AIT_SPEED_CAMERA)
+            if (alarm.type == AIT_SPEED_LIMIT)
+            {
+                if (isCanadianRegion)
+                {
+                    locImgId = @"warnings_speed_limit_ca";
+                    bottomText = [OASpeedConstant toShortString:[_settings.speedSystem get]];
+                }
+                else if (americanSigns)
+                {
+                    locImgId = @"warnings_speed_limit_us";
+                    //else case is done by drawing red ring
+                }
+                text = @(alarm.intValue).stringValue;
+            }
+            else if (alarm.type == AIT_SPEED_CAMERA)
             {
                 locImgId = @"warnings_speed_camera";
             }
@@ -224,7 +239,7 @@
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;
                 else if (alarm.type == AIT_SPEED_LIMIT)
-                    visible = NO;
+                    visible = speedLimitExceed;
                 else if (alarm.type == AIT_TUNNEL)
                     visible = tunnels;
                 else
@@ -242,7 +257,7 @@
                     _textString = text;
                     _textView.text = _textString;
                     CGRect f = _textView.frame;
-                    f.origin.y = 0;
+                    f.origin.y = alarm.type == AIT_SPEED_LIMIT && americanSigns && !isCanadianRegion ? (_carPlayMode ? 4. : 10) : 0;
                     _textView.frame = f;
                 }
                 if (![self stringEquals:bottomText b:_bottomTextString])

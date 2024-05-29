@@ -2635,3 +2635,6 @@
 "complex_widget_alert" = "%@ vidin võib asuda vaid omaette reas.";
 "shared_string_precise" = "Täpne";
 "simulation_real_mode_title" = "Realistlik simulatsioon";
+"downward_gradient" = "Tee kalle alla";
+"upward_gradient" = "Tee kalle üles";
+"required_maps" = "Vajalikud kaardid";

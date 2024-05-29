@@ -3426,3 +3426,5 @@
 "shared_string_millimeters" = "Milimetara";
 "display_position_automatic_descr" = "Zavisi od orijentacije mape: dno za smer kretanja, centar za sve ostalo.";
 "shared_string_millimeters_short" = "mm";
+"edit_tilesource_maxzoom" = "Maksimalan zum";
+"edit_tilesource_minzoom" = "Minimalan zum";

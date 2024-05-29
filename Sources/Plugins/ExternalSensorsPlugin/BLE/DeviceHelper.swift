@@ -258,13 +258,14 @@ extension DeviceHelper {
                     guard let self else { return }
                     switch result {
                     case .success:
+                        debugPrint("updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
                         device.addObservers()
                         device.notifyRSSI()
                         DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
                         discoverServices(device: device)
                     case .failure(let error):
-                        Self.logger.error("updateConnected connect: \(String(describing: error.localizedDescription))")
+                        Self.logger.error("updateConnected failure: \(String(describing: error.localizedDescription))")
                     }
                 }
             }

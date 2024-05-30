@@ -60,7 +60,7 @@ final class TravelGuidesUtils {
         return nil
     }
     
-    static func getTitleWithotPrefix(title: String) -> String {
-        return title.hasPrefix(EN_LANG_PREFIX) ? String(title.dropFirst(EN_LANG_PREFIX.count)) : title
+    static func getTitleWithoutPrefix(title: String) -> String {
+        title.hasPrefix(EN_LANG_PREFIX) ? String(title.dropFirst(EN_LANG_PREFIX.count)) : title
     }
 }

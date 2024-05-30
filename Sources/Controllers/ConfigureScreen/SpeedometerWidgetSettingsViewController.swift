@@ -8,7 +8,7 @@
 
 import Foundation
 
-final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController, WidgetStateDelegate {
+final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController {
     
     private static let selectedKey = "isSelected"
     private static let valuesKey = "values"
@@ -16,6 +16,13 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
     private static let turnOnRowKey = "turnOnRow"
     private static let speedLimitWarningRowKey = "speedLimitWarningRow"
     private static let previewSpeedometerRowKey = "previewSpeedometerRow"
+    
+    // swiftlint:disable force_unwrapping
+    lazy var settings = OAAppSettings.sharedManager()!
+    // swiftlint:enable force_unwrapping
+    
+    private var speedometerPreviewHeightConstraint: NSLayoutConstraint?
+    private var speedometerView: SpeedometerView?
     
     weak var delegate: WidgetStateDelegate?
     
@@ -28,43 +35,39 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
     }
     
     override func registerCells() {
-        addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
+        addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
         addCell(OAValueTableViewCell.reuseIdentifier)
         addCell(OASwitchTableViewCell.reuseIdentifier)
         addCell(OASimpleTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
-        let settings = OAAppSettings.sharedManager()!
         let showSpeedometer = settings.showSpeedometer.get()
-        let mode = settings.applicationMode
-        
         tableData.clearAllData()
         let switchCellSection = tableData.createNewSection()
-        switchCellSection.footerText = showSpeedometer ?  "" : localizedString("speedometer_description")
+        switchCellSection.footerText = showSpeedometer ? "" : localizedString("speedometer_description")
         
         let turnOnRow = switchCellSection.createNewRow()
         turnOnRow.cellType = OASwitchTableViewCell.reuseIdentifier
         turnOnRow.key = Self.turnOnRowKey
         turnOnRow.title = localizedString("shared_string_speedometer")
         turnOnRow.accessibilityLabel = turnOnRow.title
-        turnOnRow.accessibilityValue = localizedString( showSpeedometer ? "shared_string_on" : "shared_string_off")
+        turnOnRow.accessibilityValue = localizedString(showSpeedometer ? "shared_string_on" : "shared_string_off")
         turnOnRow.setObj(showSpeedometer, forKey: Self.selectedKey)
         
         if showSpeedometer {
             let selectSizeSection = tableData.createNewSection()
             selectSizeSection.footerText = localizedString("speedometer_description")
-            
-            //TODO: implement preview cell
             let previewSpeedometerRow = selectSizeSection.createNewRow()
             previewSpeedometerRow.cellType = Self.previewSpeedometerRowKey
             
-            let sellectSizeRow = selectSizeSection.createNewRow()
-            sellectSizeRow.cellType = SegmentImagesWithRightLableTableViewCell.reuseIdentifier
-            sellectSizeRow.title = localizedString("shared_string_size")
-            sellectSizeRow.setObj(["ic_custom20_height_s", "ic_custom20_height_m", "ic_custom20_height_l"], forKey: Self.valuesKey)
+            let selectSizeRow = selectSizeSection.createNewRow()
+            selectSizeRow.cellType = SegmentImagesWithRightLabelTableViewCell.reuseIdentifier
+            
+            selectSizeRow.title = localizedString("shared_string_size")
+            selectSizeRow.setObj(["ic_custom20_height_s", "ic_custom20_height_m", "ic_custom20_height_l"], forKey: Self.valuesKey)
             if let size = settings.speedometerSize {
-                sellectSizeRow.setObj(size, forKey: Self.widgetSizeKey)
+                selectSizeRow.setObj(size, forKey: Self.widgetSizeKey)
             }
             let settingsSection = tableData.createNewSection()
             settingsSection.headerText = localizedString("shared_string_settings")
@@ -79,7 +82,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
         }
     }
     
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {
         guard let tableData else { return nil }
         let item = tableData.item(for: indexPath)
         
@@ -107,34 +110,42 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
             cell.switchView.tag = indexPath.section << 10 | indexPath.row
             cell.switchView.addTarget(self, action: #selector(onSwitchClick(_:)), for: .valueChanged)
             return cell
-        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
+        } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: Self.valuesKey) as? [String], let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle {
                 let widgetSizeStyle = sizePref.get()
-                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
+                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)
             }
-            cell.didSelectSegmentIndex = { index in
-                guard let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
-                sizePref.set(EOAWidgetSizeStyle(rawValue: index) ?? .medium, mode: OAAppSettings.sharedManager().applicationMode.get())
+            cell.didSelectSegmentIndex = { [weak self] index in
+                guard let self, let sizePref = item.obj(forKey: Self.widgetSizeKey) as? OACommonWidgetSizeStyle else { return }
+                let widgetSizeStyle = EOAWidgetSizeStyle(rawValue: index) ?? .medium
+                sizePref.set(widgetSizeStyle, mode: settings.applicationMode.get())
+                if let speedometerView {
+                    speedometerView.configure()
+                    speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()
+                    OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateSpeedometer()
+                }
             }
-            
             return cell
         } else if item.cellType == Self.previewSpeedometerRowKey {
-            //TODO: implement preview cell
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as! OASimpleTableViewCell
             cell.backgroundColor = .mapStyleWater
             cell.titleLabel.text = nil
             cell.descriptionLabel.text = nil
+            cell.textStackView = nil
+            cell.selectionStyle = .none
+            configureSpeedometerViewWith(cell: cell)
+            
             return cell
         }
         return nil
     }
     
-    override func onRowSelected(_ indexPath: IndexPath!) {
+    override func onRowSelected(_ indexPath: IndexPath) {
         guard let tableData else { return }
         let data = tableData.item(for: indexPath)
         if data.key == Self.speedLimitWarningRowKey {
@@ -144,24 +155,61 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController,
         }
     }
     
-    @objc func onSwitchClick(_ sender: Any) -> Bool {
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        guard let tableData else { return 0.0 }
+        let item = tableData.item(for: indexPath)
+        if item.cellType == Self.previewSpeedometerRowKey {
+            return 150
+        }
+        return UITableView.automaticDimension
+    }
+    
+    private func configureSpeedometerViewWith(cell: UITableViewCell) {
+        if let speedometer = getSpeedometerView(), speedometer.superview == nil {
+            speedometer.configure()
+            cell.contentView.addSubview(speedometer)
+            
+            NSLayoutConstraint.activate([
+                speedometer.centerXAnchor.constraint(equalTo: cell.contentView.centerXAnchor),
+                speedometer.centerYAnchor.constraint(equalTo: cell.contentView.centerYAnchor)
+            ])
+            
+            speedometerPreviewHeightConstraint = speedometer.heightAnchor.constraint(equalToConstant: speedometer.getCurrentSpeedViewMaxHeightWidth())
+            speedometerPreviewHeightConstraint?.isActive = true
+        }
+    }
+    
+    private func getSpeedometerView() -> SpeedometerView? {
+        if speedometerView == nil {
+            let view = SpeedometerView.initView
+            view?.isPreview = true
+            view?.translatesAutoresizingMaskIntoConstraints = false
+            speedometerView = view
+        }
+        return speedometerView
+    }
+    
+    @objc private func onSwitchClick(_ sender: Any) -> Bool {
         guard let tableData, let sw = sender as? UISwitch else { return false }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
         let data = tableData.item(for: indexPath)
         
-        let settings = OAAppSettings.sharedManager()!
         if data.key == Self.turnOnRowKey {
             settings.showSpeedometer.set(sw.isOn)
-            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateLayout()
+            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateSpeedometer()
             reloadDataWith(animated: true, completion: nil)
             delegate?.onWidgetStateChanged()
         }
         return false
     }
-    
-    // MARK: WidgetStateDelegate
+}
+
+// MARK: - WidgetStateDelegate
+
+extension SpeedometerWidgetSettingsViewController: WidgetStateDelegate {
     func onWidgetStateChanged() {
+        speedometerView?.configure()
         generateData()
         tableView.reloadData()
     }

@@ -56,8 +56,8 @@ struct RouteDataObject;
 - (nullable OAAlarmInfo *)getSpeedLimitAlarm:(EOASpeedConstant)constants
                                whenExceeded:(BOOL)whenExceeded;
 - (nullable OAAlarmInfo *)calculateSpeedLimitAlarm:(const std::shared_ptr<RouteDataObject>)object
-                                         location:(nonnull CLLocation *)location
-                                        constants:(EOASpeedConstant)constants
+                                          location:(nonnull CLLocation *)location
+                                         constants:(EOASpeedConstant)constants
                                       whenExceeded:(BOOL)whenExceeded;
 
 @end

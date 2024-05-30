@@ -62,6 +62,27 @@ final class SpeedometerView: OATextInfoWidget {
         let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
+
+    override func updateInfo() -> Bool {
+        guard settings.showSpeedometer.get() else {
+            isHidden = true
+            return false
+        }
+        updateComponents()
+        updateSpeedometerSpeedView()
+        updateSpeedLimitView()
+        var isChangedVisible = false
+        if !speedometerSpeedView.isHidden && isHidden {
+            isChangedVisible = true
+        }
+        isHidden = speedometerSpeedView.isHidden
+        if isChangedVisible {
+            didChangeIsVisible?()
+        }
+      
+        return true
+    }
+    
     
     func configure() {
         sizeStyle = settings.speedometerSize.get()
@@ -92,26 +113,6 @@ final class SpeedometerView: OATextInfoWidget {
                 rightPositionConstraint.isActive = false
             }
         }
-    }
-
-    override func updateInfo() -> Bool {
-        guard settings.showSpeedometer.get() else {
-            isHidden = true
-            return false
-        }
-        updateComponents()
-        updateSpeedometerSpeedView()
-        updateSpeedLimitView()
-        var isChangedVisible = false
-        if !speedometerSpeedView.isHidden && isHidden {
-            isChangedVisible = true
-        }
-        isHidden = speedometerSpeedView.isHidden
-        if isChangedVisible {
-            didChangeIsVisible?()
-        }
-      
-        return true
     }
     
     private func updateComponents() {

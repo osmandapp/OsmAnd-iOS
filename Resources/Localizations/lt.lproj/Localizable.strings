@@ -95,7 +95,7 @@
 "animate_routing_route_not_calculated" = "Pirmiausia apskaičiuokite maršrutą";
 "settings_preset" = "Naudojimo profilis";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
-"dialogs_and_notifications_title" = "Dialogs and notifications";
+"dialogs_and_notifications_title" = "Dialogai ir pranešimai";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Pasirinkite naudojimo profilį su individualiu žemėlapiu ir navigacijos nustatymais.";
 "unit_of_length" = "Ilgio matavimo vienetai";
@@ -414,7 +414,7 @@
 "nearest_cities" = "Artimiausi miestai";
 "type_address" = "Įrašykite adresą";
 "search_poi_category_hint" = "Rašykite, norėdami pradėti paiešką";
-"poi_categories" = "POI categories";
+"poi_categories" = "LV kategorijos";
 "shared_string_search_history" = "Search history";
 "track_coloring_solid" = "Solidus";
 "attribute" = "Attribute";
@@ -1386,7 +1386,7 @@
 "enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
-"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
+"quick_action_transport_descr" = "Mygtukas, rodantis arba slepiantis viešąjį transportą žemėlapyje.";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
@@ -1396,10 +1396,10 @@
 "quick_action_mapillary_show" = "Show Mapillary";
 "quick_action_remove_next_destination" = "Ištrinti sekančio atvykimo tašką";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
-"change_application_profile" = "Change application profile";
+"change_application_profile" = "Keisti programos profilį";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Pridėti profilį";
-"quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
+"quick_action_switch_profile_descr" = "Veiksmo mygtukas perjungia pasirinktus profilius.";
 "profile_type_user_string" = "User profile";
 "profile_type_osmand_string" = "OsmAnd profile";
 "unsupported_action" = "Unsupported action";
@@ -2291,7 +2291,7 @@
 "shared_string_profile" = "Profilis";
 "measurement_units" = "Matavimo vienetai";
 "shared_string_logout" = "Atsijungti";
-"backup_deleting_all_data" = "Ištrinami visi duomenys";
+"backup_deleting_all_data" = "Ištrinami visi duomenys…";
 "contact_support" = "Susisiekite su palaikymo tarnyba";
 "loading_purchase_information" = "Įkeliama pirkimo informacija";
 "update_parameters" = "Atnaujinti parametrus";
@@ -2479,7 +2479,7 @@
 "user_name" = "Jūsų OSM vartotojo vardas";
 "map_marker_2nd" = "Antrojižymė";
 "shared_string_deleted" = "Panaikinta";
-"shared_string_bearing" = "Guolis";
+"shared_string_bearing" = "Azimutas";
 "map_orientation_landscape" = "Gulsčias";
 "last_seven_days" = "Per pastarąsias 7 dienas";
 "shared_string_view" = "Peržiūrėti";
@@ -2614,3 +2614,5 @@
 "activity_type_hiking_name" = "Žygiavimas";
 "activity_type_water_name" = "Vanduo";
 "activity_type_cycling_name" = "Važiavimas dviračiu";
+"help_article_map_point_layers_on_map_name" = "Taškai žemėlapyje";
+"help_article_search_search_poi_name" = "Ieškoti LV";

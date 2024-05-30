@@ -83,7 +83,6 @@ final class SpeedometerView: OATextInfoWidget {
         return true
     }
     
-    
     func configure() {
         sizeStyle = settings.speedometerSize.get()
         overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light

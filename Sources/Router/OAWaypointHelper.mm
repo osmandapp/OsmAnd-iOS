@@ -332,7 +332,8 @@
 {
     
     CLLocation *lastKnownLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
-    if (lastKnownLocation) {
+    if (lastKnownLocation)
+    {
         float maxSpeed = object->getMaximumSpeed(lastKnownLocation, [_appMode getRouteTypeProfile]);
         
         float delta = whenExceeded

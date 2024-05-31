@@ -1421,8 +1421,13 @@ includeHidden:(BOOL)includeHidden
         
         if (completionHandler)
             completionHandler(alert);
-        else
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+        else {
+            auto rootController = OARootViewController.instance;
+            [rootController canPresentAlertController:alert completion:^(BOOL canPresent) {
+                if (canPresent)
+                    [rootController presentViewController:alert animated:YES completion:nil];
+            }];
+        }
     }
 }
 
@@ -1535,7 +1540,11 @@ includeHidden:(BOOL)includeHidden
     NSString *message = OALocalizedString(@"alert_inet_needed");
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    auto rootController = OARootViewController.instance;
+    [rootController canPresentAlertController:alert completion:^(BOOL canPresent) {
+        if (canPresent)
+            [rootController presentViewController:alert animated:YES completion:nil];
+    }];
 }
 
 + (void)startDownloadOfItem:(OARepositoryResourceItem *)item

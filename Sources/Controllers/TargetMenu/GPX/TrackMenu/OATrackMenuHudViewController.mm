@@ -233,8 +233,13 @@
 
     [self startLocationServices];
 
-    if (_reopeningState && _reopeningState.showingState != EOADraggableMenuStateInitial)
-        [self updateShowingState:_reopeningState.showingState];
+    if (_reopeningState)
+    {
+        if (_reopeningState.showingState != EOADraggableMenuStateInitial)
+            [self updateShowingState:_reopeningState.showingState];
+        if (_reopeningState.openedFromTracksList)
+            [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
 
     UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
@@ -411,6 +416,7 @@
         {
             [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
         }
+        [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = YES;
     }
 }
 

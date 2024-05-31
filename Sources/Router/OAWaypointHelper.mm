@@ -309,6 +309,41 @@
     return speedAlarm;
 }
 
+- (nullable OAAlarmInfo *)getSpeedLimitAlarm:(EOASpeedConstant)constants
+                                whenExceeded:(BOOL)whenExceeded
+{
+    OARoutingHelper *routingHelper = [OARoutingHelper sharedInstance];
+    CLLocation *lastProjection = [routingHelper getLastProjection];
+    if (_route)
+    {
+        float maxSpeed = [_route getCurrentMaxSpeed:[_appMode getRouteTypeProfile]];
+        float delta = whenExceeded
+        ? [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f
+        : maxSpeed * -1;
+        return [[self class] createSpeedAlarm:constants mxspeed:maxSpeed loc:lastProjection delta:delta];
+    }
+    return nil;
+}
+
+- (nullable OAAlarmInfo *)calculateSpeedLimitAlarm:(const std::shared_ptr<RouteDataObject>)object
+                                         location:(nonnull CLLocation *)location
+                                        constants:(EOASpeedConstant)constants
+                                     whenExceeded:(BOOL)whenExceeded
+{
+    
+    CLLocation *lastKnownLocation = OsmAndApp.instance.locationServices.lastKnownLocation;
+    if (lastKnownLocation)
+    {
+        float maxSpeed = object->getMaximumSpeed(lastKnownLocation, [_appMode getRouteTypeProfile]);
+        
+        float delta = whenExceeded
+        ? [[OAAppSettings sharedManager].speedLimitExceedKmh get] / 3.6f
+        : maxSpeed * -1;
+        return [[self class] createSpeedAlarm:constants mxspeed:maxSpeed loc:lastKnownLocation delta:delta];
+    }
+    return nil;
+}
+
 - (void) announceVisibleLocations
 {
     @synchronized (_lock)

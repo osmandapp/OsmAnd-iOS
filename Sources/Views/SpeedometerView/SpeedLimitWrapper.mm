@@ -8,23 +8,15 @@
 
 #import "SpeedLimitWrapper.h"
 #import "OsmAndApp.h"
-#import "OARoutingHelper.h"
-#import "OAMapViewTrackingUtilities.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"
-#import "OAOsmAndFormatter.h"
 
 @implementation SpeedLimitWrapper
 {
-    OAMapViewTrackingUtilities *_trackingUtilities;
-    OARoutingHelper *_rh;
-    OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAWaypointHelper *_wh;
     OACurrentPositionHelper *_currentPositionHelper;
-    
-    NSString *_lastSpeedLimitValue;
 }
 
 - (instancetype)init {
@@ -39,48 +31,32 @@
 - (void)commonInit
 {
     _settings = [OAAppSettings sharedManager];
-    _rh = [OARoutingHelper sharedInstance];
-    _app = [OsmAndApp instance];
-    _trackingUtilities = [OAMapViewTrackingUtilities instance];
     _wh = [OAWaypointHelper sharedInstance];
     _currentPositionHelper = [OACurrentPositionHelper instance];
 }
 
 - (NSString *)speedLimitText
 {
-    BOOL isVisible = [_settings.showScreenAlerts get] && [_settings.showSpeedLimitWarnings get];
-    if (!isVisible)
-    {
-        return nil;
-    }
+    EOASpeedConstant speedFormat = [_settings.speedSystem get];
+    BOOL whenExceeded = [_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateWhenExceeded;
     
-    BOOL trafficWarnings = [_settings.showTrafficWarnings get];
-    BOOL cams = [_settings.showCameras get];
-    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
+    OAAlarmInfo *alarm = [_wh getSpeedLimitAlarm:speedFormat whenExceeded:whenExceeded];
+    if (!alarm)
     {
-        OAAlarmInfo *alarm;
-        if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
+        CLLocation *lastKnownLocation = [OsmAndApp instance].locationServices.lastKnownLocation;
+        if (lastKnownLocation)
         {
-            alarm = [_wh getMostImportantAlarm:[_settings.speedSystem get] showCameras:cams];
-        }
-        else
-        {
-            CLLocation *loc = _app.locationServices.lastKnownLocation;
-            const auto ro = [_currentPositionHelper getLastKnownRouteSegment:loc];
-            if (loc && ro)
+            std::shared_ptr<RouteDataObject> road;
+            road = [_currentPositionHelper getLastKnownRouteSegment:lastKnownLocation];
+            if (road)
             {
-                alarm = [_wh calculateMostImportantAlarm:ro loc:loc mc:[_settings.metricSystem get] sc:[_settings.speedSystem get] showCameras:cams];
+                alarm = [_wh calculateSpeedLimitAlarm:road location:lastKnownLocation constants:speedFormat whenExceeded:whenExceeded];
             }
         }
-        if (alarm && alarm.type == AIT_SPEED_LIMIT)
-        {
-            _lastSpeedLimitValue = @(alarm.intValue).stringValue;
-            return _lastSpeedLimitValue;
-        }
     }
-    if ([_settings.showSpeedLimitWarning get] == EOASpeedLimitWarningStateAlways && _lastSpeedLimitValue)
+    if (alarm)
     {
-        return _lastSpeedLimitValue;
+        return @(alarm.intValue).stringValue;
     }
     return nil;
 }

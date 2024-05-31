@@ -1388,7 +1388,7 @@
 "shared_string_finish" = "完成";
 "shared_string_routing" = "路徑";
 "import_duplicates_title" = "一些項目已存在";
-"import_duplicates_description" = " OsmAnd已有與匯入的名稱相同的元素。 \n \n選取動作。";
+"import_duplicates_description" = "OsmAnd 已有與匯入的名稱相同的元素。\n\n選取動作。";
 "keep_both_desc" = "匯入的項目將會加入前綴";
 "keep_both" = "保留雙方";
 "replace_all" = "取代全部";

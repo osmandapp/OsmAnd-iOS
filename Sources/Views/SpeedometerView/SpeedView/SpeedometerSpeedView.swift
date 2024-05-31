@@ -16,15 +16,16 @@ final class SpeedometerSpeedView: UIView {
     @IBOutlet private weak var valueSpeedLabel: UILabel!
     @IBOutlet private weak var unitSpeedLabel: UILabel!
     
+    var isPreview = false
+    
     private let LOW_SPEED_THRESHOLD_MPS = 6.0
     private let UPDATE_THRESHOLD_MPS = 0.1
     private let LOW_SPEED_UPDATE_THRESHOLD_MPS = 0.015 // Update more often while walking/running
-    private let previewValueDefault = "85"
-    
-    var isPreview = false
+    private let previewValueDefault: Int = 85
     
     private var widgetSizeStyle: EOAWidgetSizeStyle = .medium
-    private var cachedSpeed = 0.0
+    private let UNDEFINED_SPEED = -1.0
+    private var cachedSpeed = -1.0
     private var cachedMetricSystem = -1
     
     func configureWith(widgetSizeStyle: EOAWidgetSizeStyle, width: CGFloat) {
@@ -35,34 +36,41 @@ final class SpeedometerSpeedView: UIView {
         configureConstraints()
         
         if isPreview {
-            valueSpeedLabel.text = previewValueDefault
+            valueSpeedLabel.text = String(previewValueDefault)
             isHidden = false
         }
+        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     func updateInfo() {
-        guard OARoutingHelper.sharedInstance().isFollowingMode() else {
-            valueSpeedLabel.text = "0"
-            return
-        }
         if let lastKnownLocation = OsmAndApp.swiftInstance().locationServices?.lastKnownLocation {
             let currentSpeed = lastKnownLocation.speed
             if currentSpeed >= 0 {
                 let updateThreshold = cachedSpeed < LOW_SPEED_THRESHOLD_MPS ? LOW_SPEED_UPDATE_THRESHOLD_MPS : UPDATE_THRESHOLD_MPS
                 
-                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold {
+                if isUpdateNeeded() || abs(currentSpeed - cachedSpeed) > updateThreshold || cachedSpeed == -1 {
                     cachedSpeed = currentSpeed
-                    let valueUnitArray: NSMutableArray = []
-                    OAOsmAndFormatter.getFormattedSpeed(Float(currentSpeed), valueUnitArray: valueUnitArray)
-                    if let result = getValueAndUnit(with: valueUnitArray) {
-                        valueSpeedLabel.text = result.value
-                        unitSpeedLabel.text = result.unit
-                    }
+                    updateSpeedValueAndUnit(with: Float(cachedSpeed))
                 }
-            } else if cachedSpeed != 0 {
+                isHidden = false
+            } else if cachedSpeed != 0.0 {
                 cachedSpeed = 0
-                valueSpeedLabel.text = "0"
+                updateSpeedValueAndUnit(with: Float(cachedSpeed))
+                isHidden = false
+            } else {
+                isHidden = true
             }
+        } else {
+            isHidden = true
+        }
+    }
+    
+    private func updateSpeedValueAndUnit(with value: Float) {
+        let valueUnitArray: NSMutableArray = []
+        OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)
+        if let result = getValueAndUnit(with: valueUnitArray) {
+            valueSpeedLabel.text = result.value
+            unitSpeedLabel.text = result.unit
         }
     }
     

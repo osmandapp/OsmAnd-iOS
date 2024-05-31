@@ -805,6 +805,10 @@
     }
     
     _speedometerView = [SpeedometerView initView];
+    __weak OAMapInfoController *weakSelf = self;
+    _speedometerView.didChangeIsVisible = ^{
+        [weakSelf layoutWidgets];
+    };
     _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
     _speedometerView.hidden = YES;
     _speedometerView.delegate = self;

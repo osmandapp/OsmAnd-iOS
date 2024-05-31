@@ -91,7 +91,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
-                debugPrint("connect success")
+                debugPrint("connect success | \(device.deviceServiceName) | \(device.deviceName)")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: device.id)
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
@@ -122,6 +122,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success(let services):
+                debugPrint("discoverCharacteristics: success")
                 discoverCharacteristics(services: services)
             case .failure(let error):
                 debugPrint("discoverCharacteristics: \(error)")
@@ -144,8 +145,13 @@ final class DescriptionDeviceHeader: UIView {
                         }
                         if characteristic.properties.contains(.notify) {
                             debugPrint("\(characteristic.uuid): properties contains .notify")
-                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
-                                debugPrint(result)
+                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { notifyResult in
+                                switch notifyResult {
+                                case .success(let isNotifying):
+                                    debugPrint("success: this peripheral was registered for change notifications to the characteristic [\(characteristic.uuid)]: \(isNotifying)")
+                                case .failure(let error):
+                                    debugPrint("failure: this peripheral was not registered for change notifications to the characteristic [\(characteristic.uuid)]:  \(error.localizedDescription)")
+                                }
                             }
                         }
                     }

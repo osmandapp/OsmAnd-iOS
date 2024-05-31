@@ -2279,7 +2279,7 @@
 "backup_error_file_not_available" = "Arquivo indisponível";
 "backup_error_user_is_not_registered" = "Nenhum usuário registrado com esse endereço de e-mail";
 "routeInfo_roadClass_description" = "Colorir a rota ou a linha da trilha por classificação rodoviária.";
-"horseback_riding" = "Andar a cavalo";
+"horseback_riding" = "Equitação";
 "navigate_point_mgrs" = "MGRS";
 "backup_error_token_is_not_valid" = "Algo está errado com o código ou token do dispositivo fornecido";
 "routeInfo_winter_ice_road_description" = "Colorir a rota ou linha de trilha de acordo com sua classificação de estrada de inverno.";
@@ -2939,7 +2939,7 @@
 "true_bearing_wdiget_desc" = "Ângulo entre o norte verdadeiro e o ponto alvo observado de sua localização.";
 "angular_measeurement" = "Unidade angular";
 "angular_measeurement_descr" = "Mude em que o azimuteé medido.";
-"coordinates_widget_secondary_desc" = "Você pode alterar o formato de coordenadas em %@ – %@ – %@.";
+"coordinates_widget_secondary_desc" = "Você pode alterar o formato de coordenadas em %@– %@ – %@.";
 "coordinates_format" = "Formato das coordenadas";
 "shared_string_dark" = "Escuro";
 "shared_string_light" = "Claro";
@@ -2978,7 +2978,7 @@
 "map_widget_altitude_desc" = "Exibe a altitude da geolocalização atual ou a elevação do centro do mapa atual";
 "map_widget_group_sunrise_sunset_desc" = "Esses widgets mostram informações sobre o próximo nascer e pôr do sol.";
 "map_widget_group_sunrise_sunset" = "Nascer do sol pôr do sol";
-"bearing_secondary_desc" = "Você pode alterar o formato de dados usado em: %@ – %@ – %@.";
+"bearing_secondary_desc" = "Você pode alterar o formato de dados usado em: %@– %@ – %@.";
 "widget_secondary_desc_part_of" = "Parte do plug-in %@.";
 "weather_widgets_secondary_desc" = "As unidades de medida podem ser alteradas nas configurações do plug-in de tempo.";
 "add_widget" = "Adicionar widget";
@@ -3423,3 +3423,14 @@
 "shared_string_bottom" = "Base";
 "shared_string_top_bottom" = "Topo e base";
 "track_3d_empty_view_title" = "Visualização da trilha 3D";
+"display_position_automatic_descr" = "Depende da orientação do mapa: a parte inferior para orientação do movimento, o centro para todo o resto.";
+"speedometer_description" = "Mostra sua velocidade atual, conforme relatado via GPS";
+"speed_limit_warning" = "Aviso de limite de velocidade";
+"when_exceeded" = "Quando excedido";
+"shared_string_speedometer" = "Velocímetro";
+"shared_string_always" = "Sempre";
+"short_min" = "m";
+"shared_string_millimeters" = "Milímetros";
+"shared_string_millimeters_short" = "mm";
+"edit_tilesource_maxzoom" = "Zoom máximo";
+"edit_tilesource_minzoom" = "Zoom mínimo";

@@ -257,6 +257,24 @@
     [self setExtension:@"vertical_exaggeration_scale" value:[NSString stringWithFormat:@"%f",scale]];
 }
 
+- (NSInteger)getElevationMeters
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"elevation_meters"];
+    if (e) {
+        NSInteger value = [e.value integerValue];
+        if (value && value >= 0 && value <= 2000)
+            return value;
+        else
+            return 1000;
+    }
+    return 1000;
+}
+
+- (void)setElevationMeters:(NSInteger)meters
+{
+    [self setExtension:@"elevation_meters" value:[NSString stringWithFormat:@"%ld", meters]];
+}
+
 - (NSString *)getVisualization3dByTypeValue
 {
    OAGpxExtension *e = [self getExtensionByKey:@"line_3d_visualization_by_type"];

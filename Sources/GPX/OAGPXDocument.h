@@ -124,7 +124,9 @@
 - (void) setShowStartFinish:(BOOL)showStartFinish;
 
 - (CGFloat)getVerticalExaggerationScale;
+- (NSInteger)getElevationMeters;
 - (void)setVerticalExaggerationScale:(CGFloat)scale;
+- (void)setElevationMeters:(NSInteger)meters;
 
 - (NSString *)getVisualization3dByTypeValue;
 - (void)setVisualization3dByType:(EOAGPX3DLineVisualizationByType)type;

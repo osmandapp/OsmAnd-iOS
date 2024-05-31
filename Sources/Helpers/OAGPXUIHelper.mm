@@ -277,6 +277,7 @@
     [gpxFile setShowArrows:gpxItem.showArrows];
     [gpxFile setShowStartFinish:gpxItem.showStartFinish];
     [gpxFile setVerticalExaggerationScale:gpxItem.verticalExaggerationScale];
+    [gpxFile setElevationMeters:gpxItem.elevationMeters];
     [gpxFile setVisualization3dByType:gpxItem.visualization3dByType];
     [gpxFile setVisualization3dWallColorType:gpxItem.visualization3dWallColorType];
     [gpxFile setVisualization3dPositionType:gpxItem.visualization3dPositionType];

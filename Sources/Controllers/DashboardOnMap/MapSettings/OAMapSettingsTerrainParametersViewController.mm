@@ -59,6 +59,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
     double _baseGPXVerticalExaggerationScale;
     double _currentGPXVerticalExaggerationScale;
     
+    NSInteger _baseGPXElevationMeters;
+    NSInteger _currentGPXElevationMeters;
+    
     NSIndexPath *_minValueIndexPath;
     NSIndexPath *_maxValueIndexPath;
     NSIndexPath *_openedPickerIndexPath;
@@ -106,6 +109,15 @@ static const NSInteger kMaxZoomPickerRow = 2;
     {
         _baseGPXVerticalExaggerationScale = scale;
         _currentGPXVerticalExaggerationScale = _baseGPXVerticalExaggerationScale;
+    }
+}
+
+- (void)configureGPXElevationMeters:(NSInteger)meters
+{
+    if (_terrainType == EOAGPXSettingsTypeWallHeight)
+    {
+        _baseGPXElevationMeters = meters;
+        _currentGPXElevationMeters = _baseGPXElevationMeters;
     }
 }
 
@@ -181,6 +193,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
         case EOAGPXSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration");
             break;
+        case EOAGPXSettingsTypeWallHeight:
+            result = OALocalizedString(@"wall_height");
+            break;
     }
     return result;
 }
@@ -201,6 +216,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
         case EOATerrainSettingsTypeVerticalExaggeration:
             result = OALocalizedString(@"vertical_exaggeration_description");
             break;
+        case EOAGPXSettingsTypeWallHeight:
+            result = OALocalizedString(@"wall_height_description");
+            break;
     }
     return result;
 }
@@ -218,6 +236,14 @@ static const NSInteger kMaxZoomPickerRow = 2;
             kCellKeyKey : @"verticalExaggerationSlider",
             kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_scale")
+        }];
+    }
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+    {
+        [topSection addRowFromDictionary:@{
+            kCellKeyKey : @"wallHeightSlider",
+            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTitleKey : OALocalizedString(@"shared_string_height")
         }];
     }
     else if (_terrainType == EOATerrainSettingsTypeVisibility)
@@ -288,7 +314,7 @@ static const NSInteger kMaxZoomPickerRow = 2;
 - (CGFloat)initialMenuHeight
 {
     CGFloat divider = 2.0;
-    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeWallHeight)
     {
         divider = 2.5;
     }
@@ -386,10 +412,28 @@ static const NSInteger kMaxZoomPickerRow = 2;
     }
 }
 
+- (void)resetGPXElevationMetersValues
+{
+    NSInteger defaultMeters = 1000;
+    if (_currentGPXElevationMeters != defaultMeters)
+    {
+        _currentGPXElevationMeters = defaultMeters;
+        _isValueChange = YES;
+        [self applyGPXElevationMeters:_currentGPXElevationMeters];
+        [self updateApplyButton];
+    }
+}
+
 - (void)applyGPXVerticalExaggerationForScale:(CGFloat)scale
 {
     if (self.applyCallback)
         self.applyCallback(scale);
+}
+
+- (void)applyGPXElevationMeters:(NSInteger)meters
+{
+    if (self.applyWallHeightCallback)
+        self.applyWallHeightCallback(meters);
 }
 
 - (void)resetVerticalExaggerationValues
@@ -458,6 +502,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self resetVerticalExaggerationValues];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
         [self resetGPXVerticalExaggerationValues];
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+        [self resetGPXElevationMetersValues];
     
     [self generateData];
     [self.tableView reloadData];
@@ -473,6 +519,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
         [self applyVerticalExaggerationScale];
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
         [self applyGPXVerticalExaggerationForScale:_currentGPXVerticalExaggerationScale];
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+        [self applyGPXElevationMeters:_currentGPXElevationMeters];
     
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
@@ -511,6 +559,10 @@ static const NSInteger kMaxZoomPickerRow = 2;
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
     {
         [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
+    }
+    else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+    {
+        [self applyGPXElevationMeters:_baseGPXElevationMeters];
     }
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
@@ -552,6 +604,18 @@ static const NSInteger kMaxZoomPickerRow = 2;
         }
         return;
     }
+    if (_terrainType == EOAGPXSettingsTypeWallHeight)
+    {
+        NSInteger value = (NSInteger)slider.value;
+        if (_currentGPXElevationMeters != value)
+        {
+            _currentGPXElevationMeters = value;
+            _isValueChange = YES;
+            [self applyGPXElevationMeters:_currentGPXElevationMeters];
+            [self updateApplyButton];
+        }
+        return;
+    }
     
     if (_type == EOATerrainTypeHillshade)
     {
@@ -570,7 +634,10 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (NSString *)sliderValueString:(float)value
 {
-    return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+        return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+    else
+        return [NSString stringWithFormat:@"%ld %@", (NSInteger)value, OALocalizedString(@"m")];
 }
 
 #pragma mark - UITableViewDataSource
@@ -625,6 +692,18 @@ static const NSInteger kMaxZoomPickerRow = 2;
                 ? _app.data.verticalExaggerationScale
                 : _currentGPXVerticalExaggerationScale;
               
+                cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
+            }
+            else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+            {
+                __weak OATitleSliderTableViewCell *weakCell = cell;
+                __weak __typeof(self) weakSelf = self;
+                cell.updateValueCallback = ^(float value) {
+                    weakCell.valueLabel.text = [weakSelf sliderValueString:value];
+                };
+                cell.sliderView.minimumValue = 0;
+                cell.sliderView.maximumValue = 2000;
+                cell.sliderView.value = _currentGPXElevationMeters;
                 cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
             }
             else

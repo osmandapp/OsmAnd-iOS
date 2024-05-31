@@ -587,19 +587,19 @@
     }
     [self applyExcludedFromBackup:ocbfPathLib];
     
-    // Copy Default_wikivoyage.travel.obf to Documents/Resources if needed
-    NSString *defaultTravelGuidePathBundle = [[NSBundle mainBundle] pathForResource:@"Default_wikivoyage.travel" ofType:@"obf" inDirectory:@"Shipped"];
-    NSString *defaultTravelGuidePathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/Default_wikivoyage.travel.obf"];
-    
-    if (![[NSFileManager defaultManager] fileExistsAtPath:defaultTravelGuidePathLib])
-    {
-        NSError *error = nil;
-        [[NSFileManager defaultManager] copyItemAtPath:defaultTravelGuidePathBundle toPath:defaultTravelGuidePathLib error:&error];
-        if (error)
-            NSLog(@"Error copying file: %@ to %@ - %@", defaultTravelGuidePathBundle, defaultTravelGuidePathLib, [error localizedDescription]);
-    }
-    [self applyExcludedFromBackup:defaultTravelGuidePathLib];
-    
+//    // Copy Default_wikivoyage.travel.obf to Documents/Resources if needed
+//    NSString *defaultTravelGuidePathBundle = [[NSBundle mainBundle] pathForResource:@"Default_wikivoyage.travel" ofType:@"obf" inDirectory:@"Shipped"];
+//    NSString *defaultTravelGuidePathLib = [NSHomeDirectory() stringByAppendingString:@"/Documents/Resources/Default_wikivoyage.travel.obf"];
+//    
+//    if (![[NSFileManager defaultManager] fileExistsAtPath:defaultTravelGuidePathLib])
+//    {
+//        NSError *error = nil;
+//        [[NSFileManager defaultManager] copyItemAtPath:defaultTravelGuidePathBundle toPath:defaultTravelGuidePathLib error:&error];
+//        if (error)
+//            NSLog(@"Error copying file: %@ to %@ - %@", defaultTravelGuidePathBundle, defaultTravelGuidePathLib, [error localizedDescription]);
+//    }
+//    [self applyExcludedFromBackup:defaultTravelGuidePathLib];
+
     // Copy proj.db to Library/Application Support/proj
     NSString *projDbPathBundle = [[NSBundle mainBundle] pathForResource:@"proj" ofType:@"db"];
     NSString *projDbPathLib = [NSHomeDirectory() stringByAppendingString:@"/Library/Application Support/proj/proj.db"];

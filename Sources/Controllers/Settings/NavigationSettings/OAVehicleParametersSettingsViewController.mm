@@ -137,13 +137,23 @@
         topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
         
         UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
-        CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
-        imageView.image = image;
-        imageView.contentMode = UIViewContentModeScaleAspectFit;
-        
-        UIView *imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
-        imageBackgroundView.backgroundColor = UIColor.whiteColor;
+        UIImageView *imageView = nil;
+        UIView *imageBackgroundView = nil;
+        if (image)
+        {
+            CGFloat aspectRatio = MIN(DeviceScreenWidth, DeviceScreenHeight) / image.size.width;
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, image.size.height * aspectRatio)];
+            imageView.image = image;
+            imageView.contentMode = UIViewContentModeScaleAspectFit;
+            
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, imageView.frame.size.height)];
+            imageBackgroundView.backgroundColor = UIColor.whiteColor;
+        }
+        else
+        {
+            imageView = [[UIImageView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, 0)];
+            imageBackgroundView = [[UIView alloc] initWithFrame:CGRectMake(0., 0.5, DeviceScreenWidth, 0)];
+        }
         
         UIView *bottomImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., imageView.frame.origin.y + imageView.frame.size.height, DeviceScreenWidth, .5)];
         bottomImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
@@ -161,9 +171,12 @@
         
         CGFloat headerHeight = label.frame.origin.y + label.frame.size.height + 26.;
         UIView *tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, headerHeight)];
-        [tableHeaderView addSubview:imageBackgroundView];
-        [tableHeaderView addSubview:imageView];
-        [tableHeaderView addSubview:topImageDivider];
+        if (image)
+        {
+            [tableHeaderView addSubview:imageBackgroundView];
+            [tableHeaderView addSubview:imageView];
+            [tableHeaderView addSubview:topImageDivider];
+        }
         [tableHeaderView addSubview:bottomImageDivider];
         [tableHeaderView addSubview:label];
         tableHeaderView.backgroundColor = UIColor.clearColor;

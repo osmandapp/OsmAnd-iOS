@@ -645,7 +645,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 // MARK: OACarPlayMapViewDelegate
 
-- (void)onIntefaceControllerAttached
+- (void)onInterfaceControllerAttached
 {
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onLocationUpdate)

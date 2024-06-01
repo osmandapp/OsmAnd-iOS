@@ -12,7 +12,7 @@
 
 @protocol OACarPlayMapViewDelegate <NSObject>
 
-- (void)onIntefaceControllerAttached;
+- (void)onInterfaceControllerAttached;
 - (void)onIntefaceControllerDetached;
 - (void)onMapViewAttached;
 

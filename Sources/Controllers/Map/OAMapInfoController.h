@@ -62,7 +62,8 @@
 
 - (void) updateRuler;
 
-- (BOOL)topTextViewVisible;
 - (void)updateLayout;
+- (void)viewWillTransition;
+- (void)updateSpeedometer;
 
 @end

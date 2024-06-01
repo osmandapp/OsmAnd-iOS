@@ -237,6 +237,8 @@
 		15CD7EA725B1C1A700BCB36A /* ic_small_time_start@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EA425B1C1A700BCB36A /* ic_small_time_start@2x.png */; };
 		15CD7EAD25B1C1B900BCB36A /* ic_small_waypoints@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */; };
 		15CD7EAF25B1C1B900BCB36A /* ic_small_waypoints@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */; };
+		320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */; };
+		320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */; };
 		32048FC52A25E70200AA4B71 /* BaseOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */; };
 		32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */; };
 		32048FC92A26132600AA4B71 /* OsmOAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32048FC82A26132600AA4B71 /* OsmOAuthView.swift */; };
@@ -3188,14 +3190,15 @@
 		DAFE4D3F22169B4D009731CA /* map_osm_note_resolved@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = DAFE4D3022169B4C009731CA /* map_osm_note_resolved@3x.png */; };
 		FA00B8802B4EB66800582CD1 /* WidgetSizeStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */; };
 		FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */; };
-		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */; };
-		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */; };
+		FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */; };
+		FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */; };
 		FA069C542B9AF61B0007E4DE /* OutlineLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */; };
 		FA069C692B9F13160007E4DE /* ShadowPathView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C682B9F13160007E4DE /* ShadowPathView.swift */; };
 		FA069C6B2B9F65750007E4DE /* UILabel+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */; };
 		FA0B58222A69578A006F8F9A /* FreeBackupBannerCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */; };
 		FA12A6C72A73EED600FCB656 /* UIApplication+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */; };
 		FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */; };
+		FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */; };
 		FA204E962B19E29C008AF3D2 /* BLERunningSensor.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */; };
 		FA204E982B19E2B7008AF3D2 /* BLERunningSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */; };
 		FA204EA92B1A477C008AF3D2 /* RunningCharacteristic.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */; };
@@ -3245,6 +3248,8 @@
 		FA77E7A72AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */; };
 		FA7DCF552AF10ABF0045D136 /* BluetoothDisableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */; };
 		FA7DCF572AF11A7D0045D136 /* BluetoothDisableView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */; };
+		FA83EAA62BF6538B00DBF321 /* SpeedometerView.xib in Resources */ = {isa = PBXBuildFile; fileRef = FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */; };
+		FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */; };
 		FA86F4152AE7C56E00DC3B2B /* UserDefaults+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */; };
 		FA86F4182AE7C5EA00DC3B2B /* UserDefaultsKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */; };
 		FA86F41A2AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */; };
@@ -3286,6 +3291,7 @@
 		FAC166292B21BEF900D63755 /* CBUUIDPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */; };
 		FAC1662A2B21BEF900D63755 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661F2B21BEF900D63755 /* Peripheral.swift */; };
 		FAC1662B2B21BEF900D63755 /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166202B21BEF900D63755 /* CentralProxy.swift */; };
+		FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */; };
 		FAC5D4202BFB98DC00E9E658 /* weather_pressure.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41B2BFB98DA00E9E658 /* weather_pressure.txt */; };
 		FAC5D4212BFB98DC00E9E658 /* weather_temperature.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41C2BFB98DB00E9E658 /* weather_temperature.txt */; };
 		FAC5D4222BFB98DC00E9E658 /* weather_cloud.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41D2BFB98DB00E9E658 /* weather_cloud.txt */; };
@@ -3294,6 +3300,7 @@
 		FAC5D4282BFB9BFE00E9E658 /* hillshade_main_default.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D4252BFB9BFE00E9E658 /* hillshade_main_default.txt */; };
 		FAC5D4292BFB9BFE00E9E658 /* hillshade_color_default.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D4262BFB9BFE00E9E658 /* hillshade_color_default.txt */; };
 		FAC5D42A2BFB9BFE00E9E658 /* slope_default.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D4272BFB9BFE00E9E658 /* slope_default.txt */; };
+		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
@@ -3585,6 +3592,8 @@
 		15CD7EAA25B1C1B700BCB36A /* ic_small_waypoints@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@3x.png"; path = "Resources/Icons/ic_small_waypoints@3x.png"; sourceTree = "<group>"; };
 		15CD7EAC25B1C1B800BCB36A /* ic_small_waypoints@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_small_waypoints@2x.png"; path = "Resources/Icons/ic_small_waypoints@2x.png"; sourceTree = "<group>"; };
 		2CFA9B52B7169930B7654453 /* Pods-OsmAnd Maps.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.debug.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.debug.xcconfig"; sourceTree = "<group>"; };
+		320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitWarningViewController.swift; sourceTree = "<group>"; };
+		320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerWidgetSettingsViewController.swift; sourceTree = "<group>"; };
 		32048FC42A25E70200AA4B71 /* BaseOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseOAuthHelper.swift; sourceTree = "<group>"; };
 		32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthHelper.swift; sourceTree = "<group>"; };
 		32048FC82A26132600AA4B71 /* OsmOAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmOAuthView.swift; sourceTree = "<group>"; };
@@ -7722,14 +7731,16 @@
 		F905FB9C7B198BF071D402C0 /* Pods-OsmAnd Maps.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OsmAnd Maps.release.xcconfig"; path = "Pods/Target Support Files/Pods-OsmAnd Maps/Pods-OsmAnd Maps.release.xcconfig"; sourceTree = "<group>"; };
 		FA00B87F2B4EB66800582CD1 /* WidgetSizeStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetSizeStyle.swift; sourceTree = "<group>"; };
 		FA00B8832B5575E600582CD1 /* UIStackView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+Extension.swift"; sourceTree = "<group>"; };
-		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLableTableViewCell.swift; sourceTree = "<group>"; };
-		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLableTableViewCell.xib; sourceTree = "<group>"; };
+		FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentImagesWithRightLabelTableViewCell.swift; sourceTree = "<group>"; };
+		FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentImagesWithRightLabelTableViewCell.xib; sourceTree = "<group>"; };
 		FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutlineLabel.swift; sourceTree = "<group>"; };
 		FA069C682B9F13160007E4DE /* ShadowPathView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShadowPathView.swift; sourceTree = "<group>"; };
 		FA069C6A2B9F65750007E4DE /* UILabel+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+Extension.swift"; sourceTree = "<group>"; };
 		FA0B58212A69578A006F8F9A /* FreeBackupBannerCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FreeBackupBannerCell.swift; sourceTree = "<group>"; };
 		FA12A6C62A73EED600FCB656 /* UIApplication+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+Extension.swift"; sourceTree = "<group>"; };
 		FA183F2E2B84D6780085EF9F /* SunPositionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SunPositionMode.swift; sourceTree = "<group>"; };
+		FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SpeedLimitWrapper.h; sourceTree = "<group>"; };
+		FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = SpeedLimitWrapper.mm; sourceTree = "<group>"; };
 		FA204E952B19E29C008AF3D2 /* BLERunningSensor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSensor.swift; sourceTree = "<group>"; };
 		FA204E972B19E2B7008AF3D2 /* BLERunningSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLERunningSCDDevice.swift; sourceTree = "<group>"; };
 		FA204EA82B1A477C008AF3D2 /* RunningCharacteristic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RunningCharacteristic.swift; sourceTree = "<group>"; };
@@ -7782,6 +7793,8 @@
 		FA77E7A62AE16E90001BABE2 /* OACarPlayMapDashboardViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayMapDashboardViewController.mm; sourceTree = "<group>"; };
 		FA7DCF542AF10ABF0045D136 /* BluetoothDisableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothDisableView.swift; sourceTree = "<group>"; };
 		FA7DCF562AF11A7D0045D136 /* BluetoothDisableView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = BluetoothDisableView.xib; sourceTree = "<group>"; };
+		FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SpeedometerView.xib; sourceTree = "<group>"; };
+		FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpeedometerView.swift; sourceTree = "<group>"; };
 		FA86F4142AE7C56E00DC3B2B /* UserDefaults+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UserDefaults+Extension.swift"; sourceTree = "<group>"; };
 		FA86F4172AE7C5EA00DC3B2B /* UserDefaultsKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKey.swift; sourceTree = "<group>"; };
 		FA86F4192AE7CB8D00DC3B2B /* BLEBikeSCDDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEBikeSCDDevice.swift; sourceTree = "<group>"; };
@@ -7823,6 +7836,7 @@
 		FAC1661E2B21BEF900D63755 /* CBUUIDPath.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CBUUIDPath.swift; sourceTree = "<group>"; };
 		FAC1661F2B21BEF900D63755 /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
 		FAC166202B21BEF900D63755 /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
+		FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerSpeedView.swift; sourceTree = "<group>"; };
 		FAC5D41B2BFB98DA00E9E658 /* weather_pressure.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_pressure.txt; path = "../resources/color-palette/weather_pressure.txt"; sourceTree = "<group>"; };
 		FAC5D41C2BFB98DB00E9E658 /* weather_temperature.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_temperature.txt; path = "../resources/color-palette/weather_temperature.txt"; sourceTree = "<group>"; };
 		FAC5D41D2BFB98DB00E9E658 /* weather_cloud.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_cloud.txt; path = "../resources/color-palette/weather_cloud.txt"; sourceTree = "<group>"; };
@@ -7831,6 +7845,7 @@
 		FAC5D4252BFB9BFE00E9E658 /* hillshade_main_default.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_main_default.txt; path = "../resources/color-palette/hillshade_main_default.txt"; sourceTree = "<group>"; };
 		FAC5D4262BFB9BFE00E9E658 /* hillshade_color_default.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_color_default.txt; path = "../resources/color-palette/hillshade_color_default.txt"; sourceTree = "<group>"; };
 		FAC5D4272BFB9BFE00E9E658 /* slope_default.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = slope_default.txt; path = "../resources/color-palette/slope_default.txt"; sourceTree = "<group>"; };
+		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
@@ -13106,6 +13121,7 @@
 		DA5A804326C563A500F274C7 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				FA83EAA32BF6538B00DBF321 /* SpeedometerView */,
 				FA4195572AAB55D4007CBBAB /* ShadowTransporentView */,
 				FA4768B02A66E6DB00D533E8 /* Banners */,
 				DA5A804526C563A500F274C7 /* OAButton.h */,
@@ -13564,6 +13580,8 @@
 				DAABE4EA2A16483300569F71 /* ConfigureScreenViewController.swift */,
 				DADBE9F12A32085800C0C102 /* CompassVisibilityViewController.swift */,
 				32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */,
+				320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */,
+				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
 			);
 			path = ConfigureScreen;
 			sourceTree = "<group>";
@@ -13842,6 +13860,19 @@
 			path = BluetoothDisableView;
 			sourceTree = "<group>";
 		};
+		FA83EAA32BF6538B00DBF321 /* SpeedometerView */ = {
+			isa = PBXGroup;
+			children = (
+				FA186E462BFCF15A007EE77D /* SpeedLimitWrapper.h */,
+				FA186E472BFCF15A007EE77D /* SpeedLimitWrapper.mm */,
+				FAC5D42F2BFC7F3400E9E658 /* SpeedLimitView */,
+				FAC5D4172BFB560400E9E658 /* SpeedView */,
+				FA83EAA42BF6538B00DBF321 /* SpeedometerView.xib */,
+				FA83EAA52BF6538B00DBF321 /* SpeedometerView.swift */,
+			);
+			path = SpeedometerView;
+			sourceTree = "<group>";
+		};
 		FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */ = {
 			isa = PBXGroup;
 			children = (
@@ -13971,6 +14002,22 @@
 				FAC166162B21BEF700D63755 /* Util.swift */,
 			);
 			path = SwiftyBluetooth;
+			sourceTree = "<group>";
+		};
+		FAC5D4172BFB560400E9E658 /* SpeedView */ = {
+			isa = PBXGroup;
+			children = (
+				FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */,
+			);
+			path = SpeedView;
+			sourceTree = "<group>";
+		};
+		FAC5D42F2BFC7F3400E9E658 /* SpeedLimitView */ = {
+			isa = PBXGroup;
+			children = (
+				FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */,
+			);
+			path = SpeedLimitView;
 			sourceTree = "<group>";
 		};
 		FACE409C2AEA9A8000E1E43A /* ExternalSensorsPlugin */ = {
@@ -15327,7 +15374,7 @@
 				DA0D163F281BEEF500CEEF58 /* map_turn_sharp_right@2x.png in Resources */,
 				DA134110243DC5A80039D214 /* map_action_taxi@2x.png in Resources */,
 				DAB172C42229221F00041307 /* ic_custom_edit@2x.png in Resources */,
-				FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib in Resources */,
+				FA00B88A2B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib in Resources */,
 				DA5A83A526C563A800F274C7 /* OAOsmEditingViewController.xib in Resources */,
 				84F3A9601B4ECF2700D16EBC /* ic_trip_visitedpoint@2x.png in Resources */,
 				84F3A8CB1B4DA93100D16EBC /* ic_map_pin_small@2x.png in Resources */,
@@ -15539,6 +15586,7 @@
 				DA5A829C26C563A700F274C7 /* OAProgressBarCell.xib in Resources */,
 				DA13A0272345FA0100C1A1A8 /* ic_custom_avoid_motorways@2x.png in Resources */,
 				DA6471B522CF5433008F937F /* ic_custom_unlimited_downloads@2x.png in Resources */,
+				FA83EAA62BF6538B00DBF321 /* SpeedometerView.xib in Resources */,
 				DA5A843026C563A800F274C7 /* OARouteTargetSelectionViewController.xib in Resources */,
 				C5693B812A9DD1F7007EA552 /* ic_custom_3d_relief_colored_day@3x.png in Resources */,
 				842431F41AEFDD1900925821 /* ic_action_rec_start@2x.png in Resources */,
@@ -16670,6 +16718,7 @@
 				DA5A82FD26C563A800F274C7 /* OAProgressTitleCell.m in Sources */,
 				DA5A845126C563A900F274C7 /* OAMyPositionLayer.mm in Sources */,
 				DA0BAC732851F25000AFA550 /* OACheckBackupSubscriptionTask.m in Sources */,
+				320076142BFC775100CDDDAF /* SpeedLimitWarningViewController.swift in Sources */,
 				4655EB3328E30AD200FA2E25 /* OAStatusBackupConflictDetailsViewController.m in Sources */,
 				DAD3FD132A4599F500BFA03A /* WidgetConfigurationViewController.swift in Sources */,
 				DA5A834526C563A800F274C7 /* OAIconTextDescButtonCell.m in Sources */,
@@ -16728,6 +16777,7 @@
 				DA5A856B26C563A900F274C7 /* OATspAnt.m in Sources */,
 				DA5A83B826C563A800F274C7 /* OAQuickActionsSheetView.m in Sources */,
 				DA5A837526C563A800F274C7 /* OARoutePreferencesParameters.mm in Sources */,
+				320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
@@ -16745,6 +16795,7 @@
 				C546C00A2AC2446E00377EDE /* OAUploadOsmPOINoteViewProgressController.m in Sources */,
 				C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */,
 				DA5A830026C563A800F274C7 /* OAPublicTransportRouteShieldCell.m in Sources */,
+				FA83EAA72BF6538B00DBF321 /* SpeedometerView.swift in Sources */,
 				325B6A0526D923AA00D8B67C /* OAQuickSearchCoordinateFormatsViewController.m in Sources */,
 				462148722B6BEF44003DA10C /* CloudTrashViewController.swift in Sources */,
 				DA5A833426C563A800F274C7 /* OAShapesCollectionViewCell.m in Sources */,
@@ -16849,7 +16900,7 @@
 				DA5A812726C563A700F274C7 /* OACoreResourcesAmenityIconProvider.mm in Sources */,
 				DA5A856C26C563A900F274C7 /* OARouteImporter.mm in Sources */,
 				DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */,
-				FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift in Sources */,
+				FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */,
 				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
@@ -16890,6 +16941,7 @@
 				DA5A842F26C563A800F274C7 /* OATargetTurnViewController.m in Sources */,
 				FAA6504F2ADD42C50020DCEA /* SearchDeviceTableViewCell.swift in Sources */,
 				DA5A856926C563A900F274C7 /* OARouteProvider.mm in Sources */,
+				FA186E482BFCF15A007EE77D /* SpeedLimitWrapper.mm in Sources */,
 				DA5A848F26C563A900F274C7 /* OABaseTableViewController.m in Sources */,
 				DA5A849326C563A900F274C7 /* OAGpxApproximationViewController.mm in Sources */,
 				32C21CB727E0A66B00DE4266 /* OARecordSettingsBottomSheetViewController.m in Sources */,
@@ -16906,6 +16958,7 @@
 				DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */,
 				32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */,
 				3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */,
+				FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
@@ -17568,6 +17621,7 @@
 				CA4EDE42AAD38F5BB5B4C6B1 /* OASegmentedSlider.mm in Sources */,
 				CA4EDD247D185CBEF97908BE /* OAWeatherToolbarHandlers.mm in Sources */,
 				CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */,
+				FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */,
 				CA4ED672AF26061C16E48A61 /* OACompassModeWidgetState.mm in Sources */,
 				46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */,
 				CA4ED3D4E92007B8D20ECBC5 /* OAWeatherCacheSettingsViewController.mm in Sources */,

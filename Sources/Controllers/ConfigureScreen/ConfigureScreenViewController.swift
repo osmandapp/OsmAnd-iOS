@@ -47,7 +47,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             row.title = panel.title
             row.iconName = panel.iconName
             row.setObj(panel, forKey: "panel")
-            row.iconTintColor = (widgetsCount == 0) ? UIColor.iconColorDefault : UIColor(rgb: Int(appMode!.getIconColor()));
+            row.iconTintColor = (widgetsCount == 0) ? .iconColorDefault : UIColor(rgb: Int(appMode!.getIconColor()));
             row.descr = String(widgetsCount)
             row.accessibilityLabel = panel.title
             row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
@@ -74,7 +74,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         quickActionRow.descr = quickActionsEnabled ? String(format: localizedString("ltr_or_rtl_combine_via_colon"),
                                                             localizedString("shared_string_actions"),
                                                             actionsString) : actionsString
-        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
+        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode!.getIconColor())) : .iconColorDefault
         quickActionRow.key = "quick_action"
         quickActionRow.iconName = "ic_custom_quick_action"
         quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -87,7 +87,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         map3dModeRow.key = "map_3d_mode"
         map3dModeRow.title = localizedString("map_3d_mode_action")
         map3dModeRow.descr = OAMap3DModeVisibility.getTitle(selected3dMode) ?? ""
-        map3dModeRow.iconTintColor = isMap3DVisible ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
+        map3dModeRow.iconTintColor = isMap3DVisible ? UIColor(rgb: Int(appMode!.getIconColor())) : .iconColorDefault
         map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(selected3dMode)
         map3dModeRow.cellType = OAValueTableViewCell.reuseIdentifier
         map3dModeRow.accessibilityLabel = map3dModeRow.title
@@ -104,6 +104,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         positionMapRow.cellType = OAValueTableViewCell.reuseIdentifier
         positionMapRow.accessibilityLabel = positionMapRow.title
         positionMapRow.accessibilityValue = positionMapRow.descr
+        
         let distByTapRow = otherSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
         distByTapRow.iconName = "ic_action_ruler_line"
@@ -113,6 +114,21 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         distByTapRow.cellType = OASwitchTableViewCell.reuseIdentifier
         distByTapRow.accessibilityLabel = distByTapRow.title
         distByTapRow.accessibilityLabel = settings.showDistanceRuler.get() ? localizedString("shared_string_on") : localizedString("shared_string_off")
+
+        let speedomenterRow = otherSection.createNewRow()
+        speedomenterRow.cellType = OAValueTableViewCell.reuseIdentifier
+        speedomenterRow.key = "shared_string_speedometer"
+        speedomenterRow.title = localizedString("shared_string_speedometer")
+        speedomenterRow.descr = localizedString(settings.showSpeedometer.get() ? "shared_string_on" : "shared_string_off")
+        speedomenterRow.accessibilityLabel = speedomenterRow.title
+        speedomenterRow.accessibilityValue = speedomenterRow.descr
+        if settings.showSpeedometer.get() {
+            speedomenterRow.iconName = "widget_speed"
+            speedomenterRow.iconTintColor = nil
+        } else {
+            speedomenterRow.iconName = "ic_custom_speedometer_outlined"
+            speedomenterRow.iconTintColor = .iconColorDefault
+        }
     }
     
     func populateCompassRow(_ row: OATableRowData) {
@@ -125,7 +141,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         row.accessibilityLabel = title
         row.accessibilityValue = descr
         row.key = "compass"
-        row.iconTintColor = appMode != nil ? UIColor(rgb: Int(appMode!.getIconColor())) : UIColor.iconColorDefault
+        row.iconTintColor = appMode != nil ? UIColor(rgb: Int(appMode!.getIconColor())) : .iconColorDefault
         row.iconName = OACompassMode.getIconName(compassMode)
         row.cellType = OAValueTableViewCell.reuseIdentifier
     }
@@ -236,9 +252,13 @@ extension ConfigureScreenViewController {
             cell.setCustomLeftSeparatorInset(isCustomLeftSeparatorInset)
             cell.separatorInset = .zero
             cell.valueLabel.text = item.descr
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = item.iconTintColor
             cell.titleLabel.text = item.title
+            if let iconTintColor = item.iconTintColor {
+                cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+                cell.leftIconView.tintColor = iconTintColor
+            } else if let iconName = item.iconName {
+                cell.leftIconView.image = UIImage(named: iconName)
+            }
             applyAccessibility(cell, item)
             return cell
         } else if item.cellType == OASwitchTableViewCell.reuseIdentifier {
@@ -250,7 +270,7 @@ extension ConfigureScreenViewController {
             }
 
             let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : UIColor.iconColorDefault
+            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : .iconColorDefault
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.isOn = selected
@@ -281,7 +301,7 @@ extension ConfigureScreenViewController {
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : UIColor.iconColorDefault
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : .iconColorDefault
             }
         }
         
@@ -305,6 +325,10 @@ extension ConfigureScreenViewController {
             let vc = Map3dModeButtonVisibilityViewController()
             vc.delegate = self
             showMediumSheetViewController(vc, isLargeAvailable: false)
+        } else if data.key == "shared_string_speedometer" {
+            let vc = SpeedometerWidgetSettingsViewController()
+            vc.delegate = self
+            show(vc)
         } else if data.key == "position_on_map" {
             let vc = OAProfileGeneralSettingsParametersViewController(type: EOAProfileGeneralSettingsDisplayPosition, applicationMode: appMode)
             vc?.delegate = self

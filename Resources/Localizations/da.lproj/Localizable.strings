@@ -3430,3 +3430,9 @@
 "shared_string_millimeters_short" = "mm";
 "edit_tilesource_minzoom" = "Minimum zoom";
 "edit_tilesource_maxzoom" = "Maksimal zoom";
+"speed_limit_warning" = "Advarsel om fartgrænse";
+"when_exceeded" = "Ved overskridelse";
+"shared_string_always" = "Altid";
+"speedometer_description" = "Viser din aktuelle hastighed som rapporteret via GPS";
+"shared_string_speedometer" = "Speedometer";
+"shared_string_limit" = "Grænse";

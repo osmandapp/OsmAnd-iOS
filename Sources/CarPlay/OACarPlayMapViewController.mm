@@ -52,7 +52,7 @@
     [super viewWillAppear:animated];
 
     if (self.delegate)
-        [self.delegate onIntefaceControllerAttached];
+        [self.delegate onInterfaceControllerAttached];
 }
 
 - (void)viewDidAppear:(BOOL)animated

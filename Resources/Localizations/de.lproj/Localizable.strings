@@ -3445,3 +3445,9 @@
 "display_position_automatic_descr" = "Abhängig von der Kartenausrichtung: unten für Bewegungsrichtung, mittig für alles andere.";
 "edit_tilesource_maxzoom" = "Maximale Vergrößerung";
 "edit_tilesource_minzoom" = "Minimale Vergrößerung";
+"speedometer_description" = "Zeigt Ihre aktuelle Geschwindigkeit an, wie über GPS gemeldet";
+"shared_string_always" = "Jederzeit";
+"when_exceeded" = "Bei Überschreitung";
+"shared_string_speedometer" = "Tachometer";
+"speed_limit_warning" = "Warnung vor Tempolimit";
+"shared_string_limit" = "Limit";

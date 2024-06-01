@@ -3763,9 +3763,16 @@
 "osm_id" = "OSM ID";
 "shared_string_millimeters" = "Millimeters";
 
+"shared_string_speedometer" = "Speedometer";
+"speedometer_description" = "Shows your current speed as reported via GPS";
+"speed_limit_warning" = "Speed limit warning";
+"shared_string_always" = "Always";
+"when_exceeded" = "When exceeded";
 "edit_tilesource_maxzoom" = "Maximum zoom";
 "edit_tilesource_minzoom" = "Minimum zoom";
 "shared_string_millimeters_short" = "mm";
 
 "shared_string_instructions" = "Instructions";
 "shared_string_analysis" = "Analysis";
+
+"shared_string_limit" = "Limit";

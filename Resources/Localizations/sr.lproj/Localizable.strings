@@ -3428,3 +3428,11 @@
 "shared_string_millimeters" = "Милиметара";
 "display_position_automatic_descr" = "Зависи од усмерења карте: дно за смер кретања, средиште за све остало.";
 "shared_string_millimeters_short" = "mm";
+"edit_tilesource_maxzoom" = "Максималан зум";
+"edit_tilesource_minzoom" = "Минималан зум";
+"shared_string_speedometer" = "Брзиномер";
+"when_exceeded" = "Када је прекорачење";
+"speedometer_description" = "Приказ ваше тренутне брзине по подацима ГПС";
+"speed_limit_warning" = "Упозорење ограничења брзине";
+"shared_string_always" = "Увек";
+"shared_string_limit" = "Ограничење";

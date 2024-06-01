@@ -362,6 +362,8 @@
 		323BD9102628850400D255ED /* ic_bg_point_comment_center_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E02628850300D255ED /* ic_bg_point_comment_center_small@2x.png */; };
 		323BD9112628850400D255ED /* ic_bg_point_octagon_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E12628850300D255ED /* ic_bg_point_octagon_top@2x.png */; };
 		323BD9122628850400D255ED /* ic_bg_point_octagon_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */; };
+		323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */; };
+		323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */; };
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
@@ -3764,6 +3766,9 @@
 		323BD8E02628850300D255ED /* ic_bg_point_comment_center_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_comment_center_small@2x.png"; path = "Resources/Icons/ic_bg_point_comment_center_small@2x.png"; sourceTree = "<group>"; };
 		323BD8E12628850300D255ED /* ic_bg_point_octagon_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_octagon_top@2x.png"; path = "Resources/Icons/ic_bg_point_octagon_top@2x.png"; sourceTree = "<group>"; };
 		323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_octagon_bottom@3x.png"; path = "Resources/Icons/ic_bg_point_octagon_bottom@3x.png"; sourceTree = "<group>"; };
+		323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCell.swift; sourceTree = "<group>"; };
+		323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadingCell.xib; sourceTree = "<group>"; };
+		323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellBaseHelper.swift; sourceTree = "<group>"; };
 		3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
@@ -8160,6 +8165,9 @@
 				325536F22BE9233200F429A8 /* OADownloadingCellMultipleResourceHelper.mm */,
 				3252D63F2BEBD4E5006BDB82 /* OADownloadingCellCloudHelper.h */,
 				3252D6402BEBD4F5006BDB82 /* OADownloadingCellCloudHelper.mm */,
+				323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */,
+				323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */,
+				323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */,
 			);
 			path = DownloadingCellHelper;
 			sourceTree = "<group>";
@@ -16527,6 +16535,7 @@
 				326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */,
 				DA45B2422A30B6BF0055055A /* MapillaryWidget.swift in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
+				323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
 				32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
@@ -17625,6 +17634,7 @@
 				CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.mm in Sources */,
 				CA4ED071F93DF4FB0368BACC /* OAShowHidePressureAction.mm in Sources */,
 				CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.mm in Sources */,
+				323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */,
 				CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.mm in Sources */,
 				CA4ED3C5613C7FCF1FAF6F34 /* OAShowHidePrecipitationAction.mm in Sources */,
 				CA4EDC32B17473A9290AE863 /* OALabel.m in Sources */,

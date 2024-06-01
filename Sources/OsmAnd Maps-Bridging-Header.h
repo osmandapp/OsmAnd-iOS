@@ -168,6 +168,7 @@
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "FFCircularProgressView.h"
+#import "FFCircularProgressView+isSpinning.h"
 
 // Enums
 #import "OAGPXDataSetType.h"

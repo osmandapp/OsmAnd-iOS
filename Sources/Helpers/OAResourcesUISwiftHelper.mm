@@ -167,4 +167,9 @@
     }
 }
 
++ (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView
+{
+    return [OAResourcesUIHelper tickPath:progressView];
+}
+
 @end

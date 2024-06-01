@@ -9,7 +9,7 @@
 // Swift can't use OAResourceItem OAResourcesUIHelper because they have cpp in headers.
 // So we can use this adapter for new Swit classes
 
-@class OAWorldRegion;
+@class OAWorldRegion, FFCircularProgressView;
 
 
 @interface OAResourceSwiftItem : NSObject
@@ -36,5 +36,7 @@
 
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegionId:(NSString *)regionId resourceTypeNames:(NSArray<NSString *> *)resourceTypeNames;
 + (NSArray<OAResourceSwiftItem *> *) getResourcesInRepositoryIdsByRegion:(OAWorldRegion *)region resourceTypes:(NSArray<NSNumber *> *)resourceTypes;
+
++ (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 
 @end

@@ -728,7 +728,7 @@
 "shared_string_control_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%@之前停止";
-"shared_string_previous" = "上一頁";
+"shared_string_previous" = "上一站";
 "poi_overlay" = "POI 在上層";
 "shared_string_clear" = "清除";
 "tunnel_warning" = "前方有隧道";
@@ -1377,7 +1377,7 @@
 "copy_from_other_profile" = "從其他設定檔複製";
 "reset_to_default" = "重設為預設值";
 "gpx_parse_error" = "GPX檔案有問題。 \n \n您可能要聯絡 OsmAnd 支援團隊以進一步調查。";
-"shared_string_next" = "下一頁";
+"shared_string_next" = "下一站";
 "quick_action_map_source_title" = "地圖來源";
 "configure_screen_quick_action" = "快速動作";
 "search_activity" = "搜尋";

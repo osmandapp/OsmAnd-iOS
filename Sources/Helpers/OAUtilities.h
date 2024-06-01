@@ -147,6 +147,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 @interface UITableViewCell (util)
 
 + (NSString *) getCellIdentifier;
++ (NSString *) getLegacyCellIdentifier;
 
 @end
 

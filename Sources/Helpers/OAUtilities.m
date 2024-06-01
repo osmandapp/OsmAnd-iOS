@@ -986,6 +986,18 @@
     return NSStringFromClass(self.class);
 }
 
++ (NSString *) getLegacyCellIdentifier
+{
+    // When you add to objc class a swift cell and call getIdentifier(), it return not cell name, but cell name with a prefix.
+    // "OsmAnd_Maps.RouteInfoListItemCell" instead of "RouteInfoListItemCell".
+    
+    NSString *swiftClassPrefix = @"OsmAnd_Maps.";
+    NSString *cellClassName = NSStringFromClass(self.class);
+    if ([cellClassName hasPrefix:swiftClassPrefix])
+        cellClassName = [cellClassName substringFromIndex:swiftClassPrefix.length];
+    return cellClassName;
+}
+
 @end
 
 @implementation UICollectionViewCell (util)

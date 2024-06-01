@@ -25,10 +25,6 @@ final class RouteInfoListItemCell: UITableViewCell {
     
     var leftTurnIconDrawable: OATurnDrawable?
     
-    class func getObjcIdentifier() -> String {
-        "RouteInfoListItemCell"
-    }
-    
     func setLeftImageView(image: UIImage?) {
         leftImageView.image = image
     }
@@ -68,11 +64,10 @@ final class RouteInfoListItemCell: UITableViewCell {
     }
     
     private func refreshLeftIcon() {
-        if let leftTurnIconDrawable {
-            leftTurnIconDrawable.clr = (traitCollection.userInterfaceStyle == .dark) ? .white : .black
-            leftTurnIconDrawable.setNeedsDisplay()
-            let recoloredImage = leftTurnIconDrawable.toUIImage()
-            setLeftImageView(image: recoloredImage)
-        }
+        guard let leftTurnIconDrawable else { return }
+        leftTurnIconDrawable.clr = (traitCollection.userInterfaceStyle == .dark) ? .white : .black
+        leftTurnIconDrawable.setNeedsDisplay()
+        let recoloredImage = leftTurnIconDrawable.toUIImage()
+        setLeftImageView(image: recoloredImage)
     }
 }

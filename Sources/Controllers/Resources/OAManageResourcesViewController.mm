@@ -2640,7 +2640,7 @@ static BOOL _repositoryUpdated = NO;
         if (localItem)
         {
             cell.imageView.image = [OAResourceType getIcon:localItem.resourceType templated:YES];
-            cell.imageView.tintColor = UIColorFromRGB(resource_installed_icon_color);
+            cell.imageView.tintColor = [UIColor colorNamed:ACColorNameResourceInstalledIconColor];
         }
     }
 
@@ -2669,7 +2669,7 @@ static BOOL _repositoryUpdated = NO;
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCellForResourceId:item.resourceId.toNSString() resourceItem:item];
-        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? UIColorFromRGB(resource_installed_icon_color) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameResourceInstalledIconColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;

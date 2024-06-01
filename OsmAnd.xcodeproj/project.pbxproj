@@ -11817,7 +11817,7 @@
 				467DFD7F297F172C008A9830 /* OACardTableViewCell.m */,
 				461A3F0529F6E29C008EE079 /* OACollectionSingleLineTableViewCell.h */,
 				461A3F0629F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m */,
-				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLableTableViewCell.swift */,
+				FA00B8852B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift */,
 				32BBDC9A2C0497CF0090D37E /* RouteInfoListItemCell.swift */,
 			);
 			path = Cells;
@@ -11938,7 +11938,7 @@
 				465D7E20295494000099B206 /* OATextMultilineTableViewCell.xib */,
 				467DFD7C297EFDBB008A9830 /* OACardTableViewCell.xib */,
 				461A3F0329F6E1E8008EE079 /* OACollectionSingleLineTableViewCell.xib */,
-				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLableTableViewCell.xib */,
+				FA00B8892B592CF000582CD1 /* SegmentImagesWithRightLabelTableViewCell.xib */,
 				32BBDC962C0493190090D37E /* RouteInfoListItemCell.xib */,
 			);
 			path = Xibs;

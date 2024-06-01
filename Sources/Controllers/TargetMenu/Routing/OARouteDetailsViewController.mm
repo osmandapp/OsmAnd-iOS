@@ -79,26 +79,32 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSString *_emission;
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OASegmentTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OASegmentTableViewCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoListItemCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoListItemCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoAltitudeCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoAltitudeCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoLegendCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoLegendCell getCellIdentifier]];
+}
+
 - (UITableViewCell *) getAnalyzeButtonCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
-    OAFilledButtonCell* cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-    
-    if (cell)
-    {
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
-        [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
-        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
-        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
-    }
+    OAFilledButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell getCellIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
+    [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
+    cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+    [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
     return cell;
 }
 
 - (OASegmentTableViewCell *) getTabSelectorCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
-    OASegmentTableViewCell *cell = (OASegmentTableViewCell *)[nib objectAtIndex:0];
+    OASegmentTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell getCellIdentifier]];
     UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
     [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
     [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
@@ -128,67 +134,59 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
-    OARouteInfoListItemCell *cell = [_tableView dequeueReusableCellWithIdentifier:[OARouteInfoListItemCell getCellIdentifier]];
-    if (cell == nil)
+    OARouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoListItemCell getCellIdentifier]];
+    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
+    const auto turnType = model.turnType;
+    [turnDrawable setTurnType:turnType];
+    turnDrawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
+    CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
+                       turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
+    turnDrawable.frame = CGRectMake(0, 0, size, size);
+    [turnDrawable setClr:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+    [turnDrawable setNeedsDisplay];
+    [cell setLeftTurnIconDrawable:turnDrawable];
+    [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
+    
+    vector<int> lanes = model.turnType->getLanes();
+    if (lanes.size() > 0)
     {
-        NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoListItemCell getCellIdentifier] owner:self options:nil];
-        cell = (OARouteInfoListItemCell *)[nib objectAtIndex:0];
+        OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
+        [_lanesDrawable setLanes:lanes];
+        [_lanesDrawable updateBounds];
+        _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
+        [_lanesDrawable setNeedsDisplay];
+        [cell setBottomLanesImageWithImage:_lanesDrawable.toUIImage];
     }
-    if (cell)
+    else
     {
-        OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
-        const auto turnType = model.turnType;
-        [turnDrawable setTurnType:turnType];
-        turnDrawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
-        CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
-                           turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
-        turnDrawable.frame = CGRectMake(0, 0, size, size);
-        [turnDrawable setClr:[UIColor colorNamed:ACColorNameTextColorPrimary]];
-        [turnDrawable setNeedsDisplay];
-        [cell setLeftTurnIconDrawable:turnDrawable];
-        [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
-        
-        vector<int> lanes = model.turnType->getLanes();
-        if (lanes.size() > 0)
-        {
-            OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
-            [_lanesDrawable setLanes:lanes];
-            [_lanesDrawable updateBounds];
-            _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
-            [_lanesDrawable setNeedsDisplay];
-            [cell setBottomLanesImageWithImage:_lanesDrawable.toUIImage];
-        }
-        else
-        {
-            [cell setBottomLanesImageWithImage:nil];
-        }
-        
-        NSString *segmentDescription = [model getDescriptionRoutePart];
-        [cell setBottomLabelWithText:segmentDescription];
-        if (model.distance > 0)
-        {
-            NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance];
-            NSString *segmentTimeLabelText = [OAOsmAndFormatter getFormattedTimeInterval:[model getExpectedTime] shortFormat:YES];
-            [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@",segmentDistanceLabelText, segmentTimeLabelText]];
-        }
-        else
-        {
-            if (!segmentDescription || segmentDescription.length == 0)
-            {
-                BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
-                segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
-                [cell setBottomLabelWithText:segmentDescription];
-            }
-            [cell setTopRightLabelWithText:@""];
-        }
-        
-        NSInteger distanceFromStart = 0;
-        for (NSInteger i = 0; i < directionInfoIndex; i++)
-        {
-            distanceFromStart += directionsInfo[i].distance;
-        }
-        [cell setTopLeftLabelWithText:[OAOsmAndFormatter getFormattedDistance:distanceFromStart]];
+        [cell setBottomLanesImageWithImage:nil];
     }
+    
+    NSString *segmentDescription = [model getDescriptionRoutePart];
+    [cell setBottomLabelWithText:segmentDescription];
+    if (model.distance > 0)
+    {
+        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance];
+        NSString *segmentTimeLabelText = [OAOsmAndFormatter getFormattedTimeInterval:[model getExpectedTime] shortFormat:YES];
+        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@",segmentDistanceLabelText, segmentTimeLabelText]];
+    }
+    else
+    {
+        if (!segmentDescription || segmentDescription.length == 0)
+        {
+            BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
+            segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
+            [cell setBottomLabelWithText:segmentDescription];
+        }
+        [cell setTopRightLabelWithText:@""];
+    }
+    
+    NSInteger distanceFromStart = 0;
+    for (NSInteger i = 0; i < directionInfoIndex; i++)
+    {
+        distanceFromStart += directionsInfo[i].distance;
+    }
+    [cell setTopLeftLabelWithText:[OAOsmAndFormatter getFormattedDistance:distanceFromStart]];
     return cell;
 }
 
@@ -202,8 +200,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+    OALineChartCell *routeStatsCell = [self.tableView dequeueReusableCellWithIdentifier:[OALineChartCell getCellIdentifier]];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.lineChartView.delegate = self;
@@ -239,8 +236,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     if (hasSlope)
     {
-        nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
-        OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
+        OARouteStatisticsModeCell *modeCell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteStatisticsModeCell getCellIdentifier]];
         modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
         [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -257,8 +253,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 }
 
 - (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoAltitudeCell getCellIdentifier] owner:self options:nil];
-    OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
+    OARouteInfoAltitudeCell *altCell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoAltitudeCell getCellIdentifier]];
     altCell.avgAltitudeTitle.text = OALocalizedString(@"average_altitude");
     altCell.altRangeTitle.text = OALocalizedString(@"altitude_range");
     altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
@@ -280,8 +275,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         
         for (OARouteStatistics *stat in routeInfo)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoCell getCellIdentifier] owner:self options:nil];
-            OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
+            OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell getCellIdentifier]];
             cell.detailsButton.tag = section;
             [cell.detailsButton addTarget:self action:@selector(detailsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
@@ -301,8 +295,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
-            nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoLegendCell getCellIdentifier] owner:self options:nil];
-            OARouteInfoLegendCell *legend = (OARouteInfoLegendCell *)[nib objectAtIndex:0];
+            OARouteInfoLegendCell *legend = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoLegendCell getCellIdentifier]];
             
             for (NSString *key in stat.partition)
             {
@@ -419,6 +412,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     [self setupRouteInfo];
     
+    [self registerCells];
     [self generateData];
     _tableView.delegate = self;
     _tableView.dataSource = self;

@@ -55,8 +55,6 @@ final class RouteInfoListItemCell: UITableViewCell {
             bottomImageStackView.isHidden = false
             bottomImageView.image = image
             
-            bottomImageBorderView.layer.cornerRadius = 5
-            bottomImageBorderView.layer.borderWidth = 2
             bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
             
             bottomImageBorderViewWidthConstraint.constant = image.size.width / (image.size.height / bottomImageViewInnerHeight)

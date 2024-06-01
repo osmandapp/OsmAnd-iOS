@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OASegmentTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OASegmentTableViewCell getCellIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoListItemCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoListItemCell getCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell getObjcIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell getObjcIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoAltitudeCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoAltitudeCell getCellIdentifier]];
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
-    OARouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoListItemCell getCellIdentifier]];
+    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell getObjcIdentifier]];
     OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
     const auto turnType = model.turnType;
     [turnDrawable setTurnType:turnType];

@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc(OARouteInfoListItemCell)
 @objcMembers
 final class RouteInfoListItemCell: UITableViewCell {
     
@@ -26,7 +25,7 @@ final class RouteInfoListItemCell: UITableViewCell {
     
     var leftTurnIconDrawable: OATurnDrawable?
     
-    override class func getIdentifier() -> String {
+    class func getObjcIdentifier() -> String {
         "RouteInfoListItemCell"
     }
     
@@ -54,11 +53,8 @@ final class RouteInfoListItemCell: UITableViewCell {
         if let image {
             bottomImageStackView.isHidden = false
             bottomImageView.image = image
-            
             bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
-            
-            bottomImageBorderViewWidthConstraint.constant = image.size.width / (image.size.height / bottomImageViewInnerHeight)
-            bottomImageBorderViewWidthConstraint.constant += 16
+            bottomImageBorderViewWidthConstraint.constant = (image.size.width / (image.size.height / bottomImageViewInnerHeight)) + 16
         } else {
             bottomImageStackView.isHidden = true
         }
@@ -67,7 +63,7 @@ final class RouteInfoListItemCell: UITableViewCell {
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
-            self.refreshLeftIcon()
+            refreshLeftIcon()
         }
     }
     

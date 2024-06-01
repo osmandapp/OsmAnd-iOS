@@ -3428,3 +3428,9 @@
 "shared_string_millimeters_short" = "mm";
 "edit_tilesource_maxzoom" = "Maksimalan zum";
 "edit_tilesource_minzoom" = "Minimalan zum";
+"when_exceeded" = "Kad se prekorači";
+"shared_string_speedometer" = "Brzinomer";
+"speed_limit_warning" = "Upozorenje na ograničenu brzinu";
+"shared_string_always" = "Uvek";
+"speedometer_description" = "Prikazuje trenutnu brzinu kako je prijavljena putem GPS-a";
+"shared_string_limit" = "Ograničenje";

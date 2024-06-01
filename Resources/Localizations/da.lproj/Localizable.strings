@@ -3435,3 +3435,4 @@
 "shared_string_always" = "Altid";
 "speedometer_description" = "Viser din aktuelle hastighed som rapporteret via GPS";
 "shared_string_speedometer" = "Speedometer";
+"shared_string_limit" = "Grænse";

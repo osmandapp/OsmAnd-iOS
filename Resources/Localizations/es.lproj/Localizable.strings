@@ -3434,3 +3434,4 @@
 "shared_string_speedometer" = "Velocímetro";
 "speedometer_description" = "Muestra su velocidad actual según lo informado a través del GPS";
 "shared_string_always" = "Siempre";
+"shared_string_limit" = "Límite";

@@ -153,7 +153,7 @@
             BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
             BOOL isCanadianRegion = region == DR_CANADA;
 
-            NSString  *locImgId = @"warnings_limit";
+            NSString *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
             if (alarm.type == AIT_SPEED_LIMIT)
@@ -231,7 +231,7 @@
                 text = nil;
                 bottomText = nil;
             }
-            visible = (text &&  text.length > 0) || (locImgId.length > 0);
+            visible = (text && text.length > 0) || (locImgId.length > 0);
             if (visible)
             {
                 if (alarm.type == AIT_SPEED_CAMERA)

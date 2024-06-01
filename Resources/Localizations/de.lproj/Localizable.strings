@@ -3450,3 +3450,4 @@
 "when_exceeded" = "Bei Überschreitung";
 "shared_string_speedometer" = "Tachometer";
 "speed_limit_warning" = "Warnung vor Tempolimit";
+"shared_string_limit" = "Limit";

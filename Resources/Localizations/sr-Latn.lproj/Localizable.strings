@@ -3433,3 +3433,4 @@
 "speed_limit_warning" = "Upozorenje na ograničenu brzinu";
 "shared_string_always" = "Uvek";
 "speedometer_description" = "Prikazuje trenutnu brzinu kako je prijavljena putem GPS-a";
+"shared_string_limit" = "Ograničenje";

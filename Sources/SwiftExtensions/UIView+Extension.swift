@@ -90,16 +90,17 @@ extension UIView {
     }
 }
 
-protocol ReuseIdentifier { }
-
-extension ReuseIdentifier {
-    static var reuseIdentifier: String {
-        String(describing: Self.self)
+extension UITableViewCell {
+    @objc static var reuseIdentifier: String {
+        String(describing: self)
     }
 }
 
-extension UITableViewCell: ReuseIdentifier { }
-extension UICollectionViewCell: ReuseIdentifier { }
+extension UICollectionViewCell {
+    @objc static var reuseIdentifier: String {
+        String(describing: self)
+    }
+}
 
 extension UIView {
     class func fromNib<T: UIView>() -> T {

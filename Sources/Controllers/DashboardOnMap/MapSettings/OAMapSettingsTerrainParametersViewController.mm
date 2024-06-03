@@ -26,6 +26,8 @@ static const NSInteger kMaxAllowedZoom = 22;
 static const NSInteger kMaxMissingDataZoomShift = 5;
 static const NSInteger kMinZoomPickerRow = 1;
 static const NSInteger kMaxZoomPickerRow = 2;
+static const NSInteger kElevationMinMeters = 0;
+static const NSInteger kElevationMaxMeters = 2000;
 
 @interface OAMapSettingsTerrainParametersViewController () <UITableViewDelegate, UITableViewDataSource, OACustomPickerTableViewCellDelegate>
 
@@ -414,10 +416,9 @@ static const NSInteger kMaxZoomPickerRow = 2;
 
 - (void)resetGPXElevationMetersValues
 {
-    NSInteger defaultMeters = 1000;
-    if (_currentGPXElevationMeters != defaultMeters)
+    if (_currentGPXElevationMeters != kElevationDefMeters)
     {
-        _currentGPXElevationMeters = defaultMeters;
+        _currentGPXElevationMeters = kElevationDefMeters;
         _isValueChange = YES;
         [self applyGPXElevationMeters:_currentGPXElevationMeters];
         [self updateApplyButton];
@@ -701,8 +702,8 @@ static const NSInteger kMaxZoomPickerRow = 2;
                 cell.updateValueCallback = ^(float value) {
                     weakCell.valueLabel.text = [weakSelf sliderValueString:value];
                 };
-                cell.sliderView.minimumValue = 0;
-                cell.sliderView.maximumValue = 2000;
+                cell.sliderView.minimumValue = kElevationMinMeters;
+                cell.sliderView.maximumValue = kElevationMaxMeters;
                 cell.sliderView.value = _currentGPXElevationMeters;
                 cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
             }

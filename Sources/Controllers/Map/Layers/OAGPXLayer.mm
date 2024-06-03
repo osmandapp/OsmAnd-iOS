@@ -320,7 +320,7 @@
                         {
                             for (OAWptPt *point in segment.points)
                             {
-                                if ([point isKindOfClass:[OAWptPt class]])
+                                if ([self isInstanceOfOAWptPt:point])
                                 {
                                     switch (gpx.visualization3dByType)
                                     {
@@ -410,7 +410,7 @@
                     {
                         for (OAWptPt *point in route.points)
                         {
-                            if ([point isKindOfClass:[OAWptPt class]])
+                            if ([self isInstanceOfOAWptPt:point])
                             {
                                 switch (gpx.visualization3dByType)
                                 {
@@ -486,8 +486,7 @@
             relevantTag = OAPointAttributes.sensorTagBikePower;
             break;
         case EOAGPX3DLineVisualizationByTypeTemperature:
-            relevantTag = OAPointAttributes.sensorTagTemperature;
-            break;
+            return [self processTemperatureData:point numberFormatter:numberFormatter];
         case EOAGPX3DLineVisualizationByTypeSpeedSensor:
             relevantTag = OAPointAttributes.sensorTagSpeed;
             isSpeedSensorTag = YES;
@@ -518,6 +517,31 @@
     }
     
     return defaultValue;
+}
+
+- (float)processTemperatureData:(OAWptPt *)point numberFormatter:(NSNumberFormatter *)numberFormatter
+{
+    OAGpxExtension *trackpointextension = [point getExtensionByKey:@"trackpointextension"];
+    NSNumber *waterTempValue = nil;
+    NSNumber *airTempValue = nil;
+    
+    if (trackpointextension)
+    {
+        for (OAGpxExtension *subextension in trackpointextension.subextensions)
+        {
+            if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureW])
+                waterTempValue = [numberFormatter numberFromString:subextension.value];
+            else if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureA])
+                airTempValue = [numberFormatter numberFromString:subextension.value];
+        }
+    }
+    
+    if (waterTempValue)
+        return [waterTempValue floatValue];
+    else if (airTempValue)
+        return [airTempValue floatValue];
+    
+    return NAN;
 }
 
 - (void) drawLine:(QVector<OsmAnd::PointI> &)points
@@ -1516,6 +1540,11 @@ colorizationScheme:(int)colorizationScheme
     || type == EOAGPX3DLineVisualizationByTypeBicyclePower
     || type == EOAGPX3DLineVisualizationByTypeTemperature
     || type == EOAGPX3DLineVisualizationByTypeSpeedSensor;
+}
+
+- (BOOL)isInstanceOfOAWptPt:(id)point
+{
+    return [point isKindOfClass:[OAWptPt class]];
 }
 
 #pragma mark - OAMoveObjectProvider

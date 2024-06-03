@@ -4734,7 +4734,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
         _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:1.0] makeGlobal] makeShared];
-        _currentTrackElevationMeters = [[[OACommonInteger withKey:currentTrackVerticalExaggerationScaleKey defValue:1000] makeGlobal] makeShared];
+        _currentTrackElevationMeters = [[[OACommonInteger withKey:currentTrackElevationMetersKey defValue:kElevationDefMeters] makeGlobal] makeShared];
         _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
         
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];

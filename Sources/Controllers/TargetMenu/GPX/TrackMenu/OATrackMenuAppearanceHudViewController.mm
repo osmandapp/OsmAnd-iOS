@@ -491,6 +491,10 @@
 - (void) configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
 {
     self.gpx.visualization3dByType = type;
+    
+    if (self.gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeFixedHeight)
+        self.gpx.verticalExaggerationScale = 1.0;
+
     if (_wholeFolderTracks)
     {
         for (OAGPX *track in _wholeFolderTracks)
@@ -651,7 +655,7 @@
             [weakSelf configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type.intValue];
         }];
         
-        if (weakSelf.gpx.visualization3dByType == type.intValue)
+        if (self.gpx.visualization3dByType == type.intValue)
             action.state = UIMenuElementStateOn;
         
         if (type.intValue == EOAGPX3DLineVisualizationByTypeNone)
@@ -692,7 +696,7 @@
             [weakSelf configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type.integerValue];
         }];
         
-        if (weakSelf.gpx.visualization3dWallColorType == type.integerValue)
+        if (self.gpx.visualization3dWallColorType == type.integerValue)
             action.state = UIMenuElementStateOn;
         
         [actions addObject:action];
@@ -781,11 +785,28 @@
     
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     
-    return [UIMenu menuWithTitle:@"" children:menuElements];
+    return [UIMenu menuWithChildren:menuElements];
 }
 
 - (BOOL)hasValidDataForKey:(NSString *)key
 {
+    if ([key isEqualToString:OAPointAttributes.sensorTagTemperature])
+    {
+        for (OAPointAttributes *point in self.analysis.pointAttributes)
+        {
+            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureW])
+                return YES;
+        }
+        
+        for (OAPointAttributes *point in self.analysis.pointAttributes)
+        {
+            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureA])
+                return YES;
+        }
+        
+        return NO;
+    }
+    
     for (OAPointAttributes *point in self.analysis.pointAttributes)
     {
         if ([point hasValidValueFor:key])

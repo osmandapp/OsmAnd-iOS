@@ -22,6 +22,9 @@
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <qmap.h>
 
+static const NSInteger kElevationDefMeters = 1000;
+static const NSInteger kElevationMaxMeters = 2000;
+
 @implementation OAGPXDocument
 {
     double left;
@@ -262,12 +265,12 @@
     OAGpxExtension *e = [self getExtensionByKey:@"elevation_meters"];
     if (e) {
         NSInteger value = [e.value integerValue];
-        if (value && value >= 0 && value <= 2000)
+        if (value && value >= 0 && value <= kElevationMaxMeters)
             return value;
         else
-            return 1000;
+            return kElevationDefMeters;
     }
-    return 1000;
+    return kElevationDefMeters;
 }
 
 - (void)setElevationMeters:(NSInteger)meters

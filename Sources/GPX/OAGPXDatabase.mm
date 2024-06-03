@@ -719,7 +719,7 @@
     gpx.bounds = bounds;
     gpx.visualization3dWallColorType = EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
     gpx.verticalExaggerationScale = 1.0;
-    gpx.elevationMeters = 1000;
+    gpx.elevationMeters = kElevationDefMeters;
 
     for (NSString *key in gpxData)
     {

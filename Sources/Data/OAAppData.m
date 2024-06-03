@@ -324,7 +324,7 @@
     _hillshadeAlphaProfile = [OACommonDouble withKey:kHillshadeAlphaKey defValue:kHillshadeDefAlpha];
     _slopeAlphaProfile = [OACommonDouble withKey:kSlopeAlphaKey defValue:kSlopeDefAlpha];
     _verticalExaggerationScaleProfile = [OACommonDouble withKey:kVerticalExaggerationKey defValue:kExaggerationDefScale];
-    _elevationMetersProfile = [OACommonInteger withKey:kElevationMetersKey defValue:1000];
+    _elevationMetersProfile = [OACommonInteger withKey:kElevationMetersKey defValue:kElevationDefMeters];
     
     _hillshadeMinZoomProfile = [OACommonInteger withKey:kHillshadeMinZoomKey defValue:kHillshadeDefMinZoom];
     _hillshadeMaxZoomProfile = [OACommonInteger withKey:kHillshadeMaxZoomKey defValue:kHillshadeDefMaxZoom];

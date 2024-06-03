@@ -83,7 +83,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 {
     [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OASegmentTableViewCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OASegmentTableViewCell getCellIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell getLegacyCellIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell getLegacyCellIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell getCellIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoAltitudeCell getCellIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoAltitudeCell getCellIdentifier]];
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
-    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell getLegacyCellIdentifier]];
+    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
     const auto turnType = model.turnType;
     [turnDrawable setTurnType:turnType];

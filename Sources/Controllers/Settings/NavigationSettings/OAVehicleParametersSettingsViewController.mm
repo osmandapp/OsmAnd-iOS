@@ -130,13 +130,16 @@
     else
     {
         NSString *text = [self getTableHeaderDescription];
+        UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
+        if (!image && (!text || text.length == 0))
+            return;
+        
         CGFloat textWidth = DeviceScreenWidth - (kPaddingOnSideOfContent + [OAUtilities getLeftMargin]) * 2;
         CGFloat textHeight = [OAUtilities heightForHeaderViewText:text width:textWidth font:kHeaderDescriptionFontSmall lineSpacing:6.0];
         
         UIView *topImageDivider = [[UIView alloc] initWithFrame:CGRectMake(0., 0., DeviceScreenWidth, .5)];
         topImageDivider.backgroundColor = UIColorFromRGB(color_tint_gray);
         
-        UIImage *image = [UIImage imageNamed:[self getParameterImage:_vehicleParameter[@"name"]]];
         UIImageView *imageView = nil;
         UIView *imageBackgroundView = nil;
         if (image)

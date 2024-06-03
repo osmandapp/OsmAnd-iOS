@@ -2933,3 +2933,11 @@
 "free_favorites_backup_description" = "OsmAnd Cloudに登録すると、お気に入りと設定を無料でバックアップできます。";
 "free_favorites_backup" = "お気に入りバックアップ(無料)";
 "rendering_attr_showToll_description" = "道路の料金制限を表示します";
+"speedometer_description" = "GPSを基にあなたの現在の速度を表示します";
+"banner_payment_free_backup_settings_title" = "設定のバックアップ(無料)";
+"shared_string_speedometer" = "スピードメーター";
+"cloud_create_account" = "アカウントを作成";
+"get_osmand_cloud" = "OsmAnd Cloudを入手";
+"add_widget" = "ウィジェットを追加";
+"history_clear_alert_title" = "全ての履歴を削除";
+"history_clear_alert_message" = "全ての履歴を削除して本当によろしいですか？";

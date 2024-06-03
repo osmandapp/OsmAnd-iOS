@@ -3435,3 +3435,4 @@
 "speedometer_description" = "Приказ ваше тренутне брзине по подацима ГПС";
 "speed_limit_warning" = "Упозорење ограничења брзине";
 "shared_string_always" = "Увек";
+"shared_string_limit" = "Ограничење";

@@ -233,8 +233,13 @@
 
     [self startLocationServices];
 
-    if (_reopeningState && _reopeningState.showingState != EOADraggableMenuStateInitial)
-        [self updateShowingState:_reopeningState.showingState];
+    if (_reopeningState)
+    {
+        if (_reopeningState.showingState != EOADraggableMenuStateInitial)
+            [self updateShowingState:_reopeningState.showingState];
+        if (_reopeningState.openedFromTracksList)
+            [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
 
     UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
@@ -411,6 +416,7 @@
         {
             [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
         }
+        [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = YES;
     }
 }
 
@@ -1510,7 +1516,12 @@
     NSString *folderPath = [_app.gpxPath stringByAppendingPathComponent:@"Travel"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:folderPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
-    NSString *path = [self createUniqueFileName:self.doc.path.lastPathComponent path:folderPath];
+    
+    NSString *filename = self.doc.path.lastPathComponent;
+    if (!filename || filename.length == 0)
+        filename = [OAUtilities generateCurrentDateFilename];
+        
+    NSString *path = [self createUniqueFileName:filename path:folderPath];
     [self.doc saveTo:path];
     self.doc.path = path;
     OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:path title:self.doc.metadata.name desc:nil bounds:self.doc.bounds document:self.doc];

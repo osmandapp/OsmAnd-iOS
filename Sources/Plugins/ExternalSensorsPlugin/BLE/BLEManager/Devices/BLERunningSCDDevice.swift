@@ -19,8 +19,12 @@ final class BLERunningSCDDevice: Device {
         GattAttributes.SERVICE_RUNNING_SPEED_AND_CADENCE
     }
     
-    override var getServiceConnectedImage: UIImage {
-        UIImage(named: "widget_sensor_speed")!
+    override var getServiceConnectedImage: UIImage? {
+        UIImage(named: "widget_sensor_speed")
+    }
+    
+    override var getServiceDisconnectedImage: UIImage? {
+        UIImage(named: "ic_custom_sensor_speed_outlined")
     }
     
     override var getDataFields: [[String: String]]? {

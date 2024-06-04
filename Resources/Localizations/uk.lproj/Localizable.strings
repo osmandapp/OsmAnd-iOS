@@ -3432,3 +3432,9 @@
 "display_position_automatic_descr" = "Залежить від орієнтації мапи: внизу - для напрямку руху, в центрі - для всіх інших.";
 "shared_string_millimeters" = "Міліметри";
 "edit_tilesource_maxzoom" = "Максимальне масштабування";
+"shared_string_speedometer" = "Спідометр";
+"when_exceeded" = "Коли перевищено";
+"speedometer_description" = "Показує вашу поточну швидкість за даними GPS";
+"speed_limit_warning" = "Попередження щодо обмеження швидкості";
+"shared_string_always" = "Завжди";
+"shared_string_limit" = "Обмеження";

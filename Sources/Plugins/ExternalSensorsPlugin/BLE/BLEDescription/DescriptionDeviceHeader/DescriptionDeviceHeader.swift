@@ -42,7 +42,8 @@ final class DescriptionDeviceHeader: UIView {
     
     private func changeDisconnectedState(device: Device) {
         configureConnectButtonTitle(with: .connected)
-        deviceImageView.image = device.getServiceConnectedImage.noir
+        deviceImageView.image = device.getServiceDisconnectedImage
+        deviceImageView.tintColor = .iconColorDefault
         connectActivityView.stopAnimating()
         configureStartStateActivityView(with: device.state)
     }
@@ -64,18 +65,19 @@ final class DescriptionDeviceHeader: UIView {
     private func configureConnectUI(device: Device) {
         if device.isConnected {
             connectStatusLabel.text = localizedString("external_device_status_connected")
-            signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
+            signalIndicatorImageView.tintColor = .buttonBgColorPrimary
             updateRSSI(with: device.rssi)
             deviceImageView.image = device.getServiceConnectedImage
             configureConnectButtonTitle(with: .disconnected)
-            imageContainerView.backgroundColor = UIColor.buttonBgColorTertiary
+            imageContainerView.backgroundColor = .buttonBgColorTertiary
         } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
-            deviceImageView.image = device.getServiceConnectedImage.noir
+            deviceImageView.image = device.getServiceDisconnectedImage
+            deviceImageView.tintColor = .iconColorDefault
             configureConnectButtonTitle(with: .connected)
-            imageContainerView.backgroundColor = UIColor.viewBg
+            imageContainerView.backgroundColor = .viewBg
         }
     }
     
@@ -174,7 +176,8 @@ final class DescriptionDeviceHeader: UIView {
             case .success:
                 DeviceHelper.shared.removeDisconnected(device: device)
                 configureConnectButtonTitle(with: .connected)
-                deviceImageView.image = device.getServiceConnectedImage.noir
+                deviceImageView.image = device.getServiceDisconnectedImage
+                deviceImageView.tintColor = .iconColorDefault
             case .failure(let error):
                 if let error = error as? SBError {
                     switch error {

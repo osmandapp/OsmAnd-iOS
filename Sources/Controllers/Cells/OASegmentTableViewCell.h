@@ -11,5 +11,8 @@
 @interface OASegmentTableViewCell : UITableViewCell
 @property (strong, nonatomic) IBOutlet UISegmentedControl *segmentControl;
 
+@property (nonatomic) BOOL hideTopSectionSeparator;
+@property (nonatomic) BOOL hideBottomSectionSeparator;
+
 @end
 

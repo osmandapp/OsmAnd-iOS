@@ -20,4 +20,22 @@
     [super setSelected:selected animated:animated];
 }
 
+- (void)layoutSubviews
+{
+    [super layoutSubviews];
+    
+    for (UIView *view in self.subviews)
+    {
+        if ([NSStringFromClass(view.class) hasSuffix:@"CellSeparatorView"])
+        {
+            if (_hideTopSectionSeparator && view.frame.origin.y == 0)
+                view.hidden = YES;
+            else if (_hideBottomSectionSeparator && view.frame.origin.y > 0)
+                view.hidden = YES;
+            else
+                view.hidden = NO;
+        }
+    }
+}
+
 @end

@@ -139,6 +139,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
     [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
     [cell.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
+    cell.hideTopSectionSeparator = YES;
     return cell;
 }
 

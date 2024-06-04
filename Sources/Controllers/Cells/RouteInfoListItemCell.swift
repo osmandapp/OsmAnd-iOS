@@ -37,6 +37,10 @@ final class RouteInfoListItemCell: UITableViewCell {
         topLeftLabel.text = text
     }
     
+    func setTopLeftLabel(font: UIFont) {
+        topLeftLabel.font = font
+    }
+    
     func setTopRightLabel(text: String?) {
         topRightLabel.text = text
     }

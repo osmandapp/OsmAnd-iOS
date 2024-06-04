@@ -53,6 +53,32 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     EOAOARouteDetailsViewControllerModeAnalysis
 };
 
+@implementation OACumulativeInfo
+
++ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections
+{
+    OACumulativeInfo *cumulativeInfo = [[OACumulativeInfo alloc] init];
+    if (position >= routeDirections.count)
+        return cumulativeInfo;
+    
+    for (int i = 0; i < position; i++)
+    {
+        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
+        cumulativeInfo.time += [routeDirectionInfo getExpectedTime];
+        cumulativeInfo.distance += routeDirectionInfo.distance;
+    }
+    return cumulativeInfo;
+}
+
++ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model
+{
+    long timeInSeconds = [model getExpectedTime];
+    return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
+}
+
+@end
+
+
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
 
 @end
@@ -164,11 +190,17 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     NSString *segmentDescription = [model getDescriptionRoutePart];
     [cell setBottomLabelWithText:segmentDescription];
+    
     if (model.distance > 0)
     {
         NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance];
-        NSString *segmentTimeLabelText = [OAOsmAndFormatter getFormattedTimeInterval:[model getExpectedTime] shortFormat:YES];
-        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@",segmentDistanceLabelText, segmentTimeLabelText]];
+        [cell setTopLeftLabelWithText:segmentDistanceLabelText];
+        [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
+        
+        OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
+        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
     }
     else
     {
@@ -176,17 +208,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         {
             BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
             segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
-            [cell setBottomLabelWithText:segmentDescription];
+            [cell setTopLeftLabelWithText:segmentDescription];
+            [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+            [cell setTopRightLabelWithText:@""];
         }
-        [cell setTopRightLabelWithText:@""];
+        [cell setBottomLabelWithText:@""];
     }
     
-    NSInteger distanceFromStart = 0;
-    for (NSInteger i = 0; i < directionInfoIndex; i++)
-    {
-        distanceFromStart += directionsInfo[i].distance;
-    }
-    [cell setTopLeftLabelWithText:[OAOsmAndFormatter getFormattedDistance:distanceFromStart]];
     return cell;
 }
 

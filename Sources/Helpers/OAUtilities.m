@@ -2966,4 +2966,11 @@ static const double d180PI = 180.0 / M_PI_2;
     return ![kDocsLatestVersion containsString:@"future-ios"];
 }
 
++ (NSString *) generateCurrentDateFilename
+{
+    NSDateFormatter *objDateFormatter = [[NSDateFormatter alloc] init];
+    [objDateFormatter setDateFormat:@"EEE dd MMM yyyy"];
+    return [objDateFormatter stringFromDate:[NSDate date]];
+}
+
 @end

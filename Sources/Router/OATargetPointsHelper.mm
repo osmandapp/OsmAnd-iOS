@@ -652,7 +652,9 @@
     NSString *addressString = nil;
     BOOL isAddressFound = NO;
     NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
+    NSString *roadTitle = nil;
+    if (location && CLLocationCoordinate2DIsValid(location.coordinate))
+        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
     if (!roadTitle || roadTitle.length == 0)
     {
         addressString = OALocalizedString(@"map_no_address");

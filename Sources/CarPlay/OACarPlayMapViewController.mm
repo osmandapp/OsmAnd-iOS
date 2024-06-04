@@ -14,6 +14,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OAAlarmWidget.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kViewportXNonShifted 1.0
 
@@ -32,9 +33,12 @@
     BOOL _isInNavigationMode;
     
     OAAlarmWidget *_alarmWidget;
+    SpeedometerView *_speedometerView;
+    UIStackView *_alarmSpeedometerStackView;
     
-    NSLayoutConstraint *leftHandDrivingAlarmWidgetConstraint;
-    NSLayoutConstraint *rightHandDrivingAlarmWidgetConstraint;
+    NSLayoutConstraint *_leftHandDrivingAlarmSpeedometerStackViewConstraint;
+    NSLayoutConstraint *_rightHandDrivingAlarmSpeedometerStackViewConstraint;
+    NSLayoutConstraint *_speedometerHeightConstraint;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -60,7 +64,24 @@
     [super viewDidAppear:animated];
 
     [self attachMapToWindow];
+    
+    _alarmSpeedometerStackView = [UIStackView new];
+    _alarmSpeedometerStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    _alarmSpeedometerStackView.axis = UILayoutConstraintAxisVertical;
+    _alarmSpeedometerStackView.distribution = UIStackViewDistributionEqualSpacing;
+    _alarmSpeedometerStackView.spacing = 5;
+    [_window addSubview:_alarmSpeedometerStackView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8]
+    ]];
+    
+    _leftHandDrivingAlarmSpeedometerStackViewConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor];
+    _rightHandDrivingAlarmSpeedometerStackViewConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor];
+    
+    [self setupSpeedometer];
     [self setupAlarmWidget];
+    
     if (self.delegate)
         [self.delegate onMapViewAttached];
 }
@@ -80,16 +101,40 @@
     BOOL isLeftSideDriving = [self isLeftSideDriving];
     if (isLeftSideDriving)
     {
-        [rightHandDrivingAlarmWidgetConstraint setActive:NO];
-        [leftHandDrivingAlarmWidgetConstraint setActive:YES];
+        _alarmSpeedometerStackView.alignment = UIStackViewAlignmentTrailing;
+        NSLog(@"isLeftSideDriving YES");
+        [_leftHandDrivingAlarmSpeedometerStackViewConstraint setActive:NO];
+        [_rightHandDrivingAlarmSpeedometerStackViewConstraint setActive:YES];
     }
     else
     {
-        [leftHandDrivingAlarmWidgetConstraint setActive:NO];
-        [rightHandDrivingAlarmWidgetConstraint setActive:YES];
+        _alarmSpeedometerStackView.alignment = UIStackViewAlignmentLeading;
+        NSLog(@"isLeftSideDriving NO");
+        [_leftHandDrivingAlarmSpeedometerStackViewConstraint setActive:YES];
+        [_rightHandDrivingAlarmSpeedometerStackViewConstraint setActive:NO];
+    }
+    
+    if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
+    {
+        if (_speedometerView.carPlayConfig.isLeftSideDriving != isLeftSideDriving) {
+            _speedometerView.carPlayConfig.isLeftSideDriving = isLeftSideDriving;
+            [_speedometerView configure];
+        }
     }
 
     [self updateMapCenterPoint];
+}
+
+- (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
+{
+    [super traitCollectionDidChange:previousTraitCollection];
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_speedometerView configureUserInterfaceStyleWithStyle:self.traitCollection.userInterfaceStyle];
+            NSLog(@"traitCollectionDidChange: %ld", (long)self.traitCollection.userInterfaceStyle);
+        });
+    }
 }
 
 - (void)updateMapCenterPoint
@@ -116,16 +161,38 @@
 {
     _alarmWidget = [[OAAlarmWidget alloc] initForCarPlay];
     _alarmWidget.translatesAutoresizingMaskIntoConstraints = NO;
-    [_window addSubview:_alarmWidget];
+    
+    [_alarmSpeedometerStackView addArrangedSubview:_alarmWidget];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_alarmWidget.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:4.0],
         [_alarmWidget.heightAnchor constraintEqualToConstant:60.0],
         [_alarmWidget.widthAnchor constraintEqualToConstant:60.0]
     ]];
-    // In Right-Hand drive mode, the widget automatically has an X offset of -22 pixels. We add an additional constraint with the desired offset.
-    leftHandDrivingAlarmWidgetConstraint = [_alarmWidget.trailingAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.trailingAnchor constant:8];
-    rightHandDrivingAlarmWidgetConstraint = [_alarmWidget.trailingAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.trailingAnchor constant:22];
+}
+
+- (void)setupSpeedometer
+{
+    _speedometerView = [SpeedometerView initView];
+    _speedometerView.carPlayConfig = [CarPlayConfig new];
+    __weak __typeof(self) weakSelf = self;
+    _speedometerView.didChangeIsVisible = ^{
+        [weakSelf.view layoutIfNeeded];
+    };
+    _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
+    _speedometerView.hidden = YES;
+    [_window addSubview:_speedometerView];
+    [_speedometerView configure];
+    [_speedometerView configureUserInterfaceStyleWithStyle:self.traitCollection.userInterfaceStyle];
+    
+    [_alarmSpeedometerStackView addArrangedSubview:_speedometerView];
+    
+    _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
+    _speedometerHeightConstraint.active = YES;
+}
+
+- (void)configureSpeedometer {
+    [_speedometerView configure];
+    _speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
 }
 
 - (void) attachMapToWindow
@@ -260,7 +327,7 @@
 
 - (BOOL)isLeftSideDriving
 {
-    return _alarmWidget.frame.origin.x > self.view.frame.size.width / 2.0;
+    return _alarmSpeedometerStackView.frame.origin.x > self.view.frame.size.width / 2.0;
 }
 
 - (void)enterNavigationMode
@@ -280,6 +347,7 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_alarmWidget updateInfo];
+        [_speedometerView updateInfo];
     });
 }
 

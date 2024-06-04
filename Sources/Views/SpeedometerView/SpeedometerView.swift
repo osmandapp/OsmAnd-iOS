@@ -7,7 +7,13 @@
 //
 
 @objcMembers
+final class CarPlayConfig: NSObject {
+    var isLeftSideDriving = false
+}
+
+@objcMembers
 final class SpeedometerView: OATextInfoWidget {
+    
     @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint!
@@ -39,7 +45,7 @@ final class SpeedometerView: OATextInfoWidget {
     var sizeStyle: EOAWidgetSizeStyle = .medium
     var didChangeIsVisible: (() -> Void)?
    
-    var isCarPlay = false
+    var carPlayConfig: CarPlayConfig?
     var isPreview = false
     
     static var initView: SpeedometerView? {
@@ -62,7 +68,8 @@ final class SpeedometerView: OATextInfoWidget {
         let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
-
+    
+    @discardableResult
     override func updateInfo() -> Bool {
         guard settings.showSpeedometer.get() else {
             isHidden = true
@@ -85,8 +92,7 @@ final class SpeedometerView: OATextInfoWidget {
     
     func configure() {
         sizeStyle = settings.speedometerSize.get()
-        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
-        
+       
         let isDirectionRTL = isDirectionRTL()
         contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
         
@@ -98,20 +104,36 @@ final class SpeedometerView: OATextInfoWidget {
             centerPositionXConstraint.isActive = true
             leftPositionConstraint.isActive = false
             rightPositionConstraint.isActive = false
+            configureUserInterfaceStyleWithMapTheme()
         } else {
             isHidden = true
             centerPositionXConstraint.isActive = false
-            if isCarPlay {
+            if let carPlayConfig {
                 layer.cornerRadius = 10
-                // TODO: isCarPlay https://github.com/osmandapp/OsmAnd-iOS/issues/3668
-                leftPositionConstraint.isActive = false
-                rightPositionConstraint.isActive = true
+                if carPlayConfig.isLeftSideDriving {
+                    leftPositionConstraint.isActive = false
+                    rightPositionConstraint.isActive = true
+                } else {
+                    leftPositionConstraint.isActive = true
+                    rightPositionConstraint.isActive = false
+                }
+                contentStackView.semanticContentAttribute = carPlayConfig.isLeftSideDriving ? .forceRightToLeft : .forceLeftToRight
+                speedometerSpeedView.configureTextAlignmentContent(isTextAlignmentRight: carPlayConfig.isLeftSideDriving)
             } else {
                 layer.cornerRadius = 6
                 leftPositionConstraint.isActive = true
                 rightPositionConstraint.isActive = false
+                configureUserInterfaceStyleWithMapTheme()
             }
         }
+    }
+    
+    func configureUserInterfaceStyleWith(style: UIUserInterfaceStyle) {
+        overrideUserInterfaceStyle = style
+    }
+    
+    private func configureUserInterfaceStyleWithMapTheme() {
+        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     private func updateComponents() {

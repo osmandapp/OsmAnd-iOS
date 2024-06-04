@@ -67,6 +67,10 @@ final class CarPlaySceneDelegate: UIResponder {
             window.rootViewController = carPlayMapController
             carPlayDashboardController?.present()
             OARootViewController.instance()?.mapPanel.onCarPlayConnected()
+            OARootViewController.instance()?.mapPanel.didUpdateSpeedometer = { [weak self] in
+                guard let self else { return }
+                carPlayMapController?.configureSpeedometer()
+            }
         } else {
             let vc = OACarPlayActiveViewController()
             vc.messageText = localizedString("carplay_available_in_sub_plans")

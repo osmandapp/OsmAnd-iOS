@@ -24,8 +24,9 @@
 
 @property (nonatomic, weak) id<OACarPlayMapViewDelegate> delegate;
 
-- (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC;
+- (instancetype)initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC;
 
-- (void) detachFromCarPlayWindow;
+- (void)detachFromCarPlayWindow;
+- (void)configureSpeedometer;
 
 @end

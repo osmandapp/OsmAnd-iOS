@@ -65,6 +65,12 @@ final class SpeedometerSpeedView: UIView {
         }
     }
     
+    func configureTextAlignmentContent(isTextAlignmentRight: Bool) {
+        let textAlignment: NSTextAlignment = isTextAlignmentRight ? .right : .left
+        valueSpeedLabel.textAlignment = textAlignment
+        unitSpeedLabel.textAlignment = textAlignment
+    }
+    
     private func updateSpeedValueAndUnit(with value: Float) {
         let valueUnitArray: NSMutableArray = []
         OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)

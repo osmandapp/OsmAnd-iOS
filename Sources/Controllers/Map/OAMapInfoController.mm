@@ -118,6 +118,9 @@
 {
     [_speedometerView configure];
     [self updateLayout];
+    if ([OARootViewController instance].mapPanel.didUpdateSpeedometer) {
+        [OARootViewController instance].mapPanel.didUpdateSpeedometer();
+    }
 }
 
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
@@ -790,6 +793,9 @@
 - (void) registerAllControls
 {
     NSMutableArray<OABaseWidgetView *> *widgetsToUpdate = [NSMutableArray array];
+    
+    if (_alarmControl)
+        [_alarmControl removeFromSuperview];
 
     _alarmControl = [[OAAlarmWidget alloc] init];
     _alarmControl.delegate = self;

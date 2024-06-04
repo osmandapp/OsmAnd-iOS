@@ -42,6 +42,7 @@
 @property (nonatomic, readonly) id activeTargetObj;
 @property (nonatomic, readonly) id activeViewControllerState;
 @property (nonatomic, readonly) BOOL activeTargetChildPushed;
+@property (nonatomic, copy, nullable, readonly) void(^didUpdateSpeedometer)(void);
 
 @property (readonly) OAObservable *weatherToolbarStateChangeObservable;
 

@@ -410,4 +410,6 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 + (BOOL) isReleaseVersion;
 
++ (NSString *) generateCurrentDateFilename;
+
 @end

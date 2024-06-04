@@ -65,16 +65,20 @@ class Device: NSObject {
         ""
     }
     
-    var getServiceConnectedImage: UIImage {
-        UIImage()
+    var getServiceConnectedImage: UIImage? {
+        nil
+    }
+    
+    var getServiceDisconnectedImage: UIImage? {
+        nil
     }
     
     var getDataFields: [[String: String]]? {
-        return nil
+        nil
     }
     
     var getSettingsFields: [String: Any]? {
-        return nil
+        nil
     }
     
     init(deviceType: DeviceType!,

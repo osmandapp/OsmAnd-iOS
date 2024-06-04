@@ -2202,8 +2202,7 @@
         };
         controller.hideCallback = ^{
             OATrackMenuViewControllerState *state = _reopeningTrackMenuState;
-            BOOL openedFromTracksList = state.openedFromTracksList;
-            state.openedFromTracksList = openedFromTracksList;
+            state.openedFromTracksList = state.openedFromTracksList;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
             [weakSelf.mapViewController hideContextPinMarker];
@@ -2227,8 +2226,7 @@
         };
         controller.hideCallback = ^{
             OATrackMenuViewControllerState *state = _reopeningTrackMenuState;
-            BOOL openedFromTracksList = state.openedFromTracksList;
-            state.openedFromTracksList = openedFromTracksList;
+            state.openedFromTracksList = state.openedFromTracksList;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
             [weakSelf.mapViewController hideContextPinMarker];

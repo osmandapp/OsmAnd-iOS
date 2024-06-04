@@ -530,16 +530,17 @@
         for (OAGpxExtension *subextension in trackpointextension.subextensions)
         {
             if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureW])
+            {
                 waterTempValue = [numberFormatter numberFromString:subextension.value];
+                return waterTempValue ? [waterTempValue floatValue] : NAN;
+            }
             else if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureA])
+            {
                 airTempValue = [numberFormatter numberFromString:subextension.value];
+                return airTempValue ? [airTempValue floatValue] : NAN;
+            }
         }
     }
-    
-    if (waterTempValue)
-        return [waterTempValue floatValue];
-    else if (airTempValue)
-        return [airTempValue floatValue];
     
     return NAN;
 }
@@ -723,18 +724,13 @@ colorizationScheme:(int)colorizationScheme
                   lineWidth:(CGFloat)lineWidth
 {
     auto traceColorizationMapping = QList<OsmAnd::FColorARGB>();
-    BOOL showTransparentTraces = gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeDownwardGradient
-    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
-    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeAltitude
-    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSlope
-    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSpeed;
     BOOL isSpecialType = gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeAltitude
     || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSlope
     || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSpeed;
-    if (!showTransparentTraces)
+    if (![self showTransparentTraces:gpx.visualization3dWallColorType])
         traceColorizationMapping = colors;
     
-    BOOL shouldAddColorsToRaceColorizationMapping = colors.size() > 1 && showTransparentTraces;
+    BOOL shouldAddColorsToRaceColorizationMapping = colors.size() > 1 && [self showTransparentTraces:gpx.visualization3dWallColorType];
     
     if (shouldAddColorsToRaceColorizationMapping)
     {
@@ -786,7 +782,7 @@ colorizationScheme:(int)colorizationScheme
             break;
     }
     
-    if (showTransparentTraces)
+    if ([self showTransparentTraces:gpx.visualization3dWallColorType])
     {
         builder.setColorizationScheme(1);
         if (traceColorizationMapping.isEmpty())
@@ -1545,6 +1541,15 @@ colorizationScheme:(int)colorizationScheme
 - (BOOL)isInstanceOfOAWptPt:(id)point
 {
     return [point isKindOfClass:[OAWptPt class]];
+}
+
+- (BOOL)showTransparentTraces:(EOAGPX3DLineVisualizationWallColorType)type
+{
+    return type == EOAGPX3DLineVisualizationWallColorTypeDownwardGradient
+    || type == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
+    || type == EOAGPX3DLineVisualizationWallColorTypeAltitude
+    || type == EOAGPX3DLineVisualizationWallColorTypeSlope
+    || type == EOAGPX3DLineVisualizationWallColorTypeSpeed;
 }
 
 #pragma mark - OAMoveObjectProvider

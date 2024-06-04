@@ -13,12 +13,14 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
     weak var delegate: MapButtonsDelegate?
     private var appMode: OAApplicationMode!
     private var settings: OAAppSettings!
+    private var mapButtonsHelper: OAMapButtonsHelper!
 
     // MARK: Initialization
 
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
         appMode = settings.applicationMode.get()
+        mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
 
     override func registerCells() {
@@ -44,33 +46,29 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
         tableData.clearAllData()
 
         let buttonsSection = tableData.createNewSection()
-
-        let quickActionsCount = OAQuickActionRegistry.sharedInstance().getQuickActionsCount()
-        let quickActionsEnabled = settings.quickActionIsOn.get()
-        let actionsString = quickActionsEnabled ? String(quickActionsCount) : localizedString("shared_string_off")
-        let quickActionRow = buttonsSection.createNewRow()
-        quickActionRow.title = localizedString("configure_screen_quick_action")
-        quickActionRow.descr = quickActionsEnabled ? String(format: localizedString("ltr_or_rtl_combine_via_colon"),
-                                                            localizedString("shared_string_actions"),
-                                                            actionsString) : actionsString
-        quickActionRow.iconTintColor = quickActionsEnabled ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
-        quickActionRow.key = "quickAction"
-        quickActionRow.iconName = "ic_custom_quick_action"
-        quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
-        quickActionRow.accessibilityLabel = quickActionRow.title
-        quickActionRow.accessibilityValue = quickActionRow.descr
+        for mapButtonState in mapButtonsHelper.getButtonsStates() {
+            let enabled = mapButtonState.isEnabled()
+            let quickActionRow = buttonsSection.createNewRow()
+            quickActionRow.key = mapButtonState.id
+            quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
+            quickActionRow.setObj(mapButtonState, forKey: "buttonState")
+            quickActionRow.iconTintColor = enabled ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
+            quickActionRow.descr = localizedString(enabled ? "shared_string_on" : "shared_string_off")
+            quickActionRow.accessibilityLabel = quickActionRow.title
+            quickActionRow.accessibilityValue = quickActionRow.descr
+        }
     }
 
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        if item.cellType == OAValueTableViewCell.reuseIdentifier {
+        if item.cellType == OAValueTableViewCell.reuseIdentifier, let buttonState = item.obj(forKey: "buttonState") as? QuickActionButtonState {
             let cell = tableView.dequeueReusableCell(withIdentifier: OAValueTableViewCell.reuseIdentifier, for: indexPath) as! OAValueTableViewCell
             cell.accessoryType = .disclosureIndicator
             cell.descriptionVisibility(false)
-            cell.valueLabel.text = item.descr
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.image = buttonState.getIcon()
             cell.leftIconView.tintColor = item.iconTintColor
-            cell.titleLabel.text = item.title
+            cell.titleLabel.text = buttonState.getName()
+            cell.valueLabel.text = item.descr
             cell.accessibilityLabel = item.accessibilityLabel
             cell.accessibilityValue = item.accessibilityValue
             return cell
@@ -79,14 +77,15 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
     }
 
     override func onRowSelected(_ indexPath: IndexPath) {
-        let data = tableData.item(for: indexPath)
-        if data.key == "quickAction" {
-            let vc = OAQuickActionListViewController()
-            vc?.delegate = self
-            vc?.quickActionUpdateCallback = { [weak self] in
-                self?.onSettingsChanged()
+        let item = tableData.item(for: indexPath)
+        if let buttonState = item.obj(forKey: "buttonState") as? QuickActionButtonState {
+            if let vc = OAQuickActionListViewController(buttonState: buttonState) {
+                vc.delegate = self
+                vc.quickActionUpdateCallback = { [weak self] in
+                    self?.onSettingsChanged()
+                }
+                show(vc)
             }
-            show(vc)
         }
     }
 
@@ -98,8 +97,17 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
 
         let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self] _ in
             guard let self else { return }
-            if let buttonName = alert.textFields?.first?.text {
-                
+            if let name = alert.textFields?.first?.text {
+                if name.isEmpty {
+                    OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: view)
+                } else if !mapButtonsHelper.isActionButtonNameUnique(name) {
+                    OAUtilities.showToast(localizedString("custom_map_button_name_present"), details: nil, duration: 4, in: view)
+                } else {
+                    let buttonState = mapButtonsHelper.createNewButtonState()
+                    buttonState.setName(name)
+                    mapButtonsHelper.add(buttonState)
+                    onSettingsChanged()
+                }
             }
         }
         alert.addAction(saveAction)

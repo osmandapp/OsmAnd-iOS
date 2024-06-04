@@ -24,7 +24,6 @@
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kName = @"name";
-static NSString * const kDialog = @"dialog";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor = @"category_color";
 
@@ -54,6 +53,8 @@ static OAQuickActionType *TYPE;
     NSString *title = self.getParams[kName];
     if (!title || title.length == 0)
         title = [[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude];
+    if (!title || title.length == 0)
+        title = OALocalizedString(@"favorite");
     
     [self addFavorite:latLon.coordinate.latitude lon:latLon.coordinate.longitude title:title autoFill:![self.getParams[kDialog] boolValue]];
 }

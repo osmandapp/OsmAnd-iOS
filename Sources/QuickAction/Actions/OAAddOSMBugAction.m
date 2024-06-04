@@ -15,7 +15,6 @@
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kMessage = @"message";
-static NSString * const kDialog = @"dialog";
 
 static OAQuickActionType *TYPE;
 

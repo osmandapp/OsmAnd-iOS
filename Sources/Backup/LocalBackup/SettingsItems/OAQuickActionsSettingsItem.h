@@ -7,8 +7,13 @@
 //
 
 #import "OACollectionSettingsItem.h"
-#import "OAQuickAction.h"
 
-@interface OAQuickActionsSettingsItem : OACollectionSettingsItem<OAQuickAction *>
+@class OAQuickActionButtonState;
+
+@interface OAQuickActionsSettingsItem : OASettingsItem
+
+- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(OAQuickActionButtonState *)buttonState;
+
+- (OAQuickActionButtonState *)getButtonState;
 
 @end

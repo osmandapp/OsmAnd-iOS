@@ -9,7 +9,7 @@
 #import "OAAddQuickActionViewController.h"
 #import "OAActionConfigurationViewController.h"
 #import "Localization.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OAButtonTableViewCell.h"
@@ -28,9 +28,28 @@
     NSMutableArray<OAQuickActionType *> *_filteredData;
     UISearchController *_searchController;
     BOOL _isFiltered;
+
+    OAMapButtonsHelper *_mapButtonsHelper;
+    OAQuickActionButtonState *_buttonState;
 }
 
 #pragma mark - Initialization
+
+- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+    }
+    return self;
+}
+
+- (void)commonInit
+{
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+    _buttonState = [_mapButtonsHelper getButtonStateById:@""];
+}
 
 - (void)registerNotifications
 {
@@ -98,7 +117,7 @@
 
 - (void)generateData
 {
-    NSArray<OAQuickActionType *> *all = [[OAQuickActionRegistry sharedInstance] produceTypeActionsListWithHeaders];
+    NSArray<OAQuickActionType *> *all = [_mapButtonsHelper produceTypeActionsListWithHeaders:_buttonState];
     NSMutableArray<OAQuickActionType *> *actionsInSection = nil;
     MutableOrderedDictionary<NSString *, NSArray<OAQuickActionType *> *> *mapping = [[MutableOrderedDictionary alloc] init];
     NSString *currSectionName = @"";
@@ -217,7 +236,7 @@
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
 {
     OAQuickActionType *item = [self getItem:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:[item createNew] isNew:YES];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState typeId:item.id];
     actionScreen.delegate = self.delegate;
     [self.navigationController pushViewController:actionScreen animated:YES];
 }

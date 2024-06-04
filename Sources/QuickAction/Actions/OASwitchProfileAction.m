@@ -10,7 +10,7 @@
 #import "OAColors.h"
 #import "OAApplicationMode.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAProfileSelectionBottomSheetViewController.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -48,7 +48,7 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    NSArray<NSString *> *profiles = self.getParams[kSwitchProfileStringKeys];
+    NSArray<NSString *> *profiles = self.getParams[OAQuickActionSerializer.kSwitchProfileStringKeys];
     
     if (profiles.count == 0)
         return;
@@ -124,10 +124,10 @@ static OAQuickActionType *TYPE;
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
                           }] forKey:OALocalizedString(@"quick_action_dialog")];
     
-    NSArray<NSString *> *names = self.getParams[kSwitchProfileNames];
-    NSArray<NSString *> *stringKeys = self.getParams[kSwitchProfileStringKeys];
-    NSArray<NSString *> *iconNames = self.getParams[kSwitchProfileIconNames];
-    NSArray<NSString *> *iconColors = self.getParams[kSwitchProfileIconColors];
+    NSArray<NSString *> *names = self.getParams[OAQuickActionSerializer.kSwitchProfileNames];
+    NSArray<NSString *> *stringKeys = self.getParams[OAQuickActionSerializer.kSwitchProfileStringKeys];
+    NSArray<NSString *> *iconNames = self.getParams[OAQuickActionSerializer.kSwitchProfileIconNames];
+    NSArray<NSString *> *iconColors = self.getParams[OAQuickActionSerializer.kSwitchProfileIconColors];
     NSMutableArray *arr = [NSMutableArray new];
 
     for (int i = 0; i < names.count; i++)
@@ -173,10 +173,10 @@ static OAQuickActionType *TYPE;
             }
         }
     }
-    [params setObject:names forKey:kSwitchProfileNames];
-    [params setObject:stringKeys forKey:kSwitchProfileStringKeys];
-    [params setObject:iconNames forKey:kSwitchProfileIconNames];
-    [params setObject:iconColors forKey:kSwitchProfileIconColors];
+    [params setObject:names forKey:OAQuickActionSerializer.kSwitchProfileNames];
+    [params setObject:stringKeys forKey:OAQuickActionSerializer.kSwitchProfileStringKeys];
+    [params setObject:iconNames forKey:OAQuickActionSerializer.kSwitchProfileIconNames];
+    [params setObject:iconColors forKey:OAQuickActionSerializer.kSwitchProfileIconColors];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return names.count > 0;
 }
@@ -193,7 +193,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    return [self getParams][kSwitchProfileNames];
+    return [self getParams][OAQuickActionSerializer.kSwitchProfileNames];
 }
 
 - (OAApplicationMode *) getModeForKey:(NSString *)key

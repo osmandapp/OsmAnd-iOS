@@ -17,12 +17,14 @@ class WidgetsSettingsHelper: NSObject {
 
     private var appMode: OAApplicationMode
     private var settings: OAAppSettings
+    private var mapButtonsHelper: OAMapButtonsHelper
 
     init(appMode: OAApplicationMode) {
         self.appMode = appMode
         widgetRegistry = OAMapWidgetRegistry.sharedInstance()
         widgetsFactory = MapWidgetsFactory()
         settings = OAAppSettings.sharedManager()
+        mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
 
     func setAppMode(_ appMode: OAApplicationMode) {
@@ -42,9 +44,9 @@ class WidgetsSettingsHelper: NSObject {
         }
 
         settings.transparentMapTheme.resetMode(toDefault: appMode)
-        settings.compassMode.resetMode(toDefault: appMode)
+        mapButtonsHelper.getCompassButtonState().visibilityPref.resetMode(toDefault: appMode)
         settings.showDistanceRuler.resetMode(toDefault: appMode)
-        settings.quickActionIsOn.resetMode(toDefault: appMode)
+        mapButtonsHelper.resetQuickActions(for: appMode)
     }
 
     func copyConfigureScreenSettings(fromAppMode: OAApplicationMode, widgetParams: [String: Any]) {
@@ -52,9 +54,9 @@ class WidgetsSettingsHelper: NSObject {
             copyWidgetsForPanel(fromAppMode: fromAppMode, panel: panel, widgetParams: widgetParams)
         }
         copyPrefFromAppMode(pref: settings.transparentMapTheme, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.compassMode, fromAppMode: fromAppMode)
+        copyPrefFromAppMode(pref: mapButtonsHelper.getCompassButtonState().visibilityPref, fromAppMode: fromAppMode)
         copyPrefFromAppMode(pref: settings.showDistanceRuler, fromAppMode: fromAppMode)
-        copyPrefFromAppMode(pref: settings.quickActionIsOn, fromAppMode: fromAppMode)
+        mapButtonsHelper.copyQuickActions(from: settings.applicationMode.get(), fromAppMode: fromAppMode)
     }
 
     func copyWidgetsForPanel(fromAppMode: OAApplicationMode, panel: WidgetsPanel, widgetParams: [String: Any]? = nil) {

@@ -22,6 +22,7 @@ final class MigrationManager: NSObject {
 
     static let shared = MigrationManager()
     let defaults = UserDefaults.standard
+    private let settings = OAAppSettings.sharedManager()
 
     private override init() {}
 
@@ -57,63 +58,10 @@ final class MigrationManager: NSObject {
             }
             if !defaults.bool(forKey: MigrationKey.migrationChangeQuickActionIds1Key.rawValue) {
                 changeQuickActionIdsMigration1()
+                migrateActionButtons()
                 defaults.set(true, forKey: MigrationKey.migrationChangeQuickActionIds1Key.rawValue)
             }
         }
-    }
-
-    private func changeQuickActionIdsMigration1() {
-        if let settings = OAAppSettings.sharedManager() {
-            if let jsonData = settings.quickActionsList.get()?.data(using: .utf8),
-               let arr = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
-                let changeQuickActionIntStringIds = [
-                    Pair(4, "transport.showhide"): OAShowHideTransportLinesAction.type(),
-                    Pair(31, "osmedit.showhide"): OAShowHideLocalOSMChanges.type(),
-                    Pair(32, "nav.directions"): OANavDirectionsFromAction.type(),
-                    Pair(36, "weather.temperature.showhide"): OAShowHideTemperatureAction.type(),
-                    Pair(37, "weather.pressure.showhide"): OAShowHidePressureAction.type(),
-                    Pair(38, "weather.wind.showhide"): OAShowHideWindAction.type(),
-                    Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.type(),
-                    Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.type()
-                ]
-                var mutableArr = arr
-                for i in 0..<mutableArr.count {
-                    var data = mutableArr[i]
-                    let id = data["type"] as? Int
-                    let stringId = data["actionType"] as? String
-                    if let index = changeQuickActionIntStringIds.firstIndex(where: { (id == -1 && $0.value?.stringId == stringId) || $0.key.first == id || $0.key.second == stringId }) {
-                        if let quickActionType = changeQuickActionIntStringIds[index].value {
-                            data["type"] = quickActionType.id
-                            data["actionType"] = quickActionType.stringId
-                            if let oldName = data["name"] as? String,
-                               (oldName.contains(changeQuickActionIntStringIds[index].key.second) || oldName.contains(quickActionType.stringId)) {
-                                data["name"] = quickActionType.name
-                            }
-                            mutableArr[i] = data
-                        }
-                    }
-                }
-                if !dictionariesAreEqual(arr, mutableArr) {
-                    if let jsonData = try? JSONSerialization.data(withJSONObject: mutableArr, options: .prettyPrinted) {
-                        if let jsonString = String(data: jsonData, encoding: .utf8) {
-                            settings.quickActionsList.set(jsonString)
-                        }
-                    }
-                }
-            }
-            OAQuickActionRegistry.sharedInstance().updateQuickActions()
-        }
-    }
-
-    private func dictionariesAreEqual(_ leftArr: [[String: Any]], _ rightArr: [[String: Any]]) -> Bool {
-        guard leftArr.count == rightArr.count else { return false }
-        for (index, leftDict) in leftArr.enumerated() {
-            let rightDict = rightArr[index]
-            if !NSDictionary(dictionary: leftDict).isEqual(to: rightDict) {
-                return false
-            }
-        }
-        return true
     }
 
     private func changeWidgetIdsMigration1() {
@@ -286,6 +234,131 @@ final class MigrationManager: NSObject {
         return newWidgetsList
     }
 
+    private func changeQuickActionIdsMigration1() {
+        let prefKey = "quick_action_list"
+        if let pref = defaults.string(forKey: prefKey), let jsonData = pref.data(using: .utf8),
+           let arr = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
+            let changeQuickActionIntStringIds = [
+                Pair(4, "transport.showhide"): OAShowHideTransportLinesAction.type(),
+                Pair(31, "osmedit.showhide"): OAShowHideLocalOSMChanges.type(),
+                Pair(32, "nav.directions"): OANavDirectionsFromAction.type(),
+                Pair(36, "weather.temperature.showhide"): OAShowHideTemperatureAction.type(),
+                Pair(37, "weather.pressure.showhide"): OAShowHideAirPressureAction.type(),
+                Pair(38, "weather.wind.showhide"): OAShowHideWindAction.type(),
+                Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.type(),
+                Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.type()
+            ]
+            var mutableArr = arr
+            for i in 0..<mutableArr.count {
+                var data = mutableArr[i]
+                let id = data["type"] as? Int
+                let stringId = data["actionType"] as? String
+                if let index = changeQuickActionIntStringIds.firstIndex(where: { (id == -1 && $0.value?.stringId == stringId) || $0.key.first == id || $0.key.second == stringId }) {
+                    if let quickActionType = changeQuickActionIntStringIds[index].value {
+                        data["type"] = quickActionType.id
+                        data["actionType"] = quickActionType.stringId
+                        if let oldName = data["name"] as? String,
+                           (oldName.contains(changeQuickActionIntStringIds[index].key.second) || oldName.contains(quickActionType.stringId)) {
+                            data["name"] = quickActionType.name
+                        }
+                        mutableArr[i] = data
+                    }
+                }
+            }
+            if !dictionariesAreEqual(arr, mutableArr) {
+                if let jsonData = try? JSONSerialization.data(withJSONObject: mutableArr, options: .prettyPrinted) {
+                    if let jsonString = String(data: jsonData, encoding: .utf8) {
+                        defaults.set(object: jsonString, forKey: prefKey)
+                    }
+                }
+            }
+        }
+        OAMapButtonsHelper.sharedInstance().updateActiveActions()
+    }
+
+    private func dictionariesAreEqual(_ leftArr: [[String: Any]], _ rightArr: [[String: Any]]) -> Bool {
+        guard leftArr.count == rightArr.count else { return false }
+        for (index, leftDict) in leftArr.enumerated() {
+            let rightDict = rightArr[index]
+            if !NSDictionary(dictionary: leftDict).isEqual(to: rightDict) {
+                return false
+            }
+        }
+        return true
+    }
+    
+    private func migrateActionButtons() {
+        if let oldStatePref = OACommonBoolean.withKey("qiuckActionIsOn", defValue: false).makeProfile(),
+           let newStatePref = OACommonBoolean.withKey(QuickActionButtonState.defaultButtonId + "_state", defValue: false).makeProfile() {
+            for appMode in OAApplicationMode.allPossibleValues() {
+                newStatePref.set(oldStatePref.get(appMode), mode: appMode)
+            }
+            settings?.quickActionButtons.addUnique(QuickActionButtonState.defaultButtonId)
+        }
+
+        if let value = defaults.string(forKey: "quick_action_list"), !value.isEmpty,
+           let actionsPref = OACommonString.withKey(QuickActionButtonState.defaultButtonId + "_list", defValue: "").makeProfile() {
+            for appMode in OAApplicationMode.allPossibleValues() {
+                actionsPref.set(value, mode: appMode)
+            }
+        }
+
+        let oldFabMarginPref = FabMarginPreference("quick_fab_margin")
+        let fabMarginPref = FabMarginPreference(QuickActionButtonState.defaultButtonId + "_fab_margin")
+        for appMode in OAApplicationMode.allPossibleValues() {
+            let portrait = oldFabMarginPref.getPortraitFabMargin(appMode)
+            let landscape = oldFabMarginPref.getLandscapeFabMargin(appMode)
+
+            fabMarginPref.setPortraitFabMargin(appMode, x: portrait[0].int32Value, y: portrait[1].int32Value)
+            fabMarginPref.setLandscapeFabMargin(appMode, x: landscape[0].int32Value, y: landscape[1].int32Value)
+        }
+
+        let oldMap3DFabMarginPref = FabMarginPreference("3dmode_fab_margin")
+        let fabMap3DMarginPref = FabMarginPreference("map_3d_mode_margin")
+        for appMode in OAApplicationMode.allPossibleValues() {
+            let portrait = oldMap3DFabMarginPref.getPortraitFabMargin(appMode)
+            let landscape = oldMap3DFabMarginPref.getLandscapeFabMargin(appMode)
+
+            fabMap3DMarginPref.setPortraitFabMargin(appMode, x: portrait[0].int32Value, y: portrait[1].int32Value)
+            fabMap3DMarginPref.setLandscapeFabMargin(appMode, x: landscape[0].int32Value, y: landscape[1].int32Value)
+        }
+    }
+
+//    private void migrateProfileQuickActionButtons() {
+//        OsmandSettings settings = app.getSettings();
+//        MapButtonsHelper buttonsHelper = app.getMapButtonsHelper();
+//        Map<String, QuickActionButtonState> globalButtons = new LinkedHashMap<>();
+//
+//        for (ApplicationMode appMode : ApplicationMode.allPossibleValues()) {
+//            SharedPreferences preferences = (SharedPreferences) settings.getProfilePreferences(appMode);
+//            
+//            String ids = preferences.getString("quick_action_buttons", DEFAULT_BUTTON_ID + ";");
+//            List<String> actionsKeys = ListStringPreference.getStringsList(ids, ";");
+//            if (!Algorithms.isEmpty(actionsKeys)) {
+//                Set<String> uniqueKeys = new LinkedHashSet<>(actionsKeys);
+//                for (String key : uniqueKeys) {
+//                    if (!Algorithms.isEmpty(key)) {
+//                        String name = preferences.getString(key + "_name", "");
+//                        if (!globalButtons.containsKey(name)) {
+//                            QuickActionButtonState oldState = new QuickActionButtonState(app, key);
+//                            QuickActionButtonState newState = buttonsHelper.createNewButtonState();
+//                            
+//                            newState.getNamePref().set(name);
+//                            newState.getQuickActionsPref().set(preferences.getString(key + "_list", null));
+//                            copyPreferenceForAllModes(oldState.getStatePref(), newState.getStatePref());
+//                            copyFabMarginPreferenceForAllModes(oldState.getFabMarginPref(), newState.getFabMarginPref());
+//                            
+//                            globalButtons.put(name, newState);
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//        if (!globalButtons.isEmpty()) {
+//            buttonsHelper.setQuickActionButtonStates(globalButtons.values());
+//        }
+//    }
+
     func changeJsonMigrationToV2(_ json: [String: String]) -> [String: String] {
 
         // change keys inside old json import file after "Migration 1"
@@ -342,11 +415,11 @@ final class MigrationManager: NSObject {
         ]
 
         return Array(jsonArray.map {
-            var json = $0
+            let json = $0
             if let stringId = json["actionType"], changeQuickActionStringIds.keys.contains(stringId) {
                 return Dictionary(uniqueKeysWithValues: json.map({
                     let key = $0
-                    var value = $1
+                    let value = $1
                     if key == "actionType", let newValue = changeQuickActionStringIds[value] {
                         return (key, newValue)
                     } else {

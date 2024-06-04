@@ -23,7 +23,6 @@
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kTag = @"key_tag";
-static NSString * const kDialog = @"dialog";
 static NSString * const kCategory = @"key_category";
 
 static OAQuickActionType *ACTION_TYPE;

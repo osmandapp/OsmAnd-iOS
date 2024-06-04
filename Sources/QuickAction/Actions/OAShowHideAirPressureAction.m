@@ -6,13 +6,13 @@
 //  Copyright (c) 2022 OsmAnd. All rights reserved.
 //
 
-#import "OAShowHidePressureAction.h"
+#import "OAShowHideAirPressureAction.h"
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
 
-@implementation OAShowHidePressureAction
+@implementation OAShowHideAirPressureAction
 
 - (instancetype)init
 {

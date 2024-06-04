@@ -25,7 +25,6 @@
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kName = @"name";
-static NSString * const kDialog = @"dialog";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor =  @"category_color";
 

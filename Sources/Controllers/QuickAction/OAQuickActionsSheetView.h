@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+@class OAQuickActionButtonState;
+
 @protocol OAQuickActionsSheetDelegate <NSObject>
 
 @required
@@ -19,5 +21,7 @@
 @interface OAQuickActionsSheetView : UIView
 
 @property (nonatomic) id<OAQuickActionsSheetDelegate> delegate;
+
+- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState;
 
 @end

@@ -14,7 +14,7 @@
 #import "OAColors.h"
 #import "OAQuickAction.h"
 #import "OANewAction.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAActionConfigurationViewController.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -38,6 +38,8 @@
 
 @implementation OAQuickActionsSheetView
 {
+    OAMapButtonsHelper *_helper;
+    OAQuickActionButtonState *_buttonState;
     NSArray<OAQuickAction *> *_actions;
     
     OAAutoObserverProxy* _actionsChangedObserver;
@@ -53,7 +55,7 @@
     OAAppSettings *_settings;
 }
 
-- (instancetype) init
+- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState;
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -65,6 +67,7 @@
     
     if (self)
     {
+        _buttonState = buttonState;
         [self commonInit];
     }
     
@@ -91,7 +94,8 @@
     return self;
 }
 
-- (void)setupPageControls {
+- (void)setupPageControls
+{
     [_pageControlIndicator setNumberOfPages:[self getPagesCount]];
     [_pageControlIndicator setCurrentPage:0];
     [self setupButton:_controlBtnPrev active:NO title:OALocalizedString(@"shared_string_previous")];
@@ -101,11 +105,12 @@
 - (void) commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _helper = [OAMapButtonsHelper sharedInstance];
+    _actions = _buttonState.quickActions;
     
-    OAQuickActionRegistry *registry = [OAQuickActionRegistry sharedInstance];
     _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onActionsChanged)
-                                                         andObserve:registry.quickActionListChangedObservable];
+                                                         andObserve:_helper.quickActionListChangedObservable];
     
     [self refreshActionList];
     
@@ -180,21 +185,16 @@
 {
     OAQuickAction *item = [self getAction:indexPath];
     if (item.isActionEditable)
-    {
-        OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
-        [[OARootViewController instance].navigationController pushViewController:actionScreen animated:YES];
-    }
+        [[OARootViewController instance].navigationController pushViewController:[[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState action:item] animated:YES];
     else
-    {
         [item execute];
-    }
     if (self.delegate)
         [_delegate dismissBottomSheet];
 }
 
 - (void) refreshActionList
 {
-    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getQuickActions];
+    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:_buttonState.quickActions];
     [tmpActions addObject:[[OANewAction alloc] init]];
     NSInteger actionsCount = tmpActions.count;
     NSInteger remainder = actionsCount % 6;
@@ -400,7 +400,8 @@
     [self updateControlButtons:newIndexPath];
 }
 
-- (IBAction)closePressed:(id)sender {
+- (IBAction)closePressed:(id)sender
+{
     if (self.delegate)
         [_delegate dismissBottomSheet];
 }

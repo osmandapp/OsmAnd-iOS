@@ -11,14 +11,17 @@ import Foundation
 class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfileBottomSheetDelegate, WidgetStateDelegate {
 
     weak var delegate: MapButtonsDelegate?
-    private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
+    private var map3DButtonState: Map3DButtonState!
+    private var compassButtonState: CompassButtonState!
 
     // MARK: Initialization
 
     override func commonInit() {
-        settings = OAAppSettings.sharedManager()
-        appMode = settings.applicationMode.get()
+        appMode = OAAppSettings.sharedManager().applicationMode.get()
+        let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
+        map3DButtonState = mapButtonsHelper.getMap3DButtonState()
+        compassButtonState = mapButtonsHelper.getCompassButtonState()
     }
 
     override func registerCells() {
@@ -43,8 +46,8 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
                                                 preferredStyle: .actionSheet)
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_reset"), style: .destructive) { _ in
                 guard let self else { return }
-                self.settings.compassMode.resetMode(toDefault: self.appMode)
-                self.settings.map3dMode.resetMode(toDefault: self.appMode)
+                self.map3DButtonState.visibilityPref.resetMode(toDefault: self.appMode)
+                self.compassButtonState.visibilityPref.resetMode(toDefault: self.appMode)
                 self.onSettingsChanged()
             })
             actionSheet.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
@@ -86,27 +89,24 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
         let buttonsSection = tableData.createNewSection()
     
         let compassRow = buttonsSection.createNewRow()
-        let defaultCompassMode = EOACompassMode.rotated
-        let compassMode = EOACompassMode(rawValue: Int(settings.compassMode.get(appMode)))
         compassRow.key = "compass"
         compassRow.cellType = OAValueTableViewCell.reuseIdentifier
-        compassRow.title = localizedString("map_widget_compass")
-        compassRow.descr = OACompassMode.getTitle(compassMode ?? defaultCompassMode) ?? ""
+        compassRow.title = compassButtonState.getName()
+        compassRow.descr = getDescription(compassButtonState)
         compassRow.accessibilityLabel = compassRow.title
         compassRow.accessibilityValue = compassRow.descr
-        compassRow.iconTintColor = compassMode != .hidden ? iconTintColor : UIColor.iconColorDefault
-        compassRow.iconName = OACompassMode.getIconName(compassMode ?? defaultCompassMode)
+        compassRow.iconTintColor = compassButtonState.isEnabled() ? iconTintColor : UIColor.iconColorDefault
+        compassRow.icon = compassButtonState.getIcon()
 
         let map3dModeRow = buttonsSection.createNewRow()
-        let map3dMode = settings.map3dMode.get(appMode)
-        map3dModeRow.key = "map_3d_mode"
+        map3dModeRow.key = "map3DMode"
         map3dModeRow.cellType = OAValueTableViewCell.reuseIdentifier
-        map3dModeRow.title = localizedString("map_3d_mode_action")
-        map3dModeRow.descr = OAMap3DModeVisibility.getTitle(map3dMode) ?? ""
+        map3dModeRow.title = map3DButtonState.getName()
+        map3dModeRow.descr = getDescription(map3DButtonState)
         map3dModeRow.accessibilityLabel = map3dModeRow.title
         map3dModeRow.accessibilityValue = map3dModeRow.descr
-        map3dModeRow.iconTintColor = map3dMode != .hidden ? iconTintColor : UIColor.iconColorDefault
-        map3dModeRow.iconName = OAMap3DModeVisibility.getIconName(map3dMode)
+        map3dModeRow.iconTintColor = map3DButtonState.isEnabled() ? iconTintColor : UIColor.iconColorDefault
+        map3dModeRow.icon = map3DButtonState.getIcon()
     }
 
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
@@ -116,7 +116,7 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
             cell.accessoryType = .disclosureIndicator
             cell.descriptionVisibility(false)
             cell.valueLabel.text = item.descr
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
+            cell.leftIconView.image = item.icon
             cell.leftIconView.tintColor = item.iconTintColor
             cell.titleLabel.text = item.title
             cell.accessibilityLabel = item.accessibilityLabel
@@ -132,7 +132,7 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
             let vc = CompassVisibilityViewController()
             vc.delegate = self
             showMediumSheetViewController(vc, isLargeAvailable: false)
-        } else if data.key == "map_3d_mode" {
+        } else if data.key == "map3DMode" {
             let vc = Map3dModeButtonVisibilityViewController()
             vc.delegate = self
             showMediumSheetViewController(vc, isLargeAvailable: false)
@@ -144,6 +144,17 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
     private func onSettingsChanged() {
         reloadDataWith(animated: true, completion: nil)
         delegate?.onButtonsChanged()
+    }
+
+    private func getDescription(_ buttonState: MapButtonState) -> String {
+        if buttonState is Map3DButtonState {
+            let map3DButtonState = buttonState as! Map3DButtonState
+            return map3DButtonState.getVisibility().title
+        } else if buttonState is CompassButtonState {
+            let compassButtonState = buttonState as! CompassButtonState
+            return compassButtonState.getVisibility().title
+        }
+        return ""
     }
 
     // MARK: WidgetStateDelegate
@@ -158,8 +169,8 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
     }
 
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
-        settings.compassMode.set(settings.compassMode.get(fromAppMode), mode: appMode)
-        settings.map3dMode.set(settings.map3dMode.get(fromAppMode), mode: appMode)
+        map3DButtonState.visibilityPref.set(map3DButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
+        compassButtonState.visibilityPref.set(compassButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
         onSettingsChanged()
     }
 }

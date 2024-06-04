@@ -26,12 +26,14 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
 
     private var settings: OAAppSettings!
     private var appMode: OAApplicationMode!
+    private var mapButtonsHelper: OAMapButtonsHelper!
 
     // MARK: Initialization
 
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
         appMode = settings.applicationMode.get()
+        mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
 
     override func registerObservers() {
@@ -107,32 +109,30 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let buttonsSection = tableData.createNewSection()
         buttonsSection.headerText = localizedString("shared_string_buttons")
 
+        let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
         var defaultButtonsEnabledCount = 0
-        if settings.compassMode.get(appMode) != EOACompassMode.hidden.rawValue {
-            defaultButtonsEnabledCount += 1
-        }
-        if settings.map3dMode.get(appMode) != .hidden {
-            defaultButtonsEnabledCount += 1
+        for defaultButton in defaultButtons {
+            if defaultButton.isEnabled() {
+                defaultButtonsEnabledCount += 1
+            }
         }
         let defaultButtonsRow = buttonsSection.createNewRow()
         defaultButtonsRow.key = "defaultButtons"
         defaultButtonsRow.title = localizedString("default_buttons")
-        defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "2")
+        defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
         defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
         defaultButtonsRow.iconName = "ic_custom_button_default"
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
         defaultButtonsRow.accessibilityValue = defaultButtonsRow.descr
 
-        var customButtonsEnabledCount = 0
-        if settings.quickActionIsOn.get() {
-            customButtonsEnabledCount += 1
-        }
+        let customButtons = mapButtonsHelper.getButtonsStates()
+        let enabledCustomButtons = mapButtonsHelper.getEnabledButtonsStates()
         let customButtonsRow = buttonsSection.createNewRow()
         customButtonsRow.key = "customButtons"
         customButtonsRow.title = localizedString("custom_buttons")
-        customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(customButtonsEnabledCount)", "1")
-        customButtonsRow.iconTintColor = customButtonsEnabledCount > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
+        customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
+        customButtonsRow.iconTintColor = enabledCustomButtons.count > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
         customButtonsRow.iconName = "ic_custom_quick_action"
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title

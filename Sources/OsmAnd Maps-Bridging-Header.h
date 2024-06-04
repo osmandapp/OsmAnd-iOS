@@ -20,7 +20,7 @@
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OADownloadingCellHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
@@ -190,11 +190,12 @@
 
 // Quick actions
 #import "OAQuickAction.h"
+#import "OASwitchableAction.h"
 #import "OAShowHideTransportLinesAction.h"
 #import "OAShowHideLocalOSMChanges.h"
 #import "OANavDirectionsFromAction.h"
 #import "OAShowHideTemperatureAction.h"
-#import "OAShowHidePressureAction.h"
+#import "OAShowHideAirPressureAction.h"
 #import "OAShowHideWindAction.h"
 #import "OAShowHideCloudAction.h"
 #import "OAShowHidePrecipitationAction.h"

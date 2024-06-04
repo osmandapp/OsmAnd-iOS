@@ -13,7 +13,7 @@
 #import "OAMapHudViewController.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OACustomPlugin.h"
 #import "OAPluginInstalledViewController.h"
 #import "OAResourcesBaseViewController.h"

@@ -17,6 +17,6 @@
 - (BOOL) isActionSheetVisible;
 - (BOOL) isQuickActionFloatingButtonVisible;
 - (void) hideActionsSheetAnimated;
-- (void) updateColors:(BOOL)isNight;
+- (void) updateColors;
 
 @end

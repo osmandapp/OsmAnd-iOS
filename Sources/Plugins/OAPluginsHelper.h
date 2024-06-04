@@ -42,7 +42,7 @@ const static NSString *OSMAND_URL = @"https://osmand.net";
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
-+ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)allTypes enabledTypes:(NSMutableArray<OAQuickActionType *> *)enabledTypes;
 + (void) createMapWidgets:(id<OAWidgetRegistrationDelegate> _Nullable)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 + (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
 

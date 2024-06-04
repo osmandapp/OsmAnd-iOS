@@ -567,6 +567,7 @@
 		462F13EB283FD0D400B73795 /* OAOsmLiveFeaturesCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 462F13E9283FD0D300B73795 /* OAOsmLiveFeaturesCardView.xib */; };
 		462F13EC283FD0D400B73795 /* OAOsmLiveFeaturesCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = 462F13EA283FD0D300B73795 /* OAOsmLiveFeaturesCardView.m */; };
 		4631377929AE6D8A000B0258 /* OACarPlayHistoryListController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */; };
+		46330AEF2C034C1100E60CA2 /* FabMarginPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */; };
 		46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */; };
 		4635DDE82A02A7DE00D36203 /* ColorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635DDE72A02A7DE00D36203 /* ColorItem.swift */; };
 		464076CA2B55B3FC005AA91F /* SimpleWidgetInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */; };
@@ -636,6 +637,11 @@
 		46494281286DB36800A44103 /* ic_custom_compass_hidden@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */; };
 		46494282286DB36800A44103 /* ic_custom_compass_north@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */; };
 		464BAAA22B0E360600CC06E6 /* PointAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BAAA12B0E360600CC06E6 /* PointAttributes.swift */; };
+		464BF4A32C04D348000D6908 /* QuickActionSerializer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */; };
+		464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */; };
+		464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A62C050189000D6908 /* CompassVisibility.swift */; };
+		464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */; };
+		464BF4AB2C051909000D6908 /* Map3DButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464BF4AA2C051909000D6908 /* Map3DButtonState.swift */; };
 		464C9B4228E49793006F57B7 /* ic_custom_device_download@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B3E28E49791006F57B7 /* ic_custom_device_download@3x.png */; };
 		464C9B4328E49793006F57B7 /* ic_custom_globe_upload@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B3F28E49792006F57B7 /* ic_custom_globe_upload@2x.png */; };
 		464C9B4428E49793006F57B7 /* ic_custom_globe_upload@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464C9B4028E49792006F57B7 /* ic_custom_globe_upload@3x.png */; };
@@ -678,6 +684,8 @@
 		468AADE628C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 468AADE228C77A6200BEC402 /* ic_custom_download_map_unavailable@3x.png */; };
 		468C798D2B7F76A000DA64D0 /* SendCodeCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */; };
 		468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */; };
+		468D9C6C2C00FE0600ED368A /* MapButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6B2C00FE0600ED368A /* MapButtonState.swift */; };
+		468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */; };
 		46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */; };
 		46903D6B29B5F77A004459F1 /* OABaseWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */; };
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
@@ -1372,7 +1380,7 @@
 		C5EB72C42BD12F4D00C50C23 /* RouteParameterDevelopmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */; };
 		CA4ED03A64D6784BA1452142 /* OADeleteAllFilesCommand.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB13C1566E5C9A2B0D3E /* OADeleteAllFilesCommand.mm */; };
 		CA4ED053363110BD3446216F /* OASubscriptionBannerCardView.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDB568946B3B7E439A94E /* OASubscriptionBannerCardView.mm */; };
-		CA4ED071F93DF4FB0368BACC /* OAShowHidePressureAction.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.m */; };
+		CA4ED071F93DF4FB0368BACC /* OAShowHideAirPressureAction.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED01DD17D02CD759BBC7C /* OAShowHideAirPressureAction.m */; };
 		CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4ED355FD3FAEA8F4F74263 /* OAWeatherBandSettingsViewController.mm */; };
 		CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.m in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.m */; };
 		CA4ED127365B6FCBDC4E739E /* OABackupTypesViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = CA4EDA0456BEB6851C6646AE /* OABackupTypesViewController.mm */; };
@@ -1991,7 +1999,7 @@
 		DA5A817626C563A700F274C7 /* OAPointDescription.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79CD26C563A000F274C7 /* OAPointDescription.mm */; };
 		DA5A817726C563A700F274C7 /* MGSwipeTableCell.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D026C563A000F274C7 /* MGSwipeTableCell.m */; };
 		DA5A817826C563A700F274C7 /* MGSwipeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D326C563A000F274C7 /* MGSwipeButton.m */; };
-		DA5A817926C563A700F274C7 /* OAQuickActionRegistry.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D526C563A000F274C7 /* OAQuickActionRegistry.m */; };
+		DA5A817926C563A700F274C7 /* OAMapButtonsHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */; };
 		DA5A817B26C563A700F274C7 /* OAFavoriteAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D826C563A000F274C7 /* OAFavoriteAction.mm */; };
 		DA5A817C26C563A700F274C7 /* OAAddOSMBugAction.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79D926C563A000F274C7 /* OAAddOSMBugAction.m */; };
 		DA5A817D26C563A700F274C7 /* OAMapSourceAction.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A79DB26C563A000F274C7 /* OAMapSourceAction.mm */; };
@@ -4021,6 +4029,7 @@
 		462F13EA283FD0D300B73795 /* OAOsmLiveFeaturesCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAOsmLiveFeaturesCardView.m; sourceTree = "<group>"; };
 		4631377729AE6D45000B0258 /* OACarPlayHistoryListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACarPlayHistoryListController.h; sourceTree = "<group>"; };
 		4631377829AE6D8A000B0258 /* OACarPlayHistoryListController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACarPlayHistoryListController.mm; sourceTree = "<group>"; };
+		46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabMarginPreference.swift; sourceTree = "<group>"; };
 		46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherForecastViewController.xib; sourceTree = "<group>"; };
 		4635DDE72A02A7DE00D36203 /* ColorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorItem.swift; sourceTree = "<group>"; };
 		464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWidgetInfo.swift; sourceTree = "<group>"; };
@@ -4091,6 +4100,11 @@
 		4649427B286DB36700A44103 /* ic_custom_compass_hidden@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_hidden@2x.png"; path = "Resources/Icons/ic_custom_compass_hidden@2x.png"; sourceTree = "<group>"; };
 		4649427C286DB36700A44103 /* ic_custom_compass_north@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_north@3x.png"; path = "Resources/Icons/ic_custom_compass_north@3x.png"; sourceTree = "<group>"; };
 		464BAAA12B0E360600CC06E6 /* PointAttributes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PointAttributes.swift; sourceTree = "<group>"; };
+		464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionSerializer.swift; sourceTree = "<group>"; };
+		464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassButtonState.swift; sourceTree = "<group>"; };
+		464BF4A62C050189000D6908 /* CompassVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassVisibility.swift; sourceTree = "<group>"; };
+		464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map3DModeVisibility.swift; sourceTree = "<group>"; };
+		464BF4AA2C051909000D6908 /* Map3DButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map3DButtonState.swift; sourceTree = "<group>"; };
 		464C9B3E28E49791006F57B7 /* ic_custom_device_download@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_device_download@3x.png"; path = "Resources/Icons/ic_custom_device_download@3x.png"; sourceTree = "<group>"; };
 		464C9B3F28E49792006F57B7 /* ic_custom_globe_upload@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_globe_upload@2x.png"; path = "Resources/Icons/ic_custom_globe_upload@2x.png"; sourceTree = "<group>"; };
 		464C9B4028E49792006F57B7 /* ic_custom_globe_upload@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_globe_upload@3x.png"; path = "Resources/Icons/ic_custom_globe_upload@3x.png"; sourceTree = "<group>"; };
@@ -4143,6 +4157,8 @@
 		468C798C2B7F76A000DA64D0 /* SendCodeCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendCodeCommand.swift; sourceTree = "<group>"; };
 		468CE3EF29F82E6300F3C3E5 /* OAColorCollectionViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorCollectionViewController.h; sourceTree = "<group>"; };
 		468CE3F029F82E9400F3C3E5 /* OAColorCollectionViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAColorCollectionViewController.m; sourceTree = "<group>"; };
+		468D9C6B2C00FE0600ED368A /* MapButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapButtonState.swift; sourceTree = "<group>"; };
+		468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuickActionButtonState.swift; sourceTree = "<group>"; };
 		46903D6729B5F715004459F1 /* OABaseWebViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OABaseWebViewController.h; sourceTree = "<group>"; };
 		46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OABaseWebViewContoller.m; sourceTree = "<group>"; };
 		46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseWebViewController.xib; sourceTree = "<group>"; };
@@ -5033,7 +5049,7 @@
 		C5E202922A2102D700BFC32C /* ic_navbar_add@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_add@3x.png"; path = "Resources/Icons/ic_navbar_add@3x.png"; sourceTree = "<group>"; };
 		C5E202932A2102D800BFC32C /* ic_navbar_add@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_add@2x.png"; path = "Resources/Icons/ic_navbar_add@2x.png"; sourceTree = "<group>"; };
 		C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterDevelopmentViewController.swift; sourceTree = "<group>"; };
-		CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHidePressureAction.m; sourceTree = "<group>"; };
+		CA4ED01DD17D02CD759BBC7C /* OAShowHideAirPressureAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAShowHideAirPressureAction.m; sourceTree = "<group>"; };
 		CA4ED0221B1888DD1A891DAE /* OAPlanTypeCardRow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPlanTypeCardRow.mm; sourceTree = "<group>"; };
 		CA4ED02BF41419F656CFE755 /* OAWeatherForecastDetailsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherForecastDetailsViewController.h; sourceTree = "<group>"; };
 		CA4ED0674197CBD54D7AB46B /* OAWeatherCacheSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherCacheSettingsViewController.h; sourceTree = "<group>"; };
@@ -5069,7 +5085,7 @@
 		CA4ED5839151481FB6475983 /* OAWeatherPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWeatherPlugin.h; sourceTree = "<group>"; };
 		CA4ED58F58E106312EB43FEC /* OAShowHideTemperatureAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideTemperatureAction.h; sourceTree = "<group>"; };
 		CA4ED5B77046F2C3F6FB7181 /* OASlider.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OASlider.h; sourceTree = "<group>"; };
-		CA4ED5BDD9AF265EDFF9E6C8 /* OAShowHidePressureAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHidePressureAction.h; sourceTree = "<group>"; };
+		CA4ED5BDD9AF265EDFF9E6C8 /* OAShowHideAirPressureAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideAirPressureAction.h; sourceTree = "<group>"; };
 		CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAWeatherHelper.mm; sourceTree = "<group>"; };
 		CA4ED62F995232DABA9FA04D /* OAShowHideCloudAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAShowHideCloudAction.h; sourceTree = "<group>"; };
 		CA4ED6727DB5ADB0D8FE2ED3 /* OADeleteOldFilesCommand.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OADeleteOldFilesCommand.mm; sourceTree = "<group>"; };
@@ -5850,7 +5866,7 @@
 		DA5A79D126C563A000F274C7 /* MGSwipeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeButton.h; sourceTree = "<group>"; };
 		DA5A79D226C563A000F274C7 /* MGSwipeTableCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGSwipeTableCell.h; sourceTree = "<group>"; };
 		DA5A79D326C563A000F274C7 /* MGSwipeButton.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGSwipeButton.m; sourceTree = "<group>"; };
-		DA5A79D526C563A000F274C7 /* OAQuickActionRegistry.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAQuickActionRegistry.m; sourceTree = "<group>"; };
+		DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAMapButtonsHelper.m; sourceTree = "<group>"; };
 		DA5A79D826C563A000F274C7 /* OAFavoriteAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAFavoriteAction.mm; sourceTree = "<group>"; };
 		DA5A79D926C563A000F274C7 /* OAAddOSMBugAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAAddOSMBugAction.m; sourceTree = "<group>"; };
 		DA5A79DA26C563A000F274C7 /* OANavReplaceDestinationAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavReplaceDestinationAction.h; sourceTree = "<group>"; };
@@ -5919,7 +5935,7 @@
 		DA5A7A1B26C563A000F274C7 /* OAAddPOIAction.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAAddPOIAction.mm; sourceTree = "<group>"; };
 		DA5A7A1C26C563A000F274C7 /* OASwitchProfileAction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OASwitchProfileAction.m; sourceTree = "<group>"; };
 		DA5A7A1D26C563A000F274C7 /* OAMapStyleAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapStyleAction.h; sourceTree = "<group>"; };
-		DA5A7A1F26C563A000F274C7 /* OAQuickActionRegistry.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAQuickActionRegistry.h; sourceTree = "<group>"; };
+		DA5A7A1F26C563A000F274C7 /* OAMapButtonsHelper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAMapButtonsHelper.h; sourceTree = "<group>"; };
 		DA5A7A2126C563A000F274C7 /* NSData+CRC32.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+CRC32.h"; sourceTree = "<group>"; };
 		DA5A7A2226C563A000F274C7 /* OAWorldRegion+Protected.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "OAWorldRegion+Protected.h"; sourceTree = "<group>"; };
 		DA5A7A2326C563A000F274C7 /* NSData+CRC32.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSData+CRC32.m"; sourceTree = "<group>"; };
@@ -9600,6 +9616,20 @@
 			path = Appearance;
 			sourceTree = "<group>";
 		};
+		468D9C6A2C00FDF100ED368A /* Buttons */ = {
+			isa = PBXGroup;
+			children = (
+				464BF4A42C04F7D6000D6908 /* CompassButtonState.swift */,
+				464BF4A62C050189000D6908 /* CompassVisibility.swift */,
+				46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */,
+				464BF4AA2C051909000D6908 /* Map3DButtonState.swift */,
+				464BF4A82C0517E7000D6908 /* Map3DModeVisibility.swift */,
+				468D9C6B2C00FE0600ED368A /* MapButtonState.swift */,
+				468D9C6D2C01030400ED368A /* QuickActionButtonState.swift */,
+			);
+			path = Buttons;
+			sourceTree = "<group>";
+		};
 		46AEDB8A27F4A9AC006D90E8 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
@@ -10981,10 +11011,11 @@
 			isa = PBXGroup;
 			children = (
 				DA5A79D726C563A000F274C7 /* Actions */,
-				DA5A7A1F26C563A000F274C7 /* OAQuickActionRegistry.h */,
-				DA5A79D526C563A000F274C7 /* OAQuickActionRegistry.m */,
+				DA5A7A1F26C563A000F274C7 /* OAMapButtonsHelper.h */,
+				DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */,
 				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
 				460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */,
+				464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */,
 			);
 			path = QuickAction;
 			sourceTree = "<group>";
@@ -11054,8 +11085,8 @@
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
 				CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */,
 				CA4ED932CD20B5BC04F13428 /* OAShowHidePrecipitationAction.m */,
-				CA4ED5BDD9AF265EDFF9E6C8 /* OAShowHidePressureAction.h */,
-				CA4ED01DD17D02CD759BBC7C /* OAShowHidePressureAction.m */,
+				CA4ED5BDD9AF265EDFF9E6C8 /* OAShowHideAirPressureAction.h */,
+				CA4ED01DD17D02CD759BBC7C /* OAShowHideAirPressureAction.m */,
 				CA4ED58F58E106312EB43FEC /* OAShowHideTemperatureAction.h */,
 				CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.m */,
 				DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */,
@@ -12122,6 +12153,7 @@
 		DA5A7DCA26C563A300F274C7 /* QuickAction */ = {
 			isa = PBXGroup;
 			children = (
+				468D9C6A2C00FDF100ED368A /* Buttons */,
 				DA5A7DD526C563A300F274C7 /* OAActionAddCategoryViewController.h */,
 				DA5A7DCD26C563A300F274C7 /* OAActionAddCategoryViewController.mm */,
 				DA5A7DD226C563A300F274C7 /* OAActionAddMapSourceViewController.h */,
@@ -16485,6 +16517,7 @@
 				DA5A853726C563A900F274C7 /* OADefaultFavorite.m in Sources */,
 				DA5A846E26C563A900F274C7 /* OAWidgetState.m in Sources */,
 				DA5A849726C563A900F274C7 /* OAGpxData.mm in Sources */,
+				464BF4A92C0517E7000D6908 /* Map3DModeVisibility.swift in Sources */,
 				DAA61CCE2A03D9C000AFF65D /* OAWidgetsVisibilityHelper.mm in Sources */,
 				DA5A831226C563A800F274C7 /* OAFolderCardsCell.m in Sources */,
 				DA4ABF1C2876DA6800B996EF /* OAMapSourcesSettingsItem.mm in Sources */,
@@ -16498,7 +16531,7 @@
 				DA5A81A726C563A700F274C7 /* OAObjectType.m in Sources */,
 				DA5A840F26C563A800F274C7 /* OABasePointEditingHandler.m in Sources */,
 				DA5A832B26C563A800F274C7 /* OADirectionTableViewCell.m in Sources */,
-				DA5A817926C563A700F274C7 /* OAQuickActionRegistry.m in Sources */,
+				DA5A817926C563A700F274C7 /* OAMapButtonsHelper.m in Sources */,
 				DA5A84B926C563A900F274C7 /* OABottomSheetTwoButtonsViewController.mm in Sources */,
 				DA5A83C026C563A800F274C7 /* OAActionAddMapSourceViewController.mm in Sources */,
 				DA5A854C26C563A900F274C7 /* OAWikiArticleHelper.mm in Sources */,
@@ -16790,6 +16823,7 @@
 				326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */,
 				DAAC0EBD2801807200867D35 /* OAImportBackupTask.m in Sources */,
 				DA5A830226C563A800F274C7 /* OADeviceScreenTableViewCell.m in Sources */,
+				468D9C6E2C01030400ED368A /* QuickActionButtonState.swift in Sources */,
 				DA5A830326C563A800F274C7 /* OAQuickActionCell.mm in Sources */,
 				DA5A812826C563A700F274C7 /* OAFavoritesMapLayerProvider.mm in Sources */,
 				FA9628E62AFD2F2E004B7DEF /* BLETemperatureSensor.swift in Sources */,
@@ -16839,6 +16873,7 @@
 				DA5A843E26C563A800F274C7 /* OATargetInfoViewController.mm in Sources */,
 				DA5A831926C563A800F274C7 /* OADownloadProgressBarCell.m in Sources */,
 				DA5A830726C563A800F274C7 /* OAPoiTableViewCell.m in Sources */,
+				468D9C6C2C00FE0600ED368A /* MapButtonState.swift in Sources */,
 				DA5A84A626C563A900F274C7 /* OAPlanningPopupBaseViewController.m in Sources */,
 				DA5A843826C563A800F274C7 /* OARouteDetailsGraphViewController.mm in Sources */,
 				DA5A84D426C563A900F274C7 /* OAMapSettingsOnlineSourcesScreen.mm in Sources */,
@@ -16905,6 +16940,7 @@
 				DA5A825726C563A700F274C7 /* OAAvoidPreferParametersViewController.mm in Sources */,
 				32048FC72A26084000AA4B71 /* OsmOAuthHelper.swift in Sources */,
 				3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */,
+				464BF4A72C050189000D6908 /* CompassVisibility.swift in Sources */,
 				DA5A815B26C563A700F274C7 /* OACustomPlugin.mm in Sources */,
 				DA5A855426C563A900F274C7 /* OAGPXAppearanceCollection.mm in Sources */,
 				DA5A83A426C563A800F274C7 /* OAPoiTypeSelectionViewController.mm in Sources */,
@@ -17028,6 +17064,7 @@
 				DA5A845726C563A900F274C7 /* OAOsmBugsLayer.mm in Sources */,
 				DA4ABEEC2876DA5D00B996EF /* OAExportSettingsType.mm in Sources */,
 				DA5A856126C563A900F274C7 /* OAGpxRouteApproximation.mm in Sources */,
+				464BF4AB2C051909000D6908 /* Map3DButtonState.swift in Sources */,
 				DAECA4FA26CFE62600241B0B /* OABaseWidgetView.m in Sources */,
 				4657490E2B6803710006046B /* TrashItem.swift in Sources */,
 				DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */,
@@ -17195,6 +17232,7 @@
 				323084D926E933FE00D6FC67 /* OAOsmAndFormatter.mm in Sources */,
 				46FB65BC2A8BCF2300A21850 /* WidgetUtils.swift in Sources */,
 				DA5A831C26C563A800F274C7 /* OAColorsCollectionViewCell.m in Sources */,
+				464BF4A32C04D348000D6908 /* QuickActionSerializer.swift in Sources */,
 				DA5A848526C563A900F274C7 /* OAMapWidgetRegInfo.mm in Sources */,
 				DA5A832F26C563A800F274C7 /* OATitleSliderRoundCell.m in Sources */,
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
@@ -17349,7 +17387,9 @@
 				DA5A852A26C563A900F274C7 /* OALocationParser.mm in Sources */,
 				327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */,
 				DA5A848A26C563A900F274C7 /* OARoadSegmentData.mm in Sources */,
+				46330AEF2C034C1100E60CA2 /* FabMarginPreference.swift in Sources */,
 				FAA650542ADD42C50020DCEA /* BLEHeartRateSensor.swift in Sources */,
+				464BF4A52C04F7D6000D6908 /* CompassButtonState.swift in Sources */,
 				DA5A839726C563A800F274C7 /* OALocalResourceInformationViewController.mm in Sources */,
 				DA5A84B026C563A900F274C7 /* OAAddWaypointBottomSheetViewController.mm in Sources */,
 				DA5A848726C563A900F274C7 /* OANavigationController.m in Sources */,
@@ -17550,7 +17590,7 @@
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,
 				CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.m in Sources */,
-				CA4ED071F93DF4FB0368BACC /* OAShowHidePressureAction.m in Sources */,
+				CA4ED071F93DF4FB0368BACC /* OAShowHideAirPressureAction.m in Sources */,
 				CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.m in Sources */,
 				CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.m in Sources */,
 				CA4ED3C5613C7FCF1FAF6F34 /* OAShowHidePrecipitationAction.m in Sources */,

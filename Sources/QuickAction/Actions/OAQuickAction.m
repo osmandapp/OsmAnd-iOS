@@ -7,7 +7,7 @@
 //
 
 #import "OAQuickAction.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -22,29 +22,29 @@ static NSInteger SEQ = 0;
 
 @implementation OAQuickAction
 
-- (instancetype) init
+- (instancetype)init
 {
-    return [self initWithActionType:OAQuickActionRegistry.TYPE_ADD_ITEMS];
+    return [self initWithActionType:OAMapButtonsHelper.TYPE_ADD_ITEMS];
 }
 
--(instancetype) initWithActionType:(OAQuickActionType *)type
+- (instancetype)initWithActionType:(OAQuickActionType *)type
 {
     self = [super init];
     if (self)
     {
-        _identifier = [[NSDate date] timeIntervalSince1970] * 1000 + (SEQ++);
+        _id = [[NSDate date] timeIntervalSince1970] * 1000 + (SEQ++);
         _actionType = type;
         [self commonInit];
     }
     return self;
 }
 
-- (instancetype) initWithAction:(OAQuickAction *)action
+- (instancetype)initWithAction:(OAQuickAction *)action
 {
     self = [super init];
     if (self)
     {
-        _identifier = action.identifier;
+        _id = action.id;
         _name = action.getRawName;
         _actionType = action.actionType;
         _params = action.getParams;
@@ -57,14 +57,15 @@ static NSInteger SEQ = 0;
 {
 }
 
--(NSString *) getIconResName
+- (NSString *)getIconResName
 {
     return _actionType ? _actionType.iconName : nil;
 }
 
 - (UIImage *)getActionIcon
 {
-    return [UIImage templateImageNamed:[self getIconResName]];
+    NSString *iconResName = [self getIconResName];
+    return iconResName ? [UIImage templateImageNamed:iconResName] : nil;
 }
 
 - (NSString *)getSecondaryIconName
@@ -77,9 +78,9 @@ static NSInteger SEQ = 0;
     return self.getSecondaryIconName != nil;
 }
 
--(long) getId
+- (void)setId:(long)id
 {
-    return _identifier;
+    _id = id;
 }
 
 -(NSInteger) getType
@@ -102,7 +103,7 @@ static NSInteger SEQ = 0;
     return _actionType ? _actionType.name : @"";
 }
 
-- (NSString *) getName
+- (NSString *)getName
 {
     if (_name.length == 0 || !self.isActionEditable)
         return [self getDefaultName];
@@ -120,7 +121,7 @@ static NSInteger SEQ = 0;
     return _actionType ? _actionType.stringId : nil;
 }
 
--(NSDictionary *) getParams
+- (NSDictionary<NSString *, NSString *> *)getParams
 {
     if (!_params)
         _params = [NSDictionary new];
@@ -150,7 +151,7 @@ static NSInteger SEQ = 0;
 
 -(NSString *) getActionText
 {
-    return nil;
+    return [self getName];
 }
 
 -(NSString *) getActionStateName
@@ -217,7 +218,7 @@ static NSInteger SEQ = 0;
         OAQuickAction *action = (OAQuickAction *) object;
         if (self.getType != action.getType)
             return NO;
-        if (_identifier != action.identifier)
+        if (_id != action.id)
             return NO;
         return YES;
     }
@@ -230,7 +231,7 @@ static NSInteger SEQ = 0;
 - (NSUInteger)hash
 {
     NSInteger result = self.getType;
-    result = 31 * result + (NSInteger) (_identifier ^ (_identifier >> 32));
+    result = 31 * result + (NSInteger) (_id ^ (_id >> 32));
     result = 31 * result + (_name != nil ? [_name hash] : 0);
     return result;
 }

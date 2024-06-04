@@ -136,9 +136,4 @@
         [[[OAInstallMapillaryBottomSheetViewController alloc] init] show];
 }
 
-- (NSArray *)getQuickActionTypes
-{
-    return @[OAShowHideMapillaryAction.TYPE];
-}
-
 @end

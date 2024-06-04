@@ -11,11 +11,10 @@
 #import "OAAddQuickActionViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "Localization.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAQuickAction.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAMultiselectableHeaderView.h"
-#import "OAAppSettings.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -32,18 +31,26 @@
 
 @implementation OAQuickActionListViewController
 {
-    OAQuickActionRegistry *_registry;
     NSMutableArray<OAQuickAction *> *_data;
-    
-    OAAppSettings *_settings;
+    OAMapButtonsHelper *_mapButtonsHelper;
+    OAQuickActionButtonState *_buttonState;
 }
 
 #pragma mark - Initialization
 
+- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+    }
+    return self;
+}
+
 - (void)commonInit
 {
-    _registry = [OAQuickActionRegistry sharedInstance];
-    _settings = OAAppSettings.sharedManager;
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
 }
 
 #pragma mark - UIViewController
@@ -53,12 +60,6 @@
     [super viewDidLoad];
 
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
-}
-
-- (void) onSwitchPressed:(UISwitch *)sender
-{
-    [_settings.quickActionIsOn set:sender.isOn];
-    [self.delegate onWidgetStateChanged];
 }
 
 #pragma mark - Base UI
@@ -140,7 +141,7 @@
 
 - (void)generateData
 {
-    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    _data = [NSMutableArray arrayWithArray:_buttonState.quickActions];
 }
 
 - (NSInteger)sectionsCount
@@ -193,7 +194,7 @@
         }
         if (cell)
         {
-            cell.switchView.on = _settings.quickActionIsOn.get;
+            cell.switchView.on = [_buttonState isEnabled];
             cell.titleLabel.text = OALocalizedString(@"shared_string_enabled");
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -310,8 +311,7 @@
 
 - (void)saveChanges
 {
-    [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
-    [_registry.quickActionListChangedObservable notifyEvent];
+    [_mapButtonsHelper updateQuickActions:_buttonState actions:_data];
     if (self.quickActionUpdateCallback)
         self.quickActionUpdateCallback();
 }
@@ -342,12 +342,18 @@
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
 {
     OAQuickAction *item = [self getAction:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState action:item];
     actionScreen.delegate = self;
     [self.navigationController pushViewController:actionScreen animated:YES];
 }
 
 #pragma mark - Selectors
+
+- (void)onSwitchPressed:(UISwitch *)sender
+{
+    [_buttonState setEnabled:sender.isOn];
+    [self.delegate onWidgetStateChanged];
+}
 
 - (void)editPressed
 {
@@ -361,8 +367,7 @@
 - (void)onLeftNavbarButtonPressed
 {
     [self disableEditing];
-    [self generateData];
-    [self.tableView reloadData];
+    [self updateData];
 }
 
 - (void)donePressed
@@ -373,7 +378,7 @@
 
 - (void)addActionPressed
 {
-    OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] init];
+    OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState];
     vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -404,8 +409,9 @@
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSMutableArray<OAQuickAction *> *dataCopy = [NSMutableArray arrayWithArray:_data];
             for (NSIndexPath *path in indexes)
+            {
                 [dataCopy removeObject:[self getAction:path]];
-
+            }
             _data = dataCopy;
             [self saveChanges];
             [self.tableView reloadData];
@@ -442,12 +448,19 @@
     if (value)
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+        {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]
+                                        animated:YES
+                                  scrollPosition:UITableViewScrollPositionNone];
+        }
     }
     else
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+        {
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]
+                                          animated:YES];
+        }
     }
     [self.tableView endUpdates];
 }
@@ -456,8 +469,7 @@
 
 - (void)updateData
 {
-    [self generateData];
-    [self.tableView reloadData];
+    [self reloadDataWithAnimated:YES completion:nil];
     if (self.quickActionUpdateCallback)
         self.quickActionUpdateCallback();
 }

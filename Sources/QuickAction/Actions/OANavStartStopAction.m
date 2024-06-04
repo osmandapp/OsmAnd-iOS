@@ -12,8 +12,6 @@
 #import "OAMapPanelViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static NSString * const kDialog = @"dialog";
-
 static OAQuickActionType *TYPE;
 
 @implementation OANavStartStopAction

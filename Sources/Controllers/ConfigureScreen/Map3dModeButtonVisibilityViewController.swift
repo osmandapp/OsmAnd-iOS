@@ -6,84 +6,83 @@
 //  Copyright © 2023 OsmAnd. All rights reserved.
 //
 
-
 import Foundation
 
 @objc(OAMap3dModeButtonVisibilityViewController)
 @objcMembers
 class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
-    
+
     weak var delegate: WidgetStateDelegate?
-    
-    private var compassMode: EOAMap3DModeVisibility {
-        get {
-            OAAppSettings.sharedManager()!.map3dMode.get()
-        } set {
-            OAAppSettings.sharedManager()!.map3dMode.set(EOAMap3DModeVisibility(rawValue: Int(newValue.rawValue))!)
-        }
+
+    private var buttonState: Map3DButtonState!
+
+    // MARK: Initialize
+
+    override func commonInit() {
+        buttonState = OAMapButtonsHelper.sharedInstance().getMap3DButtonState()
     }
-    
+
+    override func registerCells() {
+        addCell(OASimpleTableViewCell.reuseIdentifier)
+    }
+
+    // MARK: Base UI
+
+    override func getTitle() -> String {
+        localizedString("map_3d_mode_action")
+    }
+
+    override func getLeftNavbarButtonTitle() -> String {
+        localizedString("shared_string_close")
+    }
+
+    // MARK: Table data
+
     override func generateData() {
         let section = tableData.createNewSection()
         section.footerText = localizedString("map_3d_mode_hint")
-        for i in 0 ..< 3 {
+        for m3dv in Map3DModeVisibility.allCases {
             let row = section.createNewRow()
-            let visibilityMode = EOAMap3DModeVisibility(rawValue: i)!
-            let title = OAMap3DModeVisibility.getTitle(visibilityMode) ?? ""
-            row.setObj(NSNumber(value: i), forKey: "map_3d_mode")
-            row.title = title
-            row.iconName = OAMap3DModeVisibility.getIconName(visibilityMode)
-            row.cellType = OASimpleTableViewCell.getIdentifier()
-            row.accessibilityLabel = title
+            row.setObj(m3dv, forKey: "map3dMode")
         }
     }
-    
-    override func getRow(_ indexPath: IndexPath!) -> UITableViewCell! {
+
+    override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
-        var cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier()) as? OASimpleTableViewCell
-        if cell == nil {
-            let nib = Bundle.main.loadNibNamed(OASimpleTableViewCell.getIdentifier(), owner: self, options: nil)
-            cell = nib?.first as? OASimpleTableViewCell
-            cell?.tintColor = UIColor.iconColorActive
-            cell?.descriptionVisibility(false)
-        }
-        if let cell = cell {
-            let isSelected = compassMode == EOAMap3DModeVisibility(rawValue: (item.obj(forKey: "map_3d_mode") as! NSNumber).intValue)
-            cell.titleLabel.text = item.title
-            cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
-            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: Int(OAAppSettings.sharedManager()!.applicationMode.get().getIconColor())) : UIColor.iconColorDisabled
+        if let map3dMode = item.obj(forKey: "map3dMode") as? Map3DModeVisibility {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
+            cell.tintColor = UIColor.iconColorActive
+            cell.descriptionVisibility(false)
+            let isSelected = buttonState.getVisibility() == map3dMode
+            cell.titleLabel.text = map3dMode.title
+            cell.leftIconView.image = UIImage.templateImageNamed(map3dMode.iconName)
+            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: OAAppSettings.sharedManager().applicationMode.get().getIconColor()) : UIColor.iconColorDisabled
             cell.accessoryType = isSelected ? .checkmark : .none
+            cell.accessibilityLabel = cell.titleLabel.text
             cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")
+            return cell
         }
-        return cell
+        return nil
     }
-    
-    override func getTitle() -> String! {
-        localizedString("map_3d_mode_action")
-    }
-    
-    override func getLeftNavbarButtonTitle() -> String! {
-        localizedString("shared_string_close")
-    }
-    
-    override func getTableHeaderDescription() -> String! {
+
+    override func getTableHeaderDescription() -> String {
         localizedString("map_3d_mode_description")
     }
-    
+
     override func hideFirstHeader() -> Bool {
         true
     }
-    
+
     override func isNavbarSeparatorVisible() -> Bool {
         false
     }
-    
-    override func onRowSelected(_ indexPath: IndexPath!) {
+
+    override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        compassMode = EOAMap3DModeVisibility(rawValue: (item.obj(forKey: "map_3d_mode") as! NSNumber).intValue)!
-        delegate?.onWidgetStateChanged()
+        if let map3dMode = item.obj(forKey: "map3dMode") as? Map3DModeVisibility {
+            buttonState.visibilityPref.set(map3dMode.rawValue)
+            delegate?.onWidgetStateChanged()
+        }
         self.dismiss()
     }
-    
 }
-

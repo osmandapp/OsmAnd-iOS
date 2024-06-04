@@ -16,11 +16,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@class OAQuickAction;
+@class OAQuickAction, OAQuickActionButtonState;
 
 @interface OAActionConfigurationViewController : OABaseButtonsViewController
 
--(instancetype) initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew;
+- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState typeId:(NSInteger)typeId;
+- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState action:(OAQuickAction *)action;
+
+- (instancetype)initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew;
 
 @property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
 

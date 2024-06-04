@@ -115,7 +115,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             downloadingCellHelper.fetchResourcesBlock()
             
-            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 
                 let downloadSection = tableData.createNewSection()
                 
@@ -206,7 +206,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             let section = tableData.createNewSection()
             
-            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 let headerTitleRow = section.createNewRow()
                 headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
                 headerTitleRow.title = localizedString("no_travel_guides_data_title")
@@ -239,7 +239,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             let section = tableData.createNewSection()
             
-            if TravelObfHelper.shared.isOnlyDefaultTravelBookPresent() {
+            if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 let headerTitleRow = section.createNewRow()
                 headerTitleRow.cellType = OARightIconTableViewCell.getIdentifier()
                 headerTitleRow.title = localizedString("no_travel_guides_data_title")
@@ -679,7 +679,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     // MARK: Search
     
     func shouldShowSearch() -> Bool {
-        !TravelObfHelper.shared.isOnlyDefaultTravelBookPresent()
+        TravelObfHelper.shared.isAnyTravelBookPresent()
     }
     
     private func setupSearchControllerWithFilter(_ isFiltered: Bool) {

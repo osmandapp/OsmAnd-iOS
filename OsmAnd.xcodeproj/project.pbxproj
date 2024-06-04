@@ -14074,7 +14074,6 @@
 				BBA3AF34197FC4BB0039D991 /* Sources */,
 				BBA3AF66197FC4BB0039D991 /* Frameworks */,
 				DA8713222994F6760087BC7F /* Download regions.ocbf */,
-				32EAF9FC2AE14BD300646807 /* Download Default_wikivoyage.travel.obf */,
 				BBA3AF82197FC4BB0039D991 /* Resources */,
 				6DDCD3D150843E9C9D19714F /* [CP] Copy Pods Resources */,
 				FA45668A2AFB839000B07165 /* Run Script: SwiftLint */,
@@ -16352,24 +16351,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\n#cd \"$SRCROOT/../android\"\n#./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
-		};
-		32EAF9FC2AE14BD300646807 /* Download Default_wikivoyage.travel.obf */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-			);
-			name = "Download Default_wikivoyage.travel.obf";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "# Download Default_wikivoyage file if not exists\n\nFILE=${SRCROOT}/Resources/Shipped/Default_wikivoyage.travel.obf\nif [ -f \"$FILE\" ]; then\n    echo \"Default_wikivoyage.travel.obf is already downloaded\"\nelse\n    curl -o ${SRCROOT}/Resources/Shipped/Default_wikivoyage.travel.obf https://creator.osmand.net/basemap/Default_wikivoyage_2.travel.obf ||:\nfi\n";
 		};
 		3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

@@ -132,6 +132,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     [self applyLocalization];
     
     _possibleZoomValues = [self getPossibleZoomValues];
+    [self registerCells];
     [self generateData];
     
     [self.resetButton setImage:[UIImage templateImageNamed:@"ic_navbar_reset"] forState:UIControlStateNormal];
@@ -171,6 +172,14 @@ static const NSInteger kElevationMaxMeters = 2000;
         [self.backButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
         [self.resetButton addBlurEffect:[ThemeManager shared].isLightTheme cornerRadius:12. padding:0];
     }
+}
+
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:[OATitleSliderTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OATitleSliderTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OAValueTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAValueTableViewCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OACustomPickerTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
 }
 
 #pragma mark - Base setup UI
@@ -236,7 +245,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"verticalExaggerationSlider",
-            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATitleSliderTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_scale")
         }];
     }
@@ -244,7 +253,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"wallHeightSlider",
-            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATitleSliderTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_height")
         }];
     }
@@ -252,29 +261,29 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         [topSection addRowFromDictionary:@{
             kCellKeyKey : @"visibilitySlider",
-            kCellTypeKey : [OATitleSliderTableViewCell getCellIdentifier],
+            kCellTypeKey : [OATitleSliderTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"visibility")
         }];
     }
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
     {
         [topSection addRowFromDictionary:@{
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
             kCellTitleKey: OALocalizedString(@"rec_interval_minimum"),
             @"value" : @(_minZoom)
         }];
         _minValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
         if (_openedPickerIndexPath && _openedPickerIndexPath.row == _minValueIndexPath.row + 1)
-            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell reuseIdentifier] }];
         
         [topSection addRowFromDictionary:@{
-            kCellTypeKey : [OAValueTableViewCell getCellIdentifier],
+            kCellTypeKey : [OAValueTableViewCell reuseIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_maximum"),
             @"value" : @(_maxZoom)
         }];
         _maxValueIndexPath = [NSIndexPath indexPathForRow:[_data rowCount:[_data sectionCount] - 1] - 1 inSection:[_data sectionCount] - 1];
         if (_openedPickerIndexPath && _openedPickerIndexPath.row == _maxValueIndexPath.row + 1)
-            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell getCellIdentifier] }];
+            [topSection addRowFromDictionary:@{ kCellTypeKey : [OACustomPickerTableViewCell reuseIdentifier] }];
     }
 }
 
@@ -666,96 +675,70 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    
-    if ([item.cellType isEqualToString:[OATitleSliderTableViewCell getCellIdentifier]])
+    if ([item.cellType isEqualToString:[OATitleSliderTableViewCell reuseIdentifier]])
     {
-        OATitleSliderTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OATitleSliderTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OATitleSliderTableViewCell reuseIdentifier]];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.sliderView.minimumTrackTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+        cell.titleLabel.text = item.title;
+        if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OATitleSliderTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OATitleSliderTableViewCell *)[nib objectAtIndex:0];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.sliderView.minimumTrackTintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item.title;
-            if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
-            {
-                __weak OATitleSliderTableViewCell *weakCell = cell;
-                __weak __typeof(self) weakSelf = self;
-                cell.updateValueCallback = ^(float value) {
-                    weakCell.valueLabel.text = [weakSelf sliderValueString:value];
-                };
-                cell.sliderView.minimumValue = 1;
-                cell.sliderView.maximumValue = 3;
-                cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
-                ? _app.data.verticalExaggerationScale
-                : _currentGPXVerticalExaggerationScale;
-              
-                cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
-            }
-            else if (_terrainType == EOAGPXSettingsTypeWallHeight)
-            {
-                __weak OATitleSliderTableViewCell *weakCell = cell;
-                __weak __typeof(self) weakSelf = self;
-                cell.updateValueCallback = ^(float value) {
-                    weakCell.valueLabel.text = [weakSelf sliderValueString:value];
-                };
-                cell.sliderView.minimumValue = kElevationMinMeters;
-                cell.sliderView.maximumValue = kElevationMaxMeters;
-                cell.sliderView.value = _currentGPXElevationMeters;
-                cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
-            }
-            else
-            {
-                cell.updateValueCallback = nil;
-                cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
-                cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
-            }
-           
-            [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
-            [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
+            __weak OATitleSliderTableViewCell *weakCell = cell;
+            __weak __typeof(self) weakSelf = self;
+            cell.updateValueCallback = ^(float value) {
+                weakCell.valueLabel.text = [weakSelf sliderValueString:value];
+            };
+            cell.sliderView.minimumValue = 1;
+            cell.sliderView.maximumValue = 3;
+            cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
+            ? _app.data.verticalExaggerationScale
+            : _currentGPXVerticalExaggerationScale;
             
+            cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
         }
+        else if (_terrainType == EOAGPXSettingsTypeWallHeight)
+        {
+            __weak OATitleSliderTableViewCell *weakCell = cell;
+            __weak __typeof(self) weakSelf = self;
+            cell.updateValueCallback = ^(float value) {
+                weakCell.valueLabel.text = [weakSelf sliderValueString:value];
+            };
+            cell.sliderView.minimumValue = kElevationMinMeters;
+            cell.sliderView.maximumValue = kElevationMaxMeters;
+            cell.sliderView.value = _currentGPXElevationMeters;
+            cell.valueLabel.text = [self sliderValueString:cell.sliderView.value];
+        }
+        else
+        {
+            cell.updateValueCallback = nil;
+            cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
+        }
+        
+        [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
+        [cell.sliderView addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OAValueTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OAValueTableViewCell reuseIdentifier]])
     {
-        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAValueTableViewCell *) nib[0];
-            [cell leftIconVisibility:NO];
-            [cell descriptionVisibility:NO];
-            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-            cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        }
-        if (cell)
-        {
-            cell.titleLabel.text = item.title;
-            cell.valueLabel.text = [item stringForKey:@"value"];
-        }
+        OAValueTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell reuseIdentifier]];
+        [cell leftIconVisibility:NO];
+        [cell descriptionVisibility:NO];
+        cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.titleLabel.text = item.title;
+        cell.valueLabel.text = [item stringForKey:@"value"];
         return cell;
     }
-    else if ([item.cellType isEqualToString:[OACustomPickerTableViewCell getCellIdentifier]])
+    else if ([item.cellType isEqualToString:[OACustomPickerTableViewCell reuseIdentifier]])
     {
-        OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell getCellIdentifier]];
-        if (cell == nil)
-        {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OACustomPickerTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OACustomPickerTableViewCell *)[nib objectAtIndex:0];
-        }
-        if (cell)
-        {
-            cell.dataArray = _possibleZoomValues;
-            NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
-            NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
-            [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
-            cell.picker.tag = indexPath.row;
-            cell.delegate = self;
-        }
+        OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
+        cell.dataArray = _possibleZoomValues;
+        NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
+        NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
+        [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
+        cell.picker.tag = indexPath.row;
+        cell.delegate = self;
         return cell;
     }
     return nil;

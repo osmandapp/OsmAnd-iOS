@@ -1164,7 +1164,7 @@
 "osmand_live_donation_switch_title" = "Donație către comunitatea OpenStreetMap";
 "osmand_live_donation_header" = "Setări pentru donații";
 "osmand_live_last_changed" = "Ultima modificare a hărții: %@";
-"osmand_live" = "OsmAnd în direct";
+"osmand_live" = "OsmAnd Live";
 "res_mapsres" = "Hărți & Resurse";
 "select_profile" = "Selectați profilul";
 "segments_count" = "Segmentul %d";
@@ -2554,7 +2554,7 @@
 "cloud_contains_newer_changes" = "Versiunea OsmAnd Cloud conține modificări mai noi.";
 "dowload_cloud_version" = "Descărcați versiunea cloud";
 "shared_string_progress" = "Progres";
-"activity_type_mountainbike_name" = "Bicicleta de munte";
+"activity_type_mountainbike_name" = "Mountain bike";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Arată trasee MTB IMBA";
 "mtb_imba_full" = "Asociația Internațională de Ciclism Montan";
 "backup_version_history" = "Istoricul versiunilor";
@@ -2581,7 +2581,7 @@
 "shared_string_not_included" = "Nu este inclus";
 "backup_deleting_all_data" = "Seșterg toate datele…";
 "shared_string_download_update" = "Descărcați actualizarea";
-"cloud_conflict" = "Conflictul";
+"cloud_conflict" = "Conflict";
 "logout_from_osmand_cloud_decsr" = "Vă deconectați\? \nVa trebui să vă conectați din nou pentru a face backup sau a restaura date.";
 "backup_delete_all_data_in_progress" = "Vă rugăm să așteptați până când OsmAnd va șterge toate datele dumneavoastră din cloud. Toate datele de pe dispozitiv rămân neatinse.";
 "backup_delete_types_descr" = "Ștergeți toate datele pentru tipurile de date depreciate din OsmAnd Cloud\?";
@@ -3391,7 +3391,7 @@
 "auto_zoom_smooth" = "Neted";
 "auto_zoom_discrete" = "Discret";
 "shared_string_speedometer" = "Vitezometru";
-"speedometer_description" = "Afișează viteza curentă raportată prin GPS";
+"speedometer_description" = "Arată viteza curentă, raportată de GPS";
 "speed_limit_warning" = "Avertizare privind limita de viteză";
 "shared_string_always" = "Întotdeauna";
 "when_exceeded" = "Atunci când este depășită";
@@ -3403,7 +3403,7 @@
 "display_position_automatic_descr" = "Depinde de orientarea hărții: în partea de jos pentru direcția de mișcare, în centru pentru toate celelalte.";
 "shared_string_millimeters" = "Milimetri";
 "short_min" = "m";
-"downward_gradient" = "Gradient descrescător";
+"downward_gradient" = "Gradient descendent";
 "upward_gradient" = "Gradient ascendent";
 "track_vertical_exaggeration_description" = "Prin modificarea valorii scalei, puteți modifica înălțimea pistei 3D";
 "visualization_3d_visualized_by" = "Vizualizat de";

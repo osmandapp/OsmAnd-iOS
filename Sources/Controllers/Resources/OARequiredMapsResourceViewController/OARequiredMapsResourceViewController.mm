@@ -364,21 +364,30 @@
     NSMutableString *description = [NSMutableString string];
     if (regions.count > 0)
     {
-        for (NSInteger i = 0; i < regions.count; i++) {
+        for (NSInteger i = 0; i < regions.count; i++)
+        {
             OAWorldRegion *region = regions[i];
-            NSString *title = region.localizedName;
+            NSString *title = region.localizedName?:region.nativeName;
             if (region.superregion)
             {
                 NSString *countryName = [self getCountryName:region];
                 if (countryName)
-                    title = [NSString stringWithFormat:@"\"%@, %@\"", region.localizedName, countryName];
+                {
+                    if (title)
+                        title = [NSString stringWithFormat:@"\"%@, %@\"", title, countryName];
+                    else
+                        title = [NSString stringWithFormat:@"\"%@\"", countryName];
+                }
             }
-            if (i == 0)
-                [description appendString:title];
-            else
-                [description appendString:[NSString stringWithFormat:@", %@", title]];
+            if (title)
+            {
+                [description appendFormat:@"%@%@",(description.length > 0 ? @", " : @""), title];
+            }
         }
-        [description appendString:@"."];
+        if (description.length > 0)
+        {
+            [description appendString:@"."];
+        }
     }
     return [NSString stringWithFormat:OALocalizedString(@"required_maps_list"), description];
 }

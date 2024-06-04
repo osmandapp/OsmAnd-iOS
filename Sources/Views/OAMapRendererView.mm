@@ -137,6 +137,9 @@
             [targetChangedObservalbe notifyEvent];
         });
 
+    _renderer->setMinZoomLevel(OsmAnd::ZoomLevel1);
+    _renderer->setMaxZoomLevel(OsmAnd::ZoomLevel22);
+
     // Create animator for that map
     _mapAnimator.reset(new OsmAnd::MapAnimator());
     _mapAnimator->setMapRenderer(_renderer);
@@ -420,12 +423,12 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (float)minZoom
 {
-    return OsmAnd::ZoomLevel1;//_renderer->getMinZoomLevel();
+    return _renderer->getMinZoomLevel();
 }
 
 - (float)maxZoom
 {
-    return OsmAnd::ZoomLevel22;//_renderer->getMaxZoomLevel();
+    return _renderer->getMaxZoomLevel();
 }
 
 @synthesize stateObservable = _stateObservable;

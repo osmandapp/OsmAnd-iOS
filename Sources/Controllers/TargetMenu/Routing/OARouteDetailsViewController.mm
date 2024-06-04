@@ -164,7 +164,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
     const auto turnType = model.turnType;
     [turnDrawable setTurnType:turnType];
-    turnDrawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
+    turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+    
     CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
                        turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
     turnDrawable.frame = CGRectMake(0, 0, size, size);

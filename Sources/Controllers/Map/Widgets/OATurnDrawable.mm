@@ -137,7 +137,10 @@
     if (_turnType && !_mini && _turnType->getExitOut() > 0)
     {
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-        attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
+        if (_textColor)
+            attributes[NSForegroundColorAttributeName] = _textColor;
+        else
+            attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
         attributes[NSFontAttributeName] = _textFont;
         
         NSString *text = [NSString stringWithFormat:@"%d", _turnType->getExitOut()];

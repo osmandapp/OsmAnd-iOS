@@ -20,8 +20,8 @@ final class RouteInfoListItemCell: UITableViewCell {
     @IBOutlet private weak var bottomImageBorderViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var bottomImageStackView: UIStackView!
     
-    let bottomImageViewDefaultWidth: CGFloat = 30
-    let bottomImageViewInnerHeight: CGFloat = 22
+    let bottomImageViewInnerHeight: CGFloat = 30
+    let leftSeparatorInset: CGFloat = 76
     
     var leftTurnIconDrawable: OATurnDrawable?
     
@@ -60,10 +60,16 @@ final class RouteInfoListItemCell: UITableViewCell {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        separatorInset = UIEdgeInsets(top: 0, left: leftSeparatorInset + OAUtilities.getLeftMargin(), bottom: 0, right: 0)
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             refreshLeftIcon()
+            bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
         }
     }
     

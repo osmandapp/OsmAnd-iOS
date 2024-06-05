@@ -195,12 +195,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     if (model.distance > 0)
     {
-        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance];
+        BOOL shouldRoundUp = ![[OAAppSettings sharedManager].preciseDistanceNumbers get];
+        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance roundUp:shouldRoundUp];
         [cell setTopLeftLabelWithText:segmentDistanceLabelText];
         [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
         
         OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
-        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance roundUp:shouldRoundUp];
         NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
         [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
     }

@@ -35,11 +35,12 @@ final class SpeedometerSpeedView: UIView {
         valueSpeedLabel.font = UIFont.systemFont(ofSize: speedValueFontSize, weight: .semibold)
         configureConstraints()
         
+       // valueSpeedLabel.textColor = .green
+        
         if isPreview {
             valueSpeedLabel.text = String(previewValueDefault)
             isHidden = false
         }
-        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     func updateInfo() {
@@ -52,16 +53,28 @@ final class SpeedometerSpeedView: UIView {
                     cachedSpeed = currentSpeed
                     updateSpeedValueAndUnit(with: Float(cachedSpeed))
                 }
-                isHidden = false
+                if isHidden {
+                    print("isHidden = false")
+                    isHidden = false
+                }
             } else if cachedSpeed != 0.0 {
                 cachedSpeed = 0
                 updateSpeedValueAndUnit(with: Float(cachedSpeed))
-                isHidden = false
+                if isHidden {
+                    print("isHidden = false")
+                    isHidden = false
+                }
             } else {
-                isHidden = true
+                if !isHidden {
+                    print("isHidden = true")
+                    isHidden = true
+                }
             }
         } else {
-            isHidden = true
+            if !isHidden {
+                print("isHidden = true")
+                isHidden = true
+            }
         }
     }
     

@@ -93,13 +93,12 @@ final class SpeedometerView: OATextInfoWidget {
     func configure() {
         sizeStyle = settings.speedometerSize.get()
        
-        let isDirectionRTL = isDirectionRTL()
-        contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
-        
         updateComponents()
 
         centerPositionYConstraint.isActive = true
         if isPreview {
+            let isDirectionRTL = isDirectionRTL()
+            contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
             isHidden = false
             centerPositionXConstraint.isActive = true
             leftPositionConstraint.isActive = false
@@ -120,6 +119,8 @@ final class SpeedometerView: OATextInfoWidget {
                 contentStackView.semanticContentAttribute = carPlayConfig.isLeftSideDriving ? .forceRightToLeft : .forceLeftToRight
                 speedometerSpeedView.configureTextAlignmentContent(isTextAlignmentRight: carPlayConfig.isLeftSideDriving)
             } else {
+                let isDirectionRTL = isDirectionRTL()
+                contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
                 layer.cornerRadius = 6
                 leftPositionConstraint.isActive = true
                 rightPositionConstraint.isActive = false
@@ -129,7 +130,7 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     func configureUserInterfaceStyleWith(style: UIUserInterfaceStyle) {
-        overrideUserInterfaceStyle = style
+       overrideUserInterfaceStyle = style
     }
     
     private func configureUserInterfaceStyleWithMapTheme() {

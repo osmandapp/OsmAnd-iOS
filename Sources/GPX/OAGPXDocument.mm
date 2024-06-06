@@ -247,12 +247,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     OAGpxExtension *e = [self getExtensionByKey:@"vertical_exaggeration_scale"];
     if (e) {
         CGFloat value = [e.value floatValue];
-        if (value && value >= 1.0 && value <= 3.0)
+        if (value && value >= 0.25 && value <= 4.0)
             return value;
         else
-            return 1.0;
+            return 0.25;
     }
-    return 1.0;
+    return 0.25;
 }
 
 - (void)setVerticalExaggerationScale:(CGFloat)scale

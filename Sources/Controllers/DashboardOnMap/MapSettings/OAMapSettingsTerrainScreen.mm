@@ -201,8 +201,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
         if (isRelief3D && [_plugin.enable3DMaps get])
         {
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
             double scaleValue = _app.data.verticalExaggerationScale;
+            NSString *alphaValueString = scaleValue <= 0.25 ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
             if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
@@ -683,6 +683,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.key isEqualToString:@"relief3D"])
     {
         [_plugin.enable3DMaps set:isOn];
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 
     [self updateAvailableMaps];

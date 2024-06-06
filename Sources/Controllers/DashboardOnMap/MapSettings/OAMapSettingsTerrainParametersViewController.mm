@@ -413,7 +413,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)resetGPXVerticalExaggerationValues
 {
-    double scale = 1.0;
+    double scale = 0.25;
     if (_currentGPXVerticalExaggerationScale != scale)
     {
         _currentGPXVerticalExaggerationScale = scale;
@@ -604,7 +604,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
     {
         CGFloat step = 0.1;
-        CGFloat roundedValue = round(slider.value / step) * step;
+        CGFloat roundedValue = slider.value >= 1.0 ? round(slider.value / step) * step : slider.value;
         if (_currentGPXVerticalExaggerationScale != roundedValue)
         {
             _currentGPXVerticalExaggerationScale = roundedValue;
@@ -645,7 +645,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (NSString *)sliderValueString:(float)value
 {
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
-        return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+        return value <= 0.25 ? OALocalizedString(@"shared_string_none") : (value < 1.0 ? [NSString stringWithFormat:@"x%.2f", value] : [NSString stringWithFormat:@"x%.1f", value]);
     else
         return [NSString stringWithFormat:@"%ld %@", (NSInteger)value, OALocalizedString(@"m")];
 }
@@ -688,8 +688,8 @@ static const NSInteger kElevationMaxMeters = 2000;
             cell.updateValueCallback = ^(float value) {
                 weakCell.valueLabel.text = [weakSelf sliderValueString:value];
             };
-            cell.sliderView.minimumValue = 1;
-            cell.sliderView.maximumValue = 3;
+            cell.sliderView.minimumValue = 0.25;
+            cell.sliderView.maximumValue = 4;
             cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
             ? _app.data.verticalExaggerationScale
             : _currentGPXVerticalExaggerationScale;

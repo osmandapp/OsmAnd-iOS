@@ -493,7 +493,7 @@
     self.gpx.visualization3dByType = type;
     
     if (self.gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeFixedHeight)
-        self.gpx.verticalExaggerationScale = 1.0;
+        self.gpx.verticalExaggerationScale = 0.25;
 
     if (_wholeFolderTracks)
     {
@@ -943,13 +943,9 @@
             }];
                 [track3DSectionItems addObject:trackLineData];
                 
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
-            double scaleValue = self.gpx.verticalExaggerationScale;
-            NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
-            if (scaleValue > 1)
-            {
-                alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
-            }
+                double scaleValue = self.gpx.verticalExaggerationScale;
+                NSString *alphaValueString = scaleValue <= 0.25 ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
+                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
                 if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
                 {
                     OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{

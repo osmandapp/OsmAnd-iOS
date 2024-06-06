@@ -34,18 +34,10 @@
     
     OAAlarmWidget *_alarmWidget;
     SpeedometerView *_speedometerView;
-   // UIStackView *_alarmSpeedometerStackView;
-//    UIView *_testView;
-//    UIStackView *_testStackViewView;
-//    NSLayoutConstraint *_testLeftConstraint;
-//    NSLayoutConstraint *_testRightConstraint;
-    
-    NSLayoutConstraint *_leftSpeedometerViewConstraint;
-    NSLayoutConstraint *_rightSpeedometerViewConstraint;
+    UIStackView *_alarmSpeedometerStackView;
     NSLayoutConstraint *_speedometerHeightConstraint;
-    
-    NSLayoutConstraint *_leftAlarmViewConstraint;
-    NSLayoutConstraint *_rightAlarmViewConstraint;
+    NSLayoutConstraint *_leftConstraint;
+    NSLayoutConstraint *_rightConstraint;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -69,68 +61,26 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-
+    
     [self attachMapToWindow];
     
-//    _testStackViewView = [UIStackView new];
-//    _testStackViewView.translatesAutoresizingMaskIntoConstraints = NO;
-//    _testStackViewView.axis = UILayoutConstraintAxisVertical;
-//    _testStackViewView.distribution = UIStackViewDistributionEqualSpacing;
-//    _testStackViewView.spacing = 5;
-//    _testStackViewView.backgroundColor = [UIColor redColor];
-//    _testStackViewView.alignment = UIStackViewAlignmentTrailing;
-//    _testStackViewView.semanticContentAttribute = UISemanticContentAttributeForceLeftToRight;
-//    [_window addSubview:_testStackViewView];
-//    
-//    [NSLayoutConstraint activateConstraints:@[
-//        [_testStackViewView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
-//        [_testStackViewView.heightAnchor constraintEqualToConstant:136.0],
-//        [_testStackViewView.widthAnchor constraintEqualToConstant:160.0]
-//    ]];
-//    _testRightConstraint = [_testStackViewView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor];
-//    _testLeftConstraint = [_testStackViewView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor];
-//    
-//    _testView = [UIView new];
-//    _testView.translatesAutoresizingMaskIntoConstraints = NO;
-//    _testView.backgroundColor = [UIColor whiteColor];
-//    [_testStackViewView addArrangedSubview:_testView];
-//    
-//    [NSLayoutConstraint activateConstraints:@[
-//        [_testView.heightAnchor constraintEqualToConstant:60.0],
-//        [_testView.widthAnchor constraintEqualToConstant:60.0]
-//    ]];
-//    
-//    UIView *testView1 = [UIView new];
-//    testView1.translatesAutoresizingMaskIntoConstraints = NO;
-//    testView1.backgroundColor = [UIColor blueColor];
-//    [_testStackViewView addArrangedSubview:testView1];
-//    
-//    [NSLayoutConstraint activateConstraints:@[
-//        [testView1.heightAnchor constraintEqualToConstant:60.0],
-//        [testView1.widthAnchor constraintEqualToConstant:100.0]
-//    ]];
+    _alarmSpeedometerStackView = [UIStackView new];
+    _alarmSpeedometerStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    _alarmSpeedometerStackView.axis = UILayoutConstraintAxisVertical;
+    _alarmSpeedometerStackView.distribution = UIStackViewDistributionEqualSpacing;
+    _alarmSpeedometerStackView.spacing = 5;
+    _alarmSpeedometerStackView.alignment = UIStackViewAlignmentFill;
+    [_window addSubview:_alarmSpeedometerStackView];
     
-//    [NSLayoutConstraint activateConstraints:@[
-//        [_testView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
-//        [_testView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor],
-//        [_testView.heightAnchor constraintEqualToConstant:60.0],
-//        [_testView.widthAnchor constraintEqualToConstant:60.0]
-//    ]];
+    [NSLayoutConstraint activateConstraints:@[
+        [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
+    ]];
     
-//    _alarmSpeedometerStackView = [UIStackView new];
-//    _alarmSpeedometerStackView.translatesAutoresizingMaskIntoConstraints = NO;
-//    _alarmSpeedometerStackView.axis = UILayoutConstraintAxisVertical;
-//    _alarmSpeedometerStackView.distribution = UIStackViewDistributionEqualSpacing;
-//    _alarmSpeedometerStackView.spacing = 5;
-//    _alarmSpeedometerStackView.backgroundColor = [UIColor redColor];
-//    _alarmSpeedometerStackView.alignment = UIStackViewAlignmentFill;
-//    [_window addSubview:_alarmSpeedometerStackView];
-//    
-//    [NSLayoutConstraint activateConstraints:@[
-//        [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
-//        [_alarmSpeedometerStackView.heightAnchor constraintEqualToConstant:136],
-//        [_alarmSpeedometerStackView.widthAnchor constraintEqualToConstant:160]
-//    ]];
+    _leftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor];
+    _leftConstraint.active = YES;
+    
+    _rightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor];
+    _rightConstraint.active = YES;
     
     [self setupSpeedometer];
     [self setupAlarmWidget];
@@ -153,28 +103,23 @@
     BOOL isLeftSideDriving = [self isLeftSideDriving];
     if (isLeftSideDriving)
     {
-        NSLog(@"isLeftSideDriving YES");
-        _rightSpeedometerViewConstraint.active = YES;
-        _leftSpeedometerViewConstraint.active = NO;
+        [_speedometerView contentAlignmentWithIsRight:YES];
         
-        _rightAlarmViewConstraint.active = YES;
-        _leftAlarmViewConstraint.active = NO;
+        _rightConstraint.active = YES;
+        _leftConstraint.active = NO;
     }
     else
     {
-        NSLog(@"isLeftSideDriving NO");
-        _rightSpeedometerViewConstraint.active = NO;
-        _leftSpeedometerViewConstraint.active = YES;
+        [_speedometerView contentAlignmentWithIsRight:NO];
         
-        _rightAlarmViewConstraint.active = NO;
-        _leftAlarmViewConstraint.active = YES;
+        _leftConstraint.active = YES;
+        _rightConstraint.active = NO;
     }
     
     if (_speedometerView && _speedometerView.superview)
     {
         if (_speedometerView.carPlayConfig.isLeftSideDriving != isLeftSideDriving) {
             _speedometerView.carPlayConfig.isLeftSideDriving = isLeftSideDriving;
-            NSLog(@"_speedometerView configure");
             [_speedometerView configure];
         }
     }
@@ -187,7 +132,6 @@
     [super traitCollectionDidChange:previousTraitCollection];
     if (_speedometerView && [self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        NSLog(@"traitCollectionDidChange");
         [self updateSpeedometerViewStyleTheme];
     }
 }
@@ -221,16 +165,12 @@
 {
     _alarmWidget = [[OAAlarmWidget alloc] initForCarPlay];
     _alarmWidget.translatesAutoresizingMaskIntoConstraints = NO;
-    [_window addSubview:_alarmWidget];
+    [_alarmSpeedometerStackView addArrangedSubview:_alarmWidget];
     
     [NSLayoutConstraint activateConstraints:@[
-        [_alarmWidget.topAnchor constraintEqualToAnchor:_speedometerView.bottomAnchor constant:5],
         [_alarmWidget.heightAnchor constraintEqualToConstant:60.0],
         [_alarmWidget.widthAnchor constraintEqualToConstant:60.0]
     ]];
-    
-    _leftAlarmViewConstraint = [_alarmWidget.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor];
-    _rightAlarmViewConstraint = [_alarmWidget.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor];
 }
 
 - (void)setupSpeedometer
@@ -244,20 +184,13 @@
     _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
     _speedometerView.hidden = YES;
     [_speedometerView configure];
-    _speedometerView.backgroundColor = [UIColor redColor];
     [self updateSpeedometerViewStyleTheme];
     
-    [_window addSubview:_speedometerView];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [_speedometerView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
-    ]];
-    
+    [_alarmSpeedometerStackView addArrangedSubview:_speedometerView];
+        
     _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
     _speedometerHeightConstraint.active = YES;
-    
-    _leftSpeedometerViewConstraint = [_speedometerView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor];
-    _rightSpeedometerViewConstraint = [_speedometerView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor];
+    _speedometerHeightConstraint.identifier = @"_speedometerHeightConstraint";
 }
 
 - (void)configureSpeedometer {
@@ -397,7 +330,7 @@
 
 - (BOOL)isLeftSideDriving
 {
-    return _speedometerView.frame.origin.x > self.view.frame.size.width / 2.0;
+    return _alarmSpeedometerStackView.frame.origin.x > self.view.frame.size.width / 2.0;
 }
 
 - (void)enterNavigationMode

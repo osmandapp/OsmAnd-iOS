@@ -14,10 +14,26 @@ final class CarPlayConfig: NSObject {
 @objcMembers
 final class SpeedometerView: OATextInfoWidget {
     
-    @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint!
-    @IBOutlet private weak var rightPositionConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint! {
+        didSet {
+            centerPositionXConstraint.identifier = "centerPositionXConstraint"
+        }
+    }
+    @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint! {
+        didSet {
+            centerPositionYConstraint.identifier = "centerPositionYConstraint"
+        }
+    }
+    @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint! {
+        didSet {
+            leftPositionConstraint.identifier = "leftPositionConstraint"
+        }
+    }
+    @IBOutlet private weak var rightPositionConstraint: NSLayoutConstraint! {
+        didSet {
+            rightPositionConstraint.identifier = "rightPositionConstraint"
+        }
+    }
     
     @IBOutlet private weak var contentStackView: UIStackView!
     
@@ -97,8 +113,8 @@ final class SpeedometerView: OATextInfoWidget {
 
         centerPositionYConstraint.isActive = true
         if isPreview {
-            let isDirectionRTL = isDirectionRTL()
-            contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
+            configureShadow()
+            configureContentStackViewSemanticContentAttribute()
             isHidden = false
             centerPositionXConstraint.isActive = true
             leftPositionConstraint.isActive = false
@@ -109,18 +125,16 @@ final class SpeedometerView: OATextInfoWidget {
             centerPositionXConstraint.isActive = false
             if let carPlayConfig {
                 layer.cornerRadius = 10
-                if carPlayConfig.isLeftSideDriving {
-                    leftPositionConstraint.isActive = false
-                    rightPositionConstraint.isActive = true
-                } else {
-                    leftPositionConstraint.isActive = true
-                    rightPositionConstraint.isActive = false
-                }
                 contentStackView.semanticContentAttribute = carPlayConfig.isLeftSideDriving ? .forceRightToLeft : .forceLeftToRight
                 speedometerSpeedView.configureTextAlignmentContent(isTextAlignmentRight: carPlayConfig.isLeftSideDriving)
+                if carPlayConfig.isLeftSideDriving {
+                    contentAlignment(isRight: true)
+                } else {
+                    contentAlignment(isRight: false)
+                }
             } else {
-                let isDirectionRTL = isDirectionRTL()
-                contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
+                configureShadow()
+                configureContentStackViewSemanticContentAttribute()
                 layer.cornerRadius = 6
                 leftPositionConstraint.isActive = true
                 rightPositionConstraint.isActive = false
@@ -131,6 +145,28 @@ final class SpeedometerView: OATextInfoWidget {
     
     func configureUserInterfaceStyleWith(style: UIUserInterfaceStyle) {
        overrideUserInterfaceStyle = style
+    }
+    
+    func contentAlignment(isRight: Bool) {
+        if isRight {
+            rightPositionConstraint.isActive = true
+            leftPositionConstraint.isActive = false
+        } else {
+            leftPositionConstraint.isActive = true
+            rightPositionConstraint.isActive = false
+        }
+    }
+    
+    private func configureShadow() {
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 5
+        layer.shadowOffset = .init(width: 0, height: 2)
+        layer.shadowColor = UIColor.black.withAlphaComponent(0.35).cgColor
+    }
+    
+    private func configureContentStackViewSemanticContentAttribute() {
+        let isDirectionRTL = isDirectionRTL()
+        contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
     }
     
     private func configureUserInterfaceStyleWithMapTheme() {

@@ -9,6 +9,7 @@
 #import "OANewAction.h"
 #import "OAAddQuickActionViewController.h"
 #import "OARootViewController.h"
+#import "OAFloatingButtonsHudViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static OAQuickActionType *TYPE;
@@ -32,8 +33,12 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] init];
-    [[OARootViewController instance].navigationController pushViewController:addActionController animated:YES];
+    OAQuickActionButtonState *quickActionButtonState = [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController getActiveButtonState];
+    if (quickActionButtonState)
+    {
+        OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] initWithButtonState:quickActionButtonState];
+        [[OARootViewController instance].navigationController pushViewController:addActionController animated:YES];
+    }
 }
 
 + (OAQuickActionType *) TYPE

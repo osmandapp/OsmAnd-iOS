@@ -312,8 +312,7 @@ static OAQuickActionType *TYPE_OPEN;
     NSArray<NSString *> *actionsKeys = [_settings.quickActionButtons get];
     if (actionsKeys && actionsKeys.count > 0)
     {
-        NSSet<NSString *> *uniqueKeys = [NSSet setWithArray:actionsKeys];
-        for (NSString *key in uniqueKeys)
+        for (NSString *key in actionsKeys)
         {
             if (key.length > 0)
             {

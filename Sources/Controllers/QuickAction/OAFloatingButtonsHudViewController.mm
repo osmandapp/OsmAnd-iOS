@@ -337,6 +337,15 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 #pragma mark - Additions
 
+- (OAQuickActionButtonState *)getActiveButtonState
+{
+    if (_isActionsViewVisible && _actionsView)
+    {
+        return _actionsView.buttonState;
+    }
+    return nil;
+}
+
 - (void)restorePinPosition
 {
     BOOL isLandscape = OAUtilities.isLandscape;

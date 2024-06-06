@@ -89,16 +89,96 @@
                                                           iconName:@"ic_navbar_add"
                                                             action:@selector(addActionPressed)
                                                               menu:nil];
-        
-        UIBarButtonItem *aditButton = [self createRightNavbarButton:nil
-                                                           iconName:@"ic_navbar_pencil"
+        addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
+
+        UIBarButtonItem *deleteButton = [self createRightNavbarButton:nil
+                                                           iconName:@"ic_custom_trash_outlined"
                                                              action:@selector(editPressed)
                                                                menu:nil];
-        
-        addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
-        aditButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
-        
-        return @[addButton, aditButton];
+        deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+
+        NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+        UIAction *renameAction = [UIAction actionWithTitle:localizedString(@"shared_string_rename")
+                                                     image:[UIImage systemImageNamed:@"square.and.pencil"]
+                                                identifier:nil
+                                                   handler:^(UIAction * _Nonnull action) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:localizedString(@"shared_string_rename")
+                                                                           message:localizedString(@"enter_new_name")
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text = [_buttonState getName];
+            }];
+
+            UIAlertAction *saveAction = [UIAlertAction actionWithTitle:localizedString(@"shared_string_save")
+                                                                 style:UIAlertActionStyleDefault
+                                                               handler:^(UIAlertAction * _Nonnull action) {
+                NSString *name = alert.textFields.firstObject.text;
+                if (name.length == 0)
+                {
+                    [OAUtilities showToast:OALocalizedString(@"empty_name") details:nil duration:4 inView:self.view];
+                }
+                else if (![_mapButtonsHelper isActionButtonNameUnique:name])
+                {
+                    [OAUtilities showToast:OALocalizedString(@"custom_map_button_name_present") details:nil duration:4 inView:self.view];
+                }
+                else
+                {
+                    [_buttonState setName:name];
+                    [_mapButtonsHelper onQuickActionsChanged:_buttonState];
+                    [self updateUIAnimated:nil];
+                    if (self.quickActionUpdateCallback)
+                        self.quickActionUpdateCallback();
+                }
+            }];
+            [alert addAction:saveAction];
+            [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_cancel")
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+
+            [alert setPreferredAction:saveAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
+
+        renameAction.accessibilityLabel = renameAction.title;
+        [menuElements addObject:renameAction];
+
+        UIAction *deleteAction = [UIAction actionWithTitle:localizedString(@"shared_string_delete")
+                                                     image:[UIImage systemImageNamed:@"trash"]
+                                                identifier:nil
+                                                   handler:^(UIAction * _Nonnull action) {
+            NSString *message = [NSString stringWithFormat:localizedString(@"res_confirmation_delete"),
+                                 [NSString stringWithFormat:@"\"%@\"", [_buttonState getName]]];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_yes")
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [_mapButtonsHelper removeQuickActionButtonState:_buttonState];
+                if (self.quickActionUpdateCallback)
+                    self.quickActionUpdateCallback();
+                [self dismissViewController];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_no")
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+            [self presentViewController:alert animated:YES completion:nil];
+        }];
+        deleteAction.accessibilityLabel = deleteAction.title;
+        deleteAction.attributes = UIMenuElementAttributesDestructive;
+        UIMenu *deleteSection = [UIMenu menuWithTitle:@""
+                                                image:nil
+                                           identifier:nil
+                                              options:UIMenuOptionsDisplayInline
+                                             children:@[deleteAction]];
+        [menuElements addObject:deleteSection];
+        UIMenu *menu = [UIMenu menuWithChildren:menuElements];
+
+        UIBarButtonItem *optionsButton = [self createRightNavbarButton:nil
+                                                              iconName:@"ic_navbar_overflow_menu_stroke"
+                                                             action:@selector(editPressed)
+                                                               menu:menu];
+        return @[optionsButton, addButton, deleteButton];
     }
 }
 

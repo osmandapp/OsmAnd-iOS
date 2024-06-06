@@ -35,6 +35,7 @@
 - (void)deleteQuickAction:(OAQuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
 - (void)updateQuickAction:(OAQuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
 - (void)updateQuickActions:(OAQuickActionButtonState * _Nonnull)buttonState actions:(NSArray<OAQuickAction *> * _Nonnull)actions;
+- (void)onQuickActionsChanged:(OAQuickActionButtonState * _Nonnull)buttonState;
 
 - (BOOL)isActionNameUnique:(NSArray<OAQuickAction *> * _Nonnull)actions quickAction:(OAQuickAction * _Nonnull)quickAction;
 - (OAQuickAction * _Nonnull)generateUniqueActionName:(NSArray<OAQuickAction *> * _Nonnull)actions action:(OAQuickAction * _Nonnull)action;

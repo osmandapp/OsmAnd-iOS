@@ -89,6 +89,69 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
         }
     }
 
+    override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        let item = tableData.item(for: indexPath)
+        if let buttonState = item.obj(forKey: "buttonState") as? QuickActionButtonState {
+            let menuProvider: UIContextMenuActionProvider = { _ in
+                var menuElements = [UIMenuElement]()
+                
+                let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
+                    guard let self else { return }
+
+                    let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
+                    alert.addTextField { textField in
+                        textField.text = buttonState.getName()
+                    }
+
+                    let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self] _ in
+                        guard let self else { return }
+
+                        if let name = alert.textFields?.first?.text {
+                            if name.isEmpty {
+                                OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: view)
+                            } else if !mapButtonsHelper.isActionButtonNameUnique(name) {
+                                OAUtilities.showToast(localizedString("custom_map_button_name_present"), details: nil, duration: 4, in: view)
+                            } else {
+                                buttonState.setName(name)
+                                mapButtonsHelper.onQuickActionsChanged(buttonState)
+                                onSettingsChanged()
+                            }
+                        }
+                    }
+                    alert.addAction(saveAction)
+                    alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+
+                    alert.preferredAction = saveAction
+                    present(alert, animated: true)
+                }
+                renameAction.accessibilityLabel = renameAction.title
+                menuElements.append(renameAction)
+                
+                let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")) { [weak self] _ in
+                    guard let self else { return }
+
+                    let message = String(format: localizedString("res_confirmation_delete"), "\"\(buttonState.getName())\"")
+                    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
+                        guard let self else { return }
+
+                        mapButtonsHelper.remove(buttonState)
+                        onSettingsChanged()
+                    })
+                    alert.addAction(UIAlertAction(title: localizedString("shared_string_no"), style: .cancel))
+                    present(alert, animated: true)
+                }
+                deleteAction.accessibilityLabel = deleteAction.title
+                deleteAction.attributes = .destructive
+                let deleteSection = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [deleteAction])
+                
+                return UIMenu(title: "", children: [renameAction, deleteSection])
+            }
+            return UIContextMenuConfiguration(identifier: nil, previewProvider: nil, actionProvider: menuProvider)
+        }
+        return nil
+    }
+
     // MARK: Selectors
 
     override func onRightNavbarButtonPressed() {
@@ -97,6 +160,7 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
 
         let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self] _ in
             guard let self else { return }
+
             if let name = alert.textFields?.first?.text {
                 if name.isEmpty {
                     OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: view)

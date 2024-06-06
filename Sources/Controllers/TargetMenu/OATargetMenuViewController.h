@@ -137,6 +137,7 @@ typedef void (^ContentHeightChangeListenerBlock)(CGFloat newHeight);
 - (void) goFull;
 - (void) goFullScreen;
 
+- (BOOL) showTopViewInFullscreen;
 - (BOOL) showTopControls;
 - (BOOL) supportMapInteraction;
 - (BOOL) supportsForceClose;

@@ -19,11 +19,14 @@ final class BLEBikeSCDDevice: Device {
         GattAttributes.SERVICE_CYCLING_SPEED_AND_CADENCE
     }
     
-    override var getServiceConnectedImage: UIImage {
-        if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor, sensor.lastBikeCadenceData != nil {
-            return UIImage(named: "widget_sensor_cadence")!
-        }
-        return UIImage(named: "widget_sensor_speed")!
+    override var getServiceConnectedImage: UIImage? {
+        getServiceImage(cadence: "widget_sensor_cadence",
+                        speed: "widget_sensor_speed")
+    }
+    
+    override var getServiceDisconnectedImage: UIImage? {
+        getServiceImage(cadence: "ic_custom_sensor_cadence_outlined",
+                        speed: "ic_custom_sensor_speed_outlined")
     }
     
     override var getDataFields: [[String: String]]? {
@@ -78,6 +81,13 @@ final class BLEBikeSCDDevice: Device {
     func setWheelCircumference(wheelCircumference: Double) {
         guard let sensor = sensors.compactMap({ $0 as? BLEBikeSensor }).first else { return }
         sensor.wheelSize = wheelCircumference / 1000
+    }
+    
+    private func getServiceImage(cadence: String, speed: String) -> UIImage? {
+        if let sensor = sensors.first(where: { $0 is BLEBikeSensor }) as? BLEBikeSensor, sensor.lastBikeCadenceData != nil {
+            return UIImage(named: cadence)
+        }
+        return UIImage(named: speed)
     }
     
     private func getWheelCircumference() -> Double? {

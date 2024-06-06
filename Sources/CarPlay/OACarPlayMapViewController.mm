@@ -75,11 +75,11 @@
     [NSLayoutConstraint activateConstraints:@[
         [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
     ]];
-    
-    _leftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor];
+    CGFloat outsideShadowOffset = 1.0;
+    _leftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor constant:outsideShadowOffset];
     _leftConstraint.active = YES;
     
-    _rightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor];
+    _rightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor constant:-outsideShadowOffset];
     _rightConstraint.active = YES;
     
     [self setupSpeedometer];
@@ -122,6 +122,7 @@
             _speedometerView.carPlayConfig.isLeftSideDriving = isLeftSideDriving;
             [_speedometerView configure];
         }
+        [self updateSpeedometerViewStyleTheme];
     }
 
     [self updateMapCenterPoint];
@@ -184,7 +185,6 @@
     _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
     _speedometerView.hidden = YES;
     [_speedometerView configure];
-    [self updateSpeedometerViewStyleTheme];
     
     [_alarmSpeedometerStackView addArrangedSubview:_speedometerView];
         
@@ -195,7 +195,11 @@
 
 - (void)configureSpeedometer {
     [_speedometerView configure];
-    _speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
+    [UIView animateWithDuration:0 delay:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
+        _speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
+    } completion:^(BOOL finished) {
+        [self updateSpeedometerViewStyleTheme];
+    }];
 }
 
 - (void) attachMapToWindow

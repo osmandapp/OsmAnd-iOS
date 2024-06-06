@@ -84,6 +84,13 @@ final class SpeedometerSpeedView: UIView {
         unitSpeedLabel.textAlignment = textAlignment
     }
     
+    func configureShadow() {
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 5
+        layer.shadowOffset = .init(width: 0, height: 2)
+        layer.shadowColor = UIColor.black.withAlphaComponent(0.30).cgColor
+    }
+    
     private func updateSpeedValueAndUnit(with value: Float) {
         let valueUnitArray: NSMutableArray = []
         OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)

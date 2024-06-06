@@ -113,9 +113,10 @@ final class SpeedometerView: OATextInfoWidget {
 
         centerPositionYConstraint.isActive = true
         if isPreview {
-            configureShadow()
-            configureContentStackViewSemanticContentAttribute()
             isHidden = false
+            speedometerSpeedView.layer.cornerRadius = 6
+            speedometerSpeedView.configureShadow()
+            configureContentStackViewSemanticContentAttribute()
             centerPositionXConstraint.isActive = true
             leftPositionConstraint.isActive = false
             rightPositionConstraint.isActive = false
@@ -124,7 +125,7 @@ final class SpeedometerView: OATextInfoWidget {
             isHidden = true
             centerPositionXConstraint.isActive = false
             if let carPlayConfig {
-                layer.cornerRadius = 10
+                speedometerSpeedView.layer.cornerRadius = 10
                 contentStackView.semanticContentAttribute = carPlayConfig.isLeftSideDriving ? .forceRightToLeft : .forceLeftToRight
                 speedometerSpeedView.configureTextAlignmentContent(isTextAlignmentRight: carPlayConfig.isLeftSideDriving)
                 if carPlayConfig.isLeftSideDriving {
@@ -132,10 +133,12 @@ final class SpeedometerView: OATextInfoWidget {
                 } else {
                     contentAlignment(isRight: false)
                 }
+                speedometerSpeedView.removeExternalBorders()
+                speedometerSpeedView.addExternalBorder(borderWidth: 1.0, borderColor: .lightGray, cornerRadius: 11)
             } else {
-                configureShadow()
                 configureContentStackViewSemanticContentAttribute()
-                layer.cornerRadius = 6
+                speedometerSpeedView.layer.cornerRadius = 6
+                speedometerSpeedView.configureShadow()
                 leftPositionConstraint.isActive = true
                 rightPositionConstraint.isActive = false
                 configureUserInterfaceStyleWithMapTheme()
@@ -144,7 +147,10 @@ final class SpeedometerView: OATextInfoWidget {
     }
     
     func configureUserInterfaceStyleWith(style: UIUserInterfaceStyle) {
-       overrideUserInterfaceStyle = style
+        overrideUserInterfaceStyle = style
+        let borderColor: UIColor = style == .light ? .widgetAutoBgStroke.light : .widgetAutoBgStroke.dark
+        speedometerSpeedView.removeExternalBorders()
+        speedometerSpeedView.addExternalBorder(borderWidth: 1.0, borderColor: borderColor, cornerRadius: 11)
     }
     
     func contentAlignment(isRight: Bool) {
@@ -155,13 +161,6 @@ final class SpeedometerView: OATextInfoWidget {
             leftPositionConstraint.isActive = true
             rightPositionConstraint.isActive = false
         }
-    }
-    
-    private func configureShadow() {
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 5
-        layer.shadowOffset = .init(width: 0, height: 2)
-        layer.shadowColor = UIColor.black.withAlphaComponent(0.35).cgColor
     }
     
     private func configureContentStackViewSemanticContentAttribute() {

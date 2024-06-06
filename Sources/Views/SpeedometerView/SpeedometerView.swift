@@ -14,26 +14,10 @@ final class CarPlayConfig: NSObject {
 @objcMembers
 final class SpeedometerView: OATextInfoWidget {
     
-    @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint! {
-        didSet {
-            centerPositionXConstraint.identifier = "centerPositionXConstraint"
-        }
-    }
-    @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint! {
-        didSet {
-            centerPositionYConstraint.identifier = "centerPositionYConstraint"
-        }
-    }
-    @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint! {
-        didSet {
-            leftPositionConstraint.identifier = "leftPositionConstraint"
-        }
-    }
-    @IBOutlet private weak var rightPositionConstraint: NSLayoutConstraint! {
-        didSet {
-            rightPositionConstraint.identifier = "rightPositionConstraint"
-        }
-    }
+    @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint!
+    @IBOutlet private weak var rightPositionConstraint: NSLayoutConstraint!
     
     @IBOutlet private weak var contentStackView: UIStackView!
     

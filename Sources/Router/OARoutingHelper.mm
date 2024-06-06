@@ -477,7 +477,7 @@ static BOOL _isDeviatedFromRoute = false;
                     double diffToNext = ABS(degreesDiff(bearingMotion, bearingRouteNext));
                     if (diff > diffToNext)
                     {
-                      //  NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
+                        NSLog(@"Processed point bearing deltas : %f %f", diff, diffToNext);
                         processed = true;
                     }
                 }

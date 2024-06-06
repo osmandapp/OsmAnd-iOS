@@ -36,8 +36,8 @@
     SpeedometerView *_speedometerView;
     UIStackView *_alarmSpeedometerStackView;
     NSLayoutConstraint *_speedometerHeightConstraint;
-    NSLayoutConstraint *_leftConstraint;
-    NSLayoutConstraint *_rightConstraint;
+    NSLayoutConstraint *_alarmSpeedometerStackViewLeftConstraint;
+    NSLayoutConstraint *_alarmSpeedometerStackViewRightConstraint;
 }
 
 - (instancetype) initWithCarPlayWindow:(CPWindow *)window mapViewController:(OAMapViewController *)mapVC
@@ -76,11 +76,11 @@
         [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
     ]];
     CGFloat outsideShadowOffset = 1.0;
-    _leftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor constant:outsideShadowOffset];
-    _leftConstraint.active = YES;
+    _alarmSpeedometerStackViewLeftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor constant:outsideShadowOffset];
+    _alarmSpeedometerStackViewLeftConstraint.active = YES;
     
-    _rightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor constant:-outsideShadowOffset];
-    _rightConstraint.active = YES;
+    _alarmSpeedometerStackViewRightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor constant:-outsideShadowOffset];
+    _alarmSpeedometerStackViewRightConstraint.active = YES;
     
     [self setupSpeedometer];
     [self setupAlarmWidget];
@@ -105,15 +105,15 @@
     {
         [_speedometerView contentAlignmentWithIsRight:YES];
         
-        _rightConstraint.active = YES;
-        _leftConstraint.active = NO;
+        _alarmSpeedometerStackViewRightConstraint.active = YES;
+        _alarmSpeedometerStackViewLeftConstraint.active = NO;
     }
     else
     {
         [_speedometerView contentAlignmentWithIsRight:NO];
         
-        _leftConstraint.active = YES;
-        _rightConstraint.active = NO;
+        _alarmSpeedometerStackViewLeftConstraint.active = YES;
+        _alarmSpeedometerStackViewRightConstraint.active = NO;
     }
     
     if (_speedometerView && _speedometerView.superview)
@@ -190,7 +190,6 @@
         
     _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
     _speedometerHeightConstraint.active = YES;
-    _speedometerHeightConstraint.identifier = @"_speedometerHeightConstraint";
 }
 
 - (void)configureSpeedometer {

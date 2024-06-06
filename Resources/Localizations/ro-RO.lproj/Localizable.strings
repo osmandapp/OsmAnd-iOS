@@ -3257,7 +3257,7 @@
 "shared_string_foot" = "Picior";
 "external_device_blood_pressure" = "Tensiune arterială";
 "external_sensors_support" = "Suport senzori externi";
-"ant_plus_searching_text_description" = "Vă rugăm să țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
+"ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
 "external_device_forget_sensor" = "Uită senzor";
 "external_device_forget_sensor_description" = "Senzorul va fi eliminat din listă. Veți putea să împerecheați din nou acest senzor în orice moment.";
 "external_device_status_connect" = "Conectare";
@@ -3373,7 +3373,7 @@
 "missing_or_outdated_maps_title" = "Hărți lipsă sau învechite";
 "osm_id" = "ID OSM";
 "vertical_exaggeration" = "Exagerare verticală";
-"calculate_online" = "Calculați online";
+"calculate_online" = "Calculează online";
 "ios_release_4_7" = "• Panouri widget îmbunătățite în partea de sus și de jos pentru a găzdui toate widgeturile\n• Gestionare îmbunătățită pentru pistele vizibile pe hartă\n• Actualizat \"Analiză pe hartă\" cu posibilitatea de a afișa măsurători de la senzori\n• A fost adăugat suport îmbunătățit pentru etichete pentru GPX: link, autor, copyright și cuvinte cheie\n• A fost îmbunătățită configurarea widgeturilor, permițând utilizatorilor să mute paginile și rândurile\n• Gestionarea îmbunătățită a pistelor în \"My Places\" cu subfoldere și meniuri contextuale pentru piste și dosare\n• Sens giratoriu cu numărul de ieșire afișat acum pe CarPlay în timpul navigării\n• Controlul reliefului 3D cu o nouă opțiune \"Exagerare verticală\" pentru un peisaj mai dramatic\n• Vizualizați altitudinea pistei direct pe hartă într-o vizualizare 3D dinamică\n• Noi widget-uri: \"Glide Ratio\" și \"Sun Position\"\n• Personalizați \"Distanța în timpul navigației\": alegeți între numere precise sau rotunjite în sus\n• Limba aplicației va fi utilizată pentru denumirile de pe harta de ansamblu a lumii în locul limbilor locale\n• OsmAnd Cloud: A fost adăugată posibilitatea de a vă gestiona datele, inclusiv restaurarea fișierelor șterse și ștergerea contului dvs.\n• A fost adăugat suportul pentru etichete suplimentare pentru rutele turistice\n• A fost reparat widget-ul \"Coordonate\" unde, în unele cazuri, ultimele cifre erau omise\n• S-a reparat comportamentul butonului \"Mod 3D\": atingerea butonului nu salva unghiul de înclinare\n• S-a fixat culoarea barei de stare pentru versiunile mai vechi de iOS\n• Corectarea gesturilor de rotire și de ciupire pentru a mări harta pentru aplicația care rulează pe macOS\n";
 "average_vertical_speed" = "Viteza verticală medie";
 "vertical_exaggeration_description" = "Prin modificarea valorii scării, puteți accentua relieful 3D.";

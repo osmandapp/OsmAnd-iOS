@@ -15,8 +15,8 @@
 
 - (void) updateViewVisibility;
 - (BOOL) isActionSheetVisible;
-- (BOOL) isQuickActionFloatingButtonVisible;
-- (void) hideActionsSheetAnimated;
+- (BOOL) isQuickActionButtonVisible;
+- (void) hideActionsSheetAnimated:(void (^)(void))completion;
 - (void) updateColors;
 
 @end

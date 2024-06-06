@@ -14,7 +14,8 @@
 
 @interface OAMapButtonsHelper : NSObject
 
-@property (readonly) OAObservable * _Nonnull quickActionListChangedObservable;
+@property (readonly) OAObservable * _Nonnull quickActionsChangedObservable;
+@property (readonly) OAObservable * _Nonnull quickActionButtonsChangedObservable;
 
 + (OAMapButtonsHelper * _Nonnull)sharedInstance;
 

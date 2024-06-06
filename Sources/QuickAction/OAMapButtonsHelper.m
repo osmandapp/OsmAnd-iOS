@@ -141,7 +141,8 @@ static OAQuickActionType *TYPE_OPEN;
         _quickActionTypesStr = [NSDictionary new];
         _enabledTypes = [NSMutableArray new];
         _settings = [OAAppSettings sharedManager];
-        _quickActionListChangedObservable = [[OAObservable alloc] init];
+        _quickActionsChangedObservable = [[OAObservable alloc] init];
+        _quickActionButtonsChangedObservable = [[OAObservable alloc] init];
         _serializer = [OAQuickActionSerializer new];
         
         [self updateActionTypes];
@@ -209,7 +210,7 @@ static OAQuickActionType *TYPE_OPEN;
 - (void)onQuickActionsChanged:(OAQuickActionButtonState *)buttonState
 {
     [buttonState saveActions:_serializer];
-    [self.quickActionListChangedObservable notifyEvent];
+    [_quickActionsChangedObservable notifyEventWithKey:buttonState];
 }
 
 - (BOOL)isActionNameUnique:(NSArray<OAQuickAction *> *)actions quickAction:(OAQuickAction *)quickAction
@@ -229,7 +230,7 @@ static OAQuickActionType *TYPE_OPEN;
     while(YES)
     {
         number++;
-        [action setName:[NSString stringWithFormat:@"%@ (%d)", name, number]];
+        [action setName:[NSString stringWithFormat:@"%@ (%@)", name, @(number).stringValue]];
         if ([self isActionNameUnique:actions quickAction:action])
             return action;
     }
@@ -241,7 +242,7 @@ static OAQuickActionType *TYPE_OPEN;
     while(YES)
     {
         number++;
-        NSString *newName = [NSString stringWithFormat:@"%@ (%d)", name, number];
+        NSString *newName = [NSString stringWithFormat:@"%@ (%@)", name, @(number).stringValue];
         if ([self isActionButtonNameUnique:newName])
             return newName;
     }
@@ -290,9 +291,9 @@ static OAQuickActionType *TYPE_OPEN;
         [quickActionTypesInt setObject:qt forKey:@(qt.id)];
         [quickActionTypesStr setObject:qt forKey:qt.stringId];
     }
-    _enabledTypes = [NSArray arrayWithArray:enabledTypes];
-    _quickActionTypesInt = [NSDictionary dictionaryWithDictionary:quickActionTypesInt];
-    _quickActionTypesStr = [NSDictionary dictionaryWithDictionary:quickActionTypesStr];
+    _enabledTypes = enabledTypes;
+    _quickActionTypesInt = quickActionTypesInt;
+    _quickActionTypesStr = quickActionTypesStr;
 
     [_serializer setQuickActionTypesStr:quickActionTypesStr];
     [_serializer setQuickActionTypesInt:quickActionTypesInt];
@@ -434,7 +435,7 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (OAQuickActionButtonState *)createNewButtonState
 {
-    NSString *id = [NSString stringWithFormat:@"%@_%ld", OAQuickActionButtonState.defaultButtonId, [[NSDate date] timeIntervalSince1970] * 1000];
+    NSString *id = [NSString stringWithFormat:@"%@_%@", OAQuickActionButtonState.defaultButtonId, @([[NSDate date] timeIntervalSince1970] * 1000).stringValue];
     return [[OAQuickActionButtonState alloc] init:id];
 }
 
@@ -442,14 +443,14 @@ static OAQuickActionType *TYPE_OPEN;
 {
     [_settings.quickActionButtons addUnique:buttonState.id];
     [self updateActiveActions];
-    [self.quickActionListChangedObservable notifyEvent];
+    [_quickActionButtonsChangedObservable notifyEventWithKey:buttonState andValue:@(YES)];
 }
 
 - (void)removeQuickActionButtonState:(OAQuickActionButtonState *)buttonState
 {
     [_settings.quickActionButtons remove:buttonState.id];
     [self updateActiveActions];
-    [self.quickActionListChangedObservable notifyEvent];
+    [_quickActionButtonsChangedObservable notifyEventWithKey:buttonState andValue:@(NO)];
 }
 
 + (OAQuickAction *)produceAction:(OAQuickAction *)action

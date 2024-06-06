@@ -23,6 +23,11 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
 + (void)initialize
 {
     TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsDayNightModeActionId

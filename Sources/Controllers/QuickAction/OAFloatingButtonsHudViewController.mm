@@ -21,17 +21,20 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMap3DModeVisibilityType.h"
-
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
 
-#define kHudButtonsOffset 16.0f
-#define kHudQuickActionButtonHeight 50.0f
+static CGFloat const kHudButtonsOffset = 16.0;
+static CGFloat const kHudQuickActionButtonHeight = 50.0;
+
+static NSInteger const kQuickActionSlashTag = -1;
+static NSInteger const kQuickActionSlashBackgroundTag = -2;
+static NSInteger const kQuickActionAddTag = -1;
+static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 @interface OAFloatingButtonsHudViewController () <OAQuickActionsSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet OAHudButton *map3dModeFloatingButton;
-@property (weak, nonatomic) IBOutlet OAHudButton *quickActionFloatingButton;
 @property (weak, nonatomic) IBOutlet UIImageView *quickActionPin;
 
 @end
@@ -39,75 +42,43 @@
 @implementation OAFloatingButtonsHudViewController
 {
     OAMapHudViewController *_mapHudController;
-    
+    OAAppSettings *_settings;
     OAMapButtonsHelper *_mapButtonsHelper;
-    OAQuickActionButtonState *_quickActionButtonState;
+
     OAMap3DButtonState *_map3DButtonState;
-    
-    UILongPressGestureRecognizer *_quickActionsButtonDragRecognizer;
     UILongPressGestureRecognizer *_map3dModeButtonDragRecognizer;
+
     OAQuickActionsSheetView *_actionsView;
     BOOL _isActionsViewVisible;
-    
+    NSMutableArray<OAHudButton *> *_quickActionFloatingButtons;
+
     CGFloat _cachedYViewPort;
     OAAutoObserverProxy *_map3dModeObserver;
     OAAutoObserverProxy *_applicationModeObserver;
     OAAutoObserverProxy *_actionsChangedObserver;
+    OAAutoObserverProxy *_actionButtonsChangedObserver;
 }
 
-- (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController
+#pragma mark - Initialization
+
+- (instancetype)initWithMapHudViewController:(OAMapHudViewController *)mapHudController
 {
-    self = [super initWithNibName:@"OAFloatingButtonsHudViewController"
-                           bundle:nil];
+    self = [super initWithNibName:@"OAFloatingButtonsHudViewController" bundle:nil];
     if (self)
     {
         _mapHudController = mapHudController;
-        _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
-        _quickActionButtonState = [_mapButtonsHelper getButtonStateById:OAQuickActionButtonState.defaultButtonId];
-        _map3DButtonState = [_mapButtonsHelper getMap3DButtonState];
-        _isActionsViewVisible = NO;
+        [self commonInit];
     }
     return self;
 }
 
-- (void)viewDidLoad
+- (void)commonInit
 {
-    [super viewDidLoad];
-    
-    [_quickActionFloatingButton setTag:[OAUtilities getQuickActionButtonTag]];
-    _quickActionFloatingButton.alpha = [_quickActionButtonState isEnabled] ? 1 : 0;
-    _quickActionFloatingButton.userInteractionEnabled = [_quickActionButtonState isEnabled];
-    _quickActionFloatingButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-    _quickActionFloatingButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
-    [_quickActionFloatingButton updateColorsForPressedState:NO];
-
-    [_map3DButtonState.fabMarginPref restorePosition:_map3dModeFloatingButton];
-    
-    _quickActionsButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuickActionButtonDragged:)];
-    [_quickActionsButtonDragRecognizer setMinimumPressDuration:0.5];
-    [_quickActionFloatingButton addGestureRecognizer:_quickActionsButtonDragRecognizer];
-    _quickActionFloatingButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
-    
-    [_map3dModeFloatingButton setTag:[OAUtilities getMap3DModeButtonTag]];
-    _map3dModeFloatingButton.alpha = 0;
-
-    [self onMap3dModeUpdated];
-    [_quickActionButtonState.fabMarginPref restorePosition:_quickActionFloatingButton];
-    
-    _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
-    [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
-    [_map3dModeFloatingButton addGestureRecognizer:_map3dModeButtonDragRecognizer];
-    
-    _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                   withHandler:@selector(onMap3dModeUpdated)
-                                                    andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
-    _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onApplicationModeChanged)
-                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
-    _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                        withHandler:@selector(updateColors)
-                                                         andObserve:[OAMapButtonsHelper sharedInstance].quickActionListChangedObservable];
-    [self updateColors];
+    _settings = [OAAppSettings sharedManager];
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+    _map3DButtonState = [_mapButtonsHelper getMap3DButtonState];
+    _isActionsViewVisible = NO;
+    _quickActionFloatingButtons = [NSMutableArray array];
 }
 
 - (void)dealloc
@@ -122,138 +93,49 @@
         [_map3dModeObserver detach];
         _map3dModeObserver = nil;
     }
-}
-
-- (void) restorePinPosition
-{
-    BOOL isLandscape = OAUtilities.isLandscape;
-    CGRect pinFrame = _quickActionPin.frame;
-    CGFloat width = isLandscape ? DeviceScreenWidth * 1.5 : DeviceScreenWidth;
-    CGFloat originX = width / 2 - pinFrame.size.width / 2;
-    CGFloat originY = isLandscape ? (DeviceScreenHeight / 2 - pinFrame.size.height) : (DeviceScreenHeight * (1.0 - (_actionsView.frame.size.height / DeviceScreenHeight)) / 2 - pinFrame.size.height);
-    if (!isnan(originX) && !isnan(originY))
+    if (_actionsChangedObserver)
     {
-        pinFrame.origin = CGPointMake(originX, originY);
-        _quickActionPin.frame = pinFrame;
+        [_actionsChangedObserver detach];
+        _actionsChangedObserver = nil;
+    }
+    if (_actionButtonsChangedObserver)
+    {
+        [_actionButtonsChangedObserver detach];
+        _actionButtonsChangedObserver = nil;
     }
 }
 
-- (void)updateColors
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [_quickActionFloatingButton updateColorsForPressedState:NO];
-        if (_quickActionButtonState.quickActions.count == 1)
-        {
-            [_quickActionFloatingButton setImage:[_quickActionButtonState getIcon] forState:UIControlStateNormal];
-        }
-        else
-        {
-            if (_isActionsViewVisible)
-                [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_action_close_banner"] forState:UIControlStateNormal];
-            else
-                [_quickActionFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_quick_action"] forState:UIControlStateNormal];
-        }
-    });
-    [self onMap3dModeUpdated];
-}
+#pragma mark - UIViewController
 
-- (void) onMap3dModeUpdated
+- (void)viewDidLoad
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self setupMap3dModeButtonVisibility];
-        [_map3dModeFloatingButton updateColorsForPressedState: NO];
-        if ([OAMapViewTrackingUtilities.instance is3DMode])
-        {
-            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_2d"] forState:UIControlStateNormal];
-            _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
-        }
-        else
-        {
-            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_3d"] forState:UIControlStateNormal];
-            _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
-        }
-        EOAMap3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
-        _map3dModeFloatingButton.accessibilityValue = [EOAMap3DModeVisibilityWrapper getTitleForType:map3DMode];
-    });
-}
+    [super viewDidLoad];
 
-- (void)onApplicationModeChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self updateViewVisibility];
-        [self restoreControlsPosition];
-    });
-}
+    [self createQuickActionButtons];
 
-- (void)adjustMapViewPort
-{
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    BOOL isLandscape = [OAUtilities isLandscape];
-    [mapPanel.mapViewController setViewportScaleX:isLandscape ? kViewportBottomScale : kViewportScale
-                                                y:isLandscape ? kViewportScale : (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight];
-}
-
-- (void) restoreMapViewPort
-{
-    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
-}
-
-- (void) updateViewVisibility
-{
-//    setLayerState(false);
-//    isLayerOn = quickActionRegistry.isQuickActionOn();
-    [self setupQuickActionBtnVisibility];
-    [self setupMap3dModeButtonVisibility];
-}
-
-- (void) setupQuickActionBtnVisibility
-{
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    //    contextMenuLayer.isInChangeMarkerPositionMode() ||
-    //    measurementToolLayer.isInMeasurementMode() ||
-    BOOL hideQuickButton = ![_quickActionButtonState isEnabled] ||
-    [mapPanel isContextMenuVisible] ||
-    [mapPanel gpxModeActive] ||
-    [mapPanel isRouteInfoVisible] ||
-    mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
-    
-    [UIView animateWithDuration:.25 animations:^{
-        _quickActionFloatingButton.alpha = hideQuickButton ? 0 : 1;
-    } completion:^(BOOL finished) {
-        _quickActionFloatingButton.userInteractionEnabled = !hideQuickButton;
-    }];
-}
-
-- (void) setupMap3dModeButtonVisibility
-{
-    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-
-    EOAMap3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
-    BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden ||
-    (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode &&
-        ![OAMapViewTrackingUtilities.instance is3DMode])  ||
-    [mapPanel isContextMenuVisible] ||
-    [mapPanel gpxModeActive] ||
-    [mapPanel isRouteInfoVisible] ||
-    mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
-    
-    [UIView animateWithDuration:.25 animations:^{
-        _map3dModeFloatingButton.alpha = hideButton ? 0 : 1;
-    } completion:^(BOOL finished) {
-        _map3dModeFloatingButton.userInteractionEnabled = !hideButton;
-    }];
-}
-
-- (BOOL) isQuickActionFloatingButtonVisible
-{
-    return _quickActionFloatingButton.alpha == 1;
-}
-
-- (void)restoreControlsPosition 
-{
-    [_quickActionButtonState.fabMarginPref restorePosition:_quickActionFloatingButton];
+    _map3dModeFloatingButton.tag = [OAUtilities getMap3DModeButtonTag];
+    _map3dModeFloatingButton.alpha = 0;
     [_map3DButtonState.fabMarginPref restorePosition:_map3dModeFloatingButton];
-    [self restorePinPosition];
+
+    [self onMap3dModeUpdated];
+    
+    _map3dModeButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onMap3dModeButtonDragged:)];
+    [_map3dModeButtonDragRecognizer setMinimumPressDuration:0.5];
+    [_map3dModeFloatingButton addGestureRecognizer:_map3dModeButtonDragRecognizer];
+    
+    _map3dModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                   withHandler:@selector(onMap3dModeUpdated)
+                                                    andObserve:[OARootViewController instance].mapPanel.mapViewController.elevationAngleObservable];
+    _applicationModeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onApplicationModeChanged)
+                                                          andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+    _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onQuickActionButtonChanged:withKey:)
+                                                         andObserve:[OAMapButtonsHelper sharedInstance].quickActionsChangedObservable];
+    _actionButtonsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                        withHandler:@selector(onQuickActionButtonChanged:withKey:andValue:)
+                                                         andObserve:[OAMapButtonsHelper sharedInstance].quickActionButtonsChangedObservable];
+    [self updateColors];
 }
 
 - (void)viewWillLayoutSubviews
@@ -263,11 +145,61 @@
         [self adjustMapViewPort];
 }
 
+#pragma mark - Selectors
+
+- (IBAction)quickActionButtonPressed:(OAHudButton *)sender
+{
+    if (sender.buttonState && [sender.buttonState isKindOfClass:OAQuickActionButtonState.class])
+    {
+        OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) sender.buttonState;
+        if (quickActionButtonState.quickActions.count == 1)
+        {
+            BOOL isEnabled = [quickActionButtonState.quickActions.firstObject isActionWithSlash];
+            [quickActionButtonState.quickActions.firstObject execute];
+            [_mapButtonsHelper.quickActionsChangedObservable notifyEventWithKey:quickActionButtonState];
+        }
+        else
+        {
+            if (!_actionsView)
+            {
+                _actionsView = [[OAQuickActionsSheetView alloc] initWithButtonState:quickActionButtonState];
+                _actionsView.delegate = self;
+            }
+            else if (![_actionsView.buttonState.id isEqualToString:quickActionButtonState.id])
+            {
+                [self hideActionsSheetAnimated:^{
+                    _actionsView = [[OAQuickActionsSheetView alloc] initWithButtonState:quickActionButtonState];
+                    _actionsView.delegate = self;
+                    [self showActionsSheetAnimated:sender];
+                }];
+                return;
+            }
+            if (_actionsView.superview)
+                [self hideActionsSheetAnimated:nil];
+            else
+                [self showActionsSheetAnimated:sender];
+        }
+    }
+}
+
+- (IBAction)map3dModeButtonPressed:(id)sender
+{
+    [OAMapViewTrackingUtilities.instance switchMap3dMode];
+    [self onMap3dModeUpdated];
+}
+
 - (void)onQuickActionButtonDragged:(UILongPressGestureRecognizer *)recognizer
 {
-    [self onButtonDragged:recognizer
-                   button:_quickActionFloatingButton
-      fabMarginPreference:_quickActionButtonState.fabMarginPref];
+    if ([recognizer.view isKindOfClass:OAHudButton.class])
+    {
+        OAHudButton *quickActionButton = (OAHudButton *) recognizer.view;
+        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+        {
+            [self onButtonDragged:recognizer
+                           button:quickActionButton
+              fabMarginPreference:((OAQuickActionButtonState *) quickActionButton.buttonState).fabMarginPref];
+        }
+    }
 }
 
 - (void)onMap3dModeButtonDragged:(UILongPressGestureRecognizer *)recognizer
@@ -302,12 +234,329 @@
     }
 }
 
+- (void)onMap3dModeUpdated
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupMap3dModeButtonVisibility];
+        [_map3dModeFloatingButton updateColorsForPressedState: NO];
+        if ([OAMapViewTrackingUtilities.instance is3DMode])
+        {
+            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_2d"] forState:UIControlStateNormal];
+            _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_3d_mode_action");
+        }
+        else
+        {
+            [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_3d"] forState:UIControlStateNormal];
+            _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
+        }
+        EOAMap3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
+        _map3dModeFloatingButton.accessibilityValue = [EOAMap3DModeVisibilityWrapper getTitleForType:map3DMode];
+    });
+}
+
+- (void)onApplicationModeChanged
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateViewVisibility];
+        [self restoreControlsPosition];
+    });
+}
+
+- (void)onQuickActionButtonChanged:(id<OAObservableProtocol>)observer withKey:(id)key
+{
+    if ([key isKindOfClass:OAQuickActionButtonState.class])
+    {
+        OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) key;
+        for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+        {
+            if ([quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+            {
+                OAQuickActionButtonState *buttonState = (OAQuickActionButtonState *) quickActionButton.buttonState;
+                if ([buttonState.id isEqualToString:quickActionButtonState.id])
+                {
+                    if (quickActionButtonState.quickActions.count != 1 && buttonState.quickActions.count)
+                    {
+                        for (UIView *subview in quickActionButton.imageView.subviews)
+                        {
+                            if (subview.tag == kQuickActionSlashTag
+                                || subview.tag == kQuickActionSlashBackgroundTag
+                                || subview.tag == kQuickActionAddTag
+                                || subview.tag == kQuickActionAddBackgroundTag)
+                                [subview removeFromSuperview];
+                        }
+                    }
+                    quickActionButton.buttonState = quickActionButtonState;
+                    [self updateQuickActionButtonColors:quickActionButton];
+                    break;
+                }
+            }
+        }
+    }
+}
+
+- (void)onQuickActionButtonChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (!key && !value)
+        {
+            for (OAHudButton *button in _quickActionFloatingButtons)
+            {
+                [self updateQuickActionButtonColors:button];
+                [self setupQuickActionBtnVisibility:button];
+            }
+        }
+        else if ([key isKindOfClass:OAQuickActionButtonState.class] && [value isKindOfClass:NSNumber.class])
+        {
+            OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) key;
+            BOOL isAdded = ((NSNumber *) value).boolValue;
+            
+            if (isAdded)
+            {
+                OAHudButton *button = [self createQuickActionFloatingButton:quickActionButtonState];
+                [self updateQuickActionButtonColors:button];
+                [self setupQuickActionBtnVisibility:button];
+            }
+            else
+            {
+                for (OAHudButton *button in _quickActionFloatingButtons)
+                {
+                    if ([button.buttonState isKindOfClass:OAQuickActionButtonState.class])
+                    {
+                        if ([((OAQuickActionButtonState *) button.buttonState).id isEqualToString:quickActionButtonState.id])
+                        {
+                            [button removeFromSuperview];
+                            [_quickActionFloatingButtons removeObject:button];
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    });
+}
+
+#pragma mark - Additions
+
+- (void)restorePinPosition
+{
+    BOOL isLandscape = OAUtilities.isLandscape;
+    CGRect pinFrame = _quickActionPin.frame;
+    CGFloat width = isLandscape ? DeviceScreenWidth * 1.5 : DeviceScreenWidth;
+    CGFloat originX = width / 2 - pinFrame.size.width / 2;
+    CGFloat originY = isLandscape ? (DeviceScreenHeight / 2 - pinFrame.size.height) : (DeviceScreenHeight * (1.0 - (_actionsView.frame.size.height / DeviceScreenHeight)) / 2 - pinFrame.size.height);
+    if (!isnan(originX) && !isnan(originY))
+    {
+        pinFrame.origin = CGPointMake(originX, originY);
+        _quickActionPin.frame = pinFrame;
+    }
+}
+
+- (void)updateColors
+{
+    for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+    {
+        [self updateQuickActionButtonColors:quickActionButton];
+    }
+    [self onMap3dModeUpdated];
+}
+
+- (void)updateQuickActionButtonColors:(OAHudButton *)quickActionButton
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [quickActionButton updateColorsForPressedState:NO];
+
+        OAQuickActionButtonState *quickActionButtonState = nil;
+        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+            quickActionButtonState = ((OAQuickActionButtonState *) quickActionButton.buttonState);
+
+        if (_isActionsViewVisible && _actionsView && [_actionsView.buttonState.id isEqualToString:quickActionButtonState.id])
+        {
+            [quickActionButton setImage:[UIImage templateImageNamed:@"ic_action_close_banner"] forState:UIControlStateNormal];
+        }
+        else
+        {
+            UIImage *quickActionIcon = quickActionButtonState ? [quickActionButtonState getIcon] : [UIImage templateImageNamed:@"ic_custom_quick_action"];
+            [quickActionButton setImage:quickActionIcon forState:UIControlStateNormal];
+            if (quickActionButtonState && [quickActionButtonState isSingleAction])
+            {
+                
+                if (![quickActionButtonState.quickActions.firstObject isActionWithSlash])
+                {
+                    for (UIView *subview in quickActionButton.imageView.subviews)
+                    {
+                        if (subview.tag == kQuickActionSlashTag || subview.tag == kQuickActionSlashBackgroundTag)
+                            [subview removeFromSuperview];
+                    }
+                }
+                else
+                {
+                    CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
+                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_bottom"]];
+                    background.tag = kQuickActionSlashBackgroundTag;
+                    background.frame = frame;
+                    [background setTintColor:!_settings.nightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
+                    [quickActionButton.imageView addSubview:background];
+
+                    UIImageView *slash = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_hide_top"]];
+                    slash.tag = kQuickActionSlashTag;
+                    slash.frame = frame;
+                    [quickActionButton.imageView addSubview:slash];
+                }
+                if (![quickActionButtonState.quickActions.firstObject hasSecondaryIcon])
+                {
+                    for (UIView *subview in quickActionButton.imageView.subviews)
+                    {
+                        if (subview.tag == kQuickActionAddTag || subview.tag == kQuickActionAddBackgroundTag)
+                            [subview removeFromSuperview];
+                    }
+                }
+                else
+                {
+                    CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
+                    UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_background"]];
+                    background.tag = kQuickActionAddBackgroundTag;
+                    [background setTintColor:!_settings.nightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
+                    [quickActionButton.imageView addSubview:background];
+
+                    NSString *secondaryIcon = [quickActionButtonState.quickActions.firstObject getSecondaryIconName];
+                    UIImageView *add = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:secondaryIcon]];
+                    add.tag = kQuickActionAddTag;
+                    add.frame = frame;
+                    [quickActionButton.imageView addSubview:add];
+                }
+            }
+        }
+    });
+}
+
+- (void)createQuickActionButtons
+{
+    for (OAQuickActionButtonState *quickActionButtonState in [_mapButtonsHelper getButtonsStates])
+    {
+        [self createQuickActionFloatingButton:quickActionButtonState];
+    }
+}
+
+- (OAHudButton *)createQuickActionFloatingButton:(OAQuickActionButtonState *)quickActionButtonState
+{
+    OAHudButton *quickActionButton = [[OAHudButton alloc] initWithFrame:{346, 648, 50, 50}];
+    [_quickActionFloatingButtons addObject:quickActionButton];
+    [self.view addSubview:quickActionButton];
+
+    quickActionButton.buttonState = quickActionButtonState;
+    quickActionButton.tag = [OAUtilities getQuickActionButtonTag];
+    quickActionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+    quickActionButton.alpha = [quickActionButtonState isEnabled] ? 1 : 0;
+    quickActionButton.userInteractionEnabled = [quickActionButtonState isEnabled];
+    quickActionButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
+    quickActionButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+    quickActionButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+    [quickActionButton updateColorsForPressedState:NO];
+    [quickActionButton addTarget:self action:@selector(quickActionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+    UILongPressGestureRecognizer *quickActionsButtonDragRecognizer = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(onQuickActionButtonDragged:)];
+    [quickActionsButtonDragRecognizer setMinimumPressDuration:0.5];
+    [quickActionButton addGestureRecognizer:quickActionsButtonDragRecognizer];
+    [quickActionButtonState.fabMarginPref restorePosition:quickActionButton];
+    return quickActionButton;
+}
+
+- (void)adjustMapViewPort
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    BOOL isLandscape = [OAUtilities isLandscape];
+    [mapPanel.mapViewController setViewportScaleX:isLandscape ? kViewportBottomScale : kViewportScale
+                                                y:isLandscape ? kViewportScale : (DeviceScreenHeight - _actionsView.frame.size.height) / DeviceScreenHeight];
+}
+
+- (void)restoreMapViewPort
+{
+    [[OARootViewController instance].mapPanel.mapViewController setViewportScaleX:kViewportScale y:_cachedYViewPort];
+}
+
+- (void)updateViewVisibility
+{
+//    setLayerState(false);
+//    isLayerOn = quickActionRegistry.isQuickActionOn();
+    for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+    {
+        [self setupQuickActionBtnVisibility:quickActionButton];
+    }
+    [self setupMap3dModeButtonVisibility];
+}
+
+- (void)setupQuickActionBtnVisibility:(OAHudButton *)quickActionButton
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    //    contextMenuLayer.isInChangeMarkerPositionMode() ||
+    //    measurementToolLayer.isInMeasurementMode() ||
+    BOOL hideQuickButton = (quickActionButton.buttonState
+                            && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class]
+                            && ![((OAQuickActionButtonState *) quickActionButton.buttonState) isEnabled])
+        || [mapPanel isContextMenuVisible]
+        || [mapPanel isDashboardVisible]
+        || [mapPanel gpxModeActive]
+        || [mapPanel isRouteInfoVisible]
+        || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
+
+    [UIView animateWithDuration:.25 animations:^{
+        quickActionButton.alpha = hideQuickButton ? 0 : 1;
+    } completion:^(BOOL finished) {
+        quickActionButton.userInteractionEnabled = !hideQuickButton;
+    }];
+}
+
+- (void)setupMap3dModeButtonVisibility
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+
+    EOAMap3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
+    BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden
+        || (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode
+            && ![OAMapViewTrackingUtilities.instance is3DMode])
+        || [mapPanel isContextMenuVisible]
+        || [mapPanel isDashboardVisible]
+        || [mapPanel gpxModeActive]
+        || [mapPanel isRouteInfoVisible]
+        || mapPanel.hudViewController.mapInfoController.weatherToolbarVisible;
+    
+    [UIView animateWithDuration:.25 animations:^{
+        _map3dModeFloatingButton.alpha = hideButton ? 0 : 1;
+    } completion:^(BOOL finished) {
+        _map3dModeFloatingButton.userInteractionEnabled = !hideButton;
+    }];
+}
+
+- (BOOL)isQuickActionButtonVisible
+{
+    for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+    {
+        if (quickActionButton.alpha == 1)
+            return YES;
+    }
+    return NO;
+}
+
+- (void)restoreControlsPosition 
+{
+    for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+    {
+        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+        {
+            OAQuickActionButtonState *quickActionButtonState = ((OAQuickActionButtonState *) quickActionButton.buttonState);
+            [quickActionButtonState.fabMarginPref restorePosition:quickActionButton];
+        }
+    }
+    [_map3DButtonState.fabMarginPref restorePosition:_map3dModeFloatingButton];
+    [self restorePinPosition];
+}
+
 - (BOOL)isActionSheetVisible
 {
     return _isActionsViewVisible;
 }
 
-- (void)showActionsSheetAnimated
+- (void)showActionsSheetAnimated:(OAHudButton *)quickActionButton
 {
     [_mapHudController hideWeatherToolbarIfNeeded];
 
@@ -322,49 +571,29 @@
     [self restorePinPosition];
     _isActionsViewVisible = YES;
     [_mapHudController updateControlsLayout:YES];
-    [self updateColors];
+    [self updateQuickActionButtonColors:quickActionButton];
 }
 
-- (void)hideActionsSheetAnimated
+- (void)hideActionsSheetAnimated:(void (^)(void))completion
 {
     if (_actionsView.hidden || !_actionsView.superview)
+    {
+        if (completion)
+            completion();
         return;
+    }
 
     _isActionsViewVisible = NO;
     [UIView animateWithDuration:.3 animations:^{
+        [_actionsView hide];
         _quickActionPin.hidden = YES;
-        _actionsView.frame = CGRectMake(OAUtilities.getLeftMargin, DeviceScreenHeight, _actionsView.bounds.size.width, _actionsView.bounds.size.height);
         [self restoreMapViewPort];
     } completion:^(BOOL finished) {
-        [_actionsView removeFromSuperview];
         [_mapHudController updateControlsLayout:YES];
+        _actionsView = nil;
+        if (completion)
+            completion();
     }];
-    [self updateColors];
-}
-
-- (IBAction)quickActionButtonPressed:(id)sender
-{
-    if (_quickActionButtonState.quickActions.count == 1)
-    {
-        [_quickActionButtonState.quickActions.firstObject execute];
-    }
-    else
-    {
-        if (!_actionsView)
-        {
-            _actionsView = [[OAQuickActionsSheetView alloc] initWithButtonState:_quickActionButtonState];
-            _actionsView.delegate = self;
-        }
-        if (_actionsView.superview)
-            [self hideActionsSheetAnimated];
-        else
-            [self showActionsSheetAnimated];
-    }
-}
-
-- (IBAction)map3dModeButtonPressed:(id)sender
-{
-    [OAMapViewTrackingUtilities.instance switchMap3dMode];
     [self updateColors];
 }
 
@@ -372,7 +601,7 @@
 
 - (void)dismissBottomSheet
 {
-    [self hideActionsSheetAnimated];
+    [self hideActionsSheetAnimated:nil];
 }
 
 @end

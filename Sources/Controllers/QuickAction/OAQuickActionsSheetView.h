@@ -21,7 +21,10 @@
 @interface OAQuickActionsSheetView : UIView
 
 @property (nonatomic) id<OAQuickActionsSheetDelegate> delegate;
+@property (nonatomic, readonly) OAQuickActionButtonState *buttonState;
 
 - (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState;
+
+- (void)hide;
 
 @end

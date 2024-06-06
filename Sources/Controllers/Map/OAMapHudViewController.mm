@@ -925,6 +925,7 @@ static const float kDistanceMeters = 100.0;
 
     [self updateTopControlsVisibility:animated];
     [self updateBottomControlsVisibility:animated];
+    [_floatingButtonsController updateViewVisibility];
 
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];

@@ -39,7 +39,6 @@
 @implementation OAQuickActionsSheetView
 {
     OAMapButtonsHelper *_helper;
-    OAQuickActionButtonState *_buttonState;
     NSArray<OAQuickAction *> *_actions;
     
     OAAutoObserverProxy* _actionsChangedObserver;
@@ -53,6 +52,7 @@
     CGFloat _initialTouchPoint;
     
     OAAppSettings *_settings;
+    BOOL _isHidden;
 }
 
 - (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState;
@@ -110,7 +110,7 @@
     
     _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onActionsChanged)
-                                                         andObserve:_helper.quickActionListChangedObservable];
+                                                         andObserve:_helper.quickActionsChangedObservable];
     
     [self refreshActionList];
     
@@ -312,6 +312,9 @@
 
 - (void) adjustFrame
 {
+    if (_isHidden)
+        return;
+
     CGRect f = self.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     BOOL isLandscape = [OAUtilities isLandscape];
@@ -359,6 +362,18 @@
     NSIndexPath *indexPath = _collectionView.indexPathsForVisibleItems.firstObject;
     [_collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:indexPath.section] atScrollPosition:UICollectionViewScrollPositionLeft animated:NO];
     [self setupShadow];
+}
+
+- (void)hide
+{
+    _isHidden = YES;
+    CGRect f = self.frame;
+    f.origin.y = DeviceScreenHeight;
+    [UIView animateWithDuration:.3 animations:^{
+        self.frame = f;
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
 }
 
 - (void)updateControlButtons:(NSIndexPath *)indexPath

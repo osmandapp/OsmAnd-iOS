@@ -276,11 +276,12 @@
     });
 }
 
-- (void)refreshProduct:(NSIndexPath *)indexPath {
+- (void)refreshProduct:(NSIndexPath *)indexPath
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
         [OAMapButtonsHelper.sharedInstance updateActionTypes];
-        [OAMapButtonsHelper.sharedInstance.quickActionListChangedObservable notifyEvent];
+        [OAMapButtonsHelper.sharedInstance.quickActionButtonsChangedObservable notifyEventWithKey:nil andValue:nil];
     });
 }
 

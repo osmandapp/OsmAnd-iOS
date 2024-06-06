@@ -66,7 +66,7 @@
 
 - (NSString *)getTitle
 {
-    return self.tableView.editing ? OALocalizedString(@"quick_action_edit_list") : OALocalizedString(@"configure_screen_quick_action");
+    return self.tableView.editing ? OALocalizedString(@"quick_action_edit_list") : [_buttonState getName];
 }
 
 - (NSString *)getLeftNavbarButtonTitle

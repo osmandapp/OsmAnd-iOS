@@ -27,9 +27,14 @@
     return obj;
 }
 
+- (UIImage *) iconWithColor:(UIColor *)color
+{
+    return [self.class getIcon:_locationIcon color:color];
+}
+
 - (UIImage *) iconWithColor:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
-    return [self.class getIcon:_locationIcon color:color scaleFactor:currentScaleFactor];
+    return [self.class getMapIcon:_locationIcon color:color scaleFactor:currentScaleFactor];
 }
 
 - (UIImage *) headingIconWithColor:(UIColor *)color
@@ -44,7 +49,35 @@
               [OALocationIcon withLocationIcon:LOCATION_ICON_BICYCLE] ];
 }
 
-+ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
++ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color
+{
+    UIImage *bottomImage;
+    UIImage *centerImage;
+    UIImage *topImage;
+    switch (locationIcon)
+    {
+        case LOCATION_ICON_DEFAULT:
+            bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
+            centerImage = [UIImage imageNamed:@"map_location_default_center"];
+            topImage = [UIImage imageNamed:@"map_location_default_top"];
+            break;
+        case LOCATION_ICON_CAR:
+            bottomImage = [UIImage imageNamed:@"map_location_car_bottom"];
+            centerImage = [UIImage imageNamed:@"map_location_car_center"];
+            topImage = [UIImage imageNamed:@"map_location_car_top"];
+            break;
+        case LOCATION_ICON_BICYCLE:
+            bottomImage = [UIImage imageNamed:@"map_location_bicycle_bottom"];
+            centerImage = [UIImage imageNamed:@"map_location_bicycle_center"];
+            topImage = [UIImage imageNamed:@"map_location_bicycle_top"];
+            break;
+        default:
+            return nil;
+    }
+    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:1.0];
+}
+
++ (UIImage *) getMapIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;

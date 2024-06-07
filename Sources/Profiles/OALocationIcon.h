@@ -22,12 +22,14 @@ typedef NS_ENUM(NSInteger, EOALocationIcon)
 @property (nonatomic, readonly) EOALocationIcon locationIcon;
 
 + (instancetype) withLocationIcon:(EOALocationIcon)locationIcon;
+- (UIImage *) iconWithColor:(UIColor *)color;
 - (UIImage *) iconWithColor:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor;
 - (UIImage *) headingIconWithColor:(UIColor *)color;
 
 + (NSArray<OALocationIcon *> *) values;
 
-+ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor;
++ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color;
++ (UIImage *) getMapIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor;
 + (UIImage *) getHeadingIcon:(EOALocationIcon)locationIcon color:(UIColor *)color;
 
 @end

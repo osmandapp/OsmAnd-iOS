@@ -26,9 +26,14 @@
     return obj;
 }
 
+- (UIImage *) iconWithColor:(UIColor *)color
+{
+    return [self.class getIcon:_navigationIcon color:color];
+}
+
 - (UIImage *) iconWithColor:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
-    return [self.class getIcon:_navigationIcon color:color scaleFactor:currentScaleFactor];
+    return [self.class getMapIcon:_navigationIcon color:color scaleFactor:currentScaleFactor];
 }
 
 + (NSArray<OANavigationIcon *> *) values
@@ -38,7 +43,35 @@
               [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_CAR] ];
 }
 
-+ (UIImage *)getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
++ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color
+{
+    UIImage *bottomImage;
+    UIImage *centerImage;
+    UIImage *topImage;
+    switch (navigationIcon)
+    {
+        case NAVIGATION_ICON_DEFAULT:
+            bottomImage = [UIImage imageNamed:@"map_navigation_default_bottom"];
+            centerImage = [UIImage imageNamed:@"map_navigation_default_center"];
+            topImage = [UIImage imageNamed:@"map_navigation_default_top"];
+            break;
+        case NAVIGATION_ICON_NAUTICAL:
+            bottomImage = [UIImage imageNamed:@"map_navigation_nautical_bottom"];
+            centerImage = [UIImage imageNamed:@"map_navigation_nautical_center"];
+            topImage = [UIImage imageNamed:@"map_navigation_nautical_top"];
+            break;
+        case NAVIGATION_ICON_CAR:
+            bottomImage = [UIImage imageNamed:@"map_navigation_car_bottom"];
+            centerImage = [UIImage imageNamed:@"map_navigation_car_center"];
+            topImage = [UIImage imageNamed:@"map_navigation_car_top"];
+            break;
+        default:
+            return nil;
+    }
+    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:1.0];
+}
+
++ (UIImage *) getMapIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;

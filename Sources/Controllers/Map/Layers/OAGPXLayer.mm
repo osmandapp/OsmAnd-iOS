@@ -355,7 +355,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                             switch (gpx.visualization3dByType)
                             {
                                 case EOAGPX3DLineVisualizationByTypeAltitude:
-                                    [elevations addObject:@([_plugin.enable3DMaps get] ? pt->elevation * 2 : pt->elevation)];
+                                    [elevations addObject:@(pt->elevation)];
                                     break;
                                 case EOAGPX3DLineVisualizationByTypeSpeed:
                                     [elevations addObject:@(pt->speed * kSpeedToHeightScale)];
@@ -443,7 +443,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                         switch (gpx.visualization3dByType)
                         {
                             case EOAGPX3DLineVisualizationByTypeAltitude:
-                                [elevations addObject:@([_plugin.enable3DMaps get] ? pt->elevation * 2 : pt->elevation)];
+                                [elevations addObject:@(pt->elevation)];
                                 break;
                             case EOAGPX3DLineVisualizationByTypeSpeed:
                                 [elevations addObject:@(pt->speed * kSpeedToHeightScale)];
@@ -867,7 +867,7 @@ colorizationScheme:(int)colorizationScheme
                     switch (gpx.visualization3dByType)
                     {
                         case EOAGPX3DLineVisualizationByTypeAltitude:
-                            splitElevation = [_plugin.enable3DMaps get] ? pt.elevation * 2 : pt.elevation;
+                            splitElevation = pt.elevation;
                             break;
                         case EOAGPX3DLineVisualizationByTypeSpeed:
                             splitElevation = pt.speed * kSpeedToHeightScale;
@@ -1017,7 +1017,7 @@ colorizationScheme:(int)colorizationScheme
                                 {
                                     _elevationScaleFactor = gpx.verticalExaggerationScale;
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
-                                        startPointElevation = [_plugin.enable3DMaps get] ? seg->points.first()->elevation * 2 : seg->points.first()->elevation;
+                                        startPointElevation = seg->points.first()->elevation;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
                                         startPointElevation = seg->points.first()->speed * kSpeedToHeightScale;
                                     else
@@ -1030,7 +1030,7 @@ colorizationScheme:(int)colorizationScheme
                                 if (raiseRoutesAboveRelief)
                                 {
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
-                                        finishPointElevation = [_plugin.enable3DMaps get] ? seg->points.last()->elevation * 2 : seg->points.last()->elevation;
+                                        finishPointElevation = seg->points.last()->elevation;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
                                         finishPointElevation = seg->points.last()->speed * kSpeedToHeightScale;
                                     else
@@ -1045,8 +1045,8 @@ colorizationScheme:(int)colorizationScheme
                                 _elevationScaleFactor = gpx.verticalExaggerationScale;
                                 if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
                                 {
-                                    startFinishPointsElevations.append([_plugin.enable3DMaps get] ? seg->points.first()->elevation * 2 : seg->points.first()->elevation);
-                                    startFinishPointsElevations.append([_plugin.enable3DMaps get] ? seg->points.last()->elevation * 2 : seg->points.last()->elevation);
+                                    startFinishPointsElevations.append(seg->points.first()->elevation);
+                                    startFinishPointsElevations.append(seg->points.last()->elevation);
                                 }
                                 else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
                                 {

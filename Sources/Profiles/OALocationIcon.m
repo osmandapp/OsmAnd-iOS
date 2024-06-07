@@ -27,9 +27,9 @@
     return obj;
 }
 
-- (UIImage *) iconWithColor:(UIColor *)color
+- (UIImage *) iconWithColor:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
-    return [self.class getIcon:_locationIcon color:color];
+    return [self.class getIcon:_locationIcon color:color scaleFactor:currentScaleFactor];
 }
 
 - (UIImage *) headingIconWithColor:(UIColor *)color
@@ -44,7 +44,7 @@
               [OALocationIcon withLocationIcon:LOCATION_ICON_BICYCLE] ];
 }
 
-+ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color
++ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
@@ -69,7 +69,7 @@
         default:
             return nil;
     }
-    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage];
+    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 
 + (UIImage *) getHeadingIcon:(EOALocationIcon)locationIcon color:(UIColor *)color

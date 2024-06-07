@@ -360,13 +360,13 @@
 - (NSArray<UIImage *> *) getIconsAtRest
 {
     UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    return @[[OALocationIcon getIcon:LOCATION_ICON_DEFAULT color:currColor], [OALocationIcon getIcon:LOCATION_ICON_CAR color:currColor], [OALocationIcon getIcon:LOCATION_ICON_BICYCLE color:currColor]];
+    return @[[OALocationIcon getIcon:LOCATION_ICON_DEFAULT color:currColor scaleFactor:1.0], [OALocationIcon getIcon:LOCATION_ICON_CAR color:currColor scaleFactor:1.0], [OALocationIcon getIcon:LOCATION_ICON_BICYCLE color:currColor scaleFactor:1.0]];
 }
 
 - (NSArray<UIImage *> *) getNavIcons
 {
     UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    return @[[OANavigationIcon getIcon:NAVIGATION_ICON_DEFAULT color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_NAUTICAL color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_CAR color:currColor]];
+    return @[[OANavigationIcon getIcon:NAVIGATION_ICON_DEFAULT color:currColor scaleFactor:1.0], [OANavigationIcon getIcon:NAVIGATION_ICON_NAUTICAL color:currColor scaleFactor:1.0], [OANavigationIcon getIcon:NAVIGATION_ICON_CAR color:currColor scaleFactor:1.0]];
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle

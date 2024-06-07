@@ -23,11 +23,11 @@ typedef NS_ENUM(NSInteger, EOANavigationIcon)
 @property (nonatomic, readonly) EOANavigationIcon navigationIcon;
 
 + (instancetype) withNavigationIcon:(EOANavigationIcon)navigationIcon;
-- (UIImage *) iconWithColor:(UIColor *)color;
+- (UIImage *) iconWithColor:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor;
 
 + (NSArray<OANavigationIcon *> *) values;
 
-+ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color;
++ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor;
 
 @end
 

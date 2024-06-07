@@ -121,7 +121,7 @@
         locationMarkerBuilder.setIsHidden(true);
         _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,
-                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]));
+                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor scaleFactor:1.0].CGImage]));
         _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_centerMarkerCollection);
         [self.mapView addKeyedSymbolsProvider:_centerMarkerCollection];
     }

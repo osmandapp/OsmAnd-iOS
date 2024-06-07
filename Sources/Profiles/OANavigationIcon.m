@@ -26,9 +26,9 @@
     return obj;
 }
 
-- (UIImage *) iconWithColor:(UIColor *)color
+- (UIImage *) iconWithColor:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
-    return [self.class getIcon:_navigationIcon color:color];
+    return [self.class getIcon:_navigationIcon color:color scaleFactor:currentScaleFactor];
 }
 
 + (NSArray<OANavigationIcon *> *) values
@@ -38,7 +38,7 @@
               [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_CAR] ];
 }
 
-+ (UIImage *)getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color
++ (UIImage *)getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
@@ -63,7 +63,7 @@
         default:
             return nil;
     }
-    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage];
+    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 
 @end

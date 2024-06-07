@@ -1684,11 +1684,10 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     }
 }
 
-+ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top scaleFactor:(CGFloat)scaleFactor
 {
     @autoreleasepool
     {
-        CGFloat scaleFactor = [[OAAppSettings sharedManager].textSize get];
         CGSize size = bottom.size;
         if (size.width < center.size.width || size.height < center.size.height)
             size = center.size;

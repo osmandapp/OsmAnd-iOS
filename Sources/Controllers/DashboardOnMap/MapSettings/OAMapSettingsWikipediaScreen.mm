@@ -257,8 +257,8 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        OAResourceItem *mapItem = item[@"item"];
-        return [_downloadingCellResourceHelper getOrCreateCellForResourceId:mapItem.resourceId.toNSString() resourceItem:mapItem];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"item"]];
+        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
     }
 
     return nil;

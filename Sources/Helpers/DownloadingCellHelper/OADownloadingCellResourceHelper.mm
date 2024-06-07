@@ -159,6 +159,7 @@
 
 #pragma mark - Cell setup methods
 
+// TODO: delete
 - (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
 {
     if (![self getResource:resourceId])

@@ -889,7 +889,8 @@
     
     if ([item[@"type"] isEqualToString:@"downloading_cell"])
     {
-        OADownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCellForResourceId:item[@"resourceId"] resourceItem:item[@"resource"]];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"resource"]];
+        OADownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:item[@"resourceId"] swiftResourceItem:mapItem];
         [cell leftIconVisibility:NO];
         [cell rightIconVisibility:NO];
         [cell descriptionVisibility:YES];

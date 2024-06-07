@@ -281,7 +281,8 @@
     }
     else if ([item[@"type"] isEqualToString:@"update_now_cell"])
     {
-        OARightIconTableViewCell *cell = [_downloadingCellResourceHelper getOrCreateCellForResourceId:item[@"resourceId"] resourceItem:_localResourceItem];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_localResourceItem];
+        OARightIconTableViewCell *cell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];

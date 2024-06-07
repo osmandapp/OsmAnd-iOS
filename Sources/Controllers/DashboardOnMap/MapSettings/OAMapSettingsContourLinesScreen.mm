@@ -578,9 +578,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        OAResourceItem *mapItem = item[@"item"];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"item"]];
         NSString *resourceId = item[@"resourceId"];
-        return [_downloadingCellResourceHelper getOrCreateCellForResourceId:resourceId resourceItem:mapItem];
+        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:resourceId swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeInfo])
     {

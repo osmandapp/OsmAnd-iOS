@@ -2658,7 +2658,8 @@ static BOOL _repositoryUpdated = NO;
             }
         }
         NSString *resourceId = [_downloadingCellMultipleResourceHelper getResourceId:item];
-        OADownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCellForResourceId:resourceId resourceItem:item];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
+        OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:resourceId swiftResourceItem:mapItem];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;
@@ -2668,7 +2669,8 @@ static BOOL _repositoryUpdated = NO;
     else if ([item_ isKindOfClass:OAResourceItem.class] || [item_ isKindOfClass:OASearchResult.class])
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
-        OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCellForResourceId:item.resourceId.toNSString() resourceItem:item];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
+        OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
         UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameResourceInstalledIconColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;

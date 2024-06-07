@@ -488,8 +488,8 @@
     }
     else if (indexPath.section == _availableMapsSection)
     {
-        item = (OAResourceItem *) _resourcesItems[indexPath.row];
-        OADownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCellForResourceId:item.resourceId.toNSString() resourceItem:item];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_resourcesItems[indexPath.row]];
+        OADownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
         cell.titleLabel.text = title;
         cell.descriptionLabel.text = description;
         return cell;

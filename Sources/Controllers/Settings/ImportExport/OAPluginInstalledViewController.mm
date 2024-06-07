@@ -398,13 +398,13 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        OAResourceItem *mapItem = [self getMapItem:indexPath];
-        return [_downloadingCellResourceHelper getOrCreateCellForResourceId:item[@"resourceId"] resourceItem:mapItem];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[self getMapItem:indexPath]];
+        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:item[@"resourceId"] swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMultyMap])
     {
-        OAResourceItem *mapItem = [self getMapItem:indexPath];
-        return [_downloadingCellMultipleResourceHelper getOrCreateCellForResourceId:item[@"resourceId"] resourceItem:mapItem];
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[self getMapItem:indexPath]];
+        return [_downloadingCellMultipleResourceHelper getOrCreateSwiftCellForResourceId:item[@"resourceId"] swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {

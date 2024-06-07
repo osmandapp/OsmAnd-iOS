@@ -27,7 +27,7 @@
 
 @property (nonatomic) BOOL stopWithAlertMessage;
 
-- (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem;
+// - (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem;
 - (OADownloadingCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem;
 
 - (OAResourceItem *) getResource:(NSString *)resourceId;

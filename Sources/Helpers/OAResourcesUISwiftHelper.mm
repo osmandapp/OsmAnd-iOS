@@ -36,6 +36,53 @@
     return [OAResourceType resourceTypeLocalized:res.resourceType];
 }
 
+- (EOAOAResourceSwiftItemType) resourceType
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    if (res.resourceType == OsmAndResourceType::Unknown)
+        return EOAOAResourceSwiftItemTypeUnknown;
+    else if (res.resourceType == OsmAndResourceType::MapRegion)
+        return EOAOAResourceSwiftItemTypeMapRegion;
+    else if (res.resourceType == OsmAndResourceType::RoadMapRegion)
+        return EOAOAResourceSwiftItemTypeRoadMapRegion;
+    else if (res.resourceType == OsmAndResourceType::SrtmMapRegion)
+        return EOAOAResourceSwiftItemTypeSrtmMapRegion;
+    else if (res.resourceType == OsmAndResourceType::DepthContourRegion)
+        return EOAOAResourceSwiftItemTypeDepthContourRegion;
+    else if (res.resourceType == OsmAndResourceType::DepthMapRegion)
+        return EOAOAResourceSwiftItemTypeDepthMapRegion;
+    else if (res.resourceType == OsmAndResourceType::WikiMapRegion)
+        return EOAOAResourceSwiftItemTypeWikiMapRegion;
+    else if (res.resourceType == OsmAndResourceType::HillshadeRegion)
+        return EOAOAResourceSwiftItemTypeHillshadeRegion;
+    else if (res.resourceType == OsmAndResourceType::SlopeRegion)
+        return EOAOAResourceSwiftItemTypeSlopeRegion;
+    else if (res.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
+        return EOAOAResourceSwiftItemTypeHeightmapRegionLegacy;
+    else if (res.resourceType == OsmAndResourceType::GeoTiffRegion)
+        return EOAOAResourceSwiftItemTypeGeoTiffRegion;
+    else if (res.resourceType == OsmAndResourceType::LiveUpdateRegion)
+        return EOAOAResourceSwiftItemTypeLiveUpdateRegion;
+    else if (res.resourceType == OsmAndResourceType::VoicePack)
+        return EOAOAResourceSwiftItemTypeVoicePack;
+    else if (res.resourceType == OsmAndResourceType::MapStyle)
+        return EOAOAResourceSwiftItemTypeMapStyle;
+    else if (res.resourceType == OsmAndResourceType::MapStylesPresets)
+        return EOAOAResourceSwiftItemTypeMapStylesPresets;
+    else if (res.resourceType == OsmAndResourceType::OnlineTileSources)
+        return EOAOAResourceSwiftItemTypeOnlineTileSources;
+    else if (res.resourceType == OsmAndResourceType::GpxFile)
+        return EOAOAResourceSwiftItemTypeGpxFile;
+    else if (res.resourceType == OsmAndResourceType::SqliteFile)
+        return EOAOAResourceSwiftItemTypeSqliteFile;
+    else if (res.resourceType == OsmAndResourceType::WeatherForecast)
+        return EOAOAResourceSwiftItemTypeWeatherForecast;
+    else if (res.resourceType == OsmAndResourceType::Travel)
+        return EOAOAResourceSwiftItemTypeTravel;
+    
+    return EOAOAResourceSwiftItemTypeUnknown;
+}
+
 - (NSString *) formatedSize
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
@@ -54,6 +101,12 @@
     return [OAResourceType getIcon:res.resourceType templated:YES];
 }
 
+- (NSString *) iconName
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return [OAResourceType getIconName:res.resourceType];
+}
+
 - (BOOL) isInstalled
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
@@ -64,6 +117,12 @@
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
     return res.resourceId.toNSString();
+}
+
+- (id<OADownloadTask>) downloadTask
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.downloadTask;
 }
 
 @end
@@ -170,6 +229,29 @@
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView
 {
     return [OAResourcesUIHelper tickPath:progressView];
+}
+
++ (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+}
+
++ (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+                completionHandler:(void(^)(UIAlertController *))completionHandler
+{
+    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler];
+}
+
++ (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
+{
+    OAResourceItem *res = (OAResourceItem *)item.objcResourceItem;
+    [OAResourcesUIHelper offerCancelDownloadOf:res onTaskStop:onTaskStop completionHandler:completionHandler];
 }
 
 @end

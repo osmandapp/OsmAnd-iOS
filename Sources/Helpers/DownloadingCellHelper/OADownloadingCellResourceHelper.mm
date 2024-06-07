@@ -7,7 +7,6 @@
 //
 
 #import "OADownloadingCellResourceHelper.h"
-#import "OAResourcesUIHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "GeneratedAssetSymbols.h"
@@ -15,7 +14,7 @@
 
 @implementation OADownloadingCellResourceHelper
 {
-    NSMutableDictionary<NSString *, OAResourceItem *> *_resourceItems;
+    NSMutableDictionary<NSString *, OAResourceSwiftItem *> *_resourceItems;
     
     OAAutoObserverProxy* _downloadTaskProgressObserver;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
@@ -71,25 +70,25 @@
     return [_resourceItems allKeys];
 }
 
-- (OAResourceItem *) getResource:(NSString *)resourceId
+- (OAResourceSwiftItem *) getResource:(NSString *)resourceId
 {
     return _resourceItems[resourceId];
 }
 
-- (void) saveResource:(OAResourceItem *)resource resourceId:(NSString *)resourceId;
+- (void) saveResource:(OAResourceSwiftItem *)resource resourceId:(NSString *)resourceId;
 {
     _resourceItems[resourceId] = resource;
 }
 
 - (BOOL) isDisabled:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = [self getResource:resourceId];
+    OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
     {
         OAIAPHelper *iapHelper = OAIAPHelper.sharedInstance;
-        if ((resourceItem.resourceType == OsmAndResourceType::WikiMapRegion) && ![iapHelper.wiki isActive])
+        if (([resourceItem resourceType] == EOAOAResourceSwiftItemTypeWikiMapRegion) && ![iapHelper.wiki isActive])
             return YES;
-        else if ((resourceItem.resourceType == OsmAndResourceType::SrtmMapRegion || resourceItem.resourceType == OsmAndResourceType::HillshadeRegion || resourceItem.resourceType == OsmAndResourceType::SlopeRegion)
+        else if (([resourceItem resourceType] == EOAOAResourceSwiftItemTypeSrtmMapRegion || [resourceItem resourceType] == EOAOAResourceSwiftItemTypeHillshadeRegion || [resourceItem resourceType] == EOAOAResourceSwiftItemTypeSlopeRegion)
                  && ![iapHelper.srtm isActive])
             return YES;
     }
@@ -99,27 +98,27 @@
 // Override
 - (BOOL) isInstalled:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = [self getResource:resourceId];
+    OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
-        return resourceItem.isInstalled || [super isInstalled:resourceId];
+        return [resourceItem isInstalled] || [super isInstalled:resourceId];
     return NO;
 }
 
 // Override
 - (BOOL) isDownloading:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = [self getResource:resourceId];
+    OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
-        return resourceItem.downloadTask != nil && [super isDownloading:resourceId];
+        return [resourceItem downloadTask] != nil && [super isDownloading:resourceId];
     return NO;
 }
 
 // Override
 - (void) startDownload:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = [self getResource:resourceId];
+    OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
-        [OAResourcesUIHelper offerDownloadAndInstallOf:((OARepositoryResourceItem *)resourceItem) onTaskCreated:nil onTaskResumed:nil];
+        [OAResourcesUISwiftHelper offerDownloadAndInstallOf:resourceItem onTaskCreated:nil onTaskResumed:nil];
 }
 
 // Override
@@ -127,10 +126,10 @@
 {
     if (_stopWithAlertMessage)
     {
-        OAResourceItem *resourceItem = [self getResource:resourceId];
+        OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
         if (resourceItem)
         {
-            [OAResourcesUIHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
+            [OAResourcesUISwiftHelper offerCancelDownloadOf:resourceItem onTaskStop:nil completionHandler:^(UIAlertController *alert) {
                 if (_hostViewController)
                     [_hostViewController presentViewController:alert animated:YES completion:nil];
             }];
@@ -159,26 +158,17 @@
 
 #pragma mark - Cell setup methods
 
-// TODO: delete
-- (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
-{
-    if (![self getResource:resourceId])
-    {
-        [self saveResource:resourceItem resourceId:resourceId];
-    
-        if (resourceItem.downloadTask)
-            [self saveStatus:EOAItemStatusInProgressType resourceId:resourceId];
-    }
-    
-    return [super getOrCreateCell:resourceId];
-}
-
 - (OADownloadingCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem
 {
     if (swiftResourceItem && swiftResourceItem.objcResourceItem)
     {
-        OAResourceItem *resourceItem = (OAResourceItem *)swiftResourceItem.objcResourceItem;
-        return [self getOrCreateCellForResourceId:resourceId resourceItem:resourceItem];
+        if (![self getResource:resourceId])
+        {
+            [self saveResource:swiftResourceItem resourceId:resourceId];
+            if ([swiftResourceItem downloadTask])
+                [self saveStatus:EOAItemStatusInProgressType resourceId:resourceId];
+        }
+        return [super getOrCreateCell:resourceId];
     }
     return nil;
 }
@@ -186,13 +176,12 @@
 // Override
 - (OADownloadingCell *) setupCell:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = [self getResource:resourceId];
+    OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
     {
-        uint64_t _sizePkg = resourceItem.sizePkg;
-        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [OAResourceType resourceTypeLocalized:resourceItem.resourceType], [NSByteCountFormatter stringFromByteCount:_sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
+        NSString *subtitle = [NSString stringWithFormat:@"%@  •  %@", [resourceItem type], [resourceItem formatedSizePkg]];
         NSString *title = resourceItem.title;
-        NSString *iconName = [OAResourceType getIconName:resourceItem.resourceType];
+        NSString *iconName = [resourceItem iconName];
         BOOL isDownloading = [self isDownloading:resourceId];
         
         // get cell with default settings
@@ -231,12 +220,12 @@
 
 - (void)showActivatePluginPopup:(NSString *)resourceId
 {
-    OAResourceItem *resourceItem = [self getResource:resourceId];
+    OAResourceSwiftItem *resourceItem = [self getResource:resourceId];
     if (resourceItem)
     {
-        if (resourceItem.resourceType == OsmAndResourceType::WikiMapRegion)
+        if ([resourceItem resourceType] == EOAOAResourceSwiftItemTypeWikiMapRegion)
             [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Wiki];
-        else if (resourceItem.resourceType == OsmAndResourceType::SrtmMapRegion || resourceItem.resourceType == OsmAndResourceType::HillshadeRegion || resourceItem.resourceType == OsmAndResourceType::SlopeRegion)
+        else if ([resourceItem resourceType] == EOAOAResourceSwiftItemTypeSrtmMapRegion || [resourceItem resourceType] == EOAOAResourceSwiftItemTypeHillshadeRegion || resourceItem.resourceType == EOAOAResourceSwiftItemTypeSlopeRegion)
             [OAPluginPopupViewController askForPlugin:kInAppId_Addon_Srtm];
     }
 }

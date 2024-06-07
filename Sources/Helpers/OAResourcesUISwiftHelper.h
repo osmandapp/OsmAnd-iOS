@@ -9,7 +9,34 @@
 // Swift can't use OAResourceItem OAResourcesUIHelper because they have cpp in headers.
 // So we can use this adapter for new Swit classes
 
+#import "OADownloadTask.h"
+
+typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
+
 @class OAWorldRegion, FFCircularProgressView;
+
+typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
+    EOAOAResourceSwiftItemTypeUnknown = -1,
+    EOAOAResourceSwiftItemTypeMapRegion = 0,
+    EOAOAResourceSwiftItemTypeRoadMapRegion,
+    EOAOAResourceSwiftItemTypeSrtmMapRegion,
+    EOAOAResourceSwiftItemTypeDepthContourRegion,
+    EOAOAResourceSwiftItemTypeDepthMapRegion,
+    EOAOAResourceSwiftItemTypeWikiMapRegion,
+    EOAOAResourceSwiftItemTypeHillshadeRegion,
+    EOAOAResourceSwiftItemTypeSlopeRegion,
+    EOAOAResourceSwiftItemTypeHeightmapRegionLegacy,
+    EOAOAResourceSwiftItemTypeGeoTiffRegion,
+    EOAOAResourceSwiftItemTypeLiveUpdateRegion,
+    EOAOAResourceSwiftItemTypeVoicePack,
+    EOAOAResourceSwiftItemTypeMapStyle,
+    EOAOAResourceSwiftItemTypeMapStylesPresets,
+    EOAOAResourceSwiftItemTypeOnlineTileSources,
+    EOAOAResourceSwiftItemTypeGpxFile,
+    EOAOAResourceSwiftItemTypeSqliteFile,
+    EOAOAResourceSwiftItemTypeWeatherForecast,
+    EOAOAResourceSwiftItemTypeTravel
+};
 
 
 @interface OAResourceSwiftItem : NSObject
@@ -21,10 +48,13 @@
 - (NSString *) resourceId;
 - (NSString *) title;
 - (NSString *) type;
+- (EOAOAResourceSwiftItemType) resourceType;
 - (NSString *) formatedSize;
 - (NSString *) formatedSizePkg;
 - (UIImage *) icon;
+- (NSString *) iconName;
 - (BOOL) isInstalled;
+- (id<OADownloadTask>) downloadTask;
 
 @end
 
@@ -39,4 +69,17 @@
 
 + (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView;
 
++ (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+                completionHandler:(void(^)(UIAlertController *))completionHandler;
+
++ (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler;
+
 @end
+
+

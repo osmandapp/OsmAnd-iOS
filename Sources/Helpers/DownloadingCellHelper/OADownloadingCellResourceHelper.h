@@ -12,7 +12,7 @@
 
 #import "OADownloadingCellBaseHelper.h"
 
-@class OAResourceItem, OAResourceSwiftItem;
+@class OAResourceSwiftItem;
 
 @protocol OADownloadingCellResourceHelperDelegate <NSObject>
 @optional
@@ -27,11 +27,10 @@
 
 @property (nonatomic) BOOL stopWithAlertMessage;
 
-// - (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem;
 - (OADownloadingCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem;
 
-- (OAResourceItem *) getResource:(NSString *)resourceId;
-- (void) saveResource:(OAResourceItem *)resource resourceId:(NSString *)resourceId;
+- (OAResourceSwiftItem *) getResource:(NSString *)resourceId;
+- (void) saveResource:(OAResourceSwiftItem *)resource resourceId:(NSString *)resourceId;
 - (BOOL) isDisabled:(NSString *)resourceId;
 - (NSArray<NSString *> *) getAllResourceIds;
 

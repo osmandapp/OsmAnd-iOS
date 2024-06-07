@@ -75,9 +75,6 @@ final class RouteInfoListItemCell: UITableViewCell {
     
     private func refreshLeftIcon() {
         guard let leftTurnIconDrawable else { return }
-        let color = (traitCollection.userInterfaceStyle == .dark) ? UIColor.widgetValue.dark : UIColor.widgetValue.light
-        leftTurnIconDrawable.clr = color
-        leftTurnIconDrawable.textColor = color
         leftTurnIconDrawable.setNeedsDisplay()
         let recoloredImage = leftTurnIconDrawable.toUIImage()
         setLeftImageView(image: recoloredImage)

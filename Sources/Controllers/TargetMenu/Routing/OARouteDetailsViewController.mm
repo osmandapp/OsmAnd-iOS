@@ -162,7 +162,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
-    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
+    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
     const auto turnType = model.turnType;
     [turnDrawable setTurnType:turnType];
     turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];

@@ -12,7 +12,8 @@ typedef NS_ENUM(NSInteger, EOATurnDrawableThemeColor)
 {
     EOATurnDrawableThemeColorMap,
     EOATurnDrawableThemeColorLight,
-    EOATurnDrawableThemeColorDark
+    EOATurnDrawableThemeColorDark,
+    EOATurnDrawableThemeColorSystem
 };
 
 @interface OATurnDrawable : UIView

@@ -53,6 +53,11 @@
             return color.light;
         case EOATurnDrawableThemeColorDark:
             return color.dark;
+        case EOATurnDrawableThemeColorSystem:
+        {
+            BOOL isSystemThemeDark = OARootViewController.instance.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
+            return isSystemThemeDark ? color.dark : color.light;
+        }
     }
 }
 
@@ -129,7 +134,10 @@
 
     if (_pathForTurnForDrawing)
     {
-        CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
+        if (_themeColor == EOATurnDrawableThemeColorSystem)
+            CGContextSetFillColorWithColor(context, [self getThemeColor:_routeDirectionColor].CGColor);
+        else
+            CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
         [_pathForTurnForDrawing fill];
         [_pathForTurnForDrawing stroke];
     }
@@ -137,10 +145,7 @@
     if (_turnType && !_mini && _turnType->getExitOut() > 0)
     {
         NSMutableDictionary<NSAttributedStringKey, id> *attributes = [NSMutableDictionary dictionary];
-        if (_textColor)
-            attributes[NSForegroundColorAttributeName] = _textColor;
-        else
-            attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
+        attributes[NSForegroundColorAttributeName] = [self getThemeColor:[UIColor colorNamed:ACColorNameWidgetValueColor]];
         attributes[NSFontAttributeName] = _textFont;
         
         NSString *text = [NSString stringWithFormat:@"%d", _turnType->getExitOut()];

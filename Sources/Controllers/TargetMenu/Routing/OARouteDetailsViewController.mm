@@ -162,6 +162,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
     const auto turnType = model.turnType;
     [turnDrawable setTurnType:turnType];
@@ -637,6 +638,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     }
     [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
     [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    [_tableView reloadData];
 }
 
 - (void) detailsButtonPressed:(id)sender
@@ -830,7 +832,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section > 1 && indexPath.row == 0)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && indexPath.section > 2 && indexPath.row == 0)
         [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

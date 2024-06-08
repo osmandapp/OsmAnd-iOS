@@ -226,7 +226,7 @@
 "voice_announces" = "Balso pranešimai";
 "screen_alerts" = "Ekranoįspėjimai";
 "vehicle_parameters" = "Transporto priemonės parametrai";
-"map_during_navigation" = "Map during navigation";
+"map_during_navigation" = "Žemėlapis navigacijos metu";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -928,7 +928,7 @@
 "select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Custom profile";
 "new_profile" = "Naujas profilis";
-"configure_profile" = "Configure profile";
+"configure_profile" = "Konfigūruoti profilį";
 "profile_settings" = "Specifiniai profilio nustatymai";
 "profile_appearance" = "Profilio išvaizda";
 "profile_appearance_descr" = "Icon, color, and name";
@@ -1115,7 +1115,7 @@
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "shared_string_details" = "Išsami informacija";
 "shared_string_type" = "Tipas";
-"res_unknown" = "Unknown";
+"res_unknown" = "Nežinoma";
 "shared_string_size" = "Dydis";
 "created_on" = "Created on";
 "res_update_all" = "Update all";
@@ -1176,7 +1176,7 @@
 "osn_bug_name" = "OSM pastaba";
 "osm_created" = "Created";
 "poi_remove_success" = "Ištrinta";
-"shared_string_modified" = "Modified";
+"shared_string_modified" = "Modifikuota";
 "osm_edit_reopened_note" = "OSM pastaba iš naujo atidaryta";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -1286,7 +1286,7 @@
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Sukurti elementus";
 "configure_map" = "Konfigūruoti žemėlapį";
-"map_look_descr" = "Map appearance";
+"map_look_descr" = "Žemėlapio išvaizda";
 "quick_action_add_marker" = "Pridėti žemėlapio žymeklį";
 "select_map_marker" = "Pasirinitežemėlapio žymę";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -2074,7 +2074,7 @@
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Vandenyno gylio kontūrai";
 "rendering_attr_piste_difficulty_freeride_name" = "Laisvas rėžimas";
-"routeInfo_steepness_name" = "Steepness";
+"routeInfo_steepness_name" = "Statumas";
 "rendering_attr_smoothness_very_bad_name" = "Labai bloga";
 "rendering_attr_surface_compacted_name" = "Suplotas";
 "rendering_attr_undefined_name" = "Nenurodyta";
@@ -2145,7 +2145,7 @@
 "rendering_value_default13_name" = "Numatytoji (13)";
 "rendering_value_thin_name" = "Plonas";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
-"routeInfo_roadClass_name" = "Road type";
+"routeInfo_roadClass_name" = "Kelio tipas";
 "routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
 "rendering_attr_piste_type_nordic_name" = "Šiaurėtiškas";
 "rendering_attr_trainLightrailRoutes_name" = "Traukinių maršrutai";
@@ -2616,3 +2616,15 @@
 "activity_type_cycling_name" = "Važiavimas dviračiu";
 "help_article_map_point_layers_on_map_name" = "Taškai žemėlapyje";
 "help_article_search_search_poi_name" = "Ieškoti LV";
+"route_maneuvers" = "Maršruto manevrai";
+"bottom_widgets_panel" = "Apatinis skydelis";
+"shared_string_buttons" = "Mygtukai";
+"si_nm_ft" = "Jūros mylios/pėdos";
+"deleted_file" = "Ištrintas failas";
+"si_nm_mt" = "Jūros mylios/metrai";
+"checking_progress" = "Tikrinama…";
+"modified_file" = "Modifikuotas failas";
+"shared_string_uploaded" = "Įkelta";
+"new_file" = "Naujas failas";
+"skip_download" = "Praleisti atsisiuntimą";
+"determine_location" = "Leiskite mums nustatyti jūsų buvimo vietą";

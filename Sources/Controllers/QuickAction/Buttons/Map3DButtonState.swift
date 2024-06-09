@@ -21,7 +21,7 @@ class Map3DButtonState: MapButtonState {
     init() {
         fabMarginPref = FabMarginPreference("map_3d_mode_margin")
         visibilityPref = OAAppSettings.sharedManager().registerIntPreference("map_3d_mode_visibility", defValue: Map3DModeVisibility.visible.rawValue)
-        super.init(Self.map3DHudId)
+        super.init(withId: Self.map3DHudId)
     }
 
     override func getName() -> String {

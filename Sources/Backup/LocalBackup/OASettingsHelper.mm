@@ -514,16 +514,6 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     return nil;
 }
-
-- (OAQuickActionsSettingsItem *) getBaseQuickActionsSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
-{
-    for (OASettingsItem * settingsItem in settingsItems)
-    {
-        if (settingsItem.type == EOASettingsItemTypeQuickActions)
-            return (OAQuickActionsSettingsItem *)settingsItem;
-    }
-    return nil;
-}
  
 - (OAPoiUiFilterSettingsItem *) getBasePoiUiFiltersSettingsItem:(NSArray<OASettingsItem *> *)settingsItems
 {
@@ -565,7 +555,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return nil;
 }
 
-- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem:(OAQuickActionButtonState *)buttonState settingsItems:(NSArray<OASettingsItem *> *)settingsItems
+- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem:(OAQuickActionButtonState *)buttonState
+                                                  settingsItems:(NSArray<OASettingsItem *> *)settingsItems
 {
     for (OASettingsItem *settingsItem in settingsItems)
     {
@@ -745,7 +736,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [NSMutableDictionary new];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickActionButtonState *> *quickActionButtons = [NSMutableArray array];
+    NSMutableArray<OAQuickActionButtonState *> *quickActionButtonStates = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];
@@ -788,7 +779,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
             }
             case EOASettingsItemTypeQuickActions:
             {
-                [quickActionButtons addObject:[(OAQuickActionsSettingsItem *) item getButtonState]];
+                [quickActionButtonStates addObject:[(OAQuickActionsSettingsItem *) item getButtonState]];
                 break;
             }
             case EOASettingsItemTypePoiUIFilters:
@@ -884,8 +875,8 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (profiles.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.PROFILE] = profiles;
-    if (quickActionButtons.count > 0 || addEmptyItems)
-        settingsToOperate[OAExportSettingsType.QUICK_ACTIONS] = quickActionButtons;
+    if (quickActionButtonStates.count > 0 || addEmptyItems)
+        settingsToOperate[OAExportSettingsType.QUICK_ACTIONS] = quickActionButtonStates;
     if (poiUIFilters.count > 0 || addEmptyItems)
         settingsToOperate[OAExportSettingsType.POI_TYPES] = poiUIFilters;
     if (tileSourceTemplates.count > 0 || addEmptyItems)

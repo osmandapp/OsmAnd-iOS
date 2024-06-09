@@ -96,11 +96,6 @@
     [_mapButtonsHelper addQuickActionButtonState:_buttonState];
 }
 
-- (BOOL)shouldReadOnCollecting
-{
-    return YES;
-}
-
 - (long)getEstimatedItemSize:(id)item
 {
     return _buttonState.quickActions.count * APPROXIMATE_QUICK_ACTION_SIZE_BYTES;
@@ -108,7 +103,7 @@
 
 - (NSString *)name
 {
-    return [_buttonState getName];
+    return _buttonState.id;
 }
 
 - (NSString *)getPublicName
@@ -124,6 +119,35 @@
 - (OASettingsItemWriter *)getWriter
 {
     return self.getJsonWriter;
+}
+
+- (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    [self readButtonState:json];
+    [super readFromJson:json error:error];
+}
+
+- (void)readButtonState:(id)json
+{
+    @try {
+        id object = json[@"buttonState"];
+        if (object)
+        {
+            NSString *id = object[@"id"];
+            _buttonState = [[OAQuickActionButtonState alloc] initWithId:id];
+            [_buttonState setName:object[@"name"]];
+            [_buttonState setEnabled:[object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
+        }
+        else
+        {
+            _buttonState = [[OAQuickActionButtonState alloc] initWithId:OAQuickActionButtonState.defaultButtonId];
+        }
+    }
+    @catch (NSException *e)
+    {
+        [self.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), [OASettingsItemType typeName:self.type]]];
+        @throw [NSException exceptionWithName:@"Json parse error" reason:e.reason userInfo:nil];
+    }
 }
 
 - (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
@@ -191,7 +215,7 @@
         }
         else
         {
-            [self.warnings addObject:OALocalizedString(@"settings_item_read_error", name)];
+            [self.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), name]];
         }
     }
     [_mapButtonsHelper updateQuickActions:_buttonState actions:quickActions];
@@ -204,7 +228,7 @@
     NSMutableDictionary<NSString *, NSString *> *jsonObject = [NSMutableDictionary dictionary];
     jsonObject[@"id"] = _buttonState.id;
     jsonObject[@"name"] = [_buttonState hasCustomName] ? [_buttonState getName] : @"";
-    jsonObject[@"enabled"] = @([_buttonState isEnabled]).stringValue;
+    jsonObject[@"enabled"] = [_buttonState isEnabled] ? @"true" : @"false";
     json[@"buttonState"] = jsonObject;
 }
 

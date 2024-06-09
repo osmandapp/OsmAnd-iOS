@@ -264,34 +264,36 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 - (void)onQuickActionButtonChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
-    if ([key isKindOfClass:OAQuickActionButtonState.class])
-    {
-        OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) key;
-        for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if ([key isKindOfClass:OAQuickActionButtonState.class])
         {
-            if ([quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+            OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) key;
+            for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
             {
-                OAQuickActionButtonState *buttonState = (OAQuickActionButtonState *) quickActionButton.buttonState;
-                if ([buttonState.id isEqualToString:quickActionButtonState.id])
+                if ([quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
                 {
-                    if (quickActionButtonState.quickActions.count != 1 && buttonState.quickActions.count)
+                    OAQuickActionButtonState *buttonState = (OAQuickActionButtonState *) quickActionButton.buttonState;
+                    if ([buttonState.id isEqualToString:quickActionButtonState.id])
                     {
-                        for (UIView *subview in quickActionButton.imageView.subviews)
+                        if (quickActionButtonState.quickActions.count != 1 && buttonState.quickActions.count)
                         {
-                            if (subview.tag == kQuickActionSlashTag
-                                || subview.tag == kQuickActionSlashBackgroundTag
-                                || subview.tag == kQuickActionAddTag
-                                || subview.tag == kQuickActionAddBackgroundTag)
-                                [subview removeFromSuperview];
+                            for (UIView *subview in quickActionButton.imageView.subviews)
+                            {
+                                if (subview.tag == kQuickActionSlashTag
+                                    || subview.tag == kQuickActionSlashBackgroundTag
+                                    || subview.tag == kQuickActionAddTag
+                                    || subview.tag == kQuickActionAddBackgroundTag)
+                                    [subview removeFromSuperview];
+                            }
                         }
+                        quickActionButton.buttonState = quickActionButtonState;
+                        [self updateQuickActionButtonColors:quickActionButton];
+                        break;
                     }
-                    quickActionButton.buttonState = quickActionButtonState;
-                    [self updateQuickActionButtonColors:quickActionButton];
-                    break;
                 }
             }
         }
-    }
+    });
 }
 
 - (void)onQuickActionButtonChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value

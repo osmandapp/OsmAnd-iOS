@@ -23,12 +23,12 @@ open class QuickActionButtonState: MapButtonState {
 
     private(set) var quickActions = [OAQuickAction]()
 
-    override init(_ id: String) {
+    override init(withId id: String) {
         statePref = settings.registerBooleanPreference(id + "_state", defValue: false).makeProfile()
         namePref = settings.registerStringPreference(id + "_name", defValue: nil).makeGlobal().makeShared()
         quickActionsPref = settings.registerStringPreference(id + "_list", defValue: nil).makeGlobal().makeShared().storeLastModifiedTime()
         fabMarginPref = FabMarginPreference(id + "_fab_margin")
-        super.init(id)
+        super.init(withId: id)
     }
     
     override func isEnabled() -> Bool {
@@ -63,7 +63,7 @@ open class QuickActionButtonState: MapButtonState {
         return nil
     }
 
-    func getQuickAction(_ type: Int, name: String, params: [AnyHashable : Any]) -> OAQuickAction? {
+    func getQuickAction(_ type: Int, name: String, params: [AnyHashable: Any]) -> OAQuickAction? {
         for action in quickActions {
             if action.getType() == type,
                ((action.hasCustomName() && action.getName() == name) || !action.hasCustomName()),
@@ -142,9 +142,5 @@ open class QuickActionButtonState: MapButtonState {
 
     func isDefaultButton() -> Bool {
         Self.defaultButtonId == id
-    }
-
-    func toString() -> String {
-        id
     }
 }

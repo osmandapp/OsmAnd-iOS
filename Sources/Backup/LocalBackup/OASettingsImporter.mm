@@ -269,9 +269,10 @@
         if (![itemJSON[@"type"] isEqualToString:@"DATA"])
         {
             OASettingsItem *item = [self createItem:itemJSON];
-            if (item)
-                [_items addObject:item];
-            
+            if (!item)
+                continue;
+
+            [_items addObject:item];
             NSString *pluginId = item.pluginId;
             if (pluginId != nil && item.type != EOASettingsItemTypePlugin)
             {
@@ -628,6 +629,11 @@
         {
             if ([item exists])
                 [duplicateItems addObject:item.fileName];
+        }
+        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class])
+        {
+            if ([item exists])
+                [duplicateItems addObject:[((OAQuickActionsSettingsItem *) item) getButtonState]];
         }
     }
     return duplicateItems;

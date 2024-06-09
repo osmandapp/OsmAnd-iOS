@@ -18,7 +18,7 @@ class CompassButtonState: MapButtonState {
 
     init() {
         visibilityPref = Self.createVisibilityPref()
-        super.init(Self.compassHudId)
+        super.init(withId: Self.compassHudId)
     }
 
     override func getName() -> String {

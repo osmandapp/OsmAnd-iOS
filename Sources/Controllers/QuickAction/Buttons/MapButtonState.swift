@@ -14,7 +14,7 @@ open class MapButtonState: NSObject {
 
     let id: String
 
-    init(_ id: String) {
+    init(withId id: String) {
         self.id = id
     }
 

@@ -317,7 +317,7 @@ static OAQuickActionType *TYPE_OPEN;
             if (key.length > 0)
             {
                 @try {
-                    OAQuickActionButtonState *buttonState = [[OAQuickActionButtonState alloc] init:key];
+                    OAQuickActionButtonState *buttonState = [[OAQuickActionButtonState alloc] initWithId:key];
                     [buttonState parseQuickActions:_serializer error:nil];
                     [list addObject:buttonState];
                 }
@@ -434,8 +434,8 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (OAQuickActionButtonState *)createNewButtonState
 {
-    NSString *id = [NSString stringWithFormat:@"%@_%@", OAQuickActionButtonState.defaultButtonId, @([[NSDate date] timeIntervalSince1970] * 1000).stringValue];
-    return [[OAQuickActionButtonState alloc] init:id];
+    NSString *id = [NSString stringWithFormat:@"%@_%ld", OAQuickActionButtonState.defaultButtonId, (long) ([[NSDate date] timeIntervalSince1970] * 1000)];
+    return [[OAQuickActionButtonState alloc] initWithId:id];
 }
 
 - (void)addQuickActionButtonState:(OAQuickActionButtonState *)buttonState

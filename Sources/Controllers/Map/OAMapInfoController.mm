@@ -849,6 +849,7 @@
         [_speedometerView configure];
         [self layoutWidgets];
     }
+    [[UIApplication sharedApplication].carPlaySceneDelegate widgetChanged:widget];
 }
 
 - (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible

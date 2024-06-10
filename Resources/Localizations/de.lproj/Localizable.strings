@@ -1542,7 +1542,7 @@
 "offline_raster_map" = "Offline-Rasterkarte";
 "offline_raster_maps" = "Offline-Rasterkarten";
 "osmand_parking_warning" = "Warnung";
-"clear_tiles_warning" = "Durch die Anwendung dieserÄnderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
+"clear_tiles_warning" = "Durch die Anwendung dieser Änderungen werden die zwischengespeicherten Daten für diese Kachelquelle gelöscht";
 "change_object_posiotion" = "Position des Objekts ändern";
 "move_marker_bottom_sheet_title" = "Karte bewegen, um die Position der Markierung zu verändern";
 "online_raster_maps" = "Online-Rasterkarten";
@@ -3394,7 +3394,7 @@
 "routing_attr_hazmat_category_usa_1_name" = "Sprengstoffe";
 "rendering_value_sector4_name" = "Sektor 4";
 "routing_attr_allow_via_ferrata_name" = "Bergroute (Klettersteig)";
-"distance_during_navigation" = "Distanz während der Navigation";
+"distance_during_navigation" = "Entfernung während der Navigation";
 "shared_string_precise" = "Präzise";
 "upload_to_osm_short" = "Hochladen zu OSM";
 "distance_during_navigation_footer" = "Wähle, wie Entfernungsinformationen in Navigationswidgets angezeigt werden (Entfernung zum Punkt, nächste Abbiegung, Spuren).\n\nWähle „Präzise“ für exakte Zahlen oder „Abrunden“ für leichtere Lesbarkeit.";
@@ -3406,7 +3406,7 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Besondere Streckenführung verwenden (nur HH)";
 "online_plugins" = "Online Plugins";
 "vertical_exaggeration" = "Vertikale Vergrößerung";
-"vertical_exaggeration_description" = "Durch Änderung des Skalenwerts können Sie das 3D-Profil hervorheben.";
+"vertical_exaggeration_description" = "Durch Änderung des Skalierungs-Werts können Sie das 3D-Profil hervorheben.";
 "shared_string_scale" = "Maßstab";
 "missing_or_outdated_maps_title" = "Fehlende oder veraltete Karte";
 "required_maps" = "Benötigte Karten";
@@ -3445,3 +3445,11 @@
 "display_position_automatic_descr" = "Abhängig von der Kartenausrichtung: unten für Bewegungsrichtung, mittig für alles andere.";
 "edit_tilesource_maxzoom" = "Maximale Vergrößerung";
 "edit_tilesource_minzoom" = "Minimale Vergrößerung";
+"speedometer_description" = "Zeigt Ihre aktuelle Geschwindigkeit an, wie über GPS gemeldet";
+"shared_string_always" = "Jederzeit";
+"when_exceeded" = "Bei Überschreitung";
+"shared_string_speedometer" = "Tachometer";
+"speed_limit_warning" = "Warnung vor Tempolimit";
+"shared_string_limit" = "Limit";
+"shared_string_instructions" = "Anleitung";
+"shared_string_analysis" = "Analyse";

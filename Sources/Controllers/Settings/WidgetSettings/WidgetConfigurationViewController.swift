@@ -38,7 +38,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
 
     override func registerCells() {
-        addCell(SegmentImagesWithRightLableTableViewCell.reuseIdentifier)
+        addCell(SegmentImagesWithRightLabelTableViewCell.reuseIdentifier)
     }
     
     override func generateData() {
@@ -180,8 +180,8 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 cell.titleLabel.text = item.title
             }
             outCell = cell
-        } else if item.cellType == SegmentImagesWithRightLableTableViewCell.getIdentifier() {
-            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLableTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLableTableViewCell
+        } else if item.cellType == SegmentImagesWithRightLabelTableViewCell.getIdentifier() {
+            let cell = tableView.dequeueReusableCell(withIdentifier: SegmentImagesWithRightLabelTableViewCell.reuseIdentifier) as! SegmentImagesWithRightLabelTableViewCell
             cell.selectionStyle = .none
             if let icons = item.obj(forKey: "values") as? [String],
                let pref = item.obj(forKey: "prefSegment") as? OACommonWidgetSizeStyle {
@@ -189,7 +189,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                 if createNew, !WidgetType.isComplexWidget(widgetInfo.widget.widgetType?.id ?? "") {
                     widgetConfigurationParams?["widgetSizeStyle"] = widgetSizeStyle.rawValue
                 }
-                cell.configureSegmenedtControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
+                cell.configureSegmentedControl(icons: icons, selectedSegmentIndex: widgetSizeStyle.rawValue)
             }
             if let title = item.string(forKey: "title") {
                 cell.configureTitle(title: title)

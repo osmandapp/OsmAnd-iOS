@@ -131,7 +131,7 @@
     BOOL tunnels = [_settings.showTunnels get];
     BOOL speedLimitExceed = [_settings.showSpeedLimitWarnings get];
     BOOL visible = false;
-    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
+    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams || speedLimitExceed))
     {
         OAAlarmInfo *alarm;
         if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
@@ -153,7 +153,7 @@
             BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
             BOOL isCanadianRegion = region == DR_CANADA;
 
-            NSString  *locImgId = @"warnings_limit";
+            NSString *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
             if (alarm.type == AIT_SPEED_LIMIT)
@@ -231,7 +231,7 @@
                 text = nil;
                 bottomText = nil;
             }
-            visible = (text &&  text.length > 0) || (locImgId.length > 0);
+            visible = (text && text.length > 0) || (locImgId.length > 0);
             if (visible)
             {
                 if (alarm.type == AIT_SPEED_CAMERA)

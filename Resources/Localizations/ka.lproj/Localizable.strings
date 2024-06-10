@@ -2538,3 +2538,31 @@
 "map_screen_orientation" = "ეკრანის ორიენტაცია";
 "shared_string_any" = "ნებისმიერი";
 "shared_string_view" = "ხედი";
+"shared_string_limit" = "ლიმიტი";
+"shared_string_speedometer" = "სპიდომეტრი";
+"rendering_attr_showBusRoutes_name" = "ავტობუსის გზები";
+"rendering_attr_natureReserves_name" = "ნაკრძალები";
+"distance_circles" = "მანძილი-წრეები";
+"promo_subscription" = "პრომოს გამოწერა";
+"offline_wikivoyage" = "ინტერნეტგარეშე ვიკივოიაჟი";
+"rendering_attr_showShareTaxiRoutes_name" = "სამარშრუტო გზები";
+"shared_string_scale" = "მასშტაბი";
+"routing_attr_carriage_restrictions_name" = "გადატანის შეზღუდვები";
+"rendering_attr_showTrolleybusRoutes_name" = "ტროლეიბუსის გზები";
+
+
+"rendering_attr_showTrainRoutes_name" = "სარკინიგზო გზები";
+"rendering_attr_showTramRoutes_name" = "ტრამვაის გზები";
+"top_widgets_panel" = "ზედა პანელი";
+"bottom_widgets_panel" = "ქვედა პანელი";
+"rendering_attr_showFitnessTrails_name" = "ფიტნეს-მარშრუტები";
+"map_widget_current_speed" = "მიმდინარე სიჩქარე";
+"rendering_attr_showMonorailRoutes_name" = "ცალრელსიანი გზები";
+"auto_zoom_smooth" = "გლუვი";
+"auto_zoom_discrete" = "დისკრეტული";
+"rendering_attr_showRunningRoutes_name" = "სარბენი გზები";
+"simulation_real_mode_title" = "რეალისტური სიმულაცია";
+"simulation_constant_mode_title" = "მუდმივი სიჩქარე";
+"speed_mode" = "სიჩქარის რეჟიმი";
+"rendering_attr_showFunicularRoutes_name" = "ფუნიკულიორის გზები";
+"add_page" = "გვერდის დამატება";

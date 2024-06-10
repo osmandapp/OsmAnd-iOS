@@ -766,7 +766,7 @@
 "shared_string_about" = "À propos";
 "follow_us" = "Suivez-nous";
 "wikivoyage_travel_guide" = "Guides de voyage";
-"start_editing_card_image_text" = "Le guide de voyage mondial et gratuit que chacun peut améliorer.";
+"start_editing_card_image_text" = "Le guide de voyage libre du monde entier que chacun peut améliorer.";
 "search_nearby" = "Rechercherà proximité";
 "unlimited_downloads" = "Téléchargements illimités";
 "wikipedia_offline" = "Wikipédia hors-ligne";
@@ -3385,3 +3385,5 @@
 "vertical_exaggeration_description" = "En modifiant la valeur de l'échelle, vous pouvez accentuer le relief 3D.";
 "vertical_exaggeration" = "Accentuation verticale";
 "required_maps" = "Cartes requises";
+"downward_gradient" = "Gradient vers le bas";
+"upward_gradient" = "Gradient vers le haut";

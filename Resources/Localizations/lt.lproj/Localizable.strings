@@ -95,7 +95,7 @@
 "animate_routing_route_not_calculated" = "Pirmiausia apskaičiuokite maršrutą";
 "settings_preset" = "Naudojimo profilis";
 "default_profile_descr" = "Select a profile that will be used the application launch.";
-"dialogs_and_notifications_title" = "Dialogs and notifications";
+"dialogs_and_notifications_title" = "Dialogai ir pranešimai";
 "dialogs_and_notifications_descr" = "Control pop-ups, dialogs, and notifications";
 "settings_preset_descr" = "Pasirinkite naudojimo profilį su individualiu žemėlapiu ir navigacijos nustatymais.";
 "unit_of_length" = "Ilgio matavimo vienetai";
@@ -226,7 +226,7 @@
 "voice_announces" = "Balso pranešimai";
 "screen_alerts" = "Ekranoįspėjimai";
 "vehicle_parameters" = "Transporto priemonės parametrai";
-"map_during_navigation" = "Map during navigation";
+"map_during_navigation" = "Žemėlapis navigacijos metu";
 "change_map_behavior" = "Change map behavior during navigation";
 "nav_type_descr" = "Select how to calculate a route for this profile";
 "nav_type_osmand" = "OsmAnd (offline routing)";
@@ -414,7 +414,7 @@
 "nearest_cities" = "Artimiausi miestai";
 "type_address" = "Įrašykite adresą";
 "search_poi_category_hint" = "Rašykite, norėdami pradėti paiešką";
-"poi_categories" = "POI categories";
+"poi_categories" = "LV kategorijos";
 "shared_string_search_history" = "Search history";
 "track_coloring_solid" = "Solidus";
 "attribute" = "Attribute";
@@ -480,7 +480,7 @@
 "shared_string_max" = "Maks.";
 "shared_string_wifi_only" = "Tik Wi-Fi";
 "shared_string_turn_off" = "Išjungti";
-"shared_strings_all_regions" = "All regions";
+"shared_strings_all_regions" = "Visi regionai";
 "regions" = "Regionai";
 "shared_string_width" = "Plotis";
 "shared_string_interval" = "Interval";
@@ -918,7 +918,7 @@
 "listed_exist" = "Listed %@ already exist in OsmAnd.";
 "shared_string_import_complete" = "Import complete";
 "import_complete_description" = "All data from the %@ is imported, you can use buttons below to open needed part of the app to manage it";
-"app_restart_required" = "Application restart required to apply some settings.";
+"app_restart_required" = "Norint pritaikyti kai kuriuos nustatymus, reikia iš naujo paleisti programą.";
 "shared_string_finish" = "Pabaiga";
 "added_items" = "Added items: %@";
 "copy_from_other_profile" = "Kopijuoti iš kito profilio";
@@ -928,7 +928,7 @@
 "select_base_profile_dialog_message" = "Base your custom profile on one of the default app profiles, this defines the basic setup like default visibility of widgets and units of speed and distance. These are the default app profiles, together with examples of custom profiles they may be extended to:";
 "profile_type_custom_string" = "Custom profile";
 "new_profile" = "Naujas profilis";
-"configure_profile" = "Configure profile";
+"configure_profile" = "Konfigūruoti profilį";
 "profile_settings" = "Specifiniai profilio nustatymai";
 "profile_appearance" = "Profilio išvaizda";
 "profile_appearance_descr" = "Icon, color, and name";
@@ -1071,7 +1071,7 @@
 "weekly" = "Kas savaitę";
 "osmand_live_reports" = "Reports";
 "osmand_live_server_date" = "Last server update: %@";
-"update_frequency" = "Update frequency";
+"update_frequency" = "Atnaujinimo dažnumas";
 "osmand_live_wifi_only" = "Update only via WiFi";
 "osmand_live_donation_header" = "Donation settings";
 "donations" = "Paremti";
@@ -1115,7 +1115,7 @@
 "res_uninst_unmanaged_q" = "You're going to delete %@. It's not from catalog, so please be sure you have a backup if needed.";
 "shared_string_details" = "Išsami informacija";
 "shared_string_type" = "Tipas";
-"res_unknown" = "Unknown";
+"res_unknown" = "Nežinoma";
 "shared_string_size" = "Dydis";
 "created_on" = "Created on";
 "res_update_all" = "Update all";
@@ -1176,7 +1176,7 @@
 "osn_bug_name" = "OSM pastaba";
 "osm_created" = "Created";
 "poi_remove_success" = "Ištrinta";
-"shared_string_modified" = "Modified";
+"shared_string_modified" = "Modifikuota";
 "osm_edit_reopened_note" = "OSM pastaba iš naujo atidaryta";
 "osm_name" = "OpenStreetMap username";
 "osm_pass" = "OpenStreetMap password";
@@ -1286,7 +1286,7 @@
 "unsupported_items" = "Unsupported items";
 "quick_action_add_create_items" = "Sukurti elementus";
 "configure_map" = "Konfigūruoti žemėlapį";
-"map_look_descr" = "Map appearance";
+"map_look_descr" = "Žemėlapio išvaizda";
 "quick_action_add_marker" = "Pridėti žemėlapio žymeklį";
 "select_map_marker" = "Pasirinitežemėlapio žymę";
 "add_gpx_waypoint" = "Add GPX waypoint";
@@ -1386,7 +1386,7 @@
 "enable_hillshade" = "Enable to view terrain data";
 "contour_lines_hillshades_slope" = "Contour lines, hillshades, slope";
 "quick_action_dir_from_descr" = "Tap this action to navigate from the current screen center point.";
-"quick_action_transport_descr" = "Tap this action to show or hide public transport routes / stops on the map.";
+"quick_action_transport_descr" = "Mygtukas, rodantis arba slepiantis viešąjį transportą žemėlapyje.";
 "toggle_public_transport" = "Show/hide public transport";
 "public_transport_show" = "Show public transport";
 "public_transport_hide" = "Hide public transport";
@@ -1396,10 +1396,10 @@
 "quick_action_mapillary_show" = "Show Mapillary";
 "quick_action_remove_next_destination" = "Ištrinti sekančio atvykimo tašką";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
-"change_application_profile" = "Change application profile";
+"change_application_profile" = "Keisti programos profilį";
 "select_application_profile" = "Select application profile";
 "shared_string_add_profile" = "Pridėti profilį";
-"quick_action_switch_profile_descr" = "The action button switches between selected profiles.";
+"quick_action_switch_profile_descr" = "Veiksmo mygtukas perjungia pasirinktus profilius.";
 "profile_type_user_string" = "User profile";
 "profile_type_osmand_string" = "OsmAnd profile";
 "unsupported_action" = "Unsupported action";
@@ -1997,7 +1997,7 @@
 "rendering_attr_hideNonVehicleHighways_name" = "Ne automobiliams skirti greitkeliai";
 "rendering_value_translucent_pink_name" = "Permatoma rožinė";
 "rendering_attr_surface_ground_name" = "Žemė";
-"routing_attr_height_obstacles_description" = "Maršrutai gali išvengti stiprių kalnų.";
+"routing_attr_height_obstacles_description" = "Numatomas kelionės laikas atspindės aukščio poveikį. Maršruto pasirinkimas gali padėti išvengti stačių įkalnių:";
 "rendering_attr_currentTrackColor_description" = "GPX spalva";
 "routing_attr_driving_style_speed_name" = "Trumpesni maršrutai";
 "routing_attr_avoid_sett_description" = "Avoids cobblestone and sett";
@@ -2074,7 +2074,7 @@
 "rendering_attr_surface_paving_stones_name" = "Paving stones";
 "rendering_attr_depthContours_name" = "Vandenyno gylio kontūrai";
 "rendering_attr_piste_difficulty_freeride_name" = "Laisvas rėžimas";
-"routeInfo_steepness_name" = "Steepness";
+"routeInfo_steepness_name" = "Statumas";
 "rendering_attr_smoothness_very_bad_name" = "Labai bloga";
 "rendering_attr_surface_compacted_name" = "Suplotas";
 "rendering_attr_undefined_name" = "Nenurodyta";
@@ -2145,7 +2145,7 @@
 "rendering_value_default13_name" = "Numatytoji (13)";
 "rendering_value_thin_name" = "Plonas";
 "rendering_attr_whiteWaterSports_name" = "Whitewater sports";
-"routeInfo_roadClass_name" = "Road type";
+"routeInfo_roadClass_name" = "Kelio tipas";
 "routing_attr_allow_skating_only_description" = "Routes groomed for freestyle or skating only without classic tracks.";
 "rendering_attr_piste_type_nordic_name" = "Šiaurėtiškas";
 "rendering_attr_trainLightrailRoutes_name" = "Traukinių maršrutai";
@@ -2291,7 +2291,7 @@
 "shared_string_profile" = "Profilis";
 "measurement_units" = "Matavimo vienetai";
 "shared_string_logout" = "Atsijungti";
-"backup_deleting_all_data" = "Ištrinami visi duomenys";
+"backup_deleting_all_data" = "Ištrinami visi duomenys…";
 "contact_support" = "Susisiekite su palaikymo tarnyba";
 "loading_purchase_information" = "Įkeliama pirkimo informacija";
 "update_parameters" = "Atnaujinti parametrus";
@@ -2479,7 +2479,7 @@
 "user_name" = "Jūsų OSM vartotojo vardas";
 "map_marker_2nd" = "Antrojižymė";
 "shared_string_deleted" = "Panaikinta";
-"shared_string_bearing" = "Guolis";
+"shared_string_bearing" = "Azimutas";
 "map_orientation_landscape" = "Gulsčias";
 "last_seven_days" = "Per pastarąsias 7 dienas";
 "shared_string_view" = "Peržiūrėti";
@@ -2604,3 +2604,27 @@
 "osmand_cloud_create_account_descr" = "Įveskite savo el. pašto adresą, ten bus atsiųstas patvirtinimo kodas,\nir visi jūsų duomenys bus su juo susieti.";
 "osmand_cloud_login_descr" = "Įveskite el. pašto adresą, kuriuo užsiregistravote. Juo bus išsiųstas vienkartinis slaptažodis.";
 "choose_what_to_restore" = "Pasirinkite, ką atkurti.";
+"activity_type_snowmobile_name" = "Sniego motociklas";
+"activity_type_winter_name" = "Žiema";
+"routing_attr_driving_style_description" = "Pasirinkite vairavimo tikslą, kad gautumėte trumpesnį, greitesnį ar saugesnį maršrutą";
+"activity_type_motorbike_name" = "Motoroleris";
+"activity_type_racing_name" = "Lenktynės";
+"activity_type_riding_name" = "Jojimas";
+"activity_type_car_name" = "Automobilis";
+"activity_type_hiking_name" = "Žygiavimas";
+"activity_type_water_name" = "Vanduo";
+"activity_type_cycling_name" = "Važiavimas dviračiu";
+"help_article_map_point_layers_on_map_name" = "Taškai žemėlapyje";
+"help_article_search_search_poi_name" = "Ieškoti LV";
+"route_maneuvers" = "Maršruto manevrai";
+"bottom_widgets_panel" = "Apatinis skydelis";
+"shared_string_buttons" = "Mygtukai";
+"si_nm_ft" = "Jūros mylios/pėdos";
+"deleted_file" = "Ištrintas failas";
+"si_nm_mt" = "Jūros mylios/metrai";
+"checking_progress" = "Tikrinama…";
+"modified_file" = "Modifikuotas failas";
+"shared_string_uploaded" = "Įkelta";
+"new_file" = "Naujas failas";
+"skip_download" = "Praleisti atsisiuntimą";
+"determine_location" = "Leiskite mums nustatyti jūsų buvimo vietą";

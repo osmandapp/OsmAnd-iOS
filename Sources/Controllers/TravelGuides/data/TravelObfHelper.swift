@@ -15,7 +15,6 @@ final class TravelObfHelper : NSObject {
     static let shared = TravelObfHelper()
     
     let WORLD_WIKIVOYAGE_FILE_NAME = "World_wikivoyage.travel.obf"
-    let DEFAULT_WIKIVOYAGE_TRAVEL_OBF = "Default_wikivoyage.travel.obf"
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
     let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
     let MAX_SEARCH_RADIUS = 800 * 1000
@@ -264,15 +263,6 @@ final class TravelObfHelper : NSObject {
         !getReaders().isEmpty
     }
     
-    func isOnlyDefaultTravelBookPresent() -> Bool {
-        let books = TravelObfHelper.shared.getReaders()
-        if books.isEmpty ||
-            books.count == 1 && books[0].lowercased() == DEFAULT_WIKIVOYAGE_TRAVEL_OBF.lowercased() {
-            return true
-        }
-        return false
-    }
-    
     func search(searchQuery: String) -> [TravelSearchResult] {
         var res = [TravelSearchResult]()
         let appLang = OAUtilities.currentLang() ?? ""
@@ -415,9 +405,9 @@ final class TravelObfHelper : NSObject {
             parts = []
         }
         
-        var navMap = [String : [TravelSearchResult]]()
+        var navMap = [String: [TravelSearchResult]]()
         var headers = [String]()
-        var headerObjs = [String : TravelSearchResult]()
+        var headerObjs = [String: TravelSearchResult]()
         if !parts.isEmpty {
             headers.append(contentsOf: parts)
             if let isParentOf = article.isParentOf, !isParentOf.isEmpty {
@@ -425,9 +415,10 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        for header in headers {
-            
-            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang, lat: article.lat, lon: article.lon) else {continue}
+        for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
+            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
+            guard let parentArticle = getParentArticleByTitle(title: header, lang: parentLang, lat: article.lat, lon: article.lon) else {continue}
 
             navMap[header] = [TravelSearchResult]()
             if let unseparatedText = parentArticle.isParentOf {
@@ -435,7 +426,7 @@ final class TravelObfHelper : NSObject {
                 for childSubsequence in isParentOf {
                     let childTitle = String(childSubsequence)
                     if !childTitle.isEmpty {
-                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang])
+                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                         var resultList = navMap[header]
                         if resultList == nil {
                             resultList = []
@@ -450,13 +441,15 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        var res: [TravelSearchResult : [TravelSearchResult]] = [:]
-        for header in headers {
+        var res: [TravelSearchResult: [TravelSearchResult]] = [:]
+        for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
+            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
             var searchResult = headerObjs[header]
             var results = navMap[header]
             if results != nil {
                 results = sortSearchResults(results: results!, searchQuery: header)
-                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: nil)
+                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                 searchResult = searchResult != nil ? searchResult : emptyResult
                 res[searchResult!] = results
             }

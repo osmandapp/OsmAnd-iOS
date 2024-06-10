@@ -968,9 +968,7 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     }
     if (gpxData == nil || displayedName == nil)
     {
-        NSDateFormatter *objDateFormatter = [[NSDateFormatter alloc] init];
-        [objDateFormatter setDateFormat:@"EEE dd MMM yyyy"];
-        NSString *suggestedName = [objDateFormatter stringFromDate:[NSDate date]];
+        NSString *suggestedName = [OAUtilities generateCurrentDateFilename];
         displayedName = [self createUniqueFileName:suggestedName];
     }
     else

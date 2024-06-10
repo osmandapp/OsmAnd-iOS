@@ -310,6 +310,7 @@ static const float kDistanceMeters = 100.0;
         self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
         if (_mapInfoController.weatherToolbarVisible)
             [_mapInfoController updateWeatherToolbarVisible];
+        [_mapInfoController viewWillTransition];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self updateControlsLayout:YES];
         [self updateMapRulerData];

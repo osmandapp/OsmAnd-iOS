@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, EOALocationIcon)
 
 + (instancetype) withLocationIcon:(EOALocationIcon)locationIcon;
 - (UIImage *) iconWithColor:(UIColor *)color;
+- (UIImage *) getMapIcon:(UIColor *)color;
 - (UIImage *) headingIconWithColor:(UIColor *)color;
 
 + (NSArray<OALocationIcon *> *) values;

@@ -50,6 +50,7 @@
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OAHistoryViewController.h"
 #import "OAAppDelegate.h"
+#import "SpeedLimitWrapper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -157,6 +158,7 @@
 
 // Views
 #import "OASegmentedSlider.h"
+#import "OATurnDrawable.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

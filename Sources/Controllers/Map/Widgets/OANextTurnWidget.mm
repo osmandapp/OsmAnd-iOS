@@ -9,6 +9,7 @@
 #import "OANextTurnWidget.h"
 #import "OsmAndApp.h"
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 #import "OARoutingHelper.h"
 #import "OARouteDirectionInfo.h"
 #import "OARouteCalculationResult.h"

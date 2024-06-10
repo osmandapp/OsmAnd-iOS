@@ -42,7 +42,8 @@ final class DescriptionDeviceHeader: UIView {
     
     private func changeDisconnectedState(device: Device) {
         configureConnectButtonTitle(with: .connected)
-        deviceImageView.image = device.getServiceConnectedImage.noir
+        deviceImageView.image = device.getServiceDisconnectedImage
+        deviceImageView.tintColor = .iconColorDefault
         connectActivityView.stopAnimating()
         configureStartStateActivityView(with: device.state)
     }
@@ -64,18 +65,19 @@ final class DescriptionDeviceHeader: UIView {
     private func configureConnectUI(device: Device) {
         if device.isConnected {
             connectStatusLabel.text = localizedString("external_device_status_connected")
-            signalIndicatorImageView.tintColor = UIColor.buttonBgColorPrimary
+            signalIndicatorImageView.tintColor = .buttonBgColorPrimary
             updateRSSI(with: device.rssi)
             deviceImageView.image = device.getServiceConnectedImage
             configureConnectButtonTitle(with: .disconnected)
-            imageContainerView.backgroundColor = UIColor.buttonBgColorTertiary
+            imageContainerView.backgroundColor = .buttonBgColorTertiary
         } else {
             connectStatusLabel.text = localizedString("external_device_status_disconnected")
             signalIndicatorImageView.tintColor = UIColor.iconColorSecondary
             signalIndicatorImageView.image = UIImage(named: "ic_small_signal_not_found")
-            deviceImageView.image = device.getServiceConnectedImage.noir
+            deviceImageView.image = device.getServiceDisconnectedImage
+            deviceImageView.tintColor = .iconColorDefault
             configureConnectButtonTitle(with: .connected)
-            imageContainerView.backgroundColor = UIColor.viewBg
+            imageContainerView.backgroundColor = .viewBg
         }
     }
     
@@ -91,7 +93,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success:
-                debugPrint("connect success")
+                debugPrint("connect success | \(device.deviceServiceName) | \(device.deviceName)")
                 let isPairedDevice = DeviceHelper.shared.isPairedDevice(id: device.id)
                 DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                 DeviceHelper.shared.addConnected(device: device)
@@ -122,6 +124,7 @@ final class DescriptionDeviceHeader: UIView {
             guard let self else { return }
             switch result {
             case .success(let services):
+                debugPrint("discoverCharacteristics: success")
                 discoverCharacteristics(services: services)
             case .failure(let error):
                 debugPrint("discoverCharacteristics: \(error)")
@@ -144,8 +147,13 @@ final class DescriptionDeviceHeader: UIView {
                         }
                         if characteristic.properties.contains(.notify) {
                             debugPrint("\(characteristic.uuid): properties contains .notify")
-                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { result in
-                                debugPrint(result)
+                            device.setNotifyValue(toEnabled: true, ofCharac: characteristic) { notifyResult in
+                                switch notifyResult {
+                                case .success(let isNotifying):
+                                    debugPrint("success: this peripheral was registered for change notifications to the characteristic [\(characteristic.uuid)]: \(isNotifying)")
+                                case .failure(let error):
+                                    debugPrint("failure: this peripheral was not registered for change notifications to the characteristic [\(characteristic.uuid)]:  \(error.localizedDescription)")
+                                }
                             }
                         }
                     }
@@ -168,7 +176,8 @@ final class DescriptionDeviceHeader: UIView {
             case .success:
                 DeviceHelper.shared.removeDisconnected(device: device)
                 configureConnectButtonTitle(with: .connected)
-                deviceImageView.image = device.getServiceConnectedImage.noir
+                deviceImageView.image = device.getServiceDisconnectedImage
+                deviceImageView.tintColor = .iconColorDefault
             case .failure(let error):
                 if let error = error as? SBError {
                     switch error {

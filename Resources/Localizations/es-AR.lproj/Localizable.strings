@@ -3438,3 +3438,11 @@
 "edit_tilesource_minzoom" = "Zum mínimo";
 "display_position_automatic_descr" = "Depende de la orientación del mapa: «Abajo» para «Dirección del movimiento», «Centro» para el resto.";
 "edit_tilesource_maxzoom" = "Zum máximo";
+"when_exceeded" = "Al excederse";
+"speed_limit_warning" = "Aviso del límite de velocidad";
+"shared_string_always" = "Siempre";
+"shared_string_speedometer" = "Velocímetro";
+"speedometer_description" = "Muestra la velocidad actual detectada por el GPS";
+"shared_string_limit" = "Límite";
+"shared_string_instructions" = "Instrucciones";
+"shared_string_analysis" = "Análisis";

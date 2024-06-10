@@ -3428,3 +3428,10 @@
 "display_position_automatic_descr" = "Depende da orientação do mapa: em baixo para a direção do movimento, ao centro para todas as outras.";
 "short_min" = "m";
 "shared_string_millimeters" = "Milímetros";
+"speedometer_description" = "Mostra a sua velocidade atual conforme indicada pelo GPS";
+"shared_string_speedometer" = "Velocímetro";
+"speed_limit_warning" = "Aviso de limite de velocidade";
+"shared_string_always" = "Sempre";
+"when_exceeded" = "Quando excedido";
+"edit_tilesource_minzoom" = "Ampliação mínima";
+"edit_tilesource_maxzoom" = "Ampliação máxima";

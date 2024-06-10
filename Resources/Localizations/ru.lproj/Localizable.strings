@@ -580,7 +580,7 @@
 "will_open_at" = "Откроется в";
 "will_open_on" = "Откроется в";
 "will_open_tomorrow_at" = "Откроется завтра в";
-"road_blocked" = "Нежелательный участок";
+"road_blocked" = "Дорога перекрыта";
 "shared_string_road" = "Дорога";
 "arrival_distance_descr" = "Как скоро следует сообщать о прибытии?";
 "app_mode_aircraft" = "Воздушное судно";
@@ -976,7 +976,7 @@
 "search_my_location" = "Найти моё местоположение";
 "avoid_in_routing_descr_" = "Избегать определённых участков и типов дорог";
 "general_settings_descr" = "Настройки экрана, локализации, единиц измерения и другие.";
-"auto_zoom_none" = "Без автомасштаба";
+"auto_zoom_none" = "Без автомасштабирования";
 "auto_zoom_close" = "К ближнему плану";
 "auto_zoom_far" = "К среднему плану";
 "auto_zoom_farthest" = "К дальнему плану";

@@ -52,6 +52,10 @@
 
 @interface OAMapInfoController () <OAWeatherLayerSettingsDelegate, OAWidgetPanelDelegate>
 
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerTopConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerLeftConstraint;
+@property (strong, nonatomic) IBOutlet NSLayoutConstraint *speedometerHeightConstraint;
+
 @end
 
 @implementation OAMapInfoController
@@ -65,6 +69,8 @@
     OAWeatherToolbar *_weatherToolbar;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
+    
+    SpeedometerView *_speedometerView;
 
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -396,6 +402,11 @@
     view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
 }
 
+- (void)viewWillTransition
+{
+    [self layoutWidgets];
+}
+
 - (void) layoutWidgets
 {
     BOOL portrait = ![OAUtilities isLandscape];
@@ -406,11 +417,25 @@
     BOOL hasBottomWidgets = [_bottomPanelController hasWidgets];
     BOOL hasRightWidgets = [_rightPanelController hasWidgets];
     [self configureLayerWidgets:hasTopWidgets];
-
+    CGFloat _speedometerViewYPosition = 0.0;
+    if (_speedometerView && _speedometerView.superview && !_speedometerView.hidden)
+    {
+        self.speedometerHeightConstraint.constant = _speedometerView.intrinsicContentSize.height;
+        CGFloat optionsMenuButtonOffsetY = _mapHudViewController.optionsMenuButton.frame.origin.y;
+        self.speedometerTopConstraint.constant = optionsMenuButtonOffsetY - _speedometerView.intrinsicContentSize.height - 16;
+        // NOTE: when opened context menu optionsMenuButton.frame.origin.x has value -34. Perhaps, by this method, the 'menu' button is hidden from the screen.
+        CGFloat optionsMenuButtonOffsetX = _mapHudViewController.optionsMenuButton.frame.origin.x;
+        if (optionsMenuButtonOffsetX < 0)
+            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x - _speedometerView.intrinsicContentSize.width;
+        else
+            self.speedometerLeftConstraint.constant = _mapHudViewController.optionsMenuButton.frame.origin.x;
+        _speedometerViewYPosition = self.speedometerTopConstraint.constant;
+    }
+    
     if (_alarmControl && _alarmControl.superview && !_alarmControl.hidden)
     {
-        CGRect optionsButtonFrame = _mapHudViewController.optionsMenuButton.frame;
-        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin], optionsButtonFrame.origin.y - _alarmControl.bounds.size.height / 2);
+        CGFloat positionY = _speedometerViewYPosition != 0.0 ? _speedometerViewYPosition :  _mapHudViewController.optionsMenuButton.frame.origin.y;
+        _alarmControl.center = CGPointMake(_alarmControl.bounds.size.width / 2 + [OAUtilities getLeftMargin] + 6, positionY - _alarmControl.bounds.size.height / 2);
     }
 
     if (_rulerControl && _rulerControl.superview && !_rulerControl.hidden)
@@ -643,6 +668,28 @@
     [_alarmControl removeFromSuperview];
     _alarmControl.delegate = self;
     [_mapHudViewController.view addSubview:_alarmControl];
+    
+    [_speedometerView removeFromSuperview];
+    _speedometerView.delegate = self;
+    
+    [_mapHudViewController.view addSubview:_speedometerView];
+    if (!self.speedometerHeightConstraint)
+    {
+        self.speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
+        self.speedometerHeightConstraint.active = YES;
+    }
+
+    if (!self.speedometerLeftConstraint)
+    {
+    self.speedometerLeftConstraint = [_speedometerView.leftAnchor constraintEqualToAnchor:_mapHudViewController.view.leftAnchor constant:16];
+    }
+    self.speedometerLeftConstraint.active = YES;
+    if (!self.speedometerTopConstraint)
+    {
+        self.speedometerTopConstraint = [_speedometerView.topAnchor constraintEqualToAnchor:_mapHudViewController.view.topAnchor];
+    }
+    self.speedometerTopConstraint.active = YES;
+    [_speedometerView configure];
 
     [_mapWidgetRegistry updateWidgetsInfo:[[OAAppSettings sharedManager].applicationMode get]];
 
@@ -737,10 +784,32 @@
 - (void) registerAllControls
 {
     NSMutableArray<OABaseWidgetView *> *widgetsToUpdate = [NSMutableArray array];
+    
+    if (_alarmControl)
+        [_alarmControl removeFromSuperview];
 
     _alarmControl = [[OAAlarmWidget alloc] init];
     _alarmControl.delegate = self;
     [widgetsToUpdate addObject:_alarmControl];
+    
+    if (_speedometerView)
+    {
+        [_speedometerView removeFromSuperview];
+        [NSLayoutConstraint deactivateConstraints:@[self.speedometerHeightConstraint, self.speedometerTopConstraint, self.speedometerLeftConstraint]];
+        self.speedometerHeightConstraint = nil;
+        self.speedometerTopConstraint = nil;
+        self.speedometerLeftConstraint = nil;
+    }
+    
+    _speedometerView = [SpeedometerView initView];
+    __weak OAMapInfoController *weakSelf = self;
+    _speedometerView.didChangeIsVisible = ^{
+        [weakSelf layoutWidgets];
+    };
+    _speedometerView.translatesAutoresizingMaskIntoConstraints = NO;
+    _speedometerView.hidden = YES;
+    _speedometerView.delegate = self;
+    [widgetsToUpdate addObject:_speedometerView];
 
     _downloadMapWidget = [[OADownloadMapWidget alloc] init];
     _downloadMapWidget.delegate = self;
@@ -772,7 +841,15 @@
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
     if (widget.isTopText || widget.isTextInfo)
+    {
         [self layoutWidgets];
+    }
+    else if ([widget isKindOfClass:[SpeedometerView class]])
+    {
+        [_speedometerView configure];
+        [self layoutWidgets];
+    }
+    [[UIApplication sharedApplication].carPlaySceneDelegate widgetChanged:widget];
 }
 
 - (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible

@@ -652,7 +652,7 @@
 "route_descr_destination" = "目的地";
 "always_center_position_on_map" = "位置顯示始終處於中心";
 "map_widget_appearance_rem" = "剩餘元件";
-"map_widget_compass" = "電子羅盤";
+"map_widget_compass" = "指南針";
 "map_widget_next_turn" = "下個轉彎";
 "map_widget_next_turn_small" = "下個轉彎(小)";
 "map_widget_next_next_turn" = "第二個轉彎";
@@ -672,7 +672,7 @@
 "do_not_send_anonymous_data_desc" = "我們不會收集位置資料。只有應用程式使用的情況和地圖下載的統計。";
 "save_global_track_interval" = "通常的記錄間隔";
 "save_global_track_interval_descr" = "指定一般軌跡錄製的記錄間隔（透過地圖上的旅程錄製小工具開啟）。";
-"rotate_map_compass_opt" = "羅盤方向";
+"rotate_map_compass_opt" = "指南針方向";
 "rotate_map_bearing_opt" = "行進方向";
 "rotate_map_north_opt" = "北方向上";
 "driving_region_descr" = "選取駕駛區域：美國、歐洲、英國、亞洲和其它。";
@@ -728,7 +728,7 @@
 "shared_string_control_stop" = "停止";
 "transport_nearby_routes" = "範圍內";
 "route_stops_before" = "%@之前停止";
-"shared_string_previous" = "上一頁";
+"shared_string_previous" = "上一站";
 "poi_overlay" = "POI 在上層";
 "shared_string_clear" = "清除";
 "tunnel_warning" = "前方有隧道";
@@ -1377,7 +1377,7 @@
 "copy_from_other_profile" = "從其他設定檔複製";
 "reset_to_default" = "重設為預設值";
 "gpx_parse_error" = "GPX檔案有問題。 \n \n您可能要聯絡 OsmAnd 支援團隊以進一步調查。";
-"shared_string_next" = "下一頁";
+"shared_string_next" = "下一站";
 "quick_action_map_source_title" = "地圖來源";
 "configure_screen_quick_action" = "快速動作";
 "search_activity" = "搜尋";
@@ -1388,7 +1388,7 @@
 "shared_string_finish" = "完成";
 "shared_string_routing" = "路徑";
 "import_duplicates_title" = "一些項目已存在";
-"import_duplicates_description" = " OsmAnd已有與匯入的名稱相同的元素。 \n \n選取動作。";
+"import_duplicates_description" = "OsmAnd 已有與匯入的名稱相同的元素。\n\n選取動作。";
 "keep_both_desc" = "匯入的項目將會加入前綴";
 "keep_both" = "保留雙方";
 "replace_all" = "取代全部";

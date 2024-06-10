@@ -756,6 +756,11 @@
     return YES;
 }
 
+- (BOOL) showTopViewInFullscreen
+{
+    return NO;
+}
+
 - (BOOL) showTopControls
 {
     if (self.delegate)

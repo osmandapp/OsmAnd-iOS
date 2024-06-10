@@ -18,8 +18,12 @@ final class BLEHeartRateDevice: Device {
         GattAttributes.SERVICE_HEART_RATE
     }
     
-    override var getServiceConnectedImage: UIImage {
-        UIImage(named: "widget_sensor_heart_rate")!
+    override var getServiceConnectedImage: UIImage? {
+        UIImage(named: "widget_sensor_heart_rate")
+    }
+    
+    override var getServiceDisconnectedImage: UIImage? {
+        UIImage(named: "ic_custom_sensor_heart_rate_outlined")
     }
     
     override var getDataFields: [[String: String]]? {

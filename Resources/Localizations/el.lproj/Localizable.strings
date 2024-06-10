@@ -1970,3 +1970,7 @@
 "purchases_feature_desc_unlimited_map_download" = "Απόκτησε απεριόριστες λήψεις χαρτών εκτός σύνδεσης για όλες τις ηπείρους και περιοχές.";
 "subscription_banner_free_maps_description" = "Απόκτησε απεριόριστες λήψεις και ενημερώσεις χάρτη.";
 "res_search_world" = "Αναζήτηση χαρτών";
+"shared_strings_all_regions" = "Όλες οι περιοχές";
+"shared_string_clear_cache" = "Εκκαθάριση μνήμης cache";
+"edit_tilesource_minzoom" = "Ελάχιστο ζουμ";
+"edit_tilesource_maxzoom" = "Μέγιστο ζουμ";

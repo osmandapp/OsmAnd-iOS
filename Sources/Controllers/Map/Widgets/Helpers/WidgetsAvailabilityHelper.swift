@@ -51,8 +51,8 @@ class WidgetsAvailabilityHelper: NSObject {
         regWidgetVisibility(widgetType: .distanceToDestination)
         regWidgetVisibility(widgetType: .timeToIntermediate)
         regWidgetVisibility(widgetType: .timeToDestination)
-        regWidgetVisibility(widgetType: .currentSpeed, appModes: [.car(), .bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .truck(), .motorcycle(), .horse(), .moped()])
-        regWidgetVisibility(widgetType: .maxSpeed, appModes: [.car(), .truck(), .motorcycle(), .moped()])
+        regWidgetVisibility(widgetType: .currentSpeed, appModes: [.bicycle(), .boat(), .ski(), .public_TRANSPORT(), .aircraft(), .horse(), .train()])
+        regWidgetVisibility(widgetType: .maxSpeed, appModes: [])
         regWidgetVisibility(widgetType: .altitudeMapCenter, appModes: [.pedestrian(), .bicycle()])
         regWidgetVisibility(widgetType: .altitudeMyLocation, appModes: [.pedestrian(), .bicycle()])
         

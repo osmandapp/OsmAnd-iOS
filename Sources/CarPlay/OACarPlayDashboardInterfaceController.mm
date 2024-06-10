@@ -28,6 +28,7 @@
 #import "OAPlugin.h"
 #import "OASRTMPlugin.h"
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 #import "OAMapButtonsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -646,7 +647,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 // MARK: OACarPlayMapViewDelegate
 
-- (void)onIntefaceControllerAttached
+- (void)onInterfaceControllerAttached
 {
     _locationUpdateObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onLocationUpdate)
@@ -658,7 +659,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
 
-- (void)onIntefaceControllerDetached
+- (void)onInterfaceControllerDetached
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
     if (_locationUpdateObserver)

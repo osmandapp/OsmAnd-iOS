@@ -821,9 +821,16 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     return ((NSArray *)_data[@(section)]).count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? 0.001 : 16.0;
+    return 0.001;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions && section == 0)
+        return OALocalizedString(@"step_by_step");
+    return @" ";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath

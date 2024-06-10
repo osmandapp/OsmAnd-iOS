@@ -3774,5 +3774,6 @@
 
 "shared_string_instructions" = "Instructions";
 "shared_string_analysis" = "Analysis";
+"step_by_step" = "Turn-by-turn";
 
 "shared_string_limit" = "Limit";

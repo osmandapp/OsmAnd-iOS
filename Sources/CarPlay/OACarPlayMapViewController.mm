@@ -64,24 +64,7 @@
     
     [self attachMapToWindow];
     
-    _alarmSpeedometerStackView = [UIStackView new];
-    _alarmSpeedometerStackView.translatesAutoresizingMaskIntoConstraints = NO;
-    _alarmSpeedometerStackView.axis = UILayoutConstraintAxisVertical;
-    _alarmSpeedometerStackView.distribution = UIStackViewDistributionEqualSpacing;
-    _alarmSpeedometerStackView.spacing = 5;
-    _alarmSpeedometerStackView.alignment = UIStackViewAlignmentFill;
-    [_window addSubview:_alarmSpeedometerStackView];
-    
-    [NSLayoutConstraint activateConstraints:@[
-        [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
-    ]];
-    CGFloat outsideShadowOffset = 1.0;
-    _alarmSpeedometerStackViewLeftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor constant:outsideShadowOffset];
-    _alarmSpeedometerStackViewLeftConstraint.active = YES;
-    
-    _alarmSpeedometerStackViewRightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor constant:-outsideShadowOffset];
-    _alarmSpeedometerStackViewRightConstraint.active = YES;
-    
+    [self setupAlarmSpeedometerStackView];
     [self setupSpeedometer];
     [self setupAlarmWidget];
     
@@ -160,6 +143,27 @@
         [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.5 : 0.5 y:kViewportBottomScale];
     else
         [_mapVc setViewportForCarPlayScaleX:isLeftSideDriving ? 1.0 + widthOffset : 1.0 - widthOffset y:1.0 + heightOffset];
+}
+
+- (void)setupAlarmSpeedometerStackView
+{
+    _alarmSpeedometerStackView = [UIStackView new];
+    _alarmSpeedometerStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    _alarmSpeedometerStackView.axis = UILayoutConstraintAxisVertical;
+    _alarmSpeedometerStackView.distribution = UIStackViewDistributionEqualSpacing;
+    _alarmSpeedometerStackView.spacing = 5;
+    _alarmSpeedometerStackView.alignment = UIStackViewAlignmentFill;
+    [_window addSubview:_alarmSpeedometerStackView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_alarmSpeedometerStackView.topAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.topAnchor constant:8],
+    ]];
+    CGFloat outsideShadowOffset = 1.0;
+    _alarmSpeedometerStackViewLeftConstraint = [_alarmSpeedometerStackView.leftAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.leftAnchor constant:outsideShadowOffset];
+    _alarmSpeedometerStackViewLeftConstraint.active = YES;
+    
+    _alarmSpeedometerStackViewRightConstraint = [_alarmSpeedometerStackView.rightAnchor constraintEqualToAnchor:_window.mapButtonSafeAreaLayoutGuide.rightAnchor constant:-outsideShadowOffset];
+    _alarmSpeedometerStackViewRightConstraint.active = YES;
 }
 
 - (void)setupAlarmWidget

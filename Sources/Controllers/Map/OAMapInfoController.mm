@@ -114,15 +114,6 @@
     [self execOnDraw];
 }
 
-- (void)updateSpeedometer
-{
-    [_speedometerView configure];
-    [self updateLayout];
-    if ([OARootViewController instance].mapPanel.didUpdateSpeedometer) {
-        [OARootViewController instance].mapPanel.didUpdateSpeedometer();
-    }
-}
-
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
 {
     self = [super init];
@@ -850,7 +841,14 @@
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
     if (widget.isTopText || widget.isTextInfo)
+    {
         [self layoutWidgets];
+    }
+    else if ([widget isKindOfClass:[SpeedometerView class]])
+    {
+        [_speedometerView configure];
+        [self layoutWidgets];
+    }
 }
 
 - (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible

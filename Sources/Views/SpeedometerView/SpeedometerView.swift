@@ -69,6 +69,10 @@ final class SpeedometerView: OATextInfoWidget {
         return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
     
+    override func isTextInfo() -> Bool {
+        false
+    }
+    
     @discardableResult
     override func updateInfo() -> Bool {
         guard settings.showSpeedometer.get() else {

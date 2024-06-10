@@ -146,7 +146,7 @@ extension UIView {
 }
 
 extension UIView {
-    fileprivate struct Constants {
+    fileprivate enum Constants {
         static let externalBorderName = "externalBorder"
     }
     

@@ -2974,7 +2974,7 @@
 "map_3d_mode_action" = "Modalità 3D";
 "shared_string_hidden" = "Nascosto";
 "visible_in_3d_mode" = "Visibile in modalità 3D";
-"map_3d_mode_description" = "Tocca la mappa con due dita e spostale su e giù per regolare l\'inclinazione della mappa.";
+"map_3d_mode_description" = "Tocca la mappa con due dita e spostale su e giù per regolare l'inclinazione della mappa.";
 "map_3d_mode_hint" = "Toccare a lungo il pulsante consente di modificarne la posizione.";
 "shared_string_add_color" = "Aggiungi colore";
 "shared_string_edit_color" = "Modifica colore";

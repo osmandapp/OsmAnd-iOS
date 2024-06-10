@@ -3385,3 +3385,5 @@
 "vertical_exaggeration_description" = "En modifiant la valeur de l'échelle, vous pouvez accentuer le relief 3D.";
 "vertical_exaggeration" = "Accentuation verticale";
 "required_maps" = "Cartes requises";
+"downward_gradient" = "Gradient vers le bas";
+"upward_gradient" = "Gradient vers le haut";

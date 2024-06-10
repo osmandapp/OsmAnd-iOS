@@ -114,12 +114,6 @@
     [self execOnDraw];
 }
 
-- (void)updateSpeedometer
-{
-    [_speedometerView configure];
-    [self updateLayout];
-}
-
 - (instancetype) initWithHudViewController:(OAMapHudViewController *)mapHudViewController
 {
     self = [super init];
@@ -790,6 +784,9 @@
 - (void) registerAllControls
 {
     NSMutableArray<OABaseWidgetView *> *widgetsToUpdate = [NSMutableArray array];
+    
+    if (_alarmControl)
+        [_alarmControl removeFromSuperview];
 
     _alarmControl = [[OAAlarmWidget alloc] init];
     _alarmControl.delegate = self;
@@ -844,7 +841,15 @@
 - (void) widgetChanged:(OABaseWidgetView *)widget
 {
     if (widget.isTopText || widget.isTextInfo)
+    {
         [self layoutWidgets];
+    }
+    else if ([widget isKindOfClass:[SpeedometerView class]])
+    {
+        [_speedometerView configure];
+        [self layoutWidgets];
+    }
+    [[UIApplication sharedApplication].carPlaySceneDelegate widgetChanged:widget];
 }
 
 - (void) widgetVisibilityChanged:(OABaseWidgetView *)widget visible:(BOOL)visible

@@ -7,7 +7,13 @@
 //
 
 @objcMembers
+final class CarPlayConfig: NSObject {
+    var isLeftSideDriving = false
+}
+
+@objcMembers
 final class SpeedometerView: OATextInfoWidget {
+    
     @IBOutlet private weak var centerPositionXConstraint: NSLayoutConstraint!
     @IBOutlet private weak var centerPositionYConstraint: NSLayoutConstraint!
     @IBOutlet private weak var leftPositionConstraint: NSLayoutConstraint!
@@ -39,7 +45,7 @@ final class SpeedometerView: OATextInfoWidget {
     var sizeStyle: EOAWidgetSizeStyle = .medium
     var didChangeIsVisible: (() -> Void)?
    
-    var isCarPlay = false
+    var carPlayConfig: CarPlayConfig?
     var isPreview = false
     
     static var initView: SpeedometerView? {
@@ -62,7 +68,12 @@ final class SpeedometerView: OATextInfoWidget {
         let fittingSize = contentStackView.systemLayoutSizeFitting(UIView.layoutFittingCompressedSize)
         return CGSize(width: fittingSize.width, height: getCurrentSpeedViewMaxHeightWidth())
     }
-
+    
+    override func isTextInfo() -> Bool {
+        false
+    }
+    
+    @discardableResult
     override func updateInfo() -> Bool {
         guard settings.showSpeedometer.get() else {
             isHidden = true
@@ -85,33 +96,68 @@ final class SpeedometerView: OATextInfoWidget {
     
     func configure() {
         sizeStyle = settings.speedometerSize.get()
-        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
-        
-        let isDirectionRTL = isDirectionRTL()
-        contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
-        
+       
         updateComponents()
 
         centerPositionYConstraint.isActive = true
         if isPreview {
             isHidden = false
+            speedometerSpeedView.layer.cornerRadius = 6
+            speedometerSpeedView.configureShadow()
+            configureContentStackViewSemanticContentAttribute()
             centerPositionXConstraint.isActive = true
             leftPositionConstraint.isActive = false
             rightPositionConstraint.isActive = false
+            configureUserInterfaceStyleWithMapTheme()
         } else {
             isHidden = true
             centerPositionXConstraint.isActive = false
-            if isCarPlay {
-                layer.cornerRadius = 10
-                // TODO: isCarPlay https://github.com/osmandapp/OsmAnd-iOS/issues/3668
-                leftPositionConstraint.isActive = false
-                rightPositionConstraint.isActive = true
+            if let carPlayConfig {
+                speedometerSpeedView.layer.cornerRadius = 10
+                contentStackView.semanticContentAttribute = carPlayConfig.isLeftSideDriving ? .forceRightToLeft : .forceLeftToRight
+                speedometerSpeedView.configureTextAlignmentContent(isTextAlignmentRight: carPlayConfig.isLeftSideDriving)
+                if carPlayConfig.isLeftSideDriving {
+                    contentAlignment(isRight: true)
+                } else {
+                    contentAlignment(isRight: false)
+                }
+                speedometerSpeedView.removeExternalBorders()
+                speedometerSpeedView.addExternalBorder(borderWidth: 1.0, borderColor: .lightGray, cornerRadius: 11)
             } else {
-                layer.cornerRadius = 6
+                configureContentStackViewSemanticContentAttribute()
+                speedometerSpeedView.layer.cornerRadius = 6
+                speedometerSpeedView.configureShadow()
                 leftPositionConstraint.isActive = true
                 rightPositionConstraint.isActive = false
+                configureUserInterfaceStyleWithMapTheme()
             }
         }
+    }
+    
+    func configureUserInterfaceStyleWith(style: UIUserInterfaceStyle) {
+        overrideUserInterfaceStyle = style
+        let borderColor: UIColor = style == .light ? .widgetAutoBgStroke.light : .widgetAutoBgStroke.dark
+        speedometerSpeedView.removeExternalBorders()
+        speedometerSpeedView.addExternalBorder(borderWidth: 1.0, borderColor: borderColor, cornerRadius: 11)
+    }
+    
+    func contentAlignment(isRight: Bool) {
+        if isRight {
+            rightPositionConstraint.isActive = true
+            leftPositionConstraint.isActive = false
+        } else {
+            leftPositionConstraint.isActive = true
+            rightPositionConstraint.isActive = false
+        }
+    }
+    
+    private func configureContentStackViewSemanticContentAttribute() {
+        let isDirectionRTL = isDirectionRTL()
+        contentStackView.semanticContentAttribute = isDirectionRTL ? .forceRightToLeft : .forceLeftToRight
+    }
+    
+    private func configureUserInterfaceStyleWithMapTheme() {
+        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     private func updateComponents() {

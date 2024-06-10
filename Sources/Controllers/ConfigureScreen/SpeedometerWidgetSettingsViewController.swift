@@ -127,7 +127,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
                 if let speedometerView {
                     speedometerView.configure()
                     speedometerPreviewHeightConstraint?.constant = speedometerView.getCurrentSpeedViewMaxHeightWidth()
-                    OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateSpeedometer()
+                    updateSpeedometer()
                 }
             }
             return cell
@@ -183,10 +183,15 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         if speedometerView == nil {
             let view = SpeedometerView.initView
             view?.isPreview = true
+            view?.delegate = OARootViewController.instance().mapPanel.hudViewController.mapInfoController
             view?.translatesAutoresizingMaskIntoConstraints = false
             speedometerView = view
         }
         return speedometerView
+    }
+    
+    private func updateSpeedometer() {
+        speedometerView?.refreshLayout()
     }
     
     @objc private func onSwitchClick(_ sender: Any) -> Bool {
@@ -197,7 +202,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
         
         if data.key == Self.turnOnRowKey {
             settings.showSpeedometer.set(sw.isOn)
-            OARootViewController.instance().mapPanel.hudViewController.mapInfoController.updateSpeedometer()
+            updateSpeedometer()
             reloadDataWith(animated: true, completion: nil)
             delegate?.onWidgetStateChanged()
         }

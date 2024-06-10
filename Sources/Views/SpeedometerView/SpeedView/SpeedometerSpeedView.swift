@@ -39,7 +39,6 @@ final class SpeedometerSpeedView: UIView {
             valueSpeedLabel.text = String(previewValueDefault)
             isHidden = false
         }
-        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     func updateInfo() {
@@ -63,6 +62,19 @@ final class SpeedometerSpeedView: UIView {
         } else {
             isHidden = true
         }
+    }
+    
+    func configureTextAlignmentContent(isTextAlignmentRight: Bool) {
+        let textAlignment: NSTextAlignment = isTextAlignmentRight ? .right : .left
+        valueSpeedLabel.textAlignment = textAlignment
+        unitSpeedLabel.textAlignment = textAlignment
+    }
+    
+    func configureShadow() {
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 5
+        layer.shadowOffset = .init(width: 0, height: 2)
+        layer.shadowColor = UIColor.black.withAlphaComponent(0.30).cgColor
     }
     
     private func updateSpeedValueAndUnit(with value: Float) {

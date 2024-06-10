@@ -657,7 +657,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
 
-- (void)onIntefaceControllerDetached
+- (void)onInterfaceControllerDetached
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
     if (_locationUpdateObserver)

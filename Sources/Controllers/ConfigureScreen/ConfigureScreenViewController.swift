@@ -295,7 +295,7 @@ extension ConfigureScreenViewController {
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : .iconColorDefault
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.settings.applicationMode.get().getIconColor())) : .iconColorDefault
             }
         }
         

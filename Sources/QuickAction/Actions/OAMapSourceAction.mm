@@ -19,7 +19,7 @@
 #import "OATitleDescrDraggableCell.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static NSString * const kLayerOsmVector = @"type_default";
+static NSString * const kLayerOsmVector = @"type_default"; //todo: migration to LAYER_OSM_VECTOR
 static NSString * const kSource = @"source";
 
 static OAQuickActionType *TYPE;

@@ -86,30 +86,31 @@ class QuickActionSerializer: NSObject {
     static func adjustParamsForExport(_ params: [AnyHashable: Any], action: OAQuickAction) -> [AnyHashable: Any] {
          if action is OASwitchableAction<AnyObject>, let switchableAction = action as? OASwitchableAction<AnyObject> {
              var paramsCopy = params
-             let className = String(describing: action.self)
+             let className = String(describing: type(of: action))
+             let key: String = switchableAction.getListKey()
              if className == "OAMapStyleAction" {
-                 if let values = params[switchableAction.getListKey()] as? [String], !values.isEmpty {
+                 if let values = params[key] as? [String], !values.isEmpty {
                      let res = values.joined(separator: ",")
-                     paramsCopy[switchableAction.getListKey()] = res
+                     paramsCopy[key] = res
                  }
                  return paramsCopy
              }
-             if let values = params[switchableAction.getListKey()] as? [Any], !values.isEmpty {
+             if let values = params[key] as? [Any], !values.isEmpty {
                  if let data = paramsToExportArray(values) {
                      if let stringData = String(data: data, encoding: .utf8) {
-                         paramsCopy[switchableAction.getListKey()] = stringData
+                         paramsCopy[key] = stringData
                      }
                  }
              }
 
             if className == "OASwitchProfileAction" {
-                var values = params[switchableAction.getListKey()] as? [Any]
+                var values = params[key] as? [Any]
                 if values == nil || paramsCopy[Self.kSwitchProfileStringKeys] != nil {
                     values = paramsCopy[Self.kSwitchProfileStringKeys] as? [Any]
                     paramsCopy.removeValue(forKey: Self.kSwitchProfileStringKeys)
                     if let data = paramsToExportArray(values) {
                         if let stringData = String(data: data, encoding: .utf8) {
-                            paramsCopy[switchableAction.getListKey()] = stringData
+                            paramsCopy[key] = stringData
                         }
                     }
                 }
@@ -155,6 +156,8 @@ class QuickActionSerializer: NSObject {
             } else if let array = params as? [NSNumber], !array.isEmpty {
                 let res = array.map { $0.stringValue }
                 return try JSONSerialization.data(withJSONObject: res, options: [])
+            } else if let array = params as? [String], !array.isEmpty {
+                return try JSONSerialization.data(withJSONObject: array, options: [])
             }
         } catch {
             return nil

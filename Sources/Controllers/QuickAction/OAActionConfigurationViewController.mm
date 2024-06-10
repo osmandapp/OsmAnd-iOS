@@ -763,7 +763,7 @@
 {
     NSString *listKey = [_action getListKey];
     NSString *params = [_action getParams][listKey];
-    return [_action getTitle:@[params]];
+    return params ? [_action getTitle:@[params]] : [_action getName];
 }
 
 #pragma mark - Selectors

@@ -174,6 +174,7 @@ static OAQuickActionType *TYPE;
         }
     }
     [params setObject:names forKey:OAQuickActionSerializer.kSwitchProfileNames];
+    [params setObject:stringKeys forKey:[self getListKey]];
     [params setObject:stringKeys forKey:OAQuickActionSerializer.kSwitchProfileStringKeys];
     [params setObject:iconNames forKey:OAQuickActionSerializer.kSwitchProfileIconNames];
     [params setObject:iconColors forKey:OAQuickActionSerializer.kSwitchProfileIconColors];
@@ -193,7 +194,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    return [self getParams][OAQuickActionSerializer.kSwitchProfileNames];
+    return [self getParams][[self getListKey]]; //todo: migrate
 }
 
 - (OAApplicationMode *) getModeForKey:(NSString *)key

@@ -22,10 +22,10 @@ extension UIApplication {
         connectedScenes.first(where: { $0.session.configuration.name == Constants.defaultConfiguration })
     }
     
-    @objc var carPlaySceneDelegate: CarPlaySceneProtocol? {
+    @objc var carPlaySceneDelegate: CarPlaySceneDelegate? {
         guard let scene = connectedScenes.first(where: { $0.session.configuration.name == Constants.carPlayConfiguration && $0.activationState == .foregroundActive }) else {
             return nil
         }
-        return scene.delegate as? CarPlaySceneProtocol
+        return scene.delegate as? CarPlaySceneDelegate
     }
 }

@@ -1,12 +1,7 @@
 import CarPlay
 
-@objc
-protocol CarPlaySceneProtocol: AnyObject {
-    func updateState()
-}
-
-final class CarPlaySceneDelegate: UIResponder, CarPlaySceneProtocol {
-
+final class CarPlaySceneDelegate: UIResponder {
+    
     private var carPlayMapController: OACarPlayMapViewController?
     private var carPlayDashboardController: OACarPlayDashboardInterfaceController?
     private var windowToAttach: CPWindow?
@@ -133,8 +128,14 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
     }
 }
 
-extension CarPlaySceneDelegate {
-    func updateState() {
+// MARK: - OAWidgetListener
+
+extension CarPlaySceneDelegate: OAWidgetListener {
+    func widgetChanged(_ widget: OABaseWidgetView?) {
         carPlayMapController?.configureSpeedometer()
     }
+    
+    func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) { }
+    
+    func widgetClicked(_ widget: OABaseWidgetView) { }
 }

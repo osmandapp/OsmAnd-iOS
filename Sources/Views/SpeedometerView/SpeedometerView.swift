@@ -73,6 +73,11 @@ final class SpeedometerView: OATextInfoWidget {
         false
     }
     
+    override func refreshLayout() {
+        super.refreshLayout()
+        UIApplication.shared.carPlaySceneDelegate?.widgetChanged(self)
+    }
+    
     @discardableResult
     override func updateInfo() -> Bool {
         guard settings.showSpeedometer.get() else {

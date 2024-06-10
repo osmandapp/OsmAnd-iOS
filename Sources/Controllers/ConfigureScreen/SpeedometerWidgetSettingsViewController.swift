@@ -191,10 +191,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     }
     
     private func updateSpeedometer() {
-        guard let speedometerView else { return }
-        
-        speedometerView.refreshLayout()
-        UIApplication.shared.carPlaySceneDelegate?.updateState()
+        speedometerView?.refreshLayout()
     }
     
     @objc private func onSwitchClick(_ sender: Any) -> Bool {

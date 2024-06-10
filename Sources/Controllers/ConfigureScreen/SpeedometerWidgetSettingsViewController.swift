@@ -193,7 +193,7 @@ final class SpeedometerWidgetSettingsViewController: OABaseNavbarViewController 
     private func updateSpeedometer() {
         guard let speedometerView else { return }
         
-        speedometerView.delegate?.widgetChanged(speedometerView)
+        speedometerView.refreshLayout()
         UIApplication.shared.carPlaySceneDelegate?.updateState()
     }
     

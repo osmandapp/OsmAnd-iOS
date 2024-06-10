@@ -3434,3 +3434,5 @@
 "shared_string_always" = "Uvek";
 "speedometer_description" = "Prikazuje trenutnu brzinu kako je prijavljena putem GPS-a";
 "shared_string_limit" = "Ograničenje";
+"shared_string_instructions" = "Instrukcije";
+"shared_string_analysis" = "Analiza";

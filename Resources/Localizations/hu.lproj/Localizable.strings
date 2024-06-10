@@ -601,7 +601,7 @@
 "shared_string_my_location" = "Saját pozícióm";
 // Shared Strings
 "shared_string_apply" = "Alkalmaz";
-"shared_string_near" = "Közelben";
+"shared_string_near" = "ennek közelében:";
 "shared_string_sound" = "Hang";
 "show_traffic_warnings" = "Forgalmi figyelmeztetések";
 "speak_favorites" = "Közeli kedvencek";
@@ -1079,7 +1079,7 @@
 "rendering_value_translucent_orange_name" = "Átlátszó narancs";
 "routing_attr_prefer_unpaved_description" = "Burkolatlan utak előnyben részesítése.";
 "rendering_attr_smoothness_very_horrible_name" = "Rettenetes";
-"rendering_attr_showCycleRoutes_name" = "Kerékpárutak";
+"rendering_attr_showCycleRoutes_name" = "Kerékpáros útvonalak";
 "rendering_attr_surface_snow_name" = "Hó";
 "routing_attr_short_way_description" = "Optimalizált rövidebb útvonal (energiamegtakarítás)";
 "rendering_value_orange_name" = "Narancs";
@@ -1150,7 +1150,7 @@
 "rendering_attr_piste_type_snow_park_name" = "Hópark";
 "rendering_attr_highway_class_track_grade2_name" = "2. osztály (kavicsos)";
 "rendering_attr_shareTaxiRoutes_name" = "Iránytaxi-útvonalak";
-"rendering_attr_surfaceIntegrity_name" = "Útfelület épsége";
+"rendering_attr_surfaceIntegrity_name" = "Útfelszín épsége";
 "rendering_attr_piste_type_connection_name" = "Kapcsolat";
 "rendering_value_bicycle_name" = "Kerékpár";
 "rendering_attr_smoothness_excellent_name" = "Kitűnő";
@@ -1519,7 +1519,7 @@
 "explore_wikipedia_offline" = "Fedezze fel a Wikipédiát offline módon.";
 "walking_route_osmc_description" = "Útvonalak színezése egyedi helyi színük (ha az OpenStreetMapen meg van adva) és típusuk (helyi, regionális, nemzetközi) szerint.";
 "gpxup_trackable" = "Követhető";
-"srtm_download_list_help_message" = "Az OsmAnd méterben és lábban adja meg a szintvonal magasságát. A mértékegység módosításához újra le kell töltenie a fájlt.";
+"srtm_download_list_help_message" = "Az OsmAnd méterben és lábban adja meg a szintvonalak közötti távolságot. A mértékegység módosításához újra le kell töltenie a fájlt.";
 "shared_string_feet" = "láb";
 "contour_lines_hillshades_slope" = "Szintvonalak, domborzatárnyékolás, lejtésviszonyok";
 "plugin_mapillary_descr" = "Utcaszintű képek. Ön is közreműködhet. A meglévő adatok térképrétegként való megjelenítéséhez kapcsolja be a „Térkép beállítása” menüben az „Utcaszintű képek” lehetőséget.";
@@ -2225,7 +2225,7 @@
 "default_price_currency_format" = "%.2f %@";
 "backup_version_history" = "Verzióelőzmények";
 "depth_contours" = "Mélységvonalak";
-"shared_string_contours" = "Kontúrok";
+"shared_string_contours" = "Szintvonalak";
 "shared_string_added" = "Hozzáadva";
 "change_application_profile" = "Alkalmazásprofil módosítása";
 "checking_progress" = "Ellenőrzés…";
@@ -2239,7 +2239,7 @@
 "shared_string_modified" = "Módosítva";
 "public_transport_ped_route_title" = "Azút gyalogosan körülbelül %@, vagyis lehet, hogy gyorsabb, mint tömegközlekedéssel";
 "shared_string_expires" = "Lejár";
-"srtm_unit_format" = "Szintvonalak egységváltozata";
+"srtm_unit_format" = "Szintvonalak mértékegysége";
 "tts_title" = "TTS";
 "select_wikipedia_article_langs" = "Jelölje ki a térképen megjelenő Wikipédia-szócikkek nyelvét. A szócikk olvasása közben válthat valamennyi elérhető nyelv között.";
 "enough_contributions_descr" = "Gratulálunk, elegendő OpenStreetMap-szerkesztést végzett, így mostantól korlátlanul élvezheti az OsmAnd térképfrissítéseit!";

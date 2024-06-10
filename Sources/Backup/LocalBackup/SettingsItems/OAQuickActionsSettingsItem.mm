@@ -136,7 +136,9 @@
             NSString *id = object[@"id"];
             _buttonState = [[OAQuickActionButtonState alloc] initWithId:id];
             [_buttonState setName:object[@"name"]];
-            [_buttonState setEnabled:[object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
+            [_buttonState setEnabled:[object[@"enabled"] isKindOfClass:NSNumber.class]
+                ? [object[@"enabled"] boolValue]
+                : [object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
         }
         else
         {

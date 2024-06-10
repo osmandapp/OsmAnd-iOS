@@ -374,7 +374,7 @@
     {
         [developmentArr addObject:
          @{
-            @"key" : @"routing_algorithm",
+            @"key" : @"router_algorithm", // previously routing_algorithm
             @"title" : OALocalizedString(@"routing_algorithm"),
             @"icon" : [UIImage templateImageNamed:@"ic_custom_route_points"],
             @"value" : OALocalizedString([_settings.useOldRouting get] ? @"routing_algorithm_a" : @"routing_algorithm_highway_hierarchies"),
@@ -551,7 +551,7 @@
         settingsViewController = [[OARoadSpeedsViewController alloc] initWithAppMode:self.appMode];
     else if ([itemKey isEqualToString:@"angleStraight"])
         settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"routing_algorithm"])
+    else if ([itemKey isEqualToString:@"router_algorithm"]) // routing_algorithm
         settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeRoutingAlgorithm];
     else if ([itemKey isEqualToString:@"auto_zoom"])
         settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeAutoZoom];
@@ -559,7 +559,7 @@
     if (settingsViewController)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"routing_algorithm"] || [itemKey isEqualToString:@"auto_zoom"])
+        if ([itemKey isEqualToString:@"router_algorithm"] || [itemKey isEqualToString:@"auto_zoom"]) // routing_algorithm
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];

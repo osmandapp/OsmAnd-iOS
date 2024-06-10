@@ -89,11 +89,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableDictionary *_instructionsTabData;
     NSMutableDictionary *_analysisTabData;
     
+    EOAOARouteDetailsViewControllerMode _selectedTab;
     NSMutableSet<NSNumber *> *_expandedSections;
     
     NSArray<NSNumber *> *_types;
-    
-    EOAOARouteDetailsViewControllerMode _selectedTab;
     
     BOOL _hasTranslated;
     double _highlightDrawX;
@@ -128,9 +127,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     return cell;
 }
 
-- (OASegmentTableViewCell *) getTabSelectorCell
+- (OASegmentTableViewCell *) getTabSelectorView
 {
-    OASegmentTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell reuseIdentifier]];
+    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
+    OASegmentTableViewCell *cell = (OASegmentTableViewCell *) nib[0];
     UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
     [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
     [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
@@ -348,7 +348,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _expandedSections = [NSMutableSet new];
     _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -357,8 +356,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableDictionary *dataArr = [NSMutableDictionary new];
     NSInteger section = 0;
     
-    UITableViewCell *getTabSelectorCell = [self getTabSelectorCell];
-    [dataArr setObject:@[getTabSelectorCell] forKey:@(section++)];
+    // this first cell with tab selector was added as a view to the tableview header to avoid showing the first tableview separator above it.
+    self.tableView.tableHeaderView = [self getTabSelectorView];
     
     if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions)
     {
@@ -444,8 +443,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     [self setupRouteInfo];
     
+    _selectedTab = EOAOARouteDetailsViewControllerModeInstructions;
+    _expandedSections = [NSMutableSet new];
     [self registerCells];
     [self generateData];
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
@@ -626,19 +628,21 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSArray *sectionData = _data[@(indexPath.section)];
     OARouteInfoCell *cell = sectionData[indexPath.row];
     [cell onDetailsPressed];
-    if ([_expandedSections containsObject:@(indexPath.section)])
-    {
-        [_expandedSections removeObject:@(indexPath.section)];
-        [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else
-    {
-        [_expandedSections addObject:@(indexPath.section)];
-        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    [self.delegate contentHeightChanged:_tableView.contentSize.height];
-    [_tableView reloadData];
+    [_tableView performBatchUpdates:^{
+        if ([_expandedSections containsObject:@(indexPath.section)])
+        {
+            [_expandedSections removeObject:@(indexPath.section)];
+            [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else
+        {
+            [_expandedSections addObject:@(indexPath.section)];
+            [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } completion:^(BOOL finished) {
+        self.tableView.tableHeaderView = [self getTabSelectorView];
+        [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    }];
 }
 
 - (void) detailsButtonPressed:(id)sender
@@ -810,7 +814,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && section > 2)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && section > 1)
     {
         return ((NSArray *)_data[@(section)]).count - ([_expandedSections containsObject:@(section)] ? 0 : 1);
     }
@@ -832,7 +836,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && indexPath.section > 2 && indexPath.row == 0)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && indexPath.section > 1 && indexPath.row == 0)
         [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -54,10 +54,7 @@
         case EOATurnDrawableThemeColorDark:
             return color.dark;
         case EOATurnDrawableThemeColorSystem:
-        {
-            BOOL isSystemThemeDark = OARootViewController.instance.traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark;
-            return isSystemThemeDark ? color.dark : color.light;
-        }
+            return [OARootViewController.instance isDarkMode] ? color.dark : color.light;
     }
 }
 

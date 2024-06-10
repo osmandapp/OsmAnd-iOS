@@ -148,7 +148,7 @@
 {
 	const auto newContext = std::make_shared<GpxRouteApproximation>(_env.ctx.get());
 	newContext->ctx->progress = std::make_shared<RouteCalculationProgress>();
-//	newContext->MINIMUM_POINT_APPROXIMATION = _pointApproximation;
+	newContext->ctx->config->minPointApproximation = _pointApproximation;
 	return newContext;
 }
 

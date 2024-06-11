@@ -12,7 +12,8 @@ typedef NS_ENUM(NSInteger, EOATurnDrawableThemeColor)
 {
     EOATurnDrawableThemeColorMap,
     EOATurnDrawableThemeColorLight,
-    EOATurnDrawableThemeColorDark
+    EOATurnDrawableThemeColorDark,
+    EOATurnDrawableThemeColorSystem
 };
 
 @interface OATurnDrawable : UIView
@@ -24,6 +25,7 @@ typedef NS_ENUM(NSInteger, EOATurnDrawableThemeColor)
 @property (nonatomic) int turnImminent;
 @property (nonatomic) BOOL deviatedFromRoute;
 @property (nonatomic) UIFont *textFont;
+@property (nonatomic) UIColor *textColor;
 @property (nonatomic) UIColor *clr;
 @property (nonatomic) CGPoint centerText;
 

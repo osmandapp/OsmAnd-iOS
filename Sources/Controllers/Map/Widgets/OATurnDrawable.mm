@@ -53,6 +53,8 @@
             return color.light;
         case EOATurnDrawableThemeColorDark:
             return color.dark;
+        case EOATurnDrawableThemeColorSystem:
+            return [OARootViewController.instance isDarkMode] ? color.dark : color.light;
     }
 }
 
@@ -129,7 +131,10 @@
 
     if (_pathForTurnForDrawing)
     {
-        CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
+        if (_themeColor == EOATurnDrawableThemeColorSystem)
+            CGContextSetFillColorWithColor(context, [self getThemeColor:_routeDirectionColor].CGColor);
+        else
+            CGContextSetFillColorWithColor(context, _routeDirectionColor.CGColor);
         [_pathForTurnForDrawing fill];
         [_pathForTurnForDrawing stroke];
     }

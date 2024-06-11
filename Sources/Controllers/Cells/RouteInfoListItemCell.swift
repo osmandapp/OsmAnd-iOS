@@ -20,8 +20,8 @@ final class RouteInfoListItemCell: UITableViewCell {
     @IBOutlet private weak var bottomImageBorderViewWidthConstraint: NSLayoutConstraint!
     @IBOutlet private weak var bottomImageStackView: UIStackView!
     
-    let bottomImageViewDefaultWidth: CGFloat = 30
-    let bottomImageViewInnerHeight: CGFloat = 22
+    let bottomImageViewInnerHeight: CGFloat = 30
+    let leftSeparatorInset: CGFloat = 76
     
     var leftTurnIconDrawable: OATurnDrawable?
     
@@ -29,12 +29,16 @@ final class RouteInfoListItemCell: UITableViewCell {
         leftImageView.image = image
     }
     
-    func setleftTurnIconDrawable(drawable: OATurnDrawable) {
+    func setLeftTurnIconDrawable(drawable: OATurnDrawable) {
         leftTurnIconDrawable = drawable
     }
     
     func setTopLeftLabel(text: String?) {
         topLeftLabel.text = text
+    }
+    
+    func setTopLeftLabel(font: UIFont) {
+        topLeftLabel.font = font
     }
     
     func setTopRightLabel(text: String?) {
@@ -56,16 +60,21 @@ final class RouteInfoListItemCell: UITableViewCell {
         }
     }
     
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        separatorInset = UIEdgeInsets(top: 0, left: leftSeparatorInset + OAUtilities.getLeftMargin(), bottom: 0, right: 0)
+    }
+    
     override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
         super.traitCollectionDidChange(previousTraitCollection)
         if traitCollection.hasDifferentColorAppearance(comparedTo: previousTraitCollection) {
             refreshLeftIcon()
+            bottomImageBorderView.layer.borderColor = UIColor.iconColorDefault.cgColor
         }
     }
     
     private func refreshLeftIcon() {
         guard let leftTurnIconDrawable else { return }
-        leftTurnIconDrawable.clr = (traitCollection.userInterfaceStyle == .dark) ? .white : .black
         leftTurnIconDrawable.setNeedsDisplay()
         let recoloredImage = leftTurnIconDrawable.toUIImage()
         setLeftImageView(image: recoloredImage)

@@ -53,6 +53,32 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     EOAOARouteDetailsViewControllerModeAnalysis
 };
 
+@implementation OACumulativeInfo
+
++ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections
+{
+    OACumulativeInfo *cumulativeInfo = [[OACumulativeInfo alloc] init];
+    if (position >= routeDirections.count)
+        return cumulativeInfo;
+    
+    for (int i = 0; i < position; i++)
+    {
+        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
+        cumulativeInfo.time += [routeDirectionInfo getExpectedTime];
+        cumulativeInfo.distance += routeDirectionInfo.distance;
+    }
+    return cumulativeInfo;
+}
+
++ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model
+{
+    long timeInSeconds = [model getExpectedTime];
+    return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
+}
+
+@end
+
+
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
 
 @end
@@ -63,11 +89,10 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableDictionary *_instructionsTabData;
     NSMutableDictionary *_analysisTabData;
     
+    EOAOARouteDetailsViewControllerMode _selectedTab;
     NSMutableSet<NSNumber *> *_expandedSections;
     
     NSArray<NSNumber *> *_types;
-    
-    EOAOARouteDetailsViewControllerMode _selectedTab;
     
     BOOL _hasTranslated;
     double _highlightDrawX;
@@ -81,8 +106,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)registerCells
 {
+    [self.tableView registerNib:[UINib nibWithNibName:@"SegmentTableHeaderView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"SegmentTableHeaderView"];
     [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell reuseIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[OASegmentTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OASegmentTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
@@ -102,18 +127,18 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     return cell;
 }
 
-- (OASegmentTableViewCell *) getTabSelectorCell
+- (SegmentTableHeaderView *) getTabSelectorView
 {
-    OASegmentTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OASegmentTableViewCell reuseIdentifier]];
+    SegmentTableHeaderView *headerView = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"SegmentTableHeaderView"];
     UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
-    [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
-    [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
-    [cell.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
-    [cell.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
-    [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-    [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-    [cell.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
-    return cell;
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
+    [headerView.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
+    return headerView;
 }
 
 - (void) populateInstructionsTabCells:(NSInteger &)section
@@ -135,10 +160,12 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 - (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
 {
     RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
-    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorMap];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
     const auto turnType = model.turnType;
     [turnDrawable setTurnType:turnType];
-    turnDrawable.textFont = [UIFont scaledSystemFontOfSize:16 weight:UIFontWeightSemibold];
+    turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+    
     CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
                        turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
     turnDrawable.frame = CGRectMake(0, 0, size, size);
@@ -164,11 +191,18 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     NSString *segmentDescription = [model getDescriptionRoutePart];
     [cell setBottomLabelWithText:segmentDescription];
+    
     if (model.distance > 0)
     {
-        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance];
-        NSString *segmentTimeLabelText = [OAOsmAndFormatter getFormattedTimeInterval:[model getExpectedTime] shortFormat:YES];
-        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@",segmentDistanceLabelText, segmentTimeLabelText]];
+        BOOL shouldRoundUp = ![[OAAppSettings sharedManager].preciseDistanceNumbers get];
+        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance roundUp:shouldRoundUp];
+        [cell setTopLeftLabelWithText:segmentDistanceLabelText];
+        [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
+        
+        OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance roundUp:shouldRoundUp];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
+        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
     }
     else
     {
@@ -176,17 +210,13 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         {
             BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
             segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
-            [cell setBottomLabelWithText:segmentDescription];
+            [cell setTopLeftLabelWithText:segmentDescription];
+            [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+            [cell setTopRightLabelWithText:@""];
         }
-        [cell setTopRightLabelWithText:@""];
+        [cell setBottomLabelWithText:@""];
     }
     
-    NSInteger distanceFromStart = 0;
-    for (NSInteger i = 0; i < directionInfoIndex; i++)
-    {
-        distanceFromStart += directionsInfo[i].distance;
-    }
-    [cell setTopLeftLabelWithText:[OAOsmAndFormatter getFormattedDistance:distanceFromStart]];
     return cell;
 }
 
@@ -316,7 +346,6 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _expandedSections = [NSMutableSet new];
     _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -325,8 +354,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSMutableDictionary *dataArr = [NSMutableDictionary new];
     NSInteger section = 0;
     
-    UITableViewCell *getTabSelectorCell = [self getTabSelectorCell];
-    [dataArr setObject:@[getTabSelectorCell] forKey:@(section++)];
+    // this first cell with tab selector was added as a view to the tableview header to avoid showing the first tableview separator above it.
+    self.tableView.tableHeaderView = [self getTabSelectorView];
     
     if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions)
     {
@@ -412,8 +441,11 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     
     [self setupRouteInfo];
     
+    _selectedTab = EOAOARouteDetailsViewControllerModeInstructions;
+    _expandedSections = [NSMutableSet new];
     [self registerCells];
     [self generateData];
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
@@ -594,18 +626,21 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     NSArray *sectionData = _data[@(indexPath.section)];
     OARouteInfoCell *cell = sectionData[indexPath.row];
     [cell onDetailsPressed];
-    if ([_expandedSections containsObject:@(indexPath.section)])
-    {
-        [_expandedSections removeObject:@(indexPath.section)];
-        [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else
-    {
-        [_expandedSections addObject:@(indexPath.section)];
-        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    [_tableView performBatchUpdates:^{
+        if ([_expandedSections containsObject:@(indexPath.section)])
+        {
+            [_expandedSections removeObject:@(indexPath.section)];
+            [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else
+        {
+            [_expandedSections addObject:@(indexPath.section)];
+            [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } completion:^(BOOL finished) {
+        self.tableView.tableHeaderView = [self getTabSelectorView];
+        [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    }];
 }
 
 - (void) detailsButtonPressed:(id)sender
@@ -777,16 +812,23 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section > 1)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && section > 1)
     {
         return ((NSArray *)_data[@(section)]).count - ([_expandedSections containsObject:@(section)] ? 0 : 1);
     }
     return ((NSArray *)_data[@(section)]).count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? 0.001 : 16.0;
+    return 0.001;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions && section == 0)
+        return OALocalizedString(@"step_by_step");
+    return @" ";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -799,7 +841,7 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section > 1 && indexPath.row == 0)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && indexPath.section > 1 && indexPath.row == 0)
         [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

@@ -15,6 +15,7 @@
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"
 #import "OASwitchProfileAction.h"
+#import "OAShowHidePoiAction.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135
@@ -178,41 +179,9 @@
 
         if (quickAction)
         {
-            NSString *paramsString = object[@"params"];
-            NSError *jsonError;
-            NSData* paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
-            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:&jsonError]];
-
-            if ([quickAction isKindOfClass:OASwitchProfileAction.class])
-            {
-                OASwitchProfileAction *switchProfileAction = (OASwitchProfileAction *) quickAction;
-                id stringKeys = params[OAQuickActionSerializer.kSwitchProfileStringKeys];
-                if (!stringKeys || params[[switchProfileAction getListKey]])
-                {
-                    stringKeys = params[[switchProfileAction getListKey]];
-                    [params removeObjectForKey:[switchProfileAction getListKey]];
-                }
-                if (stringKeys)
-                    params[OAQuickActionSerializer.kSwitchProfileStringKeys] = [NSJSONSerialization JSONObjectWithData:[stringKeys dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
-
-                [OAQuickActionSerializer readSwitchProfileAction:OAQuickActionSerializer.kSwitchProfileNames params:params];
-                [OAQuickActionSerializer readSwitchProfileAction:OAQuickActionSerializer.kSwitchProfileIconNames params:params];
-                [OAQuickActionSerializer readSwitchProfileAction:OAQuickActionSerializer.kSwitchProfileIconColors params:params];
-            }
-            else
-            {
-                NSString *values = params[quickAction.getListKey];
-                if (values)
-                {
-                    if ([quickAction isKindOfClass:OAMapStyleAction.class])
-                        params[[((OAMapStyleAction *) quickAction) getListKey]] = [values componentsSeparatedByString:@","];
-                    else if ([quickAction isKindOfClass:OASwitchableAction.class])
-                        params[[((OASwitchableAction *) quickAction) getListKey]] = [OAQuickActionSerializer parseParamsFromString:values];
-                }
-            }
+            [self.class parseParams:object[@"params"] quickAction:quickAction];
             if (name.length > 0)
                 [quickAction setName:name];
-            [quickAction setParams:params];
             [quickActions addObject:quickAction];
         }
         else
@@ -222,6 +191,30 @@
     }
     [_mapButtonsHelper updateQuickActions:_buttonState actions:quickActions];
     [_mapButtonsHelper updateActiveActions];
+}
+
++ (void)parseParams:(NSString *)paramsString quickAction:(OAQuickAction *)quickAction
+{
+    NSData *paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+    id json = [NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:json];
+
+    if ([quickAction isKindOfClass:OASwitchableAction.class])
+        [self parseParamsWithKey:[quickAction getListKey] params:params toString:NO];
+    else if ([quickAction isKindOfClass:OAShowHidePoiAction.class])
+        [self parseParamsWithKey:kFilters params:params toString:YES];
+
+    [quickAction setParams:params];
+}
+
++ (void)parseParamsWithKey:(NSString *)key params:(NSMutableDictionary *)params toString:(BOOL)toString
+{
+    NSString *values = params[key];
+    if (values)
+    {
+        NSArray *value = [OAQuickActionSerializer parseParamsFromString:values];
+        params[key] = toString && value.count > 0 && [value.firstObject isKindOfClass:NSString.class] ? [value componentsJoinedByString:@","] : value;
+    }
 }
 
 - (void)writeToJson:(id)json

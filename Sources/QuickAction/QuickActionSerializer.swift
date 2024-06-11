@@ -44,13 +44,13 @@ class QuickActionSerializer: NSObject {
         for quickAction in quickActions {
             objs.append(try getJsonFromObj(quickAction))
         }
-        return try JSONSerialization.data(withJSONObject: objs, options: [])
+        return try JSONSerialization.data(withJSONObject: objs)
     }
 
     private func getJsonFromObj(_ quickAction: OAQuickAction) throws -> [String: Any] {
         var obj: [String: Any] = [:]
         obj["actionType"] = quickAction.actionType?.stringId
-        obj["id"] = quickAction.id
+        obj["id"] = NSNumber(value: quickAction.id)
         obj["name"] = quickAction.getRawName()
         
         let params = Self.adjustParamsForExport(quickAction.getParams(), action: quickAction)
@@ -72,11 +72,11 @@ class QuickActionSerializer: NSObject {
             if let name = json["name"] as? String {
                 qa.setName(name)
             }
-            if let id = json["id"] as? Int {
-                qa.setId(id)
+            if let id = json["id"] as? NSNumber {
+                qa.setId(id.intValue)
             }
-            if let params = json["params"] as? [String: String], let paramsData = try? JSONSerialization.data(withJSONObject: params, options: []) {
-                qa.setParams(try JSONDecoder().decode([String: String].self, from: paramsData))
+            if let params = json["params"] as? String {
+                OAQuickActionsSettingsItem.parseParams(params, quickAction: qa)
             }
             return qa
         }
@@ -88,10 +88,9 @@ class QuickActionSerializer: NSObject {
              var paramsCopy = params
              let className = String(describing: type(of: action))
              let key: String = switchableAction.getListKey()
-             if className == "OAMapStyleAction" {
+             if className == String(describing: OAMapStyleAction.self) {
                  if let values = params[key] as? [String], !values.isEmpty {
-                     let res = values.joined(separator: ",")
-                     paramsCopy[key] = res
+                     paramsCopy[key] = values.joined(separator: ",")
                  }
                  return paramsCopy
              }
@@ -103,31 +102,14 @@ class QuickActionSerializer: NSObject {
                  }
              }
 
-            if className == "OASwitchProfileAction" {
-                var values = params[key] as? [Any]
-                if values == nil || paramsCopy[Self.kSwitchProfileStringKeys] != nil {
-                    values = paramsCopy[Self.kSwitchProfileStringKeys] as? [Any]
-                    paramsCopy.removeValue(forKey: Self.kSwitchProfileStringKeys)
-                    if let data = paramsToExportArray(values) {
-                        if let stringData = String(data: data, encoding: .utf8) {
-                            paramsCopy[key] = stringData
-                        }
-                    }
-                }
-                writeSwitchProfileAction(Self.kSwitchProfileNames, params: params, paramsCopy: &paramsCopy)
-                writeSwitchProfileAction(Self.kSwitchProfileIconNames, params: params, paramsCopy: &paramsCopy)
-                writeSwitchProfileAction(Self.kSwitchProfileIconColors, params: params, paramsCopy: &paramsCopy)
-            }
-
             return paramsCopy
         }
         return params
     }
 
-    static func parseParamsFromString(_ params: String) -> [[String]] {
+    static func parseParamsFromString(_ params: String) -> [Any] {
         if let jsonData = params.data(using: .utf8) {
-            do {
-                let jsonArr = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments)
+            if let jsonArr = try? JSONSerialization.jsonObject(with: jsonData, options: .allowFragments) {
                 if let jsonDictArr = jsonArr as? [[String: Any]] {
                     var res = [[String]]()
                     for pair in jsonDictArr {
@@ -136,13 +118,16 @@ class QuickActionSerializer: NSObject {
                         }
                     }
                     return res
+                } else if let array = jsonArr as? [String] {
+                    return array
+                } else if let str = jsonArr as? String {
+                    return str.components(separatedBy: ",")
+                } else if let arrArr = jsonArr as? [[String]] {
+                    return arrArr
                 }
-                return jsonArr as? [[String]] ?? []
-            } catch {
-                return []
             }
         }
-        return []
+        return params.components(separatedBy: ",")
     }
 
     private static func paramsToExportArray(_ params: [Any]?) -> Data? {
@@ -163,53 +148,5 @@ class QuickActionSerializer: NSObject {
             return nil
         }
         return nil
-    }
-
-    static func readSwitchProfileAction(_ key: String, params: NSMutableDictionary) {
-        if var values = params[key] as? String {
-            if let jsonData = values.data(using: .utf8) {
-                do {
-                    let json = try JSONSerialization.jsonObject(with: jsonData, options: .allowFragments)
-                    if let stringArray = json as? [String] {
-                        values = stringArray.joined(separator: ",")
-                    }
-                } catch {
-                    return
-                }
-            }
-            params[key] = values
-        } else {
-            var values = ""
-            if let stringKeys = params[Self.kSwitchProfileStringKeys] as? [String], !stringKeys.isEmpty {
-                for (index, stringKey) in stringKeys.enumerated() {
-                    if let mode = OAApplicationMode.value(ofStringKey: stringKey, def: OAApplicationMode.default()) {
-                        switch key {
-                        case Self.kSwitchProfileNames:
-                            values += mode.name
-                        case Self.kSwitchProfileIconNames:
-                            values += mode.getIconName()
-                        case Self.kSwitchProfileIconColors:
-                            values += "\(mode.getIconColor())"
-                        default:
-                            break
-                        }
-                        if index < stringKeys.count - 1 {
-                            values += ","
-                        }
-                    }
-                }
-            }
-            params[key] = values
-        }
-    }
-
-    private static func writeSwitchProfileAction(_ key: String, params: [AnyHashable: Any], paramsCopy: inout [AnyHashable: Any]) {
-        if let values = params[key] as? [Any], !values.isEmpty {
-            if let data = paramsToExportArray(values) {
-                if let stringData = String(data: data, encoding: .utf8) {
-                    paramsCopy[key] = stringData
-                }
-            }
-        }
     }
 }

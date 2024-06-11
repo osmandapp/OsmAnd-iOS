@@ -18,8 +18,6 @@
 #import "OASimpleTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static NSString * const kFilters = @"filters";
-
 static OAQuickActionType *TYPE;
 
 @implementation OAShowHidePoiAction
@@ -116,7 +114,7 @@ static OAQuickActionType *TYPE;
     
 }
 
--(NSArray<OAPOIUIFilter *> *) loadPoiFilters
+- (NSArray<OAPOIUIFilter *> *)loadPoiFilters
 {
     NSArray<NSString *> *filters = [NSArray new];
     

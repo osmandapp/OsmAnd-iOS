@@ -215,7 +215,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    return self.getParams[self.getListKey];
+    return [self getParams][[self getListKey]];
 }
 
 @end

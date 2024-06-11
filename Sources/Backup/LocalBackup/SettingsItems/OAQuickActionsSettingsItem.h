@@ -6,14 +6,15 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OACollectionSettingsItem.h"
+#import "OASettingsItem.h"
 
-@class OAQuickActionButtonState;
+@class OAQuickActionButtonState, OAQuickAction;
 
 @interface OAQuickActionsSettingsItem : OASettingsItem
 
 - (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(OAQuickActionButtonState *)buttonState;
 
 - (OAQuickActionButtonState *)getButtonState;
++ (void)parseParams:(NSString * _Nonnull)paramsString quickAction:(OAQuickAction * _Nonnull)quickAction;
 
 @end

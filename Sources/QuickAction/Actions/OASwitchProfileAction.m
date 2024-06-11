@@ -48,7 +48,7 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    NSArray<NSString *> *profiles = self.getParams[OAQuickActionSerializer.kSwitchProfileStringKeys];
+    NSArray<NSString *> *profiles = self.getParams[[self getListKey]];
     
     if (profiles.count == 0)
         return;
@@ -114,37 +114,41 @@ static OAQuickActionType *TYPE;
 - (OrderedDictionary *)getUIModel
 {
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
-    [data setObject:@[@{
-                          @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : kDialog,
-                          @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[kDialog] boolValue]),
-                          },
-                      @{
-                          @"footer" : OALocalizedString(@"quick_action_dialog_descr")
-                          }] forKey:OALocalizedString(@"quick_action_dialog")];
+    [data setObject:@[
+        @{
+            @"type" : [OASwitchTableViewCell getCellIdentifier],
+            @"key" : kDialog,
+            @"title" : OALocalizedString(@"quick_action_interim_dialog"),
+            @"value" : @([[self getParams][kDialog] boolValue]),
+        },
+        @{
+            @"footer" : OALocalizedString(@"quick_action_dialog_descr")
+        }] forKey:OALocalizedString(@"quick_action_dialog")
+    ];
     
-    NSArray<NSString *> *names = self.getParams[OAQuickActionSerializer.kSwitchProfileNames];
-    NSArray<NSString *> *stringKeys = self.getParams[OAQuickActionSerializer.kSwitchProfileStringKeys];
-    NSArray<NSString *> *iconNames = self.getParams[OAQuickActionSerializer.kSwitchProfileIconNames];
-    NSArray<NSString *> *iconColors = self.getParams[OAQuickActionSerializer.kSwitchProfileIconColors];
-    NSMutableArray *arr = [NSMutableArray new];
-
-    for (int i = 0; i < names.count; i++)
+    NSArray<NSString *> *stringKeys = [self getParams][[self getListKey]];
+    NSMutableArray<NSDictionary *> *arr = [NSMutableArray new];
+    
+    for (int i = 0; i < stringKeys.count; i++)
     {
-        [arr addObject:@{
-                         @"type" : [OATitleDescrDraggableCell getCellIdentifier],
-                         @"title" : names[i] ? names[i] : @"",
-                         @"stringKey" : stringKeys[i] ? stringKeys[i] : @"",
-                         @"img" : iconNames[i] ? iconNames[i] : @"",
-                         @"iconColor" : iconColors[i] ? iconColors[i] : @(color_chart_orange)
-                         }];
+        OAApplicationMode *mode = [self getModeForKey:stringKeys[i]];
+        if (mode)
+        {
+            [arr addObject:@{
+                @"type" : [OATitleDescrDraggableCell getCellIdentifier],
+                @"title" : [mode toHumanString],
+                @"stringKey" : stringKeys[i],
+                @"img" : [mode getIconName],
+                @"iconColor" : @([mode getIconColor])
+            }];
+        }
     }
     [arr addObject:@{
-                     @"title" : OALocalizedString(@"shared_string_add_profile"),
-                     @"type" : [OAButtonTableViewCell getCellIdentifier],
-                     @"target" : @"addProfile"
-                     }];
+        @"title" : OALocalizedString(@"shared_string_add_profile"),
+        @"type" : [OAButtonTableViewCell getCellIdentifier],
+        @"target" : @"addProfile"
+    }];
+
     [data setObject:[NSArray arrayWithArray:arr] forKey:OALocalizedString(@"application_profiles")];
     return data;
 }
@@ -152,34 +156,20 @@ static OAQuickActionType *TYPE;
 - (BOOL)fillParams:(NSDictionary *)model
 {
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:self.getParams];
-    NSMutableArray *names = [NSMutableArray new];
     NSMutableArray *stringKeys = [NSMutableArray new];
-    NSMutableArray *iconNames = [NSMutableArray new];
-    NSMutableArray *iconColors = [NSMutableArray new];
     for (NSArray *arr in model.allValues)
     {
         for (NSDictionary *item in arr)
         {
             if ([item[@"key"] isEqualToString:kDialog])
-            {
                 [params setValue:item[@"value"] forKey:kDialog];
-            }
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
-            {
-                [names addObject:item[@"title"]];
                 [stringKeys addObject:item[@"stringKey"]];
-                [iconNames addObject:item[@"img"]];
-                [iconColors addObject:item[@"iconColor"]];
-            }
         }
     }
-    [params setObject:names forKey:OAQuickActionSerializer.kSwitchProfileNames];
     [params setObject:stringKeys forKey:[self getListKey]];
-    [params setObject:stringKeys forKey:OAQuickActionSerializer.kSwitchProfileStringKeys];
-    [params setObject:iconNames forKey:OAQuickActionSerializer.kSwitchProfileIconNames];
-    [params setObject:iconColors forKey:OAQuickActionSerializer.kSwitchProfileIconColors];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
-    return names.count > 0;
+    return stringKeys.count > 0;
 }
 
 - (NSString *)getActionText

@@ -193,6 +193,7 @@
 // Quick actions
 #import "OAQuickAction.h"
 #import "OASwitchableAction.h"
+#import "OAQuickActionsSettingsItem.h"
 #import "OAShowHideTransportLinesAction.h"
 #import "OAShowHideLocalOSMChanges.h"
 #import "OANavDirectionsFromAction.h"
@@ -201,3 +202,4 @@
 #import "OAShowHideWindAction.h"
 #import "OAShowHideCloudAction.h"
 #import "OAShowHidePrecipitationAction.h"
+#import "OAMapStyleAction.h"

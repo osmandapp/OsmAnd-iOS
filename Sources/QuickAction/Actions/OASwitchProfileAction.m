@@ -184,7 +184,7 @@ static OAQuickActionType *TYPE;
 
 - (NSArray *)loadListFromParams
 {
-    return [self getParams][[self getListKey]]; //todo: migrate
+    return [self getParams][[self getListKey]];
 }
 
 - (OAApplicationMode *) getModeForKey:(NSString *)key

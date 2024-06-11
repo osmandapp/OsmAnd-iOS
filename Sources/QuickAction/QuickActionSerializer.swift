@@ -12,11 +12,6 @@ import Foundation
 @objcMembers
 class QuickActionSerializer: NSObject {
 
-    static let kSwitchProfileStringKeys = "stringKeys"
-    static let kSwitchProfileNames = "names"
-    static let kSwitchProfileIconNames = "iconsNames"
-    static let kSwitchProfileIconColors = "iconsColors"
-
     private var quickActionTypesStr: [String: QuickActionType] = [:]
     private var quickActionTypesInt: [Int: QuickActionType] = [:]
 

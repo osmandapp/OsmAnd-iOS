@@ -263,6 +263,16 @@ final class MigrationManager: NSObject {
                         }
                         mutableArr[i] = data
                     }
+                } else if stringId == "profile.change" {
+                    if let params = data["params"] as? String, let paramsData = params.data(using: .utf8), let json = try? JSONSerialization.jsonObject(with: paramsData) as? [AnyHashable: Any] {
+                        var newJson = json
+                        newJson.removeValue(forKey: "iconsColors")
+                        newJson.removeValue(forKey: "iconsNames")
+                        newJson.removeValue(forKey: "names")
+                        newJson["profiles"] = newJson.removeValue(forKey: "stringKeys")
+                        data["params"] = newJson
+                        mutableArr[i] = data
+                    }
                 }
             }
             if !dictionariesAreEqual(arr, mutableArr) {

@@ -132,12 +132,12 @@ class QuickActionSerializer: NSObject {
                 for pair in array where pair.count == 2 {
                     res.append(["first": pair[0], "second": pair[1]])
                 }
-                return try JSONSerialization.data(withJSONObject: res, options: [])
+                return try JSONSerialization.data(withJSONObject: res)
             } else if let array = params as? [NSNumber], !array.isEmpty {
                 let res = array.map { $0.stringValue }
-                return try JSONSerialization.data(withJSONObject: res, options: [])
+                return try JSONSerialization.data(withJSONObject: res)
             } else if let array = params as? [String], !array.isEmpty {
-                return try JSONSerialization.data(withJSONObject: array, options: [])
+                return try JSONSerialization.data(withJSONObject: array)
             }
         } catch {
             return nil

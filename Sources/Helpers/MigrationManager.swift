@@ -287,9 +287,9 @@ final class MigrationManager: NSObject {
                 }
             }
             if !dictionariesAreEqual(arr, mutableArr) {
-                if let jsonData = try? JSONSerialization.data(withJSONObject: mutableArr, options: .prettyPrinted) {
-                    if let jsonString = String(data: jsonData, encoding: .utf8) {
-                        defaults.set(object: jsonString, forKey: prefKey)
+                if let newData = try? JSONSerialization.data(withJSONObject: mutableArr) {
+                    if let newValue = String(data: newData, encoding: .utf8) {
+                        defaults.set(newValue, forKey: prefKey)
                     }
                 }
             }

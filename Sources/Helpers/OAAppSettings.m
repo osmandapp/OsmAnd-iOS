@@ -4349,7 +4349,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_mapillaryFilterPano forKey:@"mapillary_filter_pano"];
 
         _isQuickActionTutorialShown = [[[OACommonBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
-        _quickActionButtons = [[[[OACommonStringList withKey:quickActionButtonsKey defValue:@[]] makeGlobal] makeShared] storeLastModifiedTime];
+        _quickActionButtons = [[[[OACommonStringList withKey:quickActionButtonsKey defValue:@[OAQuickActionButtonState.defaultButtonId]] makeGlobal] makeShared] storeLastModifiedTime];
 
         [_globalPreferences setObject:_isQuickActionTutorialShown forKey:@"quick_action_tutorial"];
         [_globalPreferences setObject:_quickActionButtons forKey:quickActionButtonsKey];

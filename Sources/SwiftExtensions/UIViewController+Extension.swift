@@ -65,6 +65,10 @@ extension UIViewController {
     }
 }
 
+extension UIViewController {
+    @objc var isDarkMode: Bool { traitCollection.userInterfaceStyle == .dark }
+}
+
 extension UINavigationItem {
     @objc (setRightBarButtonItemsisEnabled:tintColor:)
     func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {

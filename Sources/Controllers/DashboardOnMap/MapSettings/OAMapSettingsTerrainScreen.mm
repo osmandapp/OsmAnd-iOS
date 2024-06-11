@@ -683,10 +683,10 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.key isEqualToString:@"relief3D"])
     {
         [_plugin.enable3DMaps set:isOn];
-        [[_app updateGpxTracksOnMapObservable] notifyEvent];
     }
 
     [self updateAvailableMaps];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void)showChoosePlanScreen

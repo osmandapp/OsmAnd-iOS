@@ -880,7 +880,7 @@ colorizationScheme:(int)colorizationScheme
                             splitElevation = [self processSensorData:pt forType:gpx.visualization3dByType];
                             break;
                         case EOAGPX3DLineVisualizationByTypeFixedHeight:
-                            splitElevation =  [self is3DMapsEnabled] ? pt.elevation + gpx.elevationMeters : gpx.elevationMeters;
+                            splitElevation = [self is3DMapsEnabled] ? pt.elevation + gpx.elevationMeters : gpx.elevationMeters;
                             break;
                         default:
                             splitElevation = NAN;

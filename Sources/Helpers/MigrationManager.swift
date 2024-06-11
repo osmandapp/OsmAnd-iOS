@@ -312,8 +312,8 @@ final class MigrationManager: NSObject {
            let newStatePref = OACommonBoolean.withKey(QuickActionButtonState.defaultButtonId + "_state", defValue: false).makeProfile() {
             for appMode in OAApplicationMode.allPossibleValues() {
                 newStatePref.set(oldStatePref.get(appMode), mode: appMode)
+                settings?.quickActionButtons.add(QuickActionButtonState.defaultButtonId, appMode: appMode)
             }
-            settings?.quickActionButtons.addUnique(QuickActionButtonState.defaultButtonId)
         }
 
         if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty,

@@ -235,7 +235,7 @@ final class MigrationManager: NSObject {
     }
 
     private func changeQuickActionIdsMigration1() {
-        let prefKey = "quick_action_list"
+        let prefKey = "quickActionsList"
         if let pref = defaults.string(forKey: prefKey), let jsonData = pref.data(using: .utf8),
            let arr = try? JSONSerialization.jsonObject(with: jsonData, options: []) as? [[String: Any]] {
             let changeQuickActionIntStringIds = [

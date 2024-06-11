@@ -316,7 +316,7 @@
 "shared_string_not_selected" = "Nicht ausgewählt";
 "shared_string_language" = "Sprache";
 "you_searching" = "Sie suchen";
-"from_location" = "abwesend";
+"from_location" = "entfernt";
 "show_alt_in_drive" = "Höhe im Fahrmodus anzeigen";
 "shared_string_get" = "Erwerben";
 "srtm_plugin_disabled" = "Topographie deaktiviert";
@@ -775,7 +775,7 @@
 "shared_string_close" = "Schließen";
 "shared_string_actions" = "Aktionen";
 "context_menu_item_directions_from" = "Navigiere von";
-"search_nearby" = "Suche um Aufenthaltsort";
+"search_nearby" = "In der Nähe suchen";
 "map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
 "use_osm_live_routing" = "OsmAnd-Live-Navigation";

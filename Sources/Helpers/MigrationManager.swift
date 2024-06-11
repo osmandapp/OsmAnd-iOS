@@ -248,12 +248,23 @@ final class MigrationManager: NSObject {
                 Pair(39, "weather.cloud.showhide"): OAShowHideCloudAction.type(),
                 Pair(40, "weather.precipitation.showhide"): OAShowHidePrecipitationAction.type()
             ]
+            let excludedIds = [
+                Pair(4, "favorites.showhide"),
+                Pair(31, "transport.showhide"),
+                Pair(32, "profile.change"),
+                Pair(39, "temperature.layer.showhide"),
+                Pair(40, "precipitation.layer.showhide")
+            ]
             var mutableArr = arr
             for i in 0..<mutableArr.count {
                 var data = mutableArr[i]
                 let id = data["type"] as? Int
                 let stringId = data["actionType"] as? String
-                if let index = changeQuickActionIntStringIds.firstIndex(where: { (id == -1 && $0.value?.stringId == stringId) || $0.key.first == id || $0.key.second == stringId }) {
+                if let index = changeQuickActionIntStringIds.firstIndex(where: {
+                    (id == -1 && $0.value?.stringId == stringId)
+                    || (($0.key.first == id || $0.key.second == stringId)
+                        && !excludedIds.contains(where: { $0.first == id && $0.second == stringId }))
+                }) {
                     if let quickActionType = changeQuickActionIntStringIds[index].value {
                         data["type"] = quickActionType.id
                         data["actionType"] = quickActionType.stringId
@@ -264,13 +275,13 @@ final class MigrationManager: NSObject {
                         mutableArr[i] = data
                     }
                 } else if stringId == "profile.change" {
-                    if let params = data["params"] as? String, let paramsData = params.data(using: .utf8), let json = try? JSONSerialization.jsonObject(with: paramsData) as? [AnyHashable: Any] {
-                        var newJson = json
-                        newJson.removeValue(forKey: "iconsColors")
-                        newJson.removeValue(forKey: "iconsNames")
-                        newJson.removeValue(forKey: "names")
-                        newJson["profiles"] = newJson.removeValue(forKey: "stringKeys")
-                        data["params"] = newJson
+                    if let params = data["params"] as? [AnyHashable: Any] {
+                        var newParams = params
+                        newParams.removeValue(forKey: "iconsColors")
+                        newParams.removeValue(forKey: "iconsNames")
+                        newParams.removeValue(forKey: "names")
+                        newParams["profiles"] = newParams.removeValue(forKey: "stringKeys")
+                        data["params"] = newParams
                         mutableArr[i] = data
                     }
                 }

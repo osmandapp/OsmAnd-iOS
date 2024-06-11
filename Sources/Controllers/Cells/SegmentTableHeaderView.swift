@@ -9,7 +9,7 @@
 import Foundation
 
 final class SegmentTableHeaderView: UITableViewHeaderFooterView {
-    @IBOutlet weak private var segmentControl: UISegmentedControl!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
     @IBOutlet weak private var separatorViewHeight: NSLayoutConstraint!
     
     override func layoutSubviews() {

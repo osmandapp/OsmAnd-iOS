@@ -294,7 +294,6 @@ final class MigrationManager: NSObject {
                 }
             }
         }
-        OAMapButtonsHelper.sharedInstance().updateActiveActions()
     }
 
     private func dictionariesAreEqual(_ leftArr: [[String: Any]], _ rightArr: [[String: Any]]) -> Bool {
@@ -317,7 +316,7 @@ final class MigrationManager: NSObject {
             settings?.quickActionButtons.addUnique(QuickActionButtonState.defaultButtonId)
         }
 
-        if let value = defaults.string(forKey: "quick_action_list"), !value.isEmpty,
+        if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty,
            let actionsPref = OACommonString.withKey(QuickActionButtonState.defaultButtonId + "_list", defValue: "").makeProfile() {
             for appMode in OAApplicationMode.allPossibleValues() {
                 actionsPref.set(value, mode: appMode)

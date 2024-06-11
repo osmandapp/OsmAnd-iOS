@@ -502,6 +502,8 @@
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
+		32FF4C292C183B1D00246B36 /* SegmentTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */; };
+		32FF4C2B2C18425900246B36 /* SegmentTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */; };
 		333168C02507804400266047 /* ic_custom_logo_wikidata@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */; };
@@ -3953,6 +3955,8 @@
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
+		32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTableHeaderView.xib; sourceTree = "<group>"; };
+		32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTableHeaderView.swift; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
 		333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikidata@3x.png"; path = "Resources/Icons/ic_custom_logo_wikidata@3x.png"; sourceTree = "<group>"; };
@@ -11740,6 +11744,7 @@
 				DA5A7CD726C563A200F274C7 /* OASegmentSliderTableViewCell.m */,
 				DA5A7CEC26C563A200F274C7 /* OASegmentTableViewCell.h */,
 				DA5A7C5E26C563A200F274C7 /* OASegmentTableViewCell.m */,
+				32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */,
 				B0D61037ED3E628F3BB6C1AA /* OASelectionCollapsableCell.h */,
 				B0D612B2FB498FC3CC394339 /* OASelectionCollapsableCell.mm */,
 				DA5A7C6F26C563A200F274C7 /* OAShapesCollectionViewCell.h */,
@@ -11902,6 +11907,7 @@
 				DA5A7C1A26C563A200F274C7 /* OASegmentedControlCell.xib */,
 				DA5A7C2226C563A200F274C7 /* OASegmentSliderTableViewCell.xib */,
 				DA5A7BC326C563A100F274C7 /* OASegmentTableViewCell.xib */,
+				32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */,
 				0AB314F4271F0C11007C34A3 /* OASelectionCollapsableCell.xib */,
 				DA5A7C3026C563A200F274C7 /* OAShapesCollectionViewCell.xib */,
 				DA5A7BC726C563A100F274C7 /* OAShapesTableViewCell.xib */,
@@ -16041,6 +16047,7 @@
 				DA134166243DC5A80039D214 /* map_action_openstreetmap_logo@3x.png in Resources */,
 				DA134188243DC5A80039D214 /* ic_action_campervan@2x.png in Resources */,
 				0CEF2C1824B717CC00BAAC4B /* ic_action_enduro_motorcycle@3x.png in Resources */,
+				32FF4C292C183B1D00246B36 /* SegmentTableHeaderView.xib in Resources */,
 				468AADE528C77A6200BEC402 /* ic_custom_download_map_unavailable@2x.png in Resources */,
 				3296B47C27F8790800108AF7 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,
 				845E06201B5956E800DFC2A7 /* ic_destination_pin_5_small@2x.png in Resources */,
@@ -17231,6 +17238,7 @@
 				DA5A832F26C563A800F274C7 /* OATitleSliderRoundCell.m in Sources */,
 				DA5A823026C563A700F274C7 /* OAImportDuplicatesViewController.mm in Sources */,
 				FA359EF12ADFD5310001C11D /* DeviceHelper.swift in Sources */,
+				32FF4C2B2C18425900246B36 /* SegmentTableHeaderView.swift in Sources */,
 				DA5A812B26C563A700F274C7 /* OAMapMarker.mm in Sources */,
 				FAA650582ADD42C50020DCEA /* GattAttributes.swift in Sources */,
 				DA5A855C26C563A900F274C7 /* OARoutingHelper.mm in Sources */,

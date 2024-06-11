@@ -106,8 +106,8 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
 
 - (void)registerCells
 {
+    [self.tableView registerNib:[UINib nibWithNibName:@"SegmentTableHeaderView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"SegmentTableHeaderView"];
     [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell reuseIdentifier]];
-    [self.tableView registerNib:[UINib nibWithNibName:[OASegmentTableViewCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OASegmentTableViewCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell reuseIdentifier]];
     [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
@@ -127,20 +127,18 @@ typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
     return cell;
 }
 
-- (OASegmentTableViewCell *) getTabSelectorView
+- (SegmentTableHeaderView *) getTabSelectorView
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASegmentTableViewCell getCellIdentifier] owner:self options:nil];
-    OASegmentTableViewCell *cell = (OASegmentTableViewCell *) nib[0];
+    SegmentTableHeaderView *headerView = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"SegmentTableHeaderView"];
     UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
-    [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
-    [cell.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
-    [cell.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
-    [cell.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
-    [cell.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
-    [cell.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
-    [cell.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
-    cell.hideTopSectionSeparator = YES;
-    return cell;
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
+    [headerView.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
+    return headerView;
 }
 
 - (void) populateInstructionsTabCells:(NSInteger &)section

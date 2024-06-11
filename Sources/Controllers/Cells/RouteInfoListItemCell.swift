@@ -29,7 +29,7 @@ final class RouteInfoListItemCell: UITableViewCell {
         leftImageView.image = image
     }
     
-    func setleftTurnIconDrawable(drawable: OATurnDrawable) {
+    func setLeftTurnIconDrawable(drawable: OATurnDrawable) {
         leftTurnIconDrawable = drawable
     }
     

@@ -358,41 +358,6 @@ final class MigrationManager: NSObject {
         }
     }
 
-//    private void migrateProfileQuickActionButtons() {
-//        OsmandSettings settings = app.getSettings();
-//        MapButtonsHelper buttonsHelper = app.getMapButtonsHelper();
-//        Map<String, QuickActionButtonState> globalButtons = new LinkedHashMap<>();
-//
-//        for (ApplicationMode appMode : ApplicationMode.allPossibleValues()) {
-//            SharedPreferences preferences = (SharedPreferences) settings.getProfilePreferences(appMode);
-//            
-//            String ids = preferences.getString("quick_action_buttons", DEFAULT_BUTTON_ID + ";");
-//            List<String> actionsKeys = ListStringPreference.getStringsList(ids, ";");
-//            if (!Algorithms.isEmpty(actionsKeys)) {
-//                Set<String> uniqueKeys = new LinkedHashSet<>(actionsKeys);
-//                for (String key : uniqueKeys) {
-//                    if (!Algorithms.isEmpty(key)) {
-//                        String name = preferences.getString(key + "_name", "");
-//                        if (!globalButtons.containsKey(name)) {
-//                            QuickActionButtonState oldState = new QuickActionButtonState(app, key);
-//                            QuickActionButtonState newState = buttonsHelper.createNewButtonState();
-//                            
-//                            newState.getNamePref().set(name);
-//                            newState.getQuickActionsPref().set(preferences.getString(key + "_list", null));
-//                            copyPreferenceForAllModes(oldState.getStatePref(), newState.getStatePref());
-//                            copyFabMarginPreferenceForAllModes(oldState.getFabMarginPref(), newState.getFabMarginPref());
-//                            
-//                            globalButtons.put(name, newState);
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//        if (!globalButtons.isEmpty()) {
-//            buttonsHelper.setQuickActionButtonStates(globalButtons.values());
-//        }
-//    }
-
     func changeJsonMigrationToV2(_ json: [String: String]) -> [String: String] {
 
         // change keys inside old json import file after "Migration 1"

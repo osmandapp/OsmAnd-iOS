@@ -11035,9 +11035,9 @@
 				DA5A79D726C563A000F274C7 /* Actions */,
 				DA5A7A1F26C563A000F274C7 /* OAMapButtonsHelper.h */,
 				DA5A79D526C563A000F274C7 /* OAMapButtonsHelper.m */,
-				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
 				460C1E6F2BFC9B490090D67B /* QuickActionIds.swift */,
 				464BF4A22C04D348000D6908 /* QuickActionSerializer.swift */,
+				466A017F2BFBA9B7008CC50E /* QuickActionType.swift */,
 			);
 			path = QuickAction;
 			sourceTree = "<group>";
@@ -11091,6 +11091,8 @@
 				DA5A7A0F26C563A000F274C7 /* OAParkingAction.m */,
 				DA5A79E026C563A000F274C7 /* OAQuickAction.h */,
 				DA5A79FB26C563A000F274C7 /* OAQuickAction.m */,
+				CA4ED5BDD9AF265EDFF9E6C8 /* OAShowHideAirPressureAction.h */,
+				CA4ED01DD17D02CD759BBC7C /* OAShowHideAirPressureAction.m */,
 				CA4ED62F995232DABA9FA04D /* OAShowHideCloudAction.h */,
 				CA4EDABC80C141D6AAD16F8C /* OAShowHideCloudAction.m */,
 				DA5A79F826C563A000F274C7 /* OAShowHideFavoritesAction.h */,
@@ -11107,8 +11109,6 @@
 				DA5A7A0526C563A000F274C7 /* OAShowHidePoiAction.m */,
 				CA4ED11015A078942A50049E /* OAShowHidePrecipitationAction.h */,
 				CA4ED932CD20B5BC04F13428 /* OAShowHidePrecipitationAction.m */,
-				CA4ED5BDD9AF265EDFF9E6C8 /* OAShowHideAirPressureAction.h */,
-				CA4ED01DD17D02CD759BBC7C /* OAShowHideAirPressureAction.m */,
 				CA4ED58F58E106312EB43FEC /* OAShowHideTemperatureAction.h */,
 				CA4EDC677CEB19E4B37F9E8C /* OAShowHideTemperatureAction.m */,
 				DA5A79FC26C563A000F274C7 /* OAShowHideTransportLinesAction.h */,
@@ -13623,8 +13623,8 @@
 				462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */,
 				46548DA92BF7794F00B0D3C0 /* DefaultMapButtonsViewController.swift */,
 				32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */,
-				320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */,
 				320076132BFC775100CDDDAF /* SpeedLimitWarningViewController.swift */,
+				320427D52BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift */,
 			);
 			path = ConfigureScreen;
 			sourceTree = "<group>";

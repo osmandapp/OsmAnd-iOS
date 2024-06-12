@@ -136,7 +136,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getListKey
 {
-    return kNoOverlay;
+    return kOverlays;
 }
 
 - (OrderedDictionary *)getUIModel

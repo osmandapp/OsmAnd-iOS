@@ -200,9 +200,19 @@
     NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:json];
 
     if ([quickAction isKindOfClass:OASwitchableAction.class])
+    {
         [self parseParamsWithKey:[quickAction getListKey] params:params toString:NO];
+        if ([quickAction isKindOfClass:OASwitchProfileAction.class])
+        {
+            [params removeObjectForKey:@"names"];
+            [params removeObjectForKey:@"iconsNames"];
+            [params removeObjectForKey:@"iconsColors"];
+        }
+    }
     else if ([quickAction isKindOfClass:OAShowHidePoiAction.class])
+    {
         [self parseParamsWithKey:kFilters params:params toString:YES];
+    }
 
     [quickAction setParams:params];
 }

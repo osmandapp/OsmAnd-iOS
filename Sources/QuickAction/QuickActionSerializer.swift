@@ -45,7 +45,7 @@ class QuickActionSerializer: NSObject {
     private func getJsonFromObj(_ quickAction: OAQuickAction) throws -> [String: Any] {
         var obj: [String: Any] = [:]
         obj["actionType"] = quickAction.actionType?.stringId
-        obj["id"] = NSNumber(value: quickAction.id)
+        obj["id"] = "\(quickAction.id)"
         obj["name"] = quickAction.getRawName()
         
         let params = Self.adjustParamsForExport(quickAction.getParams(), action: quickAction)
@@ -78,28 +78,44 @@ class QuickActionSerializer: NSObject {
         return nil
     }
 
-    static func adjustParamsForExport(_ params: [AnyHashable: Any], action: OAQuickAction) -> [AnyHashable: Any] {
-         if action is OASwitchableAction<AnyObject>, let switchableAction = action as? OASwitchableAction<AnyObject> {
-             var paramsCopy = params
-             let className = String(describing: type(of: action))
-             let key: String = switchableAction.getListKey()
-             if className == String(describing: OAMapStyleAction.self) {
-                 if let values = params[key] as? [String], !values.isEmpty {
-                     paramsCopy[key] = values.joined(separator: ",")
-                 }
-                 return paramsCopy
-             }
-             if let values = params[key] as? [Any], !values.isEmpty {
-                 if let data = paramsToExportArray(values) {
-                     if let stringData = String(data: data, encoding: .utf8) {
-                         paramsCopy[key] = stringData
-                     }
-                 }
-             }
-
-            return paramsCopy
+    static func adjustParamsForExport(_ params: [AnyHashable: Any], action: OAQuickAction) -> [String: String] {
+        var listKey: String?
+        var paramsCopy = params
+        if action is OASwitchableAction<AnyObject>, let switchableAction = action as? OASwitchableAction<AnyObject> {
+            let className = String(describing: type(of: action))
+            let key: String = switchableAction.getListKey()
+            listKey = key
+            if className == String(describing: OAMapStyleAction.self) {
+                if let values = params[key] as? [String], !values.isEmpty {
+                    paramsCopy[key] = values.joined(separator: ",")
+                }
+            } else if let values = params[key] as? [Any], !values.isEmpty {
+                if let data = paramsToExportArray(values) {
+                    if let stringData = String(data: data, encoding: .utf8) {
+                        paramsCopy[key] = stringData
+                    }
+                }
+            }
         }
-        return params
+        var stringParams: [String: String] = [:]
+        for (key, value) in paramsCopy {
+            if let paramKey = key as? String {
+                if let listKey, paramKey == listKey, value is String {
+                    stringParams[paramKey] = value as? String
+                } else if let boolValue = value as? Bool {
+                    stringParams[paramKey] = boolValue ? "true" : "false"
+                } else if let numberValue = value as? NSNumber {
+                    if CFGetTypeID(numberValue) == CFBooleanGetTypeID() {
+                        stringParams[paramKey] = numberValue.boolValue ? "true" : "false"
+                    } else {
+                        stringParams[paramKey] = numberValue.stringValue
+                    }
+                } else {
+                    stringParams[paramKey] = String(describing: value)
+                }
+            }
+        }
+        return stringParams
     }
 
     static func parseParamsFromString(_ params: String) -> [Any] {
@@ -134,7 +150,7 @@ class QuickActionSerializer: NSObject {
                 }
                 return try JSONSerialization.data(withJSONObject: res)
             } else if let array = params as? [NSNumber], !array.isEmpty {
-                let res = array.map { $0.stringValue }
+                let res = array.map { "\($0.stringValue)" }
                 return try JSONSerialization.data(withJSONObject: res)
             } else if let array = params as? [String], !array.isEmpty {
                 return try JSONSerialization.data(withJSONObject: array)

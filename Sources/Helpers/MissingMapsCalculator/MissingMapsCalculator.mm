@@ -168,10 +168,10 @@ static const double DISTANCE_SKIP = 10000;
             BOOL fresh = false;
             for (int i = 0; p.hhEditions != nil && i < p.hhEditions.count; i++)
             {
-                if (p.hhEditions[i].intValue > 0)
+                if (p.hhEditions[i].longValue > 0)
                 {
                     region = p.regions[i];
-                    fresh = p.hhEditions[i].intValue == max;
+                    fresh = p.hhEditions[i].longValue == max;
                     if (fresh)
                     {
                         break;
@@ -371,7 +371,7 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
             
             NSNumber *editionNumber = @(map.edition);
             [pnt.hhEditions replaceObjectAtIndex:i withObject:editionNumber];
-            hhEditionPresent |= editionNumber.intValue != 0;
+            hhEditionPresent |= editionNumber.longValue != 0;
             [pnt.editionsUnique addObject:editionNumber];
         }
     }

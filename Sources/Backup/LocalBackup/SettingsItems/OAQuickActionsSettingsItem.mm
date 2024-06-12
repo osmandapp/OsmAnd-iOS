@@ -246,7 +246,7 @@
         {
             NSMutableDictionary<NSString *, NSString *> *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
-            jsonObject[@"actionType"] = action.actionType.stringId;
+            jsonObject[@"actionType"] = [action getActionTypeId];
             NSDictionary *params = [OAQuickActionSerializer adjustParamsForExport:[action getParams] action:action];
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
             jsonObject[@"params"] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];

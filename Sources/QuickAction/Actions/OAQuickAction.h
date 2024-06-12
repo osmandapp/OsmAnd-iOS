@@ -41,7 +41,7 @@ static NSString * _Nonnull const kDialog = @"dialog";
 
 - (NSDictionary * _Nonnull)getParams;
 - (void)setName:(NSString *)name;
-- (void)setParams:(NSDictionary<NSString *, NSString *> *)params;
+- (void)setParams:(NSDictionary *)params;
 - (BOOL)isActionWithSlash;
 - (NSString *)getActionText;
 - (NSString *)getActionStateName;

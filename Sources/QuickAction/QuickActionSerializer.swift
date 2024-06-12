@@ -44,7 +44,7 @@ class QuickActionSerializer: NSObject {
 
     private func getJsonFromObj(_ quickAction: OAQuickAction) throws -> [String: Any] {
         var obj: [String: Any] = [:]
-        obj["actionType"] = quickAction.actionType?.stringId
+        obj["actionType"] = quickAction.getTypeId()
         obj["id"] = "\(quickAction.id)"
         obj["name"] = quickAction.getRawName()
         
@@ -59,19 +59,32 @@ class QuickActionSerializer: NSObject {
         var found: QuickActionType?
         if let actionType = json["actionType"] as? String {
             found = quickActionTypesStr[actionType]
-        } else if let type = json["type"] as? Int {
-            found = quickActionTypesInt[type]
+        } else if let typeInt = json["type"] as? Int {
+            found = quickActionTypesInt[typeInt]
+        } else if let typeNumber = json["type"] as? NSNumber {
+            found = quickActionTypesInt[typeNumber.intValue]
         }
-        if let found = found {
-            let qa = found.createNew()
+        var qa: OAQuickAction?
+        if found == nil {
+            if let actionType = json["actionType"] as? String {
+                qa = OAUnsupportedAction(actionTypeId: actionType)
+            } else {
+                return nil
+            }
+        } else if let found {
+            qa = found.createNew()
+        }
+        if let qa {
             if let name = json["name"] as? String {
                 qa.setName(name)
             }
             if let id = json["id"] as? NSNumber {
                 qa.setId(id.intValue)
             }
-            if let params = json["params"] as? String {
-                OAQuickActionsSettingsItem.parseParams(params, quickAction: qa)
+            if let paramsStr = json["params"] as? String {
+                OAQuickActionsSettingsItem.parseParams(paramsStr, quickAction: qa)
+            } else if let params = json["params"] as? [AnyHashable: Any] {
+                qa.setParams(params)
             }
             return qa
         }

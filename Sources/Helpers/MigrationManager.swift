@@ -308,39 +308,53 @@ final class MigrationManager: NSObject {
     }
     
     private func migrateActionButtons() {
-        if let oldStatePref = OACommonBoolean.withKey("qiuckActionIsOn", defValue: false).makeProfile(),
-           let newStatePref = OACommonBoolean.withKey(QuickActionButtonState.defaultButtonId + "_state", defValue: false).makeProfile() {
+        let helper = OAMapButtonsHelper.sharedInstance()
+        guard let buttonState = helper.getButtonState(byId: QuickActionButtonState.defaultButtonId) else {
+            return
+        }
+        
+        if let oldStatePref = OACommonBoolean.withKey("qiuckActionIsOn", defValue: false).makeProfile() {
             for appMode in OAApplicationMode.allPossibleValues() {
-                newStatePref.set(oldStatePref.get(appMode), mode: appMode)
+                buttonState.statePref.set(oldStatePref.get(appMode), mode: appMode)
                 settings?.quickActionButtons.set([QuickActionButtonState.defaultButtonId], mode: appMode)
             }
         }
-
-        if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty,
-           let actionsPref = OACommonString.withKey(QuickActionButtonState.defaultButtonId + "_list", defValue: "").makeProfile() {
+        
+        if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty{
             for appMode in OAApplicationMode.allPossibleValues() {
-                actionsPref.set(value, mode: appMode)
+                buttonState.quickActionsPref.set(value, mode: appMode)
             }
         }
-
-        let oldFabMarginPref = FabMarginPreference("quick_fab_margin")
-        let fabMarginPref = FabMarginPreference(QuickActionButtonState.defaultButtonId + "_fab_margin")
-        for appMode in OAApplicationMode.allPossibleValues() {
-            let portrait = oldFabMarginPref.getPortraitFabMargin(appMode)
-            let landscape = oldFabMarginPref.getLandscapeFabMargin(appMode)
-
-            fabMarginPref.setPortraitFabMargin(appMode, x: portrait[0].int32Value, y: portrait[1].int32Value)
-            fabMarginPref.setLandscapeFabMargin(appMode, x: landscape[0].int32Value, y: landscape[1].int32Value)
+        
+        if let oldQuickActionPortraitX = OACommonDouble.withKey("quickActionPortraitX", defValue: 0),
+           let oldQuickActionPortraitY = OACommonDouble.withKey("quickActionPortraitY", defValue:0),
+           let oldQuickActionLandscapeX = OACommonDouble.withKey("quickActionLandscapeX", defValue:0),
+           let oldQuickActionLandscapeY = OACommonDouble.withKey("quickActionLandscapeY", defValue:0) {
+            for appMode in OAApplicationMode.allPossibleValues() {
+                buttonState.fabMarginPref.setPortraitFabMargin(appMode,
+                                                               x: Int32(oldQuickActionPortraitX.get(appMode)),
+                                                               y: Int32(oldQuickActionPortraitY.get(appMode)))
+                buttonState.fabMarginPref.setLandscapeFabMargin(appMode,
+                                                                x: Int32(oldQuickActionLandscapeX.get(appMode)),
+                                                                y: Int32(oldQuickActionLandscapeY.get(appMode)))
+            }
         }
+        helper.updateActiveActions()
 
-        let oldMap3DFabMarginPref = FabMarginPreference("3dmode_fab_margin")
-        let fabMap3DMarginPref = FabMarginPreference("map_3d_mode_margin")
-        for appMode in OAApplicationMode.allPossibleValues() {
-            let portrait = oldMap3DFabMarginPref.getPortraitFabMargin(appMode)
-            let landscape = oldMap3DFabMarginPref.getLandscapeFabMargin(appMode)
-
-            fabMap3DMarginPref.setPortraitFabMargin(appMode, x: portrait[0].int32Value, y: portrait[1].int32Value)
-            fabMap3DMarginPref.setLandscapeFabMargin(appMode, x: landscape[0].int32Value, y: landscape[1].int32Value)
+        if let map3DModeState = helper.getMap3DButtonState() as Map3DButtonState? {
+            if let oldMap3DPortraitX = OACommonDouble.withKey("map3dModePortraitX", defValue: 0),
+               let oldMap3DPortraitY = OACommonDouble.withKey("map3dModePortraitY", defValue:0),
+               let oldMap3DLandscapeX = OACommonDouble.withKey("map3dModeLandscapeX", defValue:0),
+               let oldMap3DLandscapeY = OACommonDouble.withKey("map3dModeLandscapeY", defValue:0) {
+                for appMode in OAApplicationMode.allPossibleValues() {
+                    map3DModeState.fabMarginPref.setPortraitFabMargin(appMode,
+                                                                      x: Int32(oldMap3DPortraitX.get(appMode)),
+                                                                      y: Int32(oldMap3DPortraitY.get(appMode)))
+                    map3DModeState.fabMarginPref.setLandscapeFabMargin(appMode,
+                                                                       x: Int32(oldMap3DLandscapeX.get(appMode)),
+                                                                       y: Int32(oldMap3DLandscapeY.get(appMode)))
+                }
+            }
         }
     }
 

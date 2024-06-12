@@ -35,6 +35,8 @@
 #import "OAResourcesInstaller.h"
 #import "OAIAPHelper.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OADownloadMultipleResourceViewController+cpp.h"
+#import "OAResourcesUISwiftHelper.h"
 #import "OASearchResult.h"
 #import "OAQuickSearchHelper.h"
 #import "OAWeatherHelper.h"
@@ -2657,7 +2659,7 @@ static BOOL _repositoryUpdated = NO;
                 break;
             }
         }
-        NSString *resourceId = [_downloadingCellMultipleResourceHelper getResourceId:item];
+        NSString *resourceId = [item getResourceId];
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
         OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:resourceId swiftResourceItem:mapItem];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
@@ -3244,22 +3246,27 @@ static BOOL _repositoryUpdated = NO;
 
 #pragma mark - OADownloadMultipleResourceDelegate
 
-- (void)downloadResources:(OAMultipleResourceItem *)item selectedItems:(NSArray<OAResourceItem *> *)selectedItems;
+- (void)downloadResources:(OAMultipleResourceSwiftItem *)item selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems;
 {
-    _multipleItems = selectedItems;
-    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:selectedItems onTaskCreated:^(id<OADownloadTask> task) {
+    NSMutableArray<OAResourceItem *> *selectedResourceItems = [NSMutableArray array];
+    for (OAResourceSwiftItem *i in selectedItems)
+        [selectedResourceItems addObject:i.objcResourceItem];
+
+    _multipleItems = selectedResourceItems;
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item.objcResourceItem selectedItems:selectedResourceItems onTaskCreated:^(id<OADownloadTask> task) {
         [self updateContent];
     } onTaskResumed:^(id<OADownloadTask> task) {
         [self showDownloadViewForTask:task];
     }];
 }
 
-- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck
 {
     NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
     OAResourceItem *prevItem;
-    for (OAResourceItem *itemToCheck in itemsToCheck)
+    for (OAResourceSwiftItem *item in itemsToCheck)
     {
+        OAResourceItem *itemToCheck = item.objcResourceItem;
         QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
         if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
         {
@@ -3285,9 +3292,9 @@ static BOOL _repositoryUpdated = NO;
     _multipleItems = nil;
 }
 
-- (void)onDetailsSelected:(OALocalResourceItem *)item
+- (void)onDetailsSelected:(OAResourceSwiftItem *)item
 {
-    [self showDetailsOf:item];
+    [self showDetailsOf:(OALocalResourceItem *)item.objcResourceItem];
 }
 
 #pragma mark - OAWeatherForecastDetails

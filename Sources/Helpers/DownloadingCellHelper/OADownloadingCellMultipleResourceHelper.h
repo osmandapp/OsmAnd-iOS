@@ -12,10 +12,10 @@
 
 #import "OADownloadingCellResourceHelper.h"
 
-@class OAMultipleResourceItem;
+@class OAMultipleResourceSwiftItem;
 
 @interface OADownloadingCellMultipleResourceHelper : OADownloadingCellResourceHelper
 
-- (NSString *) getResourceId:(OAMultipleResourceItem *)multipleItem;
+- (NSString *) getResourceId:(OAMultipleResourceSwiftItem *)multipleItem;
 
 @end

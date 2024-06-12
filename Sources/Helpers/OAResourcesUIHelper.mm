@@ -557,6 +557,29 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     return downloadedCount == items.count;
 }
 
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue
+{
+    for (OAResourceItem *item in _items)
+    {
+        if (item.downloadTask != nil)
+            return item;
+    }
+    if (useDefautValue)
+        return _items[0];
+    return nil;
+}
+
+- (NSString *) getResourceId
+{
+    if (_items && _items.count > 0)
+    {
+        OAResourceItem *firstItem = _items[0];
+        NSString *resourceId = firstItem.resourceId.toNSString();
+        return [resourceId stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
+    }
+    return nil;
+}
+
 @end
 
 @implementation OALocalResourceItem

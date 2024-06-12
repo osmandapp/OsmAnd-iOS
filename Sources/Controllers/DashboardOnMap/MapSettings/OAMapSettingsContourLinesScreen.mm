@@ -30,7 +30,6 @@
 #import "OAIAPHelper.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
-#import "OADownloadMultipleResourceViewController.h"
 #import "OASegmentedSlider.h"
 #import "OALinks.h"
 #import "OADownloadingCellMultipleResourceHelper.h"
@@ -281,7 +280,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [availableMapsArr addObject:@{
                 @"type" : kCellTypeMap,
                 @"item" : item,
-                @"resourceId" : [_downloadingCellResourceHelper getResourceId:item]
+                @"resourceId" : [item getResourceId]
             }];
         }
 

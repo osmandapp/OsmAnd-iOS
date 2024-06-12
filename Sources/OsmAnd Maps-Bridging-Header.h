@@ -129,6 +129,7 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAPurchasesViewController.h"
 #import "OAMainSettingsViewController.h"
+#import "OADownloadMultipleResourceViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

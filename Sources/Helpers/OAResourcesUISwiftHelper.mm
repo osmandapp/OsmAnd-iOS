@@ -12,7 +12,7 @@
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
 
-@implementation OAResourceSwiftItem : NSObject
+@implementation OAResourceSwiftItem
 
 - (instancetype) initWithItem:(id)objcResourceItem
 {
@@ -125,8 +125,53 @@
     return res.downloadTask;
 }
 
+- (void) refreshDownloadTask
+{
+    OARepositoryResourceItem *res = (OARepositoryResourceItem *)self.objcResourceItem;
+    res.downloadTask = [self getDownloadTaskFor:[self resourceId]];
+}
+
+- (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
+{
+    return [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
 @end
 
+
+@implementation OAMultipleResourceSwiftItem
+
+- (NSArray<OAResourceSwiftItem *> *) items
+{
+    NSMutableArray<OAResourceSwiftItem *> *items = [NSMutableArray array];
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    for (OAResourceItem *item in res.items)
+    {
+        [items addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+    }
+    return items;
+}
+
+- (BOOL)allDownloaded
+{
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    return [res allDownloaded];
+}
+
+- (OAResourceSwiftItem *) getActiveItem:(BOOL)useDefautValue
+{
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    OAResourceItem *activeItem = [res getActiveItem:useDefautValue];
+    return [[OAResourceSwiftItem alloc] initWithItem:activeItem];
+}
+
+- (NSString *) getResourceId
+{
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    return [res getResourceId];
+}
+
+@end
 
 
 @implementation OAResourcesUISwiftHelper
@@ -252,6 +297,61 @@
 {
     OAResourceItem *res = (OAResourceItem *)item.objcResourceItem;
     [OAResourcesUIHelper offerCancelDownloadOf:res onTaskStop:onTaskStop completionHandler:completionHandler];
+}
+
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceSwiftItem *)multipleItem
+                            selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems
+                            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    NSMutableArray<OAResourceItem *> *items = [NSMutableArray array];
+    for (OAResourceSwiftItem *item in selectedItems)
+    {
+        [items addObject:item.objcResourceItem];
+    }
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:multipleItem.objcResourceItem selectedItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+}
+
++ (void)deleteResourcesOf:(NSArray<OAResourceSwiftItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
+{
+    NSMutableArray<OALocalResourceItem *> *itemsToDelete = [NSMutableArray array];
+    for (OAResourceSwiftItem *item in items)
+    {
+        [itemsToDelete addObject:(OALocalResourceItem *)item.objcResourceItem];
+    }
+    [OAResourcesUIHelper deleteResourcesOf:itemsToDelete progressHUD:progressHUD executeAfterSuccess:block];
+}
+
++ (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck
+{
+    NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
+    OAResourceItem *prevItem;
+    for (OAResourceSwiftItem *item in itemsToCheck)
+    {
+        OAResourceItem *itemToCheck = item.objcResourceItem;
+        QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
+        if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
+        {
+            BOOL prevItemInstalled = OsmAndApp.instance.resourcesManager->isResourceInstalled(prevItem.resourceId);
+            if (prevItemInstalled && prevItem.resourceId.compare(itemToCheck.resourceId) != 0)
+            {
+                [itemsToRemove addObject:(OALocalResourceItem *) prevItem];
+            }
+            else
+            {
+                BOOL itemToCheckInstalled = OsmAndApp.instance.resourcesManager->isResourceInstalled(itemToCheck.resourceId);
+                if (itemToCheckInstalled && itemToCheck.resourceId.compare(prevItem.resourceId) != 0)
+                    [itemsToRemove addObject:(OALocalResourceItem *) itemToCheck];
+            }
+        }
+        prevItem = itemToCheck;
+    }
+    [self offerSilentDeleteResourcesOf:itemsToRemove];
+}
+
++ (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
+{
+    [OAResourcesUIHelper deleteResourcesOf:items progressHUD:nil executeAfterSuccess:nil];
 }
 
 @end

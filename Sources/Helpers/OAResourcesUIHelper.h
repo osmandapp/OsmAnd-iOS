@@ -45,6 +45,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
 
 - (BOOL) allDownloaded;
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue;
+- (NSString *) getResourceId;
 
 @end
 

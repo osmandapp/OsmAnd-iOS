@@ -3965,6 +3965,7 @@
 		32ECBEAD2657AD7F005D33BD /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
+		32FF4C2F2C18A69B00246B36 /* OADownloadMultipleResourceViewController+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OADownloadMultipleResourceViewController+cpp.h"; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
 		333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikidata@3x.png"; path = "Resources/Icons/ic_custom_logo_wikidata@3x.png"; sourceTree = "<group>"; };
@@ -12048,6 +12049,7 @@
 				DA5A7D8B26C563A300F274C7 /* OADonationSettingsViewController.h */,
 				DA5A7D7F26C563A300F274C7 /* OADonationSettingsViewController.mm */,
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
+				32FF4C2F2C18A69B00246B36 /* OADownloadMultipleResourceViewController+cpp.h */,
 				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
 				DA5A7D8326C563A300F274C7 /* OALocalResourceInfoCell.h */,
 				DA5A7D9826C563A300F274C7 /* OALocalResourceInfoCell.m */,

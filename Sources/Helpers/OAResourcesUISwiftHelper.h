@@ -55,6 +55,17 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 - (NSString *) iconName;
 - (BOOL) isInstalled;
 - (id<OADownloadTask>) downloadTask;
+- (void) refreshDownloadTask;
+
+@end
+
+
+@interface OAMultipleResourceSwiftItem : OAResourceSwiftItem
+
+- (NSArray<OAResourceSwiftItem *> *) items;
+- (BOOL) allDownloaded;
+- (OAResourceSwiftItem *) getActiveItem:(BOOL)useDefautValue;
+- (NSString *) getResourceId;
 
 @end
 
@@ -79,6 +90,13 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
                 completionHandler:(void(^)(UIAlertController *))completionHandler;
 
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler;
+
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceSwiftItem *)multipleItem
+                            selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems
+                            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                            onTaskResumed:(OADownloadTaskCallback)onTaskResumed;
+
++ (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck;
 
 @end
 

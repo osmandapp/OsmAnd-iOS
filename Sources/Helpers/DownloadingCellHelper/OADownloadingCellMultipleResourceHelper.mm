@@ -8,6 +8,7 @@
 
 #import "OADownloadingCellMultipleResourceHelper.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OAResourcesUISwiftHelper.h"
 
 @interface OADownloadingCellMultipleResourceHelper() <OADownloadMultipleResourceDelegate>
 
@@ -16,40 +17,32 @@
 
 @implementation OADownloadingCellMultipleResourceHelper
 {
-    NSArray<OAResourceItem *> *_multipleDownloadingItems;
+    NSArray<OAMultipleResourceSwiftItem *> *_multipleDownloadingItems;
 }
 
 #pragma mark - Resource methods
 
 // OAMultipleResourceItem is using for Contour lines. It have two OAResourceItem subitems - for feet and for meters file.
 // This method return currently downloading subitem. Or just the first one.
-- (OAResourceItem *) getActiveItemFrom:(OAResourceItem *)resourceItem useDefautValue:(BOOL)useDefautValue
+- (OAResourceSwiftItem *) getActiveItemFrom:(OAResourceSwiftItem *)resourceItem useDefautValue:(BOOL)useDefautValue
 {
-    if (resourceItem && [resourceItem isKindOfClass:OAMultipleResourceItem.class])
+    if (resourceItem && [resourceItem isKindOfClass:OAMultipleResourceSwiftItem.class])
     {
-        OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *)resourceItem;
-        for (OARepositoryResourceItem *item in multipleItem.items)
-        {
-            if (item.downloadTask != nil)
-                return item;
-        }
-        if (useDefautValue)
-            return multipleItem.items[0];
+        OAMultipleResourceSwiftItem *multipleItem = (OAMultipleResourceSwiftItem *)resourceItem;
+        return [multipleItem getActiveItem:useDefautValue];
     }
     return nil;
 }
 
-- (NSString *) getResourceId:(OAMultipleResourceItem *)multipleItem
+- (NSString *) getResourceId:(OAMultipleResourceSwiftItem *)multipleItem
 {
-    OAResourceItem *firstItem = multipleItem.items[0];
-    NSString *resourceId = firstItem.resourceId.toNSString();
-    return [resourceId stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
+    return [multipleItem getResourceId];
 }
 
-- (OAResourceItem *) getResource:(NSString *)resourceId
+- (OAResourceSwiftItem *) getResource:(NSString *)resourceId
 {
-    OAResourceItem *item = [super getResource:resourceId];
-    if ([item isKindOfClass:OAMultipleResourceItem.class])
+    OAResourceSwiftItem *item = [super getResource:resourceId];
+    if ([item isKindOfClass:OAMultipleResourceSwiftItem.class])
         item = [self getActiveItemFrom:item useDefautValue:YES];
     return item;
 }
@@ -57,13 +50,13 @@
 // Override
 - (BOOL) isInstalled:(NSString *)resourceId
 {
-    OAResourceItem *item = [super getResource:resourceId];
-    if ([item isKindOfClass:OAMultipleResourceItem.class])
+    OAResourceSwiftItem *item = [super getResource:resourceId];
+    if ([item isKindOfClass:OAMultipleResourceSwiftItem.class])
     {
-        OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *)item;
-        for (OAResourceItem *subitem in multipleItem.items)
+        OAMultipleResourceSwiftItem *multipleItem = (OAMultipleResourceSwiftItem *)item;
+        for (OAResourceSwiftItem *subitem in [multipleItem items])
         {
-            if (subitem.isInstalled)
+            if ([subitem isInstalled])
                 return YES;
         }
     }
@@ -73,8 +66,8 @@
 // Override
 - (BOOL) isDownloading:(NSString *)resourceId
 {
-    OAResourceItem *item = [super getResource:resourceId];
-    if ([item isKindOfClass:OAMultipleResourceItem.class])
+    OAResourceSwiftItem *item = [super getResource:resourceId];
+    if ([item isKindOfClass:OAMultipleResourceSwiftItem.class])
         item = [self getActiveItemFrom:item useDefautValue:NO];
     if (item)
         return item.downloadTask != nil;
@@ -85,36 +78,31 @@
 {
     for (NSString *resourceId in [self getAllResourceIds])
     {
-        OAResourceItem *item = [super getResource:resourceId];
-        if ([item isKindOfClass:OAMultipleResourceItem.class])
+        OAResourceSwiftItem *item = [super getResource:resourceId];
+        if ([item isKindOfClass:OAMultipleResourceSwiftItem.class])
         {
-            OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *)item;
-            for (OARepositoryResourceItem *subitem in multipleItem.items)
-                subitem.downloadTask = [self getDownloadTaskFor:subitem.resource->id.toNSString()];
+            OAMultipleResourceSwiftItem *multipleItem = (OAMultipleResourceSwiftItem *)item;
+            for (OAResourceSwiftItem *subitem in [multipleItem items])
+                [subitem refreshDownloadTask];
         }
     }
-}
-
-- (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
-{
-    return [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
 #pragma mark - Cell setup methods
 
 //Override
-- (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId resourceItem:(OAResourceItem *)resourceItem
+- (OADownloadingCell *) getOrCreateCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem
 {
-    OAMultipleResourceItem *multipleItem = (OAMultipleResourceItem *)resourceItem;
-    for (OARepositoryResourceItem *subitem in multipleItem.items)
-        subitem.downloadTask = [self getDownloadTaskFor:subitem.resource->id.toNSString()];
-    
+    OAMultipleResourceSwiftItem *multipleItem = (OAMultipleResourceSwiftItem *)swiftResourceItem;
+    for (OAResourceSwiftItem *subitem in multipleItem.items)
+        [subitem refreshDownloadTask];
+
     if (![super getResource:resourceId])
     {
         // Saving OAMultipleResourceItem here. Not OAResourceItem subitem.
-        [self saveResource:resourceItem resourceId:resourceId];
-    
-        OAResourceItem *downloadingSubitem = [self getActiveItemFrom:resourceItem useDefautValue:YES];
+        [self saveResource:swiftResourceItem resourceId:resourceId];
+        
+        OAResourceSwiftItem *downloadingSubitem = [self getActiveItemFrom:swiftResourceItem useDefautValue:YES];
         if (downloadingSubitem && downloadingSubitem.downloadTask)
             [self saveStatus:EOAItemStatusInProgressType resourceId:resourceId];
     }
@@ -129,7 +117,7 @@
 // Override
 - (void) onCellClicked:(NSString *)resourceId
 {
-    OAMultipleResourceItem *multipleItem = [super getResource:resourceId];
+    OAMultipleResourceSwiftItem *multipleItem = (OAMultipleResourceSwiftItem *)[super getResource:resourceId];
     
     if (![self isInstalled:resourceId] || self.isAlwaysClickable)
     {
@@ -139,7 +127,7 @@
             {
                 if (self.hostViewController)
                 {
-                    OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithResource:multipleItem];
+                    OADownloadMultipleResourceViewController *controller = [[OADownloadMultipleResourceViewController alloc] initWithSwiftResource:multipleItem];
                     controller.delegate = self;
                     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:controller];
                     [self.hostViewController presentViewController:navigationController animated:YES completion:nil];
@@ -152,55 +140,27 @@
         }
         else
         {
-            OAResourceItem *downloadingItem = [self getActiveItemFrom:multipleItem useDefautValue:NO];
+            OAResourceSwiftItem *downloadingItem = [self getActiveItemFrom:multipleItem useDefautValue:NO];
             if (downloadingItem)
-                [self stopDownload:downloadingItem.resourceId.toNSString()];
+                [self stopDownload:[downloadingItem resourceId]];
         }
     }
 }
 
 #pragma mark - OADownloadMultipleResourceDelegate
 
-- (void)downloadResources:(OAMultipleResourceItem *)item selectedItems:(NSArray<OAResourceItem *> *)selectedItems;
+- (void)downloadResources:(OAMultipleResourceSwiftItem *)item selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems;
 {
-    _multipleDownloadingItems = selectedItems;
-    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:item selectedItems:selectedItems onTaskCreated:^(id<OADownloadTask> task) {
+    [OAResourcesUISwiftHelper offerMultipleDownloadAndInstallOf:item selectedItems:selectedItems onTaskCreated:^(id<OADownloadTask> task) {
         [self refreshMultipleDownloadTasks];
         if ([self hostTableView])
             [[self hostTableView] reloadData];
-    } onTaskResumed:^(id<OADownloadTask> task) {
-    }];
+    } onTaskResumed:nil];
 }
 
-- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceItem *> *)itemsToCheck
+- (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck
 {
-    NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
-    OAResourceItem *prevItem;
-    for (OAResourceItem *itemToCheck in itemsToCheck)
-    {
-        QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
-        if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
-        {
-            BOOL prevItemInstalled = OsmAndApp.instance.resourcesManager->isResourceInstalled(prevItem.resourceId);
-            if (prevItemInstalled && prevItem.resourceId.compare(itemToCheck.resourceId) != 0)
-            {
-                [itemsToRemove addObject:(OALocalResourceItem *) prevItem];
-            }
-            else
-            {
-                BOOL itemToCheckInstalled = OsmAndApp.instance.resourcesManager->isResourceInstalled(itemToCheck.resourceId);
-                if (itemToCheckInstalled && itemToCheck.resourceId.compare(prevItem.resourceId) != 0)
-                    [itemsToRemove addObject:(OALocalResourceItem *) itemToCheck];
-            }
-        }
-        prevItem = itemToCheck;
-    }
-    [self offerSilentDeleteResourcesOf:itemsToRemove];
-}
-
-- (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
-{
-    [OAResourcesUIHelper deleteResourcesOf:items progressHUD:nil executeAfterSuccess:nil];
+    [OAResourcesUISwiftHelper checkAndDeleteOtherSRTMResources:itemsToCheck];
 }
 
 - (void)clearMultipleResources

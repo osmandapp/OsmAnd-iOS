@@ -16,7 +16,6 @@
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OASwitchTableViewCell.h"
-#import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
@@ -194,7 +193,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
         [suggestedMapsSection addObject:@{
             @"type" : kCellTypeMultyMap,
             @"item" : item,
-            @"resourceId" : [_downloadingCellMultipleResourceHelper getResourceId:item]
+            @"resourceId" : [item getResourceId]
         }];
     }
 

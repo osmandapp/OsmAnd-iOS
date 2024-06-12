@@ -8,15 +8,16 @@
 
 import UIKit
 
-enum ItemStatusType {
+@objc enum ItemStatusType: Int {
     case idle, started, inProgress, finished
 }
 
-enum DownloadingCellRightIconType {
+@objc enum DownloadingCellRightIconType: Int {
     case hideIconAfterDownloading, showIconAlways, showShevronAlways, showIconAndShevronAlways, showShevronBeforeDownloading, showShevronAfterDownloading, showInfoAndShevronAfterDownloading
 }
 
-final class DownloadingCellBaseHelper {
+@objcMembers
+class DownloadingCellBaseHelper: NSObject {
     
     var rightIconName: String?
     var rightIconColor: UIColor?
@@ -36,9 +37,10 @@ final class DownloadingCellBaseHelper {
     
     func setHostTableView(_ tableView: UITableView?) {
         hostTableView = tableView
+        registerCells()
     }
     
-    // MARK: Resource methods
+    // MARK: - Resource methods
     
     func helperHasItemFor(_ resourceId: String) -> Bool {
         statuses[resourceId] != nil
@@ -70,7 +72,7 @@ final class DownloadingCellBaseHelper {
         // Override in subclass
     }
     
-    // MARK: Cell setup methods
+    // MARK: - Cell setup methods
     
     private func registerCells() {
         guard let hostTableView else { return }
@@ -208,7 +210,7 @@ final class DownloadingCellBaseHelper {
         return .iconColorActive
     }
     
-    // MARK: Cell behavior methods
+    // MARK: - Cell behavior methods
     
     // Default on click behavior
     func onCellClicked(_ resourceId: String) {
@@ -221,7 +223,7 @@ final class DownloadingCellBaseHelper {
         }
     }
     
-    // MARK: Cell progress update methods
+    // MARK: - Cell progress update methods
     
     func refreshCellSpinners() {
         cells.values.forEach { cell in

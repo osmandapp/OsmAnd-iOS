@@ -98,6 +98,8 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 
 + (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck;
 
++ (void) onDownldedResourceInstalled;
+
 @end
 
 

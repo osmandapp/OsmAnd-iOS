@@ -22,7 +22,6 @@
 #import "OAAutoObserverProxy.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"
-#import "OADownloadingCellResourceHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 
@@ -35,7 +34,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     EOAMapSettingsWikipediaSectionAvailable
 };
 
-@interface OAMapSettingsWikipediaScreen () <OAWikipediaScreenDelegate, OADownloadingCellResourceHelperDelegate>
+@interface OAMapSettingsWikipediaScreen () <OAWikipediaScreenDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
@@ -44,7 +43,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
 
     OAWikipediaPlugin *_wikiPlugin;
     NSArray<OARepositoryResourceItem *> *_mapItems;
@@ -79,11 +78,12 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
-    _downloadingCellResourceHelper.hostViewController = self.vwController;
-    [_downloadingCellResourceHelper setHostTableView:self.tblView];
-    _downloadingCellResourceHelper.delegate = self;
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
+    __weak OAMapSettingsWikipediaScreen *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (void) updateResources
@@ -258,7 +258,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"item"]];
-        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
+        return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
     }
 
     return nil;
@@ -358,7 +358,7 @@ typedef NS_ENUM(NSInteger, EOAMapSettingsWikipediaSection)
     }
 }
 
-#pragma mark - OADownloadingCellResourceHelperDelegate
+#pragma mark - DownloadingCellResourceHelperDelegate
 
 - (void)onDownldedResourceInstalled
 {

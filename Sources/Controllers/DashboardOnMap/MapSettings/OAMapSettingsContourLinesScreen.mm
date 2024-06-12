@@ -32,7 +32,6 @@
 #import "OAManageResourcesViewController.h"
 #import "OASegmentedSlider.h"
 #import "OALinks.h"
-#import "OADownloadingCellMultipleResourceHelper.h"
 #import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/ResourcesManager.h>
@@ -56,7 +55,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate, OADownloadingCellResourceHelperDelegate>
+@interface OAMapSettingsContourLinesScreen() <OACustomPickerTableViewCellDelegate, OAColorsTableViewCellDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
@@ -67,7 +66,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     OAIAPHelper *_iapHelper;
     OAMapViewController *_mapViewController;
     OAMapStyleSettings *_styleSettings;
-    OADownloadingCellMultipleResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellMultipleResourceHelper *_downloadingCellResourceHelper;
     NSObject *_dataLock;
 
     NSArray<NSArray *> *_data;
@@ -344,11 +343,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [[OADownloadingCellMultipleResourceHelper alloc] init];
-    _downloadingCellResourceHelper.hostViewController = self.vwController;
-    [_downloadingCellResourceHelper setHostTableView:self.tblView];
-    _downloadingCellResourceHelper.delegate = self;
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
+    __weak OAMapSettingsContourLinesScreen *weakSelf = self;
+    _downloadingCellResourceHelper = [[DownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data
@@ -577,9 +577,9 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
-        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"item"]];
+        OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item[@"item"]];
         NSString *resourceId = item[@"resourceId"];
-        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:resourceId swiftResourceItem:mapItem];
+        return [_downloadingCellResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeInfo])
     {
@@ -794,7 +794,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-#pragma mark - OADownloadingCellResourceHelperDelegate
+#pragma mark - DownloadingCellResourceHelperDelegate
 
 - (void)onDownldedResourceInstalled
 {

@@ -506,6 +506,10 @@
 		32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32EB3DF02AC325780018D9B8 /* OATravelLocalDataDbHelper.mm */; };
 		32F6225D29A7AE080069EE04 /* OAAmenityExtendedNameFilter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 320EADAB29A77AAB002F9883 /* OAAmenityExtendedNameFilter.mm */; };
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
+		32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C302C19D59A00246B36 /* DownloadingCellResourceHelper.swift */; };
+		32FF4C332C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */; };
+		32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */; };
+		32FF4C362C1A32D200246B36 /* DownloadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */; };
 		333168C02507804400266047 /* ic_custom_logo_wikidata@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */; };
@@ -3966,6 +3970,9 @@
 		32FE7AA52B65136D00F82728 /* OAGPXImportUIHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXImportUIHelper.h; sourceTree = "<group>"; };
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FF4C2F2C18A69B00246B36 /* OADownloadMultipleResourceViewController+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OADownloadMultipleResourceViewController+cpp.h"; sourceTree = "<group>"; };
+		32FF4C302C19D59A00246B36 /* DownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
+		32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellMultipleResourceHelper.swift; sourceTree = "<group>"; };
+		32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellCloudHelper.swift; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
 		333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikidata@3x.png"; path = "Resources/Icons/ic_custom_logo_wikidata@3x.png"; sourceTree = "<group>"; };
@@ -8169,6 +8176,9 @@
 				323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */,
 				323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */,
 				323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */,
+				32FF4C302C19D59A00246B36 /* DownloadingCellResourceHelper.swift */,
+				32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */,
+				32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */,
 			);
 			path = DownloadingCellHelper;
 			sourceTree = "<group>";
@@ -15571,6 +15581,7 @@
 				B24745BB27F7465D00C18C3F /* ic_custom_wind@3x.png in Resources */,
 				DA5A846626C563A900F274C7 /* OAToolbarViewController.xib in Resources */,
 				DA2EC74629FBBE0400ECEB37 /* ic_action_time@2x.png in Resources */,
+				32FF4C362C1A32D200246B36 /* DownloadingCell.xib in Resources */,
 				32A365B32B07B4F500485401 /* ic_custom_extension_outlined@2x.png in Resources */,
 				DA68B3CC233B821A00F5ACCC /* ic_profile_car@3x.png in Resources */,
 				97EF50D02AB1D91C005E861B /* map_aciton_hang_gliding@2x.png in Resources */,
@@ -16671,6 +16682,7 @@
 				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,
 				DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */,
 				DA4ABF1E2876DA6800B996EF /* OAProfileSettingsItem.mm in Sources */,
+				32FF4C332C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift in Sources */,
 				DA5A830126C563A800F274C7 /* OAIconsTableViewCell.m in Sources */,
 				DA5A813F26C563A700F274C7 /* OAWay.m in Sources */,
 				DA4ABF292876DDE800B996EF /* OAExportAsyncTask.m in Sources */,
@@ -17104,6 +17116,7 @@
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
 				FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */,
+				32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
@@ -17295,6 +17308,7 @@
 				468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
+				32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */,
 				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,
 				C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */,
 				DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */,

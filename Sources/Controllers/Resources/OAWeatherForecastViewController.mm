@@ -16,7 +16,6 @@
 #import "OALargeImageTitleDescrTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAWeatherHelper.h"
-#import "OADownloadingCellResourceHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
@@ -24,7 +23,7 @@
 #import "OAManageResourcesViewController.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OATableViewCellDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails, OADownloadingCellResourceHelperDelegate>
+@interface OAWeatherForecastViewController () <UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, OATableViewCellDelegate, OAWeatherCacheSettingsDelegate, OAWeatherForecastDetails, DownloadingCellResourceHelperDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
@@ -34,7 +33,7 @@
 {
     OsmAndAppInstance _app;
     OAWeatherHelper *_weatherHelper;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     MBProgressHUD *_progressHUD;
     BOOL _editMode;
     NSIndexPath *_sizeIndexPath;
@@ -194,9 +193,9 @@
 
 - (void) setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
     [_downloadingCellResourceHelper setHostTableView:self.tableView];
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowShevronAlways;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowShevronAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
 }
 
@@ -890,7 +889,7 @@
     if ([item[@"type"] isEqualToString:@"downloading_cell"])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item[@"resource"]];
-        OADownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:item[@"resourceId"] swiftResourceItem:mapItem];
+        DownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCell:item[@"resourceId"] swiftResourceItem:mapItem];
         [cell leftIconVisibility:NO];
         [cell rightIconVisibility:NO];
         [cell descriptionVisibility:YES];
@@ -1283,7 +1282,7 @@
     [self rearrangeForecast:indexPath];
 }
 
-#pragma mark - OADownloadingCellResourceHelperDelegate
+#pragma mark - DownloadingCellResourceHelperDelegate
 
 - (void)onDownldedResourceInstalled
 {

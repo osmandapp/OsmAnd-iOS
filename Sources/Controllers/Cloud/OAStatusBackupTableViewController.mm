@@ -44,7 +44,6 @@
 #import "OATableViewCustomHeaderView.h"
 #import "OASizes.h"
 #import "OAResourcesUIHelper.h"
-#import "OADownloadingCellCloudHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -61,7 +60,7 @@
     
     OANetworkSettingsHelper *_settingsHelper;
     OABackupHelper *_backupHelper;
-    OADownloadingCellCloudHelper *_downloadingCellCloudHelper;
+    DownloadingCellCloudHelper *_downloadingCellCloudHelper;
 }
 
 - (instancetype)initWithTableType:(EOARecentChangesType)type
@@ -111,18 +110,19 @@
 
 - (void) setupDownloadingCellHelper
 {
-    _downloadingCellCloudHelper = [[OADownloadingCellCloudHelper alloc] init];
-    [_downloadingCellCloudHelper setHostTableView:self.tableView];
-    _downloadingCellCloudHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowShevronBeforeDownloading;
+    __weak OAStatusBackupTableViewController *weakSelf = self;
+    _downloadingCellCloudHelper = [[DownloadingCellCloudHelper alloc] init];
+    [_downloadingCellCloudHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowShevronBeforeDownloading;
     if (_tableType == EOARecentChangesConflicts)
     {
-        _downloadingCellCloudHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowIconAndShevronAlways;
+        _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAndShevronAlways;
         _downloadingCellCloudHelper.rightIconName = @"ic_custom_alert";
-        _downloadingCellCloudHelper.rightIconColorName = ACColorNameIconColorDisruptive;
+        _downloadingCellCloudHelper.rightIconColor = [UIColor colorNamed:ACColorNameIconColorDisruptive];
     }
     else
     {
-        _downloadingCellCloudHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowShevronBeforeDownloading;
+        _downloadingCellCloudHelper.rightIconStyle = DownloadingCellRightIconTypeShowShevronBeforeDownloading;
     }
 }
 
@@ -597,8 +597,8 @@
     {
         OASettingsItem *settingsItem = [item objForKey:@"settingsItem"];
         NSString *type = [OASettingsItemType typeName:settingsItem.type];
-        NSString *resourceId = [_downloadingCellCloudHelper getResourceId:type filename:[item stringForKey:@"fileName"]];
-        OADownloadingCell *cell = [_downloadingCellCloudHelper getOrCreateCell:resourceId];
+        NSString *resourceId = [_downloadingCellCloudHelper getResourceIdWithTypeName:type filename:[item stringForKey:@"fileName"]];
+        DownloadingCell *cell = [_downloadingCellCloudHelper getOrCreateCell:resourceId];
         if (cell)
         {
             BOOL hasConflict = (EOABackupSyncOperationType) [item integerForKey:@"operation"] == EOABackupSyncOperationNone;
@@ -729,11 +729,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     OATableRowData *item = [_data itemForIndexPath:indexPath];
-    EOAItemStatusType itemProgressType = EOAItemStatusNone;
+    ItemStatusType itemProgressType = ItemStatusTypeIdle;
     if ([item objForKey:@"progressType"])
-        itemProgressType = (EOAItemStatusType)[item integerForKey:@"progressType"];
+        itemProgressType = (ItemStatusType)[item integerForKey:@"progressType"];
 
-    if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && itemProgressType == EOAItemStatusNone && ![self isSyncing:item])
+    if ([item objForKey:@"settingsItem"] && [item objForKey:@"operation"] && itemProgressType == ItemStatusTypeIdle && ![self isSyncing:item])
     {
         OAStatusBackupConflictDetailsViewController *statusDetailsViewController =
         [[OAStatusBackupConflictDetailsViewController alloc] initWithLocalFile:[item objForKey:@"localFile"]

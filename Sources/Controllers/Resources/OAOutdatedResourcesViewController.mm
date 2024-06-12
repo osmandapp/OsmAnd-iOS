@@ -15,7 +15,6 @@
 #import "OAIAPHelper.h"
 #import "OAWeatherForecastViewController.h"
 #import "OAPluginPopupViewController.h"
-#import "OADownloadingCellResourceHelper.h"
 #import "OASimpleTableViewCell.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -46,7 +45,7 @@
     OASubscriptionBannerCardView *_subscriptionBannerView;
     
     UIBarButtonItem *_updateAllButton;
-    OADownloadingCellResourceHelper * _downloadingCellResourceHelper;
+    DownloadingCellResourceHelper * _downloadingCellResourceHelper;
 }
 
 - (instancetype)initWithCoder:(NSCoder *)aDecoder
@@ -146,9 +145,10 @@
 
 - (void) setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
-    [_downloadingCellResourceHelper setHostTableView:self.tableView];
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowIconAlways;
+    __weak OAOutdatedResourcesViewController *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
 }
 
@@ -489,7 +489,7 @@
     else if (indexPath.section == _availableMapsSection)
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_resourcesItems[indexPath.row]];
-        OADownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
+        DownloadingCell *cell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
         cell.titleLabel.text = title;
         cell.descriptionLabel.text = description;
         return cell;

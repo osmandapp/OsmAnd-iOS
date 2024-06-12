@@ -150,12 +150,6 @@
     return [[[OsmAndApp instance].downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
-- (BOOL) isUndefinedDownloadState:(NSString*)resourceId
-{
-    auto state = [self getDownloadTask:resourceId].state;
-    return state != OADownloadTaskStateRunning && state != OADownloadTaskStateFinished;
-}
-
 #pragma mark - Cell setup methods
 
 - (OADownloadingCell *) getOrCreateSwiftCellForResourceId:(NSString *)resourceId swiftResourceItem:(OAResourceSwiftItem *)swiftResourceItem

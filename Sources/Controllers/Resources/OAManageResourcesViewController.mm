@@ -49,8 +49,6 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
-#import "OADownloadingCellResourceHelper.h"
-#import "OADownloadingCellMultipleResourceHelper.h"
 
 #include <OsmAndCore/WorldRegions.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
@@ -87,8 +85,8 @@ struct RegionResources
     OsmAndAppInstance _app;
     OAIAPHelper *_iapHelper;
     OAWeatherHelper *_weatherHelper;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
-    OADownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
 
     NSObject *_dataLock;
 
@@ -445,13 +443,14 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
-    [_downloadingCellResourceHelper setHostTableView:self.tableView];
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    __weak OAManageResourcesViewController *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
     
-    _downloadingCellMultipleResourceHelper  = [[OADownloadingCellMultipleResourceHelper alloc] init];
-    [_downloadingCellMultipleResourceHelper setHostTableView:self.tableView];
-    _downloadingCellMultipleResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
+    _downloadingCellMultipleResourceHelper  = [[DownloadingCellMultipleResourceHelper alloc] init];
+    [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellMultipleResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
 }
 
 - (UIView *) getMiddleView
@@ -2661,7 +2660,7 @@ static BOOL _repositoryUpdated = NO;
         }
         NSString *resourceId = [item getResourceId];
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-        OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:resourceId swiftResourceItem:mapItem];
+        DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;
@@ -2672,7 +2671,7 @@ static BOOL _repositoryUpdated = NO;
     {
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-        OADownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
+        DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
         UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameResourceInstalledIconColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;
@@ -3244,7 +3243,7 @@ static BOOL _repositoryUpdated = NO;
     });
 }
 
-#pragma mark - OADownloadMultipleResourceDelegate
+#pragma mark - DownloadMultipleResourceDelegate
 
 - (void)downloadResources:(OAMultipleResourceSwiftItem *)item selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems;
 {

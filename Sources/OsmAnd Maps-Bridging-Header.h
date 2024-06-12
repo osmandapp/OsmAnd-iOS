@@ -21,7 +21,6 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAQuickActionRegistry.h"
-#import "OADownloadingCellResourceHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAGpxInfo.h"
@@ -130,6 +129,7 @@
 #import "OAPurchasesViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
+#import "OAPluginPopupViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

@@ -15,7 +15,6 @@
 #import "MBProgressHUD.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAResourcesUIHelper.h"
-#import "OADownloadingCellResourceHelper.h"
 #import "OAWeatherHelper.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -23,14 +22,14 @@
 #import "OAWeatherAutoUpdateSettingsViewController.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate, OAWeatherAutoUpdateSettingsViewControllerDelegate, OADownloadingCellResourceHelperDelegate>
+@interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate, OAWeatherAutoUpdateSettingsViewControllerDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
 @implementation OAWeatherForecastDetailsViewController
 {
     OAWeatherHelper *_weatherHelper;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAWorldRegion *_region;
     NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
     NSMutableDictionary<NSNumber *, NSString *> *_headers;
@@ -112,9 +111,11 @@
 
 - (void) setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
-    [_downloadingCellResourceHelper setHostTableView:self.tableView];
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeShowIconAlways;
+    __weak OAWeatherForecastDetailsViewController *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAlways;
     _downloadingCellResourceHelper.isAlwaysClickable = YES;
     _downloadingCellResourceHelper.isBoldTitleStyle = YES;
 }
@@ -282,7 +283,7 @@
     else if ([item[@"type"] isEqualToString:@"update_now_cell"])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_localResourceItem];
-        OARightIconTableViewCell *cell = [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
+        OARightIconTableViewCell *cell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
@@ -464,7 +465,7 @@
     return state != OADownloadTaskStateRunning && state != OADownloadTaskStateFinished;
 }
 
-#pragma mark - OADownloadingCellResourceHelperDelegate
+#pragma mark - DownloadingCellResourceHelperDelegate
 
 - (void)onDownldedResourceInstalled
 {

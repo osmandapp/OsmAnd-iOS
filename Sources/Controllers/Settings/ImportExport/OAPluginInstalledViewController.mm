@@ -19,8 +19,6 @@
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
-#import "OADownloadingCellResourceHelper.h"
-#import "OADownloadingCellMultipleResourceHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
@@ -35,7 +33,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAPluginInstalledViewController () <UITableViewDelegate, UITableViewDataSource, OADownloadingCellResourceHelperDelegate>
+@interface OAPluginInstalledViewController () <UITableViewDelegate, UITableViewDataSource, DownloadingCellResourceHelperDelegate>
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIButton *disableButton;
 @property (weak, nonatomic) IBOutlet UIButton *enableButton;
@@ -64,8 +62,8 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     NSArray<OAApplicationMode *> *_addedAppModes;
     
     OAIAPHelper *_iapHelper;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
-    OADownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellMultipleResourceHelper * _downloadingCellMultipleResourceHelper;
     NSObject *_dataLock;
 }
 
@@ -219,17 +217,18 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
-    _downloadingCellResourceHelper.hostViewController = self;
-    [_downloadingCellResourceHelper setHostTableView:self.tableView];
-    _downloadingCellResourceHelper.delegate = self;
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
+    __weak OAPluginInstalledViewController *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = weakSelf;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
     
-    _downloadingCellMultipleResourceHelper = [[OADownloadingCellMultipleResourceHelper alloc] init];
-    _downloadingCellMultipleResourceHelper.hostViewController = self;
-    [_downloadingCellMultipleResourceHelper setHostTableView:self.tableView];
-    _downloadingCellMultipleResourceHelper.delegate = self;
-    _downloadingCellMultipleResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
+    _downloadingCellMultipleResourceHelper = [[DownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellMultipleResourceHelper.hostViewController = weakSelf;
+    [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellMultipleResourceHelper.delegate = weakSelf;
+    _downloadingCellMultipleResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 - (NSArray<NSArray <NSDictionary *> *> *)data
@@ -398,12 +397,12 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     else if ([item[@"type"] isEqualToString:kCellTypeMap])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[self getMapItem:indexPath]];
-        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:item[@"resourceId"] swiftResourceItem:mapItem];
+        return [_downloadingCellResourceHelper getOrCreateCell:item[@"resourceId"] swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMultyMap])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[self getMapItem:indexPath]];
-        return [_downloadingCellMultipleResourceHelper getOrCreateSwiftCellForResourceId:item[@"resourceId"] swiftResourceItem:mapItem];
+        return [_downloadingCellMultipleResourceHelper getOrCreateCell:item[@"resourceId"] swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])
     {
@@ -555,7 +554,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     }
 }
 
-#pragma mark - OADownloadingCellResourceHelperDelegate
+#pragma mark - DownloadingCellResourceHelperDelegate
 
 - (void) onDownldedResourceInstalled
 {

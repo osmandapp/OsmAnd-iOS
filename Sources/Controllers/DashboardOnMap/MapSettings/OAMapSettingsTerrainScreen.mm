@@ -11,7 +11,6 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -36,7 +35,7 @@
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
-#import "OADownloadingCellResourceHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static float kRelief3DCellRowHeight = 48.3;
 static NSString *kCellTypeMap = @"MapCell";
@@ -46,14 +45,14 @@ static NSString *kCellItemKey = @"kCellItemKey";
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate, OADownloadingCellResourceHelperDelegate>
+@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
 @implementation OAMapSettingsTerrainScreen
 {
     OsmAndAppInstance _app;
-    OADownloadingCellResourceHelper *_downloadingCellResourceHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAIAPHelper *_iapHelper;
     OASRTMPlugin *_plugin;
     OATableDataModel *_data;
@@ -303,11 +302,12 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 - (void)setupDownloadingCellHelper
 {
-    _downloadingCellResourceHelper = [OADownloadingCellResourceHelper new];
-    _downloadingCellResourceHelper.hostViewController = self.vwController;
-    [_downloadingCellResourceHelper setHostTableView:self.tblView];
-    _downloadingCellResourceHelper.delegate = self;
-    _downloadingCellResourceHelper.rightIconStyle = EOADownloadingCellRightIconTypeHideIconAfterDownloading;
+    __weak OAMapSettingsTerrainScreen *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 #pragma mark - UITableViewDataSource
@@ -458,7 +458,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     else if ([item.cellType isEqualToString:@"mapItem"])
     {
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[item objForKey:kCellItemKey]];
-        return [_downloadingCellResourceHelper getOrCreateSwiftCellForResourceId:mapItem.resourceId swiftResourceItem:mapItem];
+        return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
     }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
@@ -632,7 +632,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     [self updateAvailableMaps];
 }
 
-#pragma mark - OADownloadingCellResourceHelperDelegate
+#pragma mark - DownloadingCellResourceHelperDelegate
 
 - (void)onDownldedResourceInstalled
 {

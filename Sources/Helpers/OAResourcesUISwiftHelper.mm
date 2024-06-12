@@ -11,6 +11,7 @@
 #import "OsmAndAppImpl.h"
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
+#import "OARootViewController.h"
 
 @implementation OAResourceSwiftItem
 
@@ -352,6 +353,12 @@
 + (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
 {
     [OAResourcesUIHelper deleteResourcesOf:items progressHUD:nil executeAfterSuccess:nil];
+}
+
++ (void) onDownldedResourceInstalled
+{
+    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+    [OAManageResourcesViewController prepareData];
 }
 
 @end

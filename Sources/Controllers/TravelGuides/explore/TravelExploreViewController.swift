@@ -28,7 +28,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
   
     var searchController: UISearchController!
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
-    var downloadingCellResourceHelper: OADownloadingCellResourceHelper = OADownloadingCellResourceHelper()
+    var downloadingCellResourceHelper: DownloadingCellResourceHelper = DownloadingCellResourceHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
     var lastSelectedIndexPath: IndexPath?
@@ -296,7 +296,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     }
     
     private func setupDownloadingCellHelper() {
-        downloadingCellResourceHelper = OADownloadingCellResourceHelper()
+        downloadingCellResourceHelper = DownloadingCellResourceHelper()
         downloadingCellResourceHelper.hostViewController = self
         downloadingCellResourceHelper.setHostTableView(tableView)
         downloadingCellResourceHelper.rightIconStyle = .hideIconAfterDownloading
@@ -377,7 +377,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         
         if item.cellType == "kDownloadCellKey" {
             if let resource = getSwiftResourceByIndex(indexPath: indexPath) {
-                outCell = downloadingCellResourceHelper.getOrCreateSwiftCell(forResourceId: resource.resourceId(), swiftResourceItem: resource)
+                outCell = downloadingCellResourceHelper.getOrCreateCell(resource.resourceId(), swiftResourceItem: resource)
             }
             
         } else if item.cellType == OAFilledButtonCell.getIdentifier() {
@@ -578,7 +578,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         lastSelectedIndexPath = indexPath
         if item.cellType == "kDownloadCellKey" {
             let resource = getSwiftResourceByIndex(indexPath: indexPath)
-            downloadingCellResourceHelper.onCellClicked(resource?.resourceId())     
+            downloadingCellResourceHelper.onCellClicked(resource?.resourceId() ?? "")     
         } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
             if let article = item.obj(forKey: "article") as? TravelArticle {
                 let lang = item.string(forKey: "lang") ?? ""

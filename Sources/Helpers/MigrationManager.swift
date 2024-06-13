@@ -327,9 +327,9 @@ final class MigrationManager: NSObject {
         }
         
         if let oldQuickActionPortraitX = OACommonDouble.withKey("quickActionPortraitX", defValue: 0),
-           let oldQuickActionPortraitY = OACommonDouble.withKey("quickActionPortraitY", defValue:0),
-           let oldQuickActionLandscapeX = OACommonDouble.withKey("quickActionLandscapeX", defValue:0),
-           let oldQuickActionLandscapeY = OACommonDouble.withKey("quickActionLandscapeY", defValue:0) {
+           let oldQuickActionPortraitY = OACommonDouble.withKey("quickActionPortraitY", defValue: 0),
+           let oldQuickActionLandscapeX = OACommonDouble.withKey("quickActionLandscapeX", defValue: 0),
+           let oldQuickActionLandscapeY = OACommonDouble.withKey("quickActionLandscapeY", defValue: 0) {
             for appMode in OAApplicationMode.allPossibleValues() {
                 buttonState.fabMarginPref.setPortraitFabMargin(appMode,
                                                                x: Int32(oldQuickActionPortraitX.get(appMode)),
@@ -343,9 +343,9 @@ final class MigrationManager: NSObject {
 
         if let map3DModeState = helper.getMap3DButtonState() as Map3DButtonState? {
             if let oldMap3DPortraitX = OACommonDouble.withKey("map3dModePortraitX", defValue: 0),
-               let oldMap3DPortraitY = OACommonDouble.withKey("map3dModePortraitY", defValue:0),
-               let oldMap3DLandscapeX = OACommonDouble.withKey("map3dModeLandscapeX", defValue:0),
-               let oldMap3DLandscapeY = OACommonDouble.withKey("map3dModeLandscapeY", defValue:0) {
+               let oldMap3DPortraitY = OACommonDouble.withKey("map3dModePortraitY", defValue: 0),
+               let oldMap3DLandscapeX = OACommonDouble.withKey("map3dModeLandscapeX", defValue: 0),
+               let oldMap3DLandscapeY = OACommonDouble.withKey("map3dModeLandscapeY", defValue: 0) {
                 for appMode in OAApplicationMode.allPossibleValues() {
                     map3DModeState.fabMarginPref.setPortraitFabMargin(appMode,
                                                                       x: Int32(oldMap3DPortraitX.get(appMode)),
@@ -354,6 +354,13 @@ final class MigrationManager: NSObject {
                                                                        x: Int32(oldMap3DLandscapeX.get(appMode)),
                                                                        y: Int32(oldMap3DLandscapeY.get(appMode)))
                 }
+            }
+        }
+
+        if let compassState = helper.getCompassButtonState() as CompassButtonState?,
+           let oldCompassMode = OACommonInteger.withKey("compassMode", defValue: CompassVisibility.visibleIfMapRotated.rawValue) {
+            for appMode in OAApplicationMode.allPossibleValues() {
+                compassState.visibilityPref.set(oldCompassMode.get(appMode), mode: appMode)
             }
         }
     }

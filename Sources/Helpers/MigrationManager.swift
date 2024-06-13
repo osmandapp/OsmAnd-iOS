@@ -320,7 +320,7 @@ final class MigrationManager: NSObject {
             }
         }
         
-        if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty{
+        if let value = defaults.string(forKey: "quickActionsList"), !value.isEmpty {
             for appMode in OAApplicationMode.allPossibleValues() {
                 buttonState.quickActionsPref.set(value, mode: appMode)
             }

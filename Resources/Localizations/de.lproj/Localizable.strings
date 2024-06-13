@@ -316,7 +316,7 @@
 "shared_string_not_selected" = "Nicht ausgewählt";
 "shared_string_language" = "Sprache";
 "you_searching" = "Sie suchen";
-"from_location" = "abwesend";
+"from_location" = "entfernt";
 "show_alt_in_drive" = "Höhe im Fahrmodus anzeigen";
 "shared_string_get" = "Erwerben";
 "srtm_plugin_disabled" = "Topographie deaktiviert";
@@ -775,7 +775,7 @@
 "shared_string_close" = "Schließen";
 "shared_string_actions" = "Aktionen";
 "context_menu_item_directions_from" = "Navigiere von";
-"search_nearby" = "Suche um Aufenthaltsort";
+"search_nearby" = "In der Nähe suchen";
 "map_widget_ruler_control" = "Zirkel";
 "import_from_docs" = "Aus Dokumenten importieren";
 "use_osm_live_routing" = "OsmAnd-Live-Navigation";
@@ -3394,7 +3394,7 @@
 "routing_attr_hazmat_category_usa_1_name" = "Sprengstoffe";
 "rendering_value_sector4_name" = "Sektor 4";
 "routing_attr_allow_via_ferrata_name" = "Bergroute (Klettersteig)";
-"distance_during_navigation" = "Distanz während der Navigation";
+"distance_during_navigation" = "Entfernung während der Navigation";
 "shared_string_precise" = "Präzise";
 "upload_to_osm_short" = "Hochladen zu OSM";
 "distance_during_navigation_footer" = "Wähle, wie Entfernungsinformationen in Navigationswidgets angezeigt werden (Entfernung zum Punkt, nächste Abbiegung, Spuren).\n\nWähle „Präzise“ für exakte Zahlen oder „Abrunden“ für leichtere Lesbarkeit.";
@@ -3406,7 +3406,7 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Besondere Streckenführung verwenden (nur HH)";
 "online_plugins" = "Online Plugins";
 "vertical_exaggeration" = "Vertikale Vergrößerung";
-"vertical_exaggeration_description" = "Durch Änderung des Skalenwerts können Sie das 3D-Profil hervorheben.";
+"vertical_exaggeration_description" = "Durch Änderung des Skalierungs-Werts können Sie das 3D-Profil hervorheben.";
 "shared_string_scale" = "Maßstab";
 "missing_or_outdated_maps_title" = "Fehlende oder veraltete Karte";
 "required_maps" = "Benötigte Karten";
@@ -3451,3 +3451,5 @@
 "shared_string_speedometer" = "Tachometer";
 "speed_limit_warning" = "Warnung vor Tempolimit";
 "shared_string_limit" = "Limit";
+"shared_string_instructions" = "Anleitung";
+"shared_string_analysis" = "Analyse";

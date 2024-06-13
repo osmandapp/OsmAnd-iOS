@@ -8,6 +8,7 @@
 
 #import "OANavigationIcon.h"
 #import "OAUtilities.h"
+#import "OAAppSettings.h"
 
 @interface OANavigationIcon()
 
@@ -31,6 +32,11 @@
     return [self.class getIcon:_navigationIcon color:color];
 }
 
+- (UIImage *) getMapIcon:(UIColor *)color
+{
+    return [self.class getIcon:_navigationIcon color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
+}
+
 + (NSArray<OANavigationIcon *> *) values
 {
     return @[ [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_DEFAULT],
@@ -38,7 +44,12 @@
               [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_CAR] ];
 }
 
-+ (UIImage *)getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color
++ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color
+{
+    return [self getIcon:navigationIcon color:color scaleFactor:1.0];
+}
+
++ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
@@ -63,7 +74,7 @@
         default:
             return nil;
     }
-    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage];
+    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 
 @end

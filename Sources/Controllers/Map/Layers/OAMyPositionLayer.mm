@@ -476,9 +476,9 @@ typedef enum {
         
         // Day
         c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon iconWithColor:iconColor].CGImage];
+        sk_sp<SkImage> locationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyDay,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationMainIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(locationMainIcon));
 
         c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
         sk_sp<SkImage> locationHeadingIcon = [OANativeUtilities skImageFromCGImage:[locIcon headingIconWithColor:iconColor].CGImage];
@@ -488,24 +488,24 @@ typedef enum {
         
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.straightLocationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> straightLocationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon iconWithColor:iconColor].CGImage];
+        sk_sp<SkImage> straightLocationMainIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.straightLocationMainIconKeyDay,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:straightLocationMainIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(straightLocationMainIcon));
         c.straightLocationMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
 
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.courseMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage];
+        sk_sp<SkImage> courseMainIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyDay,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:courseMainIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(courseMainIcon));
         c.courseMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Night
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.locationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon iconWithColor:iconColor].CGImage];
+        sk_sp<SkImage> locationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyNight,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationMainNightIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(locationMainNightIcon));
         c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
         sk_sp<SkImage> locationHeadingNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon headingIconWithColor:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
@@ -514,16 +514,16 @@ typedef enum {
 
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.straightLocationMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> straightLocationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon iconWithColor:iconColor].CGImage];
+        sk_sp<SkImage> straightLocationMainNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getMapIcon:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.straightLocationMainIconKeyNight,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:straightLocationMainNightIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(straightLocationMainNightIcon));
         c.straightLocationMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
 
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.courseMainIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage];
+        sk_sp<SkImage> courseMainNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.courseMainIconKeyNight,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:courseMainNightIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(courseMainNightIcon));
         c.courseMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
 
         locationAndCourseMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -531,17 +531,17 @@ typedef enum {
         // Lost (day)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.locationMainIconKeyLostDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> locationMainLostDayIcon = [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:UIColorFromRGB(location_icon_color_lost)].CGImage];
+        sk_sp<SkImage> locationMainLostDayIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:UIColorFromRGB(location_icon_color_lost)].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostDay,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationMainLostDayIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(locationMainLostDayIcon));
         c.locationMarkerLostDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
         
         // Lost (night)
         locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
         c.locationMainIconKeyLostNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
-        sk_sp<SkImage> locationMainLostNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:UIColorFromRGB(location_icon_color_lost)].CGImage];
+        sk_sp<SkImage> locationMainLostNightIcon = [OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:UIColorFromRGB(location_icon_color_lost)].CGImage];
         locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyLostNight,
-                                                           OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationMainLostNightIcon scaleFactor:_textScaleFactor]));
+                                                           OsmAnd::SingleSkImage(locationMainLostNightIcon));
         c.locationMarkerLostNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
     
         [self updateMode:c];

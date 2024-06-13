@@ -41,7 +41,6 @@ final class SpeedLimitView: UIView {
             updateWith(value: previewValueDefault)
             isHidden = OAAppSettings.sharedManager().showSpeedLimitWarning.get() == .whenExceeded
         }
-        overrideUserInterfaceStyle = OAAppSettings.sharedManager().nightMode ? .dark : .light
     }
     
     func updateWith(value: String) {

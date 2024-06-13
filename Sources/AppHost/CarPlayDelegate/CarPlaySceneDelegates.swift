@@ -127,3 +127,17 @@ extension CarPlaySceneDelegate: CPTemplateApplicationSceneDelegate {
         }
     }
 }
+
+// MARK: - OAWidgetListener
+
+extension CarPlaySceneDelegate: OAWidgetListener {
+    func widgetChanged(_ widget: OABaseWidgetView?) {
+        if widget is SpeedometerView {
+            carPlayMapController?.configureSpeedometer()
+        }
+    }
+    
+    func widgetVisibilityChanged(_ widget: OABaseWidgetView, visible: Bool) { }
+    
+    func widgetClicked(_ widget: OABaseWidgetView) { }
+}

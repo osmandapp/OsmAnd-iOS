@@ -3435,3 +3435,6 @@
 "speedometer_description" = "Muestra su velocidad actual según lo informado a través del GPS";
 "shared_string_always" = "Siempre";
 "shared_string_limit" = "Límite";
+"shared_string_analysis" = "Análisis";
+"shared_string_instructions" = "Instrucciones";
+"step_by_step" = "Navegación paso a paso";

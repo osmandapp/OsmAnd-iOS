@@ -3443,3 +3443,7 @@
 "shared_string_always" = "Siempre";
 "shared_string_speedometer" = "Velocímetro";
 "speedometer_description" = "Muestra la velocidad actual detectada por el GPS";
+"shared_string_limit" = "Límite";
+"shared_string_instructions" = "Instrucciones";
+"shared_string_analysis" = "Análisis";
+"step_by_step" = "Giro a giro";

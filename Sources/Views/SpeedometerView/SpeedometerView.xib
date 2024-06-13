@@ -32,7 +32,7 @@
                                             <color key="textColor" name="widgetValueColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="Km/h" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tp0-En-Uqk">
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="252" text="KM/H" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tp0-En-Uqk">
                                             <rect key="frame" x="0.0" y="49" width="46" height="13"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
@@ -54,23 +54,6 @@
                                 <constraint firstItem="vak-yP-0PE" firstAttribute="leading" secondItem="jOs-Ww-k6k" secondAttribute="leading" constant="5" id="kDQ-AD-zfi"/>
                                 <constraint firstItem="vak-yP-0PE" firstAttribute="top" secondItem="jOs-Ww-k6k" secondAttribute="top" constant="5" id="msT-cu-Uiu"/>
                             </constraints>
-                            <userDefinedRuntimeAttributes>
-                                <userDefinedRuntimeAttribute type="number" keyPath="cornerRadius">
-                                    <real key="value" value="6"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="size" keyPath="shadowOffset">
-                                    <size key="value" width="0.0" height="2"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="shadowOpacity">
-                                    <real key="value" value="1"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="number" keyPath="shadowRadius">
-                                    <real key="value" value="5"/>
-                                </userDefinedRuntimeAttribute>
-                                <userDefinedRuntimeAttribute type="color" keyPath="shadowColor">
-                                    <color key="value" white="0.0" alpha="0.34548323675496689" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </userDefinedRuntimeAttribute>
-                            </userDefinedRuntimeAttributes>
                             <connections>
                                 <outlet property="bottomConstraint" destination="S3D-yZ-H3Z" id="5xF-aK-HLP"/>
                                 <outlet property="leadingConstraint" destination="kDQ-AD-zfi" id="T18-Zd-jbF"/>

@@ -90,16 +90,17 @@ extension UIView {
     }
 }
 
-protocol ReuseIdentifier { }
-
-extension ReuseIdentifier {
-    static var reuseIdentifier: String {
-        String(describing: Self.self)
+extension UITableViewCell {
+    @objc static var reuseIdentifier: String {
+        String(describing: self)
     }
 }
 
-extension UITableViewCell: ReuseIdentifier { }
-extension UICollectionViewCell: ReuseIdentifier { }
+extension UICollectionViewCell {
+    @objc static var reuseIdentifier: String {
+        String(describing: self)
+    }
+}
 
 extension UIView {
     class func fromNib<T: UIView>() -> T {
@@ -141,5 +142,41 @@ extension UIView {
         set {
             setNeedsLayout()
         }
+    }
+}
+
+extension UIView {
+    fileprivate enum Constants {
+        static let externalBorderName = "externalBorder"
+    }
+    
+    @discardableResult
+    func addExternalBorder(borderWidth: CGFloat = 2.0,
+                           borderColor: UIColor = .white,
+                           cornerRadius: CGFloat = 0) -> CALayer {
+        let externalBorder = CALayer()
+        externalBorder.frame = CGRect(x: -borderWidth, y: -borderWidth, width: frame.size.width + 2 * borderWidth, height: frame.size.height + 2 * borderWidth)
+        externalBorder.borderColor = borderColor.cgColor
+        externalBorder.borderWidth = borderWidth
+        if cornerRadius != 0 {
+            externalBorder.cornerRadius = cornerRadius
+        }
+        externalBorder.name = Constants.externalBorderName
+        
+        layer.insertSublayer(externalBorder, at: 0)
+        layer.masksToBounds = false
+        
+        return externalBorder
+    }
+    
+    func removeExternalBorders() {
+        layer.sublayers?.compactMap { $0 }
+            .filter { $0.name == Constants.externalBorderName }
+            .forEach { $0.removeFromSuperlayer() }
+    }
+    
+    func removeExternalBorder(externalBorder: CALayer) {
+        guard externalBorder.name == Constants.externalBorderName else { return }
+        externalBorder.removeFromSuperlayer()
     }
 }

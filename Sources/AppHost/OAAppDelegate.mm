@@ -47,9 +47,9 @@
 #include <OsmAndCore/QIODeviceLogSink.h>
 #include <OsmAndCore/FunctorLogSink.h>
 
-#define kCheckUpdatesInterval 3600
-
 #define kFetchDataUpdatesId @"net.osmand.fetchDataUpdates"
+
+static const NSTimeInterval kCheckUpdatesInterval = 3600;
 
 NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateStateNotification";
 
@@ -198,7 +198,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             NSLog(@"OAAppDelegate endBackgroundTask");
             
             // Check for updates every hour when the app is in the foreground
-            _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
+            [self initCheckUpdatesTimer];
         });
     });
     
@@ -259,6 +259,15 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 {
     [_app checkAndDownloadOsmAndLiveUpdates];
     [_app checkAndDownloadWeatherForecastsUpdates];
+}
+
+- (void)invalidateIfNeededCheckUpdatesTimer
+{
+    if (_checkUpdatesTimer)
+    {
+        [_checkUpdatesTimer invalidate];
+        _checkUpdatesTimer = nil;
+    }
 }
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
@@ -334,11 +343,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 - (void)applicationDidEnterBackground
 {
     NSLog(@"OAAppDelegate applicationDidEnterBackground %d", _appInitDone);
-    if (_checkUpdatesTimer)
-    {
-        [_checkUpdatesTimer invalidate];
-        _checkUpdatesTimer = nil;
-    }
+    [self invalidateIfNeededCheckUpdatesTimer];
     if (_appInitDone)
         [_app onApplicationDidEnterBackground];
     
@@ -358,9 +363,15 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
     NSLog(@"OAAppDelegate applicationDidBecomeActive %d", _appInitDone);
     if (_appInitDone)
     {
-        _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
+        [self initCheckUpdatesTimer];
         [_app onApplicationDidBecomeActive];
     }
+}
+
+- (void)initCheckUpdatesTimer
+{
+    [self invalidateIfNeededCheckUpdatesTimer];
+    _checkUpdatesTimer = [NSTimer scheduledTimerWithTimeInterval:kCheckUpdatesInterval target:self selector:@selector(performUpdatesCheck) userInfo:nil repeats:YES];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application

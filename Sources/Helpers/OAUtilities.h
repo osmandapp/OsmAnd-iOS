@@ -304,7 +304,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (UIImage *) getTintableImage:(UIImage *)image;
 + (UIImage *) getTintableImageNamed:(NSString *)name;
 + (UIImage *) tintImageWithColor:(UIImage *)source color:(UIColor *)color;
-+ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top;
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top scaleFactor:(CGFloat)scaleFactor;
 
 + (BOOL) doublesEqualUpToDigits:(int)digits source:(double)source destination:(double)destination;
 + (BOOL) isCoordEqual:(CLLocationCoordinate2D)srcLatLon destLat:(CLLocationCoordinate2D)desLatLon;
@@ -409,5 +409,7 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 + (BOOL) isValidFileName:(NSString *)name;
 
 + (BOOL) isReleaseVersion;
+
++ (NSString *) generateCurrentDateFilename;
 
 @end

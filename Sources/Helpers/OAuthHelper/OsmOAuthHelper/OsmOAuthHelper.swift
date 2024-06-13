@@ -22,7 +22,7 @@ class OsmOAuthHelper : BaseOAuthHelper {
     override class var clientSecret: String { return "giAWxmRnrhaMz6AqwAKuEYdfnhmwUbmb9aGrzlTBAmM" }
     override class var redirectURI: String { return "example.com/oauth" }
     override class var urlScheme: String { return "osmand-oauth" }
-    override class var scopes: [String] { return ["read_gpx", "write_gpx", "write_api", "write_notes", "read_prefs"] }
+    override class var scopes: [String] { return ["write_gpx", "write_api", "write_notes", "read_prefs"] }
     
     override class var token: String? {
         get { return OAAppSettings.sharedManager().osmUserAccessToken.get(OAApplicationMode.default()) }

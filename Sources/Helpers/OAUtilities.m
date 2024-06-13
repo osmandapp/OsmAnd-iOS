@@ -1684,7 +1684,7 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
     }
 }
 
-+ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top
++ (UIImage *) layeredImageWithColor:(UIColor *)color bottom:(UIImage *)bottom center:(UIImage *)center top:(UIImage *)top scaleFactor:(CGFloat)scaleFactor
 {
     @autoreleasepool
     {
@@ -1693,24 +1693,26 @@ static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
             size = center.size;
         if (size.width < top.size.width || size.height < top.size.height)
             size = top.size;
-
-        UIGraphicsBeginImageContextWithOptions(size, NO, [UIScreen mainScreen].scale);
+        
+        CGSize scaledSize = CGSizeMake(size.width * scaleFactor, size.height * scaleFactor);
+        
+        UIGraphicsBeginImageContextWithOptions(scaledSize, NO, [UIScreen mainScreen].scale);
         
         CGContextRef context = UIGraphicsGetCurrentContext();
         
-        CGContextTranslateCTM(context, 0, size.height);
+        CGContextTranslateCTM(context, 0, scaledSize.height);
         CGContextScaleCTM(context, 1.0, -1.0);
         
         CGContextSetBlendMode(context, kCGBlendModeNormal);
-        CGRect rect = CGRectMake(size.width / 2.0 - bottom.size.width / 2.0, size.height / 2.0 - bottom.size.height / 2.0, bottom.size.width, bottom.size.height);
+        CGRect rect = CGRectMake((scaledSize.width - bottom.size.width * scaleFactor) / 2, (scaledSize.height - bottom.size.height * scaleFactor) / 2, bottom.size.width * scaleFactor, bottom.size.height * scaleFactor);
         CGContextDrawImage(context, rect, bottom.CGImage);
 
         center = [self imageWithTintColor:color image:center];
         
-        rect = CGRectMake(size.width / 2.0 - center.size.width / 2.0, size.height / 2.0 - center.size.height / 2.0, center.size.width, center.size.height);
+        rect = CGRectMake((scaledSize.width - center.size.width * scaleFactor) / 2, (scaledSize.height - center.size.height * scaleFactor) / 2, center.size.width * scaleFactor, center.size.height * scaleFactor);
         CGContextDrawImage(context, rect, center.CGImage);
         
-        rect = CGRectMake(size.width / 2.0 - top.size.width / 2.0, size.height / 2.0 - top.size.height / 2.0, top.size.width, top.size.height);
+        rect = CGRectMake((scaledSize.width - top.size.width * scaleFactor) / 2, (scaledSize.height - top.size.height * scaleFactor) / 2, top.size.width * scaleFactor, top.size.height * scaleFactor);
         CGContextDrawImage(context, rect, top.CGImage);
 
         UIImage *res = UIGraphicsGetImageFromCurrentImageContext();
@@ -2965,6 +2967,13 @@ static const double d180PI = 180.0 / M_PI_2;
 + (BOOL) isReleaseVersion
 {
     return ![kDocsLatestVersion containsString:@"future-ios"];
+}
+
++ (NSString *) generateCurrentDateFilename
+{
+    NSDateFormatter *objDateFormatter = [[NSDateFormatter alloc] init];
+    [objDateFormatter setDateFormat:@"EEE dd MMM yyyy"];
+    return [objDateFormatter stringFromDate:[NSDate date]];
 }
 
 @end

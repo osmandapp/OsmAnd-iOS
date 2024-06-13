@@ -28,6 +28,7 @@
 #import "OAPlugin.h"
 #import "OASRTMPlugin.h"
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
@@ -656,7 +657,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
 }
 
-- (void)onIntefaceControllerDetached
+- (void)onInterfaceControllerDetached
 {
     [NSNotificationCenter.defaultCenter removeObserver:self];
     if (_locationUpdateObserver)

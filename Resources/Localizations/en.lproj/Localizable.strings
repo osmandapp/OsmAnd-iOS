@@ -3771,4 +3771,9 @@
 "edit_tilesource_maxzoom" = "Maximum zoom";
 "edit_tilesource_minzoom" = "Minimum zoom";
 "shared_string_millimeters_short" = "mm";
+
+"shared_string_instructions" = "Instructions";
+"shared_string_analysis" = "Analysis";
+"step_by_step" = "Turn-by-turn";
+
 "shared_string_limit" = "Limit";

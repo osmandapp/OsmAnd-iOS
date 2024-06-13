@@ -8,6 +8,7 @@
 
 #import "OALocationIcon.h"
 #import "OAUtilities.h"
+#import "OAAppSettings.h"
 
 @interface OALocationIcon()
 
@@ -32,6 +33,11 @@
     return [self.class getIcon:_locationIcon color:color];
 }
 
+- (UIImage *) getMapIcon:(UIColor *)color
+{
+    return [self.class getIcon:_locationIcon color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
+}
+
 - (UIImage *) headingIconWithColor:(UIColor *)color
 {
     return [self.class getHeadingIcon:_locationIcon color:color];
@@ -45,6 +51,11 @@
 }
 
 + (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color
+{
+    return [self getIcon:locationIcon color:color scaleFactor:1.0];
+}
+
++ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
@@ -69,7 +80,7 @@
         default:
             return nil;
     }
-    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage];
+    return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 
 + (UIImage *) getHeadingIcon:(EOALocationIcon)locationIcon color:(UIColor *)color

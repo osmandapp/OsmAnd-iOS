@@ -65,6 +65,10 @@ extension UIViewController {
     }
 }
 
+extension UIViewController {
+    @objc var isDarkMode: Bool { traitCollection.userInterfaceStyle == .dark }
+}
+
 extension UINavigationItem {
     @objc (setRightBarButtonItemsisEnabled:tintColor:)
     func setRightBarButtonItems(isEnabled: Bool, with tintColor: UIColor? = nil) {
@@ -127,5 +131,23 @@ extension UINavigationController {
             }
         }
         setViewControllers(newHistory, animated: true)
+    }
+}
+
+extension UIViewController {
+    @objc func canPresentAlertController(_ alert: UIAlertController,
+                                      completion: @escaping (Bool) -> Void) {
+        DispatchQueue.main.async { [weak self] in
+            guard let self,
+                  UIApplication.shared.applicationState != .background else {
+                completion(false)
+                return
+            }
+            if let presented = presentedViewController, presented is UIAlertController {
+                completion(false)
+                return
+            }
+            completion(true)
+        }
     }
 }

@@ -3436,3 +3436,6 @@
 "speedometer_description" = "Viser din aktuelle hastighed som rapporteret via GPS";
 "shared_string_speedometer" = "Speedometer";
 "shared_string_limit" = "Grænse";
+"shared_string_instructions" = "Instruktioner";
+"shared_string_analysis" = "Analyse";
+"step_by_step" = "Sving-for-sving";

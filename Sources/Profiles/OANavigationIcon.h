@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, EOANavigationIcon)
 
 + (instancetype) withNavigationIcon:(EOANavigationIcon)navigationIcon;
 - (UIImage *) iconWithColor:(UIColor *)color;
+- (UIImage *) getMapIcon:(UIColor *)color;
 
 + (NSArray<OANavigationIcon *> *) values;
 

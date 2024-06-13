@@ -1198,7 +1198,7 @@
 "quick_action_toggle_notes_descr" = "Натискання на цю кнопку покаже або сховає онлайн-примітки OSM.";
 "quick_action_toggle_edits_descr" = "Натискання на цю кнопку покаже або сховає офлайн-примітки OSM.";
 "quick_action_edit_list" = "Редагувати список швидких дій";
-"quick_action_hillshade_descr" = "Кнопка, щоб показати або приховати тінь на мапі.";
+"quick_action_hillshade_descr" = "Кнопка, щоб показати або сховати рельєф на мапі.";
 "show_hillshade" = "Показати відтінення рельєфу";
 "hide_hillshade" = "Сховати відтінення рельєфу";
 "toggle_contour_lines" = "Показати/сховати ізолінії";
@@ -3167,7 +3167,7 @@
 "no_bt_permission" = "Дозвіл на використання Bluetooth не надано";
 "shared_string_wrist" = "Запʼястя";
 "shared_string_travel_guides" = "Туристичні путівники";
-"ant_plus_searching_text_description" = "Будь ласка, тримайте пристрій близько до датчика. Вам потрібно активувати датчик, щоб OsmAnd зміг його знайти.";
+"ant_plus_searching_text_description" = "Тримайте пристрій близько до датчика. Вам потрібно активувати датчик, щоб OsmAnd зміг його знайти.";
 "testFlight" = "TestFlight";
 "report_an_issues" = "Повідомити про проблему";
 "telegram_chats" = "Телеграм-бесіди";
@@ -3438,3 +3438,5 @@
 "speed_limit_warning" = "Попередження щодо обмеження швидкості";
 "shared_string_always" = "Завжди";
 "shared_string_limit" = "Обмеження";
+"shared_string_instructions" = "Вказівки";
+"shared_string_analysis" = "Аналіз";

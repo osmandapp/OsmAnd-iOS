@@ -32,14 +32,52 @@
 #import "OASaveGpxToTripsActivity.h"
 #import "OAOsmAndFormatter.h"
 #import "OAEmissionHelper.h"
+#import "OASegmentTableViewCell.h"
+#import "OARouteDirectionInfo.h"
+#import "OALanesDrawable.h"
+#import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 #import <Charts/Charts-Swift.h>
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kStatsSection 0
 #define kAdditionalRouteDetailsOffset 184.0
 
 #define VIEWPORT_FULL_SCALE 0.6f
 #define VIEWPORT_MINIMIZED_SCALE 0.2f
+
+typedef NS_ENUM(NSInteger, EOAOARouteDetailsViewControllerMode)
+{
+    EOAOARouteDetailsViewControllerModeInstructions = 0,
+    EOAOARouteDetailsViewControllerModeAnalysis
+};
+
+@implementation OACumulativeInfo
+
++ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections
+{
+    OACumulativeInfo *cumulativeInfo = [[OACumulativeInfo alloc] init];
+    if (position >= routeDirections.count)
+        return cumulativeInfo;
+    
+    for (int i = 0; i < position; i++)
+    {
+        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
+        cumulativeInfo.time += [routeDirectionInfo getExpectedTime];
+        cumulativeInfo.distance += routeDirectionInfo.distance;
+    }
+    return cumulativeInfo;
+}
+
++ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model
+{
+    long timeInSeconds = [model getExpectedTime];
+    return [OAOsmAndFormatter getFormattedDuration:timeInSeconds];
+}
+
+@end
+
 
 @interface OARouteDetailsViewController () <OAStateChangedListener, ChartViewDelegate, OAStatisticsSelectionDelegate, OAEmissionHelperListener>
 
@@ -48,7 +86,10 @@
 @implementation OARouteDetailsViewController
 {
     NSDictionary *_data;
+    NSMutableDictionary *_instructionsTabData;
+    NSMutableDictionary *_analysisTabData;
     
+    EOAOARouteDetailsViewControllerMode _selectedTab;
     NSMutableSet<NSNumber *> *_expandedSections;
     
     NSArray<NSNumber *> *_types;
@@ -63,25 +104,133 @@
     NSString *_emission;
 }
 
+- (void)registerCells
+{
+    [self.tableView registerNib:[UINib nibWithNibName:@"SegmentTableHeaderView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"SegmentTableHeaderView"];
+    [self.tableView registerNib:[UINib nibWithNibName:[OAFilledButtonCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OAFilledButtonCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[RouteInfoListItemCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OALineChartCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OALineChartCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteStatisticsModeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoAltitudeCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoAltitudeCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoCell reuseIdentifier]];
+    [self.tableView registerNib:[UINib nibWithNibName:[OARouteInfoLegendCell reuseIdentifier] bundle:nil] forCellReuseIdentifier:[OARouteInfoLegendCell reuseIdentifier]];
+}
+
 - (UITableViewCell *) getAnalyzeButtonCell
 {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAFilledButtonCell getCellIdentifier] owner:self options:nil];
-    OAFilledButtonCell* cell = (OAFilledButtonCell *)[nib objectAtIndex:0];
-    
-    if (cell)
-    {
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
-        [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
-        cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
-        [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
-    }
+    OAFilledButtonCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAFilledButtonCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    [cell.button setTitle:OALocalizedString(@"gpx_analyze") forState:UIControlStateNormal];
+    [cell.button addTarget:self action:@selector(openRouteDetailsGraph) forControlEvents:UIControlEventTouchUpInside];
+    cell.button.backgroundColor = [UIColor colorNamed:ACColorNameButtonBgColorPrimary];
+    [cell.button setTitleColor:[UIColor colorNamed:ACColorNameButtonTextColorPrimary] forState:UIControlStateNormal];
     return cell;
 }
 
-- (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OALineChartCell getCellIdentifier] owner:self options:nil];
-    OALineChartCell *routeStatsCell = (OALineChartCell *)[nib objectAtIndex:0];
+- (SegmentTableHeaderView *) getTabSelectorView
+{
+    SegmentTableHeaderView *headerView = [self.tableView dequeueReusableHeaderFooterViewWithIdentifier:@"SegmentTableHeaderView"];
+    UIFont *font = [UIFont scaledSystemFontOfSize:14. weight:UIFontWeightSemibold];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateSelected];
+    [headerView.segmentControl setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor colorNamed:ACColorNameTextColorPrimary], NSFontAttributeName : font} forState:UIControlStateNormal];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_instructions") forSegmentAtIndex:0];
+    [headerView.segmentControl setTitle:OALocalizedString(@"shared_string_analysis") forSegmentAtIndex:1];
+    [headerView.segmentControl removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl addTarget:self action:@selector(segmentChanged:) forControlEvents:UIControlEventValueChanged];
+    [headerView.segmentControl setSelectedSegmentIndex:_selectedTab == EOAOARouteDetailsViewControllerModeInstructions ? 0 : 1];
+    return headerView;
+}
+
+- (void) populateInstructionsTabCells:(NSInteger &)section
+{
+    _instructionsTabData = [NSMutableDictionary dictionary];
+    NSMutableArray<UITableViewCell *> *cells = [NSMutableArray array];
+    
+    NSArray<OARouteDirectionInfo *> *routeDirections = [self.routingHelper getRouteDirections];
+    for (NSInteger i = 0; i < routeDirections.count; i++)
+    {
+        OARouteDirectionInfo *routeDirectionInfo = routeDirections[i];
+        UITableViewCell *cell = [self getRouteDirectionCell:i model:routeDirectionInfo directionsInfo:routeDirections];
+        [cells addObject:cell];
+    }
+
+    [_instructionsTabData setObject:cells forKey:@(section++)];
+}
+
+- (UITableViewCell *) getRouteDirectionCell:(NSInteger)directionInfoIndex model:(OARouteDirectionInfo *)model directionsInfo:(NSArray<OARouteDirectionInfo *> *)directionsInfo
+{
+    RouteInfoListItemCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[RouteInfoListItemCell reuseIdentifier]];
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    OATurnDrawable *turnDrawable = [[OATurnDrawable alloc] initWithMini:NO themeColor:EOATurnDrawableThemeColorSystem];
+    const auto turnType = model.turnType;
+    [turnDrawable setTurnType:turnType];
+    turnDrawable.textColor = [UIColor colorNamed:ACColorNameWidgetValueColor];
+    
+    CGFloat size = MAX(turnDrawable.pathForTurn.bounds.origin.x + turnDrawable.pathForTurn.bounds.size.width,
+                       turnDrawable.pathForTurn.bounds.origin.y + turnDrawable.pathForTurn.bounds.size.height);
+    turnDrawable.frame = CGRectMake(0, 0, size, size);
+    [turnDrawable setClr:[UIColor colorNamed:ACColorNameTextColorPrimary]];
+    [turnDrawable setNeedsDisplay];
+    [cell setLeftTurnIconDrawable:turnDrawable];
+    [cell setLeftImageViewWithImage:turnDrawable.toUIImage];
+    
+    vector<int> lanes = model.turnType->getLanes();
+    if (lanes.size() > 0)
+    {
+        OALanesDrawable *_lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:1];
+        [_lanesDrawable setLanes:lanes];
+        [_lanesDrawable updateBounds];
+        _lanesDrawable.frame = CGRectMake(0, 0, _lanesDrawable.width, _lanesDrawable.height);
+        [_lanesDrawable setNeedsDisplay];
+        [cell setBottomLanesImageWithImage:_lanesDrawable.toUIImage];
+    }
+    else
+    {
+        [cell setBottomLanesImageWithImage:nil];
+    }
+    
+    NSString *segmentDescription = [model getDescriptionRoutePart];
+    [cell setBottomLabelWithText:segmentDescription];
+    
+    if (model.distance > 0)
+    {
+        BOOL shouldRoundUp = ![[OAAppSettings sharedManager].preciseDistanceNumbers get];
+        NSString *segmentDistanceLabelText = [OAOsmAndFormatter getFormattedDistance:model.distance roundUp:shouldRoundUp];
+        [cell setTopLeftLabelWithText:segmentDistanceLabelText];
+        [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleHeadline]];
+        
+        OACumulativeInfo *cumulativeInfo = [OACumulativeInfo getRouteDirectionCumulativeInfo:directionInfoIndex + 1 routeDirections:directionsInfo];
+        NSString *distance = [OAOsmAndFormatter getFormattedDistance:cumulativeInfo.distance roundUp:shouldRoundUp];
+        NSString *time = [OAOsmAndFormatter getFormattedTimeInterval:cumulativeInfo.time shortFormat:YES];
+        [cell setTopRightLabelWithText:[NSString stringWithFormat:@"%@ • %@", distance, time]];
+    }
+    else
+    {
+        if (!segmentDescription || segmentDescription.length == 0)
+        {
+            BOOL isLastCell = directionInfoIndex == (directionsInfo.count - 1);
+            segmentDescription = OALocalizedString(isLastCell ? @"arrived_at_destination" : @"arrived_at_intermediate_point");
+            [cell setTopLeftLabelWithText:segmentDescription];
+            [cell setTopLeftLabelWithFont:[UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline]];
+            [cell setTopRightLabelWithText:@""];
+        }
+        [cell setBottomLabelWithText:@""];
+    }
+    
+    return cell;
+}
+
+- (void) populateAnalysisTabCells:(NSInteger &)section
+{
+    _analysisTabData = [NSMutableDictionary dictionary];
+    [self populateMainGraphSection:_analysisTabData section:section];
+    [self populateElevationSection:_analysisTabData section:section];
+    [self populateStatistics:_analysisTabData section:section];
+}
+
+- (void)populateMainGraphSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section 
+{
+    OALineChartCell *routeStatsCell = [self.tableView dequeueReusableCellWithIdentifier:[OALineChartCell reuseIdentifier]];
     routeStatsCell.selectionStyle = UITableViewCellSelectionStyleNone;
     routeStatsCell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
     routeStatsCell.lineChartView.delegate = self;
@@ -117,8 +266,7 @@
     
     if (hasSlope)
     {
-        nib = [[NSBundle mainBundle] loadNibNamed:[OARouteStatisticsModeCell getCellIdentifier] owner:self options:nil];
-        OARouteStatisticsModeCell *modeCell = (OARouteStatisticsModeCell *)[nib objectAtIndex:0];
+        OARouteStatisticsModeCell *modeCell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteStatisticsModeCell reuseIdentifier]];
         modeCell.selectionStyle = UITableViewCellSelectionStyleNone;
         [modeCell.modeButton setTitle:[NSString stringWithFormat:@"%@/%@", OALocalizedString(@"altitude"), OALocalizedString(@"shared_string_slope")] forState:UIControlStateNormal];
         [modeCell.modeButton addTarget:self action:@selector(onStatsModeButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
@@ -135,8 +283,7 @@
 }
 
 - (void)populateElevationSection:(NSMutableDictionary *)dataArr section:(NSInteger &)section {
-    NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoAltitudeCell getCellIdentifier] owner:self options:nil];
-    OARouteInfoAltitudeCell *altCell = (OARouteInfoAltitudeCell *)[nib objectAtIndex:0];
+    OARouteInfoAltitudeCell *altCell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoAltitudeCell reuseIdentifier]];
     altCell.avgAltitudeTitle.text = OALocalizedString(@"average_altitude");
     altCell.altRangeTitle.text = OALocalizedString(@"altitude_range");
     altCell.ascentTitle.text = OALocalizedString(@"gpx_ascent");
@@ -158,8 +305,7 @@
         
         for (OARouteStatistics *stat in routeInfo)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoCell getCellIdentifier] owner:self options:nil];
-            OARouteInfoCell *cell = (OARouteInfoCell *)[nib objectAtIndex:0];
+            OARouteInfoCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoCell reuseIdentifier]];
             cell.detailsButton.tag = section;
             [cell.detailsButton addTarget:self action:@selector(detailsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             cell.titleView.text = [OAUtilities getLocalizedRouteInfoProperty:stat.name];
@@ -179,8 +325,7 @@
             
             cell.separatorInset = UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.);
             
-            nib = [[NSBundle mainBundle] loadNibNamed:[OARouteInfoLegendCell getCellIdentifier] owner:self options:nil];
-            OARouteInfoLegendCell *legend = (OARouteInfoLegendCell *)[nib objectAtIndex:0];
+            OARouteInfoLegendCell *legend = [self.tableView dequeueReusableCellWithIdentifier:[OARouteInfoLegendCell reuseIdentifier]];
             
             for (NSString *key in stat.partition)
             {
@@ -201,7 +346,6 @@
         self.gpx = [OAGPXUIHelper makeGpxFromRoute:self.routingHelper.getRoute];
         self.analysis = [self.gpx getAnalysis:0];
     }
-    _expandedSections = [NSMutableSet new];
     _types = @[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)];
     _lastTranslation = CGPointZero;
     _mapView = [OARootViewController instance].mapPanel.mapViewController.mapView;
@@ -210,12 +354,22 @@
     NSMutableDictionary *dataArr = [NSMutableDictionary new];
     NSInteger section = 0;
     
-    [self populateMainGraphSection:dataArr section:section];
+    // this first cell with tab selector was added as a view to the tableview header to avoid showing the first tableview separator above it.
+    self.tableView.tableHeaderView = [self getTabSelectorView];
     
-    [self populateElevationSection:dataArr section:section];
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions)
+    {
+        if (!_instructionsTabData)
+            [self populateInstructionsTabCells:section];
+        [dataArr addEntriesFromDictionary:_instructionsTabData];
+    }
+    else if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis)
+    {
+        if (!_analysisTabData)
+            [self populateAnalysisTabCells:section];
+        [dataArr addEntriesFromDictionary:_analysisTabData];
+    }
 
-    [self populateStatistics:dataArr section:section];
-    
     _data = [NSDictionary dictionaryWithDictionary:dataArr];
 }
 
@@ -287,7 +441,11 @@
     
     [self setupRouteInfo];
     
+    _selectedTab = EOAOARouteDetailsViewControllerModeInstructions;
+    _expandedSections = [NSMutableSet new];
+    [self registerCells];
     [self generateData];
+    
     _tableView.delegate = self;
     _tableView.dataSource = self;
     _tableView.contentInset = UIEdgeInsetsMake(0., 0., [self getToolBarHeight], 0.);
@@ -352,6 +510,9 @@
 
 - (void)refreshContent
 {
+    NSInteger contentSectionNumber = 1;
+    [self populateInstructionsTabCells:contentSectionNumber];
+    [self populateAnalysisTabCells:contentSectionNumber];
     [self generateData];
     [self.tableView reloadData];
 }
@@ -384,6 +545,11 @@
 - (CGFloat)additionalContentOffset
 {
     return [self isLandscapeIPadAware] ? 0.0 : kAdditionalRouteDetailsOffset;
+}
+
+- (BOOL) showTopViewInFullscreen
+{
+    return YES;
 }
 
 - (BOOL) hasTopToolbar
@@ -460,18 +626,21 @@
     NSArray *sectionData = _data[@(indexPath.section)];
     OARouteInfoCell *cell = sectionData[indexPath.row];
     [cell onDetailsPressed];
-    if ([_expandedSections containsObject:@(indexPath.section)])
-    {
-        [_expandedSections removeObject:@(indexPath.section)];
-        [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    else
-    {
-        [_expandedSections addObject:@(indexPath.section)];
-        [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
-    }
-    [_tableView scrollToRowAtIndexPath:indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:YES];
-    [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    [_tableView performBatchUpdates:^{
+        if ([_expandedSections containsObject:@(indexPath.section)])
+        {
+            [_expandedSections removeObject:@(indexPath.section)];
+            [_tableView deleteRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+        else
+        {
+            [_expandedSections addObject:@(indexPath.section)];
+            [_tableView insertRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:indexPath.row + 1 inSection:indexPath.section]] withRowAnimation:UITableViewRowAnimationFade];
+        }
+    } completion:^(BOOL finished) {
+        self.tableView.tableHeaderView = [self getTabSelectorView];
+        [self.delegate contentHeightChanged:_tableView.contentSize.height];
+    }];
 }
 
 - (void) detailsButtonPressed:(id)sender
@@ -623,6 +792,17 @@
     [mapPanel stopNavigation];
 }
 
+- (void) segmentChanged:(id)sender
+{
+    UISegmentedControl *segment = (UISegmentedControl*)sender;
+    if (segment)
+    {
+        _selectedTab = (EOAOARouteDetailsViewControllerMode) segment.selectedSegmentIndex;
+        [self generateData];
+        [self.tableView reloadData];
+    }
+}
+
 #pragma mark - UITableViewDataSource
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -632,16 +812,23 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section > 1)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && section > 1)
     {
         return ((NSArray *)_data[@(section)]).count - ([_expandedSections containsObject:@(section)] ? 0 : 1);
     }
     return ((NSArray *)_data[@(section)]).count;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+- (CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:(NSInteger)section
 {
-    return section == 0 ? 0.001 : 16.0;
+    return 0.001;
+}
+
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeInstructions && section == 0)
+        return OALocalizedString(@"step_by_step");
+    return @" ";
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -654,7 +841,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section > 1 && indexPath.row == 0)
+    if (_selectedTab == EOAOARouteDetailsViewControllerModeAnalysis && indexPath.section > 1 && indexPath.row == 0)
         [self onSectionPressed:indexPath];
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }

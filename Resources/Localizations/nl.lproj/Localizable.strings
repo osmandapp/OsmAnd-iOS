@@ -2645,3 +2645,5 @@
 "ant_plus_searching_text_description" = "Houd het apparaat dicht bij de sensor. Je moet de sensor activeren zodat OsmAnd hem kan vinden.";
 "longest_duration_first" = "Langste duur eerst";
 "shared_string_hand" = "Hand";
+"downward_gradient" = "Neerwaartse helling";
+"upward_gradient" = "Opwaartse helling";

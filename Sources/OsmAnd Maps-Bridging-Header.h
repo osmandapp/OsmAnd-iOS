@@ -159,6 +159,7 @@
 
 // Views
 #import "OASegmentedSlider.h"
+#import "OATurnDrawable.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>

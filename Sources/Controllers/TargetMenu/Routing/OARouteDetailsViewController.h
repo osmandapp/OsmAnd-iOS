@@ -8,6 +8,19 @@
 
 #import "OARouteBaseViewController.h"
 
+@class OARouteDirectionInfo;
+
+@interface OACumulativeInfo : NSObject
+
+@property (nonatomic) double distance;
+@property (nonatomic) long time;
+
++ (OACumulativeInfo *) getRouteDirectionCumulativeInfo:(NSInteger)position routeDirections:(NSArray<OARouteDirectionInfo *> *)routeDirections;
++ (NSString *) getTimeDescription:(OARouteDirectionInfo *)model;
+
+@end
+
+
 @interface OARouteDetailsViewController : OARouteBaseViewController <UITableViewDataSource, UITableViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIButton *doneButton;

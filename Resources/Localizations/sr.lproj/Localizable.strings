@@ -3436,3 +3436,6 @@
 "speed_limit_warning" = "Упозорење ограничења брзине";
 "shared_string_always" = "Увек";
 "shared_string_limit" = "Ограничење";
+"shared_string_instructions" = "Инструкције";
+"shared_string_analysis" = "Анализа";
+"step_by_step" = "Скретање-по-скретање";

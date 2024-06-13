@@ -131,7 +131,7 @@
     BOOL tunnels = [_settings.showTunnels get];
     BOOL speedLimitExceed = [_settings.showSpeedLimitWarnings get];
     BOOL visible = false;
-    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
+    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams || speedLimitExceed))
     {
         OAAlarmInfo *alarm;
         if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])

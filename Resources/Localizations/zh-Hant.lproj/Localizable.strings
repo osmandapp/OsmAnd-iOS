@@ -652,7 +652,7 @@
 "route_descr_destination" = "目的地";
 "always_center_position_on_map" = "位置顯示始終處於中心";
 "map_widget_appearance_rem" = "剩餘元件";
-"map_widget_compass" = "電子羅盤";
+"map_widget_compass" = "指南針";
 "map_widget_next_turn" = "下個轉彎";
 "map_widget_next_turn_small" = "下個轉彎(小)";
 "map_widget_next_next_turn" = "第二個轉彎";
@@ -672,7 +672,7 @@
 "do_not_send_anonymous_data_desc" = "我們不會收集位置資料。只有應用程式使用的情況和地圖下載的統計。";
 "save_global_track_interval" = "通常的記錄間隔";
 "save_global_track_interval_descr" = "指定一般軌跡錄製的記錄間隔（透過地圖上的旅程錄製小工具開啟）。";
-"rotate_map_compass_opt" = "羅盤方向";
+"rotate_map_compass_opt" = "指南針方向";
 "rotate_map_bearing_opt" = "行進方向";
 "rotate_map_north_opt" = "北方向上";
 "driving_region_descr" = "選取駕駛區域：美國、歐洲、英國、亞洲和其它。";

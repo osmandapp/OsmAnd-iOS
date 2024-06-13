@@ -40,18 +40,19 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 
-#define kMargin 16.0
-#define kButtonsViewHeight 44.0
-#define kDefaultMapRulerMarginBottom 0
+static const CGFloat kMargin = 16.0;
+static const CGFloat kButtonsViewHeight = 44.0;
+static const CGFloat kDefaultMapRulerMarginBottom = 0;
 
-#define kButtonsTopMargin 1.0
-#define kButtonsBottomMargin 10.0
-#define kButtonsSideMargin 6.0
-#define kButtonsIconSize 30.0
-#define kButtonsIconTopMargin 7.0
-#define kButtonsLabelTopMargin 38.0
-#define kButtonsLabelSideMargin 4.0
-#define kButtonsLabelHeight 30.0
+static const CGFloat kButtonsTopMargin = 1.0;
+static const CGFloat kButtonsBottomMargin = 10.0;
+static const CGFloat kButtonsSideMargin = 6.0;
+static const CGFloat kButtonsIconSize = 30.0;
+static const CGFloat kButtonsIconTopMargin = 7.0;
+static const CGFloat kButtonsLabelTopMargin = 38.0;
+static const CGFloat kButtonsLabelSideMargin = 4.0;
+static const CGFloat kButtonsLabelHeight = 30.0;
+static const CGFloat kTopViewCornerRadius = 10.0;
 
 @interface OATargetPointView() <UIScrollViewDelegate, OAScrollViewDelegate, OAShareMenuDelegate>
 
@@ -1306,7 +1307,10 @@ static const NSInteger _buttonsCount = 4;
     _fullOffset = [self getFullOffset];
     
     _fullScreenHeight = _headerHeight + contentViewHeight;
-    _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
+    if (self.customController.showTopViewInFullscreen)
+        _fullScreenOffset = _headerY + kTopViewCornerRadius - toolBarHeight;
+    else
+        _fullScreenOffset = _headerY + topViewHeight - toolBarHeight;
     
     CGFloat contentHeight = _headerY + _fullScreenHeight;
     

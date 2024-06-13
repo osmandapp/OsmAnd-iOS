@@ -8,9 +8,8 @@
 
 import UIKit
 
-@objc(OAMap3DButtonState)
 @objcMembers
-class Map3DButtonState: MapButtonState {
+final class Map3DButtonState: MapButtonState {
 
     static let map3DHudId = "map_3d"
 
@@ -25,15 +24,15 @@ class Map3DButtonState: MapButtonState {
     }
 
     override func getName() -> String {
-        return localizedString("map_3d_mode_action")
+        localizedString("map_3d_mode_action")
     }
 
     override func isEnabled() -> Bool {
-        return getVisibility() != .hidden
+        getVisibility() != .hidden
     }
 
     override func getIcon() -> UIImage? {
-        return UIImage.templateImageNamed(getVisibility().iconName)
+        UIImage.templateImageNamed(getVisibility().iconName)
     }
 
     func getVisibility() -> Map3DModeVisibility {

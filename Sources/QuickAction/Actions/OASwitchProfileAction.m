@@ -19,7 +19,7 @@
 
 static NSString * const kProfiles = @"profiles";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OASwitchProfileAction
 {
@@ -38,12 +38,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId
                                            stringId:@"profile.change"
                                                  cl:self.class]
               name:OALocalizedString(@"change_application_profile")]
              iconName:@"ic_custom_manage_profiles"]
-            category:EOAQuickActionTypeCategoryNavigation];
+            category:QuickActionTypeCategoryNavigation];
 }
 
 - (void)execute
@@ -177,7 +177,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_list_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

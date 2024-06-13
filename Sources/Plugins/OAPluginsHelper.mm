@@ -349,11 +349,11 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)allTypes enabledTypes:(NSMutableArray<OAQuickActionType *> *)enabledTypes
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<QuickActionType *> *)allTypes enabledTypes:(NSMutableArray<QuickActionType *> *)enabledTypes
 {
     for (OAPlugin *p in [self getAvailablePlugins])
     {
-        NSArray<OAQuickActionType *> *types = [p getQuickActionTypes];
+        NSArray<QuickActionType *> *types = [p getQuickActionTypes];
         [allTypes addObjectsFromArray:types];
         if ([p isEnabled])
             [enabledTypes addObjectsFromArray:types];

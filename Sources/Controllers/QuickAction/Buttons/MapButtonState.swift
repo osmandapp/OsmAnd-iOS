@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc(OAMapButtonState)
 @objcMembers
 open class MapButtonState: NSObject {
 

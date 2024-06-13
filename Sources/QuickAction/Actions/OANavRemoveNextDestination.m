@@ -11,7 +11,7 @@
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavRemoveNextDestination
 
@@ -22,13 +22,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId
                                              stringId:@"nav.destination.remove"
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_remove_next_destination")]
                iconName:@"ic_action_intermediate"]
               secondaryIconName:@"ic_custom_compound_action_remove"] 
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -65,7 +65,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_remove_next_destination");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

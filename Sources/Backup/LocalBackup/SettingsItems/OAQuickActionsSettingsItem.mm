@@ -23,12 +23,12 @@
 @implementation OAQuickActionsSettingsItem
 {
     OAMapButtonsHelper *_mapButtonsHelper;
-    OAQuickActionButtonState *_buttonState;
+    QuickActionButtonState *_buttonState;
 }
 
 @dynamic type, name;
 
-- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(OAQuickActionButtonState *)buttonState
+- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(QuickActionButtonState *)buttonState
 {
     self = [super initWithBaseItem:baseItem];
     if (self)
@@ -50,7 +50,7 @@
     return EOASettingsItemTypeQuickActions;
 }
 
-- (OAQuickActionButtonState *)getButtonState
+- (QuickActionButtonState *)getButtonState
 {
     return _buttonState;
 }
@@ -58,7 +58,7 @@
 - (void)renameButton
 {
     NSString *name = [_buttonState getName];
-    OAQuickActionButtonState *newButtonState = [_mapButtonsHelper createNewButtonState];
+    QuickActionButtonState *newButtonState = [_mapButtonsHelper createNewButtonState];
     [newButtonState setName:[_mapButtonsHelper generateUniqueButtonName:name]];
     [newButtonState setEnabled:[_buttonState isEnabled]];
     _buttonState = newButtonState;
@@ -85,7 +85,7 @@
     {
         if (self.shouldReplace)
         {
-            OAQuickActionButtonState *state = [_mapButtonsHelper getButtonStateById:_buttonState.id];
+            QuickActionButtonState *state = [_mapButtonsHelper getButtonStateById:_buttonState.id];
             if (state)
                 [_mapButtonsHelper removeQuickActionButtonState:state];
         }
@@ -135,7 +135,7 @@
         if (object)
         {
             NSString *id = object[@"id"];
-            _buttonState = [[OAQuickActionButtonState alloc] initWithId:id];
+            _buttonState = [[QuickActionButtonState alloc] initWithId:id];
             [_buttonState setName:object[@"name"]];
             [_buttonState setEnabled:[object[@"enabled"] isKindOfClass:NSNumber.class]
                 ? [object[@"enabled"] boolValue]
@@ -143,7 +143,7 @@
         }
         else
         {
-            _buttonState = [[OAQuickActionButtonState alloc] initWithId:OAQuickActionButtonState.defaultButtonId];
+            _buttonState = [[QuickActionButtonState alloc] initWithId:QuickActionButtonState.defaultButtonId];
         }
     }
     @catch (NSException *e)
@@ -222,7 +222,7 @@
     NSString *values = params[key];
     if (values)
     {
-        NSArray *value = [OAQuickActionSerializer parseParamsFromString:values];
+        NSArray *value = [QuickActionSerializer parseParamsFromString:values];
         params[key] = toString && value.count > 0 && [value.firstObject isKindOfClass:NSString.class] ? [value componentsJoinedByString:@","] : value;
     }
 }
@@ -247,7 +247,7 @@
             NSMutableDictionary<NSString *, NSString *> *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
             jsonObject[@"actionType"] = [action getActionTypeId];
-            NSDictionary *params = [OAQuickActionSerializer adjustParamsForExport:[action getParams] action:action];
+            NSDictionary *params = [QuickActionSerializer adjustParamsForExport:[action getParams] action:action];
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
             jsonObject[@"params"] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             [jsonArray addObject:jsonObject];

@@ -22,7 +22,7 @@
 static NSString * const kUnderlays = @"underlays";
 static NSString * const kNoUnderlay = @"no_underlay";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapUnderlayAction
 {
@@ -45,12 +45,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
                                            stringId:@"mapunderlay.change"
                                                  cl:self.class]
               name:OALocalizedString(@"quick_action_map_underlay")]
              iconName:@"ic_custom_underlay_map"]
-            category:EOAQuickActionTypeCategoryConfigureMap];
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void) execute
@@ -208,7 +208,7 @@ static OAQuickActionType *TYPE;
     return sources.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

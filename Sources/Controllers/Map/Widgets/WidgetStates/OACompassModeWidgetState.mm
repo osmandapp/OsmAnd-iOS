@@ -14,7 +14,7 @@
 
 @implementation OACompassModeWidgetState
 {
-    OACompassButtonState *_compassState;
+    CompassButtonState *_compassState;
 }
 
 - (instancetype)init
@@ -39,7 +39,7 @@
 
 - (NSString *)getMenuIconId
 {
-    return [EOACompassVisibilityWrapper getIconNameForType:[_compassState getVisibility]];
+    return [CompassVisibilityWrapper getIconNameForType:[_compassState getVisibility]];
 }
 
 - (NSString *)getMenuItemId
@@ -49,25 +49,25 @@
 
 - (NSArray<NSString *> *)getMenuTitles
 {
-    return [EOACompassVisibilityWrapper getTitles];
+    return [CompassVisibilityWrapper getTitles];
 }
 
 - (NSArray<NSString *> *) getMenuDescriptions
 {
-    return [EOACompassVisibilityWrapper getDescs];
+    return [CompassVisibilityWrapper getDescs];
 }
 
 - (NSArray<NSString *> *)getMenuIconIds
 {
-    return [EOACompassVisibilityWrapper getIconNames];
+    return [CompassVisibilityWrapper getIconNames];
 }
 
 - (NSArray<NSString *> *)getMenuItemIds
 {
     return @[
-            @(EOACompassVisibilityAlwaysVisible).stringValue,
-            @(EOACompassVisibilityAlwaysHidden).stringValue,
-            @(EOACompassVisibilityVisibleIfMapRotated).stringValue
+            @(CompassVisibilityAlwaysVisible).stringValue,
+            @(CompassVisibilityAlwaysHidden).stringValue,
+            @(CompassVisibilityVisibleIfMapRotated).stringValue
     ];
 }
 

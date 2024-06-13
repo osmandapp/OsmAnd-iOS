@@ -8,43 +8,43 @@
 
 import Foundation
 
-class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDelegate {
-
+final class CustomMapButtonsViewController: OABaseNavbarViewController {
+    
     weak var delegate: MapButtonsDelegate?
     private var appMode: OAApplicationMode!
     private var settings: OAAppSettings!
     private var mapButtonsHelper: OAMapButtonsHelper!
-
+    
     // MARK: Initialization
-
+    
     override func commonInit() {
         settings = OAAppSettings.sharedManager()
         appMode = settings.applicationMode.get()
         mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
     }
-
+    
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
-
+    
     // MARK: Base UI
-
+    
     override func getTitle() -> String {
         localizedString("custom_buttons")
     }
-
+    
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         return [createRightNavbarButton(nil,
                                         iconName: "ic_navbar_add",
                                         action: #selector(onRightNavbarButtonPressed),
                                         menu: nil)]
     }
-
+    
     // MARK: Table data
-
+    
     override func generateData() {
         tableData.clearAllData()
-
+        
         let buttonsSection = tableData.createNewSection()
         for mapButtonState in mapButtonsHelper.getButtonsStates() {
             let enabled = mapButtonState.isEnabled()
@@ -58,7 +58,7 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
             quickActionRow.accessibilityValue = quickActionRow.descr
         }
     }
-
+    
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         if item.cellType == OAValueTableViewCell.reuseIdentifier, let buttonState = item.obj(forKey: "buttonState") as? QuickActionButtonState {
@@ -75,37 +75,34 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
         }
         return nil
     }
-
+    
     override func onRowSelected(_ indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
         if let buttonState = item.obj(forKey: "buttonState") as? QuickActionButtonState {
             if let vc = OAQuickActionListViewController(buttonState: buttonState) {
                 vc.delegate = self
-                vc.quickActionUpdateCallback = { [weak self] in
-                    self?.onSettingsChanged()
-                }
                 show(vc)
             }
         }
     }
-
+    
     override func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
         let item = tableData.item(for: indexPath)
         if let buttonState = item.obj(forKey: "buttonState") as? QuickActionButtonState {
-            let menuProvider: UIContextMenuActionProvider = { _ in
+            let menuProvider: UIContextMenuActionProvider = { [weak self] _ in
                 var menuElements = [UIMenuElement]()
                 
                 let renameAction = UIAction(title: localizedString("shared_string_rename"), image: UIImage(systemName: "square.and.pencil")) { [weak self] _ in
                     guard let self else { return }
-
+                    
                     let alert = UIAlertController(title: localizedString("shared_string_rename"), message: localizedString("enter_new_name"), preferredStyle: .alert)
                     alert.addTextField { textField in
                         textField.text = buttonState.getName()
                     }
-
+                    
                     let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self] _ in
                         guard let self else { return }
-
+                        
                         if let name = alert.textFields?.first?.text {
                             if name.isEmpty {
                                 OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: view)
@@ -120,7 +117,7 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
                     }
                     alert.addAction(saveAction)
                     alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-
+                    
                     alert.preferredAction = saveAction
                     present(alert, animated: true)
                 }
@@ -129,12 +126,12 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
                 
                 let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage(systemName: "trash")) { [weak self] _ in
                     guard let self else { return }
-
+                    
                     let message = String(format: localizedString("res_confirmation_delete"), "\"\(buttonState.getName())\"")
                     let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: localizedString("shared_string_yes"), style: .default) { [weak self] _ in
                         guard let self else { return }
-
+                        
                         mapButtonsHelper.remove(buttonState)
                         onSettingsChanged()
                     })
@@ -151,16 +148,16 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
         }
         return nil
     }
-
+    
     // MARK: Selectors
-
+    
     override func onRightNavbarButtonPressed() {
         let alert = UIAlertController(title: localizedString("add_button"), message: localizedString("enter_new_name"), preferredStyle: .alert)
         alert.addTextField()
-
+        
         let saveAction = UIAlertAction(title: localizedString("shared_string_save"), style: .default) { [weak self] _ in
             guard let self else { return }
-
+            
             if let name = alert.textFields?.first?.text {
                 if name.isEmpty {
                     OAUtilities.showToast(localizedString("empty_name"), details: nil, duration: 4, in: view)
@@ -176,17 +173,20 @@ class CustomMapButtonsViewController: OABaseNavbarViewController, WidgetStateDel
         }
         alert.addAction(saveAction)
         alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
-
+        
         alert.preferredAction = saveAction
         present(alert, animated: true)
     }
-
+    
     // MARK: Additions
-
+    
     private func onSettingsChanged() {
         reloadDataWith(animated: true, completion: nil)
         delegate?.onButtonsChanged()
     }
+}
+
+extension CustomMapButtonsViewController: WidgetStateDelegate {
 
     // MARK: WidgetStateDelegate
 

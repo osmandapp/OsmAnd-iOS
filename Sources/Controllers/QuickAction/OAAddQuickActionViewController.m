@@ -23,19 +23,19 @@
 
 @implementation OAAddQuickActionViewController
 {
-    OrderedDictionary<NSString *, NSArray<OAQuickActionType *> *> *_actions;
+    OrderedDictionary<NSString *, NSArray<QuickActionType *> *> *_actions;
     
-    NSMutableArray<OAQuickActionType *> *_filteredData;
+    NSMutableArray<QuickActionType *> *_filteredData;
     UISearchController *_searchController;
     BOOL _isFiltered;
 
     OAMapButtonsHelper *_mapButtonsHelper;
-    OAQuickActionButtonState *_buttonState;
+    QuickActionButtonState *_buttonState;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState
 {
     self = [super init];
     if (self)
@@ -117,11 +117,11 @@
 
 - (void)generateData
 {
-    NSArray<OAQuickActionType *> *all = [_mapButtonsHelper produceTypeActionsListWithHeaders:_buttonState];
-    NSMutableArray<OAQuickActionType *> *actionsInSection = nil;
-    MutableOrderedDictionary<NSString *, NSArray<OAQuickActionType *> *> *mapping = [[MutableOrderedDictionary alloc] init];
+    NSArray<QuickActionType *> *all = [_mapButtonsHelper produceTypeActionsListWithHeaders:_buttonState];
+    NSMutableArray<QuickActionType *> *actionsInSection = nil;
+    MutableOrderedDictionary<NSString *, NSArray<QuickActionType *> *> *mapping = [[MutableOrderedDictionary alloc] init];
     NSString *currSectionName = @"";
-    for (OAQuickActionType *action in all)
+    for (QuickActionType *action in all)
     {
         if (action.id == 0)
         {
@@ -142,7 +142,7 @@
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
 }
 
-- (OAQuickActionType *)getItem:(NSIndexPath *)indexPath
+- (QuickActionType *)getItem:(NSIndexPath *)indexPath
 {
     if (_isFiltered)
         return _filteredData[indexPath.row];
@@ -172,7 +172,7 @@
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    OAQuickActionType *action = [self getItem:indexPath];
+    QuickActionType *action = [self getItem:indexPath];
     if (action)
     {
         OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
@@ -235,7 +235,7 @@
 
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
 {
-    OAQuickActionType *item = [self getItem:indexPath];
+    QuickActionType *item = [self getItem:indexPath];
     OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState typeId:item.id];
     actionScreen.delegate = self.delegate;
     [self.navigationController pushViewController:actionScreen animated:YES];
@@ -288,7 +288,7 @@
         _filteredData = [NSMutableArray new];
         for (NSArray *actionGroup in _actions.allValues)
         {
-            for (OAQuickActionType *actionType in actionGroup)
+            for (QuickActionType *actionType in actionGroup)
             {
                 NSRange nameRange = [actionType.name rangeOfString:searchText options:NSCaseInsensitiveSearch];
                 if (nameRange.location != NSNotFound)

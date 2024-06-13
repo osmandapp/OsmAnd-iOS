@@ -8,13 +8,13 @@
 
 #import "OASettingsItem.h"
 
-@class OAQuickActionButtonState, OAQuickAction;
+@class QuickActionButtonState, OAQuickAction;
 
 @interface OAQuickActionsSettingsItem : OASettingsItem
 
-- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(OAQuickActionButtonState *)buttonState;
+- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(QuickActionButtonState *)buttonState;
 
-- (OAQuickActionButtonState *)getButtonState;
+- (QuickActionButtonState *)getButtonState;
 + (void)parseParams:(NSString * _Nonnull)paramsString quickAction:(OAQuickAction * _Nonnull)quickAction;
 
 @end

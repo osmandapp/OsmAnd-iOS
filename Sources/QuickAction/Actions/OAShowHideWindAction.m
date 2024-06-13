@@ -10,7 +10,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideWindAction
 
@@ -21,12 +21,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideWindLayerActionId
                                             stringId:@"wind.layer.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_wind")]
               iconName:@"ic_custom_wind"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -46,7 +46,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"wind_hide") : OALocalizedString(@"wind_show");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

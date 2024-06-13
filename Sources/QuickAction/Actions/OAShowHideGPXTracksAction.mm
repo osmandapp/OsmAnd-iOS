@@ -12,7 +12,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideGPXTracksAction
 {
@@ -26,12 +26,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId
                                             stringId:@"gpx.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"show_hide_gpx")]
               iconName:@"ic_custom_trip"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -65,7 +65,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"hide_gpx") : OALocalizedString(@"show_gpx");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

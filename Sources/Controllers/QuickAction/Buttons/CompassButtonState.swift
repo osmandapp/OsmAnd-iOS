@@ -8,11 +8,10 @@
 
 import UIKit
 
-@objc(OACompassButtonState)
 @objcMembers
-class CompassButtonState: MapButtonState {
+final class CompassButtonState: MapButtonState {
 
-    public static let compassHudId = "compass"
+    static let compassHudId = "compass"
 
     let visibilityPref: OACommonInteger
 
@@ -22,31 +21,31 @@ class CompassButtonState: MapButtonState {
     }
 
     override func getName() -> String {
-        return localizedString("map_widget_compass")
+        localizedString("map_widget_compass")
     }
 
     override func isEnabled() -> Bool {
-        return getVisibility() != .alwaysHidden
+        getVisibility() != .alwaysHidden
     }
 
     override func getIcon() -> UIImage? {
-        return UIImage.templateImageNamed(getVisibility().iconName)
+        UIImage.templateImageNamed(getVisibility().iconName)
     }
 
     func getVisibility() -> CompassVisibility {
-        return CompassVisibility(rawValue: visibilityPref.get())!
+        CompassVisibility(rawValue: visibilityPref.get())!
     }
 
     func getVisibility(_ mode: OAApplicationMode) -> CompassVisibility {
-        return CompassVisibility(rawValue: visibilityPref.get(mode))!
+        CompassVisibility(rawValue: visibilityPref.get(mode))!
     }
 
     private static func createVisibilityPref() -> OACommonInteger {
         let settings = OAAppSettings.sharedManager()!
-        var preference = settings.getPreferenceByKey("compass_visibility") as? OACommonInteger
-        if preference == nil {
-            preference = settings.registerIntPreference("compass_visibility", defValue: CompassVisibility.visibleIfMapRotated.rawValue).makeProfile()//.cache()
+        guard let preference = settings.getPreferenceByKey("compass_visibility") as? OACommonInteger else {
+            let defaultValue = CompassVisibility.visibleIfMapRotated.rawValue
+            return settings.registerIntPreference("compass_visibility", defValue: defaultValue).makeProfile()
         }
-        return preference!
+        return preference
     }
 }

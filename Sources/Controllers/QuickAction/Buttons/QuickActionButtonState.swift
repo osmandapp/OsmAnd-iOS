@@ -8,19 +8,18 @@
 
 import Foundation
 
-@objc(OAQuickActionButtonState)
 @objcMembers
-open class QuickActionButtonState: MapButtonState {
+final class QuickActionButtonState: MapButtonState {
 
-    public static let defaultButtonId = "quick_actions"
+    static let defaultButtonId = "quick_actions"
 
-    private let app = OsmAndApp.swiftInstance()
-    private let settings = OAAppSettings.sharedManager()!
     let statePref: OACommonBoolean
     let namePref: OACommonString
     let quickActionsPref: OACommonString
     let fabMarginPref: FabMarginPreference
 
+    private let app = OsmAndApp.swiftInstance()
+    private let settings = OAAppSettings.sharedManager()!
     private(set) var quickActions = [OAQuickAction]()
 
     override init(withId id: String) {

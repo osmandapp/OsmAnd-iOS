@@ -59,7 +59,7 @@
     NSString *_originalName;
     
     OAMapButtonsHelper *_mapButtonsHelper;
-    OAQuickActionButtonState *_buttonState;
+    QuickActionButtonState *_buttonState;
     
     BOOL _isNew;
 
@@ -75,7 +75,7 @@
 
 #pragma mark - Initialization
 
-- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState typeId:(NSInteger)typeId
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState typeId:(NSInteger)typeId
 {
     self = [super init];
     if (self)
@@ -87,7 +87,7 @@
     return self;
 }
 
-- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState action:(OAQuickAction *)action
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     self = [super init];
     if (self)

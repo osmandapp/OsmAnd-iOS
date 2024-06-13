@@ -10,7 +10,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideCloudAction
 
@@ -21,11 +21,11 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideCloudLayerActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideCloudLayerActionId
                                             stringId:@"cloud.layer.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_cloud")]
-              category:EOAQuickActionTypeCategoryConfigureMap]
+              category:QuickActionTypeCategoryConfigureMap]
              iconName:@"ic_custom_clouds"]
             nonEditable];
 }
@@ -46,7 +46,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"cloud_hide") : OALocalizedString(@"cloud_show");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

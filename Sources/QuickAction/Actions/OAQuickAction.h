@@ -13,14 +13,14 @@
 static NSString * _Nonnull const kSectionNoName = @"no_name";
 static NSString * _Nonnull const kDialog = @"dialog";
 
-@class OrderedDictionary, OAQuickActionType;
+@class OrderedDictionary, QuickActionType;
 
 @interface OAQuickAction : NSObject
 
-@property (nonatomic, readonly) OAQuickActionType * _Nullable actionType;
+@property (nonatomic, readonly) QuickActionType * _Nullable actionType;
 @property (nonatomic, readonly) long id;
 
-- (instancetype _Nonnull)initWithActionType:(OAQuickActionType * _Nonnull)type;
+- (instancetype _Nonnull)initWithActionType:(QuickActionType * _Nonnull)type;
 - (instancetype _Nonnull)initWithAction:(OAQuickAction * _Nonnull)action;
 - (void) commonInit;
 
@@ -56,6 +56,6 @@ static NSString * _Nonnull const kDialog = @"dialog";
 - (NSString *)getTitle:(NSArray *)filters;
 - (NSString *)getListKey;
 
-+ (OAQuickActionType *)TYPE;
++ (QuickActionType *)TYPE;
 
 @end

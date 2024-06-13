@@ -33,12 +33,12 @@
 {
     NSMutableArray<OAQuickAction *> *_data;
     OAMapButtonsHelper *_mapButtonsHelper;
-    OAQuickActionButtonState *_buttonState;
+    QuickActionButtonState *_buttonState;
 }
 
 #pragma mark - Initialization
 
-- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState
 {
     self = [super init];
     if (self)
@@ -126,8 +126,8 @@
                     [_buttonState setName:name];
                     [_mapButtonsHelper onQuickActionsChanged:_buttonState];
                     [self updateUIAnimated:nil];
-                    if (self.quickActionUpdateCallback)
-                        self.quickActionUpdateCallback();
+                    if (self.delegate)
+                        [self.delegate onWidgetStateChanged];
                 }
             }];
             [alert addAction:saveAction];
@@ -155,8 +155,8 @@
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
                 [_mapButtonsHelper removeQuickActionButtonState:_buttonState];
-                if (self.quickActionUpdateCallback)
-                    self.quickActionUpdateCallback();
+                if (self.delegate)
+                    [self.delegate onWidgetStateChanged];
                 [self dismissViewController];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_no")
@@ -392,8 +392,8 @@
 - (void)saveChanges
 {
     [_mapButtonsHelper updateQuickActions:_buttonState actions:_data];
-    if (self.quickActionUpdateCallback)
-        self.quickActionUpdateCallback();
+    if (self.delegate)
+        [self.delegate onWidgetStateChanged];
 }
 
 - (NSInteger)getScreensCount
@@ -432,7 +432,8 @@
 - (void)onSwitchPressed:(UISwitch *)sender
 {
     [_buttonState setEnabled:sender.isOn];
-    [self.delegate onWidgetStateChanged];
+    if (self.delegate)
+        [self.delegate onWidgetStateChanged];
 }
 
 - (void)editPressed
@@ -550,8 +551,8 @@
 - (void)updateData
 {
     [self reloadDataWithAnimated:YES completion:nil];
-    if (self.quickActionUpdateCallback)
-        self.quickActionUpdateCallback();
+    if (self.delegate)
+        [self.delegate onWidgetStateChanged];
 }
 
 @end

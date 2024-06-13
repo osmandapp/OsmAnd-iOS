@@ -8,32 +8,32 @@
 
 import Foundation
 
-class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfileBottomSheetDelegate, WidgetStateDelegate {
-
+final class DefaultMapButtonsViewController: OABaseNavbarViewController {
+    
     weak var delegate: MapButtonsDelegate?
     private var appMode: OAApplicationMode!
     private var map3DButtonState: Map3DButtonState!
     private var compassButtonState: CompassButtonState!
-
+    
     // MARK: Initialization
-
+    
     override func commonInit() {
         appMode = OAAppSettings.sharedManager().applicationMode.get()
         let mapButtonsHelper = OAMapButtonsHelper.sharedInstance()
         map3DButtonState = mapButtonsHelper.getMap3DButtonState()
         compassButtonState = mapButtonsHelper.getCompassButtonState()
     }
-
+    
     override func registerCells() {
         addCell(OAValueTableViewCell.reuseIdentifier)
     }
-
+    
     // MARK: Base UI
-
+    
     override func getTitle() -> String {
         localizedString("default_buttons")
     }
-
+    
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         var resetAlert: UIAlertController?
         resetAlert = UIAlertController(title: title,
@@ -79,15 +79,15 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
         }
         return buttons
     }
-
+    
     // MARK: Table data
-
+    
     override func generateData() {
         tableData.clearAllData()
-
+        
         let iconTintColor = UIColor(rgb: Int(appMode.getIconColor()))
         let buttonsSection = tableData.createNewSection()
-    
+        
         let compassRow = buttonsSection.createNewRow()
         compassRow.key = "compass"
         compassRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -97,7 +97,7 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
         compassRow.accessibilityValue = compassRow.descr
         compassRow.iconTintColor = compassButtonState.isEnabled() ? iconTintColor : UIColor.iconColorDefault
         compassRow.icon = compassButtonState.getIcon()
-
+        
         let map3dModeRow = buttonsSection.createNewRow()
         map3dModeRow.key = "map3DMode"
         map3dModeRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -108,7 +108,7 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
         map3dModeRow.iconTintColor = map3DButtonState.isEnabled() ? iconTintColor : UIColor.iconColorDefault
         map3dModeRow.icon = map3DButtonState.getIcon()
     }
-
+    
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell? {
         let item = tableData.item(for: indexPath)
         if item.cellType == OAValueTableViewCell.reuseIdentifier {
@@ -125,7 +125,7 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
         }
         return nil
     }
-
+    
     override func onRowSelected(_ indexPath: IndexPath) {
         let data = tableData.item(for: indexPath)
         if data.key == "compass" {
@@ -138,24 +138,27 @@ class DefaultMapButtonsViewController: OABaseNavbarViewController, OACopyProfile
             showMediumSheetViewController(vc, isLargeAvailable: false)
         }
     }
-
+    
     // MARK: Additions
-
+    
     private func onSettingsChanged() {
         reloadDataWith(animated: true, completion: nil)
         delegate?.onButtonsChanged()
     }
-
+    
     private func getDescription(_ buttonState: MapButtonState) -> String {
-        if buttonState is Map3DButtonState {
-            let map3DButtonState = buttonState as! Map3DButtonState
+        switch buttonState {
+        case let map3DButtonState as Map3DButtonState:
             return map3DButtonState.getVisibility().title
-        } else if buttonState is CompassButtonState {
-            let compassButtonState = buttonState as! CompassButtonState
+        case let compassButtonState as CompassButtonState:
             return compassButtonState.getVisibility().title
+        default:
+            return ""
         }
-        return ""
     }
+}
+
+extension DefaultMapButtonsViewController: WidgetStateDelegate, OACopyProfileBottomSheetDelegate {
 
     // MARK: WidgetStateDelegate
 

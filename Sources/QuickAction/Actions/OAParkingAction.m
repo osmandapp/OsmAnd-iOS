@@ -15,7 +15,7 @@
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAParkingAction
 
@@ -26,13 +26,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsParkingActionId
                                              stringId:@"parking.add"
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_add_parking")]
                iconName:@"ic_custom_parking"]
               secondaryIconName:@"ic_custom_compound_action_add"]
-             category:EOAQuickActionTypeCategoryCreateCategory]
+             category:QuickActionTypeCategoryCreateCategory]
             nonEditable];
 }
 
@@ -59,7 +59,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_parking_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

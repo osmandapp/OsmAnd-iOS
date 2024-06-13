@@ -16,7 +16,7 @@
 
 static NSString * const kMessage = @"message";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAAddOSMBugAction
 
@@ -27,13 +27,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddOsmBugActionId
                                             stringId:@"osmbug.add"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_add_osm_bug")]
               iconName:@"ic_action_osm_note"]
              secondaryIconName:@"ic_custom_compound_action_add"]
-            category:EOAQuickActionTypeCategoryCreateCategory];
+            category:QuickActionTypeCategoryCreateCategory];
 }
 
 - (void)execute
@@ -92,7 +92,7 @@ static OAQuickActionType *TYPE;
     return params[kMessage] && params;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

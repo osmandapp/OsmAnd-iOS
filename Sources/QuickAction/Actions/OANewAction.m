@@ -12,7 +12,7 @@
 #import "OAFloatingButtonsHudViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANewAction
 
@@ -23,7 +23,7 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNewActionId
                                            stringId:@"new"
                                                  cl:self.class]
               name:OALocalizedString(@"quick_action_new_action")]
@@ -33,7 +33,7 @@ static OAQuickActionType *TYPE;
 
 - (void)execute
 {
-    OAQuickActionButtonState *quickActionButtonState = [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController getActiveButtonState];
+    QuickActionButtonState *quickActionButtonState = [[OARootViewController instance].mapPanel.hudViewController.floatingButtonsController getActiveButtonState];
     if (quickActionButtonState)
     {
         OAAddQuickActionViewController *addActionController = [[OAAddQuickActionViewController alloc] initWithButtonState:quickActionButtonState];
@@ -41,7 +41,7 @@ static OAQuickActionType *TYPE;
     }
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

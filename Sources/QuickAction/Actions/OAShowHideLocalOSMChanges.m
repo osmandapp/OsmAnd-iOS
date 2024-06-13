@@ -10,7 +10,7 @@
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideLocalOSMChanges
 {
@@ -24,12 +24,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId
                                             stringId:@"osmedit.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_local_edits")]
               iconName:@"ic_custom_osm_edits"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -58,7 +58,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"hide_edits") : OALocalizedString(@"show_edits");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

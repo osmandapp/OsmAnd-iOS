@@ -110,17 +110,12 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         buttonsSection.headerText = localizedString("shared_string_buttons")
 
         let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
-        var defaultButtonsEnabledCount = 0
-        for defaultButton in defaultButtons {
-            if defaultButton.isEnabled() {
-                defaultButtonsEnabledCount += 1
-            }
-        }
+        var defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
         let defaultButtonsRow = buttonsSection.createNewRow()
         defaultButtonsRow.key = "defaultButtons"
         defaultButtonsRow.title = localizedString("default_buttons")
         defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
-        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
+        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : .iconColorDefault
         defaultButtonsRow.iconName = "ic_custom_button_default"
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
@@ -132,7 +127,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         customButtonsRow.key = "customButtons"
         customButtonsRow.title = localizedString("custom_buttons")
         customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
-        customButtonsRow.iconTintColor = enabledCustomButtons.count > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
+        customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? UIColor(rgb: Int(appMode.getIconColor())) : .iconColorDefault
         customButtonsRow.iconName = "ic_custom_quick_action"
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title
@@ -294,8 +289,9 @@ extension ConfigureScreenViewController {
         }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
-            UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.settings.applicationMode.get().getIconColor())) : .iconColorDefault
+            UIView.animate(withDuration: 0.2) { [weak self] in
+                guard let self else { return }
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : .iconColorDefault
             }
         }
         

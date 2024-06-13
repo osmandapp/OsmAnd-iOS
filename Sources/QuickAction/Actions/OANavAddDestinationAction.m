@@ -15,7 +15,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavAddDestinationAction
 
@@ -26,13 +26,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavAddDestinationActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAddDestinationActionId
                                              stringId:@"nav.destination.add"
                                                    cl:self.class]
                 name:OALocalizedString(@"add_destination")]
                iconName:@"ic_action_target"]
               secondaryIconName:@"ic_custom_compound_action_add"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -52,7 +52,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_add_dest_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

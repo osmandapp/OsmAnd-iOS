@@ -11,7 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAContourLinesAction
 {
@@ -26,12 +26,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId
                                             stringId:@"contourlines.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_contour_lines")]
               iconName:@"ic_custom_contour_lines"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -78,7 +78,7 @@ static OAQuickActionType *TYPE;
     return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"rendering_attr_contourLines_name");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

@@ -6,20 +6,20 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-@objc(OAFabMarginPreference)
 @objcMembers
-class FabMarginPreference: NSObject {
+final class FabMarginPreference: NSObject {
 
     private static let kXPortraitMargin = "_x_portrait_margin"
     private static let kYPortraitMargin = "_y_portrait_margin"
     private static let kXLandscapeMargin = "_x_landscape_margin"
     private static let kYLandscapeMargin = "_y_landscape_margin"
 
-    private let settings = OAAppSettings.sharedManager()!
     let fabMarginXPortrait: OACommonInteger
     let fabMarginYPortrait: OACommonInteger
     let fabMarginXLandscape: OACommonInteger
     let fabMarginYLandscape: OACommonInteger
+
+    private let settings = OAAppSettings.sharedManager()!
 
     init(_ prefix: String) {
         fabMarginXPortrait = settings.registerIntPreference(prefix + FabMarginPreference.kXPortraitMargin, defValue: 0).makeProfile()
@@ -49,19 +49,19 @@ class FabMarginPreference: NSObject {
     }
 
     func getPortraitFabMargin() -> [NSNumber] {
-        return getPortraitFabMargin(settings.applicationMode.get())
+        getPortraitFabMargin(settings.applicationMode.get())
     }
 
     func getLandscapeFabMargin() -> [NSNumber] {
-        return getLandscapeFabMargin(settings.applicationMode.get())
+        getLandscapeFabMargin(settings.applicationMode.get())
     }
 
     func getPortraitFabMargin(_ mode: OAApplicationMode) -> [NSNumber] {
-        return [NSNumber(value: fabMarginXPortrait.get(mode)), NSNumber(value: fabMarginYPortrait.get(mode))]
+        [NSNumber(value: fabMarginXPortrait.get(mode)), NSNumber(value: fabMarginYPortrait.get(mode))]
     }
 
     func getLandscapeFabMargin(_ mode: OAApplicationMode) -> [NSNumber] {
-        return [NSNumber(value: fabMarginXLandscape.get(mode)), NSNumber(value: fabMarginYLandscape.get(mode))]
+        [NSNumber(value: fabMarginXLandscape.get(mode)), NSNumber(value: fabMarginYLandscape.get(mode))]
     }
 
     func resetMode(toDefault mode: OAApplicationMode) {

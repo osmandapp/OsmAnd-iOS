@@ -10,7 +10,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideAirPressureAction
 
@@ -21,12 +21,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideAirPressureLayerActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideAirPressureLayerActionId
                                             stringId:@"pressure.layer.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_pressure")]
               iconName:@"ic_custom_air_pressure"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -46,7 +46,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"pressure_hide") : OALocalizedString(@"pressure_show");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

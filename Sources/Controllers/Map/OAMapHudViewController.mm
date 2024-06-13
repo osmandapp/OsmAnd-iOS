@@ -415,8 +415,8 @@ static const float kDistanceMeters = 100.0;
 - (BOOL) shouldShowCompass:(float)azimuth
 {
     NSInteger rotateMap = [_settings.rotateMap get];
-    EOACompassVisibility compassVisibility = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] getVisibility];
-    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == EOACompassVisibilityVisibleIfMapRotated) || compassVisibility == EOACompassVisibilityAlwaysVisible) && _mapSettingsButton.alpha == 1.0;
+    CompassVisibility compassVisibility = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] getVisibility];
+    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible) && _mapSettingsButton.alpha == 1.0;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -720,7 +720,7 @@ static const float kDistanceMeters = 100.0;
         OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
 
         BOOL isQuickAction = NO;
-        for (OAQuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
+        for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
         {
             if (obj == buttonState.statePref || obj == buttonState.quickActionsPref)
             {

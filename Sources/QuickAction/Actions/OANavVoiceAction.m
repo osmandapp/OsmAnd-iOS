@@ -12,7 +12,7 @@
 #import "OAVoiceRouter.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavVoiceAction
 {
@@ -26,12 +26,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId
                                             stringId:@"nav.voice"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_navigation_voice")]
               iconName:@"ic_custom_sound"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -56,7 +56,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"quick_action_navigation_voice_on") : OALocalizedString(@"quick_action_navigation_voice_off");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

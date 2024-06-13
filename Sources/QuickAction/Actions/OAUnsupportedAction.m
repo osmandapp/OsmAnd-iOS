@@ -10,7 +10,7 @@
 #import "OARootViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAUnsupportedAction
 {
@@ -28,12 +28,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsUnsupportedId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsUnsupportedId
                                             stringId:@"unsupported.action"
                                                   cl:self.class]
                name:OALocalizedString(@"unsupported_action")]
               iconName:@"ic_custom_alert"]
-             category:EOAQuickActionTypeCategoryUnsupported]
+             category:QuickActionTypeCategoryUnsupported]
             nonEditable];
 }
 
@@ -70,7 +70,7 @@ static OAQuickActionType *TYPE;
     [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

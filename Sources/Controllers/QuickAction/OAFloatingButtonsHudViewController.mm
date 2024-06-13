@@ -45,7 +45,7 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
     OAAppSettings *_settings;
     OAMapButtonsHelper *_mapButtonsHelper;
 
-    OAMap3DButtonState *_map3DButtonState;
+    Map3DButtonState *_map3DButtonState;
     UILongPressGestureRecognizer *_map3dModeButtonDragRecognizer;
 
     OAQuickActionsSheetView *_actionsView;
@@ -149,9 +149,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 - (IBAction)quickActionButtonPressed:(OAHudButton *)sender
 {
-    if (sender.buttonState && [sender.buttonState isKindOfClass:OAQuickActionButtonState.class])
+    if (sender.buttonState && [sender.buttonState isKindOfClass:QuickActionButtonState.class])
     {
-        OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) sender.buttonState;
+        QuickActionButtonState *quickActionButtonState = (QuickActionButtonState *) sender.buttonState;
         if (quickActionButtonState.quickActions.count == 1)
         {
             BOOL isEnabled = [quickActionButtonState.quickActions.firstObject isActionWithSlash];
@@ -193,11 +193,11 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
     if ([recognizer.view isKindOfClass:OAHudButton.class])
     {
         OAHudButton *quickActionButton = (OAHudButton *) recognizer.view;
-        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
         {
             [self onButtonDragged:recognizer
                            button:quickActionButton
-              fabMarginPreference:((OAQuickActionButtonState *) quickActionButton.buttonState).fabMarginPref];
+              fabMarginPreference:((QuickActionButtonState *) quickActionButton.buttonState).fabMarginPref];
         }
     }
 }
@@ -211,7 +211,7 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 - (void)onButtonDragged:(UILongPressGestureRecognizer *)recognizer
                  button:(OAHudButton *)button
-    fabMarginPreference:(OAFabMarginPreference *)fabMarginPreference
+    fabMarginPreference:(FabMarginPreference *)fabMarginPreference
 {
     if (recognizer.state == UIGestureRecognizerStateBegan)
     {
@@ -249,8 +249,8 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
             [_map3dModeFloatingButton setImage:[UIImage templateImageNamed:@"ic_custom_3d"] forState:UIControlStateNormal];
             _map3dModeFloatingButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
         }
-        EOAMap3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
-        _map3dModeFloatingButton.accessibilityValue = [EOAMap3DModeVisibilityWrapper getTitleForType:map3DMode];
+        Map3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
+        _map3dModeFloatingButton.accessibilityValue = [Map3DModeVisibilityWrapper getTitleForType:map3DMode];
     });
 }
 
@@ -265,14 +265,14 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 - (void)onQuickActionButtonChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if ([key isKindOfClass:OAQuickActionButtonState.class])
+        if ([key isKindOfClass:QuickActionButtonState.class])
         {
-            OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) key;
+            QuickActionButtonState *quickActionButtonState = (QuickActionButtonState *) key;
             for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
             {
-                if ([quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+                if ([quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
                 {
-                    OAQuickActionButtonState *buttonState = (OAQuickActionButtonState *) quickActionButton.buttonState;
+                    QuickActionButtonState *buttonState = (QuickActionButtonState *) quickActionButton.buttonState;
                     if ([buttonState.id isEqualToString:quickActionButtonState.id])
                     {
                         if (quickActionButtonState.quickActions.count != 1 && buttonState.quickActions.count)
@@ -307,9 +307,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
                 [self setupQuickActionBtnVisibility:button];
             }
         }
-        else if ([key isKindOfClass:OAQuickActionButtonState.class] && [value isKindOfClass:NSNumber.class])
+        else if ([key isKindOfClass:QuickActionButtonState.class] && [value isKindOfClass:NSNumber.class])
         {
-            OAQuickActionButtonState *quickActionButtonState = (OAQuickActionButtonState *) key;
+            QuickActionButtonState *quickActionButtonState = (QuickActionButtonState *) key;
             BOOL isAdded = ((NSNumber *) value).boolValue;
             
             if (isAdded)
@@ -322,9 +322,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
             {
                 for (OAHudButton *button in _quickActionFloatingButtons)
                 {
-                    if ([button.buttonState isKindOfClass:OAQuickActionButtonState.class])
+                    if ([button.buttonState isKindOfClass:QuickActionButtonState.class])
                     {
-                        if ([((OAQuickActionButtonState *) button.buttonState).id isEqualToString:quickActionButtonState.id])
+                        if ([((QuickActionButtonState *) button.buttonState).id isEqualToString:quickActionButtonState.id])
                         {
                             [button removeFromSuperview];
                             [_quickActionFloatingButtons removeObject:button];
@@ -339,7 +339,7 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 #pragma mark - Additions
 
-- (OAQuickActionButtonState *)getActiveButtonState
+- (QuickActionButtonState *)getActiveButtonState
 {
     if (_isActionsViewVisible && _actionsView)
     {
@@ -376,9 +376,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
     dispatch_async(dispatch_get_main_queue(), ^{
         [quickActionButton updateColorsForPressedState:NO];
 
-        OAQuickActionButtonState *quickActionButtonState = nil;
-        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
-            quickActionButtonState = ((OAQuickActionButtonState *) quickActionButton.buttonState);
+        QuickActionButtonState *quickActionButtonState = nil;
+        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
+            quickActionButtonState = ((QuickActionButtonState *) quickActionButton.buttonState);
 
         if (_isActionsViewVisible && _actionsView && [_actionsView.buttonState.id isEqualToString:quickActionButtonState.id])
         {
@@ -390,7 +390,6 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
             [quickActionButton setImage:quickActionIcon forState:UIControlStateNormal];
             if (quickActionButtonState && [quickActionButtonState isSingleAction])
             {
-                
                 if (![quickActionButtonState.quickActions.firstObject isActionWithSlash])
                 {
                     for (UIView *subview in quickActionButton.imageView.subviews)
@@ -442,13 +441,13 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 - (void)createQuickActionButtons
 {
-    for (OAQuickActionButtonState *quickActionButtonState in [_mapButtonsHelper getButtonsStates])
+    for (QuickActionButtonState *quickActionButtonState in [_mapButtonsHelper getButtonsStates])
     {
         [self createQuickActionFloatingButton:quickActionButtonState];
     }
 }
 
-- (OAHudButton *)createQuickActionFloatingButton:(OAQuickActionButtonState *)quickActionButtonState
+- (OAHudButton *)createQuickActionFloatingButton:(QuickActionButtonState *)quickActionButtonState
 {
     OAHudButton *quickActionButton = [[OAHudButton alloc] initWithFrame:{346, 648, 50, 50}];
     [_quickActionFloatingButtons addObject:quickActionButton];
@@ -487,8 +486,6 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 
 - (void)updateViewVisibility
 {
-//    setLayerState(false);
-//    isLayerOn = quickActionRegistry.isQuickActionOn();
     for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
     {
         [self setupQuickActionBtnVisibility:quickActionButton];
@@ -499,11 +496,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 - (void)setupQuickActionBtnVisibility:(OAHudButton *)quickActionButton
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    //    contextMenuLayer.isInChangeMarkerPositionMode() ||
-    //    measurementToolLayer.isInMeasurementMode() ||
     BOOL hideQuickButton = (quickActionButton.buttonState
-                            && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class]
-                            && ![((OAQuickActionButtonState *) quickActionButton.buttonState) isEnabled])
+                            && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class]
+                            && ![((QuickActionButtonState *) quickActionButton.buttonState) isEnabled])
         || [mapPanel isContextMenuVisible]
         || [mapPanel isDashboardVisible]
         || [mapPanel gpxModeActive]
@@ -521,9 +516,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
 
-    EOAMap3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
-    BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden
-        || (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode
+    Map3DModeVisibility map3DMode = [_map3DButtonState getVisibility];
+    BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
+        || (map3DMode == Map3DModeVisibilityVisibleIn3DMode
             && ![OAMapViewTrackingUtilities.instance is3DMode])
         || [mapPanel isContextMenuVisible]
         || [mapPanel isDashboardVisible]
@@ -552,9 +547,9 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
 {
     for (OAHudButton *quickActionButton in _quickActionFloatingButtons)
     {
-        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:OAQuickActionButtonState.class])
+        if (quickActionButton.buttonState && [quickActionButton.buttonState isKindOfClass:QuickActionButtonState.class])
         {
-            OAQuickActionButtonState *quickActionButtonState = ((OAQuickActionButtonState *) quickActionButton.buttonState);
+            QuickActionButtonState *quickActionButtonState = ((QuickActionButtonState *) quickActionButton.buttonState);
             [quickActionButtonState.fabMarginPref restorePosition:quickActionButton];
         }
     }

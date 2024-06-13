@@ -630,10 +630,9 @@
             if ([item exists])
                 [duplicateItems addObject:item.fileName];
         }
-        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class])
+        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class] && [item exists])
         {
-            if ([item exists])
-                [duplicateItems addObject:[((OAQuickActionsSettingsItem *) item) getButtonState]];
+            [duplicateItems addObject:[((OAQuickActionsSettingsItem *) item) getButtonState]];
         }
     }
     return duplicateItems;

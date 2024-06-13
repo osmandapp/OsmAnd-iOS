@@ -280,10 +280,10 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     settingsItems[OAExportSettingsType.GLOBAL] = @[[[OAGlobalSettingsItem alloc] init]];
 
     OAMapButtonsHelper *buttonsHelper = [OAMapButtonsHelper sharedInstance];
-    NSArray<OAQuickActionButtonState *> *buttonStates = [buttonsHelper getButtonsStates];
+    NSArray<QuickActionButtonState *> *buttonStates = [buttonsHelper getButtonsStates];
     if (buttonStates.count == 1)
     {
-        OAQuickActionButtonState *state = buttonStates.firstObject;
+        QuickActionButtonState *state = buttonStates.firstObject;
         if ([state isDefaultButton] && state.quickActions.count == 0)
             buttonStates = @[];
     }
@@ -291,7 +291,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         settingsItems[OAExportSettingsType.QUICK_ACTIONS] = buttonStates;
 
     OAMapButtonsHelper *registry = OAMapButtonsHelper.sharedInstance;
-    NSArray<OAQuickActionButtonState *> *actionsList = [registry getButtonsStates];
+    NSArray<QuickActionButtonState *> *actionsList = [registry getButtonsStates];
     if (actionsList.count > 0)
         settingsItems[OAExportSettingsType.QUICK_ACTIONS] = actionsList;
     
@@ -555,7 +555,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     return nil;
 }
 
-- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem:(OAQuickActionButtonState *)buttonState
+- (OAQuickActionsSettingsItem *)getBaseQuickActionsSettingsItem:(QuickActionButtonState *)buttonState
                                                   settingsItems:(NSArray<OASettingsItem *> *)settingsItems
 {
     for (OASettingsItem *settingsItem in settingsItems)
@@ -563,7 +563,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
         if (settingsItem.type == EOASettingsItemTypeQuickActions)
         {
             OAQuickActionsSettingsItem *item = (OAQuickActionsSettingsItem *) settingsItem;
-            OAQuickActionButtonState *state = [item getButtonState];
+            QuickActionButtonState *state = [item getButtonState];
             if ([state.id isEqualToString:buttonState.id] && [[state getName] isEqualToString:[buttonState getName]])
                 return item;
         }
@@ -575,7 +575,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     NSMutableArray<OASettingsItem *> *result = [NSMutableArray array];
     NSMutableArray<OAApplicationModeBean *> *appModeBeans = [NSMutableArray array];
-    NSMutableArray<OAQuickActionButtonState *> *quickActionButtons = [NSMutableArray array];
+    NSMutableArray<QuickActionButtonState *> *quickActionButtons = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<OAAvoidRoadInfo *> *avoidRoads = [NSMutableArray array];
@@ -591,7 +591,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     {
         if ([object isKindOfClass:OAApplicationModeBean.class])
             [appModeBeans addObject:object];
-        else if ([object isKindOfClass:OAQuickActionButtonState.class])
+        else if ([object isKindOfClass:QuickActionButtonState.class])
             [quickActionButtons addObject:object];
         else if ([object isKindOfClass:OAPOIUIFilter.class])
             [poiUIFilters addObject:object];
@@ -653,7 +653,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
     }
     if (quickActionButtons.count > 0)
     {
-        for (OAQuickActionButtonState *buttonState in quickActionButtons)
+        for (QuickActionButtonState *buttonState in quickActionButtons)
         {
             OAQuickActionsSettingsItem *baseItem = [self getBaseQuickActionsSettingsItem:buttonState settingsItems:settingsItems];
             [result addObject:[[OAQuickActionsSettingsItem alloc] initWithBaseItem:baseItem buttonState:buttonState]];
@@ -736,7 +736,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 {
     NSMutableDictionary<OAExportSettingsType *, NSArray *> *settingsToOperate = [NSMutableDictionary new];
     NSMutableArray<OAApplicationModeBean *> *profiles = [NSMutableArray array];
-    NSMutableArray<OAQuickActionButtonState *> *quickActionButtonStates = [NSMutableArray array];
+    NSMutableArray<QuickActionButtonState *> *quickActionButtonStates = [NSMutableArray array];
     NSMutableArray<OAPOIUIFilter *> *poiUIFilters = [NSMutableArray array];
     NSMutableArray<OATileSource *> *tileSourceTemplates = [NSMutableArray array];
     NSMutableArray<NSString *> *routingFilesList = [NSMutableArray array];

@@ -8,9 +8,8 @@
 
 import Foundation
 
-@objc(OAQuickActionSerializer)
 @objcMembers
-class QuickActionSerializer: NSObject {
+final class QuickActionSerializer: NSObject {
 
     private var quickActionTypesStr: [String: QuickActionType] = [:]
     private var quickActionTypesInt: [Int: QuickActionType] = [:]

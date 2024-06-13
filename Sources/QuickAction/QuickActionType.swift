@@ -6,7 +6,7 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-@objc(EOAQuickActionTypeCategory)
+@objc
 enum QuickActionTypeCategory: Int {
     case unsupported = -1
     case createCategory
@@ -17,7 +17,6 @@ enum QuickActionTypeCategory: Int {
     case open
 }
 
-@objc(OAQuickActionType)
 @objcMembers
 final class QuickActionType: NSObject {
     let id: Int
@@ -67,7 +66,7 @@ final class QuickActionType: NSObject {
     }
 
     func createNew() -> OAQuickAction {
-        if let cl = cl {
+        if let cl {
             return cl.init()
         } else {
             fatalError("Class not defined")
@@ -75,7 +74,7 @@ final class QuickActionType: NSObject {
     }
         
     func createNew(_ action: OAQuickAction) -> OAQuickAction {
-        if let cl = cl {
+        if let cl {
             return cl.init(action: action)
         } else {
             return OAQuickAction(action: action)
@@ -83,22 +82,22 @@ final class QuickActionType: NSObject {
     }
 
     var actionEditable: Bool {
-        return _actionEditable
+        _actionEditable
     }
 
     var name: String? {
-        return _name
+        _name
     }
 
     var iconName: String? {
-        return _iconName
+        _iconName
     }
 
     var secondaryIconName: String? {
-        return _secondaryIconName
+        _secondaryIconName
     }
 
     var category: Int {
-        return _category ?? QuickActionTypeCategory.unsupported.rawValue
+        _category ?? QuickActionTypeCategory.unsupported.rawValue
     }
 }

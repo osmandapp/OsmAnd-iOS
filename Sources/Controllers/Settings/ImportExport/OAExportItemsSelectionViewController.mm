@@ -269,9 +269,9 @@
         item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_marker"];
         item[@"color"] = marker.color;
     }
-    else if ([object isKindOfClass:OAQuickActionButtonState.class])
+    else if ([object isKindOfClass:QuickActionButtonState.class])
     {
-        OAQuickActionButtonState *quickActionButtonState = object;
+        QuickActionButtonState *quickActionButtonState = object;
         item[@"title"] = [quickActionButtonState getName];
         item[@"icon"] = [quickActionButtonState getIcon];
     }

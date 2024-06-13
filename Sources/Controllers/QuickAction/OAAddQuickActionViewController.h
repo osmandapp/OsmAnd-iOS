@@ -15,7 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, weak) id<OAQuickActionListDelegate> delegate;
 
-- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState;
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState;
 
 @end
 

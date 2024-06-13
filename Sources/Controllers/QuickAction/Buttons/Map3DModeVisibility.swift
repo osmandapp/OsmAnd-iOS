@@ -6,7 +6,7 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-@objc(EOAMap3DModeVisibility)
+@objc
 enum Map3DModeVisibility: Int32, CaseIterable {
 
     case hidden
@@ -29,7 +29,6 @@ enum Map3DModeVisibility: Int32, CaseIterable {
     }
 }
 
-@objc(EOAMap3DModeVisibilityWrapper)
 @objcMembers
 final class Map3DModeVisibilityWrapper: NSObject {
 

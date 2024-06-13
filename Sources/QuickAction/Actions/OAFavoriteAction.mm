@@ -27,7 +27,7 @@ static NSString * const kName = @"name";
 static NSString * const kCategoryName = @"category_name";
 static NSString * const kCategoryColor = @"category_color";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAFavoriteAction
 
@@ -38,13 +38,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsFavoriteActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsFavoriteActionId
                                             stringId:@"fav.add"
                                                   cl:self.class]
                name:OALocalizedString(@"ctx_mnu_add_fav")]
               iconName:@"ic_custom_favorites"]
              secondaryIconName:@"ic_custom_compound_action_add"]
-            category:EOAQuickActionTypeCategoryCreateCategory];
+            category:QuickActionTypeCategoryCreateCategory];
 }
 
 - (void)execute
@@ -209,7 +209,7 @@ static OAQuickActionType *TYPE;
     return YES;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

@@ -11,7 +11,7 @@
 #import "OAMapPanelViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavDirectionsFromAction
 
@@ -22,12 +22,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId
                                             stringId:@"nav.directions"
                                                   cl:self.class]
                name:OALocalizedString(@"context_menu_item_directions_from")]
               iconName:@"ic_action_directions_from"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -45,7 +45,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_dir_from_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

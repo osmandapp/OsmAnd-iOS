@@ -22,7 +22,7 @@
 
 static NSString * const kStyles = @"styles";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapStyleAction
 
@@ -33,12 +33,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapStyleActionId
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapStyleActionId
                                            stringId:@"mapstyle.change"
                                                  cl:self.class]
               name:OALocalizedString(@"quick_action_map_style")]
              iconName:@"ic_custom_map_style"]
-            category:EOAQuickActionTypeCategoryConfigureMap];
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void)commonInit
@@ -235,7 +235,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_list_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

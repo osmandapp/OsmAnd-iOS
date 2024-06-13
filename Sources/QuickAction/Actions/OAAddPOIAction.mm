@@ -25,7 +25,7 @@
 static NSString * const kTag = @"key_tag";
 static NSString * const kCategory = @"key_category";
 
-static OAQuickActionType *ACTION_TYPE;
+static QuickActionType *ACTION_TYPE;
 
 @implementation OAAddPOIAction
 
@@ -36,12 +36,12 @@ static OAQuickActionType *ACTION_TYPE;
 
 + (void)initialize
 {
-    ACTION_TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId
+    ACTION_TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId
                                                   stringId:@"osmpoi.add"
                                                         cl:self.class]
                      name:OALocalizedString(@"quick_action_add_poi")]
                     iconName:@"ic_action_create_poi"]
-                   category:EOAQuickActionTypeCategoryCreateCategory];
+                   category:QuickActionTypeCategoryCreateCategory];
 }
 
 - (void) execute
@@ -203,7 +203,7 @@ static OAQuickActionType *ACTION_TYPE;
     return tagValues.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return ACTION_TYPE;
 }

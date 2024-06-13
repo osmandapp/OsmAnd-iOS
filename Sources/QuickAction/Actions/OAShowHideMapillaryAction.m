@@ -11,7 +11,7 @@
 #import "OAIAPHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideMapillaryAction
 
@@ -22,12 +22,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideMapillaryActionId
                                             stringId:@"mapillary.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_showhide_mapillary_title")]
               iconName:@"ic_custom_mapillary_symbol"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -60,7 +60,7 @@ static OAQuickActionType *TYPE;
     return [OsmAndApp instance].data.mapillary ? OALocalizedString(@"quick_action_mapillary_hide") : OALocalizedString(@"quick_action_mapillary_show");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

@@ -12,7 +12,7 @@
 #import "OAMapPanelViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavStartStopAction
 {
@@ -26,12 +26,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavStartStopActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavStartStopActionId
                                             stringId:@"nav.startstop"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_start_stop_navigation")]
               iconName:@"ic_custom_navigation_arrow"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -75,7 +75,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"start_navigation");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

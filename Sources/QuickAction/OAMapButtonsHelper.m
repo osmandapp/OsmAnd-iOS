@@ -43,52 +43,52 @@ static NSString * const kParams = @"params";
 static NSString * const kId = @"id";
 static NSString * const kActionType = @"actionType";
 
-static OAQuickActionType *TYPE_ADD_ITEMS;
-static OAQuickActionType *TYPE_CONFIGURE_MAP;
-static OAQuickActionType *TYPE_NAVIGATION;
-static OAQuickActionType *TYPE_CONFIGURE_SCREEN;
-static OAQuickActionType *TYPE_SETTINGS;
-static OAQuickActionType *TYPE_OPEN;
+static QuickActionType *TYPE_ADD_ITEMS;
+static QuickActionType *TYPE_CONFIGURE_MAP;
+static QuickActionType *TYPE_NAVIGATION;
+static QuickActionType *TYPE_CONFIGURE_SCREEN;
+static QuickActionType *TYPE_SETTINGS;
+static QuickActionType *TYPE_OPEN;
 
 @implementation OAMapButtonsHelper
 {
     OAAppSettings *_settings;
-    OAQuickActionSerializer *_serializer;
+    QuickActionSerializer *_serializer;
     
-    OAMap3DButtonState *_map3DButtonState;
-    OACompassButtonState *_compassButtonState;
-    NSMutableArray<OAQuickActionButtonState *> *_mapButtonStates;
+    Map3DButtonState *_map3DButtonState;
+    CompassButtonState *_compassButtonState;
+    NSMutableArray<QuickActionButtonState *> *_mapButtonStates;
 
-    NSArray<OAQuickActionType *> *_enabledTypes;
-    NSDictionary<NSNumber *, OAQuickActionType *> *_quickActionTypesInt;
-    NSDictionary<NSString *, OAQuickActionType *> *_quickActionTypesStr;
+    NSArray<QuickActionType *> *_enabledTypes;
+    NSDictionary<NSNumber *, QuickActionType *> *_quickActionTypesInt;
+    NSDictionary<NSString *, QuickActionType *> *_quickActionTypesStr;
 }
 
 + (void)initialize
 {
-    TYPE_ADD_ITEMS = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_ADD_ITEMS = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                        name:OALocalizedString(@"quick_action_add_create_items")]
-                      category:EOAQuickActionTypeCategoryCreateCategory];
+                      category:QuickActionTypeCategoryCreateCategory];
 
-    TYPE_CONFIGURE_MAP = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_CONFIGURE_MAP = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                            name:OALocalizedString(@"configure_map")]
-                          category:EOAQuickActionTypeCategoryConfigureMap];
+                          category:QuickActionTypeCategoryConfigureMap];
 
-    TYPE_NAVIGATION = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_NAVIGATION = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                         name:OALocalizedString(@"routing_settings")]
-                       category:EOAQuickActionTypeCategoryNavigation];
+                       category:QuickActionTypeCategoryNavigation];
 
-    TYPE_CONFIGURE_SCREEN = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_CONFIGURE_SCREEN = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                               name:OALocalizedString(@"layer_map_appearance")]
-                             category:EOAQuickActionTypeCategoryConfigureScreen];
+                             category:QuickActionTypeCategoryConfigureScreen];
 
-    TYPE_SETTINGS = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_SETTINGS = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                       name:OALocalizedString(@"shared_string_settings")]
-                     category:EOAQuickActionTypeCategorySettings];
+                     category:QuickActionTypeCategorySettings];
 
-    TYPE_OPEN = [[[[OAQuickActionType alloc] initWithId:0 stringId:@""]
+    TYPE_OPEN = [[[[QuickActionType alloc] initWithId:0 stringId:@""]
                   name:OALocalizedString(@"shared_string_open")]
-                 category:EOAQuickActionTypeCategoryOpen];
+                 category:QuickActionTypeCategoryOpen];
 }
 
 + (OAMapButtonsHelper *)sharedInstance
@@ -101,32 +101,32 @@ static OAQuickActionType *TYPE_OPEN;
     return _sharedInstance;
 }
 
-+ (OAQuickActionType *) TYPE_ADD_ITEMS
++ (QuickActionType *) TYPE_ADD_ITEMS
 {
     return TYPE_ADD_ITEMS;
 }
 
-+ (OAQuickActionType *) TYPE_CONFIGURE_MAP
++ (QuickActionType *) TYPE_CONFIGURE_MAP
 {
     return TYPE_CONFIGURE_MAP;
 }
 
-+ (OAQuickActionType *) TYPE_NAVIGATION
++ (QuickActionType *) TYPE_NAVIGATION
 {
     return TYPE_NAVIGATION;
 }
 
-+ (OAQuickActionType *) TYPE_CONFIGURE_SCREEN
++ (QuickActionType *) TYPE_CONFIGURE_SCREEN
 {
     return TYPE_CONFIGURE_SCREEN;
 }
 
-+ (OAQuickActionType *) TYPE_SETTINGS
++ (QuickActionType *) TYPE_SETTINGS
 {
     return TYPE_SETTINGS;
 }
 
-+ (OAQuickActionType *) TYPE_OPEN
++ (QuickActionType *) TYPE_OPEN
 {
     return TYPE_OPEN;
 }
@@ -143,7 +143,7 @@ static OAQuickActionType *TYPE_OPEN;
         _settings = [OAAppSettings sharedManager];
         _quickActionsChangedObservable = [[OAObservable alloc] init];
         _quickActionButtonsChangedObservable = [[OAObservable alloc] init];
-        _serializer = [OAQuickActionSerializer new];
+        _serializer = [QuickActionSerializer new];
         
         [self updateActionTypes];
         [self initDefaultButtons];
@@ -153,29 +153,29 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (void)initDefaultButtons
 {
-    _map3DButtonState = [OAMap3DButtonState new];
-    _compassButtonState = [OACompassButtonState new];
+    _map3DButtonState = [Map3DButtonState new];
+    _compassButtonState = [CompassButtonState new];
 }
 
-- (OAMap3DButtonState *)getMap3DButtonState
+- (Map3DButtonState *)getMap3DButtonState
 {
     return _map3DButtonState;
 }
 
-- (OACompassButtonState *)getCompassButtonState
+- (CompassButtonState *)getCompassButtonState
 {
     return _compassButtonState;
 }
 
-- (NSArray<OAQuickActionButtonState *> *)getButtonsStates;
+- (NSArray<QuickActionButtonState *> *)getButtonsStates;
 {
     return _mapButtonStates;
 }
 
-- (NSArray<OAQuickActionButtonState *> *)getEnabledButtonsStates
+- (NSArray<QuickActionButtonState *> *)getEnabledButtonsStates
 {
-    NSMutableArray<OAQuickActionButtonState *> *list = [NSMutableArray array];
-    for (OAQuickActionButtonState *buttonState in _mapButtonStates)
+    NSMutableArray<QuickActionButtonState *> *list = [NSMutableArray array];
+    for (QuickActionButtonState *buttonState in _mapButtonStates)
     {
         if ([buttonState isEnabled])
             [list addObject:buttonState];
@@ -183,31 +183,31 @@ static OAQuickActionType *TYPE_OPEN;
     return list;
 }
 
-- (void)addQuickAction:(OAQuickActionButtonState *)buttonState action:(OAQuickAction *)action
+- (void)addQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     [buttonState add:action];
     [self onQuickActionsChanged:buttonState];
 }
 
-- (void)deleteQuickAction:(OAQuickActionButtonState *)buttonState action:(OAQuickAction *)action
+- (void)deleteQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     [buttonState remove:action];
     [self onQuickActionsChanged:buttonState];
 }
 
-- (void)updateQuickAction:(OAQuickActionButtonState *)buttonState action:(OAQuickAction *)action
+- (void)updateQuickAction:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
 {
     [buttonState set:action];
     [self onQuickActionsChanged:buttonState];
 }
 
-- (void)updateQuickActions:(OAQuickActionButtonState *)buttonState actions:(NSArray<OAQuickAction *> *)actions
+- (void)updateQuickActions:(QuickActionButtonState *)buttonState actions:(NSArray<OAQuickAction *> *)actions
 {
     [buttonState setWithQuickActions:actions];
     [self onQuickActionsChanged:buttonState];
 }
 
-- (void)onQuickActionsChanged:(OAQuickActionButtonState *)buttonState
+- (void)onQuickActionsChanged:(QuickActionButtonState *)buttonState
 {
     [buttonState saveActions:_serializer];
     [_quickActionsChangedObservable notifyEventWithKey:buttonState];
@@ -250,7 +250,7 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (void)updateActionTypes
 {
-    NSMutableArray<OAQuickActionType *> *allTypes = [NSMutableArray new];
+    NSMutableArray<QuickActionType *> *allTypes = [NSMutableArray new];
 //    [allTypes addObject:OANewAction.TYPE];
     [allTypes addObject:OAFavoriteAction.TYPE];
     [allTypes addObject:OAGPXAction.TYPE];
@@ -281,12 +281,12 @@ static OAQuickActionType *TYPE_OPEN;
     [allTypes addObject:OAMapOverlayAction.TYPE];
     [allTypes addObject:OAMapUnderlayAction.TYPE];
 
-    NSMutableArray<OAQuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
+    NSMutableArray<QuickActionType *> *enabledTypes = [NSMutableArray arrayWithArray:allTypes];
     [OAPluginsHelper registerQuickActionTypesPlugins:allTypes enabledTypes:enabledTypes];
     
-    NSMutableDictionary<NSNumber *, OAQuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
-    NSMutableDictionary<NSString *, OAQuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
-    for (OAQuickActionType *qt in allTypes)
+    NSMutableDictionary<NSNumber *, QuickActionType *> *quickActionTypesInt = [NSMutableDictionary new];
+    NSMutableDictionary<NSString *, QuickActionType *> *quickActionTypesStr = [NSMutableDictionary new];
+    for (QuickActionType *qt in allTypes)
     {
         [quickActionTypesInt setObject:qt forKey:@(qt.id)];
         [quickActionTypesStr setObject:qt forKey:qt.stringId];
@@ -306,9 +306,9 @@ static OAQuickActionType *TYPE_OPEN;
     _mapButtonStates = [self createButtonsStates];
 }
 
-- (NSMutableArray<OAQuickActionButtonState *> * _Nonnull)createButtonsStates
+- (NSMutableArray<QuickActionButtonState *> * _Nonnull)createButtonsStates
 {
-    NSMutableArray<OAQuickActionButtonState *> *list = [NSMutableArray array];
+    NSMutableArray<QuickActionButtonState *> *list = [NSMutableArray array];
     NSArray<NSString *> *actionsKeys = [_settings.quickActionButtons get];
     if (actionsKeys && actionsKeys.count > 0)
     {
@@ -317,7 +317,7 @@ static OAQuickActionType *TYPE_OPEN;
             if (key.length > 0)
             {
                 @try {
-                    OAQuickActionButtonState *buttonState = [[OAQuickActionButtonState alloc] initWithId:key];
+                    QuickActionButtonState *buttonState = [[QuickActionButtonState alloc] initWithId:key];
                     [buttonState parseQuickActions:_serializer error:nil];
                     [list addObject:buttonState];
                 }
@@ -333,7 +333,7 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (void)resetQuickActionsForMode:(OAApplicationMode *)appMode
 {
-    for (OAQuickActionButtonState *buttonState in [self getButtonsStates])
+    for (QuickActionButtonState *buttonState in [self getButtonsStates])
     {
         [buttonState resetForMode:appMode];
     }
@@ -342,16 +342,16 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (void)copyQuickActionsFromMode:(OAApplicationMode *)toAppMode fromAppMode:(OAApplicationMode *)fromAppMode
 {
-    for (OAQuickActionButtonState *buttonState in [self getButtonsStates])
+    for (QuickActionButtonState *buttonState in [self getButtonsStates])
     {
         [buttonState copyForModeFromMode:fromAppMode toMode:toAppMode];
     }
     [self updateActionTypes];
 }
 
-- (NSArray<OAQuickActionType *> *)produceTypeActionsListWithHeaders:(OAQuickActionButtonState *)buttonState
+- (NSArray<QuickActionType *> *)produceTypeActionsListWithHeaders:(QuickActionButtonState *)buttonState
 {
-    NSMutableArray<OAQuickActionType *> *actionTypes = [NSMutableArray new];
+    NSMutableArray<QuickActionType *> *actionTypes = [NSMutableArray new];
     [self filterQuickActions:buttonState filter:TYPE_ADD_ITEMS actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_CONFIGURE_MAP actionTypes:actionTypes];
     [self filterQuickActions:buttonState filter:TYPE_NAVIGATION actionTypes:actionTypes];
@@ -362,7 +362,7 @@ static OAQuickActionType *TYPE_OPEN;
     return actionTypes;
 }
 
-- (void)filterQuickActions:(OAQuickActionButtonState *)buttonState filter:(OAQuickActionType *)filter actionTypes:(NSMutableArray<OAQuickActionType *> *)actionTypes
+- (void)filterQuickActions:(QuickActionButtonState *)buttonState filter:(QuickActionType *)filter actionTypes:(NSMutableArray<QuickActionType *> *)actionTypes
 {
     [actionTypes addObject:filter];
 
@@ -371,7 +371,7 @@ static OAQuickActionType *TYPE_OPEN;
     {
         [set addObject:@(action.actionType.id)];
     }
-    for (OAQuickActionType *type in _enabledTypes)
+    for (QuickActionType *type in _enabledTypes)
     {
         if (type.category == filter.category)
         {
@@ -393,7 +393,7 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (OAQuickAction *)newActionByStringType:(NSString *)actionType
 {
-    OAQuickActionType *quickActionType = _quickActionTypesStr[actionType];
+    QuickActionType *quickActionType = _quickActionTypesStr[actionType];
     if (quickActionType)
         return [quickActionType createNew];
     return nil;
@@ -401,7 +401,7 @@ static OAQuickActionType *TYPE_OPEN;
 
 - (OAQuickAction *)newActionByType:(NSInteger)type
 {
-    OAQuickActionType *quickActionType = _quickActionTypesInt[@(type)];
+    QuickActionType *quickActionType = _quickActionTypesInt[@(type)];
     if (quickActionType != nil)
         return [quickActionType createNew];
     return nil;
@@ -412,9 +412,9 @@ static OAQuickActionType *TYPE_OPEN;
     return [self getButtonStateByName:name] == nil;
 }
 
-- (OAQuickActionButtonState *)getButtonStateByName:(NSString *)name
+- (QuickActionButtonState *)getButtonStateByName:(NSString *)name
 {
-    for (OAQuickActionButtonState *buttonState in _mapButtonStates)
+    for (QuickActionButtonState *buttonState in _mapButtonStates)
     {
         if ([[buttonState getName] isEqualToString:name])
             return buttonState;
@@ -422,9 +422,9 @@ static OAQuickActionType *TYPE_OPEN;
     return nil;
 }
 
-- (OAQuickActionButtonState *)getButtonStateById:(NSString *)id
+- (QuickActionButtonState *)getButtonStateById:(NSString *)id
 {
-    for (OAQuickActionButtonState *buttonState in _mapButtonStates)
+    for (QuickActionButtonState *buttonState in _mapButtonStates)
     {
         if ([buttonState.id isEqualToString:id])
             return buttonState;
@@ -432,20 +432,20 @@ static OAQuickActionType *TYPE_OPEN;
     return nil;
 }
 
-- (OAQuickActionButtonState *)createNewButtonState
+- (QuickActionButtonState *)createNewButtonState
 {
-    NSString *id = [NSString stringWithFormat:@"%@_%ld", OAQuickActionButtonState.defaultButtonId, (long) ([[NSDate date] timeIntervalSince1970] * 1000)];
-    return [[OAQuickActionButtonState alloc] initWithId:id];
+    NSString *id = [NSString stringWithFormat:@"%@_%ld", QuickActionButtonState.defaultButtonId, (long) ([[NSDate date] timeIntervalSince1970] * 1000)];
+    return [[QuickActionButtonState alloc] initWithId:id];
 }
 
-- (void)addQuickActionButtonState:(OAQuickActionButtonState *)buttonState
+- (void)addQuickActionButtonState:(QuickActionButtonState *)buttonState
 {
     [_settings.quickActionButtons addUnique:buttonState.id];
     [self updateActiveActions];
     [_quickActionButtonsChangedObservable notifyEventWithKey:buttonState andValue:@(YES)];
 }
 
-- (void)removeQuickActionButtonState:(OAQuickActionButtonState *)buttonState
+- (void)removeQuickActionButtonState:(QuickActionButtonState *)buttonState
 {
     [_settings.quickActionButtons remove:buttonState.id];
     [self updateActiveActions];

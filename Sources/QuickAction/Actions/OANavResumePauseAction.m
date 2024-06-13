@@ -13,7 +13,7 @@
 #import "OAMapPanelViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavResumePauseAction
 {
@@ -27,13 +27,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId
                                              stringId:@"nav.resumepause"
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_resume_pause_navigation")]
                iconName:@"ic_custom_navigation_arrow"]
               secondaryIconName:@"ic_custom_compound_action_add"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -84,7 +84,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"pause_nav");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

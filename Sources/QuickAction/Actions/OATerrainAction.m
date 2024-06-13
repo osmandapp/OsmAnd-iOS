@@ -11,7 +11,7 @@
 #import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OATerrainAction
 
@@ -22,12 +22,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsTerrainActionId
                                             stringId:@"terrain.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_hillshade")]
               iconName:@"ic_custom_hillshade"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -66,7 +66,7 @@ static OAQuickActionType *TYPE;
     return [[OsmAndApp instance].data terrainType] != EOATerrainTypeDisabled ? OALocalizedString(@"hide_terrain") : OALocalizedString(@"show_terrain");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

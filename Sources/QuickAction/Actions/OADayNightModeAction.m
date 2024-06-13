@@ -11,7 +11,7 @@
 #import "OADayNightHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OADayNightModeAction
 {
@@ -30,12 +30,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsDayNightModeActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsDayNightModeActionId
                                             stringId:@"daynight.switch"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_switch_day_mode")]
               iconName:@"ic_custom_sun"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -65,7 +65,7 @@ static OAQuickActionType *TYPE;
     return _settings.nightMode ? OALocalizedString(@"quick_action_switch_day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

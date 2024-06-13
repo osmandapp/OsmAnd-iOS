@@ -10,7 +10,7 @@
 #import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavAutoZoomMapAction
 {
@@ -24,12 +24,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAutoZoomMapActionId
                                             stringId:@"nav.autozoom"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_auto_zoom")]
               iconName:@"ic_navbar_search"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -58,7 +58,7 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"auto_zoom_off") : OALocalizedString(@"auto_zoom_on");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

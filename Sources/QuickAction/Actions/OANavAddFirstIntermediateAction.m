@@ -15,7 +15,7 @@
 #import "OsmAndApp.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavAddFirstIntermediateAction
 
@@ -26,13 +26,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsNavAddFirstIntermediateActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAddFirstIntermediateActionId
                                              stringId:@"nav.intermediate.add"
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_add_first_intermediate")]
                iconName:@"ic_action_intermediate"]
               secondaryIconName:@"ic_custom_compound_action_add"]
-             category:EOAQuickActionTypeCategoryNavigation]
+             category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }
 
@@ -52,7 +52,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_first_intermediate_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

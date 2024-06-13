@@ -12,7 +12,7 @@
 #import "OAReverseGeocoder.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMarkerAction
 
@@ -23,13 +23,13 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId
                                             stringId:@"marker.add"
                                                   cl:self.class]
                name:OALocalizedString(@"quick_action_add_marker")]
               iconName:@"ic_custom_favorites"]
              secondaryIconName:@"ic_custom_compound_action_add"]
-            category:EOAQuickActionTypeCategoryCreateCategory];
+            category:QuickActionTypeCategoryCreateCategory];
 }
 
 - (void)execute
@@ -44,7 +44,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_add_marker_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

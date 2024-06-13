@@ -55,7 +55,7 @@
     BOOL _isHidden;
 }
 
-- (instancetype)initWithButtonState:(OAQuickActionButtonState *)buttonState;
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState;
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     

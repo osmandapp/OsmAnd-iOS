@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc(OAMap3dModeButtonVisibilityViewController)
 @objcMembers
 class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
 
@@ -51,12 +50,12 @@ class Map3dModeButtonVisibilityViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if let map3dMode = item.obj(forKey: "map3dMode") as? Map3DModeVisibility {
             let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
-            cell.tintColor = UIColor.iconColorActive
+            cell.tintColor = .iconColorActive
             cell.descriptionVisibility(false)
             let isSelected = buttonState.getVisibility() == map3dMode
             cell.titleLabel.text = map3dMode.title
             cell.leftIconView.image = UIImage.templateImageNamed(map3dMode.iconName)
-            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: OAAppSettings.sharedManager().applicationMode.get().getIconColor()) : UIColor.iconColorDisabled
+            cell.leftIconView.tintColor = isSelected ? UIColor(rgb: OAAppSettings.sharedManager().applicationMode.get().getIconColor()) : .iconColorDisabled
             cell.accessoryType = isSelected ? .checkmark : .none
             cell.accessibilityLabel = cell.titleLabel.text
             cell.accessibilityValue = localizedString(isSelected ? "shared_string_selected" : "shared_string_not_selected")

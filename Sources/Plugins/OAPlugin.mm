@@ -235,7 +235,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return nil;
 }
 
-- (NSArray<OAQuickActionType *> *) getQuickActionTypes
+- (NSArray<QuickActionType *> *) getQuickActionTypes
 {
     return @[];
 }

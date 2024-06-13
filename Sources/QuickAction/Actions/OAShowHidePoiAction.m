@@ -18,7 +18,7 @@
 #import "OASimpleTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHidePoiAction
 {
@@ -32,12 +32,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId
                                            stringId:@"poi.showhide"
                                                  cl:self.class]
               name:OALocalizedString(@"toggle_poi")]
              iconName:@"ic_custom_poi"]
-            category:EOAQuickActionTypeCategoryConfigureMap];
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void)commonInit
@@ -203,7 +203,7 @@ static OAQuickActionType *TYPE;
     : filters[0];
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

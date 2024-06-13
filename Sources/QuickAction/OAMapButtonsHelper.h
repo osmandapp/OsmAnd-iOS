@@ -5,12 +5,10 @@
 //  Created by Paul on 8/15/19.
 //  Copyright © 2019 OsmAnd. All rights reserved.
 //
-//  OsmAnd/src/net/osmand/plus/quickaction/QuickActionRegistry.java
-//  git revision 8dedb3908aabe6e4fdd59751914516461f09e6d9
 
 #import <Foundation/Foundation.h>
 
-@class OAObservable, OAApplicationMode, OAQuickAction, OAQuickActionType, OAQuickActionButtonState, OAMapButtonState, OAMap3DButtonState, OACompassButtonState;
+@class OAObservable, OAApplicationMode, OAQuickAction, QuickActionType, QuickActionButtonState, MapButtonState, Map3DButtonState, CompassButtonState;
 
 @interface OAMapButtonsHelper : NSObject
 
@@ -19,23 +17,23 @@
 
 + (OAMapButtonsHelper * _Nonnull)sharedInstance;
 
-+ (OAQuickActionType * _Nonnull)TYPE_ADD_ITEMS;
-+ (OAQuickActionType * _Nonnull)TYPE_CONFIGURE_MAP;
-+ (OAQuickActionType * _Nonnull)TYPE_NAVIGATION;
-+ (OAQuickActionType * _Nonnull)TYPE_CONFIGURE_SCREEN;
-+ (OAQuickActionType * _Nonnull)TYPE_SETTINGS;
-+ (OAQuickActionType * _Nonnull)TYPE_OPEN;
++ (QuickActionType * _Nonnull)TYPE_ADD_ITEMS;
++ (QuickActionType * _Nonnull)TYPE_CONFIGURE_MAP;
++ (QuickActionType * _Nonnull)TYPE_NAVIGATION;
++ (QuickActionType * _Nonnull)TYPE_CONFIGURE_SCREEN;
++ (QuickActionType * _Nonnull)TYPE_SETTINGS;
++ (QuickActionType * _Nonnull)TYPE_OPEN;
 
-- (OAMap3DButtonState * _Nonnull)getMap3DButtonState;
-- (OACompassButtonState * _Nonnull)getCompassButtonState;
-- (NSArray<OAQuickActionButtonState *> * _Nonnull)getButtonsStates;
-- (NSArray<OAQuickActionButtonState *> * _Nonnull)getEnabledButtonsStates;
+- (Map3DButtonState * _Nonnull)getMap3DButtonState;
+- (CompassButtonState * _Nonnull)getCompassButtonState;
+- (NSArray<QuickActionButtonState *> * _Nonnull)getButtonsStates;
+- (NSArray<QuickActionButtonState *> * _Nonnull)getEnabledButtonsStates;
 
-- (void)addQuickAction:(OAQuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
-- (void)deleteQuickAction:(OAQuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
-- (void)updateQuickAction:(OAQuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
-- (void)updateQuickActions:(OAQuickActionButtonState * _Nonnull)buttonState actions:(NSArray<OAQuickAction *> * _Nonnull)actions;
-- (void)onQuickActionsChanged:(OAQuickActionButtonState * _Nonnull)buttonState;
+- (void)addQuickAction:(QuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
+- (void)deleteQuickAction:(QuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
+- (void)updateQuickAction:(QuickActionButtonState * _Nonnull)buttonState action:(OAQuickAction * _Nonnull)action;
+- (void)updateQuickActions:(QuickActionButtonState * _Nonnull)buttonState actions:(NSArray<OAQuickAction *> * _Nonnull)actions;
+- (void)onQuickActionsChanged:(QuickActionButtonState * _Nonnull)buttonState;
 
 - (BOOL)isActionNameUnique:(NSArray<OAQuickAction *> * _Nonnull)actions quickAction:(OAQuickAction * _Nonnull)quickAction;
 - (OAQuickAction * _Nonnull)generateUniqueActionName:(NSArray<OAQuickAction *> * _Nonnull)actions action:(OAQuickAction * _Nonnull)action;
@@ -45,16 +43,16 @@
 - (void)updateActiveActions;
 - (void)resetQuickActionsForMode:(OAApplicationMode * _Nonnull)appMode;
 - (void)copyQuickActionsFromMode:(OAApplicationMode * _Nonnull)toAppMode fromAppMode:(OAApplicationMode * _Nonnull)fromAppMode;
-- (NSArray<OAQuickActionType *> * _Nonnull)produceTypeActionsListWithHeaders:(OAQuickActionButtonState * _Nonnull)buttonState;
+- (NSArray<QuickActionType *> * _Nonnull)produceTypeActionsListWithHeaders:(QuickActionButtonState * _Nonnull)buttonState;
 - (OAQuickAction * _Nullable)newActionByStringType:(NSString * _Nonnull)actionType;
 - (OAQuickAction * _Nullable)newActionByType:(NSInteger)type;
 
 - (BOOL)isActionButtonNameUnique:(NSString * _Nonnull)name;
-- (OAQuickActionButtonState * _Nullable)getButtonStateByName:(NSString * _Nonnull)name;
-- (OAQuickActionButtonState * _Nullable)getButtonStateById:(NSString * _Nonnull)id;
-- (OAQuickActionButtonState * _Nonnull)createNewButtonState;
-- (void)addQuickActionButtonState:(OAQuickActionButtonState * _Nonnull)buttonState;
-- (void)removeQuickActionButtonState:(OAQuickActionButtonState * _Nonnull)buttonState;
+- (QuickActionButtonState * _Nullable)getButtonStateByName:(NSString * _Nonnull)name;
+- (QuickActionButtonState * _Nullable)getButtonStateById:(NSString * _Nonnull)id;
+- (QuickActionButtonState * _Nonnull)createNewButtonState;
+- (void)addQuickActionButtonState:(QuickActionButtonState * _Nonnull)buttonState;
+- (void)removeQuickActionButtonState:(QuickActionButtonState * _Nonnull)buttonState;
 
 + (OAQuickAction * _Nonnull)produceAction:(OAQuickAction * _Nonnull)action;
 

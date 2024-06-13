@@ -22,7 +22,7 @@
 static NSString * const kLayerOsmVector = @"type_default"; //todo: migrate to LAYER_OSM_VECTOR (android)
 static NSString * const kSource = @"source";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapSourceAction
 {
@@ -41,12 +41,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapSourceActionId
                                            stringId:@"mapsource.change"
                                                  cl:self.class]
               name:OALocalizedString(@"quick_action_map_source")]
              iconName:@"ic_custom_show_on_map"]
-            category:EOAQuickActionTypeCategoryConfigureMap];
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void)execute
@@ -196,7 +196,7 @@ static OAQuickActionType *TYPE;
     return sources.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

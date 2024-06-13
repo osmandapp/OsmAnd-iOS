@@ -6,7 +6,7 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
-@objc(EOACompassVisibility)
+@objc
 enum CompassVisibility: Int32, CaseIterable {
 
     case alwaysVisible
@@ -37,7 +37,6 @@ enum CompassVisibility: Int32, CaseIterable {
     }
 }
 
-@objc(EOACompassVisibilityWrapper)
 @objcMembers
 final class CompassVisibilityWrapper: NSObject {
 

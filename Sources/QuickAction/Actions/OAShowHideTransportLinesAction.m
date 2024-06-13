@@ -11,7 +11,7 @@
 #import "OAMapStyleSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideTransportLinesAction
 {
@@ -20,12 +20,12 @@ static OAQuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[OAQuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId
                                             stringId:@"transport.showhide"
                                                   cl:self.class]
                name:OALocalizedString(@"toggle_public_transport")]
               iconName:@"ic_custom_transport_bus"]
-             category:EOAQuickActionTypeCategoryConfigureMap]
+             category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }
 
@@ -67,7 +67,7 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_transport_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
     return TYPE;
 }

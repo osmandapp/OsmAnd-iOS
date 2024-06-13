@@ -244,8 +244,8 @@
                     {
                         OAQuickActionsSettingsItem *quickActionsSettingsItem = (OAQuickActionsSettingsItem *) item;
 
-                        OAQuickActionButtonState *buttonState = [quickActionsSettingsItem getButtonState];
-                        OAQuickActionButtonState *state = [mapButtonsHelper getButtonStateById:buttonState.id];
+                        QuickActionButtonState *buttonState = [quickActionsSettingsItem getButtonState];
+                        QuickActionButtonState *state = [mapButtonsHelper getButtonStateById:buttonState.id];
                         if (state)
                         {
                             for (OAQuickAction *action in buttonState.quickActions)

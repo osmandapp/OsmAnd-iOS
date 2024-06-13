@@ -157,6 +157,10 @@
     
     if ([_weatherHelper getRegionIdsForDownloadedWeatherForecast].count != 0)
         [self.navigationController.navigationBar.topItem setRightBarButtonItem:_editButton animated:YES];
+    
+    [self.tableView reloadData];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -173,9 +177,6 @@
 
     if (!_editMode)
         [self updateCacheSize];
-    
-    if (_downloadingCellResourceHelper)
-        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void)viewWillDisappear:(BOOL)animated

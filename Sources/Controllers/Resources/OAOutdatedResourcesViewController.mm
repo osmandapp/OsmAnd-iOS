@@ -107,6 +107,7 @@
     [self setupSubscriptionBanner];
     [self updateContent];
     [self prepareContent];
+    [self.tableView reloadData];
     if (_downloadingCellResourceHelper)
         [_downloadingCellResourceHelper refreshCellSpinners];
 }

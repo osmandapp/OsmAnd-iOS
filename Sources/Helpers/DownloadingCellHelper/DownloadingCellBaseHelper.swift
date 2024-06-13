@@ -31,6 +31,20 @@ class DownloadingCellBaseHelper: NSObject {
     private var progresses: [String: Float] = Dictionary()
     private weak var hostTableView: UITableView?
     
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(onApplicationWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    func onApplicationWillEnterForeground() {
+        hostTableView?.reloadData()
+        refreshCellSpinners()
+    }
+    
     func getHostTableView() -> UITableView? {
         hostTableView
     }

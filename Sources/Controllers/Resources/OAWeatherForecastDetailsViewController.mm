@@ -88,18 +88,20 @@
 {
     [super viewWillAppear:animated];
     [self generateData];
-    [_downloadingCellResourceHelper cleanCellCache];
     [self.tableView reloadData];
+    if (_downloadingCellResourceHelper)
+    {
+        [_downloadingCellResourceHelper refreshCellSpinners];
+    }
     if (self.delegate)
         [self.delegate onUpdateForecast];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [_weatherHelper calculateCacheSize:_region onComplete:nil];
-    if (_downloadingCellResourceHelper)
-        [_downloadingCellResourceHelper refreshCellSpinners];
 }
 
 - (void)viewDidDisappear:(BOOL)animated

@@ -94,9 +94,10 @@
     [self.tableView registerClass:OATableViewCustomHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
-- (void)viewDidAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super viewDidAppear:animated];
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
     if (_downloadingCellCloudHelper)
         [_downloadingCellCloudHelper refreshCellSpinners];
 }

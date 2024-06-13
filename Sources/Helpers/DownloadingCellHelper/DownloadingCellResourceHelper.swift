@@ -66,7 +66,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     private func isDisabled(_ resourceId: String) -> Bool {
         guard let resourceItem = getResource(resourceId), let iapHelper = OAIAPHelper.sharedInstance() else { return false }
         let type = resourceItem.resourceType()
-        if iapHelper.wiki.isActive() && type == .wikiMapRegion {
+        if !iapHelper.wiki.isActive() && type == .wikiMapRegion {
             return true
         } else if !iapHelper.srtm.isActive() && (type == .srtmMapRegion || type == .hillshadeRegion || type == .slopeRegion) {
             return true
@@ -83,6 +83,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func isDownloading(_ resourceId: String) -> Bool {
         if let resourceItem = getResource(resourceId) {
+            resourceItem.refreshDownloadTask()
             return resourceItem.downloadTask() != nil && super.isDownloading(resourceId)
         }
         return false
@@ -132,6 +133,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     override func setupCell(_ resourceId: String) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
+            resourceItem.refreshDownloadTask()
             let subtitle = String(format: "%@  •  %@", resourceItem.type(), resourceItem.formatedSizePkg())
             let title = resourceItem.title()
             let iconName = resourceItem.iconName()

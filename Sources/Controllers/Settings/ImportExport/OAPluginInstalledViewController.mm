@@ -401,7 +401,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     }
     else if ([item[@"type"] isEqualToString:kCellTypeMultyMap])
     {
-        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[self getMapItem:indexPath]];
+        OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:[self getMapItem:indexPath]];
         return [_downloadingCellMultipleResourceHelper getOrCreateCell:item[@"resourceId"] swiftResourceItem:mapItem];
     }
     else if ([item[@"type"] isEqualToString:[OASwitchTableViewCell getCellIdentifier]])

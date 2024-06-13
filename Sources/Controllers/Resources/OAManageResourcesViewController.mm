@@ -363,6 +363,12 @@ static BOOL _repositoryUpdated = NO;
     [[OARootViewController instance] requestProductsWithProgress:NO reload:NO];
 
     [self applySafeAreaMargins];
+    
+    [self.tableView reloadData];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper refreshCellSpinners];
+    if (_downloadingCellMultipleResourceHelper)
+        [_downloadingCellMultipleResourceHelper refreshCellSpinners];
 }
 
 - (void) viewDidAppear:(BOOL)animated
@@ -394,11 +400,6 @@ static BOOL _repositoryUpdated = NO;
         }
     }
     _viewAppeared = YES;
-    
-    if (_downloadingCellResourceHelper)
-        [_downloadingCellResourceHelper refreshCellSpinners];
-    if (_downloadingCellMultipleResourceHelper)
-        [_downloadingCellMultipleResourceHelper refreshCellSpinners];
 }
 
 - (void) viewWillDisappear:(BOOL)animated
@@ -2659,8 +2660,8 @@ static BOOL _repositoryUpdated = NO;
             }
         }
         NSString *resourceId = [item getResourceId];
-        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
-        DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
+        OAMultipleResourceSwiftItem *mapItem = [[OAMultipleResourceSwiftItem alloc] initWithItem:item];
+        DownloadingCell *downloadingCell = [_downloadingCellMultipleResourceHelper getOrCreateCell:resourceId swiftResourceItem:mapItem];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;

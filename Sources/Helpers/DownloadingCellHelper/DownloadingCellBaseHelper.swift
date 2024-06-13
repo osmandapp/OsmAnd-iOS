@@ -37,7 +37,6 @@ class DownloadingCellBaseHelper: NSObject {
     
     func setHostTableView(_ tableView: UITableView?) {
         hostTableView = tableView
-        registerCells()
     }
     
     // MARK: - Resource methods
@@ -74,11 +73,6 @@ class DownloadingCellBaseHelper: NSObject {
     
     // MARK: - Cell setup methods
     
-    private func registerCells() {
-        guard let hostTableView else { return }
-        hostTableView.register(UINib(nibName: DownloadingCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: DownloadingCell.reuseIdentifier)
-    }
-    
     func getOrCreateCell(_ resourceId: String) -> DownloadingCell? {
         if statuses[resourceId] == nil {
             statuses[resourceId] = .idle
@@ -105,7 +99,8 @@ class DownloadingCellBaseHelper: NSObject {
         guard let hostTableView else { return nil }
         var cell = cells[resourceId]
         if cell == nil {
-            cell = hostTableView.dequeueReusableCell(withIdentifier: DownloadingCell.reuseIdentifier) as? DownloadingCell
+            let nib = Bundle.main.loadNibNamed(DownloadingCell.reuseIdentifier, owner: self, options: nil)
+            cell = nib?.first as? DownloadingCell
         }
         guard let cell else { return nil }
         

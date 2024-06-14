@@ -121,8 +121,6 @@ final class SpeedometerView: OATextInfoWidget {
                 } else {
                     contentAlignment(isRight: false)
                 }
-                speedometerSpeedView.removeExternalBorders()
-                speedometerSpeedView.addExternalBorder(borderWidth: 1.0, borderColor: .lightGray, cornerRadius: 11)
             } else {
                 configureContentStackViewSemanticContentAttribute()
                 speedometerSpeedView.layer.cornerRadius = 6
@@ -137,8 +135,8 @@ final class SpeedometerView: OATextInfoWidget {
     func configureUserInterfaceStyleWith(style: UIUserInterfaceStyle) {
         overrideUserInterfaceStyle = style
         let borderColor: UIColor = style == .light ? .widgetAutoBgStroke.light : .widgetAutoBgStroke.dark
-        speedometerSpeedView.removeExternalBorders()
-        speedometerSpeedView.addExternalBorder(borderWidth: 1.0, borderColor: borderColor, cornerRadius: 11)
+        speedometerSpeedView.layer.borderWidth = 1.0
+        speedometerSpeedView.layer.borderColor = borderColor.cgColor
     }
     
     func contentAlignment(isRight: Bool) {

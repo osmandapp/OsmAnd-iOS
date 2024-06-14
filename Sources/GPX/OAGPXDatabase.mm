@@ -20,10 +20,11 @@
 #import "OAPOI.h"
 
 #define kDbName @"gpx.db"
-
 #define GPX_EXT @"gpx"
 #define KML_EXT @"kml"
 #define KMZ_EXT @"kmz"
+
+static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 
 @implementation OAGPX
 
@@ -718,7 +719,7 @@
     bounds.bottomRight = CLLocationCoordinate2DMake([gpxData[@"bottom_right_lat"] doubleValue], [gpxData[@"bottom_right_lon"] doubleValue]);
     gpx.bounds = bounds;
     gpx.visualization3dWallColorType = EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
-    gpx.verticalExaggerationScale = 0.25;
+    gpx.verticalExaggerationScale = kVerticalExaggerationScaleDef;
     gpx.elevationMeters = kElevationDefMeters;
 
     for (NSString *key in gpxData)

@@ -40,6 +40,7 @@
 
 static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
+static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 
 @interface OAGPXLayer ()
 
@@ -320,30 +321,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 NSArray<OATrack *> *tracks = [doc getTracks:NO];
                 if ([self isSensorLineVisualizationType:gpx.visualization3dByType])
                 {
-                    for (OATrack *track in doc.tracks)
-                    {
-                        for (OATrkSegment *segment in track.segments)
-                        {
-                            for (OAWptPt *point in segment.points)
-                            {
-                                if ([self isInstanceOfOAWptPt:point])
-                                {
-                                    switch (gpx.visualization3dByType)
-                                    {
-                                        case EOAGPX3DLineVisualizationByTypeHeartRate:
-                                        case EOAGPX3DLineVisualizationByTypeBicycleCadence:
-                                        case EOAGPX3DLineVisualizationByTypeBicyclePower:
-                                        case EOAGPX3DLineVisualizationByTypeTemperature:
-                                        case EOAGPX3DLineVisualizationByTypeSpeedSensor:
-                                            [elevations addObject:@([self processSensorData:point forType:gpx.visualization3dByType])];
-                                            break;
-                                        default:
-                                            break;
-                                    }
-                                }
-                            }
-                        }
-                    }
+                    [self processGPXDataElements:doc.tracks withGPX:gpx addToElevations:elevations];
                 }
                 for (const auto& track : doc_->tracks)
                 {
@@ -412,27 +390,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 NSMutableArray *elevations = [NSMutableArray array];
                 if ([self isSensorLineVisualizationType:gpx.visualization3dByType])
                 {
-                    for (OARoute *route in doc.routes)
-                    {
-                        for (OAWptPt *point in route.points)
-                        {
-                            if ([self isInstanceOfOAWptPt:point])
-                            {
-                                switch (gpx.visualization3dByType)
-                                {
-                                    case EOAGPX3DLineVisualizationByTypeHeartRate:
-                                    case EOAGPX3DLineVisualizationByTypeBicycleCadence:
-                                    case EOAGPX3DLineVisualizationByTypeBicyclePower:
-                                    case EOAGPX3DLineVisualizationByTypeTemperature:
-                                    case EOAGPX3DLineVisualizationByTypeSpeedSensor:
-                                        [elevations addObject:@([self processSensorData:point forType:gpx.visualization3dByType])];
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        }
-                    }
+                    [self processGPXDataElements:doc.routes withGPX:gpx addToElevations:elevations];
                 }
                 for (const auto& route : doc_->routes)
                 {
@@ -471,6 +429,47 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     [self setVectorLineProvider:_linesCollection sync:YES];
     [self refreshGpxWaypoints];
     [self refreshStartFinishPoints];
+}
+
+- (void)processGPXDataElements:(NSArray *)elements withGPX:(OAGPX *)gpx addToElevations:(NSMutableArray *)elevations
+{
+    for (id element in elements)
+    {
+        NSArray *points = @[];
+        if ([element isKindOfClass:[OATrack class]]) {
+            for (OATrkSegment *segment in [(OATrack *)element segments])
+            {
+                [self evaluateSensorDataForPoints:segment.points withGPX:gpx addToElevations:elevations];
+            }
+        }
+        else if ([element isKindOfClass:[OARoute class]])
+        {
+            points = [(OARoute *)element points];
+            [self evaluateSensorDataForPoints:points withGPX:gpx addToElevations:elevations];
+        }
+    }
+}
+
+- (void)evaluateSensorDataForPoints:(NSArray *)points withGPX:(OAGPX *)gpx addToElevations:(NSMutableArray *)elevations
+{
+    for (OAWptPt *point in points)
+    {
+        if ([self isInstanceOfOAWptPt:point])
+        {
+            switch (gpx.visualization3dByType)
+            {
+                case EOAGPX3DLineVisualizationByTypeHeartRate:
+                case EOAGPX3DLineVisualizationByTypeBicycleCadence:
+                case EOAGPX3DLineVisualizationByTypeBicyclePower:
+                case EOAGPX3DLineVisualizationByTypeTemperature:
+                case EOAGPX3DLineVisualizationByTypeSpeedSensor:
+                    [elevations addObject:@([self processSensorData:point forType:gpx.visualization3dByType])];
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
 
 - (float)processSensorData:(OAWptPt *)point forType:(EOAGPX3DLineVisualizationByType)visualizationType
@@ -730,9 +729,6 @@ colorizationScheme:(int)colorizationScheme
                   lineWidth:(CGFloat)lineWidth
 {
     auto traceColorizationMapping = QList<OsmAnd::FColorARGB>();
-    BOOL isSpecialType = gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeAltitude
-    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSlope
-    || gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSpeed;
     if (![self showTransparentTraces:gpx.visualization3dWallColorType])
         traceColorizationMapping = colors;
     
@@ -764,7 +760,7 @@ colorizationScheme:(int)colorizationScheme
         builder.setHeights(heights);
     }
     // for setColorizationMapping use: traceColorizationMapping or QList<OsmAnd::FColorARGB>()
-    if (!isSpecialType)
+    if (![self isSpecialGradientType:gpx.visualization3dWallColorType])
         builder.setColorizationMapping(traceColorizationMapping);
 
     builder.setOutlineColorizationMapping(traceColorizationMapping);
@@ -924,7 +920,7 @@ colorizationScheme:(int)colorizationScheme
     [self clearStartFinishPoints];
     [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
-    _elevationScaleFactor = 0.25;
+    _elevationScaleFactor = kVerticalExaggerationScaleDef;
     if (_startFinishProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
@@ -1466,6 +1462,44 @@ colorizationScheme:(int)colorizationScheme
     return nil;
 }
 
+- (BOOL)isSensorLineVisualizationType:(EOAGPX3DLineVisualizationByType)type
+{
+    return type == EOAGPX3DLineVisualizationByTypeHeartRate
+    || type == EOAGPX3DLineVisualizationByTypeBicycleCadence
+    || type == EOAGPX3DLineVisualizationByTypeBicyclePower
+    || type == EOAGPX3DLineVisualizationByTypeTemperature
+    || type == EOAGPX3DLineVisualizationByTypeSpeedSensor;
+}
+
+- (BOOL)isInstanceOfOAWptPt:(id)point
+{
+    return [point isKindOfClass:[OAWptPt class]];
+}
+
+- (BOOL)showTransparentTraces:(EOAGPX3DLineVisualizationWallColorType)type
+{
+    return type == EOAGPX3DLineVisualizationWallColorTypeDownwardGradient
+    || type == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
+    || type == EOAGPX3DLineVisualizationWallColorTypeAltitude
+    || type == EOAGPX3DLineVisualizationWallColorTypeSlope
+    || type == EOAGPX3DLineVisualizationWallColorTypeSpeed;
+}
+
+- (BOOL)is3DMapsEnabled
+{
+    return _plugin && [_plugin is3DMapsEnabled] && [OsmAndApp instance].data.terrainType != EOATerrainTypeDisabled;
+}
+
+- (BOOL)isSpecialGradientType:(EOAGPX3DLineVisualizationWallColorType)type
+{
+    static NSSet *specialTypes = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        specialTypes = [NSSet setWithArray:@[@(EOAGPX3DLineVisualizationWallColorTypeAltitude), @(EOAGPX3DLineVisualizationWallColorTypeSlope), @(EOAGPX3DLineVisualizationWallColorTypeSpeed)]];
+    });
+    return [specialTypes containsObject:@(type)];
+}
+
 #pragma mark - OAContextMenuProvider
 
 - (OATargetPoint *) getTargetPoint:(id)obj
@@ -1533,34 +1567,6 @@ colorizationScheme:(int)colorizationScheme
                 [found addObject:targetPoint];
         }
     }
-}
-
-- (BOOL)isSensorLineVisualizationType:(EOAGPX3DLineVisualizationByType)type
-{
-    return type == EOAGPX3DLineVisualizationByTypeHeartRate
-    || type == EOAGPX3DLineVisualizationByTypeBicycleCadence
-    || type == EOAGPX3DLineVisualizationByTypeBicyclePower
-    || type == EOAGPX3DLineVisualizationByTypeTemperature
-    || type == EOAGPX3DLineVisualizationByTypeSpeedSensor;
-}
-
-- (BOOL)isInstanceOfOAWptPt:(id)point
-{
-    return [point isKindOfClass:[OAWptPt class]];
-}
-
-- (BOOL)showTransparentTraces:(EOAGPX3DLineVisualizationWallColorType)type
-{
-    return type == EOAGPX3DLineVisualizationWallColorTypeDownwardGradient
-    || type == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
-    || type == EOAGPX3DLineVisualizationWallColorTypeAltitude
-    || type == EOAGPX3DLineVisualizationWallColorTypeSlope
-    || type == EOAGPX3DLineVisualizationWallColorTypeSpeed;
-}
-
-- (BOOL)is3DMapsEnabled
-{
-    return _plugin && [_plugin is3DMapsEnabled] && [OsmAndApp instance].data.terrainType != EOATerrainTypeDisabled;
 }
 
 #pragma mark - OAMoveObjectProvider

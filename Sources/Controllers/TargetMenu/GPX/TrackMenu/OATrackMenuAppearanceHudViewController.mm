@@ -41,9 +41,9 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 
-#define kColorsSection 1
-
-#define kColorGridOrDescriptionCell 1
+static const NSInteger kColorsSection = 1;
+static const NSInteger kColorGridOrDescriptionCell = 1;
+static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 
 @interface OABackupGpx : NSObject
 
@@ -493,7 +493,7 @@
     self.gpx.visualization3dByType = type;
     
     if (self.gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeFixedHeight)
-        self.gpx.verticalExaggerationScale = 0.25;
+        self.gpx.verticalExaggerationScale = kVerticalExaggerationScaleDef;
 
     if (_wholeFolderTracks)
     {
@@ -620,7 +620,6 @@
 
 - (UIMenu *)createVisualizedByMenuForCellButton:(UIButton *)button
 {
-    __weak __typeof(self) weakSelf = self;
     NSDictionary<NSNumber *, NSString *> *visualizationTypes = @{
         @(EOAGPX3DLineVisualizationByTypeNone): @"shared_string_none",
         @(EOAGPX3DLineVisualizationByTypeAltitude): @"altitude",
@@ -644,8 +643,10 @@
     NSMutableArray<UIAction *> *sensorActions = [NSMutableArray array];
     UIAction *noneAction;
     UIAction *fixedHeightAction;
+    __weak __typeof(self) weakSelf = self;
     for (NSNumber *type in visualizationTypes.allKeys)
     {
+        int typeValue = type.intValue;
         NSString *title = OALocalizedString(visualizationTypes[type]);
         NSString *dataKey = dataKeys[type];
         if (dataKey && ![self hasValidDataForKey:dataKey])
@@ -655,12 +656,12 @@
             [weakSelf configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type.intValue];
         }];
         
-        if (self.gpx.visualization3dByType == type.intValue)
+        if (self.gpx.visualization3dByType == typeValue)
             action.state = UIMenuElementStateOn;
         
-        if (type.intValue == EOAGPX3DLineVisualizationByTypeNone)
+        if (typeValue == EOAGPX3DLineVisualizationByTypeNone)
             noneAction = action;
-        else if (type.intValue == EOAGPX3DLineVisualizationByTypeFixedHeight)
+        else if (typeValue == EOAGPX3DLineVisualizationByTypeFixedHeight)
             fixedHeightAction = action;
         else
             [sensorActions addObject:action];
@@ -677,7 +678,6 @@
 
 - (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
 {
-    __weak __typeof(self) weakSelf = self;
     NSDictionary<NSNumber *, NSString *> *wallColorTypes = @{
         @(EOAGPX3DLineVisualizationWallColorTypeNone): @"shared_string_none",
         @(EOAGPX3DLineVisualizationWallColorTypeSolid): @"track_coloring_solid",
@@ -689,6 +689,7 @@
     };
     
     NSMutableArray<UIAction *> *actions = [NSMutableArray array];
+    __weak __typeof(self) weakSelf = self;
     for (NSNumber *type in wallColorTypes.allKeys)
     {
         NSString *title = OALocalizedString(wallColorTypes[type]);
@@ -944,7 +945,7 @@
                 [track3DSectionItems addObject:trackLineData];
                 
                 double scaleValue = self.gpx.verticalExaggerationScale;
-                NSString *alphaValueString = scaleValue <= 0.25 ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
+                NSString *alphaValueString = scaleValue <= kVerticalExaggerationScaleDef ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
                 NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
                 if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
                 {

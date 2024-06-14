@@ -24,6 +24,8 @@
 
 static const NSInteger kElevationDefMeters = 1000;
 static const NSInteger kElevationMaxMeters = 2000;
+static const CGFloat kVerticalExaggerationScaleDef = 0.25;
+static const CGFloat kVerticalExaggerationScaleMax = 4.0;
 
 @implementation OAGPXDocument
 {
@@ -247,12 +249,12 @@ static const NSInteger kElevationMaxMeters = 2000;
     OAGpxExtension *e = [self getExtensionByKey:@"vertical_exaggeration_scale"];
     if (e) {
         CGFloat value = [e.value floatValue];
-        if (value && value >= 0.25 && value <= 4.0)
+        if (value && value >= kVerticalExaggerationScaleDef && value <= kVerticalExaggerationScaleMax)
             return value;
         else
-            return 0.25;
+            return kVerticalExaggerationScaleDef;
     }
-    return 0.25;
+    return kVerticalExaggerationScaleDef;
 }
 
 - (void)setVerticalExaggerationScale:(CGFloat)scale

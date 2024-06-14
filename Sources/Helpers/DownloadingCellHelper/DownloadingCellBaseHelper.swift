@@ -26,9 +26,9 @@ class DownloadingCellBaseHelper: NSObject {
     var isDownloadedRecolored = false
     var rightIconStyle: DownloadingCellRightIconType = .hideIconAfterDownloading
     
-    private var cells: [String: DownloadingCell] = Dictionary()
-    private var statuses: [String: ItemStatusType] = Dictionary()
-    private var progresses: [String: Float] = Dictionary()
+    private var cells = [String: DownloadingCell]()
+    private var statuses = [String: ItemStatusType]()
+    private var progresses = [String: Float]()
     private weak var hostTableView: UITableView?
     
     override init() {
@@ -206,10 +206,7 @@ class DownloadingCellBaseHelper: NSObject {
     }
     
     func getRightIconName() -> String {
-        if let rightIconName {
-            return rightIconName
-        }
-        return "ic_custom_download"
+        rightIconName ?? "ic_custom_download"
     }
     
     func getRightIconColor() -> UIColor {
@@ -218,8 +215,6 @@ class DownloadingCellBaseHelper: NSObject {
         }
         return .iconColorActive
     }
-    
-    // MARK: - Cell behavior methods
     
     // Default on click behavior
     func onCellClicked(_ resourceId: String) {

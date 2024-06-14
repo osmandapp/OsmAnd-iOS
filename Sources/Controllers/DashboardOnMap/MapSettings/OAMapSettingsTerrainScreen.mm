@@ -476,7 +476,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             BOOL isReadMore = [item.key isEqualToString:@"readMore"];
             [cell leftIconVisibility:!isReadMore];
             [cell descriptionVisibility:!isReadMore];
-            cell.titleLabel.textColor = isReadMore ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorPrimary];
+            cell.titleLabel.textColor = [UIColor colorNamed: isReadMore ? ACColorNameTextColorActive : ACColorNameTextColorPrimary];
             cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
             cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
             cell.titleLabel.text = item.title;

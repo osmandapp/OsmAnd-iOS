@@ -13,19 +13,6 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
     
     // MARK: - Resource methods
     
-    // OAMultipleResourceItem is using for Contour lines. It have two OAResourceItem subitems - for feet and for meters file.
-    // This method return currently downloading subitem. Or just the first one.
-    private func getActiveItemFrom(resourceItem: OAResourceSwiftItem?, useDefautValue: Bool) -> OAResourceSwiftItem? {
-        if let resourceItem, let multipleItem = resourceItem as? OAMultipleResourceSwiftItem {
-            return multipleItem.getActiveItem(useDefautValue)
-        }
-        return nil
-    }
-    
-    func getResourceId(_ multipleItem: OAMultipleResourceSwiftItem) -> String? {
-        multipleItem.getResourceId()
-    }
-    
     override func getResource(_ resourceId: String) -> OAResourceSwiftItem? {
         var item = super.getResource(resourceId)
         if item is OAMultipleResourceSwiftItem {
@@ -43,7 +30,7 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
                 }
             }
         }
-        return false || super.isInstalled(resourceId)
+        return super.isInstalled(resourceId)
     }
     
     override func isDownloading(_ resourceId: String) -> Bool {
@@ -54,7 +41,11 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
         if let item {
             return item.downloadTask() != nil
         }
-        return false || super.isDownloading(resourceId)
+        return super.isDownloading(resourceId)
+    }
+    
+    func getResourceId(_ multipleItem: OAMultipleResourceSwiftItem) -> String? {
+        multipleItem.getResourceId()
     }
     
     private func refreshMultipleDownloadTasks() {
@@ -66,6 +57,15 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
                 }
             }
         }
+    }
+    
+    // OAMultipleResourceItem is using for Contour lines. It have two OAResourceItem subitems - for feet and for meters file.
+    // This method return currently downloading subitem. Or just the first one.
+    private func getActiveItemFrom(resourceItem: OAResourceSwiftItem?, useDefautValue: Bool) -> OAResourceSwiftItem? {
+        if let resourceItem, let multipleItem = resourceItem as? OAMultipleResourceSwiftItem {
+            return multipleItem.getActiveItem(useDefautValue)
+        }
+        return nil
     }
     
     // MARK: - Cell setup methods
@@ -88,19 +88,15 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
         return super.getOrCreateCell(resourceId)
     }
     
-    // MARK: - Cell behavior methods
-    
     override func onCellClicked(_ resourceId: String) {
         guard let multipleItem = super.getResource(resourceId) as? OAMultipleResourceSwiftItem else { return }
         
         if !isInstalled(resourceId) || isAlwaysClickable {
             if !isDownloading(resourceId) {
-                if let hostViewController {
-                    if let vc = OADownloadMultipleResourceViewController(swiftResource: multipleItem) {
-                        vc.delegate = self
-                        let navController = UINavigationController(rootViewController: vc)
-                        hostViewController.present(navController, animated: true)
-                    }
+                if let hostViewController, let vc = OADownloadMultipleResourceViewController(swiftResource: multipleItem) {
+                    vc.delegate = self
+                    let navController = UINavigationController(rootViewController: vc)
+                    hostViewController.present(navController, animated: true)
                 }
             } else {
                 if let downloadingItem = getActiveItemFrom(resourceItem: multipleItem, useDefautValue: false) {
@@ -114,8 +110,9 @@ final class DownloadingCellMultipleResourceHelper: DownloadingCellResourceHelper
     
     func downloadResources(_ item: OAMultipleResourceSwiftItem, selectedItems: [OAResourceSwiftItem]) {
         OAResourcesUISwiftHelper.offerMultipleDownloadAndInstall(of: item, selectedItems: selectedItems, onTaskCreated: { [weak self] _ in
-            self?.refreshMultipleDownloadTasks()
-            if let hostTableView = self?.getHostTableView() {
+            guard let self else { return }
+            self.refreshMultipleDownloadTasks()
+            if let hostTableView = self.getHostTableView() {
                 hostTableView.reloadData()
             }
         }, onTaskResumed: nil)

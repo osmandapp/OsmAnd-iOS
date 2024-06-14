@@ -449,7 +449,7 @@ static BOOL _repositoryUpdated = NO;
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
     
-    _downloadingCellMultipleResourceHelper  = [[DownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellMultipleResourceHelper  = [DownloadingCellMultipleResourceHelper new];
     [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellMultipleResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowInfoAndShevronAfterDownloading;
 }

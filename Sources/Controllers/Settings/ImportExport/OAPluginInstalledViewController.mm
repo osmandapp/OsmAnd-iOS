@@ -224,7 +224,7 @@ typedef NS_ENUM(NSInteger, EOAPluginSectionType) {
     _downloadingCellResourceHelper.delegate = weakSelf;
     _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
     
-    _downloadingCellMultipleResourceHelper = [[DownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellMultipleResourceHelper = [DownloadingCellMultipleResourceHelper new];
     _downloadingCellMultipleResourceHelper.hostViewController = weakSelf;
     [_downloadingCellMultipleResourceHelper setHostTableView:weakSelf.tableView];
     _downloadingCellMultipleResourceHelper.delegate = weakSelf;

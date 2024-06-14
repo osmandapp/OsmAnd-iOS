@@ -40,48 +40,51 @@
 - (EOAOAResourceSwiftItemType) resourceType
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
-    if (res.resourceType == OsmAndResourceType::Unknown)
-        return EOAOAResourceSwiftItemTypeUnknown;
-    else if (res.resourceType == OsmAndResourceType::MapRegion)
-        return EOAOAResourceSwiftItemTypeMapRegion;
-    else if (res.resourceType == OsmAndResourceType::RoadMapRegion)
-        return EOAOAResourceSwiftItemTypeRoadMapRegion;
-    else if (res.resourceType == OsmAndResourceType::SrtmMapRegion)
-        return EOAOAResourceSwiftItemTypeSrtmMapRegion;
-    else if (res.resourceType == OsmAndResourceType::DepthContourRegion)
-        return EOAOAResourceSwiftItemTypeDepthContourRegion;
-    else if (res.resourceType == OsmAndResourceType::DepthMapRegion)
-        return EOAOAResourceSwiftItemTypeDepthMapRegion;
-    else if (res.resourceType == OsmAndResourceType::WikiMapRegion)
-        return EOAOAResourceSwiftItemTypeWikiMapRegion;
-    else if (res.resourceType == OsmAndResourceType::HillshadeRegion)
-        return EOAOAResourceSwiftItemTypeHillshadeRegion;
-    else if (res.resourceType == OsmAndResourceType::SlopeRegion)
-        return EOAOAResourceSwiftItemTypeSlopeRegion;
-    else if (res.resourceType == OsmAndResourceType::HeightmapRegionLegacy)
-        return EOAOAResourceSwiftItemTypeHeightmapRegionLegacy;
-    else if (res.resourceType == OsmAndResourceType::GeoTiffRegion)
-        return EOAOAResourceSwiftItemTypeGeoTiffRegion;
-    else if (res.resourceType == OsmAndResourceType::LiveUpdateRegion)
-        return EOAOAResourceSwiftItemTypeLiveUpdateRegion;
-    else if (res.resourceType == OsmAndResourceType::VoicePack)
-        return EOAOAResourceSwiftItemTypeVoicePack;
-    else if (res.resourceType == OsmAndResourceType::MapStyle)
-        return EOAOAResourceSwiftItemTypeMapStyle;
-    else if (res.resourceType == OsmAndResourceType::MapStylesPresets)
-        return EOAOAResourceSwiftItemTypeMapStylesPresets;
-    else if (res.resourceType == OsmAndResourceType::OnlineTileSources)
-        return EOAOAResourceSwiftItemTypeOnlineTileSources;
-    else if (res.resourceType == OsmAndResourceType::GpxFile)
-        return EOAOAResourceSwiftItemTypeGpxFile;
-    else if (res.resourceType == OsmAndResourceType::SqliteFile)
-        return EOAOAResourceSwiftItemTypeSqliteFile;
-    else if (res.resourceType == OsmAndResourceType::WeatherForecast)
-        return EOAOAResourceSwiftItemTypeWeatherForecast;
-    else if (res.resourceType == OsmAndResourceType::Travel)
-        return EOAOAResourceSwiftItemTypeTravel;
-    
-    return EOAOAResourceSwiftItemTypeUnknown;
+    switch (res.resourceType)
+    {
+        case OsmAndResourceType::Unknown:
+            return EOAOAResourceSwiftItemTypeUnknown;
+        case OsmAndResourceType::MapRegion:
+            return EOAOAResourceSwiftItemTypeMapRegion;
+        case OsmAndResourceType::RoadMapRegion:
+            return EOAOAResourceSwiftItemTypeRoadMapRegion;
+        case OsmAndResourceType::SrtmMapRegion:
+            return EOAOAResourceSwiftItemTypeSrtmMapRegion;
+        case OsmAndResourceType::DepthContourRegion:
+            return EOAOAResourceSwiftItemTypeDepthContourRegion;
+        case OsmAndResourceType::DepthMapRegion:
+            return EOAOAResourceSwiftItemTypeDepthMapRegion;
+        case OsmAndResourceType::WikiMapRegion:
+            return EOAOAResourceSwiftItemTypeWikiMapRegion;
+        case OsmAndResourceType::HillshadeRegion:
+            return EOAOAResourceSwiftItemTypeHillshadeRegion;
+        case OsmAndResourceType::SlopeRegion:
+            return EOAOAResourceSwiftItemTypeSlopeRegion;
+        case OsmAndResourceType::HeightmapRegionLegacy:
+            return EOAOAResourceSwiftItemTypeHeightmapRegionLegacy;
+        case OsmAndResourceType::GeoTiffRegion:
+            return EOAOAResourceSwiftItemTypeGeoTiffRegion;
+        case OsmAndResourceType::LiveUpdateRegion:
+            return EOAOAResourceSwiftItemTypeLiveUpdateRegion;
+        case OsmAndResourceType::VoicePack:
+            return EOAOAResourceSwiftItemTypeVoicePack;
+        case OsmAndResourceType::MapStyle:
+            return EOAOAResourceSwiftItemTypeMapStyle;
+        case OsmAndResourceType::MapStylesPresets:
+            return EOAOAResourceSwiftItemTypeMapStylesPresets;
+        case OsmAndResourceType::OnlineTileSources:
+            return EOAOAResourceSwiftItemTypeOnlineTileSources;
+        case OsmAndResourceType::GpxFile:
+            return EOAOAResourceSwiftItemTypeGpxFile;
+        case OsmAndResourceType::SqliteFile:
+            return EOAOAResourceSwiftItemTypeSqliteFile;
+        case OsmAndResourceType::WeatherForecast:
+            return EOAOAResourceSwiftItemTypeWeatherForecast;
+        case OsmAndResourceType::Travel:
+            return EOAOAResourceSwiftItemTypeTravel;
+        default:
+            return EOAOAResourceSwiftItemTypeUnknown;
+    }
 }
 
 - (NSString *) formatedSize

@@ -277,19 +277,17 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     
     private func fetchResources() {
         if var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"]) {
-            downloadingResouces.sort(by: { a, b in
-                a.title() < b.title()
-            })
+            downloadingResouces.sort { $0.title() < $1.title() }
             self.downloadingResources = downloadingResouces
         }
     }
     
     private func getSwiftResourceByIndex(indexPath: IndexPath?) -> OAResourceSwiftItem? {
-        let headerCellsCountInResourcesSection = self.headerCellsCountInResourcesSection()
+        let headerCellsCountInResourcesSection = headerCellsCountInResourcesSection()
         if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
             let index = indexPath.row - headerCellsCountInResourcesSection
-            if self.downloadingResources.count > index {
-                return self.downloadingResources[index]
+            if downloadingResources.count > index {
+                return downloadingResources[index]
             }
         }
         return nil

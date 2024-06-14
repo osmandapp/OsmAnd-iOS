@@ -559,13 +559,16 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 - (OAResourceItem *) getActiveItem:(BOOL)useDefautValue
 {
-    for (OAResourceItem *item in _items)
+    if (_items && _items.count > 0)
     {
-        if (item.downloadTask != nil)
-            return item;
+        for (OAResourceItem *item in _items)
+        {
+            if (item.downloadTask != nil)
+                return item;
+        }
+        if (useDefautValue)
+            return _items[0];
     }
-    if (useDefautValue)
-        return _items[0];
     return nil;
 }
 

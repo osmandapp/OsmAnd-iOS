@@ -150,8 +150,6 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
         return nil
     }
-
-    // MARK: - Cell behavior methods
     
     override func onCellClicked(_ resourceId: String) {
         if !isInstalled(resourceId) || isAlwaysClickable {
@@ -208,7 +206,7 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 self?.setCellProgress(resourceId: resourceId, progress: progress, status: .finished)
                 
                 // Start next downloading if needed
-                if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), tasks.count > 0 {
+                if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), !tasks.isEmpty {
                     if let nextTask = OsmAndApp.swiftInstance().downloadsManager.firstDownloadTasks(withKey: tasks[0] as? String) {
                         nextTask.resume()
                     }

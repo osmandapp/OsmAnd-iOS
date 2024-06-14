@@ -344,7 +344,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)setupDownloadingCellHelper
 {
     __weak OAMapSettingsContourLinesScreen *weakSelf = self;
-    _downloadingCellResourceHelper = [[DownloadingCellMultipleResourceHelper alloc] init];
+    _downloadingCellResourceHelper = [DownloadingCellMultipleResourceHelper new];
     _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
     [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
     _downloadingCellResourceHelper.delegate = weakSelf;

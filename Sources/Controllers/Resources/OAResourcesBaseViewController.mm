@@ -508,7 +508,6 @@ static BOOL dataInvalidated = NO;
             [self showDownloadViewForTask:task];
         
         [self.downloadView setProgress:[value floatValue]];
-        //[self refreshContent:NO];
     });
 }
 

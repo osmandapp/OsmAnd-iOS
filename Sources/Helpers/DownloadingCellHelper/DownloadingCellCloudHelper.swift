@@ -30,7 +30,7 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
     
     // MARK: - Downloading cell progress observer's methods
     
-    @objc func onBackupItemStarted(notification: NSNotification) {
+    @objc private func onBackupItemStarted(notification: NSNotification) {
         guard let type = notification.userInfo?["type"] as? String, 
               let name = notification.userInfo?["name"] as? String else { return }
         let resourceId = getResourceId(typeName: type, filename: name)
@@ -54,7 +54,7 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
         }
     }
     
-    @objc func onBackupProgressItemFinished(notification: NSNotification) {
+    @objc private func onBackupProgressItemFinished(notification: NSNotification) {
         guard let type = notification.userInfo?["type"] as? String,
               let name = notification.userInfo?["name"] as? String else { return }
         let resourceId = getResourceId(typeName: type, filename: name)

@@ -296,7 +296,7 @@
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
             BOOL installed = item.isInstalled;
             cell.leftIconView.image = [OAResourceType getIcon:_type.type templated:YES];
-            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] :installed  ?  UIColorFromRGB( resource_installed_icon_color) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] :installed  ?  [UIColor colorNamed:ACColorNameIconColorGreen] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.accessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
             cell.titleLabel.text = item.title;

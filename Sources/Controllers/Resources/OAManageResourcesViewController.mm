@@ -2642,7 +2642,7 @@ static BOOL _repositoryUpdated = NO;
         if (localItem)
         {
             cell.imageView.image = [OAResourceType getIcon:localItem.resourceType templated:YES];
-            cell.imageView.tintColor = [UIColor colorNamed:ACColorNameResourceInstalledIconColor];
+            cell.imageView.tintColor = [UIColor colorNamed:ACColorNameIconColorGreen];
         }
     }
 
@@ -2655,7 +2655,7 @@ static BOOL _repositoryUpdated = NO;
         {
             if (_app.resourcesManager->isResourceInstalled(resourceItem.resourceId))
             {
-                color = [UIColor colorNamed:ACColorNameResourceInstalledIconColor];
+                color = [UIColor colorNamed:ACColorNameIconColorGreen];
                 break;
             }
         }
@@ -2673,7 +2673,7 @@ static BOOL _repositoryUpdated = NO;
         OAResourceItem *item = (OAResourceItem *) ([item_ isKindOfClass:OASearchResult.class] ? ((OASearchResult *) item_).relatedObject : item_);
         OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:item];
         DownloadingCell *downloadingCell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
-        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameResourceInstalledIconColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
+        UIColor *color = _app.resourcesManager->isResourceInstalled(item.resourceId) ? [UIColor colorNamed:ACColorNameIconColorGreen] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         downloadingCell.leftIconView.image = [OAResourceType getIcon:item.resourceType templated:YES];
         downloadingCell.leftIconView.tintColor = color;
         downloadingCell.titleLabel.text = title;

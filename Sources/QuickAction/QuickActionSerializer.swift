@@ -109,8 +109,12 @@ final class QuickActionSerializer: NSObject {
                 }
             }
         }
+        return adjustParamsForExport(paramsCopy, listKey: listKey)
+    }
+
+    static func adjustParamsForExport(_ params: [AnyHashable: Any], listKey: String?) -> [String: String] {
         var stringParams: [String: String] = [:]
-        for (key, value) in paramsCopy {
+        for (key, value) in params {
             if let paramKey = key as? String {
                 if let listKey, paramKey == listKey, value is String {
                     stringParams[paramKey] = value as? String
@@ -153,7 +157,7 @@ final class QuickActionSerializer: NSObject {
         return params.components(separatedBy: ",")
     }
 
-    private static func paramsToExportArray(_ params: [Any]?) -> Data? {
+    static func paramsToExportArray(_ params: [Any]?) -> Data? {
         do {
             if let array = params as? [[String]], !array.isEmpty {
                 var res = [[String: String]]()

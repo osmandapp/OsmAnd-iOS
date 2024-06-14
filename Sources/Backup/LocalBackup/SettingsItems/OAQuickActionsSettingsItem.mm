@@ -160,7 +160,17 @@
         return;
 
     if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] <= OAMigrationManager.importExportVersionMigration2)
-        itemsJson = [[OAMigrationManager shared] changeJsonMigrationToV3:itemsJson];
+    {
+        @try
+        {
+            itemsJson = [[OAMigrationManager shared] changeJsonMigrationToV3:itemsJson error:error];
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to read quick action items: %@", e.reason);
+            return;
+        }
+    }
 
     NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     for (id object in itemsJson)
@@ -202,12 +212,6 @@
     if ([quickAction isKindOfClass:OASwitchableAction.class])
     {
         [self parseParamsWithKey:[quickAction getListKey] params:params toString:NO];
-        if ([quickAction isKindOfClass:OASwitchProfileAction.class])
-        {
-            [params removeObjectForKey:@"names"];
-            [params removeObjectForKey:@"iconsNames"];
-            [params removeObjectForKey:@"iconsColors"];
-        }
     }
     else if ([quickAction isKindOfClass:OAShowHidePoiAction.class])
     {

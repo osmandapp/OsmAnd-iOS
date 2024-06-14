@@ -274,13 +274,29 @@ final class MigrationManager: NSObject {
                         }
                         mutableArr[i] = data
                     }
-                } else if stringId == "profile.change" {
-                    if let params = data["params"] as? [AnyHashable: Any] {
+                } else {
+                    let isMapSource = stringId == "mapsource.change"
+                    let isProfile = stringId == "profile.change"
+                    if isMapSource || isProfile, let params = data["params"] as? [AnyHashable: Any] {
                         var newParams = params
-                        newParams.removeValue(forKey: "iconsColors")
-                        newParams.removeValue(forKey: "iconsNames")
-                        newParams.removeValue(forKey: "names")
-                        newParams["profiles"] = newParams.removeValue(forKey: "stringKeys")
+                        if isMapSource {
+                            if let sourceParams = newParams["source"] as? [[String]] {
+                                var newSourceParams = [[String]]()
+                                for sourcePair in sourceParams {
+                                    if sourcePair.first == "type_default", let sourceValue = sourcePair.last {
+                                        newSourceParams.append(["LAYER_OSM_VECTOR", sourceValue])
+                                    } else {
+                                        newSourceParams.append(sourcePair)
+                                    }
+                                }
+                                newParams["source"] = newSourceParams
+                            }
+                        } else if isProfile {
+                            newParams.removeValue(forKey: "iconsColors")
+                            newParams.removeValue(forKey: "iconsNames")
+                            newParams.removeValue(forKey: "names")
+                            newParams["profiles"] = newParams.removeValue(forKey: "stringKeys")
+                        }
                         data["params"] = newParams
                         mutableArr[i] = data
                     }
@@ -408,7 +424,7 @@ final class MigrationManager: NSObject {
         })
     }
 
-    func changeJsonMigrationToV3(_ jsonArray: [[String: String]]) -> [[String: String]] {
+    func changeJsonMigrationToV3(_ jsonArray: [[String: String]]) throws -> [[String: String]] {
 
         // change keys inside old json import file after "Migration 2"
 
@@ -420,21 +436,60 @@ final class MigrationManager: NSObject {
             "weather.precipitation.showhide": "precipitation.layer.showhide"
         ]
 
-        return Array(jsonArray.map {
-            let json = $0
-            if let stringId = json["actionType"], changeQuickActionStringIds.keys.contains(stringId) {
-                return Dictionary(uniqueKeysWithValues: json.map({
-                    let key = $0
-                    let value = $1
-                    if key == "actionType", let newValue = changeQuickActionStringIds[value] {
-                        return (key, newValue)
-                    } else {
-                        return (key, value)
+        return try Array(jsonArray.map {
+            var json = $0
+            if let stringId = json["actionType"] {
+                let isMapSource = stringId == "mapsource.change"
+                let isProfile = stringId == "profile.change"
+                if isMapSource || isProfile, let paramsString = json["params"], let paramsData = paramsString.data(using: .utf8) {
+                    var needToChange = false
+                    if let paramsJson = try JSONSerialization.jsonObject(with: paramsData) as? [AnyHashable: Any] {
+                        let paramsDict = NSMutableDictionary(dictionary: paramsJson)
+                        if isMapSource {
+                            OAQuickActionsSettingsItem.parseParams(withKey: "source", params: paramsDict, toString: false)
+                        } else if isProfile {
+                            needToChange = paramsDict["names"] != nil || paramsDict["iconsNames"] != nil || paramsDict["iconsColors"] != nil
+                            paramsDict.removeObject(forKey: "names")
+                            paramsDict.removeObject(forKey: "iconsNames")
+                            paramsDict.removeObject(forKey: "iconsColors")
+                        }
+                        if let sourceParams = paramsDict["source"] as? [[String]] {
+                            var newSourceParams = [[String]]()
+                            for sourcePair in sourceParams {
+                                if sourcePair.first == "type_default", let sourceValue = sourcePair.last {
+                                    newSourceParams.append(["LAYER_OSM_VECTOR", sourceValue])
+                                    needToChange = true
+                                } else {
+                                    newSourceParams.append(sourcePair)
+                                }
+                            }
+                            if !sourceParams.elementsEqual(newSourceParams) {
+                                if let newParamsData = QuickActionSerializer.paramsToExportArray(newSourceParams) {
+                                    paramsDict["source"] = String(data: newParamsData, encoding: .utf8)
+                                }
+                            }
+                        }
+                        if needToChange {
+                            let lisKey = isMapSource ? "source" : "profiles"
+                            let newParams = QuickActionSerializer.adjustParamsForExport(paramsDict as! [AnyHashable: Any], listKey: lisKey)
+                            if let jsonData = try? JSONSerialization.data(withJSONObject: newParams) {
+                                json["params"] = String(data: jsonData, encoding: .utf8)
+                            }
+                        }
                     }
-                }))
-            } else {
-                return json
+                } else if changeQuickActionStringIds.keys.contains(stringId) {
+                    return Dictionary(uniqueKeysWithValues: json.map({
+                        let key = $0
+                        let value = $1
+                        if key == "actionType", let newValue = changeQuickActionStringIds[value] {
+                            return (key, newValue)
+                        } else {
+                            return (key, value)
+                        }
+                    }))
+                }
             }
+            return json
         })
     }
 }

@@ -16,5 +16,6 @@
 
 - (QuickActionButtonState *)getButtonState;
 + (void)parseParams:(NSString * _Nonnull)paramsString quickAction:(OAQuickAction * _Nonnull)quickAction;
++ (void)parseParamsWithKey:(NSString *)key params:(NSMutableDictionary *)params toString:(BOOL)toString;
 
 @end

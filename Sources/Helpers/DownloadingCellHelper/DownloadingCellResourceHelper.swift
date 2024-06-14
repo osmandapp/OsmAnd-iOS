@@ -47,6 +47,44 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     // MARK: - Resource methods
     
+    override func startDownload(_ resourceId: String) {
+        if let resourceItem = getResource(resourceId) {
+            OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: nil, onTaskResumed: nil)
+        }
+    }
+    
+    override func stopDownload(_ resourceId: String) {
+        if stopWithAlertMessage {
+            if let resourceItem = getResource(resourceId) {
+                OAResourcesUISwiftHelper.offerCancelDownload(of: resourceItem, onTaskStop: nil) { [weak self] alert in
+                    if let alert {
+                        self?.hostViewController?.present(alert, animated: true)
+                    }
+                }
+            }
+        } else {
+            // Stop immediately
+            if let task = getDownloadTask(resourceId) {
+                task.stop()
+            }
+        }
+    }
+    
+    override func isInstalled(_ resourceId: String) -> Bool {
+        if let resourceItem = getResource(resourceId) {
+            return resourceItem.isInstalled() || super.isInstalled(resourceId)
+        }
+        return false
+    }
+    
+    override func isDownloading(_ resourceId: String) -> Bool {
+        if let resourceItem = getResource(resourceId) {
+            resourceItem.refreshDownloadTask()
+            return resourceItem.downloadTask() != nil && super.isDownloading(resourceId)
+        }
+        return false
+    }
+    
     override func helperHasItemFor(_ resourceId: String) -> Bool {
         resourceItems[resourceId] != nil
     }
@@ -74,62 +112,11 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         return false
     }
     
-    override func isInstalled(_ resourceId: String) -> Bool {
-        if let resourceItem = getResource(resourceId) {
-            return resourceItem.isInstalled() || super.isInstalled(resourceId)
-        }
-        return false
-    }
-    
-    override func isDownloading(_ resourceId: String) -> Bool {
-        if let resourceItem = getResource(resourceId) {
-            resourceItem.refreshDownloadTask()
-            return resourceItem.downloadTask() != nil && super.isDownloading(resourceId)
-        }
-        return false
-    }
-    
-    override func startDownload(_ resourceId: String) {
-        if let resourceItem = getResource(resourceId) {
-            OAResourcesUISwiftHelper.offerDownloadAndInstall(of: resourceItem, onTaskCreated: nil, onTaskResumed: nil)
-        }
-    }
-    
-    override func stopDownload(_ resourceId: String) {
-        if stopWithAlertMessage {
-            if let resourceItem = getResource(resourceId) {
-                OAResourcesUISwiftHelper.offerCancelDownload(of: resourceItem, onTaskStop: nil) { [weak self] alert in
-                    if let alert {
-                        self?.hostViewController?.present(alert, animated: true)
-                    }
-                }
-            }
-        } else {
-            // Stop immediately
-            if let task = getDownloadTask(resourceId) {
-                task.stop()
-            }
-        }
-    }
-    
     private func getDownloadTask(_ resourceId: String) -> OADownloadTask? {
         OsmAndApp.swiftInstance().downloadsManager.downloadTasks(withKey: "resource:" + resourceId).first as? OADownloadTask
     }
     
     // MARK: - Cell setup methods
-    
-    func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
-        if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
-            if getResource(resourceId) == nil {
-                saveResource(resource: swiftResourceItem, resourceId: resourceId)
-            }
-            if swiftResourceItem.downloadTask() != nil {
-                saveStatus(resourceId: resourceId, status: .inProgress)
-            }
-            return super.getOrCreateCell(resourceId)
-        }
-        return nil
-    }
     
     override func setupCell(_ resourceId: String) -> DownloadingCell? {
         if let resourceItem = getResource(resourceId) {
@@ -163,6 +150,19 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
                 stopDownload(resourceId)
             }
         }
+    }
+    
+    func getOrCreateCell(_ resourceId: String, swiftResourceItem: OAResourceSwiftItem?) -> DownloadingCell? {
+        if let swiftResourceItem, swiftResourceItem.objcResourceItem != nil {
+            if getResource(resourceId) == nil {
+                saveResource(resource: swiftResourceItem, resourceId: resourceId)
+            }
+            if swiftResourceItem.downloadTask() != nil {
+                saveStatus(resourceId: resourceId, status: .inProgress)
+            }
+            return super.getOrCreateCell(resourceId)
+        }
+        return nil
     }
     
     private func showActivatePluginPopup(_ resourceId: String) {

@@ -55,10 +55,6 @@ class DownloadingCellBaseHelper: NSObject {
     
     // MARK: - Resource methods
     
-    func helperHasItemFor(_ resourceId: String) -> Bool {
-        statuses[resourceId] != nil
-    }
-    
     // Override in subclass
     func isInstalled(_ resourceId: String) -> Bool {
         if helperHasItemFor(resourceId) {
@@ -83,6 +79,10 @@ class DownloadingCellBaseHelper: NSObject {
     
     func stopDownload(_ resourceId: String) {
         // Override in subclass
+    }
+    
+    func helperHasItemFor(_ resourceId: String) -> Bool {
+        statuses[resourceId] != nil
     }
     
     // MARK: - Cell setup methods

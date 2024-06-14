@@ -41,7 +41,7 @@ final class DownloadingCellCloudHelper: DownloadingCellBaseHelper  {
         }
     }
     
-    @objc func onBackupItemProgress(notification: NSNotification) {
+    @objc private func onBackupItemProgress(notification: NSNotification) {
         guard let type = notification.userInfo?["type"] as? String,
               let name = notification.userInfo?["name"] as? String,
               let value = notification.userInfo?["value"] as? Float else { return }

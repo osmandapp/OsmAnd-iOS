@@ -82,7 +82,7 @@ final class SpeedometerSpeedView: UIView {
         OAOsmAndFormatter.getFormattedSpeed(value, valueUnitArray: valueUnitArray)
         if let result = getValueAndUnit(with: valueUnitArray) {
             valueSpeedLabel.text = result.value
-            unitSpeedLabel.text = result.unit
+            unitSpeedLabel.text = result.unit.uppercased()
         }
     }
     

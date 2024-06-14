@@ -192,7 +192,7 @@
     
     [_alarmSpeedometerStackView addArrangedSubview:_speedometerView];
         
-    _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
+    _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth] + 2];
     _speedometerHeightConstraint.active = YES;
 }
 

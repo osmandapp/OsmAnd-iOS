@@ -98,18 +98,18 @@
         deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
 
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-        UIAction *renameAction = [UIAction actionWithTitle:localizedString(@"shared_string_rename")
+        UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                      image:[UIImage systemImageNamed:@"square.and.pencil"]
                                                 identifier:nil
                                                    handler:^(UIAction * _Nonnull action) {
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:localizedString(@"shared_string_rename")
-                                                                           message:localizedString(@"enter_new_name")
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
+                                                                           message:OALocalizedString(@"enter_new_name")
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
                 textField.text = [_buttonState getName];
             }];
 
-            UIAlertAction *saveAction = [UIAlertAction actionWithTitle:localizedString(@"shared_string_save")
+            UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save")
                                                                  style:UIAlertActionStyleDefault
                                                                handler:^(UIAlertAction * _Nonnull action) {
                 NSString *name = alert.textFields.firstObject.text;
@@ -131,7 +131,7 @@
                 }
             }];
             [alert addAction:saveAction];
-            [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_cancel")
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
                                                       style:UIAlertActionStyleCancel
                                                     handler:nil]];
 
@@ -142,16 +142,16 @@
         renameAction.accessibilityLabel = renameAction.title;
         [menuElements addObject:renameAction];
 
-        UIAction *deleteAction = [UIAction actionWithTitle:localizedString(@"shared_string_delete")
+        UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
                                                      image:[UIImage systemImageNamed:@"trash"]
                                                 identifier:nil
                                                    handler:^(UIAction * _Nonnull action) {
-            NSString *message = [NSString stringWithFormat:localizedString(@"res_confirmation_delete"),
+            NSString *message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"),
                                  [NSString stringWithFormat:@"\"%@\"", [_buttonState getName]]];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
                                                                            message:message
                                                                     preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_yes")
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
                 [_mapButtonsHelper removeQuickActionButtonState:_buttonState];
@@ -159,7 +159,7 @@
                     [self.delegate onWidgetStateChanged];
                 [self dismissViewController];
             }]];
-            [alert addAction:[UIAlertAction actionWithTitle:localizedString(@"shared_string_no")
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no")
                                                       style:UIAlertActionStyleCancel
                                                     handler:nil]];
             [self presentViewController:alert animated:YES completion:nil];

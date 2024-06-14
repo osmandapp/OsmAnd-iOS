@@ -158,19 +158,17 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     }
 }
 
-extension DefaultMapButtonsViewController: WidgetStateDelegate, OACopyProfileBottomSheetDelegate {
-
-    // MARK: WidgetStateDelegate
-
+// MARK: WidgetStateDelegate
+extension DefaultMapButtonsViewController: WidgetStateDelegate {
     func onWidgetStateChanged() {
         onSettingsChanged()
     }
+}
 
-    // MARK: OACopyProfileBottomSheetDelegate
-
+// MARK: OACopyProfileBottomSheetDelegate
+extension DefaultMapButtonsViewController: OACopyProfileBottomSheetDelegate {
     func onCopyProfileCompleted() {
     }
-
     func onCopyProfile(_ fromAppMode: OAApplicationMode) {
         map3DButtonState.visibilityPref.set(map3DButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)
         compassButtonState.visibilityPref.set(compassButtonState.getVisibility(fromAppMode).rawValue, mode: appMode)

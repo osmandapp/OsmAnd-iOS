@@ -110,7 +110,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         buttonsSection.headerText = localizedString("shared_string_buttons")
 
         let defaultButtons = [mapButtonsHelper.getCompassButtonState(), mapButtonsHelper.getMap3DButtonState()]
-        var defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
+        let defaultButtonsEnabledCount = defaultButtons.filter { $0.isEnabled() }.count
         let defaultButtonsRow = buttonsSection.createNewRow()
         defaultButtonsRow.key = "defaultButtons"
         defaultButtonsRow.title = localizedString("default_buttons")
@@ -289,9 +289,8 @@ extension ConfigureScreenViewController {
         }
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
-            UIView.animate(withDuration: 0.2) { [weak self] in
-                guard let self else { return }
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(settings.applicationMode.get().getIconColor())) : .iconColorDefault
+            UIView.animate(withDuration: 0.2) {
+                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.settings.applicationMode.get().getIconColor())) : .iconColorDefault
             }
         }
         

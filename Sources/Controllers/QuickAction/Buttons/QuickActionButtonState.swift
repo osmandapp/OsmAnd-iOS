@@ -34,14 +34,14 @@ final class QuickActionButtonState: MapButtonState {
         statePref.get()
     }
 
-    func setEnabled(_ enabled: Bool) {
-        statePref.set(enabled)
-    }
-
     override func getName() -> String {
         let defaultName = localizedString("configure_screen_quick_action")
         let name = namePref.get() ?? defaultName
         return name.isEmpty ? defaultName : name
+    }
+
+    func setEnabled(_ enabled: Bool) {
+        statePref.set(enabled)
     }
 
     func hasCustomName() -> Bool {

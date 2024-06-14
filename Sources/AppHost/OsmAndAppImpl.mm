@@ -47,6 +47,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
 #import "OAPluginsHelper.h"
+#import "OASharedUtil.h"
 
 #include <algorithm>
 #include <QList>
@@ -198,6 +199,8 @@
         [defaults registerDefaults:defResetSettings];
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
+
+        [OASharedUtil initSharedLib];
     }
     return self;
 }

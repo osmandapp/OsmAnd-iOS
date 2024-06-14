@@ -18,6 +18,9 @@
 		05CC79562BB98B0B00BAC638 /* OAOnlinePlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79552BB98B0B00BAC638 /* OAOnlinePlugin.mm */; };
 		05CC79592BB99EC700BAC638 /* OAPluginsHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */; };
 		05CC795B2BB9A1C400BAC638 /* PluginsHelper+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */; };
+		05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */; };
+		05DACD792C1C67470023FAD9 /* OAXmlStreamWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD782C1C67470023FAD9 /* OAXmlStreamWriter.mm */; };
+		05DACD7F2C1CAF470023FAD9 /* OASharedUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
 		0A0EABFD26E618FB0044E82C /* ic_custom_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */; };
 		0A0EABFE26E618FB0044E82C /* ic_custom_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */; };
@@ -3367,6 +3370,12 @@
 		05CC79572BB99EC700BAC638 /* OAPluginsHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAPluginsHelper.h; sourceTree = "<group>"; };
 		05CC79582BB99EC700BAC638 /* OAPluginsHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAPluginsHelper.mm; sourceTree = "<group>"; };
 		05CC795A2BB9A1C400BAC638 /* PluginsHelper+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PluginsHelper+Extension.swift"; sourceTree = "<group>"; };
+		05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAXmlStreamReader.h; sourceTree = "<group>"; };
+		05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAXmlStreamReader.mm; sourceTree = "<group>"; };
+		05DACD772C1C67470023FAD9 /* OAXmlStreamWriter.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAXmlStreamWriter.h; sourceTree = "<group>"; };
+		05DACD782C1C67470023FAD9 /* OAXmlStreamWriter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAXmlStreamWriter.mm; sourceTree = "<group>"; };
+		05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedUtil.h; sourceTree = "<group>"; };
+		05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASharedUtil.m; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
 		0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@2x.png"; path = "Resources/Icons/ic_custom_info@2x.png"; sourceTree = "<group>"; };
 		0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@3x.png"; path = "Resources/Icons/ic_custom_info@3x.png"; sourceTree = "<group>"; };
@@ -11318,6 +11327,10 @@
 				DA35963329B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.h */,
 				DA35963429B1EDEA009DF4D6 /* OANetworkRouteSelectionTask.mm */,
 				464BAAA12B0E360600CC06E6 /* PointAttributes.swift */,
+				05DACD742C1B0E9A0023FAD9 /* OAXmlStreamReader.h */,
+				05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */,
+				05DACD772C1C67470023FAD9 /* OAXmlStreamWriter.h */,
+				05DACD782C1C67470023FAD9 /* OAXmlStreamWriter.mm */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -13350,6 +13363,8 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
+				05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */,
+				05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16363,7 +16378,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\n#cd \"$SRCROOT/../android\"\n#./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "#if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n#  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n#  exit 0\n#fi\ncd \"$SRCROOT/../android\"\n./gradlew :OsmAnd-shared:embedAndSignAppleFrameworkForXcode\n";
 		};
 		3CF6A0D6E82F1156F659B9F4 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -16417,7 +16432,7 @@
 		};
 		DA8713222994F6760087BC7F /* Download regions.ocbf */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 8;
 			files = (
 			);
 			inputFileListPaths = (
@@ -16429,7 +16444,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
@@ -16610,6 +16625,7 @@
 				DA4ABF192876DA6800B996EF /* OAQuickActionsSettingsItem.mm in Sources */,
 				32BFF098299137D60023D067 /* OAUploadGPXFilesTask.m in Sources */,
 				DA5A83F926C563A800F274C7 /* OACustomPOIViewController.mm in Sources */,
+				05DACD792C1C67470023FAD9 /* OAXmlStreamWriter.mm in Sources */,
 				FAC166252B21BEF900D63755 /* CBExtensions.swift in Sources */,
 				46E9AD9128DC869300CC55F9 /* OARightIconTableViewCell.m in Sources */,
 				DA5A815626C563A700F274C7 /* OAWikipediaPlugin.mm in Sources */,
@@ -16737,6 +16753,7 @@
 				DA5A824A26C563A700F274C7 /* OADefaultSpeedViewController.mm in Sources */,
 				DA5A846126C563A900F274C7 /* OAContextMenuLayer.mm in Sources */,
 				DA5A813E26C563A700F274C7 /* OANode.m in Sources */,
+				05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */,
 				B24745C027F862C300C18C3F /* OAWeatherLayerSettingsViewController.mm in Sources */,
 				FAA6505F2ADD42C50020DCEA /* DescriptionDeviceHeader.swift in Sources */,
 				DA5A839C26C563A800F274C7 /* OADirectionAppearanceViewController.m in Sources */,
@@ -17187,6 +17204,7 @@
 				DA5A83C626C563A800F274C7 /* OAActionConfigurationViewController.mm in Sources */,
 				DA5A812226C563A700F274C7 /* OAIAPHelper.mm in Sources */,
 				DA5A853C26C563A900F274C7 /* OAReverseGeocoder.mm in Sources */,
+				05DACD7F2C1CAF470023FAD9 /* OASharedUtil.m in Sources */,
 				DA5A853426C563A900F274C7 /* OASettingsExporter.mm in Sources */,
 				DA5A84A826C563A900F274C7 /* OASnapTrackWarningViewController.mm in Sources */,
 				DA4ABF182876DA6800B996EF /* OAHistoryMarkersSettingsItem.mm in Sources */,

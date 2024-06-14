@@ -27,13 +27,14 @@
 
 @interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
 
+@property (nonatomic) QuickActionButtonState *buttonState;
+@property (nonatomic) OAMapButtonsHelper *mapButtonsHelper;
+
 @end
 
 @implementation OAQuickActionListViewController
 {
     NSMutableArray<OAQuickAction *> *_data;
-    OAMapButtonsHelper *_mapButtonsHelper;
-    QuickActionButtonState *_buttonState;
 }
 
 #pragma mark - Initialization
@@ -97,6 +98,7 @@
                                                                menu:nil];
         deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
 
+        __weak __typeof(self) weakSelf = self;
         NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
         UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
                                                      image:[UIImage systemImageNamed:@"square.and.pencil"]
@@ -106,7 +108,7 @@
                                                                            message:OALocalizedString(@"enter_new_name")
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-                textField.text = [_buttonState getName];
+                textField.text = [weakSelf.buttonState getName];
             }];
 
             UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save")
@@ -115,19 +117,19 @@
                 NSString *name = alert.textFields.firstObject.text;
                 if (name.length == 0)
                 {
-                    [OAUtilities showToast:OALocalizedString(@"empty_name") details:nil duration:4 inView:self.view];
+                    [OAUtilities showToast:OALocalizedString(@"empty_name") details:nil duration:4 inView:weakSelf.view];
                 }
-                else if (![_mapButtonsHelper isActionButtonNameUnique:name])
+                else if (![weakSelf.mapButtonsHelper isActionButtonNameUnique:name])
                 {
-                    [OAUtilities showToast:OALocalizedString(@"custom_map_button_name_present") details:nil duration:4 inView:self.view];
+                    [OAUtilities showToast:OALocalizedString(@"custom_map_button_name_present") details:nil duration:4 inView:weakSelf.view];
                 }
                 else
                 {
-                    [_buttonState setName:name];
-                    [_mapButtonsHelper onQuickActionsChanged:_buttonState];
-                    [self updateUIAnimated:nil];
-                    if (self.delegate)
-                        [self.delegate onWidgetStateChanged];
+                    [weakSelf.buttonState setName:name];
+                    [weakSelf.mapButtonsHelper onQuickActionsChanged:weakSelf.buttonState];
+                    [weakSelf updateUIAnimated:nil];
+                    if (weakSelf.delegate)
+                        [weakSelf.delegate onWidgetStateChanged];
                 }
             }];
             [alert addAction:saveAction];
@@ -136,7 +138,7 @@
                                                     handler:nil]];
 
             [alert setPreferredAction:saveAction];
-            [self presentViewController:alert animated:YES completion:nil];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }];
 
         renameAction.accessibilityLabel = renameAction.title;
@@ -147,22 +149,22 @@
                                                 identifier:nil
                                                    handler:^(UIAction * _Nonnull action) {
             NSString *message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"),
-                                 [NSString stringWithFormat:@"\"%@\"", [_buttonState getName]]];
+                                 [NSString stringWithFormat:@"\"%@\"", [weakSelf.buttonState getName]]];
             UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
                                                                            message:message
                                                                     preferredStyle:UIAlertControllerStyleAlert];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
                                                       style:UIAlertActionStyleDefault
                                                     handler:^(UIAlertAction * _Nonnull action) {
-                [_mapButtonsHelper removeQuickActionButtonState:_buttonState];
-                if (self.delegate)
-                    [self.delegate onWidgetStateChanged];
-                [self dismissViewController];
+                [weakSelf.mapButtonsHelper removeQuickActionButtonState:weakSelf.buttonState];
+                if (weakSelf.delegate)
+                    [weakSelf.delegate onWidgetStateChanged];
+                [weakSelf dismissViewController];
             }]];
             [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no")
                                                       style:UIAlertActionStyleCancel
                                                     handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
         }];
         deleteAction.accessibilityLabel = deleteAction.title;
         deleteAction.attributes = UIMenuElementAttributesDestructive;

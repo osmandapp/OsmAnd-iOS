@@ -29,8 +29,8 @@ static CGFloat const kHudQuickActionButtonHeight = 50.0;
 
 static NSInteger const kQuickActionSlashTag = -1;
 static NSInteger const kQuickActionSlashBackgroundTag = -2;
-static NSInteger const kQuickActionAddTag = -1;
-static NSInteger const kQuickActionAddBackgroundTag = -2;
+static NSInteger const kQuickActionSecondaryTag = -1;
+static NSInteger const kQuickActionSecondaryBackgroundTag = -2;
 
 @interface OAFloatingButtonsHudViewController () <OAQuickActionsSheetDelegate>
 
@@ -275,16 +275,13 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
                     QuickActionButtonState *buttonState = (QuickActionButtonState *) quickActionButton.buttonState;
                     if ([buttonState.id isEqualToString:quickActionButtonState.id])
                     {
-                        if (quickActionButtonState.quickActions.count != 1 && buttonState.quickActions.count)
+                        for (UIView *subview in quickActionButton.imageView.subviews)
                         {
-                            for (UIView *subview in quickActionButton.imageView.subviews)
-                            {
-                                if (subview.tag == kQuickActionSlashTag
-                                    || subview.tag == kQuickActionSlashBackgroundTag
-                                    || subview.tag == kQuickActionAddTag
-                                    || subview.tag == kQuickActionAddBackgroundTag)
-                                    [subview removeFromSuperview];
-                            }
+                            if (subview.tag == kQuickActionSlashTag
+                                || subview.tag == kQuickActionSlashBackgroundTag
+                                || subview.tag == kQuickActionSecondaryTag
+                                || subview.tag == kQuickActionSecondaryBackgroundTag)
+                                [subview removeFromSuperview];
                         }
                         quickActionButton.buttonState = quickActionButtonState;
                         [self updateQuickActionButtonColors:quickActionButton];
@@ -416,7 +413,7 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
                 {
                     for (UIView *subview in quickActionButton.imageView.subviews)
                     {
-                        if (subview.tag == kQuickActionAddTag || subview.tag == kQuickActionAddBackgroundTag)
+                        if (subview.tag == kQuickActionSecondaryTag || subview.tag == kQuickActionSecondaryBackgroundTag)
                             [subview removeFromSuperview];
                     }
                 }
@@ -424,13 +421,13 @@ static NSInteger const kQuickActionAddBackgroundTag = -2;
                 {
                     CGRect frame = CGRectMake(0., 0., quickActionButton.imageView.frame.size.width, quickActionButton.imageView.frame.size.height);
                     UIImageView *background = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:@"ic_custom_compound_action_background"]];
-                    background.tag = kQuickActionAddBackgroundTag;
+                    background.tag = kQuickActionSecondaryBackgroundTag;
                     [background setTintColor:!_settings.nightMode ? UIColorFromRGB(color_quick_action_background) : UIColorFromRGB(color_quick_action_background_night)];
                     [quickActionButton.imageView addSubview:background];
 
                     NSString *secondaryIcon = [quickActionButtonState.quickActions.firstObject getSecondaryIconName];
                     UIImageView *add = [[UIImageView alloc] initWithImage:[UIImage templateImageNamed:secondaryIcon]];
-                    add.tag = kQuickActionAddTag;
+                    add.tag = kQuickActionSecondaryTag;
                     add.frame = frame;
                     [quickActionButton.imageView addSubview:add];
                 }

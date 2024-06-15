@@ -38,7 +38,6 @@
 #import "OAPluginsHelper.h"
 
 static const CGFloat kRelief3DCellRowHeight = 48.3;
-static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -203,7 +202,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         if (isRelief3D && [_plugin.enable3DMaps get])
         {
             double scaleValue = _app.data.verticalExaggerationScale;
-            NSString *alphaValueString = scaleValue <= kVerticalExaggerationScaleDef ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
+            NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
             if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];

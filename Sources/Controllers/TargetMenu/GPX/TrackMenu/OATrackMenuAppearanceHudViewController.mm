@@ -43,7 +43,6 @@
 
 static const NSInteger kColorsSection = 1;
 static const NSInteger kColorGridOrDescriptionCell = 1;
-static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 
 @interface OABackupGpx : NSObject
 
@@ -493,7 +492,7 @@ static const CGFloat kVerticalExaggerationScaleDef = 0.25;
     self.gpx.visualization3dByType = type;
     
     if (self.gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeFixedHeight)
-        self.gpx.verticalExaggerationScale = kVerticalExaggerationScaleDef;
+        self.gpx.verticalExaggerationScale = kExaggerationDefScale;
 
     if (_wholeFolderTracks)
     {
@@ -945,7 +944,7 @@ static const CGFloat kVerticalExaggerationScaleDef = 0.25;
                 [track3DSectionItems addObject:trackLineData];
                 
                 double scaleValue = self.gpx.verticalExaggerationScale;
-                NSString *alphaValueString = scaleValue <= kVerticalExaggerationScaleDef ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
+                NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
                 NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
                 if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
                 {

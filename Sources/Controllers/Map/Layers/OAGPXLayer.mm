@@ -40,7 +40,6 @@
 
 static const CGFloat kSpeedToHeightScale = 10.0;
 static const CGFloat kTemperatureToHeightOffset = 100.0;
-static const CGFloat kVerticalExaggerationScaleDef = 0.25;
 
 @interface OAGPXLayer ()
 
@@ -436,7 +435,8 @@ static const CGFloat kVerticalExaggerationScaleDef = 0.25;
     for (id element in elements)
     {
         NSArray *points = @[];
-        if ([element isKindOfClass:[OATrack class]]) {
+        if ([element isKindOfClass:[OATrack class]])
+        {
             for (OATrkSegment *segment in [(OATrack *)element segments])
             {
                 [self evaluateSensorDataForPoints:segment.points withGPX:gpx addToElevations:elevations];
@@ -920,7 +920,7 @@ colorizationScheme:(int)colorizationScheme
     [self clearStartFinishPoints];
     [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
-    _elevationScaleFactor = kVerticalExaggerationScaleDef;
+    _elevationScaleFactor = kExaggerationDefScale;
     if (_startFinishProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_startFinishProvider];
@@ -1462,13 +1462,14 @@ colorizationScheme:(int)colorizationScheme
     return nil;
 }
 
-- (BOOL)isSensorLineVisualizationType:(EOAGPX3DLineVisualizationByType)type
+- (BOOL)isSensorLineVisualizationType:(EOAGPX3DLineVisualizationByType)type 
 {
-    return type == EOAGPX3DLineVisualizationByTypeHeartRate
-    || type == EOAGPX3DLineVisualizationByTypeBicycleCadence
-    || type == EOAGPX3DLineVisualizationByTypeBicyclePower
-    || type == EOAGPX3DLineVisualizationByTypeTemperature
-    || type == EOAGPX3DLineVisualizationByTypeSpeedSensor;
+    static NSSet *sensorTypes = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        sensorTypes = [NSSet setWithArray:@[@(EOAGPX3DLineVisualizationByTypeHeartRate), @(EOAGPX3DLineVisualizationByTypeBicycleCadence), @(EOAGPX3DLineVisualizationByTypeBicyclePower), @(EOAGPX3DLineVisualizationByTypeTemperature), @(EOAGPX3DLineVisualizationByTypeSpeedSensor)]];
+    });
+    return [sensorTypes containsObject:@(type)];
 }
 
 - (BOOL)isInstanceOfOAWptPt:(id)point
@@ -1478,11 +1479,12 @@ colorizationScheme:(int)colorizationScheme
 
 - (BOOL)showTransparentTraces:(EOAGPX3DLineVisualizationWallColorType)type
 {
-    return type == EOAGPX3DLineVisualizationWallColorTypeDownwardGradient
-    || type == EOAGPX3DLineVisualizationWallColorTypeUpwardGradient
-    || type == EOAGPX3DLineVisualizationWallColorTypeAltitude
-    || type == EOAGPX3DLineVisualizationWallColorTypeSlope
-    || type == EOAGPX3DLineVisualizationWallColorTypeSpeed;
+    static NSSet *transparentTypes = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        transparentTypes = [NSSet setWithArray:@[@(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient), @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient), @(EOAGPX3DLineVisualizationWallColorTypeAltitude), @(EOAGPX3DLineVisualizationWallColorTypeSlope), @(EOAGPX3DLineVisualizationWallColorTypeSpeed)]];
+    });
+    return [transparentTypes containsObject:@(type)];
 }
 
 - (BOOL)is3DMapsEnabled

@@ -24,8 +24,6 @@
 #define KML_EXT @"kml"
 #define KMZ_EXT @"kmz"
 
-static const CGFloat kVerticalExaggerationScaleDef = 0.25;
-
 @implementation OAGPX
 
 - (NSString *) getNiceTitle
@@ -719,7 +717,7 @@ static const CGFloat kVerticalExaggerationScaleDef = 0.25;
     bounds.bottomRight = CLLocationCoordinate2DMake([gpxData[@"bottom_right_lat"] doubleValue], [gpxData[@"bottom_right_lon"] doubleValue]);
     gpx.bounds = bounds;
     gpx.visualization3dWallColorType = EOAGPX3DLineVisualizationWallColorTypeUpwardGradient;
-    gpx.verticalExaggerationScale = kVerticalExaggerationScaleDef;
+    gpx.verticalExaggerationScale = kExaggerationDefScale;
     gpx.elevationMeters = kElevationDefMeters;
 
     for (NSString *key in gpxData)

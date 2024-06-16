@@ -8,7 +8,7 @@
 "select_postcode" = "邮政编码搜索";
 "type_postcode" = "输入邮政编码";
 "coords_search" = "坐标搜索";
-"nearest_cities" = "附近的城市";
+"nearest_cities" = "最近的城市";
 "type_address" = "输入地址";
 "search_poi_category_hint" = "键入以搜索全部";
 // Shared Strings
@@ -452,8 +452,8 @@
 "apply_filters" = "应用过滤器";
 "filter_poi_hint" = "按名称筛选";
 "city_type_suburb" = "市郊";
-"city_type_hamlet" = "村庄";
-"city_type_village" = "村";
+"city_type_hamlet" = "自然村（小村庄）";
+"city_type_village" = "行政村（村庄）";
 "city_type_town" = "乡镇";
 "city_type_city" = "城市";
 "city_type_district" = "区";
@@ -538,7 +538,7 @@
 "driving_region_canada" = "加拿大";
 "driving_region_europe_asia" = "欧洲、亚洲、拉丁美洲和类似地区";
 "driving_region_uk" = "英国、印度和类似地区";
-"driving_region_australia" = "澳大利亚";
+"driving_region_australia" = "澳洲";
 "left_side_navigation" = "左侧行驶";
 "search_nearby" = "在附近搜索";
 "cancel_navigation" = "停止导航";
@@ -1101,7 +1101,7 @@
 "rendering_attr_showMtbRoutes_name" = "山地自行车路线";
 "rendering_attr_currentTrackColor_name" = "GPX颜色";
 "rendering_attr_hideWoodScrubs_name" = "树木和灌木丛";
-"rendering_attr_highway_class_service_name" = "服务站";
+"rendering_attr_highway_class_service_name" = "服务道路";
 "rendering_value_translucent_purple_name" = "半透明紫色";
 "rendering_attr_surface_asphalt_name" = "沥青路";
 "rendering_value_lightgreen_name" = "浅绿色";
@@ -1640,7 +1640,7 @@
 "rendering_attr_showFitnessTrails_description" = "显示健身步道";
 "routeInfo_tracktype_description" = "根据表面成分给路线或轨迹线上色。通常适用于道路网络大部分未铺设的情况。";
 "save_heading" = "包括航向";
-"selected_profile" = "选定的配置文件";
+"selected_profile" = "当前所选配置文件";
 "join_segments" = "加入分段";
 "routeInfo_roadClass_description" = "按道路分类给路线或轨迹线上色。";
 "number_of_tiles" = "瓦片数量";
@@ -1981,7 +1981,7 @@
 "shared_string_contributions" = "贡献";
 "routing_attr_motor_type_gas_name" = "压缩天然气";
 "routing_attr_motor_type_electric_name" = "电动";
-"osm_live_payment_desc" = "订阅按选定的时间段收费。可随时在 Google Play 上取消。";
+"osm_live_payment_desc" = "按所选时间段收取订阅费用。可随时在 Google Play 上取消。";
 "nav_type_hint" = "导航类型";
 "osm_live_enter_user_name" = "请输入公开名称";
 "approximate_file_size" = "估计文件大小";
@@ -2298,7 +2298,7 @@
 "map_screen_orientation" = "屏幕方向";
 "activity_type_cycling_name" = "骑车";
 "select_tracks_to_display" = "选择轨迹以在地图上显示。";
-"help_article_troubleshooting_general_name" = "一般";
+"help_article_troubleshooting_general_name" = "常见问题";
 "map_widget_time_to_intermediate" = "到达中继点的时间";
 "user_guide" = "用户指南";
 "wiki_article_search_text" = "搜索对应的维基条目";
@@ -2329,7 +2329,7 @@
 "new_track" = "新轨迹";
 "lanes_widgets_desc" = "显示当前的道路车道布局，并突出显示导航时要走的车道。";
 "trip_recording_distance_widget_desc" = "显示当前记录的行程距离。";
-"help_article_personal_name" = "我的资料";
+"help_article_personal_name" = "我的数据";
 "help_article_navigation_routing_direct_to_point_routing_name" = "直达点路线规划（船）";
 "help_contact_us" = "联系我们";
 "help_article_navigation_setup_markers_navigation_name" = "按照标记导航";
@@ -2438,7 +2438,7 @@
 "plan_route_folder" = "文件夹";
 "about_osmAnd" = "关于 OsmAnd";
 "activity_type_riding_name" = "骑行";
-"general_settings" = "一般";
+"general_settings" = "常规设置";
 "activity_type_hiking_name" = "健行";
 "help_article_map_map_context_menu_name" = "地图情景菜单";
 "shortest_distance_first" = "最短距离优先";
@@ -2515,14 +2515,14 @@
 "start_recording" = "开始录制";
 "trip_recording_downhill_widget_desc" = "显示当前记录的行程中所有下降高度的总和。";
 "shared_string_format" = "格式";
-"shared_string_nearest" = "接近";
+"shared_string_nearest" = "最近";
 "verify_account_deletion_descr" = "删除之前，我们需要验证您的帐户。 \n \n请输入您注册时使用的电子邮件地址。我们将向其发送下一步操作的一次性密码。";
 "map_widget_trip_recording_duration" = "持续时间";
 "av_notes_video_widget_desc" = "点击小部件可以让你录制一个视频。";
 "detailed_log_file" = "详细日志文档";
 "arrival_time_widget_desc" = "到达目标地点的时间。";
 "glide_ratio_to_target" = "目标滑翔比率";
-"second_next_turn_widget_desc" = "该小工具会显示关于你的第二个下一转弯处的信息，如果在接近距离内转弯，则会启用该信息。";
+"second_next_turn_widget_desc" = "小工具会显示下一处转弯的信息，如果距离转弯处较近，信息则会启用。";
 "help_article_troubleshooting_maps_data_name" = "地图与数据";
 "map_widget_next_sunset" = "下次日落";
 "external_device_status_disconnect" = "断开连接";
@@ -2560,7 +2560,7 @@
 "map_widget_altitude_current_location" = "海拔：当前位置";
 "help_article_map_raster_maps_name" = "光栅地图（在线 / 离线）";
 "shared_string_move" = "移动";
-"most_viewed" = "查看最多";
+"most_viewed" = "最多访问";
 "send_log" = "发送日志";
 "my_places_no_tracks_title" = "空文件夹";
 "help_first_steps" = "第一步";
@@ -2631,3 +2631,12 @@
 "time_to_navigation_point_widget_settings_desc" = "点击小工具以切换模式。";
 "shared_string_temperature" = "温度";
 "map_widget_altitude_map_center_desc" = "显示当前地图中心的海拔高度。";
+"distance_during_navigation" = "导航时的距离显示";
+"shared_string_limit" = "限制";
+"auto_zoom_smooth" = "平滑";
+"auto_zoom_discrete" = "不连续";
+"vertical_exaggeration_description" = "通过改变比例值，可以突出三维地形的效果。";
+"vertical_exaggeration" = "垂直夸大";
+"help_article_navigation_routing_straight_line_routing_name" = "直线路径规划（航空器）";
+"shared_string_scale" = "比例";
+"speed_limit_warning" = "速限警告";

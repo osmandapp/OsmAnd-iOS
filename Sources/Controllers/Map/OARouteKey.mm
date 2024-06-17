@@ -50,7 +50,7 @@
     auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
     if (rk)
     {
-        auto key = *rk.get();
+        auto key = *rk;
         return [[OARouteKey alloc] initWithKey:key];
     }
     return nil;

@@ -644,10 +644,18 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (NSString *)sliderValueString:(float)value
 {
-    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration || _terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
+    {
+        return value <= 1 ? OALocalizedString(@"shared_string_none") : [NSString stringWithFormat:@"x%.1f", value];
+    }
+    else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
+    {
         return value <= 0.25 ? OALocalizedString(@"shared_string_none") : (value < 1.0 ? [NSString stringWithFormat:@"x%.2f", value] : [NSString stringWithFormat:@"x%.1f", value]);
+    }
     else
+    {
         return [NSString stringWithFormat:@"%ld %@", (NSInteger)value, OALocalizedString(@"m")];
+    }
 }
 
 #pragma mark - UITableViewDataSource
@@ -688,8 +696,8 @@ static const NSInteger kElevationMaxMeters = 2000;
             cell.updateValueCallback = ^(float value) {
                 weakCell.valueLabel.text = [weakSelf sliderValueString:value];
             };
-            cell.sliderView.minimumValue = 0.25;
-            cell.sliderView.maximumValue = 4;
+            cell.sliderView.minimumValue = _terrainType == EOATerrainSettingsTypeVerticalExaggeration ? 1 : 0.25;
+            cell.sliderView.maximumValue = _terrainType == EOATerrainSettingsTypeVerticalExaggeration ? 3 : 4;
             cell.sliderView.value = _terrainType == EOATerrainSettingsTypeVerticalExaggeration
             ? _app.data.verticalExaggerationScale
             : _currentGPXVerticalExaggerationScale;

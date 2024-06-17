@@ -920,7 +920,7 @@ colorizationScheme:(int)colorizationScheme
     [self clearStartFinishPoints];
     [self clearConfigureStartFinishPointsElevations];
     [self clearSplitLabels];
-    _elevationScaleFactor = kExaggerationDefScale;
+    _elevationScaleFactor = kGpxExaggerationDefScale;
     if (_startFinishProvider)
     {
         [self.mapView removeTiledSymbolsProvider:_startFinishProvider];

@@ -29,6 +29,7 @@
 #import "OASRTMPlugin.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
+#import "GeneratedAssetSymbols.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
@@ -106,6 +107,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _mapTemplate = [[CPMapTemplate alloc] init];
     _mapTemplate.mapDelegate = self;
+    [self onUpdateMapTemplateStyle];
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
@@ -563,8 +565,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
-    if (directionInfo.directionInfo.streetName)
-        maneuver.instructionVariants = @[directionInfo.directionInfo.streetName];
+    NSString *streetName = directionInfo.directionInfo.streetName;
+    if (streetName)
+        maneuver.instructionVariants = @[streetName];
+    
     return maneuver;
 }
 
@@ -677,6 +681,19 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         if ([_routingHelper isFollowingMode])
             [self onTripStartTriggered];
     }
+}
+
+- (void)onUpdateMapTemplateStyle
+{
+    UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
+    BOOL isDarkStyle = style == UIUserInterfaceStyleDark;
+    _mapTemplate.guidanceBackgroundColor = isDarkStyle ? [UIColor blackColor] : [UIColor whiteColor];
+    _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
+}
+
+- (void)dealloc
+{
+    NSLog(@"dealloc");
 }
 
 @end

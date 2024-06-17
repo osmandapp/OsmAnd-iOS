@@ -8,23 +8,22 @@
 
 #import "OAQuickAction.h"
 
-#define KEY_DIALOG @"dialog"
-
 @interface OASwitchableAction<ObjectType> : OAQuickAction
 
--(void) executeWithParams:(NSArray<NSString *> *) params;
+- (void)executeWithParams:(NSArray<NSString *> *)params;
 
--(NSString *) getTranslatedItemName:(NSString *) item;
+- (NSString *)getTranslatedItemName:(NSString *)item;
 
--(NSString *) getTitle:(NSArray<ObjectType> *) filters;
+- (NSString *)getTitle:(NSArray<ObjectType> *)filters;
+- (NSString *)getItemName:(ObjectType)item;
 
--(NSString *) getItemName:(ObjectType) item;
+- (NSString *)getAddBtnText;
+- (NSString *)getDescrHint;
+- (NSString *)getDescrTitle;
 
--(NSString *) getAddBtnText;
--(NSString *) getDescrHint;
--(NSString *) getDescrTitle;
+- (NSArray<ObjectType> *)loadListFromParams;
 
--(NSArray *) loadListFromParams;
+- (NSString *)getListKey;
 
 //protected abstract View.OnClickListener getOnAddBtnClickListener(MapActivity activity, final Adapter adapter);
 

@@ -10,127 +10,109 @@
 #import "OAQuickActionsSettingsItemReader.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionRegistry.h"
-#import "OAQuickActionType.h"
-
+#import "OAMapButtonsHelper.h"
 #import "OAUnsupportedAction.h"
 #import "OAMapStyleAction.h"
 #import "OASwitchableAction.h"
 #import "OASwitchProfileAction.h"
+#import "OAShowHidePoiAction.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135
 
-@interface OAQuickActionsSettingsItem()
-
-@property (nonatomic) NSMutableArray<OAQuickAction *> *items;
-@property (nonatomic) NSMutableArray<OAQuickAction *> *appliedItems;
-@property (nonatomic) NSMutableArray<OAQuickAction *> *existingItems;
-@property (nonatomic) NSMutableArray<NSString *> *warnings;
-
-@end
-
 @implementation OAQuickActionsSettingsItem
 {
-    OAQuickActionRegistry *_actionsRegistry;
+    OAMapButtonsHelper *_mapButtonsHelper;
+    QuickActionButtonState *_buttonState;
 }
 
-@dynamic items, appliedItems, existingItems, warnings;
+@dynamic type, name;
 
-- (void) initialization
+- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(QuickActionButtonState *)buttonState
+{
+    self = [super initWithBaseItem:baseItem];
+    if (self)
+    {
+        _buttonState = buttonState;
+    }
+    return self;
+}
+
+- (void)initialization
 {
     [super initialization];
 
-    _actionsRegistry = [OAQuickActionRegistry sharedInstance];
-    self.existingItems = [_actionsRegistry getQuickActions].mutableCopy;
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
 }
 
-- (EOASettingsItemType) type
+- (EOASettingsItemType)type
 {
     return EOASettingsItemTypeQuickActions;
 }
 
-- (BOOL) isDuplicate:(OAQuickAction *)item
+- (QuickActionButtonState *)getButtonState
 {
-    return ![_actionsRegistry isNameUnique:item];
+    return _buttonState;
 }
 
-- (OAQuickAction *) renameItem:(OAQuickAction *)item
+- (void)renameButton
 {
-    return [_actionsRegistry generateUniqueName:item];
+    NSString *name = [_buttonState getName];
+    QuickActionButtonState *newButtonState = [_mapButtonsHelper createNewButtonState];
+    [newButtonState setName:[_mapButtonsHelper generateUniqueButtonName:name]];
+    [newButtonState setEnabled:[_buttonState isEnabled]];
+    _buttonState = newButtonState;
 }
 
 - (long)localModifiedTime
 {
-    return _actionsRegistry.getLastModifiedTime;
+    return [_buttonState getLastModifiedTime];
 }
 
 - (void)setLocalModifiedTime:(long)localModifiedTime
 {
-    [_actionsRegistry setLastModifiedTime:localModifiedTime];
+    [_buttonState setLastModifiedTime:localModifiedTime];
 }
 
-- (NSString *)getPublicName
+- (BOOL)exists
 {
-    return OALocalizedString(@"shared_string_quick_actions");
+    return [_mapButtonsHelper getButtonStateById:_buttonState.id] != nil;
 }
 
-- (void) apply
+- (void)apply
 {
-    NSArray<OAQuickAction *> *newItems = [self getNewItems];
-    if (newItems.count > 0 || self.duplicateItems.count > 0)
+    if ([self exists])
     {
-        self.appliedItems = [NSMutableArray arrayWithArray:newItems];
-        NSMutableArray<OAQuickAction *> *newActions = [NSMutableArray arrayWithArray:self.existingItems];
-        if (self.duplicateItems.count > 0)
+        if (self.shouldReplace)
         {
-            if (self.shouldReplace)
-            {
-                for (OAQuickAction *duplicateItem in self.duplicateItems)
-                {
-                    for (OAQuickAction *savedAction in self.existingItems)
-                    {
-                        if ([duplicateItem.getName isEqualToString:savedAction.getName])
-                            [newActions removeObject:savedAction];
-                    }
-                }
-            }
-            else
-            {
-                for (OAQuickAction * duplicateItem in self.duplicateItems)
-                {
-                    [self renameItem:duplicateItem];
-                }
-            }
-            [self.appliedItems addObjectsFromArray:self.duplicateItems];
+            QuickActionButtonState *state = [_mapButtonsHelper getButtonStateById:_buttonState.id];
+            if (state)
+                [_mapButtonsHelper removeQuickActionButtonState:state];
         }
-        [newActions addObjectsFromArray:self.appliedItems];
-        [_actionsRegistry updateQuickActions:newActions];
-        [_actionsRegistry updateActionTypes];
-        [_actionsRegistry.quickActionListChangedObservable notifyEvent];
+        else
+        {
+            [self renameButton];
+        }
     }
-}
-
-- (BOOL) shouldReadOnCollecting
-{
-    return YES;
+    [_mapButtonsHelper addQuickActionButtonState:_buttonState];
 }
 
 - (long)getEstimatedItemSize:(id)item
 {
-    return APPROXIMATE_QUICK_ACTION_SIZE_BYTES;
+    return _buttonState.quickActions.count * APPROXIMATE_QUICK_ACTION_SIZE_BYTES;
 }
 
-- (NSString *) name
+- (NSString *)name
 {
-    return @"quick_actions";
+    return _buttonState.id;
 }
 
-- (void)deleteItem:(OAQuickAction *)item
+- (NSString *)getPublicName
 {
-    [_actionsRegistry deleteQuickAction:item];
+    return [_buttonState hasCustomName] ? [_buttonState getName] : OALocalizedString(@"shared_string_quick_actions");
 }
 
-- (OASettingsItemReader *) getReader
+- (OASettingsItemReader *)getReader
 {
     return [[OAQuickActionsSettingsItemReader alloc] initWithItem:self];
 }
@@ -140,12 +122,57 @@
     return self.getJsonWriter;
 }
 
-- (void) readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+- (void)readFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
 {
-    NSArray* itemsJson = [json mutableArrayValueForKey:@"items"];
+    [self readButtonState:json];
+    [super readFromJson:json error:error];
+}
+
+- (void)readButtonState:(id)json
+{
+    @try {
+        id object = json[@"buttonState"];
+        if (object)
+        {
+            NSString *id = object[@"id"];
+            _buttonState = [[QuickActionButtonState alloc] initWithId:id];
+            [_buttonState setName:object[@"name"]];
+            [_buttonState setEnabled:[object[@"enabled"] isKindOfClass:NSNumber.class]
+                ? [object[@"enabled"] boolValue]
+                : [object[@"enabled"] isEqualToString:@"true"] ? YES : NO];
+        }
+        else
+        {
+            _buttonState = [[QuickActionButtonState alloc] initWithId:QuickActionButtonState.defaultButtonId];
+        }
+    }
+    @catch (NSException *e)
+    {
+        [self.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), [OASettingsItemType typeName:self.type]]];
+        @throw [NSException exceptionWithName:@"Json parse error" reason:e.reason userInfo:nil];
+    }
+}
+
+- (void)readItemsFromJson:(id)json error:(NSError * _Nullable __autoreleasing *)error
+{
+    NSArray *itemsJson = [json mutableArrayValueForKey:@"items"];
     if (itemsJson.count == 0)
         return;
 
+    if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] <= OAMigrationManager.importExportVersionMigration2)
+    {
+        @try
+        {
+            itemsJson = [[OAMigrationManager shared] changeJsonMigrationToV3:itemsJson error:error];
+        }
+        @catch (NSException *e)
+        {
+            NSLog(@"Failed to read quick action items: %@", e.reason);
+            return;
+        }
+    }
+
+    NSMutableArray<OAQuickAction *> *quickActions = [NSMutableArray array];
     for (id object in itemsJson)
     {
         NSString *name = object[@"name"];
@@ -153,220 +180,83 @@
         NSString *type = object[@"type"];
         OAQuickAction *quickAction = nil;
         if (actionType)
-            quickAction = [_actionsRegistry newActionByStringType:actionType];
+            quickAction = [_mapButtonsHelper newActionByStringType:actionType];
         else if (type)
-            quickAction = [_actionsRegistry newActionByType:type.integerValue];
+            quickAction = [_mapButtonsHelper newActionByType:type.integerValue];
 
         if (!quickAction && actionType)
             quickAction = [[OAUnsupportedAction alloc] initWithActionTypeId:actionType];
 
         if (quickAction)
         {
-            NSString *paramsString = object[@"params"];
-            NSError *jsonError;
-            NSData* paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
-            NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:[NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:&jsonError]];
-
-            if ([quickAction isKindOfClass:OASwitchProfileAction.class])
-            {
-                id stringKeys = params[kSwitchProfileStringKeys];
-                if (!stringKeys || params[quickAction.getListKey])
-                {
-                    stringKeys = params[quickAction.getListKey];
-                    [params removeObjectForKey:quickAction.getListKey];
-                }
-                if (stringKeys)
-                    params[kSwitchProfileStringKeys] = [NSJSONSerialization JSONObjectWithData:[stringKeys dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
-
-                [self readSwitchProfileAction:kSwitchProfileNames params:params];
-                [self readSwitchProfileAction:kSwitchProfileIconNames params:params];
-                [self readSwitchProfileAction:kSwitchProfileIconColors params:params];
-            }
-            else
-            {
-                NSString *values = params[quickAction.getListKey];
-                if (values)
-                {
-                    if ([quickAction isKindOfClass:OAMapStyleAction.class])
-                        params[quickAction.getListKey] = [values componentsSeparatedByString:@","];
-                    else if ([quickAction isKindOfClass:OASwitchableAction.class])
-                        params[quickAction.getListKey] = [self parseParamsFromString:values];
-                }
-            }
+            [self.class parseParams:object[@"params"] quickAction:quickAction];
             if (name.length > 0)
                 [quickAction setName:name];
-            [quickAction setParams:params];
-            [self.items addObject:quickAction];
+            [quickActions addObject:quickAction];
         }
         else
         {
-            [self.warnings addObject:OALocalizedString(@"settings_item_read_error", self.name)];
+            [self.warnings addObject:[NSString stringWithFormat:OALocalizedString(@"settings_item_read_error"), name]];
         }
     }
+    [_mapButtonsHelper updateQuickActions:_buttonState actions:quickActions];
+    [_mapButtonsHelper updateActiveActions];
+}
+
++ (void)parseParams:(NSString *)paramsString quickAction:(OAQuickAction *)quickAction
+{
+    NSData *paramsData = [paramsString dataUsingEncoding:NSUTF8StringEncoding];
+    id json = [NSJSONSerialization JSONObjectWithData:paramsData options:kNilOptions error:nil];
+    NSMutableDictionary *params = [NSMutableDictionary dictionaryWithDictionary:json];
+
+    if ([quickAction isKindOfClass:OASwitchableAction.class])
+    {
+        [self parseParamsWithKey:[quickAction getListKey] params:params toString:NO];
+    }
+    else if ([quickAction isKindOfClass:OAShowHidePoiAction.class])
+    {
+        [self parseParamsWithKey:kFilters params:params toString:YES];
+    }
+
+    [quickAction setParams:params];
+}
+
++ (void)parseParamsWithKey:(NSString *)key params:(NSMutableDictionary *)params toString:(BOOL)toString
+{
+    NSString *values = params[key];
+    if (values)
+    {
+        NSArray *value = [QuickActionSerializer parseParamsFromString:values];
+        params[key] = toString && value.count > 0 && [value.firstObject isKindOfClass:NSString.class] ? [value componentsJoinedByString:@","] : value;
+    }
+}
+
+- (void)writeToJson:(id)json
+{
+    [super writeToJson:json];
+    NSMutableDictionary<NSString *, NSString *> *jsonObject = [NSMutableDictionary dictionary];
+    jsonObject[@"id"] = _buttonState.id;
+    jsonObject[@"name"] = [_buttonState hasCustomName] ? [_buttonState getName] : @"";
+    jsonObject[@"enabled"] = [_buttonState isEnabled] ? @"true" : @"false";
+    json[@"buttonState"] = jsonObject;
 }
 
 - (void)writeItemsToJson:(id)json
 {
     NSMutableArray *jsonArray = [NSMutableArray array];
-    if (self.items.count > 0)
+    if (_buttonState.quickActions.count > 0)
     {
-        for (OAQuickAction *action in self.items)
+        for (OAQuickAction *action in _buttonState.quickActions)
         {
-            NSMutableDictionary *jsonObject = [NSMutableDictionary dictionary];
+            NSMutableDictionary<NSString *, NSString *> *jsonObject = [NSMutableDictionary dictionary];
             jsonObject[@"name"] = [action hasCustomName] ? [action getName] : @"";
-            jsonObject[@"actionType"] = action.getActionTypeId;
-            NSDictionary *params = [self adjustParamsForExport:[action getParams] action:action];
+            jsonObject[@"actionType"] = [action getActionTypeId];
+            NSDictionary *params = [QuickActionSerializer adjustParamsForExport:[action getParams] action:action];
             NSData *jsonData = [NSJSONSerialization dataWithJSONObject:params options:0 error:nil];
             jsonObject[@"params"] = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
             [jsonArray addObject:jsonObject];
         }
         json[@"items"] = jsonArray;
-    }
-}
-
-- (NSDictionary *) adjustParamsForExport:(NSDictionary *)params action:(OAQuickAction *)action
-{
-    if ([action isKindOfClass:OAMapStyleAction.class])
-    {
-        NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
-        NSArray<NSString *> *values = params[action.getListKey];
-        NSMutableString *res = [NSMutableString new];
-        if (values && values.count > 0)
-        {
-            for (NSString *value in values)
-            {
-                [res appendString:value];
-                if (![value isEqualToString:values.lastObject])
-                    [res appendString:@","];
-            }
-        }
-        paramsCopy[action.getListKey] = res;
-        return paramsCopy;
-    }
-    else if ([action isKindOfClass:OASwitchableAction.class])
-    {
-        NSMutableDictionary *paramsCopy = [NSMutableDictionary dictionaryWithDictionary:params];
-        NSArray *values = params[action.getListKey];
-        if (values && values.count > 0)
-        {
-            NSData *data = [self paramsToExportArray:values];
-            if (data)
-                paramsCopy[action.getListKey] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        }
-
-        if ([action isKindOfClass:OASwitchProfileAction.class])
-        {
-            if (!values || paramsCopy[kSwitchProfileStringKeys])
-            {
-                values = paramsCopy[kSwitchProfileStringKeys];
-                [paramsCopy removeObjectForKey:kSwitchProfileStringKeys];
-                paramsCopy[action.getListKey] = [[NSString alloc] initWithData:[self paramsToExportArray:values] encoding:NSUTF8StringEncoding];
-            }
-            [self writeSwitchProfileAction:kSwitchProfileNames params:params paramsCopy:paramsCopy];
-            [self writeSwitchProfileAction:kSwitchProfileIconNames params:params paramsCopy:paramsCopy];
-            [self writeSwitchProfileAction:kSwitchProfileIconColors params:params paramsCopy:paramsCopy];
-        }
-
-        return paramsCopy;
-    }
-    return params;
-}
-
-- (NSArray<NSArray<NSString *> *> *) parseParamsFromString:(NSString *)params
-{
-    NSData *jsonData = [params dataUsingEncoding:NSUTF8StringEncoding];
-    NSError *error;
-    NSArray *jsonArr = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:&error];
-    if (!error)
-    {
-        if ([jsonArr.firstObject isKindOfClass:[NSDictionary class]])
-        {
-            NSMutableArray<NSArray<NSString *> *> *res = [NSMutableArray new];
-            for (NSDictionary *pair in jsonArr)
-            {
-                NSString *first = pair[@"first"];
-                NSString *second = pair[@"second"];
-                if (first && second)
-                    [res addObject:@[first, second]];
-            }
-            return res;
-        }
-        return jsonArr;
-    }
-    return [NSArray new];
-}
-
-- (NSData *) paramsToExportArray:(id)params
-{
-    if ([params isKindOfClass:[NSArray class]])
-    {
-        NSArray *array = params;
-        if (array.count > 0)
-        {
-            if ([array.firstObject isKindOfClass:[NSArray<NSString *> class]])
-            {
-                NSMutableArray<NSDictionary *> *res = [NSMutableArray new];
-                for (NSArray<NSString *> *pair in array)
-                {
-                    [res addObject:@{@"first": pair.firstObject, @"second": pair.lastObject}];
-                }
-                array = res;
-            }
-            else if ([array.firstObject isKindOfClass:[NSNumber class]])
-            {
-                NSMutableArray<NSString *> *res = [NSMutableArray new];
-                for (NSNumber *param in array)
-                {
-                    [res addObject:param.stringValue];
-                }
-                array = res;
-            }
-        }
-        return [NSJSONSerialization dataWithJSONObject:array options:0 error:nil];
-    }
-    return nil;
-}
-
-- (void)readSwitchProfileAction:(NSString *)key params:(NSMutableDictionary *)params
-{
-    NSMutableString *values = params[key];
-    if (values)
-    {
-        params[key] = [NSJSONSerialization JSONObjectWithData:[values dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
-    }
-    else
-    {
-        values = [NSMutableString new];
-        NSArray *stringKeys = params[kSwitchProfileStringKeys];
-        if (stringKeys && stringKeys.count > 0)
-        {
-            for (NSString *stringKey in stringKeys)
-            {
-                OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:stringKey def:OAApplicationMode.DEFAULT];
-                if ([key isEqualToString:kSwitchProfileNames])
-                    [values appendString:mode.name];
-                else if ([key isEqualToString:kSwitchProfileIconNames])
-                    [values appendString:mode.getIconName];
-                else if ([key isEqualToString:kSwitchProfileIconColors])
-                    [values appendString:@(mode.getIconColor).stringValue];
-
-                if (![stringKey isEqualToString:stringKeys.lastObject])
-                    [values appendString:@","];
-            }
-        }
-        params[key] = [values componentsSeparatedByString:@","];
-    }
-}
-
-
-- (void)writeSwitchProfileAction:(NSString *)key params:(NSDictionary *)params paramsCopy:(NSMutableDictionary *)paramsCopy
-{
-    NSArray *values = params[key];
-    if (values && values.count > 0)
-    {
-        NSData *data = [self paramsToExportArray:values];
-        if (data)
-            paramsCopy[key] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
     }
 }
 

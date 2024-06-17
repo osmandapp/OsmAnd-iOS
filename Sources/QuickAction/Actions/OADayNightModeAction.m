@@ -8,31 +8,49 @@
 
 #import "OADayNightModeAction.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionType.h"
 #import "OADayNightHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OADayNightModeAction
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsDayNightModeActionId
+                                            stringId:@"daynight.switch"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_switch_day_mode")]
+              iconName:@"ic_custom_sun"]
+             category:QuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    if (settings.nightMode)
-        [settings.appearanceMode set:APPEARANCE_MODE_DAY];
+    if (_settings.nightMode)
+        [_settings.appearanceMode set:APPEARANCE_MODE_DAY];
     else
-        [settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
+        [_settings.appearanceMode set:APPEARANCE_MODE_NIGHT];
     [[OADayNightHelper instance] forceUpdate];
 }
 
 - (NSString *)getIconResName
 {
-    if ([OAAppSettings sharedManager].nightMode)
+    if (_settings.nightMode)
         return @"ic_custom_sun";
     return @"ic_custom_moon";
 }
@@ -44,14 +62,11 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    return [OAAppSettings sharedManager].nightMode ? OALocalizedString(@"quick_action_switch_day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
+    return _settings.nightMode ? OALocalizedString(@"quick_action_switch_day_mode") : OALocalizedString(@"quick_action_switch_night_mode");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:27 stringId:@"daynight.switch" class:self.class name:OALocalizedString(@"quick_action_switch_day_mode") category:CONFIGURE_MAP iconName:@"ic_custom_sun" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

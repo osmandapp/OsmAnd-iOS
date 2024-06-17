@@ -9,13 +9,10 @@
 #import "OAMarkerAction.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAMapRendererView.h"
 #import "OAReverseGeocoder.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#include <OsmAndCore/Utilities.h>
-
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMarkerAction
 
@@ -24,12 +21,22 @@ static OAQuickActionType *TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId
+                                            stringId:@"marker.add"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_add_marker")]
+              iconName:@"ic_custom_favorites"]
+             secondaryIconName:@"ic_custom_compound_action_add"]
+            category:QuickActionTypeCategoryCreateCategory];
+}
+
 - (void)execute
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-    const auto& latLon = OsmAnd::Utilities::convert31ToLatLon(mapPanel.mapViewController.mapView.target31);
-    
-    [mapPanel addMapMarker:latLon.latitude lon:latLon.longitude description:[[OAReverseGeocoder instance] lookupAddressAtLat:latLon.latitude lon:latLon.longitude]];
+    CLLocation *latLon = [self getMapLocation];
+    [mapPanel addMapMarker:latLon.coordinate.latitude lon:latLon.coordinate.longitude description:[[OAReverseGeocoder instance] lookupAddressAtLat:latLon.coordinate.latitude lon:latLon.coordinate.longitude]];
 }
 
 - (NSString *)getActionText
@@ -37,11 +44,8 @@ static OAQuickActionType *TYPE;
     return OALocalizedString(@"quick_action_add_marker_descr");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:2 stringId:@"marker.add" class:self.class name:OALocalizedString(@"quick_action_add_marker") category:CREATE_CATEGORY iconName:@"ic_custom_favorites" secondaryIconName:@"ic_custom_compound_action_add"];
-       
     return TYPE;
 }
 

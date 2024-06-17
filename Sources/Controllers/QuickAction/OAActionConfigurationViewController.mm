@@ -11,7 +11,7 @@
 #import "OAQuickAction.h"
 #import "OrderedDictionary.h"
 #import "OAInputTableViewCell.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OASwitchTableViewCell.h"
@@ -58,7 +58,8 @@
     MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *_data;
     NSString *_originalName;
     
-    OAQuickActionRegistry *_actionRegistry;
+    OAMapButtonsHelper *_mapButtonsHelper;
+    QuickActionButtonState *_buttonState;
     
     BOOL _isNew;
 
@@ -74,6 +75,30 @@
 
 #pragma mark - Initialization
 
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState typeId:(NSInteger)typeId
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+        _isNew = YES;
+        _action = [OAMapButtonsHelper produceAction:[_mapButtonsHelper newActionByType:typeId]];
+    }
+    return self;
+}
+
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState action:(OAQuickAction *)action
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+        _isNew = action.id == 0;
+        _action = _isNew ? [OAMapButtonsHelper produceAction:[_mapButtonsHelper newActionByType:action.id]] : action;
+    }
+    return self;
+}
+
 - (instancetype)initWithAction:(OAQuickAction *)action isNew:(BOOL)isNew
 {
     self = [super init];
@@ -81,9 +106,13 @@
     {
         _action = action;
         _isNew = isNew;
-        _actionRegistry = [OAQuickActionRegistry sharedInstance];
     }
     return self;
+}
+
+- (void)commonInit
+{
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
 }
 
 - (void)registerNotifications
@@ -730,6 +759,13 @@
     return [NSArray arrayWithArray:titles];
 }
 
+- (NSString *)getOldTitle
+{
+    NSString *listKey = [_action getListKey];
+    NSString *params = [_action getParams][listKey];
+    return params ? [_action getTitle:@[params]] : [_action getName];
+}
+
 #pragma mark - Selectors
 
 - (void)onNameChanged:(UITextView *)textView
@@ -801,14 +837,14 @@
         [self presentViewController:alert animated:YES completion:nil];
         return;
     }
-    
-    if ([_actionRegistry isNameUnique:_action])
+
+    NSArray<OAQuickAction *> *actions = _buttonState.quickActions;
+    if ([_mapButtonsHelper isActionNameUnique:actions quickAction:_action])
     {
         if (_isNew)
-            [_actionRegistry addQuickAction:_action];
+            [_mapButtonsHelper addQuickAction:_buttonState action:_action];
         else
-            [_actionRegistry updateQuickAction:_action];
-        [_actionRegistry.quickActionListChangedObservable notifyEvent];
+            [_mapButtonsHelper updateQuickAction:_buttonState action:_action];
         for (UIViewController *controller in self.navigationController.viewControllers)
         {
             if ([controller isKindOfClass:[OAQuickActionListViewController class]])
@@ -823,14 +859,13 @@
     }
     else
     {
-        _action = [_actionRegistry generateUniqueName:_action];
-        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"quick_action_name_alert"), _action.getName] preferredStyle:UIAlertControllerStyleAlert];
+        _action = [_mapButtonsHelper generateUniqueActionName:actions action:_action];
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:[NSString stringWithFormat:OALocalizedString(@"quick_action_name_alert"), [_action getName]] preferredStyle:UIAlertControllerStyleAlert];
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
             if (_isNew)
-                [_actionRegistry addQuickAction:_action];
+                [_mapButtonsHelper addQuickAction:_buttonState action:_action];
             else
-                [_actionRegistry updateQuickAction:_action];
-            [_actionRegistry.quickActionListChangedObservable notifyEvent];
+                [_mapButtonsHelper updateQuickAction:_buttonState action:_action];
             for (UIViewController *controller in self.navigationController.viewControllers)
             {
                 if ([controller isKindOfClass:[OAQuickActionListViewController class]])
@@ -1033,7 +1068,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 
@@ -1059,10 +1094,9 @@
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
     NSMutableDictionary *actionName = [NSMutableDictionary dictionaryWithDictionary:_data[OALocalizedString(@"shared_string_action_name")].firstObject];
     NSString *nameKey = OALocalizedString(@"shared_string_action_name");
-    NSString *oldTitle = [_action getTitle:_action.getParams[_action.getListKey]];
     NSString *defaultName = [_action getDefaultName];
     
-    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:oldTitle])
+    if ([actionName[@"title"] isEqualToString:defaultName] || [actionName[@"title"] isEqualToString:[self getOldTitle]])
     {
         NSString *newTitle = [_action getTitle:titles];
         [actionName setObject:newTitle forKey:@"title"];
@@ -1093,7 +1127,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 
@@ -1119,7 +1153,7 @@
     }
     [newItems addObject:button];
     [_data setObject:[NSArray arrayWithArray:newItems] forKey:key];
-    [self renameAction:titles oldTitle:[_action getTitle:_action.getParams[_action.getListKey]]];
+    [self renameAction:titles oldTitle:[self getOldTitle]];
     [self.tableView reloadData];
 }
 

@@ -21,7 +21,6 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
 #import "OAMapButtonsHelper.h"
-#import "OADownloadingCellHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAGpxInfo.h"
@@ -129,6 +128,8 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAPurchasesViewController.h"
 #import "OAMainSettingsViewController.h"
+#import "OADownloadMultipleResourceViewController.h"
+#import "OAPluginPopupViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -169,6 +170,7 @@
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "FFCircularProgressView.h"
+#import "FFCircularProgressView+isSpinning.h"
 
 // Enums
 #import "OAGPXDataSetType.h"

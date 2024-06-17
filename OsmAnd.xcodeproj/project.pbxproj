@@ -286,7 +286,6 @@
 		3219705E25FA0DCE00C3FED6 /* bg_point_octagon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */; };
 		3219705F25FA0DCE00C3FED6 /* bg_point_circle@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */; };
 		3219995D2AA22E910000ADC4 /* TravelGuidesUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */; };
-		321DD7562A77A8E5003223F7 /* OADownloadingCellHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321DD7552A77A8E5003223F7 /* OADownloadingCellHelper.mm */; };
 		321E95252823B5C10040312C /* OASimulationNavigationSettingViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */; };
 		32210DB1298929B0005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAD298929AF005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png */; };
 		32210DB2298929B0005D16CB /* ic_custom_map_pin_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32210DAE298929AF005D16CB /* ic_custom_map_pin_outlined@2x.png */; };
@@ -363,6 +362,8 @@
 		323BD9102628850400D255ED /* ic_bg_point_comment_center_small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E02628850300D255ED /* ic_bg_point_comment_center_small@2x.png */; };
 		323BD9112628850400D255ED /* ic_bg_point_octagon_top@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E12628850300D255ED /* ic_bg_point_octagon_top@2x.png */; };
 		323BD9122628850400D255ED /* ic_bg_point_octagon_bottom@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */; };
+		323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */; };
+		323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */; };
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
@@ -504,6 +505,10 @@
 		32FE7AA72B65138800F82728 /* OAGPXImportUIHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */; };
 		32FF4C292C183B1D00246B36 /* SegmentTableHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */; };
 		32FF4C2B2C18425900246B36 /* SegmentTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */; };
+		32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C302C19D59A00246B36 /* DownloadingCellResourceHelper.swift */; };
+		32FF4C332C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */; };
+		32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */; };
+		32FF4C362C1A32D200246B36 /* DownloadingCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */; };
 		333168BA2507804400266047 /* ic_custom_logo_wikimedia@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */; };
 		333168BE2507804400266047 /* ic_custom_logo_wikimedia@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */; };
 		333168C02507804400266047 /* ic_custom_logo_wikidata@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */; };
@@ -3688,8 +3693,6 @@
 		3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon@3x.png"; path = "Resources/Icons/bg_point_octagon@3x.png"; sourceTree = "<group>"; };
 		3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle@3x.png"; path = "Resources/Icons/bg_point_circle@3x.png"; sourceTree = "<group>"; };
 		3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesUtils.swift; sourceTree = "<group>"; };
-		321DD7542A77A8C2003223F7 /* OADownloadingCellHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OADownloadingCellHelper.h; sourceTree = "<group>"; };
-		321DD7552A77A8E5003223F7 /* OADownloadingCellHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OADownloadingCellHelper.mm; sourceTree = "<group>"; };
 		321E08062A37793100105DAE /* OAMap3DModeVisibilityType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMap3DModeVisibilityType.h; sourceTree = "<group>"; };
 		321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMap3DModeVisibilityType.mm; sourceTree = "<group>"; };
 		321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimulationNavigationSettingViewController.h; sourceTree = "<group>"; };
@@ -3776,6 +3779,9 @@
 		323BD8E02628850300D255ED /* ic_bg_point_comment_center_small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_comment_center_small@2x.png"; path = "Resources/Icons/ic_bg_point_comment_center_small@2x.png"; sourceTree = "<group>"; };
 		323BD8E12628850300D255ED /* ic_bg_point_octagon_top@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_octagon_top@2x.png"; path = "Resources/Icons/ic_bg_point_octagon_top@2x.png"; sourceTree = "<group>"; };
 		323BD8E22628850300D255ED /* ic_bg_point_octagon_bottom@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_bg_point_octagon_bottom@3x.png"; path = "Resources/Icons/ic_bg_point_octagon_bottom@3x.png"; sourceTree = "<group>"; };
+		323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCell.swift; sourceTree = "<group>"; };
+		323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DownloadingCell.xib; sourceTree = "<group>"; };
+		323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellBaseHelper.swift; sourceTree = "<group>"; };
 		3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@2x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@2x.png"; sourceTree = "<group>"; };
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
@@ -3968,6 +3974,10 @@
 		32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAGPXImportUIHelper.mm; sourceTree = "<group>"; };
 		32FF4C252C183A6400246B36 /* SegmentTableHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SegmentTableHeaderView.xib; sourceTree = "<group>"; };
 		32FF4C2A2C18425900246B36 /* SegmentTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentTableHeaderView.swift; sourceTree = "<group>"; };
+		32FF4C2F2C18A69B00246B36 /* OADownloadMultipleResourceViewController+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OADownloadMultipleResourceViewController+cpp.h"; sourceTree = "<group>"; };
+		32FF4C302C19D59A00246B36 /* DownloadingCellResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellResourceHelper.swift; sourceTree = "<group>"; };
+		32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellMultipleResourceHelper.swift; sourceTree = "<group>"; };
+		32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadingCellCloudHelper.swift; sourceTree = "<group>"; };
 		333168B42507803300266047 /* ic_custom_logo_wikimedia@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@2x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@2x.png"; sourceTree = "<group>"; };
 		333168B62507803800266047 /* ic_custom_logo_wikimedia@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikimedia@3x.png"; path = "Resources/Icons/ic_custom_logo_wikimedia@3x.png"; sourceTree = "<group>"; };
 		333168B72507803B00266047 /* ic_custom_logo_wikidata@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_logo_wikidata@3x.png"; path = "Resources/Icons/ic_custom_logo_wikidata@3x.png"; sourceTree = "<group>"; };
@@ -8165,6 +8175,19 @@
 			path = "Geomagnetism-Swift";
 			sourceTree = "<group>";
 		};
+		32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */ = {
+			isa = PBXGroup;
+			children = (
+				323BFE6C2C0B6FA400A4E7B1 /* DownloadingCell.xib */,
+				323BFE6A2C0B6F6F00A4E7B1 /* DownloadingCell.swift */,
+				323BFE6D2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift */,
+				32FF4C302C19D59A00246B36 /* DownloadingCellResourceHelper.swift */,
+				32FF4C322C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift */,
+				32FF4C342C1A18ED00246B36 /* DownloadingCellCloudHelper.swift */,
+			);
+			path = DownloadingCellHelper;
+			sourceTree = "<group>";
+		};
 		32E1EAA02AB87B7200CE13B6 /* search */ = {
 			isa = PBXGroup;
 			children = (
@@ -12060,6 +12083,7 @@
 				DA5A7D8B26C563A300F274C7 /* OADonationSettingsViewController.h */,
 				DA5A7D7F26C563A300F274C7 /* OADonationSettingsViewController.mm */,
 				0AD1F3A326CC02B100EE4DFD /* OADownloadMultipleResourceViewController.h */,
+				32FF4C2F2C18A69B00246B36 /* OADownloadMultipleResourceViewController+cpp.h */,
 				0AD1F3A426CC02B100EE4DFD /* OADownloadMultipleResourceViewController.mm */,
 				DA5A7D8326C563A300F274C7 /* OALocalResourceInfoCell.h */,
 				DA5A7D9826C563A300F274C7 /* OALocalResourceInfoCell.m */,
@@ -13269,6 +13293,7 @@
 		DA5A808E26C563A500F274C7 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				32D24D1F2BE54A5E000FA504 /* DownloadingCellHelper */,
 				FA327BFB2BB418B500CFADCF /* MissingMapsCalculator */,
 				46ED6C3C2B333A4600A5555F /* Extensions */,
 				FA86F4162AE7C5DC00DC3B2B /* UserDefaultsKey */,
@@ -13369,8 +13394,6 @@
 				DA5A80C326C563A600F274C7 /* SunriseSunset.m */,
 				DA5A80C526C563A600F274C7 /* UIColor+RGB.swift */,
 				460767112A49F86400AF63F2 /* WikiAlgorithms.swift */,
-				321DD7542A77A8C2003223F7 /* OADownloadingCellHelper.h */,
-				321DD7552A77A8E5003223F7 /* OADownloadingCellHelper.mm */,
 				32EAF9FD2AE15A2800646807 /* AFNetworkReachabilityManagerWrapper.h */,
 				32EAF9FE2AE15A3C00646807 /* AFNetworkReachabilityManagerWrapper.m */,
 				32ABB64C2AEBC02100491E99 /* OAWebImagesCacheHelper.h */,
@@ -15584,6 +15607,7 @@
 				B24745BB27F7465D00C18C3F /* ic_custom_wind@3x.png in Resources */,
 				DA5A846626C563A900F274C7 /* OAToolbarViewController.xib in Resources */,
 				DA2EC74629FBBE0400ECEB37 /* ic_action_time@2x.png in Resources */,
+				32FF4C362C1A32D200246B36 /* DownloadingCell.xib in Resources */,
 				32A365B32B07B4F500485401 /* ic_custom_extension_outlined@2x.png in Resources */,
 				DA68B3CC233B821A00F5ACCC /* ic_profile_car@3x.png in Resources */,
 				97EF50D02AB1D91C005E861B /* map_aciton_hang_gliding@2x.png in Resources */,
@@ -16497,7 +16521,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				321DD7562A77A8E5003223F7 /* OADownloadingCellHelper.mm in Sources */,
 				46E9AD9228DC894600CC55F9 /* OASimpleTableViewCell.m in Sources */,
 				DA5A830926C563A800F274C7 /* OAIconBackgroundCollectionViewCell.m in Sources */,
 				DA5A831D26C563A800F274C7 /* OACollectionViewCell.mm in Sources */,
@@ -16533,6 +16556,7 @@
 				326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */,
 				DA45B2422A30B6BF0055055A /* MapillaryWidget.swift in Sources */,
 				DA5A825C26C563A700F274C7 /* OAProfileAppearanceViewController.mm in Sources */,
+				323BFE6B2C0B6F6F00A4E7B1 /* DownloadingCell.swift in Sources */,
 				DA5A853226C563A900F274C7 /* OAResourcesUIHelper.mm in Sources */,
 				32EB3DF12AC325780018D9B8 /* OATravelLocalDataDbHelper.mm in Sources */,
 				FA44BF692A72F810000D2F5F /* SceneDelegate.mm in Sources */,
@@ -16665,6 +16689,7 @@
 				DA0133142A20E24700920C14 /* WidgetsSettingsHelper.swift in Sources */,
 				DA849999287EBEC7002B1E11 /* OADeleteFilesCommand.m in Sources */,
 				DA4ABF1E2876DA6800B996EF /* OAProfileSettingsItem.mm in Sources */,
+				32FF4C332C1A0A4C00246B36 /* DownloadingCellMultipleResourceHelper.swift in Sources */,
 				DA5A830126C563A800F274C7 /* OAIconsTableViewCell.m in Sources */,
 				DA5A813F26C563A700F274C7 /* OAWay.m in Sources */,
 				DA4ABF292876DDE800B996EF /* OAExportAsyncTask.m in Sources */,
@@ -17101,6 +17126,7 @@
 				DA5A819026C563A700F274C7 /* OAShowHideGPXTracksAction.mm in Sources */,
 				DA5A82E526C563A800F274C7 /* OAPublicTransportShieldCell.mm in Sources */,
 				FA183F2F2B84D6780085EF9F /* SunPositionMode.swift in Sources */,
+				32FF4C312C19D59A00246B36 /* DownloadingCellResourceHelper.swift in Sources */,
 				DA5A850F26C563A900F274C7 /* OAUserInteractionInterceptorView.m in Sources */,
 				8A2DF237287EFD9E003642B7 /* OAMapCreatorDbHelper.mm in Sources */,
 				FA359EE02ADEA22F0001C11D /* BLEChangeDeviceNameViewController.swift in Sources */,
@@ -17296,6 +17322,7 @@
 				468CE3F129F82EA700F3C3E5 /* OAColorCollectionViewController.m in Sources */,
 				DA5A83C726C563A800F274C7 /* OATargetMenuViewController.mm in Sources */,
 				DA5A81BF26C563A700F274C7 /* OAPOIType.m in Sources */,
+				32FF4C352C1A18ED00246B36 /* DownloadingCellCloudHelper.swift in Sources */,
 				46D38AA229C39D7C000AAE0C /* OARoutingFile.m in Sources */,
 				C546C0042AC242D600377EDE /* OAOsmUploadPOIViewController.m in Sources */,
 				DA5A81CE26C563A700F274C7 /* OATileSource.mm in Sources */,
@@ -17637,6 +17664,12 @@
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,
+				CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.m in Sources */,
+				CA4ED071F93DF4FB0368BACC /* OAShowHideAirPressureAction.m in Sources */,
+				CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.m in Sources */,
+				323BFE6E2C0B6FF900A4E7B1 /* DownloadingCellBaseHelper.swift in Sources */,
+				CA4ED0E24578E7AF0472D74C /* OAShowHideCloudAction.m in Sources */,
+				CA4ED3C5613C7FCF1FAF6F34 /* OAShowHidePrecipitationAction.m in Sources */,
 				CA4ED8CAB7D105A8DAAF2A06 /* OAShowHideTemperatureAction.m in Sources */,
 				CA4ED071F93DF4FB0368BACC /* OAShowHideAirPressureAction.m in Sources */,
 				CA4ED8E8B076A382837AEF2D /* OAShowHideWindAction.m in Sources */,

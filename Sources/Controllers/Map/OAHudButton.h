@@ -23,6 +23,8 @@
 @property (nonatomic) CGFloat borderWidthDay;
 @property (nonatomic) CGFloat borderWidthNight;
 
+@property (nonatomic) id buttonState;
+
 - (void) updateColorsForPressedState:(BOOL)isPressed;
 
 @end

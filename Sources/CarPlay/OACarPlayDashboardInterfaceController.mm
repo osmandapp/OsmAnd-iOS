@@ -29,6 +29,8 @@
 #import "OASRTMPlugin.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
+#import "OAMapButtonsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")
@@ -224,9 +226,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             OAMapViewTrackingUtilities *mapViewTrackingUtilities = [OAMapViewTrackingUtilities instance];
-            EOAMap3DModeVisibility map3DMode = [_settings.map3dMode get];
-            BOOL hideButton = map3DMode == EOAMap3DModeVisibilityHidden
-                || (map3DMode == EOAMap3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities is3DMode]);
+            Map3DModeVisibility map3DMode = [[[OAMapButtonsHelper sharedInstance] getMap3DButtonState] getVisibility];
+            BOOL hideButton = map3DMode == Map3DModeVisibilityHidden
+                || (map3DMode == Map3DModeVisibilityVisibleIn3DMode && ![mapViewTrackingUtilities is3DMode]);
             _3DModeMapButton.hidden = hideButton ? YES : NO;
             if ([mapViewTrackingUtilities is3DMode])
             {
@@ -238,14 +240,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
                 _3DModeMapButton.image = [UIImage imageNamed:@"btn_map_3d_mode"];
                 _3DModeMapButton.accessibilityLabel = OALocalizedString(@"map_2d_mode_action");
             }
-            _3DModeMapButton.accessibilityValue = [OAMap3DModeVisibility getTitle:map3DMode];
+            _3DModeMapButton.accessibilityValue = [Map3DModeVisibilityWrapper getTitleForType:map3DMode];
         });
     }
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _settings.map3dMode)
+    if (notification.object == [[OAMapButtonsHelper sharedInstance] getMap3DButtonState].visibilityPref)
         [self onMap3dModeUpdated];
 }
 

@@ -11,6 +11,7 @@
 #import "OAProfileSettingsItem.h"
 #import "OACollectionSettingsItem.h"
 #import "OAFileSettingsItem.h"
+#import "OAQuickActionsSettingsItem.h"
 #import "OAPrepareBackupResult.h"
 #import "OABackupHelper.h"
 #import "OARemoteFile.h"
@@ -315,6 +316,10 @@
         {
             if (item.exists)
                 [duplicateItems addObject:((OAFileSettingsItem *) item).filePath];
+        }
+        else if ([item isKindOfClass:OAQuickActionsSettingsItem.class] && [item exists])
+        {
+            [duplicateItems addObject:[((OAQuickActionsSettingsItem *) item) getButtonState]];
         }
     }
     return duplicateItems;

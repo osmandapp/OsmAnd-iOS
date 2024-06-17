@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 const static NSString *ONLINE_PLUGINS_URL = @"https://osmand.net/api/plugins/list";
 const static NSString *OSMAND_URL = @"https://osmand.net";
 
-@class OAPlugin, OACustomPlugin, OAWorldRegion, OAQuickActionType, OAApplicationMode, OAPOIUIFilter, OAGPXTrackAnalysis, OAPointAttributes, OAWidgetType, OABaseWidgetView, OAOnlinePlugin;
+@class OAPlugin, OACustomPlugin, OAWorldRegion, QuickActionType, OAApplicationMode, OAPOIUIFilter, OAGPXTrackAnalysis, OAPointAttributes, OAWidgetType, OABaseWidgetView, OAOnlinePlugin;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -42,7 +42,7 @@ const static NSString *OSMAND_URL = @"https://osmand.net";
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
-+ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled;
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<QuickActionType *> *)allTypes enabledTypes:(NSMutableArray<QuickActionType *> *)enabledTypes;
 + (void) createMapWidgets:(id<OAWidgetRegistrationDelegate> _Nullable)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
 + (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
 

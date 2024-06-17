@@ -13,6 +13,8 @@
 #import "OAIAPHelper.h"
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
+#import "OAContourLinesAction.h"
+#import "OATerrainAction.h"
 #import "Localization.h"
 #import "OALinks.h"
 
@@ -95,6 +97,11 @@
             [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];
         });
     }
+}
+
+- (NSArray *)getQuickActionTypes
+{
+    return @[OAContourLinesAction.TYPE, OATerrainAction.TYPE];
 }
 
 @end

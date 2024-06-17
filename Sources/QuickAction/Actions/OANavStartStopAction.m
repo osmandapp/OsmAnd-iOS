@@ -10,23 +10,39 @@
 #import "OARoutingHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define KEY_DIALOG @"dialog"
-
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavStartStopAction
+{
+    OARoutingHelper *_helper;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavStartStopActionId
+                                            stringId:@"nav.startstop"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_start_stop_navigation")]
+              iconName:@"ic_custom_navigation_arrow"]
+             category:QuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
+- (void)commonInit
+{
+    _helper = [OARoutingHelper sharedInstance];
+}
+
 - (void)execute
 {
-    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-    if ([helper isPauseNavigation] || [helper isFollowingMode])
+    if ([_helper isPauseNavigation] || [_helper isFollowingMode])
     {
         // No destination dilogue yet
 //        if ([self.getParams[KEY_DIALOG] boolValue])
@@ -42,8 +58,7 @@ static OAQuickActionType *TYPE;
 
 - (BOOL)isActionWithSlash
 {
-    OARoutingHelper *rh = [OARoutingHelper sharedInstance];
-    return rh.isPauseNavigation || rh.isFollowingMode;
+    return _helper.isPauseNavigation || _helper.isFollowingMode;
 }
 
 - (NSString *)getActionText
@@ -53,19 +68,15 @@ static OAQuickActionType *TYPE;
 
 - (NSString *)getActionStateName
 {
-    OARoutingHelper *helper = [OARoutingHelper sharedInstance];
-    if (helper.isPauseNavigation || helper.isFollowingMode)
+    if (_helper.isPauseNavigation || _helper.isFollowingMode)
     {
         return OALocalizedString(@"cancel_navigation");
     }
     return OALocalizedString(@"start_navigation");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:25 stringId:@"nav.startstop" class:self.class name:OALocalizedString(@"quick_action_start_stop_navigation") category:NAVIGATION iconName:@"ic_custom_navigation_arrow" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

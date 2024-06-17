@@ -13,8 +13,7 @@
 #import "OAMapHudViewController.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
-#import "OAQuickActionType.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OACustomPlugin.h"
 #import "OAPluginInstalledViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -236,7 +235,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return nil;
 }
 
-- (NSArray<OAQuickActionType *> *) getQuickActionTypes
+- (NSArray<QuickActionType *> *) getQuickActionTypes
 {
     return @[];
 }

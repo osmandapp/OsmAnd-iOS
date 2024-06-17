@@ -58,28 +58,26 @@
 {
     [[self.vwController.buttonsView viewWithTag:kButtonsDividerTag] removeFromSuperview];
     NSMutableArray *arr = [NSMutableArray array];
-    NSArray *params = _action.loadListFromParams;
     [arr addObject:@{
                      @"type" : [OABottomSheetHeaderCell getCellIdentifier],
                      @"title" : _action.getDescrTitle,
                      @"description" : @""
                      }];
     
-    NSDictionary *profileParams = [_action getParams];
-    NSArray *names = profileParams[@"names"] ? profileParams[@"names"] : @[];
-    NSArray *stringKeys = profileParams[@"stringKeys"] ? profileParams[@"stringKeys"] : @[];
-    NSArray *iconNames = profileParams[@"iconsNames"] ? profileParams[@"iconsNames"] : @[];
-    NSArray *iconColors = profileParams[@"iconsColors"] ? profileParams[@"iconsColors"] : @[];
+    NSArray *stringKeys = [_action loadListFromParams];
     for (int i = 0; i < stringKeys.count; i++)
     {
+        OAApplicationMode *mode = [OAApplicationMode valueOfStringKey:stringKeys[i] def:nil];
+        if (!mode)
+            continue;
+
         [arr addObject:@{
-                         @"type" : [OASimpleTableViewCell getCellIdentifier],
-                         @"title" : names[i],
-                         @"value" : stringKeys[i],
-                         @"param" : stringKeys[i],
-                         @"img" : iconNames[i],
-                         @"iconColor" : iconColors[i]
-                         }];
+            @"type" : [OASimpleTableViewCell getCellIdentifier],
+            @"title" : [mode toHumanString],
+            @"param" : stringKeys[i],
+            @"img" : [mode getIconName],
+            @"iconColor" : @([mode getIconColor])
+        }];
     }
     _data = [NSArray arrayWithArray:arr];
 }
@@ -197,7 +195,7 @@
 - (void) tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.row];
-    [_action executeWithParams:item[@"param"]];
+    [_action executeWithParams:@[item[@"param"]]];
     [tableView deselectRowAtIndexPath:indexPath animated:true];
     [self.vwController dismiss];
 }

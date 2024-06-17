@@ -8,27 +8,37 @@
 
 #import "OAContourLinesAction.h"
 #import "OAAppSettings.h"
-#import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAContourLinesAction
 {
-    OsmAndAppInstance _app;
     OAAppSettings *_settings;
     OAMapStyleSettings *_styleSettings;
 }
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self) {
-        _settings = [OAAppSettings sharedManager];
-        _styleSettings = [OAMapStyleSettings sharedInstance];
-    }
-    return self;
+    return [super initWithActionType:self.class.TYPE];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId
+                                            stringId:@"contourlines.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_contour_lines")]
+              iconName:@"ic_custom_contour_lines"]
+             category:QuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+    _styleSettings = [OAMapStyleSettings sharedInstance];
 }
 
 - (OAMapStyleParameter *) parameter
@@ -68,11 +78,8 @@ static OAQuickActionType *TYPE;
     return [self isContourLinesOn] ? OALocalizedString(@"hide_contour_lines") : OALocalizedString(@"rendering_attr_contourLines_name");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:29 stringId:@"contourlines.showhide" class:self.class name:OALocalizedString(@"toggle_contour_lines") category:CONFIGURE_MAP iconName:@"ic_custom_contour_lines" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

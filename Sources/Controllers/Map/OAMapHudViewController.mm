@@ -415,8 +415,8 @@ static const float kDistanceMeters = 100.0;
 - (BOOL) shouldShowCompass:(float)azimuth
 {
     NSInteger rotateMap = [_settings.rotateMap get];
-    NSInteger compassMode = [_settings.compassMode get];
-    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassMode == EOACompassRotated) || compassMode == EOACompassVisible) && _mapSettingsButton.alpha == 1.0;
+    CompassVisibility compassVisibility = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] getVisibility];
+    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible) && _mapSettingsButton.alpha == 1.0;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -500,8 +500,7 @@ static const float kDistanceMeters = 100.0;
     [_optionsMenuButton updateColorsForPressedState:NO];
     _optionsMenuButton.layer.cornerRadius = 6;
 
-    BOOL isNight = _settings.nightMode;
-    [_floatingButtonsController updateColors:isNight];
+    [_floatingButtonsController updateColors];
     [self.rulerLabel updateColors];
     [_mapPanelViewController updateColors];
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
@@ -714,26 +713,35 @@ static const float kDistanceMeters = 100.0;
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OACommonPreference *obj = notification.object;
-    OACommonInteger *rotateMap = _settings.rotateMap;
-    OACommonBoolean *transparentMapTheme = _settings.transparentMapTheme;
-    OACommonMap3dMode *map3dMode = _settings.map3dMode;
-    OACommonBoolean *quickActionIsOn = _settings.quickActionIsOn;
-    OACommonInteger *compassMode = _settings.compassMode;
     if (obj)
     {
-        if (obj == rotateMap || obj == compassMode)
+        OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+        OACommonInteger *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
+        OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
+
+        BOOL isQuickAction = NO;
+        for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
+        {
+            if (obj == buttonState.statePref || obj == buttonState.quickActionsPref)
+            {
+                isQuickAction = YES;
+                break;
+            }
+        }
+
+        if (obj == _settings.rotateMap || obj == compassButtonState)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
             });
         }
-        else if (obj == transparentMapTheme)
+        else if (obj == _settings.transparentMapTheme)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateColors];
             });
         }
-        else if (obj == map3dMode || obj == quickActionIsOn)
+        else if (obj == map3DButtonState || isQuickAction)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateDependentButtonsVisibility];
@@ -918,6 +926,7 @@ static const float kDistanceMeters = 100.0;
 
     [self updateTopControlsVisibility:animated];
     [self updateBottomControlsVisibility:animated];
+    [_floatingButtonsController updateViewVisibility];
 
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];

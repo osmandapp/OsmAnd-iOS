@@ -8,26 +8,44 @@
 
 #import "OAShowHideLocalOSMChanges.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideLocalOSMChanges
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId
+                                            stringId:@"osmedit.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_local_edits")]
+              iconName:@"ic_custom_osm_edits"]
+             category:QuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setShowOfflineEdits:![settings.mapSettingShowOfflineEdits get]];
+    [_settings setShowOfflineEdits:![_settings.mapSettingShowOfflineEdits get]];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [[OAAppSettings sharedManager].mapSettingShowOfflineEdits get];
+    return [_settings.mapSettingShowOfflineEdits get];
 }
 
 - (NSString *)getActionText
@@ -40,11 +58,8 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"hide_edits") : OALocalizedString(@"show_edits");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:31 stringId:@"osmedit.showhide" class:self.class name:OALocalizedString(@"toggle_local_edits") category:CONFIGURE_MAP iconName:@"ic_custom_osm_edits" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

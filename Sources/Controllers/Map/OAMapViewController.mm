@@ -1620,7 +1620,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
-        [quickAction hideActionsSheetAnimated];
+        [quickAction hideActionsSheetAnimated:nil];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events

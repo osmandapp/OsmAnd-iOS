@@ -7,12 +7,14 @@
 //
 
 #import "OADownloadMultipleResourceViewController.h"
+#import "OADownloadMultipleResourceViewController+cpp.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
 #import "OASegmentedControlCell.h"
 #import "OADividerCell.h"
+#import "OAResourcesUISwiftHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -66,6 +68,12 @@
                 [_selectedItems addObject:item];
         }
     }
+    return self;
+}
+
+- (instancetype)initWithSwiftResource:(OAMultipleResourceSwiftItem *)swiftResource
+{
+    self = [self initWithResource:swiftResource.objcResourceItem];
     return self;
 }
 
@@ -288,7 +296,7 @@
             BOOL selected = !_isSingleSRTM && [_selectedItems containsObject:item];
             BOOL installed = item.isInstalled;
             cell.leftIconView.image = [OAResourceType getIcon:_type.type templated:YES];
-            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] :installed  ?  UIColorFromRGB( resource_installed_icon_color) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = selected ? [UIColor colorNamed:ACColorNameIconColorActive] :installed  ?  [UIColor colorNamed:ACColorNameIconColorGreen] : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.leftIconView.contentMode = UIViewContentModeCenter;
             cell.accessoryType = installed ? UITableViewCellAccessoryDetailButton : UITableViewCellAccessoryNone;
             cell.titleLabel.text = item.title;
@@ -359,7 +367,7 @@
     [self dismissViewControllerAnimated:YES completion:^{
         OAResourceItem *item = [self getItem:indexPath];
         if ([item isKindOfClass:OALocalResourceItem.class])
-            [self.delegate onDetailsSelected:(OALocalResourceItem *)item];
+            [self.delegate onDetailsSelected:[[OAResourceSwiftItem alloc] initWithItem:item]];
     }];
 }
 
@@ -477,19 +485,23 @@
     {
         if (_isSRTM)
         {
-            NSMutableArray<OAResourceItem *> *itemsToCheck = [NSMutableArray new];
+            NSMutableArray<OAResourceSwiftItem *> *itemsToCheck = [NSMutableArray new];
             for (OAResourceItem *selectedItem in _selectedItems)
             {
                 QString srtmMapName = selectedItem.resourceId.remove(QLatin1String([OAResourceType isSRTMF:selectedItem] ? ".srtmf.obf" : ".srtm.obf"));
                 for (OAResourceItem *itemToCheck in _multipleItem.items)
                 {
                     if (itemToCheck.resourceId.startsWith(srtmMapName))
-                        [itemsToCheck addObject:itemToCheck];
+                        [itemsToCheck addObject:[[OAResourceSwiftItem alloc] initWithItem:itemToCheck]];
                 }
             }
             [self.delegate checkAndDeleteOtherSRTMResources:itemsToCheck];
         }
-        [self.delegate downloadResources:_multipleItem selectedItems:_selectedItems];
+        NSMutableArray<OAResourceSwiftItem *> *selectedItems = [NSMutableArray new];
+        for (OAResourceItem *selectedItem in _selectedItems)
+            [selectedItems addObject:[[OAResourceSwiftItem alloc] initWithItem:selectedItem]];
+        
+        [self.delegate downloadResources:[[OAMultipleResourceSwiftItem alloc] initWithItem:_multipleItem] selectedItems:selectedItems];
     }
 }
 

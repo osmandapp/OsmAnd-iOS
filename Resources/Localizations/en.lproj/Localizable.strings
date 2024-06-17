@@ -3777,3 +3777,9 @@
 "step_by_step" = "Turn-by-turn";
 
 "shared_string_limit" = "Limit";
+
+"custom_buttons" = "Custom buttons";
+"default_buttons" = "Default buttons";
+"add_button" = "Add button";
+"empty_name" = "Empty name";
+"custom_map_button_name_present" = "Such button already present";

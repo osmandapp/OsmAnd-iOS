@@ -16,7 +16,7 @@
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OARootViewController.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAPlugin.h"
 #import "OACustomPlugin.h"
 #import "OAColors.h"
@@ -276,11 +276,12 @@
     });
 }
 
-- (void)refreshProduct:(NSIndexPath *)indexPath {
+- (void)refreshProduct:(NSIndexPath *)indexPath
+{
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [OAQuickActionRegistry.sharedInstance updateActionTypes];
-        [OAQuickActionRegistry.sharedInstance.quickActionListChangedObservable notifyEvent];
+        [OAMapButtonsHelper.sharedInstance updateActionTypes];
+        [OAMapButtonsHelper.sharedInstance.quickActionButtonsChangedObservable notifyEventWithKey:nil andValue:nil];
     });
 }
 

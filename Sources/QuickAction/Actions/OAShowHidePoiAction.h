@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+static NSString * const kFilters = @"filters";
+
 @interface OAShowHidePoiAction : OAQuickAction
 
 @end

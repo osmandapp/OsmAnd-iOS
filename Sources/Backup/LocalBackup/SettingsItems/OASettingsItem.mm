@@ -317,7 +317,7 @@ NSInteger const kSettingsItemErrorCodeAlreadyRead = 1;
 
     NSDictionary<NSString *, NSString *> *settings;
     if ([[OASettingsHelper sharedInstance] getCurrentBackupVersion] == OAMigrationManager.importExportVersionMigration1)
-        settings = [[OAMigrationManager shared] changeJsonMigration:json];
+        settings = [[OAMigrationManager shared] changeJsonMigrationToV2:json];
     else
         settings = json;
 

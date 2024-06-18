@@ -37,7 +37,6 @@
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static float kRelief3DCellRowHeight = 48.3;
 static NSString *kCellTypeMap = @"MapCell";
 static NSString *kCellItemKey = @"kCellItemKey";
 

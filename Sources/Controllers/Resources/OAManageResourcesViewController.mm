@@ -663,7 +663,8 @@ static BOOL _repositoryUpdated = NO;
         if (_doDataUpdate || _resourcesByRegions.count() == 0 || _lackOfResources)
             [OAManageResourcesViewController prepareData];
 
-        [self collectSubregionsDataAndItems];
+        if (![self.region isKindOfClass:OACustomRegion.class])
+            [self collectSubregionsDataAndItems];
         [self collectResourcesDataAndItems];
 
         _doDataUpdate = NO;
@@ -880,7 +881,8 @@ static BOOL _repositoryUpdated = NO;
 
 - (void) collectCustomItems
 {
-    _customRegions = self.region.flattenedSubregions;
+    _customRegions = self.region.subregions;
+    
     for (OAResourceItem *item in ((OACustomRegion *) self.region).loadIndexItems)
     {
         item.downloadTask = [self getDownloadTaskFor:item.resourceId.toNSString()];

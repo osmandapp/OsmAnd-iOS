@@ -3439,3 +3439,12 @@
 "shared_string_instructions" = "Instruktioner";
 "shared_string_analysis" = "Analyse";
 "step_by_step" = "Sving-for-sving";
+"custom_buttons" = "Tilpassede knapper";
+"default_buttons" = "Standardknapper";
+"empty_name" = "Tomt navn";
+"custom_map_button_name_present" = "Sådan en knap findes allerede";
+"shared_string_item" = "Element";
+"wall_height" = "Murhøjde";
+"wall_height_description" = "Ved at ændre højdeværdien kan du løfte sporets øverste linje op over jordoverfladen.";
+"add_button" = "Tilføj knap";
+"select_items" = "Vælg elementer";

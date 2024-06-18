@@ -713,8 +713,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             
             onNavbarCancelButtonClicked()
             if !allTracks.isEmpty {
-                let uploadVC = OAOsmUploadGPXViewConroller(gpxItems: allTracks)
-                show(uploadVC)
+                show(OAOsmUploadGPXViewConroller(gpxItems: allTracks))
             }
         }
     }
@@ -731,7 +730,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             let message = localizedString("delete_tracks_bottom_sheet_description_regular_part") + tracksMessagePart + "?"
             let alert = UIAlertController(title: localizedString("delete_tracks_bottom_sheet_title"), message: message, preferredStyle: .actionSheet)
             alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
-                guard let self = self else { return }
+                guard let self else { return }
                 for folderName in self.selectedFolders {
                     self.deleteFolder(folderName)
                 }
@@ -762,6 +761,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         tableView.allowsMultipleSelectionDuringEditing = false
         updateData()
         setupNavbar()
+        setupSearchController()
         tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
         navigationController?.setToolbarHidden(true, animated: true)
         tabBarController?.tabBar.isHidden = false
@@ -1321,7 +1321,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             if let cell {
                 cell.selectionStyle = tableView.isEditing ? .default : .none
                 cell.selectedBackgroundView = UIView()
-                cell.selectedBackgroundView?.backgroundColor = UIColor.groupBg
+                cell.selectedBackgroundView?.backgroundColor = .groupBg
                 cell.titleLabel.textColor = UIColor.textColorPrimary
                 cell.descriptionLabel.textColor = UIColor.textColorSecondary
                 cell.rightIconView.tintColor = UIColor.iconColorDefault

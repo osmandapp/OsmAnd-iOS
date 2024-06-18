@@ -3419,3 +3419,8 @@
 "shared_string_instructions" = "Instrucțiuni";
 "shared_string_analysis" = "Analiză";
 "step_by_step" = "Pas cu pas";
+"wall_height" = "Înălțimea peretelui";
+"add_button" = "Adăugați butonul";
+"empty_name" = "Nume gol";
+"custom_map_button_name_present" = "Acest buton este deja prezent";
+"wall_height_description" = "Prin modificarea valorii înălțimii, puteți ridica linia superioară a liniei de cale ferată deasupra nivelului solului.";

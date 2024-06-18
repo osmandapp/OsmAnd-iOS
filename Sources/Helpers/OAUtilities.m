@@ -32,17 +32,20 @@
 
 #import "OsmAnd_Maps-Swift.h"
 
-#define kBlurViewTag -999
-#define kSpinnerViewTag -998
+static NSInteger const kBlurViewTag = -999;
+static NSInteger const kSpinnerViewTag = -998;
 
-#define kNavItemStackViewWithSubtitleTag -997
-#define kTitleInNavItemStackViewTag -996
-#define kSubtitleInNavItemStackViewTag -995
+static NSInteger const kNavItemStackViewWithSubtitleTag = -997;
+static NSInteger const kTitleInNavItemStackViewTag = -996;
+static NSInteger const kSubtitleInNavItemStackViewTag = -995;
 
-#define kNavItemStackViewWithCenterIconTag -994
-#define kCenterIconInNavItemStackViewTag -993
+static NSInteger const kNavItemStackViewWithCenterIconTag = -994;
+static NSInteger const kCenterIconInNavItemStackViewTag = -993;
 
-#define kShadowViewTag -992
+static NSInteger const kShadowViewTag = -992;
+
+static NSInteger const kQuickActionButtonTag = -991;
+static NSInteger const kMap3DModeButtonTag = -990;
 
 @implementation UIBezierPath (util)
 
@@ -1216,6 +1219,16 @@ static NSUnitCloud * _percent;
 @implementation OAUtilities
 
 static NSMutableArray<NSString *> * _accessingSecurityScopedResource;
+
++ (NSInteger)getQuickActionButtonTag
+{
+    return kQuickActionButtonTag;
+}
+
++ (NSInteger)getMap3DModeButtonTag
+{
+    return kMap3DModeButtonTag;
+}
 
 + (BOOL) getAccessToFile:(NSString *)filePath
 {

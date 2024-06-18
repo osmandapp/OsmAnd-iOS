@@ -298,7 +298,7 @@
     _mapLayersConfiguration = [[OAMapLayersConfiguration alloc] init];
     // Profile settings
     _lastMapSourceProfile = [OACommonMapSource withKey:kLastMapSourceKey defValue:[[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                                                                                             andVariant:@"type_default"]];
+                                                                                                             andVariant:@"LAYER_OSM_VECTOR"]];
     _overlayMapSourceProfile = [OACommonMapSource withKey:kOverlaySourceKey defValue:nil];
     _underlayMapSourceProfile = [OACommonMapSource withKey:kUnderlaySourceKey defValue:nil];
     _lastOverlayMapSourceProfile = [OACommonMapSource withKey:kLastOverlayKey defValue:nil];
@@ -1840,7 +1840,7 @@
 + (OAMapSource *) defaultMapSource
 {
     return [[OAMapSource alloc] initWithResource:@"default.render.xml"
-                                      andVariant:@"type_default"];
+                                      andVariant:@"LAYER_OSM_VECTOR"];
 }
 
 #pragma mark - NSCoding

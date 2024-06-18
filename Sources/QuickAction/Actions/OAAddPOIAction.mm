@@ -10,12 +10,9 @@
 #import "OAPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OARootViewController.h"
-#import "OAMapRendererView.h"
 #import "OANode.h"
 #import "OAEditPOIData.h"
 #import "OAOsmEditingViewController.h"
-#import "OALinks.h"
-#import "OAQuickActionType.h"
 #import "OAButtonTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OASwitchTableViewCell.h"
@@ -23,14 +20,12 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#include <OsmAndCore/Utilities.h>
+static NSString * const kTag = @"key_tag";
+static NSString * const kCategory = @"key_category";
 
-#define KEY_TAG @"key_tag"
-#define KEY_DIALOG @"dialog"
-#define KEY_CATEGORY @"key_category"
-
-static OAQuickActionType *ACTION_TYPE;
+static QuickActionType *ACTION_TYPE;
 
 @implementation OAAddPOIAction
 
@@ -39,18 +34,28 @@ static OAQuickActionType *ACTION_TYPE;
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    ACTION_TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsAddPoiActionId
+                                                  stringId:@"osmpoi.add"
+                                                        cl:self.class]
+                     name:OALocalizedString(@"quick_action_add_poi")]
+                    iconName:@"ic_action_create_poi"]
+                   category:QuickActionTypeCategoryCreateCategory];
+}
+
 - (void) execute
 {
     OAOsmEditingPlugin *plugin = (OAOsmEditingPlugin *) [OAPluginsHelper getPlugin:OAOsmEditingPlugin.class];
     
     if (plugin)
     {
-        const auto latLon = OsmAnd::Utilities::convert31ToLatLon([OARootViewController instance].mapPanel.mapViewController.mapView.target31);
-        OANode *node = [[OANode alloc] initWithId:-1 latitude:latLon.latitude longitude:latLon.longitude];
+        CLLocation *latLon = [self getMapLocation];
+        OANode *node = [[OANode alloc] initWithId:-1 latitude:latLon.coordinate.latitude longitude:latLon.coordinate.longitude];
         [node replaceTags:[self getTagsFromParams]];
         
         OAEditPOIData *data = [[OAEditPOIData alloc] initWithEntity:node];
-        if ([[self getParams][KEY_DIALOG] boolValue])
+        if ([[self getParams][kDialog] boolValue])
         {
             OAEntity *entity = data.getEntity;
             OAOsmEditingViewController *editingScreen = [[OAOsmEditingViewController alloc] initWithEntity:entity];
@@ -101,7 +106,7 @@ static OAQuickActionType *ACTION_TYPE;
 - (OrderedDictionary<NSString *, NSString *> *) getTagsFromParams
 {
     OrderedDictionary<NSString *, NSString *> *actions = nil;
-    NSString *json = [self getParams][KEY_TAG];
+    NSString *json = [self getParams][kTag];
     if (json)
         actions = [NSJSONSerialization JSONObjectWithData:[json dataUsingEncoding:NSUTF8StringEncoding] options:0 error:nil];
     
@@ -113,9 +118,9 @@ static OAQuickActionType *ACTION_TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -124,7 +129,7 @@ static OAQuickActionType *ACTION_TYPE;
     [data setObject:@[@{
                           @"type" : [OAValueTableViewCell getCellIdentifier],
                           @"title" : OALocalizedString(@"poi_dialog_poi_type"),
-                          @"key" : KEY_CATEGORY,
+                          @"key" : kCategory,
                           @"value" : self.getTagsFromParams[POI_TYPE_TAG] ? self.getTagsFromParams[POI_TYPE_TAG] : OALocalizedString(@"shared_string_select"),
                           },
                       @{
@@ -169,8 +174,8 @@ static OAQuickActionType *ACTION_TYPE;
         for (NSUInteger i = 0; i < arr.count; i++)
         {
             NSDictionary *item = arr[i];
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:@"OATextInputFloatingCellWithIcon"] && item[@"img"])
             {
                 if (i + 1 < arr.count - 1)
@@ -183,7 +188,7 @@ static OAQuickActionType *ACTION_TYPE;
                         [tagValues setObject:val forKey:tag];
                 }
             }
-            else if ([item[@"key"] isEqualToString:KEY_CATEGORY])
+            else if ([item[@"key"] isEqualToString:kCategory])
             {
                 [tagValues setObject:item[@"value"] forKey:POI_TYPE_TAG];
             }
@@ -193,16 +198,13 @@ static OAQuickActionType *ACTION_TYPE;
                                                        options:0
                                                          error:nil];
     NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    [params setObject:jsonString forKey:KEY_TAG];
+    [params setObject:jsonString forKey:kTag];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return tagValues.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!ACTION_TYPE)
-        ACTION_TYPE = [[OAQuickActionType alloc] initWithIdentifier:13 stringId:@"osmpoi.add" class:self.class name:OALocalizedString(@"quick_action_add_poi") category:CREATE_CATEGORY iconName:@"ic_action_create_poi" secondaryIconName:nil];
-       
     return ACTION_TYPE;
 }
 

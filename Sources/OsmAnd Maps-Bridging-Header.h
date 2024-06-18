@@ -20,8 +20,7 @@
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
-#import "OAQuickActionRegistry.h"
-#import "OADownloadingCellHelper.h"
+#import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAGpxInfo.h"
@@ -129,6 +128,8 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAPurchasesViewController.h"
 #import "OAMainSettingsViewController.h"
+#import "OADownloadMultipleResourceViewController.h"
+#import "OAPluginPopupViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -169,6 +170,7 @@
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "FFCircularProgressView.h"
+#import "FFCircularProgressView+isSpinning.h"
 
 // Enums
 #import "OAGPXDataSetType.h"
@@ -189,3 +191,18 @@
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
 #import "OANetworkUtilities.h"
+
+// Quick actions
+#import "OAQuickAction.h"
+#import "OASwitchableAction.h"
+#import "OAQuickActionsSettingsItem.h"
+#import "OAShowHideTransportLinesAction.h"
+#import "OAShowHideLocalOSMChanges.h"
+#import "OANavDirectionsFromAction.h"
+#import "OAShowHideTemperatureAction.h"
+#import "OAShowHideAirPressureAction.h"
+#import "OAShowHideWindAction.h"
+#import "OAShowHideCloudAction.h"
+#import "OAShowHidePrecipitationAction.h"
+#import "OAMapStyleAction.h"
+#import "OAUnsupportedAction.h"

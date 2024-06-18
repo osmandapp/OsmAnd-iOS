@@ -11,8 +11,9 @@
 #import "OsmAndAppImpl.h"
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
+#import "OARootViewController.h"
 
-@implementation OAResourceSwiftItem : NSObject
+@implementation OAResourceSwiftItem
 
 - (instancetype) initWithItem:(id)objcResourceItem
 {
@@ -36,6 +37,56 @@
     return [OAResourceType resourceTypeLocalized:res.resourceType];
 }
 
+- (EOAOAResourceSwiftItemType) resourceType
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    switch (res.resourceType)
+    {
+        case OsmAndResourceType::Unknown:
+            return EOAOAResourceSwiftItemTypeUnknown;
+        case OsmAndResourceType::MapRegion:
+            return EOAOAResourceSwiftItemTypeMapRegion;
+        case OsmAndResourceType::RoadMapRegion:
+            return EOAOAResourceSwiftItemTypeRoadMapRegion;
+        case OsmAndResourceType::SrtmMapRegion:
+            return EOAOAResourceSwiftItemTypeSrtmMapRegion;
+        case OsmAndResourceType::DepthContourRegion:
+            return EOAOAResourceSwiftItemTypeDepthContourRegion;
+        case OsmAndResourceType::DepthMapRegion:
+            return EOAOAResourceSwiftItemTypeDepthMapRegion;
+        case OsmAndResourceType::WikiMapRegion:
+            return EOAOAResourceSwiftItemTypeWikiMapRegion;
+        case OsmAndResourceType::HillshadeRegion:
+            return EOAOAResourceSwiftItemTypeHillshadeRegion;
+        case OsmAndResourceType::SlopeRegion:
+            return EOAOAResourceSwiftItemTypeSlopeRegion;
+        case OsmAndResourceType::HeightmapRegionLegacy:
+            return EOAOAResourceSwiftItemTypeHeightmapRegionLegacy;
+        case OsmAndResourceType::GeoTiffRegion:
+            return EOAOAResourceSwiftItemTypeGeoTiffRegion;
+        case OsmAndResourceType::LiveUpdateRegion:
+            return EOAOAResourceSwiftItemTypeLiveUpdateRegion;
+        case OsmAndResourceType::VoicePack:
+            return EOAOAResourceSwiftItemTypeVoicePack;
+        case OsmAndResourceType::MapStyle:
+            return EOAOAResourceSwiftItemTypeMapStyle;
+        case OsmAndResourceType::MapStylesPresets:
+            return EOAOAResourceSwiftItemTypeMapStylesPresets;
+        case OsmAndResourceType::OnlineTileSources:
+            return EOAOAResourceSwiftItemTypeOnlineTileSources;
+        case OsmAndResourceType::GpxFile:
+            return EOAOAResourceSwiftItemTypeGpxFile;
+        case OsmAndResourceType::SqliteFile:
+            return EOAOAResourceSwiftItemTypeSqliteFile;
+        case OsmAndResourceType::WeatherForecast:
+            return EOAOAResourceSwiftItemTypeWeatherForecast;
+        case OsmAndResourceType::Travel:
+            return EOAOAResourceSwiftItemTypeTravel;
+        default:
+            return EOAOAResourceSwiftItemTypeUnknown;
+    }
+}
+
 - (NSString *) formatedSize
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
@@ -54,14 +105,77 @@
     return [OAResourceType getIcon:res.resourceType templated:YES];
 }
 
+- (NSString *) iconName
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return [OAResourceType getIconName:res.resourceType];
+}
+
 - (BOOL) isInstalled
 {
     OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
     return [res isInstalled];
 }
 
+- (NSString *) resourceId
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.resourceId.toNSString();
+}
+
+- (id<OADownloadTask>) downloadTask
+{
+    OAResourceItem *res = (OAResourceItem *)self.objcResourceItem;
+    return res.downloadTask;
+}
+
+- (void) refreshDownloadTask
+{
+    OARepositoryResourceItem *res = (OARepositoryResourceItem *)self.objcResourceItem;
+    res.downloadTask = [self getDownloadTaskFor:[self resourceId]];
+}
+
+- (id<OADownloadTask>) getDownloadTaskFor:(NSString*)resourceId
+{
+    return [[OsmAndApp.instance.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
+}
+
 @end
 
+
+@implementation OAMultipleResourceSwiftItem
+
+- (NSArray<OAResourceSwiftItem *> *) items
+{
+    NSMutableArray<OAResourceSwiftItem *> *items = [NSMutableArray array];
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    for (OAResourceItem *item in res.items)
+    {
+        [items addObject:[[OAResourceSwiftItem alloc] initWithItem:item]];
+    }
+    return items;
+}
+
+- (BOOL)allDownloaded
+{
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    return [res allDownloaded];
+}
+
+- (OAResourceSwiftItem *) getActiveItem:(BOOL)useDefautValue
+{
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    OAResourceItem *activeItem = [res getActiveItem:useDefautValue];
+    return [[OAResourceSwiftItem alloc] initWithItem:activeItem];
+}
+
+- (NSString *) getResourceId
+{
+    OAMultipleResourceItem *res = (OAMultipleResourceItem *)self.objcResourceItem;
+    return [res getResourceId];
+}
+
+@end
 
 
 @implementation OAResourcesUISwiftHelper
@@ -159,6 +273,95 @@
 
         return item;
     }
+}
+
++ (UIBezierPath *) tickPath:(FFCircularProgressView *)progressView
+{
+    return [OAResourcesUIHelper tickPath:progressView];
+}
+
++ (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+}
+
++ (void)offerDownloadAndInstallOf:(OAResourceSwiftItem *)item
+                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                    onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+                completionHandler:(void(^)(UIAlertController *))completionHandler
+{
+    OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
+    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler];
+}
+
++ (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler
+{
+    OAResourceItem *res = (OAResourceItem *)item.objcResourceItem;
+    [OAResourcesUIHelper offerCancelDownloadOf:res onTaskStop:onTaskStop completionHandler:completionHandler];
+}
+
++ (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceSwiftItem *)multipleItem
+                            selectedItems:(NSArray<OAResourceSwiftItem *> *)selectedItems
+                            onTaskCreated:(OADownloadTaskCallback)onTaskCreated
+                            onTaskResumed:(OADownloadTaskCallback)onTaskResumed
+{
+    NSMutableArray<OAResourceItem *> *items = [NSMutableArray array];
+    for (OAResourceSwiftItem *item in selectedItems)
+    {
+        [items addObject:item.objcResourceItem];
+    }
+    [OAResourcesUIHelper offerMultipleDownloadAndInstallOf:multipleItem.objcResourceItem selectedItems:items onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed];
+}
+
++ (void)deleteResourcesOf:(NSArray<OAResourceSwiftItem *> *)items progressHUD:(MBProgressHUD *)progressHUD executeAfterSuccess:(dispatch_block_t)block
+{
+    NSMutableArray<OALocalResourceItem *> *itemsToDelete = [NSMutableArray array];
+    for (OAResourceSwiftItem *item in items)
+    {
+        [itemsToDelete addObject:(OALocalResourceItem *)item.objcResourceItem];
+    }
+    [OAResourcesUIHelper deleteResourcesOf:itemsToDelete progressHUD:progressHUD executeAfterSuccess:block];
+}
+
++ (void)checkAndDeleteOtherSRTMResources:(NSArray<OAResourceSwiftItem *> *)itemsToCheck
+{
+    NSMutableArray<OALocalResourceItem *> *itemsToRemove = [NSMutableArray new];
+    OAResourceItem *prevItem;
+    for (OAResourceSwiftItem *item in itemsToCheck)
+    {
+        OAResourceItem *itemToCheck = item.objcResourceItem;
+        QString srtmMapName = itemToCheck.resourceId.remove(QLatin1String([OAResourceType isSRTMF:itemToCheck] ? ".srtmf.obf" : ".srtm.obf"));
+        if (prevItem && prevItem.resourceId.startsWith(srtmMapName))
+        {
+            BOOL prevItemInstalled = OsmAndApp.instance.resourcesManager->isResourceInstalled(prevItem.resourceId);
+            if (prevItemInstalled && prevItem.resourceId.compare(itemToCheck.resourceId) != 0)
+            {
+                [itemsToRemove addObject:(OALocalResourceItem *) prevItem];
+            }
+            else
+            {
+                BOOL itemToCheckInstalled = OsmAndApp.instance.resourcesManager->isResourceInstalled(itemToCheck.resourceId);
+                if (itemToCheckInstalled && itemToCheck.resourceId.compare(prevItem.resourceId) != 0)
+                    [itemsToRemove addObject:(OALocalResourceItem *) itemToCheck];
+            }
+        }
+        prevItem = itemToCheck;
+    }
+    [self offerSilentDeleteResourcesOf:itemsToRemove];
+}
+
++ (void)offerSilentDeleteResourcesOf:(NSArray<OALocalResourceItem *> *)items
+{
+    [OAResourcesUIHelper deleteResourcesOf:items progressHUD:nil executeAfterSuccess:nil];
+}
+
++ (void) onDownldedResourceInstalled
+{
+    [[OARootViewController instance].mapPanel.mapViewController updatePoiLayer];
+    [OAManageResourcesViewController prepareData];
 }
 
 @end

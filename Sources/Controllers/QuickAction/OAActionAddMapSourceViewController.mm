@@ -106,7 +106,7 @@
 {
     switch (_type) {
         case EOAMapSourceTypePrimary:
-            return @"type_default";
+            return @"LAYER_OSM_VECTOR";
         case EOAMapSourceTypeOverlay:
             return @"no_overlay";
         case EOAMapSourceTypeUnderlay:

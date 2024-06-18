@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, OAQuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString;
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -56,7 +56,7 @@
 - (void) install:(id<OAPluginInstallListener> _Nullable)callback;
 
 - (NSString *) getHelpFileName;
-- (NSArray<OAQuickActionType *> *) getQuickActionTypes;
+- (NSArray<QuickActionType *> *) getQuickActionTypes;
 
 - (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
 - (NSArray<OAPOIUIFilter *> *)getCustomPoiFilters;

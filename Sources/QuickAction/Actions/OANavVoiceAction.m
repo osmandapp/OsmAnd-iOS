@@ -10,28 +10,40 @@
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OAVoiceRouter.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OANavVoiceAction
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavVoiceActionId
+                                            stringId:@"nav.voice"
+                                                  cl:self.class]
+               name:OALocalizedString(@"quick_action_navigation_voice")]
+              iconName:@"ic_custom_sound"]
+             category:QuickActionTypeCategoryNavigation]
+            nonEditable];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    BOOL voice = [settings.voiceMute get];
-    
+    BOOL voice = [_settings.voiceMute get];
     [[OARoutingHelper sharedInstance].getVoiceRouter setMute:!voice];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return ![[OAAppSettings sharedManager].voiceMute get];
+    return ![_settings.voiceMute get];
 }
 
 - (NSString *)getActionText
@@ -44,11 +56,8 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"quick_action_navigation_voice_on") : OALocalizedString(@"quick_action_navigation_voice_off");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:11 stringId:@"nav.voice" class:self.class name:OALocalizedString(@"quick_action_navigation_voice") category:NAVIGATION iconName:@"ic_custom_sound" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

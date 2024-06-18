@@ -22,13 +22,14 @@
 #import "OAWeatherAutoUpdateSettingsViewController.h"
 #import "GeneratedAssetSymbols.h"
 
-@interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate, OAWeatherAutoUpdateSettingsViewControllerDelegate>
+@interface OAWeatherForecastDetailsViewController  () <OAWeatherCacheSettingsDelegate, OAWeatherFrequencySettingsDelegate, OAWeatherAutoUpdateSettingsViewControllerDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
 @implementation OAWeatherForecastDetailsViewController
 {
     OAWeatherHelper *_weatherHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAWorldRegion *_region;
     NSMutableArray<NSMutableArray<NSMutableDictionary *> *> *_data;
     NSMutableDictionary<NSNumber *, NSString *> *_headers;
@@ -68,12 +69,6 @@
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(onWeatherSizeCalculated:withKey:andValue:)
                                                  andObserve:[OAWeatherHelper sharedInstance].weatherSizeCalculatedObserver]];
-    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
-                                                withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
-                                                 andObserve:[OsmAndApp instance].downloadsManager.progressCompletedObservable]];
-    [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
-                                                withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
-                                                 andObserve:[OsmAndApp instance].downloadsManager.completedObservable]];
 }
 
 #pragma mark - UIViewController
@@ -86,6 +81,7 @@
 
     _progressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     [self.view addSubview:_progressHUD];
+    [self setupDownloadingCellHelper];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -93,14 +89,37 @@
     [super viewWillAppear:animated];
     [self generateData];
     [self.tableView reloadData];
+    if (_downloadingCellResourceHelper)
+    {
+        [_downloadingCellResourceHelper refreshCellSpinners];
+    }
     if (self.delegate)
         [self.delegate onUpdateForecast];
+    [self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
     [_weatherHelper calculateCacheSize:_region onComplete:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+    [super viewDidDisappear:animated];
+    if (_downloadingCellResourceHelper)
+        [_downloadingCellResourceHelper cleanCellCache];
+}
+
+- (void) setupDownloadingCellHelper
+{
+    __weak OAWeatherForecastDetailsViewController *weakSelf = self;
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tableView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeShowIconAlways;
+    _downloadingCellResourceHelper.isAlwaysClickable = YES;
+    _downloadingCellResourceHelper.isBoldTitleStyle = YES;
 }
 
 #pragma mark - Base UI
@@ -163,12 +182,9 @@
 
     NSMutableDictionary *updateNowData = [NSMutableDictionary dictionary];
     updateNowData[@"key"] = @"update_now_cell";
-    updateNowData[@"type"] = [OARightIconTableViewCell getCellIdentifier];
+    updateNowData[@"type"] = @"update_now_cell";
     updateNowData[@"title"] = OALocalizedString(@"update_now");
-    updateNowData[@"title_color"] = [UIColor colorNamed:ACColorNameTextColorActive];
-    updateNowData[@"title_font"] = [UIFont scaledSystemFontOfSize:17. weight:UIFontWeightMedium];
-    updateNowData[@"right_icon"] = @"ic_custom_download";
-    updateNowData[@"right_icon_color"] = [UIColor colorNamed:ACColorNameIconColorActive];
+    updateNowData[@"resourceId"] = [_region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"];
     [infoCells addObject:updateNowData];
     _updateNowIndexPath = [NSIndexPath indexPathForRow:infoCells.count - 1 inSection:data.count - 1];
 
@@ -266,6 +282,18 @@
         }
         return cell;
     }
+    else if ([item[@"type"] isEqualToString:@"update_now_cell"])
+    {
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:_localResourceItem];
+        OARightIconTableViewCell *cell = [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
+        if (cell)
+        {
+            cell.titleLabel.text = item[@"title"];
+            [cell leftIconVisibility:NO];
+            [cell descriptionVisibility:NO];
+        }
+        return cell;
+    }
     else if ([item[@"type"] isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
         OARightIconTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
@@ -283,22 +311,9 @@
             cell.titleLabel.font = [item.allKeys containsObject:@"title_font"] ? item[@"title_font"] : [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
 
             BOOL hasRightIcon = [item.allKeys containsObject:@"right_icon"];
-            if (([item[@"key"] isEqualToString:@"update_now_cell"] && _localResourceItem.downloadTask != nil && _localResourceItem.downloadTask.state == OADownloadTaskStateRunning))
-            {
-                FFCircularProgressView *progressView = [[FFCircularProgressView alloc] initWithFrame:CGRectMake(0., 0., 25., 25.)];
-                progressView.iconView = [[UIView alloc] init];
-                progressView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
-
-                cell.accessoryView = progressView;
-                cell.rightIconView.image = nil;
-                hasRightIcon = NO;
-            }
-            else
-            {
-                cell.accessoryView = nil;
-                cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
-                cell.rightIconView.tintColor = item[@"right_icon_color"];
-            }
+            cell.accessoryView = nil;
+            cell.rightIconView.image = hasRightIcon ? [UIImage templateImageNamed:item[@"right_icon"]] : nil;
+            cell.rightIconView.tintColor = item[@"right_icon_color"];
             [cell rightIconVisibility:hasRightIcon];
         }
         return cell;
@@ -372,15 +387,10 @@
     }
     else if ([item[@"key"] isEqualToString:@"update_now_cell"])
     {
-        if (_localResourceItem.downloadTask != nil && _localResourceItem.downloadTask.state == OADownloadTaskStateRunning)
-        {
+        NSString *resourceId = item[@"resourceId"];
+        if ([_downloadingCellResourceHelper isDownloading:resourceId])
             [_weatherHelper calculateCacheSize:_region onComplete:nil];
-            [_localResourceItem.downloadTask stop];
-        }
-        else
-        {
-            [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)_localResourceItem onTaskCreated:nil onTaskResumed:nil];
-        }
+        [_downloadingCellResourceHelper onCellClicked:resourceId];
     }
     else if ([item[@"key"] isEqualToString:@"remove_forecast_cell"])
     {
@@ -439,6 +449,7 @@
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1. * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
         if (self.delegate)
             [self.delegate onUpdateForecast];
@@ -456,75 +467,15 @@
     return state != OADownloadTaskStateRunning && state != OADownloadTaskStateFinished;
 }
 
-- (void)onDownloadTaskProgressChanged:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownldedResourceInstalled
 {
-    id<OADownloadTask> task = key;
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"] || ![task.key containsString:_region.downloadsIdPrefix])
-        return;
-
-    dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
-            return;
-        
-        if (_updateNowIndexPath && _sizeIndexPath)
-        {
-            if ([self isUndefinedDownloadState])
-                return;
-            
-            NSIndexPath *indexPath = _updateNowIndexPath;
-            UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            if (!cell.accessoryView)
-            {
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
-                cell = [self.tableView cellForRowAtIndexPath:indexPath];
-            }
-            FFCircularProgressView *progressView = (FFCircularProgressView *) cell.accessoryView;
-            if (![progressView isKindOfClass: [FFCircularProgressView class]])
-            {
-                return;
-            }
-            float progressCompleted = task.progressCompleted;
-            if (progressCompleted >= 0.001f && task.state == OADownloadTaskStateRunning)
-            {
-                progressView.iconPath = nil;
-                if (progressView.isSpinning)
-                    [progressView stopSpinProgressBackgroundLayer];
-                progressView.progress = progressCompleted - 0.001;
-            }
-            else if (task.state == OADownloadTaskStateFinished)
-            {
-                progressView.iconPath = [OAResourcesUIHelper tickPath:progressView];
-                progressView.progress = .0f;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [self.tableView reloadRowsAtIndexPaths:@[indexPath]
-                                      withRowAnimation:UITableViewRowAnimationAutomatic];
-            }
-            else
-            {
-                progressView.iconPath = [UIBezierPath bezierPath];
-                progressView.progress = .0f;
-                if (!progressView.isSpinning)
-                    [progressView startSpinProgressBackgroundLayer];
-                [progressView setNeedsDisplay];
-            }
-        }
-    });
-}
-
-- (void)onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
-{
-    id<OADownloadTask> task = key;
-    
-    // Skip all downloads that are not resources
-    if (![task.key hasPrefix:@"resource:"] || ![task.key containsString:_region.downloadsIdPrefix])
-        return;
-
     dispatch_async(dispatch_get_main_queue(), ^{
         if (!self.isViewLoaded)
             return;
         [self generateData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tableView reloadData];
         if (self.delegate)
             [self.delegate onUpdateForecast];
@@ -545,6 +496,7 @@
 - (void)onAutoUpdateSelected
 {
     [self generateData];
+    [_downloadingCellResourceHelper cleanCellCache];
     [self.tableView reloadData];
 }
 

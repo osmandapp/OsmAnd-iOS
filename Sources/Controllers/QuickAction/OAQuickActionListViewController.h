@@ -8,11 +8,14 @@
 
 #import "OABaseButtonsViewController.h"
 
+@class QuickActionButtonState;
+
 @protocol OAWidgetStateDelegate;
 
 @interface OAQuickActionListViewController : OABaseButtonsViewController
 
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState;
+
 @property (nonatomic, weak) id<OAWidgetStateDelegate> delegate;
-@property (nonatomic, copy, nullable) void (^quickActionUpdateCallback)(void);
 
 @end

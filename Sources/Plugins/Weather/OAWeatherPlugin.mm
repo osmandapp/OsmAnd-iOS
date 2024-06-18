@@ -150,4 +150,9 @@
     return [NSString stringWithFormat:NSLocalizedString(@"weather_plugin_description", nil), k_weather_global_forecast_system];
 }
 
+- (NSArray *)getQuickActionTypes
+{
+    return @[OAShowHideTemperatureAction.TYPE, OAShowHideWindAction.TYPE, OAShowHideAirPressureAction.TYPE, OAShowHidePrecipitationAction.TYPE, OAShowHideCloudAction.TYPE];
+}
+
 @end

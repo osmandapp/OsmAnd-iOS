@@ -28,7 +28,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
   
     var searchController: UISearchController!
     var imagesCacheHelper: TravelGuidesImageCacheHelper?
-    var downloadingCellHelper: OADownloadingCellHelper = OADownloadingCellHelper()
+    var downloadingCellResourceHelper: DownloadingCellResourceHelper = DownloadingCellResourceHelper()
     var dataLock: NSObject = NSObject()
     var downloadingResources: [OAResourceSwiftItem] = []
     var lastSelectedIndexPath: IndexPath?
@@ -77,6 +77,12 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         navigationItem.leftItemsSupplementBackButton = true
         navigationController?.navigationBar.topItem?.backButtonTitle = localizedString("shared_string_back")
         screenMode = .popularArticles
+        downloadingCellResourceHelper.refreshCellSpinners()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        downloadingCellResourceHelper.cleanCellCache()
     }
     
     override func registerObservers() {
@@ -113,7 +119,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             
             guard isInited  else { return }
             
-            downloadingCellHelper.fetchResourcesBlock()
+            fetchResources()
             
             if !TravelObfHelper.shared.isAnyTravelBookPresent() {
                 
@@ -269,38 +275,31 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         }
     }
     
-    func setupDownloadingCellHelper() {
-        downloadingCellHelper = OADownloadingCellHelper()
-        downloadingCellHelper.hostViewController = self
-        downloadingCellHelper.hostTableView = self.tableView
-        downloadingCellHelper.hostDataLock = dataLock
-        
-        downloadingCellHelper.fetchResourcesBlock = { [weak self] in
-            guard let self else { return }
-            if var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"]) {
-                downloadingResouces.sort(by: { a, b in
-                    a.title() < b.title()
-                })
-                self.downloadingResources = downloadingResouces
+    private func fetchResources() {
+        if var downloadingResouces = OAResourcesUISwiftHelper.getResourcesInRepositoryIds(byRegionId: "travel", resourceTypeNames: ["travel"]) {
+            downloadingResouces.sort { $0.title() < $1.title() }
+            self.downloadingResources = downloadingResouces
+        }
+    }
+    
+    private func getSwiftResourceByIndex(indexPath: IndexPath?) -> OAResourceSwiftItem? {
+        let headerCellsCountInResourcesSection = headerCellsCountInResourcesSection()
+        if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
+            let index = indexPath.row - headerCellsCountInResourcesSection
+            if downloadingResources.count > index {
+                return downloadingResources[index]
             }
         }
-        
-        downloadingCellHelper.getSwiftResourceByIndexBlock = { [weak self] (indexPath: IndexPath?) -> OAResourceSwiftItem? in
-            guard let self else { return nil }
-            let headerCellsCountInResourcesSection = self.headerCellsCountInResourcesSection()
-            if let indexPath, indexPath.row >= headerCellsCountInResourcesSection {
-                let index = indexPath.row - headerCellsCountInResourcesSection
-                if self.downloadingResources.count > index {
-                    return self.downloadingResources[index]
-                }
-            }
-            return nil
-        }
-        
-        downloadingCellHelper.getTableDataModelBlock = { [weak self] in
-            guard let self else { return nil }
-            return self.tableData
-        }
+        return nil
+    }
+    
+    private func setupDownloadingCellHelper() {
+        downloadingCellResourceHelper = DownloadingCellResourceHelper()
+        downloadingCellResourceHelper.hostViewController = self
+        downloadingCellResourceHelper.setHostTableView(tableView)
+        downloadingCellResourceHelper.rightIconStyle = .hideIconAfterDownloading
+        downloadingCellResourceHelper.isDownloadedRecolored = true
+        downloadingCellResourceHelper.stopWithAlertMessage = false
     }
     
     func headerCellsCountInResourcesSection() -> Int {
@@ -317,6 +316,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
     @objc func update() {
         DispatchQueue.main.async {
             self.generateData()
+            self.downloadingCellResourceHelper.cleanCellCache()
             self.tableView.reloadData()
         }
     }
@@ -374,8 +374,10 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         var outCell: UITableViewCell? = nil
         
         if item.cellType == "kDownloadCellKey" {
-            let resource = downloadingCellHelper.getSwiftResourceByIndexBlock(indexPath)
-            outCell = downloadingCellHelper.setupSwiftCell(resource, indexPath: indexPath)
+            if let resource = getSwiftResourceByIndex(indexPath: indexPath) {
+                outCell = downloadingCellResourceHelper.getOrCreateCell(resource.resourceId(), swiftResourceItem: resource)
+            }
+            
         } else if item.cellType == OAFilledButtonCell.getIdentifier() {
             var cell = tableView.dequeueReusableCell(withIdentifier: OAFilledButtonCell.getIdentifier()) as? OAFilledButtonCell
             if cell == nil {
@@ -573,8 +575,9 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
         let item = tableData.item(for: indexPath)
         lastSelectedIndexPath = indexPath
         if item.cellType == "kDownloadCellKey" {
-            downloadingCellHelper.onItemClicked(indexPath)
-        } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier() {
+            let resource = getSwiftResourceByIndex(indexPath: indexPath)
+            downloadingCellResourceHelper.onCellClicked(resource?.resourceId() ?? "")     
+        } else if item.cellType == ArticleTravelCell.getIdentifier() || item.cellType == GpxTravelCell.getIdentifier()  {
             if let article = item.obj(forKey: "article") as? TravelArticle {
                 let lang = item.string(forKey: "lang") ?? ""
                 openArticle(article: article, lang: lang)
@@ -642,6 +645,7 @@ final class TravelExploreViewController: OABaseNavbarViewController, TravelExplo
             guard let self else { return }
             self.isDataLoaded = true
             self.generateData()
+            self.downloadingCellResourceHelper.cleanCellCache()
             self.tableView.reloadData()
             self.view.removeSpinner()
         }

@@ -254,6 +254,9 @@ static inline UIColor * colorFromARGB(NSInteger rgbValue)
 
 @interface OAUtilities : NSObject
 
++ (NSInteger)getQuickActionButtonTag;
++ (NSInteger)getMap3DModeButtonTag;
+
 + (BOOL) getAccessToFile:(NSString *)filePath;
 + (void) denyAccessToFile:(NSString *)filePath removeFromInbox:(BOOL)remove;
 

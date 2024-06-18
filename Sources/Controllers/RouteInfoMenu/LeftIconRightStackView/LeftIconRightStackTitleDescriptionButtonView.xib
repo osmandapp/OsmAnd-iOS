@@ -31,7 +31,7 @@
                             <color key="textColor" name="textColorPrimary"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Some offline maps required for this route are missing or not up to date. Please download or update these maps." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ti9-Tx-TrR">
+                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="749" text="Some offline maps required for this route are missing or not up to date. Please download or update these maps." textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ti9-Tx-TrR">
                             <rect key="frame" x="0.0" y="26.333333333333329" width="562" height="38"/>
                             <fontDescription key="fontDescription" style="UICTFontTextStyleSubhead"/>
                             <color key="textColor" name="textColorSecondary"/>
@@ -43,7 +43,7 @@
                     </constraints>
                 </stackView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="X6v-CI-mPO">
-                    <rect key="frame" x="46" y="84.333333333333329" width="562" height="43.999999999999986"/>
+                    <rect key="frame" x="46" y="84.333333333333329" width="562" height="223.66666666666669"/>
                     <color key="backgroundColor" name="buttonBgColorTertiary"/>
                     <constraints>
                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="44" id="peI-TH-Wza"/>
@@ -68,6 +68,7 @@
                 <constraint firstItem="5aX-HE-dhd" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="BYo-08-gpy"/>
                 <constraint firstItem="X6v-CI-mPO" firstAttribute="top" secondItem="5aX-HE-dhd" secondAttribute="bottom" constant="20" id="Du2-fw-38a"/>
                 <constraint firstAttribute="trailing" secondItem="5aX-HE-dhd" secondAttribute="trailing" id="dRa-QF-GWK"/>
+                <constraint firstAttribute="bottom" secondItem="X6v-CI-mPO" secondAttribute="bottom" id="ggK-AQ-c9O"/>
                 <constraint firstItem="X6v-CI-mPO" firstAttribute="leading" secondItem="66i-cA-EEV" secondAttribute="trailing" constant="16" id="qGZ-M5-ioR"/>
                 <constraint firstItem="66i-cA-EEV" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="tr1-Yd-J84"/>
                 <constraint firstAttribute="trailing" secondItem="X6v-CI-mPO" secondAttribute="trailing" id="w3Z-AV-vBF"/>

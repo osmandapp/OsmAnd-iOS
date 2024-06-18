@@ -2640,3 +2640,16 @@
 "help_article_navigation_routing_straight_line_routing_name" = "直线路径规划（航空器）";
 "shared_string_scale" = "比例";
 "speed_limit_warning" = "速限警告";
+"when_exceeded" = "当超过时";
+"speedometer_description" = "通过 GPS 报告显示您的当前速度";
+"shared_string_speedometer" = "速度表";
+"rendering_attr_padusDisplayMode_name" = "公共用地显示模式";
+"rendering_attr_padusHideBoundaries_name" = "隐藏公共用地边界";
+"rendering_value_access_name" = "按访问类型";
+"rendering_attr_padusHideBoundaries_description" = "隐藏公共用地边界但保留区域";
+"shared_string_keywords" = "关键字";
+"shared_string_next_event" = "下个事件";
+"map_widget_sun_position_desc" = "显示距离日出或日落前的剩余时间。";
+"map_widget_sun_position" = "太阳位置";
+"rendering_attr_padusDisplayMode_description" = "按访问类型或管理者名称";
+"rendering_value_managerName_name" = "按管理者名称";

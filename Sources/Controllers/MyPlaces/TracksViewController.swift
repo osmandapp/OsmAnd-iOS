@@ -253,8 +253,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     foundedTracks.append(track)
                 }
             }
-            
-            // #warning("implement sorting in next task")  // See: https://github.com/osmandapp/OsmAnd-Issues/issues/2348
+
             foundedFolders.sort { $0.path.lastPathComponent() < $1.path.lastPathComponent() }
             foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
             
@@ -1202,7 +1201,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             return selectedFolders.contains { folderName -> Bool in
                 let folderPath = currentFolder.path.appendingPathComponent(folderName)
                 let trackPath = track.gpxFilePath.deletingLastPathComponent()
-                return trackPath.hasPrefix(folderPath) || trackPath == folderPath
+                return trackPath.hasPrefix(folderPath)
             }
         }
         

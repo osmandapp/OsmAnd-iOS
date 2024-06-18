@@ -29,7 +29,6 @@
 #import "OASRTMPlugin.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
-#import "GeneratedAssetSymbols.h"
 
 #define unitsKm OALocalizedString(@"km")
 #define unitsM OALocalizedString(@"m")

@@ -3437,3 +3437,8 @@
 "shared_string_instructions" = "Instrukcije";
 "shared_string_analysis" = "Analiza";
 "step_by_step" = "Skretanje-po-skretanje";
+"custom_buttons" = "Prilagođena dugmad";
+"default_buttons" = "Podrazumevana dugmad";
+"add_button" = "Dodaj dugme";
+"custom_map_button_name_present" = "Takavo dugme već postoji";
+"empty_name" = "Prazno ime";

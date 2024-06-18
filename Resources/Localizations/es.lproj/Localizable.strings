@@ -3438,3 +3438,8 @@
 "shared_string_analysis" = "Análisis";
 "shared_string_instructions" = "Instrucciones";
 "step_by_step" = "Navegación paso a paso";
+"default_buttons" = "Botones por defecto";
+"empty_name" = "Nombre vacío";
+"custom_map_button_name_present" = "Este botón ya existe";
+"custom_buttons" = "Botones personalizados";
+"add_button" = "Añadir un botón";

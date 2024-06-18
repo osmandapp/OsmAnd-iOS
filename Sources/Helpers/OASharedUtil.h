@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OASharedUtil : NSObject
 
-+ (void)initSharedLib;
++ (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath;
 
 @end
 

@@ -7,13 +7,17 @@
 //
 
 #import "OASharedUtil.h"
+#import "OsmAndApp.h"
+#import "OAXmlFactory.h"
 #import <OsmAndShared/OsmAndShared.h>
 
 @implementation OASharedUtil
 
-+ (void)initSharedLib
++ (void)initSharedLib:(NSString *)documentsPath gpxPath:(NSString *)gpxPath
 {
-    [OASPlatformUtil.shared initializeAppDir:@"" gpxDir:@"" xmlPullParserApi:nil xmlSerializerApi:nil];
+    [OASPlatformUtil.shared initializeAppDir:documentsPath
+                                      gpxDir:gpxPath
+                               xmlFactoryApi:[[OAXmlFactory alloc] init]];
 }
 
 @end

@@ -200,7 +200,7 @@
         NSDictionary *defResetRouting = [NSDictionary dictionaryWithObject:@"NO" forKey:@"reset_routing"];
         [defaults registerDefaults:defResetRouting];
 
-        [OASharedUtil initSharedLib];
+        [OASharedUtil initSharedLib:_documentsPath gpxPath:_gpxPath];
     }
     return self;
 }

@@ -21,6 +21,8 @@
 		05DACD762C1B0E9A0023FAD9 /* OAXmlStreamReader.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */; };
 		05DACD792C1C67470023FAD9 /* OAXmlStreamWriter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD782C1C67470023FAD9 /* OAXmlStreamWriter.mm */; };
 		05DACD7F2C1CAF470023FAD9 /* OASharedUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */; };
+		05DACD822C1EC4340023FAD9 /* OAXmlFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */; };
+		05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */; };
 		0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */; };
 		0A0EABFD26E618FB0044E82C /* ic_custom_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */; };
 		0A0EABFE26E618FB0044E82C /* ic_custom_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */; };
@@ -3376,6 +3378,9 @@
 		05DACD782C1C67470023FAD9 /* OAXmlStreamWriter.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAXmlStreamWriter.mm; sourceTree = "<group>"; };
 		05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASharedUtil.h; sourceTree = "<group>"; };
 		05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OASharedUtil.m; sourceTree = "<group>"; };
+		05DACD802C1EC4340023FAD9 /* OAXmlFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAXmlFactory.h; sourceTree = "<group>"; };
+		05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAXmlFactory.m; sourceTree = "<group>"; };
+		05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedUtil.swift; sourceTree = "<group>"; };
 		0A0C6EBE26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAGpxStatBlockCollectionViewCell.xib; sourceTree = "<group>"; };
 		0A0EABFB26E618FB0044E82C /* ic_custom_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@2x.png"; path = "Resources/Icons/ic_custom_info@2x.png"; sourceTree = "<group>"; };
 		0A0EABFC26E618FB0044E82C /* ic_custom_info@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_info@3x.png"; path = "Resources/Icons/ic_custom_info@3x.png"; sourceTree = "<group>"; };
@@ -11331,6 +11336,8 @@
 				05DACD752C1B0E9A0023FAD9 /* OAXmlStreamReader.mm */,
 				05DACD772C1C67470023FAD9 /* OAXmlStreamWriter.h */,
 				05DACD782C1C67470023FAD9 /* OAXmlStreamWriter.mm */,
+				05DACD802C1EC4340023FAD9 /* OAXmlFactory.h */,
+				05DACD812C1EC4340023FAD9 /* OAXmlFactory.m */,
 			);
 			path = GPX;
 			sourceTree = "<group>";
@@ -13365,6 +13372,7 @@
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
 				05DACD7D2C1CAF470023FAD9 /* OASharedUtil.h */,
 				05DACD7E2C1CAF470023FAD9 /* OASharedUtil.m */,
+				05DACD832C1F1CE20023FAD9 /* SharedUtil.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -16432,7 +16440,7 @@
 		};
 		DA8713222994F6760087BC7F /* Download regions.ocbf */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 8;
+			buildActionMask = 12;
 			files = (
 			);
 			inputFileListPaths = (
@@ -16444,7 +16452,7 @@
 			);
 			outputPaths = (
 			);
-			runOnlyForDeploymentPostprocessing = 1;
+			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "# Download the new version each build (does not fail the buld if there's no Internet)\ncurl -o ${SRCROOT}/Resources/Shipped/regions.ocbf https://creator.osmand.net/basemap/regions.ocbf ||:\n";
 		};
@@ -16780,6 +16788,7 @@
 				DA5A83B826C563A800F274C7 /* OAQuickActionsSheetView.m in Sources */,
 				DA5A837526C563A800F274C7 /* OARoutePreferencesParameters.mm in Sources */,
 				320427D62BF4D5250085DCA1 /* SpeedometerWidgetSettingsViewController.swift in Sources */,
+				05DACD842C1F1CE20023FAD9 /* SharedUtil.swift in Sources */,
 				DA5A833126C563A800F274C7 /* OASegmentSliderTableViewCell.m in Sources */,
 				DA5A818A26C563A700F274C7 /* OAMapUnderlayAction.mm in Sources */,
 				DA5A81BB26C563A700F274C7 /* OAPOIFilter.m in Sources */,
@@ -17599,6 +17608,7 @@
 				CA4ED74E88CC146ED42AE3D2 /* OARouteLineAppearanceHudViewController.mm in Sources */,
 				CA4ED710806E780B7FAB796A /* OAPreviewRouteLineInfo.mm in Sources */,
 				CA4ED153BFA207753EEE0E13 /* OAMapillaryOsmTagHelper.mm in Sources */,
+				05DACD822C1EC4340023FAD9 /* OAXmlFactory.m in Sources */,
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
 				46CBC9782B9633FB005CC244 /* AverageGlideComputer.swift in Sources */,

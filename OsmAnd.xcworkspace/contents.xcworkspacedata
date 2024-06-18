@@ -104,6 +104,37 @@
                      <Group
                         location = "group:gpx"
                         name = "gpx">
+                        <Group
+                           location = "group:primitives"
+                           name = "primitives">
+                           <FileRef
+                              location = "group:Bounds.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Metadata.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Copyright.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:WptPt.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrkSegment.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Author.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:GpxExtensions.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Track.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Route.kt">
+                           </FileRef>
+                        </Group>
                         <FileRef
                            location = "group:GpxTrackAnalysis.kt">
                         </FileRef>

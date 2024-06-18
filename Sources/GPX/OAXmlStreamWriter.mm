@@ -21,8 +21,9 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
     QXmlStreamWriter _writer;
     
     QFile _file;
+    QByteArray _data;
     QBuffer _buffer;
-    NSOutputStream *_output;
+    id<OASOutputStreamAPI> _output;
 
     NSMutableArray<NSString *> *_tags;
 }
@@ -45,17 +46,17 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
 
 - (BOOL)setFeatureName:(NSString *)name state:(BOOL)state error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setFeature(name:state:)")))
 {
-    return NO; // Not implemented
+    return YES; // Not implemented
 }
 
 - (BOOL)getFeatureName:(NSString *)name error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("getFeature(name_:)"))) __attribute__((swift_error(nonnull_error)))
 {
-    return NO; // Not implemented
+    return YES; // Not implemented
 }
 
 - (BOOL)setPropertyName:(NSString *)name value:(id _Nullable)value error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setProperty(name:value:)")))
 {
-    return NO; // Not implemented
+    return YES; // Not implemented
 }
 
 - (id _Nullable)getPropertyName:(NSString *)name error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("getProperty(name_:)"))) __attribute__((swift_error(nonnull_error)))
@@ -73,10 +74,14 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
     return YES;
 }
 
-- (BOOL)setOutputOutput:(nonnull NSOutputStream *)output error:(NSError * _Nullable __autoreleasing * _Nullable)error 
+- (BOOL)setOutputOutput:(id<OASOutputStreamAPI>)output error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setOutput(output:)")));
 {
     _output = output;
-    _buffer.open(QIODevice::ReadWrite);
+    _data.clear();
+    _buffer.setBuffer(&_data);
+    if (!_buffer.open(QIODevice::WriteOnly))
+        return NO;
+
     _writer.setDevice(&_buffer);
     return YES;
 }
@@ -95,7 +100,7 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
 
 - (BOOL)setPrefixPrefix:(NSString *)prefix namespace:(NSString *)namespace_ error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setPrefix(prefix:namespace:)")))
 {
-    return NO; // Not implemented
+    return YES; // Not implemented
 }
 
 - (NSString * _Nullable)getPrefixNamespace:(NSString *)namespace_ generatePrefix:(BOOL)generatePrefix error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("getPrefix(namespace:generatePrefix:)"))) __attribute__((swift_error(nonnull_error)))
@@ -146,7 +151,7 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
 
 - (BOOL)textBuf:(OASKotlinCharArray *)buf start:(int32_t)start len:(int32_t)len error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("text(buf:start:len:)")))
 {
-    return NO; // Not implemented
+    return YES; // Not implemented
 }
 
 - (BOOL)cdsectText:(NSString *)text error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("cdsect(text:)")))
@@ -181,47 +186,63 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
 
 - (BOOL)ignorableWhitespaceText:(NSString *)text error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("ignorableWhitespace(text:)")))
 {
-    return NO; // Not implemented
+    return YES; // Not implemented
 }
 
 - (BOOL)flushAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("flush()")))
 {
-    if (_file.isOpen())
+    if (_output)
     {
-        _file.close();
-        return YES;
-    }
-    else if (_output && _output.streamStatus == NSStreamStatusOpen)
-    {
-        QByteArray byteArray = _buffer.data();
-        const void *data = byteArray.constData();
-        NSUInteger length = byteArray.size();
+        _buffer.close();
 
-        NSInteger bytesWritten = 0;
-        NSUInteger totalBytesWritten = 0;
+        const void *data = _data.constData();
+        uint32_t length = _data.size();
+
+        int32_t bytesWritten = 0;
+        uint32_t totalBytesWritten = 0;
 
         while (totalBytesWritten < length)
         {
-            bytesWritten = [_output write:(const uint8_t *)data + totalBytesWritten
-                               maxLength:length - totalBytesWritten];
+            bytesWritten = [_output writeBuffer:(void *)((const uint8_t *)data + totalBytesWritten)
+                               maxLength:length - totalBytesWritten error:nil];
             if (bytesWritten == -1)
             {
-                NSLog(@"Error writing to output stream: %@", _output.streamError.localizedDescription);
+                NSLog(@"Error writing to output stream");
                 break;
             }
             totalBytesWritten += bytesWritten;
         }
 
         if (totalBytesWritten == length)
+        {
+            [_output flushAndReturnError:nil];
+
+            _data.clear();
+            _buffer.setBuffer(&_data);
+            if (!_buffer.open(QIODevice::WriteOnly))
+                return NO;
+
             return YES;
+        }
         else
-            NSLog(@"Could not write all data to output stream.");
-    }
-    else
-    {
-        NSLog(@"Failed to open output stream: %@", _output.streamError.localizedDescription);
+        {
+            NSLog(@"Could not write all data to output stream");
+            return NO;
+        }
     }
 
+    return YES;
+}
+
+- (BOOL)closeAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("close_()")))
+{
+    if ([self flushAndReturnError:nil])
+    {
+        if (_file.isOpen())
+            _file.close();
+     
+        return YES;
+    }
     return NO;
 }
 

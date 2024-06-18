@@ -3454,3 +3454,12 @@
 "shared_string_instructions" = "Anleitung";
 "shared_string_analysis" = "Analyse";
 "step_by_step" = "Abbiegehinweise";
+"select_items" = "Elemente auswählen";
+"wall_height" = "Höhe der Mauer";
+"wall_height_description" = "Indem der Wert für die Höhe geändert wird, kann die Oberkante der Spur über das Bodenniveau angehoben werden.";
+"custom_buttons" = "Benutzerdefinierte Schaltflächen";
+"default_buttons" = "Standard-Schaltflächen";
+"add_button" = "Schaltfläche hinzufügen";
+"empty_name" = "Leerer Name";
+"custom_map_button_name_present" = "Diese Schaltfläche ist bereits vorhanden";
+"shared_string_item" = "Element";

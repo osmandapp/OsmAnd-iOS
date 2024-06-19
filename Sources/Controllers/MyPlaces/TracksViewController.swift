@@ -91,7 +91,7 @@ private class TrackFolder {
     }
     
     func getTrackByPath(_ path: String) -> OAGPX? {
-        var result: OAGPX? = nil
+        var result: OAGPX?
         performForAllTracks { track in
             if path == track.gpxFilePath {
                 result = track
@@ -153,6 +153,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     private var selectedTrack: OAGPX?
     private var selectedFolderPath: String?
+    private var selectedTracks: [OAGPX] = []
+    private var selectedFolders: [String] = []
     
     private var app: OsmAndAppProtocol
     private var settings: OAAppSettings
@@ -243,18 +245,15 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         if isFiltered {
             var foundedFolders: [TrackFolder] = []
             var foundedTracks: [OAGPX] = []
-            for folder in rootFolder.flattenedFolders.values {
-                if folder.path.lastPathComponent().containsCaseInsensitive(text: searchText) {
-                    foundedFolders.append(folder)
-                }
+            for folder in rootFolder.flattenedFolders.values where folder.path.lastPathComponent().containsCaseInsensitive(text: searchText) {
+                foundedFolders.append(folder)
             }
             rootFolder.performForAllTracks { track in
                 if track.gpxFileName.containsCaseInsensitive(text: searchText) {
                     foundedTracks.append(track)
                 }
             }
-            
-            #warning("implement sorting in next task   https:")//github.com/osmandapp/OsmAnd-Issues/issues/2348
+
             foundedFolders.sort { $0.path.lastPathComponent() < $1.path.lastPathComponent() }
             foundedTracks.sort { $0.gpxFileName.lastPathComponent() < $1.gpxFileName.lastPathComponent() }
             
@@ -265,57 +264,59 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 createRowFor(track: track, section: section)
             }
         } else {
-            if isRootFolder && iapHelper.trackRecording.isActive() {
-                if settings.mapSettingTrackRecording {
-                    let currentRecordingTrackRow = section.createNewRow()
-                    currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
-                    currentRecordingTrackRow.key = recordingTrackKey
-                    currentRecordingTrackRow.title = localizedString("recorded_track")
-                    currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: savingHelper.getCurrentGPX().timeSpan, waypoints: savingHelper.points, showDate: false, filepath: nil)
-                    let isVisible = settings.mapSettingShowRecordingTrack.get()
-                    currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
-                    currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
-                    currentRecordingTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
-                    currentRecordingTrackRow.setObj(localizedString("ic_custom_stop"), forKey: buttonIconKey)
-                    currentRecordingTrackRow.setObj(ButtonActionNumberTag.pause.rawValue, forKey: buttonActionNumberTagKey)
-                    currentRecordingTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
-                    currentRecordingTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
-                } else {
-                    if savingHelper.hasData() {
-                        let currentPausedTrackRow = section.createNewRow()
-                        currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
-                        currentPausedTrackRow.key = recordingTrackKey
-                        currentPausedTrackRow.title = localizedString("recorded_track")
-                        currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: savingHelper.getCurrentGPX().timeSpan, waypoints: savingHelper.points, showDate: false, filepath: nil)
+            if !tableView.isEditing {
+                if isRootFolder && iapHelper.trackRecording.isActive() {
+                    if settings.mapSettingTrackRecording {
+                        let currentRecordingTrackRow = section.createNewRow()
+                        currentRecordingTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
+                        currentRecordingTrackRow.key = recordingTrackKey
+                        currentRecordingTrackRow.title = localizedString("recorded_track")
+                        currentRecordingTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: savingHelper.getCurrentGPX().timeSpan, waypoints: savingHelper.points, showDate: false, filepath: nil)
                         let isVisible = settings.mapSettingShowRecordingTrack.get()
-                        currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
-                        currentPausedTrackRow.iconName = "ic_custom_track_recordable"
-                        currentPausedTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
-                        currentPausedTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
-                        currentPausedTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
-                        currentPausedTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
-                        currentPausedTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
+                        currentRecordingTrackRow.setObj(isVisible, forKey: isVisibleKey)
+                        currentRecordingTrackRow.iconName = "ic_custom_track_recordable"
+                        currentRecordingTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
+                        currentRecordingTrackRow.setObj(localizedString("ic_custom_stop"), forKey: buttonIconKey)
+                        currentRecordingTrackRow.setObj(ButtonActionNumberTag.pause.rawValue, forKey: buttonActionNumberTagKey)
+                        currentRecordingTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
+                        currentRecordingTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
                     } else {
-                        let recordNewTrackRow = section.createNewRow()
-                        recordNewTrackRow.cellType = OAButtonTableViewCell.reuseIdentifier
-                        recordNewTrackRow.key = recordingTrackKey
-                        recordNewTrackRow.title = localizedString("new_track")
-                        recordNewTrackRow.descr = localizedString("not_recorded")
-                        recordNewTrackRow.iconName = "ic_custom_trip"
-                        recordNewTrackRow.iconTintColor = UIColor.iconColorDefault
-                        recordNewTrackRow.setObj(localizedString("start_recording"), forKey: buttonTitleKey)
-                        recordNewTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
-                        recordNewTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
-                        let isVisible = settings.mapSettingShowRecordingTrack.get()
-                        recordNewTrackRow.setObj(isVisible, forKey: isVisibleKey)
-                        recordNewTrackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
+                        if savingHelper.hasData() {
+                            let currentPausedTrackRow = section.createNewRow()
+                            currentPausedTrackRow.cellType = OATwoButtonsTableViewCell.reuseIdentifier
+                            currentPausedTrackRow.key = recordingTrackKey
+                            currentPausedTrackRow.title = localizedString("recorded_track")
+                            currentPausedTrackRow.descr = getTrackDescription(distance: savingHelper.distance, timeSpan: savingHelper.getCurrentGPX().timeSpan, waypoints: savingHelper.points, showDate: false, filepath: nil)
+                            let isVisible = settings.mapSettingShowRecordingTrack.get()
+                            currentPausedTrackRow.setObj(isVisible, forKey: isVisibleKey)
+                            currentPausedTrackRow.iconName = "ic_custom_track_recordable"
+                            currentPausedTrackRow.iconTintColor = isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault
+                            currentPausedTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
+                            currentPausedTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
+                            currentPausedTrackRow.setObj(localizedString("ic_custom_download"), forKey: secondButtonIconKey)
+                            currentPausedTrackRow.setObj(ButtonActionNumberTag.save.rawValue, forKey: secondButtonActionNumberTagKey)
+                        } else {
+                            let recordNewTrackRow = section.createNewRow()
+                            recordNewTrackRow.cellType = OAButtonTableViewCell.reuseIdentifier
+                            recordNewTrackRow.key = recordingTrackKey
+                            recordNewTrackRow.title = localizedString("new_track")
+                            recordNewTrackRow.descr = localizedString("not_recorded")
+                            recordNewTrackRow.iconName = "ic_custom_trip"
+                            recordNewTrackRow.iconTintColor = UIColor.iconColorDefault
+                            recordNewTrackRow.setObj(localizedString("start_recording"), forKey: buttonTitleKey)
+                            recordNewTrackRow.setObj(localizedString("ic_custom_play"), forKey: buttonIconKey)
+                            recordNewTrackRow.setObj(ButtonActionNumberTag.startRecording.rawValue, forKey: buttonActionNumberTagKey)
+                            let isVisible = settings.mapSettingShowRecordingTrack.get()
+                            recordNewTrackRow.setObj(isVisible, forKey: isVisibleKey)
+                            recordNewTrackRow.setObj(isVisible ? UIColor.iconColorActive : UIColor.iconColorDefault, forKey: colorKey)
+                        }
                     }
                 }
             }
             
             guard let currentTrackFolder = (isVisibleOnMapFolder ? visibleTracksFolder : getTrackFolderByPath(currentFolderPath)) else { return }
             
-            if currentTrackFolder.subfolders.isEmpty && currentTrackFolder.tracks.isEmpty {
+            if currentTrackFolder.subfolders.isEmpty && currentTrackFolder.tracks.isEmpty && !tableView.isEditing {
                 let emptyFolderBannerRow = section.createNewRow()
                 emptyFolderBannerRow.cellType = OALargeImageTitleDescrTableViewCell.reuseIdentifier
                 emptyFolderBannerRow.title = localizedString(isRootFolder ? "my_places_no_tracks_title_root" : "my_places_no_tracks_title")
@@ -324,8 +325,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 emptyFolderBannerRow.iconTintColor = UIColor.iconColorSecondary
                 emptyFolderBannerRow.setObj(localizedString("shared_string_import"), forKey: buttonTitleKey)
             } else {
-                
-                if isRootFolder {
+                if isRootFolder && !tableView.isEditing {
                     let visibleTracksFolderRow = section.createNewRow()
                     visibleTracksFolderRow.cellType = OARightIconTableViewCell.reuseIdentifier
                     visibleTracksFolderRow.key = visibleTracksKey
@@ -413,8 +413,73 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func setupNavbar() {
-        var title = currentFolder.path.lastPathComponent()
-        if isRootFolder {
+        if tableView.isEditing {
+            tabBarController?.navigationItem.hidesBackButton = true
+            navigationItem.hidesBackButton = true
+            let cancelButton = UIButton(type: .system)
+            cancelButton.setTitle(localizedString("shared_string_cancel"), for: .normal)
+            cancelButton.setImage(nil, for: .normal)
+            cancelButton.titleLabel?.font = UIFont.preferredFont(forTextStyle: .body)
+            cancelButton.addTarget(self, action: #selector(onNavbarCancelButtonClicked), for: .touchUpInside)
+            tabBarController?.navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
+            navigationItem.leftBarButtonItem = UIBarButtonItem(customView: cancelButton)
+        } else {
+            tabBarController?.navigationItem.hidesBackButton = false
+            tabBarController?.navigationItem.leftBarButtonItem = nil
+            navigationItem.hidesBackButton = false
+            navigationItem.leftBarButtonItem = nil
+        }
+
+        configureNavigationBarAppearance()
+        updateNavigationBarTitle()
+        navigationController?.setNavigationBarHidden(false, animated: false)
+        tabBarController?.navigationItem.searchController = nil
+        setupNavBarMenuButton()
+    }
+    
+    func configureNavigationBarAppearance() {
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        appearance.backgroundColor = UIColor.navBarBgColorPrimary
+        appearance.shadowColor = UIColor.navBarBgColorPrimary
+        appearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: UIColor.navBarTextColorPrimary]
+        
+        let blurAppearance = UINavigationBarAppearance()
+        blurAppearance.backgroundEffect = UIBlurEffect(style: .regular)
+        blurAppearance.backgroundColor = UIColor.navBarBgColorPrimary
+        blurAppearance.shadowColor = UIColor.navBarBgColorPrimary
+        blurAppearance.titleTextAttributes = [NSAttributedString.Key.font: UIFont.preferredFont(forTextStyle: .headline), NSAttributedString.Key.foregroundColor: UIColor.navBarTextColorPrimary]
+        
+        navigationController?.navigationBar.standardAppearance = blurAppearance
+        navigationController?.navigationBar.scrollEdgeAppearance = appearance
+        navigationController?.navigationBar.tintColor = UIColor.navBarTextColorPrimary
+        navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    private func updateNavigationBarTitle() {
+        var title: String = currentFolder.path.lastPathComponent()
+        if tableView.isEditing {
+            let totalSelectedTracks = selectedTracks.count
+            let totalSelectedFolders = selectedFolders.count
+            let totalSelectedItems = totalSelectedTracks + totalSelectedFolders
+            if totalSelectedItems == 0 {
+                title = localizedString("select_items")
+            } else {
+                let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
+                    let folderPath = currentFolder.path.appendingPathComponent(folderName)
+                    if let folder = currentFolder.getFolderByPath(folderPath) {
+                        return result + folder.tracksCount
+                    }
+                    return result
+                }
+                
+                let itemText = localizedString("shared_string_item").lowercased()
+                title = "\(totalSelectedItems) \(itemText)"
+                if totalSelectedFolders > 0 && tracksInSelectedFolders > 0 {
+                    title += " (\(String(format: localizedString("folder_tracks_count"), tracksInSelectedFolders)))"
+                }
+            }
+        } else if isRootFolder {
             title = localizedString("menu_my_trips")
         } else if isVisibleOnMapFolder {
             title = localizedString("tracks_on_map")
@@ -422,35 +487,61 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         
         tabBarController?.navigationItem.title = title
         navigationItem.title = title
-        navigationController?.setNavigationBarHidden(false, animated: false)
-        tabBarController?.navigationItem.searchController = nil
-        setupNavBarMenuButton()
     }
 
     private func setupNavBarMenuButton() {
-        // TODO: Implement Select navbar action in text task and uncomment
-        // let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { [weak self] _ in
-        //     self?.onNavbarSelectButtonClicked()
-        // }
-        let addFolderAction = UIAction(title: localizedString("add_folder"), image: UIImage.icCustomFolderAddOutlined) { [weak self] _ in
-            self?.onNavbarAddFolderButtonClicked()
+        var menuActions: [UIMenuElement] = []
+        if !tableView.isEditing {
+            let selectAction = UIAction(title: localizedString("shared_string_select"), image: UIImage.icCustomSelectOutlined) { [weak self] _ in
+                self?.onNavbarSelectButtonClicked()
+            }
+            let addFolderAction = UIAction(title: localizedString("add_folder"), image: UIImage.icCustomFolderAddOutlined) { [weak self] _ in
+                self?.onNavbarAddFolderButtonClicked()
+            }
+            let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { [weak self] _ in
+                self?.onNavbarImportButtonClicked()
+            }
+            
+            let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
+            let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
+            let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
+            menuActions.append(contentsOf: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
+        } else {
+            let showOnMapAction = UIAction(title: localizedString("shared_string_show_on_map"), image: UIImage.icCustomMapPinOutlined) { [weak self] _ in
+                self?.onNavbarShowOnMapButtonClicked()
+            }
+            let exportAction = UIAction(title: localizedString("shared_string_export"), image: UIImage.icCustomExportOutlined) { [weak self] _ in
+                self?.onNavbarExportButtonClicked()
+            }
+            let uploadToOsmAction = UIAction(title: localizedString("upload_to_osm_short"), image: UIImage.icCustomUploadToOpenstreetmapOutlined) { [weak self] _ in
+                self?.onNavbarUploadToOsmButtonClicked()
+            }
+            let deleteAction = UIAction(title: localizedString("shared_string_delete"), image: UIImage.icCustomTrashOutlined, attributes: .destructive) { [weak self] _ in
+                self?.onNavbarDeleteButtonClicked()
+            }
+            
+            let mapTrackOptionsActions = UIMenu(title: "", options: .displayInline, children: [showOnMapAction, exportAction, uploadToOsmAction])
+            let deleteItemsActions = UIMenu(title: "", options: .displayInline, children: [deleteAction])
+            menuActions.append(contentsOf: [mapTrackOptionsActions, deleteItemsActions])
         }
-        let importAction = UIAction(title: localizedString("shared_string_import"), image: UIImage.icCustomImportOutlined) { [weak self] _ in
-            self?.onNavbarImportButtonClicked()
-        }
-        // let selectActionWithDivider = UIMenu(title: "", options: .displayInline, children: [selectAction])
-        let addFolderActionWithDivider = UIMenu(title: "", options: .displayInline, children: [addFolderAction])
-        let importActionWithDivider = UIMenu(title: "", options: .displayInline, children: [importAction])
-        let menu = UIMenu(title: "", image: nil, children: [addFolderActionWithDivider, importActionWithDivider])
-        // let menu = UIMenu(title: "", image: nil, children: [selectActionWithDivider, addFolderActionWithDivider, importActionWithDivider])
         
-        if let navBarButtontem = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: UIColor.navBarTextColorPrimary, action: nil, target: self, menu: menu) {
-            navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButtontem], animated: false)
-            navigationItem.setRightBarButtonItems([navBarButtontem], animated: false)
+        let menu = UIMenu(title: "", image: nil, children: menuActions)
+        if let navBarButton = OABaseNavbarViewController.createRightNavbarButton("", icon: UIImage.templateImageNamed("ic_navbar_overflow_menu_stroke.png"), color: UIColor.navBarTextColorPrimary, action: nil, target: self, menu: menu) {
+            navigationController?.navigationBar.topItem?.setRightBarButtonItems([navBarButton], animated: false)
+            navigationItem.setRightBarButtonItems([navBarButton], animated: false)
         }
     }
     
-    #warning("implement sorting in next task   https:")//github.com/osmandapp/OsmAnd-Issues/issues/2348
+    private func configureToolbar() {
+        let buttonTitle = localizedString(areAllItemsSelected() ? "shared_string_deselect_all" : "shared_string_select_all")
+        let selectDeselectButton = UIBarButtonItem(title: buttonTitle, style: .plain, target: self, action: #selector(onSelectDeselectAllButtonClicked))
+        let attributes: [NSAttributedString.Key: Any] = [.foregroundColor: UIColor.iconColorActive]
+        selectDeselectButton.setTitleTextAttributes(attributes, for: .normal)
+        tabBarController?.toolbarItems = [selectDeselectButton]
+        toolbarItems = [selectDeselectButton]
+    }
+    
+    // #warning("implement sorting in next task")  // See: https://github.com/osmandapp/OsmAnd-Issues/issues/2348
     private func sortWithOptions(_ list: [String], options: SortingOptions) -> [String] {
         list.sorted { $0 < $1 }
     }
@@ -532,10 +623,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         return rootFolder.getFolderByPath(path)
     }
         
-    // MARK: - Navbar Actions
+    // MARK: - Navbar Toolbar Actions
     
     private func onNavbarSelectButtonClicked() {
-        OAUtilities.showToast("", details: "This function is not implemented yet", duration: 4, in: self.view)
+        tableView.setEditing(true, animated: false)
+        tableView.allowsMultipleSelectionDuringEditing = true
+        updateData()
+        setupNavbar()
+        tabBarController?.tabBar.isHidden = true
+        tabBarController?.navigationController?.setToolbarHidden(false, animated: true)
+        navigationController?.setToolbarHidden(false, animated: true)
+        configureToolbar()
     }
     
     private func onNavbarAddFolderButtonClicked() {
@@ -557,6 +655,141 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     @objc private func onNavbarImportButtonClicked() {
         importHelper.onImportClicked(withDestinationFolderPath: currentFolderPath)
+    }
+    
+    @objc private func onNavbarShowOnMapButtonClicked() {
+        if hasSelectedItems() {
+            var tracksToShow: [String] = []
+            tracksToShow.append(contentsOf: selectedTracks.compactMap {
+                settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath
+            })
+            
+            for folderName in selectedFolders {
+                if let folder = currentFolder.subfolders[folderName] {
+                    let folderTracksToShow = folder.getAllTracks().compactMap {
+                        settings.mapSettingVisibleGpx.contains($0.gpxFilePath) ? nil : $0.gpxFilePath
+                    }
+                    tracksToShow.append(contentsOf: folderTracksToShow)
+                }
+            }
+            
+            if !tracksToShow.isEmpty {
+                settings.showGpx(tracksToShow, update: true)
+            }
+            
+            updateAllFoldersVCData()
+            onNavbarCancelButtonClicked()
+        }
+    }
+    
+    @objc private func onNavbarExportButtonClicked() {
+        if hasSelectedItems() {
+            var allExportFilePaths: [String] = []
+            for folderName in selectedFolders {
+                if let folder = currentFolder.subfolders[folderName] {
+                    allExportFilePaths.append(contentsOf: folder.getAllTracksFilePaths())
+                }
+            }
+            
+            allExportFilePaths.append(contentsOf: selectedTracks.map { OsmAndApp.swiftInstance().gpxPath.appendingPathComponent($0.gpxFilePath) })
+            let state = OATrackMenuViewControllerState()
+            state.openedFromTracksList = true
+            onNavbarCancelButtonClicked()
+            let exportVC = OAExportItemsViewController(tracks: allExportFilePaths)
+            navigationController?.pushViewController(exportVC, animated: true)
+        }
+    }
+    
+    @objc private func onNavbarUploadToOsmButtonClicked() {
+        if hasSelectedItems() {
+            var allTracks: [OAGPX] = []
+            allTracks.append(contentsOf: selectedTracks)
+            for folderName in selectedFolders {
+                if let folder = currentFolder.subfolders[folderName] {
+                    allTracks.append(contentsOf: folder.getAllTracks())
+                }
+            }
+            
+            onNavbarCancelButtonClicked()
+            if !allTracks.isEmpty {
+                show(OAOsmUploadGPXViewConroller(gpxItems: allTracks))
+            }
+        }
+    }
+    
+    @objc private func onNavbarDeleteButtonClicked() {
+        if hasSelectedItems() {
+            let tracksInSelectedFolders = selectedFolders.reduce(0) { (result, folderName) -> Int in
+                let folderPath = currentFolder.path.appendingPathComponent(folderName)
+                return result + (currentFolder.getFolderByPath(folderPath)?.tracksCount ?? 0)
+            }
+            
+            let totalTracksToDelete = selectedTracks.count + tracksInSelectedFolders
+            let tracksMessagePart = String(format: localizedString("folder_tracks_count"), totalTracksToDelete)
+            let message = localizedString("delete_tracks_bottom_sheet_description_regular_part") + tracksMessagePart + "?"
+            let alert = UIAlertController(title: localizedString("delete_tracks_bottom_sheet_title"), message: message, preferredStyle: .actionSheet)
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_delete"), style: .destructive) { [weak self] _ in
+                guard let self else { return }
+                for folderName in self.selectedFolders {
+                    self.deleteFolder(folderName)
+                }
+                
+                for track in self.selectedTracks {
+                    let isVisible = self.settings.mapSettingVisibleGpx.contains(track.gpxFilePath)
+                    if isVisible {
+                        self.settings.hideGpx([track.gpxFilePath])
+                    }
+                    self.gpxDB.removeGpxItem(track.gpxFilePath)
+                }
+                
+                updateAllFoldersVCData()
+                onNavbarCancelButtonClicked()
+            })
+            alert.addAction(UIAlertAction(title: localizedString("shared_string_cancel"), style: .cancel))
+            let popPresenter = alert.popoverPresentationController
+            popPresenter?.barButtonItem = navigationItem.rightBarButtonItem
+            popPresenter?.permittedArrowDirections = UIPopoverArrowDirection.any
+            present(alert, animated: true)
+        }
+    }
+    
+    @objc private func onNavbarCancelButtonClicked() {
+        selectedTracks.removeAll()
+        selectedFolders.removeAll()
+        tableView.setEditing(false, animated: true)
+        tableView.allowsMultipleSelectionDuringEditing = false
+        updateData()
+        setupNavbar()
+        setupSearchController()
+        tabBarController?.navigationController?.setToolbarHidden(true, animated: true)
+        navigationController?.setToolbarHidden(true, animated: true)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
+    @objc private func onSelectDeselectAllButtonClicked() {
+        if areAllItemsSelected() {
+            selectedTracks.removeAll()
+            selectedFolders.removeAll()
+            for row in 0..<tableView.numberOfRows(inSection: 0) {
+                tableView.deselectRow(at: IndexPath(row: row, section: 0), animated: true)
+            }
+        } else {
+            guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return }
+            let allFolders = currentFolder.subfolders.values
+            selectedFolders = allFolders.map { $0.path.lastPathComponent() }
+            selectedTracks = currentFolder.getAllTracks().filter { track in
+                !selectedFolders.contains(where: { folderName in
+                    track.gpxFilePath.contains(folderName)
+                })
+            }
+            
+            for row in 0..<tableView.numberOfRows(inSection: 0) {
+                tableView.selectRow(at: IndexPath(row: row, section: 0), animated: true, scrollPosition: .none)
+            }
+        }
+        
+        updateNavigationBarTitle()
+        configureToolbar()
     }
     
     // MARK: - Folders Actions
@@ -956,6 +1189,33 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         }
     }
     
+    private func areAllItemsSelected() -> Bool {
+        guard let currentFolder = getTrackFolderByPath(currentFolderPath) else { return false }
+        let allDisplayedTracks = currentFolder.getAllTracks()
+        let allDisplayedFolders = currentFolder.subfolders.values
+        let allTracksSelected = allDisplayedTracks.allSatisfy { track in
+            if selectedTracks.contains(track) {
+                return true
+            }
+            
+            return selectedFolders.contains { folderName -> Bool in
+                let folderPath = currentFolder.path.appendingPathComponent(folderName)
+                let trackPath = track.gpxFilePath.deletingLastPathComponent()
+                return trackPath.hasPrefix(folderPath)
+            }
+        }
+        
+        let allFoldersSelected = allDisplayedFolders.allSatisfy { folder in
+            selectedFolders.contains(folder.path.lastPathComponent())
+        }
+        
+        return allTracksSelected && allFoldersSelected
+    }
+    
+    private func hasSelectedItems() -> Bool {
+        !selectedFolders.isEmpty || !selectedTracks.isEmpty
+    }
+    
     fileprivate func changeGpxDBSubfolderTags(folderContent: TrackFolder, srcPath: String, destPath: String) {
         for gpxFile in folderContent.tracks.values {
             var path = gpxFile.gpxFilePath ?? ""
@@ -1058,7 +1318,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         } else if item.cellType == OARightIconTableViewCell.reuseIdentifier {
             let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier) as? OARightIconTableViewCell
             if let cell {
-                cell.selectionStyle = .none
+                cell.selectionStyle = tableView.isEditing ? .default : .none
+                cell.selectedBackgroundView = UIView()
+                cell.selectedBackgroundView?.backgroundColor = .groupBg
                 cell.titleLabel.textColor = UIColor.textColorPrimary
                 cell.descriptionLabel.textColor = UIColor.textColorSecondary
                 cell.rightIconView.tintColor = UIColor.iconColorDefault
@@ -1110,52 +1372,96 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         var buttonConfig = UIButton.Configuration.plain()
         buttonConfig.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 7, bottom: 0, trailing: 7)
         buttonConfig.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer { incoming in
-             var outgoing = incoming
-             outgoing.font = UIFont.preferredFont(forTextStyle: .footnote)
-             return outgoing
+            var outgoing = incoming
+            outgoing.font = UIFont.preferredFont(forTextStyle: .footnote)
+            return outgoing
         }
         return buttonConfig
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = tableData.item(for: indexPath)
-        if item.key == visibleTracksKey {
-            let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
-            if let vc = MapSettingsGpxViewController() {
-                vc.delegate = self
-                show(vc)
-            }
-        } else if item.key == tracksFolderKey {
-            if let subfolderPath = item.obj(forKey: pathKey) as? String {
-                let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
-                if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
-                    if let subfolder = rootFolder.getFolderByPath(subfolderPath) {
-                        vc.currentFolder = subfolder
-                        vc.currentFolderPath = subfolderPath
-                        vc.rootFolder = rootFolder
-                        vc.visibleTracksFolder = visibleTracksFolder
-                        vc.isRootFolder = false
-                        vc.hostVCDelegate = self
-                        show(vc)
+        if tableView.isEditing {
+            if item.key == trackKey {
+                if let trackPath = item.obj(forKey: pathKey) as? String,
+                   let track = rootFolder.getTrackByPath(trackPath) {
+                    if !selectedTracks.contains(track) {
+                        selectedTracks.append(track)
                     }
                 }
+            } else if item.key == tracksFolderKey {
+                let folderName = item.title ?? ""
+                if !selectedFolders.contains(folderName) {
+                    selectedFolders.append(folderName)
+                }
             }
-        } else if item.key == trackKey {
-            if let trackPath = item.obj(forKey: pathKey) as? String,
-               let track = rootFolder.getTrackByPath(trackPath),
-               let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
-                OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
-                                                                               navControllerHistory: newCurrentHistory,
-                                                                               fromTrackMenu: false,
-                                                                               selectedTab: .overviewTab)
+            updateNavigationBarTitle()
+            configureToolbar()
+        } else {
+            if item.key == visibleTracksKey {
+                let vc = MapSettingsGpxViewController()
+                vc?.delegate = self
+                show(vc)
+            } else if item.key == tracksFolderKey {
+                if let subfolderPath = item.obj(forKey: pathKey) as? String {
+                    let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)
+                    if let vc = storyboard.instantiateViewController(withIdentifier: "TracksViewController") as? TracksViewController {
+                        if let subfolder = rootFolder.getFolderByPath(subfolderPath) {
+                            vc.currentFolder = subfolder
+                            vc.currentFolderPath = subfolderPath
+                            vc.rootFolder = rootFolder
+                            vc.visibleTracksFolder = visibleTracksFolder
+                            vc.isRootFolder = false
+                            vc.hostVCDelegate = self
+                            show(vc)
+                        }
+                    }
+                }
+            } else if item.key == trackKey {
+                if let trackPath = item.obj(forKey: pathKey) as? String,
+                   let track = rootFolder.getTrackByPath(trackPath),
+                   let newCurrentHistory = navigationController?.saveCurrentStateForScrollableHud(), !newCurrentHistory.isEmpty {
+                    OARootViewController.instance().mapPanel.openTargetViewWithGPX(fromTracksList: track,
+                                                                                   navControllerHistory: newCurrentHistory,
+                                                                                   fromTrackMenu: false,
+                                                                                   selectedTab: .overviewTab)
+                }
+            } else if item.key == recordingTrackKey {
+                if savingHelper.hasData() {
+                    rootVC.mapPanel.openRecordingTrackTargetView()
+                    rootVC.navigationController?.popToRootViewController(animated: true)
+                }
             }
-        } else if item.key == recordingTrackKey {
-            if savingHelper.hasData() {
-                rootVC.mapPanel.openRecordingTrackTargetView()
-                rootVC.navigationController?.popToRootViewController(animated: true)
-            }
+            tableView.deselectRow(at: indexPath, animated: true)
         }
-        tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        let item = tableData.item(for: indexPath)
+        if tableView.isEditing {
+            if item.key == trackKey {
+                if let trackPath = item.obj(forKey: pathKey) as? String,
+                   let track = rootFolder.getTrackByPath(trackPath),
+                   let index = selectedTracks.firstIndex(of: track) {
+                    selectedTracks.remove(at: index)
+                }
+            } else if item.key == tracksFolderKey {
+                let folderName = item.title ?? ""
+                if let index = selectedFolders.firstIndex(of: folderName) {
+                    selectedFolders.remove(at: index)
+                }
+            }
+            updateNavigationBarTitle()
+            configureToolbar()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        true
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        .none
     }
     
     func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
@@ -1281,9 +1587,8 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     
     func onFolderSelected(_ selectedFolderName: String?) {
         if let selectedFolderName {
-            if let selectedTrack {
+            if selectedTrack != nil {
                 moveFile(selectedFolderName: selectedFolderName)
-                
             } else if let selectedFolderPath {
                 moveFolder(folderPathForOpenedContextMenu: selectedFolderPath, selectedFolderName: selectedFolderName)
             }
@@ -1336,8 +1641,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             isFiltered = false
         }
         updateSearchController()
-        generateData()
-        tableView.reloadData()
+        updateData()
     }
     
     // MARK: - UISearchBarDelegate

@@ -37,11 +37,10 @@
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
-static float kRelief3DCellRowHeight = 48.3;
 static NSString *kCellTypeMap = @"MapCell";
 static NSString *kCellItemKey = @"kCellItemKey";
 
-#define kRelief3DCellRowHeight 48.3
+static const CGFloat kRelief3DCellRowHeight = 48.3;
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
@@ -182,8 +181,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
         if (isRelief3D && [_plugin.enable3DMaps get])
         {
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
             double scaleValue = _app.data.verticalExaggerationScale;
+            NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
             if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
@@ -619,6 +618,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 
     [self updateAvailableMaps];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void)showChoosePlanScreen

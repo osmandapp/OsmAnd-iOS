@@ -32,7 +32,7 @@
 "angular_units" = "კუთხის საზომი ერთეულები";
 "angular_units_descr" = "აზიმუტის საზომი ერთეულების შეცვლა.";
 "allow_3d" = "2.5D ხედის დაშვება";
-"allow_3d_descr" = "Enable this option to be able to view the map in the 2.5D perspective";
+"allow_3d_descr" = "ჩართეთ ეს პარამეტრი, რომ რუკა 2.5D პერსპექტივაში იხილოთ";
 "access_intermediate_arrival_time" = "საშუალო ჩასვლის დრო";
 "map_widget_intermediate_time" = "შუალედური დრო";
 "shared_string_previous" = "წინა";
@@ -1334,8 +1334,8 @@
 "hide_gpx" = "ტრეკის დამალვა";
 "show_notes" = "OSM შენიშვნების ჩვენება";
 "hide_notes" = "OSM შენიშვნების დამალვა";
-"show_edits" = "Show local edits";
-"hide_edits" = "Hide local edits";
+"show_edits" = "ლოკალური ჩასწორებების ჩვენება";
+"hide_edits" = "ლოკალური ჩასწორებების დამალვა";
 "search_results" = "ძებნის შედეგები";
 "shared_string_action_name" = "მოქმედების სახელი";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";

@@ -2884,7 +2884,7 @@
 "wind_widget_desc" = "Mostra la velocità del vento del centro attuale della mappa.";
 "bearing_desc" = "Mostra l\'angolo assoluto o relativo rispetto la destinazione in unità angolari (in 180 gradi, in 360 gradi o in milliradianti).";
 "map_widget_group_sunrise_sunset_desc" = "Questo widget mostra le informazioni sui prossimi alba e tramonto.";
-"weather_widgets_secondary_desc" = "Le unità di misura possono essere cambiate nelle impostazioni del componente aggiuntivo Meteo.";
+"weather_widgets_secondary_desc" = "Le unità di misura si possono modificare nelle impostazioni del componente aggiuntivo Meteo.";
 "distance_circles" = "Cerchi di distanza";
 "second_next_turn_widget_desc" = "Il widget mostra le informazioni sulla seconda prossima svolta, che sono abilitate se la seconda svoltaè immediatamente dopo la prima.";
 "elevation_profile_widget_desc" = "Mostra il profilo altimetrico e della pendenza dell\'attuale percorso.";
@@ -3135,7 +3135,7 @@
 "help_article_plan_route_coordinate_input_name" = "Inserimento coordinate";
 "shared_string_hand" = "Mano";
 "external_device_status_disconnecting" = "Disconnessione";
-"purchases_feature_desc_external_sensors" = "Visualizza e registra dati da sensori esterni: velocità, potenza, cadenza e battito cardiaco in bicicletta.";
+"purchases_feature_desc_external_sensors" = "Visualizza e registra dati da sensori esterni: velocità, cadenza e potenza sviluppata in bicicletta, frequenza cardiaca.";
 "external_sensors_support" = "Supporto sensori esterni";
 "shared_string_finger" = "Dito";
 "help_article_map_vector_maps_name" = "Mappe vettoriali (Stili mappa)";

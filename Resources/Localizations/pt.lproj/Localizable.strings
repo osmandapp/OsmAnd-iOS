@@ -3435,3 +3435,16 @@
 "when_exceeded" = "Quando excedido";
 "edit_tilesource_minzoom" = "Ampliação mínima";
 "edit_tilesource_maxzoom" = "Ampliação máxima";
+"shared_string_instructions" = "Instruções";
+"shared_string_analysis" = "Análise";
+"custom_buttons" = "Botões personalizados";
+"default_buttons" = "Botões predefinidos";
+"add_button" = "Adicionar botão";
+"empty_name" = "Nome vazio";
+"custom_map_button_name_present" = "Este botão já existe";
+"shared_string_item" = "Item";
+"select_items" = "Selecionar itens";
+"wall_height" = "Altura da parede";
+"wall_height_description" = "Ao alterar o valor da altura, pode elevar a linha superior do trilho acima do nível do solo.";
+"step_by_step" = "Passo a passo";
+"shared_string_limit" = "Limite";

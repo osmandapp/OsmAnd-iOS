@@ -3411,3 +3411,4 @@
 "track_vertical_exaggeration_description" = "Modificando il valore della scala, puoi modificare l'altezza della traccia 3D";
 "osmand_depelopment_use_old_routing" = "Usa il vecchio algoritmo (A*)";
 "step_by_step" = "Svolta dopo svolta";
+"wall_height" = "Altezza della parete";

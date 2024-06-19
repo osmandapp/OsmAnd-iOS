@@ -872,6 +872,7 @@
 "shared_string_is_deleted" = "%@ is deleted.";
 "shared_string_deleting" = "Deleting";
 "shared_string_deleting_complete" = "Deleting complete";
+"shared_string_colors" = "Colors";
 
 "restart" = "Restart";
 
@@ -3783,3 +3784,5 @@
 "add_button" = "Add button";
 "empty_name" = "Empty name";
 "custom_map_button_name_present" = "Such button already present";
+
+"user_palette" = "User palette";

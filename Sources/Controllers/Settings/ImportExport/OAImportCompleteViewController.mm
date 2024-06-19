@@ -62,7 +62,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     EOAImportDataTypeHistoryMarkers,
     EOAImportDataTypeSearchHistory,
     EOAImportDataTypeNavigationHistory,
-    EOAImportDataTypeGlobal
+    EOAImportDataTypeGlobal,
+    EOAImportDataTypeColorPalette
 };
 
 @implementation OAImportCompleteViewController
@@ -155,6 +156,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     __block NSInteger searchHistoryCount = 0;
     __block NSInteger navigationHistoryCount = 0;
     __block NSInteger globalCount = 0;
+    __block NSInteger colorPaletteCount = 0;
 
     [_itemsMap enumerateKeysAndObjectsUsingBlock:^(OAExportSettingsType * _Nonnull type, NSArray * _Nonnull settings, BOOL * _Nonnull stop) {
         if (type == OAExportSettingsType.PROFILE)
@@ -191,6 +193,8 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             navigationHistoryCount += settings.count;
         else if (type == OAExportSettingsType.GLOBAL)
             globalCount += settings.count;
+        else if (type == OAExportSettingsType.COLOR_DATA)
+            colorPaletteCount += settings.count;
     }];
 
     if (profilesCount > 0)
@@ -363,6 +367,15 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
             @"category" : @(EOAImportDataTypeGlobal)
             }
          ];
+    }
+    if (colorPaletteCount > 0)
+    {
+        [_data addObject: @{
+            @"label": OALocalizedString(@"shared_string_colors"),
+            @"iconName": @"ic_custom_file_color_palette",
+            @"count": [NSString stringWithFormat:@"%ld", colorPaletteCount],
+            @"category" : @(EOAImportDataTypeColorPalette)
+        }];
     }
 }
 

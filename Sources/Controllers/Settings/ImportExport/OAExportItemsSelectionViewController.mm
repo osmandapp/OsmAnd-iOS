@@ -324,8 +324,16 @@
 - (void)setupItemFromFile:(NSMutableDictionary *)item filePath:(NSString *)filePath
 {
     EOASettingsItemFileSubtype fileSubtype = [OAFileSettingsItemFileSubtype getSubtypeByFileName:filePath.lastPathComponent];
-    item[@"title"] = [filePath.lastPathComponent stringByDeletingPathExtension];
     item[@"icon"] = [UIImage templateImageNamed:[OAFileSettingsItemFileSubtype getIcon:fileSubtype]];
+    if (fileSubtype == EOASettingsItemFileSubtypeColorPalette)
+    {
+        item[@"title"] = [ColorsPaletteUtils getPaletteName:filePath];
+        item[@"descr"] = [ColorsPaletteUtils getPaletteTypeName:filePath];
+    }
+    else
+    {
+        item[@"title"] = [filePath.lastPathComponent stringByDeletingPathExtension];
+    }
     if ([filePath.lowercaseString hasSuffix:GPX_FILE_EXT])
     {
         [self setupItemFromGpx:item filePath:filePath appearanceInfo:nil];

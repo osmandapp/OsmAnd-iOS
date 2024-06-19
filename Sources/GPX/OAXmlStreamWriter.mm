@@ -66,6 +66,9 @@ NSString * const OAXmlStreamWriterErrorDomain = @"OAXmlStreamWriterError";
 
 - (BOOL)setOutputFilePath:(NSString *)filePath error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setOutput(filePath:)")))
 {
+    if (_file.isOpen())
+        _file.close();
+
     _file.setFileName(QString::fromNSString(filePath));
     if (!_file.open(QIODevice::WriteOnly | QIODevice::Truncate | QIODevice::Text))
         return NO;

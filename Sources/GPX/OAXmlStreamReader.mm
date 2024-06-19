@@ -17,6 +17,7 @@ NSString * const OAXmlStreamReaderErrorDomain = @"OAXmlStreamReaderError";
 @implementation OAXmlStreamReader
 {
     QXmlStreamReader _reader;
+    QFile _file;
 }
 
 - (BOOL)hasError __attribute__((swift_name("hasError()")))
@@ -71,12 +72,15 @@ NSString * const OAXmlStreamReaderErrorDomain = @"OAXmlStreamReaderError";
 
 - (BOOL)setInputFilePath:(NSString *)filePath inputEncoding:(NSString * _Nullable)inputEncoding error:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("setInput(filePath:inputEncoding:)")))
 {
-    QFile file(QString::fromNSString(filePath));
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    if (_file.isOpen())
+        _file.close();
+
+    _file.setFileName(QString::fromNSString(filePath));
+    if (!_file.open(QIODevice::ReadOnly | QIODevice::Text))
         return NO;
 
     _reader.clear();
-    _reader.setDevice(&file);
+    _reader.setDevice(&_file);
     return YES;
 }
 
@@ -90,6 +94,10 @@ NSString * const OAXmlStreamReaderErrorDomain = @"OAXmlStreamReaderError";
 - (BOOL)closeAndReturnError:(NSError * _Nullable * _Nullable)error __attribute__((swift_name("close_()")))
 {
     _reader.clear();
+
+    if (_file.isOpen())
+        _file.close();
+    
     return YES;
 }
 

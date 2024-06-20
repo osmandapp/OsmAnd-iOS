@@ -1765,7 +1765,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
         item.title = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nothing_found"),
-                [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
+                      [OAOsmAndFormatter getFormattedDistance:rd withParams:[OAOsmAndFormatterParams noTrailingZerosParams]]];
     }
 
     if (!_paused && !_cancelPrev)

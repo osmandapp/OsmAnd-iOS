@@ -34,7 +34,7 @@ final class BLEBikeSCDDevice: Device {
             var result = [[String: String]]()
             if let lastBikeSpeedDistanceData = sensor.lastBikeSpeedDistanceData {
                 let speed = OAOsmAndFormatter.getFormattedSpeed(Float(lastBikeSpeedDistanceData.speed.value))
-                let distance = OAOsmAndFormatter.getFormattedDistance(Float(lastBikeSpeedDistanceData.totalTravelDistance.value), forceTrailingZeroes: false)
+                let distance = OAOsmAndFormatter.getFormattedDistance(Float(lastBikeSpeedDistanceData.totalTravelDistance.value), with: OAOsmAndFormatterParams.noTrailingZeros())
                 debugPrint("speed: \(speed ?? "")")
                 debugPrint("distance: \(distance ?? "")")
                 

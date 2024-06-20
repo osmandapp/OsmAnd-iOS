@@ -187,26 +187,27 @@ static NSArray<NSNumber *> *roundingBounds = nil;
 
 + (NSString *) getFormattedDistance:(float)meters
 {
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES];
+    return [self getFormattedDistance:meters withParams:nil];
 }
 
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes
++ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params
 {
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES roundUp:NO valueUnitArray:nil];
+    return [self getFormattedDistance:meters withParams:params valueUnitArray:nil];
 }
 
-+ (NSString *) getFormattedDistance:(float)meters roundUp:(BOOL)isRoundUp
-{
-    return [self getFormattedDistance:meters forceTrailingZeroes:YES roundUp:isRoundUp valueUnitArray:nil];
-}
-
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes roundUp:(BOOL)isRoundUp valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
++ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
     
     NSString *mainUnitStr;
     float mainUnitInMeters;
+    if (!params)
+        params = [OAOsmAndFormatterParams defaultParams];
+    
+    if (params.useLowerBound && [settings.preciseDistanceNumbers get])
+        params = [OAOsmAndFormatterParams defaultParams];
+    
     if (mc == KILOMETERS_AND_METERS)
     {
         mainUnitStr = _unitsKm;
@@ -224,58 +225,61 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     }
 
     float floatDistance = meters / mainUnitInMeters;
-    if (isRoundUp)
-        floatDistance = [self roundedDistanceValueForUnit:floatDistance];
-
+    BOOL forceTrailingZeroes = params.forceTrailingZerosInDecimalMainUnit;
+    int decimalPrecision = params.extraDecimalPrecision;
     if (meters >= 100 * mainUnitInMeters)
     {
         return [self formatValue:(int) (meters / mainUnitInMeters + 0.5) unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
     else if (meters > 9.99f * mainUnitInMeters)
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (meters > 0.999f * mainUnitInMeters && (mc != NAUTICAL_MILES_AND_METERS || mc != NAUTICAL_MILES_AND_FEET))
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_FEET && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:FEET_IN_ONE_METER])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_METERS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == MILES_AND_YARDS && meters > 0.249f * mainUnitInMeters && ![self isCleanValue:meters inUnits:YARDS_IN_ONE_METER])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == NAUTICAL_MILES_AND_METERS && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else if (mc == NAUTICAL_MILES_AND_FEET && meters > 0.99f * mainUnitInMeters && ![self isCleanValue:meters inUnits:1.0000f])
     {
-        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:2 valueUnitArray:valueUnitArray];
+        return [self formatValue:floatDistance unit:mainUnitStr forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:1 + decimalPrecision valueUnitArray:valueUnitArray];
     }
     else
     {
-        if (mc == KILOMETERS_AND_METERS || mc == MILES_AND_METERS || mc == NAUTICAL_MILES_AND_METERS)
+        if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
         {
-            return [self formatValue:isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters + 0.5)] : (int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
-        }
-        else if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
-        {
-            int feet = isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters * FEET_IN_ONE_METER + 0.5)] : (int) (meters * FEET_IN_ONE_METER + 0.5);
+            int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
+            if (params.useLowerBound)
+                feet = [self lowerTo10BaseRoundingBounds:feet withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
             return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_YARDS)
         {
-            int yards = isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters * YARDS_IN_ONE_METER + 0.5)] : (int) (meters * YARDS_IN_ONE_METER + 0.5);
+            int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
+            if (params.useLowerBound)
+                yards = [self lowerTo10BaseRoundingBounds:yards withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
             return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
-        return [self formatValue:isRoundUp ? [self roundedDistanceValueForUnit:(int) (meters + 0.5)] : (int) (meters + 0.5) unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
+        
+        int m = (int) (meters + 0.5);
+        if (params.useLowerBound)
+            m = [self lowerTo10BaseRoundingBounds:m withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
+        return [self formatValue:m unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
 }
 
@@ -762,17 +766,6 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     {
         return [NSString stringWithFormat:@"<1 %@", OALocalizedString(@"int_min")];
     }
-}
-
-+ (float)roundedDistanceValueForUnit:(float)value
-{
-    if (roundingBounds == nil)
-        roundingBounds = [self generate10BaseRoundingBoundsWithMax:100 multCoef:5];
-    
-    if (value >= 1)
-        return [self lowerTo10BaseRoundingBounds:value withRoundRange:roundingBounds];
-    else
-        return value;
 }
 
 + (NSArray<NSNumber *> *)generate10BaseRoundingBoundsWithMax:(int)max multCoef:(int)multCoef

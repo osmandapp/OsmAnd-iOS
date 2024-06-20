@@ -40,14 +40,13 @@ final class BLERunningSCDDevice: Device {
             }
             if let lastRunningDistanceData = sensor.lastRunningDistanceData {
                 let distanceMeters = lastRunningDistanceData.totalDistance.value / 10
-                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), forceTrailingZeroes: false) {
+                if let distance = OAOsmAndFormatter.getFormattedDistance(Float(distanceMeters), with: OAOsmAndFormatterParams.noTrailingZeros()) {
                     result.append([localizedString("external_device_characteristic_total_distance"): String(distance)])
                 }
             }
             if let lastRunningStrideLengthData = sensor.lastRunningStrideLengthData {
                 let strideLengthMeters = lastRunningStrideLengthData.strideLength.value / 100
-               
-                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), forceTrailingZeroes: false) {
+                if let strideLength = OAOsmAndFormatter.getFormattedDistance(Float(strideLengthMeters), with: OAOsmAndFormatterParams.noTrailingZeros()) {
                     result.append([localizedString("external_device_characteristic_stride_length"): String(strideLength)])
                 }
             }

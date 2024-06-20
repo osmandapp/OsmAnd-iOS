@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OAAppSettings.h"
+#import "OAOsmAndFormatterParams.h"
 
 @interface OAOsmAndFormatter : NSObject
 
@@ -40,10 +41,9 @@
 #define EAST @"E"
 
 + (double)calculateRoundedDist:(double)baseMetersDist;
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes roundUp:(BOOL)isRoundUp valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedDistance:(float)meters;
-+ (NSString *)getFormattedDistance:(float)meters forceTrailingZeroes:(BOOL)forceTrailingZeroes;
-+ (NSString *)getFormattedDistance:(float)meters roundUp:(BOOL)isRoundUp;
++ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params;
 + (NSString *)getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *)getFormattedAzimuth:(float)bearing;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;

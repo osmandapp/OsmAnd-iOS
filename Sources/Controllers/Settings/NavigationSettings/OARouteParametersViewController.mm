@@ -53,6 +53,7 @@ static NSString *iconKey = @"icon";
 static NSString *nameKey = @"name";
 static NSString *descriptionKey = @"description";
 static NSString *titleKey = @"title";
+static NSString *headerKey = @"header";
 static NSString *keyKey = @"key";
 static NSString *valueKey = @"value";
 static NSString *paramGroupKey = @"paramGroup";
@@ -168,7 +169,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
 {
     NSMutableArray *tableData = [NSMutableArray array];
     
-    NSMutableArray *headerImageSection = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *headerImageSection = [NSMutableArray array];
     [tableData addObject:headerImageSection];
     [headerImageSection addObject:@{
         typeKey : [OADeviceScreenTableViewCell getCellIdentifier],
@@ -176,7 +177,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         backgroundImageKey : @"img_settings_device_bottom_light@3x.png",
     }];
     
-    NSMutableArray *parametersSection = [NSMutableArray array];
+    NSMutableArray<NSDictionary *> *parametersSection = [NSMutableArray array];
     [tableData addObject:parametersSection];
     
     if ([self.appMode getRouterService] == EOARouteService::OSMAND)
@@ -185,19 +186,32 @@ static NSString *foregroundImageKey = @"foregroundImage";
     }
     else if ([self.appMode getRouterService] == EOARouteService::STRAIGHT)
     {
-        // TODO: Implement
+        [parametersSection addObject:  @{
+            typeKey : [OAValueTableViewCell getCellIdentifier],
+            keyKey : angleStraightKey,
+            titleKey : OALocalizedString(@"recalc_angle_dialog_title"),
+            iconKey : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
+            valueKey : [NSString stringWithFormat:OALocalizedString(@"shared_string_angle_param"), @((int) [_settings.routeStraightAngle get:self.appMode]).stringValue]
+        }];
     }
     
+    NSMutableArray<NSDictionary *> *recalcSection = [NSMutableArray array];
+    [tableData addObject:recalcSection];
+    [self setupSelectRouteRecalcDistance:recalcSection];
+    [self setupReverseDirectionRecalculation:recalcSection];
     
-    
-    NSMutableArray *bottomSection = [NSMutableArray array];
-    
-    // TODO: Implement bottom sections
-    
-    if (bottomSection.count > 0)
-        [tableData addObject:bottomSection];
-    
+    if ([OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
+    {
+        NSMutableArray<NSDictionary *> *devSection = [NSMutableArray array];
+        [tableData addObject:devSection];
+        [self setupDevelopmentCategoryPreferences:devSection];
+    }
+
     _data = [NSArray arrayWithArray:tableData];
+    
+    
+    
+    
     
     
     // TODO: delete old code after test ========================================
@@ -804,6 +818,53 @@ static NSString *foregroundImageKey = @"foregroundImage";
     }];
 }
 
+- (void) setupSelectRouteRecalcDistance:(NSMutableArray *)tableSection
+{
+    double recalcDist = [_settings.routeRecalculationDistance get:self.appMode];
+    recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
+    NSString *descr = recalcDist == -1
+            ? OALocalizedString(@"rendering_value_disabled_name")
+            : [OAOsmAndFormatter getFormattedDistance:recalcDist forceTrailingZeroes:NO];
+    [tableSection addObject:@{
+        headerKey: OALocalizedString(@"recalculate_route"),
+        typeKey : [OAValueTableViewCell getCellIdentifier],
+        keyKey : recalculateRouteKey,
+        titleKey : OALocalizedString(@"route_recalculation_dist_title"),
+        iconKey : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
+        valueKey : descr
+    }];
+}
+
+- (void) setupReverseDirectionRecalculation:(NSMutableArray *)tableSection
+{
+    [tableSection addObject: @{
+        typeKey : [OASwitchTableViewCell getCellIdentifier],
+        keyKey : reverseDirKey,
+        titleKey : OALocalizedString(@"in_case_of_reverse_direction"),
+        iconKey : @"ic_custom_reverse_direction",
+        valueKey : @(![_settings.disableWrongDirectionRecalc get:self.appMode])
+    }];
+}
+
+- (void) setupDevelopmentCategoryPreferences:(NSMutableArray *)tableSection
+{
+    [tableSection addObject:@{
+        headerKey: OALocalizedString(@"shared_string_development"),
+        typeKey : [OAValueTableViewCell getCellIdentifier],
+        keyKey : routingAlgorithmKey,
+        titleKey : OALocalizedString(@"routing_algorithm"),
+        iconKey : [UIImage templateImageNamed:@"ic_custom_route_points"],
+        valueKey : OALocalizedString([_settings.useOldRouting get] ? @"routing_algorithm_a" : @"routing_algorithm_highway_hierarchies")
+    }];
+    [tableSection addObject:@{
+        typeKey : [OAValueTableViewCell getCellIdentifier],
+        keyKey : autoZoomKey,
+        titleKey : OALocalizedString(@"auto_zoom"),
+        iconKey : [UIImage templateImageNamed:@"ic_custom_zoom_level"],
+        valueKey : OALocalizedString([_settings.useV1AutoZoom get] ? @"auto_zoom_discrete" : @"auto_zoom_smooth")
+    }];
+}
+
 - (void) setupOtherBooleanParameterSummary:(NSMutableArray *)tableSection param:(RoutingParameter)param
 {
     if (param.type == RoutingParameterType::BOOLEAN)
@@ -976,10 +1037,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
 
 - (NSString *)getTitleForHeader:(NSInteger)section
 {
-    if (section == 2 && [OAPluginsHelper getPlugin:OAOsmandDevelopmentPlugin.class].isEnabled)
-        return OALocalizedString(@"shared_string_development");
-    
-    return nil;
+    return _data[section][0][headerKey];
 }
 
 - (void)onRowSelected:(NSIndexPath *)indexPath

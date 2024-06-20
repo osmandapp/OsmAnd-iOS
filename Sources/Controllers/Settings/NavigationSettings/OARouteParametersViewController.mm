@@ -47,6 +47,32 @@
     BOOL _isDisplyedHazmatCategoryUSAParameters;
 }
 
+static NSString *paramKey = @"param";
+static NSString *typeKey = @"type";
+static NSString *iconKey = @"icon";
+static NSString *nameKey = @"name";
+static NSString *descriptionKey = @"description";
+static NSString *titleKey = @"title";
+static NSString *keyKey = @"key";
+static NSString *valueKey = @"value";
+static NSString *paramGroupKey = @"paramGroup";
+static NSString *avoidRoadsKey = @"avoidRoads";
+static NSString *preferRoadsKey = @"preferRoads";
+static NSString *dangerousGoodsUsaKey = @"dangerous_goods_usa";
+static NSString *multiValuePrefKey = @"multiValuePref";
+static NSString *tempLimitationKey = @"temp_limitation";
+static NSString *recalculateRouteKey = @"recalculateRoute";
+static NSString *roadSpeedsKey = @"roadSpeeds";
+static NSString *angleStraightKey = @"angleStraight";
+static NSString *routingAlgorithmKey = @"routing_algorithm";
+static NSString *autoZoomKey = @"auto_zoom";
+static NSString *paramsIdsKey = @"paramsIds";
+static NSString *paramsNamesKey = @"paramsNames";
+static NSString *reverseDirKey = @"reverseDir";
+static NSString *enabledKey = @"enabled";
+static NSString *backgroundImageKey = @"backgroundImage";
+static NSString *foregroundImageKey = @"foregroundImage";
+
 #pragma mark - Initialization
 
 - (void)commonInit
@@ -81,12 +107,12 @@
     if (group && group.getText && group.getValue)
     {
         [parametersArr addObject:@{
-            @"type" : [OAValueTableViewCell getCellIdentifier],
-            @"title" : [group getText],
-            @"icon" : [[group getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate],
-            @"value" : [group getValue],
-            @"param" : group,
-            @"key" : @"paramGroup"
+            typeKey : [OAValueTableViewCell getCellIdentifier],
+            titleKey : [group getText],
+            iconKey : [[group getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate],
+            valueKey : [group getValue],
+            paramKey : group,
+            keyKey : paramGroupKey
         }];
     }
 }
@@ -145,9 +171,9 @@
     NSMutableArray *headerImageSection = [NSMutableArray array];
     [tableData addObject:headerImageSection];
     [headerImageSection addObject:@{
-        @"type" : [OADeviceScreenTableViewCell getCellIdentifier],
-        @"foregroundImage" : @"img_settings_sreen_route_parameters@3x.png",
-        @"backgroundImage" : @"img_settings_device_bottom_light@3x.png",
+        typeKey : [OADeviceScreenTableViewCell getCellIdentifier],
+        foregroundImageKey : @"img_settings_sreen_route_parameters@3x.png",
+        backgroundImageKey : @"img_settings_device_bottom_light@3x.png",
     }];
     
     NSMutableArray *parametersSection = [NSMutableArray array];
@@ -538,11 +564,11 @@
                     icon = @"ic_action_play_dark";
                 }
                 [tableSection addObject: @{
-                    @"type" : [OASwitchTableViewCell getCellIdentifier],
-                    @"name" : paramId,
-                    @"icon" : icon,
-                    @"title" : title,
-                    @"value" : rp
+                    typeKey : [OASwitchTableViewCell getCellIdentifier],
+                    nameKey : paramId,
+                    iconKey : icon,
+                    titleKey : title,
+                    valueKey : rp
                 }];
             }
         }
@@ -599,23 +625,23 @@
                 description = OALocalizedString(@"avoid_in_routing_descr_");
             }
             [tableSection addObject:@{
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
-                @"title" : title,
-                @"description" : description,
-                @"icon" : @"ic_custom_alert",
-                @"value" : @([self checkIfAnyParameterIsSelected:_avoidParameters]),
-                @"key" : @"avoidRoads"
+                typeKey : [OASimpleTableViewCell getCellIdentifier],
+                titleKey : title,
+                descriptionKey : description,
+                iconKey : @"ic_custom_alert",
+                valueKey : @([self checkIfAnyParameterIsSelected:_avoidParameters]),
+                keyKey : avoidRoadsKey
             }];
         }
         
         if (_preferParameters.size() > 0)
         {
             [tableSection addObject:@{
-                @"type" : [OASimpleTableViewCell getCellIdentifier],
-                @"title" : OALocalizedString(@"prefer_in_routing_title"),
-                @"icon" : @"ic_custom_alert",
-                @"value" : @([self checkIfAnyParameterIsSelected:_preferParameters]),
-                @"key" : @"preferRoads"
+                typeKey : [OASimpleTableViewCell getCellIdentifier],
+                titleKey : OALocalizedString(@"prefer_in_routing_title"),
+                iconKey : @"ic_custom_alert",
+                valueKey : @([self checkIfAnyParameterIsSelected:_preferParameters]),
+                keyKey : preferRoadsKey
             }];
         }
         
@@ -652,13 +678,13 @@
         NSMutableArray<NSString *> *enabledParamsIds = fetchedParams[2];
         [tableSection addObject:
          @{
-            @"type" : [OAValueTableViewCell getCellIdentifier],
-            @"key" : @"dangerous_goods_usa",
-            @"icon" : [self getHazmatUsaIcon:enabledParamsIds],
-            @"title" : OALocalizedString(@"dangerous_goods"),
-            @"value" : [self getHazmatUsaDescription:enabledParamsIds],
-            @"paramsIds" : paramsIds,
-            @"paramsNames" : paramsNames
+            typeKey : [OAValueTableViewCell getCellIdentifier],
+            keyKey : dangerousGoodsUsaKey,
+            iconKey : [self getHazmatUsaIcon:enabledParamsIds],
+            titleKey : OALocalizedString(@"dangerous_goods"),
+            valueKey : [self getHazmatUsaDescription:enabledParamsIds],
+            paramsIdsKey : paramsIds,
+            paramsNamesKey : paramsNames
         }];
         _isDisplyedHazmatCategoryUSAParameters = YES;
     }
@@ -677,7 +703,7 @@
         NSString *paramId = [NSString stringWithUTF8String:parameter.id.c_str()];
         NSString *name = [OAUtilities getRoutingStringPropertyName:paramId defaultName:[NSString stringWithUTF8String:parameter.name.c_str()]];
         OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:parameter.defaultBoolean];
-        NSString *enabled = [pref get:self.appMode] ? @"enabled" : @"";
+        NSString *enabled = [pref get:self.appMode] ? enabledKey : @"";
         [params addObject:@[paramId, name, enabled]];
     }
     
@@ -689,7 +715,7 @@
     {
         [paramsIds addObject:param[0]];
         [paramsNames addObject:param[1]];
-        if ([param[2] isEqualToString:@"enabled"])
+        if ([param[2] isEqualToString:enabledKey])
             [enabledParamsIds addObject:param[0]];
     }
     return @[paramsIds, paramsNames, enabledParamsIds];
@@ -737,11 +763,11 @@
         
         [tableSection addObject:
          @{
-            @"type" : [OAValueTableViewCell getCellIdentifier],
-            @"key" : @"multiValuePref",
-            @"title" : OALocalizedString(@"transport_hazmat_title"),
-            @"value" : description,
-            @"param" : hazmatCategory
+            typeKey : [OAValueTableViewCell getCellIdentifier],
+            keyKey : multiValuePrefKey,
+            titleKey : OALocalizedString(@"transport_hazmat_title"),
+            valueKey : description,
+            paramKey : hazmatCategory
         }];
     }
 }
@@ -753,11 +779,11 @@
     OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
     rp.routingParameter = param;
     [tableSection addObject: @{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"name" : paramId,
-        @"icon" : @"ic_action_hill_climbing",
-        @"title" : OALocalizedString(@"routing_attr_allow_via_ferrata_name"),
-        @"value" : rp
+        typeKey : [OASwitchTableViewCell getCellIdentifier],
+        nameKey : paramId,
+        iconKey : @"ic_action_hill_climbing",
+        titleKey : OALocalizedString(@"routing_attr_allow_via_ferrata_name"),
+        valueKey : rp
     }];
 }
 
@@ -770,11 +796,11 @@
     OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
     rp.routingParameter = param;
     [tableSection addObject: @{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"name" : paramId,
-        @"icon" : @"ic_custom_van",
-        @"title" : OALocalizedString(@"routing_attr_goods_restrictions_name"),
-        @"value" : goodsParameter
+        typeKey : [OASwitchTableViewCell getCellIdentifier],
+        nameKey : paramId,
+        iconKey : @"ic_custom_van",
+        titleKey : OALocalizedString(@"routing_attr_goods_restrictions_name"),
+        valueKey : goodsParameter
     }];
 }
 
@@ -805,11 +831,11 @@
                 iconName = @"ic_custom_alert";
             
             [tableSection addObject: @{
-                @"type" : [OASwitchTableViewCell getCellIdentifier],
-                @"name" : paramId,
-                @"icon" : iconName,
-                @"title" : [rp getText],
-                @"value" : rp
+                typeKey : [OASwitchTableViewCell getCellIdentifier],
+                nameKey : paramId,
+                iconKey : iconName,
+                titleKey : [rp getText],
+                valueKey : rp
             }];
         }
     }
@@ -819,11 +845,11 @@
 {
     [tableSection addObject:
     @{
-        @"type" : [OASwitchTableViewCell getCellIdentifier],
-        @"key" : @"temp_limitation",
-        @"title" : OALocalizedString(@"temporary_conditional_routing"),
-        @"icon" : @"ic_custom_road_works",
-        @"value" : @([_settings.enableTimeConditionalRouting get:self.appMode])
+        typeKey : [OASwitchTableViewCell getCellIdentifier],
+        keyKey : tempLimitationKey,
+        titleKey : OALocalizedString(@"temporary_conditional_routing"),
+        iconKey : @"ic_custom_road_works",
+        valueKey : @([_settings.enableTimeConditionalRouting get:self.appMode])
     }];
 }
 
@@ -840,8 +866,8 @@
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    OALocalRoutingParameter *param = item[@"param"];
-    NSString *cellType = param ? [param getCellType] : item[@"type"];
+    OALocalRoutingParameter *param = item[paramKey];
+    NSString *cellType = param ? [param getCellType] : item[typeKey];
     if ([cellType isEqualToString:[OADeviceScreenTableViewCell getCellIdentifier]])
     {
         OADeviceScreenTableViewCell* cell = [self.tableView dequeueReusableCellWithIdentifier:[OADeviceScreenTableViewCell getCellIdentifier]];
@@ -853,8 +879,8 @@
         }
         if (cell)
         {
-            cell.backgroundImageView.image = [UIImage imageNamed:item[@"backgroundImage"]].imageFlippedForRightToLeftLayoutDirection;
-            cell.foregroundImageView.image = [UIImage imageNamed:item[@"foregroundImage"]].imageFlippedForRightToLeftLayoutDirection;
+            cell.backgroundImageView.image = [UIImage imageNamed:item[backgroundImageKey]].imageFlippedForRightToLeftLayoutDirection;
+            cell.foregroundImageView.image = [UIImage imageNamed:item[foregroundImageKey]].imageFlippedForRightToLeftLayoutDirection;
         }
         return cell;
     }
@@ -870,21 +896,21 @@
         }
         if (cell)
         {
-            cell.leftIconView.image = param && ![item.allKeys containsObject:@"icon"] ? [param getIcon].imageFlippedForRightToLeftLayoutDirection : [item[@"icon"] imageFlippedForRightToLeftLayoutDirection];
-            if (param && ![param isSelected] && ![item.allKeys containsObject:@"icon"])
+            cell.leftIconView.image = param && ![item.allKeys containsObject:iconKey] ? [param getIcon].imageFlippedForRightToLeftLayoutDirection : [item[iconKey] imageFlippedForRightToLeftLayoutDirection];
+            if (param && ![param isSelected] && ![item.allKeys containsObject:iconKey])
                 cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             else
                 cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
 
             cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
-            if ([item[@"key"] isEqualToString:@"recalculateRoute"])
+            if ([item[keyKey] isEqualToString:recalculateRouteKey])
                 cell.leftIconView.tintColor = [_settings.routeRecalculationDistance get:self.appMode] == -1 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : UIColorFromRGB(_iconColor);
             
-            cell.titleLabel.text = param ? [param getText] : item[@"title"];
+            cell.titleLabel.text = param ? [param getText] : item[titleKey];
 
-            cell.valueLabel.text = param ? [param getValue] : item[@"value"];
+            cell.valueLabel.text = param ? [param getValue] : item[valueKey];
             if ([param isKindOfClass:OAHazmatRoutingParameter.class])
-                cell.valueLabel.text = item[@"value"];
+                cell.valueLabel.text = item[valueKey];
         }
         return cell;
     }
@@ -900,9 +926,9 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"value"] boolValue] ? UIColorFromRGB(_iconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.titleLabel.text = item[titleKey];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[iconKey]];
+            cell.leftIconView.tintColor = [item[valueKey] boolValue] ? UIColorFromRGB(_iconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }
@@ -918,9 +944,9 @@
         }
         if (cell)
         {
-            cell.titleLabel.text = item[@"title"];
-            cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            id v = item[@"value"];
+            cell.titleLabel.text = item[titleKey];
+            cell.leftIconView.image = [UIImage templateImageNamed:item[iconKey]];
+            id v = item[valueKey];
 
             [cell.switchView removeTarget:nil action:NULL forControlEvents:UIControlEventAllEvents];
             if ([v isKindOfClass:[OALocalRoutingParameter class]])
@@ -959,9 +985,9 @@
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
     NSDictionary *item = _data[indexPath.section][indexPath.row];
-    OALocalRoutingParameter *parameter = item[@"param"];
-    NSString *itemKey = item[@"key"];
-    if ([itemKey isEqualToString:@"paramGroup"])
+    OALocalRoutingParameter *parameter = item[paramKey];
+    NSString *itemKey = item[keyKey];
+    if ([itemKey isEqualToString:paramGroupKey])
     {
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         [parameter rowSelectAction:self.tableView indexPath:indexPath];
@@ -969,31 +995,31 @@
     }
 
     OABaseSettingsViewController* settingsViewController = nil;
-    if ([itemKey isEqualToString:@"recalculateRoute"])
+    if ([itemKey isEqualToString:recalculateRouteKey])
         settingsViewController = [[OARecalculateRouteViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"avoidRoads"])
+    else if ([itemKey isEqualToString:avoidRoadsKey])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:YES];
-    else if ([itemKey isEqualToString:@"multiValuePref"] && parameter)
+    else if ([itemKey isEqualToString:multiValuePrefKey] && parameter)
         settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter appMode:self.appMode];
-    else if ([itemKey isEqualToString:@"multiValuePref"])
+    else if ([itemKey isEqualToString:multiValuePrefKey])
         settingsViewController = [[OARouteParameterValuesViewController alloc] initWithParameter:_otherRoutingParameters[[item[@"ind"] intValue]] appMode:self.appMode];
-    else if ([itemKey isEqualToString:@"preferRoads"])
+    else if ([itemKey isEqualToString:preferRoadsKey])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
-    else if ([itemKey isEqualToString:@"roadSpeeds"])
+    else if ([itemKey isEqualToString:roadSpeedsKey])
         settingsViewController = [[OARoadSpeedsViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"angleStraight"])
+    else if ([itemKey isEqualToString:angleStraightKey])
         settingsViewController = [[OAAngleStraightLineViewController alloc] initWithAppMode:self.appMode];
-    else if ([itemKey isEqualToString:@"routing_algorithm"])
+    else if ([itemKey isEqualToString:routingAlgorithmKey])
         settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeRoutingAlgorithm];
-    else if ([itemKey isEqualToString:@"auto_zoom"])
+    else if ([itemKey isEqualToString:autoZoomKey])
         settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeAutoZoom];
-    else if ([itemKey isEqualToString:@"dangerous_goods_usa"])
-        settingsViewController = [[OARouteParameterHazmatUsa alloc] initWithApplicationMode:self.appMode parameterIds:item[@"paramsIds"] parameterNames:item[@"paramsNames"]];
+    else if ([itemKey isEqualToString:dangerousGoodsUsaKey])
+        settingsViewController = [[OARouteParameterHazmatUsa alloc] initWithApplicationMode:self.appMode parameterIds:item[paramsIdsKey] parameterNames:item[paramsNamesKey]];
     
     if (settingsViewController)
     {
         settingsViewController.delegate = self;
-        if ([itemKey isEqualToString:@"routing_algorithm"] || [itemKey isEqualToString:@"auto_zoom"])
+        if ([itemKey isEqualToString:routingAlgorithmKey] || [itemKey isEqualToString:autoZoomKey])
             [self showMediumSheetViewController:settingsViewController isLargeAvailable:NO];
         else
             [self showModalViewController:settingsViewController];
@@ -1010,11 +1036,11 @@
         NSIndexPath *indexPath = [NSIndexPath indexPathForRow:sw.tag & 0x3FF inSection:sw.tag >> 10];
         NSDictionary *item = _data[indexPath.section][indexPath.row];
         BOOL isChecked = ((UISwitch *) sender).on;
-        if ([item[@"key"] isEqualToString:@"reverseDir"])
+        if ([item[keyKey] isEqualToString:reverseDirKey])
         {
             [_settings.disableWrongDirectionRecalc set:!isChecked mode:self.appMode];
         }
-        else if ([item[@"key"] isEqualToString:@"temp_limitation"])
+        else if ([item[keyKey] isEqualToString:tempLimitationKey])
         {
             [_settings.enableTimeConditionalRouting set:isChecked mode:self.appMode];
         }
@@ -1030,7 +1056,7 @@
 {
     NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
     NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:_data[indexPath.section][indexPath.row]];
-    newItem[@"value"] = [NSNumber numberWithBool:isChecked];
+    newItem[valueKey] = [NSNumber numberWithBool:isChecked];
     newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];;
     _data = [NSArray arrayWithArray:newData];
 }

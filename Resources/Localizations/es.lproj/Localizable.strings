@@ -3443,3 +3443,7 @@
 "custom_map_button_name_present" = "Este botón ya existe";
 "custom_buttons" = "Botones personalizados";
 "add_button" = "Añadir un botón";
+"select_items" = "Seleccionar elementos";
+"shared_string_item" = "Elemento";
+"wall_height" = "Altura de la pared";
+"wall_height_description" = "Al cambiar el valor de altura, puede elevar la línea superior de la pista por encima del nivel del suelo.";

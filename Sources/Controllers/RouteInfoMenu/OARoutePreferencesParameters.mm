@@ -402,7 +402,7 @@
 {
     NSString *key;
     if ([_groupName isEqualToString:kRouteParamReliefSmoothnessFactor])
-        key = @"preferred_terrain";
+        key = @"routing_attr_height_obstacles_name";
     else
         key = [NSString stringWithFormat:@"routing_attr_%@_name", _groupName];
     NSString *res = OALocalizedString(key);

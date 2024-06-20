@@ -3447,3 +3447,12 @@
 "shared_string_instructions" = "Instrucciones";
 "shared_string_analysis" = "Análisis";
 "step_by_step" = "Giro a giro";
+"custom_buttons" = "Botones personalizados";
+"add_button" = "Añadir botón";
+"custom_map_button_name_present" = "Ese botón ya existe";
+"default_buttons" = "Botones predefinidos";
+"empty_name" = "Nombre vacío";
+"shared_string_item" = "Elemento";
+"wall_height_description" = "Cambiando el valor de la altura, puedes elevar la línea superior de la traza sobre el nivel del suelo.";
+"select_items" = "Marcar elementos";
+"wall_height" = "Altura del muro";

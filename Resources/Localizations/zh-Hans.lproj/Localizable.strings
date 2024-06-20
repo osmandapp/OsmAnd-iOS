@@ -444,7 +444,7 @@
 "selected_categories" = "选择分类";
 "new_filter_desc" = "请输入新筛选器的名称，该名称将添加到你的\"类别\"选项卡中。";
 "shared_string_filters" = "过滤器";
-"edit_filter" = "编辑分类";
+"edit_filter" = "编辑筛选条件";
 "edit_filter_save_as_menu_item" = "另存为";
 "delete_filter" = "删除过滤器";
 "save_filter" = "保存过滤器";
@@ -2362,7 +2362,7 @@
 "wind_widget_desc" = "显示当前地图中心的风速。";
 "mapillary_widget_descr" = "可以助你迅速将图片提交到 Mapillary。";
 "help_article_navigation_routing_online_routing_name" = "线上路线规划";
-"shared_string_loading" = "README（请读我）：- 帮助翻译的最佳方法是通过https://hosted.weblate.org/engage/osmand/ - 如果您直接编辑strings.xml文件，请确保：1. 不要生成重复的字符串（通过名称检查字符串是否已经存在）2. 每个英文撇号（引号）前面都要加上反斜杠。3. 如果您修改了英语字符串文件，请将新字符串添加到文件的顶部，这样在发布之前的定期审查会更容易。- 有关措辞和连贯（一致）性，请参考https://docs.osmand.net/docs/technical/contributions/translating-osmand 谢谢 - Hardy";
+"shared_string_loading" = "正在加载";
 "shared_string_buttons" = "按钮";
 "map_settings_topography" = "等高线数据";
 "apply_to_existing_favorites_descr" = "将更改应用于组中现有的收藏点，还是仅应用于新收藏点？";
@@ -2653,3 +2653,12 @@
 "map_widget_sun_position" = "太阳位置";
 "rendering_attr_padusDisplayMode_description" = "按访问类型或管理者名称";
 "rendering_value_managerName_name" = "按管理者名称";
+"rendering_attr_showToll_name" = "显示过路费限制";
+"shared_string_trash" = "回收箱";
+"shared_string_delete_item" = "删除项目";
+"shared_string_delete_immediately" = "立即删除";
+"target_elevation" = "目标海拔";
+"delete_all_items" = "删除所有项目";
+"rendering_attr_showToll_description" = "显示道路收费限制";
+"restore_from_trash" = "从回收箱还原";
+"trash_is_empty" = "回收箱是空的";

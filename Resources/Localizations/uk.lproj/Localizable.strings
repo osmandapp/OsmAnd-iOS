@@ -3440,3 +3440,13 @@
 "shared_string_limit" = "Обмеження";
 "shared_string_instructions" = "Вказівки";
 "shared_string_analysis" = "Аналіз";
+"default_buttons" = "Кнопки за замовчуванням";
+"select_items" = "Обрати елементи";
+"shared_string_item" = "Елемент";
+"empty_name" = "Пуста назва";
+"wall_height" = "Висота стіни";
+"wall_height_description" = "Змінюючи значення висоти, ви можете підняти верхню лінію доріжки над рівнем землі.";
+"custom_buttons" = "Користувацькі кнопки";
+"add_button" = "Додати кнопку";
+"custom_map_button_name_present" = "Така кнопка вже присутня";
+"step_by_step" = "Крок за кроком";

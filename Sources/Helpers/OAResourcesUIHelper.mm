@@ -89,7 +89,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
++ (NSString *)getIconName:(OsmAndResourceType)type
 {
     NSString *imageNamed;
     switch (type)
@@ -136,6 +136,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             imageNamed = @"ic_custom_map";
             break;
     }
+    return imageNamed;
+}
+
++ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
+{
+    NSString *imageNamed = [self.class getIconName:type];
     return templated ? [UIImage templateImageNamed:imageNamed] : [UIImage imageNamed:imageNamed];
 }
 
@@ -549,6 +555,32 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             downloadedCount++;
     }
     return downloadedCount == items.count;
+}
+
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue
+{
+    if (_items && _items.count > 0)
+    {
+        for (OAResourceItem *item in _items)
+        {
+            if (item.downloadTask != nil)
+                return item;
+        }
+        if (useDefautValue)
+            return _items[0];
+    }
+    return nil;
+}
+
+- (NSString *) getResourceId
+{
+    if (_items && _items.count > 0)
+    {
+        OAResourceItem *firstItem = _items[0];
+        NSString *resourceId = firstItem.resourceId.toNSString();
+        return [resourceId stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
+    }
+    return nil;
 }
 
 @end

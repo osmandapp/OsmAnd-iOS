@@ -8,26 +8,44 @@
 
 #import "OAShowHideFavoritesAction.h"
 #import "OAAppSettings.h"
-#import "OAQuickActionType.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAShowHideFavoritesAction
+{
+    OAAppSettings *_settings;
+}
 
 - (instancetype)init
 {
     return [super initWithActionType:self.class.TYPE];
 }
 
++ (void)initialize
+{
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideFavoritesActionId
+                                            stringId:@"favorites.showhide"
+                                                  cl:self.class]
+               name:OALocalizedString(@"toggle_fav")]
+              iconName:@"ic_custom_favorites"]
+             category:QuickActionTypeCategoryConfigureMap]
+            nonEditable];
+}
+
+- (void)commonInit
+{
+    _settings = [OAAppSettings sharedManager];
+}
+
 - (void)execute
 {
-    OAAppSettings *settings = [OAAppSettings sharedManager];
-    [settings setShowFavorites:![settings.mapSettingShowFavorites get]];
+    [_settings setShowFavorites:![_settings.mapSettingShowFavorites get]];
 }
 
 - (BOOL)isActionWithSlash
 {
-    return [OAAppSettings sharedManager].mapSettingShowFavorites.get;
+    return _settings.mapSettingShowFavorites.get;
 }
 
 - (NSString *)getActionStateName
@@ -35,11 +53,8 @@ static OAQuickActionType *TYPE;
     return [self isActionWithSlash] ? OALocalizedString(@"fav_hide") : OALocalizedString(@"fav_show");
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:4 stringId:@"favorites.showhide" class:self.class name:OALocalizedString(@"toggle_fav") category:CONFIGURE_MAP iconName:@"ic_custom_favorites" secondaryIconName:nil editable:NO];
-       
     return TYPE;
 }
 

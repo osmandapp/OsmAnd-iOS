@@ -3438,3 +3438,9 @@
 "shared_string_limit" = "Ограничење";
 "shared_string_instructions" = "Инструкције";
 "shared_string_analysis" = "Анализа";
+"step_by_step" = "Скретање-по-скретање";
+"custom_buttons" = "Прилагођена дугмад";
+"default_buttons" = "Подразумевана дугмад";
+"add_button" = "Додај дугме";
+"empty_name" = "Празно име";
+"custom_map_button_name_present" = "Такво дугме већ постоји";

@@ -665,7 +665,7 @@
 "coords_format_descr" = "Format geografischer Koordinaten.";
 "do_not_show_discount_desc" = "Unterdrückt Meldungen zu App-Sonderangeboten und besonderen lokalen Ereignissen.";
 "save_global_track_interval" = "Intervall für generelle Aufzeichnung";
-"save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Track-Aufzeichnung festlegen (wird über die Schaltfläche „Routenaufzeichnung“ auf dem Kartenbildschirm angeschaltet).";
+"save_global_track_interval_descr" = "Aufzeichnungsintervall für die generelle Trackaufzeichnung festlegen (wird über die Schaltfläche „Routenaufzeichnung“ auf dem Kartenbildschirm angeschaltet).";
 "rotate_map_to" = "Kartenausrichtung";
 "rotate_map_to_bearing_descr" = "Art der Kartenausrichtung wählen.";
 "rotate_map_compass_opt" = "Kompassrichtung";
@@ -3236,7 +3236,7 @@
 "help_article_troubleshooting_crash_logs_name" = "Absturzprotokolle";
 "help_article_troubleshooting_general_name" = "Allgemein";
 "help_article_troubleshooting_maps_data_name" = "Karten und Daten";
-"help_article_troubleshooting_track_recording_issues_name" = "Streckenaufzeichnung";
+"help_article_troubleshooting_track_recording_issues_name" = "Trackaufzeichnung";
 "help_article_widgets_name" = "Kartenwidgets";
 "help_article_widgets_info_widgets_name" = "Informations-Widgets";
 "help_article_widgets_map_buttons_name" = "Schaltflächen der Karte";
@@ -3406,7 +3406,7 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Besondere Streckenführung verwenden (nur HH)";
 "online_plugins" = "Online Plugins";
 "vertical_exaggeration" = "Vertikale Vergrößerung";
-"vertical_exaggeration_description" = "Durch Änderung des Skalierungs-Werts können Sie das 3D-Profil hervorheben.";
+"vertical_exaggeration_description" = "Durch Änderung des Skalenwerts können Sie das 3D-Profil hervorheben.";
 "shared_string_scale" = "Maßstab";
 "missing_or_outdated_maps_title" = "Fehlende oder veraltete Karte";
 "required_maps" = "Benötigte Karten";
@@ -3453,3 +3453,13 @@
 "shared_string_limit" = "Limit";
 "shared_string_instructions" = "Anleitung";
 "shared_string_analysis" = "Analyse";
+"step_by_step" = "Abbiegehinweise";
+"select_items" = "Elemente auswählen";
+"wall_height" = "Höhe der Mauer";
+"wall_height_description" = "Indem der Wert für die Höhe geändert wird, kann die Oberkante der Spur über das Bodenniveau angehoben werden.";
+"custom_buttons" = "Benutzerdefinierte Schaltflächen";
+"default_buttons" = "Standard-Schaltflächen";
+"add_button" = "Schaltfläche hinzufügen";
+"empty_name" = "Leerer Name";
+"custom_map_button_name_present" = "Diese Schaltfläche ist bereits vorhanden";
+"shared_string_item" = "Element";

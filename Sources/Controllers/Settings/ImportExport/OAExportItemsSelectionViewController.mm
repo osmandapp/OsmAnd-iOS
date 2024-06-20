@@ -269,6 +269,12 @@
         item[@"icon"] = [UIImage templateImageNamed:@"ic_custom_marker"];
         item[@"color"] = marker.color;
     }
+    else if ([object isKindOfClass:QuickActionButtonState.class])
+    {
+        QuickActionButtonState *quickActionButtonState = object;
+        item[@"title"] = [quickActionButtonState getName];
+        item[@"icon"] = [quickActionButtonState getIcon];
+    }
 //        if (ExportSettingsType.ACTIVE_MARKERS.name().equals(markersGroup.getId())) {
 //            item.setTitle(getString(R.string.map_markers));
 //            item.setIcon(uiUtilities.getIcon(R.drawable.ic_action_flag, getItemIconColor(object)));

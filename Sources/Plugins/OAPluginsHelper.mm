@@ -14,8 +14,7 @@
 #import "OAMapHudViewController.h"
 #import "OAIAPHelper.h"
 #import "OAAutoObserverProxy.h"
-#import "OAQuickActionType.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OACustomPlugin.h"
 #import "OAPluginInstalledViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -69,7 +68,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
         [plugin setEnabled:NO];
     }
     [[OAAppSettings sharedManager] enablePlugin:[plugin getId] enable:enable];
-    [OAQuickActionRegistry.sharedInstance updateActionTypes];
+    [OAMapButtonsHelper.sharedInstance updateActionTypes];
     if (recreateControls)
         [OARootViewController.instance.mapPanel.hudViewController.mapInfoController recreateAllControls];
     [plugin updateLayers];
@@ -150,7 +149,7 @@ static NSMutableArray<OAPlugin *> *allPlugins;
             [self initPlugin:plugin];
         }
     }
-    [OAQuickActionRegistry.sharedInstance updateActionTypes];
+    [OAMapButtonsHelper.sharedInstance updateActionTypes];
 }
 
 + (void) initPlugin:(OAPlugin *)plugin
@@ -350,14 +349,15 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     }
 }
 
-+ (void) registerQuickActionTypesPlugins:(NSMutableArray<OAQuickActionType *> *)types disabled:(BOOL)disabled
++ (void) registerQuickActionTypesPlugins:(NSMutableArray<QuickActionType *> *)allTypes enabledTypes:(NSMutableArray<QuickActionType *> *)enabledTypes
 {
-    if (!disabled)
-        for (OAPlugin *p in [self getEnabledPlugins])
-            [types addObjectsFromArray:p.getQuickActionTypes];
-    else
-        for (OAPlugin *p in [self getNotEnabledPlugins])
-            [types addObjectsFromArray:p.getQuickActionTypes];
+    for (OAPlugin *p in [self getAvailablePlugins])
+    {
+        NSArray<QuickActionType *> *types = [p getQuickActionTypes];
+        [allTypes addObjectsFromArray:types];
+        if ([p isEnabled])
+            [enabledTypes addObjectsFromArray:types];
+    }
 }
 
 + (void) addCustomPlugin:(OACustomPlugin *)plugin

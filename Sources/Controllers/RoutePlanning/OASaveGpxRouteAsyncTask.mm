@@ -120,6 +120,7 @@
         gpx.showArrows = oldGpx.showArrows;
         gpx.showStartFinish = oldGpx.showStartFinish;
         gpx.verticalExaggerationScale = oldGpx.verticalExaggerationScale;
+        gpx.elevationMeters = oldGpx.elevationMeters;
         gpx.visualization3dByType = oldGpx.visualization3dByType;
         gpx.visualization3dWallColorType = oldGpx.visualization3dWallColorType;
         gpx.visualization3dPositionType = oldGpx.visualization3dPositionType;

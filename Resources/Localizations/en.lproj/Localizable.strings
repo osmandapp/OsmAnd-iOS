@@ -937,6 +937,8 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
+"select_items" = "Select items";
+"shared_string_item" = "Item";
 "shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
@@ -3734,8 +3736,10 @@
 "routing_attr_hazmat_category_usa_9_name" = "Miscellaneous";
 "rendering_value_sector2_name" = "Sector 2";
 "vertical_exaggeration" = "Vertical exaggeration";
+"wall_height" = "Wall height";
 "vertical_exaggeration_description" = "By changing the scale value, you can emphasise the 3D relief.";
 "shared_string_scale" = "Scale";
+"wall_height_description" = "By changing the height value, you can lift the track top line above the ground level.";
 
 "missing_or_outdated_maps_title" = "Missing or outdated maps";
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
@@ -3777,3 +3781,9 @@
 "step_by_step" = "Turn-by-turn";
 
 "shared_string_limit" = "Limit";
+
+"custom_buttons" = "Custom buttons";
+"default_buttons" = "Default buttons";
+"add_button" = "Add button";
+"empty_name" = "Empty name";
+"custom_map_button_name_present" = "Such button already present";

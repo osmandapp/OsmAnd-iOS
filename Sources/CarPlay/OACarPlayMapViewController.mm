@@ -114,9 +114,13 @@
 - (void)traitCollectionDidChange:(UITraitCollection *)previousTraitCollection
 {
     [super traitCollectionDidChange:previousTraitCollection];
-    if (_speedometerView && [self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
+    if ([self.traitCollection hasDifferentColorAppearanceComparedToTraitCollection:previousTraitCollection])
     {
-        [self updateSpeedometerViewStyleTheme];
+        if (_speedometerView)
+            [self updateSpeedometerViewStyleTheme];
+       
+        if (self.delegate)
+            [self.delegate onUpdateMapTemplateStyle];
     }
 }
 
@@ -192,7 +196,7 @@
     
     [_alarmSpeedometerStackView addArrangedSubview:_speedometerView];
         
-    _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth]];
+    _speedometerHeightConstraint = [_speedometerView.heightAnchor constraintEqualToConstant:[_speedometerView getCurrentSpeedViewMaxHeightWidth] + 2];
     _speedometerHeightConstraint.active = YES;
 }
 

@@ -22,6 +22,11 @@
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <qmap.h>
 
+static const NSInteger kElevationDefMeters = 1000;
+static const NSInteger kElevationMaxMeters = 2000;
+static const CGFloat kVerticalExaggerationScaleDef = 0.25;
+static const CGFloat kVerticalExaggerationScaleMax = 4.0;
+
 @implementation OAGPXDocument
 {
     double left;
@@ -244,17 +249,35 @@
     OAGpxExtension *e = [self getExtensionByKey:@"vertical_exaggeration_scale"];
     if (e) {
         CGFloat value = [e.value floatValue];
-        if (value && value >= 1.0 && value <= 3.0)
+        if (value && value >= kVerticalExaggerationScaleDef && value <= kVerticalExaggerationScaleMax)
             return value;
         else
-            return 1.0;
+            return kVerticalExaggerationScaleDef;
     }
-    return 1.0;
+    return kVerticalExaggerationScaleDef;
 }
 
 - (void)setVerticalExaggerationScale:(CGFloat)scale
 {
     [self setExtension:@"vertical_exaggeration_scale" value:[NSString stringWithFormat:@"%f",scale]];
+}
+
+- (NSInteger)getElevationMeters
+{
+    OAGpxExtension *e = [self getExtensionByKey:@"elevation_meters"];
+    if (e) {
+        NSInteger value = [e.value integerValue];
+        if (value && value >= 0 && value <= kElevationMaxMeters)
+            return value;
+        else
+            return kElevationDefMeters;
+    }
+    return kElevationDefMeters;
+}
+
+- (void)setElevationMeters:(NSInteger)meters
+{
+    [self setExtension:@"elevation_meters" value:[NSString stringWithFormat:@"%ld", meters]];
 }
 
 - (NSString *)getVisualization3dByTypeValue

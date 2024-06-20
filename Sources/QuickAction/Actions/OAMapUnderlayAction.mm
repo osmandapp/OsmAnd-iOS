@@ -13,16 +13,16 @@
 #import "Localization.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OAMapStyleSettings.h"
-#import "OAQuickActionType.h"
 #import "OAResourcesUIHelper.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define KEY_UNDERLAYS @"underlays"
-#define KEY_NO_UNDERLAY @"no_underlay"
+static NSString * const kUnderlays = @"underlays";
+static NSString * const kNoUnderlay = @"no_underlay";
 
-static OAQuickActionType *TYPE;
+static QuickActionType *TYPE;
 
 @implementation OAMapUnderlayAction
 {
@@ -33,15 +33,24 @@ static OAQuickActionType *TYPE;
 
 - (instancetype) init
 {
-    self = [super initWithActionType:self.class.TYPE];
-    if (self)
-    {
-        _styleSettings = [OAMapStyleSettings sharedInstance];
-        _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    return [super initWithActionType:self.class.TYPE];
+}
 
-        _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
-    }
-    return self;
+- (void)commonInit
+{
+    _styleSettings = [OAMapStyleSettings sharedInstance];
+    _hidePolygonsParameter = [_styleSettings getParameter:@"noPolygons"];
+    _onlineMapSources = [OAResourcesUIHelper getSortedRasterMapSources:NO];
+}
+
++ (void)initialize
+{
+    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
+                                           stringId:@"mapunderlay.change"
+                                                 cl:self.class]
+              name:OALocalizedString(@"quick_action_map_underlay")]
+             iconName:@"ic_custom_underlay_map"]
+            category:QuickActionTypeCategoryConfigureMap];
 }
 
 - (void) execute
@@ -49,7 +58,7 @@ static OAQuickActionType *TYPE;
     NSArray<NSArray<NSString *> *> *sources = self.getParams[self.getListKey];
     if (sources.count > 0)
     {
-        BOOL showBottomSheetStyles = [self.getParams[KEY_DIALOG] boolValue];
+        BOOL showBottomSheetStyles = [self.getParams[kDialog] boolValue];
         if (showBottomSheetStyles)
         {
             OAQuickActionSelectionBottomSheetViewController *bottomSheet = [[OAQuickActionSelectionBottomSheetViewController alloc] initWithAction:self type:EOAMapSourceTypeUnderlay];
@@ -59,7 +68,7 @@ static OAQuickActionType *TYPE;
         
         NSInteger index = -1;
         OAMapSource *currSource = [OsmAndApp instance].data.underlayMapSource;
-        NSString *currentSource = currSource.name ? currSource.name : KEY_NO_UNDERLAY;
+        NSString *currentSource = currSource.name ? currSource.name : kNoUnderlay;
         BOOL noUnderlay = currSource.name == nil;
         
         for (NSInteger idx = 0; idx < sources.count; idx++)
@@ -86,7 +95,7 @@ static OAQuickActionType *TYPE;
     OsmAndAppInstance app = [OsmAndApp instance];
     NSString *variant = params.firstObject;
     NSString *name = params.count > 1 ? params[params.count - 1] : @"";
-    BOOL hasUnderlay = ![variant isEqualToString:KEY_NO_UNDERLAY];
+    BOOL hasUnderlay = ![variant isEqualToString:kNoUnderlay];
     if (hasUnderlay)
     {
         OAMapSource *newMapSource = nil;
@@ -121,7 +130,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *) getTranslatedItemName:(NSString *)item
 {
-    if ([item isEqualToString:KEY_NO_UNDERLAY])
+    if ([item isEqualToString:kNoUnderlay])
         return OALocalizedString(@"no_underlay");
     else
         return item;
@@ -144,7 +153,7 @@ static OAQuickActionType *TYPE;
 
 - (NSString *) getListKey
 {
-    return KEY_UNDERLAYS;
+    return kUnderlays;
 }
 
 - (OrderedDictionary *) getUIModel
@@ -152,9 +161,9 @@ static OAQuickActionType *TYPE;
     MutableOrderedDictionary *data = [[MutableOrderedDictionary alloc] init];
     [data setObject:@[@{
                           @"type" : [OASwitchTableViewCell getCellIdentifier],
-                          @"key" : KEY_DIALOG,
+                          @"key" : kDialog,
                           @"title" : OALocalizedString(@"quick_action_interim_dialog"),
-                          @"value" : @([self.getParams[KEY_DIALOG] boolValue]),
+                          @"value" : @([self.getParams[kDialog] boolValue]),
                           },
                       @{
                           @"footer" : OALocalizedString(@"quick_action_dialog_descr")
@@ -188,28 +197,25 @@ static OAQuickActionType *TYPE;
     {
         for (NSDictionary *item in arr)
         {
-            if ([item[@"key"] isEqualToString:KEY_DIALOG])
-                [params setValue:item[@"value"] forKey:KEY_DIALOG];
+            if ([item[@"key"] isEqualToString:kDialog])
+                [params setValue:item[@"value"] forKey:kDialog];
             else if ([item[@"type"] isEqualToString:[OATitleDescrDraggableCell getCellIdentifier]])
                 [sources addObject:@[item[@"value"], item[@"title"]]];
         }
     }
-    [params setObject:sources forKey:KEY_UNDERLAYS];
+    [params setObject:sources forKey:kUnderlays];
     [self setParams:[NSDictionary dictionaryWithDictionary:params]];
     return sources.count > 0;
 }
 
-+ (OAQuickActionType *) TYPE
++ (QuickActionType *) TYPE
 {
-    if (!TYPE)
-        TYPE = [[OAQuickActionType alloc] initWithIdentifier:16 stringId:@"mapunderlay.change" class:self.class name:OALocalizedString(@"quick_action_map_underlay") category:CONFIGURE_MAP iconName:@"ic_custom_underlay_map" secondaryIconName:nil];
-       
     return TYPE;
 }
 
 - (NSArray *)loadListFromParams
 {
-    return self.getParams[self.getListKey];
+    return [self getParams][[self getListKey]];
 }
 
 @end

@@ -40,6 +40,7 @@
 - (void) setRotationNoneToManual;
 
 - (CLLocation *) getDefaultLocation;
+- (CLLocation *) getMapLocation;
 
 - (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
 - (void) setZoomTime:(NSTimeInterval)time;

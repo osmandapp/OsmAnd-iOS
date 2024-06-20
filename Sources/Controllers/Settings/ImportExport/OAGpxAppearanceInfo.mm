@@ -27,6 +27,7 @@
         _showArrows = dataItem.showArrows;
         _showStartFinish = dataItem.showStartFinish;
         _verticalExaggerationScale = dataItem.verticalExaggerationScale;
+        _elevationMeters = dataItem.elevationMeters;
         _visualization3dByType = dataItem.visualization3dByType;
         _visualization3dWallColorType = dataItem.visualization3dWallColorType;
         _visualization3dPositionType = dataItem.visualization3dPositionType;
@@ -52,6 +53,7 @@
     json[@"show_arrows"] = _showArrows ? @"true" : @"false";
     json[@"show_start_finish"] = _showStartFinish ? @"true" : @"false";
     json[@"vertical_exaggeration_scale"] = [NSString stringWithFormat:@"%f", _verticalExaggerationScale];
+    json[@"elevation_meters"] = [NSString stringWithFormat:@"%ld", _elevationMeters];
     
     json[@"line_3d_visualization_by_type"] = [OAGPXDatabase lineVisualizationByTypeNameForType:_visualization3dByType];
     json[@"line_3d_visualization_wall_color_type"] = [OAGPXDatabase lineVisualizationWallColorTypeNameForType:_visualization3dWallColorType];
@@ -83,6 +85,7 @@
     gpxAppearanceInfo.showArrows = [json[@"show_arrows"] boolValue];
     gpxAppearanceInfo.showStartFinish = [json[@"show_start_finish"] boolValue];
     gpxAppearanceInfo.verticalExaggerationScale = [json[@"vertical_exaggeration_scale"] floatValue];
+    gpxAppearanceInfo.elevationMeters = [json[@"elevation_meters"] integerValue];
     
     gpxAppearanceInfo.visualization3dByType = [OAGPXDatabase lineVisualizationByTypeForName:json[@"line_3d_visualization_by_type"]];
     

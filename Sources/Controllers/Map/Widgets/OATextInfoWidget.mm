@@ -114,6 +114,84 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return dic;
 }
 
+- (void)printConstraintConstantsForView:(UIView *)view {
+    for (NSLayoutConstraint *constraint in view.constraints) {
+        NSLog(@"Constraint constant: %f", constraint);
+    }
+    
+    for (UIView *subview in view.subviews) {
+        [self printConstraintConstantsForView:subview];
+    }
+}
+
+- (void)updateVerticalStackImageTitleSubtitleLayout
+{
+    NSArray *viewsToRemove = [self subviews];
+    for (UIView *v in viewsToRemove) {
+        [v removeFromSuperview];
+    }
+    [self initSeparatorsView];
+    [self showBottomSeparator:NO];
+    [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameCustomSeparator]];
+
+    UIStackView *verticalStackView = [UIStackView new];
+    verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    verticalStackView.axis = UILayoutConstraintAxisVertical;
+    verticalStackView.alignment = UIStackViewAlignmentFill;
+    verticalStackView.spacing = 7;
+    verticalStackView.distribution = UIStackViewDistributionEqualSpacing;
+    [self addSubview:verticalStackView];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [verticalStackView.topAnchor constraintEqualToAnchor:self.topAnchor constant:9],
+        [verticalStackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
+        [verticalStackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3],
+    ]];
+    [self printConstraintConstantsForView:_imageView];
+    _imageView = [UIImageView new];
+    _imageView.contentMode = UIViewContentModeScaleAspectFit;
+    UIImage *image = [UIImage imageNamed:_icon];
+    [self setImage:image];
+    _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [verticalStackView addArrangedSubview:_imageView];
+    
+    UIStackView *verticalNameUnitStackView = [UIStackView new];
+    verticalNameUnitStackView.translatesAutoresizingMaskIntoConstraints = NO;
+    verticalNameUnitStackView.axis = UILayoutConstraintAxisVertical;
+    verticalNameUnitStackView.alignment = UIStackViewAlignmentFill;
+    verticalNameUnitStackView.spacing = 7;
+    verticalNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
+    [verticalStackView addArrangedSubview:verticalNameUnitStackView];
+    [self printConstraintConstantsForView:_imageView];
+    
+    self.valueLabel = [UILabel new];
+    self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.valueLabel.textAlignment = NSTextAlignmentCenter;
+    self.valueLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];
+    self.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+    [verticalNameUnitStackView addArrangedSubview:self.valueLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.valueLabel.heightAnchor constraintEqualToConstant:24],
+    ]];
+    
+    self.unitLabel = [UILabel new];
+    self.unitLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    self.unitLabel.textAlignment = NSTextAlignmentCenter;
+    self.unitLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption2];
+    self.unitLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+    [verticalNameUnitStackView addArrangedSubview:self.unitLabel];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [self.unitLabel.heightAnchor constraintEqualToConstant:13]
+    ]];
+    
+    [NSLayoutConstraint activateConstraints:@[
+        [_imageView.heightAnchor constraintEqualToConstant:30],
+        [_imageView.widthAnchor constraintEqualToConstant:30],
+    ]];
+}
+
 - (void)updateSimpleLayout
 {
     NSArray *viewsToRemove = [self subviews];
@@ -489,17 +567,25 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
 }
 
+- (void)configureVerticalStackImageTitleSubtitleLayout
+{
+    self.valueLabel.text = _text;
+    self.unitLabel.text = _subtext;
+    [self updatesSeparatorsColor:[UIColor colorNamed:ACColorNameCustomSeparator]];
+}
+
 - (void)configureSimpleLayout
 {
     CGFloat labelFontSize = [OAWidgetSizeStyleObjWrapper getLabelFontSizeForType:self.widgetSizeStyle];
     CGFloat valueFontSize = [OAWidgetSizeStyleObjWrapper getValueFontSizeForType:self.widgetSizeStyle];
     CGFloat unitsFontSize = [OAWidgetSizeStyleObjWrapper getUnitsFontSizeForType:self.widgetSizeStyle];
-    CGFloat paddingBetweenIconAdndValue = [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle];
+    CGFloat paddingBetweenIconAndValue = [OAWidgetSizeStyleObjWrapper getPaddingBetweenIconAndValueWithType:self.widgetSizeStyle];
 
     self.nameLabel.font = [UIFont scaledSystemFontOfSize:labelFontSize weight:UIFontWeightMedium];
     self.nameLabel.textColor = _contentTitleColor;
 
-    self.valueLabel.font = [UIFont scaledSystemFontOfSize:valueFontSize weight:UIFontWeightSemibold]; self.valueLabel.textColor = _primaryColor;
+    self.valueLabel.font = [UIFont scaledSystemFontOfSize:valueFontSize weight:UIFontWeightSemibold];
+    self.valueLabel.textColor = _primaryColor;
 
     self.unitLabel.font = [UIFont scaledSystemFontOfSize:unitsFontSize weight:UIFontWeightMedium];
     self.unitLabel.textColor = _unitsColor;
@@ -557,7 +643,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
          _contentStackViewSimpleWidget.spacing = 0;
         if (self.widgetSizeStyle == EOAWidgetSizeStyleSmall)
         {
-            _contentStackViewSimpleWidget.spacing = paddingBetweenIconAdndValue;
+            _contentStackViewSimpleWidget.spacing = paddingBetweenIconAndValue;
             self.emptyViewRightPlaceholderFullRow.hidden = YES;
             if (_subtext.length == 0)
             {
@@ -577,7 +663,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     }
     else
     {
-        _contentStackViewSimpleWidget.spacing = paddingBetweenIconAdndValue;
+        _contentStackViewSimpleWidget.spacing = paddingBetweenIconAndValue;
         self.valueLabel.textAlignment = NSTextAlignmentNatural;
     }
 }
@@ -587,6 +673,10 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     if (self.isSimpleLayout)
     {
         [self configureSimpleLayout];
+    }
+    else if (self.isVerticalStackImageTitleSubtitleLayout)
+    {
+        [self configureVerticalStackImageTitleSubtitleLayout];
     }
     else
     {
@@ -656,7 +746,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 
 - (void) adjustViewSize
 {
-    if (self.isSimpleLayout)
+    if (self.isSimpleLayout || self.isVerticalStackImageTitleSubtitleLayout)
         return;
     CGFloat leadingOffset = _imageView.hidden ? 3 : 39;
     _leadingTextAnchor.constant = leadingOffset;

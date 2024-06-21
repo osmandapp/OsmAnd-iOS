@@ -122,7 +122,7 @@
                         const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(selfWeak.band, bandValue, true);
 
                         BOOL unitsWithBigFont = selfWeak.band == WEATHER_BAND_TEMPERATURE;
-                        if (unitsWithBigFont)
+                        if (unitsWithBigFont && !selfWeak.shouldAlwaysSeparateValueAndUnitText)
                         {
                             NSString *fullText = [NSString stringWithFormat:@"%@ %@", bandValueStr.toNSString(), bandUnit];
                             [selfWeak setText:fullText subtext:nil];

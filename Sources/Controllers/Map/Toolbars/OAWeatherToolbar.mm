@@ -22,6 +22,7 @@
 #import "OAWeatherPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAWeatherWidget.h"
 
 #define kDefaultZoom 10
 
@@ -30,6 +31,7 @@
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *layersCollectionView;
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
 @property (weak, nonatomic) IBOutlet OASegmentedSlider *timeSliderView;
+@property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
 
 @end
 
@@ -47,6 +49,7 @@
     NSInteger _previousSelectedDayIndex;
     float _prevZoom;
     OsmAnd::PointI _prevTarget31;
+    NSArray<OAWeatherWidget *> *_weatherWidgetControlsArray;
 }
 
 - (instancetype)init
@@ -58,7 +61,7 @@
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
                 [self.class calculateYOutScreen],
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
-                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 205. + [OAUtilities getBottomMargin]
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 241. + [OAUtilities getBottomMargin]
         );
 
     [self commonInit];
@@ -109,7 +112,6 @@
     _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(updateLayersHandlerData)
                                                   andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
-    
     [self updateInfo];
 }
 
@@ -131,6 +133,25 @@
     }
 }
 
+- (void)configureWidgetControlsStackView
+{
+    _weatherWidgetControlsArray = [(OAWeatherPlugin *)[OAPluginsHelper getPlugin:OAWeatherPlugin.class] createWidgetsControls];
+    
+    if (_weatherWidgetControlsArray && _weatherWidgetControlsArray.count > 0) {
+        [_weatherStackView removeAllArrangedSubviews];
+        NSInteger itemCount = _weatherWidgetControlsArray.count;
+        for (NSInteger idx = 0; idx < itemCount; idx++) {
+            OAWeatherWidget *widget = _weatherWidgetControlsArray[idx];
+            widget.shouldAlwaysSeparateValueAndUnitText = YES;
+            widget.isVerticalStackImageTitleSubtitleLayout = YES;
+            [widget updateVerticalStackImageTitleSubtitleLayout];
+            BOOL showSeparator = (idx != itemCount - 1);
+            [widget showRightSeparator:showSeparator];
+            [_weatherStackView addArrangedSubview:widget];
+        }
+    }
+}
+
 - (void)resetHandlersData
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -144,6 +165,7 @@
         [self updateData:[_datesHandler getData] type:EOAWeatherToolbarDates index:0];
         [self.layersCollectionView reloadData];
         [self.dateCollectionView reloadData];
+        [self configureWidgetControlsStackView];
     });
 }
 
@@ -153,6 +175,7 @@
         [_layersHandler updateData];
         [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers index:-1];
         [self.layersCollectionView reloadData];
+        [self configureWidgetControlsStackView];
     });
 }
 
@@ -181,16 +204,17 @@
     self.layer.shadowRadius = 5.;
     self.layer.shadowOffset = CGSizeMake(0., -1.);
     self.layer.masksToBounds = NO;
-    
-    self.layer.cornerRadius = 9.;
-    self.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
 }
 
 - (BOOL)updateInfo
 {
     OAMapInfoController *mapInfoController = [OARootViewController instance].mapPanel.hudViewController.mapInfoController;
-    BOOL visible =  mapInfoController.weatherToolbarVisible;
+    BOOL visible = mapInfoController.weatherToolbarVisible;
     [self updateVisibility:visible];
+    if (visible)
+    {
+        [self updateWidgetsInfo];
+    }
 
     return YES;
 }
@@ -304,7 +328,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -319,7 +343,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -341,7 +365,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -356,7 +380,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -368,7 +392,7 @@
     if ([OAUtilities isLandscape])
         return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] : 0.;
 
-    return DeviceScreenHeight - (205. + [OAUtilities getBottomMargin]);
+    return DeviceScreenHeight - (241. + [OAUtilities getBottomMargin]);
 }
 
 + (CGFloat)calculateYOutScreen
@@ -376,7 +400,14 @@
     if ([OAUtilities isLandscape])
         return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] -1 : -1.;
 
-    return DeviceScreenHeight + 205. + [OAUtilities getBottomMargin];
+    return DeviceScreenHeight + 241. + [OAUtilities getBottomMargin];
+}
+
+- (void)updateWidgetsInfo
+{
+    for (OAWeatherWidget *itemView in _weatherWidgetControlsArray) {
+        [itemView updateInfo];
+    }
 }
 
 #pragma mark - UISlider
@@ -387,8 +418,10 @@
     NSDate *selectedDate = _timeValues[index];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
 
-    if ([_layersHandler isAllLayersDisabled])
+    if ([_layersHandler isAllLayersDisabled]) {
         [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] updateWidgetsInfo];
+        [self updateWidgetsInfo];
+    }
 }
 
 #pragma mark - OAWeatherToolbarDelegate
@@ -418,6 +451,7 @@
         [self.dateCollectionView setValues:data withSelectedIndex:index];
         [self.dateCollectionView reloadData];
         _previousSelectedDayIndex = index;
+        [self updateWidgetsInfo];
     }
 }
 

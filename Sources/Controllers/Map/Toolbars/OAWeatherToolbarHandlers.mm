@@ -189,19 +189,25 @@
 
     NSMutableArray<NSMutableDictionary *> *layersData = [NSMutableArray array];
     [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-            @"title": OALocalizedString(@"today"),
+            @"title": OALocalizedString(@"today").capitalizedString,
             @"value": selectedDate
+    }]];
+    [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
+            @"title": OALocalizedString(@"tomorrow"),
+            @"value": [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:selectedDate options:0]
     }]];
 
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.timeZone = calendar.timeZone;
-    [formatter setDateFormat:@"dd.MM"];
-    for (NSInteger i = 1; i <= 6; i++)
+    [formatter setDateFormat:@"E"];
+    
+    // Next 5 days (excluding today and tomorrow)
+    for (NSInteger i = 2; i <= 6; i++)
     {
-        selectedDate = [calendar dateByAddingUnit:NSCalendarUnitDay value:1 toDate:selectedDate options:0];
+       NSDate *date = [calendar dateByAddingUnit:NSCalendarUnitDay value:i toDate:selectedDate options:0];
         [layersData addObject:[NSMutableDictionary dictionaryWithDictionary:@{
-                @"title": [formatter stringFromDate:selectedDate],
-                @"value": selectedDate
+                @"title": [formatter stringFromDate:date],
+                @"value": date
         }]];
     }
 

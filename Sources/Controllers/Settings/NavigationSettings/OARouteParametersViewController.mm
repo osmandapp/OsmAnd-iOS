@@ -562,7 +562,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 nameKey : paramId,
                 iconKey : iconName,
                 titleKey : title,
-                valueKey : @([rp isSelected])
+                valueKey: rp
             }];
         }
     }

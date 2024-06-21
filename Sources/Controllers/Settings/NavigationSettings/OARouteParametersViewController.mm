@@ -238,7 +238,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 if (![self.appMode isDerivedRoutingFrom:OAApplicationMode.CAR])
                 {
                     title = OALocalizedString(@"fast_route_mode");
-                    icon = @"ic_action_play_dark";
+                    icon = @"ic_custom_fastest_route";
                 }
                 [tableSection addObject: @{
                     typeKey : [OASwitchTableViewCell getCellIdentifier],
@@ -353,11 +353,16 @@ static NSString *foregroundImageKey = @"foregroundImage";
         NSMutableArray<NSString *> *paramsIds = fetchedParams[0];
         NSMutableArray<NSString *> *paramsNames = fetchedParams[1];
         NSMutableArray<NSString *> *enabledParamsIds = fetchedParams[2];
+        BOOL enabled = enabledParamsIds.count > 0;
+        UIImage *icon = [UIImage templateImageNamed: enabled ? @"ic_custom_placard_hazard" :@"ic_custom_placard_hazard_off"];
+        UIColor *tint = [UIColor colorNamed:enabled ? ACColorNameIconColorDisruptive : ACColorNameIconColorDisabled];
+        
         [tableSection addObject:
          @{
             typeKey : [OAValueTableViewCell getCellIdentifier],
             keyKey : dangerousGoodsUsaKey,
-            iconKey : [self getHazmatUsaIcon:enabledParamsIds],
+            iconKey : icon,
+            iconTintKey : tint,
             titleKey : OALocalizedString(@"dangerous_goods"),
             valueKey : [self getHazmatUsaDescription:enabledParamsIds],
             paramsIdsKey : paramsIds,
@@ -396,12 +401,6 @@ static NSString *foregroundImageKey = @"foregroundImage";
             [enabledParamsIds addObject:param[0]];
     }
     return @[paramsIds, paramsNames, enabledParamsIds];
-}
-
-- (UIImage *) getHazmatUsaIcon:(NSArray<NSString *> *)paramsIds
-{
-    BOOL enabled = paramsIds.count > 0;
-    return enabled ? [UIImage imageNamed:@"ic_custom_hazmat_limit_colored"] : [UIImage templateImageNamed:@"ic_custom_hazmat_limit"];
 }
 
 - (NSString *) getHazmatUsaDescription:(NSArray<NSString *> *)paramsIds
@@ -795,7 +794,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     NSMutableArray *newData = [NSMutableArray arrayWithArray:_data];
     NSMutableDictionary *newItem= [NSMutableDictionary dictionaryWithDictionary:_data[indexPath.section][indexPath.row]];
     newItem[valueKey] = [NSNumber numberWithBool:isChecked];
-    newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];;
+    newData[indexPath.section][indexPath.row] = [NSDictionary dictionaryWithDictionary:newItem];
     _data = [NSArray arrayWithArray:newData];
 }
 

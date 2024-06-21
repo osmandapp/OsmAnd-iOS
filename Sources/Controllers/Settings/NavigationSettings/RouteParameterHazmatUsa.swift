@@ -61,6 +61,8 @@ final class RouteParameterHazmatUsa: OABaseSettingsViewController {
             row.cellType = OASwitchTableViewCell.getIdentifier()
             row.key = parameterIds[i]
             row.title = parameterNames[i]
+            let classNumber = parameterIds[i].replacingOccurrences(of: "hazmat_category_usa_", with: "")
+            row.iconName = "ic_custom_placard_hazard_" + classNumber
             if let param = OAAppSettings.sharedManager().getCustomRoutingBooleanProperty(row.key, defaultValue: false) {
                 row.setObj(param, forKey: paramsKey)
                 row.setObj(param.get(appMode), forKey: selectedKey)
@@ -74,7 +76,12 @@ final class RouteParameterHazmatUsa: OABaseSettingsViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: OASwitchTableViewCell.reuseIdentifier, for: indexPath) as! OASwitchTableViewCell
         cell.titleLabel.text = item.title
         cell.descriptionVisibility(false)
-        cell.leftIconVisibility(false)
+        if let iconName = item.iconName {
+            cell.leftIconVisibility(true)
+            cell.leftIconView.image = UIImage(named: iconName)
+        } else {
+            cell.leftIconVisibility(false)
+        }
         let selected = item.bool(forKey: selectedKey)
         cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
         cell.switchView.isOn = selected

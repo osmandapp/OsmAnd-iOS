@@ -55,6 +55,7 @@ static NSString *nameKey = @"name";
 static NSString *descriptionKey = @"description";
 static NSString *titleKey = @"title";
 static NSString *headerKey = @"header";
+static NSString *indexKey = @"index";
 static NSString *keyKey = @"key";
 static NSString *valueKey = @"value";
 static NSString *paramGroupKey = @"paramGroup";
@@ -338,7 +339,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
             else if ([paramId isEqualToString:kRouteParamGoodsRestrictions])
                 [self setupGoodsRestrictionsPreference:tableSection param:p];
             else
-                [self setupOtherBooleanParameterSummary:tableSection param:p];
+                [self createRoutingParameterPref:tableSection param:p index:i];
         }
     }
     [self setupTimeConditionalRoutingPref:tableSection];
@@ -531,12 +532,18 @@ static NSString *foregroundImageKey = @"foregroundImage";
     }
 }
 
-- (void) setupOtherBooleanParameterSummary:(NSMutableArray *)tableSection param:(RoutingParameter)param
+- (void) createRoutingParameterPref:(NSMutableArray *)tableSection param:(RoutingParameter)param index:(NSInteger)index
 {
+    OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
+    rp.routingParameter = param;
+    NSString *paramId = [NSString stringWithUTF8String:param.id.c_str()];
+    NSString *title = [rp getText];
+    NSString *iconName = [rp getIconName];
+    if (!iconName || iconName.length == 0)
+        iconName = @"ic_custom_alert";
+    
     if (param.type == RoutingParameterType::BOOLEAN)
     {
-        NSString *paramId = [NSString stringWithUTF8String:param.id.c_str()];
-        OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:param.defaultBoolean];
         if ([paramId isEqualToString:kRouteParamHeightObstacles] && _reliefFactorParameters.size() > 0)
         {
             _reliefFactorParameters.insert(_reliefFactorParameters.begin(), param);
@@ -548,23 +555,31 @@ static NSString *foregroundImageKey = @"foregroundImage";
         }
         else
         {
-            NSString *paramId = [NSString stringWithUTF8String:param.id.c_str()];
+            if ([paramId isEqualToString:kRouteParamHeightObstacles])
+                title = OALocalizedString(@"routing_attr_height_obstacles_name");
             OACommonBoolean *pref = [_settings getCustomRoutingBooleanProperty:paramId defaultValue:param.defaultBoolean];
-            OALocalNonAvoidParameter *rp = [[OALocalNonAvoidParameter alloc] initWithAppMode:self.appMode];
-            rp.routingParameter = param;
-            
-            NSString *iconName = [rp getIconName];
-            if (!iconName)
-                iconName = @"ic_custom_alert";
-            
             [tableSection addObject: @{
                 typeKey : [OASwitchTableViewCell getCellIdentifier],
                 nameKey : paramId,
                 iconKey : iconName,
-                titleKey : [rp getText],
-                valueKey : rp
+                titleKey : title,
+                valueKey : @([rp isSelected])
             }];
         }
+    }
+    else
+    {
+        NSString *defaultValue = param.type == RoutingParameterType::NUMERIC ? kDefaultNumericValue : kDefaultSymbolicValue;
+        OACommonString *setting = [_settings getCustomRoutingProperty:paramId defaultValue:defaultValue];
+        NSString *value = [NSString stringWithUTF8String:param.possibleValueDescriptions[[setting get:self.appMode].intValue].c_str()];
+        [tableSection addObject:@{
+            typeKey : [OAValueTableViewCell getCellIdentifier],
+            keyKey : multiValuePrefKey,
+            titleKey : title,
+            iconKey : [UIImage templateImageNamed:iconName],
+            valueKey : value,
+            indexKey : @(index)
+        }];
     }
 }
 
@@ -725,7 +740,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     else if ([itemKey isEqualToString:multiValuePrefKey] && parameter)
         settingsViewController = [[OARouteParameterValuesViewController alloc] initWithRoutingParameter:parameter appMode:self.appMode];
     else if ([itemKey isEqualToString:multiValuePrefKey])
-        settingsViewController = [[OARouteParameterValuesViewController alloc] initWithParameter:_otherRoutingParameters[[item[@"ind"] intValue]] appMode:self.appMode];
+        settingsViewController = [[OARouteParameterValuesViewController alloc] initWithParameter:_otherRoutingParameters[[item[indexKey] intValue]] appMode:self.appMode];
     else if ([itemKey isEqualToString:preferRoadsKey])
         settingsViewController = [[OAAvoidPreferParametersViewController alloc] initWithAppMode:self.appMode isAvoid:NO];
     else if ([itemKey isEqualToString:roadSpeedsKey])

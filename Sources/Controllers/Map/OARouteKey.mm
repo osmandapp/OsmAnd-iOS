@@ -7,6 +7,7 @@
 //
 
 #import "OARouteKey.h"
+#import "Localization.h"
 
 @implementation OARouteKey
 
@@ -49,10 +50,18 @@
     auto rk = OsmAnd::NetworkRouteKey::fromGpx(tags);
     if (rk)
     {
-        auto key = *rk.get();
+        auto key = *rk;
         return [[OARouteKey alloc] initWithKey:key];
     }
     return nil;
+}
+
+- (NSString *)getActivityTypeTitle
+{
+    NSString *tag = _routeKey.getTag().toNSString();
+    NSString *resourceId = [NSString stringWithFormat:@"%@%@%@", @"activity_type_", tag, @"_name"];
+    NSString *res = OALocalizedString(resourceId);
+    return [res isEqualToString:resourceId] ? [OAUtilities capitalizeFirstLetter:tag] : res;
 }
 
 @end

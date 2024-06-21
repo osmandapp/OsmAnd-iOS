@@ -2597,6 +2597,11 @@ typedef enum
     return [self openTargetViewWithFavorite:item pushed:pushed saveState:YES preferredZoom:PREFERRED_FAVORITE_ZOOM];
 }
 
+- (void)openTargetViewWithFavorite:(OAFavoriteItem *)item pushed:(BOOL)pushed saveState:(BOOL)saveState
+{
+    return [self openTargetViewWithFavorite:item pushed:pushed saveState:saveState preferredZoom:PREFERRED_FAVORITE_ZOOM];
+}
+
 - (void)openTargetViewWithAddress:(OAAddress *)address name:(NSString *)name typeName:(NSString *)typeName pushed:(BOOL)pushed preferredZoom:(float)preferredZoom
 {
     return [self openTargetViewWithAddress:address name:name typeName:typeName pushed:pushed saveState:YES preferredZoom:preferredZoom];

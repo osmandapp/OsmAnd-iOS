@@ -3421,7 +3421,7 @@
 "add_button" = "Ajouter un bouton";
 "empty_name" = "Sans nom";
 "custom_map_button_name_present" = "Ce bouton est déjà présent";
-"display_position_automatic_descr" = "Dépend de l'orientation de la carte : en bas si l'orientation dépend du mouvement, centré dans tous les autres cas.";
+"display_position_automatic_descr" = "Dépend de l'orientation de la carte : en bas si l'orientation suit le déplacement, centré dans tous les autres cas.";
 "auto_zoom" = "Zoom automatique";
 "shared_string_development" = "Développement";
 "routing_algorithm_a" = "A*";

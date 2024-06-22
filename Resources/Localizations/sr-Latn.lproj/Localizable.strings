@@ -178,7 +178,7 @@
 "carplay_active_message" = "Mapa se prikazuje preko KarPlej-a";
 "carplay_profile" = "KarPlej profil";
 "carplay_profile_descr" = "Profil koji će se koristiti dok ste povezani na KarPlej.";
-"show_traffic_warnings" = "Upozorenja o saobraćaju";
+"show_traffic_warnings" = "Szanje na putevima";
 "show_pedestrian_warnings" = "Pešački prelazi";
 "show_cameras" = "Kamere za merenje brzine";
 "show_lanes" = "Trake";

@@ -3424,3 +3424,7 @@
 "empty_name" = "Nume gol";
 "custom_map_button_name_present" = "Un asemenea buton este deja prezent";
 "wall_height_description" = "Prin modificarea valorii înălțimii, puteți ridica linia superioară a liniei de cale ferată deasupra nivelului solului.";
+"custom_buttons" = "Butoane personalizate";
+"select_items" = "Selectați elemente";
+"shared_string_item" = "Element";
+"default_buttons" = "Butoane standard";

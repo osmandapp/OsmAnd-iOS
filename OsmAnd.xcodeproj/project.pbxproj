@@ -572,6 +572,7 @@
 		462545A928D3688900637964 /* ic_custom_cross_buy_colored_day_big@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A528D3688700637964 /* ic_custom_cross_buy_colored_day_big@3x.png */; };
 		462545AA28D3688900637964 /* ic_custom_cross_buy_colored_day_big@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A628D3688800637964 /* ic_custom_cross_buy_colored_day_big@2x.png */; };
 		462545AB28D3688900637964 /* ic_custom_cross_buy_colored_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */; };
+		4625AF902C2335870099EB89 /* TerrainMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4625AF8F2C2335870099EB89 /* TerrainMode.swift */; };
 		4627664D283D766E00F412F6 /* OASubscriptionCardView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */; };
 		462BF6DC2B7E8347003ECA2C /* DeleteAccountCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */; };
 		462E13E82BFA36D40038BCCB /* CustomMapButtonsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */; };
@@ -4050,6 +4051,7 @@
 		462545A528D3688700637964 /* ic_custom_cross_buy_colored_day_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cross_buy_colored_day_big@3x.png"; path = "Resources/Icons/ic_custom_cross_buy_colored_day_big@3x.png"; sourceTree = "<group>"; };
 		462545A628D3688800637964 /* ic_custom_cross_buy_colored_day_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cross_buy_colored_day_big@2x.png"; path = "Resources/Icons/ic_custom_cross_buy_colored_day_big@2x.png"; sourceTree = "<group>"; };
 		462545A728D3688800637964 /* ic_custom_cross_buy_colored_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_cross_buy_colored_day@3x.png"; path = "Resources/Icons/ic_custom_cross_buy_colored_day@3x.png"; sourceTree = "<group>"; };
+		4625AF8F2C2335870099EB89 /* TerrainMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainMode.swift; sourceTree = "<group>"; };
 		4627664C283D766E00F412F6 /* OASubscriptionCardView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OASubscriptionCardView.xib; sourceTree = "<group>"; };
 		462BF6DB2B7E8347003ECA2C /* DeleteAccountCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteAccountCommand.swift; sourceTree = "<group>"; };
 		462E13E72BFA36D40038BCCB /* CustomMapButtonsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomMapButtonsViewController.swift; sourceTree = "<group>"; };
@@ -10904,6 +10906,7 @@
 			children = (
 				DA5A798A26C563A000F274C7 /* OASRTMPlugin.mm */,
 				DA5A798B26C563A000F274C7 /* OASRTMPlugin.h */,
+				4625AF8F2C2335870099EB89 /* TerrainMode.swift */,
 			);
 			path = SRTMPlugin;
 			sourceTree = "<group>";
@@ -17218,6 +17221,7 @@
 				DA5A84CB26C563A900F274C7 /* OACopyProfileBottomSheetViewControler.mm in Sources */,
 				DA5A836526C563A800F274C7 /* OAAppModeView.mm in Sources */,
 				DA679950299A7A4A00CC1509 /* OAFetchBackgroundDataOperation.m in Sources */,
+				4625AF902C2335870099EB89 /* TerrainMode.swift in Sources */,
 				32D253B427F336C200324717 /* OACloudIntroductionViewController.m in Sources */,
 				32473DD62A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift in Sources */,
 				DA5A84D926C563A900F274C7 /* OAMapSettingsViewController.mm in Sources */,

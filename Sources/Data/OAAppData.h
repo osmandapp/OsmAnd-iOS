@@ -117,19 +117,9 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 
 @property (readonly) OAMapLayersConfiguration* mapLayersConfiguration;
 
-@property (nonatomic) EOATerrainType terrainType;
-@property (nonatomic) EOATerrainType lastTerrainType;
-@property (nonatomic) double hillshadeAlpha;
-@property (nonatomic) NSInteger hillshadeMinZoom;
-@property (nonatomic) NSInteger hillshadeMaxZoom;
-@property (nonatomic) double slopeAlpha;
-@property (nonatomic) NSInteger slopeMinZoom;
-@property (nonatomic) NSInteger slopeMaxZoom;
 @property (nonatomic) double verticalExaggerationScale;
 
-@property (readonly) OAObservable* terrainChangeObservable;
 @property (readonly) OAObservable* terrainResourcesChangeObservable;
-@property (readonly) OAObservable* terrainAlphaChangeObservable;
 @property (readonly) OAObservable* verticalExaggerationScaleChangeObservable;
 
 @property (nonatomic) BOOL mapillary;
@@ -190,19 +180,7 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 - (OAMapSource *) getLastMapSource:(OAApplicationMode *)mode;
 - (void) setLastMapSource:(OAMapSource *)lastMapSource mode:(OAApplicationMode *)mode;
 
-- (EOATerrainType) getTerrainType:(OAApplicationMode *)mode;
-- (void) setTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
-
-- (void) resetHillshadeAlpha;
-- (void) resetSlopeAlpha;
-- (void) resetHillshadeMinZoom;
-- (void) resetHillshadeMaxZoom;
-- (void) resetSlopeMinZoom;
-- (void) resetSlopeMaxZoom;
 - (void)resetVerticalExaggerationScale;
-
-- (EOATerrainType) getLastTerrainType:(OAApplicationMode *)mode;
-- (void) setLastTerrainType:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode;
 
 - (void) setSettingValue:(NSString *)value forKey:(NSString *)key mode:(OAApplicationMode *)mode;
 - (void) addPreferenceValuesToDictionary:(MutableOrderedDictionary *)prefs mode:(OAApplicationMode *)mode;

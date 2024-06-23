@@ -15,6 +15,7 @@
 #import "OAMapRendererEnvironment.h"
 #import "OAOsmandDevelopmentPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include "OATerrainMapLayerProvider.h"
 #include <OsmAndCore/Utilities.h>
@@ -33,9 +34,11 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     std::shared_ptr<OsmAnd::SlopeRasterMapLayerProvider> _slopeLayerProvider;
     std::shared_ptr<OsmAnd::HillshadeRasterMapLayerProvider> _hillshadeLayerProvider;
 
-    OAAutoObserverProxy *_terrainChangeObserver;
-    OAAutoObserverProxy *_terrainAlphaChangeObserver;
     OAAutoObserverProxy *_verticalExaggerationScaleChangeObservable;
+    OAAutoObserverProxy *_applicationModeChangedObserver;
+
+    TerrainMode *_terrainMode;
+    OASRTMPlugin *_plugin;
 }
 
 - (NSString *) layerId
@@ -45,36 +48,34 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 
 - (void) initLayer
 {
-    _terrainChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onTerrainLayerChanged)
-                                                          andObserve:self.app.data.terrainChangeObservable];
-    _terrainAlphaChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                              withHandler:@selector(onTerrainLayerAlphaChanged)
-                                                               andObserve:self.app.data.terrainAlphaChangeObservable];
-    
+    _plugin = ((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]);
+    _terrainMode = [_plugin getTerrainSettingMode];
+
     _verticalExaggerationScaleChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                                            withHandler:@selector(onVerticalExaggerationScaleChanged)
                                                                             andObserve:self.app.data.verticalExaggerationScaleChangeObservable];
-    
-    
+
+    _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                           withHandler:@selector(onAppModeChanged)
+                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(onProfileSettingSet:)
+                                                 name:kNotificationSetProfileSetting
+                                               object:nil];
 }
 
 - (void) deinitLayer
 {
-    if (_terrainChangeObserver)
-    {
-        [_terrainChangeObserver detach];
-        _terrainChangeObserver = nil;
-    }
-    if (_terrainAlphaChangeObserver)
-    {
-        [_terrainAlphaChangeObserver detach];
-        _terrainAlphaChangeObserver = nil;
-    }
     if (_verticalExaggerationScaleChangeObservable)
     {
         [_verticalExaggerationScaleChangeObservable detach];
         _verticalExaggerationScaleChangeObservable = nil;
+    }
+    if (_applicationModeChangedObserver)
+    {
+        [_applicationModeChangedObserver detach];
+        _applicationModeChangedObserver = nil;
     }
 }
 
@@ -86,29 +87,22 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     [self.mapView resetProviderFor:self.layerIndex];
 }
 
-- (BOOL) updateLayer
+- (BOOL)updateLayer
 {
     [super updateLayer];
 
-    EOATerrainType type = self.app.data.terrainType;
-    if (type != EOATerrainTypeDisabled && [[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])
+    if ([_plugin isTerrainLayerEnabled] && [_plugin isEnabled])
     {
-        if (type == EOATerrainTypeSlope)
+        _terrainMode = [_plugin getTerrainSettingMode];
+        if ([_terrainMode isSlope])
             [self setupSlopeLayerProvider];
-        else if (type == EOATerrainTypeHillshade)
+        else if ([_terrainMode isHillshade])
             [self setupHillshadeLayerProvider];
         else
             [self setupTerrainMapProvider];
 
         OsmAnd::MapLayerConfiguration config;
-        double layerAlpha = self.app.data.hillshadeAlpha;
-        if (type == EOATerrainTypeSlope)
-            layerAlpha = self.app.data.slopeAlpha;
-        else if (type == EOATerrainTypeHillshade)
-            layerAlpha = self.app.data.hillshadeAlpha;
-
-        config.setOpacityFactor(layerAlpha);
-        
+        config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
         [self.mapView setElevationScaleFactor:self.app.data.verticalExaggerationScale];
         return YES;
@@ -116,12 +110,16 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     return NO;
 }
 
-- (void) onTerrainLayerChanged
+- (void)onAppModeChanged
 {
-    [self updateTerrainLayer];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateTerrainLayer];
+        if ([_plugin isTerrainLayerEnabled])
+            [self onVerticalExaggerationScaleChanged];
+    });
 }
 
-- (void) updateTerrainLayer
+- (void)updateTerrainLayer
 {
     [self.mapViewController runWithRenderSync:^{
         if (![self updateLayer])
@@ -136,21 +134,29 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     }];
 }
 
-- (void) onTerrainLayerAlphaChanged
+- (void)onProfileSettingSet:(NSNotification *)notification
 {
-    dispatch_async(dispatch_get_main_queue(), ^{
-        [self.mapViewController runWithRenderSync:^{
-            OsmAnd::MapLayerConfiguration config;
-            EOATerrainType type = self.app.data.terrainType;
-            double layerAlpha = self.app.data.hillshadeAlpha;
-            if (type == EOATerrainTypeSlope)
-                layerAlpha = self.app.data.slopeAlpha;
-            else if (type == EOATerrainTypeHillshade)
-                layerAlpha = self.app.data.hillshadeAlpha;
-            config.setOpacityFactor(layerAlpha);
-            [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
-        }];
-    });
+    if (notification.object == _plugin.terrain || notification.object == _plugin.terrainSettingMode)
+    {
+        [self updateTerrainLayer];
+    }
+    else if ([notification.object isKindOfClass:OACommonInteger.class])
+    {
+        if ([_terrainMode isTransparencySetting:notification.object])
+        {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.mapViewController runWithRenderSync:^{
+                    OsmAnd::MapLayerConfiguration config;
+                    config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
+                    [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
+                }];
+            });
+        }
+        else if ([_terrainMode isZoomSetting:notification.object])
+        {
+            [self updateTerrainLayer];
+        }
+    }
 }
 
 - (void)onVerticalExaggerationScaleChanged
@@ -165,26 +171,14 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     });
 }
 
-- (OsmAnd::ZoomLevel) getMinZoom
+- (OsmAnd::ZoomLevel)getMinZoom
 {
-    EOATerrainType type = self.app.data.terrainType;
-    if (type == EOATerrainTypeSlope)
-        return OsmAnd::ZoomLevel(self.app.data.slopeMinZoom);
-    else if (type == EOATerrainTypeHillshade)
-        return OsmAnd::ZoomLevel(self.app.data.hillshadeMinZoom);
-    else
-        return OsmAnd::ZoomLevel1;
+    return OsmAnd::ZoomLevel([_terrainMode getMinZoom]);
 }
 
 - (OsmAnd::ZoomLevel) getMaxZoom
 {
-    EOATerrainType type = self.app.data.terrainType;
-    if (type == EOATerrainTypeSlope)
-        return OsmAnd::ZoomLevel(self.app.data.slopeMaxZoom);
-    else if (type == EOATerrainTypeHillshade)
-        return OsmAnd::ZoomLevel(self.app.data.hillshadeMaxZoom);
-    else
-        return OsmAnd::ZoomLevel11;
+    return OsmAnd::ZoomLevel([_terrainMode getMaxZoom]);
 }
 
 - (void) setupTerrainMapProvider

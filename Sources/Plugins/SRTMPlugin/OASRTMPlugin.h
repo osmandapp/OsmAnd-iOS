@@ -8,14 +8,21 @@
 
 #import "OAPlugin.h"
 
-@class OACommonBoolean;
+@class OACommonBoolean, TerrainMode;
 
 @interface OASRTMPlugin : OAPlugin
 
 @property (nonatomic) OACommonBoolean *enable3DMaps;
+@property (nonatomic) OACommonBoolean *terrain;
+@property (nonatomic) OACommonString *terrainSettingMode;
 
-- (BOOL) isHeightmapEnabled;
-- (BOOL) isHeightmapAllowed;
+- (TerrainMode *)getTerrainSettingMode;
+- (void)setTerrainMode:(TerrainMode *)mode;
+- (BOOL)isTerrainLayerEnabled;
+- (void)setTerrainLayerEnabled:(BOOL)enabled;
+
+- (BOOL)isHeightmapEnabled;
+- (BOOL)isHeightmapAllowed;
 - (BOOL) is3DMapsEnabled;
 
 @end

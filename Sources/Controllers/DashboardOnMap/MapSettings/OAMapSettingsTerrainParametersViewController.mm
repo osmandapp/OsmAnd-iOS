@@ -43,7 +43,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 {
     OsmAndAppInstance _app;
     OATableDataModel *_data;
-    EOATerrainType _type;
+    TerrainMode *_terrainMode;
     OAMapPanelViewController *_mapPanel;
     
     NSArray<NSString *> *_possibleZoomValues;
@@ -89,12 +89,12 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)commonInit
 {
     _app = OsmAndApp.instance;
-    _type = _app.data.terrainType;
+    _terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainSettingMode];
     _mapPanel = OARootViewController.instance.mapPanel;
     
-    _baseMinZoom = _type == EOATerrainTypeHillshade ? _app.data.hillshadeMinZoom : _app.data.slopeMinZoom;
-    _baseMaxZoom = _type == EOATerrainTypeHillshade ? _app.data.hillshadeMaxZoom : _app.data.slopeMaxZoom;
-    _baseAlpha = _type == EOATerrainTypeHillshade ? _app.data.hillshadeAlpha : _app.data.slopeAlpha;
+    _baseMinZoom = [_terrainMode getMinZoom];
+    _baseMaxZoom = [_terrainMode getMaxZoom];
+    _baseAlpha = [_terrainMode getTransparency] * 0.01;
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
         _baseVerticalExaggerationScale = _app.data.verticalExaggerationScale;
@@ -363,17 +363,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)resetVisibilityValues
 {
-    double alpha;
-    if (_type == EOATerrainTypeHillshade)
-    {
-        [_app.data resetHillshadeAlpha];
-        alpha = _app.data.hillshadeAlpha;
-    }
-    else
-    {
-        [_app.data resetSlopeAlpha];
-        alpha = _app.data.slopeAlpha;
-    }
+    [_terrainMode resetTransparencyToDefault];
+    CGFloat alpha = [_terrainMode getTransparency] * 0.01;
 
     if (_currentAlpha != alpha)
     {
@@ -385,22 +376,10 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)resetZoomLevels
 {
-    NSInteger minZoom;
-    NSInteger maxZoom;
-    if (_type == EOATerrainTypeHillshade)
-    {
-        [_app.data resetHillshadeMinZoom];
-        [_app.data resetHillshadeMaxZoom];
-        minZoom = _app.data.hillshadeMinZoom;
-        maxZoom = _app.data.hillshadeMaxZoom;
-    }
-    else
-    {
-        [_app.data resetSlopeMinZoom];
-        [_app.data resetSlopeMaxZoom];
-        minZoom = _app.data.slopeMinZoom;
-        maxZoom = _app.data.slopeMaxZoom;
-    }
+    [_terrainMode resetZoomsToDefault];
+    NSInteger minZoom = [_terrainMode getMinZoom];
+    NSInteger maxZoom = [_terrainMode getMaxZoom];
+
 
     if (_minZoom != minZoom || _maxZoom != maxZoom)
     {
@@ -460,24 +439,12 @@ static const NSInteger kElevationMaxMeters = 2000;
 
 - (void)applyCurrentVisibility
 {
-    if (_type == EOATerrainTypeHillshade)
-        _app.data.hillshadeAlpha = _currentAlpha;
-    else
-        _app.data.slopeAlpha = _currentAlpha;
+    [_terrainMode setTransparency:_currentAlpha / 0.01];
 }
 
 - (void)applyCurrentZoomLevels
 {
-    if (_type == EOATerrainTypeHillshade)
-    {
-        _app.data.hillshadeMinZoom = _minZoom;
-        _app.data.hillshadeMaxZoom = _maxZoom;
-    }
-    else
-    {
-        _app.data.slopeMinZoom = _minZoom;
-        _app.data.slopeMaxZoom = _maxZoom;
-    }
+    [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
 }
 
 - (void)applyVerticalExaggerationScale
@@ -543,37 +510,16 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)hide
 {
     if (_terrainType == EOATerrainSettingsTypeVisibility)
-    {
-        if (_type == EOATerrainTypeHillshade)
-            _app.data.hillshadeAlpha = _baseAlpha;
-        else
-            _app.data.slopeAlpha = _baseAlpha;
-    }
+        [_terrainMode setTransparency:_baseAlpha / 0.01];
     else if (_terrainType == EOATerrainSettingsTypeZoomLevels)
-    {
-        if (_type == EOATerrainTypeHillshade)
-        {
-            _app.data.hillshadeMinZoom = _baseMinZoom;
-            _app.data.hillshadeMaxZoom = _baseMaxZoom;
-        }
-        else
-        {
-            _app.data.slopeMinZoom = _baseMinZoom;
-            _app.data.slopeMaxZoom = _baseMaxZoom;
-        }
-    }
+        [_terrainMode setZoomValuesWithMinZoom:_baseMinZoom maxZoom:_baseMaxZoom];
     else if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
-    {
         _app.data.verticalExaggerationScale = _baseVerticalExaggerationScale;
-    }
     else if (_terrainType == EOAGPXSettingsTypeVerticalExaggeration)
-    {
         [self applyGPXVerticalExaggerationForScale:_baseGPXVerticalExaggerationScale];
-    }
     else if (_terrainType == EOAGPXSettingsTypeWallHeight)
-    {
         [self applyGPXElevationMeters:_baseGPXElevationMeters];
-    }
+
     [self hide:YES duration:.2 onComplete:^{
         if (self.delegate)
             [self.delegate onBackTerrainParameters];
@@ -626,17 +572,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         }
         return;
     }
-    
-    if (_type == EOATerrainTypeHillshade)
-    {
-        _currentAlpha = slider.value;
-        _app.data.hillshadeAlpha = _currentAlpha;
-    }
-    else
-    {
-        _currentAlpha = slider.value;
-        _app.data.slopeAlpha = _currentAlpha;
-    }
+
+    _currentAlpha = slider.value;
+    [_terrainMode setTransparency:_currentAlpha / 0.01];
     
     _isValueChange = YES;
     [self updateApplyButton];
@@ -719,8 +657,9 @@ static const NSInteger kElevationMaxMeters = 2000;
         else
         {
             cell.updateValueCallback = nil;
-            cell.sliderView.value = _app.data.terrainType == EOATerrainTypeSlope ? _app.data.slopeAlpha : _app.data.hillshadeAlpha;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%.0f%@", cell.sliderView.value * 100, @"%"];
+            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainSettingMode] getTransparency];
+            cell.sliderView.value = transparency * 0.01;
+            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%", transparency];
         }
         
         [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];
@@ -816,10 +755,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (intValue <= _maxZoom)
         {
             _minZoom = intValue;
-            if (_type == EOATerrainTypeHillshade)
-                _app.data.hillshadeMinZoom = _minZoom;
-            else if (_type == EOATerrainTypeSlope)
-                _app.data.slopeMinZoom = _minZoom;
+            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
         }
         else
         {
@@ -833,10 +769,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         if (intValue >= _minZoom)
         {
             _maxZoom = intValue;
-            if (_type == EOATerrainTypeHillshade)
-                _app.data.hillshadeMaxZoom = _maxZoom;
-            else if (_type == EOATerrainTypeSlope)
-                _app.data.slopeMaxZoom = _maxZoom;
+            [_terrainMode setZoomValuesWithMinZoom:_minZoom maxZoom:_maxZoom];
         }
         else
         {

@@ -487,24 +487,6 @@ typedef NS_ENUM(NSInteger, EOASimulationMode)
 
 @end
 
-typedef NS_ENUM(NSInteger, EOATerrainType)
-{
-    EOATerrainTypeDisabled = 0,
-    EOATerrainTypeHillshade,
-    EOATerrainTypeSlope
-};
-
-@interface OACommonTerrain : OACommonInteger
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue;
-
-- (EOATerrainType) get;
-- (EOATerrainType) get:(OAApplicationMode *)mode;
-- (void) set:(EOATerrainType)autoZoomMap;
-- (void) set:(EOATerrainType)autoZoomMap mode:(OAApplicationMode *)mode;
-
-@end
-
 typedef NS_ENUM(NSInteger, EOASpeedLimitWarningState)
 {
     EOASpeedLimitWarningStateAlways = 0,

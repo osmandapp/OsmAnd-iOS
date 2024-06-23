@@ -1489,7 +1489,7 @@ colorizationScheme:(int)colorizationScheme
 
 - (BOOL)is3DMapsEnabled
 {
-    return _plugin && [_plugin is3DMapsEnabled] && [OsmAndApp instance].data.terrainType != EOATerrainTypeDisabled;
+    return _plugin && [_plugin is3DMapsEnabled] && [_plugin isTerrainLayerEnabled];
 }
 
 - (BOOL)isSpecialGradientType:(EOAGPX3DLineVisualizationWallColorType)type

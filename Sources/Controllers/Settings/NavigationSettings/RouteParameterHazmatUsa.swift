@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc(OARouteParameterHazmatUsa)
 @objcMembers
 final class RouteParameterHazmatUsa: OABaseSettingsViewController {
 
@@ -58,7 +57,7 @@ final class RouteParameterHazmatUsa: OABaseSettingsViewController {
         
         for i in 0 ..< parameterIds.count {
             let row = section.createNewRow()
-            row.cellType = OASwitchTableViewCell.getIdentifier()
+            row.cellType = OASwitchTableViewCell.reuseIdentifier
             row.key = parameterIds[i]
             row.title = parameterNames[i]
             let classNumber = parameterIds[i].replacingOccurrences(of: "hazmat_category_usa_", with: "")

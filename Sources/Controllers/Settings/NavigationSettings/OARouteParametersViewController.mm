@@ -350,6 +350,8 @@ static NSString *foregroundImageKey = @"foregroundImage";
     if ([_settings.drivingRegion get:self.appMode] == DR_US)
     {
         NSArray<NSArray<NSString *> *> *fetchedParams = [self getHazmatUsaParamsIds];
+        if (fetchedParams.count < 3)
+            return;
         NSMutableArray<NSString *> *paramsIds = fetchedParams[0];
         NSMutableArray<NSString *> *paramsNames = fetchedParams[1];
         NSMutableArray<NSString *> *enabledParamsIds = fetchedParams[2];
@@ -751,7 +753,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     else if ([itemKey isEqualToString:autoZoomKey])
         settingsViewController = [[OARouteParameterDevelopmentViewController alloc] initWithApplicationMode:self.appMode parameterType:ParameterTypeAutoZoom];
     else if ([itemKey isEqualToString:dangerousGoodsUsaKey])
-        settingsViewController = [[OARouteParameterHazmatUsa alloc] initWithApplicationMode:self.appMode parameterIds:item[paramsIdsKey] parameterNames:item[paramsNamesKey]];
+        settingsViewController = [[RouteParameterHazmatUsa alloc] initWithApplicationMode:self.appMode parameterIds:item[paramsIdsKey] parameterNames:item[paramsNamesKey]];
     
     if (settingsViewController)
     {

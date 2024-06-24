@@ -3406,7 +3406,7 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Besondere Streckenführung verwenden (nur HH)";
 "online_plugins" = "Online Plugins";
 "vertical_exaggeration" = "Vertikale Vergrößerung";
-"vertical_exaggeration_description" = "Durch Änderung des Skalierungs-Werts können Sie das 3D-Profil hervorheben.";
+"vertical_exaggeration_description" = "Durch Änderung des Skalenwerts können Sie das 3D-Profil hervorheben.";
 "shared_string_scale" = "Maßstab";
 "missing_or_outdated_maps_title" = "Fehlende oder veraltete Karte";
 "required_maps" = "Benötigte Karten";

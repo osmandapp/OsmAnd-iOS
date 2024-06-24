@@ -14,6 +14,7 @@
 @property (nonatomic, readonly) OsmAnd::NetworkRouteKey routeKey;
 
 + (OARouteKey *) fromGpx:(NSDictionary<NSString *, NSString *> *)gpx;
+- (NSString *) getActivityTypeTitle;
 
 - (instancetype) initWithKey:(const OsmAnd::NetworkRouteKey &)key;
 

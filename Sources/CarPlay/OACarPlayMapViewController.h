@@ -15,6 +15,7 @@
 - (void)onInterfaceControllerAttached;
 - (void)onInterfaceControllerDetached;
 - (void)onMapViewAttached;
+- (void)onUpdateMapTemplateStyle;
 
 @end
 

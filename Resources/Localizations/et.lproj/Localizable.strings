@@ -2316,7 +2316,7 @@
 "route_line_use_map_style_width" = "Kasuta kaardistiili (%@) vaikimisi laiust.";
 "restore_from_file" = "Taasta failist";
 "osmand_cloud" = "OsmAnd Cloud";
-"routeInfo_smoothness_description" = "Pakub klassifikatsioonisüsteemi, mis käsitleb tee füüsilist kasutatavust ratassõidukitele, eelkõige pinna korrapärasust ja tasasust.";
+"routeInfo_smoothness_description" = "Tee või raja klassifikatsioonisüsteem ratassõidukitele, arvestades eelkõige pinna korrapärasust ja tasasust.";
 "last_backup" = "Viimane varukoopia";
 "backup_error_user_is_not_registered" = "Selle e-posti aadressiga ei ole registreeritudühtegi kasutajat";
 "cloud_conflicts" = "Versioonide erinevused";
@@ -2638,3 +2638,8 @@
 "downward_gradient" = "Tee kalle alla";
 "upward_gradient" = "Tee kalle üles";
 "required_maps" = "Vajalikud kaardid";
+"restore_from_trash" = "Taasta prügikastist";
+"empty_name" = "Tühi nimi";
+"shared_string_delete_item" = "Kustuta objekt";
+"shared_string_delete_immediately" = "Kustuta kohe";
+"delete_all_items" = "Kustuta kõik objektid";

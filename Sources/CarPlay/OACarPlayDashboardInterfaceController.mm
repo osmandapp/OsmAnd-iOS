@@ -80,6 +80,9 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     OALanesDrawable *_lanesDrawable;
     CPManeuverDisplayStyle _secondaryStyle;
+    
+    UIColor *_lightGuidanceBackgroundColor;
+    UIColor *_darkGuidanceBackgroundColor;
 }
 
 - (void) commonInit
@@ -90,6 +93,8 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     [_routingHelper addCalculationProgressCallback:self];
     _lanesDrawable = [[OALanesDrawable alloc] initWithScaleCoefficient:10.];
     _secondaryStyle = CPManeuverDisplayStyleDefault;
+    _lightGuidanceBackgroundColor = [UIColor colorWithRed:0.976 green:0.976 blue:0.984 alpha:1.0];
+    _darkGuidanceBackgroundColor = [UIColor colorWithRed:0.231 green:0.231 blue:0.231 alpha:1.0];
 }
 
 - (void) stopNavigation
@@ -108,6 +113,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     
     _mapTemplate = [[CPMapTemplate alloc] init];
     _mapTemplate.mapDelegate = self;
+    [self onUpdateMapTemplateStyle];
     [self enterBrowsingState];
     
     [self.interfaceController setRootTemplate:_mapTemplate animated:YES completion:nil];
@@ -565,8 +571,10 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
     maneuver.symbolImage = [turnDrawable toUIImage];
     maneuver.initialTravelEstimates = estimates;
     maneuver.userInfo = @{ @"imminent" : @(directionInfo.imminent) };
-    if (directionInfo.directionInfo.streetName)
-        maneuver.instructionVariants = @[directionInfo.directionInfo.streetName];
+    NSString *streetName = directionInfo.directionInfo.streetName;
+    if (streetName)
+        maneuver.instructionVariants = @[streetName];
+    
     return maneuver;
 }
 
@@ -679,6 +687,14 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
         if ([_routingHelper isFollowingMode])
             [self onTripStartTriggered];
     }
+}
+
+- (void)onUpdateMapTemplateStyle
+{
+    UIUserInterfaceStyle style = self.interfaceController.carTraitCollection.userInterfaceStyle;
+    BOOL isDarkStyle = style == UIUserInterfaceStyleDark;
+    _mapTemplate.guidanceBackgroundColor = isDarkStyle ? _darkGuidanceBackgroundColor : _lightGuidanceBackgroundColor;
+    _mapTemplate.tripEstimateStyle = isDarkStyle ? CPTripEstimateStyleDark : CPTripEstimateStyleLight;
 }
 
 @end

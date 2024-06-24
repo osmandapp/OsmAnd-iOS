@@ -3444,3 +3444,7 @@
 "add_button" = "Додај дугме";
 "empty_name" = "Празно име";
 "custom_map_button_name_present" = "Такво дугме већ постоји";
+"select_items" = "Одаберите ставке";
+"shared_string_item" = "Ставка";
+"wall_height" = "Висина зида";
+"wall_height_description" = "Променом вредности висине, можете подићи горњу линију стазе изнад нивоа тла.";

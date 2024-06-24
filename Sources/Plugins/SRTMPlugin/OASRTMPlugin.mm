@@ -36,7 +36,7 @@ static NSString * const kTerrain = @"terrain_layer";
 
         _terrain = [[self registerBooleanPreference:kTerrain defValue:YES] makeProfile];
         NSArray<TerrainMode *> *tms = TerrainMode.values;
-        _terrainSettingMode = [[self registerStringPreference:kTerrainMode defValue:tms.count == 0 ? @"" : [tms.firstObject getKeyName]] makeProfile];
+        _terrainModeType = [[self registerStringPreference:kTerrainMode defValue:tms.count == 0 ? @"" : [tms.firstObject getKeyName]] makeProfile];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(onProfileSettingSet:)
@@ -78,14 +78,14 @@ static NSString * const kTerrain = @"terrain_layer";
     return [NSString stringWithFormat:NSLocalizedString(@"srtm_plugin_description", nil), k_docs_plugin_srtm];
 }
 
-- (TerrainMode *)getTerrainSettingMode
+- (TerrainMode *)getTerrainMode
 {
-    return [TerrainMode getByKey:[_terrainSettingMode get]];
+    return [TerrainMode getByKey:[_terrainModeType get]];
 }
 
 - (void)setTerrainMode:(TerrainMode *)mode
 {
-    return [_terrainSettingMode set:[mode getKeyName]];
+    return [_terrainModeType set:[mode getKeyName]];
 }
 
 - (BOOL)isTerrainLayerEnabled

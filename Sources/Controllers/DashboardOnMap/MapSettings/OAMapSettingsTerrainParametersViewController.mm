@@ -89,7 +89,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)commonInit
 {
     _app = OsmAndApp.instance;
-    _terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainSettingMode];
+    _terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode];
     _mapPanel = OARootViewController.instance.mapPanel;
     
     _baseMinZoom = [_terrainMode getMinZoom];
@@ -657,7 +657,7 @@ static const NSInteger kElevationMaxMeters = 2000;
         else
         {
             cell.updateValueCallback = nil;
-            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainSettingMode] getTransparency];
+            NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
             cell.sliderView.value = transparency * 0.01;
             cell.valueLabel.text = [NSString stringWithFormat:@"%ld%", transparency];
         }

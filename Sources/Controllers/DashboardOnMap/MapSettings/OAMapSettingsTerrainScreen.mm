@@ -93,7 +93,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     _data = [OATableDataModel model];
 
-    TerrainMode *terrainMode = [_plugin getTerrainSettingMode];
+    TerrainMode *terrainMode = [_plugin getTerrainMode];
     _minZoom = [terrainMode getMinZoom];
     _maxZoom = [terrainMode getMaxZoom];
 
@@ -272,7 +272,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [weakSelf terrainTypeChanged];
         }];
 
-        if ([mode getKeyName] == [_plugin.terrainSettingMode get])
+        if ([mode getKeyName] == [_plugin.terrainModeType get])
         {
             action.state = UIMenuElementStateOn;
 
@@ -395,7 +395,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            cell.separatorInset = ![[_plugin getTerrainSettingMode] isHillshade] ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
+            cell.separatorInset = ![[_plugin getTerrainMode] isHillshade] ? UIEdgeInsetsMake(0., CGFLOAT_MAX, 0., 0.) : UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingOnSideOfContent, 0., 0.);;
             cell.textView.text = item.descr;
             cell.textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
             cell.textView.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];

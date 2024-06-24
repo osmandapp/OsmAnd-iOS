@@ -49,7 +49,7 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 - (void) initLayer
 {
     _plugin = ((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]);
-    _terrainMode = [_plugin getTerrainSettingMode];
+    _terrainMode = [_plugin getTerrainMode];
 
     _verticalExaggerationScaleChangeObservable = [[OAAutoObserverProxy alloc] initWith:self
                                                                            withHandler:@selector(onVerticalExaggerationScaleChanged)
@@ -93,7 +93,7 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 
     if ([_plugin isTerrainLayerEnabled] && [_plugin isEnabled])
     {
-        _terrainMode = [_plugin getTerrainSettingMode];
+        _terrainMode = [_plugin getTerrainMode];
         if ([_terrainMode isSlope])
             [self setupSlopeLayerProvider];
         else if ([_terrainMode isHillshade])
@@ -136,7 +136,7 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _plugin.terrain || notification.object == _plugin.terrainSettingMode)
+    if (notification.object == _plugin.terrain || notification.object == _plugin.terrainModeType)
     {
         [self updateTerrainLayer];
     }
@@ -176,7 +176,7 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     return OsmAnd::ZoomLevel([_terrainMode getMinZoom]);
 }
 
-- (OsmAnd::ZoomLevel) getMaxZoom
+- (OsmAnd::ZoomLevel)getMaxZoom
 {
     return OsmAnd::ZoomLevel([_terrainMode getMaxZoom]);
 }

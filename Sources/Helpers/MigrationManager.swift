@@ -388,14 +388,14 @@ final class MigrationManager: NSObject {
     func changeTerrainSettingsMigration1() {
         if let plugin = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
             if let newTerrain = plugin.terrain,
-               let newTerrainMode = plugin.terrainSettingMode,
+               let newTerrainMode = plugin.terrainModeType,
                let oldTerrainMode = OACommonInteger.withKey("terrainType", defValue: 0),
                let oldLastTerrainMode = OACommonInteger.withKey("lastTerrainType", defValue: 1) {
                 for appMode in OAApplicationMode.allPossibleValues() {
                     let oldValue = oldTerrainMode.get(appMode)
                     if oldValue == 0 {
                         newTerrain.set(false, mode: appMode)
-                        newTerrainMode.set(oldLastTerrainMode.get() == 2 ? "slope" : "hillshade", mode: appMode)
+                        newTerrainMode.set(oldLastTerrainMode.get(appMode) == 2 ? "slope" : "hillshade", mode: appMode)
                     } else {
                         newTerrain.set(true, mode: appMode)
                         newTerrainMode.set(oldValue == 2 ? "slope" : "hillshade", mode: appMode)
@@ -411,22 +411,21 @@ final class MigrationManager: NSObject {
             let oldHillshadeAlpha = OACommonDouble.withKey("hillshadeAlpha", defValue: 0.45)
             let oldSlopeAlpha = OACommonDouble.withKey("slopeAlpha", defValue: 0.35)
 
-            if let terrainMode = plugin.getTerrainSettingMode() {
-                for appMode in OAApplicationMode.allPossibleValues() {
-                    if terrainMode.isHillshade() {
-                        if let oldHillshadeMinZoom, let oldHillshadeMaxZoom {
-                            terrainMode.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode))
-                        }
-                        if let oldHillshadeAlpha {
-                            terrainMode.setTransparency(Int32(oldHillshadeAlpha.get(appMode) / 0.01))
-                        }
-                    } else {
-                        if let oldSlopeMinZoom, let oldSlopeMaxZoom {
-                            terrainMode.setZoomValues(minZoom: oldSlopeMinZoom.get(appMode), maxZoom: oldSlopeMaxZoom.get(appMode))
-                        }
-                        if let oldSlopeAlpha {
-                            terrainMode.setTransparency(Int32(oldSlopeAlpha.get(appMode) / 0.01))
-                        }
+            let terrainMode = plugin.getTerrainMode()
+            for appMode in OAApplicationMode.allPossibleValues() {
+                if plugin.terrainModeType.get(appMode) == TerrainMode.TerrainType.hillshade.rawValue {
+                    if let oldHillshadeMinZoom, let oldHillshadeMaxZoom {
+                        terrainMode?.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode), mode: appMode)
+                    }
+                    if let oldHillshadeAlpha {
+                        terrainMode?.setTransparency(Int32(oldHillshadeAlpha.get(appMode) / 0.01), mode: appMode)
+                    }
+                } else {
+                    if let oldSlopeMinZoom, let oldSlopeMaxZoom {
+                        terrainMode?.setZoomValues(minZoom: oldSlopeMinZoom.get(appMode), maxZoom: oldSlopeMaxZoom.get(appMode), mode: appMode)
+                    }
+                    if let oldSlopeAlpha {
+                        terrainMode?.setTransparency(Int32(oldSlopeAlpha.get(appMode) / 0.01), mode: appMode)
                     }
                 }
             }

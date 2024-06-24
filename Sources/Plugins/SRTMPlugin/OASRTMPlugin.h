@@ -14,9 +14,9 @@
 
 @property (nonatomic) OACommonBoolean *enable3DMaps;
 @property (nonatomic) OACommonBoolean *terrain;
-@property (nonatomic) OACommonString *terrainSettingMode;
+@property (nonatomic) OACommonString *terrainModeType;
 
-- (TerrainMode *)getTerrainSettingMode;
+- (TerrainMode *)getTerrainMode;
 - (void)setTerrainMode:(TerrainMode *)mode;
 - (BOOL)isTerrainLayerEnabled;
 - (void)setTerrainLayerEnabled:(BOOL)enabled;

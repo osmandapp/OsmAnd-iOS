@@ -47,7 +47,7 @@ long long OATerrainMapLayerProvider::obtainImageData(const OsmAnd::IMapTiledData
 sk_sp<const SkImage> OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     QByteArray byteArray;
-    TerrainMode *terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainSettingMode];
+    TerrainMode *terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode];
     if ([terrainMode isHillshade])
         byteArray = [[OATerrainLayer sharedInstanceHillshade] getByteArray:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
     else if ([terrainMode isSlope])

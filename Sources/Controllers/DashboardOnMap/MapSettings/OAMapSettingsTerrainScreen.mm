@@ -157,7 +157,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTitleKey : OALocalizedString(@"visibility"),
             kCellIconNameKey : @"ic_custom_visibility",
             kCellIconTintColor : [UIColor colorNamed:ACColorNameIconColorDefault],
-            @"value" : [NSString stringWithFormat:@"%ld%", [terrainMode getTransparency]]
+            @"value" : [NSString stringWithFormat:@"%ld%%", [terrainMode getTransparency]]
         }];
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"zoomLevels",

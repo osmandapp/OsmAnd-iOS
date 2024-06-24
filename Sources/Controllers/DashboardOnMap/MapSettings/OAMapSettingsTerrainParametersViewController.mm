@@ -659,7 +659,7 @@ static const NSInteger kElevationMaxMeters = 2000;
             cell.updateValueCallback = nil;
             NSInteger transparency = [[((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode] getTransparency];
             cell.sliderView.value = transparency * 0.01;
-            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%", transparency];
+            cell.valueLabel.text = [NSString stringWithFormat:@"%ld%%", transparency];
         }
         
         [cell.sliderView removeTarget:self action:NULL forControlEvents:UIControlEventAllEvents];

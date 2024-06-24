@@ -78,6 +78,7 @@
 - (void)openDescription;
 - (void)openDescriptionEditor;
 - (void)openDescriptionReadOnly:(NSString *)description;
+- (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray;
 - (void)openDuplicateTrack;
 - (void)openMoveTrack;
 - (void)openWptOnMap:(OAGpxWptItem *)gpxWptItem;

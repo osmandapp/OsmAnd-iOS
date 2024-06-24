@@ -172,13 +172,15 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     BOOL hasWiki = NO;
+    BOOL hasName = NO;
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
-
+    NSMutableArray<NSDictionary *> *nameTags = [[NSMutableArray alloc] init];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
+    OARowInfo *nameRow;
     NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
 
     BOOL osmEditingEnabled = [OAPluginsHelper isEnabled:OAOsmEditingPlugin.class];
@@ -191,11 +193,24 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         UIColor *textColor;
         NSString *vl = [self.poi getAdditionalInfo][key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+        if ([convertedKey containsString:@"name"] && !hasName) 
+        {
+            nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
+            [infoRows addObject:nameRow];
+            hasName = YES;
+        }
+        if ([convertedKey containsString:@"name"])
+        {
+            [nameTags addObjectsFromArray:[self getPoiTypeDataForKey:convertedKey withValue:vl]];
+            [nameRow setDetailsArray:nameTags];
+        }
+        
         if ([convertedKey isEqualToString:@"image"]
-                || [convertedKey isEqualToString:MAPILLARY_TAG]
-                || [convertedKey isEqualToString:@"subway_region"]
-                || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-                || [convertedKey hasPrefix:@"lang_yes"])
+            || [convertedKey isEqualToString:MAPILLARY_TAG]
+            || [convertedKey isEqualToString:@"subway_region"]
+            || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
+            || [convertedKey hasPrefix:@"lang_yes"]
+            || hasName)
             continue;
 
         NSString *textPrefix = @"";
@@ -655,6 +670,26 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     }
 }
 
+- (OARowInfo *)addNameRowWithText:(NSString *)textValue iconSize:(CGSize)iconSize
+{
+    OARowInfo *row = [[OARowInfo alloc] initWithKey:@"name"
+                                               icon:[OATargetInfoViewController getIcon:@"ic_navbar_languge" size:iconSize]
+                                         textPrefix:OALocalizedString(@"shared_string_name")
+                                               text:textValue
+                                          textColor:nil
+                                             isText:NO
+                                          needLinks:NO
+                                              order:90
+                                           typeName:@""
+                                      isPhoneNumber:NO
+                                              isUrl:NO];
+    
+    row.collapsable = NO;
+    row.collapsed = YES;
+    row.collapsableView = nil;
+    return row;
+}
+
 - (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows
 {
     if (![rows containsObject:newRow])
@@ -770,6 +805,33 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (NSString *)formatPrefix:(NSString *)prefix units:(NSString *)units
 {
     return prefix != nil && prefix.length > 0 ? [NSString stringWithFormat:@"%@, %@", prefix, units] : units;
+}
+
+- (NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
+{
+    if ([routeTagKey isEqualToString:@"name"])
+        return nil;
+    
+    OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
+    NSString *localizedTitle = poiType.nameLocalized ?: @"";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:nil];
+    NSTextCheckingResult *match = [regex firstMatchInString:localizedTitle options:0 range:NSMakeRange(0, localizedTitle.length)];
+    if (match)
+    {
+        NSRange matchRange = [match rangeAtIndex:1];
+        if (matchRange.length > 0)
+        {
+            NSString *firstLetter = [[localizedTitle substringWithRange:NSMakeRange(matchRange.location, 1)] uppercaseString];
+            NSString *remainingLetters = [localizedTitle substringWithRange:NSMakeRange(matchRange.location + 1, matchRange.length - 1)];
+            localizedTitle = [firstLetter stringByAppendingString:remainingLetters];
+        }
+    }
+    
+    return @[@{
+        @"key": routeTagKey,
+        @"value": value,
+        @"localizedTitle": localizedTitle
+    }];
 }
 
 - (BOOL) isNumericValue:(NSString *)value

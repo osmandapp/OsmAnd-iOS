@@ -34,6 +34,7 @@
 {
     NSString *_description;
     NSString *_imageURL;
+    NSMutableArray<NSDictionary *> *_nameTags;
 }
 
 @dynamic tableData, isGeneratedData;
@@ -181,29 +182,34 @@
         return;
     
     OAGPXTableSectionData *infoSectionData = [OAGPXTableSectionData withData:@{
-            kTableKey: @"route_info",
-            kSectionHeader: OALocalizedString(@"route_info"),
-            kSectionHeaderHeight: @56.
+        kTableKey: @"route_info",
+        kSectionHeader: OALocalizedString(@"route_info"),
+        kSectionHeaderHeight: @56.
     }];
     [data.subjects addObject:infoSectionData];
 
     NSString *tag = routeKey.routeKey.getTag().toNSString();
     OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
-            kTableKey: @"route",
-            kCellType: [OAValueTableViewCell getCellIdentifier],
-            kCellTitle: OALocalizedString(@"layer_route"),
-            kCellDesc: OALocalizedString([self tagToActivity:tag])
+        kTableKey: @"route",
+        kCellType: [OAValueTableViewCell getCellIdentifier],
+        kCellTitle: OALocalizedString(@"layer_route"),
+        kCellDesc: OALocalizedString([self tagToActivity:tag])
     }];
     [infoSectionData.subjects addObject:routeCellData];
 
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
     QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
+    _nameTags = [[NSMutableArray alloc] init];
     for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
     {
         NSString *routeTagKey = i.key().toNSString();
-        if ([routeTagKey hasPrefix:@"osmc"]
-            || [routeTagKey isEqualToString:@"name"]
-            || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
+        if ([routeTagKey containsString:@"name"] && ![routeTagKey hasPrefix:@"osmc"])
+        {
+            NSArray<NSDictionary *> *tagData = [self getPoiTypeDataForKey:routeTagKey withValue:i.value().toNSString()];
+            if (tagData && tagData.count > 0)
+                [_nameTags addObjectsFromArray:tagData];
+        }
+        if ([self shouldExcludeTag:routeTagKey])
             continue;
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
         if (!poiType && ![routeTagKey isEqualToString:@"symbol"]
@@ -239,15 +245,20 @@
         {
             routeTagTitle = OALocalizedString(@"osm_id");
         }
-
+        else if ([routeTagKey isEqualToString:@"name"])
+        {
+            routeTagTitle = OALocalizedString(@"shared_string_name");
+            routeTagValue = i.value().toNSString() ?: @"";
+        }
+        
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
-                kTableKey: routeTagKey,
-                kCellType: [OAValueTableViewCell getCellIdentifier],
-                kCellTitle: routeTagTitle,
-                kCellDesc: routeTagValue,
-                kTableValues: @{ @"order": routeTagOrder }
+            kTableKey: routeTagKey,
+            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kCellTitle: routeTagTitle,
+            kCellDesc: routeTagValue,
+            kTableValues: @{ @"order": routeTagOrder }
         }];
-        if ([routeTagKey hasPrefix:@"description"])
+        if ([routeTagKey hasPrefix:@"description"] || [routeTagKey isEqualToString:@"name"])
             [routeCellData setData:@{ kCellToggle: @YES }];
         [subjects addObject:routeCellData];
     }
@@ -259,6 +270,33 @@
     }];
 
     [infoSectionData.subjects addObjectsFromArray:subjects];
+}
+
+- (NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
+{
+    if ([routeTagKey isEqualToString:@"name"])
+        return nil;
+    
+    OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
+    NSString *localizedTitle = poiType.nameLocalized ?: @"";
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:nil];
+    NSTextCheckingResult *match = [regex firstMatchInString:localizedTitle options:0 range:NSMakeRange(0, localizedTitle.length)];
+    if (match)
+    {
+        NSRange matchRange = [match rangeAtIndex:1];
+        if (matchRange.length > 0)
+        {
+            NSString *firstLetter = [[localizedTitle substringWithRange:NSMakeRange(matchRange.location, 1)] uppercaseString];
+            NSString *remainingLetters = [localizedTitle substringWithRange:NSMakeRange(matchRange.location + 1, matchRange.length - 1)];
+            localizedTitle = [firstLetter stringByAppendingString:remainingLetters];
+        }
+    }
+    
+    return @[@{
+        @"key": routeTagKey,
+        @"value": value,
+        @"localizedTitle": localizedTitle
+    }];
 }
 
 - (NSString *)tagToActivity:(NSString *)tag
@@ -539,6 +577,22 @@
     return nil;
 }
 
+- (BOOL)shouldExcludeTag:(NSString *)tagKey
+{
+    NSArray<NSString *> *excludedTags = @[@"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name"];
+    NSString *normalizedTagKey = [tagKey stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
+    for (NSString *excludedTag in excludedTags)
+    {
+        if ([normalizedTagKey isEqualToString:excludedTag])
+            return YES;
+    }
+    
+    if ([tagKey hasPrefix:@"osmc"] || [tagKey hasPrefix:@"name:"] || ([tagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
+        return YES;
+    
+    return NO;
+}
+
 #pragma mark - Cell action methods
 
 - (void)onSwitch:(BOOL)toggle tableData:(OAGPXBaseTableData *)tableData
@@ -731,6 +785,10 @@
             else if ([cellData.key hasPrefix:@"description"])
             {
                 [self.trackMenuDelegate openDescriptionReadOnly:cellData.desc];
+            }
+            else if ([cellData.key isEqualToString:@"name"])
+            {
+                [self.trackMenuDelegate openNameTagsScreenWith:_nameTags];
             }
         }
     }

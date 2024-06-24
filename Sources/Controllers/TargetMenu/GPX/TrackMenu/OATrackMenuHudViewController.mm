@@ -1589,6 +1589,14 @@
     [self.navigationController pushViewController:routeDescController animated:YES];
 }
 
+- (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray 
+{
+    _pushedNewScreen = YES;
+    OANameTagsDetailsViewController *tagsDetailsController = [[OANameTagsDetailsViewController alloc] initWithTags:tagsArray];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
+    [self.navigationController presentViewController:navigationController animated:YES completion:nil];
+}
+
 - (void)openDuplicateTrack
 {
     OASaveTrackViewController *saveTrackViewController = [[OASaveTrackViewController alloc]
@@ -2023,7 +2031,7 @@
             else
             {
                 cell.accessoryView = nil;
-                cell.accessoryType = [cellData.key hasPrefix:@"description"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
+                cell.accessoryType = [cellData.key hasPrefix:@"description"] || [cellData.key isEqualToString:@"name"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
             }
         }
         outCell = cell;

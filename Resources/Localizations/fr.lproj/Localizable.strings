@@ -3446,3 +3446,10 @@
 "step_by_step" = "Instructions pas à pas";
 "calculate_online" = "Calculer en ligne";
 "short_min" = "m";
+"route_recalculation_dist_title" = "Distance à partir de laquelle recalculer l’itinéraire";
+"in_case_of_reverse_direction" = "En cas de sens inverse";
+"avoid_pt_types" = "Éviter des types de transports …";
+"shared_string_class" = "Classe";
+"dangerous_goods" = "Marchandises dangereuses";
+"dangerous_goods_description" = "Sur certaines routes et tunnels, le transport de matières dangereuses est interdit.";
+"avoid_pt_types_descr" = "Sélectionnez les types de transport en commun à éviter pour le guidage :";

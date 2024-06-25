@@ -15,7 +15,7 @@
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
 
-static const double kDISTANCE_SPLIT = 50000;
+static const double kDISTANCE_SPLIT = 15000;
 static const double DISTANCE_SKIP = 10000;
 
 @interface MissingMapsCalculatorPoint : NSObject
@@ -89,6 +89,12 @@ static const double DISTANCE_SKIP = 10000;
         rmap.downloadName = rmapDownloadName;
         rmap.reader = file;
         rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
+
+        if ([[rmap.downloadName lowercaseString] hasPrefix:@"world_"])
+        {
+            continue; // avoid including World_seamarks
+        }
+
         [knownMaps setObject:rmap forKey:[rmap downloadName]];
         
         for (const auto& rt : file->hhIndexes)
@@ -268,9 +274,17 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         {
             regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
         }
-        [regions addObject:regionDownloadId];
-        if (!region.regionJoinMap && !region.regionJoinRoads) {
-            onlyJointMap = NO;
+        BOOL hasMapType = region.regionMap;
+        BOOL hasRoadsType = region.regionRoads;
+        BOOL hasMapJoinType = region.regionJoinMap;
+        BOOL hasRoadsJoinType = region.regionJoinRoads;
+        if (hasMapType || hasRoadsType || hasMapJoinType || hasRoadsJoinType)
+        {
+            [regions addObject:regionDownloadId];
+            if (!hasMapJoinType && !hasRoadsJoinType)
+            {
+                onlyJointMap = NO;
+            }
         }
     }
     [regions sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {

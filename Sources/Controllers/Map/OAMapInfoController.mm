@@ -44,6 +44,7 @@
 
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAWeatherHelper.h"
 
 #define kWidgetsTopPadding 10.0
 
@@ -623,40 +624,59 @@
     
     [vc addControllerWithController:navigationController];
     
-    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
-       button1.layer.cornerRadius = 25;
-       button1.translatesAutoresizingMaskIntoConstraints = NO;
-       [button1 setImage:[UIImage imageNamed:@"ic_custom_contour_lines_disabled"] forState:UIControlStateNormal];
-       [button1 addTarget:self action:@selector(button1Tapped:) forControlEvents:UIControlEventTouchUpInside];
-       
-
-       [NSLayoutConstraint activateConstraints:@[
-           [button1.heightAnchor constraintEqualToConstant:50],
-           [button1.widthAnchor constraintEqualToConstant:50],
-       ]];
-       
-       UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
-       button2.layer.cornerRadius = 25;
-       button2.translatesAutoresizingMaskIntoConstraints = NO;
-       [button2 setImage:[UIImage imageNamed:@"ic_custom_overlay_map_disabled"] forState:UIControlStateNormal];
-       [button2 addTarget:self action:@selector(button2Tapped:) forControlEvents:UIControlEventTouchUpInside];
-       
-       [NSLayoutConstraint activateConstraints:@[
-           [button2.heightAnchor constraintEqualToConstant:50],
-           [button2.widthAnchor constraintEqualToConstant:50]
-       ]];
-       
-       [vc addButtonsWithButtons:@[button1, button2]];
-}
-
-- (void)button1Tapped:(UIButton *)sender {
-    NSLog(@"button1 tapped!");
-}
-
-- (void)button2Tapped:(UIButton *)sender {
-    NSLog(@"button2 tapped!");
+    OAHudButton *contourButton = [UIButton buttonWithType:UIButtonTypeSystem];
     
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[WeatherLayerSettingsViewController new]];
+//    OAHudButton *weatherButton = [[OAHudButton alloc] initWithFrame:CGRectZero];
+
+//    quickActionButton.buttonState = quickActionButtonState;
+//    quickActionButton.tag = [OAUtilities getQuickActionButtonTag];
+//    quickActionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
+//    quickActionButton.alpha = [quickActionButtonState isEnabled] ? 1 : 0;
+//    quickActionButton.userInteractionEnabled = [quickActionButtonState isEnabled];
+//    quickActionButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
+//    quickActionButton.tintColorDay = UIColorFromRGB(color_primary_purple);
+//    quickActionButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
+    contourButton.layer.cornerRadius = 25;
+    contourButton.translatesAutoresizingMaskIntoConstraints = NO;
+       [contourButton setImage:[UIImage imageNamed:@"ic_custom_contour_lines_disabled"] forState:UIControlStateNormal];
+       [contourButton addTarget:self action:@selector(contourButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+       
+
+       [NSLayoutConstraint activateConstraints:@[
+           [contourButton.heightAnchor constraintEqualToConstant:50],
+           [contourButton.widthAnchor constraintEqualToConstant:50],
+       ]];
+       
+      OAHudButton *weatherButton = [[OAHudButton alloc] initWithFrame:CGRectZero];
+
+    weatherButton.layer.cornerRadius = 25;
+    weatherButton.translatesAutoresizingMaskIntoConstraints = NO;
+    
+   // [sender setImage:[UIImage imageNamed: YES ? @"ic_custom_overlay_map_disabled" : @"ic_layer_top"] forState:UIControlStateNormal];
+    [weatherButton setImage:[UIImage imageNamed:[OAWeatherHelper sharedInstance].allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_layer_top"] forState:UIControlStateNormal];
+       [weatherButton addTarget:self action:@selector(weatherButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
+       
+       [NSLayoutConstraint activateConstraints:@[
+           [weatherButton.heightAnchor constraintEqualToConstant:50],
+           [weatherButton.widthAnchor constraintEqualToConstant:50]
+       ]];
+       
+       [vc addButtonsWithButtons:@[button1, weatherButton]];
+}
+
+- (void)contourButtonTapped:(UIButton *)sender {
+    NSLog(@"contourButtonTapped tapped!");
+}
+
+- (void)weatherButtonTapped:(OAHudButton *)sender {
+    NSLog(@"weatherButtonTapped tapped!");
+    
+    auto weatherLayerSettingsViewController = [WeatherLayerSettingsViewController new];
+    weatherLayerSettingsViewController.onChangeButtonIconAction = ^(BOOL allLayersAreDisabled) {
+        [sender setImage:[UIImage imageNamed:allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_layer_top"] forState:UIControlStateNormal];
+    }
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherLayerSettingsViewController];
     
     navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
     

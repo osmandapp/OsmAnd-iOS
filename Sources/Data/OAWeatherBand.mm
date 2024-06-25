@@ -159,6 +159,30 @@ static NSString *kPrecipContourStyleName;
     return NO;
 }
 
+- (void)setSelectBand:(BOOL)isSelect
+{
+    switch (self.bandIndex)
+    {
+        case WEATHER_BAND_CLOUD:
+            _app.data.weatherCloud = isSelect;
+            break;
+        case WEATHER_BAND_TEMPERATURE:
+            _app.data.weatherTemp = isSelect;
+            break;
+        case WEATHER_BAND_PRESSURE:
+            _app.data.weatherPressure = isSelect;
+            break;
+        case WEATHER_BAND_WIND_SPEED:
+            _app.data.weatherWind = isSelect;
+            break;
+        case WEATHER_BAND_PRECIPITATION:
+            _app.data.weatherPrecip = isSelect;
+            break;
+        case WEATHER_BAND_UNDEFINED:
+            break;
+    }
+}
+
 - (NSUnit *) getBandUnit
 {
     switch (self.bandIndex)

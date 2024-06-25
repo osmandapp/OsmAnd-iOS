@@ -32,6 +32,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
 + (NSString *) getInternalBandUnit:(EOAWeatherBand)bandIndex;
 
 - (BOOL) isBandVisible;
+- (void)setSelectBand:(BOOL)isSelect;
 - (NSUnit *) getBandUnit;
 - (BOOL) setBandUnit:(NSUnit *)unit;
 - (BOOL) isBandUnitAuto;

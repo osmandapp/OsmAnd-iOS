@@ -171,6 +171,18 @@
             calculateOnlineButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
         }
+
+        if (true)
+        {
+            OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
+            OATableRowData *ignoreMissingMapsRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            ignoreMissingMapsRow.title = OALocalizedString(@"missing_maps_ignore_details");
+
+            OATableRowData *ignoreMissingMapsRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsRow.cellType = [OAButtonTableViewCell getCellIdentifier];
+            ignoreMissingMapsRow.title = OALocalizedString(@"missing_maps_ignore");
+        }
     }
 }
 - (void)onRowSelected:(NSIndexPath *)indexPath

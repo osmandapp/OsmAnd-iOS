@@ -1592,7 +1592,7 @@
 - (void)openNameTagsScreenWith:(NSArray<NSDictionary *> *)tagsArray 
 {
     _pushedNewScreen = YES;
-    OANameTagsDetailsViewController *tagsDetailsController = [[OANameTagsDetailsViewController alloc] initWithTags:tagsArray];
+    OANameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:tagsArray];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
     [self.navigationController presentViewController:navigationController animated:YES completion:nil];
 }

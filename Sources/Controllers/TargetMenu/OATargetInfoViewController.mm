@@ -978,7 +978,7 @@
     }
     else if ([info.key isEqualToString:@"name"])
     {
-        OANameTagsDetailsViewController *tagsDetailsController = [[OANameTagsDetailsViewController alloc] initWithTags:info.detailsArray];
+        NameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:info.detailsArray];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
         [self.navController presentViewController:navigationController animated:YES completion:nil];
     }

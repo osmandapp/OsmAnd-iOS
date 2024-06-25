@@ -8,7 +8,6 @@
 
 import UIKit
 
-@objc(OANameTagsDetailsViewController)
 @objcMembers
 final class NameTagsDetailsViewController: OABaseNavbarViewController {
     private var tags: [NSDictionary]
@@ -49,7 +48,7 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
                 section.headerText = localizedString(header)
                 for tagDict in filteredTags {
                     let row = section.createNewRow()
-                    row.cellType = OASimpleTableViewCell.getIdentifier()
+                    row.cellType = OASimpleTableViewCell.reuseIdentifier
                     row.key = key
                     row.title = tagDict["value"] as? String ?? ""
                     row.descr = tagDict["localizedTitle"] as? String ?? ""
@@ -61,7 +60,7 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {
         guard let indexPath else { return nil }
         let item = tableData.item(for: indexPath)
-        let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.getIdentifier(), for: indexPath) as! OASimpleTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier, for: indexPath) as! OASimpleTableViewCell
         cell.selectionStyle = .none
         cell.leftIconVisibility(false)
         cell.descriptionVisibility(!(item.descr?.isEmpty ?? true))

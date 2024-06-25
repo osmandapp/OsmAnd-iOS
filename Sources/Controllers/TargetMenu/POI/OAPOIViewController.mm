@@ -807,23 +807,29 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
     return prefix != nil && prefix.length > 0 ? [NSString stringWithFormat:@"%@, %@", prefix, units] : units;
 }
 
-- (NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
+- (nullable NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
 {
     if ([routeTagKey isEqualToString:@"name"])
         return nil;
     
     OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
     NSString *localizedTitle = poiType.nameLocalized ?: @"";
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:nil];
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:&error];
+    if (error)
+    {
+        NSLog(@"Error creating NSRegularExpression: %@", error.localizedDescription);
+        return nil;
+    }
+    
     NSTextCheckingResult *match = [regex firstMatchInString:localizedTitle options:0 range:NSMakeRange(0, localizedTitle.length)];
     if (match)
     {
         NSRange matchRange = [match rangeAtIndex:1];
         if (matchRange.length > 0)
         {
-            NSString *firstLetter = [[localizedTitle substringWithRange:NSMakeRange(matchRange.location, 1)] uppercaseString];
-            NSString *remainingLetters = [localizedTitle substringWithRange:NSMakeRange(matchRange.location + 1, matchRange.length - 1)];
-            localizedTitle = [firstLetter stringByAppendingString:remainingLetters];
+            localizedTitle = [localizedTitle substringWithRange:matchRange];
+            localizedTitle = [OAUtilities capitalizeFirstLetter:localizedTitle];
         }
     }
     

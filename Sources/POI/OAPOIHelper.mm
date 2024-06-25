@@ -627,6 +627,39 @@
     return lf;
 }
 
+- (nullable NSArray<NSDictionary *> *) getNameDataForTagKey:(NSString *)routeTagKey withValue:(NSString *)value
+{
+    if ([routeTagKey isEqualToString:@"name"])
+        return nil;
+    
+    OAPOIBaseType *poiType = [self getAnyPoiAdditionalTypeByKey:routeTagKey];
+    NSString *localizedTitle = poiType.nameLocalized ?: @"";
+    NSError *error = nil;
+    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:&error];
+    if (error)
+    {
+        NSLog(@"Error creating NSRegularExpression: %@", error.localizedDescription);
+        return nil;
+    }
+    
+    NSTextCheckingResult *match = [regex firstMatchInString:localizedTitle options:0 range:NSMakeRange(0, localizedTitle.length)];
+    if (match)
+    {
+        NSRange matchRange = [match rangeAtIndex:1];
+        if (matchRange.length > 0)
+        {
+            localizedTitle = [localizedTitle substringWithRange:matchRange];
+            localizedTitle = [OAUtilities capitalizeFirstLetter:localizedTitle];
+        }
+    }
+    
+    return @[@{
+        @"key": routeTagKey,
+        @"value": value,
+        @"localizedTitle": localizedTitle
+    }];
+}
+
 - (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
 {
     _visibleArea = area;

@@ -205,7 +205,7 @@
         NSString *routeTagKey = i.key().toNSString();
         if ([routeTagKey containsString:@"name"] && ![routeTagKey hasPrefix:@"osmc"])
         {
-            NSArray<NSDictionary *> *tagData = [self getPoiTypeDataForKey:routeTagKey withValue:i.value().toNSString()];
+            NSArray<NSDictionary *> *tagData = [[OAPOIHelper sharedInstance] getNameDataForTagKey:routeTagKey withValue:i.value().toNSString()];
             if (tagData && tagData.count > 0)
                 [_nameTags addObjectsFromArray:tagData];
         }
@@ -270,39 +270,6 @@
     }];
 
     [infoSectionData.subjects addObjectsFromArray:subjects];
-}
-
-- (nullable NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
-{
-    if ([routeTagKey isEqualToString:@"name"])
-        return nil;
-    
-    OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
-    NSString *localizedTitle = poiType.nameLocalized ?: @"";
-    NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:&error];
-    if (error)
-    {
-        NSLog(@"Error creating NSRegularExpression: %@", error.localizedDescription);
-        return nil;
-    }
-    
-    NSTextCheckingResult *match = [regex firstMatchInString:localizedTitle options:0 range:NSMakeRange(0, localizedTitle.length)];
-    if (match)
-    {
-        NSRange matchRange = [match rangeAtIndex:1];
-        if (matchRange.length > 0)
-        {
-            localizedTitle = [localizedTitle substringWithRange:matchRange];
-            localizedTitle = [OAUtilities capitalizeFirstLetter:localizedTitle];
-        }
-    }
-    
-    return @[@{
-        @"key": routeTagKey,
-        @"value": value,
-        @"localizedTitle": localizedTitle
-    }];
 }
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText

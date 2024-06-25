@@ -272,7 +272,6 @@
     [infoSectionData.subjects addObjectsFromArray:subjects];
 }
 
-<<<<<<< HEAD
 - (NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
 {
     if ([routeTagKey isEqualToString:@"name"])
@@ -299,21 +298,6 @@
         @"localizedTitle": localizedTitle
     }];
 }
-
-- (NSString *)tagToActivity:(NSString *)tag
-{
-    if ([tag isEqualToString:@"bicycle"])
-        return @"activity_type_cycling_name";
-    else if ([tag isEqualToString:@"mtb"])
-        return @"activity_type_mountainbike_name";
-    else if ([tag isEqualToString:@"horse"])
-        return @"app_mode_horse";
-    else if ([tag isEqualToString:@"hiking"])
-        return @"activity_type_hiking_name";
-    return @"";
-}
-=======
->>>>>>> 10aa65e048be0041774c30456ef0fd1e135beb5d
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText
 {

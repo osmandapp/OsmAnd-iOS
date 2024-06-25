@@ -11,13 +11,13 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
-#import "OAWorldRegion.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>
 
 static const double kDISTANCE_SPLIT = 15000;
 static const double DISTANCE_SKIP = 10000;
+#define kWorld @"world"
 
 @interface MissingMapsCalculatorPoint : NSObject
 @property (nonatomic, strong) NSMutableArray<NSString *> *regions;

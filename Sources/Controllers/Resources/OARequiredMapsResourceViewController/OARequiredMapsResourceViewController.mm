@@ -175,13 +175,13 @@
         if (true)
         {
             OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
-            OATableRowData *ignoreMissingMapsRow = [ignoreMissingMapsSection createNewRow];
-            ignoreMissingMapsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
-            ignoreMissingMapsRow.title = OALocalizedString(@"missing_maps_ignore_details");
+            OATableRowData *ignoreMissingMapsTitleRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            ignoreMissingMapsTitleRow.title = OALocalizedString(@"missing_maps_ignore_details");
 
-            OATableRowData *ignoreMissingMapsRow = [ignoreMissingMapsSection createNewRow];
-            ignoreMissingMapsRow.cellType = [OAButtonTableViewCell getCellIdentifier];
-            ignoreMissingMapsRow.title = OALocalizedString(@"missing_maps_ignore");
+            OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
+            ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
         }
     }
 }

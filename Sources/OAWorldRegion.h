@@ -31,6 +31,8 @@
 @property (readonly) NSString* regionRoadSigns;
 @property (readonly) NSString* wikiLink;
 @property (readonly) NSString* population;
+@property (readonly) BOOL regionMap;
+@property (readonly) BOOL regionRoads;
 @property (readonly) BOOL regionJoinMap;
 @property (readonly) BOOL regionJoinRoads;
 

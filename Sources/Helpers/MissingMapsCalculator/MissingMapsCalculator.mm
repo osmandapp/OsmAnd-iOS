@@ -17,7 +17,6 @@
 
 static const double kDISTANCE_SPLIT = 15000;
 static const double DISTANCE_SKIP = 10000;
-#define kWorld @"world"
 
 @interface MissingMapsCalculatorPoint : NSObject
 @property (nonatomic, strong) NSMutableArray<NSString *> *regions;
@@ -91,7 +90,7 @@ static const double DISTANCE_SKIP = 10000;
         rmap.reader = file;
         rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
 
-        if ([[rmap.downloadName lowercaseString] hasPrefix:[kWorld stringByAppendingString:@"_"]])
+        if ([[rmap.downloadName lowercaseString] hasPrefix:[@"world_"]])
         {
             continue; // avoid including World_seamarks
         }
@@ -275,13 +274,15 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         {
             regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
         }
-        BOOL hasMapType = region.regionMap; // or.isDownloadOfType(o, OsmandRegions.MAP_TYPE);
-        BOOL hasRoadsType = region.regionRoads; // or.isDownloadOfType(o, OsmandRegions.ROADS_TYPE);
-        BOOL hasMapJoinType = region.regionJoinMap; // or.isDownloadOfType(o, OsmandRegions.MAP_JOIN_TYPE);
-        BOOL hasRoadsJoinType = region.regionJoinRoads; // or.isDownloadOfType(o, OsmandRegions.ROADS_JOIN_TYPE);
-        if (hasMapType || hasRoadsType || hasMapJoinType || hasRoadsJoinType) {
+        BOOL hasMapType = region.regionMap;
+        BOOL hasRoadsType = region.regionRoads;
+        BOOL hasMapJoinType = region.regionJoinMap;
+        BOOL hasRoadsJoinType = region.regionJoinRoads;
+        if (hasMapType || hasRoadsType || hasMapJoinType || hasRoadsJoinType)
+        {
             [regions addObject:regionDownloadId];
-            if (!hasMapJoinType && !hasRoadsJoinType) {
+            if (!hasMapJoinType && !hasRoadsJoinType)
+            {
                 onlyJointMap = NO;
             }
         }

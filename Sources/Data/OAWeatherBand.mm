@@ -139,7 +139,7 @@ static NSString *kPrecipContourStyleName;
     return obj;
 }
 
-- (BOOL) isBandVisible
+- (BOOL)isBandVisible
 {
     switch (self.bandIndex)
     {

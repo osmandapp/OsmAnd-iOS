@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension OAWeatherHelper {
-    
-    @objc var allLayersAreDisabled: Bool {
-        bands.map({ $0.isBandVisible()}).allSatisfy({!$0})
-    }
-}
+//extension OAWeatherHelper {
+//    
+//    @objc var allLayersAreDisabled: Bool {
+//        bands.map({ $0.isBandVisible()}).allSatisfy({!$0})
+//    }
+//}

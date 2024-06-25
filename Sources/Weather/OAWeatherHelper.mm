@@ -845,4 +845,24 @@
     return [NSDate dateWithTimeIntervalSince1970:round(date.timeIntervalSince1970 / hour) * hour];
 }
 
+- (BOOL)allLayersAreDisabled
+{
+    NSArray<OAWeatherBand *> *bandsArray = self.bands;
+    NSMutableArray<NSNumber *> *isVisibleArray = [[NSMutableArray alloc] initWithCapacity:bandsArray.count];
+    for (OAWeatherBand *band in bandsArray) {
+        [isVisibleArray addObject:@([band isBandVisible])];
+    }
+    
+    BOOL allDisabled = YES;
+    for (NSNumber *isVisibleNumber in isVisibleArray) {
+        BOOL isVisible = [isVisibleNumber boolValue];
+        if (isVisible) {
+            allDisabled = NO;
+            break;
+        }
+    }
+    
+    return allDisabled;
+}
+
 @end

@@ -14,15 +14,26 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
     private static let weatherLayerKey = "weatherLayer"
     private static let selectedKey = "isSelected"
     
-    var onChangeButtonIconAction: ((Bool) -> Void)?
+    var onChangeSwitchLayerAction: (() -> Void)?
+    var onCloseAction: (() -> Void)?
     
-//    lazy var weatherBandTemperature: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_TEMPERATURE)
-//    lazy var weatherBandPressure: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRESSURE)
-//    lazy var weatherBandWind: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_WIND_SPEED)
-//    lazy var weatherBandCloud: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_CLOUD)
-//    lazy var weatherBandPrecipitation: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRECIPITATION)
+    private lazy var weatherArray: [OAWeatherBand] = {
+        [OAWeatherBand.withWeatherBand(.WEATHER_BAND_TEMPERATURE),
+        OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRESSURE),
+        OAWeatherBand.withWeatherBand(.WEATHER_BAND_WIND_SPEED),
+        OAWeatherBand.withWeatherBand(.WEATHER_BAND_CLOUD),
+        OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRECIPITATION)]
+    }()
     
-    override func getTitle() -> String! {
+//    private let weatherBandTemperature: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_TEMPERATURE)
+//    private let weatherBandPressure: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRESSURE)
+//    private let weatherBandWind: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_WIND_SPEED)
+//    private let weatherBandCloud: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_CLOUD)
+//    private let weatherBandPrecipitation: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRECIPITATION)
+//    
+//    private var weatherArray = [OAWeatherBand]()
+    
+    override func getTitle() -> String {
         localizedString("shared_string_layers")
     }
     
@@ -34,26 +45,42 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         addCell(OASwitchTableViewCell.reuseIdentifier)
     }
     
-//    for (OAWeatherBand *band in _weatherHelper.bands)
-//    {
-//        [measurementCells addObject:@{
-//                @"key": [@"band_" stringByAppendingString:[band getMeasurementName]],
-//                @"band": band,
-//                @"type": [OAValueTableViewCell getCellIdentifier]
-//        }];
-//    }
+    override func onLeftNavbarButtonPressed() {
+        super.onLeftNavbarButtonPressed()
+        onCloseAction?()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        generateData()
+        tableView.reloadData()
+    }
     
     override func generateData() {
+        tableData.clearAllData()
         let section = tableData.createNewSection()
-        OAWeatherHelper.sharedInstance().bands.forEach({
+        if weatherArray.isEmpty {
+            print("isEmpty")
+        }
+        
+        for obj in weatherArray {
+            print(obj)
+        }
+        weatherArray.forEach({ item in
+            print("1")
             let row = section.createNewRow()
             row.cellType = OASwitchTableViewCell.reuseIdentifier
-            row.title = $0.getMeasurementName()
-            row.iconName = $0.getIcon()
+            row.key = Self.weatherLayerKey
+            row.title = item.getMeasurementName()
+            row.iconName = item.getIcon()
           //  @"image" : _weatherBand ? _weatherBand.getIcon : @"ic_custom_contour_lines"
-            let isVisible = $0.isBandVisible()
+            let isVisible: Bool = item.isBandVisible()
             row.setObj(isVisible, forKey: Self.selectedKey)
-            row.setObj($0, forKey: "band")
+            row.setObj(item, forKey: "band")
             row.accessibilityLabel = row.title
             row.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")
         })
@@ -82,23 +109,19 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         return nil
     }
     
-    @objc func onSwitchClick(_ sender: Any) -> Bool {
+    @objc private func onSwitchClick(_ sender: Any) -> Bool {
         guard let sw = sender as? UISwitch else {
             return false
         }
         
         let indexPath = IndexPath(row: sw.tag & 0x3FF, section: sw.tag >> 10)
-        let data = tableData!.item(for: indexPath)
+        let data = tableData.item(for: indexPath)
         
         if data.key == Self.weatherLayerKey {
             if let band = data.obj(forKey: "band") as? OAWeatherBand {
                 band.setSelect(sw.isOn)
                 reloadDataWith(animated: true, completion: nil)
-                
-                //let bands: [Bool] = OAWeatherHelper.sharedInstance().bands.map{ $0.isBandVisible() }
-                let allLayersAreDisabled = OAWeatherHelper.sharedInstance().allLayersAreDisabled//bands.allSatisfy({!$0})
-                
-                onChangeButtonIconAction?(allLayersAreDisabled)
+                onChangeSwitchLayerAction?()
             }
         }
         

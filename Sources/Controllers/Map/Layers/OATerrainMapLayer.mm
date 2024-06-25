@@ -9,11 +9,9 @@
 #import "OATerrainMapLayer.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
-#import "OASRTMPlugin.h"
-#import "OAMapStyleSettings.h"
-#import "OAAutoObserverProxy.h"
 #import "OAMapRendererEnvironment.h"
-#import "OAOsmandDevelopmentPlugin.h"
+#import "OASRTMPlugin.h"
+#import "OAAutoObserverProxy.h"
 #import "OAPluginsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
@@ -21,18 +19,11 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/SlopeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
-
-static NSString * const SLOPE_MAIN_COLOR_FILENAME = @"slope_default";
-static NSString * const HILLSHADE_MAIN_COLOR_FILENAME = @"hillshade_main_default";
-static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_default";
+#include <OsmAndCore/Map/HeightRasterMapLayerProvider.h>
 
 @implementation OATerrainMapLayer
 {
-    std::shared_ptr<OsmAnd::IMapLayerProvider> _terrainMapProvider;
-    
-    std::shared_ptr<const OsmAnd::IGeoTiffCollection> _heightsCollection;
-    std::shared_ptr<OsmAnd::SlopeRasterMapLayerProvider> _slopeLayerProvider;
-    std::shared_ptr<OsmAnd::HillshadeRasterMapLayerProvider> _hillshadeLayerProvider;
+    std::shared_ptr<OsmAnd::IMapLayerProvider> _layerProvider;
 
     OAAutoObserverProxy *_verticalExaggerationScaleChangeObservable;
     OAAutoObserverProxy *_applicationModeChangedObserver;
@@ -81,9 +72,7 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 
 - (void) resetLayer
 {
-    _terrainMapProvider.reset();
-    _slopeLayerProvider.reset();
-    _hillshadeLayerProvider.reset();
+    _layerProvider.reset();
     [self.mapView resetProviderFor:self.layerIndex];
 }
 
@@ -94,12 +83,8 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
     if ([_plugin isTerrainLayerEnabled] && [_plugin isEnabled])
     {
         _terrainMode = [_plugin getTerrainMode];
-        if ([_terrainMode isSlope])
-            [self setupSlopeLayerProvider];
-        else if ([_terrainMode isHillshade])
-            [self setupHillshadeLayerProvider];
-        else
-            [self setupTerrainMapProvider];
+        _layerProvider = [self createGeoTiffLayerProvider:_terrainMode];
+        [self.mapView setProvider:_layerProvider forLayer:self.layerIndex];
 
         OsmAnd::MapLayerConfiguration config;
         config.setOpacityFactor([_terrainMode getTransparency] * 0.01);
@@ -125,9 +110,7 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
         if (![self updateLayer])
         {
             [self.mapView resetProviderFor:self.layerIndex];
-            _terrainMapProvider.reset();
-            _slopeLayerProvider.reset();
-            _hillshadeLayerProvider.reset();
+            _layerProvider.reset();
         }
         [self.mapViewController recreateHeightmapProvider];
         [self.mapViewController updateElevationConfiguration];
@@ -173,46 +156,42 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 
 - (OsmAnd::ZoomLevel)getMinZoom
 {
-    return OsmAnd::ZoomLevel([_terrainMode getMinZoom]);
+    return OsmAnd::ZoomLevel([_plugin getTerrainMinZoom]);
 }
 
 - (OsmAnd::ZoomLevel)getMaxZoom
 {
-    return OsmAnd::ZoomLevel([_terrainMode getMaxZoom]);
+    return OsmAnd::ZoomLevel([_plugin getTerrainMaxZoom]);
 }
 
-- (void) setupTerrainMapProvider
+- (std::shared_ptr<OsmAnd::IMapLayerProvider>)createGeoTiffLayerProvider:(TerrainMode *)mode
 {
-    _terrainMapProvider = std::make_shared<OATerrainMapLayerProvider>([self getMinZoom], [self getMaxZoom]);
+    auto geoTiffCollection = self.mapViewController.mapRendererEnv.geoTiffCollection;
+    NSString *heightmapDir = self.app.colorsPalettePath;
+    auto mainColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getMainFile]]);
 
-    [self.mapView setProvider:_terrainMapProvider forLayer:self.layerIndex];
-    _slopeLayerProvider.reset();
-    _hillshadeLayerProvider.reset();
-}
-
-- (void) setupSlopeLayerProvider
-{
-    auto slopeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:SLOPE_MAIN_COLOR_FILENAME ofType:@"txt"]);
-    _slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(self.mapViewController.mapRendererEnv.geoTiffCollection, slopeColorFilename);
-    _slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
-    _slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
-
-    [self.mapView setProvider:_slopeLayerProvider forLayer:self.layerIndex];
-    _hillshadeLayerProvider.reset();
-    _terrainMapProvider.reset();
-}
-
-- (void) setupHillshadeLayerProvider
-{
-    auto hillshadeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:HILLSHADE_MAIN_COLOR_FILENAME ofType:@"txt"]);
-    auto slopeSecondaryColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:SLOPE_SECONDARY_COLOR_FILENAME ofType:@"txt"]);
-    _hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(self.mapViewController.mapRendererEnv.geoTiffCollection, hillshadeColorFilename, slopeSecondaryColorFilename);
-    _hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
-    _hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
-
-    [self.mapView setProvider:_hillshadeLayerProvider forLayer:self.layerIndex];
-    _slopeLayerProvider.reset();
-    _terrainMapProvider.reset();
+    if ([mode isHillshade])
+    {
+        auto slopeSecondaryColorFilename = QString::fromNSString([heightmapDir stringByAppendingPathComponent:[mode getSecondFile]]);
+        auto hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename, slopeSecondaryColorFilename);
+        hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
+        hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+        return hillshadeLayerProvider;
+    }
+    else if ([mode isSlope])
+    {
+        auto slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
+        slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
+        slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+        return slopeLayerProvider;
+    }
+    else
+    {
+        auto heightLayerProvider = std::make_shared<OsmAnd::HeightRasterMapLayerProvider>(geoTiffCollection, mainColorFilename);
+        heightLayerProvider->setMinVisibleZoom([self getMinZoom]);
+        heightLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
+        return heightLayerProvider;
+    }
 }
 
 @end

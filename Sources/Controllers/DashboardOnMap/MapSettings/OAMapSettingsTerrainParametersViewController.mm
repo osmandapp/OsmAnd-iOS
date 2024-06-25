@@ -21,8 +21,6 @@
 #import "OATerrainMapLayer.h"
 #import "GeneratedAssetSymbols.h"
 
-static const NSInteger kMinAllowedZoom = 1;
-static const NSInteger kMaxAllowedZoom = 22;
 static const NSInteger kMaxMissingDataZoomShift = 5;
 static const NSInteger kMinZoomPickerRow = 1;
 static const NSInteger kMaxZoomPickerRow = 2;
@@ -45,6 +43,7 @@ static const NSInteger kElevationMaxMeters = 2000;
     OATableDataModel *_data;
     TerrainMode *_terrainMode;
     OAMapPanelViewController *_mapPanel;
+    OASRTMPlugin *_plugin;
     
     NSArray<NSString *> *_possibleZoomValues;
     
@@ -89,11 +88,12 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)commonInit
 {
     _app = OsmAndApp.instance;
-    _terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode];
+    _plugin = (OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class];
+    _terrainMode = [_plugin getTerrainMode];
     _mapPanel = OARootViewController.instance.mapPanel;
     
-    _baseMinZoom = [_terrainMode getMinZoom];
-    _baseMaxZoom = [_terrainMode getMaxZoom];
+    _baseMinZoom = [_plugin getTerrainMinZoom];
+    _baseMaxZoom = [_plugin getTerrainMaxZoom];
     _baseAlpha = [_terrainMode getTransparency] * 0.01;
     if (_terrainType == EOATerrainSettingsTypeVerticalExaggeration)
     {
@@ -377,10 +377,8 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (void)resetZoomLevels
 {
     [_terrainMode resetZoomsToDefault];
-    NSInteger minZoom = [_terrainMode getMinZoom];
-    NSInteger maxZoom = [_terrainMode getMaxZoom];
-
-
+    NSInteger minZoom = [_plugin getTerrainMinZoom];
+    NSInteger maxZoom = [_plugin getTerrainMaxZoom];
     if (_minZoom != minZoom || _maxZoom != maxZoom)
     {
         _minZoom = minZoom;
@@ -455,7 +453,7 @@ static const NSInteger kElevationMaxMeters = 2000;
 - (NSArray<NSString *> *)getPossibleZoomValues
 {
     NSMutableArray *res = [NSMutableArray new];
-    for (int i = 1; i <= kMaxAllowedZoom; i++)
+    for (int i = terrainMinSupportedZoom; i <= terrainMaxSupportedZoom; i++)
     {
         [res addObject:[NSString stringWithFormat:@"%d", i]];
     }
@@ -681,9 +679,9 @@ static const NSInteger kElevationMaxMeters = 2000;
     {
         OACustomPickerTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OACustomPickerTableViewCell reuseIdentifier]];
         cell.dataArray = _possibleZoomValues;
-        NSInteger minZoom = _minZoom >= kMinAllowedZoom && _minZoom <= kMaxAllowedZoom ? _minZoom : 1;
-        NSInteger maxZoom = _maxZoom >= kMinAllowedZoom && _maxZoom <= kMaxAllowedZoom ? _maxZoom : 1;
-        [cell.picker selectRow:indexPath.row == 1 ? minZoom - 1 : maxZoom - 1 inComponent:0 animated:NO];
+        NSInteger minZoom = _minZoom >= terrainMinSupportedZoom && _minZoom <= terrainMaxSupportedZoom ? (_minZoom - terrainMinSupportedZoom) : 1;
+        NSInteger maxZoom = _maxZoom >= terrainMinSupportedZoom && _maxZoom <= terrainMaxSupportedZoom ? (_maxZoom - terrainMinSupportedZoom) : 1;
+        [cell.picker selectRow:indexPath.row == 1 ? minZoom : maxZoom inComponent:0 animated:NO];
         cell.picker.tag = indexPath.row;
         cell.delegate = self;
         return cell;

@@ -305,7 +305,7 @@ NSInteger const kSettingsHelperErrorCodeEmptyJson = 5;
 
     NSFileManager *fileManager = NSFileManager.defaultManager;
     BOOL isDir = NO;
-    NSString *colorPaletteFolder = [[OsmAndApp instance].documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
+    NSString *colorPaletteFolder = [OsmAndApp instance].colorsPalettePath;
     BOOL exists = [fileManager fileExistsAtPath:colorPaletteFolder isDirectory:&isDir];
     if (exists && isDir)
     {

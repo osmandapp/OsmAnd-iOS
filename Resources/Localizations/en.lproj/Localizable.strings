@@ -3790,3 +3790,4 @@
 "custom_map_button_name_present" = "Such button already present";
 
 "user_palette" = "User palette";
+"height_legend_description" = "Altitude color maps are used to visualize relief.";

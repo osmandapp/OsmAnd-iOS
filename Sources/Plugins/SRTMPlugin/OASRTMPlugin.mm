@@ -47,7 +47,7 @@ static NSString * const kTerrain = @"terrain_layer";
     return self;
 }
 
-- (NSString *) getId
+- (NSString *)getId
 {
     return PLUGIN_ID;
 }
@@ -57,7 +57,7 @@ static NSString * const kTerrain = @"terrain_layer";
     return [super isEnabled] && [[OAIAPHelper sharedInstance].srtm isActive];
 }
 
-- (NSArray<OAResourceItem *> *) getSuggestedMaps
+- (NSArray<OAResourceItem *> *)getSuggestedMaps
 {
     NSMutableArray *suggestedMaps = [NSMutableArray new];
     CLLocationCoordinate2D latLon = [OAResourcesUIHelper getMapLocation];
@@ -68,7 +68,7 @@ static NSString * const kTerrain = @"terrain_layer";
     return suggestedMaps;
 }
 
-- (NSString *) getName
+- (NSString *)getName
 {
     return OALocalizedString(@"srtm_plugin_name");
 }
@@ -98,22 +98,33 @@ static NSString * const kTerrain = @"terrain_layer";
     [_terrain set:enabled];
 }
 
-- (BOOL) isHeightmapEnabled
+- (NSInteger)getTerrainMinZoom
+{
+    return MAX(terrainMinSupportedZoom, [[self getTerrainMode] getMinZoom]);
+}
+
+
+- (NSInteger)getTerrainMaxZoom
+{
+    return MIN(terrainMaxSupportedZoom, [[self getTerrainMode] getMaxZoom]);
+}
+
+- (BOOL)isHeightmapEnabled
 {
     return [self isHeightmapAllowed];
 }
 
-- (BOOL) isHeightmapAllowed
+- (BOOL)isHeightmapAllowed
 {
     return [OAIAPHelper isOsmAndProAvailable];
 }
 
-- (BOOL) is3DMapsEnabled
+- (BOOL)is3DMapsEnabled
 {
     return [self isHeightmapEnabled] && [_enable3DMaps get];
 }
 
-- (void) onProfileSettingSet:(NSNotification *)notification
+- (void)onProfileSettingSet:(NSNotification *)notification
 {
     if (notification.object == _enable3DMaps)
     {

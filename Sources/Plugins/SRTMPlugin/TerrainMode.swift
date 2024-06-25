@@ -12,53 +12,56 @@ import Foundation
 @objcMembers
 final class TerrainMode: NSObject {
 
-    static let hillshadePrefix: String = "hillshade_main_"
-    static let hillshadeScndPrefix = "hillshade_color_"
-    static let colorSlopePrefix = "slope_"
-    static let heightPrefix = "height_"
-
-    private static let defaultKey = "default"
-    private static var terrainModes: [TerrainMode]?
-
     enum TerrainType: String {
         case hillshade
         case slope
         case height
     }
 
+    static let defaultKey = "default"
+    static let altitudeDefaultKey = "altitude_default"
+    static let hillshadePrefix: String = "hillshade_main_"
+    static let hillshadeScndPrefix = "hillshade_color_"
+    static let colorSlopePrefix = "slope_"
+    static let heightPrefix = "height_"
+
     let type: TerrainType
-    var translateName: String
 
     private let minZoom: OACommonInteger
     private let maxZoom: OACommonInteger
     private let transparency: OACommonInteger
     private let key: String
 
-    init(_ key: String, translateName: String, type: TerrainType) {
-        self.type = type
+    static var values: [TerrainMode] {
+        if let terrainModes {
+            return terrainModes
+        }
+        Self.reloadTerrainModes()
+        return terrainModes ?? []
+    }
+
+    private static var terrainModes: [TerrainMode]?
+
+    var translateName: String
+
+    init(_ key: String, type: TerrainType, translateName: String) {
         self.key = key
+        self.type = type
         self.translateName = translateName
+
         let settings = OAAppSettings.sharedManager()!
         minZoom = settings.registerIntPreference(key + "_min_zoom", defValue: 3).makeProfile()
         maxZoom = settings.registerIntPreference(key + "_max_zoom", defValue: 17).makeProfile()
         transparency = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
     }
 
-    static var values: [TerrainMode] {
-        if let terrainModes {
-            return terrainModes
-        }
-
-        let hillshade = TerrainMode(defaultKey,
-                                    translateName: localizedString("shared_string_hillshade"),
-                                    type: .hillshade)
-        let slope = TerrainMode(defaultKey,
-                                translateName: localizedString("shared_string_slope"),
-                                type: .slope)
-
-        var tms: [TerrainMode] = [hillshade, slope]
-        let dir = "\(NSHomeDirectory())/Documents/Resources/\(CLR_PALETTE_DIR)"
-        if let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
+    static func reloadTerrainModes() {
+        var modes = [TerrainMode]()
+        modes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
+        modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
+        
+        if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
+           let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
             for file in files {
                 guard file.hasSuffix(TXT_EXT) else { continue }
 
@@ -67,25 +70,46 @@ final class TerrainMode: NSObject {
                     let key = String(nm.substring(from: hillshadePrefix.length).dropLast(TXT_EXT.length))
                     let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
                     if key != defaultKey {
-                        tms.append(TerrainMode(key, translateName: name, type: .hillshade))
+                        modes.append(TerrainMode(key, type: .hillshade, translateName: name))
                     }
                 } else if nm.hasPrefix(colorSlopePrefix) {
                     let key = String(nm.substring(from: colorSlopePrefix.length).dropLast(TXT_EXT.length))
                     let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
                     if key != defaultKey {
-                        tms.append(TerrainMode(key, translateName: name, type: .slope))
+                        modes.append(TerrainMode(key, type: .slope, translateName: name))
                     }
                 } else if nm.hasPrefix(heightPrefix) {
                     let key = String(nm.substring(from: heightPrefix.count).dropLast(TXT_EXT.count))
                     let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
                     if key != defaultKey {
-                        tms.append(TerrainMode(key, translateName: name, type: .height))
+                        modes.append(TerrainMode(key, type: .height, translateName: name))
                     }
                 }
             }
         }
-        terrainModes = tms
-        return tms
+        terrainModes = modes
+    }
+
+    static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
+        if let terrainModes {
+            for mode in terrainModes {
+                if mode.type == type && mode.getKeyName() == keyName {
+                    return mode
+                }
+            }
+        }
+        return nil
+    }
+
+    static func getDefaultMode(_ type: TerrainType) -> TerrainMode? {
+        if let terrainModes {
+            for mode in terrainModes {
+                if mode.type == type && mode.isDefaultMode() {
+                    return mode
+                }
+            }
+        }
+        return nil
     }
 
     static func getByKey(_ key: String) -> TerrainMode? {
@@ -122,14 +146,18 @@ final class TerrainMode: NSObject {
     }
 
     func getKeyName() -> String {
-        if key == Self.defaultKey {
-            return type.rawValue.lowercased()
+        if key == Self.defaultKey || key == Self.altitudeDefaultKey {
+            return type.rawValue
         }
         return key
     }
 
+    func isDefaultMode() -> Bool {
+        type == .height ? key == Self.altitudeDefaultKey : key == Self.defaultKey
+    }
+
     func getCacheFileName() -> String {
-        type.rawValue.lowercased() + ".cache"
+        type.rawValue + ".cache"
     }
 
     func setZoomValues(minZoom: Int32, maxZoom: Int32) {
@@ -171,8 +199,18 @@ final class TerrainMode: NSObject {
         maxZoom.get()
     }
 
-    func getDescription() -> String {
+    func getDefaultDescription() -> String {
         translateName
+    }
+
+    func getDescription() -> String {
+        if type == .hillshade {
+            return localizedString("shared_string_hillshade")
+        } else if type == .slope {
+            return localizedString("shared_string_slope")
+        } else {
+            return localizedString("altitude")
+        }
     }
 
     func isTransparencySetting(_ setting: OACommonInteger) -> Bool {

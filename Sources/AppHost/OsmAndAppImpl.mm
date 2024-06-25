@@ -125,6 +125,7 @@
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
+@synthesize colorsPalettePath = _colorsPalettePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -178,6 +179,7 @@
         _gpxTravelPath = [_gpxPath stringByAppendingPathComponent:WIKIVOYAGE_INDEX_DIR];
         _hiddenMapsPath = [_dataPath stringByAppendingPathComponent:HIDDEN_DIR];
         _routingMapsCachePath = [_cachePath stringByAppendingPathComponent:@"ind_routing.cache"];
+        _colorsPalettePath = [_documentsPath stringByAppendingPathComponent:COLOR_PALETTE_DIR];
 
         _favoritesFilePrefix = @"favorites";
         _favoritesGroupNameSeparator = @"-";
@@ -292,11 +294,18 @@
 
 - (void) migrateResourcesToDocumentsIfNeeded
 {
-    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
+    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR]
+                                           toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]
+                               removeOriginalFile:YES];
+    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
+                                              toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
+                                  removeOriginalFile:YES];
+    BOOL movedColorsPalette = [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
+                                                     toDest:_colorsPalettePath
+                                  removeOriginalFile:NO];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-    if (movedRes || movedSqlite)
+    if (movedRes || movedSqlite || movedColorsPalette)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
 }
 
@@ -730,7 +739,9 @@
     return YES;
 }
 
-- (BOOL) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
+- (BOOL) moveContentsOfDirectory:(NSString *)src
+                          toDest:(NSString *)dest
+              removeOriginalFile:(BOOL)remove
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:src])
@@ -745,13 +756,22 @@
         if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
             continue;
         NSError *err = nil;
-        [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
-                    toPath:[dest stringByAppendingPathComponent:file]
-                     error:&err];
+        if (remove)
+        {
+            [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
+                        toPath:[dest stringByAppendingPathComponent:file]
+                         error:&err];
+        }
+        else
+        {
+            [fm copyItemAtPath:[src stringByAppendingPathComponent:file]
+                        toPath:[dest stringByAppendingPathComponent:file]
+                         error:&err];
+        }
         if (err)
             tryAgain = YES;
     }
-    if (!tryAgain)
+    if (remove && !tryAgain)
         [fm removeItemAtPath:src error:nil];
     return YES;
 }

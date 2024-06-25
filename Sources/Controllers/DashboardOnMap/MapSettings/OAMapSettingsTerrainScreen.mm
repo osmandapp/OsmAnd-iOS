@@ -94,20 +94,21 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     _data = [OATableDataModel model];
 
     TerrainMode *terrainMode = [_plugin getTerrainMode];
-    _minZoom = [terrainMode getMinZoom];
-    _maxZoom = [terrainMode getMaxZoom];
+    _minZoom = [_plugin getTerrainMinZoom];
+    _maxZoom = [_plugin getTerrainMaxZoom];
 
     BOOL isRelief3D = [OAIAPHelper isOsmAndProAvailable];
     BOOL isTerrainEbabled = [_plugin isTerrainLayerEnabled];
     BOOL isHillshade = [terrainMode isHillshade];
+    BOOL isSlope = [terrainMode isSlope];
 
     OATableSectionData *switchSection = [_data createNewSection];
     [switchSection addRowFromDictionary:@{
         kCellKeyKey : @"terrainStatus",
         kCellTypeKey : [OASwitchTableViewCell getCellIdentifier],
-        kCellTitleKey : isTerrainEbabled ? OALocalizedString(@"shared_string_enabled") : OALocalizedString(@"rendering_value_disabled_name"),
+        kCellTitleKey : OALocalizedString(isTerrainEbabled ? @"shared_string_enabled" : @"rendering_value_disabled_name"),
         kCellIconNameKey : isTerrainEbabled ? @"ic_custom_show.png" : @"ic_custom_hide.png",
-        kCellIconTintColor : isTerrainEbabled ? [UIColor colorNamed:ACColorNameIconColorSelected] : [UIColor colorNamed:ACColorNameIconColorDisabled],
+        kCellIconTintColor : [UIColor colorNamed:isTerrainEbabled ? ACColorNameIconColorSelected : ACColorNameIconColorDisabled],
         @"value" : @(isTerrainEbabled)
     }];
 
@@ -139,10 +140,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [titleSection addRowFromDictionary:@{
             kCellKeyKey : @"terrainTypeDesc",
             kCellTypeKey : [OATextLineViewCell getCellIdentifier],
-            kCellDescrKey : isHillshade ? OALocalizedString(@"map_settings_hillshade_description") : OALocalizedString(@"map_settings_slopes_description"),
+            kCellDescrKey : OALocalizedString(isHillshade ? @"map_settings_hillshade_description"
+                : isSlope ? @"map_settings_slopes_description" : @"height_legend_description"),
 
         }];
-        if (!isHillshade)
+        if (isSlope)
         {
             [titleSection addRowFromDictionary:@{
                 kCellTypeKey : [OAImageTextViewCell getCellIdentifier],
@@ -199,7 +201,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             OATableSectionData *availableMapsSection = [_data createNewSection];
             _availableMapsSection = [_data sectionCount] - 1;
             availableMapsSection.headerText = OALocalizedString(@"available_maps");
-            availableMapsSection.footerText = isHillshade ? OALocalizedString(@"map_settings_add_maps_hillshade") : OALocalizedString(@"map_settings_add_maps_slopes");
+            availableMapsSection.footerText = OALocalizedString(isHillshade ? @"map_settings_add_maps_hillshade" : @"map_settings_add_maps_slopes");
             for (NSInteger i = 0; i < _mapItems.count; i++)
             {
                 [availableMapsSection addRowFromDictionary:@{
@@ -256,13 +258,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (UIMenu *)createTerrainTypeMenuForCellButton:(UIButton *)button
 {
     NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
-    NSInteger selectedIndex = 0;
     NSMutableAttributedString *attributedString;
 
     __weak __typeof(self) weakSelf = self;
     for (NSInteger i = 0; i < TerrainMode.values.count; i++)
     {
         TerrainMode *mode = TerrainMode.values[i];
+        if (![mode isDefaultMode])
+            continue;
 
         UIAction *action = [UIAction actionWithTitle:[mode getDescription]
                                                image:nil

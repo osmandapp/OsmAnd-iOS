@@ -706,6 +706,7 @@
 		46A27270281DD05E00FF591D /* osm-carto.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 46A2726F281DD05D00FF591D /* osm-carto.render.xml */; };
 		46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */; };
 		46AB58A729C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */; };
+		46AD052A2C29E2060032C3B7 /* color-palette in Resources */ = {isa = PBXBuildFile; fileRef = 46AD05292C29E2060032C3B7 /* color-palette */; };
 		46AEDB8E27F4ABE2006D90E8 /* ic_custom_air_pressure@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB8C27F4ABE1006D90E8 /* ic_custom_air_pressure@3x.png */; };
 		46AEDB8F27F4ABE2006D90E8 /* ic_custom_air_pressure@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB8D27F4ABE1006D90E8 /* ic_custom_air_pressure@2x.png */; };
 		46AEDB9227F4ABF1006D90E8 /* ic_custom_clouds@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46AEDB9027F4ABF0006D90E8 /* ic_custom_clouds@3x.png */; };
@@ -3311,14 +3312,6 @@
 		FAC1662A2B21BEF900D63755 /* Peripheral.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC1661F2B21BEF900D63755 /* Peripheral.swift */; };
 		FAC1662B2B21BEF900D63755 /* CentralProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC166202B21BEF900D63755 /* CentralProxy.swift */; };
 		FAC5D4192BFB562000E9E658 /* SpeedometerSpeedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */; };
-		FAC5D4202BFB98DC00E9E658 /* weather_pressure.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41B2BFB98DA00E9E658 /* weather_pressure.txt */; };
-		FAC5D4212BFB98DC00E9E658 /* weather_temperature.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41C2BFB98DB00E9E658 /* weather_temperature.txt */; };
-		FAC5D4222BFB98DC00E9E658 /* weather_cloud.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41D2BFB98DB00E9E658 /* weather_cloud.txt */; };
-		FAC5D4232BFB98DC00E9E658 /* weather_wind.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41E2BFB98DB00E9E658 /* weather_wind.txt */; };
-		FAC5D4242BFB98DC00E9E658 /* weather_precip.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D41F2BFB98DB00E9E658 /* weather_precip.txt */; };
-		FAC5D4282BFB9BFE00E9E658 /* hillshade_main_default.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D4252BFB9BFE00E9E658 /* hillshade_main_default.txt */; };
-		FAC5D4292BFB9BFE00E9E658 /* hillshade_color_default.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D4262BFB9BFE00E9E658 /* hillshade_color_default.txt */; };
-		FAC5D42A2BFB9BFE00E9E658 /* slope_default.txt in Resources */ = {isa = PBXBuildFile; fileRef = FAC5D4272BFB9BFE00E9E658 /* slope_default.txt */; };
 		FAC5D4312BFC7F5200E9E658 /* SpeedLimitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */; };
 		FACE409F2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm in Sources */ = {isa = PBXBuildFile; fileRef = FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */; };
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
@@ -4201,6 +4194,7 @@
 		46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAUninstallSpeedCamerasViewController.mm; sourceTree = "<group>"; };
 		46AB58A529C4C967003B2FB9 /* OAWikipediaImagesSettingsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikipediaImagesSettingsViewController.h; sourceTree = "<group>"; };
 		46AB58A629C4C979003B2FB9 /* OAWikipediaImagesSettingsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikipediaImagesSettingsViewController.m; sourceTree = "<group>"; };
+		46AD05292C29E2060032C3B7 /* color-palette */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "color-palette"; path = "../resources/color-palette"; sourceTree = "<group>"; };
 		46AEDB8C27F4ABE1006D90E8 /* ic_custom_air_pressure@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_air_pressure@3x.png"; path = "Resources/Icons/ic_custom_air_pressure@3x.png"; sourceTree = "<group>"; };
 		46AEDB8D27F4ABE1006D90E8 /* ic_custom_air_pressure@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_air_pressure@2x.png"; path = "Resources/Icons/ic_custom_air_pressure@2x.png"; sourceTree = "<group>"; };
 		46AEDB9027F4ABF0006D90E8 /* ic_custom_clouds@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clouds@3x.png"; path = "Resources/Icons/ic_custom_clouds@3x.png"; sourceTree = "<group>"; };
@@ -7874,14 +7868,6 @@
 		FAC1661F2B21BEF900D63755 /* Peripheral.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Peripheral.swift; sourceTree = "<group>"; };
 		FAC166202B21BEF900D63755 /* CentralProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CentralProxy.swift; sourceTree = "<group>"; };
 		FAC5D4182BFB562000E9E658 /* SpeedometerSpeedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedometerSpeedView.swift; sourceTree = "<group>"; };
-		FAC5D41B2BFB98DA00E9E658 /* weather_pressure.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_pressure.txt; path = "../resources/color-palette/weather_pressure.txt"; sourceTree = "<group>"; };
-		FAC5D41C2BFB98DB00E9E658 /* weather_temperature.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_temperature.txt; path = "../resources/color-palette/weather_temperature.txt"; sourceTree = "<group>"; };
-		FAC5D41D2BFB98DB00E9E658 /* weather_cloud.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_cloud.txt; path = "../resources/color-palette/weather_cloud.txt"; sourceTree = "<group>"; };
-		FAC5D41E2BFB98DB00E9E658 /* weather_wind.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_wind.txt; path = "../resources/color-palette/weather_wind.txt"; sourceTree = "<group>"; };
-		FAC5D41F2BFB98DB00E9E658 /* weather_precip.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = weather_precip.txt; path = "../resources/color-palette/weather_precip.txt"; sourceTree = "<group>"; };
-		FAC5D4252BFB9BFE00E9E658 /* hillshade_main_default.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_main_default.txt; path = "../resources/color-palette/hillshade_main_default.txt"; sourceTree = "<group>"; };
-		FAC5D4262BFB9BFE00E9E658 /* hillshade_color_default.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = hillshade_color_default.txt; path = "../resources/color-palette/hillshade_color_default.txt"; sourceTree = "<group>"; };
-		FAC5D4272BFB9BFE00E9E658 /* slope_default.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = slope_default.txt; path = "../resources/color-palette/slope_default.txt"; sourceTree = "<group>"; };
 		FAC5D4302BFC7F5200E9E658 /* SpeedLimitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeedLimitView.swift; sourceTree = "<group>"; };
 		FACE409D2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = OAExternalSensorsPlugin.mm; sourceTree = "<group>"; };
 		FACE409E2AEA9ACB00E1E43A /* OAExternalSensorsPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAExternalSensorsPlugin.h; sourceTree = "<group>"; };
@@ -7966,16 +7952,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		05028F752A12A102003FECD0 /* heightmap */ = {
-			isa = PBXGroup;
-			children = (
-				FAC5D4262BFB9BFE00E9E658 /* hillshade_color_default.txt */,
-				FAC5D4252BFB9BFE00E9E658 /* hillshade_main_default.txt */,
-				FAC5D4272BFB9BFE00E9E658 /* slope_default.txt */,
-			);
-			name = heightmap;
-			sourceTree = "<group>";
-		};
 		0A1051D12731A30200BDF6C4 /* MenuBuilder */ = {
 			isa = PBXGroup;
 			children = (
@@ -9867,18 +9843,6 @@
 			name = "Recovered References";
 			sourceTree = "<group>";
 		};
-		8A4D03DD27A6DEED00B8A778 /* weather */ = {
-			isa = PBXGroup;
-			children = (
-				FAC5D41D2BFB98DB00E9E658 /* weather_cloud.txt */,
-				FAC5D41F2BFB98DB00E9E658 /* weather_precip.txt */,
-				FAC5D41B2BFB98DA00E9E658 /* weather_pressure.txt */,
-				FAC5D41C2BFB98DB00E9E658 /* weather_temperature.txt */,
-				FAC5D41E2BFB98DB00E9E658 /* weather_wind.txt */,
-			);
-			name = weather;
-			sourceTree = "<group>";
-		};
 		8A4D03E827A6DF3700B8A778 /* proj */ = {
 			isa = PBXGroup;
 			children = (
@@ -10127,8 +10091,7 @@
 		BB451D8918D70AE4005FBE09 /* Embedded */ = {
 			isa = PBXGroup;
 			children = (
-				05028F752A12A102003FECD0 /* heightmap */,
-				8A4D03DD27A6DEED00B8A778 /* weather */,
+				46AD05292C29E2060032C3B7 /* color-palette */,
 				DA5CA677211ECCB500E2B79B /* style */,
 				DA5A857E26C5692100F274C7 /* article_style.css */,
 				DAC58858210898FB008B7763 /* voice */,
@@ -14656,7 +14619,6 @@
 				8AE0194E24505C8B00DA5C33 /* ic_small_arrow_forward@3x.png in Resources */,
 				8476E2C21F6C1EEC00EC274F /* map_pedestrian_location_lost_night@2x.png in Resources */,
 				8490B1D72068E22B007694A5 /* ic_small_turn_right@3x.png in Resources */,
-				FAC5D4202BFB98DC00E9E658 /* weather_pressure.txt in Resources */,
 				0A7C7F2D2703955200F779E4 /* ic_custom_track_line_bold@2x.png in Resources */,
 				46453B4828358854001F9A3A /* OAChoosePlanViewController.xib in Resources */,
 				8476E1E81F6AA01000EC274F /* ic_list_startpoint@3x.png in Resources */,
@@ -14667,7 +14629,6 @@
 				DA835FFE23438512003374B5 /* ic_small_arrow_down@2x.png in Resources */,
 				DAAE21E62269D6010006E016 /* ic_custom_my_places@3x.png in Resources */,
 				DA5A82A726C563A700F274C7 /* OAGPXRecTableViewCell.xib in Resources */,
-				FAC5D4242BFB98DC00E9E658 /* weather_precip.txt in Resources */,
 				8A6CBCA821CE25F0004033C7 /* ic_live_purchased@3x.png in Resources */,
 				0A8E4506270A12720016826E /* img_track_gradient_speed.png in Resources */,
 				DA6676D52450660800EF476D /* ic_action_bus@3x.png in Resources */,
@@ -14914,7 +14875,6 @@
 				84D81EE81AA30404001098FD /* ic_destination_arrow_small@3x.png in Resources */,
 				0A7DAF8E270C401E0059238B /* ic_custom_folder_move@2x.png in Resources */,
 				46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */,
-				FAC5D4292BFB9BFE00E9E658 /* hillshade_color_default.txt in Resources */,
 				845E06971B5FF17400DFC2A7 /* ic_plugin_contourlines@3x.png in Resources */,
 				321251452A4B2081006C44BD /* ic_custom_3d@2x.png in Resources */,
 				DA5A83EC26C563A800F274C7 /* OAAddressTableViewController.xib in Resources */,
@@ -15236,7 +15196,6 @@
 				8A755A5F21CBF92400E42699 /* ic_live_nautical_depth@3x.png in Resources */,
 				3AC639E51A2200E6001D5E57 /* icon_favorite_direction@2x.png in Resources */,
 				DA32845226CBC0460036BA73 /* ic_custom_stop@2x.png in Resources */,
-				FAC5D42A2BFB9BFE00E9E658 /* slope_default.txt in Resources */,
 				97EF50D92AB1D926005E861B /* map_action_paragliding@3x.png in Resources */,
 				DA6D0792255173C5004FE017 /* ic_custom_add_point_after@3x.png in Resources */,
 				DAB985A82124231C0081F8F8 /* ar_tts.js in Resources */,
@@ -15368,7 +15327,6 @@
 				8A755A6D21CBF92400E42699 /* ic_live_wikipedia@2x.png in Resources */,
 				8476E1E41F6AA01000EC274F /* ic_list_destination@2x.png in Resources */,
 				46453AF128352388001F9A3A /* ic_custom_cloud_upload_colored_day@2x.png in Resources */,
-				FAC5D4222BFB98DC00E9E658 /* weather_cloud.txt in Resources */,
 				84B6E0842073CF55002CA15B /* ic_action_route_first_intermediate@3x.png in Resources */,
 				B247459727F4A57300C18C3F /* ic_custom_cloud_done@2x.png in Resources */,
 				46453ADC2835234B001F9A3A /* ic_custom_advanced_widgets_colored_big@3x.png in Resources */,
@@ -15459,6 +15417,7 @@
 				84185A6C1AA8ADFF00F70328 /* ic_map_pin@3x.png in Resources */,
 				DA80D9A42716CC1800445DAF /* map_track_point_finish@3x.png in Resources */,
 				845E06171B5956E800DFC2A7 /* ic_destination_pin_4@2x.png in Resources */,
+				46AD052A2C29E2060032C3B7 /* color-palette in Resources */,
 				8458BB8B1B0F1E7A00738132 /* ic_website@2x.png in Resources */,
 				DA13A02B2345FA0100C1A1A8 /* ic_custom_forbid_private_access@3x.png in Resources */,
 				DA32846826CBF76B0036BA73 /* img_plugin_trip_recording.jpg in Resources */,
@@ -15501,7 +15460,6 @@
 				DA52CDF924AE087F00CC309D /* img_help_length_limit_day@3x.png in Resources */,
 				8476E2AC1F6C1EEC00EC274F /* map_default_location_view_angle@3x.png in Resources */,
 				DA32846526CBF76B0036BA73 /* img_plugin_osm_edits.jpg in Resources */,
-				FAC5D4282BFB9BFE00E9E658 /* hillshade_main_default.txt in Resources */,
 				DAB625B12125A8E700E6AF2E /* ko_tts.js in Resources */,
 				DA1341E4243DC5A90039D214 /* ic_action_subway@2x.png in Resources */,
 				46453B2B2835245F001F9A3A /* ic_custom_pro_features_colored@3x.png in Resources */,
@@ -15871,7 +15829,6 @@
 				DA5A857526C5680700F274C7 /* OADestinationBarWidget.xib in Resources */,
 				46453B1C2835243F001F9A3A /* ic_custom_osmand_maps_plus_bw@3x.png in Resources */,
 				0A0C6EBF26F5127C00F7CEB3 /* OAGpxStatBlockCollectionViewCell.xib in Resources */,
-				FAC5D4232BFB98DC00E9E658 /* weather_wind.txt in Resources */,
 				DA1341E8243DC5A90039D214 /* map_action_campervan@3x.png in Resources */,
 				C558A29C29B1355A00E79DDB /* ic_custom_direction_manual_night@3x.png in Resources */,
 				845E06A01B5FF17400DFC2A7 /* ic_plugin_nautical@3x.png in Resources */,
@@ -16368,7 +16325,6 @@
 				DA5A82CF26C563A800F274C7 /* OAPointHeaderTableViewCell.xib in Resources */,
 				845E06941B5FF17400DFC2A7 /* ic_plugin_contourlines@2x.png in Resources */,
 				3296B4A127F8790800108AF7 /* ic_custom_thermometer@3x.png in Resources */,
-				FAC5D4212BFB98DC00E9E658 /* weather_temperature.txt in Resources */,
 				32B50ADA26BBE3C7002E6C92 /* ic_custom_drawer@3x.png in Resources */,
 				158DE49E25AEF32F007C1B57 /* ic_destination_pin_7_small@2x.png in Resources */,
 				3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */,

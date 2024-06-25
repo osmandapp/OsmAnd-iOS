@@ -10,6 +10,4 @@
 
 @interface OATerrainMapLayer : OARasterMapLayer
 
-- (OsmAnd::ZoomLevel) getMaxZoom;
-
 @end

@@ -36,6 +36,7 @@
 @property(nonatomic, readonly) NSString *gpxTravelPath;
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
 @property(nonatomic, readonly) NSString *routingMapsCachePath;
+@property(nonatomic, readonly) NSString *colorsPalettePath;
 
 
 @property(readonly) BOOL initialized;

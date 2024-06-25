@@ -90,7 +90,7 @@ static const double DISTANCE_SKIP = 10000;
         rmap.reader = file;
         rmap.standard = [_or getRegionDataByDownloadName:[rmap downloadName]] != nil;
 
-        if ([[rmap.downloadName lowercaseString] hasPrefix:[@"world_"]])
+        if ([[rmap.downloadName lowercaseString] hasPrefix:@"world_"])
         {
             continue; // avoid including World_seamarks
         }

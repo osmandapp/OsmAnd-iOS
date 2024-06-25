@@ -343,7 +343,7 @@
 "shared_string_show_all" = "Vis alle";
 "get_directions" = "Rutevejledning";
 "shared_string_dismiss" = "Annuller";
-"shared_string_modify" = "Ændre";
+"shared_string_modify" = "Tilpas";
 "poi_filter_parking" = "Parkering";
 "est_travel_time" = "Anslået rejsetid";
 "pedestrian" = "Fodgænger";
@@ -3448,3 +3448,10 @@
 "wall_height_description" = "Ved at ændre højdeværdien kan du løfte sporets øverste linje op over jordoverfladen.";
 "add_button" = "Tilføj knap";
 "select_items" = "Vælg elementer";
+"avoid_pt_types_descr" = "Vælg de typer offentlig transport, der skal undgås i forbindelse med navigation:";
+"route_recalculation_dist_title" = "Mindste afstand for at genberegne rute";
+"shared_string_class" = "Klasse";
+"in_case_of_reverse_direction" = "I tilfælde af modsat retning";
+"avoid_pt_types" = "Undgå transportformer…";
+"dangerous_goods" = "Farligt gods";
+"dangerous_goods_description" = "På nogle veje og i nogle tunneler er det forbudt at transportere farlige materialer.";

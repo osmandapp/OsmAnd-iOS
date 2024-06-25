@@ -86,9 +86,9 @@
 "simulate_routing_descr" = "Simular la ubicación usando una ruta calculada";
 "select_avoid_descr" = "Marca los caminos a evitar durante la navegación. Puedes marcar una carretera en el mapa o elegir un tipo de la siguiente lista.";
 "no_active_route" = "Sin ruta activa";
-"day_night_info_description" = "Alba: %@ \nOcaso: %@";
+"day_night_info_description" = "Amanecer: %@ \nAtardecer: %@";
 "day_night_info" = "Información diurna/nocturna";
-"daynight_mode_auto" = "Alba/ocaso";
+"daynight_mode_auto" = "Amanecer/atardecer";
 "route_simulation" = "Simulación de la ruta";
 "auto_follow_location_enabled" = "Centrado automático del mapa activado.";
 "unknown_location" = "Ubicación desconocida.";
@@ -2857,8 +2857,8 @@
 "shared_string_external" = "Externo";
 "with_permission_my_position_value" = "Mover el mapa a la ubicación actual";
 "map_widget_sunrise_sunset_time_left" = "Tiempo restante";
-"map_widget_sunrise" = "Alba";
-"map_widget_sunset" = "Ocaso";
+"map_widget_sunrise" = "Amanecer";
+"map_widget_sunset" = "Atardecer";
 "map_widget_next_sunrise" = "Próximo amanecer";
 "without_permission_my_position_value" = "OsmAnd no tiene permisos de ubicación";
 "press_again_to_change_the_map_orientation" = "Pulsa de nuevo para cambiar la orientación del mapa";
@@ -2952,7 +2952,7 @@
 "map_widget_altitude_desc" = "Muestran la altitud de la ubicación geográfica actual o la elevación del centro del mapa actual";
 "weather_widget_group_desc" = "Un grupo de widgets que muestran datos meteorológicos diversos.";
 "map_widget_group_sunrise_sunset_desc" = "Muestran información sobre la próxima salida y puesta del sol.";
-"map_widget_group_sunrise_sunset" = "Alba, ocaso";
+"map_widget_group_sunrise_sunset" = "Amanecer, atardecer";
 "bearing_secondary_desc" = "El formato de los datos usados puede cambiarse en: %@→ %@ → %@.";
 "angular_measeurement" = "Unidad angular";
 "angular_measeurement_descr" = "Cambiar el acimut en el que se mide.";

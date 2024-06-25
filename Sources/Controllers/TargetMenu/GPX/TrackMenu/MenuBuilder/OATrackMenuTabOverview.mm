@@ -192,7 +192,7 @@
             kTableKey: @"route",
             kCellType: [OAValueTableViewCell getCellIdentifier],
             kCellTitle: OALocalizedString(@"layer_route"),
-            kCellDesc: OALocalizedString([self tagToActivity:tag])
+            kCellDesc: routeKey.getActivityTypeTitle
     }];
     [infoSectionData.subjects addObject:routeCellData];
 
@@ -261,18 +261,6 @@
     [infoSectionData.subjects addObjectsFromArray:subjects];
 }
 
-- (NSString *)tagToActivity:(NSString *)tag
-{
-    if ([tag isEqualToString:@"bicycle"])
-        return @"activity_type_cycling_name";
-    else if ([tag isEqualToString:@"mtb"])
-        return @"activity_type_mountainbike_name";
-    else if ([tag isEqualToString:@"horse"])
-        return @"app_mode_horse";
-    else if ([tag isEqualToString:@"hiking"])
-        return @"activity_type_hiking_name";
-    return @"";
-}
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText
 {

@@ -344,7 +344,7 @@
 "shared_string_show_all" = "Összes megjelenítése";
 "get_directions" = "Navigáció";
 "shared_string_dismiss" = "Bezárás";
-"shared_string_modify" = "Módosítás";
+"shared_string_modify" = "Módosít";
 "poi_filter_parking" = "Parkoló";
 "est_travel_time" = "Utazási idő becslése";
 "pedestrian" = "Gyalogos";
@@ -2850,3 +2850,4 @@
 "vertical_exaggeration" = "Függőleges eltúlzás";
 "shared_string_scale" = "Skála";
 "required_maps" = "Szükséges térképek";
+"tomorrow" = "Holnap";

@@ -3299,3 +3299,4 @@
 "wall_height" = "Duvar yüksekliği";
 "downward_gradient" = "Aşağı doğru eğim";
 "upward_gradient" = "Yukarı doğru eğim";
+"map_markers_desc" = "Pencere öğesi, harita işaretçileri listesindeki ilk iki işaretçi için mesafeyi veya tahmini varış zamanını (TVZ) gösterir.";

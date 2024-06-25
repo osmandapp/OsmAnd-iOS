@@ -3039,3 +3039,5 @@
 "map_widget_target_distance_desc" = "Viser avstanden fra kameraet til målstedet.";
 "shared_string_keywords" = "Nøkkelord";
 "required_maps" = "Påkrevde kart";
+"wall_height" = "Vegghøyde";
+"tomorrow" = "I morgen";

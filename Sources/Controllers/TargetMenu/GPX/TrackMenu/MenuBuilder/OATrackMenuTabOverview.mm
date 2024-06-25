@@ -190,10 +190,10 @@
 
     NSString *tag = routeKey.routeKey.getTag().toNSString();
     OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
-        kTableKey: @"route",
-        kCellType: [OAValueTableViewCell getCellIdentifier],
-        kCellTitle: OALocalizedString(@"layer_route"),
-        kCellDesc: OALocalizedString([self tagToActivity:tag])
+            kTableKey: @"route",
+            kCellType: [OAValueTableViewCell getCellIdentifier],
+            kCellTitle: OALocalizedString(@"layer_route"),
+            kCellDesc: routeKey.getActivityTypeTitle
     }];
     [infoSectionData.subjects addObject:routeCellData];
 
@@ -272,6 +272,7 @@
     [infoSectionData.subjects addObjectsFromArray:subjects];
 }
 
+<<<<<<< HEAD
 - (NSArray<NSDictionary *> *)getPoiTypeDataForKey:(NSString *)routeTagKey withValue:(NSString *)value
 {
     if ([routeTagKey isEqualToString:@"name"])
@@ -311,6 +312,8 @@
         return @"activity_type_hiking_name";
     return @"";
 }
+=======
+>>>>>>> 10aa65e048be0041774c30456ef0fd1e135beb5d
 
 - (NSString *) findFirstImageURL:(NSString *)htmlText
 {

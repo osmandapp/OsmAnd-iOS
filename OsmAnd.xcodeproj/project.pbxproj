@@ -404,6 +404,7 @@
 		327D68A52A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */; };
 		327D68AA2A8FB8180076D1E0 /* ArticleTravelCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327D68A92A8FB8180076D1E0 /* ArticleTravelCell.swift */; };
 		327D68AB2A8FB9020076D1E0 /* ArticleTravelCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 327D68A82A8FB7910076D1E0 /* ArticleTravelCell.xib */; };
+		327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */; };
 		32839A372AF0F911007B5057 /* WikiImageCacheHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32839A362AF0F911007B5057 /* WikiImageCacheHelper.swift */; };
 		328BD49529D5AC6400045871 /* OATripRecordingDistanceWidget.m in Sources */ = {isa = PBXBuildFile; fileRef = 328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */; };
 		328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 328EECD529DC5FA7002922AA /* OATripRecordingElevationWidget.mm */; };
@@ -3854,6 +3855,7 @@
 		327D68A42A8F9BA80076D1E0 /* SavedArticlesTabViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedArticlesTabViewController.swift; sourceTree = "<group>"; };
 		327D68A82A8FB7910076D1E0 /* ArticleTravelCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = ArticleTravelCell.xib; path = Sources/Controllers/TravelGuides/explore/cells/ArticleTravelCell.xib; sourceTree = SOURCE_ROOT; };
 		327D68A92A8FB8180076D1E0 /* ArticleTravelCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArticleTravelCell.swift; sourceTree = "<group>"; };
+		327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RouteParameterHazmatUsa.swift; sourceTree = "<group>"; };
 		32839A362AF0F911007B5057 /* WikiImageCacheHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WikiImageCacheHelper.swift; sourceTree = "<group>"; };
 		328BD49329D5AC5500045871 /* OATripRecordingDistanceWidget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OATripRecordingDistanceWidget.h; sourceTree = "<group>"; };
 		328BD49429D5AC6400045871 /* OATripRecordingDistanceWidget.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OATripRecordingDistanceWidget.m; sourceTree = "<group>"; };
@@ -11627,6 +11629,7 @@
 				DA5A7B9A26C563A100F274C7 /* OARouteParameterValuesViewController.h */,
 				DA5A7B9426C563A100F274C7 /* OARouteParameterValuesViewController.mm */,
 				C5EB72C32BD12F4C00C50C23 /* RouteParameterDevelopmentViewController.swift */,
+				327DF9892C2494C800B5069C /* RouteParameterHazmatUsa.swift */,
 				DA5A7B7926C563A100F274C7 /* OAScreenAlertsViewController.h */,
 				DA5A7B8926C563A100F274C7 /* OAScreenAlertsViewController.m */,
 				321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */,
@@ -17200,6 +17203,7 @@
 				3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */,
 				DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,
+				327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,
 				DA5A849926C563A900F274C7 /* OAInfoBottomView.mm in Sources */,
 				DA5A83BC26C563A800F274C7 /* OAQuickActionListViewController.m in Sources */,

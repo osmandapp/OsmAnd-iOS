@@ -19,7 +19,7 @@
 "shared_string_or" = "veya";
 "shared_string_and" = "ve";
 "shared_string_edit" = "Düzenle";
-"shared_string_modify" = "Değiştirmek";
+"shared_string_modify" = "Düzelt";
 "first_time_continue" = "Daha Sonra";
 "offline_maps" = "Çevrim Dışı Haritalar";
 "shared_string_download_map" = "Harita indir";
@@ -3296,3 +3296,4 @@
 "shared_string_top" = "Üst";
 "visualization_3d_wall_color" = "Duvar rengi";
 "shared_string_top_bottom" = "Üst ve alt";
+"wall_height" = "Duvar yüksekliği";

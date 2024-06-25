@@ -178,7 +178,7 @@
 "carplay_active_message" = "Mapa se prikazuje preko KarPlej-a";
 "carplay_profile" = "KarPlej profil";
 "carplay_profile_descr" = "Profil koji će se koristiti dok ste povezani na KarPlej.";
-"show_traffic_warnings" = "Upozorenja o saobraćaju";
+"show_traffic_warnings" = "Szanje na putevima";
 "show_pedestrian_warnings" = "Pešački prelazi";
 "show_cameras" = "Kamere za merenje brzine";
 "show_lanes" = "Trake";
@@ -448,7 +448,7 @@
 "shared_string_or" = "ili";
 "shared_string_and" = "i";
 "shared_string_edit" = "Urediti";
-"shared_string_modify" = "Modifikuj";
+"shared_string_modify" = "Promeni";
 "first_time_continue" = "Kasnije";
 "shared_string_of" = "od";
 "shared_string_all" = "Sve";
@@ -3442,3 +3442,7 @@
 "add_button" = "Dodaj dugme";
 "custom_map_button_name_present" = "Takavo dugme već postoji";
 "empty_name" = "Prazno ime";
+"shared_string_item" = "Stavka";
+"wall_height" = "Visina zida";
+"wall_height_description" = "Promenom vrednosti visine, možete podići gornju liniju staze iznad nivoa tla.";
+"select_items" = "Odaberite stavke";

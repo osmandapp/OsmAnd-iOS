@@ -447,7 +447,7 @@
 "shared_string_or" = "aŭ";
 "shared_string_and" = "kaj";
 "shared_string_edit" = "Redakti";
-"shared_string_modify" = "Modify";
+"shared_string_modify" = "Modifi";
 "first_time_continue" = "Poste";
 "shared_string_of" = "of";
 "shared_string_all" = "Ĉiuj";
@@ -3104,3 +3104,4 @@
 "shared_string_scale" = "Skali";
 "vertical_exaggeration" = "Vertikala troigo";
 "vertical_exaggeration_description" = "Per ŝanĝi la valoron de skalo vi povas emfazi la 3-dimensian map-reliefon.";
+"tomorrow" = "Morgaŭ";

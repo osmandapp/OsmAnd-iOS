@@ -3463,3 +3463,10 @@
 "empty_name" = "Leerer Name";
 "custom_map_button_name_present" = "Diese Schaltfläche ist bereits vorhanden";
 "shared_string_item" = "Element";
+"dangerous_goods" = "Gefahrgut";
+"avoid_pt_types_descr" = "Wähle die öffentlichen Verkehrsmittel aus, die Du für die Navigation vermeiden möchtest:";
+"route_recalculation_dist_title" = "Mindestabstand für Neuberechnung der Route";
+"in_case_of_reverse_direction" = "Bei umgekehrter Richtung";
+"avoid_pt_types" = "Verkehrsmittel ausschließen …";
+"shared_string_class" = "Klasse";
+"dangerous_goods_description" = "Auf manchen Straßen und in Tunneln ist der Transport von Gefahrgut verboten.";

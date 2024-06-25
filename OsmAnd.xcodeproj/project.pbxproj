@@ -3322,6 +3322,9 @@
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
+		FAE6E8602C29AC0700907FBE /* CompactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E85F2C29AC0700907FBE /* CompactViewController.swift */; };
+		FAE6E8622C29AC8200907FBE /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8612C29AC8200907FBE /* WeatherViewController.swift */; };
+		FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */; };
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
@@ -7884,6 +7887,9 @@
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
 		FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "СhoicePairedDeviceTableViewCell.swift"; sourceTree = "<group>"; };
+		FAE6E85F2C29AC0700907FBE /* CompactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactViewController.swift; sourceTree = "<group>"; };
+		FAE6E8612C29AC8200907FBE /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
+		FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLayerSettingsViewController.swift; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -9691,6 +9697,8 @@
 				CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */,
 				CA4EDE6E1DAF70B53B04003C /* OAWeatherWebClient.mm */,
 				CA4ED4DA76018A8B23059CA6 /* OAWeatherWebClient.h */,
+				FAE6E8612C29AC8200907FBE /* WeatherViewController.swift */,
+				FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */,
 			);
 			path = Weather;
 			sourceTree = "<group>";
@@ -13783,6 +13791,7 @@
 		FA069C522B9AF6090007E4DE /* Controls */ = {
 			isa = PBXGroup;
 			children = (
+				FAE6E85E2C29ABFB00907FBE /* CompactViewController */,
 				FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */,
 				FA069C682B9F13160007E4DE /* ShadowPathView.swift */,
 			);
@@ -14118,6 +14127,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		FAE6E85E2C29ABFB00907FBE /* CompactViewController */ = {
+			isa = PBXGroup;
+			children = (
+				FAE6E85F2C29AC0700907FBE /* CompactViewController.swift */,
+			);
+			path = CompactViewController;
+			sourceTree = "<group>";
+		};
 		FAF6C89C2AD014C800A3ED94 /* ThemeManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -14187,7 +14204,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = OA;
-				LastUpgradeCheck = 0610;
+				LastUpgradeCheck = 1540;
 				ORGANIZATIONNAME = OsmAnd;
 				TargetAttributes = {
 					BBA3AF30197FC4BB0039D991 = {
@@ -16953,6 +16970,7 @@
 				DA5A856C26C563A900F274C7 /* OARouteImporter.mm in Sources */,
 				DA5A83B426C563A800F274C7 /* OAOsmEditsListViewController.mm in Sources */,
 				FA00B8862B5928F900582CD1 /* SegmentImagesWithRightLabelTableViewCell.swift in Sources */,
+				FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */,
 				FA4768B32A66E73000D533E8 /* FreeBackupBanner.swift in Sources */,
 				DA5A81AF26C563A700F274C7 /* OASearchCoreFactory.mm in Sources */,
 				DA5A849626C563A900F274C7 /* InitialRoutePlanningBottomSheetViewController.mm in Sources */,
@@ -17264,6 +17282,7 @@
 				DA5A83CB26C563A800F274C7 /* OACollapsableView.m in Sources */,
 				DA5A82F426C563A800F274C7 /* OASearchMoreCell.m in Sources */,
 				DA5A81BA26C563A700F274C7 /* OAPOIHistoryType.mm in Sources */,
+				FAE6E8602C29AC0700907FBE /* CompactViewController.swift in Sources */,
 				C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */,
 				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
@@ -17661,6 +17680,7 @@
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
 				46CBC9782B9633FB005CC244 /* AverageGlideComputer.swift in Sources */,
+				FAE6E8622C29AC8200907FBE /* WeatherViewController.swift in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,

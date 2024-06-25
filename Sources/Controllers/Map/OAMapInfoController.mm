@@ -71,6 +71,7 @@
     OARulerWidget *_rulerControl;
     
     SpeedometerView *_speedometerView;
+    WeatherViewController *_weatherViewController;
 
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -602,6 +603,72 @@
         [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
     }];
+    // TODO: 
+    
+    auto vc = [CompactViewController new];
+    if (!_weatherViewController)
+    {
+        _weatherViewController = [WeatherViewController new];
+    }
+    
+    [_weatherViewController willMoveToParentViewController:nil];
+    [_weatherViewController.view removeFromSuperview];
+    [_weatherViewController removeFromParentViewController];
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_weatherViewController];
+    
+    [_mapHudViewController addChildViewController:vc];
+    [_mapHudViewController.view addSubview:vc.view];
+    [vc didMoveToParentViewController:_mapHudViewController];
+    
+    [vc addControllerWithController:navigationController];
+    
+    UIButton *button1 = [UIButton buttonWithType:UIButtonTypeSystem];
+       button1.layer.cornerRadius = 25;
+       button1.translatesAutoresizingMaskIntoConstraints = NO;
+       [button1 setImage:[UIImage imageNamed:@"ic_custom_contour_lines_disabled"] forState:UIControlStateNormal];
+       [button1 addTarget:self action:@selector(button1Tapped:) forControlEvents:UIControlEventTouchUpInside];
+       
+
+       [NSLayoutConstraint activateConstraints:@[
+           [button1.heightAnchor constraintEqualToConstant:50],
+           [button1.widthAnchor constraintEqualToConstant:50],
+       ]];
+       
+       UIButton *button2 = [UIButton buttonWithType:UIButtonTypeSystem];
+       button2.layer.cornerRadius = 25;
+       button2.translatesAutoresizingMaskIntoConstraints = NO;
+       [button2 setImage:[UIImage imageNamed:@"ic_custom_overlay_map_disabled"] forState:UIControlStateNormal];
+       [button2 addTarget:self action:@selector(button2Tapped:) forControlEvents:UIControlEventTouchUpInside];
+       
+       [NSLayoutConstraint activateConstraints:@[
+           [button2.heightAnchor constraintEqualToConstant:50],
+           [button2.widthAnchor constraintEqualToConstant:50]
+       ]];
+       
+       [vc addButtonsWithButtons:@[button1, button2]];
+}
+
+- (void)button1Tapped:(UIButton *)sender {
+    NSLog(@"button1 tapped!");
+}
+
+- (void)button2Tapped:(UIButton *)sender {
+    NSLog(@"button2 tapped!");
+    
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:[WeatherLayerSettingsViewController new]];
+    
+    navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+    
+    UISheetPresentationController *sheet = navigationController.sheetPresentationController;
+    if (sheet)
+    {
+        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
+        sheet.preferredCornerRadius = 20;
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = YES;
+    }
+    
+    [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)hideWeatherToolbar

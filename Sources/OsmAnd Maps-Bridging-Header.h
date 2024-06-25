@@ -171,6 +171,7 @@
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "FFCircularProgressView.h"
 #import "FFCircularProgressView+isSpinning.h"
+#import "OAWeatherToolbar.h"
 
 // Enums
 #import "OAGPXDataSetType.h"

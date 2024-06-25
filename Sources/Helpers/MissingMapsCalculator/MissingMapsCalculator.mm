@@ -275,9 +275,15 @@ pointsToCheck:(NSMutableArray<MissingMapsCalculatorPoint *> *)pointsToCheck
         {
             regionDownloadId = [regionDownloadId substringToIndex:[regionDownloadId length] - 1];
         }
-        [regions addObject:regionDownloadId];
-        if (!region.regionJoinMap && !region.regionJoinRoads) {
-            onlyJointMap = NO;
+        BOOL hasMapType = region.regionMap; // or.isDownloadOfType(o, OsmandRegions.MAP_TYPE);
+        BOOL hasRoadsType = region.regionRoads; // or.isDownloadOfType(o, OsmandRegions.ROADS_TYPE);
+        BOOL hasMapJoinType = region.regionJoinMap; // or.isDownloadOfType(o, OsmandRegions.MAP_JOIN_TYPE);
+        BOOL hasRoadsJoinType = region.regionJoinRoads; // or.isDownloadOfType(o, OsmandRegions.ROADS_JOIN_TYPE);
+        if (hasMapType || hasRoadsType || hasMapJoinType || hasRoadsJoinType) {
+            [regions addObject:regionDownloadId];
+            if (!hasMapJoinType && !hasRoadsJoinType) {
+                onlyJointMap = NO;
+            }
         }
     }
     [regions sortUsingComparator:^NSComparisonResult(NSString * _Nonnull o1, NSString * _Nonnull o2) {

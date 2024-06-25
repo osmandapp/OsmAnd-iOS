@@ -71,9 +71,11 @@
         _regionRoadSigns = _worldRegion->regionRoadSigns.toNSString();
         _wikiLink = _worldRegion->wikiLink.toNSString();
         _population = _worldRegion->population.toNSString();
+        _regionMap = _worldRegion->regionMap;
+        _regionRoads = _worldRegion->regionRoads;
         _regionJoinMap = _worldRegion->regionJoinMap;
         _regionJoinRoads = _worldRegion->regionJoinRoads;
-        
+
         OsmAnd::LatLon latLonTopLeft = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.topLeft);
         OsmAnd::LatLon latLonBottomRight = OsmAnd::Utilities::convert31ToLatLon(region->mapObject->bbox31.bottomRight);
         _bboxTopLeft = CLLocationCoordinate2DMake(latLonTopLeft.latitude, latLonTopLeft.longitude);

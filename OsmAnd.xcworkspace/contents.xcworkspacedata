@@ -1,6 +1,285 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
+   <Group
+      location = "container:"
+      name = "SharedLib">
+      <Group
+         location = "group:../android/OsmAnd-shared/src/commonMain"
+         name = "commonMain">
+         <Group
+            location = "group:kotlin"
+            name = "kotlin">
+            <Group
+               location = "group:net"
+               name = "net">
+               <Group
+                  location = "group:osmand"
+                  name = "osmand">
+                  <Group
+                     location = "group:shared"
+                     name = "shared">
+                     <FileRef
+                        location = "group:IndexConstants.kt">
+                     </FileRef>
+                     <Group
+                        location = "group:util"
+                        name = "util">
+                        <FileRef
+                           location = "group:KAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:IProgress.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:Localization.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:LoggerFactory.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KMapUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundleWriter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundleXmlReader.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundleXmlWriter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KMapAlgorithms.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundleReader.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformUtil.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringBundle.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:DbUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:Logger.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:io"
+                        name = "io">
+                        <FileRef
+                           location = "group:KFile.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:xml"
+                        name = "xml">
+                        <FileRef
+                           location = "group:XmlPullParser.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:XmlSerializer.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:XmlParserException.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:extensions"
+                        name = "extensions">
+                        <FileRef
+                           location = "group:DoubleExtensions.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:StringExtensions.kt">
+                        </FileRef>
+                     </Group>
+                     <FileRef
+                        location = "group:KException.kt">
+                     </FileRef>
+                     <Group
+                        location = "group:gpx"
+                        name = "gpx">
+                        <Group
+                           location = "group:primitives"
+                           name = "primitives">
+                           <FileRef
+                              location = "group:Bounds.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Metadata.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Copyright.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:WptPt.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:TrkSegment.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Author.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:GpxExtensions.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Track.kt">
+                           </FileRef>
+                           <FileRef
+                              location = "group:Route.kt">
+                           </FileRef>
+                        </Group>
+                        <FileRef
+                           location = "group:GpxTrackAnalysis.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SplitSegment.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ElevationDiffsCalculator.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PointAttributes.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GradientScaleType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ColoringPurpose.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDbUtils.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDirItem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDataItem.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:ElevationApproximator.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxUtilities.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxDatabase.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxParameter.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxFile.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:SplitMetric.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:GpxSplitType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:DataItem.kt">
+                        </FileRef>
+                     </Group>
+                     <FileRef
+                        location = "group:ColorPalette.kt">
+                     </FileRef>
+                     <Group
+                        location = "group:api"
+                        name = "api">
+                        <FileRef
+                           location = "group:SQLiteAPI.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:routing"
+                        name = "routing">
+                        <FileRef
+                           location = "group:ColoringType.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:RouteColorize.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:data"
+                        name = "data">
+                        <FileRef
+                           location = "group:KLatLon.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:KQuadRect.kt">
+                        </FileRef>
+                     </Group>
+                  </Group>
+               </Group>
+            </Group>
+         </Group>
+      </Group>
+      <Group
+         location = "group:../android/OsmAnd-shared/src/iosMain"
+         name = "iosMain">
+         <Group
+            location = "group:kotlin"
+            name = "kotlin">
+            <Group
+               location = "group:net"
+               name = "net">
+               <Group
+                  location = "group:osmand"
+                  name = "osmand">
+                  <Group
+                     location = "group:shared"
+                     name = "shared">
+                     <Group
+                        location = "group:util"
+                        name = "util">
+                        <FileRef
+                           location = "group:Localization.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:LoggerFactory.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:PlatformUtil.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:xml"
+                        name = "xml">
+                        <FileRef
+                           location = "group:XmlPullParser.kt">
+                        </FileRef>
+                        <FileRef
+                           location = "group:XmlSerializer.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:extensions"
+                        name = "extensions">
+                        <FileRef
+                           location = "group:StringExtensions.kt">
+                        </FileRef>
+                     </Group>
+                     <Group
+                        location = "group:api"
+                        name = "api">
+                        <FileRef
+                           location = "group:SQLiteAPIImpl.kt">
+                        </FileRef>
+                     </Group>
+                  </Group>
+               </Group>
+            </Group>
+         </Group>
+      </Group>
+   </Group>
    <FileRef
       location = "group:OsmAnd.xcodeproj">
    </FileRef>

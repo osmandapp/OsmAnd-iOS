@@ -34,6 +34,7 @@
 #import "OALocationParser.h"
 #import "OrderedDictionary.h"
 #import "OAMapUtils.h"
+#import "OATopIndexFilter.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>
@@ -878,6 +879,8 @@
     NSMutableDictionary<NSString *, NSNumber *> *_activePoiFilters;
     NSDictionary<NSString *, OAPOIType *> *_translatedNames;
     OAPOIHelper *_types;
+    NSMutableDictionary<NSString *, NSMutableSet<NSString *> *> *_poiAdditionalTopIndexCache;
+    int BBOX_RADIUS;
 }
 
 - (instancetype) init
@@ -891,6 +894,8 @@
         _topVisibleFilters = [_types getTopVisibleFilters];
         _categories = _types.poiCategoriesNoOther;
         _translatedNames = [NSDictionary new];
+        _poiAdditionalTopIndexCache = [[NSMutableDictionary alloc] init];
+        BBOX_RADIUS = 10000;
     }
     return self;
 }
@@ -1117,6 +1122,7 @@
             [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:csf.getFilterId searchResult:res];
         }
     }
+    //searchTopIndexPoiAdditional(phrase, resultMatcher);
     return YES;
 }
 
@@ -1173,6 +1179,138 @@
         return -1;
     
     return SEARCH_AMENITY_TYPE_API_PRIORITY;
+}
+
+/*- (void)initPoiAdditionalTopIndexWithPhrase:(OASearchPhrase *)phrase
+{
+    if (_poiAdditionalTopIndexCache == nil) {
+        _poiAdditionalTopIndexCache = [[NSMutableDictionary alloc] init];
+        OsmAndAppInstance app = [OsmAndApp instance];
+        const auto& obfsCollection = app.resourcesManager->obfsCollection;
+        NSArray *offlineIndexes = [phrase getOfflineIndexes];
+        
+        for (NSString *resId in offlineIndexes) 
+        {
+            const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+            if (!r)
+                continue;
+            
+            const auto dataInterface = obfsCollection->obtainDataInterface({r});
+            QHash<QString, QStringList> poiSubTypes;
+            dataInterface->loadAmenityTopIndexSubtypes(poiSubTypes);
+
+            NSMutableSet *names = [[NSMutableSet alloc] init];
+            
+            for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubTypes)))
+            {
+                NSMutableArray<NSString *> *array = [[NSMutableArray alloc] init];
+                for (const QString &qString : entry.value())
+                {
+                    //qString.toNSString();
+                    
+                    NSString *nsString = [NSString stringWithUTF8String:qString.toUtf8().constData()];
+                    //QString::fromNSString(nsString);
+                    [array addObject:nsString];
+                }
+                [names addObjectsFromArray:array];
+            }
+            
+            if (names.count > 0) {
+                _poiAdditionalTopIndexCache[resId] = names;
+            }
+        }
+        
+        for (NSString *resId in _poiAdditionalTopIndexCache) 
+        {
+            NSMutableSet *values = _poiAdditionalTopIndexCache[resId];
+            NSMutableArray *translation = [[NSMutableArray alloc] init];
+            
+            for (NSString *value in values) 
+            {
+                NSString *translate = [self getTopIndexTranslation:value];
+                [translation addObject:translate];
+            }
+            [values addObjectsFromArray:translation];
+        }
+    }
+}*/
+
+- (void)searchTopIndexPoiAdditionalWithPhrase:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+{
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:BBOX_RADIUS];
+    OsmAnd::AreaI bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
+    OsmAndAppInstance app = [OsmAndApp instance];
+    const auto& obfsCollection = app.resourcesManager->obfsCollection;
+    OANameStringMatcher *nm = [phrase getMainUnknownNameStringMatcher];
+
+    NSArray *offlineIndexes = [phrase getOfflineIndexes];
+    for (NSString *resId in offlineIndexes)
+    {
+        const auto& r = app.resourcesManager->getLocalResource(QString::fromNSString(resId));
+        if (!r)
+            continue;
+        
+        const auto dataInterface = obfsCollection->obtainDataInterface({r});
+        QHash<QString, QStringList> poiSubTypes;
+        dataInterface->loadAmenityTopIndexSubtypes(poiSubTypes, &bbox31);
+        for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubTypes)))
+        {
+            NSMutableArray<NSString *> *values = [[NSMutableArray alloc] init];
+            for (const QString &qString : entry.value())
+            {
+                [values addObject:qString.toNSString()];
+            }
+            if ([nm matchesMap:values]) 
+            {
+                OATopIndexMatch *match = [self matchTopIndex:values phrase:phrase];
+                if (match != nil)
+                {
+                    OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
+                    res.localeName = match.translatedValue;
+                    res.object = [[OATopIndexFilter alloc] initWithPoiSubType:entry.key().toNSString() value:match.value];
+                    [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
+                }
+            }
+        }
+    }
+    //QString::fromNSString(nsString);
+}
+
+- (OATopIndexMatch *)matchTopIndex:(NSArray<NSString *> *)values phrase:(OASearchPhrase *)phrase
+{
+    NSString *search = [phrase getText:YES];
+    OANameStringMatcher *nm = [[OANameStringMatcher alloc] initWithNamePart:search mode:CHECK_ONLY_STARTS_WITH];
+    NSString * topIndexValue = nil;
+    NSString * translate = nil;
+    
+    for (NSString * s in values)
+    {
+        NSString *translate = [self getTopIndexTranslation:s];
+        if ([nm matches:s] || [nm matches:translate])
+        {
+            topIndexValue = s;
+            break;
+        }
+    }
+    
+    if (topIndexValue != nil) 
+    {
+        OATopIndexMatch *topIndexMatch = [[OATopIndexMatch alloc] initWithSubType:topIndexValue translatedValue:translate];
+        return topIndexMatch;
+    }
+    return nil;
+}
+
+- (NSString *)getTopIndexTranslation:(NSString *)value {
+    return value;
+    //NSString *key = [TopIndexFilter getValueKey:value];
+    //NSString *translate = [types getPoiTranslation:key];
+    
+    //if ([[translate lowercaseString] isEqualToString:key]) {
+    //    translate = value;
+    //}
+    
+    //return translate;
 }
 
 @end

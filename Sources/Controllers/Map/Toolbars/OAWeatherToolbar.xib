@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="23077.2" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23068.1"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -119,11 +119,11 @@
             <color key="backgroundColor" name="viewBg"/>
             <constraints>
                 <constraint firstAttribute="trailing" secondItem="IOB-SJ-nfi" secondAttribute="trailing" id="15M-gt-URh"/>
-                <constraint firstAttribute="trailing" secondItem="F33-ES-4SU" secondAttribute="trailing" id="5r0-dR-3ye"/>
+                <constraint firstItem="aBx-xP-AGq" firstAttribute="trailing" secondItem="F33-ES-4SU" secondAttribute="trailing" id="5r0-dR-3ye"/>
                 <constraint firstItem="cAi-yw-VnC" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="68L-uU-qBD"/>
                 <constraint firstItem="IOB-SJ-nfi" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="8gK-gw-UQl"/>
                 <constraint firstAttribute="trailing" secondItem="iIX-79-Rqj" secondAttribute="trailing" id="8ss-z7-Vjf"/>
-                <constraint firstItem="F33-ES-4SU" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="9yN-sU-fvc"/>
+                <constraint firstItem="F33-ES-4SU" firstAttribute="leading" secondItem="aBx-xP-AGq" secondAttribute="leading" id="9yN-sU-fvc"/>
                 <constraint firstItem="H2C-uP-knh" firstAttribute="top" secondItem="iIX-79-Rqj" secondAttribute="bottom" constant="6" id="INP-Ym-kfx"/>
                 <constraint firstItem="cAi-yw-VnC" firstAttribute="top" secondItem="IOB-SJ-nfi" secondAttribute="bottom" constant="12" id="Ita-8w-MRE"/>
                 <constraint firstItem="IOB-SJ-nfi" firstAttribute="top" secondItem="jQ7-Py-E2J" secondAttribute="top" constant="12" id="Q4O-RA-aPV"/>

@@ -73,6 +73,7 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) NSUnitLength *weatherPrecipUnit;
 @property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
+@property (nonatomic) NSString *weatherSource;
 
 @property (readonly) OAObservable *weatherSettingsChangeObservable;
 

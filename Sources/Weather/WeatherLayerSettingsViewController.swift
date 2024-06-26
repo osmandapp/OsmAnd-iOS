@@ -54,22 +54,15 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         super.viewDidLoad()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        generateData()
-        tableView.reloadData()
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        generateData()
+//        tableView.reloadData()
+//    }
     
     override func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
-        if weatherArray.isEmpty {
-            print("isEmpty")
-        }
-        
-        for obj in weatherArray {
-            print(obj)
-        }
         weatherArray.forEach({ item in
             print("1")
             let row = section.createNewRow()

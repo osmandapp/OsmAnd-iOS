@@ -15,6 +15,7 @@
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherBand.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"
@@ -85,6 +86,7 @@
 #define kWeatherPrecipToolbarUnitAutoKey @"weatherPrecipToolbarUnitAuto"
 #define kWeatherPrecipAlphaKey @"weatherPrecipAlpha"
 #define kWeatherPrecipToolbarAlphaKey @"weatherPrecipToolbarAlpha"
+#define kWeatherSourceKey @"weatherSource"
 
 @implementation OAAppData
 {
@@ -166,8 +168,10 @@
     OACommonString *_contourNameLastUsedToolbarProfile;
     OACommonDouble *_contoursAlphaProfile;
     OACommonDouble *_contoursAlphaToolbarProfile;
-
+    
     NSMapTable<NSString *, OACommonPreference *> *_registeredPreferences;
+    
+    OACommonString *_weatherSourceProfile;
 }
 
 @synthesize applicationModeChangedObservable = _applicationModeChangedObservable, mapLayersConfiguration = _mapLayersConfiguration, weatherSettingsChangeObservable = _weatherSettingsChangeObservable;
@@ -360,6 +364,11 @@
     _weatherCloudUnitProfile = [OACommonUnit withKey:kWeatherCloudUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
     _weatherCloudToolbarUnitProfile = [OACommonUnit withKey:kWeatherCloudToolbarUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_CLOUD]];
     _weatherCloudUnitAutoProfile = [OACommonBoolean withKey:kWeatherCloudUnitAutoKey defValue:YES];
+    
+    WeatherSource getDefaultSource = WeatherSourceObjWrapper.getDefaultSource;
+    
+    _weatherSourceProfile = [OACommonString withKey:kWeatherSourceKey defValue:[WeatherSourceObjWrapper getSettingValueForType:getDefaultSource]];
+    
     _weatherCloudToolbarUnitAutoProfile = [OACommonBoolean withKey:kWeatherCloudToolbarUnitAutoKey defValue:YES];
     _weatherCloudAlphaProfile = [OACommonDouble withKey:kWeatherCloudAlphaKey defValue:0.5];
     _weatherCloudToolbarAlphaProfile = [OACommonDouble withKey:kWeatherCloudToolbarAlphaKey defValue:0.5];
@@ -455,6 +464,8 @@
     [_registeredPreferences setObject:_weatherPrecipToolbarUnitAutoProfile forKey:@"show_weather_precip_unit_auto_toolbar"];
     [_registeredPreferences setObject:_weatherPrecipAlphaProfile forKey:@"weather_precip_transparency"];
     [_registeredPreferences setObject:_weatherPrecipToolbarAlphaProfile forKey:@"weather_precip_transparency_toolbar"];
+
+    [_registeredPreferences setObject:_weatherSourceProfile forKey:@"weather_source"];
 }
 
 - (void) dealloc
@@ -1000,6 +1011,24 @@
     }
 }
 
+- (NSString *)weatherSource
+{
+    @synchronized (_lock)
+    {
+        return [_weatherSourceProfile get];
+    }
+}
+
+- (void)setWeatherSource:(NSString *)weatherSource
+{
+    @synchronized(_lock)
+    {
+        [_weatherSourceProfile set:weatherSource];
+        // TODO:
+        [_weatherCloudAlphaChangeObservable notifyEventWithKey:@(WEATHER_BAND_CLOUD) andValue:@(self.weatherCloudAlpha)];
+    }
+}
+
 - (double) weatherCloudAlpha
 {
     @synchronized (_lock)
@@ -1138,6 +1167,8 @@
         [_weatherCloudToolbarUnitAutoProfile resetToDefault];
         [_weatherCloudAlphaProfile resetToDefault];
         [_weatherCloudToolbarAlphaProfile resetToDefault];
+        
+        [_weatherSourceProfile resetToDefault];
         
         [_weatherPrecipProfile resetToDefault];
         [_weatherPrecipToolbarProfile resetToDefault];
@@ -1976,6 +2007,8 @@
     [_weatherPrecipToolbarUnitAutoProfile set:[_weatherPrecipToolbarUnitAutoProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipAlphaProfile set:[_weatherPrecipAlphaProfile get:sourceMode] mode:targetMode];
     [_weatherPrecipToolbarAlphaProfile set:[_weatherPrecipToolbarAlphaProfile get:sourceMode] mode:targetMode];
+    
+    [_weatherSourceProfile set:[_weatherSourceProfile get:sourceMode] mode:targetMode];
 }
 
 @end

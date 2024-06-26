@@ -9,12 +9,13 @@
 @objcMembers
 final class CompactNavigationViewController: UINavigationController {
 //    override func loadView() {
-//    //    view = WeatherView()
+//        let weatherView = WeatherView()
+//        self.view = weatherView
 //    }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
+//    override func viewDidLoad() {
+//        super.viewDidLoad()
+//    }
 }
 
 @objcMembers
@@ -34,7 +35,7 @@ final class CompactViewController: UIViewController {
     }
     
     private var config: Config = .defaultConfig
-    private var controller: UIViewController!
+    var controller: UIViewController!
     private var buttonsStackLeadingConstraint: NSLayoutConstraint?
     private var buttonsStackBottomConstraint: NSLayoutConstraint?
     
@@ -51,13 +52,14 @@ final class CompactViewController: UIViewController {
     // MARK: - Life circle
     
 //    override func loadView() {
-//       // super.loadView()
-//        view = WeatherView()
+//        let weatherView = WeatherView()
+//        self.view = weatherView
+//        weatherView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 //    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .yellow
+      //  view.backgroundColor = .yellow
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -148,7 +150,7 @@ final class CompactViewController: UIViewController {
         buttonsStackLeadingConstraint = buttonsStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: UIDevice.current.orientation.isLandscape ? config.maxWidth : config.stackButtonsConfig.leftSpace )
         buttonsStackLeadingConstraint?.isActive = true
         
-        buttonsStackBottomConstraint = buttonsStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant:  UIDevice.current.orientation.isLandscape ? config.stackButtonsConfig.landscapeBottomSpace : -250)
+        buttonsStackBottomConstraint = buttonsStack.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: UIDevice.current.orientation.isLandscape ? config.stackButtonsConfig.landscapeBottomSpace : -250)
         buttonsStackBottomConstraint?.isActive = true
     }
 }

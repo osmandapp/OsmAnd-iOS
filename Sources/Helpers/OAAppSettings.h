@@ -1228,6 +1228,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *lastUUIDChangeTimestamp;
 
 @property (nonatomic) OACommonBoolean *useOldRouting;
+@property (assign, nonatomic) BOOL ignoreMissingMaps; // IGNORE_MISSING_MAPS
 
 - (long) getLastGloblalSettingsModifiedTime;
 - (void) setLastGlobalModifiedTime:(long)timestamp;

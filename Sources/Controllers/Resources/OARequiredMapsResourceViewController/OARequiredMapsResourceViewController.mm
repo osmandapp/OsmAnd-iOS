@@ -172,9 +172,10 @@
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
         }
 
-        if (true)
+        if (_potentiallyUsedMaps.count > 0)
         {
             OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
+
             OATableRowData *ignoreMissingMapsTitleRow = [ignoreMissingMapsSection createNewRow];
             ignoreMissingMapsTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             ignoreMissingMapsTitleRow.title = OALocalizedString(@"missing_maps_ignore_details");
@@ -494,6 +495,13 @@
 - (void)onCalculateOnlineButtonPressed:(id)sender
 {
     NSLog(@"onCalculateOnlineButtonPressed");
+    if (true)
+    {
+        // TODO make separate handler for "Use existing maps" button
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        settings.ignoreMissingMaps = YES;
+        // TODO recalc route now
+    }
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         auto missingMapsCalculator = [MissingMapsCalculator new];

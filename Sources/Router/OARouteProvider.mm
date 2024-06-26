@@ -986,7 +986,10 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     router->setUseFastRecalculation(settings.useFastRecalculation);
-    
+
+    router->CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
+    NSLog(@"XXX CALCULATE_MISSING_MAPS = %@", router->CALCULATE_MISSING_MAPS);
+
     auto config = [app getRoutingConfigForMode:params.mode];
     auto generalRouter = [app getRouter:config mode:params.mode];
     if (!generalRouter)

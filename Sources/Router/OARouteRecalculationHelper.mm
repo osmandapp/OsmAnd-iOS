@@ -412,6 +412,8 @@
             _routeCalcErrorShort = OALocalizedString(@"empty_route_calculated");
             [self showMessage:_routeCalcError];
         }
+        OAAppSettings *settings = [OAAppSettings sharedManager];
+        settings.ignoreMissingMaps = NO; // reset on routing error
     }
 }
 

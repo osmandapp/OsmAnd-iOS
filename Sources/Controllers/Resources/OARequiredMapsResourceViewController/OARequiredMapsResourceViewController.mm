@@ -172,7 +172,7 @@
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
         }
 
-        if (_potentiallyUsedMaps.count > 0)
+        if (_potentiallyUsedMaps.count > 0) // TODO how to make distinct handler for the button?
         {
             OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
 
@@ -497,10 +497,9 @@
     NSLog(@"onCalculateOnlineButtonPressed");
     if (true)
     {
-        // TODO make separate handler for "Use existing maps" button
-        OAAppSettings *settings = [OAAppSettings sharedManager];
-        settings.ignoreMissingMaps = YES;
-        // TODO recalc route now
+        // TODO make handler for "Use existing maps" button
+        [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+        [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
     }
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {

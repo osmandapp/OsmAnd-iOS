@@ -375,7 +375,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double maxCircleRadius = _maxRadius;
     int i = 1;
     while ((maxCircleRadius -= _radius) > 0)
-        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) withParams:[OAOsmAndFormatterParams noTrailingZerosParams]]];
+        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) withParams:[OsmAndFormatterParams noTrailingZeros]]];
 }
 
 - (void) drawRulerCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx

@@ -15,7 +15,7 @@
 #import "OsmAndApp.h"
 #import "OARoutingHelper.h"
 #import "OAOsmAndFormatter.h"
-
+#import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAColors.h"
 
@@ -63,7 +63,7 @@
     NSMutableArray<NSString *> *arr = [NSMutableArray new];
     for (NSNumber *n in _possibleDistanceValues)
     {
-        [arr addObject:[OAOsmAndFormatter getFormattedDistance:n.doubleValue withParams:[OAOsmAndFormatterParams noTrailingZerosParams]]];
+        [arr addObject:[OAOsmAndFormatter getFormattedDistance:n.doubleValue withParams:[OsmAndFormatterParams noTrailingZeros]]];
     }
     _valueSummaries = arr;
 }
@@ -72,7 +72,7 @@
 {
     double defValue = [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]];
     defValue = defValue == -1 ? _possibleDistanceValues.firstObject.doubleValue : defValue;
-    return [OAOsmAndFormatter getFormattedDistance:defValue withParams:[OAOsmAndFormatterParams noTrailingZerosParams]];
+    return [OAOsmAndFormatter getFormattedDistance:defValue withParams:[OsmAndFormatterParams noTrailingZeros]];
 }
 
 #pragma mark - Base UI

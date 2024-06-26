@@ -9,6 +9,7 @@
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OALocationConvert.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <GeographicLib/GeoCoords.hpp>
 
@@ -190,12 +191,12 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     return [self getFormattedDistance:meters withParams:nil];
 }
 
-+ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params
 {
     return [self getFormattedDistance:meters withParams:params valueUnitArray:nil];
 }
 
-+ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray
 {
     OAAppSettings *settings = [OAAppSettings sharedManager];
     EOAMetricsConstant mc = [settings.metricSystem get];
@@ -203,10 +204,10 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     NSString *mainUnitStr;
     float mainUnitInMeters;
     if (!params)
-        params = [OAOsmAndFormatterParams defaultParams];
+        params = [OsmAndFormatterParams defaultParams];
     
-    if (params.useLowerBound && [settings.preciseDistanceNumbers get])
-        params = [OAOsmAndFormatterParams defaultParams];
+    if ([params isUseLowerBound] && [settings.preciseDistanceNumbers get])
+        params = [OsmAndFormatterParams defaultParams];
     
     if (mc == KILOMETERS_AND_METERS)
     {
@@ -264,20 +265,20 @@ static NSArray<NSNumber *> *roundingBounds = nil;
         if (mc == MILES_AND_FEET || mc == NAUTICAL_MILES_AND_FEET)
         {
             int feet = (int) (meters * FEET_IN_ONE_METER + 0.5);
-            if (params.useLowerBound)
+            if ([params isUseLowerBound])
                 feet = [self lowerTo10BaseRoundingBounds:feet withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
             return [self formatValue:feet unit:_unitsFt forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         else if (mc == MILES_AND_YARDS)
         {
             int yards = (int) (meters * YARDS_IN_ONE_METER + 0.5);
-            if (params.useLowerBound)
+            if ([params isUseLowerBound])
                 yards = [self lowerTo10BaseRoundingBounds:yards withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
             return [self formatValue:yards unit:_unitsYd forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
         }
         
         int m = (int) (meters + 0.5);
-        if (params.useLowerBound)
+        if ([params isUseLowerBound])
             m = [self lowerTo10BaseRoundingBounds:m withRoundRange:[self generate10BaseRoundingBoundsWithMax:100 multCoef:5]];
         return [self formatValue:m unit:_unitsM forceTrailingZeroes:forceTrailingZeroes decimalPlacesNumber:0 valueUnitArray:valueUnitArray];
     }
@@ -710,10 +711,10 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     return coordinate;
 }
 
-+ (NSString *) getFormattedDistanceInterval:(double)interval
++ (NSString *) getFormattedDistanceInterval:(double)interval withParams:(OsmAndFormatterParams *)params
 {
     double roundedDist = [self.class calculateRoundedDist:interval];
-    return [self.class getFormattedDistance:(float) roundedDist];
+    return [self.class getFormattedDistance:(float) roundedDist withParams:params];
 }
 
 + (NSString *) getFormattedOsmTagValue:(NSString *)tagValue

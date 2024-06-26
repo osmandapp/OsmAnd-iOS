@@ -522,7 +522,7 @@ typedef NS_ENUM(NSInteger, EOACarPlayButtonType) {
 
 - (NSMeasurement<NSUnitLength *> *) getFormattedDistance:(int)meters
 {
-    NSString *distString = [OAOsmAndFormatter getFormattedDistance:meters withParams:[OAOsmAndFormatterParams useLowerBoundsParams]];
+    NSString *distString = [OAOsmAndFormatter getFormattedDistance:meters withParams:[OsmAndFormatterParams useLowerBounds]];
     NSArray<NSString *> *components = [distString componentsSeparatedByString:@" "];
     if (components.count == 2)
         return [[NSMeasurement alloc] initWithDoubleValue:components.firstObject.doubleValue unit:[self getUnitByString:components.lastObject]];

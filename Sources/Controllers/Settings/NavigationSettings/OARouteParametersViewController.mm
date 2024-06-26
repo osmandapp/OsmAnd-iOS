@@ -488,7 +488,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
     recalcDist = recalcDist == 0 ? [OARoutingHelper getDefaultAllowedDeviation:self.appMode posTolerance:[OARoutingHelper getPosTolerance:0]] : recalcDist;
     NSString *descr = recalcDist == -1
             ? OALocalizedString(@"rendering_value_disabled_name")
-    : [OAOsmAndFormatter getFormattedDistance:recalcDist withParams:[OAOsmAndFormatterParams noTrailingZerosParams]];
+    : [OAOsmAndFormatter getFormattedDistance:recalcDist withParams:[OsmAndFormatterParams noTrailingZeros]];
     [tableSection addObject:@{
         headerKey: OALocalizedString(@"recalculate_route"),
         typeKey : [OAValueTableViewCell getCellIdentifier],

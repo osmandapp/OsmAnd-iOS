@@ -10,16 +10,9 @@ import Foundation
 
 @objcMembers
 final class OsmAndFormatterParams: NSObject {
-    static let defaultForceTrailing: Bool = true
+    static let defaultForceTrailing = true
     static let defaultExtraDecimalPrecision: Int = 1
-    var forceTrailingZerosInDecimalMainUnit: Bool = defaultForceTrailing
-    var extraDecimalPrecision: Int = defaultExtraDecimalPrecision
-    var useLowerBound: Bool = false
-    var isUseLowerBound: Bool {
-        return useLowerBound
-    }
-    
-    static let `default`: OsmAndFormatterParams = OsmAndFormatterParams()
+    static let defaultParams: OsmAndFormatterParams = OsmAndFormatterParams()
     
     static let useLowerBounds: OsmAndFormatterParams = {
         let params = OsmAndFormatterParams()
@@ -34,6 +27,14 @@ final class OsmAndFormatterParams: NSObject {
         params.setTrailingZerosForMainUnit(false)
         return params
     }()
+    
+    var forceTrailingZerosInDecimalMainUnit: Bool = defaultForceTrailing
+    var extraDecimalPrecision: Int = defaultExtraDecimalPrecision
+    var useLowerBound = false
+    
+    var isUseLowerBound: Bool {
+        useLowerBound
+    }
     
     @discardableResult
     func setTrailingZerosForMainUnit(_ forceTrailingZeros: Bool) -> OsmAndFormatterParams {

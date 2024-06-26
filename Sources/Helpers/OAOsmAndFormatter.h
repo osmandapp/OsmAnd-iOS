@@ -8,7 +8,8 @@
 
 #import <Foundation/Foundation.h>
 #import "OAAppSettings.h"
-#import "OAOsmAndFormatterParams.h"
+
+@class OsmAndFormatterParams;
 
 @interface OAOsmAndFormatter : NSObject
 
@@ -41,9 +42,9 @@
 #define EAST @"E"
 
 + (double)calculateRoundedDist:(double)baseMetersDist;
-+ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedDistance:(float)meters;
-+ (NSString *)getFormattedDistance:(float)meters withParams:(OAOsmAndFormatterParams *)params;
++ (NSString *)getFormattedDistance:(float)meters withParams:(OsmAndFormatterParams *)params;
 + (NSString *)getFormattedAlarmInfoDistance:(float)meters;
 + (NSString *)getFormattedAzimuth:(float)bearing;
 + (NSString *)getFormattedTimeHM:(NSTimeInterval)timeInterval;
@@ -59,7 +60,7 @@
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc;
 + (NSString *)getFormattedAlt:(double)alt mc:(EOAMetricsConstant)mc valueUnitArray:(NSMutableArray <NSString *>*)valueUnitArray;
 + (NSString *)getFormattedCoordinatesWithLat:(double)lat lon:(double)lon outputFormat:(NSInteger)outputFormat;
-+ (NSString *)getFormattedDistanceInterval:(double)interval;
++ (NSString *)getFormattedDistanceInterval:(double)interval withParams:(OsmAndFormatterParams *)params;
 + (NSString *)getFormattedOsmTagValue:(NSString *)tagValue;
 + (NSString *)getFormattedDurationShort:(NSTimeInterval)seconds fullForm:(BOOL)fullForm;
 + (NSString *)getFormattedDuration:(NSTimeInterval)seconds;

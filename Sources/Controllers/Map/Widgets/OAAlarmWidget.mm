@@ -14,6 +14,7 @@
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAAlarmWidget ()
 
@@ -224,7 +225,7 @@
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue withParams:alarm.type == AIT_TUNNEL ? [OAOsmAndFormatterParams useLowerBoundsParams] : nil];
+                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue withParams:alarm.type == AIT_TUNNEL ? [OsmAndFormatterParams useLowerBounds] : nil];
             }
             else
             {

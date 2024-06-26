@@ -12,6 +12,7 @@
 @implementation OATopIndexFilter
 
 - (instancetype)initWithPoiSubType:(NSString *)poiSubType value:(NSString *)value {
+    self = [super init];
     if (self) {
         _valueKey = [OATopIndexFilter getValueKey:value];
         _poiSubType = poiSubType;

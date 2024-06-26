@@ -846,6 +846,19 @@
 
 @end
 
+@implementation OATopIndexMatch
+
+- (instancetype)initWithSubType:(NSString *)value translatedValue:(NSString *)translatedValue {
+    self = [super init];
+    if (self) {
+        _value = value;
+        _translatedValue = translatedValue;
+    }
+    return self;
+}
+
+@end
+
 @interface OAPoiTypeResult : NSObject
 
 @property (nonatomic) OAPOIBaseType *pt;
@@ -1122,7 +1135,7 @@
             [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:showTopFiltersOnly stdFilterId:csf.getFilterId searchResult:res];
         }
     }
-    //searchTopIndexPoiAdditional(phrase, resultMatcher);
+    [self searchTopIndexPoiAdditional:phrase resultMatcher:resultMatcher];
     return YES;
 }
 
@@ -1235,7 +1248,7 @@
     }
 }*/
 
-- (void)searchTopIndexPoiAdditionalWithPhrase:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (void) searchTopIndexPoiAdditional:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     QuadRect *bbox = [phrase getRadiusBBox31ToSearch:BBOX_RADIUS];
     OsmAnd::AreaI bbox31 = OsmAnd::AreaI(bbox.top, bbox.left, bbox.bottom, bbox.right);
@@ -1252,6 +1265,7 @@
         
         const auto dataInterface = obfsCollection->obtainDataInterface({r});
         QHash<QString, QStringList> poiSubTypes;
+        
         dataInterface->loadAmenityTopIndexSubtypes(poiSubTypes, &bbox31);
         for (const auto& entry : OsmAnd::rangeOf(OsmAnd::constOf(poiSubTypes)))
         {
@@ -1285,7 +1299,7 @@
     
     for (NSString * s in values)
     {
-        NSString *translate = [self getTopIndexTranslation:s];
+        translate = [self getTopIndexTranslation:s];
         if ([nm matches:s] || [nm matches:translate])
         {
             topIndexValue = s;

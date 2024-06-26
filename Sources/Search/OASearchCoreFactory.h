@@ -94,6 +94,7 @@ static const int PREFERRED_DEFAULT_ZOOM = 15;
 - (void) clearCustomFilters;
 - (void) addCustomFilter:(OACustomSearchPoiFilter *)poiFilter priority:(int)priority;
 - (void) setActivePoiFiltersByOrder:(NSArray<NSString *> *)filterOrder;
+- (void) searchTopIndexPoiAdditionalWithPhrase:(OASearchPhrase *)phrase resultMatcher:(OASearchResultMatcher *)resultMatcher;
 
 @end
 

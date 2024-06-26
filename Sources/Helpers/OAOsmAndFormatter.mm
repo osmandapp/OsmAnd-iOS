@@ -203,10 +203,7 @@ static NSArray<NSNumber *> *roundingBounds = nil;
     
     NSString *mainUnitStr;
     float mainUnitInMeters;
-    if (!params)
-        params = [OsmAndFormatterParams defaultParams];
-    
-    if ([params isUseLowerBound] && [settings.preciseDistanceNumbers get])
+    if (!params || ([params isUseLowerBound] && [settings.preciseDistanceNumbers get]))
         params = [OsmAndFormatterParams defaultParams];
     
     if (mc == KILOMETERS_AND_METERS)

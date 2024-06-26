@@ -988,7 +988,7 @@
     router->setUseFastRecalculation(settings.useFastRecalculation);
 
     router->CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
-    NSLog(@"XXX CALCULATE_MISSING_MAPS = %@", router->CALCULATE_MISSING_MAPS);
+    NSLog(@"XXX CALCULATE_MISSING_MAPS = %@", router->CALCULATE_MISSING_MAPS ? @"true" : @"false");
 
     auto config = [app getRoutingConfigForMode:params.mode];
     auto generalRouter = [app getRouter:config mode:params.mode];

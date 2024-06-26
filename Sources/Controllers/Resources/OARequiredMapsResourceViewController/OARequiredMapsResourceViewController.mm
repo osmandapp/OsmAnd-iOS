@@ -500,6 +500,7 @@
         // TODO make handler for "Use existing maps" button
         [OAAppSettings sharedManager].ignoreMissingMaps = YES;
         [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+        [self dismissViewController];
     }
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {

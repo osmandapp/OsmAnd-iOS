@@ -2533,7 +2533,7 @@
 "tomorrow" = "Mâine";
 "weather_remove_forecasts_description" = "Sunteți sigur că doriți să eliminați previziunile pentru țările: %d.";
 "weather_accuracy_forecast_description" = "Prognoza offline este disponibilă până la: %@.\nPrecizie: %@, din oră în oră. %@ la fiecare 3 ore.";
-"weather_forecast" = "Prognoza meteo";
+"weather_forecast" = "Prognoză meteo";
 "weather_updates_automatically" = "OsmAnd va descărca automat actualizări atunci când este în funcțiune.";
 "shared_string_recorded" = "Înregistrat";
 "backup_pause_all" = "Pauză la toate";

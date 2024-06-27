@@ -2216,7 +2216,7 @@
 "pressure_hide" = "Nascondi pressione";
 "routing_attr_avoid_tunnels_name" = "Evita i tunnel";
 "routing_attr_avoid_tunnels_description" = "Evita i tunnel";
-"animate_my_location" = "Simula la mia posizione";
+"animate_my_location" = "Scorrimento uniforme della mappa";
 "animate_my_location_descr" = "Transizione fluida della posizione sulla mappa durante la navigazione";
 "carplay_active_message" = "La mappa è mostrata tramite CarPlay";
 "carplay_profile_descr" = "Profilo che verrà utilizzato quando connesso a CarPlay.";

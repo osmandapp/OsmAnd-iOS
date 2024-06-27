@@ -473,10 +473,11 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                     return result
                 }
                 
+                let totalTracks = totalSelectedTracks + tracksInSelectedFolders
                 let itemText = localizedString("shared_string_item").lowercased()
                 title = "\(totalSelectedItems) \(itemText)"
-                if totalSelectedFolders > 0 && tracksInSelectedFolders > 0 {
-                    title += " (\(String(format: localizedString("folder_tracks_count"), tracksInSelectedFolders)))"
+                if totalTracks > 0 {
+                    title += " (\(String(format: localizedString("folder_tracks_count"), totalTracks)))"
                 }
             }
         } else if isRootFolder {

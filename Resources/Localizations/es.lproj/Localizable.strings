@@ -348,7 +348,7 @@
 "shared_string_show_all" = "Mostrar todo";
 "get_directions" = "Indicaciones";
 "shared_string_dismiss" = "Descartar";
-"shared_string_modify" = "Editar";
+"shared_string_modify" = "Modificar";
 "poi_filter_parking" = "Aparcamientos";
 "est_travel_time" = "Tiempo de viaje estimado";
 "pedestrian" = "Peatón";
@@ -3447,3 +3447,10 @@
 "shared_string_item" = "Elemento";
 "wall_height" = "Altura de la pared";
 "wall_height_description" = "Al cambiar el valor de altura, puede elevar la línea superior de la pista por encima del nivel del suelo.";
+"avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";
+"route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";
+"avoid_pt_types" = "Evitar tipos de transporte…";
+"shared_string_class" = "Clase";
+"dangerous_goods" = "Mercancías peligrosas";
+"in_case_of_reverse_direction" = "En caso de dirección incorrecta";
+"dangerous_goods_description" = "En algunas carreteras y túneles está prohibido el transporte de mercancías peligrosas.";

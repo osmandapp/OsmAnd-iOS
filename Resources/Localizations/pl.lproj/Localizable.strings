@@ -3221,3 +3221,11 @@
 "shared_string_article" = "Artykuł";
 "ft_s" = "stóp/s";
 "downward_gradient" = "Nachylenie w dół";
+"vertical_exaggeration" = "Pionowe wyolbrzymienie";
+"distance_during_navigation" = "Odległość podczas nawigacji";
+"tomorrow" = "Jutro";
+"auto_zoom_discrete" = "Dyskretny";
+"rendering_attr_padusDisplayMode_name" = "Tryb wyświetlania terenów publicznych";
+"upward_gradient" = "Nachylenie w górę";
+"vertical_exaggeration_description" = "Zmieniając wartość skali, można podkreślić płaskorzeźbę 3D.";
+"auto_zoom_smooth" = "Płynny";

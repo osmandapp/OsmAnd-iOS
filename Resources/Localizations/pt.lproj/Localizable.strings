@@ -3448,3 +3448,10 @@
 "wall_height_description" = "Ao alterar o valor da altura, pode elevar a linha superior do trilho acima do nível do solo.";
 "step_by_step" = "Passo a passo";
 "shared_string_limit" = "Limite";
+"avoid_pt_types_descr" = "Selecionar tipos de transportes públicos a evitar para a navegação:";
+"route_recalculation_dist_title" = "Distância mínima para recalcular a rota";
+"in_case_of_reverse_direction" = "Em caso de inversão de direção";
+"dangerous_goods" = "Mercadorias perigosas";
+"dangerous_goods_description" = "Em algumas estradas e túneis, o transporte de materiais perigosos é proibido.";
+"avoid_pt_types" = "Evitar tipos de transporte…";
+"shared_string_class" = "Classe";

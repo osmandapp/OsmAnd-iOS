@@ -3448,3 +3448,10 @@
 "wall_height_description" = "Ved at ændre højdeværdien kan du løfte sporets øverste linje op over jordoverfladen.";
 "add_button" = "Tilføj knap";
 "select_items" = "Vælg elementer";
+"avoid_pt_types_descr" = "Vælg de typer offentlig transport, der skal undgås i forbindelse med navigation:";
+"route_recalculation_dist_title" = "Mindste afstand for at genberegne rute";
+"shared_string_class" = "Klasse";
+"in_case_of_reverse_direction" = "I tilfælde af modsat retning";
+"avoid_pt_types" = "Undgå transportformer…";
+"dangerous_goods" = "Farligt gods";
+"dangerous_goods_description" = "På nogle veje og i nogle tunneler er det forbudt at transportere farlige materialer.";

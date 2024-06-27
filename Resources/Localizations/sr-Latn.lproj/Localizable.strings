@@ -448,7 +448,7 @@
 "shared_string_or" = "ili";
 "shared_string_and" = "i";
 "shared_string_edit" = "Urediti";
-"shared_string_modify" = "Modifikuj";
+"shared_string_modify" = "Promeni";
 "first_time_continue" = "Kasnije";
 "shared_string_of" = "od";
 "shared_string_all" = "Sve";
@@ -3446,3 +3446,10 @@
 "wall_height" = "Visina zida";
 "wall_height_description" = "Promenom vrednosti visine, možete podići gornju liniju staze iznad nivoa tla.";
 "select_items" = "Odaberite stavke";
+"avoid_pt_types" = "Izbegavati vrste prevoza…";
+"shared_string_class" = "Klasa";
+"in_case_of_reverse_direction" = "U slučaju obrnutog pravca";
+"route_recalculation_dist_title" = "Najmanja udaljenost za preračunavanje rute";
+"dangerous_goods" = "Opasna roba";
+"dangerous_goods_description" = "Na nekim putevima i tunelima prevoz opasnih materije je zabranjen.";
+"avoid_pt_types_descr" = "Odaberi vrste javnog prevoza koje treba izbegavati:";

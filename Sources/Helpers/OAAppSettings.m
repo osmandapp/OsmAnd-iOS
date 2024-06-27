@@ -3993,17 +3993,17 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_routerService set:2 mode:OAApplicationMode.DEFAULT];
 
         [_profilePreferences setObject:_routerService forKey:@"route_service"];
-        _navigationIcon = [OACommonInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
-        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        _navigationIcon = [OACommonString withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
+        [_navigationIcon setModeDefaultValue:NAVIGATION_ICON_NAUTICAL mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_navigationIcon forKey:@"navigation_icon"];
 
-        _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
+        _locationIcon = [OACommonString withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
+        [_locationIcon setModeDefaultValue:LOCATION_ICON_CAR mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:LOCATION_ICON_BICYCLE mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:LOCATION_ICON_DEFAULT mode:OAApplicationMode.BOAT];
+        [_locationIcon setModeDefaultValue:LOCATION_ICON_CAR mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:LOCATION_ICON_BICYCLE mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:LOCATION_ICON_BICYCLE mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];

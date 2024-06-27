@@ -10,26 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, EOALocationIcon)
-{
-    LOCATION_ICON_DEFAULT = 0,
-    LOCATION_ICON_CAR,
-    LOCATION_ICON_BICYCLE
-};
+static NSString *LOCATION_ICON_DEFAULT = @"map_location_default";
+static NSString *LOCATION_ICON_CAR = @"map_location_car";
+static NSString *LOCATION_ICON_BICYCLE = @"map_location_bicycle";
 
 @interface OALocationIcon : NSObject
 
-@property (nonatomic, readonly) EOALocationIcon locationIcon;
-
-+ (instancetype) withLocationIcon:(EOALocationIcon)locationIcon;
++ (instancetype) withIconName:(NSString *)iconName;
 - (UIImage *) iconWithColor:(UIColor *)color;
 - (UIImage *) getMapIcon:(UIColor *)color;
 - (UIImage *) headingIconWithColor:(UIColor *)color;
 
-+ (NSArray<OALocationIcon *> *) values;
-
-+ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color;
-+ (UIImage *) getHeadingIcon:(EOALocationIcon)locationIcon color:(UIColor *)color;
++ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color;
++ (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color;
 
 @end
 

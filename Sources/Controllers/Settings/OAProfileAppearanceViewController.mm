@@ -21,6 +21,7 @@
 #import "OAColorsTableViewCell.h"
 #import "OAIconsTableViewCell.h"
 #import "OALocationIconsTableViewCell.h"
+#import "OAIndexConstants.h"
 #import "GeneratedAssetSymbols.h"
 
 #define kIconsAtRestRow 0
@@ -36,8 +37,8 @@
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) EOARouteService routeService;
-@property (nonatomic) EOANavigationIcon navigationIcon;
-@property (nonatomic) EOALocationIcon locationIcon;
+@property (nonatomic) NSString *navigationIcon;
+@property (nonatomic) NSString *locationIcon;
 @property (nonatomic) CGFloat minSpeed;
 @property (nonatomic) CGFloat maxSpeed;
 
@@ -85,8 +86,8 @@
     result = 31 * result + (_iconName != nil ? _iconName.hash : 0);
     result = 31 * result + (_routingProfile != nil ? _routingProfile.hash : 0);
     result = 31 * result + @(_routeService).hash;
-    result = 31 * result + @(_navigationIcon).hash;
-    result = 31 * result + @(_locationIcon).hash;
+    result = 31 * result + _navigationIcon.hash;
+    result = 31 * result + _locationIcon.hash;
     return result;
 }
 
@@ -109,6 +110,11 @@
     NSArray<NSNumber *> *_colors;
     NSDictionary<NSNumber *, NSString *> *_colorNames;
     NSArray<NSString *> *_icons;
+    
+    NSArray<NSString *> *_locationIconNames;
+    NSArray<NSString *> *_navigationIconNames;
+    NSArray<UIImage *> *_locationIcons;
+    NSArray<UIImage *> *_navigationIcons;
 }
 
 - (instancetype) initWithParentProfile:(OAApplicationMode *)profile
@@ -299,6 +305,11 @@
 
 - (void) generateData
 {
+    _locationIconNames = [self getlocationIconNames];
+    _navigationIconNames = [self getNavigationIconNames];
+    _locationIcons = [self getlocationIcons];
+    _navigationIcons = [self getNavigationIcons];
+    
     _colors = @[
         @(profile_icon_color_blue_light_default),
         @(profile_icon_color_purple_light),
@@ -357,16 +368,58 @@
                @"ic_action_light_aircraft"];
 }
 
-- (NSArray<UIImage *> *) getIconsAtRest
+- (NSArray<NSString *> *) getlocationIconNames
 {
-    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    return @[[OALocationIcon getIcon:LOCATION_ICON_DEFAULT color:currColor], [OALocationIcon getIcon:LOCATION_ICON_CAR color:currColor], [OALocationIcon getIcon:LOCATION_ICON_BICYCLE color:currColor]];
+    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
+    [iconNames addObject:LOCATION_ICON_DEFAULT];
+    [iconNames addObject:LOCATION_ICON_CAR];
+    [iconNames addObject:LOCATION_ICON_BICYCLE];
+    
+    Model3dHelper *helper = [[Model3dHelper alloc] init];
+    NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
+    for (NSString *modelIconName in model3dIconsNames)
+    {
+        [iconNames addObject:modelIconName];
+    }
+    return iconNames;
 }
 
-- (NSArray<UIImage *> *) getNavIcons
+- (NSArray<UIImage *> *) getlocationIcons
 {
+    NSMutableArray<UIImage *> *icons = [NSMutableArray array];
     UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    return @[[OANavigationIcon getIcon:NAVIGATION_ICON_DEFAULT color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_NAUTICAL color:currColor], [OANavigationIcon getIcon:NAVIGATION_ICON_CAR color:currColor]];
+    for (NSString *iconName in _locationIconNames)
+    {
+        [icons addObject:[OALocationIcon getPreviewIcon:iconName color:currColor]];
+    }
+    return icons;
+}
+
+- (NSArray<NSString *> *) getNavigationIconNames
+{
+    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
+    [iconNames addObject:NAVIGATION_ICON_DEFAULT];
+    [iconNames addObject:NAVIGATION_ICON_NAUTICAL];
+    [iconNames addObject:NAVIGATION_ICON_CAR];
+    
+    Model3dHelper *helper = [[Model3dHelper alloc] init];
+    NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
+    for (NSString *modelIconName in model3dIconsNames)
+    {
+        [iconNames addObject:modelIconName];
+    }
+    return iconNames;
+}
+
+- (NSArray<UIImage *> *) getNavigationIcons
+{
+    NSMutableArray<UIImage *> *icons = [NSMutableArray array];
+    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
+    for (NSString *iconName in _navigationIconNames)
+    {
+        [icons addObject:[OANavigationIcon getPreviewIcon:iconName color:currColor]];
+    }
+    return icons;
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -601,8 +654,13 @@
         {
             BOOL isAtRestRow = indexPath.row == kIconsAtRestRow;
             cell.locationType = isAtRestRow ? EOALocationTypeRest : EOALocationTypeMoving;
-            cell.dataArray = isAtRestRow ? [self getIconsAtRest] : [self getNavIcons];
-            cell.selectedIndex = isAtRestRow ? _changedProfile.locationIcon : _changedProfile.navigationIcon;
+            cell.dataArray = isAtRestRow ? _locationIcons : _navigationIcons;
+            
+            if (isAtRestRow)
+                cell.selectedIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+            else
+                cell.selectedIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
+            
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _changedProfile.color;
             cell.delegate = self;
@@ -657,9 +715,9 @@
 {
     _hasChangesBeenMade = YES;
     if (locType == EOALocationTypeRest)
-        _changedProfile.locationIcon = (EOALocationIcon) newValue;
+        _changedProfile.locationIcon = _locationIconNames[newValue];
     else if (locType == EOALocationTypeMoving)
-        _changedProfile.navigationIcon = (EOANavigationIcon) newValue;
+        _changedProfile.navigationIcon = _navigationIconNames[newValue];
     
     [_tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:locType == EOALocationTypeRest ? 0 : 1 inSection:2]] withRowAnimation:UITableViewRowAnimationNone];
 }

@@ -9,93 +9,115 @@
 #import "OALocationIcon.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAIndexConstants.h"
 
 @interface OALocationIcon()
 
-@property (nonatomic) EOALocationIcon locationIcon;
+@property (nonatomic) NSString *iconName;
 
 @end
 
 
 @implementation OALocationIcon
 
-+ (instancetype) withLocationIcon:(EOALocationIcon)locationIcon
++ (instancetype) withIconName:(NSString *)iconName
 {
     OALocationIcon *obj = [[OALocationIcon alloc] init];
     if (obj)
-        obj.locationIcon = locationIcon;
+    {
+        NSString *migratedOldValue = [self getMigratedValue:iconName];
+        if (migratedOldValue)
+            obj.iconName = migratedOldValue;
+        else
+            obj.iconName = iconName;
+    }
 
     return obj;
 }
 
++ (NSString *) getMigratedValue:(id)value
+{
+    if ([value isKindOfClass:NSNumber.class])
+    {
+        NSNumber *oldEnumValue = value;
+        if (oldEnumValue.intValue == 0)
+            return LOCATION_ICON_DEFAULT;
+        else if (oldEnumValue.intValue == 1)
+            return LOCATION_ICON_CAR;
+        else if (oldEnumValue.intValue == 2)
+            return LOCATION_ICON_BICYCLE;
+    }
+    return nil;
+}
+
 - (UIImage *) iconWithColor:(UIColor *)color
 {
-    return [self.class getIcon:_locationIcon color:color];
+    return [self.class getIcon:_iconName color:color];
 }
 
 - (UIImage *) getMapIcon:(UIColor *)color
 {
-    return [self.class getIcon:_locationIcon color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
+    return [self.class getIcon:_iconName color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
 }
 
 - (UIImage *) headingIconWithColor:(UIColor *)color
 {
-    return [self.class getHeadingIcon:_locationIcon color:color];
+    return [self.class getHeadingIcon:_iconName color:color];
 }
 
-+ (NSArray<OALocationIcon *> *) values
++ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color
 {
-    return @[ [OALocationIcon withLocationIcon:LOCATION_ICON_DEFAULT],
-              [OALocationIcon withLocationIcon:LOCATION_ICON_CAR],
-              [OALocationIcon withLocationIcon:LOCATION_ICON_BICYCLE] ];
+    return [self getIcon:iconName color:color scaleFactor:1.0];
 }
 
-+ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color
-{
-    return [self getIcon:locationIcon color:color scaleFactor:1.0];
-}
-
-+ (UIImage *) getIcon:(EOALocationIcon)locationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
++ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
     UIImage *topImage;
-    switch (locationIcon)
+    if ([iconName isEqualToString:LOCATION_ICON_DEFAULT])
     {
-        case LOCATION_ICON_DEFAULT:
-            bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
-            centerImage = [UIImage imageNamed:@"map_location_default_center"];
-            topImage = [UIImage imageNamed:@"map_location_default_top"];
-            break;
-        case LOCATION_ICON_CAR:
-            bottomImage = [UIImage imageNamed:@"map_location_car_bottom"];
-            centerImage = [UIImage imageNamed:@"map_location_car_center"];
-            topImage = [UIImage imageNamed:@"map_location_car_top"];
-            break;
-        case LOCATION_ICON_BICYCLE:
-            bottomImage = [UIImage imageNamed:@"map_location_bicycle_bottom"];
-            centerImage = [UIImage imageNamed:@"map_location_bicycle_center"];
-            topImage = [UIImage imageNamed:@"map_location_bicycle_top"];
-            break;
-        default:
-            return nil;
+        bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
+        centerImage = [UIImage imageNamed:@"map_location_default_center"];
+        topImage = [UIImage imageNamed:@"map_location_default_top"];
+    }
+    else if ([iconName isEqualToString:LOCATION_ICON_CAR])
+    {
+        bottomImage = [UIImage imageNamed:@"map_location_car_bottom"];
+        centerImage = [UIImage imageNamed:@"map_location_car_center"];
+        topImage = [UIImage imageNamed:@"map_location_car_top"];
+    }
+    else if ([iconName isEqualToString:LOCATION_ICON_BICYCLE])
+    {
+        bottomImage = [UIImage imageNamed:@"map_location_bicycle_bottom"];
+        centerImage = [UIImage imageNamed:@"map_location_bicycle_center"];
+        topImage = [UIImage imageNamed:@"map_location_bicycle_top"];
     }
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 
-+ (UIImage *) getHeadingIcon:(EOALocationIcon)locationIcon color:(UIColor *)color
++ (UIImage *) getHeadingIcon:(NSString *)iconName color:(UIColor *)color
 {
-    switch (locationIcon)
-    {
-        case LOCATION_ICON_DEFAULT:
-            return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_default_location_view_angle"] color:color];
-        case LOCATION_ICON_CAR:
-            return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_car_location_view_angle"] color:color];
-        case LOCATION_ICON_BICYCLE:
-            return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_bicycle_location_view_angle"] color:color];
-        default:
-            return nil;
-    }
+    if ([iconName isEqualToString:LOCATION_ICON_DEFAULT])
+        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_default_location_view_angle"] color:color];
+    else if ([iconName isEqualToString:LOCATION_ICON_CAR])
+        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_car_location_view_angle"] color:color];
+    else if ([iconName isEqualToString:LOCATION_ICON_BICYCLE])
+        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_bicycle_location_view_angle"] color:color];
+    return nil;
+}
+
++ (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color
+{
+    UIImage *modelPreview = [OANavigationIcon getModelPreviewDrawable:iconName];
+    if (modelPreview)
+        return modelPreview;
+    return [self getIcon:iconName color:color scaleFactor:1];
+}
+
++ (BOOL) isModel:(NSString *)iconName
+{
+    return [iconName hasPrefix:MODEL_NAME_PREFIX];
 }
 
 @end

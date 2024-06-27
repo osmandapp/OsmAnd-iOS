@@ -112,7 +112,7 @@
         _centerMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
         
         OAApplicationMode *appMode = OARoutingHelper.sharedInstance.getAppMode;
-        OANavigationIcon *navIcon = [OANavigationIcon withNavigationIcon:appMode.getNavigationIcon];
+        OANavigationIcon *navIcon = [OANavigationIcon withIconName:appMode.getNavigationIcon];
         UIColor *iconColor = UIColorFromRGB(appMode.getIconColor);
         
         OsmAnd::MapMarkerBuilder locationMarkerBuilder;

@@ -475,52 +475,52 @@ static int PROFILE_TRUCK = 1000;
 
 - (NSString *) getNavigationIconName
 {
-    switch (self.getNavigationIcon)
-    {
-        case NAVIGATION_ICON_DEFAULT:
-            return @"DEFAULT";
-        case NAVIGATION_ICON_NAUTICAL:
-            return @"NAUTICAL";
-        case NAVIGATION_ICON_CAR:
-            return @"CAR";
-        default:
-            return @"DEFAULT";
-    }
+    NSString *navigationIcon = [self getLocationIcon];
+    if ([navigationIcon isEqualToString:NAVIGATION_ICON_DEFAULT])
+        return @"DEFAULT";
+    else if ([navigationIcon isEqualToString:NAVIGATION_ICON_NAUTICAL])
+        return @"NAUTICAL";
+    else if ([navigationIcon isEqualToString:NAVIGATION_ICON_CAR])
+        return @"CAR";
+    else if ([navigationIcon hasPrefix:MODEL_NAME_PREFIX])
+        return navigationIcon;
+    else
+        return @"DEFAULT";
 }
 
-- (EOANavigationIcon) getNavigationIcon
+- (NSString *) getNavigationIcon
 {
     return [OAAppSettings.sharedManager.navigationIcon get:self];
 }
 
-- (void) setNavigationIcon:(EOANavigationIcon) navIcon
+- (void) setNavigationIcon:(NSString *) navIcon
 {
-    [OAAppSettings.sharedManager.navigationIcon set:(int)navIcon mode:self];
+    [OAAppSettings.sharedManager.navigationIcon set:navIcon mode:self];
 }
 
 - (NSString *) getLocationIconName
 {
-    switch (self.getLocationIcon)
-    {
-        case LOCATION_ICON_DEFAULT:
-            return @"DEFAULT";
-        case LOCATION_ICON_CAR:
-            return @"CAR";
-        case LOCATION_ICON_BICYCLE:
-            return @"BICYCLE";
-        default:
-            return @"DEFAULT";
-    }
+    NSString *locationIcon = [self getLocationIcon];
+    if ([locationIcon isEqualToString:LOCATION_ICON_DEFAULT])
+        return @"DEFAULT";
+    else if ([locationIcon isEqualToString:LOCATION_ICON_CAR])
+        return @"CAR";
+    else if ([locationIcon isEqualToString:LOCATION_ICON_BICYCLE])
+        return @"BICYCLE";
+    else if ([locationIcon hasPrefix:MODEL_NAME_PREFIX])
+        return locationIcon;
+    else
+        return @"DEFAULT";
 }
 
-- (EOALocationIcon) getLocationIcon
+- (NSString *) getLocationIcon
 {
     return [OAAppSettings.sharedManager.locationIcon get:self];
 }
 
-- (void) setLocationIcon:(EOALocationIcon) locIcon
+- (void) setLocationIcon:(NSString *) locIcon
 {
-    [OAAppSettings.sharedManager.locationIcon set:(int)locIcon mode:self];
+    [OAAppSettings.sharedManager.locationIcon set:locIcon mode:self];
 }
 
 - (NSString *) getIconColorName
@@ -919,7 +919,7 @@ static int PROFILE_TRUCK = 1000;
     return iconName;
 }
 
-+ (EOANavigationIcon) parseNavIcon:(NSString *)locIcon
++ (NSString *) parseNavIcon:(NSString *)locIcon
 {
     if ([locIcon isEqualToString:@"DEFAULT"])
         return NAVIGATION_ICON_DEFAULT;
@@ -927,10 +927,12 @@ static int PROFILE_TRUCK = 1000;
         return NAVIGATION_ICON_NAUTICAL;
     else if ([locIcon isEqualToString:@"CAR"])
         return NAVIGATION_ICON_CAR;
+    else if ([locIcon hasPrefix:MODEL_NAME_PREFIX])
+        return locIcon;
     return NAVIGATION_ICON_DEFAULT;
 }
 
-+ (EOALocationIcon) parseLocationIcon:(NSString *)locIcon
++ (NSString *) parseLocationIcon:(NSString *)locIcon
 {
     if ([locIcon isEqualToString:@"DEFAULT"])
         return LOCATION_ICON_DEFAULT;
@@ -938,6 +940,8 @@ static int PROFILE_TRUCK = 1000;
         return LOCATION_ICON_CAR;
     else if ([locIcon isEqualToString:@"BICYCLE"])
         return LOCATION_ICON_BICYCLE;
+    else if ([locIcon hasPrefix:MODEL_NAME_PREFIX])
+        return locIcon;
     return LOCATION_ICON_DEFAULT;
 }
 

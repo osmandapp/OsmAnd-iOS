@@ -9,72 +9,113 @@
 #import "OANavigationIcon.h"
 #import "OAUtilities.h"
 #import "OAAppSettings.h"
+#import "OAIndexConstants.h"
+#import "OsmAndApp.h"
 
 @interface OANavigationIcon()
 
-@property (nonatomic) EOANavigationIcon navigationIcon;
+@property (nonatomic) NSString *iconName;
 
 @end
 
 @implementation OANavigationIcon
 
-+ (instancetype) withNavigationIcon:(EOANavigationIcon)navigationIcon
++ (instancetype) withIconName:(NSString *)iconName
 {
     OANavigationIcon *obj = [[OANavigationIcon alloc] init];
     if (obj)
-        obj.navigationIcon = navigationIcon;
+    {
+        NSString *migratedOldValue = [self getMigratedValue:iconName];
+        if (migratedOldValue)
+            obj.iconName = migratedOldValue;
+        else
+            obj.iconName = iconName;
+    }
 
     return obj;
 }
 
++ (NSString *) getMigratedValue:(id)value
+{
+    if ([value isKindOfClass:NSNumber.class])
+    {
+        NSNumber *oldEnumValue = value;
+        if (oldEnumValue.intValue == 0)
+            return NAVIGATION_ICON_DEFAULT;
+        else if (oldEnumValue.intValue == 1)
+            return NAVIGATION_ICON_NAUTICAL;
+        else if (oldEnumValue.intValue == 2)
+            return NAVIGATION_ICON_CAR;
+    }
+    return nil;
+}
+
 - (UIImage *) iconWithColor:(UIColor *)color
 {
-    return [self.class getIcon:_navigationIcon color:color];
+    return [self.class getIcon:_iconName color:color];
 }
 
 - (UIImage *) getMapIcon:(UIColor *)color
 {
-    return [self.class getIcon:_navigationIcon color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
+    return [self.class getIcon:_iconName color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
 }
 
-+ (NSArray<OANavigationIcon *> *) values
++ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color
 {
-    return @[ [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_DEFAULT],
-              [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_NAUTICAL],
-              [OANavigationIcon withNavigationIcon:NAVIGATION_ICON_CAR] ];
+    return [self getIcon:iconName color:color scaleFactor:1.0];
 }
 
-+ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color
-{
-    return [self getIcon:navigationIcon color:color scaleFactor:1.0];
-}
-
-+ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
++ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
     UIImage *topImage;
-    switch (navigationIcon)
+    if ([iconName isEqualToString:NAVIGATION_ICON_DEFAULT])
     {
-        case NAVIGATION_ICON_DEFAULT:
-            bottomImage = [UIImage imageNamed:@"map_navigation_default_bottom"];
-            centerImage = [UIImage imageNamed:@"map_navigation_default_center"];
-            topImage = [UIImage imageNamed:@"map_navigation_default_top"];
-            break;
-        case NAVIGATION_ICON_NAUTICAL:
-            bottomImage = [UIImage imageNamed:@"map_navigation_nautical_bottom"];
-            centerImage = [UIImage imageNamed:@"map_navigation_nautical_center"];
-            topImage = [UIImage imageNamed:@"map_navigation_nautical_top"];
-            break;
-        case NAVIGATION_ICON_CAR:
-            bottomImage = [UIImage imageNamed:@"map_navigation_car_bottom"];
-            centerImage = [UIImage imageNamed:@"map_navigation_car_center"];
-            topImage = [UIImage imageNamed:@"map_navigation_car_top"];
-            break;
-        default:
-            return nil;
+        bottomImage = [UIImage imageNamed:@"map_navigation_default_bottom"];
+        centerImage = [UIImage imageNamed:@"map_navigation_default_center"];
+        topImage = [UIImage imageNamed:@"map_navigation_default_top"];
+    }
+    else if ([iconName isEqualToString:NAVIGATION_ICON_NAUTICAL])
+    {
+        bottomImage = [UIImage imageNamed:@"map_navigation_nautical_bottom"];
+        centerImage = [UIImage imageNamed:@"map_navigation_nautical_center"];
+        topImage = [UIImage imageNamed:@"map_navigation_nautical_top"];
+    }
+    else if ([iconName isEqualToString:NAVIGATION_ICON_CAR])
+    {
+        bottomImage = [UIImage imageNamed:@"map_navigation_car_bottom"];
+        centerImage = [UIImage imageNamed:@"map_navigation_car_center"];
+        topImage = [UIImage imageNamed:@"map_navigation_car_top"];
     }
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
+}
+
++ (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color
+{
+    UIImage *modelPreview = [self getModelPreviewDrawable:iconName];
+    if (modelPreview)
+        return modelPreview;
+    return [self getIcon:iconName color:color scaleFactor:1];
+}
+
++ (UIImage *) getModelPreviewDrawable:(NSString *)iconName
+{
+    if ([self isModel:iconName])
+    {
+        NSString *shortIconName = [iconName substringFromIndex:MODEL_NAME_PREFIX.length];
+        NSString *iconFilePath = [[[[[OsmAndApp.instance documentsPath] stringByAppendingPathComponent:MODEL_3D_DIR] stringByAppendingPathComponent:shortIconName] stringByAppendingPathComponent:shortIconName] stringByAppendingPathExtension:@"png"];
+        if ([NSFileManager.defaultManager fileExistsAtPath:iconFilePath])
+        {
+            return [UIImage imageNamed:iconFilePath];
+        }
+    }
+    return nil;
+}
+
++ (BOOL) isModel:(NSString *)iconName
+{
+    return [iconName hasPrefix:MODEL_NAME_PREFIX];
 }
 
 @end

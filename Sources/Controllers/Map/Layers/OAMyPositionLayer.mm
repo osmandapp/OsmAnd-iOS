@@ -470,8 +470,8 @@ typedef enum {
         locationAndCourseMarkerBuilder.setBaseOrder(baseOrder--);
         locationAndCourseMarkerBuilder.setIsHidden(true);
         
-        OALocationIcon *locIcon = [OALocationIcon withLocationIcon:mode.getLocationIcon];
-        OANavigationIcon *navIcon = [OANavigationIcon withNavigationIcon:mode.getNavigationIcon];
+        OALocationIcon *locIcon = [OALocationIcon withIconName:mode.getLocationIcon];
+        OANavigationIcon *navIcon = [OANavigationIcon withIconName:mode.getNavigationIcon];
         UIColor *iconColor = UIColorFromRGB(mode.getIconColor);
         
         // Day

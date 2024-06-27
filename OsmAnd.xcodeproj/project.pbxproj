@@ -435,6 +435,8 @@
 		329989B0298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m in Sources */ = {isa = PBXBuildFile; fileRef = 329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */; };
 		32A001A026131FEA00ABE0D2 /* ic_custom_clipboard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */; };
 		32A001A126131FEA00ABE0D2 /* ic_custom_clipboard@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */; };
+		32A0CDF12C29AE6E00FDD8E0 /* Model3dHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */; };
+		32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */; };
 		32A0D6B32A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */; };
 		32A21B5C2A98BCA500A2762A /* TravelGuidesContentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A21B5B2A98BCA500A2762A /* TravelGuidesContentsViewController.swift */; };
 		32A365B22B07B4F500485401 /* ic_custom_help_outlined@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 32A365AE2B07B4F500485401 /* ic_custom_help_outlined@2x.png */; };
@@ -3796,6 +3798,7 @@
 		32464B802A7012D700DA6980 /* OAResourcesUISwiftHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAResourcesUISwiftHelper.mm; sourceTree = "<group>"; };
 		32473DD52A9D06A7008C8041 /* TravelGuidesNavigationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesNavigationViewController.swift; sourceTree = "<group>"; };
 		3249BFBE285CC2D200FFEF42 /* ckb */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ckb; path = ckb.lproj/Localizable.strings; sourceTree = "<group>"; };
+		324F04932C2C56A300D612D4 /* OAModel3dHelper+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OAModel3dHelper+cpp.h"; sourceTree = "<group>"; };
 		325B69FB26D828DC00D8B67C /* OAQuickSearchCoordinatesViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinatesViewController.h; sourceTree = "<group>"; };
 		325B69FC26D828EB00D8B67C /* OAQuickSearchCoordinatesViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAQuickSearchCoordinatesViewController.mm; sourceTree = "<group>"; };
 		325B6A0326D9239800D8B67C /* OAQuickSearchCoordinateFormatsViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAQuickSearchCoordinateFormatsViewController.h; sourceTree = "<group>"; };
@@ -3889,6 +3892,9 @@
 		329989AF298A90E1003D7A0E /* OAOsmUploadGPXVisibilityViewConroller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAOsmUploadGPXVisibilityViewConroller.m; sourceTree = "<group>"; };
 		32A0019E26131FEA00ABE0D2 /* ic_custom_clipboard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@2x.png"; path = "Resources/Icons/ic_custom_clipboard@2x.png"; sourceTree = "<group>"; };
 		32A0019F26131FEA00ABE0D2 /* ic_custom_clipboard@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_clipboard@3x.png"; path = "Resources/Icons/ic_custom_clipboard@3x.png"; sourceTree = "<group>"; };
+		32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model3dHelper.swift; sourceTree = "<group>"; };
+		32A0CDF22C29AF8500FDD8E0 /* OAModel3dHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAModel3dHelper.h; sourceTree = "<group>"; };
+		32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAModel3dHelper.mm; sourceTree = "<group>"; };
 		32A0D6B22A4F1CF50016241D /* Map3dModeButtonVisibilityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Map3dModeButtonVisibilityViewController.swift; sourceTree = "<group>"; };
 		32A21B5B2A98BCA500A2762A /* TravelGuidesContentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesContentsViewController.swift; sourceTree = "<group>"; };
 		32A365AE2B07B4F500485401 /* ic_custom_help_outlined@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_help_outlined@2x.png"; path = "Resources/Icons/ic_custom_help_outlined@2x.png"; sourceTree = SOURCE_ROOT; };
@@ -8117,6 +8123,17 @@
 				32672A092AAF3D0100D46608 /* GpxTravelCell.swift */,
 			);
 			path = cells;
+			sourceTree = "<group>";
+		};
+		32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */ = {
+			isa = PBXGroup;
+			children = (
+				32A0CDF02C29AE6E00FDD8E0 /* Model3dHelper.swift */,
+				32A0CDF22C29AF8500FDD8E0 /* OAModel3dHelper.h */,
+				324F04932C2C56A300D612D4 /* OAModel3dHelper+cpp.h */,
+				32A0CDF32C29B01D00FDD8E0 /* OAModel3dHelper.mm */,
+			);
+			path = Model3dHelper;
 			sourceTree = "<group>";
 		};
 		32AD5D582A2F10EA00A51B60 /* OAuthHelper */ = {
@@ -13413,6 +13430,7 @@
 				32FE7AA62B65138800F82728 /* OAGPXImportUIHelper.mm */,
 				4663EC792BA1FEEF006B0EBB /* MigrationManager.swift */,
 				0590D19B2BF88AF400C62AF5 /* ConcurrentDictionary.swift */,
+				32A0CDF52C29B07B00FDD8E0 /* Model3dHelper */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -17442,6 +17460,7 @@
 				DA5A849E26C563A900F274C7 /* OAReversePointsCommand.mm in Sources */,
 				DA5A84DC26C563A900F274C7 /* OAMapSettingsPOIScreen.mm in Sources */,
 				DA5A84B326C563A900F274C7 /* OAFirstMapillaryBottomSheetViewController.mm in Sources */,
+				32A0CDF12C29AE6E00FDD8E0 /* Model3dHelper.swift in Sources */,
 				32464B812A7012D700DA6980 /* OAResourcesUISwiftHelper.mm in Sources */,
 				DA5A837726C563A800F274C7 /* OARouteInfoView.mm in Sources */,
 				DA5A84DF26C563A900F274C7 /* OAMapSettingsTerrainScreen.mm in Sources */,
@@ -17685,6 +17704,7 @@
 				CA4ED15F50530CD41EB6F164 /* OAPlanTypeCardRow.mm in Sources */,
 				CA4ED29358E483696800D91A /* OASubscriptionCardView.mm in Sources */,
 				CA4ED5E21D6762F76CAF347A /* OACardButtonCell.mm in Sources */,
+				32A0CDF42C29B01D00FDD8E0 /* OAModel3dHelper.mm in Sources */,
 				CA4ED3D37A857AA9DE517533 /* OAPurchaseDetailsViewController.m in Sources */,
 				CA4EDD68D7B26540651A56EB /* OATitleDescriptionBigIconCell.mm in Sources */,
 				328EECD629DC5FA7002922AA /* OATripRecordingElevationWidget.mm in Sources */,

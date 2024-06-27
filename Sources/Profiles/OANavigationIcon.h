@@ -11,24 +11,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-typedef NS_ENUM(NSInteger, EOANavigationIcon)
-{
-    NAVIGATION_ICON_DEFAULT = 0,
-    NAVIGATION_ICON_NAUTICAL,
-    NAVIGATION_ICON_CAR
-};
+static NSString *NAVIGATION_ICON_DEFAULT = @"map_navigation_default";
+static NSString *NAVIGATION_ICON_NAUTICAL = @"map_navigation_nautical";
+static NSString *NAVIGATION_ICON_CAR = @"map_navigation_car";
 
 @interface OANavigationIcon : NSObject
 
-@property (nonatomic, readonly) EOANavigationIcon navigationIcon;
-
-+ (instancetype) withNavigationIcon:(EOANavigationIcon)navigationIcon;
++ (instancetype) withIconName:(NSString *)iconName;
 - (UIImage *) iconWithColor:(UIColor *)color;
 - (UIImage *) getMapIcon:(UIColor *)color;
 
-+ (NSArray<OANavigationIcon *> *) values;
-
-+ (UIImage *) getIcon:(EOANavigationIcon)navigationIcon color:(UIColor *)color;
++ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color;
++ (UIImage *) getModelPreviewDrawable:(NSString *)iconName;
++ (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color;
 
 @end
 

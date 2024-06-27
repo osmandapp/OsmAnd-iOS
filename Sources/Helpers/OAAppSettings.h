@@ -850,8 +850,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *profileIconColor;
 @property (nonatomic) OACommonString *userProfileName;
 @property (nonatomic) OACommonString *parentAppMode;
-@property (nonatomic) OACommonInteger *navigationIcon;
-@property (nonatomic) OACommonInteger *locationIcon;
+@property (nonatomic) OACommonString *navigationIcon;
+@property (nonatomic) OACommonString *locationIcon;
 @property (nonatomic) OACommonInteger *appModeOrder;
 
 @property (nonatomic) OACommonDouble *defaultSpeed;

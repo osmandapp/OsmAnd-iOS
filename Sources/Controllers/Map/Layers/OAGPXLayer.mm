@@ -335,7 +335,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                     [elevations addObject:@(pt->elevation)];
                                     break;
                                 case EOAGPX3DLineVisualizationByTypeSpeed:
-                                    [elevations addObject:@(pt->speed * kSpeedToHeightScale)];
+                                    [elevations addObject:@([self is3DMapsEnabled] ? (pt->speed * kSpeedToHeightScale) + pt->elevation : pt->speed * kSpeedToHeightScale)];
                                     break;
                                 case EOAGPX3DLineVisualizationByTypeFixedHeight:
                                     [elevations addObject:@([self is3DMapsEnabled] ? pt->elevation + gpx.elevationMeters : gpx.elevationMeters)];
@@ -403,7 +403,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                 [elevations addObject:@(pt->elevation)];
                                 break;
                             case EOAGPX3DLineVisualizationByTypeSpeed:
-                                [elevations addObject:@(pt->speed * kSpeedToHeightScale)];
+                                [elevations addObject:@([self is3DMapsEnabled] ? (pt->speed * kSpeedToHeightScale) + pt->elevation : pt->speed * kSpeedToHeightScale)];
                                 break;
                             case EOAGPX3DLineVisualizationByTypeFixedHeight:
                                 [elevations addObject:@([self is3DMapsEnabled] ? pt->elevation + gpx.elevationMeters : gpx.elevationMeters)];
@@ -506,7 +506,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         if (isSpeedSensorTag)
         {
             NSNumber *value = [numberFormatter numberFromString:trackpointextension.value];
-            return value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
+            float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
+            return [self is3DMapsEnabled] && value ? processedValue + point.elevation : processedValue;
         }
         else
         {
@@ -515,7 +516,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 if ([subextension.name isEqualToString:relevantTag])
                 {
                     NSNumber *value = [numberFormatter numberFromString:subextension.value];
-                    return value ? [value floatValue] : defaultValue;
+                    float processedValue = value ? [value floatValue] : defaultValue;
+                    return [self is3DMapsEnabled] && value ? processedValue + point.elevation : processedValue;
                 }
             }
         }
@@ -537,12 +539,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureW])
             {
                 waterTempValue = [numberFormatter numberFromString:subextension.value];
-                return waterTempValue ? [waterTempValue floatValue] + kTemperatureToHeightOffset : NAN;
+                float processedWaterTemp = waterTempValue ? [waterTempValue floatValue] : NAN;
+                return [self is3DMapsEnabled] && waterTempValue ? processedWaterTemp + point.elevation : processedWaterTemp;
             }
             else if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureA])
             {
                 airTempValue = [numberFormatter numberFromString:subextension.value];
-                return airTempValue ? [airTempValue floatValue] + kTemperatureToHeightOffset : NAN;
+                float processedAirTemp = airTempValue ? [airTempValue floatValue] : NAN;
+                return [self is3DMapsEnabled] && airTempValue ? processedAirTemp + point.elevation : processedAirTemp;
             }
         }
     }
@@ -866,7 +870,7 @@ colorizationScheme:(int)colorizationScheme
                             splitElevation = pt.elevation;
                             break;
                         case EOAGPX3DLineVisualizationByTypeSpeed:
-                            splitElevation = pt.speed * kSpeedToHeightScale;
+                            splitElevation = [self is3DMapsEnabled] ? (pt.speed * kSpeedToHeightScale) + pt.elevation : pt.speed * kSpeedToHeightScale;
                             break;
                         case EOAGPX3DLineVisualizationByTypeHeartRate:
                         case EOAGPX3DLineVisualizationByTypeBicycleCadence:
@@ -1015,7 +1019,7 @@ colorizationScheme:(int)colorizationScheme
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
                                         startPointElevation = seg->points.first()->elevation;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
-                                        startPointElevation = seg->points.first()->speed * kSpeedToHeightScale;
+                                        startPointElevation = [self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + seg->points.first()->elevation : seg->points.first()->speed * kSpeedToHeightScale;
                                     else
                                         startPointElevation = [self is3DMapsEnabled] ? seg->points.first()->elevation + gpx.elevationMeters : gpx.elevationMeters;
                                 }
@@ -1028,7 +1032,7 @@ colorizationScheme:(int)colorizationScheme
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
                                         finishPointElevation = seg->points.last()->elevation;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
-                                        finishPointElevation = seg->points.last()->speed * kSpeedToHeightScale;
+                                        finishPointElevation = [self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + seg->points.last()->elevation : seg->points.last()->speed * kSpeedToHeightScale;
                                     else
                                         finishPointElevation = [self is3DMapsEnabled] ? seg->points.last()->elevation + gpx.elevationMeters : gpx.elevationMeters;
                                 }
@@ -1046,8 +1050,8 @@ colorizationScheme:(int)colorizationScheme
                                 }
                                 else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
                                 {
-                                    startFinishPointsElevations.append(seg->points.first()->speed * kSpeedToHeightScale);
-                                    startFinishPointsElevations.append(seg->points.last()->speed * kSpeedToHeightScale);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + seg->points.first()->elevation : seg->points.first()->speed * kSpeedToHeightScale);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + seg->points.last()->elevation : seg->points.last()->speed * kSpeedToHeightScale);
                                 }
                                 else
                                 {

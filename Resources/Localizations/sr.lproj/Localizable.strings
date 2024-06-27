@@ -3448,3 +3448,10 @@
 "shared_string_item" = "Ставка";
 "wall_height" = "Висина зида";
 "wall_height_description" = "Променом вредности висине, можете подићи горњу линију стазе изнад нивоа тла.";
+"avoid_pt_types_descr" = "Одаберите врсте јавног превоза које треба избегавати:";
+"route_recalculation_dist_title" = "Минимална удаљеност за поновно израчунавање руте";
+"in_case_of_reverse_direction" = "У случају обрнутог правца";
+"avoid_pt_types" = "Избегавај врсте превоза…";
+"shared_string_class" = "Класа";
+"dangerous_goods" = "Опасна роба";
+"dangerous_goods_description" = "На неким путевима и тунелима није дозвољен превоз опасних материја.";

@@ -1394,7 +1394,7 @@
 "shared_string_start_date" = "Data începerii";
 "retry" = "Reîncercare";
 "shared_string_of" = "de";
-"shared_string_modify" = "Modificați";
+"shared_string_modify" = "Modifică";
 "shared_string_buy_for" = "pentru";
 "shared_string_search_history" = "Istoric de căutări";
 "poi_categories" = "Categorii de puncte de interes";
@@ -3428,3 +3428,4 @@
 "select_items" = "Selectați elemente";
 "shared_string_item" = "Element";
 "default_buttons" = "Butoane standard";
+"dangerous_goods_description" = "Pe unele drumuri și tuneluri este interzis transportul de materiale periculoase.";

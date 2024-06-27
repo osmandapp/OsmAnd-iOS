@@ -172,7 +172,7 @@
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
         }
 
-        if (_potentiallyUsedMaps.count > 0) // TODO how to make distinct handler for the button?
+        if (_potentiallyUsedMaps.count > 0)
         {
             OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
 
@@ -183,6 +183,7 @@
             OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
             ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
+            ignoreMissingMapsButtonRow.action = @selector(onIgnoreMissingMapsButtonPressed:);
         }
     }
 }
@@ -492,16 +493,17 @@
     [self setupNavbarButtons];
 }
 
+- (void)onIgnoreMissingMapsButtonPressed:(id)sender
+{
+    NSLog(@"onIgnoreMissingMapsButtonPressed");
+    [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+    [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
+
 - (void)onCalculateOnlineButtonPressed:(id)sender
 {
     NSLog(@"onCalculateOnlineButtonPressed");
-    if (true)
-    {
-        // TODO make handler for "Use existing maps" button
-        [OAAppSettings sharedManager].ignoreMissingMaps = YES;
-        [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
-        [self dismissViewController];
-    }
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         auto missingMapsCalculator = [MissingMapsCalculator new];

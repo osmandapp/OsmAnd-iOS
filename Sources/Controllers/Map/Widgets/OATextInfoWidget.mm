@@ -165,6 +165,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     [self printConstraintConstantsForView:_imageView];
     
     self.valueLabel = [UILabel new];
+    self.valueLabel.text = @"-";
     self.valueLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.valueLabel.textAlignment = NSTextAlignmentCenter;
     self.valueLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleTitle3];

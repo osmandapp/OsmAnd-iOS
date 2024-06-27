@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="AB3-JX-r91" userLabel="Content" customClass="WeatherNavigationBarView" customModule="OsmAnd_Maps" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="460" height="47"/>
+            <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMaxX="YES" flexibleMinY="YES" flexibleMaxY="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="unR-Ml-tWu" userLabel="Left Button">
+                    <rect key="frame" x="0.0" y="2.5" width="80" height="44.5"/>
+                    <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_backBtn"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="80" id="FWN-OJ-XcZ"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
+                    <color key="tintColor" name="buttonBgColorPrimary"/>
+                    <state key="normal" title="Back" image="ic_navbar_chevron.png">
+                        <color key="titleColor" name="textColorActive"/>
+                    </state>
+                    <connections>
+                        <action selector="leftButtonTapped:" destination="AB3-JX-r91" eventType="touchUpInside" id="JFB-mT-1E2"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" horizontalCompressionResistancePriority="250" text="Weather" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" minimumScaleFactor="0.5" adjustsFontForContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="shB-5G-YQw">
+                    <rect key="frame" x="80" y="14.5" width="335" height="20.5"/>
+                    <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_titleLbl"/>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QFB-fL-7aq" userLabel="RightButton">
+                    <rect key="frame" x="415" y="2.5" width="40" height="44.5"/>
+                    <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_checkmarkBtn"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="40" id="PxP-dL-U1J"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
+                    <color key="tintColor" name="buttonBgColorPrimary"/>
+                    <state key="normal" image="ic_navbar_settings.png"/>
+                    <connections>
+                        <action selector="rightButtonTapped:" destination="AB3-JX-r91" eventType="touchUpInside" id="A5E-pz-EUL"/>
+                    </connections>
+                </button>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="wpF-P1-aoN"/>
+            <color key="backgroundColor" systemColor="systemGray6Color"/>
+            <constraints>
+                <constraint firstItem="wpF-P1-aoN" firstAttribute="trailing" secondItem="QFB-fL-7aq" secondAttribute="trailing" constant="5" id="9zr-HC-OgQ"/>
+                <constraint firstItem="shB-5G-YQw" firstAttribute="leading" secondItem="unR-Ml-tWu" secondAttribute="trailing" id="BHG-oJ-bgC"/>
+                <constraint firstItem="QFB-fL-7aq" firstAttribute="centerY" secondItem="unR-Ml-tWu" secondAttribute="centerY" id="Dwp-OG-3fz"/>
+                <constraint firstItem="unR-Ml-tWu" firstAttribute="leading" secondItem="wpF-P1-aoN" secondAttribute="leading" id="REc-ve-M2e"/>
+                <constraint firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="shB-5G-YQw" secondAttribute="bottom" constant="12" id="arD-aA-pBI"/>
+                <constraint firstItem="QFB-fL-7aq" firstAttribute="leading" secondItem="shB-5G-YQw" secondAttribute="trailing" id="lFy-o1-QWI"/>
+                <constraint firstItem="shB-5G-YQw" firstAttribute="centerY" secondItem="unR-Ml-tWu" secondAttribute="centerY" id="mfh-XL-Eqj"/>
+                <constraint firstAttribute="bottom" secondItem="QFB-fL-7aq" secondAttribute="bottom" id="ufS-cY-Sgd"/>
+                <constraint firstAttribute="bottom" secondItem="unR-Ml-tWu" secondAttribute="bottom" id="ytC-12-mRu"/>
+            </constraints>
+            <nil key="simulatedTopBarMetrics"/>
+            <nil key="simulatedBottomBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="leftButton" destination="unR-Ml-tWu" id="UFX-AN-pRc"/>
+                <outlet property="rightButton" destination="QFB-fL-7aq" id="aeC-Yk-S04"/>
+                <outlet property="titleLabel" destination="shB-5G-YQw" id="UO0-QL-up4"/>
+            </connections>
+            <point key="canvasLocation" x="114.49275362318842" y="46.540178571428569"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="ic_navbar_chevron.png" width="28" height="28"/>
+        <image name="ic_navbar_settings.png" width="28" height="28"/>
+        <namedColor name="buttonBgColorPrimary">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <namedColor name="textColorActive">
+            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+        <systemColor name="systemGray6Color">
+            <color red="0.94901960784313721" green="0.94901960784313721" blue="0.96862745098039216" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
+</document>

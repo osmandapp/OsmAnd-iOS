@@ -57,12 +57,13 @@
     NSArray *nib = [[NSBundle mainBundle] loadNibNamed:@"OAWeatherToolbar" owner:self options:nil];
     self = (OAWeatherToolbar *) nib[0];
     if (self)
-//        self.frame = CGRectMake(
-//                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
-//                [self.class calculateYOutScreen],
-//                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
-//                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 241. + [OAUtilities getBottomMargin]
-//        );
+        // TODO: mb remove?
+        self.frame = CGRectMake(
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
+                [self.class calculateYOutScreen],
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 241. + [OAUtilities getBottomMargin]
+        );
 
     [self commonInit];
     return self;
@@ -135,7 +136,7 @@
 
 - (void)configureWidgetControlsStackView
 {
-    _weatherWidgetControlsArray = [(OAWeatherPlugin *)[OAPluginsHelper getPlugin:OAWeatherPlugin.class] createWidgetsControls];
+    _weatherWidgetControlsArray = [[(OAWeatherPlugin *)[OAPluginsHelper getPlugin:OAWeatherPlugin.class] createWidgetsControls] copy];
     
     if (_weatherWidgetControlsArray && _weatherWidgetControlsArray.count > 0) {
         [_weatherStackView removeAllArrangedSubviews];
@@ -143,6 +144,7 @@
         for (NSInteger idx = 0; idx < itemCount; idx++) {
             OAWeatherWidget *widget = _weatherWidgetControlsArray[idx];
             widget.shouldAlwaysSeparateValueAndUnitText = YES;
+            widget.useDashSymbolWhenTextIsEmpty = YES;
             widget.isVerticalStackImageTitleSubtitleLayout = YES;
             [widget updateVerticalStackImageTitleSubtitleLayout];
             BOOL showSeparator = (idx != itemCount - 1);
@@ -338,7 +340,7 @@
         {
             frame.size.width = DeviceScreenWidth * 0.45;
             frame.size.height = DeviceScreenHeight;
-            frame.origin = CGPointZero;
+            frame.origin = CGPointMake(0., 44);;
         }
         else
         {
@@ -390,7 +392,7 @@
 + (CGFloat)calculateY
 {
     if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] : 0.;
+        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44.0 : 44.0;
 
     return DeviceScreenHeight - (241. + [OAUtilities getBottomMargin]);
 }
@@ -398,7 +400,7 @@
 + (CGFloat)calculateYOutScreen
 {
     if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] -1 : -1.;
+        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44 - 1 : 44 - 1.;
 
     return DeviceScreenHeight + 241. + [OAUtilities getBottomMargin];
 }

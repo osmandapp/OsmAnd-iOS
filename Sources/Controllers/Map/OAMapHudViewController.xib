@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="22505" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="32700.99.1234" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" colorMatched="YES">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22504"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -42,7 +42,8 @@
                 <outlet property="topWidgetsViewWidthConstraint" destination="yax-4w-LsJ" id="HkI-5d-3J5"/>
                 <outlet property="topWidgetsViewYConstraint" destination="l7W-kJ-xAQ" id="Jsx-7s-avC"/>
                 <outlet property="view" destination="1" id="3"/>
-                <outlet property="weatherButton" destination="Kft-AO-Hcd" id="8Mb-KG-ple"/>
+                <outlet property="weatherContoursButton" destination="z6t-dM-5Mr" id="Eqx-Y3-Rih"/>
+                <outlet property="weatherLayersButton" destination="JjN-sY-BJ6" id="UoD-7p-Inn"/>
                 <outlet property="widgetsView" destination="w1v-g4-GFe" id="rXE-hx-5bY"/>
                 <outlet property="zoomButtonsView" destination="o72-6U-6Av" id="dzB-hp-3xi"/>
                 <outlet property="zoomInButton" destination="GgY-iA-GiG" id="pBy-3y-5hp"/>
@@ -217,6 +218,29 @@
                         <action selector="onOptionsMenuButtonDown:" destination="-1" eventType="touchDragInside" id="BcB-jK-AfK"/>
                     </connections>
                 </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="z6t-dM-5Mr" userLabel="weatherContoursButton" customClass="OAHudButton">
+                    <rect key="frame" x="0.0" y="550" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="ic_custom_contour_lines_disabled">
+                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="JjN-sY-BJ6" userLabel="weatherLayersButton" customClass="OAHudButton">
+                    <rect key="frame" x="0.0" y="600" width="50" height="50"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
+                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
+                    <state key="normal" image="ic_custom_overlay_map_disabled">
+                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    </state>
+                    <connections>
+                        <action selector="onWeatherLayersButtonClick:" destination="-1" eventType="touchUpInside" id="lum-sp-fCE"/>
+                    </connections>
+                </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Tol-6L-Amr" userLabel="mapModeButton" customClass="OAHudButton">
                     <rect key="frame" x="282" y="833" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMinX="YES" flexibleMinY="YES"/>
@@ -226,19 +250,6 @@
                     </state>
                     <connections>
                         <action selector="onMapModeButtonClicked:" destination="-1" eventType="touchUpInside" id="W5u-0h-muR"/>
-                    </connections>
-                </button>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="Kft-AO-Hcd" userLabel="weatherButton" customClass="OAHudButton">
-                    <rect key="frame" x="16" y="767" width="50" height="50"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                    <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                    <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
-                    <state key="normal" image="ic_custom_umbrella.png">
-                        <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
-                    </state>
-                    <connections>
-                        <action selector="onWeatherToolbarButtonClick:" destination="-1" eventType="touchUpInside" id="BmS-gM-X5V"/>
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gMm-Ly-WJo" userLabel="searchButton" customClass="OAHudButton">
@@ -270,16 +281,17 @@
     </objects>
     <resources>
         <image name="ic_action_enduro_motorcycle.png" width="30" height="30"/>
+        <image name="ic_custom_contour_lines_disabled" width="30" height="30"/>
         <image name="ic_custom_direction_compass.png" width="30" height="30"/>
         <image name="ic_custom_drawer.png" width="30" height="30"/>
         <image name="ic_custom_map_location_position.png" width="30" height="30"/>
         <image name="ic_custom_map_zoom_in.png" width="30" height="30"/>
         <image name="ic_custom_map_zoom_out.png" width="30" height="30"/>
         <image name="ic_custom_navigation.png" width="30" height="30"/>
+        <image name="ic_custom_overlay_map_disabled" width="30" height="30"/>
         <image name="ic_custom_search.png" width="30" height="30"/>
-        <image name="ic_custom_umbrella.png" width="30" height="30"/>
         <namedColor name="widgetBgColor">
-            <color red="1" green="1" blue="1" alpha="0.93999999761581421" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>

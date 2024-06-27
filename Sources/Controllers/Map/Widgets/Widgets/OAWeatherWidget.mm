@@ -136,7 +136,10 @@
                 else if (selfWeak.cachedValue != selfWeak.undefined)
                 {
                     selfWeak.cachedValue = selfWeak.undefined;
-                    [selfWeak setText:nil subtext:nil];
+                    if (selfWeak.useDashSymbolWhenTextIsEmpty)
+                        [selfWeak setText:@"-" subtext:nil];
+                    else
+                        [selfWeak setText:nil subtext:nil];
                 }
             });
         };

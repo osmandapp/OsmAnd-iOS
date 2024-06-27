@@ -2647,3 +2647,4 @@
 "shared_string_hand" = "Hand";
 "downward_gradient" = "Neerwaartse helling";
 "upward_gradient" = "Opwaartse helling";
+"wall_height" = "Muur hoogte";

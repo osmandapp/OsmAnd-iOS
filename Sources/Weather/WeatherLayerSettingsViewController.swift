@@ -25,14 +25,6 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRECIPITATION)]
     }()
     
-//    private let weatherBandTemperature: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_TEMPERATURE)
-//    private let weatherBandPressure: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRESSURE)
-//    private let weatherBandWind: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_WIND_SPEED)
-//    private let weatherBandCloud: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_CLOUD)
-//    private let weatherBandPrecipitation: OAWeatherBand = OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRECIPITATION)
-//    
-//    private var weatherArray = [OAWeatherBand]()
-    
     override func getTitle() -> String {
         localizedString("shared_string_layers")
     }
@@ -70,7 +62,6 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
             row.key = Self.weatherLayerKey
             row.title = item.getMeasurementName()
             row.iconName = item.getIcon()
-          //  @"image" : _weatherBand ? _weatherBand.getIcon : @"ic_custom_contour_lines"
             let isVisible: Bool = item.isBandVisible()
             row.setObj(isVisible, forKey: Self.selectedKey)
             row.setObj(item, forKey: "band")

@@ -184,11 +184,5 @@
                               widgetParams:nil]
     ];
 }
-/*
- _weatherPressureControl,
- _weatherCloudControl,
- _weatherPrecipControl,
- _weatherWindSpeedControl]
- */
 
 @end

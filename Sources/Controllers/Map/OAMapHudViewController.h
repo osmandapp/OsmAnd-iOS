@@ -34,7 +34,6 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
-//@property (weak, nonatomic) IBOutlet OAHudButton *weatherButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *weatherContoursButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *weatherLayersButton;
 

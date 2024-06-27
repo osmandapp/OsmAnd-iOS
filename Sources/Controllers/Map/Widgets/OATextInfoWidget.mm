@@ -113,17 +113,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         dic[NSFontAttributeName] = label.font;
     return dic;
 }
-
-- (void)printConstraintConstantsForView:(UIView *)view {
-    for (NSLayoutConstraint *constraint in view.constraints) {
-        NSLog(@"Constraint constant: %f", constraint);
-    }
-    
-    for (UIView *subview in view.subviews) {
-        [self printConstraintConstantsForView:subview];
-    }
-}
-
 - (void)updateVerticalStackImageTitleSubtitleLayout
 {
     NSArray *viewsToRemove = [self subviews];
@@ -147,7 +136,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         [verticalStackView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor constant:3],
         [verticalStackView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-3],
     ]];
-    [self printConstraintConstantsForView:_imageView];
     _imageView = [UIImageView new];
     _imageView.contentMode = UIViewContentModeScaleAspectFit;
     UIImage *image = [UIImage imageNamed:_icon];
@@ -162,7 +150,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     verticalNameUnitStackView.spacing = 7;
     verticalNameUnitStackView.distribution = UIStackViewDistributionEqualSpacing;
     [verticalStackView addArrangedSubview:verticalNameUnitStackView];
-    [self printConstraintConstantsForView:_imageView];
     
     self.valueLabel = [UILabel new];
     self.valueLabel.text = @"-";

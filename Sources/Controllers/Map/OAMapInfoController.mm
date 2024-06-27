@@ -74,8 +74,6 @@
     OARulerWidget *_rulerControl;
     
     SpeedometerView *_speedometerView;
-  //  WeatherViewController *_weatherViewController;
-  //  CompactViewController *_compactViewController;
 
     OAAppSettings *_settings;
     OADayNightHelper *_dayNightHelper;
@@ -575,20 +573,6 @@
         [self hideWeatherToolbar];
 }
 
-//- (void)clearWeatherScreen
-//{
-//    [_compactViewController willMoveToParentViewController:nil];
-//    [_compactViewController.view removeFromSuperview];
-//    [_compactViewController removeFromParentViewController];
-//    
-////    [_weatherViewController willMoveToParentViewController:nil];
-////    [_weatherViewController.view removeFromSuperview];
-////    [_weatherViewController removeFromParentViewController];
-//    
-//    _compactViewController = nil;
-//    _weatherViewController = nil;
-//}
-
 - (void)showWeatherToolbar
 {
     OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
@@ -603,14 +587,6 @@
 
     if (_weatherToolbar.hidden)
     {
-//        [_weatherViewController willMoveToParentViewController:nil];
-//        [_weatherViewController.view removeFromSuperview];
-//        [_weatherViewController removeFromParentViewController];
-        
-//        [_compactViewController willMoveToParentViewController:nil];
-//        [_compactViewController.view removeFromSuperview];
-//        [_compactViewController removeFromParentViewController];
-        
         [_weatherToolbar moveOutOfScreen];
         _weatherToolbar.hidden = NO;
         _weatherNavigationBarView.hidden = NO;
@@ -632,32 +608,7 @@
         [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
     }];
-    //_weatherNavigationBarView.hidden = NO;
     _weatherNavigationBarView.frame = CGRectMake(0, 0, _weatherToolbar.frame.size.width, 44 + [OAUtilities getTopMargin]);
-    
-//    if (!_compactViewController)
-//    {
-//        _compactViewController = [CompactViewController new];
-//    }
-//    if (!_weatherViewController)
-//    {
-//        __weak __typeof(self) weakSelf = self;
-//        _weatherViewController = [WeatherViewController new];
-//        _weatherViewController.onCloseButtonAction = ^{
-//            [weakSelf clearWeatherScreen];
-//        };
-//    }
-    
-//    [CATransaction begin];
-//    [CATransaction setCompletionBlock:^{
-//        [self configureWeather];
-//    }];
-//    [_compactViewController willMoveToParentViewController:nil];
-//    [_compactViewController.view removeFromSuperview];
-//    [_compactViewController removeFromParentViewController];
-//    [CATransaction commit];
-    
-
 }
 
 - (void)updateContourLayer:(NSString *)contoursType
@@ -756,11 +707,14 @@
         none.state = UIMenuElementStateOn;
     }
     
-    NSArray<UIMenuElement *> *menuElements = [@[[UIMenu menuWithTitle:@""
-                                                                image:nil
-                                                           identifier:nil
-                                                              options:UIMenuOptionsDisplayInline
-                                                             children:@[none]], temperature, precipitation, wind, cloud, pressure]];
+    NSMutableArray<UIMenuElement *> *menuElements = [@[temperature, precipitation, wind, cloud, pressure] mutableCopy];
+    
+    [menuElements insertObject:[UIMenu menuWithTitle:@""
+                                               image:nil
+                                          identifier:nil
+                                             options:UIMenuOptionsDisplayInline
+                                            children:@[none]] atIndex:0];
+    
     
     return [UIMenu menuWithChildren:menuElements];
 }
@@ -831,9 +785,7 @@
     _weatherToolbar.hidden = YES;
     _weatherNavigationBarView.hidden = YES;
     [_mapHudViewController updateWeatherButtonVisibility];
-//    [_compactViewController willMoveToParentViewController:nil];
-//    [_compactViewController.view removeFromSuperview];
-//    [_compactViewController removeFromParentViewController];
+    
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
     }                completion:^(BOOL finished) {

@@ -200,7 +200,6 @@ static const float kDistanceMeters = 100.0;
     self.floatingButtonsController.view.frame = self.view.frame;
     [self.view addSubview:self.floatingButtonsController.view];
 
-    //self.weatherButton.alpha = 0.;
     self.weatherContoursButton.alpha = 0.;
     self.weatherLayersButton.alpha = 0.;
 

@@ -99,15 +99,6 @@ final class WeatherDataSourceViewController: OABaseNavbarViewController {
     override func getTableHeaderDescription() -> String {
         localizedString("weather_data_sources_prompt")
     }
-    
-//    override func getTableHeaderDescriptionAttr() -> NSAttributedString! {
-//        let attrStr = NSMutableAttributedString(string: localizedString("weather_data_sources_prompt"))
-//        // Set font attribute
-//        let font = UIFont.systemFont(ofSize: 13)
-//        attrStr.addAttribute(.font, value: font, range: NSRange(location: 0, length: attrStr.length))
-//        attrStr.addAttribute(.foregroundColor, value: UIColor.textColorSecondary, range: NSRange(location: 0, length: attrStr.length))
-//        return attrStr
-//    }
 
     // MARK: Table data
 

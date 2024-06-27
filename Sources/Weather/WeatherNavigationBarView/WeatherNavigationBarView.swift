@@ -19,8 +19,6 @@ final class WeatherNavigationBarView: UIView {
             .instantiate(withOwner: nil, options: nil)[0] as? WeatherNavigationBarView
     }
     
-   // private static let NIB_NAME = "WeatherNavigationBarView"
-    
     var onLeftButtonAction: (() -> Void)?
     var onRightButtonAction: (() -> Void)?
     

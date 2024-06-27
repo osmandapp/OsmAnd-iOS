@@ -3326,10 +3326,7 @@
 		FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */; };
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
-		FAE6E8602C29AC0700907FBE /* CompactViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E85F2C29AC0700907FBE /* CompactViewController.swift */; };
-		FAE6E8622C29AC8200907FBE /* WeatherViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8612C29AC8200907FBE /* WeatherViewController.swift */; };
 		FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */; };
-		FAE6E8682C2ABA6F00907FBE /* OAWeatherHelper+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8672C2ABA6F00907FBE /* OAWeatherHelper+Extension.swift */; };
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
@@ -7896,10 +7893,7 @@
 		FAE0B7102AFCDAD400C02438 /* BLEPairedSensorsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEPairedSensorsViewController.swift; sourceTree = "<group>"; };
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
 		FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "СhoicePairedDeviceTableViewCell.swift"; sourceTree = "<group>"; };
-		FAE6E85F2C29AC0700907FBE /* CompactViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompactViewController.swift; sourceTree = "<group>"; };
-		FAE6E8612C29AC8200907FBE /* WeatherViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherViewController.swift; sourceTree = "<group>"; };
 		FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLayerSettingsViewController.swift; sourceTree = "<group>"; };
-		FAE6E8672C2ABA6F00907FBE /* OAWeatherHelper+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "OAWeatherHelper+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -9708,9 +9702,7 @@
 				CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */,
 				CA4EDE6E1DAF70B53B04003C /* OAWeatherWebClient.mm */,
 				CA4ED4DA76018A8B23059CA6 /* OAWeatherWebClient.h */,
-				FAE6E8612C29AC8200907FBE /* WeatherViewController.swift */,
 				FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */,
-				FAE6E8672C2ABA6F00907FBE /* OAWeatherHelper+Extension.swift */,
 				FA282AEE2C2BFFD200CC7AC1 /* WeatherDataSourceViewController.swift */,
 			);
 			path = Weather;
@@ -13805,7 +13797,6 @@
 		FA069C522B9AF6090007E4DE /* Controls */ = {
 			isa = PBXGroup;
 			children = (
-				FAE6E85E2C29ABFB00907FBE /* CompactViewController */,
 				FA069C532B9AF61B0007E4DE /* OutlineLabel.swift */,
 				FA069C682B9F13160007E4DE /* ShadowPathView.swift */,
 			);
@@ -14148,14 +14139,6 @@
 				FAA1CEB02B17509400760545 /* OptionDeviceTableViewCell.xib */,
 			);
 			path = Cells;
-			sourceTree = "<group>";
-		};
-		FAE6E85E2C29ABFB00907FBE /* CompactViewController */ = {
-			isa = PBXGroup;
-			children = (
-				FAE6E85F2C29AC0700907FBE /* CompactViewController.swift */,
-			);
-			path = CompactViewController;
 			sourceTree = "<group>";
 		};
 		FAF6C89C2AD014C800A3ED94 /* ThemeManager */ = {
@@ -16553,7 +16536,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "count=0\nfor file_path in $(git ls-files -om --exclude-from=.gitignore | grep \".swift$\"); do\n  # Set environment variables with file names in order to feed SwiftLint, as documented at the following link\n  # 👉 https://github.com/realm/SwiftLint#command-line\n    export SCRIPT_INPUT_FILE_$count=$file_path\n    # Count the number of modified Swift files in the index and the working tree, excluding those ignored by git\n    count=$((count + 1))\ndone\nfor file_path in $(git diff --cached --name-only | grep \".swift$\"); do\n    export SCRIPT_INPUT_FILE_$count=$file_path\n    count=$((count + 1))\ndone\n    export SCRIPT_INPUT_FILE_COUNT=$count\n    # Run SwiftLint only over the files mentioned above, if any\nif [ $SCRIPT_INPUT_FILE_COUNT -ne 0 ]; then\n  \"${PODS_ROOT}/SwiftLint/swiftlint\" lint --use-script-input-files\nfi\n";
+			shellScript = "
+";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -16660,7 +16644,6 @@
 				DA5A83D626C563A800F274C7 /* OAReplaceFavoriteViewController.mm in Sources */,
 				DA5A815D26C563A700F274C7 /* OASRTMPlugin.mm in Sources */,
 				C5AF90792A25E8A100989A86 /* OAKeyboardHintBar.m in Sources */,
-				FAE6E8682C2ABA6F00907FBE /* OAWeatherHelper+Extension.swift in Sources */,
 				DA5A819A26C563A700F274C7 /* OAMapOverlayAction.mm in Sources */,
 				DA5A82F726C563A800F274C7 /* OARangeSliderCell.m in Sources */,
 				FA5A21A22A9C7DE100319695 /* CALayer+Extension.swift in Sources */,
@@ -17309,7 +17292,6 @@
 				DA5A83CB26C563A800F274C7 /* OACollapsableView.m in Sources */,
 				DA5A82F426C563A800F274C7 /* OASearchMoreCell.m in Sources */,
 				DA5A81BA26C563A700F274C7 /* OAPOIHistoryType.mm in Sources */,
-				FAE6E8602C29AC0700907FBE /* CompactViewController.swift in Sources */,
 				C5B4AE5C2B1F480C0019F357 /* HelpDetailsViewController.swift in Sources */,
 				46E8FFC729ED759000DB1EFE /* UINavigationController+keyCommands.m in Sources */,
 				DA5A844E26C563A900F274C7 /* OATransportStopsLayer.mm in Sources */,
@@ -17708,7 +17690,6 @@
 				CA4EDBC475684B567F9345C9 /* OAWeatherPlugin.mm in Sources */,
 				CA4ED3D292CC8CAE7922DC3E /* OAWeatherSettingsViewController.mm in Sources */,
 				46CBC9782B9633FB005CC244 /* AverageGlideComputer.swift in Sources */,
-				FAE6E8622C29AC8200907FBE /* WeatherViewController.swift in Sources */,
 				CA4ED0D1E58A3E00EAE53C55 /* OAWeatherBandSettingsViewController.mm in Sources */,
 				3236428E2900370800E18413 /* OAFPSTextInfoWidget.mm in Sources */,
 				FA00B8842B5575E600582CD1 /* UIStackView+Extension.swift in Sources */,

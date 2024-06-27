@@ -183,7 +183,6 @@
             OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
             ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
-            ignoreMissingMapsButtonRow.action = @selector(onIgnoreMissingMapsButtonPressed:);
         }
     }
 }
@@ -291,7 +290,16 @@
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+            if ([item.title isEqualToString:OALocalizedString(@"calculate_online")])
+            {
+                [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([item.title isEqualToString:OALocalizedString(@"missing_maps_ignore")])
+            {
+                [cell.button addTarget:self action:@selector(onIgnoreMissingMapsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+
             return cell;
         }
         else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])

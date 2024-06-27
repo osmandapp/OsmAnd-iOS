@@ -25,7 +25,16 @@
                     <fontDescription key="fontDescription" style="UICTFontTextStyleBody"/>
                     <color key="tintColor" name="buttonBgColorPrimary"/>
                     <state key="normal" title="Back" image="ic_navbar_chevron.png">
-                        <color key="titleColor" name="textColorActive"/>
+                        <color key="titleColor" name="buttonBgColorPrimary"/>
+                    </state>
+                    <state key="disabled">
+                        <color key="titleColor" name="buttonBgColorPrimary"/>
+                    </state>
+                    <state key="selected">
+                        <color key="titleColor" name="buttonBgColorPrimary"/>
+                    </state>
+                    <state key="highlighted">
+                        <color key="titleColor" name="buttonBgColorPrimary"/>
                     </state>
                     <connections>
                         <action selector="leftButtonTapped:" destination="AB3-JX-r91" eventType="touchUpInside" id="JFB-mT-1E2"/>
@@ -37,7 +46,7 @@
                     <fontDescription key="fontDescription" style="UICTFontTextStyleHeadline"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QFB-fL-7aq" userLabel="RightButton">
+                <button opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QFB-fL-7aq" userLabel="RightButton">
                     <rect key="frame" x="415" y="2.5" width="40" height="44.5"/>
                     <accessibility key="accessibilityConfiguration" identifier="topBarNavigation_checkmarkBtn"/>
                     <constraints>
@@ -79,9 +88,6 @@
         <image name="ic_navbar_chevron.png" width="28" height="28"/>
         <image name="ic_navbar_settings.png" width="28" height="28"/>
         <namedColor name="buttonBgColorPrimary">
-            <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <systemColor name="systemGray6Color">

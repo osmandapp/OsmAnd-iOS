@@ -660,133 +660,77 @@
 
 }
 
-//- (void)configureWeather
-//{
-//    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:_weatherViewController];
-//    
-//    [_compactViewController.controller willMoveToParentViewController:nil];
-//    [_compactViewController.controller.view removeFromSuperview];
-//    [_compactViewController.controller removeFromParentViewController];
-//    
-//    [_mapHudViewController addChildViewController:_compactViewController];
-//    [_mapHudViewController.view addSubview:_compactViewController.view];
-//    [_compactViewController didMoveToParentViewController:_mapHudViewController];
-//    
-//    [_compactViewController addControllerWithController:navigationController];
-//    
-//    OAHudButton *contourButton = [[OAHudButton alloc] initWithFrame:CGRectZero];
-//    contourButton.showsMenuAsPrimaryAction = YES;
-//    __weak OAHudButton *weakContourButton = contourButton;
-//    contourButton.menu = [self createContourMenu:^{
-//        NSString *contourName = OsmAndApp.instance.data.contourName;
-//        BOOL isEnabledContourButton = [[OAMapStyleSettings sharedInstance] isAnyWeatherContourLinesEnabled] || contourName.length > 0;
-//        [weakContourButton setImage:[UIImage imageNamed:isEnabledContourButton ? @"" : @"ic_custom_contour_lines_disabled" ] forState:UIControlStateNormal];
-//    }];
-//    
-////    OAHudButton *weatherButton = [[OAHudButton alloc] initWithFrame:CGRectZero];
-//
-////    quickActionButton.buttonState = quickActionButtonState;
-////    quickActionButton.tag = [OAUtilities getQuickActionButtonTag];
-////    quickActionButton.autoresizingMask = UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleTopMargin;
-////    quickActionButton.alpha = [quickActionButtonState isEnabled] ? 1 : 0;
-////    quickActionButton.userInteractionEnabled = [quickActionButtonState isEnabled];
-////    quickActionButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
-////    quickActionButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-////    quickActionButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
-//    contourButton.layer.cornerRadius = 25;
-//    contourButton.translatesAutoresizingMaskIntoConstraints = NO;
-//    // TODO:
-//    NSString *contourName = OsmAndApp.instance.data.contourName;
-//    BOOL isEnabledContourButton = [[OAMapStyleSettings sharedInstance] isAnyWeatherContourLinesEnabled] || contourName.length > 0;
-//    [contourButton setImage:[UIImage imageNamed:isEnabledContourButton ? @"" : @"ic_custom_contour_lines_disabled" ] forState:UIControlStateNormal];
-//    [contourButton addTarget:self action:@selector(contourButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-//    
-//    [NSLayoutConstraint activateConstraints:@[
-//        [contourButton.heightAnchor constraintEqualToConstant:50],
-//        [contourButton.widthAnchor constraintEqualToConstant:50],
-//    ]];
-//       
-//    OAHudButton *weatherButton = [[OAHudButton alloc] initWithFrame:CGRectZero];
-//
-//    weatherButton.layer.cornerRadius = 25;
-//    weatherButton.translatesAutoresizingMaskIntoConstraints = NO;
-//    
-//   // [sender setImage:[UIImage imageNamed: YES ? @"ic_custom_overlay_map_disabled" : @"ic_layer_top"] forState:UIControlStateNormal];
-//    [weatherButton setImage:[UIImage imageNamed:[OAWeatherHelper sharedInstance].allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_layer_top"] forState:UIControlStateNormal];
-//       [weatherButton addTarget:self action:@selector(weatherButtonTapped:) forControlEvents:UIControlEventTouchUpInside];
-//       
-//       [NSLayoutConstraint activateConstraints:@[
-//           [weatherButton.heightAnchor constraintEqualToConstant:50],
-//           [weatherButton.widthAnchor constraintEqualToConstant:50]
-//       ]];
-//       
-//       [_compactViewController addButtonsWithButtons:@[contourButton, weatherButton]];
-//}
+- (void)updateContourLayer:(NSString *)contoursType
+{
+    auto app = [OsmAndApp instance];
+    app.data.contourName = contoursType;
+    app.data.contourNameLastUsed = contoursType;
+    [[OAMapStyleSettings sharedInstance] setWeatherContourLinesEnabled:YES weatherContourLinesAttr:contoursType];
+}
+
+- (void)disableContourLayer
+{
+    auto app = [OsmAndApp instance];
+    app.data.contourName = @"";
+    app.data.contourNameLastUsed = WEATHER_NONE_CONTOURS_LINES_VALUE;
+    [[OAMapStyleSettings sharedInstance] setWeatherContourLinesEnabled:NO
+                            weatherContourLinesAttr:WEATHER_NONE_CONTOURS_LINES_VALUE];
+}
 
 - (UIMenu *)createContourMenu:(void(^)(void))onTapHandler
 {
-
+    __weak __typeof(self) weakSelf = self;
     auto styleSettings = [OAMapStyleSettings sharedInstance];
     UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
-                                             image: [[UIImage imageNamed:@"ic_custom_contour_lines_disabled"] imageWithTintColor:[UIColor blackColor]]
+                                             image: [[UIImage templateImageNamed:@"ic_custom_contour_lines_disabled"] imageWithTintColor:[UIColor blackColor]]
                                         identifier:nil
                                            handler:^(__kindof UIAction * _Nonnull action) {
+        [weakSelf disableContourLayer];
         if (onTapHandler)
             onTapHandler();
     }];
-    
-  //  [menuElements addObject:none];
 
     UIAction *temperature = [UIAction actionWithTitle:OALocalizedString(@"map_settings_weather_temp")
-                                          image:[[UIImage imageNamed:@"ic_custom_thermometer"] imageWithTintColor:[UIColor blackColor]]
+                                          image:[[UIImage templateImageNamed:@"ic_custom_thermometer"] imageWithTintColor:[UIColor blackColor]]
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeSlope];
-//        [self terrainTypeChanged];
+        [weakSelf updateContourLayer:WEATHER_TEMP_CONTOUR_LINES_ATTR];
         if (onTapHandler)
             onTapHandler();
     }];
-  //  [menuElements addObject:temperature];
     
     UIAction *pressure = [UIAction actionWithTitle:OALocalizedString(@"map_settings_weather_pressure")
-                                          image:[[UIImage imageNamed:@"ic_custom_air_pressure"] imageWithTintColor:[UIColor blackColor]]
+                                          image:[[UIImage templateImageNamed:@"ic_custom_air_pressure"] imageWithTintColor:[UIColor blackColor]]
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeSlope];
-//        [self terrainTypeChanged];
+        [weakSelf updateContourLayer:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
         if (onTapHandler)
             onTapHandler();
     }];
-  //  [menuElements addObject:pressure];
     
     UIAction *wind = [UIAction actionWithTitle:OALocalizedString(@"map_settings_weather_wind")
-                                          image:[[UIImage imageNamed:@"ic_custom_wind"] imageWithTintColor:[UIColor blackColor]]
+                                          image:[[UIImage templateImageNamed:@"ic_custom_wind"] imageWithTintColor:[UIColor blackColor]]
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeSlope];
-//        [self terrainTypeChanged];
+        [weakSelf updateContourLayer:WEATHER_WIND_CONTOURS_LINES_ATTR];
         if (onTapHandler)
             onTapHandler();
     }];
- //   [menuElements addObject:wind];
     
     UIAction *cloud = [UIAction actionWithTitle:OALocalizedString(@"map_settings_weather_cloud")
-                                          image:[[UIImage imageNamed:@"ic_custom_clouds"] imageWithTintColor:[UIColor blackColor]]
+                                          image:[[UIImage templateImageNamed:@"ic_custom_clouds"] imageWithTintColor:[UIColor blackColor]]
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeSlope];
-//        [self terrainTypeChanged];
+        [weakSelf updateContourLayer:WEATHER_CLOUD_CONTOURS_LINES_ATTR];
         if (onTapHandler)
             onTapHandler();
     }];
-  //  [menuElements addObject:cloud];
     
     UIAction *precipitation = [UIAction actionWithTitle:OALocalizedString(@"map_settings_weather_precip")
-                                          image:[[UIImage imageNamed:@"ic_custom_precipitation"] imageWithTintColor:[UIColor blackColor]]
+                                          image:[[UIImage templateImageNamed:@"ic_custom_precipitation"] imageWithTintColor:[UIColor blackColor]]
                                      identifier:nil
                                         handler:^(__kindof UIAction * _Nonnull action) {
-//        [_app.data setTerrainType: EOATerrainTypeSlope];
-//        [self terrainTypeChanged];
+        [weakSelf updateContourLayer:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
         if (onTapHandler)
             onTapHandler();
     }];
@@ -812,72 +756,11 @@
         none.state = UIMenuElementStateOn;
     }
     
-    NSMutableArray<UIMenuElement *> *menuElements = [@[precipitation, cloud, wind, pressure, temperature] mutableCopy];
-    
-    [menuElements addObject:[UIMenu menuWithTitle:@""
-                                       image:nil
-                                  identifier:nil
-                                     options:UIMenuOptionsDisplayInline
-                                    children:@[none]]];
-    
-   // [menuElements addObject:precipitation];
-    
-//    NSArray *weatherLayers = @[
-//        @{
-//            @"type"  : [OAValueTableViewCell getCellIdentifier],
-//            @"name"  : kWeatherTemp,
-//            @"title" : OALocalizedString(@"map_settings_weather_temp"),
-//            @"value" : @(_app.data.weatherTemp),
-//            @"image" : @"ic_custom_thermometer"
-//        },
-//        @{
-//            @"type"  : [OAValueTableViewCell getCellIdentifier],
-//            @"name"  : kWeatherPressure,
-//            @"title" : OALocalizedString(@"map_settings_weather_pressure"),
-//            @"value" : @(_app.data.weatherPressure),
-//            @"image" : @"ic_custom_air_pressure"
-//        },
-//        @{
-//            @"type"  : [OAValueTableViewCell getCellIdentifier],
-//            @"name"  : kWeatherWind,
-//            @"title" : OALocalizedString(@"map_settings_weather_wind"),
-//            @"value" : @(_app.data.weatherWind),
-//            @"image" : @"ic_custom_wind"
-//        },
-//        @{
-//            @"type"  : [OAValueTableViewCell getCellIdentifier],
-//            @"name"  : kWeatherCloud,
-//            @"title" : OALocalizedString(@"map_settings_weather_cloud"),
-//            @"value" : @(_app.data.weatherCloud),
-//            @"image" : @"ic_custom_clouds"
-//        },
-//        @{
-//            @"type"  : [OAValueTableViewCell getCellIdentifier],
-//            @"name"  : kWeatherPrecip,
-//            @"title" : OALocalizedString(@"map_settings_weather_precip"),
-//            @"value" : @(_app.data.weatherPrecip),
-//            @"image" : @"ic_custom_precipitation"
-//        }];
-    
-    
-//    NSInteger selectedIndex = _app.data.terrainType == EOATerrainTypeHillshade ? 0 : 1;
-//    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-      //  ((UIAction *)menuElements[0]).state = UIMenuElementStateOn;
-    
-//    NSString *title = [menuElements[selectedIndex] title];
-//    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:title];
-//    
-//    NSTextAttachment *attachment = [[NSTextAttachment alloc] init];
-//    UIImageSymbolConfiguration *config = [UIImageSymbolConfiguration configurationWithPointSize:16 weight:UIImageSymbolWeightBold];
-//    UIImage *image = [UIImage systemImageNamed:@"chevron.up.chevron.down" withConfiguration:config];
-//    image = [image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-//    attachment.image = image;
-    
-//    NSAttributedString *attachmentString = [NSAttributedString attributedStringWithAttachment:attachment];
-//    [attributedString appendAttributedString:[[NSAttributedString alloc] initWithString:@" "]];
-//    [attributedString appendAttributedString:attachmentString];
-//    
-//    [button setAttributedTitle:attributedString forState:UIControlStateNormal];
+    NSArray<UIMenuElement *> *menuElements = [@[[UIMenu menuWithTitle:@""
+                                                                image:nil
+                                                           identifier:nil
+                                                              options:UIMenuOptionsDisplayInline
+                                                             children:@[none]], temperature, precipitation, wind, cloud, pressure]];
     
     return [UIMenu menuWithChildren:menuElements];
 }
@@ -891,7 +774,7 @@
     
     auto weatherLayerSettingsViewController = [WeatherLayerSettingsViewController new];
     weatherLayerSettingsViewController.onChangeSwitchLayerAction = ^{
-        [sender setImage:[UIImage imageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_layer_top"] forState:UIControlStateNormal];
+        [sender setImage:[UIImage imageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
     };
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherLayerSettingsViewController];

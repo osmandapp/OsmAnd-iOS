@@ -222,7 +222,7 @@
                     <rect key="frame" x="0.0" y="550" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" name="mapButtonIconColorDefault"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" image="ic_custom_contour_lines_disabled">
                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -232,7 +232,7 @@
                     <rect key="frame" x="0.0" y="600" width="50" height="50"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
                     <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <color key="tintColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="tintColor" name="mapButtonIconColorDefault"/>
                     <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                     <state key="normal" image="ic_custom_overlay_map_disabled">
                         <color key="titleColor" red="0.3411764706" green="0.078431372550000003" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
@@ -290,6 +290,9 @@
         <image name="ic_custom_navigation.png" width="30" height="30"/>
         <image name="ic_custom_overlay_map_disabled" width="30" height="30"/>
         <image name="ic_custom_search.png" width="30" height="30"/>
+        <namedColor name="mapButtonIconColorDefault">
+            <color red="0.32941176470588235" green="0.32941176470588235" blue="0.32941176470588235" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
         <namedColor name="widgetBgColor">
             <color red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>

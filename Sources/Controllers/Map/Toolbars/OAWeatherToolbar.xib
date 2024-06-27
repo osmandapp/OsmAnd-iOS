@@ -3,7 +3,7 @@
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -37,50 +37,6 @@
                 </view>
                 <stackView opaque="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="F33-ES-4SU" userLabel="Weather Stack View">
                     <rect key="frame" x="0.0" y="73" width="405" height="95"/>
-                    <subviews>
-                        <view hidden="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CLi-FG-lhd">
-                            <rect key="frame" x="0.0" y="0.0" width="6" height="95"/>
-                            <subviews>
-                                <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="7" translatesAutoresizingMaskIntoConstraints="NO" id="aHa-8A-Bwr">
-                                    <rect key="frame" x="3" y="9" width="0.0" height="77"/>
-                                    <subviews>
-                                        <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="ic_custom_wind.png" translatesAutoresizingMaskIntoConstraints="NO" id="tMI-6M-ExQ">
-                                            <rect key="frame" x="0.0" y="0.0" width="0.0" height="30"/>
-                                        </imageView>
-                                        <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="0v4-d2-mMF">
-                                            <rect key="frame" x="0.0" y="37" width="0.0" height="40"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="19" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LS5-Wp-7AP">
-                                                    <rect key="frame" x="0.0" y="0.0" width="0.0" height="24"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="24" id="ZFb-el-1hh"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle3"/>
-                                                    <color key="textColor" name="textColorPrimary"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="km/h" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6Re-FT-9oT">
-                                                    <rect key="frame" x="0.0" y="27" width="0.0" height="13"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="height" constant="13" id="GFB-RK-Rcw"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" style="UICTFontTextStyleCaption2"/>
-                                                    <color key="textColor" name="textColorSecondary"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                        </stackView>
-                                    </subviews>
-                                </stackView>
-                            </subviews>
-                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            <constraints>
-                                <constraint firstAttribute="trailing" secondItem="aHa-8A-Bwr" secondAttribute="trailing" constant="3" id="ZMU-10-ZAp"/>
-                                <constraint firstItem="aHa-8A-Bwr" firstAttribute="leading" secondItem="CLi-FG-lhd" secondAttribute="leading" constant="3" id="jxW-I2-CVr"/>
-                                <constraint firstItem="aHa-8A-Bwr" firstAttribute="top" secondItem="CLi-FG-lhd" secondAttribute="top" constant="9" id="lgO-gu-q57"/>
-                            </constraints>
-                        </view>
-                    </subviews>
                     <constraints>
                         <constraint firstAttribute="height" constant="95" id="hIY-uT-yRA"/>
                     </constraints>
@@ -147,18 +103,11 @@
         </view>
     </objects>
     <resources>
-        <image name="ic_custom_wind.png" width="30" height="30"/>
         <namedColor name="customSeparator">
             <color red="0.79607843137254897" green="0.7803921568627451" blue="0.81960784313725488" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="iconColorActive">
             <color red="0.3411764705882353" green="0.078431372549019607" blue="0.80000000000000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorPrimary">
-            <color red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
-        <namedColor name="textColorSecondary">
-            <color red="0.49019607843137253" green="0.45098039215686275" blue="0.5490196078431373" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
         <namedColor name="viewBg">
             <color red="0.94901960784313721" green="0.94901960784313721" blue="0.95294117647058818" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

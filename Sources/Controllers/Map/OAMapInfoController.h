@@ -65,5 +65,6 @@
 - (void)updateLayout;
 - (void)viewWillTransition;
 - (void)updateSpeedometer;
+- (UIMenu *)createContourMenu:(void(^)(void))onTapHandler;
 
 @end

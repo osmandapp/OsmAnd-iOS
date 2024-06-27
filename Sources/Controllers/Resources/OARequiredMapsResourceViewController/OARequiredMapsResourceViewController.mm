@@ -171,6 +171,19 @@
             calculateOnlineButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
         }
+
+        if (_potentiallyUsedMaps.count > 0)
+        {
+            OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
+
+            OATableRowData *ignoreMissingMapsTitleRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            ignoreMissingMapsTitleRow.title = OALocalizedString(@"missing_maps_ignore_details");
+
+            OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
+            ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
+        }
     }
 }
 - (void)onRowSelected:(NSIndexPath *)indexPath
@@ -277,7 +290,16 @@
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+            if ([item.title isEqualToString:OALocalizedString(@"calculate_online")])
+            {
+                [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([item.title isEqualToString:OALocalizedString(@"missing_maps_ignore")])
+            {
+                [cell.button addTarget:self action:@selector(onIgnoreMissingMapsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+
             return cell;
         }
         else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
@@ -477,6 +499,14 @@
                     completion:nil];
     [self updateBottomButtons];
     [self setupNavbarButtons];
+}
+
+- (void)onIgnoreMissingMapsButtonPressed:(id)sender
+{
+    NSLog(@"onIgnoreMissingMapsButtonPressed");
+    [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+    [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
 }
 
 - (void)onCalculateOnlineButtonPressed:(id)sender

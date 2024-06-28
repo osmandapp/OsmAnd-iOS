@@ -3166,7 +3166,7 @@
 "enter_new_name" = "Introduceți noul nume";
 "no_tracks_on_map" = "Nu există urme pe hartă";
 "select_tracks_to_display" = "Selectați trasee pentru a le afișa pe hartă.";
-"show_all_tracks" = "Afișați toate traseele";
+"show_all_tracks" = "Arată toate traseele";
 "recently_visible" = "%@ vizibil recent";
 "shared_string_nearest" = "Cea mai apropiată";
 "shorter_duration_first" = "Durata mai scurtă întâi";
@@ -3301,7 +3301,7 @@
 "osmand_cloud_deletion_all_data_warning" = "Toate datele din OsmAnd Cloud vor fi %@. Datele de pe dispozitiv rămân neatinse.";
 "simple_widget_footer" = "Widgetul poate ocupa toată lățimea rândului sau doar o coloană.";
 "shared_string_next_event" = "Următorul eveniment";
-"map_widget_sun_position" = "Poziția soarelui";
+"map_widget_sun_position" = "Poziție soare";
 "action_cant_be_undone" = "Această acțiune nu poate fi anulată.";
 "manage_subscriptions" = "Gestionare abonamente.";
 "deleting_complete" = "Ștergere finalizată";

@@ -2895,8 +2895,7 @@
 "shared_string_license" = "רישיון";
 "shared_string_link" = "קישור";
 "shared_string_keywords" = "מילות מפתח";
-
-"rendering_value_dark_orange_name" = "כתום כהה";;
+"rendering_value_dark_orange_name" = "כתום כהה";
 "default_buttons" = "כפתורי ברירת מחדל";
 "step_by_step" = "פנייה אחר פנייה";
 "shared_string_item" = "פריט";

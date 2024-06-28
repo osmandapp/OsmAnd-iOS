@@ -2648,10 +2648,9 @@
 "downward_gradient" = "Neerwaartse helling";
 "upward_gradient" = "Opwaartse helling";
 "wall_height" = "Muur hoogte";
-
 "routing_attr_avoid_cobblestone_name" = "Vermijd kinderkopjes";
 "routing_attr_avoid_cobblestone_description" = "Vermijd kinderkopjes";
-"rendering_value_dark_orange_name" = "Donker oranje";;
+"rendering_value_dark_orange_name" = "Donker oranje";
 "shared_string_top_bottom" = "Top en onderkant";
 "route_recalculation_dist_title" = "Minimale afstand om route te herbereken";
 "shared_string_class" = "Klasse";

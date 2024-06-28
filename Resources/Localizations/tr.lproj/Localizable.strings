@@ -3300,10 +3300,9 @@
 "downward_gradient" = "Aşağı doğru eğim";
 "upward_gradient" = "Yukarı doğru eğim";
 "map_markers_desc" = "Pencereöğesi, harita işaretçileri listesindeki ilk iki işaretçi için mesafeyi veya tahmini varış zamanını (TVZ) gösterir.";
-
 "rendering_value_dark_orange_name" = "Koyu portakal";
 "routing_attr_avoid_cobblestone_description" = "Parke taşlarından kaçının";
-"routing_attr_avoid_cobblestone_name" = "Parke taşlarından kaçının";;
+"routing_attr_avoid_cobblestone_name" = "Parke taşlarından kaçının";
 "avoid_pt_types" = "Kaçınılacak taşıma türleri…";
 "step_by_step" = "Adım adım";
 "in_case_of_reverse_direction" = "Ters yön durumunda";

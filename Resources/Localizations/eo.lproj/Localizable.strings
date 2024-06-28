@@ -3105,10 +3105,9 @@
 "vertical_exaggeration" = "Vertikala troigo";
 "vertical_exaggeration_description" = "Perŝanĝi la valoron de skalo vi povas emfazi la 3-dimensian map-reliefon.";
 "tomorrow" = "Morgaŭ";
-
 "routing_attr_avoid_cobblestone_description" = "Evitiĝibajn pavimŝtonojn";
 "routing_attr_avoid_cobblestone_name" = "Eviti rulŝtonajn kahelojn";
-"rendering_value_dark_orange_name" = "Oranĝkolora malhela";;
+"rendering_value_dark_orange_name" = "Oranĝkolora malhela";
 "wall_height" = "Alto de muro";
 "route_recalculation_dist_title" = "Minimuma distanco por rekalkuli kurson";
 "avoid_pt_types" = "Eviti transportilojn…";

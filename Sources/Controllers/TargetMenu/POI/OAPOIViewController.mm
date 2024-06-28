@@ -404,7 +404,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 if (!list)
                 {
                     list = [[NSMutableArray alloc] init];
-                    collectedPoiTypes[key] = list;
+                    collectedPoiTypes[catKey] = list;
                 }
                 [list addObject:poiType];
             }

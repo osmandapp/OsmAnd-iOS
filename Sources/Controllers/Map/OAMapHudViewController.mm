@@ -252,12 +252,12 @@ static const float kDistanceMeters = 100.0;
 {
     NSString *contourName = OsmAndApp.instance.data.contourName;
     BOOL isEnabledContourButton = [[OAMapStyleSettings sharedInstance] isAnyWeatherContourLinesEnabled] || contourName.length > 0;
-    [_weatherContoursButton setImage:[UIImage imageNamed:isEnabledContourButton ? @"ic_custom_contour_lines" : @"ic_custom_contour_lines_disabled" ] forState:UIControlStateNormal];
+    [_weatherContoursButton setImage:[UIImage templateImageNamed:isEnabledContourButton ? @"ic_custom_contour_lines" : @"ic_custom_contour_lines_disabled" ] forState:UIControlStateNormal];
 }
 
 - (void)updateStateWeatherLayersButton
 {
-    [_weatherLayersButton setImage:[UIImage imageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
+    [_weatherLayersButton setImage:[UIImage templateImageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
 }
 
 - (CGFloat) getExtraScreenOffset
@@ -526,19 +526,19 @@ static const float kDistanceMeters = 100.0;
 
     [self updateMapModeButton];
     
-    [_weatherContoursButton updateColorsForPressedState:NO];
     [self updateStateWeatherContoursButton];
     UIColor *color = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault];
     UIColor *tintLightColor = color.light;
     UIColor *tintDarkColor = color.dark;
-    _weatherContoursButton.tintColorDay = tintLightColor;
-    _weatherContoursButton.tintColorNight = tintDarkColor;
+    _weatherContoursButton.tintColorDay = tintDarkColor;
+    _weatherContoursButton.tintColorNight = tintLightColor;
+    [_weatherContoursButton updateColorsForPressedState:NO];
     
-    [_weatherLayersButton updateColorsForPressedState:NO];
     [self updateStateWeatherLayersButton];
 
-    _weatherLayersButton.tintColorDay = tintLightColor;
-    _weatherLayersButton.tintColorNight = tintDarkColor;
+    _weatherLayersButton.tintColorDay = tintDarkColor;
+    _weatherLayersButton.tintColorNight = tintLightColor;
+    [_weatherLayersButton updateColorsForPressedState:NO];
 
     [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];

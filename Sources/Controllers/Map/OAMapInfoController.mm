@@ -719,16 +719,11 @@
     return [UIMenu menuWithChildren:menuElements];
 }
 
-- (void)contourButtonTapped:(UIButton *)sender {
-    NSLog(@"contourButtonTapped tapped!");
-}
-
 - (void)weatherButtonTapped:(OAHudButton *)sender {
-    NSLog(@"weatherButtonTapped tapped!");
     
     auto weatherLayerSettingsViewController = [WeatherLayerSettingsViewController new];
     weatherLayerSettingsViewController.onChangeSwitchLayerAction = ^{
-        [sender setImage:[UIImage imageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
+        [sender setImage:[UIImage templateImageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
     };
     
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherLayerSettingsViewController];

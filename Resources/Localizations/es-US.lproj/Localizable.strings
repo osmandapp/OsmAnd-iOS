@@ -3454,10 +3454,9 @@
 "custom_buttons" = "Botones personalizados";
 "upward_gradient" = "Gradiente ascendente";
 "ft_s" = "ft/s";
-
 "routing_attr_avoid_cobblestone_description" = "Evita pasar por caminos adoquinados";
 "routing_attr_avoid_cobblestone_name" = "Evitar adoquinado";
-"rendering_value_dark_orange_name" = "Anaranjado oscuro";;
+"rendering_value_dark_orange_name" = "Anaranjado oscuro";
 "route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";
 "in_case_of_reverse_direction" = "En caso de dirección inversa";
 "avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";

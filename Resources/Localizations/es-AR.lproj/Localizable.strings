@@ -1305,8 +1305,8 @@
 "quick_action_add_poi" = "Añadir PDI";
 "quick_action_map_style" = "Alternar estilo del mapa";
 "quick_action_map_source" = "Alternar repositorio del mapa";
-"quick_action_map_overlay" = "Alternar mapa superpuesto";
-"quick_action_map_underlay" = "Alternar mapa subyacente";
+"quick_action_map_overlay" = "Capa superpuesta";
+"quick_action_map_underlay" = "Capa subyacente";
 "quick_action_replace_destination" = "Reemplazar destino";
 "add_destination" = "Añadir destino";
 "route_add_start_point" = "Añadir punto de partida";

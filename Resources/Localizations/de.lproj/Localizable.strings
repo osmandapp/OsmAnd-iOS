@@ -1085,10 +1085,10 @@
 "toggle_online_notes" = "OSM-Hinweise umschalten";
 "toggle_local_edits" = "Lokale OSM-Bearbeitungen umschalten";
 "quick_action_add_poi" = "POI hinzufügen";
-"quick_action_map_style" = "Kartendarstellungändern";
+"quick_action_map_style" = "Kartenstil";
 "quick_action_map_source" = "Kartenquelleändern";
-"quick_action_map_overlay" = "Overlay-Karteändern";
-"quick_action_map_underlay" = "Karten-Underlayändern";
+"quick_action_map_overlay" = "Überlagerung";
+"quick_action_map_underlay" = "Unterlage";
 "quick_action_replace_destination" = "Ziel ersetzen";
 "add_destination" = "Ziel hinzufügen";
 "quick_action_auto_zoom" = "Automatische Vergrößerung";
@@ -1881,7 +1881,7 @@
 "quick_action_mapillary_show" = "Mapillary anzeigen";
 "quick_action_showhide_mapillary_title" = "Mapillary ein-/ausblenden";
 "quick_action_switch_profile_descr" = "Die Aktionsschaltfläche schaltet zwischen den ausgewählten Profilen um.";
-"quick_action_remove_next_destination" = "Nächsten Zielpunkt löschen";
+"quick_action_remove_next_destination" = "Nächster Zielpunkt";
 "arrived_at_destination" = "Sie sind angekommen.";
 "key_hint_recenter_map" = "Karte wieder zentrieren";
 "shared_z_a" = "Z - A";

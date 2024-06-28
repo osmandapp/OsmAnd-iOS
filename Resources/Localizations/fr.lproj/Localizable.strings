@@ -1012,10 +1012,10 @@
 "quick_action_interim_dialog" = "Afficher une fenêtre intermédiaire";
 "toggle_poi" = "Afficher / Masquer les points d'intérêt";
 "map_magnifier" = "Zoom de la carte";
-"quick_action_map_style" = "Modifier le style de carte";
+"quick_action_map_style" = "Style de carte";
 "add_gpx_waypoint" = "Ajouter un point GPX";
 "quick_action_resume_pause_navigation" = "Suspendre / Reprendre le guidage";
-"quick_action_map_underlay" = "Modifier la sous-couche de carte";
+"quick_action_map_underlay" = "Sous-couche";
 "quick_action_add_first_intermediate" = "Ajouter une première étape";
 "mapillary_menu_title_tile_cache" = "Cache des tuiles";
 "shared_string_without_name" = "Sans nom";
@@ -1037,7 +1037,7 @@
 "mapillary" = "Mapillary";
 "shared_string_action_name" = "Nom de l\'action";
 "download_depth_countours" = "Lignes de sondes marines";
-"quick_action_map_overlay" = "Modifier la sur-couche de carte";
+"quick_action_map_overlay" = "Sur-couche";
 "show_more" = "Afficher plus";
 "mapillary_menu_title_pano" = "Afficher uniquement les imagesà 360°";
 "quick_action_poi_list" = "Liste des points d\'intérêt";
@@ -1657,7 +1657,7 @@
 "profile_appearance" = "Apparence du profil";
 "profile_settings" = "Paramètres pour le profil";
 "configure_profile" = "Configurer le profil";
-"profile_alert_delete_msg" = "Supprimer le profil« %@ » \?";
+"profile_alert_delete_msg" = "Supprimer le profil« %@ »";
 "copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
 "shared_string_next" = "Suivant";
 "nav_type_hint" = "Type de navigation";
@@ -1741,7 +1741,7 @@
 "profile_type_user_string" = "Profil utilisateur";
 "quick_action_switch_profile_descr" = "Le bouton d’action bascule entre les profils sélectionnés.";
 "profile_alert_need_save_title" = "Enregistrer les modifications";
-"quick_action_remove_next_destination" = "Supprimer la prochaineétape";
+"quick_action_remove_next_destination" = "Prochaine étape";
 "profile_sett_descr" = "Affecter le profil de l'application sélectionnée";
 "export_profile_descr" = "Vous pouvez exporter tous les paramètres du profil, copier tous les paramètres d'un autre profil ou réinitialiser tous les paramètres du profil à l'état par défaut.";
 "import_profile_descr" = "Pour importer un profil, appuyez sur le fichier voulu (*.osf) dans n'importe quelle application et sélectionnez \"Copier vers les cartes OsmAnd\"";
@@ -2381,7 +2381,7 @@
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
 "product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
-"weather_plugin_description" = "Fournit: \n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position \n- Les cartes d\'isobares et d\'isothermes \n \nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
+"weather_plugin_description" = "Fournit :\n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position \n- Les cartes d'isobares et d'isothermes \n \nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_hectopascals" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Millimètres de mercure";
@@ -3411,7 +3411,7 @@
 "fixed_height" = "Hauteur fixe";
 "shared_string_top" = "En haut";
 "track_3d_empty_view_title" = "Vue des traces en 3D";
-"track_3d_empty_view_description" = "Explorez la trace en 3D interactif! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
+"track_3d_empty_view_description" = "Explorez la trace en 3D interactif ! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
 "osm_id" = "ID OSM";
 "shared_string_millimeters" = "Millimètres";
 "shared_string_speedometer" = "Compteur de vitesse";

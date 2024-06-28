@@ -847,7 +847,7 @@
 "tab_title_basic" = "Semplice";
 "start_editing_card_image_text" = "La guida turistica libera in tutto il mondo che chiunque può modificare.";
 "upload_anonymously" = "Carica anonimamente";
-"quick_action_map_style" = "Cambia lo stile della mappa";
+"quick_action_map_style" = "Stile della mappa";
 "weekly" = "Settimanale";
 "unsaved_changes_will_be_lost" = "Tutte le modifiche non salvate andranno perse. Continuare?";
 "map_widget_ruler_control" = "Righello radiale";
@@ -1692,7 +1692,7 @@
 "quick_action_switch_profile_descr" = "Il pulsante azione cambia fra i profili selezionati.";
 "profile_alert_need_save_title" = "Salva le modifiche";
 "weight_limit_description" = "Indica il peso del veicolo, alcune restrizioni stradali potrebbero essere applicate per veicoli pesanti.";
-"quick_action_remove_next_destination" = "Cancella il prossimo punto di destinazione";
+"quick_action_remove_next_destination" = "Punto di destinazione successivo";
 "layer_amenity_label" = "Etichette dei punti (PDI, Preferiti)";
 "transport_stops" = "fermate";
 "profile_alert_need_profile_name_title" = "Inserisci il nome del profilo";
@@ -2216,7 +2216,7 @@
 "pressure_hide" = "Nascondi pressione";
 "routing_attr_avoid_tunnels_name" = "Evita i tunnel";
 "routing_attr_avoid_tunnels_description" = "Evita i tunnel";
-"animate_my_location" = "Scorrimento uniforme della mappa";
+"animate_my_location" = "Simula la mia posizione";
 "animate_my_location_descr" = "Transizione fluida della posizione sulla mappa durante la navigazione";
 "carplay_active_message" = "La mappa è mostrata tramite CarPlay";
 "carplay_profile_descr" = "Profilo che verrà utilizzato quando connesso a CarPlay.";
@@ -3337,7 +3337,7 @@
 "routing_attr_allow_via_ferrata_description" = "Percorso di montagna attrezzato con funi fisse, camini, scale e ponti.";
 "rendering_value_sector2_name" = "Settore 2";
 "rendering_attr_showProposed_name" = "Oggetti proposti";
-"rendering_attr_lightDetail_name" = "Dettagli chiari";
+"rendering_attr_lightDetail_name" = "Chiaro, dettagliato";
 "rendering_value_sector5_name" = "Settore 5";
 "rendering_attr_padusDisplayMode_name" = "Modalità di visualizzazione dei terreni pubblici";
 "rendering_value_name_only_name" = "Solo nome";
@@ -3435,3 +3435,5 @@
 "shared_string_top" = "Sopra";
 "calculate_online" = "Calcola online";
 "avoid_pt_types" = "Evita tipi di trasporto…";
+"select_items" = "Seleziona elementi";
+"routing_algorithm_highway_hierarchies" = "Gerarchie autostradali";

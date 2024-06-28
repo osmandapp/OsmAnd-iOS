@@ -2546,3 +2546,11 @@
 "coordinates_format" = "Koordinat formatı";
 "angular_measeurement" = "Bucaq vahidi";
 "audionotes_plugin_name" = "Səs/video qeydləri";
+"in_case_of_reverse_direction" = "Əks istiqamətdə gəldikdə";
+"avoid_pt_types_descr" = "Naviqasiyada yayınmaq üçün ictimai nəqliyyat növlərini seçin:";
+"route_recalculation_dist_title" = "Marşrutun yenidən hesablanacağı minimum məsafə";
+"edit_tilesource_maxzoom" = "Maksimum yaxınlaşdırma";
+"shared_string_bottom" = "Alt";
+"step_by_step" = "Addım-addım";
+"shared_string_always" = "Hər zaman";
+"edit_tilesource_minzoom" = "Minimum yaxınlaşdırma";

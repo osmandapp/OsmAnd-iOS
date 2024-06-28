@@ -1669,7 +1669,7 @@
 "map_settings_weather_wind" = "Άνεμος";
 "external_sensors_plugin_name" = "Εξωτερικοί Αισθητήρες";
 "shared_string_weather" = "Καιρός";
-"weather_update_disabled" = "Ανενεργό";
+"weather_update_disabled" = "Απενεργοποιημένο";
 "weather_update_over_any_network" = "Σε οποιοδήποτε δίκτυο";
 "plugin_popup_weather_title" = "Ενεργοποίηση Καιρού";
 "help_article_navigation_car_play_name" = "CarPlay";
@@ -1974,3 +1974,16 @@
 "shared_string_clear_cache" = "Εκκαθάριση μνήμης cache";
 "edit_tilesource_minzoom" = "Ελάχιστο ζουμ";
 "edit_tilesource_maxzoom" = "Μέγιστο ζουμ";
+"shared_string_item" = "Αντικείμενο";
+"avoid_pt_types" = "Αποφυγή ειδών Μ.Μ.Μ…";
+"speed_limit_warning" = "Προειδοποίηση ορίου ταχύτητας";
+"shared_string_bottom" = "Κάτω μέρος";
+"avoid_pt_types_descr" = "Αποφυγή ειδών δημοσίων ΜΜΜ στην πλοήγηση:";
+"shared_string_always" = "Πάντοτε";
+"auto_zoom" = "Αυτόματο ζουμ";
+"dangerous_goods" = "Επικίνδυνα εμπορεύματα";
+"dangerous_goods_description" = "Σε ορισμένους δρόμους και σήραγγες απαγορεύεται η μεταφορά επικίνδυνων υλικών.";
+"step_by_step" = "Βήμα-βήμα";
+"shared_string_development" = "Ανάπτυξη";
+"shared_string_class" = "Τάξη";
+"route_recalculation_dist_title" = "Ελάχιστη απόσταση για επανυπολογισμό διαδρομής";

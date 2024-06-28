@@ -3434,9 +3434,8 @@
 "shared_string_millimeters_short" = "mm";
 "edit_tilesource_maxzoom" = "Zoom máximo";
 "edit_tilesource_minzoom" = "Zoom mínimo";
-
 "routing_attr_avoid_cobblestone_name" = "Evitar paralelepípedos";
-"routing_attr_avoid_cobblestone_description" = "Evitar paralelepípedos";;
+"routing_attr_avoid_cobblestone_description" = "Evitar paralelepípedos";
 "shared_string_limit" = "Limite";
 "dangerous_goods_description" = "Em algumas estradas e túneis é proibido o transporte de materiais perigosos.";
 "step_by_step" = "Curva a curva";

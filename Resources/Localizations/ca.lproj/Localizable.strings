@@ -1083,7 +1083,7 @@
 "toggle_online_notes" = "Commuta les notes OSM";
 "toggle_local_edits" = "Commuta edició local OSM";
 "quick_action_add_poi" = "Afegeix PDI";
-"quick_action_map_style" = "canvia l\'estil del mapa";
+"quick_action_map_style" = "canvia l'estil del mapa";
 "quick_action_map_source" = "Canvia l\'origen del mapa";
 "quick_action_map_overlay" = "Modifica la superposició del mapa";
 "quick_action_map_underlay" = "Modifica el fons del mapa";
@@ -1515,7 +1515,7 @@
 "rendering_attr_noAdminboundaries_name" = "Límits administratius";
 "routing_attr_avoid_subway_description" = "Evita el metro i el tram";
 "routing_attr_avoid_bus_description" = "Evita autobús i troleibús";
-"rendering_attr_showAccess_name" = "Mostra les restriccions d\'accés i els peatges";
+"rendering_attr_showAccess_name" = "Mostra les restriccions d'accés i els peatges";
 "rendering_attr_hmRendered_name" = "Mostra més detalls al mapa";
 "routeInfo_steepness_name" = "Inclinació";
 "routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar";

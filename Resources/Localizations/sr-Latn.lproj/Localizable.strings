@@ -3453,7 +3453,6 @@
 "dangerous_goods" = "Opasna roba";
 "dangerous_goods_description" = "Na nekim putevima i tunelima prevoz opasnih materije je zabranjen.";
 "avoid_pt_types_descr" = "Odaberi vrste javnog prevoza koje treba izbegavati:";
-
 "routing_attr_avoid_cobblestone_name" = "Izbegavati kaldrmu";
 "rendering_value_dark_orange_name" = "Tamnonarančasta";
-"routing_attr_avoid_cobblestone_description" = "Izbegavati kaldrmu";;
+"routing_attr_avoid_cobblestone_description" = "Izbegavati kaldrmu";

@@ -2643,10 +2643,9 @@
 "shared_string_delete_item" = "Kustuta objekt";
 "shared_string_delete_immediately" = "Kustuta kohe";
 "delete_all_items" = "Kustuta kõik objektid";
-
 "routing_attr_avoid_cobblestone_description" = "Väldi munakiviteid";
 "routing_attr_avoid_cobblestone_name" = "Väldi munakiviteid";
-"rendering_value_dark_orange_name" = "Tumeoranž";;
+"rendering_value_dark_orange_name" = "Tumeoranž";
 "avoid_pt_types_descr" = "Vali navigeerimisel välditavad ühistranspordi liigid:";
 "auto_zoom_discrete" = "Mittepidev";
 "shared_string_development" = "Arendus";

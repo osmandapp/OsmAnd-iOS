@@ -3429,10 +3429,9 @@
 "shared_string_item" = "Element";
 "default_buttons" = "Butoane standard";
 "dangerous_goods_description" = "Pe unele drumuriși tuneluri este interzis transportul de materiale periculoase.";
-
 "routing_attr_avoid_cobblestone_name" = "Evită piatra cubică";
 "rendering_value_dark_orange_name" = "Portocaliuînchis";
-"routing_attr_avoid_cobblestone_description" = "Evită piatra cubică";;
+"routing_attr_avoid_cobblestone_description" = "Evită piatra cubică";
 "shared_string_class" = "Clasă";
 "avoid_pt_types" = "Evitare tipuri de transport…";
 "dangerous_goods" = "Mărfuri periculoase";

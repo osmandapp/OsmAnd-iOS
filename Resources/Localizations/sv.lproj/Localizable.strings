@@ -3388,9 +3388,8 @@
 "auto_zoom_smooth" = "Jämn";
 "auto_zoom_discrete" = "Diskret";
 "shared_string_scale" = "Skala";
-
 "routing_attr_avoid_cobblestone_description" = "Undvik kullersten";
-"routing_attr_avoid_cobblestone_name" = "Undvik kullersten";;
+"routing_attr_avoid_cobblestone_name" = "Undvik kullersten";
 "shared_string_class" = "Klass";
 "when_exceeded" = "Omöverskrider";
 "speedometer_description" = "Visar din nuvarande hastighet enligt GPS";

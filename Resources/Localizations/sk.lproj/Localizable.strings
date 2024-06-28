@@ -2834,10 +2834,9 @@
 "upward_gradient" = "Gradient smerujúci nahor";
 "required_maps" = "Potrebné mapy";
 "tomorrow" = "Zajtra";
-
 "routing_attr_avoid_cobblestone_name" = "Vyhnúť sa okrúhlym kameňom";
 "rendering_value_dark_orange_name" = "Tmavooranžová";
-"routing_attr_avoid_cobblestone_description" = "Vyhnúť sa okrúhlym kameňom";;
+"routing_attr_avoid_cobblestone_description" = "Vyhnúť sa okrúhlym kameňom";
 "avoid_pt_types_descr" = "Vyberte typy verejnej dopravy, ktorej sa má navigácia vyhnúť:";
 "visualization_3d_wall_color" = "Farba steny";
 "calculate_online" = "Vypočítať online";

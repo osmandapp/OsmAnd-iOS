@@ -1303,10 +1303,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "הוספת נקודת עניין";
-"quick_action_map_style" = "שינוי סגנון מפה";
+"quick_action_map_style" = "סגנון מפה";
 "quick_action_map_source" = "החלפת מקור מפה";
-"quick_action_map_overlay" = "החלפת שכבה מעל למפה";
-"quick_action_map_underlay" = "החלפת המפה שמתחת";
+"quick_action_map_overlay" = "שכבת על";
+"quick_action_map_underlay" = "שכבת רקע";
 "quick_action_replace_destination" = "החלפת יעד";
 "add_destination" = "Add destination";
 "route_add_start_point" = "הוספת נקודת יציאה";
@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "מפסק להצגה או הסתרה של שכבת Mapillary על גבי המפה.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "מחיקת נקודת היעד הקרובה ביותר";
+"quick_action_remove_next_destination" = "נקודת היעד הבאה";
 "quick_action_remove_next_destination_descr" = "מוחק את נקודת היעד הבאה במסלול שלך. אם זו נקודת היעד, הניווט ייפסק.";
 "change_application_profile" = "החלפת פרופיל יישומון";
 "select_application_profile" = "Select application profile";

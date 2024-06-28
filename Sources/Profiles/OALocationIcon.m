@@ -120,4 +120,9 @@
     return [iconName hasPrefix:MODEL_NAME_PREFIX];
 }
 
+- (BOOL) isModel
+{
+    return [self.class isModel:_iconName];
+}
+
 @end

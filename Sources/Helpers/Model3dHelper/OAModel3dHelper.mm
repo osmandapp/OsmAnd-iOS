@@ -8,17 +8,31 @@
 
 #import "OAModel3dHelper.h"
 #import "OAModel3dHelper+cpp.h"
+#import "OANativeUtilities.h"
+#import "OsmAndApp.h"
+#import "OAIndexConstants.h"
+
+#include <OsmAndCore/ObjParser.h>
+#include "OsmAndCore/Map/Model3D.h"
 
 @implementation OAModel3dWrapper
+{
+    OsmAnd::Model3D *_model;
+}
 
 - (instancetype)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
 {
     self = [super init];
     if (self)
     {
-        self.model = model;
+        _model = new OsmAnd::Model3D(model->vertices, model->materials, model->bbox);
     }
     return self;
+}
+
+- (void) setMainColor:(UIColor *)color
+{
+    _model->mainColor = [color toFColorARGB];
 }
 
 @end
@@ -53,11 +67,14 @@
 
 - (OAModel3dWrapper *) doInBackground
 {
-    // TODO: delete  storage/emulated/0/Android/data/net.osmand.plus/files/models/map_default_location/map_default_location.obj
-    QString objFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@.obj", _modelDirPath, _modelDirPath.lastPathComponent]);
+    NSString *documentsPath = OsmAndApp.instance.documentsPath;
+    NSString *name = _modelDirPath.lastPathComponent;
     
-    // TODO: delete  storage/emulated/0/Android/data/net.osmand.plus/files/models/map_default_location
-    QString mtlFilePath = QString::fromNSString(_modelDirPath);
+    // .../Documents/models/map_default_location/map_default_location.obj
+    QString objFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@/%@/%@.obj", documentsPath, MODEL_3D_DIR, name, name]);
+    
+    // .../Documents/models/map_default_location
+    QString mtlFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@/%@", documentsPath, MODEL_3D_DIR, name]);
     
     const auto parser = OsmAnd::ObjParser(objFilePath, mtlFilePath);
     std::shared_ptr<const OsmAnd::Model3D> model = parser.parse();

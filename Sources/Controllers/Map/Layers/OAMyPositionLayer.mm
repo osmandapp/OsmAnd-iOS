@@ -18,6 +18,11 @@
 #import "OANavigationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OsmAnd_Maps-Swift.h"
+
+//TODO: delete
+//#import "OAModel3dHelper.h"
+//#import "OAModel3dHelper+cpp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -445,8 +450,34 @@ typedef enum {
     float _textScaleFactor;
 
     OAAutoObserverProxy* _appModeChangeObserver;
+    
+    OAModel3dWrapper *_locationModel;
+    OAModel3dWrapper *_navigationModel;
+    NSString *_locationIconName;
+    NSString *_navigationIconName;
+    BOOL _brokenLocationModel;
+    BOOL _brokenNavigationModel;
+    BOOL _markersInvalidated;
+    UIColor *_profileColor;
 
     BOOL _initDone;
+}
+
+- (void) setLocationModel
+{
+    _locationModel = [Model3dHelper.shared getModelWithModelName:_locationIconName callbackOnLoad:^(OAModel3dWrapper * _Nullable model) {
+        _locationModel = model;
+        [_locationModel setMainColor:_profileColor];
+        _brokenLocationModel = model == nil;
+        _markersInvalidated = YES;
+    }];
+    if (_locationModel)
+    {
+        [_locationModel setMainColor:_profileColor];
+    }
+    
+    // TODO: implement
+    // locationIcon = nil;
 }
 
 - (void) generateMarkersCollection
@@ -470,9 +501,53 @@ typedef enum {
         locationAndCourseMarkerBuilder.setBaseOrder(baseOrder--);
         locationAndCourseMarkerBuilder.setIsHidden(true);
         
-        OALocationIcon *locIcon = [OALocationIcon withIconName:mode.getLocationIcon];
-        OANavigationIcon *navIcon = [OANavigationIcon withIconName:mode.getNavigationIcon];
+        NSString *locationIconName = mode.getLocationIcon;
+        NSString *navigationIconName = mode.getNavigationIcon;
+        
+        
+        OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
+        
+        //TODO: add color for locationOutdated status
         UIColor *iconColor = UIColorFromRGB(mode.getIconColor);
+        
+        //TODO: implement?
+        _profileColor = iconColor;
+        
+        if ([navIcon isModel])
+        {
+            _navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callbackOnLoad:^(OAModel3dWrapper * _Nullable model) {
+                _navigationModel = model;
+                [_navigationModel setMainColor:iconColor];
+                _brokenNavigationModel = _navigationModel == nil;
+                _markersInvalidated = YES;
+                if ([OALocationIcon isModel:locationIconName])
+                    [self setLocationModel];
+            }];
+            if (_navigationModel)
+                [_navigationModel setMainColor:iconColor];
+            
+//            //TODO: navigationIcon = null;
+        }
+        else
+        {
+            //TODO: flat marker setup
+            
+            //navigationModel = null;
+        }
+        
+        OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
+        if ([locIcon isModel])
+        {
+            if (![navIcon isModel] || _navigationModel)
+                [self setLocationModel];
+        }
+        else
+        {
+            //TODO: flat marker setup
+            
+            //locationModel = null;
+        }
+        
         
         // Day
         c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);

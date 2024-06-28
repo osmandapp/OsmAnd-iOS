@@ -24,6 +24,9 @@ static NSString *LOCATION_ICON_BICYCLE = @"map_location_bicycle";
 + (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color;
 + (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color;
 
++ (BOOL) isModel:(NSString *)iconName;
+- (BOOL) isModel;
+
 @end
 
 NS_ASSUME_NONNULL_END

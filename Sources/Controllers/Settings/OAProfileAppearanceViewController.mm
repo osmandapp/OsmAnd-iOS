@@ -375,7 +375,7 @@
     [iconNames addObject:LOCATION_ICON_CAR];
     [iconNames addObject:LOCATION_ICON_BICYCLE];
     
-    Model3dHelper *helper = [[Model3dHelper alloc] init];
+    Model3dHelper *helper = [Model3dHelper shared];
     NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
     for (NSString *modelIconName in model3dIconsNames)
     {
@@ -402,7 +402,7 @@
     [iconNames addObject:NAVIGATION_ICON_NAUTICAL];
     [iconNames addObject:NAVIGATION_ICON_CAR];
     
-    Model3dHelper *helper = [[Model3dHelper alloc] init];
+    Model3dHelper *helper = [Model3dHelper shared];
     NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
     for (NSString *modelIconName in model3dIconsNames)
     {

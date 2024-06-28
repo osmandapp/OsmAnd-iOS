@@ -10,8 +10,7 @@
 
 @interface OAModel3dWrapper : NSObject
 
-//@property (nonatomic) id obj;
-//- (instancetype)initWith:(id)obj;
+- (void) setMainColor:(UIColor *)color;
 
 @end
 

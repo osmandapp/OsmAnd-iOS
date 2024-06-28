@@ -25,6 +25,9 @@ static NSString *NAVIGATION_ICON_CAR = @"map_navigation_car";
 + (UIImage *) getModelPreviewDrawable:(NSString *)iconName;
 + (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color;
 
++ (BOOL) isModel:(NSString *)iconName;
+- (BOOL) isModel;
+
 @end
 
 NS_ASSUME_NONNULL_END

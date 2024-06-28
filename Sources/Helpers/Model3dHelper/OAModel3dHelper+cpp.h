@@ -11,7 +11,6 @@
 
 @interface OAModel3dWrapper(cpp)
 
-@property (nonatomic) std::shared_ptr<const OsmAnd::Model3D> model;
 - (instancetype)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
 
 @end

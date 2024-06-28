@@ -11,7 +11,9 @@ import Foundation
 @objcMembers
 final class Model3dHelper: NSObject {
     
-    typealias callbackWithModel3d = (OAModel3dWrapper?) -> ()
+    typealias callbackWithModel3d = (_ model: OAModel3dWrapper?) -> Void
+    
+    static let shared = Model3dHelper()
     
     private let app: OsmAndAppProtocol
     private let settings: OAAppSettings
@@ -20,13 +22,13 @@ final class Model3dHelper: NSObject {
     private var modelsInProgress = Set<String>()
     private var failedModels = Set<String>()
     
-    override init() {
+    private override init() {
         app = OsmAndApp.swiftInstance()
         settings = OAAppSettings.sharedManager()
     }
     
     func getModel(modelName: String, callbackOnLoad: callbackWithModel3d?) -> OAModel3dWrapper? {
-        if modelName.hasPrefix(MODEL_NAME_PREFIX) {
+        if !modelName.hasPrefix(MODEL_NAME_PREFIX) {
             if let callbackOnLoad {
                 callbackOnLoad(nil)
             }
@@ -35,7 +37,7 @@ final class Model3dHelper: NSObject {
         
         let pureModelName = modelName.replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
         let model3D = modelsCache[pureModelName]
-        if let model3D {
+        if model3D == nil {
             loadModel(modelName: pureModelName, callback: callbackOnLoad)
         }
         
@@ -46,6 +48,7 @@ final class Model3dHelper: NSObject {
         if !app.initialized {
             
             // TODO: implement
+            
         } else {
             loadModelImpl(modelName: modelName, callback: callback)
         }
@@ -56,12 +59,26 @@ final class Model3dHelper: NSObject {
             return
         }
         
-        let modelDirPath = app.documentsPath.appendingPathComponent(MODEL_3D_DIR)
+        let modelDirPath = app.documentsPath.appendingPathComponent(MODEL_3D_DIR).appendingPathComponent(modelName)
+        if !Model3dHelper.isModelExist(dir: modelDirPath) {
+            return
+        }
         
-        //FileManager.default.fileExists(atPath: modelDirPath)
+        modelsInProgress.insert(modelName)
         
-        // TODO: continue
-        
+        let task = OALoad3dModelTask(modelName) { model in
+            if model == nil {
+                self.failedModels.insert(modelName)
+            } else {
+                self.modelsCache[modelName] = model
+            }
+            self.modelsInProgress.insert(modelName)
+            if let callback {
+                callback(model)
+            }
+            return true
+        }
+        task?.execute()
     }
     
     static func listModels() -> [String] {

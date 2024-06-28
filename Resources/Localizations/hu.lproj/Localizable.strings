@@ -2851,10 +2851,9 @@
 "shared_string_scale" = "Skála";
 "required_maps" = "Szükséges térképek";
 "tomorrow" = "Holnap";
-
 "rendering_value_dark_orange_name" = "Sötét narancs";
 "routing_attr_avoid_cobblestone_name" = "Macskakő elkerülése";
-"routing_attr_avoid_cobblestone_description" = "Macskakő elkerülése";;
+"routing_attr_avoid_cobblestone_description" = "Macskakő elkerülése";
 "downward_gradient" = "Lefelé mutató gradiens";
 "in_case_of_reverse_direction" = "Ellentétes irány esetén";
 "shared_string_limit" = "Korlátozás";

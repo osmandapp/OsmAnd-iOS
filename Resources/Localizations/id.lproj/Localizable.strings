@@ -3106,9 +3106,8 @@
 "required_maps" = "Peta yang Diperlukan";
 "shared_string_scale" = "Skala";
 "vertical_exaggeration_description" = "Dengan mengubah nilai skala, Anda dapat memperjelas relief 3D.";
-
 "routing_attr_avoid_cobblestone_description" = "Hindari batu bulat";
-"routing_attr_avoid_cobblestone_name" = "Hindari batu bulat";;
+"routing_attr_avoid_cobblestone_name" = "Hindari batu bulat";
 "track_vertical_exaggeration_description" = "Dengan mengubah nilai skala, Anda dapat mengubah ketinggian trek 3D.";
 "step_by_step" = "Belokan demi belokan";
 "shared_string_item" = "Item";

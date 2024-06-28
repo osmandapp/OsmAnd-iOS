@@ -3041,9 +3041,8 @@
 "required_maps" = "Påkrevde kart";
 "wall_height" = "Vegghøyde";
 "tomorrow" = "I morgen";
-
 "routing_attr_avoid_cobblestone_description" = "Unngå brostein";
-"routing_attr_avoid_cobblestone_name" = "Unngå brostein";;
+"routing_attr_avoid_cobblestone_name" = "Unngå brostein";
 "when_exceeded" = "Når overskredet";
 "track_3d_empty_view_description" = "Utforsk sporet i interaktiv 3D. Se høyde, hastighet, og mer direkte på kartet.";
 "shared_string_item" = "Element";

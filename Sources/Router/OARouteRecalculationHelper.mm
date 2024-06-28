@@ -413,7 +413,7 @@
             [self showMessage:_routeCalcError];
         }
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        settings.ignoreMissingMaps = NO; // reset on routing error
+        settings.ignoreMissingMaps = NO;
     }
 }
 

@@ -503,7 +503,6 @@
 
 - (void)onIgnoreMissingMapsButtonPressed:(id)sender
 {
-    NSLog(@"onIgnoreMissingMapsButtonPressed");
     [OAAppSettings sharedManager].ignoreMissingMaps = YES;
     [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
     [self dismissViewController];
@@ -511,7 +510,6 @@
 
 - (void)onCalculateOnlineButtonPressed:(id)sender
 {
-    NSLog(@"onCalculateOnlineButtonPressed");
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         auto missingMapsCalculator = [MissingMapsCalculator new];

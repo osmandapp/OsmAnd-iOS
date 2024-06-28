@@ -2662,8 +2662,7 @@
 "rendering_attr_showToll_description" = "显示道路收费限制";
 "restore_from_trash" = "从回收箱还原";
 "trash_is_empty" = "回收箱是空的";
-
-"rendering_value_dark_orange_name" = "深橘色";;
+"rendering_value_dark_orange_name" = "深橘色";
 "external_device_any_connected" = "任何已连接";
 "step_by_step" = "路线转向规划";
 "track_appearance_3D_visualization" = "3D可视化";

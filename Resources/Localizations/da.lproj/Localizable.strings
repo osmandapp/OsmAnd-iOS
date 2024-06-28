@@ -3399,7 +3399,7 @@
 "calculate_online" = "Beregn online";
 "required_maps_list" = "Kort, der også vil blive brugt: %@";
 "getting_list_required_maps" = "Henter en liste over nødvendige kort...";
-"calculate_online_title" = "Listen over nødvendige kort er baseret på ruten i lige linje. For at få en nøjagtig liste over kort kan OsmAnd forudberegne din rute online";
+"calculate_online_title" = "Listen over manglende kort er baseret på ruten i lige linje. For at få en nøjagtig liste over kort kan OsmAnd forudberegne din rute online";
 "average_vertical_speed" = "Gennemsnitlig vertikal hastighed";
 "osm_id" = "OSM ID";
 "osmand_depelopment_use_old_routing" = "Brug gammel ruteberegning (A*)";
@@ -3458,3 +3458,5 @@
 "rendering_value_dark_orange_name" = "Mørk orange";
 "routing_attr_avoid_cobblestone_description" = "Undgå brosten";
 "routing_attr_avoid_cobblestone_name" = "Undgå brosten";
+"missing_maps_ignore" = "Brug eksisterende kort";
+"missing_maps_ignore_details" = "Nogle allerede downloadede kort kan være velegnede til din rute. Hvis du kender området og kortene, kan du prøve at lave en rute ved hjælp af de eksisterende kort.";

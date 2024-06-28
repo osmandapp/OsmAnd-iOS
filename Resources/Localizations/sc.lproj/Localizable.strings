@@ -1079,10 +1079,10 @@
 "quick_action_navigation_voice" = "Boghe alluta/istudada";
 "quick_action_add_osm_bug" = "Annanghe una nota OSM";
 "quick_action_add_poi" = "Annanghe PDI";
-"quick_action_map_style" = "Acontza s\'istile de sa mapa";
+"quick_action_map_style" = "Acontza s'istile de sa mapa";
 "quick_action_map_source" = "Muda sa mitza de sa mapa";
 "quick_action_map_overlay" = "Acontza sos istratos superiores de sa mapa";
-"quick_action_map_underlay" = "Muda s\'istratu inferiore";
+"quick_action_map_underlay" = "Muda s'istratu inferiore";
 "quick_action_replace_destination" = "Muda sa destinatzione";
 "add_destination" = "Annanghe una destinatzione";
 "quick_action_add_first_intermediate" = "Annanghe su primu puntu de coladòrgiu";

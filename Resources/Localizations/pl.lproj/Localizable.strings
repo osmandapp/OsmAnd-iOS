@@ -3229,10 +3229,9 @@
 "upward_gradient" = "Nachylenie w górę";
 "vertical_exaggeration_description" = "Zmieniając wartość skali, można podkreślić płaskorzeźbę 3D.";
 "auto_zoom_smooth" = "Płynny";
-
 "routing_attr_avoid_cobblestone_description" = "Unikaj kocichłbów";
 "routing_attr_avoid_cobblestone_name" = "Unikaj kocichłbów";
-"rendering_value_dark_orange_name" = "Ciemnopomarańczowy";;
+"rendering_value_dark_orange_name" = "Ciemnopomarańczowy";
 "missing_or_outdated_maps_description" = "Brakuje niektórych map offline wymaganych dla tej trasy lub nie są one aktualne. Prosimy o pobranie lub zaktualizowanie tych map.";
 "shared_string_top_bottom" = "Góra i dół";
 "edit_tilesource_minzoom" = "Minimalne przybliżenie";

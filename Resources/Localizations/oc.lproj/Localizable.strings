@@ -1558,7 +1558,7 @@
 "rendering_attr_hideBuildings_name" = "Edificis";
 "rendering_attr_contourColorScheme_name" = "Coloracion dei linhas de contorn";
 "rendering_value_bicycle_name" = "Bicicleta";
-"rendering_attr_showAccess_name" = "Mostrar lei limitacions d\'accès e lei peatges";
+"rendering_attr_showAccess_name" = "Mostrar lei limitacions d'accès e lei peatges";
 "rendering_value_bold_name" = "Gras";
 "rendering_attr_pisteGrooming_name" = "Percors d\'esquilh de fons";
 "rendering_attr_noAdminboundaries_name" = "Limits administratius";

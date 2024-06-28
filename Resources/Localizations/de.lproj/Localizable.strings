@@ -2912,7 +2912,7 @@
 "user_name" = "OSM-Benutzername";
 "av_notes_photo_widget_desc" = "Durch Tippen auf das Widget kann ein Foto aufgenommen werden.";
 "av_notes_video_widget_desc" = "Durch Tippen auf das Widget kann ein Video aufgenommen werden.";
-"av_notes_audio_widget_desc" = "Durch Tippen auf das Widget kann eine Sprachnotiz aufgenommen werden.";
+"av_notes_audio_widget_desc" = "Durch Tippen auf das Widget kann eine Audionotiz aufgenommen werden.";
 
 // Widget descriptions
 "coordinates_widget_current_location_desc" = "Zeigt die geografischen Koordinaten des aktuellen Standorts an";

@@ -802,7 +802,7 @@
 "tab_title_basic" = "Alap";
 "quick_action_map_underlay_action" = "Alátétréteg hozzáadása";
 "shared_string_add_photos" = "Fényképek hozzáadása";
-"quick_action_map_style" = "Térképstílus módosítás";
+"quick_action_map_style" = "Térkép stílus";
 "quick_action_start_stop_navigation" = "Navigáció indítása/megállítása";
 "fast_route_mode_descr" = "Leggyorsabbútvonal tervezésének engedélyezése vagy letiltása az üzemanyag-takarékos útvonal kedvéért.";
 "contact_info" = "Elérhetőségek";
@@ -830,7 +830,7 @@
 "context_menu_item_create_poi" = "POI készítés";
 "weekly" = "Hetente";
 "context_menu_item_open_note" = "OSM-jegyzet nyitása";
-"quick_action_map_overlay" = "Térképfedőréteg módosítása";
+"quick_action_map_overlay" = "Fedvény";
 "snap_to_road_descr" = "A jelenlegi helyet jelző ikon bepattan az aktuális navigációs útvonalba";
 "quick_action_replace_destination" = "Célpont lecserélése";
 "poi_dialog_poi_type" = "POI típus";
@@ -878,7 +878,7 @@
 "quick_action_start_stop_nav_descr" = "A navigáció elkezdéséhez vagy befejezéséhez koppintson erre a gombra.";
 "relief_smoothness_factor_descr" = "Előnyben részesített terep: sík vagy dombos.";
 "impassable_road_desc" = "A navigáció során elkerülendő utak kijelölése.";
-"quick_action_map_underlay" = "Térképalátét módosítása";
+"quick_action_map_underlay" = "Alátét";
 "add_gpx_waypoint" = "GPX-útpont hozzáadása";
 "quick_action_resume_pause_navigation" = "Navigáció szüneteltetése/folytatása";
 "rendering_value_category_name" = "Kategória";
@@ -1392,7 +1392,7 @@
 "temporary_conditional_routing" = "Időszakos korlátozások figyelembevétele";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "public_transport_try_change_settings" = "Próbálja meg módosítani a beállításokat.";
-"quick_action_remove_next_destination" = "Következő célpont törlése";
+"quick_action_remove_next_destination" = "Következő célpont";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "show_direction" = "Távolság jelzése";
 "save_track_logging_accuracy" = "Naplózás pontossága";

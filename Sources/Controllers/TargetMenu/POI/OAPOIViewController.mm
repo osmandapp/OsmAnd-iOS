@@ -102,12 +102,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 
 - (NSString *) getTypeStr
 {
-    /*
-    ???
-    if (self.localMapIndexItem && self.localMapIndexItem.sizePkg && self.localMapIndexItem.sizePkg > 0)
-    {
-        return [NSString stringWithFormat:@"%@ - %@", str, [NSByteCountFormatter stringFromByteCount:self.localMapIndexItem.sizePkg countStyle:NSByteCountFormatterCountStyleFile]];
-    }*/
     return [self.poi getSubTypeStr];
 }
 
@@ -550,42 +544,6 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         }
     }];
 
-    /*if (collectedPoiTypes.count > 0)
-    {
-        OACollapsableNearestPoiTypeView *collapsableView = [[OACollapsableNearestPoiTypeView alloc] initWithFrame:CGRectMake(0, 0, 320, 100)];
-        collapsableView.collapsed = YES;
-        [collapsableView setData:collectedPoiTypes
-                         amenity:self.poi
-                             lat:self.poi.latitude
-                             lon:self.poi.longitude
-                 isPoiAdditional:NO
-                         textRow:nil];
-        OAPOIType *poiCategory = self.poi.type;
-        UIImage *icon = [OATargetInfoViewController getIcon:[NSString stringWithFormat:@"mx_%@", poiCategory.name] size:iconSize];
-        NSMutableString *sb = [NSMutableString new];
-        for (OAPOIType *pt in collectedPoiTypes)
-        {
-            if (sb.length > 0)
-                [sb appendString:@" • "];
-            [sb appendString:pt.nameLocalized];
-        }
-        OARowInfo *row = [[OARowInfo alloc] initWithKey:poiCategory.name
-                                                   icon:icon
-                                             textPrefix:poiCategory.nameLocalized
-                                                   text:sb
-                                              textColor:nil
-                                                 isText:NO
-                                              needLinks:NO
-                                                  order:40
-                                               typeName:poiCategory.name
-                                          isPhoneNumber:NO
-                                                  isUrl:NO];
-        row.collapsed = YES;
-        row.collapsable = YES;
-        row.collapsableView = collapsableView;
-        [infoRows addObject:row];
-    }*/
-    
     if (collectedPoiTypes.count > 0) {
         for (NSString *key in collectedPoiTypes) {
             NSMutableArray<OAPOIType *> *poiTypeList = collectedPoiTypes[key];

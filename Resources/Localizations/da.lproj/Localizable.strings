@@ -3455,7 +3455,6 @@
 "avoid_pt_types" = "Undgå transportformer…";
 "dangerous_goods" = "Farligt gods";
 "dangerous_goods_description" = "På nogle veje og i nogle tunneler er det forbudt at transportere farlige materialer.";
-
 "rendering_value_dark_orange_name" = "Mørk orange";
 "routing_attr_avoid_cobblestone_description" = "Undgå brosten";
-"routing_attr_avoid_cobblestone_name" = "Undgå brosten";;
+"routing_attr_avoid_cobblestone_name" = "Undgå brosten";

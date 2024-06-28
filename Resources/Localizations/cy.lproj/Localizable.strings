@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Togl i ddangos neu guddio\'r haen Mapillary ar y map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Dileu\'r pwynt cyrchfan agosaf";
+"quick_action_remove_next_destination" = "Dileu'r pwynt cyrchfan agosaf";
 "quick_action_remove_next_destination_descr" = "Yn dileu cyrchfan nesaf eich llwybr. Os mai dyna\'r cyrchfan olaf, bydd y llywio yn dod i ben.";
 "change_application_profile" = "Newid proffil ap";
 "select_application_profile" = "Select application profile";

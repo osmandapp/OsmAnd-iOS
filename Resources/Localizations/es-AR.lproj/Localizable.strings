@@ -3456,3 +3456,10 @@
 "wall_height_description" = "Cambiando el valor de la altura, puedes elevar la línea superior de la traza sobre el nivel del suelo.";
 "select_items" = "Marcar elementos";
 "wall_height" = "Altura del muro";
+"avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";
+"route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";
+"avoid_pt_types" = "Evitar tipos de transporte…";
+"shared_string_class" = "Clase";
+"in_case_of_reverse_direction" = "En caso de dirección inversa";
+"dangerous_goods" = "Mercancías peligrosas";
+"dangerous_goods_description" = "En algunos caminos y túneles se prohíbe el transporte de materiales peligrosos.";

@@ -3455,7 +3455,6 @@
 "dangerous_goods_description" = "Em algumas estradas e túneis, o transporte de materiais perigosos é proibido.";
 "avoid_pt_types" = "Evitar tipos de transporte…";
 "shared_string_class" = "Classe";
-
 "rendering_value_dark_orange_name" = "Laranja escuro";
 "routing_attr_avoid_cobblestone_description" = "Evitar pedras irregulares";
-"routing_attr_avoid_cobblestone_name" = "Evitar pedras irregulares";;
+"routing_attr_avoid_cobblestone_name" = "Evitar pedras irregulares";

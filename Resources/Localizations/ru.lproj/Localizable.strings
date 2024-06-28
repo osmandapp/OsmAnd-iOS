@@ -3164,10 +3164,9 @@
 "shared_string_scale" = "Масштаб";
 "required_maps" = "Требуемые карты";
 "tomorrow" = "Завтра";
-
 "rendering_value_dark_orange_name" = "Темно-оранжевый";
 "routing_attr_avoid_cobblestone_name" = "Без булыжника";
-"routing_attr_avoid_cobblestone_description" = "Без булыжника";;
+"routing_attr_avoid_cobblestone_description" = "Без булыжника";
 "avoid_pt_types_descr" = "Выберите виды транспорта, которых следует избегать при навигации:";
 "auto_zoom_discrete" = "Дискретное";
 "shared_string_development" = "Разработка";

@@ -347,6 +347,35 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
     return [self getAdditionalInfo][@"route_id"];
 }
 
+- (NSString *)getSubTypeStr
+{
+    OAPOICategory *pc = self.type.category;
+    NSArray<NSString *> * subs = [_subType componentsSeparatedByString:@";"];
+    NSMutableString *typeStr = [NSMutableString string];
+    //multi value
+    for (NSString * subType : subs)
+    {
+        OAPOIType * pt = [pc getPoiTypeByKeyName:subType];
+        if (pt != nil)
+        {
+            if (typeStr.length > 0) 
+            {
+                [typeStr appendFormat:@", %@", [pt.nameLocalized lowercaseString]];
+            }
+            else
+            {
+                [typeStr appendString:pt.nameLocalized];
+            }
+        }
+    }
+    if ([typeStr length] == 0)
+    {
+        typeStr = [NSMutableString stringWithString:[_subType lowercaseString]];
+        [typeStr replaceOccurrencesOfString:@"_" withString:@" " options:0 range:NSMakeRange(0, [typeStr length])];
+    }
+    return typeStr;
+}
+
 - (NSString *)toStringEn
 {
     NSString *nameEn = self.localizedNames[@"en"] ? self.localizedNames[@"en"] : @"";

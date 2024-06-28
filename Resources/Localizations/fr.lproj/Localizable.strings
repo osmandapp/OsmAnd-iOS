@@ -3453,7 +3453,6 @@
 "dangerous_goods" = "Marchandises dangereuses";
 "dangerous_goods_description" = "Sur certaines routes et tunnels, le transport de matières dangereuses est interdit.";
 "avoid_pt_types_descr" = "Sélectionnez les types de transport en commun à éviter pour le guidage :";
-
 "routing_attr_avoid_cobblestone_name" = "Éviter les pavés";
 "rendering_value_dark_orange_name" = "Orange foncé";
-"routing_attr_avoid_cobblestone_description" = "Éviter les routes pavées";;
+"routing_attr_avoid_cobblestone_description" = "Éviter les routes pavées";

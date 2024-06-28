@@ -3470,7 +3470,6 @@
 "avoid_pt_types" = "Verkehrsmittel ausschließen …";
 "shared_string_class" = "Klasse";
 "dangerous_goods_description" = "Auf manchen Straßen und in Tunneln ist der Transport von Gefahrgut verboten.";
-
 "rendering_value_dark_orange_name" = "Dunkelorange";
 "routing_attr_avoid_cobblestone_description" = "Kopfsteinpflaster vermeiden";
-"routing_attr_avoid_cobblestone_name" = "Kopfsteinpflaster vermeiden";;
+"routing_attr_avoid_cobblestone_name" = "Kopfsteinpflaster vermeiden";

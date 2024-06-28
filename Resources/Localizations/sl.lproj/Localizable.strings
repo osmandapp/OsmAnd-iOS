@@ -2461,9 +2461,8 @@
 "side_marker_eta" = "Predvideničas prihoda";
 "gps_info_widget_desc" = "Prikazuještevilo trenutno vidnih in uporabljenih satelitov.";
 "average_speed_widget_desc" = "Prikazuje povprečno hitrost trenutne vožnje.";
-
 "routing_attr_avoid_cobblestone_name" = "Brez tlakovanih cest";
-"routing_attr_avoid_cobblestone_description" = "Načrtovanje poti brez uporabe tlakovanih cest";;
+"routing_attr_avoid_cobblestone_description" = "Načrtovanje poti brez uporabe tlakovanih cest";
 "in_case_of_reverse_direction" = "V primeru obratne smeri";
 "display_position_automatic_descr" = "Odvisno od usmerjenosti zemljevida: spodnji del za smer gibanja, sredinski del za vse drugo.";
 "shared_string_class" = "Razred";

@@ -2569,9 +2569,8 @@
 "quick_action_map_overlay" = "지도 overlay 변경";
 "quick_action_map_underlay" = "지도 밑줄 변경";
 "quick_action_map_style" = "지도 스타일 변경";
-
 "routing_attr_avoid_cobblestone_description" = "Cobblestone를 피하십시오";
-"routing_attr_avoid_cobblestone_name" = "Cobblestone를 피하십시오";;
+"routing_attr_avoid_cobblestone_name" = "Cobblestone를 피하십시오";
 "short_min" = "m";
 "calculate_online" = "온라인으로 계산";
 "default_buttons" = "기본값 버튼";

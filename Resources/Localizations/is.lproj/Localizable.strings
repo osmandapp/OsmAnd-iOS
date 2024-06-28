@@ -3365,9 +3365,8 @@
 "shared_string_scale" = "Kvarði";
 "rendering_value_access_name" = "Eftir tegund aðgangs";
 "rendering_value_managerName_name" = "Eftir nafni stjórnanda";
-
 "routing_attr_avoid_cobblestone_name" = "";
-"routing_attr_avoid_cobblestone_description" = "";;
+"routing_attr_avoid_cobblestone_description" = "";
 "visualization_3d_track_line" = "Ferillína";
 "shared_string_round_up" = "Rúnna upp";
 "empty_name" = "Autt heiti";

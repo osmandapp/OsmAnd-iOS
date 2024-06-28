@@ -3455,7 +3455,6 @@
 "shared_string_class" = "Класа";
 "dangerous_goods" = "Опасна роба";
 "dangerous_goods_description" = "На неким путевима и тунелима није дозвољен превоз опасних материја.";
-
 "rendering_value_dark_orange_name" = "Тамно наранџаста";
 "routing_attr_avoid_cobblestone_description" = "Избегавање калдрме";
-"routing_attr_avoid_cobblestone_name" = "Избегавај калдрму";;
+"routing_attr_avoid_cobblestone_name" = "Избегавај калдрму";

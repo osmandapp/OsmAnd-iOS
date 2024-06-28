@@ -2635,9 +2635,8 @@
 "route_maneuvers_desc" = "Navigacijos valdikliaiįjungiami navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimo arba likęs laikas, kiti posūkiai, kryptis, esamos gatvės pavadinimas, eismo juostų informacija, maksimalus greitis, artėjimo įspėjimai, LV, kelio taškai.";
 "navigation_points_desc" = "Navigacijos valdikliai yraįjungti navigacijos metu, kad būtų rodoma tokia informacija kaip atstumas, atvykimas ar likęs laikas, kiti posūkiai, posūkis, esamos/kitos gatvės pavadinimas, juostos informacija, maksimalus greitis, įspėjimai apie artėjimą, LV, kelio taškai.";
 "magnetic_bearing_widget_desc" = "Kampas tarp magnetinės šiaurės ir tikslo taško, stebimo iš jūsų vietos.";
-
 "routing_attr_avoid_cobblestone_description" = "Vengti trinkelių";
-"routing_attr_avoid_cobblestone_name" = "Vengti trinkelių";;
+"routing_attr_avoid_cobblestone_name" = "Vengti trinkelių";
 "track_3d_empty_view_description" = "Naršykite trasą interaktyviu 3D formatu! Vizualizuokite aukštį, greitį ir daugiau tiesiogiai žemėlapyje.";
 "auto_zoom" = "Automatinis priartinimas";
 "default_buttons" = "Numatytieji mygtukai";

@@ -2045,7 +2045,7 @@
 "rendering_value_bicycle_name" = "Bicicleta";
 "rendering_value_translucent_lightgreen_name" = "Verde claro translúcido";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nivel";
-"rendering_attr_showAccess_name" = "Restricciones de acceso";
+"rendering_attr_showAccess_name" = "Restricciones de acceso y peajes";
 "rendering_attr_surface_dirt_name" = "Tierra (lodosa)";
 "routing_attr_piste_type_skitour_name" = "Esquí de travesía";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir caminos sin pavimentar";
@@ -2276,7 +2276,7 @@
 "routing_attr_only_permitted_ways_name" = "Vías expresamente autorizadas";
 "routing_attr_prefer_horse_routes_name" = "Preferir rutas ecuestres";
 "shared_string_open_street_map" = "OpenStreetMap";
-"horseback_riding" = "Equitación";
+"horseback_riding" = "Cabalgata";
 "start_point" = "Iniciar";
 "altitude" = "Altitud";
 "route_preferred_terrain_less_hilly" = "Rutas más cortas y menos montañosas.";
@@ -2709,7 +2709,7 @@
 "si_nm_ft" = "Millas/pies náuticos";
 "rendering_attr_showTrainRoutes_name" = "Rutas de tren";
 "rendering_attr_weatherPressureContours_name" = "Isolíneas de presión";
-"rendering_attr_showWaterwayTunnels_description" = "Mostrar los túneles fluviales";
+"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilidad de los túneles fluviales";
 "rendering_attr_weatherCloudContours_name" = "Isolíneas de nubes";
 "rendering_attr_seabedDetail_description" = "Información de texto adicional sobre la calificación de la superficie del fondo marino, los tipos de superficie combinados, la categoría y el taxón de la maleza o la hierba marina";
 "rendering_attr_horse_scale_demanding_name" = "Exigente";
@@ -2771,7 +2771,7 @@
 "rendering_attr_OSMMapperAssistantNote_name" = "Etiquetas«note» (nota)";
 "rendering_attr_horse_scale_common_name" = "Común";
 "rendering_attr_showTramRoutes_name" = "Rutas de tranvía";
-"rendering_attr_showWaterwayTunnels_name" = "Túneles fluviales";
+"rendering_attr_showWaterwayTunnels_name" = "Aumentar visibilidad de los túneles fluviales";
 "rendering_attr_noNatureReserveBoundaries_name" = "Fronteras naturales";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
 "rendering_attr_hideMilitaryAreas_description" = "Oculta lasáreas militares";
@@ -3336,7 +3336,7 @@
 "new_track" = "Nueva traza";
 "action_cant_be_undone" = "Esta acción no puede deshacerse.";
 "osmand_cloud_deletion_all_data_warning" = "Todos los datos de OsmAnd Cloud serán %@. Los datos en el dispositivo se mantienen intactos.";
-"osmand_cloud_deletion_account_warning" = "Esta cuenta y todos sus datos serán %@";
+"osmand_cloud_deletion_account_warning" = "Esta cuenta y todos sus datos serán %@.";
 "osmand_cloud_deleted_account_descr" = "Se ha borrado la cuenta con todos los datos de OsmAnd Cloud.";
 "glide_ratio_to_target" = "Relación de planeo al objetivo";
 "map_widget_group_glide_desc" = "Los widgets muestran la relación de planeo hacia el objetivo o la relación de planeo promedio para el viaje actual.";
@@ -3404,7 +3404,7 @@
 "required_maps" = "Mapas necesarios";
 "calculate_online" = "Calcular en línea";
 "calculate_online_title" = "La lista de mapas necesarios, se basa en una línea recta de la ruta. Para obtener una lista precisa de mapas, OsmAnd puede volver a calcular en línea esta ruta";
-"required_maps_list" = "Mapas que también serán usados: %@";
+"required_maps_list" = "Mapas extras a usar: %@";
 "getting_list_required_maps" = "Obteniendo una lista de mapas necesarios…";
 "shared_string_speedometer" = "Velocímetro";
 "speedometer_description" = "Muestra la velocidad actual detectada por el GPS";
@@ -3417,7 +3417,7 @@
 "add_button" = "Añadir botón";
 "empty_name" = "Nombre vacío";
 "custom_map_button_name_present" = "Ese botón ya existe";
-"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D";
+"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D.";
 "visualization_3d_visualized_by" = "Visualizado por";
 "fixed_height" = "Altura uniforme";
 "track_3d" = "Traza 3D";
@@ -3454,3 +3454,13 @@
 "custom_buttons" = "Botones personalizados";
 "upward_gradient" = "Gradiente ascendente";
 "ft_s" = "ft/s";
+"routing_attr_avoid_cobblestone_description" = "Evita pasar por caminos adoquinados";
+"routing_attr_avoid_cobblestone_name" = "Evitar adoquinado";
+"rendering_value_dark_orange_name" = "Anaranjado oscuro";
+"route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";
+"in_case_of_reverse_direction" = "En caso de dirección inversa";
+"avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";
+"dangerous_goods_description" = "En algunos caminos y túneles se prohíbe el transporte de materiales peligrosos.";
+"avoid_pt_types" = "Evitar tipos de transporte…";
+"shared_string_class" = "Clase";
+"dangerous_goods" = "Mercancías peligrosas";

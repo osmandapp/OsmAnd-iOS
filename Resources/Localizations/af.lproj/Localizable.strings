@@ -2709,7 +2709,7 @@
 "map_orientation_portrait" = "Portret";
 "network" = "Netwerk";
 "map_orientation_default" = "Dieselfde as toestel";
-"map_settings_topography" = "Kontoerlyne";
+"map_settings_topography" = "Kontoer lyne inligting";
 "map_orientation_landscape" = "Landskap";
 "general_settings" = "Algemene instellings";
 "short_min" = "m";
@@ -2719,3 +2719,6 @@
 "map_screen_orientation" = "Skerm oriëntasie";
 "shared_string_accessibility" = "Toeganklikheid";
 "map_widget_gps_info" = "GPS inligting";
+"edit_tilesource_maxzoom" = "Maks vergroting";
+"shared_string_bottom" = "Onder";
+"edit_tilesource_minzoom" = "Min vergroting";

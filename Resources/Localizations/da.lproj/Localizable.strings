@@ -55,7 +55,7 @@
 "daynight_mode_night" = "Nat";
 "map_widget_renderer" = "Kortstilart";
 "map_settings_overunder" = "Over-/underlejring";
-"map_settings_under" = "Underlejret";
+"map_settings_under" = "Underlejring";
 "shared_string_none" = "Ingen";
 "shared_string_online_maps" = "Onlinekort";
 "map_settings_avail_lay" = "Tilgængelige lag";
@@ -202,7 +202,7 @@
 "track_continue_rec_q" = "Fortsæt optagelsen?";
 "map_settings_type" = "Korttype";
 "map_mode" = "Korttilstand";
-"map_settings_over" = "Overlejret";
+"map_settings_over" = "Overlejring";
 "map_settings_offline" = "Stil for offline kort";
 "shared_string_transparency" = "Gennemsigtighed";
 // Intro
@@ -1083,10 +1083,10 @@
 "toggle_online_notes" = "Skift visning af OSM-noter";
 "toggle_local_edits" = "Skift visning af lokale OSM-noter";
 "quick_action_add_poi" = "Tilføj IP";
-"quick_action_map_style" = "Skift kortstil";
+"quick_action_map_style" = "Kortstil";
 "quick_action_map_source" = "Skift kortkilde";
-"quick_action_map_overlay" = "Skift kortoverlejring";
-"quick_action_map_underlay" = "Skift kortunderlejring";
+"quick_action_map_overlay" = "Overlejring";
+"quick_action_map_underlay" = "Underlejring";
 "quick_action_replace_destination" = "Udskift destination";
 "add_destination" = "Tilføj destination";
 "quick_action_add_first_intermediate" = "Tilføj første mellemliggende punkt";
@@ -1273,7 +1273,7 @@
 "rendering_attr_undefined_name" = "Ikke defineret";
 "rendering_attr_piste_difficulty_expert_name" = "Ekspert";
 "rendering_attr_contourLines_name" = "Vis højdekurver";
-"rendering_attr_showAccess_name" = "Vis adgangsbegrænsninger";
+"rendering_attr_showAccess_name" = "Vis adgangs- og vejafgiftsbegrænsninger";
 "routing_attr_allow_intermediate_name" = "Tillad middelsvære ruter";
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_value_brown_name" = "Brun";
@@ -1758,7 +1758,7 @@
 "plan_route" = "Planlæg en rute";
 "checking_for_duplicates" = "Søger efter dubletter...";
 "after_tapping_done" = "Tryk på Udført og slettede profiler går helt tabt.";
-"profile_alert_delete_msg" = "Slet profilen \"%@\"";
+"profile_alert_delete_msg" = "Slet profilen \"%@\"\?";
 "added_items" = "Tilføjede elementer: %@";
 "shared_string_finish" = "Afslut";
 "shared_string_import_complete" = "Importen er fuldført";
@@ -1796,7 +1796,7 @@
 "routing_attr_length_name" = "Længde";
 "default_profile_descr" = "Vælg en profil, der skal bruges ved start af app.";
 "shared_string_next" = "Næste";
-"quick_action_remove_next_destination" = "Slet næste destinationspunkt";
+"quick_action_remove_next_destination" = "Næste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "next_segment" = "Næste segment";
 "arrived_at_destination" = "Ankommet.";
@@ -3119,7 +3119,7 @@
 "no_travel_guides_data_title" = "Du har ikke rejsedata";
 "map_orientation_landscape" = "Landskab";
 "map_widget_ant_heart_rate_desc" = "Viser brugerens puls under en given aktivitet i realtid";
-"external_device_status_connect" = "Tilslut";
+"external_device_status_connect" = "Forbind";
 "default_appearance_desc" = "Standard farve, ikon og form vil gælde for de tilføjede favoritpunkter i gruppen.";
 "shared_string_result" = "Resultat";
 "no_travel_guides_data_descr" = "Download Wikivoyage-rejseguider for at se artikler om steder rundt om i verden uden forbindelse til internettet.";
@@ -3391,10 +3391,10 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Brug særlig ruteberegning (kun HH)";
 "online_plugins" = "Online udvidelser";
 "vertical_exaggeration" = "Vertikal overdrivelse";
-"vertical_exaggeration_description" = "Ved at ændre skalaværdien kan du fremhæve 3D-relieffet.";
+"vertical_exaggeration_description" = "Ved atændre skalaværdien kan du fremhæve 3D-relieffet.";
 "shared_string_scale" = "Skala";
 "missing_or_outdated_maps_title" = "Manglende eller forældede kort";
-"missing_or_outdated_maps_description" = "Nogle offline-kort, der kræves til denne rute, mangler eller er ikke opdaterede. Download eller opdater disse kort.";
+"missing_or_outdated_maps_description" = "Nogle offline-kort, der er kræves for denne rute, mangler eller er ikke opdaterede. Download eller opdater disse kort.";
 "required_maps" = "Nødvendige kort";
 "calculate_online" = "Beregn online";
 "required_maps_list" = "Kort, der også vil blive brugt: %@";
@@ -3403,7 +3403,7 @@
 "average_vertical_speed" = "Gennemsnitlig vertikal hastighed";
 "osm_id" = "OSM ID";
 "osmand_depelopment_use_old_routing" = "Brug gammel ruteberegning (A*)";
-"auto_zoom" = "Auto-zoom";
+"auto_zoom" = "Autozoom";
 "routing_algorithm_highway_hierarchies" = "Motorvejs-hierarkier";
 "auto_zoom_smooth" = "Jævn";
 "auto_zoom_discrete" = "Diskret";
@@ -3421,7 +3421,7 @@
 "track_3d_empty_view_title" = "3D-sporvisning";
 "track_3d_empty_view_description" = "Udforsk sporet i interaktiv 3D! Visualiser højde, hastighed og meget mere direkte på kortet.";
 "ft_s" = "fod/s";
-"track_vertical_exaggeration_description" = "Ved at ændre skalaværdien kan du ændre 3D-sporets højde";
+"track_vertical_exaggeration_description" = "Ved atændre skalaværdien kan du ændre 3D-sporets højde.";
 "visualization_3d_visualized_by" = "Visualiseret af";
 "visualization_3d_wall_color" = "Vægfarve";
 "short_min" = "m";
@@ -3455,3 +3455,6 @@
 "avoid_pt_types" = "Undgå transportformer…";
 "dangerous_goods" = "Farligt gods";
 "dangerous_goods_description" = "På nogle veje og i nogle tunneler er det forbudt at transportere farlige materialer.";
+"rendering_value_dark_orange_name" = "Mørk orange";
+"routing_attr_avoid_cobblestone_description" = "Undgå brosten";
+"routing_attr_avoid_cobblestone_name" = "Undgå brosten";

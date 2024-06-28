@@ -2858,7 +2858,7 @@
 "activity_type_water_name" = "Voda";
 "navigation_points_desc" = "Navigaciskite vidžeti se ovozmoženi za vreme na navigacijata za prikažuvanje informacii kako rastojanie, vreme na pristignuvanje ili levo, slednite krivini, ležište, tekovno ime na ulica, informacii za lenti, maksimalna brzina, predupreduvanja za približuvanje, POI, točki na dviženje.";
 "popular_destinations" = "Popularni destinacii";
-"weather_update_disabled" = "Onevozmoženo";
+"weather_update_disabled" = "Onevozmozeno";
 "av_notes_video_widget_desc" = "Dopiranjeto na vidzetot ovozmozuva zapocnuvanje na snimanje video.";
 "last_seven_days" = "Poslednite sedum dena";
 "add_page" = "Dodadete stranica";
@@ -2963,3 +2963,15 @@
 "map_markers_bar" = "Lenta za markeri na karti";
 "apply_to_existing" = "Primeni na postoečki";
 "audionotes_plugin_name" = "Audio/video beleski";
+"shared_string_bottom" = "Dno";
+"shared_string_development" = "Razvoj";
+"avoid_pt_types" = "Izbegnete vidovi na transport…";
+"edit_tilesource_maxzoom" = "Maksimalen zum";
+"edit_tilesource_minzoom" = "Minimalen zum";
+"avoid_pt_types_descr" = "Izberete tipovi na javen prevozšto treba da gi izbegnete za navigacija:";
+"step_by_step" = "Turn-by-turn navigacija";
+"calculate_online" = "Presmetajte na onlajn";
+"in_case_of_reverse_direction" = "Vo slučaj na obratna nasoka";
+"shared_string_always" = "Sekogas";
+"shared_string_item" = "Predmet";
+"route_recalculation_dist_title" = "Minimalno rastojanie do povtorno presmetuvanje na maršrutata";

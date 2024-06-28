@@ -86,7 +86,7 @@
 "simulate_routing_descr" = "Simulirajte svoju poziciju koristeći izračunatu rutu";
 "select_avoid_descr" = "Izaberite puteve koje želite da izbegnete tokom navigacije. Možete ili da izaberete put na mapi ili da izaberete tip sa liste ispod.";
 "no_active_route" = "Nema aktivne rute";
-"day_night_info_description" = "Izlazak sunca: %@ \nZalazak sunca: %@";
+"day_night_info_description" = "Izlazak sunca: %@  \nZalazak sunca: %@";
 "day_night_info" = "Dan/noć info";
 "daynight_mode_auto" = "Automatski";
 "route_simulation" = "Simulacija rute";
@@ -726,7 +726,7 @@
 "sett_arr" = "Strelice mape";
 "shared_string_location" = "Lokacija";
 "sett_arr_map" = "Centar mape";
-"short_location_on_map" = "Širina %@ \nDužina %@";
+"short_location_on_map" = "Širina %@  \nDužina %@";
 "navigate_point_format_D" = "DDD.DDDDD";
 "navigate_point_format_DM" = "DDD MM.MMM";
 "navigate_point_format_DMS" = "DDD MM SS.S";
@@ -896,7 +896,7 @@
 "custom_plugins" = "Prilagođeni dodaci";
 "extra_maps_menu_group" = "Dodatne mape";
 "import_duplicates_title" = "Neke stavke već postoje";
-"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.\n\nOdaberi radnju.";
+"import_duplicates_description" = "OsmAnd već ima jedinice sa istim imenom kao oni koji se uvoze.  \n  \nOdaberi radnju.";
 "keep_both" = "Zadrži obe";
 "keep_both_desc" = "Uvežene stavke će biti dodate sa predlozima";
 "replace_all" = "Zameni sve";
@@ -968,7 +968,7 @@
 "reset_to_default" = "Vrati na fabrička podešavanja";
 "reset_profile_action_descr" = "Resetujte sva podešavanja profila na podrazumevane vrednosti instalacije. Dodirom na Resetuj će se odbaciti sve vaše promene, ova radnja se ne može opozvati.";
 "checking_for_duplicates" = "Provera duplikata...";
-"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.\n\nTo može da potraje neko vreme.";
+"checking_for_duplicate_description" = "OsmAnd proverava %@ postojanje umnožaka sa postojećim jedinicama u programu.  \n  \nTo može da potraje neko vreme.";
 
 // Purchases
 "prch_addons" = "Dodaci";
@@ -2044,7 +2044,7 @@
 "rendering_value_bicycle_name" = "Bicikl";
 "rendering_value_translucent_lightgreen_name" = "Prozirna svetlo zelena";
 "rendering_attr_contourLines_name" = "Prikazati izohipse";
-"rendering_attr_showAccess_name" = "Prikazuj zabrane pristupa";
+"rendering_attr_showAccess_name" = "Prikazuj ograničenja pristupa i putarina";
 "rendering_attr_surface_dirt_name" = "Prašina";
 "routing_attr_piste_type_skitour_name" = "Vrsta skijanja";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferiranje makadama";
@@ -2307,7 +2307,7 @@
 "rendering_attr_showMonorailRoutes_name" = "Rute sa jednim kolosekom";
 "cloud_conflicts" = "Konflikt";
 "cloud_email_not_registered" = "Ova adresa e-pošte nije registrovana za OsmAnd Cloud";
-"horseback_riding" = "Jahanje";
+"horseback_riding" = "Jahanje konja";
 "backup_error_file_not_available" = "Fajl nije dostupan";
 "osm_live_subscriptions" = "Pretplate";
 "osmand_cloud_login_descr" = "Unesi adresu e-pošte sa kojom si se registrovao. Biće poslata jednokratna lozinka.";
@@ -2422,10 +2422,10 @@
 "contributions_may_calculate_with_delay" = "Obračun dopronosa može potrajati nekoliko časova.";
 "shared_string_progress" = "Napredak";
 "simulate_your_location_gpx_descr" = "Simuliraj svoj lokaciju koristeću snimljenu GPX trase.";
-"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,\ni svi vaši podaci će biti povezani sa njim.";
+"osmand_cloud_create_account_descr" = "Unesi svoju adresu e-pošte, tamo će vam biti poslan verifikacioni kôd,  \ni svi vaši podaci će biti povezani sa njim.";
 "routing_attr_motor_type_hybrid_name" = "Hibrid";
 "shared_string_added" = "Dodato";
-"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.\n\nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
+"backup_delete_old_data_warning" = "Izbrisaćete istoriju promena prethodno učitanih podataka.  \n  \nTrenutna verzija podataka biće sačuvana na serveru, ali nećete moći da se vratite na prethodno izvršene promene.";
 "map_updates_for_mappers" = "Ažuriranje mapa za kartografe";
 "local_backup" = "Lokalna rezervna kopija";
 "backup_delete_old_data" = "Ukloni stare verzije";
@@ -2492,7 +2492,7 @@
 "routing_attr_difficulty_preference_beginner_name" = "Početnik";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Prikazati oznake popravke";
 "routing_attr_carriage_restrictions_description" = "Razmotri pristupne dozvole za vozila sa konjskom zapregom";
-"rendering_attr_showWaterwayTunnels_name" = "Tuneli plovnih puteva";
+"rendering_attr_showWaterwayTunnels_name" = "Povećaj vidljivost za tunele plovnih puteva";
 "rendering_attr_weatherPressureContours_name" = "Linije jednakog pritiska";
 "routing_attr_allow_intermittent_name" = "Dozvoli povremene vodene tokove";
 "rendering_attr_hideMilitaryAreas_name" = "Sakriti vojna područja";
@@ -2502,7 +2502,7 @@
 "routing_attr_difficulty_preference_advanced_name" = "Napredan";
 "rendering_attr_showShareTaxiRoutes_name" = "Taksi rute";
 "routing_attr_allow_intermittent_description" = "Dozvoli vodene tokove koji nekad presuše";
-"rendering_attr_showWaterwayTunnels_description" = "Ne skrivaj tunele za vodene puteve";
+"rendering_attr_showWaterwayTunnels_description" = "Povećanje vidljivosti za tunele plovnih puteva";
 "rendering_attr_noNatureReserveBoundaries_description" = "Sakrij rezervate prirode, zaštićena područja i granice nacionalnih parkova";
 "rendering_attr_OSMMapperAssistantNote_description" = "Prikazati oznake beleški";
 "rendering_attr_hideMilitaryAreas_description" = "Sakriti vojna oblasti";
@@ -2674,11 +2674,11 @@
 "ant_plus_bluetooth_off" = "Bluetooth je isključen";
 "ant_plus_searching_text" = "Pretraga senzora";
 "ant_plus_open_settings" = "Otvori podešavanja";
-"ant_plus_nothing_found_description" = "Proveri da li je:\n- Blutut uključen\n- Prijemnik uključen\n- Ovaj uređaj smešten blizu senzora";
+"ant_plus_nothing_found_description" = "Proveri da li je:  \n- Blutut uključen  \n- Prijemnik uključen  \n- Ovaj uređaj smešten blizu senzora";
 "external_device_details_information" = "Informacija";
 "external_device_forget_sensor" = "Zaboravi senzor";
 "external_device_details_battery" = "Baterija";
-"external_device_forget_sensor_description" = "Prijemnik će biti uklonjen sa spiska. Možeš da upariš ovaj senzor kad god poželiš.";
+"external_device_forget_sensor_description" = "Prijemnikće biti uklonjen sa spiska. Možeš da upariš ovaj senzor kad god poželiš.";
 "ant_plus_bluetooth_off_description" = "Uključi Bluetooth i upari senzore.";
 "external_device_characteristic_speed" = "Brzina";
 "wheel_circumference" = "Obim točka";
@@ -2940,7 +2940,7 @@
 "external_device_status_disconnect" = "Prekid veze";
 "shared_string_delete_item" = "Obriši stavku";
 "shared_string_is_deleted" = "%@ je obrisan.";
-"map_settings_topography" = "Konturne linije";
+"map_settings_topography" = "Izohipse";
 "map_settings_clear_geo_cache" = "Očisti geo pločice";
 "weather_precip_enable_descr" = "Omogućite da vidite sloj padavina na mapi.";
 "screen_settings_weather_toolbar" = "Vremenska traka sa alatkama";
@@ -2992,7 +2992,7 @@
 "app_store" = "Ap Prodavnica";
 "weather_data_provider" = "Dobavljač podataka GFS.";
 "weather_updates_automatically" = "OsmAnd će preuzeti ažuriranja automatski kada je aktivan.";
-"external_device_status_connect" = "Poveži se";
+"external_device_status_connect" = "Poveži";
 "new_track" = "Nova trasa";
 "download_to_device" = "Preuzmi na uređaj";
 "shared_string_next_event" = "Sledeći događaj";
@@ -3396,34 +3396,34 @@
 "required_maps" = "Potrebne Mape";
 "calculate_online" = "Izračunaj onlajn";
 "calculate_online_title" = "Lista potrebnih mapa je zasnovana na pravolinijskoj ruti. Da biste dobili tačnu listu mapa, OsmAnd može unapred da izračuna vašu rutu na mreži";
-"required_maps_list" = "Mape koje će takođe biti upotrebljene: %@";
+"required_maps_list" = "Mape kojeće se takođe koristiti: %@";
 "getting_list_required_maps" = "Preuzimanje liste potrebnih mapa…";
 "average_vertical_speed" = "Prosečna vertikalna brzina";
 "osm_id" = "OSM ID";
 "osmand_depelopment_use_old_routing" = "Koristi staro rutiranje (A*)";
 "routing_algorithm" = "Algoritam rutiranja";
-"auto_zoom" = "Auto-zum";
+"auto_zoom" = "Autozum";
 "shared_string_development" = "Razvoj";
 "routing_algorithm_highway_hierarchies" = "Hijerarhija autoputeva";
 "auto_zoom_smooth" = "Glatko";
 "auto_zoom_discrete" = "Diskretno";
 "routing_algorithm_a" = "A*";
 "ft_s" = "ft/s";
-"track_vertical_exaggeration_description" = "Promenom vrednosti na skali možeš promeniti visinu 3D staze";
+"track_vertical_exaggeration_description" = "Promenom vrednosti na skali možeš promeniti visinu 3D staze.";
 "upward_gradient" = "Gradijent na gore";
 "shared_string_top_bottom" = "Vrh i dno";
 "track_3d_empty_view_title" = "3D prikaz Staze";
-"visualization_3d_visualized_by" = "Vizualizirano od";
-"visualization_3d_wall_color" = "Boja zida";
+"visualization_3d_visualized_by" = "Vizualizirao";
+"visualization_3d_wall_color" = "Boja zidova";
 "visualization_3d_track_line" = "Linija staze";
 "track_3d" = "3D staza";
-"fixed_height" = "Fiksna Visina";
+"fixed_height" = "Fiksna visina";
 "downward_gradient" = "Gradijent na dole";
 "shared_string_top" = "Vrh";
-"shared_string_bottom" = "Dno";
+"shared_string_bottom" = "Na dnu";
 "track_3d_empty_view_description" = "Istraži stazu u interaktivnom 3D! Vizualiziraj visinu, brzinu i još toga direktno na mapi.";
 "short_min" = "m";
-"shared_string_millimeters" = "Milimetara";
+"shared_string_millimeters" = "Milimetri";
 "display_position_automatic_descr" = "Zavisi od orijentacije mape: dno za smer kretanja, centar za sve ostalo.";
 "shared_string_millimeters_short" = "mm";
 "edit_tilesource_maxzoom" = "Maksimalan zum";
@@ -3453,3 +3453,6 @@
 "dangerous_goods" = "Opasna roba";
 "dangerous_goods_description" = "Na nekim putevima i tunelima prevoz opasnih materije je zabranjen.";
 "avoid_pt_types_descr" = "Odaberi vrste javnog prevoza koje treba izbegavati:";
+"routing_attr_avoid_cobblestone_name" = "Izbegavati kaldrmu";
+"rendering_value_dark_orange_name" = "Tamnonarančasta";
+"routing_attr_avoid_cobblestone_description" = "Izbegavati kaldrmu";

@@ -2045,7 +2045,7 @@
 "rendering_value_bicycle_name" = "Bicicleta";
 "rendering_value_translucent_lightgreen_name" = "Verde claro translúcido";
 "rendering_attr_contourLines_name" = "Mostrar curvas de nivel";
-"rendering_attr_showAccess_name" = "Restricciones de acceso";
+"rendering_attr_showAccess_name" = "Restricciones de acceso y peajes";
 "rendering_attr_surface_dirt_name" = "Tierra (lodosa)";
 "routing_attr_piste_type_skitour_name" = "Esquí de travesía";
 "routing_attr_driving_style_prefer_unpaved_name" = "Preferir caminos sin pavimentar";
@@ -2274,7 +2274,7 @@
 "routing_attr_only_permitted_ways_name" = "Vías expresamente autorizadas";
 "routing_attr_allow_gate_description" = "Permitir el uso de puertas";
 "routing_attr_only_permitted_streets_description" = "Usar sólo las calles que estén expresamente autorizadas";
-"horseback_riding" = "Equitación";
+"horseback_riding" = "Cabalgata";
 "routing_attr_only_permitted_ways_description" = "Usar sólo las vías (caminos, senderos, etc.) que estén expresamente autorizadas";
 "route_preferred_terrain_any" = "El perfil del terreno no se tiene en cuenta al elegir una ruta.";
 "route_preferred_terrain_less_hilly" = "Rutas más cortas y menos montañosas.";
@@ -2741,7 +2741,7 @@
 "routing_attr_avoid_footways_name" = "Evitar veredas o aceras";
 "rendering_attr_horse_scale_common_name" = "Común";
 "rendering_attr_OSMMapperAssistantFixme_name" = "Etiquetas«fixme» (arréglame)";
-"rendering_attr_showWaterwayTunnels_name" = "Túneles fluviales";
+"rendering_attr_showWaterwayTunnels_name" = "Aumentar visibilidad de los túneles fluviales";
 "rendering_attr_depthContourWidth_description" = "La anchura para las curvas de nivel de profundidad";
 "rendering_attr_showTramRoutes_name" = "Rutas de tranvía";
 "routing_attr_freeride_policy_do_not_go_offpiste_name" = "No salirse de la pista";
@@ -2765,7 +2765,7 @@
 "routing_attr_prefer_hiking_routes_name" = "Preferir rutas de senderismo";
 "rendering_attr_noNatureReserveBoundaries_name" = "Fronteras naturales";
 "rendering_attr_showMtbScaleUphill_description" = "Muestra los senderos según la escala MTB de ascenso.";
-"rendering_attr_showWaterwayTunnels_description" = "Mostrar los túneles fluviales";
+"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilidad de los túneles fluviales";
 "rendering_attr_showTrainRoutes_name" = "Rutas de tren";
 "routing_attr_avoid_highway_name" = "Evitar los caminos";
 "routing_attr_allow_streams_name" = "Permitir arroyos y desagües";
@@ -3332,7 +3332,7 @@
 "verify_account" = "Comprobar cuenta";
 "verify_account_deletion_descr" = "Debemos comprobar tu cuenta antes de borrarla. \n \nIngresa el correo electrónico con el cual fue registrado. Se te enviará la contraseña de un solo uso para el siguiente paso.";
 "osmand_cloud_delete_account_descr" = "¿Borrar la cuenta de OsmAnd Cloud?";
-"osmand_cloud_deletion_account_warning" = "Esta cuenta y todos sus datos serán %@";
+"osmand_cloud_deletion_account_warning" = "Esta cuenta y todos sus datos serán %@.";
 "osmand_cloud_delete_account_confirmation" = "¿Borrar cuenta\?";
 "osmand_cloud_deletion_subscriptions_warning" = "Esto no cancelará la suscripción a OsmAnd Pro.";
 "action_cant_be_undone" = "Esta acción no puede deshacerse.";
@@ -3404,7 +3404,7 @@
 "required_maps" = "Mapas necesarios";
 "calculate_online" = "Calcular en línea";
 "calculate_online_title" = "La lista de mapas necesarios, se basa en una línea recta de la ruta. Para obtener una lista precisa de mapas, OsmAnd puede volver a calcular en línea esta ruta";
-"required_maps_list" = "Mapas que también serán usados: %@";
+"required_maps_list" = "Mapas extras a usar: %@";
 "getting_list_required_maps" = "Obteniendo una lista de mapas necesarios…";
 "vertical_exaggeration_description" = "Al cambiar el valor de la escala, puede enfatizar el relieve en 3D.";
 "missing_or_outdated_maps_description" = "Algunos mapas sin conexión necesarios para esta ruta desaparecieron o están desactualizados. Descarga o actualiza estos mapas.";
@@ -3418,7 +3418,7 @@
 "routing_algorithm_highway_hierarchies" = "Jerarquías viales";
 "auto_zoom_smooth" = "Suave";
 "auto_zoom_discrete" = "Discreto";
-"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D";
+"track_vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes cambiar la altura de la traza 3D.";
 "ft_s" = "ft/s";
 "visualization_3d_visualized_by" = "Visualizado por";
 "visualization_3d_wall_color" = "Color del muro";
@@ -3456,3 +3456,13 @@
 "wall_height_description" = "Cambiando el valor de la altura, puedes elevar la línea superior de la traza sobre el nivel del suelo.";
 "select_items" = "Marcar elementos";
 "wall_height" = "Altura del muro";
+"routing_attr_avoid_cobblestone_description" = "Evita pasar por caminos adoquinados";
+"routing_attr_avoid_cobblestone_name" = "Evitar adoquinado";
+"rendering_value_dark_orange_name" = "Anaranjado oscuro";
+"avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";
+"shared_string_class" = "Clase";
+"avoid_pt_types" = "Evitar tipos de transporte…";
+"dangerous_goods_description" = "En algunos caminos y túneles se prohíbe el transporte de materiales peligrosos.";
+"in_case_of_reverse_direction" = "En caso de dirección inversa";
+"dangerous_goods" = "Mercancías peligrosas";
+"route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";

@@ -3308,10 +3308,9 @@
 "vertical_exaggeration" = "垂直誇大";
 "shared_string_scale" = "比例尺";
 "required_maps" = "所需的地圖";
-
 "routing_attr_avoid_cobblestone_description" = "避免鵝卵石";
 "routing_attr_avoid_cobblestone_name" = "避免鵝卵石";
-"rendering_value_dark_orange_name" = "深橘色";;
+"rendering_value_dark_orange_name" = "深橘色";
 "custom_map_button_name_present" = "如此按鈕已存在";
 "auto_zoom_discrete" = "分離";
 "dangerous_goods" = "危險物品";

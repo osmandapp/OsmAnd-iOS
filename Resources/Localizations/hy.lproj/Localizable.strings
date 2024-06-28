@@ -2335,3 +2335,7 @@
 "subscribe_email_error" = "Սխալ";
 "image_cache" = "Նկարների կեշը (cache)";
 "context_menu_read_article" = "Կարդալ հոդվածը";
+"edit_tilesource_maxzoom" = "Առավելագույն խոշորացում";
+"edit_tilesource_minzoom" = "Նվազագույն խոշորացում";
+"shared_string_bottom" = "Ներքևում";
+"shared_string_always" = "Միշտ";

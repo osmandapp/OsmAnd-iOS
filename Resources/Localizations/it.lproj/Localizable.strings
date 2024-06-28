@@ -3412,10 +3412,9 @@
 "osmand_depelopment_use_old_routing" = "Usa il vecchio algoritmo (A*)";
 "step_by_step" = "Svolta dopo svolta";
 "wall_height" = "Altezza della parete";
-
 "routing_attr_avoid_cobblestone_description" = "Evita il ciottolo";
 "routing_attr_avoid_cobblestone_name" = "Evita acciottolato";
-"rendering_value_dark_orange_name" = "Arancione scuro";;
+"rendering_value_dark_orange_name" = "Arancione scuro";
 "custom_map_button_name_present" = "Tale pulsanteè già presente";
 "shared_string_bottom" = "Sotto";
 "dangerous_goods" = "Merci pericolose";

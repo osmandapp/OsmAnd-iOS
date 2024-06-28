@@ -760,7 +760,7 @@
 "shared_string_done" = "Gata";
 "routing_attr_height_obstacles_name" = "Utilizare date altitudine";
 "monitoring_min_speed" = "Viteză minimă";
-"quick_action_remove_next_destination" = "Șterge următorul punct de destinație";
+"quick_action_remove_next_destination" = "Următorul punct de destinație";
 "profile_alert_need_profile_name_title" = "Introduceți numele profilului";
 "public_transport_warning_title" = "În prezent, navigația pentru transportul public este în testare beta, așteptați erori și inexactități.";
 "quick_action_mapillary_show" = "Afișare Mapillary";

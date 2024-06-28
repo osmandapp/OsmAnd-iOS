@@ -1302,10 +1302,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Aldoni interesejon";
-"quick_action_map_style" = "Ŝanĝi map-stilon";
+"quick_action_map_style" = "Map-stilo";
 "quick_action_map_source" = "Ŝanĝi mapan fonton";
-"quick_action_map_overlay" = "Ŝanĝi mapan surtavolon";
-"quick_action_map_underlay" = "Ŝanĝi mapan subtavolon";
+"quick_action_map_overlay" = "Surtavolo";
+"quick_action_map_underlay" = "Subtavolo";
 "quick_action_replace_destination" = "Anstataŭigi celon";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Aldoni komencpunkton";
@@ -1393,7 +1393,7 @@
 "quick_action_showhide_mapillary_descr" = "Ŝaltilo por montri aŭ kaŝi tavolon de Mapillary sur la mapo.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Forigi sekvan celon";
+"quick_action_remove_next_destination" = "Sekva celo";
 "quick_action_remove_next_destination_descr" = "La markita celo de la kurso estos forigita. Se tioĉi estos la fina celo, la navigado ĉesos.";
 "change_application_profile" = "Ŝanĝi aplikaĵan profilon";
 "select_application_profile" = "Select application profile";

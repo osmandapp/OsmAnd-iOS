@@ -921,9 +921,9 @@
 "toggle_poi" = "Показать/скрыть POI";
 "quick_action_add_parking" = "Добавить место парковки";
 "quick_action_add_poi" = "Добавить POI";
-"quick_action_map_style" = "Сменить стиль карты";
+"quick_action_map_style" = "Стиль карты";
 "quick_action_map_source" = "Сменить источник карты";
-"quick_action_map_underlay" = "Сменить подложку карты";
+"quick_action_map_underlay" = "Подложка";
 "add_destination" = "Добавить пункт назначения";
 "quick_action_start_stop_navigation" = "Запуск/остановка навигации";
 "toggle_day_night" = "Переключить дневной/ночной режим";
@@ -1136,7 +1136,7 @@
 "quick_action_add_create_items" = "Действия";
 "toggle_online_notes" = "Показать/спрятать заметки OSM";
 "toggle_local_edits" = "Показать/спрятать локальные правки OSM";
-"quick_action_map_overlay" = "Сменить карту наложения";
+"quick_action_map_overlay" = "Наложение";
 "quick_action_replace_destination" = "Заменить пункт назначения";
 "show_hide_gpx" = "Показать/спрятать путешествия";
 "shared_string_action_name" = "Название действия";
@@ -1880,7 +1880,7 @@
 "next_segment" = "Следующий сегмент";
 "quick_action_showhide_mapillary_title" = "Показать/скрыть Mapillary";
 "quick_action_mapillary_show" = "Показать Mapillary";
-"quick_action_remove_next_destination" = "Удалить следующий пункт";
+"quick_action_remove_next_destination" = "Следующий пункт назначения";
 "layer_amenity_label" = "Названия точек";
 "quick_action_mapillary_hide" = "Скрыть Mapillary";
 "shared_string_add_profile" = "Добавить профиль";

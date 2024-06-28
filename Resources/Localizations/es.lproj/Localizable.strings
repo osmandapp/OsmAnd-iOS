@@ -3454,7 +3454,6 @@
 "dangerous_goods" = "Mercancías peligrosas";
 "in_case_of_reverse_direction" = "En caso de dirección incorrecta";
 "dangerous_goods_description" = "En algunas carreteras y túneles está prohibido el transporte de mercancías peligrosas.";
-
 "rendering_value_dark_orange_name" = "Naranja oscuro";
 "routing_attr_avoid_cobblestone_description" = "Evite los adoquines";
-"routing_attr_avoid_cobblestone_name" = "Evite los adoquines";;
+"routing_attr_avoid_cobblestone_name" = "Evite los adoquines";

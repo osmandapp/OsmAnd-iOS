@@ -3450,10 +3450,9 @@
 "add_button" = "Додати кнопку";
 "custom_map_button_name_present" = "Така кнопка вже присутня";
 "step_by_step" = "Покроково";
-
 "rendering_value_dark_orange_name" = "Темно-жовтогарячий";
 "routing_attr_avoid_cobblestone_description" = "Уникайте бруківки";
-"routing_attr_avoid_cobblestone_name" = "Уникайте бруківки";;
+"routing_attr_avoid_cobblestone_name" = "Уникайте бруківки";
 "in_case_of_reverse_direction" = "У разі зворотного напрямку";
 "route_recalculation_dist_title" = "Мінімальна відстань для перебудування маршруту";
 "dangerous_goods_description" = "Деякими дорогами та тунелями перевезення небезпечних матеріалів заборонено.";

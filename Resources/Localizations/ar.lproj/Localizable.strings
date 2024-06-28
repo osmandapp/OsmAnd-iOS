@@ -3431,9 +3431,8 @@
 "shared_string_top" = "أعلى";
 "display_position_automatic_descr" = "يعتمد على اتجاه الخريطة: الجزء السفلي لاتجاه الحركة ، المركز للبقية.";
 "ft_s" = "ft/s";
-
 "routing_attr_avoid_cobblestone_description" = "تجنب الحصى";
-"routing_attr_avoid_cobblestone_name" = "تجنب الحصى";;
+"routing_attr_avoid_cobblestone_name" = "تجنب الحصى";
 "speedometer_description" = "عرض سرعتك الحالية بواسطة GPS";
 "shared_string_class" = "فئة";
 "avoid_pt_types" = "تجنب أنواع النقل…";

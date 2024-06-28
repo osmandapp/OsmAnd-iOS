@@ -3458,7 +3458,7 @@
 "wall_height" = "Altura del muro";
 "routing_attr_avoid_cobblestone_description" = "Evita pasar por caminos adoquinados";
 "routing_attr_avoid_cobblestone_name" = "Evitar adoquinado";
-"rendering_value_dark_orange_name" = "Anaranjado oscuro";;
+"rendering_value_dark_orange_name" = "Anaranjado oscuro";
 "avoid_pt_types_descr" = "Marca los tipos de transporte público a evitar para la navegación:";
 "shared_string_class" = "Clase";
 "avoid_pt_types" = "Evitar tipos de transporte…";

@@ -166,10 +166,11 @@
             OATableRowData *calculateOnlineTitleRow = [calculateOnlineSection createNewRow];
             calculateOnlineTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             calculateOnlineTitleRow.title = OALocalizedString(@"calculate_online_title");
-            
+
             OATableRowData *calculateOnlineButtonRow = [calculateOnlineSection createNewRow];
             calculateOnlineButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
+            calculateOnlineButtonRow.key = @"calculate_online_button";
         }
 
         if (_potentiallyUsedMaps.count > 0)
@@ -183,6 +184,7 @@
             OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
             ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
+            ignoreMissingMapsButtonRow.key = @"missing_maps_ignore_button";
         }
     }
 }
@@ -291,11 +293,11 @@
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
 
-            if ([item.title isEqualToString:OALocalizedString(@"calculate_online")])
+            if ([item.key isEqualToString:@"calculate_online_button"])
             {
                 [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             }
-            else if ([item.title isEqualToString:OALocalizedString(@"missing_maps_ignore")])
+            else if ([item.key isEqualToString:@"missing_maps_ignore_button"])
             {
                 [cell.button addTarget:self action:@selector(onIgnoreMissingMapsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
             }

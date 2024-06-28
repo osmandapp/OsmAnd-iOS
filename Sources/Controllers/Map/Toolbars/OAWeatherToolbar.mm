@@ -98,7 +98,7 @@
     [self.layersCollectionView setOnlyIconCompact:YES];
     [self.layersCollectionView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
                                                                                                   action:@selector(handleLongPressOnLayer:)]];
-
+    self.timeSliderView.stepMinWithoutDrawMark = 145.0;
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 
@@ -300,18 +300,38 @@
     NSDate *selectedNextDate = [calendar startOfDayForDate:date];
     NSMutableArray<NSDate *> *selectedTimeValues = [NSMutableArray array];
     [selectedTimeValues addObject:selectedNextDate];
+    
+    int minCounter1 = 10;
+    for (NSInteger i = 1; i < 6; i++) {
+        NSDate *step10MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
+                                                     value:minCounter1 * i
+                                                    toDate:selectedNextDate
+                                                   options:0];
+        [selectedTimeValues addObject:step10MinDate];
+    }
 
-    NSInteger selectedDayIndex = [self.dateCollectionView getSelectedIndex];
+    NSInteger selectedDayIndex = 0;//[self.dateCollectionView getSelectedIndex];
     NSInteger count = selectedDayIndex == 0 ? 9 + (9 - 1) * 2 : 9;
     for (NSInteger i = 0; i < count - 1; i++)
     {
+        int stepHour = 1;//selectedDayIndex == 0 ? 1 : 3;
         selectedNextDate = [calendar dateByAddingUnit:NSCalendarUnitHour
-                                                value:selectedDayIndex == 0 ? 1 : 3
+                                                value:stepHour
                                                toDate:selectedNextDate
                                               options:0];
         [selectedTimeValues addObject:selectedNextDate];
+        if (i != count - 2)
+        {
+            int minCounter = 10;
+            for (NSInteger i = 1; i < 6; i++) {
+                NSDate *step10MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
+                                                             value:minCounter * i
+                                                            toDate:selectedNextDate
+                                                           options:0];
+                [selectedTimeValues addObject:step10MinDate];
+            }
+        }
     }
-
     _timeValues = selectedTimeValues;
 }
 
@@ -416,7 +436,7 @@
 
 - (void)timeChanged:(UISlider *)sender
 {
-    NSInteger index = self.timeSliderView.selectedMark;
+    NSInteger index = [self.timeSliderView getIndexForStepMinWithoutDrawMark];
     NSDate *selectedDate = _timeValues[index];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
 

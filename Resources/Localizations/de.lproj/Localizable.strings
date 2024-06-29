@@ -3411,7 +3411,7 @@
 "missing_or_outdated_maps_title" = "Fehlende oder veraltete Karten";
 "required_maps" = "Benötigte Karten";
 "calculate_online" = "Online berechnen";
-"calculate_online_title" = "Die Liste der erforderlichen Karten basiert auf der geradlinigen Route. Um eine genaue Liste der Karten zu erhalten, kann OsmAnd Ihre Route online vorberechnen";
+"calculate_online_title" = "Die Liste der fehlenden Karten basiert auf der geradlinigen Route. Um eine genaue Liste der Karten zu erhalten, kann OsmAnd deine Route online vorberechnen";
 "required_maps_list" = "Karten, die auch verwendet werden: %@";
 "missing_or_outdated_maps_description" = "Einige Offline-Karten, die für diese Route benötigt werden, fehlen oder sind nicht auf dem neuesten Stand. Bitte laden Sie diese Karten herunter oder aktualisieren Sie diese.";
 "getting_list_required_maps" = "Abrufen einer Liste der benötigten Karten...";
@@ -3473,3 +3473,5 @@
 "rendering_value_dark_orange_name" = "Dunkelorange";
 "routing_attr_avoid_cobblestone_description" = "Kopfsteinpflaster vermeiden";
 "routing_attr_avoid_cobblestone_name" = "Kopfsteinpflaster vermeiden";
+"missing_maps_ignore_details" = "Einige bereits heruntergeladene Karten könnten für deine Route geeignet sein. Wenn du dich in der Gegend und mit den Karten auskennst, kannst du versuchen, deine Route mit den vorhandenen Karten zu planen.";
+"missing_maps_ignore" = "Vorhandene Karten verwenden";

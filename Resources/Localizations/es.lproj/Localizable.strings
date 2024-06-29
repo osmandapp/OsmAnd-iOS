@@ -3396,7 +3396,7 @@
 "missing_or_outdated_maps_description" = "Algunos mapas offline necesarios para esta ruta no están disponibles o no están actualizados. Por favor, descargue o actualice estos mapas.";
 "required_maps" = "Mapas necesarios";
 "calculate_online" = "Calcular en línea";
-"calculate_online_title" = "La lista de mapas necesarios se basa en la ruta en línea recta. Para obtener una lista precisa de mapas, OsmAnd puede precalcular su ruta en línea";
+"calculate_online_title" = "La lista de mapas que faltan se basa en la ruta en línea recta. Para obtener una lista precisa de mapas, OsmAnd puede precalcular su ruta en línea";
 "average_vertical_speed" = "Velocidad vertical promedio";
 "vertical_exaggeration_description" = "Cambiando el valor de la escala, puedes acentuar el relieve 3D.";
 "shared_string_scale" = "Escala";
@@ -3457,3 +3457,5 @@
 "rendering_value_dark_orange_name" = "Naranja oscuro";
 "routing_attr_avoid_cobblestone_description" = "Evite los adoquines";
 "routing_attr_avoid_cobblestone_name" = "Evite los adoquines";
+"missing_maps_ignore" = "Usar mapas existentes";
+"missing_maps_ignore_details" = "Es posible que algunos mapas ya descargados sean adecuados para su ruta. Si está familiarizado con la zona y los mapas, puede intentar trazar una ruta utilizando los mapas existentes.";

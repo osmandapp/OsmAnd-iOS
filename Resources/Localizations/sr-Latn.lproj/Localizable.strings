@@ -1021,7 +1021,7 @@
 "simplified_track" = "Pojednostavljene trase";
 "simplified_track_description" = "Samo linija rute biće sačuvana, a međuodredišta biće obrisana.";
 "open_saved_track" = "Otvori sačuvanu trasu";
-"plan_route_create_new_route" = "Nova ruta";
+"plan_route_create_new_route" = "Kreiranje nove rute";
 "track_is_saved" = "%@\nje sačuvan!";
 "plan_route_open_existing_track" = "Otvori postojeću trasu";
 "sort_last_modified" = "Poslednje izmenjeno";
@@ -1303,10 +1303,10 @@
 "toggle_online_notes" = "Uključite OSM beleške";
 "toggle_local_edits" = "Uključite lokalne OSM izmene";
 "quick_action_add_poi" = "Dodaj TOI";
-"quick_action_map_style" = "Izmeni stil mape";
+"quick_action_map_style" = "Stil mape";
 "quick_action_map_source" = "Izmeni izvor mape";
-"quick_action_map_overlay" = "Izmeni nivo iznad mape";
-"quick_action_map_underlay" = "Izmeni sloj ispod mape";
+"quick_action_map_overlay" = "Mapa iznad";
+"quick_action_map_underlay" = "Pozadinska mapa";
 "quick_action_replace_destination" = "Zameni odredište";
 "add_destination" = "Dodaj odredište";
 "route_add_start_point" = "Dodaj početnu tačku";
@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Prikazati ili sakriti nivo Mapilarija na mapi.";
 "quick_action_mapillary_hide" = "Sakrij Mapilari";
 "quick_action_mapillary_show" = "Prikaži Mapilari";
-"quick_action_remove_next_destination" = "Obriši sledeću odredišnu tačku";
+"quick_action_remove_next_destination" = "Sledeća odredišna tačka";
 "quick_action_remove_next_destination_descr" = "Uklanja trenutnu odredišnu tačku. Ako je ona i finiš tačka, navođenje će se zaustaviti.";
 "change_application_profile" = "Promeni profil programa";
 "select_application_profile" = "Izaberite profil aplikacije";

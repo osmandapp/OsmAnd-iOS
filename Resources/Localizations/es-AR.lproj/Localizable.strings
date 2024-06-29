@@ -1303,7 +1303,7 @@
 "toggle_online_notes" = "Alternar notas de OSM";
 "toggle_local_edits" = "Alternar ediciones locales de OSM";
 "quick_action_add_poi" = "Añadir PDI";
-"quick_action_map_style" = "Alternar estilo del mapa";
+"quick_action_map_style" = "Estilo del mapa";
 "quick_action_map_source" = "Alternar repositorio del mapa";
 "quick_action_map_overlay" = "Capa superpuesta";
 "quick_action_map_underlay" = "Capa subyacente";
@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Un botón que alterna la capa de Mapillary en el mapa.";
 "quick_action_mapillary_hide" = "Ocultar Mapillary";
 "quick_action_mapillary_show" = "Mostrar Mapillary";
-"quick_action_remove_next_destination" = "Borrar el siguiente punto de destino";
+"quick_action_remove_next_destination" = "Siguiente punto de destino";
 "quick_action_remove_next_destination_descr" = "Quita el siguiente destino de la ruta. Si es el destino final, la navegación se detendrá.";
 "change_application_profile" = "Cambiar perfil de la aplicación";
 "select_application_profile" = "Elegir perfil de la aplicación";
@@ -3099,7 +3099,7 @@
 "external_sensors_plugin_description" = "Accede a sensores externos para leer, por ejemplo, el ritmo cardíaco, la velocidad en bicicleta y la potencia o cadencia del pedaleo. Debes conectar tu dispositivo con sensores que admitan el protocolo de red personal inalámbrica ANT+.";
 "external_device_characteristic_speed" = "Velocidad";
 "bluetooth_found_title" = "Encontrado: %d";
-"external_sensors_source_of_data" = "Origen de los datos";
+"external_sensors_source_of_data" = "Proveedor de datos";
 "external_device_status_connecting" = "Conectando";
 "map_widget_ant_bicycle_speed" = "Velocidad de la bicicleta";
 "ant_plus_searching_text" = "Buscando sensores";
@@ -3403,7 +3403,7 @@
 "missing_or_outdated_maps_title" = "Mapas perdidos o desactualizados";
 "required_maps" = "Mapas necesarios";
 "calculate_online" = "Calcular en línea";
-"calculate_online_title" = "La lista de mapas necesarios, se basa en una línea recta de la ruta. Para obtener una lista precisa de mapas, OsmAnd puede volver a calcular en línea esta ruta";
+"calculate_online_title" = "La lista de mapas faltantes, se basa en la ruta en línea recta. Para obtener una lista precisa de mapas, OsmAnd puede volver a calcular en línea esta ruta";
 "required_maps_list" = "Mapas extras a usar: %@";
 "getting_list_required_maps" = "Obteniendo una lista de mapas necesarios…";
 "vertical_exaggeration_description" = "Al cambiar el valor de la escala, puede enfatizar el relieve en 3D.";
@@ -3466,3 +3466,5 @@
 "in_case_of_reverse_direction" = "En caso de dirección inversa";
 "dangerous_goods" = "Mercancías peligrosas";
 "route_recalculation_dist_title" = "Distancia mínima para recalcular la ruta";
+"missing_maps_ignore" = "Ignorar mapas faltantes";
+"missing_maps_ignore_details" = "Algunos mapas descargados pueden adecuarse a la ruta. Si conoces la zona y los mapas, intenta trazar la ruta usando los mapas existente.";

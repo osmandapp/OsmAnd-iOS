@@ -200,16 +200,14 @@
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
     QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
     _nameTags = [[NSMutableArray alloc] init];
+    NSString *nameTagString = tagsToGpx["name"].toNSString();
+    BOOL hasName = NO;
     for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
     {
         NSString *routeTagKey = i.key().toNSString();
-        if ([routeTagKey containsString:@"name"] && ![routeTagKey hasPrefix:@"osmc"])
-        {
-            NSArray<NSDictionary *> *tagData = [[OAPOIHelper sharedInstance] getNameDataForTagKey:routeTagKey withValue:i.value().toNSString()];
-            if (tagData && tagData.count > 0)
-                [_nameTags addObjectsFromArray:tagData];
-        }
-        if ([self shouldExcludeTag:routeTagKey])
+        if ([routeTagKey hasPrefix:@"osmc"]
+            || [routeTagKey isEqualToString:@"name"]
+            || ([routeTagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
             continue;
         OAPOIBaseType *poiType = [[OAPOIHelper sharedInstance] getAnyPoiAdditionalTypeByKey:routeTagKey];
         if (!poiType && ![routeTagKey isEqualToString:@"symbol"]
@@ -229,6 +227,20 @@
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
 
+        if ([[OAPOIHelper sharedInstance] shouldProcessNameTagForKey:routeTagKey] && !hasName)
+        {
+            OAGPXTableCellData *routeNameCellData = [OAGPXTableCellData withData:@{
+                kTableKey: @"name",
+                kCellType: [OAValueTableViewCell getCellIdentifier],
+                kCellTitle: OALocalizedString(@"shared_string_name"),
+                kCellDesc: (nameTagString.length > 0) ? nameTagString : i.value().toNSString(),
+                kTableValues: @{ @"order": routeTagOrder },
+                kCellToggle: @YES
+            }];
+            [subjects addObject:routeNameCellData];
+            hasName = YES;
+        }
+
         if ([routeTagKey isEqualToString:@"colour"])
         {
             routeTagTitle = OALocalizedString(@"shared_string_color");
@@ -245,10 +257,14 @@
         {
             routeTagTitle = OALocalizedString(@"osm_id");
         }
-        else if ([routeTagKey isEqualToString:@"name"])
+        else if ([[OAPOIHelper sharedInstance] shouldProcessNameTagForKey:routeTagKey])
         {
-            routeTagTitle = OALocalizedString(@"shared_string_name");
-            routeTagValue = i.value().toNSString() ?: @"";
+            [_nameTags addObject:@{
+                @"key": routeTagKey,
+                @"value": routeTagValue,
+                @"localizedTitle": routeTagTitle
+            }];
+            continue;
         }
         
         OAGPXTableCellData *routeCellData = [OAGPXTableCellData withData:@{
@@ -258,7 +274,7 @@
             kCellDesc: routeTagValue,
             kTableValues: @{ @"order": routeTagOrder }
         }];
-        if ([routeTagKey hasPrefix:@"description"] || [routeTagKey isEqualToString:@"name"])
+        if ([routeTagKey hasPrefix:@"description"])
             [routeCellData setData:@{ kCellToggle: @YES }];
         [subjects addObject:routeCellData];
     }
@@ -535,22 +551,6 @@
         return copyrightSectionData;
     }
     return nil;
-}
-
-- (BOOL)shouldExcludeTag:(NSString *)tagKey
-{
-    if ([tagKey hasPrefix:@"osmc"] || [tagKey hasPrefix:@"name:"] || ([tagKey isEqualToString:@"relation_id"] && ![OAPluginsHelper isEnabled:OAOsmEditingPlugin.class]))
-        return YES;
-    
-    NSArray<NSString *> *excludedTags = @[@"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name"];
-    NSString *normalizedTagKey = [tagKey stringByTrimmingCharactersInSet:[NSCharacterSet characterSetWithCharactersInString:@":"]];
-    for (NSString *excludedTag in excludedTags)
-    {
-        if ([normalizedTagKey isEqualToString:excludedTag])
-            return YES;
-    }
-    
-    return NO;
 }
 
 #pragma mark - Cell action methods

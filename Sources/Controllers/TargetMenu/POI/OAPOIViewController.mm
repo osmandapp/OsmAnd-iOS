@@ -193,24 +193,18 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         UIColor *textColor;
         NSString *vl = [self.poi getAdditionalInfo][key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
-        if ([convertedKey containsString:@"name"] && !hasName) 
+        if ([_poiHelper shouldProcessNameTagForKey:convertedKey] && !hasName)
         {
             nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
             [infoRows addObject:nameRow];
             hasName = YES;
-        }
-        if ([convertedKey containsString:@"name"])
-        {
-            [nameTags addObjectsFromArray:[_poiHelper getNameDataForTagKey:convertedKey withValue:vl]];
-            [nameRow setDetailsArray:nameTags];
         }
         
         if ([convertedKey isEqualToString:@"image"]
             || [convertedKey isEqualToString:MAPILLARY_TAG]
             || [convertedKey isEqualToString:@"subway_region"]
             || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-            || [convertedKey hasPrefix:@"lang_yes"]
-            || hasName)
+            || [convertedKey hasPrefix:@"lang_yes"])
             continue;
 
         NSString *textPrefix = @"";
@@ -296,8 +290,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 continue;
             }
         }
-        else if ([convertedKey hasPrefix:@"name:"])
+        else if ([_poiHelper shouldProcessNameTagForKey:convertedKey])
         {
+            [nameTags addObject:@{
+                @"key": convertedKey,
+                @"value": vl,
+                @"localizedTitle": pt.nameLocalized
+            }];
+            [nameRow setDetailsArray:nameTags];
             continue;
         }
         else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])

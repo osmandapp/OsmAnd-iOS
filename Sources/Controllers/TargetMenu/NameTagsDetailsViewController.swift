@@ -11,7 +11,6 @@ import UIKit
 @objcMembers
 final class NameTagsDetailsViewController: OABaseNavbarViewController {
     private var tags: [NSDictionary]
-    private let keysToSections: [String: String] = ["reg_name": "route_name_regional", "loc_name": "route_name_local", "name": "shared_string_name", "nat_name": "route_name_national", "int_name": "route_name_international", "short_name": "route_name_short", "official_name": "route_name_official", "old_name": "route_name_old", "alt_name": "route_name_alt"]
     
     init(tags: [NSDictionary]) {
         self.tags = tags
@@ -37,24 +36,52 @@ final class NameTagsDetailsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        for (key, header) in keysToSections {
-            let filteredTags = tags.filter { tag in
-                guard let tagKey = tag["key"] as? String else { return false }
-                return tagKey.hasPrefix(key)
-            }
+        var sections = [String: [(tag: (key: String, value: String, descr: String), header: String)]]()
+        for tagDict in tags {
+            guard let tagKey = tagDict["key"] as? String,
+                  let localizedTitle = tagDict["localizedTitle"] as? String,
+                  let value = tagDict["value"] as? String else { continue }
             
-            if !filteredTags.isEmpty {
-                let section = tableData.createNewSection()
-                section.headerText = localizedString(header)
-                for tagDict in filteredTags {
-                    let row = section.createNewRow()
-                    row.cellType = OASimpleTableViewCell.reuseIdentifier
-                    row.key = key
-                    row.title = tagDict["value"] as? String ?? ""
-                    row.descr = tagDict["localizedTitle"] as? String ?? ""
-                }
+            let baseKey = String(tagKey.split(separator: ":").first ?? "")
+            let description = extractDescription(from: localizedTitle)
+            let header = extractHeader(from: localizedTitle, withKey: tagKey)
+            sections[baseKey, default: []].append((tag: (key: tagKey, value: value, descr: description), header: header))
+        }
+        
+        for (baseKey, tagsWithHeaders) in sections {
+            let section = tableData.createNewSection()
+            section.headerText = tagsWithHeaders.first?.header ?? baseKey
+            for tagWithHeader in tagsWithHeaders {
+                let row = section.createNewRow()
+                configureRow(row, with: tagWithHeader.tag)
             }
         }
+    }
+    
+    private func extractHeader(from title: String, withKey key: String) -> String {
+        if key.hasPrefix("name:") {
+            return localizedString("shared_string_name")
+        } else {
+            let endIndex = title.firstIndex(of: "(") ?? title.endIndex
+            return String(title[..<endIndex]).trimmingCharacters(in: .whitespaces)
+        }
+    }
+    
+    private func extractDescription(from title: String) -> String {
+        guard let start = title.firstIndex(of: "("),
+              let end = title.firstIndex(of: ")"),
+              start < end else {
+            return ""
+        }
+        
+        return String(title[title.index(after: start)..<end]).capitalized
+    }
+    
+    private func configureRow(_ row: OATableRowData, with tag: (key: String, value: String, descr: String)) {
+        row.cellType = OASimpleTableViewCell.reuseIdentifier
+        row.key = tag.key
+        row.title = tag.value
+        row.descr = tag.descr
     }
     
     override func getRow(_ indexPath: IndexPath?) -> UITableViewCell? {

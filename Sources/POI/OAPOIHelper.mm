@@ -39,6 +39,8 @@
 #define kRadiusKmToMetersKoef 1200.0
 #define kZoomToSearchPOI 16.0
 
+static NSArray<NSString *> *const kNameTagPrefixes = @[@"name:", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name"];
+
 @implementation OAPOIHelper {
 
     OsmAndAppInstance _app;
@@ -625,39 +627,6 @@
         return [obj1.nameLocalized localizedCompare:obj2.nameLocalized];
     }];
     return lf;
-}
-
-- (nullable NSArray<NSDictionary *> *) getNameDataForTagKey:(NSString *)routeTagKey withValue:(NSString *)value
-{
-    if ([routeTagKey isEqualToString:@"name"])
-        return nil;
-    
-    OAPOIBaseType *poiType = [self getAnyPoiAdditionalTypeByKey:routeTagKey];
-    NSString *localizedTitle = poiType.nameLocalized ?: @"";
-    NSError *error = nil;
-    NSRegularExpression *regex = [NSRegularExpression regularExpressionWithPattern:@"\\(([^)]+)\\)" options:0 error:&error];
-    if (error)
-    {
-        NSLog(@"Error creating NSRegularExpression: %@", error.localizedDescription);
-        return nil;
-    }
-    
-    NSTextCheckingResult *match = [regex firstMatchInString:localizedTitle options:0 range:NSMakeRange(0, localizedTitle.length)];
-    if (match)
-    {
-        NSRange matchRange = [match rangeAtIndex:1];
-        if (matchRange.length > 0)
-        {
-            localizedTitle = [localizedTitle substringWithRange:matchRange];
-            localizedTitle = [OAUtilities capitalizeFirstLetter:localizedTitle];
-        }
-    }
-    
-    return @[@{
-        @"key": routeTagKey,
-        @"value": value,
-        @"localizedTitle": localizedTitle
-    }];
 }
 
 - (void) setVisibleScreenDimensions:(OsmAnd::AreaI)area zoomLevel:(OsmAnd::ZoomLevel)zoom
@@ -1501,6 +1470,17 @@
 {
     _breakSearch = !_isSearchDone;
     return _breakSearch;
+}
+
+- (BOOL) shouldProcessNameTagForKey:(NSString *)key
+{
+    for (NSString *prefix in kNameTagPrefixes)
+    {
+        if ([key hasPrefix:prefix])
+            return YES;
+    }
+    
+    return NO;
 }
 
 - (void) onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry

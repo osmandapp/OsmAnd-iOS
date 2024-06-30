@@ -103,14 +103,6 @@
 "select_avoid_descr" = "Select roads you want to avoid during navigation. You can either select a road on the map or choose a type from the list below.";
 "no_active_route" = "No active route";
 
-"route_name_regional" = "Regional name";
-"route_name_local" = "Local name";
-"route_name_national" = "National name";
-"route_name_international" = "International name";
-"route_name_short" = "Short name";
-"route_name_official" = "Official name";
-"route_name_old" = "Old name";
-"route_name_alt" = "Alternative name";
 "day_night_info_description" = "Sunrise: %@ \nSunset: %@";
 "day_night_info" = "Day/night info";
 "daynight_mode_auto" = "Sunrise/sunset";

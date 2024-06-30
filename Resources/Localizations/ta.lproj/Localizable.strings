@@ -2328,3 +2328,7 @@
 "weather_update_disabled" = "முடக்கியது";
 "shared_string_travel_guides" = "பயண வழிகாட்டிகள்";
 "context_menu_read_article" = "கட்டுரை வாசிக்க";
+"edit_tilesource_minzoom" = "குறைந்தபட்ச ஜூம்";
+"avoid_pt_types" = "போக்குவரத்து வகையை தவிர்க்க…";
+"edit_tilesource_maxzoom" = "அதிகபட்ச ஜூம்";
+"avoid_pt_types_descr" = "வழிசெலுத்தலைத் தவிர்ப்பதற்கு பொதுப் போக்குவரத்து வகைகளைத் தேர்ந்தெடுக்கவும்:";

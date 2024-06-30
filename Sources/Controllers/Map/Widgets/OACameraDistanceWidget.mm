@@ -65,7 +65,7 @@
 
 - (NSString *) formatDistance: (float) distanceInMeters
 {
-    return [OAOsmAndFormatter getFormattedDistance:distanceInMeters forceTrailingZeroes:NO];
+    return [OAOsmAndFormatter getFormattedDistance:distanceInMeters];
 }
 
 - (void) setImage:(UIImage *)image

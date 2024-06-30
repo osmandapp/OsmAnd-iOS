@@ -2000,3 +2000,14 @@
 "coordinates_format" = "Formato das coordenadas";
 "angular_measeurement" = "Unidade angular";
 "audionotes_plugin_name" = "Notas de son/vídeo";
+"avoid_pt_types_descr" = "Escolle os tipos de transporte público a evitar para a navegación:";
+"empty_name" = "Nome baleiro";
+"edit_tilesource_minzoom" = "Achegamento mínimo";
+"in_case_of_reverse_direction" = "En caso de dirección inversa";
+"step_by_step" = "Tódolos cruzamentos (xiro a xiro)";
+"avoid_pt_types" = "Evitar tipos de transporte…";
+"shared_string_always" = "Sempre";
+"route_recalculation_dist_title" = "Distancia mínima para recalcular a ruta";
+"edit_tilesource_maxzoom" = "Achegamento máximo";
+"shared_string_bottom" = "Abaixo";
+"shared_string_development" = "Desenvolvemento";

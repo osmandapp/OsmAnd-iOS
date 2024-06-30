@@ -893,3 +893,5 @@
 "shared_string_result" = "ရလဒ်";
 "shared_string_read" = "ဖတ်ပါ";
 "press_again_to_change_the_map_orientation" = "မြေပုံတည်နေရာကိုပြောင်းလဲရန်နောက်တစ်ကြိမ်အသာပုတ်ပါ";
+"avoid_pt_types_descr" = "လမ်းညွှန်ရန် မသုံးမြည့်ပြည်သူပို့ဆောင်ရေးအမျိုးအစားများကိုရွေးပါ။";
+"avoid_pt_types" = "ရှောင်ထားသောပို့ဆောင်ရေးအမျိုးအစားများ";

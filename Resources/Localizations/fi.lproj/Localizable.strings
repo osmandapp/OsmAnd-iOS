@@ -466,10 +466,10 @@
 "shared_string_max" = "Maks.";
 "offline_maps" = "Offline-kartat";
 "shared_string_download_map" = "Lataa kartta";
-"update_tile" = "Päivitä kartta";
+"update_tile" = "Päivitä";
 "download_pending" = "Download pending";
 "move_map_to_select_area" = "Siirrä karttaa valitaksesi tarvittavan alueen.";
-"number_of_tiles" = "Tiilien lukumäärä";
+"number_of_tiles" = "Ruutujen lukumäärä";
 "download_size" = "Download size";
 "preview_of_selected_zoom_levels" = "Preview of selected zoom levels";
 "select_online_source" = "Select source";
@@ -886,7 +886,7 @@
 
 // Resources
 "shared_string_resources" = "Resurssit";
-"res_mapsres" = "Maps & Resources";
+"res_mapsres" = "Kartat & resurssit";
 "download_tab_local" = "Asennetut";
 "osmand_live" = "OsmAnd Live";
 "live_updates" = "Live-päivitykset";
@@ -959,11 +959,11 @@
 "shared_string_zoom_levels" = "Zoomaustasot";
 "res_expire_time" = "Expire time";
 "res_mercator" = "Mercator Projection";
-"edit_tilesource_elliptic_tile" = "elliptinen merkator";
-"pseudo_mercator_projection" = "Pseudo-Mercator projection";
+"edit_tilesource_elliptic_tile" = "Elliptinen Mercatorin projektio";
+"pseudo_mercator_projection" = "Pseudo-Mercatorin projektio";
 "res_source_format" = "Source format";
 "sqlite_db_file" = "SQLiteDB -tiedosto";
-"one_image_per_tile" = "One image file per tile";
+"one_image_per_tile" = "Yksi kuva ruutua kohden";
 "res_zoom_levels_desc" = "This parameters will affect the map display when used as a map type or overlay/underlay.\n\nMap type: the map will be limited to the selected zooms.\n\nOverlay / Underlay: Zoom levels at which tiles will be visible. Upscale or downscale will occur above or below the set values.";
 "res_expire_time_desc" = "Expiration time in minutes. Cached tiles will be reloaded after specified time. Leave this field empty if you do not need to reload tiles for this source.\nOne day is 1440 minutes.\nOne week is 10 080 minutes.\n30 days are 43 200 minutes.";
 "res_name_warning" = "File name cannot be empty";
@@ -1072,7 +1072,7 @@
 "mapillary_descr" = "Katutason valokuvia verkossa kaikille. Tutustu paikkoihin, tee yhteistyötä, kaappaa maailma.";
 "mapillary_turn_on_widget" = "Turn on Mapillary widget";
 "mapillary_turn_on_widget_descr" = "This allows you to quickly contribute to Mapillary";
-"mapillary_menu_title_tile_cache" = "Karttalaattavälimuisti";
+"mapillary_menu_title_tile_cache" = "Karttaruutuvälimuisti";
 "shared_string_reload" = "Lataa uudelleen";
 "show_more" = "Näytä lisää";
 "mapil_reload_cache" = "Reload tiles to see the newest data";
@@ -1123,7 +1123,7 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Lisää KP";
-"quick_action_map_style" = "Muuta karttatyyliä";
+"quick_action_map_style" = "Karttatyyli";
 "quick_action_map_source" = "Muuta kartan lähdettä";
 "quick_action_map_overlay" = "Change map overlay";
 "quick_action_map_underlay" = "Change map underlay";
@@ -1860,7 +1860,7 @@
 "rendering_attr_surface_paving_stones_name" = "Kivetty";
 "rendering_attr_depthContours_name" = "Merelliset syvyyskäyrät";
 "rendering_attr_piste_difficulty_freeride_name" = "Freeride";
-"routeInfo_steepness_name" = "Steepness";
+"routeInfo_steepness_name" = "Jyrkkyys";
 "rendering_attr_smoothness_very_bad_name" = "Erittäin huono";
 "rendering_attr_surface_compacted_name" = "Tiivistetty";
 "rendering_attr_undefined_name" = "Määrittelemätön";
@@ -2799,7 +2799,7 @@
 "help_article_navigation_routing_public_transport_navigation_name" = "Julkisen liikenteen reititys";
 "help_article_navigation_routing_train_routing_name" = "Junareititys";
 "help_article_navigation_routing_straight_line_routing_name" = "Linnuntiereititys (lentokone)";
-"help_article_navigation_setup_route_details_name" = "Reitin tiedot";
+"help_article_navigation_setup_route_details_name" = "Reitin yksityiskohdat";
 "help_article_purchases_ios_name" = "iOS-ostokset";
 "help_article_search_search_all_name" = "Etsi kaikki";
 "help_article_search_search_coordinates_name" = "Etsi koordinaatteja";
@@ -2843,3 +2843,7 @@
 "speed_limit_warning" = "Nopeusrajoitusvaroitus";
 "shared_string_millimeters_short" = "mm";
 "add_button" = "Lisää painike";
+"tomorrow" = "Huomenna";
+"required_maps" = "Vaaditut kartat";
+"rendering_value_dark_orange_name" = "Tummanoranssi";
+"help_article_troubleshooting_general_name" = "Yleistä";

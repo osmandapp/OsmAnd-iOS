@@ -44,7 +44,7 @@
 "fav_export_select" = "Виберіть закладки для експорту";
 "shared_string_dismiss" = "Відхилити";
 "shared_string_description" = "Опис";
-"shared_string_modify" = "Змінити";
+"shared_string_modify" = "Модифікувати";
 "first_time_continue" = "Далі";
 "fav_create_group" = "Створити нову групу";
 "fav_ignore" = "Ігнорувати";
@@ -1109,7 +1109,7 @@
 "quick_action_navigation_voice" = "Голос увімк/вимк";
 "quick_action_add_osm_bug" = "Додати Нотатку OSM";
 "quick_action_add_poi" = "Додати POI";
-"quick_action_map_style" = "Змінити стиль мапи";
+"quick_action_map_style" = "Стиль мапи";
 "quick_action_map_source" = "Змінити джерело мапи";
 "quick_action_replace_destination" = "Замінити пункт призначення";
 "add_destination" = "Додати пункт призначення";
@@ -1157,8 +1157,8 @@
 "add_gpx_waypoint" = "Додати маршрутну точку GPX";
 "toggle_online_notes" = "Показати/сховати нотатки OSM";
 "toggle_local_edits" = "Показати/сховати локальні правки OSM";
-"quick_action_map_overlay" = "Змінити допоміжний шар";
-"quick_action_map_underlay" = "Змінити тло мапи";
+"quick_action_map_overlay" = "Накладання";
+"quick_action_map_underlay" = "Підкладка";
 "shared_string_action_name" = "Назва дії";
 "quick_action_name_alert" = "Назву швидкої дії змінено на %@, щоб уникнути дублювання.";
 "quick_action_screen_header" = "Екран %ld";
@@ -1874,7 +1874,7 @@
 "quick_action_mapillary_show" = "Показати Mapillary";
 "quick_action_remove_next_destination_descr" = "Вилучає наступний пункт призначення з маршруту. Якщо це кінцевий пункт призначення, навігація зупиниться.";
 "shared_string_add_profile" = "Додати профіль";
-"quick_action_remove_next_destination" = "Вилучити наступну точку призначення";
+"quick_action_remove_next_destination" = "Наступний пункт призначення";
 "reverse_route" = "Зворотний маршрут";
 "quick_action_mapillary_hide" = "Вимкнути Mapillary";
 "profile_type_user_string" = "Профіль користувача";
@@ -3403,7 +3403,7 @@
 "ft_s" = "футів/с";
 "delete_all_items_desc" = "Ви впевнеі, що бажаєте назавжди видалити всі елементи зі Смітника? Дана дія є незворотня.";
 "remove_folder_with_files_descr" = "Ви впевнені, що хочете видалити теку \"%@\" та всі доріжки %d?";
-"calculate_online_title" = "Список необхідних карт базується на прямому маршруті. Щоб отримати точний список карт, OsmAnd може попередньо розрахувати ваш маршрут онлайн";
+"calculate_online_title" = "Список відсутніх мап базується на прямому маршруті. Щоб отримати точний список мап, OsmAnd може попередньо розрахувати ваш маршрут онлайн";
 "track_3d_empty_view_description" = "Досліджуйте трек в інтерактивному 3D! Візуалізуйте висоту, швидкість та багато іншого безпосередньо на мапі.";
 "recorded_track" = "Записана доріжка";
 "permanent_delete_warning" = "%@ буде видалено назавжди. Ви впевнені?";
@@ -3460,3 +3460,5 @@
 "avoid_pt_types_descr" = "Оберіть види громадського транспорту, яких треба уникати:";
 "dangerous_goods" = "Небезпечні вантажі";
 "shared_string_class" = "Клас";
+"missing_maps_ignore" = "Використати існуючі мапи";
+"missing_maps_ignore_details" = "Деякі вже завантажені мапи можуть підійти для вашого маршруту. Якщо ви знайомі з місцевістю і мапами, ви можете спробувати прокласти маршрут, використовуючи наявні мапи.";

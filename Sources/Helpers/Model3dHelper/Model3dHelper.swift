@@ -72,7 +72,7 @@ final class Model3dHelper: NSObject {
             } else {
                 self.modelsCache[modelName] = model
             }
-            self.modelsInProgress.insert(modelName)
+            self.modelsInProgress.remove(modelName)
             if let callback {
                 callback(model)
             }

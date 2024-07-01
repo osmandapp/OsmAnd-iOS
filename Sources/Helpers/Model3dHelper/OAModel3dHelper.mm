@@ -12,9 +12,6 @@
 #import "OsmAndApp.h"
 #import "OAIndexConstants.h"
 
-#include <OsmAndCore/ObjParser.h>
-#include "OsmAndCore/Map/Model3D.h"
-
 @implementation OAModel3dWrapper
 {
     OsmAnd::Model3D *_model;
@@ -28,6 +25,11 @@
         _model = new OsmAnd::Model3D(model->vertices, model->materials, model->bbox);
     }
     return self;
+}
+
+- (std::shared_ptr<const OsmAnd::Model3D>) model
+{
+    return std::shared_ptr<const OsmAnd::Model3D>(new OsmAnd::Model3D(_model->vertices, _model->materials, _model->bbox, _model->mainColor));
 }
 
 - (void) setMainColor:(UIColor *)color

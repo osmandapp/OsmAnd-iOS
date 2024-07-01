@@ -3443,6 +3443,20 @@
 • Fixed status bar color for older iOS versions\n
 • Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
 
+"ios_release_4_8" = "• New \"Speedometer\" widget compatible with CarPlay\n
+• Added Turn-by-turn instructions to route details\n
+• Customize the map screen by adding multiple \"Quick Action\" buttons\n
+• 3D Track Improvements: new visualization and colorization options\n
+• Custom color palettes for terrain, tracks, and routes\n
+• Added improved multi-selection mode for Tracks\n
+• 3D variant for location position icons\n
+• Weather: UI refresh, added wind animation\n
+• Add smooth transitions while zooming in 3D mode\n
+• \"Location position on screen\" is now in Configure Screen\n
+• Change \"Wheel circumference\" in BLE sensor settings\n
+• Added separate \"Speed limit\" navigation alert\n
+• Fixed names for bearing widgets\n
+• Fixed \"Radius ruler\" visibility in all widget panels\n
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";

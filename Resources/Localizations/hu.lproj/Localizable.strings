@@ -344,7 +344,7 @@
 "shared_string_show_all" = "Összes megjelenítése";
 "get_directions" = "Navigáció";
 "shared_string_dismiss" = "Bezárás";
-"shared_string_modify" = "Módosít";
+"shared_string_modify" = "Módosítás";
 "poi_filter_parking" = "Parkoló";
 "est_travel_time" = "Utazási idő becslése";
 "pedestrian" = "Gyalogos";
@@ -802,7 +802,7 @@
 "tab_title_basic" = "Alap";
 "quick_action_map_underlay_action" = "Alátétréteg hozzáadása";
 "shared_string_add_photos" = "Fényképek hozzáadása";
-"quick_action_map_style" = "Térkép stílus";
+"quick_action_map_style" = "Térképstílus";
 "quick_action_start_stop_navigation" = "Navigáció indítása/megállítása";
 "fast_route_mode_descr" = "Leggyorsabbútvonal tervezésének engedélyezése vagy letiltása az üzemanyag-takarékos útvonal kedvéért.";
 "contact_info" = "Elérhetőségek";
@@ -878,7 +878,7 @@
 "quick_action_start_stop_nav_descr" = "A navigáció elkezdéséhez vagy befejezéséhez koppintson erre a gombra.";
 "relief_smoothness_factor_descr" = "Előnyben részesített terep: sík vagy dombos.";
 "impassable_road_desc" = "A navigáció során elkerülendő utak kijelölése.";
-"quick_action_map_underlay" = "Alátét";
+"quick_action_map_underlay" = "Alátétréteg";
 "add_gpx_waypoint" = "GPX-útpont hozzáadása";
 "quick_action_resume_pause_navigation" = "Navigáció szüneteltetése/folytatása";
 "rendering_value_category_name" = "Kategória";

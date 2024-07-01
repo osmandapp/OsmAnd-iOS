@@ -556,11 +556,7 @@
 
 - (void)onTopButtonPressed
 {
-    UIActivityViewController *activityViewController = [[UIActivityViewController alloc] initWithActivityItems:@[[self getUrl]]
-                                                                                         applicationActivities:nil];
-    activityViewController.popoverPresentationController.sourceView = self.view;
-    activityViewController.popoverPresentationController.sourceRect = self.topButton.frame;
-    [self.navigationController presentViewController:activityViewController animated:YES completion:nil];
+    [self showActivity:@[[self getUrl]] sourceView:self.topButton barButtonItem:nil completionWithItemsHandler:nil];
 }
 
 - (void)onBottomButtonPressed

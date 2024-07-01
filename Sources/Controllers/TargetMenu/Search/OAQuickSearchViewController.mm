@@ -169,8 +169,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
 
 - (void)commonInit
 {
-    self.searchQuery = @"";
-    self.searchType = OAQuickSearchType::REGULAR;
+    _searchQuery = @"";
+    _searchType = OAQuickSearchType::REGULAR;
     _runSearchFirstTime = YES;
 }
 
@@ -454,7 +454,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
             break;
     }
     _barActionType = type;
-    [self.view setNeedsLayout];
+    if (self.isViewLoaded)
+	    [self.view setNeedsLayout];
 }
 
 - (void)updateTabsVisibility:(BOOL)show
@@ -802,7 +803,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         }
         [self updateSearchNearMapCenterLabel];
 
-        [self.view setNeedsLayout];
+        if (self.isViewLoaded)
+	        [self.view setNeedsLayout];
     }
 }
 
@@ -1429,7 +1431,8 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
         [self runSearch];
     }
 
-    [self.view setNeedsLayout];
+    if (self.isViewLoaded)
+	    [self.view setNeedsLayout];
 }
 
 - (void) goToPoint:(double)latitude longitude:(double)longitude
@@ -1762,7 +1765,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         double rd = [OAOsmAndFormatter calculateRoundedDist:minimalSearchRadius];
         item.title = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nothing_found"),
-                [OAOsmAndFormatter getFormattedDistance:rd forceTrailingZeroes:NO]];
+                      [OAOsmAndFormatter getFormattedDistance:rd withParams:[OsmAndFormatterParams noTrailingZeros]]];
     }
 
     if (!_paused && !_cancelPrev)
@@ -1923,7 +1926,7 @@ typedef BOOL(^OASearchFinishedCallback)(OASearchPhrase *phrase);
     {
         NSString *lang = [OAAppSettings sharedManager].settingPrefMapLanguage.get;
         BOOL transliterate = [OAAppSettings sharedManager].settingMapLanguageTranslit.get;
-        [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate];
+        [OAQuickSearchTableController showHistoryItemOnMap:item lang:lang ? lang : @"" transliterate:transliterate preferredZoom:item.preferredZoom];
     }
     else if (self.searchType == OAQuickSearchType::START_POINT || self.searchType == OAQuickSearchType::DESTINATION || self.searchType == OAQuickSearchType::INTERMEDIATE || self.searchType == OAQuickSearchType::HOME || self.searchType == OAQuickSearchType::WORK)
     {

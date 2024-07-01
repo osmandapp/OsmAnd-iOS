@@ -20,8 +20,7 @@
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAUtilities.h"
-#import "OAQuickActionRegistry.h"
-#import "OADownloadingCellHelper.h"
+#import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAGpxInfo.h"
@@ -33,6 +32,7 @@
 #import "OAGPXUIHelper.h"
 #import "OAMapUtils.h"
 #import "OADestination.h"
+#import "OACollatorStringMatcher.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -49,6 +49,7 @@
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OAHistoryViewController.h"
 #import "OAAppDelegate.h"
+#import "SpeedLimitWrapper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -98,6 +99,7 @@
 #import "OABaseButtonsViewController.h"
 #import "OABaseNavbarSubviewViewController.h"
 #import "OAQuickActionListViewController.h"
+#import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACreateProfileViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmLoginMainViewController.h"
@@ -126,6 +128,8 @@
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAPurchasesViewController.h"
 #import "OAMainSettingsViewController.h"
+#import "OADownloadMultipleResourceViewController.h"
+#import "OAPluginPopupViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -151,9 +155,11 @@
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATextInputFloatingCell.h"
+#import "OAInputTableViewCell.h"
 
 // Views
 #import "OASegmentedSlider.h"
+#import "OATurnDrawable.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>
@@ -164,6 +170,7 @@
 #import "OADayNightHelper.h"
 #import <CoreBluetooth/CoreBluetooth.h>
 #import "FFCircularProgressView.h"
+#import "FFCircularProgressView+isSpinning.h"
 
 // Enums
 #import "OAGPXDataSetType.h"
@@ -184,3 +191,18 @@
 #import "OARemoteFile.h"
 #import "OAOperationLog.h"
 #import "OANetworkUtilities.h"
+
+// Quick actions
+#import "OAQuickAction.h"
+#import "OASwitchableAction.h"
+#import "OAQuickActionsSettingsItem.h"
+#import "OAShowHideTransportLinesAction.h"
+#import "OAShowHideLocalOSMChanges.h"
+#import "OANavDirectionsFromAction.h"
+#import "OAShowHideTemperatureAction.h"
+#import "OAShowHideAirPressureAction.h"
+#import "OAShowHideWindAction.h"
+#import "OAShowHideCloudAction.h"
+#import "OAShowHidePrecipitationAction.h"
+#import "OAMapStyleAction.h"
+#import "OAUnsupportedAction.h"

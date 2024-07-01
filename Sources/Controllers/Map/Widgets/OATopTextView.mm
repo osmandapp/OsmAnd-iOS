@@ -15,6 +15,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAWaypointHelper.h"
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OARouteInfoView.h"

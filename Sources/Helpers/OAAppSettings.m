@@ -109,7 +109,6 @@ static NSString * const transparentMapThemeKey = @"transparentMapTheme";
 static NSString * const showStreetNameKey = @"showStreetName";
 static NSString * const positionPlacementOnMapKey = @"positionPlacementOnMap";
 static NSString * const rotateMapKey = @"rotateMap";
-static NSString * const compassModeKey = @"compassMode";
 static NSString * const firstMapIsDownloadedKey = @"firstMapIsDownloaded";
 
 // App profiles
@@ -167,6 +166,7 @@ static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
 static NSString * const showCompassControlRulerKey = @"showCompassRuler";
 static NSString * const showTrafficWarningsKey = @"showTrafficWarnings";
 static NSString * const showPedestrianKey = @"showPedestrian";
+static NSString * const showSpeedLimitWarningsKey = @"showSpeedLimitWarnings";
 static NSString * const showCamerasKey = @"showCameras";
 static NSString * const showTunnelsKey = @"showTunnels";
 static NSString * const showLanesKey = @"showLanes";
@@ -212,6 +212,9 @@ static NSString * const showDistanceRulerKey = @"showDistanceRuler";
 static NSString * const showElevationProfileWidgetKey = @"show_elevation_profile_widget";
 static NSString * const showSlopesOnElevationWidget = @"show_slopes_on_elevation_widget";
 static NSString * const customWidgetKeys = @"custom_widgets_keys";
+static NSString * const showSpeedometerKey = @"show_speedometer";
+static NSString * const speedometerSizeKey = @"speedometer_size";
+static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
 
 static NSString * const osmUserNameKey = @"osm_user_name";
 static NSString * const userOsmBugNameKey = @"userOsmBugName";
@@ -236,20 +239,8 @@ static NSString * const mapillaryFilterStartDateKey = @"mapillaryFilterStartDate
 static NSString * const mapillaryFilterEndDateKey = @"mapillaryFilterEndDate";
 static NSString * const mapillaryFilterPanoKey = @"mapillaryFilterPano";
 
-static NSString * const quickActionIsOnKey = @"qiuckActionIsOn";
-static NSString * const quickActionsListKey = @"quickActionsList";
 static NSString * const isQuickActionTutorialShownKey = @"isQuickActionTutorialShown";
-
-static NSString * const quickActionLandscapeXKey = @"quickActionLandscapeX";
-static NSString * const quickActionLandscapeYKey = @"quickActionLandscapeY";
-static NSString * const quickActionPortraitXKey = @"quickActionPortraitX";
-static NSString * const quickActionPortraitYKey = @"quickActionPortraitY";
-
-static NSString * const map3dModeLandscapeXKey = @"map3dModeLandscapeX";
-static NSString * const map3dModeLandscapeYKey = @"map3dModeLandscapeY";
-static NSString * const map3dModePortraitXKey = @"map3dModePortraitX";
-static NSString * const map3dModePortraitYKey = @"map3dModePortraitY";
-static NSString * const map3dModeVisibilityKey = @"map_3d_mode_visibility";
+static NSString * const quickActionButtonsKey = @"quick_action_buttons";
 
 static NSString * const contourLinesZoomKey = @"contourLinesZoom";
 static NSString * const hikingRoutesParameterKey = @"hikingRoutesParameter";
@@ -356,6 +347,7 @@ static NSString * const currentTrackWidthKey = @"currentTrackWidth";
 static NSString * const currentTrackShowArrowsKey = @"currentTrackShowArrows";
 static NSString * const currentTrackShowStartFinishKey = @"currentTrackShowStartFinish";
 static NSString * const currentTrackVerticalExaggerationScaleKey = @"currentTrackVerticalExaggerationScale";
+static NSString * const currentTrackElevationMetersKey = @"currentTrackElevationMeters";
 static NSString * const currentTrackVisualization3dByTypeKey = @"currentTrackVisualization3dByType";
 static NSString * const currentTrackVisualization3dWallColorTypeKey = @"currentTrackVisualization3dWallColorType";
 static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTrackVisualization3dPositionType";
@@ -437,83 +429,6 @@ static NSString * const topWidgetPanelOrderOldKey = @"top_widget_panel_order";
 static NSString * const bottomWidgetPanelOrderKeyOld = @"bottom_widget_panel_order";
 
 static NSString * const useOldRoutingKey = @"useOldRoutingKey";
-
-@implementation OACompassMode
-
-+ (NSString *) getTitle:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassVisible:
-            return OALocalizedString(@"compass_always_visible");
-        case EOACompassHidden:
-            return OALocalizedString(@"compass_always_hidden");
-        default:
-            return OALocalizedString(@"compass_visible_if_map_rotated");
-    }
-}
-
-+ (NSString *) getDescription:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassRotated:
-            return OALocalizedString(@"compass_visible_in_rotated_mode_descr");
-        default:
-            return @"";
-    }
-}
-
-+ (NSString *) getIconName:(EOACompassMode)cm
-{
-    switch (cm)
-    {
-        case EOACompassVisible:
-            return @"ic_custom_compass_north";
-        case EOACompassHidden:
-            return @"ic_custom_compass_hidden";
-        default:
-            return @"ic_custom_compass_rotated";
-    }
-}
-
-@end
-
-@implementation OAMap3DModeVisibility
-
-+ (instancetype) withModeConstant:(EOAMap3DModeVisibility)mode;
-{
-    OAMap3DModeVisibility *obj = [[OAMap3DModeVisibility alloc] init];
-    if (obj)
-        obj.mode = mode;
-    return obj;
-}
-
-+ (NSString *) getTitle:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return OALocalizedString(@"shared_string_hidden");
-        case EOAMap3DModeVisibilityVisible:
-            return OALocalizedString(@"shared_string_visible");
-        default:
-            return OALocalizedString(@"visible_in_3d_mode");
-    }
-}
-
-+ (NSString *) getIconName:(EOAMap3DModeVisibility)mode
-{
-    switch (mode)
-    {
-        case EOAMap3DModeVisibilityHidden:
-            return @"ic_custom_button_3d_off";
-        default:
-            return @"ic_custom_button_3d";
-    }
-}
-
-@end
 
 @interface OAMetricsConstant()
 
@@ -1393,21 +1308,27 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     return obj;
 }
 
-- (id)makeGlobal
+- (instancetype)makeGlobal
 {
     _global = YES;
     return self;
 }
 
-- (id)makeProfile
+- (instancetype)makeProfile
 {
     _global = NO;
     return self;
 }
 
-- (id)makeShared
+- (instancetype)makeShared
 {
     _shared = YES;
+    return self;
+}
+
+- (instancetype)storeLastModifiedTime
+{
+    _lastModifiedTimeStored = YES;
     return self;
 }
 
@@ -2352,6 +2273,100 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
+@implementation OACommonSpeedLimitWarningState
+
+@dynamic defValue;
+
+static NSString *kStateAlwaysKey = @"ALWAYS";
+static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
+
++ (instancetype) withKey:(NSString *)key defValue:(EOASpeedLimitWarningState)defValue
+{
+    OACommonSpeedLimitWarningState *obj = [[OACommonSpeedLimitWarningState alloc] init];
+    if (obj)
+    {
+        obj.key = key;
+        obj.defValue = defValue;
+    }
+    return obj;
+}
+
+- (EOASpeedLimitWarningState) get
+{
+    return [super get];
+}
+
+- (EOASpeedLimitWarningState) get:(OAApplicationMode *)mode
+{
+    return [super get:mode];
+}
+
+- (void) set:(EOASpeedLimitWarningState)value
+{
+    [super set:(int)value];
+}
+
+- (void) set:(EOASpeedLimitWarningState)value mode:(OAApplicationMode *)mode
+{
+    [super set:(int)value mode:mode];
+}
+
+- (void) resetToDefault
+{
+    EOASpeedLimitWarningState defaultValue = self.defValue;
+    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
+    if (pDefault)
+        defaultValue = (EOASpeedLimitWarningState)((NSNumber *)pDefault).intValue;
+
+    [self set:defaultValue];
+}
+
+- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
+{
+    if ([strValue isEqualToString:kStateAlwaysKey])
+        return [self set:EOASpeedLimitWarningStateAlways mode:mode];
+    else if ([strValue isEqualToString:kWhenExceededKey])
+        return [self set:EOASpeedLimitWarningStateWhenExceeded mode:mode];
+}
+
+- (NSString *)toStringValue:(OAApplicationMode *)mode
+{
+    switch ([self get:mode])
+    {
+        case EOASpeedLimitWarningStateAlways:
+            return kStateAlwaysKey;
+        case EOASpeedLimitWarningStateWhenExceeded:
+            return kWhenExceededKey;
+        default:
+            return @"";
+    }
+}
+
+- (NSString *) toHumanString
+{
+    return [self toHumanString:[self appMode]];
+}
+
+- (NSString *) toHumanString:(OAApplicationMode *)mode
+{
+    return [self.class toHumanString:[self get:mode]];
+}
+
++ (NSString *) toHumanString:(EOASpeedLimitWarningState)value
+{
+    switch (value)
+    {
+        case EOASpeedLimitWarningStateAlways:
+            return OALocalizedString(@"shared_string_always");
+        case EOASpeedLimitWarningStateWhenExceeded:
+            return OALocalizedString(@"when_exceeded");
+        default:
+            return @"";
+    }
+}
+
+@end
+
 @implementation OACommonAutoZoomMap
 
 @dynamic defValue;
@@ -2914,82 +2929,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
     if (pDefault)
         defaultValue = (EOARulerWidgetMode)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-@end
-
-@implementation OACommonMap3dMode
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOAMap3DModeVisibility)defValue
-{
-    OACommonRulerWidgetMode *obj = [[OACommonRulerWidgetMode alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOAMap3DModeVisibility) get
-{
-    return [super get];
-}
-
-- (void) set:(EOAMap3DModeVisibility)map3dMode
-{
-    [super set:map3dMode];
-}
-
-- (EOAMap3DModeVisibility) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOAMap3DModeVisibility)map3dMode mode:(OAApplicationMode *)mode
-{
-    [super set:map3dMode mode:mode];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"Hidden"])
-        return [self set:EOAMap3DModeVisibilityHidden mode:mode];
-    else if ([strValue isEqualToString:@"Visible"])
-        return [self set:EOAMap3DModeVisibilityVisible mode:mode];
-    else if ([strValue isEqualToString:@"VisibleIn3DMode"])
-        return [self set:EOAMap3DModeVisibilityVisibleIn3DMode mode:mode];
-}
-
-+ (NSString *) rulerWidgetModeToString:(EOAMap3DModeVisibility)map3dMode
-{
-    switch (map3dMode) {
-        case EOAMap3DModeVisibilityHidden:
-            return @"Hidden";
-        case EOAMap3DModeVisibilityVisible:
-            return @"Visible";
-        case EOAMap3DModeVisibilityVisibleIn3DMode:
-            return @"VisibleIn3DMode";
-        default:
-            return @"VisibleIn3DMode";
-    }
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    return [self.class rulerWidgetModeToString:[self get:mode]];
-}
-
-- (void) resetToDefault
-{
-    EOAMap3DModeVisibility defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOAMap3DModeVisibility)((NSNumber *)pDefault).intValue;
 
     [self set:defaultValue];
 }
@@ -4128,9 +4067,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [_rotateMap setModeDefaultValue:@(ROTATE_MAP_BEARING) mode:[OAApplicationMode PEDESTRIAN]];
         [_profilePreferences setObject:_rotateMap forKey:@"rotate_map"];
 
-        _compassMode = [OACommonInteger withKey:compassModeKey defValue:EOACompassRotated];
-        [_profilePreferences setObject:_compassMode forKey:@"compass_mode"];
-
         _mapDensity = [OACommonDouble withKey:mapDensityKey defValue:MAGNIFIER_DEFAULT_VALUE];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_CAR) mode:[OAApplicationMode CAR]];
         [_mapDensity setModeDefaultValue:@(MAGNIFIER_DEFAULT_VALUE) mode:[OAApplicationMode BICYCLE]];
@@ -4276,6 +4212,9 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [_showPedestrian setModeDefaultValue:@YES mode:[OAApplicationMode CAR]];
         [_profilePreferences setObject:_showPedestrian forKey:@"show_pedestrian"];
 
+        _showSpeedLimitWarnings = [OACommonBoolean withKey:showSpeedLimitWarningsKey defValue:NO];
+        [_profilePreferences setObject:_showSpeedLimitWarnings forKey:@"show_speed_limit_warnings"];
+
         _showCameras = [OACommonBoolean withKey:showCamerasKey defValue:NO];
         [_profilePreferences setObject:_showCameras forKey:@"show_cameras"];
         _showTunnels = [OACommonBoolean withKey:showTunnelsKey defValue:NO];
@@ -4410,33 +4349,25 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [_globalPreferences setObject:_mapillaryFilterEndDate forKey:@"mapillary_filter_to_date"];
         [_globalPreferences setObject:_mapillaryFilterPano forKey:@"mapillary_filter_pano"];
 
-        _quickActionIsOn = [OACommonBoolean withKey:quickActionIsOnKey defValue:NO];
-        _quickActionsList = [[[OACommonString withKey:quickActionsListKey defValue:@""] makeGlobal] makeShared];
         _isQuickActionTutorialShown = [[[OACommonBoolean withKey:isQuickActionTutorialShownKey defValue:NO] makeGlobal] makeShared];
+        _quickActionButtons = [[[[OACommonStringList withKey:quickActionButtonsKey defValue:@[QuickActionButtonState.defaultButtonId]] makeGlobal] makeShared] storeLastModifiedTime];
 
-        [_profilePreferences setObject:_quickActionIsOn forKey:@"quick_action_state"];
-        [_globalPreferences setObject:_quickActionsList forKey:@"quick_action_list"];
         [_globalPreferences setObject:_isQuickActionTutorialShown forKey:@"quick_action_tutorial"];
-
-        _quickActionPortraitX = [OACommonDouble withKey:quickActionPortraitXKey defValue:0];
-        _quickActionPortraitY = [OACommonDouble withKey:quickActionPortraitYKey defValue:0];
-        _quickActionLandscapeX = [OACommonDouble withKey:quickActionLandscapeXKey defValue:0];
-        _quickActionLandscapeY = [OACommonDouble withKey:quickActionLandscapeYKey defValue:0];
-        [_profilePreferences setObject:_quickActionPortraitX forKey:@"quick_fab_margin_x_portrait_margin"];
-        [_profilePreferences setObject:_quickActionPortraitY forKey:@"quick_fab_margin_y_portrait_margin"];
-        [_profilePreferences setObject:_quickActionLandscapeX forKey:@"quick_fab_margin_x_landscape_margin"];
-        [_profilePreferences setObject:_quickActionLandscapeY forKey:@"quick_fab_margin_y_landscape_margin"];
+        [_globalPreferences setObject:_quickActionButtons forKey:quickActionButtonsKey];
         
-        _map3dMode = [[OACommonMap3dMode withKey:map3dModeVisibilityKey defValue:EOAMap3DModeVisibilityVisible] makeShared];
-        _map3dModePortraitX = [OACommonDouble withKey:map3dModePortraitXKey defValue:0];
-        _map3dModePortraitY = [OACommonDouble withKey:map3dModePortraitYKey defValue:0];
-        _map3dModeLandscapeX = [OACommonDouble withKey:map3dModeLandscapeXKey defValue:0];
-        _map3dModeLandscapeY = [OACommonDouble withKey:map3dModeLandscapeYKey defValue:0];
-        [_profilePreferences setObject:_map3dMode forKey:map3dModeVisibilityKey];
-        [_profilePreferences setObject:_map3dModePortraitX forKey:@"3dmode_fab_margin_x_portrait_margin"];
-        [_profilePreferences setObject:_map3dModePortraitY forKey:@"3dmode_fab_margin_y_portrait_margin"];
-        [_profilePreferences setObject:_map3dModeLandscapeX forKey:@"3dmode_fab_margin_x_landscape_margin"];
-        [_profilePreferences setObject:_map3dModeLandscapeY forKey:@"3dmode_fab_margin_y_landscape_margin"];
+        _showSpeedometer = [OACommonBoolean withKey:showSpeedometerKey defValue:NO];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.CAR];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.TRUCK];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.MOTORCYCLE];
+        [_showSpeedometer setModeDefaultValue:@YES mode:OAApplicationMode.MOPED];
+        [_profilePreferences setObject:_showSpeedometer forKey:@"show_speedometer"];
+        
+        _speedometerSize = [OACommonWidgetSizeStyle withKey:speedometerSizeKey defValue:EOAWidgetSizeStyleMedium];
+        [_speedometerSize setModeDefaultValue:EOAWidgetSizeStyleSmall mode:OAApplicationMode.CAR];
+        [self registerPreference:_speedometerSize forKey:speedometerSizeKey];
+        
+        _showSpeedLimitWarning = [OACommonSpeedLimitWarningState withKey:showSpeedLimitWarningKey defValue:EOASpeedLimitWarningStateWhenExceeded];
+        [self registerPreference:_showSpeedLimitWarning forKey:showSpeedLimitWarningKey];
         
         _contourLinesZoom = [OACommonString withKey:contourLinesZoomKey defValue:@""];
         [_profilePreferences setObject:_contourLinesZoom forKey:@"contour_lines_zoom"];
@@ -4617,7 +4548,8 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         
         _currentTrackShowStartFinish = [[[OACommonBoolean withKey:currentTrackShowStartFinishKey defValue:YES] makeGlobal] makeShared];
         
-        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:1.0] makeGlobal] makeShared];
+        _currentTrackVerticalExaggerationScale = [[[OACommonDouble withKey:currentTrackVerticalExaggerationScaleKey defValue:0.25] makeGlobal] makeShared];
+        _currentTrackElevationMeters = [[[OACommonInteger withKey:currentTrackElevationMetersKey defValue:kElevationDefMeters] makeGlobal] makeShared];
         _currentTrackVisualization3dByType = [[[OACommonInteger withKey:currentTrackVisualization3dByTypeKey defValue:EOAGPX3DLineVisualizationByTypeNone] makeGlobal] makeShared];
         
         _currentTrackVisualization3dWallColorType = [[[OACommonInteger withKey:currentTrackVisualization3dWallColorTypeKey defValue:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient] makeGlobal] makeShared];
@@ -4637,6 +4569,7 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
         [_globalPreferences setObject:_currentTrackShowStartFinish forKey:@"current_track_show_start_finish"];
         
         [_globalPreferences setObject:_currentTrackVerticalExaggerationScale forKey:@"current_track_vertical_exaggeration_scale"];
+        [_globalPreferences setObject:_currentTrackElevationMeters forKey:@"current_track_elevation_meters"];
         [_globalPreferences setObject:_currentTrackVisualization3dByType forKey:@"current_track_visualization_3d_by_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dWallColorType forKey:@"current_track_visualization_3d_wall_color_type"];
         [_globalPreferences setObject:_currentTrackVisualization3dPositionType forKey:@"current_track_visualization_3d_position_type"];
@@ -5324,18 +5257,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 {
     _customPluginsJson = customPluginsJson;
     [[NSUserDefaults standardUserDefaults] setObject:_customPluginsJson forKey:customPluginsJsonKey];
-}
-
-- (void) setQuickActionCoordinatesPortrait:(float)x y:(float)y
-{
-    [_quickActionPortraitX set:x];
-    [_quickActionPortraitY set:y];
-}
-
-- (void) setQuickActionCoordinatesLandscape:(float)x y:(float)y
-{
-    [_quickActionLandscapeX set:x];
-    [_quickActionLandscapeY set:y];
 }
 
 - (NSString *) getDefaultVoiceProvider

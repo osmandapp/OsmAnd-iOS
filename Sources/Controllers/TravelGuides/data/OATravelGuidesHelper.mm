@@ -24,7 +24,7 @@
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAMapAlgorithms.h"
-
+#import "OAMapLayers.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
@@ -54,6 +54,7 @@
 
 @implementation OATravelGuidesHelper
 
+static const NSArray<NSString *> *wikivoyageOSMTags = @[@"wikidata", @"wikipedia", @"opening_hours", @"address", @"email", @"fax", @"directions", @"price", @"phone"];
 
 + (void) searchAmenity:(double)lat lon:(double)lon reader:(NSString *)reader radius:(int)radius searchFilters:(NSArray<NSString *> *)searchFilters publish:(BOOL(^)(OAPOI *poi))publish
 {
@@ -112,6 +113,14 @@
     [OAPOIHelper.sharedInstance findTravelGuidesByKeyword:searchQuery categoryNames:categoryNames poiTypeName:nil location:locI bbox31:bbox31 reader:reader publish:publish];
 }
 
++ (void) showContextMenuWithLatitude:(double)latitude longitude:(double)longitude
+{
+    OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+    OAMapViewController *mapVC = mapPanel.mapViewController;
+    OATargetPoint *targetPoint = [mapVC.mapLayers.contextMenuLayer getUnknownTargetPoint:latitude longitude:longitude];
+    targetPoint.centerMap = YES;
+    [mapPanel showContextMenu:targetPoint];
+}
 
 + (OAWptPt *) createWptPt:(OAPOI *)amenity lang:(NSString *)lang
 {
@@ -140,7 +149,18 @@
     {
         wptPt.type = [OAUtilities capitalizeFirstLetter:category];
     }
-    
+    for (NSString *key in [amenity getAdditionalInfo].allKeys)
+    {
+        if (![wikivoyageOSMTags containsObject:key])
+        {
+            continue;
+        }
+        NSString *amenityValue = [amenity getAdditionalInfo][key];
+        if (amenityValue)
+        {
+            [wptPt setExtension:key value:amenityValue];
+        }
+    }
     return wptPt;
 }
 

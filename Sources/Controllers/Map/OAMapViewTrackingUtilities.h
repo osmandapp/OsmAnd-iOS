@@ -21,7 +21,7 @@
 + (BOOL) isSmallSpeedForCompass:(CLLocation *)location;
 + (BOOL) isSmallSpeedForAnimation:(CLLocation *)location;
 
-- (BOOL) isIn3dMode;
+- (BOOL) is3DMode;
 - (void) switchMap3dMode;
 
 - (BOOL) isMapLinkedToLocation;
@@ -40,8 +40,11 @@
 - (void) setRotationNoneToManual;
 
 - (CLLocation *) getDefaultLocation;
+- (CLLocation *) getMapLocation;
 
 - (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
 - (void) setZoomTime:(NSTimeInterval)time;
+
+- (void)startTilting:(float)elevationAngle;
 
 @end

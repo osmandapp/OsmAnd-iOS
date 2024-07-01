@@ -100,9 +100,9 @@ final class WidgetPageViewController: UIViewController {
                 }
                 
                 if UIScreen.main.traitCollection.preferredContentSizeCategory > .large {
-                    widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
+                    widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: widget.frame.size.height, priority: .defaultHigh)
                 } else {
-                    widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.equal, constant: widget.frame.size.height, priority: .defaultHigh)
+                    widget.updateHeightConstraint(with: .equal, constant: widget.frame.size.height, priority: .defaultHigh)
                 }
             }
         }
@@ -133,7 +133,7 @@ extension WidgetPageViewController {
             // NOTE: not isComplex widget has static height (waiting redesign)
             height = 50
         }
-        widget.updateHeightConstraint(with: NSLayoutConstraint.Relation.greaterThanOrEqual, constant: height, priority: .defaultHigh)
+        widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: height, priority: .defaultHigh)
         widget.showBottomSeparator(false)
         widget.showRightSeparator(false)
     }
@@ -145,7 +145,7 @@ extension WidgetPageViewController {
                 // NOTE: use adjustSize for Complex widget
                 if WidgetType.isComplexWidget(firstWidget.widgetType?.id ?? "") {
                     firstWidget.adjustSize()
-                    firstWidget.heightConstraint?.constant = firstWidget.frame.height
+                    firstWidget.heightGreaterThanOrEqualConstraint?.constant = firstWidget.frame.height
                 }
                 firstWidget.isFullRow = true
                 if let widget = firstWidget as? OATextInfoWidget {

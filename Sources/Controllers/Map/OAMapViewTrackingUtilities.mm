@@ -228,13 +228,13 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     });
 }
 
-- (BOOL) isIn3dMode
+- (BOOL) is3DMode
 {
     return [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle < 89;
 }
 
 - (BOOL)isDefaultElevationAngle {
-    return ceil([OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle) == kMapModePositionTrackingDefaultElevationAngle;
+    return ceil([OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle) == kDefaultElevationAngle;
 }
 
 - (void)startTilting:(float)elevationAngle
@@ -263,13 +263,26 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 - (void)switchMap3dMode
 {
     BOOL defaultElevationAngle = [self isDefaultElevationAngle];
-    float tiltAngle = kMapModePositionTrackingDefaultElevationAngle;
-    if (defaultElevationAngle)
-    {
-        float elevationAngle = ceil([[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle]);
-        tiltAngle = elevationAngle != tiltAngle ? elevationAngle : kMapModeFollowDefaultElevationAngle;
-    }
+    float tiltAngle = defaultElevationAngle ? [self getElevationAngle:floor(_mapView.zoom)] : kDefaultElevationAngle;
     [self startTilting:tiltAngle];
+}
+
+- (float) getElevationAngle:(int)zoom
+{
+    float map3DModeElevationAngle = ceil([[OARootViewController instance].mapPanel.mapViewController getMap3DModeElevationAngle]);
+    if (map3DModeElevationAngle != 90)
+    {
+        return map3DModeElevationAngle;
+    }
+    else
+    {
+        if (zoom < kMinZoomLevelToAjustCameraTilt)
+            zoom = kMinZoomLevelToAjustCameraTilt;
+        else if (zoom > kMaxZoomLimit)
+            zoom = kMaxZoomLimit;
+        
+        return 90 - (zoom - 2) * 5;
+    }
 }
 
 - (void) onLocationServicesStatusChanged

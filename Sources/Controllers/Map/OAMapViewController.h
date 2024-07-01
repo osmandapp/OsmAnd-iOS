@@ -14,41 +14,46 @@
 #import "OAAppSettings.h"
 #import "OAPOIType.h"
 
-#define kNotificationMapGestureAction @"kNotificationMapGestureAction"
-#define kNotificationLayersConfigurationChanged @"kNotificationLayersConfigurationChanged"
-
-#define kCorrectionMinLeftSpace 40.0
-#define kCorrectionMinBottomSpace 40.0
-#define kCorrectionMinLeftSpaceBBox 20.0
-#define kCorrectionMinBottomSpaceBBox 20.0
-
-#define kElevationGestureMaxThreshold 50.0f
-#define kElevationMinAngle 5.0f
-#define kElevationGesturePointsPerDegree 3.0f
-#define kRotationGestureThresholdDegrees 5.0f
-#define kZoomDeceleration 40.0f
-#define kZoomVelocityAbsLimit 10.0f
-#define kTargetMoveVelocityLimit 3000.0f
-#define kTargetMoveDeceleration 10000.0f
-#define kRotateDeceleration 500.0f
-#define kRotateVelocityAbsLimitInDegrees 400.0f
-#define kMapModePositionTrackingDefaultZoom 16.0f
-#define kMapModePositionTrackingDefaultElevationAngle 90.0f
-#define kMapBottomPosConstant 1.3f
-#define kGoToMyLocationZoom 15.0f
-#define kMapModeFollowDefaultZoom 18.0f
-#define kMapModeFollowDefaultElevationAngle 30.0
-#define kQuickAnimationTime 0.25f
-#define kFastAnimationTime 0.5f
-#define kOneSecondAnimatonTime 1.0f
-#define kHalfSecondAnimatonTime 0.5f
-#define kScreensToFlyWithAnimation 400000.0
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
-#define kNavAnimatonTime 1.0f
 
-#define CENTER_CONSTANT 0
-#define BOTTOM_CONSTANT 1
+static NSString *kNotificationMapGestureAction = @"kNotificationMapGestureAction";
+static NSString *kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
+
+static const float kCorrectionMinLeftSpace = 40.0;
+static const float kCorrectionMinBottomSpace = 40.0;
+static const float kCorrectionMinLeftSpaceBBox = 20.0;
+static const float kCorrectionMinBottomSpaceBBox = 20.0;
+
+static const int kMinZoomLevelToAjustCameraTilt = 3;
+static const int kMaxZoomLimit = 17;
+
+static const float kDefaultElevationAngle = 90.0f;
+static const float kElevationGestureMaxThreshold = 50.0f;
+static const float kMapModeFollowDefaultZoom = 18.0f;
+static const float kMapModeFollowDefaultElevationAngle = 30.0;
+static const float kElevationGesturePointsPerDegree = 3.0f;
+static const float kRotationGestureThresholdDegrees = 5.0f;
+static const float kZoomDeceleration = 40.0f;
+static const float kZoomVelocityAbsLimit = 10.0f;
+static const float kTargetMoveVelocityLimit = 3000.0f;
+static const float kTargetMoveDeceleration = 10000.0f;
+static const float kRotateDeceleration = 500.0f;
+static const float kRotateVelocityAbsLimitInDegrees = 400.0f;
+static const float kMapModePositionTrackingDefaultZoom = 16.0f;
+
+static const float kMapBottomPosConstant = 1.3f;
+static const float kGoToMyLocationZoom = 15.0f;
+
+static const float kQuickAnimationTime = 0.25f;
+static const float kFastAnimationTime = 0.5f;
+static const float kOneSecondAnimatonTime = 1.0f;
+static const float kHalfSecondAnimatonTime = 0.5f;
+static const float kScreensToFlyWithAnimation = 400000.0;
+static const float kNavAnimatonTime = 1.0f;
+
+static const int CENTER_CONSTANT = 0;
+static const int BOTTOM_CONSTANT = 1;
 
 @class OAGPX;
 @class OAWptPt;
@@ -123,9 +128,11 @@
 - (NSArray<OAWptPt *> * _Nonnull)getPointsOf:(NSString * _Nullable)gpxFileName groupName:(NSString * _Nonnull)groupName;
 
 - (BOOL) canZoomIn;
-- (void) animatedZoomIn;
+- (void) zoomIn;
+- (void) zoomInAndAdjustTiltAngle;
 - (BOOL) canZoomOut;
-- (void) animatedZoomOut;
+- (void) zoomOut;
+- (void) zoomOutAndAdjustTiltAngle;
 
 - (void) animatedPanUp;
 - (void) animatedPanDown;
@@ -212,5 +219,8 @@
 - (void) updateElevationConfiguration;
 
 - (void) updateTapRulerLayer;
+
+- (void)getAltitudeForMapCenter:(void (^ _Nonnull)(float height))callback;
+- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(float height))callback;
 
 @end

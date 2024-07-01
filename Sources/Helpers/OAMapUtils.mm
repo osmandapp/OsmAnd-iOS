@@ -396,9 +396,4 @@
     return latEqual && lonEqual;
 }
 
-+ (double)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon
-{
-    return [OANativeUtilities getAltitudeForElevatedPoint:OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude))];
-}
-
 @end

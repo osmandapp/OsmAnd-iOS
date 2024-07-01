@@ -15,7 +15,6 @@ final class TravelObfHelper : NSObject {
     static let shared = TravelObfHelper()
     
     let WORLD_WIKIVOYAGE_FILE_NAME = "World_wikivoyage.travel.obf"
-    let DEFAULT_WIKIVOYAGE_TRAVEL_OBF = "Default_wikivoyage.travel.obf"
     let ARTICLE_SEARCH_RADIUS = 50 * 1000
     let SAVED_ARTICLE_SEARCH_RADIUS = 30 * 1000
     let MAX_SEARCH_RADIUS = 800 * 1000
@@ -26,7 +25,7 @@ final class TravelObfHelper : NSObject {
     let TRAVEL_GPX_CONVERT_MULT_2 = 5
     
     private var popularArticles = PopularArticles()
-    private var cachedArticles: [Int : [String:TravelArticle] ] = [:]
+    private let cachedArticles = ConcurrentDictionary<Int, [String:TravelArticle]>()
     private let localDataHelper: TravelLocalDataHelper
     private var searchRadius: Int
     private var foundAmenitiesIndex: Int = 0
@@ -169,7 +168,7 @@ final class TravelObfHelper : NSObject {
             var i = articles.values.makeIterator()
             if let next = i.next() {
                 let newArticleId = next.generateIdentifier()
-                cachedArticles[newArticleId.hashValue] = articles
+                cachedArticles.setValue(articles, forKey: newArticleId.hashValue)
                 article = getCachedArticle(articleId: newArticleId, lang: lang, readGpx: readPoints, callback: callback)
             }
         }
@@ -264,15 +263,6 @@ final class TravelObfHelper : NSObject {
         !getReaders().isEmpty
     }
     
-    func isOnlyDefaultTravelBookPresent() -> Bool {
-        let books = TravelObfHelper.shared.getReaders()
-        if books.isEmpty ||
-            books.count == 1 && books[0].lowercased() == DEFAULT_WIKIVOYAGE_TRAVEL_OBF.lowercased() {
-            return true
-        }
-        return false
-    }
-    
     func search(searchQuery: String) -> [TravelSearchResult] {
         var res = [TravelSearchResult]()
         let appLang = OAUtilities.currentLang() ?? ""
@@ -309,17 +299,17 @@ final class TravelObfHelper : NSObject {
                             var l1 = a
                             var l2 = b
                             if l1 == appLang {
-                                l1 = "1";
+                                l1 = "1"
                             }
                             if l2 == appLang {
-                                l2 = "1";
+                                l2 = "1"
                             }
                             if !appLangEn {
                                 if l1 == "en" {
-                                    l1 = "2";
+                                    l1 = "2"
                                 }
                                 if l2 == "en" {
-                                    l2 = "2";
+                                    l2 = "2"
                                 }
                             }
                             return l1 < l2
@@ -331,10 +321,8 @@ final class TravelObfHelper : NSObject {
                         cacheTravelArticles(file: file, amenity: amenity, lang: appLang, readPoints: false, callback: nil)
                     }
                 }
-                
-                
             }
-            res = sortSearchResults(results: res)
+            res = sortSearchResults(results: res, searchQuery: searchQuery)
         }
         return res
     }
@@ -357,11 +345,33 @@ final class TravelObfHelper : NSObject {
         return langs
     }
     
-    func sortSearchResults(results: [TravelSearchResult]) -> [TravelSearchResult] {
+    func sortSearchResults(results: [TravelSearchResult], searchQuery: String) -> [TravelSearchResult] {
         var sortedResults = results
-        sortedResults.sort { a, b in
-            let titleA = a.getArticleTitle() ?? ""
-            let titleB = b.getArticleTitle() ?? ""
+        let collatorContains: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_CONTAINS)
+        let collatorEquals: OACollatorStringMatcher = OACollatorStringMatcher(part: searchQuery, mode: CHECK_EQUALS)
+        sortedResults.sort { (sr1, sr2) -> Bool in
+            let titleA = sr1.getArticleTitle() ?? ""
+            let titleB = sr2.getArticleTitle() ?? ""
+            let titleAContainsQuery = collatorContains.matches(titleA)
+            let titleBContainsQuery = collatorContains.matches(titleB)
+            if collatorEquals.matches(titleA) {
+                return true
+            }
+            if  collatorEquals.matches(titleB) {
+                return false
+            }
+            if titleAContainsQuery && titleBContainsQuery {
+                return titleA < titleB
+            }
+            if titleAContainsQuery {
+                return true
+            }
+            if titleBContainsQuery {
+                return false
+            }
+            if titleA == titleB {
+                return sr1.isPartOf ?? "" < sr2.isPartOf ?? ""
+            }
             return titleA < titleB
         }
         return sortedResults
@@ -395,9 +405,9 @@ final class TravelObfHelper : NSObject {
             parts = []
         }
         
-        var navMap = [String : [TravelSearchResult]]()
+        var navMap = [String: [TravelSearchResult]]()
         var headers = [String]()
-        var headerObjs = [String : TravelSearchResult]()
+        var headerObjs = [String: TravelSearchResult]()
         if !parts.isEmpty {
             headers.append(contentsOf: parts)
             if let isParentOf = article.isParentOf, !isParentOf.isEmpty {
@@ -405,9 +415,10 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        for header in headers {
-            
-            guard let parentArticle = getParentArticleByTitle(title: header, lang: lang, lat: article.lat, lon: article.lon) else {continue}
+        for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
+            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
+            guard let parentArticle = getParentArticleByTitle(title: header, lang: parentLang, lat: article.lat, lon: article.lon) else {continue}
 
             navMap[header] = [TravelSearchResult]()
             if let unseparatedText = parentArticle.isParentOf {
@@ -415,7 +426,7 @@ final class TravelObfHelper : NSObject {
                 for childSubsequence in isParentOf {
                     let childTitle = String(childSubsequence)
                     if !childTitle.isEmpty {
-                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [lang])
+                        let searchResult = TravelSearchResult(routeId: "", articleTitle: childTitle, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                         var resultList = navMap[header]
                         if resultList == nil {
                             resultList = []
@@ -430,13 +441,15 @@ final class TravelObfHelper : NSObject {
             }
         }
         
-        var res: [TravelSearchResult : [TravelSearchResult]] = [:]
-        for header in headers {
+        var res: [TravelSearchResult: [TravelSearchResult]] = [:]
+        for var header in headers {
+            let parentLang = header.hasPrefix(TravelGuidesUtils.EN_LANG_PREFIX) ? "en" : lang
+            header = TravelGuidesUtils.getTitleWithoutPrefix(title: header)
             var searchResult = headerObjs[header]
             var results = navMap[header]
             if results != nil {
-                results = sortSearchResults(results: results!)
-                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: nil)
+                results = sortSearchResults(results: results!, searchQuery: header)
+                let emptyResult = TravelSearchResult(routeId: "", articleTitle: header, isPartOf: nil, imageTitle: nil, langs: [parentLang])
                 searchResult = searchResult != nil ? searchResult : emptyResult
                 res[searchResult!] = results
             }
@@ -479,7 +492,7 @@ final class TravelObfHelper : NSObject {
     
     func getCachedArticle(articleId: TravelArticleIdentifier, lang: String?, readGpx: Bool, callback: GpxReadDelegate?) -> TravelArticle? {
         var article: TravelArticle? = nil
-        let articles = cachedArticles[articleId.hashValue]
+        let articles = cachedArticles.getValue(forKey: articleId.hashValue)
         if let articles {
             if lang == nil || lang!.length == 0 {
                 let ac = articles.values
@@ -766,7 +779,7 @@ final class TravelObfHelper : NSObject {
     
     func getArticleId(title: String, lang: String) -> TravelArticleIdentifier? {
         var a: TravelArticle? = nil
-        for articles in cachedArticles.values {
+        for articles in cachedArticles.getAllValues() {
             for article in articles.values {
                 if article.title == title {
                     a = article
@@ -785,7 +798,7 @@ final class TravelObfHelper : NSObject {
     func getArticleLangs(articleId: TravelArticleIdentifier) -> [String] {
         var res = [String]()
         if let article = getArticleById(articleId: articleId, lang: "", readGpx: false, callback: nil) {
-            if let articles = cachedArticles[article.generateIdentifier().hashValue] {
+            if let articles = cachedArticles.getValue(forKey: article.generateIdentifier().hashValue) {
                 res.append(contentsOf: articles.keys)
             }
         } else {

@@ -14,10 +14,9 @@
 #import "OAColors.h"
 #import "OAQuickAction.h"
 #import "OANewAction.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAActionConfigurationViewController.h"
-#import "OAQuickActionType.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kButtonContainerHeight 60.0
@@ -39,6 +38,7 @@
 
 @implementation OAQuickActionsSheetView
 {
+    OAMapButtonsHelper *_helper;
     NSArray<OAQuickAction *> *_actions;
     
     OAAutoObserverProxy* _actionsChangedObserver;
@@ -52,9 +52,10 @@
     CGFloat _initialTouchPoint;
     
     OAAppSettings *_settings;
+    BOOL _isHidden;
 }
 
-- (instancetype) init
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState;
 {
     NSArray *bundle = [[NSBundle mainBundle] loadNibNamed:NSStringFromClass([self class]) owner:nil options:nil];
     
@@ -66,6 +67,7 @@
     
     if (self)
     {
+        _buttonState = buttonState;
         [self commonInit];
     }
     
@@ -92,7 +94,8 @@
     return self;
 }
 
-- (void)setupPageControls {
+- (void)setupPageControls
+{
     [_pageControlIndicator setNumberOfPages:[self getPagesCount]];
     [_pageControlIndicator setCurrentPage:0];
     [self setupButton:_controlBtnPrev active:NO title:OALocalizedString(@"shared_string_previous")];
@@ -102,11 +105,12 @@
 - (void) commonInit
 {
     _settings = [OAAppSettings sharedManager];
+    _helper = [OAMapButtonsHelper sharedInstance];
+    _actions = _buttonState.quickActions;
     
-    OAQuickActionRegistry *registry = [OAQuickActionRegistry sharedInstance];
     _actionsChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                         withHandler:@selector(onActionsChanged)
-                                                         andObserve:registry.quickActionListChangedObservable];
+                                                         andObserve:_helper.quickActionsChangedObservable];
     
     [self refreshActionList];
     
@@ -181,21 +185,16 @@
 {
     OAQuickAction *item = [self getAction:indexPath];
     if (item.isActionEditable)
-    {
-        OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
-        [[OARootViewController instance].navigationController pushViewController:actionScreen animated:YES];
-    }
+        [[OARootViewController instance].navigationController pushViewController:[[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState action:item] animated:YES];
     else
-    {
         [item execute];
-    }
     if (self.delegate)
         [_delegate dismissBottomSheet];
 }
 
 - (void) refreshActionList
 {
-    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:[OAQuickActionRegistry sharedInstance].getQuickActions];
+    NSMutableArray<OAQuickAction *> *tmpActions = [NSMutableArray arrayWithArray:_buttonState.quickActions];
     [tmpActions addObject:[[OANewAction alloc] init]];
     NSInteger actionsCount = tmpActions.count;
     NSInteger remainder = actionsCount % 6;
@@ -313,6 +312,9 @@
 
 - (void) adjustFrame
 {
+    if (_isHidden)
+        return;
+
     CGRect f = self.frame;
     CGFloat bottomMargin = [OAUtilities getBottomMargin];
     BOOL isLandscape = [OAUtilities isLandscape];
@@ -362,6 +364,18 @@
     [self setupShadow];
 }
 
+- (void)hide
+{
+    _isHidden = YES;
+    CGRect f = self.frame;
+    f.origin.y = DeviceScreenHeight;
+    [UIView animateWithDuration:.3 animations:^{
+        self.frame = f;
+    } completion:^(BOOL finished) {
+        [self removeFromSuperview];
+    }];
+}
+
 - (void)updateControlButtons:(NSIndexPath *)indexPath
 {
     [self setupButton:_controlBtnPrev active:indexPath.section > 0 title:OALocalizedString(@"shared_string_previous")];
@@ -401,7 +415,8 @@
     [self updateControlButtons:newIndexPath];
 }
 
-- (IBAction)closePressed:(id)sender {
+- (IBAction)closePressed:(id)sender
+{
     if (self.delegate)
         [_delegate dismissBottomSheet];
 }
@@ -534,7 +549,7 @@
     if (cell && [cell isKindOfClass:OAQuickActionCell.class])
     {
         OAQuickAction *action = [self getAction:indexPath];
-        if (!action || action.actionType.identifier == 0)
+        if (!action || action.actionType.id == 0)
         {
             cell.hidden = YES;
             return cell;
@@ -552,7 +567,7 @@
         resultCell.actionTitleView.text = action.getActionStateName;
         [resultCell.actionTitleView setEnabled:isEnabled];
         resultCell.actionTitleView.textColor = isDayMode ? UIColorFromRGB(color_quick_action_text) : UIColorFromRGB(color_text_secondary_night);
-        resultCell.imageView.image = [UIImage templateImageNamed:action.getIconResName];
+        resultCell.imageView.image = [[action getActionIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         resultCell.imageView.tintColor = [(isDayMode ? UIColorFromRGB(color_primary_purple) : UIColorFromRGB(color_primary_night)) colorWithAlphaComponent:isEnabled ? 1.0 : 0.3];
         if (resultCell.imageView.subviews.count > 0)
             [[resultCell.imageView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];

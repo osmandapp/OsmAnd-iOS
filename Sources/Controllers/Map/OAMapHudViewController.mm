@@ -33,15 +33,16 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 
-#define kButtonWidth 50.0
-#define kButtonOffset 16.0
-#define kButtonHeight 50.0
-#define kWidgetsOffset 3.0
-#define kDistanceMeters 100.0
-
 #define _(name) OAMapModeHudViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
+
+static const float kButtonWidth = 50.0;
+static const float kButtonOffset = 16.0;
+static const float kButtonHeight = 50.0;
+static const float kWidgetsOffset = 3.0;
+static const float kDistanceMeters = 100.0;
+
 
 @interface OAMapHudViewController () <OAMapInfoControllerProtocol>
 
@@ -309,6 +310,7 @@
         self.bottomBarViewHeightConstraint.constant = [OAUtilities getBottomMargin];
         if (_mapInfoController.weatherToolbarVisible)
             [_mapInfoController updateWeatherToolbarVisible];
+        [_mapInfoController viewWillTransition];
     } completion:^(id<UIViewControllerTransitionCoordinatorContext>  _Nonnull context) {
         [self updateControlsLayout:YES];
         [self updateMapRulerData];
@@ -413,8 +415,8 @@
 - (BOOL) shouldShowCompass:(float)azimuth
 {
     NSInteger rotateMap = [_settings.rotateMap get];
-    NSInteger compassMode = [_settings.compassMode get];
-    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassMode == EOACompassRotated) || compassMode == EOACompassVisible) && _mapSettingsButton.alpha == 1.0;
+    CompassVisibility compassVisibility = [[[OAMapButtonsHelper sharedInstance] getCompassButtonState] getVisibility];
+    return (((azimuth != 0.0 || rotateMap != ROTATE_MAP_NONE) && compassVisibility == CompassVisibilityVisibleIfMapRotated) || compassVisibility == CompassVisibilityAlwaysVisible) && _mapSettingsButton.alpha == 1.0;
 }
 
 - (BOOL) isOverlayUnderlayViewVisible
@@ -498,8 +500,7 @@
     [_optionsMenuButton updateColorsForPressedState:NO];
     _optionsMenuButton.layer.cornerRadius = 6;
 
-    BOOL isNight = _settings.nightMode;
-    [_floatingButtonsController updateColors:isNight];
+    [_floatingButtonsController updateColors];
     [self.rulerLabel updateColors];
     [_mapPanelViewController updateColors];
     _statusBarView.backgroundColor = [self getStatusBarBackgroundColor];
@@ -630,12 +631,12 @@
 
 - (IBAction) onZoomInButtonClicked:(id)sender
 {
-    [_mapViewController animatedZoomIn];
+    [_mapViewController zoomInAndAdjustTiltAngle];
 }
 
 - (IBAction) onZoomOutButtonClicked:(id)sender
 {
-    [_mapViewController animatedZoomOut];
+    [_mapViewController zoomOutAndAdjustTiltAngle];
     [_mapViewController calculateMapRuler];
 }
 
@@ -712,26 +713,35 @@
 - (void) onProfileSettingSet:(NSNotification *)notification
 {
     OACommonPreference *obj = notification.object;
-    OACommonInteger *rotateMap = _settings.rotateMap;
-    OACommonBoolean *transparentMapTheme = _settings.transparentMapTheme;
-    OACommonMap3dMode *map3dMode = _settings.map3dMode;
-    OACommonBoolean *quickActionIsOn = _settings.quickActionIsOn;
-    OACommonInteger *compassMode = _settings.compassMode;
     if (obj)
     {
-        if (obj == rotateMap || obj == compassMode)
+        OAMapButtonsHelper *mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
+        OACommonInteger *compassButtonState = [mapButtonsHelper getCompassButtonState].visibilityPref;
+        OACommonInteger *map3DButtonState = [mapButtonsHelper getMap3DButtonState].visibilityPref;
+
+        BOOL isQuickAction = NO;
+        for (QuickActionButtonState *buttonState in [mapButtonsHelper getButtonsStates])
+        {
+            if (obj == buttonState.statePref || obj == buttonState.quickActionsPref)
+            {
+                isQuickAction = YES;
+                break;
+            }
+        }
+
+        if (obj == _settings.rotateMap || obj == compassButtonState)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateCompassButton];
             });
         }
-        else if (obj == transparentMapTheme)
+        else if (obj == _settings.transparentMapTheme)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateColors];
             });
         }
-        else if (obj == map3dMode || obj == quickActionIsOn)
+        else if (obj == map3DButtonState || isQuickAction)
         {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self updateDependentButtonsVisibility];
@@ -916,6 +926,7 @@
 
     [self updateTopControlsVisibility:animated];
     [self updateBottomControlsVisibility:animated];
+    [_floatingButtonsController updateViewVisibility];
 
     if (_downloadView)
         _downloadView.frame = [self getDownloadViewFrame];
@@ -955,6 +966,16 @@
 
 - (BOOL)hasTopWidget {
     return [_mapInfoController.topPanelController hasWidgets];
+}
+
+- (BOOL)isRightPanelVisible
+{
+    return _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
+}
+
+- (BOOL)isLeftPanelVisible
+{
+    return _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
 }
 
 - (void) updateBottomButtonsLayout
@@ -1157,8 +1178,8 @@
     BOOL isWeatherToolbarVisible = _mapInfoController.weatherToolbarVisible;
     BOOL isScrollableHudVisible = _mapPanelViewController.scrollableHudViewController != nil || _mapPanelViewController.prevScrollableHudViewController != nil;
     BOOL isTopPanelVisible = _mapInfoController.topPanelController && [_mapInfoController.topPanelController hasWidgets];
-    BOOL isLeftPanelVisible = _mapInfoController.leftPanelController && [_mapInfoController.leftPanelController hasWidgets];
-    BOOL isRightPanelVisible = _mapInfoController.rightPanelController && [_mapInfoController.rightPanelController hasWidgets];
+    BOOL isLeftPanelVisible = [self isLeftPanelVisible];
+    BOOL isRightPanelVisible = [self isRightPanelVisible];
     BOOL isTargetToHideVisible = _mapPanelViewController.activeTargetType == OATargetGPX
         || _mapPanelViewController.activeTargetType == OATargetWeatherLayerSettings
         || _mapPanelViewController.activeTargetType == OATargetRouteLineAppearance

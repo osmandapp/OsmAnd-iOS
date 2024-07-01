@@ -65,16 +65,20 @@ class Device: NSObject {
         ""
     }
     
-    var getServiceConnectedImage: UIImage {
-        UIImage()
+    var getServiceConnectedImage: UIImage? {
+        nil
+    }
+    
+    var getServiceDisconnectedImage: UIImage? {
+        nil
     }
     
     var getDataFields: [[String: String]]? {
-        return nil
+        nil
     }
     
     var getSettingsFields: [String: Any]? {
-        return nil
+        nil
     }
     
     init(deviceType: DeviceType!,
@@ -95,9 +99,9 @@ class Device: NSObject {
         return nil
     }
     
-    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) {
-        
-    }
+    func update(with characteristic: CBCharacteristic, result: (Result<Void, Error>) -> Void) { }
+    
+    func configure() {}
     
     func addObservers() {
         NotificationCenter.default.removeObserver(self)
@@ -119,6 +123,7 @@ class Device: NSObject {
     }
     
     func didDisconnectDevice() {
+        debugPrint("didDisconnectDevice | \(deviceServiceName) | \(deviceName)")
         NotificationCenter.default.post(name: .DeviceDisconnected,
                                         object: nil,
                                         userInfo: [Self.identifier: self.id])

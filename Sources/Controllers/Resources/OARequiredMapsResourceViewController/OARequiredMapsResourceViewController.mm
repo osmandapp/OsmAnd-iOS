@@ -166,10 +166,25 @@
             OATableRowData *calculateOnlineTitleRow = [calculateOnlineSection createNewRow];
             calculateOnlineTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             calculateOnlineTitleRow.title = OALocalizedString(@"calculate_online_title");
-            
+
             OATableRowData *calculateOnlineButtonRow = [calculateOnlineSection createNewRow];
             calculateOnlineButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
+            calculateOnlineButtonRow.key = @"calculate_online_button";
+        }
+
+        if (_potentiallyUsedMaps.count > 0)
+        {
+            OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
+
+            OATableRowData *ignoreMissingMapsTitleRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            ignoreMissingMapsTitleRow.title = OALocalizedString(@"missing_maps_ignore_details");
+
+            OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
+            ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
+            ignoreMissingMapsButtonRow.key = @"missing_maps_ignore_button";
         }
     }
 }
@@ -277,7 +292,16 @@
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+            if ([item.key isEqualToString:@"calculate_online_button"])
+            {
+                [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([item.key isEqualToString:@"missing_maps_ignore_button"])
+            {
+                [cell.button addTarget:self action:@selector(onIgnoreMissingMapsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+
             return cell;
         }
         else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
@@ -364,21 +388,30 @@
     NSMutableString *description = [NSMutableString string];
     if (regions.count > 0)
     {
-        for (NSInteger i = 0; i < regions.count; i++) {
+        for (NSInteger i = 0; i < regions.count; i++)
+        {
             OAWorldRegion *region = regions[i];
-            NSString *title = region.localizedName;
+            NSString *title = region.localizedName?:region.nativeName;
             if (region.superregion)
             {
                 NSString *countryName = [self getCountryName:region];
                 if (countryName)
-                    title = [NSString stringWithFormat:@"\"%@, %@\"", region.localizedName, countryName];
+                {
+                    if (title)
+                        title = [NSString stringWithFormat:@"\"%@, %@\"", title, countryName];
+                    else
+                        title = [NSString stringWithFormat:@"\"%@\"", countryName];
+                }
             }
-            if (i == 0)
-                [description appendString:title];
-            else
-                [description appendString:[NSString stringWithFormat:@", %@", title]];
+            if (title)
+            {
+                [description appendFormat:@"%@%@",(description.length > 0 ? @", " : @""), title];
+            }
         }
-        [description appendString:@"."];
+        if (description.length > 0)
+        {
+            [description appendString:@"."];
+        }
     }
     return [NSString stringWithFormat:OALocalizedString(@"required_maps_list"), description];
 }
@@ -470,50 +503,61 @@
     [self setupNavbarButtons];
 }
 
+- (void)onIgnoreMissingMapsButtonPressed:(id)sender
+{
+    [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+    [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
+
 - (void)onCalculateOnlineButtonPressed:(id)sender
 {
-    NSLog(@"onCalculateOnlineButtonPressed");
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
-        _isActiveOnlineCalculateRequest = YES;
-        [self selectAllCells:NO];
-        [self reloadDataWithAnimated:NO completion:nil];
-        __weak __typeof(self) weakSelf = self;
-        OARouteProvider *routeProvider = [OARoutingHelper sharedInstance].getRouteProvider;
-        auto missingMapsCalculator = [routeProvider missingMapsCalculator];
-        [self.navigationItem setRightBarButtonItemsisEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
-        [OAResourcesUIHelper onlineCalculateRequestStartPoint:missingMapsCalculator.startPoint endPoint:missingMapsCalculator.endPoint completion:^(NSArray<CLLocation *> *locations, NSError *error) {
-            __strong __typeof(weakSelf) strongSelf = weakSelf;
-            if (!strongSelf)
-                return;
-            [strongSelf onlineCalculateFinishState];
-            if (!error && locations.count > 0)
-            {
-                CLLocation *startPoint = locations[0];
-                NSMutableArray *targetsPointsArray = [locations mutableCopy];
-                [targetsPointsArray removeObjectAtIndex:0];
-                if ([missingMapsCalculator checkIfThereAreMissingMapsWithStart:startPoint targets:targetsPointsArray])
+        auto missingMapsCalculator = [MissingMapsCalculator new];
+        OARouteCalculationResult *prevRoute = [OARoutingHelper.sharedInstance getRoute];
+        if (prevRoute != nil
+            && prevRoute.missingMapsPoints != nil
+            && prevRoute.missingMapsRoutingContext != nullptr) {
+            _isActiveOnlineCalculateRequest = YES;
+            [self selectAllCells:NO];
+            [self reloadDataWithAnimated:NO completion:nil];
+            [self.navigationItem setRightBarButtonItemsisEnabled:NO tintColor:[UIColor colorNamed:ACColorNameButtonBgColorDisabled]];
+            __weak __typeof(self) weakSelf = self;
+            [OAResourcesUIHelper onlineCalculateRequestWithRouteCalculationResult:prevRoute completion:^(NSArray<CLLocation *> *locations, NSError *error) {
+                __strong __typeof(weakSelf) strongSelf = weakSelf;
+                if (!strongSelf)
+                    return;
+                [strongSelf onlineCalculateFinishState];
+                if (!error && locations.count > 0)
                 {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
-                                                             mapsToUpdate:missingMapsCalculator.mapsToUpdate
-                                                      potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
-                        [missingMapsCalculator clearResult];
-                        [strongSelf selectAllCells:YES];
-                    });
+                    bool oldRouting = [[OAAppSettings sharedManager].useOldRouting get];
+                    if ([missingMapsCalculator checkIfThereAreMissingMaps:prevRoute.missingMapsRoutingContext start:prevRoute.missingMapsPoints.firstObject targets:locations checkHHEditions:!oldRouting])
+                    {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [strongSelf updateRoutingResourcesWithMissingMaps:missingMapsCalculator.missingMaps
+                                                                 mapsToUpdate:missingMapsCalculator.mapsToUpdate
+                                                          potentiallyUsedMaps:missingMapsCalculator.potentiallyUsedMaps];
+                            [prevRoute setMissingMaps:missingMapsCalculator.missingMaps
+                                         mapsToUpdate:missingMapsCalculator.mapsToUpdate
+                                             usedMaps:missingMapsCalculator.potentiallyUsedMaps ctx:prevRoute.missingMapsRoutingContext points:prevRoute.missingMapsPoints];
+                            [missingMapsCalculator clearResult];
+                            [strongSelf selectAllCells:YES];
+                        });
+                    } else {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            [strongSelf reloadDataWithAnimated:NO completion:nil];
+                            [strongSelf selectAllCells:YES];
+                        });
+                    }
                 } else {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         [strongSelf reloadDataWithAnimated:NO completion:nil];
                         [strongSelf selectAllCells:YES];
                     });
                 }
-            } else {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [strongSelf reloadDataWithAnimated:NO completion:nil];
-                    [strongSelf selectAllCells:YES];
-                });
-            }
-        }];
+            }];
+        }
     }
     else
     {

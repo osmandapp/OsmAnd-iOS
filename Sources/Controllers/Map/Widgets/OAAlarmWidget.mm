@@ -14,6 +14,7 @@
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OAAlarmWidget ()
 
@@ -129,8 +130,9 @@
     BOOL cams = [_settings.showCameras get];
     BOOL peds = [_settings.showPedestrian get];
     BOOL tunnels = [_settings.showTunnels get];
+    BOOL speedLimitExceed = [_settings.showSpeedLimitWarnings get];
     BOOL visible = false;
-    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams))
+    if (([_rh isFollowingMode] || [_trackingUtilities isMapLinkedToLocation]) && (trafficWarnings || cams || speedLimitExceed))
     {
         OAAlarmInfo *alarm;
         if([_rh isFollowingMode] && ![OARoutingHelper isDeviatedFromRoute] && ![_rh getCurrentGPXRoute])
@@ -152,7 +154,7 @@
             BOOL americanSigns = [OADrivingRegion isAmericanSigns:region];
             BOOL isCanadianRegion = region == DR_CANADA;
 
-            NSString  *locImgId = @"warnings_limit";
+            NSString *locImgId = @"warnings_limit";
             NSString *text = @"";
             NSString *bottomText = @"";
             if (alarm.type == AIT_SPEED_LIMIT)
@@ -223,20 +225,22 @@
                 else
                     locImgId = @"warnings_tunnel";
 
-                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue roundUp:(![[OAAppSettings sharedManager].preciseDistanceNumbers get] && alarm.type == AIT_TUNNEL)];
+                bottomText = [OAOsmAndFormatter getFormattedDistance:alarm.floatValue withParams:alarm.type == AIT_TUNNEL ? [OsmAndFormatterParams useLowerBounds] : nil];
             }
             else
             {
                 text = nil;
                 bottomText = nil;
             }
-            visible = (text &&  text.length > 0) || (locImgId.length > 0);
+            visible = (text && text.length > 0) || (locImgId.length > 0);
             if (visible)
             {
                 if (alarm.type == AIT_SPEED_CAMERA)
                     visible = cams;
                 else if (alarm.type == AIT_PEDESTRIAN)
                     visible = peds;
+                else if (alarm.type == AIT_SPEED_LIMIT)
+                    visible = speedLimitExceed;
                 else if (alarm.type == AIT_TUNNEL)
                     visible = tunnels;
                 else

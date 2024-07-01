@@ -120,7 +120,6 @@
     OAAutoObserverProxy *_headingUpdateObserver;
     NSTimeInterval _lastUpdate;
 
-    UIDocumentInteractionController *_exportController;
     OATrackMenuHeaderView *_headerView;
     OAGPXTableData *_tableData;
 
@@ -234,8 +233,13 @@
 
     [self startLocationServices];
 
-    if (_reopeningState && _reopeningState.showingState != EOADraggableMenuStateInitial)
-        [self updateShowingState:_reopeningState.showingState];
+    if (_reopeningState)
+    {
+        if (_reopeningState.showingState != EOADraggableMenuStateInitial)
+            [self updateShowingState:_reopeningState.showingState];
+        if (_reopeningState.openedFromTracksList)
+            [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = NO;
+    }
 
     UIImage *groupsImage = [UIImage templateImageNamed:@"ic_custom_folder_visible"];
     [self.groupsButton setImage:groupsImage forState:UIControlStateNormal];
@@ -355,7 +359,6 @@
 - (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
-    _exportController = nil;
     _isViewVisible = YES;
     [self restoreNavControllerHistoryIfNeeded];
 }
@@ -403,12 +406,17 @@
 
 - (void)restoreNavControllerHistoryIfNeeded
 {
-    if (!_forceHiding && !_pushedNewScreen && _reopeningState && _reopeningState.openedFromTracksList)
+    if (_forceHiding)
+    {
+        [[OARootViewController instance].navigationController restoreForceHidingScrollableHud];
+    }
+    else if (!_pushedNewScreen && _reopeningState && _reopeningState.openedFromTracksList)
     {
         if (_navControllerHistory && _navControllerHistory.count > 0)
         {
             [[OARootViewController instance].navigationController setViewControllers:_navControllerHistory animated:YES];
         }
+        [OARootViewController instance].navigationController.interactivePopGestureRecognizer.enabled = YES;
     }
 }
 
@@ -690,6 +698,7 @@
         for (OAWptPt *rtePt in [self.doc getRoutePoints])
         {
             OAGpxWptItem *rtePtItem = [OAGpxWptItem withGpxWpt:rtePt];
+            rtePtItem.routePoint = YES;
             NSMutableArray<OAGpxWptItem *> *rtePtsGroup = _waypointGroups[OALocalizedString(@"route_points")];
             if (!rtePtsGroup)
             {
@@ -1462,9 +1471,21 @@
     }];
 }
 
-- (void)openExport
+- (void)openExport:(UIView *)sourceView
 {
-    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil];
+    CGRect touchPointArea = CGRectZero;
+    if ([sourceView isKindOfClass:UIButton.class])
+    {
+        UIButton *topButtonShare = (UIButton *)sourceView;
+        touchPointArea = [self.view convertRect:topButtonShare.bounds fromView:topButtonShare];
+    }
+    else if ([sourceView isKindOfClass:UITableViewCell.class])
+    {
+        UITableViewCell *actionsTabCell = (UITableViewCell *)sourceView;
+        NSIndexPath *indexPath = [self.tableView indexPathForCell:actionsTabCell];
+        touchPointArea = [self.view convertRect:[self.tableView rectForRowAtIndexPath:indexPath] fromView:self.tableView];
+    }
+    [_gpxUIHelper openExportForTrack:self.gpx gpxDoc:self.doc isCurrentTrack:self.isCurrentTrack inViewController:self hostViewControllerDelegate:nil touchPointArea:touchPointArea];
 }
 
 - (void)openNavigation
@@ -1495,7 +1516,12 @@
     NSString *folderPath = [_app.gpxPath stringByAppendingPathComponent:@"Travel"];
     if (![[NSFileManager defaultManager] fileExistsAtPath:folderPath])
         [[NSFileManager defaultManager] createDirectoryAtPath:folderPath withIntermediateDirectories:NO attributes:nil error:nil];
-    NSString *path = [self createUniqueFileName:self.doc.path.lastPathComponent path:folderPath];
+    
+    NSString *filename = self.doc.path.lastPathComponent;
+    if (!filename || filename.length == 0)
+        filename = [OAUtilities generateCurrentDateFilename];
+        
+    NSString *path = [self createUniqueFileName:filename path:folderPath];
     [self.doc saveTo:path];
     self.doc.path = path;
     OAGPX *gpx = [[OAGPXDatabase sharedDb] addGpxItem:path title:self.doc.metadata.name desc:nil bounds:self.doc.bounds document:self.doc];

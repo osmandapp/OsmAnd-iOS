@@ -942,7 +942,7 @@ import Charts
             } else {
                 mulSpeed = 1
             }
-            return Pair(first: mulSpeed, second: divSpeed)
+            return Pair(mulSpeed, divSpeed)
         }
         return nil
     }

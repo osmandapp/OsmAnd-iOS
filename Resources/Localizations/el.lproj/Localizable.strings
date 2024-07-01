@@ -1669,7 +1669,7 @@
 "map_settings_weather_wind" = "Άνεμος";
 "external_sensors_plugin_name" = "Εξωτερικοί Αισθητήρες";
 "shared_string_weather" = "Καιρός";
-"weather_update_disabled" = "Ανενεργό";
+"weather_update_disabled" = "Απενεργοποιημένο";
 "weather_update_over_any_network" = "Σε οποιοδήποτε δίκτυο";
 "plugin_popup_weather_title" = "Ενεργοποίηση Καιρού";
 "help_article_navigation_car_play_name" = "CarPlay";
@@ -1949,3 +1949,41 @@
 "gpx_analyze" = "Ανάλυση";
 "stats_select_graph_data" = "Επιλογή δεδομένων γραφήματος";
 "mapil_no_images" = "Δεν έχουμε φωτογραφίες για αυτήν την τοποθεσία.";
+"testFlight" = "TestFlight";
+"product_desc_development" = "Για προγραμματιστές και έμπειρους χρήστες";
+"product_desc_weather" = "24ωρη πρόγνωση καιρού των επόμενων 7 ημερών στον χάρτη";
+"download_install_beta_version" = "Λήψη και εγκατάσταση beta εκδόσεων του OsmAnd";
+"online_plugins" = "Διαδικτυακές επεκτάσεις";
+"shared_string_maximum" = "Μέγιστο";
+"res_mapsres" = "Χάρτες & πόροι";
+"res_world_map" = "Παγκόσμιος χάρτης";
+"worldwide_maps" = "Παγκόσμιοι χάρτες";
+"res_worldwide" = "Παγκόσμια";
+"res_wmap" = "Προεπισκόπηση παγκόσμιου χάρτη";
+
+// Release Notes
+// instruction:
+//https://github.com/osmandapp/OsmAnd-Issues/blob/master/Adding%20release%20information%20to%20IOS.md
+
+"latest_version" = "Έχετε την πιο πρόσφατη έκδοση: %@";
+"subscription_banner_free_maps_title" = "Μπορείτε να κατεβάσετε %i χάρτες δωρεάν.";
+"purchases_feature_desc_unlimited_map_download" = "Απόκτησε απεριόριστες λήψεις χαρτών εκτός σύνδεσης για όλες τις ηπείρους και περιοχές.";
+"subscription_banner_free_maps_description" = "Απόκτησε απεριόριστες λήψεις και ενημερώσεις χάρτη.";
+"res_search_world" = "Αναζήτηση χαρτών";
+"shared_strings_all_regions" = "Όλες οι περιοχές";
+"shared_string_clear_cache" = "Εκκαθάριση μνήμης cache";
+"edit_tilesource_minzoom" = "Ελάχιστο ζουμ";
+"edit_tilesource_maxzoom" = "Μέγιστο ζουμ";
+"shared_string_item" = "Αντικείμενο";
+"avoid_pt_types" = "Αποφυγή ειδών Μ.Μ.Μ…";
+"speed_limit_warning" = "Προειδοποίηση ορίου ταχύτητας";
+"shared_string_bottom" = "Κάτω μέρος";
+"avoid_pt_types_descr" = "Αποφυγή ειδών δημοσίων ΜΜΜ στην πλοήγηση:";
+"shared_string_always" = "Πάντοτε";
+"auto_zoom" = "Αυτόματο ζουμ";
+"dangerous_goods" = "Επικίνδυνα εμπορεύματα";
+"dangerous_goods_description" = "Σε ορισμένους δρόμους και σήραγγες απαγορεύεται η μεταφορά επικίνδυνων υλικών.";
+"step_by_step" = "Βήμα-βήμα";
+"shared_string_development" = "Ανάπτυξη";
+"shared_string_class" = "Τάξη";
+"route_recalculation_dist_title" = "Ελάχιστη απόσταση για επανυπολογισμό διαδρομής";

@@ -11,11 +11,10 @@
 #import "OAAddQuickActionViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "Localization.h"
-#import "OAQuickActionRegistry.h"
+#import "OAMapButtonsHelper.h"
 #import "OAQuickAction.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAMultiselectableHeaderView.h"
-#import "OAAppSettings.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OASwitchTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
@@ -28,22 +27,31 @@
 
 @interface OAQuickActionListViewController () <MGSwipeTableCellDelegate, OAMultiselectableHeaderDelegate, OAQuickActionListDelegate>
 
+@property (nonatomic) QuickActionButtonState *buttonState;
+@property (nonatomic) OAMapButtonsHelper *mapButtonsHelper;
+
 @end
 
 @implementation OAQuickActionListViewController
 {
-    OAQuickActionRegistry *_registry;
     NSMutableArray<OAQuickAction *> *_data;
-    
-    OAAppSettings *_settings;
 }
 
 #pragma mark - Initialization
 
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+    }
+    return self;
+}
+
 - (void)commonInit
 {
-    _registry = [OAQuickActionRegistry sharedInstance];
-    _settings = OAAppSettings.sharedManager;
+    _mapButtonsHelper = [OAMapButtonsHelper sharedInstance];
 }
 
 #pragma mark - UIViewController
@@ -55,17 +63,11 @@
     [self.tableView registerClass:OAMultiselectableHeaderView.class forHeaderFooterViewReuseIdentifier:[OATableViewCustomHeaderView getCellIdentifier]];
 }
 
-- (void) onSwitchPressed:(UISwitch *)sender
-{
-    [_settings.quickActionIsOn set:sender.isOn];
-    [self.delegate onWidgetStateChanged];
-}
-
 #pragma mark - Base UI
 
 - (NSString *)getTitle
 {
-    return self.tableView.editing ? OALocalizedString(@"quick_action_edit_list") : OALocalizedString(@"configure_screen_quick_action");
+    return self.tableView.editing ? OALocalizedString(@"quick_action_edit_list") : [_buttonState getName];
 }
 
 - (NSString *)getLeftNavbarButtonTitle
@@ -88,16 +90,97 @@
                                                           iconName:@"ic_navbar_add"
                                                             action:@selector(addActionPressed)
                                                               menu:nil];
-        
-        UIBarButtonItem *aditButton = [self createRightNavbarButton:nil
-                                                           iconName:@"ic_navbar_pencil"
+        addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
+
+        UIBarButtonItem *deleteButton = [self createRightNavbarButton:nil
+                                                           iconName:@"ic_custom_trash_outlined"
                                                              action:@selector(editPressed)
                                                                menu:nil];
-        
-        addButton.accessibilityLabel = OALocalizedString(@"shared_string_add");
-        aditButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
-        
-        return @[addButton, aditButton];
+        deleteButton.accessibilityLabel = OALocalizedString(@"shared_string_edit");
+
+        __weak __typeof(self) weakSelf = self;
+        NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+        UIAction *renameAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_rename")
+                                                     image:[UIImage systemImageNamed:@"square.and.pencil"]
+                                                identifier:nil
+                                                   handler:^(UIAction * _Nonnull action) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:OALocalizedString(@"shared_string_rename")
+                                                                           message:OALocalizedString(@"enter_new_name")
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+                textField.text = [weakSelf.buttonState getName];
+            }];
+
+            UIAlertAction *saveAction = [UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_save")
+                                                                 style:UIAlertActionStyleDefault
+                                                               handler:^(UIAlertAction * _Nonnull action) {
+                NSString *name = alert.textFields.firstObject.text;
+                if (name.length == 0)
+                {
+                    [OAUtilities showToast:OALocalizedString(@"empty_name") details:nil duration:4 inView:weakSelf.view];
+                }
+                else if (![weakSelf.mapButtonsHelper isActionButtonNameUnique:name])
+                {
+                    [OAUtilities showToast:OALocalizedString(@"custom_map_button_name_present") details:nil duration:4 inView:weakSelf.view];
+                }
+                else
+                {
+                    [weakSelf.buttonState setName:name];
+                    [weakSelf.mapButtonsHelper onQuickActionsChanged:weakSelf.buttonState];
+                    [weakSelf updateUIAnimated:nil];
+                    if (weakSelf.delegate)
+                        [weakSelf.delegate onWidgetStateChanged];
+                }
+            }];
+            [alert addAction:saveAction];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_cancel")
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+
+            [alert setPreferredAction:saveAction];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }];
+
+        renameAction.accessibilityLabel = renameAction.title;
+        [menuElements addObject:renameAction];
+
+        UIAction *deleteAction = [UIAction actionWithTitle:OALocalizedString(@"shared_string_delete")
+                                                     image:[UIImage systemImageNamed:@"trash"]
+                                                identifier:nil
+                                                   handler:^(UIAction * _Nonnull action) {
+            NSString *message = [NSString stringWithFormat:OALocalizedString(@"res_confirmation_delete"),
+                                 [NSString stringWithFormat:@"\"%@\"", [weakSelf.buttonState getName]]];
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil
+                                                                           message:message
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_yes")
+                                                      style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * _Nonnull action) {
+                [weakSelf.mapButtonsHelper removeQuickActionButtonState:weakSelf.buttonState];
+                if (weakSelf.delegate)
+                    [weakSelf.delegate onWidgetStateChanged];
+                [weakSelf dismissViewController];
+            }]];
+            [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_no")
+                                                      style:UIAlertActionStyleCancel
+                                                    handler:nil]];
+            [weakSelf presentViewController:alert animated:YES completion:nil];
+        }];
+        deleteAction.accessibilityLabel = deleteAction.title;
+        deleteAction.attributes = UIMenuElementAttributesDestructive;
+        UIMenu *deleteSection = [UIMenu menuWithTitle:@""
+                                                image:nil
+                                           identifier:nil
+                                              options:UIMenuOptionsDisplayInline
+                                             children:@[deleteAction]];
+        [menuElements addObject:deleteSection];
+        UIMenu *menu = [UIMenu menuWithChildren:menuElements];
+
+        UIBarButtonItem *optionsButton = [self createRightNavbarButton:nil
+                                                              iconName:@"ic_navbar_overflow_menu_stroke"
+                                                             action:@selector(editPressed)
+                                                               menu:menu];
+        return @[optionsButton, addButton, deleteButton];
     }
 }
 
@@ -140,7 +223,7 @@
 
 - (void)generateData
 {
-    _data = [NSMutableArray arrayWithArray:_registry.getQuickActions];
+    _data = [NSMutableArray arrayWithArray:_buttonState.quickActions];
 }
 
 - (NSInteger)sectionsCount
@@ -193,7 +276,7 @@
         }
         if (cell)
         {
-            cell.switchView.on = _settings.quickActionIsOn.get;
+            cell.switchView.on = [_buttonState isEnabled];
             cell.titleLabel.text = OALocalizedString(@"shared_string_enabled");
 
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -214,7 +297,7 @@
     if (cell)
     {
         [cell.textView setText:action.getName];
-        [cell.iconView setImage:[UIImage templateImageNamed:action.getIconResName]];
+        [cell.iconView setImage:[action getActionIcon]];
         [cell.iconView setTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
         if (cell.iconView.subviews.count > 0)
             [[cell.iconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -310,8 +393,9 @@
 
 - (void)saveChanges
 {
-    [_registry updateQuickActions:[NSArray arrayWithArray:_data]];
-    [_registry.quickActionListChangedObservable notifyEvent];
+    [_mapButtonsHelper updateQuickActions:_buttonState actions:_data];
+    if (self.delegate)
+        [self.delegate onWidgetStateChanged];
 }
 
 - (NSInteger)getScreensCount
@@ -340,12 +424,19 @@
 - (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
 {
     OAQuickAction *item = [self getAction:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithAction:item isNew:NO];
+    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState action:item];
     actionScreen.delegate = self;
     [self.navigationController pushViewController:actionScreen animated:YES];
 }
 
 #pragma mark - Selectors
+
+- (void)onSwitchPressed:(UISwitch *)sender
+{
+    [_buttonState setEnabled:sender.isOn];
+    if (self.delegate)
+        [self.delegate onWidgetStateChanged];
+}
 
 - (void)editPressed
 {
@@ -359,8 +450,7 @@
 - (void)onLeftNavbarButtonPressed
 {
     [self disableEditing];
-    [self generateData];
-    [self.tableView reloadData];
+    [self updateData];
 }
 
 - (void)donePressed
@@ -371,7 +461,7 @@
 
 - (void)addActionPressed
 {
-    OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] init];
+    OAAddQuickActionViewController *vc = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState];
     vc.delegate = self;
     [self.navigationController pushViewController:vc animated:YES];
 }
@@ -402,8 +492,9 @@
         [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
             NSMutableArray<OAQuickAction *> *dataCopy = [NSMutableArray arrayWithArray:_data];
             for (NSIndexPath *path in indexes)
+            {
                 [dataCopy removeObject:[self getAction:path]];
-
+            }
             _data = dataCopy;
             [self saveChanges];
             [self.tableView reloadData];
@@ -440,12 +531,19 @@
     if (value)
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES scrollPosition:UITableViewScrollPositionNone];
+        {
+            [self.tableView selectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]
+                                        animated:YES
+                                  scrollPosition:UITableViewScrollPositionNone];
+        }
     }
     else
     {
         for (int i = 0; i < rowsCount; i++)
-            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section] animated:YES];
+        {
+            [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:section]
+                                          animated:YES];
+        }
     }
     [self.tableView endUpdates];
 }
@@ -454,8 +552,9 @@
 
 - (void)updateData
 {
-    [self generateData];
-    [self.tableView reloadData];
+    [self reloadDataWithAnimated:YES completion:nil];
+    if (self.delegate)
+        [self.delegate onWidgetStateChanged];
 }
 
 @end

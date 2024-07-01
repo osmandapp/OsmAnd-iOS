@@ -21,6 +21,10 @@
 #include <OsmAndCore/Map/SlopeRasterMapLayerProvider.h>
 #include <OsmAndCore/Map/HillshadeRasterMapLayerProvider.h>
 
+static NSString * const SLOPE_MAIN_COLOR_FILENAME = @"slope_default";
+static NSString * const HILLSHADE_MAIN_COLOR_FILENAME = @"hillshade_main_default";
+static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_default";
+
 @implementation OATerrainMapLayer
 {
     std::shared_ptr<OsmAnd::IMapLayerProvider> _terrainMapProvider;
@@ -195,7 +199,7 @@
 
 - (void) setupSlopeLayerProvider
 {
-    auto slopeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:@"slopes_main" ofType:@"txt"]);
+    auto slopeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:SLOPE_MAIN_COLOR_FILENAME ofType:@"txt"]);
     _slopeLayerProvider = std::make_shared<OsmAnd::SlopeRasterMapLayerProvider>(self.mapViewController.mapRendererEnv.geoTiffCollection, slopeColorFilename);
     _slopeLayerProvider->setMinVisibleZoom([self getMinZoom]);
     _slopeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);
@@ -207,8 +211,8 @@
 
 - (void) setupHillshadeLayerProvider
 {
-    auto hillshadeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:@"hillshade_main" ofType:@"txt"]);
-    auto slopeSecondaryColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:@"color_slope" ofType:@"txt"]);
+    auto hillshadeColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:HILLSHADE_MAIN_COLOR_FILENAME ofType:@"txt"]);
+    auto slopeSecondaryColorFilename = QString::fromNSString([[NSBundle mainBundle] pathForResource:SLOPE_SECONDARY_COLOR_FILENAME ofType:@"txt"]);
     _hillshadeLayerProvider = std::make_shared<OsmAnd::HillshadeRasterMapLayerProvider>(self.mapViewController.mapRendererEnv.geoTiffCollection, hillshadeColorFilename, slopeSecondaryColorFilename);
     _hillshadeLayerProvider->setMinVisibleZoom([self getMinZoom]);
     _hillshadeLayerProvider->setMaxVisibleZoom([self getMaxZoom]);

@@ -60,6 +60,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAZoom.h"
 
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
@@ -127,15 +128,16 @@
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)
 #define deinit _(deinit)
-#define kGestureZoomCoef 10.0f
 
-#define ZONE_0_ANGLE_THRESHOLD 5.0f
-#define ZONE_1_ANGLE_THRESHOLD 20.0f
-#define ZONE_2_ANGLE_THRESHOLD 30.0f
-#define ZONE_3_ANGLE_THRESHOLD 60.0f
-#define ZONE_0_ZOOM_THRESHOLD 0.15f
-#define ZONE_1_ZOOM_THRESHOLD 0.6f
-#define ZONE_2_ZOOM_THRESHOLD 1.5f
+static const float kGestureZoomCoef = 10.0f;
+
+static const float ZONE_0_ANGLE_THRESHOLD = 5.0f;
+static const float ZONE_1_ANGLE_THRESHOLD = 20.0f;
+static const float ZONE_2_ANGLE_THRESHOLD = 30.0f;
+static const float ZONE_3_ANGLE_THRESHOLD = 60.0f;
+static const float ZONE_0_ZOOM_THRESHOLD = 0.15f;
+static const float ZONE_1_ZOOM_THRESHOLD = 0.6f;
+static const float ZONE_2_ZOOM_THRESHOLD = 1.5f;
 
 
 typedef NS_ENUM(NSInteger, EOAMapPanDirection) {
@@ -541,8 +543,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         float azimuth = _app.data.mapLastViewedState.azimuth;
         _mapView.azimuth = isnan(azimuth) ? 0 : azimuth;
         float elevationAngle = _app.data.mapLastViewedState.elevationAngle;
-        _mapView.elevationAngle = isnan(elevationAngle) ? 90 : elevationAngle;
-        _map3DModeElevationAngle = _mapView.elevationAngle;
+        _mapView.elevationAngle = isnan(elevationAngle) ? kDefaultElevationAngle : elevationAngle;
+        _map3DModeElevationAngle = kDefaultElevationAngle;
     }
     
     // Mark that map source is no longer valid
@@ -1561,8 +1563,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     CGFloat angleDelta = -translation.y / static_cast<CGFloat>(kElevationGesturePointsPerDegree);
     CGFloat angle = _mapView.elevationAngle;
     angle -= angleDelta;
-    if (angle < kElevationMinAngle)
-        angle = kElevationMinAngle;
+    if (angle < kMinAllowedElevationAngle)
+        angle = kMinAllowedElevationAngle;
     _mapView.elevationAngle = angle;
     _map3DModeElevationAngle = angle;
     [recognizer setTranslation:CGPointZero inView:self.view];
@@ -1618,7 +1620,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         OAFloatingButtonsHudViewController *quickAction = mapPanel.hudViewController.floatingButtonsController;
-        [quickAction hideActionsSheetAnimated];
+        [quickAction hideActionsSheetAnimated:nil];
         [_mapLayers.contextMenuLayer showContextMenu:touchPoint showUnknownLocation:longPress forceHide:[recognizer isKindOfClass:UITapGestureRecognizer.class] && recognizer.numberOfTouches == 1];
         
         // Handle route planning touch events
@@ -1748,7 +1750,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     return (_mapView.zoom < _mapView.maxZoom);
 }
 
-- (void) animatedZoomIn
+- (void) zoomIn
 {
     if (!self.mapViewLoaded)
         return;
@@ -1774,6 +1776,105 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
     _mapView.mapAnimator->resume();
 
+}
+
+- (BOOL) canZoomOut
+{
+    if (!self.mapViewLoaded)
+        return NO;
+    
+    return (_mapView.zoom > _mapView.minZoom);
+}
+
+- (void) zoomOut
+{
+    if (!self.mapViewLoaded)
+        return;
+
+    if (_mapView.zoomLevel <= _mapView.minZoom)
+        return;
+    
+    // Get base zoom delta
+    float zoomDelta = [self currentZoomOutDelta];
+    
+    while ([_mapView getSymbolsUpdateSuspended] < 0)
+        [_mapView suspendSymbolsUpdate];
+
+    // Animate zoom-in by -1
+    zoomDelta -= 1.0f;
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
+    
+    _mapView.mapAnimator->animateZoomBy(zoomDelta,
+                                    kQuickAnimationTime,
+                                    OsmAnd::MapAnimator::TimingFunction::Linear,
+                                    kUserInteractionAnimationKey);
+    _mapView.mapAnimator->resume();
+    
+}
+
+- (void) zoomInAndAdjustTiltAngle
+{
+    [self changeZoomManually:1 adjustTiltAngle:[[OAMapViewTrackingUtilities instance] is3DMode]];
+}
+
+- (void) zoomOutAndAdjustTiltAngle
+{
+    [self changeZoomManually:-1 adjustTiltAngle:[[OAMapViewTrackingUtilities instance] is3DMode]];
+}
+
+- (void) changeZoomManually:(int)zoomStep
+{
+    [self changeZoomManually:NO];
+}
+
+- (void) changeZoomManually:(int)zoomStep adjustTiltAngle:(BOOL)adjustTiltAngle
+{
+    if (!self.mapViewLoaded)
+        return;
+    
+    OAZoom *zoom = [[OAZoom alloc] initWitZoom:_mapView.zoom minZoom:_mapView.minZoom maxZoom:_mapView.maxZoom];
+    
+    if (zoomStep > 0 && ![zoom isZoomInAllowed])
+    {
+        [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_maxzoom") duration:4 inView:self.view];
+        return;
+    }
+    else if (zoomStep < 0 && ![zoom isZoomOutAllowed])
+    {
+        [OAUtilities showToast:nil details:OALocalizedString(@"edit_tilesource_minzoom") duration:4 inView:self.view];
+        return;
+    }
+    
+    [zoom changeZoom:zoomStep];
+    
+    _mapView.mapAnimator->pause();
+    _mapView.mapAnimator->cancelAllAnimations();
+    
+    _mapView.mapAnimator->animateZoomBy(zoomStep,
+                                        kQuickAnimationTime,
+                                        OsmAnd::MapAnimator::TimingFunction::Linear,
+                                        kUserInteractionAnimationKey);
+    
+    _mapView.mapAnimator->resume();
+    
+    if (adjustTiltAngle)
+    {
+        [self adjustTiltAngle:zoom];
+    }
+}
+
+- (void) adjustTiltAngle:(OAZoom *)zoom
+{
+    int baseZoom = [zoom getBaseZoom];
+    if (baseZoom >= kMinZoomLevelToAjustCameraTilt && baseZoom <= kMaxZoomLimit)
+    {
+        int angle = 90 - (baseZoom - 2) * 5;
+        if (angle >= kMinAllowedElevationAngle && angle < kDefaultElevationAngle)
+        {
+            [[OAMapViewTrackingUtilities instance] startTilting:angle];
+        }
+    }
 }
 
 - (void) animatedPanUp
@@ -1912,41 +2013,6 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     }
     
     return 0.0f;
-}
-
-- (BOOL) canZoomOut
-{
-    if (!self.mapViewLoaded)
-        return NO;
-    
-    return (_mapView.zoom > _mapView.minZoom);
-}
-
-- (void) animatedZoomOut
-{
-    if (!self.mapViewLoaded)
-        return;
-
-    if (_mapView.zoomLevel <= _mapView.minZoom)
-        return;
-    
-    // Get base zoom delta
-    float zoomDelta = [self currentZoomOutDelta];
-    
-    while ([_mapView getSymbolsUpdateSuspended] < 0)
-        [_mapView suspendSymbolsUpdate];
-
-    // Animate zoom-in by -1
-    zoomDelta -= 1.0f;
-    _mapView.mapAnimator->pause();
-    _mapView.mapAnimator->cancelAllAnimations();
-    
-    _mapView.mapAnimator->animateZoomBy(zoomDelta,
-                                    kQuickAnimationTime,
-                                    OsmAnd::MapAnimator::TimingFunction::Linear,
-                                    kUserInteractionAnimationKey);
-    _mapView.mapAnimator->resume();
-    
 }
 
 - (void) onDayNightModeChanged
@@ -2174,8 +2240,17 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
         const auto screenTileSize = 256 * self.displayDensityFactor;
-        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * [settings.mapDensity get]);
-        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * [settings.mapDensity get]);
+        double mapDensity = [settings.mapDensity get];
+        double mapDensityAligned;
+        if (mapDensity > 2)
+            mapDensityAligned = 2.0;
+        else if (mapDensity > 1)
+            mapDensityAligned = 1.0;
+        else
+            mapDensityAligned = mapDensity;
+
+        const auto rasterTileSize = OsmAnd::Utilities::getNextPowerOfTwo(256 * self.displayDensityFactor * mapDensityAligned);
+        const unsigned int rasterTileSizeOrig = (unsigned int)(256 * self.displayDensityFactor * mapDensity);
         OALog(@"Screen tile size %fpx, raster tile size %dpx", screenTileSize, rasterTileSize);
 
         // Set reference tile size on the screen
@@ -2466,7 +2541,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin)
+    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -3806,6 +3881,45 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateTapRulerLayer
 {
     [self.mapLayers.rulerByTapControlLayer updateLayer];
+}
+
+- (void)getAltitudeForMapCenter:(void (^ _Nonnull)(float height))callback
+{
+    auto centerPixel = _mapView.getCenterPixel;
+    OsmAnd::PointI elevatedPoint = OsmAnd::PointI();
+    if ([_mapView getLocationFromElevatedPoint:centerPixel location31:&elevatedPoint])
+        [self getAltitudeForPoint:elevatedPoint callback:callback];
+    else
+        callback(kMinAltitudeValue);
+}
+
+- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(float height))callback
+{
+    OsmAnd::PointI point = OsmAnd::Utilities::convertLatLonTo31(OsmAnd::LatLon(latLon.latitude, latLon.longitude));
+    return [self getAltitudeForPoint:point callback:callback];
+}
+
+- (void)getAltitudeForPoint:(OsmAnd::PointI)point callback:(void (^ _Nonnull)(float height))callback
+{
+    double altitude = [_mapView getLocationHeightInMeters:point];
+    if (altitude > kMinAltitudeValue)
+    {
+        callback(altitude);
+    }
+    else
+    {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            QList<float> heights = [self getHeightsForPoints:QList<OsmAnd::PointI>({point})];
+            callback(heights.count() > 0 ? heights[0] : kMinAltitudeValue);
+        });
+    }
+}
+
+- (QList<float>)getHeightsForPoints:(QList<OsmAnd::PointI>)points
+{
+    QList<float> heights;
+    _geoTiffCollection->calculateHeights(OsmAnd::ZoomLevel14, _mapView.elevationDataTileSize, points, heights);
+    return heights;
 }
 
 @end

@@ -65,6 +65,12 @@
     }];
     [parametersArr addObject:@{
         @"type" : [OASwitchTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"traffic_warning_speed_limit"),
+        @"icon" : [self getSpeedLimitIcon],
+        @"value" : _settings.showSpeedLimitWarnings,
+    }];
+    [parametersArr addObject:@{
+        @"type" : [OASwitchTableViewCell getCellIdentifier],
         @"title" : OALocalizedString(@"show_traffic_warnings"),
         @"icon" : @"list_warnings_traffic_calming",
         @"value" : _settings.showTrafficWarnings,
@@ -214,5 +220,17 @@
         [self.delegate onSettingsChanged];
 }
 
-@end
+#pragma mark - Additions
 
+- (NSString *)getSpeedLimitIcon
+{
+    EOADrivingRegion drivingRegion = [_settings.drivingRegion get:[_settings.applicationMode get]];
+    
+    if (drivingRegion == DR_US)
+        return @"list_warnings_speed_limit_us";
+    else if (drivingRegion == DR_CANADA)
+        return @"list_warnings_speed_limit_ca";
+    return @"list_warnings_limit";
+}
+
+@end

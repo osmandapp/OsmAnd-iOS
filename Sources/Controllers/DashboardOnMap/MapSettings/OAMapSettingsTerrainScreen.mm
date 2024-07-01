@@ -11,7 +11,6 @@
 #import "OAMapSettingsViewController.h"
 #import "OAMapStyleSettings.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
@@ -36,22 +35,23 @@
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
-#import "OADownloadingCellHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
-static float kRelief3DCellRowHeight = 48.3;
 static NSString *kCellTypeMap = @"MapCell";
 static NSString *kCellItemKey = @"kCellItemKey";
 
+static const CGFloat kRelief3DCellRowHeight = 48.3;
+
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate>
+@interface OAMapSettingsTerrainScreen() <SFSafariViewControllerDelegate, UITextViewDelegate, OATerrainParametersDelegate, DownloadingCellResourceHelperDelegate>
 
 @end
 
 @implementation OAMapSettingsTerrainScreen
 {
     OsmAndAppInstance _app;
-    OADownloadingCellHelper *_downloadingCellHelper;
+    DownloadingCellResourceHelper *_downloadingCellResourceHelper;
     OAIAPHelper *_iapHelper;
     OASRTMPlugin *_plugin;
     OATableDataModel *_data;
@@ -61,10 +61,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
     NSObject *_dataLock;
     NSArray<OAResourceItem *> *_mapItems;
-
-    OAAutoObserverProxy* _downloadTaskProgressObserver;
-    OAAutoObserverProxy* _downloadTaskCompletedObserver;
-    OAAutoObserverProxy* _localResourcesChangedObserver;
 }
 
 @synthesize settingsScreen, tableData, vwController, tblView, title, isOnlineMapSource;
@@ -90,27 +86,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [self initData];
     }
     return self;
-}
-
-- (void) dealloc
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self];
-    
-    if (_downloadTaskProgressObserver)
-    {
-        [_downloadTaskProgressObserver detach];
-        _downloadTaskProgressObserver = nil;
-    }
-    if (_downloadTaskCompletedObserver)
-    {
-        [_downloadTaskCompletedObserver detach];
-        _downloadTaskCompletedObserver = nil;
-    }
-    if (_localResourcesChangedObserver)
-    {
-        [_localResourcesChangedObserver detach];
-        _localResourcesChangedObserver = nil;
-    }
 }
 
 - (void) initData
@@ -206,8 +181,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }];
         if (isRelief3D && [_plugin.enable3DMaps get])
         {
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
             double scaleValue = _app.data.verticalExaggerationScale;
+            NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
             if (scaleValue > 1)
             {
                 alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
@@ -230,8 +205,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             for (NSInteger i = 0; i < _mapItems.count; i++)
             {
                 [availableMapsSection addRowFromDictionary:@{
-                    kCellKeyKey : kCellTypeMap,
-                    kCellTypeKey : [OARightIconTableViewCell getCellIdentifier],
+                    kCellKeyKey : @"mapItem",
+                    kCellTypeKey : @"mapItem",
                     kCellItemKey : _mapItems[i]
                 }];
             }
@@ -264,6 +239,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
                                   skipIfOneDownloaded:YES];
 
     [self initData];
+    [_downloadingCellResourceHelper cleanCellCache];
     [UIView transitionWithView:tblView
                       duration:.35
                        options:UIViewAnimationOptionTransitionCrossDissolve
@@ -280,7 +256,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productPurchased:) name:OAIAPProductPurchasedNotification object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(productsRestored:) name:OAIAPProductsRestoredNotification object:nil];
-    [_downloadingCellHelper updateAvailableMaps];
+    [self updateAvailableMaps];
 }
 
 - (void)onRotation
@@ -336,30 +312,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void)setupDownloadingCellHelper
 {
     __weak OAMapSettingsTerrainScreen *weakSelf = self;
-    _downloadingCellHelper = [[OADownloadingCellHelper alloc] init];
-    _downloadingCellHelper.hostViewController = self.vwController;
-    _downloadingCellHelper.hostTableView = self.tblView;
-    _downloadingCellHelper.hostDataLock = _dataLock;
-    
-    _downloadingCellHelper.fetchResourcesBlock = ^(){
-        [weakSelf updateAvailableMaps];
-    };
-    
-    _downloadingCellHelper.getResourceByIndexBlock = ^OAResourceItem *(NSIndexPath *indexPath){
-        
-        OATableRowData *row = [weakSelf getItem:indexPath];
-        if (row)
-        {
-            OAResourceItem *mapItem = [row objForKey:kCellItemKey];
-            if (mapItem)
-                return mapItem;
-        }
-        return nil;
-    };
-    
-    _downloadingCellHelper.getTableDataModelBlock =  ^OATableDataModel *{
-        return [weakSelf data];
-    };
+    _downloadingCellResourceHelper = [DownloadingCellResourceHelper new];
+    _downloadingCellResourceHelper.hostViewController = weakSelf.vwController;
+    [_downloadingCellResourceHelper setHostTableView:weakSelf.tblView];
+    _downloadingCellResourceHelper.delegate = weakSelf;
+    _downloadingCellResourceHelper.rightIconStyle = DownloadingCellRightIconTypeHideIconAfterDownloading;
 }
 
 #pragma mark - UITableViewDataSource
@@ -507,6 +464,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         return cell;
     }
+    else if ([item.cellType isEqualToString:@"mapItem"])
+    {
+        OAResourceSwiftItem *mapItem = [[OAResourceSwiftItem alloc] initWithItem:[item objForKey:kCellItemKey]];
+        return [_downloadingCellResourceHelper getOrCreateCell:mapItem.resourceId swiftResourceItem:mapItem];
+    }
     else if ([item.cellType isEqualToString:[OARightIconTableViewCell getCellIdentifier]])
     {
         OARightIconTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:[OARightIconTableViewCell getCellIdentifier]];
@@ -519,22 +481,14 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         }
         if (cell)
         {
-            if ([item.key isEqualToString:kCellTypeMap])
-            {
-                OAResourceItem *mapItem = [item objForKey:kCellItemKey];
-                return [_downloadingCellHelper setupCell:mapItem indexPath:indexPath];
-            }
-            else
-            {
-                cell.accessoryView = nil;
-                BOOL isReadMore = [item.key isEqualToString:@"readMore"];
-                [cell leftIconVisibility:!isReadMore];
-                [cell descriptionVisibility:!isReadMore];
-                cell.titleLabel.textColor = isReadMore ? [UIColor colorNamed:ACColorNameTextColorActive] : [UIColor colorNamed:ACColorNameTextColorPrimary];
-                cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
-                cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
-                cell.titleLabel.text = item.title;
-            }
+            cell.accessoryView = nil;
+            BOOL isReadMore = [item.key isEqualToString:@"readMore"];
+            [cell leftIconVisibility:!isReadMore];
+            [cell descriptionVisibility:!isReadMore];
+            cell.titleLabel.textColor = [UIColor colorNamed: isReadMore ? ACColorNameTextColorActive : ACColorNameTextColorPrimary];
+            cell.titleLabel.font = [UIFont scaledSystemFontOfSize:17. weight:isReadMore ? UIFontWeightSemibold : UIFontWeightRegular];
+            cell.rightIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.titleLabel.text = item.title;
         }
         return cell;
     }
@@ -618,7 +572,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item.key isEqualToString:kCellTypeMap])
     {
-        [_downloadingCellHelper onItemClicked:indexPath];
+        OAResourceItem *mapItem = _mapItems[indexPath.row];
+        [_downloadingCellResourceHelper onCellClicked:mapItem.resourceId.toNSString()];
     }
 }
 
@@ -672,7 +627,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         [_plugin.enable3DMaps set:isOn];
     }
 
-    [_downloadingCellHelper updateAvailableMaps];
+    [self updateAvailableMaps];
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void)showChoosePlanScreen
@@ -683,7 +639,16 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (void) terrainTypeChanged
 {
     _availableMapsSection = -1;
-    [_downloadingCellHelper updateAvailableMaps];
+    [self updateAvailableMaps];
+}
+
+#pragma mark - DownloadingCellResourceHelperDelegate
+
+- (void)onDownldedResourceInstalled
+{
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self updateAvailableMaps];
+    });
 }
 
 #pragma mark - OAIAPProductNotification
@@ -692,6 +657,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [self initData];
+        [_downloadingCellResourceHelper cleanCellCache];
         [self.tblView reloadData];
     });
 }

@@ -56,22 +56,28 @@
 
 @implementation OANativeUtilities
 
-+ (sk_sp<SkImage>) skImageFromPngResource:(NSString *)resourceName
++ (NSString *)getScaledResourceName:(NSString *)resourceName
 {
     NSString *resourcePath = nil;
-    if ([UIScreen mainScreen].scale > 2.0f)
+    CGFloat scale = [UIScreen mainScreen].scale;
+    if (scale > 2.0f)
         resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@3x"] ofType:@"png"];
-    else if ([UIScreen mainScreen].scale > 1.0f)
+    else if (scale > 1.0f)
         resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@2x"] ofType:@"png"];
     else
-    	resourcePath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"png"];
+        resourcePath = [[NSBundle mainBundle] pathForResource:resourceName ofType:@"png"];
 
     if (resourcePath == nil)
         resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@2x"] ofType:@"png"];
-
     if (resourcePath == nil)
         resourcePath = [[NSBundle mainBundle] pathForResource:[resourceName stringByAppendingString:@"@3x"] ofType:@"png"];
 
+    return resourcePath;
+}
+
++ (sk_sp<SkImage>)skImageFromPngResource:(NSString *)resourceName
+{
+    NSString *resourcePath = [self getScaledResourceName:resourceName];
     if (resourcePath == nil)
         return nullptr;
 
@@ -290,7 +296,7 @@
     return nil;
 }
 
-+ (double)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint
++ (float)getAltitudeForPixelPoint:(OsmAnd::PointI)screenPoint
 {
     if (screenPoint != OsmAnd::PointI())
     {
@@ -302,10 +308,9 @@
     return kMinAltitudeValue;
 }
 
-+ (double)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
++ (float)getAltitudeForElevatedPoint:(OsmAnd::PointI)elevatedPoint
 {
-    OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
-    return [mapRenderer getLocationHeightInMeters:elevatedPoint];
+    return [OARootViewController.instance.mapPanel.mapViewController.mapView getLocationHeightInMeters:elevatedPoint];
 }
 
 + (OsmAnd::PointI)get31FromElevatedPixel:(OsmAnd::PointI)screenPoint
@@ -330,7 +335,7 @@
 {
     OAMapRendererView *mapRenderer = OARootViewController.instance.mapPanel.mapViewController.mapView;
     int x31 = OsmAnd::Utilities::get31TileNumberX(lon);
-    int y31 = OsmAnd::Utilities::get31TileNumberX(lat);
+    int y31 = OsmAnd::Utilities::get31TileNumberY(lat);
     OsmAnd::PointI point31 = OsmAnd::PointI(x31, y31);
     CGPoint screenPoint;
     [mapRenderer obtainScreenPointFromPosition:&point31 toScreen:&screenPoint checkOffScreen:YES];

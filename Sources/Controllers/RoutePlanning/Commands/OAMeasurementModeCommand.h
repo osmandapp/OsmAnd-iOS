@@ -47,5 +47,6 @@ typedef NS_ENUM(NSInteger, EOAMeasurementCommandType)
 - (EOAMeasurementCommandType) getType;
 - (OAMeasurementEditingContext *) getEditingCtx;
 - (void) refreshMap;
+- (void) resetMap;
 
 @end

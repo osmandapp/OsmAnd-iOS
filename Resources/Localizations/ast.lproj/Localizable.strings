@@ -2559,3 +2559,13 @@
 "announcement_time_intervals" = "Time and distance intervals";
 "user_points" = "User points";
 "announcement_time_passing" = "Passing";
+"shared_string_always" = "Siempres";
+"route_recalculation_dist_title" = "Minimal distance to recalculate route";
+"avoid_pt_types_descr" = "Select public transport types to avoid for navigation:";
+"shared_string_bottom" = "Bottom";
+"avoid_pt_types" = "Avoid transport types…";
+"in_case_of_reverse_direction" = "In case of reverse direction";
+"shared_string_development" = "Desendolcu";
+"step_by_step" = "Xiru a xiru";
+"edit_tilesource_maxzoom" = "Maximum zoom";
+"edit_tilesource_minzoom" = "Minimum zoom";

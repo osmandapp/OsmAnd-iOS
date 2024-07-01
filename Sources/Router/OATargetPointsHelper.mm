@@ -591,9 +591,8 @@
             NSString *pointName = [self getLocationName:_pointToStart.point];
             [_pointToStart.pointDescription setName:pointName];
             [_app.data setPointToStart:_pointToStart];
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
                 _isSearchingStart = NO;
             });
         });
@@ -609,9 +608,8 @@
             NSString *pointName = [self getLocationName:_myLocationToStart.point];
             [_myLocationToStart.pointDescription setName:pointName];
             [_app.data setMyLocationToStart:_myLocationToStart];;
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
                 _isSearchingMyLocation = NO;
             });
         });
@@ -627,9 +625,8 @@
             NSString *pointName = [self getLocationName:_pointToNavigate.point];
             [_pointToNavigate.pointDescription setName:pointName];
             [_app.data setPointToNavigate:_pointToNavigate];
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
                 _isSearchingDestination = NO;
             });
         });
@@ -643,9 +640,8 @@
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void) {
             NSString *pointName = [self getLocationName:point.point];
             [point.pointDescription setName:pointName];
-            [self updateRouteAndRefresh:NO];
             dispatch_async(dispatch_get_main_queue(), ^(void) {
-                [self updateListeners:NO];
+                [self updateRouteAndRefresh:NO];
             });
         });
     }
@@ -656,7 +652,9 @@
     NSString *addressString = nil;
     BOOL isAddressFound = NO;
     NSString *formattedTargetName = nil;
-    NSString *roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
+    NSString *roadTitle = nil;
+    if (location && CLLocationCoordinate2DIsValid(location.coordinate))
+        roadTitle = [[OAReverseGeocoder instance] lookupAddressAtLat:location.coordinate.latitude lon:location.coordinate.longitude];
     if (!roadTitle || roadTitle.length == 0)
     {
         addressString = OALocalizedString(@"map_no_address");
@@ -686,7 +684,7 @@
     
     CLLocation *current = [_routingHelper getLastProjection];
     double dist = 400000;
-    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamIdHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
+    if ([[OAApplicationMode BICYCLE] isDerivedRoutingFrom:[_routingHelper getAppMode]] && [[_settings getCustomRoutingBooleanProperty:kRouteParamHeightObstacles defaultValue:false] get:[_routingHelper getAppMode]])
     {
         dist = 50000;
     }

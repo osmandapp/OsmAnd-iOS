@@ -376,7 +376,7 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
-    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 20];
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
     NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
     for (NSString *resId in offlineIndexes)
     {
@@ -789,7 +789,7 @@
                                       return false;
                                   }
                                   sr.amenity = amenity;
-                                  sr.preferredZoom = 17;
+                                  sr.preferredZoom = PREFERRED_POI_ZOOM;
                                   sr.resourceId = currentResId;
                                   sr.location = [OASearchCoreFactory getLocation:amenity->position31];
                                   
@@ -797,7 +797,7 @@
                                       amenity->subType == QStringLiteral("country"))
                                   {
                                       sr.priorityDistance = SEARCH_AMENITY_BY_NAME_CITY_PRIORITY_DISTANCE;
-                                      sr.preferredZoom = amenity->subType == QStringLiteral("country") ? 7 : 13;
+                                      sr.preferredZoom = amenity->subType == QStringLiteral("country") ? PREFERRED_COUNTRY_ZOOM : PREFERRED_CITY_ZOOM;
                                   }
                                   else if (amenity->subType == QStringLiteral("town"))
                                   {
@@ -1486,7 +1486,7 @@
         }
         
         res.object = *poi;
-        res.preferredZoom = 17;
+        res.preferredZoom = PREFERRED_POI_ZOOM;
         res.resourceId = selected;
         res.location = [OASearchCoreFactory getLocation:_currentAmenity->position31];
         res.priority = SEARCH_AMENITY_BY_TYPE_PRIORITY;
@@ -1678,7 +1678,7 @@
             res.relatedObject = [[OAStreet alloc] initWithStreet:s];
             res.localeRelatedObjectName = s->getName(lang, transliterate).toNSString();
             res.objectType = HOUSE;
-            res.preferredZoom = 17;
+            res.preferredZoom = PREFERRED_BUILDING_ZOOM;
             
             [resultMatcher publish:res];
         }
@@ -1706,7 +1706,7 @@
                 res.priorityDistance = 0;
                 res.objectType = STREET_INTERSECTION;
                 res.location = [OASearchCoreFactory getLocation:street->position31];
-                res.preferredZoom = 16;
+                res.preferredZoom = PREFERRED_STREET_INTERSECTION_ZOOM;
                 [phrase countUnknownWordsMatchMainResult:res];
                 [resultMatcher publish:res];
             }
@@ -1804,7 +1804,7 @@
             
             res.localeRelatedObjectName = c->getName(lang, transliterate).toNSString();
             res.object = [[OAStreet alloc] initWithStreet:object];
-            res.preferredZoom = 17;
+            res.preferredZoom = PREFERRED_STREET_ZOOM;
             res.resourceId = sw.result.resourceId;
             res.location = [OASearchCoreFactory getLocation:object->position31];
             res.priority = SEARCH_STREET_BY_CITY_PRIORITY;

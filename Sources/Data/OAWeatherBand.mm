@@ -396,15 +396,15 @@ static NSString *kPrecipContourStyleName;
     switch (self.bandIndex)
     {
         case WEATHER_BAND_CLOUD:
-            return [[NSBundle mainBundle] pathForResource:@"cloud_color" ofType:@"txt"];
+            return [[NSBundle mainBundle] pathForResource:@"weather_cloud" ofType:@"txt"];
         case WEATHER_BAND_TEMPERATURE:
-            return [[NSBundle mainBundle] pathForResource:@"temperature_color" ofType:@"txt"];
+            return [[NSBundle mainBundle] pathForResource:@"weather_temperature" ofType:@"txt"];
         case WEATHER_BAND_PRESSURE:
-            return [[NSBundle mainBundle] pathForResource:@"pressure_color" ofType:@"txt"];
+            return [[NSBundle mainBundle] pathForResource:@"weather_pressure" ofType:@"txt"];
         case WEATHER_BAND_WIND_SPEED:
-            return [[NSBundle mainBundle] pathForResource:@"wind_color" ofType:@"txt"];
+            return [[NSBundle mainBundle] pathForResource:@"weather_wind" ofType:@"txt"];
         case WEATHER_BAND_PRECIPITATION:
-            return [[NSBundle mainBundle] pathForResource:@"precip_color" ofType:@"txt"];
+            return [[NSBundle mainBundle] pathForResource:@"weather_precip" ofType:@"txt"];
         case WEATHER_BAND_UNDEFINED:
             return nil;
     }

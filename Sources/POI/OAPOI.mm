@@ -46,7 +46,7 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 {
     NSString *subwayRegion = [self getAdditionalInfo][@"subway_region"];
 	if (subwayRegion.length > 0)
-        return [UIImage svgImageNamed:[NSString stringWithFormat:@"map-icons-svg/mx_subway_%@", subwayRegion]];
+        return [UIImage svgImageNamed:[NSString stringWithFormat:@"map-icons-svg/c_mx_subway_%@", subwayRegion]];
     else if (_mapIconName && _mapIconName.length > 0 && ![_mapIconName containsString:@"_small"])
         return [UIImage mapSvgImageNamed:[NSString stringWithFormat:@"mx_%@", _mapIconName]];
     else if (_type)
@@ -345,6 +345,33 @@ static NSArray<NSString *> *const HIDDEN_EXTENSIONS = @[
 - (NSString *)getRouteId
 {
     return [self getAdditionalInfo][@"route_id"];
+}
+
+- (NSString *)getSubTypeStr
+{
+    OAPOICategory *pc = self.type.category;
+    NSMutableString *typeStr = [NSMutableString string];
+    if (_subType.length > 0)
+    {
+        NSArray<NSString *> * subs = [_subType componentsSeparatedByString:@";"];
+        for (NSString * subType : subs)
+        {
+            OAPOIType * pt = [pc getPoiTypeByKeyName:subType];
+            if (pt != nil)
+            {
+                if (typeStr.length > 0)
+                    [typeStr appendFormat:@", %@", [pt.nameLocalized lowercaseString]];
+                else
+                    [typeStr appendString:pt.nameLocalized];
+            }
+        }
+        if (typeStr.length == 0)
+        {
+            typeStr = [NSMutableString stringWithString:[_subType lowercaseString]];
+            [typeStr replaceOccurrencesOfString:@"_" withString:@" " options:0 range:NSMakeRange(0, [typeStr length])];
+        }
+    }
+    return typeStr;
 }
 
 - (NSString *)toStringEn

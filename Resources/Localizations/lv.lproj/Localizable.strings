@@ -2390,3 +2390,11 @@
 "global_settings" = "Globālie iestatījumi";
 "shared_string_accessibility" = "Pieejamība";
 "subscribe_email_error" = "Kļūda";
+"avoid_pt_types_descr" = "Izvēlieties publiskā transporta kategorijas, no kā izvairīties navigācijas laikā:";
+"step_by_step" = "Soli pa solim";
+"edit_tilesource_maxzoom" = "Maksimālais mērogs";
+"shared_string_bottom" = "Apakša";
+"edit_tilesource_minzoom" = "Minimālais mērogs";
+"shared_string_development" = "Izstrāde";
+"shared_string_always" = "Vienmēr";
+"avoid_pt_types" = "Nelietot transportu…";

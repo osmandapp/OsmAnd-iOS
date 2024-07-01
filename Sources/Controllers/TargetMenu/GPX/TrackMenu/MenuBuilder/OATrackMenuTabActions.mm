@@ -230,7 +230,7 @@
     else if ([tableData.key isEqualToString:@"analyze"] && self.trackMenuDelegate)
         [self.trackMenuDelegate openAnalysis:@[@(GPXDataSetTypeAltitude), @(GPXDataSetTypeSlope)]];
     else if ([tableData.key isEqualToString:@"share"] && self.trackMenuDelegate)
-        [self.trackMenuDelegate openExport];
+        [self.trackMenuDelegate openExport:sourceView];
     else if ([tableData.key isEqualToString:@"edit"] && self.trackMenuDelegate)
         [self.trackMenuDelegate editSegment];
     else if ([tableData.key isEqualToString:@"edit_create_duplicate"] && self.trackMenuDelegate)

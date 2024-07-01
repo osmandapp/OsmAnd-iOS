@@ -45,6 +45,8 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 - (instancetype)initWithType:(OsmAndResourceType)resourceType items:(NSArray<OAResourceItem *> *)items;
 
 - (BOOL) allDownloaded;
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue;
+- (NSString *) getResourceId;
 
 @end
 
@@ -54,6 +56,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
 + (instancetype)withType:(OsmAndResourceType)type;
 + (NSString *)resourceTypeLocalized:(OsmAndResourceType)type;
++ (NSString *)getIconName:(OsmAndResourceType)type;
 + (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated;
 + (NSInteger)getOrderIndex:(NSNumber *)type;
 + (OsmAndResourceType)resourceTypeByScopeId:(NSString *)scopeId;
@@ -293,8 +296,7 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (NSArray<OAResourceItem *> *)getMapRegionResourcesToDownloadForRegions:(NSArray<OAWorldRegion *> *)regions;
 + (NSArray<OAResourceItem *> *)getMapRegionResourcesToUpdateForRegions:(NSArray<OAWorldRegion *> *)regions;
 
-+ (void)onlineCalculateRequestStartPoint:(CLLocation *)startPoint
-                                endPoint:(CLLocation *)endPoint
-                              completion:(LocationArrayCallback)completion;
++ (void)onlineCalculateRequestWithRouteCalculationResult:(OARouteCalculationResult *)routeCalculationResult
+                                              completion:(LocationArrayCallback)completion;
 
 @end

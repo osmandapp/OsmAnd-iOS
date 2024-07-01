@@ -10,8 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAMapSettingsViewController.h"
-#import "OAQuickActionListViewController.h"
-#import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
 #import "OAMapSettingsViewController.h"
 #import "OARoutingHelper.h"
@@ -414,8 +412,7 @@ typedef NS_ENUM(NSInteger, EOAImportDataType) {
     }
     else if (dataType == EOAImportDataTypeQuickActions)
     {
-        OAQuickActionListViewController *actionsList = [[OAQuickActionListViewController alloc] init];
-        [rootController.navigationController pushViewController:actionsList animated:YES];
+        [rootController.navigationController pushViewController:[[CustomMapButtonsViewController alloc] init] animated:YES];
     }
     else if (dataType == EOAImportDataTypePoiFilters)
     {

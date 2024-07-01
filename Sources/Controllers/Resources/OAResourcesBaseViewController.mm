@@ -280,10 +280,6 @@ static BOOL dataInvalidated = NO;
 {
 }
 
-- (void) refreshDownloadingContent:(NSString *)downloadTaskKey
-{
-}
-
 - (void) updateDisplayItem:(OAResourceItem *)item
 {
 }
@@ -537,9 +533,6 @@ static BOOL dataInvalidated = NO;
             return;
         
         [self.downloadView setProgress:[value floatValue]];
-        //[self refreshContent:NO];
-        [self refreshDownloadingContent:task.key];
-        
     });
 }
 

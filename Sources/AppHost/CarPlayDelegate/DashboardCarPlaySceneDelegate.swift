@@ -85,13 +85,12 @@ extension DashboardCarPlaySceneDelegate: CPTemplateApplicationDashboardSceneDele
     func templateApplicationDashboardScene(_ templateApplicationDashboardScene: CPTemplateApplicationDashboardScene, didConnect dashboardController: CPDashboardController, to window: UIWindow) {
         NSLog("[CarPlay] DashboardCarPlaySceneDelegate didConnect")
         self.window = window
-        let nightMode = templateApplicationDashboardScene.dashboardWindow.traitCollection.userInterfaceStyle == .dark
         dashboardController.shortcutButtons = [
-            CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: UIImage(named: nightMode ? "ic_carplay_navigation_night" : "ic_carplay_navigation")!, handler: { _ in
+            CPDashboardButton(titleVariants: [localizedString("shared_string_navigation")], subtitleVariants: [""], image: UIImage(named: "ic_carplay_navigation")!, handler: { _ in
                 guard let url = URL(string: "osmandmaps://navigation") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             }),
-            CPDashboardButton(titleVariants: [localizedString("address_search_desc")], subtitleVariants: [""], image: UIImage(named: nightMode ? "ic_carplay_search_night" : "ic_carplay_search")!, handler: { _ in
+            CPDashboardButton(titleVariants: [localizedString("address_search_desc")], subtitleVariants: [""], image: UIImage(named: "ic_carplay_search")!, handler: { _ in
                 guard let url = URL(string: "osmandmaps://search") else { return }
                 templateApplicationDashboardScene.open(url, options: nil, completionHandler: nil)
             })]

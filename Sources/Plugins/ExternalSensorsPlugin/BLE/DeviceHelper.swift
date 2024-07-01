@@ -77,6 +77,7 @@ final class DeviceHelper: NSObject {
                 device.deviceName = savedDevice.deviceName
                 device.deviceType = savedDevice.deviceType
                 device.setPeripheral(peripheral: peripheral)
+                device.configure()
                 device.addObservers()
                 return device
             } else {
@@ -108,6 +109,20 @@ final class DeviceHelper: NSObject {
     
     func changeDeviceName(with id: String, name: String) {
         devicesSettingsCollection.changeDeviceName(with: id, name: name)
+    }
+    
+    func changeDeviceParameter(with id: String,
+                               key: String,
+                               value: String) {
+        devicesSettingsCollection.changeDeviceParameter(with: id,
+                                                        key: key,
+                                                        value: value)
+        if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
+            if let connectedDevice = connectedDevices.first(where: { $0.id == id }) as? BLEBikeSCDDevice,
+               let wheelCircumference = Double(value) {
+                connectedDevice.setWheelCircumference(wheelCircumference: wheelCircumference)
+            }
+        }
     }
     
     private func updatePeripheralsForConnectedDevices(peripherals: [Peripheral]) {
@@ -243,13 +258,14 @@ extension DeviceHelper {
                     guard let self else { return }
                     switch result {
                     case .success:
+                        debugPrint("updateConnected success | \(device.deviceServiceName) | \(device.deviceName)")
                         device.addObservers()
                         device.notifyRSSI()
                         DeviceHelper.shared.setDevicePaired(device: device, isPaired: true)
                         connectedDevices.append(device)
                         discoverServices(device: device)
                     case .failure(let error):
-                        Self.logger.error("updateConnected connect: \(String(describing: error.localizedDescription))")
+                        Self.logger.error("updateConnected failure: \(String(describing: error.localizedDescription))")
                     }
                 }
             }

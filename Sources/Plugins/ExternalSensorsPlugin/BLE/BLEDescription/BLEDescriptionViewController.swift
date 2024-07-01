@@ -17,6 +17,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         didSet {
             device.didChangeCharacteristic = { [weak self] in
                 guard let self else { return }
+                headerView.updateActiveServiceImage()
                 generateData()
                 tableView.reloadData()
             }
@@ -27,7 +28,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
         }
     }
     
-    var wheelSize: Float?
+    var wheelSizeInMillimeters: Float?
     
     private lazy var headerView: DescriptionDeviceHeader = {
         Bundle.main.loadNibNamed("DescriptionDeviceHeader", owner: self, options: nil)?[0] as! DescriptionDeviceHeader
@@ -41,7 +42,7 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
 
         configureHeader()
         headerView.configure(device: device)
-        headerView.didPaireDevicedAction = { [weak self] in
+        headerView.didPaireDeviceAction = { [weak self] in
             guard let self else { return }
             generateData()
             tableView.reloadData()
@@ -107,11 +108,11 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
                     if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
                         settingRow.title = localizedString("wheel_circumference")
                     }
-                    if let descr = value as? Float {
+                    if let floatValue = value as? Float {
                         if key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
-                            wheelSize = descr
+                            wheelSizeInMillimeters = floatValue
                         }
-                        settingRow.descr = String(descr)
+                        settingRow.descr = String(format: "%.0f", floatValue) + " " + localizedString("shared_string_millimeters_short")
                     }
                  }
             }
@@ -192,17 +193,15 @@ final class BLEDescriptionViewController: OABaseNavbarViewController {
             }
             navigationController?.present(UINavigationController(rootViewController: nameVC), animated: true)
         } else if item.key == WheelDeviceSettings.WHEEL_CIRCUMFERENCE_KEY {
-            #warning("We are waiting for the design for the controller")
-            /*
             let wheelVC = BLEWheelSettingsViewController()
-            wheelVC.wheelSize = wheelSize
+            wheelVC.device = device
+            wheelVC.wheelSize = wheelSizeInMillimeters
             wheelVC.onSaveAction = { [weak self] in
                 guard let self else { return }
                 generateData()
                 tableView.reloadData()
             }
             navigationController?.present(UINavigationController(rootViewController: wheelVC), animated: true)
-             */
         }
     }
     

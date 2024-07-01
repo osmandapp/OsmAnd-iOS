@@ -41,15 +41,15 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 
-#define kColorsSection 1
-
-#define kColorGridOrDescriptionCell 1
+static const NSInteger kColorsSection = 1;
+static const NSInteger kColorGridOrDescriptionCell = 1;
 
 @interface OABackupGpx : NSObject
 
 @property (nonatomic) NSInteger color;
 @property (nonatomic) BOOL showStartFinish;
 @property (nonatomic) CGFloat verticalExaggerationScale;
+@property (nonatomic) NSInteger elevationMeters;
 @property (nonatomic) BOOL joinSegments;
 @property (nonatomic) BOOL showArrows;
 @property (nonatomic) NSString *width;
@@ -181,6 +181,7 @@
     _backupGpxItem.showArrows = self.gpx.showArrows;
     _backupGpxItem.showStartFinish = self.gpx.showStartFinish;
     _backupGpxItem.verticalExaggerationScale = self.gpx.verticalExaggerationScale;
+    _backupGpxItem.elevationMeters = self.gpx.elevationMeters;
     _backupGpxItem.visualization3dByType = self.gpx.visualization3dByType;
     _backupGpxItem.visualization3dWallColorType = self.gpx.visualization3dWallColorType;
     _backupGpxItem.visualization3dPositionType = self.gpx.visualization3dPositionType;
@@ -200,6 +201,7 @@
             backupItem.showArrows = track.showArrows;
             backupItem.showStartFinish = track.showStartFinish;
             backupItem.verticalExaggerationScale = track.verticalExaggerationScale;
+            backupItem.elevationMeters = track.elevationMeters;
             backupItem.visualization3dByType = track.visualization3dByType;
             backupItem.visualization3dWallColorType = track.visualization3dWallColorType;
             backupItem.visualization3dPositionType = track.visualization3dPositionType;
@@ -219,6 +221,7 @@
     self.gpx.showArrows = _backupGpxItem.showArrows;
     self.gpx.showStartFinish = _backupGpxItem.showStartFinish;
     self.gpx.verticalExaggerationScale = _backupGpxItem.verticalExaggerationScale;
+    self.gpx.elevationMeters = _backupGpxItem.elevationMeters;
     self.gpx.visualization3dByType = _backupGpxItem.visualization3dByType;
     self.gpx.visualization3dWallColorType = _backupGpxItem.visualization3dWallColorType;
     self.gpx.visualization3dPositionType = _backupGpxItem.visualization3dPositionType;
@@ -236,6 +239,7 @@
         [self.settings.currentTrackShowArrows set:_backupGpxItem.showArrows];
         [self.settings.currentTrackShowStartFinish set:_backupGpxItem.showStartFinish];
         [self.settings.currentTrackVerticalExaggerationScale set:_backupGpxItem.verticalExaggerationScale];
+        [self.settings.currentTrackElevationMeters set:_backupGpxItem.elevationMeters];
         [self.settings.currentTrackVisualization3dByType set:(int)_backupGpxItem.visualization3dByType];
         [self.settings.currentTrackVisualization3dWallColorType set:(int)_backupGpxItem.visualization3dWallColorType];
         [self.settings.currentTrackVisualization3dPositionType set:(int)_backupGpxItem.visualization3dPositionType];
@@ -249,6 +253,7 @@
         [self.doc setShowArrows:_backupGpxItem.showArrows];
         [self.doc setShowStartFinish:_backupGpxItem.showStartFinish];
         [self.doc setVerticalExaggerationScale:_backupGpxItem.verticalExaggerationScale];
+        [self.doc setElevationMeters:_backupGpxItem.elevationMeters];
         [self.doc setVisualization3dByType:_backupGpxItem.visualization3dByType];
         [self.doc setVisualization3dWallColorType:_backupGpxItem.visualization3dWallColorType];
         [self.doc setVisualization3dPositionType:_backupGpxItem.visualization3dPositionType];
@@ -266,6 +271,7 @@
             track.showArrows = bakupItem.showArrows;
             track.showStartFinish = bakupItem.showStartFinish;
             track.verticalExaggerationScale = bakupItem.verticalExaggerationScale;
+            track.elevationMeters = bakupItem.elevationMeters;
             track.visualization3dByType = bakupItem.visualization3dByType;
             track.visualization3dWallColorType = bakupItem.visualization3dWallColorType;
             track.visualization3dPositionType = bakupItem.visualization3dPositionType;
@@ -484,6 +490,10 @@
 - (void) configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type
 {
     self.gpx.visualization3dByType = type;
+    
+    if (self.gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeFixedHeight)
+        self.gpx.verticalExaggerationScale = kGpxExaggerationDefScale;
+
     if (_wholeFolderTracks)
     {
         for (OAGPX *track in _wholeFolderTracks)
@@ -505,6 +515,16 @@
 - (void)configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type
 {
     self.gpx.visualization3dWallColorType = type;
+
+    if (self.gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeAltitude)
+        self.gpx.coloringType = OAColoringType.ALTITUDE.name;
+    else if (self.gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSlope)
+        self.gpx.coloringType = OAColoringType.SLOPE.name;
+    else if (self.gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSpeed)
+        self.gpx.coloringType = OAColoringType.SPEED.name;
+    else
+        self.gpx.coloringType = OAColoringType.TRACK_SOLID.name;
+
     if (_wholeFolderTracks)
     {
         for (OAGPX *track in _wholeFolderTracks)
@@ -565,6 +585,27 @@
     [self reloadTableWithAnimation];
 }
 
+- (void)configureElevationMeters:(NSInteger)meters
+{
+    self.gpx.elevationMeters = meters;
+    if (_wholeFolderTracks)
+    {
+        for (OAGPX *track in _wholeFolderTracks)
+            track.elevationMeters = meters;
+    }
+    
+    if (self.isCurrentTrack)
+    {
+        [self.doc setElevationMeters:self.gpx.elevationMeters];
+        [[_app updateRecTrackOnMapObservable] notifyEvent];
+    }
+    else
+    {
+        [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    }
+    [self reloadTableWithAnimation];
+}
+
 - (void)reloadTableWithAnimation
 {
     [self generateData];
@@ -578,84 +619,115 @@
 
 - (UIMenu *)createVisualizedByMenuForCellButton:(UIButton *)button
 {
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    NSDictionary<NSNumber *, NSString *> *visualizationTypes = @{
+        @(EOAGPX3DLineVisualizationByTypeNone): @"shared_string_none",
+        @(EOAGPX3DLineVisualizationByTypeAltitude): @"altitude",
+        @(EOAGPX3DLineVisualizationByTypeSpeed): @"shared_string_speed",
+        @(EOAGPX3DLineVisualizationByTypeHeartRate): @"map_widget_ant_heart_rate",
+        @(EOAGPX3DLineVisualizationByTypeBicycleCadence): @"map_widget_ant_bicycle_cadence",
+        @(EOAGPX3DLineVisualizationByTypeBicyclePower): @"map_widget_ant_bicycle_power",
+        @(EOAGPX3DLineVisualizationByTypeTemperature): @"shared_string_temperature",
+        @(EOAGPX3DLineVisualizationByTypeSpeedSensor): @"shared_string_speed",
+        @(EOAGPX3DLineVisualizationByTypeFixedHeight): @"fixed_height"
+    };
+    
+    NSDictionary<NSNumber *, NSString *> *dataKeys = @{
+        @(EOAGPX3DLineVisualizationByTypeHeartRate): OAPointAttributes.sensorTagHeartRate,
+        @(EOAGPX3DLineVisualizationByTypeBicycleCadence): OAPointAttributes.sensorTagCadence,
+        @(EOAGPX3DLineVisualizationByTypeBicyclePower): OAPointAttributes.sensorTagBikePower,
+        @(EOAGPX3DLineVisualizationByTypeTemperature): OAPointAttributes.sensorTagTemperature,
+        @(EOAGPX3DLineVisualizationByTypeSpeedSensor): OAPointAttributes.sensorTagSpeed
+    };
+    
+    NSMutableArray<UIAction *> *sensorActions = [NSMutableArray array];
+    UIAction *noneAction;
+    UIAction *fixedHeightAction;
     __weak __typeof(self) weakSelf = self;
-    UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
-                                             image:nil
-                                        identifier:nil
-                                           handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeNone];
-    }];
-    [menuElements addObject:none];
-
-    UIAction *altitude = [UIAction actionWithTitle:OALocalizedString(@"altitude")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeAltitude];
-    }];
-    [menuElements addObject:altitude];
+    for (NSNumber *type in visualizationTypes.allKeys)
+    {
+        int typeValue = type.intValue;
+        NSString *title = OALocalizedString(visualizationTypes[type]);
+        NSString *dataKey = dataKeys[type];
+        if (dataKey && ![self hasValidDataForKey:dataKey])
+            continue;
+        
+        UIAction *action = [UIAction actionWithTitle:title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf configureVisualization3dByType:(EOAGPX3DLineVisualizationByType)type.intValue];
+        }];
+        
+        if (self.gpx.visualization3dByType == typeValue)
+            action.state = UIMenuElementStateOn;
+        
+        if (typeValue == EOAGPX3DLineVisualizationByTypeNone)
+            noneAction = action;
+        else if (typeValue == EOAGPX3DLineVisualizationByTypeFixedHeight)
+            fixedHeightAction = action;
+        else
+            [sensorActions addObject:action];
+    }
     
-    UIAction *fixedHeight = [UIAction actionWithTitle:OALocalizedString(@"fixed_height")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dByType:EOAGPX3DLineVisualizationByTypeFixedHeight];
-    }];
-    [menuElements addObject:fixedHeight];
+    UIMenu *noneMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[noneAction]];
+    UIMenu *sensorMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:sensorActions];
+    UIMenu *fixedHeightMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[fixedHeightAction]];
     
-    NSInteger selectedIndex = self.gpx.visualization3dByType;
-    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
-    
-    NSString *title = [menuElements[selectedIndex] title];
-    
-    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+    UIMenu *mainMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[noneMenu, sensorMenu, fixedHeightMenu]];
+    NSString *selectedTitle = visualizationTypes[@(weakSelf.gpx.visualization3dByType)];
+    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[mainMenu]];
 }
 
 - (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
 {
-    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    NSDictionary<NSNumber *, NSString *> *wallColorTypes = @{
+        @(EOAGPX3DLineVisualizationWallColorTypeNone): @"shared_string_none",
+        @(EOAGPX3DLineVisualizationWallColorTypeSolid): @"track_coloring_solid",
+        @(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient): @"downward_gradient",
+        @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient): @"upward_gradient",
+        @(EOAGPX3DLineVisualizationWallColorTypeAltitude): @"altitude",
+        @(EOAGPX3DLineVisualizationWallColorTypeSlope): @"shared_string_slope",
+        @(EOAGPX3DLineVisualizationWallColorTypeSpeed): @"shared_string_speed"
+    };
+    
+    NSMutableArray<UIAction *> *actions = [NSMutableArray array];
     __weak __typeof(self) weakSelf = self;
-    UIAction *none = [UIAction actionWithTitle:OALocalizedString(@"shared_string_none")
-                                             image:nil
-                                        identifier:nil
-                                           handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeNone];
-    }];
-    [menuElements addObject:none];
-
-    UIAction *solid = [UIAction actionWithTitle:OALocalizedString(@"track_coloring_solid")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeSolid];
-    }];
-    [menuElements addObject:solid];
+    for (NSNumber *type in wallColorTypes.allKeys)
+    {
+        NSString *title = OALocalizedString(wallColorTypes[type]);
+        UIAction *action = [UIAction actionWithTitle:title image:nil identifier:nil handler:^(__kindof UIAction * _Nonnull action) {
+            [weakSelf configureVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)type.integerValue];
+        }];
+        
+        if (self.gpx.visualization3dWallColorType == type.integerValue)
+            action.state = UIMenuElementStateOn;
+        
+        [actions addObject:action];
+    }
     
-    UIAction *downwardGradient = [UIAction actionWithTitle:OALocalizedString(@"downward_gradient")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeDownwardGradient];
-    }];
-    [menuElements addObject:downwardGradient];
+    NSArray<NSNumber *> *noneTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeNone)];
+    NSArray<NSNumber *> *colorTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeSolid), @(EOAGPX3DLineVisualizationWallColorTypeDownwardGradient), @(EOAGPX3DLineVisualizationWallColorTypeUpwardGradient)];
+    NSArray<NSNumber *> *dataTypes = @[@(EOAGPX3DLineVisualizationWallColorTypeAltitude), @(EOAGPX3DLineVisualizationWallColorTypeSlope), @(EOAGPX3DLineVisualizationWallColorTypeSpeed)];
     
-    UIAction *upwardGradient = [UIAction actionWithTitle:OALocalizedString(@"upward_gradient")
-                                          image:nil
-                                     identifier:nil
-                                        handler:^(__kindof UIAction * _Nonnull action) {
-        [weakSelf configureVisualization3dWallColorType:EOAGPX3DLineVisualizationWallColorTypeUpwardGradient];
-    }];
-    [menuElements addObject:upwardGradient];
+    NSMutableArray<UIMenuElement *> *menuElements = [NSMutableArray array];
+    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:noneTypes.firstObject]]]]];
     
-    NSInteger selectedIndex = self.gpx.visualization3dWallColorType;
-    if (selectedIndex >= 0 && selectedIndex < menuElements.count)
-        ((UIAction *)menuElements[selectedIndex]).state = UIMenuElementStateOn;
+    NSMutableArray<UIAction *> *colorActions = [NSMutableArray array];
+    for (NSNumber *type in colorTypes)
+    {
+        [colorActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
+    }
     
-    NSString *title = [menuElements[selectedIndex] title];
+    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:colorActions]];
     
-    return [self createChevronMenu:title button:button menuElements:[menuElements copy]];
+    NSMutableArray<UIAction *> *dataActions = [NSMutableArray array];
+    for (NSNumber *type in dataTypes)
+    {
+        [dataActions addObject:[actions objectAtIndex:[wallColorTypes.allKeys indexOfObject:type]]];
+    }
+    
+    [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:dataActions]];
+    
+    UIMenu *mainMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:menuElements];
+    NSString *selectedTitle = wallColorTypes[@(weakSelf.gpx.visualization3dWallColorType)];
+    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[mainMenu]];
 }
 
 - (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button
@@ -714,6 +786,34 @@
     [button setAttributedTitle:attributedString forState:UIControlStateNormal];
     
     return [UIMenu menuWithChildren:menuElements];
+}
+
+- (BOOL)hasValidDataForKey:(NSString *)key
+{
+    if ([key isEqualToString:OAPointAttributes.sensorTagTemperature])
+    {
+        for (OAPointAttributes *point in self.analysis.pointAttributes)
+        {
+            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureW])
+                return YES;
+        }
+        
+        for (OAPointAttributes *point in self.analysis.pointAttributes)
+        {
+            if ([point hasValidValueFor:OAPointAttributes.sensorTagTemperatureA])
+                return YES;
+        }
+        
+        return NO;
+    }
+    
+    for (OAPointAttributes *point in self.analysis.pointAttributes)
+    {
+        if ([point hasValidValueFor:key])
+            return YES;
+    }
+    
+    return NO;
 }
 
 - (void)generateData
@@ -843,27 +943,44 @@
             }];
                 [track3DSectionItems addObject:trackLineData];
                 
-            NSString *alphaValueString = OALocalizedString(@"shared_string_none");
-            double scaleValue = self.gpx.verticalExaggerationScale;
-            if (scaleValue > 1)
-            {
-                alphaValueString = [NSString stringWithFormat:@"x%.1f", scaleValue];
+                double scaleValue = self.gpx.verticalExaggerationScale;
+                NSString *alphaValueString = scaleValue <= kGpxExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
+                NSString *elevationMetersValueString = [NSString stringWithFormat:@"%ld %@", self.gpx.elevationMeters, OALocalizedString(@"m")];
+                if (self.gpx.visualization3dByType != EOAGPX3DLineVisualizationByTypeFixedHeight)
+                {
+                    OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{
+                        kTableKey:@"vertical_exaggeration",
+                        kCellType:[OAValueTableViewCell getCellIdentifier],
+                        kCellTitle:OALocalizedString(@"vertical_exaggeration"),
+                        kCellIconNameKey:@"ic_custom_terrain_scale",
+                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kTableValues:@{
+                            @"string_value":alphaValueString,
+                            @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
+                            @"accessibility_value":alphaValueString,
+                            @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
+                        },
+                    }];
+                    [track3DSectionItems addObject:verticalExaggerationData];
+                }
+                else
+                {
+                    OAGPXTableCellData *wallHeightData = [OAGPXTableCellData withData:@{
+                        kTableKey:@"wall_height",
+                        kCellType:[OAValueTableViewCell getCellIdentifier],
+                        kCellTitle:OALocalizedString(@"wall_height"),
+                        kCellIconNameKey:@"ic_custom_terrain_scale",
+                        kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
+                        kTableValues:@{
+                            @"string_value":elevationMetersValueString,
+                            @"accessibility_label":OALocalizedString(@"wall_height"),
+                            @"accessibility_value":elevationMetersValueString,
+                            @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
+                        },
+                    }];
+                    [track3DSectionItems addObject:wallHeightData];
+                }
             }
-            OAGPXTableCellData *verticalExaggerationData = [OAGPXTableCellData withData:@{
-                kTableKey:@"vertical_exaggeration",
-                kCellType:[OAValueTableViewCell getCellIdentifier],
-                kCellTitle:OALocalizedString(@"vertical_exaggeration"),
-                kCellIconNameKey:@"ic_custom_terrain_scale",
-                kCellIconTintColor:[UIColor colorNamed:scaleValue > 1 ? ACColorNameIconColorSelected : ACColorNameIconColorDefault],
-                kTableValues:@{
-                    @"string_value":alphaValueString,
-                    @"accessibility_label":OALocalizedString(@"vertical_exaggeration"),
-                    @"accessibility_value":alphaValueString,
-                    @"accessoryType":@(UITableViewCellAccessoryDisclosureIndicator)
-                },
-            }];
-            [track3DSectionItems addObject:verticalExaggerationData];
-        }
     }
 
     [appearanceSections addObject:[OAGPXTableSectionData withData:@{
@@ -1139,6 +1256,7 @@
             [self.settings.currentTrackShowArrows set:self.gpx.showArrows];
             [self.settings.currentTrackShowStartFinish set:self.gpx.showStartFinish];
             [self.settings.currentTrackVerticalExaggerationScale set:self.gpx.verticalExaggerationScale];
+            [self.settings.currentTrackElevationMeters set:self.gpx.elevationMeters];
             [self.settings.currentTrackVisualization3dByType set:(int)self.gpx.visualization3dByType];
             [self.settings.currentTrackVisualization3dWallColorType set:(int)self.gpx.visualization3dWallColorType];
             [self.settings.currentTrackVisualization3dPositionType set:(int)self.gpx.visualization3dPositionType];
@@ -1152,6 +1270,7 @@
             [self.doc setShowArrows:self.gpx.showArrows];
             [self.doc setShowStartFinish:self.gpx.showStartFinish];
             [self.doc setVerticalExaggerationScale:self.gpx.verticalExaggerationScale];
+            [self.doc setElevationMeters:self.gpx.elevationMeters];
             [self.doc setVisualization3dByType:self.gpx.visualization3dByType];
             [self.doc setVisualization3dWallColorType:self.gpx.visualization3dWallColorType];
             [self.doc setVisualization3dPositionType:self.gpx.visualization3dPositionType];
@@ -1524,15 +1643,13 @@
             }
             
             [cell.contentView addSubview:_trackView3DEmptyView];
-            cell.translatesAutoresizingMaskIntoConstraints = NO;
             _trackView3DEmptyView.translatesAutoresizingMaskIntoConstraints = NO;
-            
-            [cell.contentView addSubview:_trackView3DEmptyView];
+
             [NSLayoutConstraint activateConstraints:@[
                 [_trackView3DEmptyView.leadingAnchor constraintEqualToAnchor:cell.contentView.leadingAnchor constant:20],
                 [_trackView3DEmptyView.trailingAnchor constraintEqualToAnchor:cell.contentView.trailingAnchor constant:-20],
                 [_trackView3DEmptyView.topAnchor constraintEqualToAnchor:cell.contentView.topAnchor constant:20],
-                [_trackView3DEmptyView.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor constant:20],
+                [_trackView3DEmptyView.bottomAnchor constraintEqualToAnchor:cell.contentView.bottomAnchor constant:-20],
             ]];
             return cell;
             
@@ -1554,10 +1671,6 @@
     OAGPXTableCellData *cellData = [self getCellData:indexPath];
     if ([cellData.type isEqualToString:[OADividerCell getCellIdentifier]])
         return [cellData.values[@"float_value"] floatValue];
-    if ([cellData.type isEqualToString:[UITableViewCell getCellIdentifier]] && [cellData.key isEqualToString:@"track_view_3d_empty_state"])
-    {
-        return [[UIFontMetrics defaultMetrics] scaledValueForValue:82] + 104;
-    }
     
     return UITableViewAutomaticDimension;
 }
@@ -2085,14 +2198,37 @@
         };
         controller.hideCallback = ^{
             OATrackMenuViewControllerState *state = _reopeningTrackMenuState;
-            BOOL openedFromTracksList = state.openedFromTracksList;
-            state.openedFromTracksList = openedFromTracksList;
+            state.openedFromTracksList = state.openedFromTracksList;
             state.openedFromTrackMenu = YES;
             state.scrollToSectionIndex = 3;
             [weakSelf.mapViewController hideContextPinMarker];
             [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
                                                   trackHudMode:EOATrackAppearanceHudMode
                                                          state:state];
+        };
+        [self hide:YES duration:.2 onComplete:^{
+            [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
+        }];
+    }
+    else if ([tableData.key isEqualToString:@"wall_height"])
+    {
+        OAMapSettingsTerrainParametersViewController *controller = [[OAMapSettingsTerrainParametersViewController alloc] initWithSettingsType:EOAGPXSettingsTypeWallHeight];
+        NSInteger savedElevationMeters = self.gpx.elevationMeters;
+        [controller configureGPXElevationMeters:savedElevationMeters];
+        __weak __typeof(self) weakSelf = self;
+        controller.applyWallHeightCallback = ^(NSInteger meters)
+        {
+            [weakSelf configureElevationMeters:meters];
+        };
+        controller.hideCallback = ^{
+            OATrackMenuViewControllerState *state = _reopeningTrackMenuState;
+            state.openedFromTracksList = state.openedFromTracksList;
+            state.openedFromTrackMenu = YES;
+            state.scrollToSectionIndex = 3;
+            [weakSelf.mapViewController hideContextPinMarker];
+            [weakSelf.mapPanelViewController openTargetViewWithGPX:weakSelf.gpx
+                                                      trackHudMode:EOATrackAppearanceHudMode
+                                                             state:state];
         };
         [self hide:YES duration:.2 onComplete:^{
             [OARootViewController.instance.mapPanel showScrollableHudViewController:controller];
@@ -2106,6 +2242,7 @@
             [self.settings.currentTrackShowArrows resetToDefault];
             [self.settings.currentTrackShowStartFinish resetToDefault];
             [self.settings.currentTrackVerticalExaggerationScale resetToDefault];
+            [self.settings.currentTrackElevationMeters resetToDefault];
             [self.settings.currentTrackVisualization3dByType resetToDefault];
             [self.settings.currentTrackVisualization3dWallColorType resetToDefault];
             [self.settings.currentTrackVisualization3dPositionType resetToDefault];
@@ -2116,6 +2253,7 @@
             [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
             [self.doc setVerticalExaggerationScale:[self.settings.currentTrackVerticalExaggerationScale get]];
+            [self.doc setElevationMeters:[self.settings.currentTrackElevationMeters get]];
             
             [self.doc setVisualization3dByType:(EOAGPX3DLineVisualizationByType)[self.settings.currentTrackVisualization3dByType get]];
             [self.doc setVisualization3dWallColorType:(EOAGPX3DLineVisualizationWallColorType)[self.settings.currentTrackVisualization3dWallColorType get]];

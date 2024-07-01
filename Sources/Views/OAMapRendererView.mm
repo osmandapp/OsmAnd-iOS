@@ -137,6 +137,9 @@
             [targetChangedObservalbe notifyEvent];
         });
 
+    _renderer->setMinZoomLevel(OsmAnd::ZoomLevel1);
+    _renderer->setMaxZoomLevel(OsmAnd::ZoomLevel22);
+
     // Create animator for that map
     _mapAnimator.reset(new OsmAnd::MapAnimator());
     _mapAnimator->setMapRenderer(_renderer);
@@ -314,26 +317,7 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (double) normalizeElevationAngle:(double)elevationAngle
 {
-    return elevationAngle > 90 ? 90 : MAX([self getMinAllowedElevationAngle:elevationAngle], elevationAngle);
-}
-
-- (double) getMinAllowedElevationAngle:(double)elevationAngle
-{
-    // TODO: skip normalize temporarily
-    if (YES)
-        return 10;
-    
-    int verticalTilesCount = round(UIScreen.mainScreen.bounds.size.height * self.viewportYScale * self.displayDensityFactor / 256.0);
-    if (verticalTilesCount < 6)
-        return MAX(30.0, elevationAngle);
-    else if (verticalTilesCount < 8)
-        return MAX(36.0, elevationAngle);
-    else if (verticalTilesCount < 9)
-        return MAX(40.0, elevationAngle);
-    else if (verticalTilesCount < 11)
-        return MAX(42.0, elevationAngle);
-    else
-        return MAX(48.0, elevationAngle);
+    return elevationAngle > 90 ? 90 : MAX(kMinAllowedElevationAngle, elevationAngle);
 }
 
 - (void)setElevationAngle:(float)elevationAngle
@@ -349,6 +333,21 @@ forcedUpdate:(BOOL)forcedUpdate
 - (float)getElevationScaleFactor
 {
     return _renderer->getElevationScaleFactor();
+}
+
+- (void)setMyLocationCircleColor:(OsmAnd::FColorARGB)color
+{
+    _renderer->setMyLocationColor(color);
+}
+
+- (void)setMyLocationCirclePosition:(OsmAnd::PointI)location31
+{
+    _renderer->setMyLocation31(location31);
+}
+
+- (void)setMyLocationCircleRadius:(float)radiusInMeters
+{
+    _renderer->setMyLocationRadiusInMeters(radiusInMeters);
 }
 
 - (OsmAnd::PointI)target31
@@ -424,12 +423,12 @@ forcedUpdate:(BOOL)forcedUpdate
 
 - (float)minZoom
 {
-    return OsmAnd::ZoomLevel1;//_renderer->getMinZoomLevel();
+    return _renderer->getMinZoomLevel();
 }
 
 - (float)maxZoom
 {
-    return OsmAnd::ZoomLevel22;//_renderer->getMaxZoomLevel();
+    return _renderer->getMaxZoomLevel();
 }
 
 @synthesize stateObservable = _stateObservable;

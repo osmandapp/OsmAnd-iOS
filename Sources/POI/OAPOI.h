@@ -23,6 +23,7 @@
 #define CUISINE_TAG @"cuisine"
 #define WIKIDATA_TAG @"wikidata"
 #define WIKIMEDIA_COMMONS_TAG @"wikimedia_commons"
+#define WIKIPEDIA_TAG @"wikipedia"
 #define MAPILLARY_TAG @"mapillary"
 #define DISH_TAG @"dish"
 #define POI_REF @"ref"
@@ -106,6 +107,8 @@
 - (NSString *)getRouteId;
 
 - (NSString *) toStringEn;
+
+- (NSString *) getSubTypeStr;
 
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;

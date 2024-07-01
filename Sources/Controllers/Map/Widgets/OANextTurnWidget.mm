@@ -9,6 +9,7 @@
 #import "OANextTurnWidget.h"
 #import "OsmAndApp.h"
 #import "OATurnDrawable.h"
+#import "OATurnDrawable+cpp.h"
 #import "OARoutingHelper.h"
 #import "OARouteDirectionInfo.h"
 #import "OARouteCalculationResult.h"
@@ -216,7 +217,7 @@
 - (void) updateDistance
 {
     int deviatePath = _turnDrawable.deviatedFromRoute ? _deviatedPath : _nextTurnDistance;
-    NSString *ds = [OAOsmAndFormatter getFormattedDistance:deviatePath roundUp:![[OAAppSettings sharedManager].preciseDistanceNumbers get]];
+    NSString *ds = [OAOsmAndFormatter getFormattedDistance:deviatePath withParams:[OsmAndFormatterParams useLowerBounds]];
     
     if (ds)
     {

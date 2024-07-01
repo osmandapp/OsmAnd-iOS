@@ -9,14 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "OAMapHudViewController.h"
 
+@class QuickActionButtonState;
+
 @interface OAFloatingButtonsHudViewController : UIViewController
 
-- (instancetype) initWithMapHudViewController:(OAMapHudViewController *)mapHudController;
+- (instancetype _Nonnull)initWithMapHudViewController:(OAMapHudViewController * _Nonnull)mapHudController;
 
-- (void) updateViewVisibility;
-- (BOOL) isActionSheetVisible;
-- (BOOL) isQuickActionFloatingButtonVisible;
-- (void) hideActionsSheetAnimated;
-- (void) updateColors:(BOOL)isNight;
+- (void)updateViewVisibility;
+- (BOOL)isActionSheetVisible;
+- (BOOL)isQuickActionButtonVisible;
+- (void)hideActionsSheetAnimated:(void (^ _Nullable)(void))completion;
+- (void)updateColors;
+- (QuickActionButtonState * _Nullable)getActiveButtonState;
 
 @end

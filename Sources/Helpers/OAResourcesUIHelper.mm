@@ -28,6 +28,7 @@
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OAAppVersion.h"
+#import "OARouteCalculationResult.h"
 
 #include <OsmAndCore/WorldRegions.h>
 
@@ -88,7 +89,7 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
     }
 }
 
-+ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
++ (NSString *)getIconName:(OsmAndResourceType)type
 {
     NSString *imageNamed;
     switch (type)
@@ -135,6 +136,12 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             imageNamed = @"ic_custom_map";
             break;
     }
+    return imageNamed;
+}
+
++ (UIImage *)getIcon:(OsmAndResourceType)type templated:(BOOL)templated
+{
+    NSString *imageNamed = [self.class getIconName:type];
     return templated ? [UIImage templateImageNamed:imageNamed] : [UIImage imageNamed:imageNamed];
 }
 
@@ -548,6 +555,32 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
             downloadedCount++;
     }
     return downloadedCount == items.count;
+}
+
+- (OAResourceItem *) getActiveItem:(BOOL)useDefautValue
+{
+    if (_items && _items.count > 0)
+    {
+        for (OAResourceItem *item in _items)
+        {
+            if (item.downloadTask != nil)
+                return item;
+        }
+        if (useDefautValue)
+            return _items[0];
+    }
+    return nil;
+}
+
+- (NSString *) getResourceId
+{
+    if (_items && _items.count > 0)
+    {
+        OAResourceItem *firstItem = _items[0];
+        NSString *resourceId = firstItem.resourceId.toNSString();
+        return [resourceId stringByReplacingOccurrencesOfString:@"srtmf" withString:@"srtm"];
+    }
+    return nil;
 }
 
 @end
@@ -1421,8 +1454,17 @@ includeHidden:(BOOL)includeHidden
         if (completionHandler)
             completionHandler(alert);
         else
-            [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+            [self presentAlert:alert];
     }
+}
+
++ (void)presentAlert:(UIAlertController *)alert
+{
+    auto rootController = OARootViewController.instance;
+    [rootController canPresentAlertController:alert completion:^(BOOL canPresent) {
+        if (canPresent)
+            [rootController presentViewController:alert animated:YES completion:nil];
+    }];
 }
 
 + (void)offerMultipleDownloadAndInstallOf:(OAMultipleResourceItem *)multipleItem
@@ -1534,7 +1576,7 @@ includeHidden:(BOOL)includeHidden
     NSString *message = OALocalizedString(@"alert_inet_needed");
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:nil message:message preferredStyle:UIAlertControllerStyleAlert];
     [alert addAction:[UIAlertAction actionWithTitle:OALocalizedString(@"shared_string_ok") style:UIAlertActionStyleCancel handler:nil]];
-    [OARootViewController.instance presentViewController:alert animated:YES completion:nil];
+    [self presentAlert:alert];
 }
 
 + (void)startDownloadOfItem:(OARepositoryResourceItem *)item
@@ -2266,24 +2308,32 @@ includeHidden:(BOOL)includeHidden
     return [resources copy];
 }
 
-+ (NSString *)formatCLLocationToPointString:(CLLocation *)point
-{
-    return [NSString stringWithFormat:@"%f,%f", point.coordinate.latitude, point.coordinate.longitude];
++ (NSString *)formatPointString:(CLLocation *)location {
+    return [NSString stringWithFormat:@"points=%f,%f",location.coordinate.latitude, location.coordinate.longitude];
 }
 
-+ (void)onlineCalculateRequestStartPoint:(CLLocation *)startPoint
-                                endPoint:(CLLocation *)endPoint
-                              completion:(LocationArrayCallback)completion
++ (void)onlineCalculateRequestWithRouteCalculationResult:(OARouteCalculationResult *)routeCalculationResult
+                                              completion:(LocationArrayCallback)completion
 {
     NSLog(@"onlineCalculateRequestStartPoint start");
     NSURLSession *session = [NSURLSession sharedSession];
     
     NSString *routeUrlString = @"https://maptile.osmand.net/routing/route";
-    NSString *routeMode = [[OAAppSettings sharedManager].applicationMode get].stringKey;
-    NSString *startPointString = [self formatCLLocationToPointString:startPoint];
-    NSString *endPointString = [self formatCLLocationToPointString:endPoint];
     
-    NSString *urlString = [NSString stringWithFormat:@"%@?routeMode=%@&points=%@&points=%@", routeUrlString, routeMode, startPointString, endPointString];
+    NSMutableString *pointsString = [NSMutableString string];
+    
+    for (CLLocation *l in routeCalculationResult.missingMapsPoints) {
+        [pointsString appendString:[NSString stringWithFormat:@"&%@", [self formatPointString:l]]];
+    }
+    
+    NSString *routeMode = @"car";
+    GeneralRouterProfile profile = routeCalculationResult.missingMapsRoutingContext->config->router->getProfile();
+    if (profile == GeneralRouterProfile::BICYCLE)
+    {
+        routeMode = @"bicycle";
+    }
+    
+    NSString *urlString = [NSString stringWithFormat:@"%@?routeMode=%@%@", routeUrlString, routeMode, pointsString];
     NSURL *url = [NSURL URLWithString:urlString];
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
     NSURLSessionDataTask *task = [session dataTaskWithRequest:request
@@ -2328,18 +2378,7 @@ includeHidden:(BOOL)includeHidden
                                             [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
                                         }
                                     }
-                                } 
-                                else if ([geometryType isEqualToString:@"Point"])
-                                {
-                                    NSArray *coordinates = geometry[@"coordinates"];
-                                    if (coordinates.count >= 2)
-                                    {
-                                        double latitude = [coordinates[1] doubleValue];
-                                        double longitude = [coordinates[0] doubleValue];
-                                        [locationArray addObject:[[CLLocation alloc] initWithLatitude:latitude longitude:longitude]];
-                                    }
                                 }
-
                             }
                             NSLog(@"Coordinates array: %@", locationArray);
                             if (completion)

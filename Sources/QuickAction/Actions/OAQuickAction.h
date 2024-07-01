@@ -10,49 +10,52 @@
 #import "OrderedDictionary.h"
 #import "Localization.h"
 
-#define kSectionNoName @"no_name"
+static NSString * _Nonnull const kSectionNoName = @"no_name";
+static NSString * _Nonnull const kDialog = @"dialog";
 
-@class OrderedDictionary;
-@class OAQuickActionType;
+@class OrderedDictionary, QuickActionType;
 
 @interface OAQuickAction : NSObject
 
-@property (nonatomic, readonly) OAQuickActionType *actionType;
-@property (nonatomic) long identifier;
+@property (nonatomic, readonly) QuickActionType * _Nullable actionType;
+@property (nonatomic, readonly) long id;
 
-- (instancetype) initWithActionType:(OAQuickActionType *)type;
-- (instancetype) initWithAction:(OAQuickAction *)action;
+- (instancetype _Nonnull)initWithActionType:(QuickActionType * _Nonnull)type;
+- (instancetype _Nonnull)initWithAction:(OAQuickAction * _Nonnull)action;
+- (void) commonInit;
 
--(NSString *) getIconResName;
--(NSString *) getSecondaryIconName;
--(BOOL) hasSecondaryIcon;
+- (NSString * _Nullable)getIconResName;
+- (NSString * _Nullable)getSecondaryIconName;
+- (UIImage * _Nullable)getActionIcon;
+- (BOOL)hasSecondaryIcon;
 
--(long) getId;
--(NSInteger) getType;
--(BOOL) isActionEditable;
--(BOOL) isActionEnabled;
--(NSString *) getRawName;
--(NSString *) getDefaultName;
--(NSString *) getName;
--(BOOL) hasCustomName;
--(NSString *) getActionTypeId;
+- (void)setId:(long)id;
+- (NSInteger)getType;
+- (BOOL)isActionEditable;
+- (BOOL)isActionEnabled;
+- (NSString *)getRawName;
+- (NSString *)getDefaultName;
+- (NSString *)getName;
+- (BOOL)hasCustomName;
+- (NSString *)getActionTypeId;
 
--(NSDictionary *) getParams;
--(void) setName:(NSString *) name;
--(void) setParams:(NSDictionary<NSString *, NSString *> *) params;
--(BOOL) isActionWithSlash;
--(NSString *) getActionText;
--(NSString *) getActionStateName;
+- (NSDictionary * _Nonnull)getParams;
+- (void)setName:(NSString *)name;
+- (void)setParams:(NSDictionary *)params;
+- (BOOL)isActionWithSlash;
+- (NSString *)getActionText;
+- (NSString *)getActionStateName;
+- (CLLocation *)getMapLocation;
 
--(void) execute;
--(void) drawUI;
--(OrderedDictionary *)getUIModel;
--(BOOL) fillParams:(NSDictionary *)model;
+- (void)execute;
+- (void)drawUI;
+- (OrderedDictionary *)getUIModel;
+- (BOOL)fillParams:(NSDictionary * _Nonnull)model;
 
--(BOOL) hasInstanceInList:(NSArray<OAQuickAction *> *)active;
--(NSString *)getTitle:(NSArray *)filters;
--(NSString *) getListKey;
+- (BOOL)hasInstanceInList:(NSArray<OAQuickAction *> *)active;
+- (NSString *)getTitle:(NSArray *)filters;
+- (NSString *)getListKey;
 
-+ (OAQuickActionType *) TYPE;
++ (QuickActionType *)TYPE;
 
 @end

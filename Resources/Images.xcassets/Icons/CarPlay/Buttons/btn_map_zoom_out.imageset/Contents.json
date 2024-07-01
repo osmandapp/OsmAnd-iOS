@@ -2,7 +2,7 @@
   "images" : [
     {
       "filename" : "btn_map_zoom_out_light.svg",
-      "idiom" : "car"
+      "idiom" : "universal"
     },
     {
       "appearances" : [
@@ -12,7 +12,7 @@
         }
       ],
       "filename" : "btn_map_zoom_out_dark.svg",
-      "idiom" : "car"
+      "idiom" : "universal"
     }
   ],
   "info" : {
@@ -20,6 +20,7 @@
     "version" : 1
   },
   "properties" : {
+    "preserves-vector-representation" : true,
     "template-rendering-intent" : "original"
   }
 }

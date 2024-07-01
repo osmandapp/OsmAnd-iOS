@@ -49,8 +49,12 @@
 
 - (BOOL)updateInfo
 {
-    double altitude = [self getAltitudeInMeters];
-    if (altitude != kMinAltitudeValue)
+    [self requestAltitude];
+}
+
+- (BOOL)updateAltitude:(float)altitude
+{
+    if (altitude > kMinAltitudeValue)
     {
         int newAltitude = (int) altitude;
         if ([self isUpdateNeeded] || _cachedAltitude != newAltitude)
@@ -72,7 +76,7 @@
     return YES;
 }
 
-- (double)getAltitudeInMeters
+- (void)requestAltitude
 {
     switch (_widgetType)
     {
@@ -80,16 +84,23 @@
         {
             CLLocation *loc = _app.locationServices.lastKnownLocation;
             if (loc && loc.verticalAccuracy >= 0)
-                return loc.altitude;
+            {
+                [self updateAltitude:loc.altitude];
+                return;
+            }
             break;
         }
         case EOAAltitudeWidgetTypeMapCenter:
         {
-            OsmAnd::PointI screenPoint = [OARootViewController instance].mapPanel.mapViewController.mapView.fixedPixel;
-            return [OANativeUtilities getAltitudeForPixelPoint:screenPoint];
+            [OARootViewController.instance.mapPanel.mapViewController getAltitudeForMapCenter:^(float height) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [self updateAltitude:height];
+                });
+            }];
+            return;
         }
     }
-    return kMinAltitudeValue;
+    [self updateAltitude:kMinAltitudeValue];
 }
 
 - (BOOL) isMetricSystemDepended

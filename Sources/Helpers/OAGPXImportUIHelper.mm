@@ -35,7 +35,7 @@
 
 @implementation OAGPXImportUIHelper
 {
-    UIViewController *_hostVC;
+    UIViewController __weak *_hostVC;
     MBProgressHUD *_progressHUD;
     OsmAndAppInstance _app;
     

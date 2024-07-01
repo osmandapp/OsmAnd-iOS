@@ -148,6 +148,7 @@
     gpx.showArrows = _appearanceInfo.showArrows;
     gpx.showStartFinish = _appearanceInfo.showStartFinish;
     gpx.verticalExaggerationScale = _appearanceInfo.verticalExaggerationScale;
+    gpx.elevationMeters = _appearanceInfo.elevationMeters;
     gpx.visualization3dByType = _appearanceInfo.visualization3dByType;
     gpx.visualization3dWallColorType = _appearanceInfo.visualization3dWallColorType;
     gpx.visualization3dPositionType = _appearanceInfo.visualization3dPositionType;

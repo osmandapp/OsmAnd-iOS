@@ -536,12 +536,15 @@
 {
     if ([self shouldShowTurnArrows])
     {
-        //[self.mapViewController runWithRenderSync:^{
+        @synchronized (self) 
+        {
             const auto zoom = self.mapView.zoomLevel;
-
-            if (_collection->getLines().isEmpty() || zoom <= OsmAnd::ZoomLevel14) {
-                [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
-                _actionLinesCollection->removeAllLines();
+            if (zoom <= OsmAnd::ZoomLevel14 || _collection->isEmpty()) {
+                if (!_actionLinesCollection->isEmpty())
+                {
+                    [self.mapView removeKeyedSymbolsProvider:_actionLinesCollection];
+                    _actionLinesCollection->removeAllLines();
+                }
                 return;
             }
             else
@@ -550,8 +553,9 @@
                 NSArray<NSArray<CLLocation *> *> *actionPoints = [self calculateActionPoints];
                 if (actionPoints.count > 0)
                 {
+                    auto actionLines = _actionLinesCollection->getLines();
                     int lineIdx = 0;
-                    int initialLinesCount = _actionLinesCollection->getLines().count();
+                    int initialLinesCount = actionLines.count();
                     for (NSArray<CLLocation *> *line in actionPoints)
                     {
                         QVector<OsmAnd::PointI> points;
@@ -561,7 +565,7 @@
                         }
                         if (lineIdx < initialLinesCount)
                         {
-                            auto line = _actionLinesCollection->getLines()[lineIdx];
+                            auto line = actionLines[lineIdx];
                             line->setPoints(points);
                             line->setIsHidden(false);
                             lineIdx++;
@@ -571,7 +575,7 @@
                             OsmAnd::VectorLineBuilder builder;
                             builder.setBaseOrder(baseOrder--)
                                     .setIsHidden(false)
-                                    .setLineId(_actionLinesCollection->getLines().size())
+                                    .setLineId(_actionLinesCollection->getLinesCount())
                                     .setLineWidth(_lineWidth * 0.4)
                                     .setPoints(points)
                                     .setEndCapStyle(OsmAnd::VectorLine::EndCapStyle::ARROW)
@@ -579,16 +583,15 @@
                             builder.buildAndAddToCollection(_actionLinesCollection);
                         }
                     }
-                    QList<std::shared_ptr<OsmAnd::VectorLine> > toDelete;
                     while (lineIdx < initialLinesCount)
                     {
-                        _actionLinesCollection->getLines()[lineIdx]->setIsHidden(true);
+                        actionLines[lineIdx]->setIsHidden(true);
                         lineIdx++;
                     }
                 }
             }
             [self.mapView addKeyedSymbolsProvider:_actionLinesCollection];
-        //}];
+        }
     }
 }
 

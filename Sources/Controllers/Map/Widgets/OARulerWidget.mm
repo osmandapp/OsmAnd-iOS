@@ -234,7 +234,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) drawLayer:(CALayer *)layer inContext:(CGContextRef)ctx
 {
-    if (![self rulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
+    if (![self isRulerWidgetOn] || [_mapViewController getMapZoom] <= SHOW_RULER_MIN_ZOOM)
         return;
 
     UIGraphicsPushContext(ctx);
@@ -276,7 +276,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL) rulerModeOn
 {
-    return [self rulerWidgetOn] && _settings.rulerMode.get != RULER_MODE_NO_CIRCLES;
+    return [self isRulerWidgetOn] && _settings.rulerMode.get != RULER_MODE_NO_CIRCLES;
 }
 
 - (int) getCompassCircleIndex:(CGPoint)center
@@ -375,7 +375,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
     double maxCircleRadius = _maxRadius;
     int i = 1;
     while ((maxCircleRadius -= _radius) > 0)
-        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) forceTrailingZeroes:NO]];
+        [_cacheDistances addObject:[OAOsmAndFormatter getFormattedDistance:(_roundedDist * i++) withParams:[OsmAndFormatterParams noTrailingZeros]]];
 }
 
 - (void) drawRulerCircle:(int)circleNumber center:(CGPoint)center inContext:(CGContextRef)ctx
@@ -773,7 +773,7 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (BOOL) updateInfo
 {
-    BOOL visible = [self rulerWidgetOn];
+    BOOL visible = [self isRulerWidgetOn];
     if (visible)
     {
         if (_firstUpdate || _cachedMapMode != _settings.nightMode)
@@ -886,13 +886,32 @@ typedef NS_ENUM(NSInteger, EOATextSide) {
 
 - (void) onMapSourceUpdated
 {
-    if ([self rulerWidgetOn])
+    if ([self isRulerWidgetOn])
         [self setNeedsDisplay];
 }
 
-- (BOOL) rulerWidgetOn
-{
-    return [OARootViewController.instance.mapPanel.mapWidgetRegistry isWidgetVisible:@"ruler"];
+- (BOOL)isRulerWidgetOn {
+    OAMapWidgetRegistry *widgetRegistry = OARootViewController.instance.mapPanel.mapWidgetRegistry;
+    NSArray<OAMapWidgetInfo *> *widgets = [widgetRegistry getWidgetInfosForType:OAWidgetType.radiusRuler];
+    if (widgets.count == 0)
+    {
+        return NO;
+    }
+    BOOL isWidgetVisible = NO;
+    OAMapHudViewController *mapHudViewController = [[OARootViewController instance] mapPanel].hudViewController;
+    for (OAMapWidgetInfo *widget in widgets)
+    {
+        if ([widgetRegistry isWidgetVisible:widget.key])
+        {
+            isWidgetVisible = widget.widgetPanel == OAWidgetsPanel.rightPanel
+            ? [mapHudViewController isRightPanelVisible]
+            : [mapHudViewController isLeftPanelVisible];
+        }
+        if (isWidgetVisible)
+            return YES;
+    }
+    
+    return isWidgetVisible;
 }
 
 - (BOOL) updateVisibility:(BOOL)visible

@@ -246,7 +246,7 @@
 }
 
 - (BOOL) isQuickActionLayerOn {
-    return _mapPanel.hudViewController.floatingButtonsController.isQuickActionFloatingButtonVisible;
+    return _mapPanel.hudViewController.floatingButtonsController.isQuickActionButtonVisible;
 }
 
 - (BOOL) isMapRouteInfoMenuVisible {

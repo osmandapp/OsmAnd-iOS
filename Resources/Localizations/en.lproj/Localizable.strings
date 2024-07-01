@@ -499,6 +499,7 @@
 "fast_route_mode_descr" = "Enable to calculate fastest route or disable for fuel-saving route.";
 "avoid_in_routing_title" = "Avoid…";
 "avoid_in_routing_descr_" = "Avoid certain routes and road types";
+"avoid_pt_types_descr" = "Select public transport types to avoid for navigation:";
 "prefer_in_routing_title" = "Prefer…";
 "prefer_in_routing_descr" = "Prefer motorways.";
 "relief_smoothness_factor_descr" = "Preferred terrain: flat or hilly.";
@@ -535,6 +536,8 @@
 "special_routing_type" = "Special routing";
 "import_routing_file_descr" = "You can import routing file from any cloud storage app by opening it in OsmAnd.";
 "recalculate_route" = "Recalculate route";
+"route_recalculation_dist_title" = "Minimal distance to recalculate route";
+"in_case_of_reverse_direction" = "In case of reverse direction";
 "recalculate_wrong_dir" = "Recalculate route in case of reverse direction";
 "recalculate_route_distance_promo" = "The route will be recalculated if the distance from the route to the current location is more than selected value.";
 "select_distance_route_will_recalc" = "Select the distance after which the route will be recalculated.";
@@ -567,6 +570,7 @@
 "turn_arrows" = "Turn Arrows";
 "turn_arrows_descr" = "Select whether turn arrows are indicated on the route line.";
 "impassable_road" = "Avoid roads…";
+"avoid_pt_types" = "Avoid transport types…";
 "road_speeds" = "Road speeds";
 "avoid_transport_type" = "Avoid transport types";
 "temporary_conditional_routing" = "Consider temporary limitations";
@@ -937,6 +941,8 @@
 "add_favorite" = "Add favorite";
 "name_and_descr" = "Name & description";
 "select_group" = "Select group";
+"select_items" = "Select items";
+"shared_string_item" = "Item";
 "shared_string_icon" = "Icon";
 "shared_string_shape" = "Shape";
 "fav_point_dublicate" = "Duplicate Favorite name specified";
@@ -1134,6 +1140,7 @@
 "shared_string_precise" = "Precise";
 "shared_string_round_up" = "Round up";
 "distance_during_navigation_footer" = "Choose how distance information is displayed in navigation widgets (distance to point, next turn, lanes).\n\nChoose “Precise” for exact numbers, or “Round up” for easier readability.";
+"display_position_automatic_descr" = "Depends on Map orientation: bottom for movement direction, center for all others.";
 "units_and_formats" = "Units&formats";
 "device_settings" = "Device settings";
 "osmand_settings" = "OsmAnd settings";
@@ -1376,6 +1383,8 @@
 "ltr_or_rtl_combine_via_slash" = "%@/%@";
 "ltr_or_rtl_combine_via_comma" = "%@, %@";
 "ltr_or_rtl_combine_via_of" = "%ld of %ld";
+
+"shared_string_class" = "Class";
 
 "listed_exist" = "Listed %@, already exist in OsmAnd.";
 
@@ -1664,7 +1673,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "routing_algorithm" = "Routing algorithm";
-"auto_zoom" = "Auto-zoom";
+"auto_zoom" = "Autozoom";
 "shared_string_development" = "Development";
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
@@ -1845,10 +1854,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
-"quick_action_map_style" = "Change map style";
+"quick_action_map_style" = "Map style";
 "quick_action_map_source" = "Change map source";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
+"quick_action_map_overlay" = "Overlay";
+"quick_action_map_underlay" = "Underlay";
 "quick_action_replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Add point of departure";
@@ -1938,7 +1947,7 @@
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete next destination point";
+"quick_action_remove_next_destination" = "Next destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";
@@ -2787,7 +2796,7 @@
 "rendering_value_bicycle_name" = "Bicycle";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "Show access restrictions";
+"rendering_attr_showAccess_name" = "Show access and toll restrictions";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
@@ -3436,7 +3445,7 @@
 
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
-"rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
+"rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
@@ -3485,7 +3494,7 @@
 "rendering_attr_weatherTempContours_name" = "Temperature isolines";
 "rendering_attr_showTramRoutes_name" = "Tram routes";
 "routing_attr_hazmat_category_description" = "Hazardous materials category / Consider hazmat access permissions";
-"rendering_attr_showWaterwayTunnels_name" = "Waterway tunnels";
+"rendering_attr_showWaterwayTunnels_name" = "Increase visibility for waterway tunnels";
 "rendering_attr_seabedDetail_name" = "Seabed detail";
 "routing_attr_driving_style_description" = "Select driving purpose to get shorter, faster or safer route";
 "rendering_attr_weatherPrecipitationContours_name" = "Precipitation isolines";
@@ -3504,7 +3513,9 @@
 "routing_attr_avoid_4wd_only_description" = "Avoid roads only suitable for 4WD vehicles";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_description" = "Schematic display of icons at low zooms";
 "routing_attr_difficulty_preference_beginner_name" = "Beginner";
-
+"dangerous_goods" = "Dangerous goods";
+"dangerous_goods_description" = "On some roads and tunnels transporting of hazardous materials is forbidden.";
+    
 "exit_number" = "Exit number";
 "announce_when_exceeded" = "Announce when exceeded";
 "speak_gps_signal_status" = "Announce GPS signal loss and recovery";
@@ -3637,6 +3648,7 @@
 "my_places_no_tracks_title" = "Empty folder";
 "my_places_no_tracks_descr" = "This folder doesn’t have any track yet.";
 "delete_folder" = "Delete folder";
+"short_min" = "m";
 "remove_folder_with_files_descr" = "Are you sure you want to remove \"%@\" folder and all %d tracks?";
 "new_track" = "New track";
 "not_recorded" = "Not recorded";
@@ -3732,23 +3744,27 @@
 "routing_attr_hazmat_category_usa_9_name" = "Miscellaneous";
 "rendering_value_sector2_name" = "Sector 2";
 "vertical_exaggeration" = "Vertical exaggeration";
+"wall_height" = "Wall height";
 "vertical_exaggeration_description" = "By changing the scale value, you can emphasise the 3D relief.";
 "shared_string_scale" = "Scale";
+"wall_height_description" = "By changing the height value, you can lift the track top line above the ground level.";
 
 "missing_or_outdated_maps_title" = "Missing or outdated maps";
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "required_maps" = "Required Maps";
 "calculate_online" = "Calculate online";
-"calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
+"calculate_online_title" = "The list of missing maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
-"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height";
+"missing_maps_ignore" = "Use existing maps";
+"missing_maps_ignore_details" = "Some already downloaded maps might be suitable for your route. If you are familiar with the area and the maps, you can try routing using the existing maps.";
 
+"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height.";
 "visualization_3d_visualized_by" = "Visualized by";
 "visualization_3d_wall_color" = "Wall color";
 "visualization_3d_track_line" = "Track line";
 "track_3d" = "3d track";
-"fixed_height" = "Fixed Height";
+"fixed_height" = "Fixed height";
 "downward_gradient" = "Downward gradient";
 "upward_gradient" = "Upward gradient";
 "shared_string_top" = "Top";
@@ -3759,3 +3775,29 @@
 "track_3d_empty_view_description" = "Explore the track in interactive 3D! Visualize height, speed, and more directly on the map.";
 
 "osm_id" = "OSM ID";
+"shared_string_millimeters" = "Millimeters";
+
+"shared_string_speedometer" = "Speedometer";
+"speedometer_description" = "Shows your current speed as reported via GPS";
+"speed_limit_warning" = "Speed limit warning";
+"shared_string_always" = "Always";
+"when_exceeded" = "When exceeded";
+"edit_tilesource_maxzoom" = "Maximum zoom";
+"edit_tilesource_minzoom" = "Minimum zoom";
+"shared_string_millimeters_short" = "mm";
+
+"shared_string_instructions" = "Instructions";
+"shared_string_analysis" = "Analysis";
+"step_by_step" = "Turn-by-turn";
+
+"shared_string_limit" = "Limit";
+
+"custom_buttons" = "Custom buttons";
+"default_buttons" = "Default buttons";
+"add_button" = "Add button";
+"empty_name" = "Empty name";
+"custom_map_button_name_present" = "Such button already present";
+
+"routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
+"routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
+"rendering_value_dark_orange_name" = "Dark orange";;

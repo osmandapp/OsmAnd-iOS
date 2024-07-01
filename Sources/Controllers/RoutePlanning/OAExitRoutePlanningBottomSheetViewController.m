@@ -137,9 +137,10 @@
 
 - (void) saveButtonPressed
 {
-    [self hide:YES];
-    if (_delegate)
-        [_delegate onSaveResultPressed];
+    [self hide:YES completion:^{
+        if (_delegate)
+            [_delegate onSaveResultPressed];
+    }];
 }
 
 #pragma mark - UITableViewDataSource

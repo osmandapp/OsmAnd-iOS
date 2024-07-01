@@ -2715,3 +2715,8 @@
 "rendering_attr_padusHideBoundaries_name" = "బహిరంగ భూ సరిహద్దులను దాచివేయు";
 "shared_string_all_colors" = "అన్ని రంగులు";
 "shared_string_precise" = "ఖచ్చితమైన";
+"shared_string_limit" = "పరిమితి";
+"speedometer_description" = "జిపియస్ ఇచ్చిన విధంగా మీ ప్రస్తుత వేగాన్ని చూపిస్తుంది";
+"when_exceeded" = "మించినప్పుడు";
+"speed_limit_warning" = "వేగ పరిమితి హెచ్చరిక";
+"shared_string_speedometer" = "స్పీడోమీటరు";

@@ -973,8 +973,10 @@
         [resultMatcher publish:approx];
         return true;
     };
-    
+
+    env.router->setUseGeometryBasedApproximation(true);
     env.router->searchGpxRoute(gctx, points, resultAcceptor);
+
     return gctx;
 }
 
@@ -984,7 +986,9 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     OAAppSettings *settings = [OAAppSettings sharedManager];
     router->setUseFastRecalculation(settings.useFastRecalculation);
-    
+
+    router->CALCULATE_MISSING_MAPS = !settings.ignoreMissingMaps;
+
     auto config = [app getRoutingConfigForMode:params.mode];
     auto generalRouter = [app getRouter:config mode:params.mode];
     if (!generalRouter)
@@ -1080,7 +1084,18 @@
     if (params.intermediates)
         inters = [NSArray arrayWithArray:params.intermediates];
     
-    return [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+    OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+    NSMutableArray<CLLocation *> *points = [NSMutableArray array];
+    [points addObject:start];
+    [points addObjectsFromArray:inters];
+    [points addObject:end];
+    [result setMissingMaps:result.missingMaps
+              mapsToUpdate:result.mapsToUpdate
+                  usedMaps:result.potentiallyUsedMaps
+                       ctx:env.ctx
+                    points:points];
+
+    return result;
 }
 
 - (OARouteCalculationResult *) calculateOsmAndRouteWithIntermediatePoints:(OARouteCalculationParams *)routeParams intermediates:(NSArray<CLLocation *> *)intermediates connectRtePts:(BOOL)connectRtePts

@@ -8,32 +8,52 @@
 
 #import <Foundation/Foundation.h>
 
-#define calculate_osmand_route_without_internet_id 100
-#define fast_route_mode_id 101
-#define use_points_as_intermediates_id 102
-#define gpx_option_reverse_route_id 103
-#define gpx_option_from_start_point_id 104
-#define gpx_option_calculate_first_last_segment_id 105
-#define calculate_osmand_route_gpx_id 106
-#define speak_favorites_id 107
-#define connect_route_points_id 108
+static const int calculate_osmand_route_without_internet_id = 100;
+static const int fast_route_mode_id = 101;
+static const int use_points_as_intermediates_id = 102;
+static const int gpx_option_reverse_route_id = 103;
+static const int gpx_option_from_start_point_id = 104;
+static const int gpx_option_calculate_first_last_segment_id = 105;
+static const int calculate_osmand_route_gpx_id = 106;
+static const int speak_favorites_id = 107;
+static const int connect_route_points_id = 108;
 
-#define kRouteParamGroupDrivingStyle @"driving_style"
-#define kRouteParamGroupReliefSmoothnessFactor @"relief_smoothness_factor"
-#define kRouteParamIdReliefSmoothnessFactorPlain @"relief_smoothness_factor_plains"
-#define kRouteParamIdReliefSmoothnessFactorMorePlain @"relief_smoothness_factor_more_plains"
-#define kRouteParamIdReliefSmoothnessFactorHills @"relief_smoothness_factor_hills"
-#define kRouteParamIdHeightObstacles @"height_obstacles"
-#define kRouteParamIdShortWay @"short_way"
-#define kRouteParamIdGoodsRestrictions @"goods_restrictions"
-#define kRouteParamIdAllowPrivate @"allow_private"
-#define kRouteParamIdAllowPrivateTruck @"allow_private_for_truck"
-#define kRouteParamIdAllowMotorway @"allow_motorway"
-#define kRouteParamIdHazmatCategory @"hazmat_category"
-#define kRouteParamShortWay @"short_way"
+static NSString *kRouteParamGroupDrivingStyle = @"driving_style";
+static NSString *kRouteParamIdReliefSmoothnessFactorPlain = @"relief_smoothness_factor_plains";
+static NSString *kRouteParamIdReliefSmoothnessFactorMorePlain = @"relief_smoothness_factor_more_plains";
+static NSString *kRouteParamIdReliefSmoothnessFactorHills = @"relief_smoothness_factor_hills";
 
-#define kDefaultNumericValue @"0.0"
-#define kDefaultSymbolicValue @"-"
+static NSString *kRouteParamShortWay = @"short_way";
+static NSString *kRouteParamHeightObstacles = @"height_obstacles";
+static NSString *kRouteParamReliefSmoothnessFactor = @"relief_smoothness_factor";
+static NSString *kRouteParamAvoidFerries = @"avoid_ferries";
+static NSString *kRouteParamAvoidToll = @"avoid_toll";
+static NSString *kRouteParamAvoidMotorway = @"avoid_motorway";
+static NSString *kRouteParamAllowUnpaved = @"avoid_unpaved";
+static NSString *kRouteParamPreferMotorway = @"prefer_motorway";
+static NSString *kRouteParamAllowPrivate = @"allow_private";
+static NSString *kRouteParamAllowPrivateTruck = @"allow_private_for_truck";
+static NSString *kRouteParamHazmatCategory = @"hazmat_category";
+static NSString *kRouteParamGoodsRestrictions = @"goods_restrictions";
+static NSString *kRouteParamAllowMotorway = @"allow_motorway";
+static NSString *kRouteParamAllowViaFerrata = @"allow_via_ferrata";
+
+static NSString *kRouteParamAvoidParameterPrefix = @"avoid_";
+static NSString *kRouteParamPreferParameterPrefix = @"prefer_";
+static NSString *kRouteParamMotorType = @"motor_type";
+static NSString *kRouteParamHazmatCategoryUsaPrefix = @"hazmat_category_usa_";
+
+static NSString *kRouteParamVehicleHeight = @"height";
+static NSString *kRouteParamVehicleWeight = @"weight";
+static NSString *kRouteParamVehicleWidth = @"width";
+static NSString *kRouteParamVehicleLength = @"length";
+static NSString *kRouteParamVehicleMotorType = @"motor_type";
+static NSString *kRouteParamVehicleMaxAxleLoad = @"maxaxleload";
+static NSString *kRouteParamVehicleWeightRating = @"weightrating";
+
+
+static NSString *kDefaultNumericValue = @"0.0";
+static NSString *kDefaultSymbolicValue = @"-";
 
 @class OAApplicationMode, OARoutingHelper, OAAppSettings;
 @class OALocalRoutingParameterGroup, OALocalRoutingParameter;
@@ -77,6 +97,7 @@ struct RoutingParameter;
 - (NSString *) getValue;
 - (NSString *) getDescription;
 - (UIImage *) getIcon;
+- (NSString *) getIconName;
 - (NSString *) getCellType;
 - (BOOL) hasOptions;
 - (UIColor *) getTintColor;

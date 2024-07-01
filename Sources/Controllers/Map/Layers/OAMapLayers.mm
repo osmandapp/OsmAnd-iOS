@@ -114,7 +114,7 @@
     [OAPluginsHelper createLayers];
 
     _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                         withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                         withHandler:@selector(onBackgroundStateChanged)
                                                           andObserve:OsmAndApp.instance.backgroundStateObservable];
 }
 
@@ -132,16 +132,12 @@
     [_layers removeAllObjects];
 }
 
-- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
+- (void) onBackgroundStateChanged
 {
-    if ([key isKindOfClass:NSNumber.class])
-    {
-        BOOL isInBackground = ((NSNumber *)key).boolValue;
-        if (!isInBackground)
-            for (OAMapLayer *layer in _layers.objectEnumerator)
-                if (layer.invalidated)
-                    [layer updateLayer];
-    }
+    if (!OsmAndApp.instance.isInBackground)
+        for (OAMapLayer *layer in _layers.objectEnumerator)
+            if (layer.invalidated)
+                [layer updateLayer];
 }
 
 - (NSArray<OAMapLayer *> *) getLayers

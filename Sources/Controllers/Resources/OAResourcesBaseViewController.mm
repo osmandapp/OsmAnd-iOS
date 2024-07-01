@@ -88,7 +88,7 @@ static BOOL dataInvalidated = NO;
                                                                     andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
 
         _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                             withHandler:@selector(onBackgroundStateChanged)
                                                               andObserve:OsmAndApp.instance.backgroundStateObservable];
 
         _resourceItemsComparator = ^NSComparisonResult(id obj1, id obj2) {
@@ -626,35 +626,31 @@ static BOOL dataInvalidated = NO;
     }
 }
 
-- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
+- (void) onBackgroundStateChanged
 {
-    if ([key isKindOfClass:NSNumber.class])
+    if (!_app.isInBackgroundOnDevice)
     {
-        BOOL isInBackground = ((NSNumber *)key).boolValue;
-        if (!isInBackground)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
-                {
-                    OASuspendedDownloadTask *suspendedTask = [_finishedBackgroundDownloadings firstObject];
-                    [self refreshUIOnTaskFinished:suspendedTask];
-                    [_finishedBackgroundDownloadings removeObjectAtIndex:0];
-                }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
+            {
+                OASuspendedDownloadTask *suspendedTask = [_finishedBackgroundDownloadings firstObject];
+                [self refreshUIOnTaskFinished:suspendedTask];
+                [_finishedBackgroundDownloadings removeObjectAtIndex:0];
+            }
 
-                if (self.dataInvalidated || dataInvalidated)
-                {
-                    [self updateContent];
-                    self.dataInvalidated = NO;
-                    dataInvalidated = NO;
-                }
-
-
+            if (self.dataInvalidated || dataInvalidated)
+            {
                 [self updateContent];
-                [self.getTableView reloadData];
-                // TODO: FIX
-                //[self refreshDownloadingContent:nil]; // restart all cells animations
-            });
-        }
+                self.dataInvalidated = NO;
+                dataInvalidated = NO;
+            }
+
+
+            [self updateContent];
+            [self.getTableView reloadData];
+            // TODO: FIX
+            //[self refreshDownloadingContent:nil]; // restart all cells animations
+        });
     }
 }
 

@@ -1005,7 +1005,7 @@
 
     BOOL isInBackground = self.isInBackground;
     if (prevIsInBackground != isInBackground)
-        [self.backgroundStateObservable notifyEventWithKey:@(isInBackground)];
+        [self.backgroundStateObservable notifyEvent];
 }
 
 - (BOOL) isInBackground
@@ -1297,7 +1297,7 @@
 - (void) onApplicationDidEnterBackground
 {
     _isInBackground = YES;
-    [self.backgroundStateObservable notifyEventWithKey:@(YES)];
+    [self.backgroundStateObservable notifyEvent];
 
     [self saveDataToPermamentStorage];
 
@@ -1318,7 +1318,7 @@
 
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
 
-    [self.backgroundStateObservable notifyEventWithKey:@(NO)];
+    [self.backgroundStateObservable notifyEvent];
 }
 
 - (void) stopNavigation

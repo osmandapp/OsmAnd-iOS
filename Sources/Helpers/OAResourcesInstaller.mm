@@ -57,7 +57,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                                                    withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
                                                                     andObserve:_app.downloadsManager.completedObservable];
         _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                             withHandler:@selector(onBackgroundStateChanged)
                                                               andObserve:_app.downloadsManager.completedObservable];
     }
     return self;
@@ -77,18 +77,14 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     }
 }
 
-- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
+- (void) onBackgroundStateChanged
 {
-    if ([key isKindOfClass:NSNumber.class])
+    if (!_app.isInBackgroundOnDevice && _lastDownloadedRegionInBackground)
     {
-        BOOL isInBackground = ((NSNumber *)key).boolValue;
-        if (!isInBackground && _lastDownloadedRegionInBackground)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [OAPluginPopupViewController showRegionOnMap:_lastDownloadedRegionInBackground];
-                _lastDownloadedRegionInBackground = nil;
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [OAPluginPopupViewController showRegionOnMap:_lastDownloadedRegionInBackground];
+            _lastDownloadedRegionInBackground = nil;
+        });
     }
 }
 

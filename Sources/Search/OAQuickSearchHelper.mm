@@ -385,7 +385,7 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
         _searchRequestsCount = 0;
 
         _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                             withHandler:@selector(onBackgroundStateChanged:withKey:)
+                                                             withHandler:@selector(onBackgroundStateChanged)
                                                               andObserve:OsmAndApp.instance.backgroundStateObservable];
 
         _localResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
@@ -509,18 +509,14 @@ static const int SEARCH_TRACK_OBJECT_PRIORITY = 53;
     [[_core getSearchSettings] setRegions:app.worldRegion];
 }
 
-- (void) onBackgroundStateChanged:(id)observable withKey:(id)key
+- (void) onBackgroundStateChanged
 {
-    if ([key isKindOfClass:NSNumber.class])
+    if (!OsmAndApp.instance.isInBackground && _resourcesInvalidated)
     {
-        BOOL isInBackground = ((NSNumber *)key).boolValue;
-        if (!isInBackground && _resourcesInvalidated)
-        {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self setResourcesForSearchUICore];
-                _resourcesInvalidated = NO;
-            });
-        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self setResourcesForSearchUICore];
+            _resourcesInvalidated = NO;
+        });
     }
 }
 

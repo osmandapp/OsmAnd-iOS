@@ -152,7 +152,7 @@
             [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:parameterName];
             return NO;
         }
-        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && (band == WEATHER_BAND_NOTHING || band == WEATHER_BAND_WIND_ANIMATION))
+        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_NOTHING)
         {
             [_styleSettings setWeatherContourLinesEnabled:NO weatherContourLinesAttr:parameterName];
             return NO;
@@ -162,7 +162,7 @@
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
-        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_NOTHING || band == WEATHER_BAND_WIND_ANIMATION)
+        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_NOTHING)
             return NO;
 
         //[self showProgressHUD];

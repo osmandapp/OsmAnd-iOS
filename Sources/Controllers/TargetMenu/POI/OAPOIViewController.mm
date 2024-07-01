@@ -193,7 +193,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         UIColor *textColor;
         NSString *vl = [self.poi getAdditionalInfo][key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
-        if ([_poiHelper shouldProcessNameTagForKey:convertedKey] && !hasName)
+        if (!hasName && [_poiHelper isNameTag:convertedKey])
         {
             nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
             [infoRows addObject:nameRow];
@@ -290,7 +290,7 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 continue;
             }
         }
-        else if ([_poiHelper shouldProcessNameTagForKey:convertedKey])
+        else if ([_poiHelper isNameTag:convertedKey])
         {
             [nameTags addObject:@{
                 @"key": convertedKey,

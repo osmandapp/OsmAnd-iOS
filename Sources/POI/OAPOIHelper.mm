@@ -1472,11 +1472,11 @@ static NSArray<NSString *> *const kNameTagPrefixes = @[@"name:", @"int_name", @"
     return _breakSearch;
 }
 
-- (BOOL) shouldProcessNameTagForKey:(NSString *)key
+- (BOOL) isNameTag:(NSString *)tag
 {
     for (NSString *prefix in kNameTagPrefixes)
     {
-        if ([key hasPrefix:prefix])
+        if ([tag hasPrefix:prefix])
             return YES;
     }
     

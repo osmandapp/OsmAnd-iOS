@@ -227,13 +227,13 @@
         else if ([routeTagKey isEqualToString:@"wikipedia"])
             routeTagValue = [OAWikiAlgorithms getWikiUrlWithText:routeTagValue];
 
-        if ([[OAPOIHelper sharedInstance] shouldProcessNameTagForKey:routeTagKey] && !hasName)
+        if (!hasName && [[OAPOIHelper sharedInstance] isNameTag:routeTagKey])
         {
             OAGPXTableCellData *routeNameCellData = [OAGPXTableCellData withData:@{
                 kTableKey: @"name",
                 kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"shared_string_name"),
-                kCellDesc: (nameTagString.length > 0) ? nameTagString : i.value().toNSString(),
+                kCellDesc: (nameTagString.length > 0) ? nameTagString : @"",
                 kTableValues: @{ @"order": routeTagOrder },
                 kCellToggle: @YES
             }];
@@ -257,7 +257,7 @@
         {
             routeTagTitle = OALocalizedString(@"osm_id");
         }
-        else if ([[OAPOIHelper sharedInstance] shouldProcessNameTagForKey:routeTagKey])
+        else if ([[OAPOIHelper sharedInstance] isNameTag:routeTagKey])
         {
             [_nameTags addObject:@{
                 @"key": routeTagKey,

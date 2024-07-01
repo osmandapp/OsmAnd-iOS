@@ -1334,6 +1334,7 @@
 		BBA3AF97197FC4BB0039D991 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = BB451DF318D8F7D7005FBE09 /* Localizable.strings */; };
 		BBA3AFC4197FC4BB0039D991 /* Resources.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BB451F1018EB34A5005FBE09 /* Resources.storyboard */; };
 		C51BE6FD2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */; };
+		C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */ = {isa = PBXBuildFile; fileRef = C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */; };
 		C53920C2291E4E770076D5BB /* ic_custom_van@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */; };
 		C53920C3291E4E770076D5BB /* ic_custom_van@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */; };
 		C542601F2AA0D2A000E76C00 /* ic_custom_visibility@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = C542601D2AA0D29F00E76C00 /* ic_custom_visibility@2x.png */; };
@@ -4931,6 +4932,7 @@
 		BBB3F6AA18A4DEF0001C3175 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BBBDADB818BCF53500E4A359 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
 		C51BE6FC2BBC3E7C00B63A1A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = Resources/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmAndFormatterParams.swift; sourceTree = "<group>"; };
 		C53920C0291E4E770076D5BB /* ic_custom_van@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@2x.png"; path = "Resources/Icons/ic_custom_van@2x.png"; sourceTree = "<group>"; };
 		C53920C1291E4E770076D5BB /* ic_custom_van@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_van@3x.png"; path = "Resources/Icons/ic_custom_van@3x.png"; sourceTree = "<group>"; };
 		C542601D2AA0D29F00E76C00 /* ic_custom_visibility@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_visibility@2x.png"; path = "Resources/Icons/ic_custom_visibility@2x.png"; sourceTree = "<group>"; };
@@ -13368,6 +13370,7 @@
 				DAD5B4CE288E80EC009CF611 /* OAOperationLog.m */,
 				323084D726E933EE00D6FC67 /* OAOsmAndFormatter.h */,
 				323084D826E933FE00D6FC67 /* OAOsmAndFormatter.mm */,
+				C52E750E2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift */,
 				DA5A80AD26C563A600F274C7 /* OAOsmAndLiveHelper.h */,
 				DA5A80A326C563A500F274C7 /* OAOsmAndLiveHelper.mm */,
 				DA5A80B926C563A600F274C7 /* OAResourcesInstaller.h */,
@@ -17314,6 +17317,7 @@
 				DA5A83FD26C563A800F274C7 /* OAHistoryTableViewController.mm in Sources */,
 				461A3F0729F6E2BA008EE079 /* OACollectionSingleLineTableViewCell.m in Sources */,
 				DA5A84FD26C563A900F274C7 /* OATableViewCell.m in Sources */,
+				C52E750F2C2BECAC00C45ED0 /* OsmAndFormatterParams.swift in Sources */,
 				DA5A83DB26C563A800F274C7 /* OASelectFavoriteGroupViewController.mm in Sources */,
 				DA5A854726C563A900F274C7 /* OANetworkUtilities.m in Sources */,
 				B247453827E35E9B00C18C3F /* OACloudIntroductionHeaderView.m in Sources */,

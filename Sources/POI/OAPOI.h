@@ -108,6 +108,8 @@
 
 - (NSString *) toStringEn;
 
+- (NSString *) getSubTypeStr;
+
 - (NSDictionary<NSString *, NSString *> *) toTagValue:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 + (OAPOI *) fromTagValue:(NSDictionary<NSString *, NSString *> *)map privatePrefix:(NSString *)privatePrefix osmPrefix:(NSString *)osmPrefix;
 - (NSString *)getTagSuffix:(NSString *)tagPrefix;

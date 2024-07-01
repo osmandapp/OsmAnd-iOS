@@ -47,7 +47,7 @@ final class SensorDistanceWidgetDataField: SensorWidgetDataField {
     override func getFormattedValue() -> FormattedValue? {
         if let value = numberValue?.floatValue {
             let valueUnitArray: NSMutableArray = []
-            OAOsmAndFormatter.getFormattedDistance(value, forceTrailingZeroes: false, roundUp: false, valueUnitArray: valueUnitArray)
+            OAOsmAndFormatter.getFormattedDistance(value, with: OsmAndFormatterParams.noTrailingZeros, valueUnitArray: valueUnitArray)
             if let result = getValueAndUnit(with: valueUnitArray) {
                 return FormattedValue(valueSrc: 0, value: result.value, unit: result.unit)
             }

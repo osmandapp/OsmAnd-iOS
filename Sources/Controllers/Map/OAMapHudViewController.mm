@@ -1113,7 +1113,7 @@ static const float kDistanceMeters = 100.0;
         return;
     
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackground)
+        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackgroundOnDevice)
             return;
         
         if (!_downloadView)
@@ -1163,11 +1163,18 @@ static const float kDistanceMeters = 100.0;
         
         OADownloadProgressView *download = self.downloadView;
         self.downloadView  = nil;
-        [UIView animateWithDuration:.3 animations:^{
-            download.alpha = 0.0;
-        } completion:^(BOOL finished) {
+        if (_app.isInBackgroundOnDevice)
+        {
             [download removeFromSuperview];
-        }];
+        }
+        else
+        {
+            [UIView animateWithDuration:.3 animations:^{
+                download.alpha = 0.0;
+            } completion:^(BOOL finished) {
+                [download removeFromSuperview];
+            }];
+        }
     });
 }
 

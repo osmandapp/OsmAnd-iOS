@@ -1013,6 +1013,11 @@
     return _isInBackground && !self.carPlayActive;
 }
 
+- (BOOL) isInBackgroundOnDevice
+{
+    return _isInBackground;
+}
+
 - (void)startRepositoryUpdateAsync:(BOOL)async
 {
     _isRepositoryUpdating = YES;

@@ -505,7 +505,7 @@ static BOOL dataInvalidated = NO;
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackground)
+        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackgroundOnDevice)
         {
             self.dataInvalidated = YES;
             return;
@@ -524,7 +524,7 @@ static BOOL dataInvalidated = NO;
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackground)
+        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackgroundOnDevice)
             return;
         
         if (!self.downloadView || !self.downloadView.superview)
@@ -595,7 +595,7 @@ static BOOL dataInvalidated = NO;
         OASuspendedDownloadTask *suspendedTask = [[OASuspendedDownloadTask alloc] init];
         suspendedTask.task = task;
         suspendedTask.nextTask = nextTask;
-        if (_app.isInBackground)
+        if (_app.isInBackgroundOnDevice)
             [_finishedBackgroundDownloadings addObject:suspendedTask];
         else
             [self refreshUIOnTaskFinished:suspendedTask];
@@ -621,7 +621,8 @@ static BOOL dataInvalidated = NO;
     }
     else
     {
-        [self refreshDownloadingContent:suspendedTask.task.key];
+        // TODO: FIX
+        //[self refreshDownloadingContent:suspendedTask.task.key];
     }
 }
 
@@ -650,7 +651,8 @@ static BOOL dataInvalidated = NO;
 
                 [self updateContent];
                 [self.getTableView reloadData];
-                [self refreshDownloadingContent:nil]; // restart all cells animations
+                // TODO: FIX
+                //[self refreshDownloadingContent:nil]; // restart all cells animations
             });
         }
     }

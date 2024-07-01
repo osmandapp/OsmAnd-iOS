@@ -58,7 +58,8 @@
 @property(nonatomic) OAMapViewState* initialURLMapState;
 
 @property (nonatomic) BOOL carPlayActive;
-@property (nonatomic) BOOL isInBackground;
+@property (nonatomic) BOOL isInBackground; // YES if is in background on device and carplay inactive
+@property (nonatomic) BOOL isInBackgroundOnDevice; // YES if is in background on device (carplay may be active)
 @property(readonly) OAObservable* backgroundStateObservable;
 
 - (void) loadWorldRegions;

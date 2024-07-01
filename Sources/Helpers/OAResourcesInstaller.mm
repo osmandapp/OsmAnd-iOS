@@ -364,7 +364,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        if (_app.isInBackground)
+                                        if (_app.isInBackgroundOnDevice)
                                             _lastDownloadedRegionInBackground = foundRegion;
                                         else
                                             [OAPluginPopupViewController showRegionOnMap:foundRegion];

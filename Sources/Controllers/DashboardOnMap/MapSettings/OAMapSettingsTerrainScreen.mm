@@ -218,16 +218,6 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
 }
 
-- (OATableDataModel *)data
-{
-    return _data;
-}
-
-- (OATableRowData *)getItem:(NSIndexPath *)indexPath
-{
-    return [_data itemForIndexPath:indexPath];
-}
-
 - (void)updateAvailableMaps
 {
     CLLocationCoordinate2D loc = [OAResourcesUIHelper getMapLocation];
@@ -570,7 +560,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
         SFSafariViewController *safariViewController = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:[item stringForKey:@"link"]]];
         [self.vwController presentViewController:safariViewController animated:YES completion:nil];
     }
-    else if ([item.key isEqualToString:kCellTypeMap])
+    else if ([item.key isEqualToString:@"mapItem"])
     {
         OAResourceItem *mapItem = _mapItems[indexPath.row];
         [_downloadingCellResourceHelper onCellClicked:mapItem.resourceId.toNSString()];

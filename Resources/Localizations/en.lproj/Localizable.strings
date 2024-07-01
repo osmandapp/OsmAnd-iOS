@@ -3802,3 +3802,4 @@
 "weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Wind animation";

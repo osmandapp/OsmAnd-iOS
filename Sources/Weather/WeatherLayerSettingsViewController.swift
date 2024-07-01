@@ -25,6 +25,8 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         OAWeatherBand.withWeatherBand(.WEATHER_BAND_PRECIPITATION)]
     }()
     
+    private lazy var windAnimation = OAWeatherBand.withWeatherBand(.WEATHER_BAND_WIND_ANIMATION)
+    
     override func getTitle() -> String {
         localizedString("shared_string_layers")
     }
@@ -42,21 +44,10 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         onCloseAction?()
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        generateData()
-//        tableView.reloadData()
-//    }
-    
     override func generateData() {
         tableData.clearAllData()
         let section = tableData.createNewSection()
         weatherArray.forEach({ item in
-            print("1")
             let row = section.createNewRow()
             row.cellType = OASwitchTableViewCell.reuseIdentifier
             row.key = Self.weatherLayerKey
@@ -68,6 +59,16 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
             row.accessibilityLabel = row.title
             row.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")
         })
+        
+        let sectionAnimation = tableData.createNewSection()
+        let weatherWindAnimation = section.createNewRow()
+        weatherWindAnimation.title = localizedString("map_settings_weather_wind_animation")
+        weatherWindAnimation.cellType = OASwitchTableViewCell.reuseIdentifier
+        let isVisible: Bool = windAnimation.isBandVisible()
+        weatherWindAnimation.setObj(isVisible, forKey: Self.selectedKey)
+        weatherWindAnimation.setObj(windAnimation, forKey: "band")
+        weatherWindAnimation.accessibilityLabel = weatherWindAnimation.title
+        weatherWindAnimation.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {

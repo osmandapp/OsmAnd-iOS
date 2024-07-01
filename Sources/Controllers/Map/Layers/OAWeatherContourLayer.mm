@@ -122,7 +122,7 @@
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         NSString *parameterName = self.app.data.contourName;
-        OsmAnd::BandIndex band = WEATHER_BAND_UNDEFINED;
+        OsmAnd::BandIndex band = WEATHER_BAND_NOTHING;
 
         OAMapStyleParameter *tempContourLinesParam = [_styleSettings getParameter:WEATHER_TEMP_CONTOUR_LINES_ATTR];
         OAMapStyleParameter *pressureContourLinesParam = [_styleSettings getParameter:WEATHER_PRESSURE_CONTOURS_LINES_ATTR];
@@ -152,7 +152,7 @@
             [_styleSettings setWeatherContourLinesEnabled:YES weatherContourLinesAttr:parameterName];
             return NO;
         }
-        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && band == WEATHER_BAND_UNDEFINED)
+        else if ([_styleSettings isAnyWeatherContourLinesEnabled] && (band == WEATHER_BAND_NOTHING || band == WEATHER_BAND_WIND_ANIMATION))
         {
             [_styleSettings setWeatherContourLinesEnabled:NO weatherContourLinesAttr:parameterName];
             return NO;
@@ -162,7 +162,7 @@
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
-        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_UNDEFINED)
+        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_NOTHING || band == WEATHER_BAND_WIND_ANIMATION)
             return NO;
 
         //[self showProgressHUD];

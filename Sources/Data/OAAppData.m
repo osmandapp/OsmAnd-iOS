@@ -385,7 +385,7 @@
     _weatherSourceProfile = [OACommonString withKey:kWeatherSourceKey defValue:[WeatherSourceObjWrapper getSettingValueForType:getDefaultSource]];
     _weatherWindAnimationProfile = [OACommonBoolean withKey:kWeatherWindAnimationKey defValue:NO];
     _weatherWindAnimationUnitProfile = [OACommonUnit withKey:kWeatherWindAnimationWindUnitKey defValue:[OAWeatherBand getDefaultBandUnit:WEATHER_BAND_WIND_ANIMATION]];
-    _weatherWindAnimationAlphaProfile = [OACommonDouble withKey:kWeatherWindAnimationToolbarAlphaKey defValue:0.6]
+    _weatherWindAnimationAlphaProfile = [OACommonDouble withKey:kWeatherWindAnimationToolbarAlphaKey defValue:0.6];
     
     _weatherWindAnimationUnitAutoProfile = [OACommonBoolean withKey:kWeatherWindAnimationUnitAutoKey defValue:YES];
     
@@ -489,7 +489,7 @@
     [_registeredPreferences setObject:_weatherWindAnimationProfile forKey:@"weather_wind_animation"];
     [_registeredPreferences setObject:_weatherWindAnimationUnitProfile forKey:@"show_weather_wind_animation_unit"];
     [_registeredPreferences setObject:_weatherWindAnimationAlphaProfile forKey:@"weather_wind_animation_alpha"];
-    [_registeredPreferences setObject:_weatherWindAnimationUnitAutoProfile forKey:@"weather_wind_animation_unit_auto"]
+    [_registeredPreferences setObject:_weatherWindAnimationUnitAutoProfile forKey:@"weather_wind_animation_unit_auto"];
 }
 
 - (void) dealloc
@@ -1092,7 +1092,7 @@
     @synchronized(_lock)
     {
         [_weatherSourceProfile set:weatherSource];
-        [_weatherSourceChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:@(self.weatherSource)];
+        [_weatherSourceChangeObservable notifyEventWithKey:@(WEATHER_BAND_WIND_ANIMATION) andValue:self.weatherSource];
     }
 }
 
@@ -1117,7 +1117,7 @@
 {
     @synchronized(_lock)
     {
-        return [_weatherWindAnimationUnitAutoProfile get]
+        return [_weatherWindAnimationUnitAutoProfile get];
     }
 }
 

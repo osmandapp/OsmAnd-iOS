@@ -61,7 +61,7 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         })
         
         let sectionAnimation = tableData.createNewSection()
-        let weatherWindAnimation = section.createNewRow()
+        let weatherWindAnimation = sectionAnimation.createNewRow()
         weatherWindAnimation.title = localizedString("map_settings_weather_wind_animation")
         weatherWindAnimation.cellType = OASwitchTableViewCell.reuseIdentifier
         let isVisible: Bool = windAnimation.isBandVisible()

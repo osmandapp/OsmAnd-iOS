@@ -3456,7 +3456,7 @@
 • Change \"Wheel circumference\" in BLE sensor settings\n
 • Added separate \"Speed limit\" navigation alert\n
 • Fixed names for bearing widgets\n
-• Fixed \"Radius ruler\" visibility in all widget panels\n
+• Fixed \"Radius ruler\" visibility in all widget panels\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";

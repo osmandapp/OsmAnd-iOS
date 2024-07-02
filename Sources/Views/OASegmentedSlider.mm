@@ -71,7 +71,8 @@
     [self removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
     [self addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    if (self.stepMinWithoutDrawMark > 0) {
+    if (self.stepsAmountWithoutDrawMark > 0)
+    {
         [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside];
         [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside];
         [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpOutside];
@@ -379,10 +380,10 @@
         _currentRightLineView.frame = CGRectMake(inset, trackRect.origin.y, trackWidth, trackHeight);
 }
 
-- (NSInteger)getIndexForStepMinWithoutDrawMark
+- (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark
 {
     CGFloat value = self.value;
-    NSInteger marks = self.stepMinWithoutDrawMark;
+    NSInteger marks = self.stepsAmountWithoutDrawMark;
     CGFloat step = 1. / (marks - 1);
     int nextMark = 0;
     for (int i = 0; i < marks; i++)
@@ -415,9 +416,9 @@ NSString *getTimeStringAtIndex(int index) {
 - (void)layoutSelectingTitle
 {
     _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
-    NSInteger index = self.stepMinWithoutDrawMark > 0 ? [self getIndexForStepMinWithoutDrawMark] : [self getIndex];
+    NSInteger index = self.stepsAmountWithoutDrawMark > 0 ? [self getIndexForOptionStepsAmountWithoutDrawMark] : [self getIndex];
     NSLog(@"%d", index);
-    if (self.stepMinWithoutDrawMark > 0)
+    if (self.stepsAmountWithoutDrawMark > 0)
     {
         _selectingMarkTitle.text = getTimeStringAtIndex(index);
     }

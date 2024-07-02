@@ -14,9 +14,9 @@
 @property (nonatomic) CGFloat currentMarkX;
 @property (nonatomic) CGFloat maximumForCurrentMark;
 
-@property (nonatomic) NSInteger stepMinWithoutDrawMark;
+@property (nonatomic) NSInteger stepsAmountWithoutDrawMark;
 
-- (NSInteger)getIndexForStepMinWithoutDrawMark;
+- (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark;
 
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks
   additionalMarksBetween:(NSInteger)additionalMarksBetween;

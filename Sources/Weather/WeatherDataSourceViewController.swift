@@ -34,7 +34,6 @@ final class WeatherSourceObjWrapper: NSObject {
     }
 }
 
-
 @objc enum WeatherSource: Int, CaseIterable {
     case gfs
     case ecmwf
@@ -137,7 +136,9 @@ final class WeatherDataSourceViewController: OABaseNavbarViewController {
         let item = tableData.item(for: indexPath)
         if let weatherSource = item.obj(forKey: "weatherSource") as? WeatherSource {
             OsmAndApp.swiftInstance().data.weatherSource = weatherSource.settingValue
-            reloadDataWith(animated: true, completion: nil)
+            reloadDataWith(animated: true) { [weak self] _ in
+                self?.dismiss()
+            }
         }
     }
 }

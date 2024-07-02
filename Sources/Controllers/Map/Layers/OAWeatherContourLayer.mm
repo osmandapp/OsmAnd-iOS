@@ -129,17 +129,33 @@
         OAMapStyleParameter *cloudContourLinesParam = [_styleSettings getParameter:WEATHER_CLOUD_CONTOURS_LINES_ATTR];
         OAMapStyleParameter *windContourLinesParam = [_styleSettings getParameter:WEATHER_WIND_CONTOURS_LINES_ATTR];
         OAMapStyleParameter *precipContourLinesParam = [_styleSettings getParameter:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR];
-
+        
+        BOOL bandWasChanged = NO;
         if (tempContourLinesParam && [parameterName isEqualToString:WEATHER_TEMP_CONTOUR_LINES_ATTR])
+        {
             band = WEATHER_BAND_TEMPERATURE;
+            bandWasChanged = YES;
+        }
         else if (pressureContourLinesParam && [parameterName isEqualToString:WEATHER_PRESSURE_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_PRESSURE;
+            bandWasChanged = YES;
+        }
         else if (cloudContourLinesParam && [parameterName isEqualToString:WEATHER_CLOUD_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_CLOUD;
+            bandWasChanged = YES;
+        }
         else if (windContourLinesParam && [parameterName isEqualToString:WEATHER_WIND_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_WIND_SPEED;
+            bandWasChanged = YES;
+        }
         else if (precipContourLinesParam && [parameterName isEqualToString:WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR])
+        {
             band = WEATHER_BAND_PRECIPITATION;
+            bandWasChanged = YES;
+        }
 
         BOOL needUpdateStyleSettings = (tempContourLinesParam && ![tempContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_TEMPERATURE)
             || (pressureContourLinesParam && ![pressureContourLinesParam.value isEqualToString:@"true"] && band == WEATHER_BAND_PRESSURE)
@@ -162,7 +178,9 @@
         config.setOpacityFactor(self.app.data.contoursAlpha);
         [self.mapView setMapLayerConfiguration:self.layerIndex configuration:config forcedUpdate:NO];
 
-        if ((!self.app.data.weather && !_needsSettingsForToolbar) || band == WEATHER_BAND_NOTHING)
+        if (!self.app.data.weather && !_needsSettingsForToolbar)
+            return NO;
+        if (!bandWasChanged)
             return NO;
 
         //[self showProgressHUD];

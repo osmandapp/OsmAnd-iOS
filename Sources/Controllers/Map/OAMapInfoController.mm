@@ -719,31 +719,7 @@
     return [UIMenu menuWithChildren:menuElements];
 }
 
-- (void)weatherButtonTapped:(OAHudButton *)sender {
-    
-    auto weatherLayerSettingsViewController = [WeatherLayerSettingsViewController new];
-    weatherLayerSettingsViewController.onChangeSwitchLayerAction = ^{
-        [sender setImage:[UIImage templateImageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
-    };
-    
-    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherLayerSettingsViewController];
-    
-    navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
-    
-    UISheetPresentationController *sheet = navigationController.sheetPresentationController;
-    if (sheet)
-    {
-        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
-        sheet.preferredCornerRadius = 20;
-        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = YES;
-    }
-    
-    [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
-}
-
 - (void)showWeatherDataSourceViewController {
-    NSLog(@"showWeatherDataSourceViewController tapped!");
-    
     auto weatherDataSourceViewController = [WeatherDataSourceViewController new];
     UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherDataSourceViewController];
     

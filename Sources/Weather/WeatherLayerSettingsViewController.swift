@@ -35,6 +35,10 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
         localizedString("shared_string_close")
     }
     
+    override func isNavbarSeparatorVisible() -> Bool {
+        false
+    }
+    
     override func registerCells() {
         addCell(OASwitchTableViewCell.reuseIdentifier)
     }
@@ -46,29 +50,8 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
     
     override func generateData() {
         tableData.clearAllData()
-        let section = tableData.createNewSection()
-        weatherArray.forEach({ item in
-            let row = section.createNewRow()
-            row.cellType = OASwitchTableViewCell.reuseIdentifier
-            row.key = Self.weatherLayerKey
-            row.title = item.getMeasurementName()
-            row.iconName = item.getIcon()
-            let isVisible: Bool = item.isBandVisible()
-            row.setObj(isVisible, forKey: Self.selectedKey)
-            row.setObj(item, forKey: "band")
-            row.accessibilityLabel = row.title
-            row.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")
-        })
-        
-        let sectionAnimation = tableData.createNewSection()
-        let weatherWindAnimation = sectionAnimation.createNewRow()
-        weatherWindAnimation.title = localizedString("map_settings_weather_wind_animation")
-        weatherWindAnimation.cellType = OASwitchTableViewCell.reuseIdentifier
-        let isVisible: Bool = windAnimation.isBandVisible()
-        weatherWindAnimation.setObj(isVisible, forKey: Self.selectedKey)
-        weatherWindAnimation.setObj(windAnimation, forKey: "band")
-        weatherWindAnimation.accessibilityLabel = weatherWindAnimation.title
-        weatherWindAnimation.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")
+        generateWeatherSectionData()
+        generateWindAnimationSectionData()
     }
     
     override func getRow(_ indexPath: IndexPath) -> UITableViewCell! {
@@ -92,6 +75,36 @@ final class WeatherLayerSettingsViewController: OABaseNavbarViewController {
             return cell
         }
         return nil
+    }
+    
+    private func generateWeatherSectionData() {
+        let section = tableData.createNewSection()
+        
+        weatherArray.forEach { weatherItem in
+            let row = section.createNewRow()
+            configureRow(row, with: weatherItem)
+        }
+    }
+
+    private func generateWindAnimationSectionData() {
+        let section = tableData.createNewSection()
+        let row = section.createNewRow()
+        
+        configureRow(row, with: windAnimation)
+    }
+    
+    private func configureRow(_ row: OATableRowData, with item: OAWeatherBand) {
+        row.cellType = OASwitchTableViewCell.reuseIdentifier
+        row.key = Self.weatherLayerKey
+        row.title = item.getMeasurementName()
+        row.iconName = item.getIcon()
+        
+        let isVisible = item.isBandVisible()
+        row.setObj(isVisible, forKey: Self.selectedKey)
+        row.setObj(item, forKey: "band")
+        
+        row.accessibilityLabel = row.title
+        row.accessibilityValue = localizedString(isVisible ? "shared_string_on" : "shared_string_off")
     }
     
     @objc private func onSwitchClick(_ sender: Any) -> Bool {

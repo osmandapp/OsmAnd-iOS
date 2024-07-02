@@ -355,11 +355,9 @@ static const float kDistanceMeters = 100.0;
     self.mapModeButton.accessibilityLabel = OALocalizedString(@"shared_string_my_location");
     self.zoomInButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_in");
     self.zoomOutButton.accessibilityLabel = OALocalizedString(@"key_hint_zoom_out");
-   // self.weatherButton.accessibilityLabel = OALocalizedString(@"shared_string_cancel");
     self.compassButton.accessibilityLabel = OALocalizedString(@"map_widget_compass");
-    // TODO:
-//    self.weatherContoursButton.accessibilityLabel =
-//    self.weatherLayersButton.accessibilityLabel =
+    self.weatherContoursButton.accessibilityLabel = OALocalizedString(@"shared_string_contours");
+    self.weatherLayersButton.accessibilityLabel = OALocalizedString(@"shared_string_layers");
 }
 
 - (void) updateRulerPosition:(CGFloat)bottom left:(CGFloat)left

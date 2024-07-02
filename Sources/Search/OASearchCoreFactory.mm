@@ -1281,9 +1281,10 @@
                 {
                     OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
                     res.localeName = match.translatedValue;
+                    OsmAnd::LogPrintf(OsmAnd::LogSeverityLevel::Debug, "Top index found: %s %s", entry.key().toStdString().c_str(), QString::fromNSString(match.value).toStdString().c_str());
                     //TODO crash in UI
                     //res.object = [[OATopIndexFilter alloc] initWithPoiSubType:entry.key().toNSString() value:match.value];
-                    [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
+                    //[self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
                 }
             }
         }

@@ -105,8 +105,15 @@
 
 - (ColorPalette *)getGradientColorPaletteSync:(EOAColorizationType)colorizationType gradientPaletteName:(NSString *)gradientPaletteName
 {
+    return [self getGradientColorPaletteSync:colorizationType gradientPaletteName:gradientPaletteName refresh:NO];
+}
+
+- (ColorPalette *)getGradientColorPaletteSync:(EOAColorizationType)colorizationType
+                          gradientPaletteName:(NSString *)gradientPaletteName
+                                      refresh:(BOOL)refresh
+{
     NSString *colorPaletteFileName = [NSString stringWithFormat:@"route_%@_%@.txt", [self getColorizationTypeName:colorizationType], gradientPaletteName];
-    return [self getGradientColorPalette:colorPaletteFileName];
+    return [self getGradientColorPalette:colorPaletteFileName refresh:refresh];
 }
 
 - (ColorPalette *)getGradientColorPaletteSyncWithModeKey:(NSString *)modeKey
@@ -116,8 +123,13 @@
 
 - (ColorPalette *)getGradientColorPalette:(NSString *)colorPaletteFileName
 {
+    return [self getGradientColorPalette:colorPaletteFileName refresh:NO];
+}
+
+- (ColorPalette *)getGradientColorPalette:(NSString *)colorPaletteFileName refresh:(BOOL)refresh
+{
     ColorPalette *colorPalette = [_cachedColorPalette objectForKey:colorPaletteFileName];
-    if (!colorPalette)
+    if (!colorPalette || refresh)
     {
         NSString *filePath = [[self getColorPaletteDir] stringByAppendingPathComponent:colorPaletteFileName];
         if ([[NSFileManager defaultManager] fileExistsAtPath:filePath])

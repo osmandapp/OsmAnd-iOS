@@ -18,6 +18,9 @@
 - (NSDictionary<NSString *, NSArray *> *)getPalletsForType:(NSInteger)gradientType isTerrainType:(BOOL)isTerrainType;
 - (ColorPalette *)requireGradientColorPaletteSync:(EOAColorizationType)colorizationType gradientPaletteName:(NSString *)gradientPaletteName;
 - (ColorPalette *)getGradientColorPaletteSync:(EOAColorizationType)colorizationType gradientPaletteName:(NSString *)gradientPaletteName;
+- (ColorPalette *)getGradientColorPaletteSync:(EOAColorizationType)colorizationType
+                          gradientPaletteName:(NSString *)gradientPaletteName
+                                      refresh:(BOOL)refresh;
 - (ColorPalette *)getGradientColorPaletteSyncWithModeKey:(NSString *)modeKey;
 - (ColorPalette *)getGradientColorPalette:(NSString *)colorPaletteFileName;
 

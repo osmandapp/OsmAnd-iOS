@@ -133,19 +133,19 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     return YES;
 }
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs refreshColors:(BOOL)refreshColors
 {
-    [self refreshGpxTracks:gpxDocs reset:YES];
+    [self refreshGpxTracks:gpxDocs reset:YES refreshColors:refreshColors];
 }
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset
+- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset refreshColors:(BOOL)refreshColors
 {
     if (reset)
         [self resetLayer];
 
     _gpxDocs = gpxDocs;
     [self refreshCachedTracks];
-    [self refreshGpxTracks];
+    [self refreshGpxTracks:refreshColors];
 }
 
 - (void)refreshCachedTracks
@@ -227,7 +227,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     }
 }
 
-- (void) refreshGpxTracks
+- (void) refreshGpxTracks:(BOOL)refreshColors
 {
     BOOL hasVolumetricSymbols;
     for (NSMutableDictionary<NSString *, id> *cachedTrack in _cachedTracks.allValues)
@@ -269,13 +269,14 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 type = OAColoringType.DEFAULT;
 
             if ([type isGradient]
-                    && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
+                && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
-                    || _cachedColors[key].isEmpty()))
+                    || _cachedColors[key].isEmpty()
+                    || refreshColors))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[type toColorizationType] gradientPaletteName:_gradientPalette];
+                ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[type toColorizationType] gradientPaletteName:_gradientPalette refresh:refreshColors];
                 OARouteColorize *colorizationHelper =
                         [[OARouteColorize alloc] initWithGpxFile:doc
                                                                   analysis:[doc getAnalysis:0]
@@ -292,9 +293,10 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 }
             }
             else if ([type isRouteInfoAttribute]
-                    && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
-                    || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
-                    || _cachedColors[key].isEmpty()))
+                     && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
+                        || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
+                        || _cachedColors[key].isEmpty()
+                        || refreshColors))
             {
                 OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
                 auto segs = [routeImporter importRoute];
@@ -316,8 +318,9 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                    locations:locations];
             }
             else if ([type isSolidSingleColor]
-                    && ([cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_NONE
-                    || !_cachedColors[key].isEmpty()))
+                     && ([cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_NONE
+                         || !_cachedColors[key].isEmpty()
+                         || refreshColors))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
@@ -1613,7 +1616,7 @@ colorizationScheme:(int)colorizationScheme
                 doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
                 docs[QString::fromNSString(item.docPath)] = doc;
-                [self refreshGpxTracks:docs];
+                [self refreshGpxTracks:docs refreshColors:NO];
             }
         }
         else

@@ -698,6 +698,7 @@
     OsmAndAppInstance app = OsmAndApp.instance;
     BOOL updateRoutingFiles = NO;
     BOOL updateResources = NO;
+    BOOL updateColoPalette = NO;
     for (OASettingsItem *item in _items)
     {
         if ([item isKindOfClass:OAFileSettingsItem.class])
@@ -705,12 +706,15 @@
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
             updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
             updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
+            updateColoPalette = updateColoPalette || fileItem.subtype == EOASettingsItemFileSubtypeColorPalette;
             
-            if (updateResources && updateRoutingFiles)
+            if (updateResources && updateRoutingFiles && updateColoPalette)
                 break;
         }
     }
-    
+
+    if (updateColoPalette)
+        [app.updateGpxTracksOnMapObservable notifyEvent];
     if (updateRoutingFiles)
         [app loadRoutingFiles];
     if (updateResources)

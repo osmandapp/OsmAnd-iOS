@@ -230,7 +230,6 @@ static const float kDistanceMeters = 100.0;
     [self.compassBox addGestureRecognizer:_longPress];
     
     [self configureWeatherContoursButton];
-    [self updateStateWeatherLayersButton];;
 
     [self.leftWidgetsView addShadow];
     [self.rightWidgetsView addShadow];
@@ -245,7 +244,6 @@ static const float kDistanceMeters = 100.0;
         [weakSelf updateStateWeatherContoursButton];
         [weakSelf configureWeatherContoursButton];
     }];
-    [self updateStateWeatherContoursButton];
 }
 
 - (void)updateStateWeatherContoursButton
@@ -253,11 +251,23 @@ static const float kDistanceMeters = 100.0;
     NSString *contourName = OsmAndApp.instance.data.contourName;
     BOOL isEnabledContourButton = [[OAMapStyleSettings sharedInstance] isAnyWeatherContourLinesEnabled] || contourName.length > 0;
     [_weatherContoursButton setImage:[UIImage templateImageNamed:isEnabledContourButton ? @"ic_custom_contour_lines" : @"ic_custom_contour_lines_disabled"] forState:UIControlStateNormal];
+    UIColor *color = [UIColor colorNamed:isEnabledContourButton ? ACColorNameMapButtonBgColorActive : ACColorNameMapButtonBgColorDefault];
+
+    _weatherContoursButton.tintColorDay = color.dark;
+    _weatherContoursButton.tintColorNight = color.light;
+    [_weatherContoursButton updateColorsForPressedState:NO];
 }
 
 - (void)updateStateWeatherLayersButton
 {
-    [_weatherLayersButton setImage:[UIImage templateImageNamed:OAWeatherHelper.sharedInstance.allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
+    BOOL allLayersAreDisabled = OAWeatherHelper.sharedInstance.allLayersAreDisabled;
+    [_weatherLayersButton setImage:[UIImage templateImageNamed:allLayersAreDisabled ? @"ic_custom_overlay_map_disabled" : @"ic_custom_overlay_map"] forState:UIControlStateNormal];
+    
+    UIColor *color = [UIColor colorNamed:allLayersAreDisabled ? ACColorNameMapButtonBgColorDefault : ACColorNameMapButtonBgColorActive];
+    
+    _weatherLayersButton.tintColorDay = color.dark;
+    _weatherLayersButton.tintColorNight = color.light;
+    [_weatherLayersButton updateColorsForPressedState:NO];
 }
 
 - (CGFloat) getExtraScreenOffset
@@ -523,20 +533,6 @@ static const float kDistanceMeters = 100.0;
     [_zoomOutButton updateColorsForPressedState:NO];
 
     [self updateMapModeButton];
-    
-    [self updateStateWeatherContoursButton];
-    UIColor *color = [UIColor colorNamed:ACColorNameMapButtonBgColorDefault];
-    UIColor *tintLightColor = color.light;
-    UIColor *tintDarkColor = color.dark;
-    _weatherContoursButton.tintColorDay = tintDarkColor;
-    _weatherContoursButton.tintColorNight = tintLightColor;
-    [_weatherContoursButton updateColorsForPressedState:NO];
-    
-    [self updateStateWeatherLayersButton];
-
-    _weatherLayersButton.tintColorDay = tintDarkColor;
-    _weatherLayersButton.tintColorNight = tintLightColor;
-    [_weatherLayersButton updateColorsForPressedState:NO];
 
     [_optionsMenuButton setImage:[UIImage templateImageNamed:@"ic_custom_drawer"] forState:UIControlStateNormal];
     [_optionsMenuButton updateColorsForPressedState:NO];
@@ -843,6 +839,9 @@ static const float kDistanceMeters = 100.0;
 
 - (void) showWeatherButton
 {
+    [self updateStateWeatherContoursButton];
+    [self updateStateWeatherLayersButton];
+    
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(hideWeatherButtonImpl) object:nil];
     [NSObject cancelPreviousPerformRequestsWithTarget:self selector:@selector(showWeatherButtonImpl) object:nil];
     [self performSelector:@selector(showWeatherButtonImpl) withObject:NULL afterDelay:0.];

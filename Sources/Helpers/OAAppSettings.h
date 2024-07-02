@@ -890,6 +890,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonInteger *customRouteColorDay;
 @property (nonatomic) OACommonInteger *customRouteColorNight;
 @property (nonatomic) OACommonColoringType *routeColoringType;
+@property (nonatomic) OACommonString *routeGradientPalette;
 @property (nonatomic) OACommonString *routeInfoAttribute;
 @property (nonatomic) OACommonString *routeLineWidth;
 @property (nonatomic) OACommonBoolean *routeShowTurnArrows;

@@ -10,7 +10,7 @@
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OALocationServices.h"
-#import "OARouteColorizationHelper.h"
+#import "OARouteColorize.h"
 #import "OAMapUtils.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"

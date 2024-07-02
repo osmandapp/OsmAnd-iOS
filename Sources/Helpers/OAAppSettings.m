@@ -160,6 +160,7 @@ static NSString * const routeRecalculationDistanceKey = @"routeRecalculationDist
 static NSString * const customRouteColorDayKey = @"customRouteColorDay";
 static NSString * const customRouteColorNightKey = @"customRouteColorNight";
 static NSString * const routeColoringTypeKey = @"routeColoringType";
+static NSString * const routeGradientPaletteKey = @"route_gradient_palette";
 static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
 static NSString * const routeLineWidthKey = @"routeLineWidth";
 static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
@@ -4126,6 +4127,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
+
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:@"default"];
+        [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
         [_profilePreferences setObject:_routeInfoAttribute forKey:@"route_info_attribute"];

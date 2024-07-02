@@ -264,6 +264,18 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return nil;
 }
 
+- (EOAColorizationType)toColorizationType
+{
+    if (self == self.class.SPEED)
+        return EOAColorizationTypeSpeed;
+    else if (self == self.class.ALTITUDE)
+        return EOAColorizationTypeElevation;
+    else if (self == self.class.SLOPE)
+        return EOAColorizationTypeSlope;
+    else
+        return EOAColorizationTypeNone;
+}
+
 + (NSString *) getRouteInfoAttribute:(NSString *)name
 {
     return name.length > 0 && [name hasPrefix:ROUTE_INFO_PREFIX] ? name : nil;

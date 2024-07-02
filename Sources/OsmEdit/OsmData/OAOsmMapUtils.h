@@ -13,12 +13,17 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class OAWay;
+@class OAWay, OANode;
 
 @interface OAOsmMapUtils : NSObject
 
 +(CLLocationCoordinate2D)getWeightCenterForWay:(OAWay *)way;
 
++ (void)simplifyDouglasPeucker:(NSArray<OANode *> *)nodes
+                         start:(NSInteger)start
+                           end:(NSInteger)end
+                        result:(NSMutableArray<OANode *> *)result
+                       epsilon:(double)epsilon;
 @end
 
 NS_ASSUME_NONNULL_END

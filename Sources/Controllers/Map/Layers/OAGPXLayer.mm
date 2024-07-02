@@ -21,7 +21,7 @@
 #import "OASavingTrackHelper.h"
 #import "OAWaypointsMapLayerProvider.h"
 #import "OAFavoritesLayer.h"
-#import "OARouteColorizationHelper.h"
+#import "OARouteColorize.h"
 #import "OAGPXAppearanceCollection.h"
 #import "QuadRect.h"
 #import "OAMapUtils.h"
@@ -30,6 +30,7 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
+#import "OAColorPaletteHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/LatLon.h>
@@ -67,6 +68,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
+    NSString *_gradientPalette;
 }
 
 - (NSString *) layerId
@@ -77,6 +79,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 - (void) initLayer
 {
     [super initLayer];
+
+    _gradientPalette = @"default";
 
     _splitLock = [[NSObject alloc] init];
     _splitLabelsQueue = [[NSOperationQueue alloc] init];
@@ -271,12 +275,21 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                OARouteColorizationHelper *routeColorization =
-                        [[OARouteColorizationHelper alloc] initWithGpxFile:doc
-                                analysis:[doc getAnalysis:0]
-                                                                      type:type.toGradientScaleType.toColorizationType
+                ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[type toColorizationType] gradientPaletteName:_gradientPalette];
+                OARouteColorize *colorizationHelper =
+                        [[OARouteColorize alloc] initWithGpxFile:doc
+                                                                  analysis:[doc getAnalysis:0]
+                                                                      type:[[type toGradientScaleType] toColorizationType]
+                                                                   palette:colorPalette
                                                            maxProfileSpeed:0];
-                _cachedColors[key] = routeColorization ? [routeColorization getResult] : QList<OsmAnd::FColorARGB>();
+                _cachedColors[key].clear();
+                if (colorizationHelper)
+                {
+                    for (OARouteColorizationPoint *colorizationPoint in [colorizationHelper getResult])
+                    {
+                        _cachedColors[key].append(OsmAnd::ColorARGB(colorizationPoint.color));
+                    }
+                }
             }
             else if ([type isRouteInfoAttribute]
                     && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]

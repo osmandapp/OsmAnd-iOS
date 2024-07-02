@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OAColorizationType.h"
 
 @class OAGPXDocument, OAGradientScaleType, OARouteCalculationResult;
 
@@ -35,6 +36,7 @@
 - (BOOL) isAvailableInSubscription;
 
 - (OAGradientScaleType *) toGradientScaleType;
+- (EOAColorizationType) toColorizationType;
 
 - (NSString *) getName:(NSString *)routeInfoAttribute;
 - (BOOL) isCustomColor;

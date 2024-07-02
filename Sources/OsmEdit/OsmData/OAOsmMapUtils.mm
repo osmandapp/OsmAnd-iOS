@@ -7,6 +7,7 @@
 //
 
 #import "OAOsmMapUtils.h"
+#import "OAMapUtils.h"
 #import "OANode.h"
 #import "OAWay.h"
 
@@ -425,6 +426,41 @@
     }
     
     return [[OACell alloc] initWithCenter:x / area y:y / area h:0 rings:rings];
+}
+
++ (void)simplifyDouglasPeucker:(NSArray<OANode *> *)nodes
+                         start:(NSInteger)start
+                           end:(NSInteger)end
+                        result:(NSMutableArray<OANode *> *)result
+                       epsilon:(double)epsilon
+{
+    double dmax = -DBL_MAX;
+    NSInteger index = -1;
+
+    OANode *startPt = nodes[start];
+    OANode *endPt = nodes[end];
+
+    for (NSInteger i = start + 1; i < end; i++)
+    {
+        OANode *pt = nodes[i];
+        double d = [OAMapUtils getOrthogonalDistance:[[CLLocation alloc] initWithLatitude:[pt getLatitude] longitude:[pt getLongitude]]
+                                        fromLocation:[[CLLocation alloc] initWithLatitude:[startPt getLatitude] longitude:[startPt getLongitude]]
+                                          toLocation:[[CLLocation alloc] initWithLatitude:[endPt getLatitude] longitude:[endPt getLongitude]]];
+        if (d > dmax)
+        {
+            dmax = d;
+            index = i;
+        }
+    }
+    if (dmax > epsilon)
+    {
+        [self simplifyDouglasPeucker:nodes start:start end:index result:result epsilon:epsilon];
+        [self simplifyDouglasPeucker:nodes start:index end:end result:result epsilon:epsilon];
+    }
+    else
+    {
+        [result addObject:endPt];
+    }
 }
 
 @end

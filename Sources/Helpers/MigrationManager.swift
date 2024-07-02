@@ -413,7 +413,7 @@ final class MigrationManager: NSObject {
 
             let terrainMode = plugin.getTerrainMode()
             for appMode in OAApplicationMode.allPossibleValues() {
-                if plugin.terrainModeType.get(appMode) == TerrainMode.TerrainType.hillshade.rawValue {
+                if plugin.terrainModeType.get(appMode) == TerrainMode.TerrainType.hillshade.name {
                     if let oldHillshadeMinZoom, let oldHillshadeMaxZoom {
                         terrainMode?.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode), mode: appMode)
                     }

@@ -12,10 +12,26 @@ import Foundation
 @objcMembers
 final class TerrainMode: NSObject {
 
-    enum TerrainType: String {
+    @objc enum TerrainType: Int32 {
         case hillshade
         case slope
         case height
+
+        var name: String {
+            switch self {
+            case .hillshade: "hillshade"
+            case .slope: "slope"
+            case .height: "height"
+            }
+        }
+    }
+
+    @objcMembers
+    final class TerrainTypeWrapper: NSObject {
+
+        static func getNameFor(type: TerrainType) -> String {
+            type.name
+        }
     }
 
     static let defaultKey = "default"
@@ -147,7 +163,7 @@ final class TerrainMode: NSObject {
 
     func getKeyName() -> String {
         if key == Self.defaultKey || key == Self.altitudeDefaultKey {
-            return type.rawValue
+            return type.name
         }
         return key
     }
@@ -157,7 +173,7 @@ final class TerrainMode: NSObject {
     }
 
     func getCacheFileName() -> String {
-        type.rawValue + ".cache"
+        type.name + ".cache"
     }
 
     func setZoomValues(minZoom: Int32, maxZoom: Int32) {

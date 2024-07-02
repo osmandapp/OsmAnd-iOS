@@ -33,23 +33,24 @@
 #import "OAMapUtils.h"
 #import "OADestination.h"
 #import "OACollatorStringMatcher.h"
-
-// Adapters
-#import "OAResourcesUISwiftHelper.h"
-#import "OATravelGuidesHelper.h"
-#import "OAGPXDocumentAdapter.h"
-#import "OATravelLocalDataDbHelper.h"
-#import "OAPOI.h"
-
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OALocationConvert.h"
 #import "OAWidgetsVisibilityHelper.h"
 #import "OADistanceAndDirectionsUpdater.h"
-#import "OAHistoryViewController.h"
 #import "OAAppDelegate.h"
 #import "SpeedLimitWrapper.h"
+#import "OAIndexConstants.h"
+#import "QuadRect.h"
+#import "OASearchPoiTypeFilter.h"
+#import "OAPOI.h"
+
+// Adapters
+#import "OAResourcesUISwiftHelper.h"
+#import "OATravelGuidesHelper.h"
+#import "OAGPXDocumentAdapter.h"
+#import "OATravelLocalDataDbHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -130,6 +131,7 @@
 #import "OAMainSettingsViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
+#import "OAHistoryViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -145,12 +147,6 @@
 #import "OASearchMoreCell.h"
 #import "OADividerCell.h"
 #import "OADownloadProgressBarCell.h"
-
-// Other
-#import "OAIndexConstants.h"
-#import "QuadRect.h"
-#import "OASearchPoiTypeFilter.h"
-#import "OAPOI.h"
 #import "OADirectionTableViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"

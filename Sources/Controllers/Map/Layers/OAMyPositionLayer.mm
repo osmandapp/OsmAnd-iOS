@@ -288,6 +288,9 @@ typedef enum {
             _mapView.mapMarkersAnimator->animatePositionTo(marker, target31, animationDuration,  OsmAnd::Animator::TimingFunction::Linear);
             if (iconKey)
                 _mapView.mapMarkersAnimator->animateDirectionTo(marker, iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading), kRotateAnimationTime,  OsmAnd::Animator::TimingFunction::Linear);
+            
+            if (marker->model3D != nullptr)
+                _mapView.mapMarkersAnimator->animateModel3DDirectionTo(marker, OsmAnd::Utilities::normalizedAngleDegrees(heading), kRotateAnimationTime, OsmAnd::Animator::TimingFunction::Linear);
         }
         else
         {
@@ -295,6 +298,9 @@ typedef enum {
             [_mapView setMyLocationCirclePosition:(target31)];
             if (iconKey)
                 marker->setOnMapSurfaceIconDirection(iconKey, OsmAnd::Utilities::normalizedAngleDegrees(heading));
+            
+            if (marker->model3D != nullptr)
+                marker->setModel3DDirection(OsmAnd::Utilities::normalizedAngleDegrees(heading));
         }
 
         if (visible && marker->isHidden())
@@ -494,11 +500,8 @@ typedef enum {
         if ([navIcon isModel])
         {
             navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callbackOnLoad:^(OAModel3dWrapper * _Nullable model) {
-                if (model && mode == [OAAppSettings.sharedManager currentMode])
-                {
-                    [self refreshMarkersCollection];
-                    return;
-                }
+                [self refreshMarkersCollection];
+                return;
             }];
             if (!navigationModel)
             {
@@ -513,11 +516,8 @@ typedef enum {
             if (![navIcon isModel] || navigationModel)
             {
                 locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callbackOnLoad:^(OAModel3dWrapper *_Nullable model) {
-                    if (model && mode == [OAAppSettings.sharedManager currentMode])
-                    {
-                        [self refreshMarkersCollection];
-                        return;
-                    }
+                    [self refreshMarkersCollection];
+                    return;
                 }];
                 if (!locationModel)
                 {
@@ -594,17 +594,25 @@ typedef enum {
         {
             [locationModel setMainColor:iconColor];
             locationModelCpp = [locationModel model];
+            locationHeadingSkImage = [OANativeUtilities skImageFromCGImage:[locIcon headingIconWithColor:iconColor].CGImage];
+            
+            c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+            locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
+            
             
             c.locationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
             locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
             
             c.locationHeadingIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
             locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
+            sk_sp<SkImage> locationHeadingIcon = locationHeadingSkImage;
+            locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
+                                                               OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingIcon scaleFactor:_textScaleFactor]));
             c.locationMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
             
             locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
-            locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
             c.straightLocationMainIconKeyDay = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
+            locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
             c.straightLocationMarkerDay = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
             
             locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();
@@ -613,6 +621,9 @@ typedef enum {
             
             c.locationHeadingIconKeyNight = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(2);
             locationAndCourseMarkerBuilder.setModel3D(locationModelCpp);
+            sk_sp<SkImage> locationHeadingNightIcon = locationHeadingSkImage;
+            locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
+                                                               OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingNightIcon scaleFactor:_textScaleFactor]));
             c.locationMarkerNight = locationAndCourseMarkerBuilder.buildAndAddToCollection(c.markerCollection);
             
             locationAndCourseMarkerBuilder.clearOnMapSurfaceIcons();

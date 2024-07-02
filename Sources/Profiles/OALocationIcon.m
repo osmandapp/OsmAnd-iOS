@@ -104,6 +104,8 @@
         return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_car_location_view_angle"] color:color];
     else if ([iconName isEqualToString:LOCATION_ICON_BICYCLE])
         return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_bicycle_location_view_angle"] color:color];
+    else if ([self isModel:iconName])
+        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_car_location_view_angle"] color:color];
     return nil;
 }
 

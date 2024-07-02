@@ -88,6 +88,12 @@
         centerImage = [UIImage imageNamed:@"map_navigation_car_center"];
         topImage = [UIImage imageNamed:@"map_navigation_car_top"];
     }
+    else if ([self isModel:iconName])
+    {
+        bottomImage = [UIImage imageNamed:@"map_navigation_default_bottom"];
+        centerImage = [UIImage imageNamed:@"map_navigation_default_center"];
+        topImage = [UIImage imageNamed:@"map_navigation_default_top"];
+    }
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 

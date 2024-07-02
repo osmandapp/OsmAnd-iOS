@@ -252,7 +252,7 @@ static const float kDistanceMeters = 100.0;
 {
     NSString *contourName = OsmAndApp.instance.data.contourName;
     BOOL isEnabledContourButton = [[OAMapStyleSettings sharedInstance] isAnyWeatherContourLinesEnabled] || contourName.length > 0;
-    [_weatherContoursButton setImage:[UIImage templateImageNamed:isEnabledContourButton ? @"ic_custom_contour_lines" : @"ic_custom_contour_lines_disabled" ] forState:UIControlStateNormal];
+    [_weatherContoursButton setImage:[UIImage templateImageNamed:isEnabledContourButton ? @"ic_custom_contour_lines" : @"ic_custom_contour_lines_disabled"] forState:UIControlStateNormal];
 }
 
 - (void)updateStateWeatherLayersButton
@@ -661,7 +661,6 @@ static const float kDistanceMeters = 100.0;
 
     [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
-
 
 - (IBAction) onOptionsMenuButtonDown:(id)sender
 {
@@ -1410,7 +1409,6 @@ static const float kDistanceMeters = 100.0;
         _weatherLayersButton.frame = CGRectMake(CGRectGetMaxX(_weatherToolbar.frame) + 20, bottomOffset - _weatherLayersButton.bounds.size.height, _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
         
         _weatherContoursButton.frame = CGRectMake(CGRectGetMaxX(_weatherToolbar.frame) + 20, CGRectGetMinY(_weatherLayersButton.frame) - 70, _weatherContoursButton.bounds.size.width, _weatherContoursButton.bounds.size.height);
-        
     } else {
         _weatherLayersButton.frame = CGRectMake([self getExtraScreenOffset], bottomOffset - _weatherLayersButton.bounds.size.height - (_mapInfoController.weatherToolbarVisible ? 0. : (kButtonOffset + _optionsMenuButton.bounds.size.height)), _weatherLayersButton.bounds.size.width, _weatherLayersButton.bounds.size.height);
         

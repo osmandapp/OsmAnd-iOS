@@ -3,7 +3,7 @@
     <device id="retina6_72" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22684"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="22685"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -60,16 +60,6 @@
                         </userDefinedRuntimeAttribute>
                     </userDefinedRuntimeAttributes>
                 </slider>
-                <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="SUC-UW-N83" customClass="OAFoldersCollectionView">
-                    <rect key="frame" x="0.0" y="195" width="414" height="55"/>
-                    <color key="backgroundColor" white="1" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="8" minimumInteritemSpacing="8" id="e16-bA-b6i">
-                        <size key="itemSize" width="128" height="128"/>
-                        <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                        <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                        <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                    </collectionViewFlowLayout>
-                </collectionView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="aBx-xP-AGq"/>
             <color key="backgroundColor" name="viewBg"/>
@@ -84,7 +74,6 @@
                 <constraint firstItem="cAi-yw-VnC" firstAttribute="top" secondItem="IOB-SJ-nfi" secondAttribute="bottom" constant="12" id="Ita-8w-MRE"/>
                 <constraint firstItem="IOB-SJ-nfi" firstAttribute="top" secondItem="jQ7-Py-E2J" secondAttribute="top" constant="12" id="Q4O-RA-aPV"/>
                 <constraint firstItem="F33-ES-4SU" firstAttribute="top" secondItem="cAi-yw-VnC" secondAttribute="bottom" id="dz4-qE-mhY"/>
-                <constraint firstItem="aBx-xP-AGq" firstAttribute="bottom" secondItem="SUC-UW-N83" secondAttribute="bottom" id="g7S-lu-qL5"/>
                 <constraint firstItem="iIX-79-Rqj" firstAttribute="top" secondItem="F33-ES-4SU" secondAttribute="bottom" id="gF4-vo-Pyr"/>
                 <constraint firstItem="iIX-79-Rqj" firstAttribute="leading" secondItem="jQ7-Py-E2J" secondAttribute="leading" id="iN5-nY-ze7"/>
                 <constraint firstAttribute="trailing" secondItem="cAi-yw-VnC" secondAttribute="trailing" id="ptP-sB-KZE"/>
@@ -95,7 +84,6 @@
             <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
             <connections>
                 <outlet property="dateCollectionView" destination="IOB-SJ-nfi" id="Z4t-hq-2UG"/>
-                <outlet property="layersCollectionView" destination="SUC-UW-N83" id="DDs-DN-NZe"/>
                 <outlet property="timeSliderView" destination="H2C-uP-knh" id="fZf-5P-ZH3"/>
                 <outlet property="weatherStackView" destination="F33-ES-4SU" id="5lS-ws-Kcc"/>
             </connections>

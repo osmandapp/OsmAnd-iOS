@@ -28,7 +28,6 @@
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
-@property (weak, nonatomic) IBOutlet OAFoldersCollectionView *layersCollectionView;
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
 @property (weak, nonatomic) IBOutlet OASegmentedSlider *timeSliderView;
 @property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
@@ -88,15 +87,11 @@
     _previousSelectedDayIndex = 0;
 
     _layersHandler = [[OAWeatherToolbarLayersHandler alloc] init];
-    _layersHandler.delegate = self;
     _datesHandler = [[OAWeatherToolbarDatesHandler alloc] init];
     _datesHandler.delegate = self;
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
-    self.layersCollectionView.foldersDelegate = _layersHandler;
-    [self.layersCollectionView setOnlyIconCompact:YES];
-    [self.layersCollectionView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                  action:@selector(handleLongPressOnLayer:)]];
+    
     self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
@@ -162,9 +157,7 @@
         [_datesHandler updateData];
         NSInteger selectedTimeIndex = [self getSelectedTimeIndex:[OAUtilities getCurrentTimezoneDate:[NSDate date]]];
         self.timeSliderView.selectedMark = selectedTimeIndex;
-        [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers index:-1];
-        [self updateData:[_datesHandler getData] type:EOAWeatherToolbarDates index:0];
-        [self.layersCollectionView reloadData];
+        [self updateData:[_datesHandler getData] index:0];
         [self.dateCollectionView reloadData];
         [self configureWidgetControlsStackView];
     });
@@ -174,27 +167,8 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_layersHandler updateData];
-        [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers index:-1];
-        [self.layersCollectionView reloadData];
         [self configureWidgetControlsStackView];
     });
-}
-
-- (void)handleLongPressOnLayer:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
-    {
-        CGPoint point = [gestureRecognizer locationInView:self.layersCollectionView];
-        NSIndexPath *indexPath = [self.layersCollectionView indexPathForItemAtPoint:point];
-        if (indexPath)
-        {
-            [self.layersCollectionView reloadData];
-            _selectedLayerIndex = indexPath.row;
-            _needsSettingsForToolbar = YES;
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-            [mapPanel.hudViewController changeWeatherToolbarVisible];
-        }
-    }
 }
 
 - (void) awakeFromNib
@@ -450,33 +424,25 @@
 
 #pragma mark - OAWeatherToolbarDelegate
 
-- (void)updateData:(NSArray *)data type:(EOAWeatherToolbarDelegateType)type index:(NSInteger)index
+- (void)updateData:(NSArray *)data index:(NSInteger)index
 {
-    if (type == EOAWeatherToolbarLayers)
-    {
-        [self.layersCollectionView setValues:data withSelectedIndex:index];
-        [self.layersCollectionView reloadData];
-    }
-    else if (type == EOAWeatherToolbarDates)
-    {
-        [self updateTimeValues:data[index][@"value"]];
-        [self setCurrentMark:index];
-        [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:index > 0 ? 0 : 2];
-
-        NSInteger selectedTimeIndex = self.timeSliderView.selectedMark;
-        if (_previousSelectedDayIndex == 0 && index > 0)
-            selectedTimeIndex = (NSInteger) round(selectedTimeIndex / 3);
-        else if (_previousSelectedDayIndex > 0 && index == 0)
-            selectedTimeIndex *= 3;
-
-        self.timeSliderView.selectedMark = selectedTimeIndex;
-        [self timeChanged:nil];
-
-        [self.dateCollectionView setValues:data withSelectedIndex:index];
-        [self.dateCollectionView reloadData];
-        _previousSelectedDayIndex = index;
-        [self updateWidgetsInfo];
-    }
+    [self updateTimeValues:data[index][@"value"]];
+    [self setCurrentMark:index];
+    [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:index > 0 ? 0 : 2];
+    
+    NSInteger selectedTimeIndex = self.timeSliderView.selectedMark;
+    if (_previousSelectedDayIndex == 0 && index > 0)
+        selectedTimeIndex = (NSInteger) round(selectedTimeIndex / 3);
+    else if (_previousSelectedDayIndex > 0 && index == 0)
+        selectedTimeIndex *= 3;
+    
+    self.timeSliderView.selectedMark = selectedTimeIndex;
+    [self timeChanged:nil];
+    
+    [self.dateCollectionView setValues:data withSelectedIndex:index];
+    [self.dateCollectionView reloadData];
+    _previousSelectedDayIndex = index;
+    [self updateWidgetsInfo];
 }
 
 @end

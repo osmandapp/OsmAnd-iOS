@@ -295,8 +295,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             else if ([type isRouteInfoAttribute]
                      && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
                         || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
-                        || _cachedColors[key].isEmpty()
-                        || refreshColors))
+                        || _cachedColors[key].isEmpty()))
             {
                 OARouteImporter *routeImporter = [[OARouteImporter alloc] initWithGpxFile:doc];
                 auto segs = [routeImporter importRoute];
@@ -319,8 +318,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             }
             else if ([type isSolidSingleColor]
                      && ([cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_NONE
-                         || !_cachedColors[key].isEmpty()
-                         || refreshColors))
+                         || !_cachedColors[key].isEmpty()))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;

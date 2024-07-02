@@ -745,10 +745,10 @@
 
 - (void) refreshRoute
 {
-    [self refreshRouteWithSync:YES];
+    [self refreshRouteWithSync:YES refreshColors:NO];
 }
 
-- (void) refreshRouteWithSync:(BOOL)sync
+- (void) refreshRouteWithSync:(BOOL)sync refreshColors:(BOOL)refreshColors
 {
     if (!_routeAttributes)
         _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
@@ -816,10 +816,13 @@
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         BOOL routeUpdated = NO;
         if ([routeColoringType isGradient]
-                && (_route != route || _prevRouteColoringType != routeColoringType || _colorizationScheme != COLORIZATION_GRADIENT))
+                && (_route != route
+                    || _prevRouteColoringType != routeColoringType
+                    || _colorizationScheme != COLORIZATION_GRADIENT
+                    || refreshColors))
         {
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-            ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[routeColoringType toColorizationType] gradientPaletteName:_routeGradientPalette];
+            ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[routeColoringType toColorizationType] gradientPaletteName:_routeGradientPalette refresh:refreshColors];
             OARouteColorize *colorizationHelper =
                     [[OARouteColorize alloc] initWithGpxFile:gpx
                                                               analysis:[gpx getAnalysis:0]
@@ -979,7 +982,7 @@
 - (void) onMapFrameAnimatorsUpdated
 {
     if (_routingHelper && ![_routingHelper isPublicTransportMode])
-        [self refreshRouteWithSync:NO];
+        [self refreshRouteWithSync:NO refreshColors:NO];
 }
 
 @end

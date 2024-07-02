@@ -15,7 +15,8 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapWidgetRegistry.h"
-
+#import "OAMapLayers.h"
+#import "OARouteLayer.h"
 #import "OASettingsItem.h"
 #import "OAAvoidRoadsSettingsItem.h"
 #import "OAMapSourcesSettingsItem.h"
@@ -698,7 +699,7 @@
     OsmAndAppInstance app = OsmAndApp.instance;
     BOOL updateRoutingFiles = NO;
     BOOL updateResources = NO;
-    BOOL updateColoPalette = NO;
+    BOOL updateColorPalette = NO;
     for (OASettingsItem *item in _items)
     {
         if ([item isKindOfClass:OAFileSettingsItem.class])
@@ -706,15 +707,18 @@
             OAFileSettingsItem *fileItem = (OAFileSettingsItem *)item;
             updateResources = updateResources || fileItem.subtype != EOASettingsItemFileSubtypeUnknown;
             updateRoutingFiles = updateRoutingFiles || fileItem.subtype == EOASettingsItemFileSubtypeRoutingConfig;
-            updateColoPalette = updateColoPalette || fileItem.subtype == EOASettingsItemFileSubtypeColorPalette;
+            updateColorPalette = updateColorPalette || fileItem.subtype == EOASettingsItemFileSubtypeColorPalette;
             
-            if (updateResources && updateRoutingFiles && updateColoPalette)
+            if (updateResources && updateRoutingFiles && updateColorPalette)
                 break;
         }
     }
 
-    if (updateColoPalette)
+    if (updateColorPalette)
+    {
         [app.updateGpxTracksOnMapObservable notifyEvent];
+        [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer refreshRouteWithSync:YES refreshColors:YES];
+    }
     if (updateRoutingFiles)
         [app loadRoutingFiles];
     if (updateResources)

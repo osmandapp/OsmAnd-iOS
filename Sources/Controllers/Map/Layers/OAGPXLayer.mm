@@ -30,7 +30,6 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
-#import "OAColorPaletteHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/LatLon.h>
@@ -276,7 +275,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
-                ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[type toColorizationType] gradientPaletteName:_gradientPalette refresh:refreshColors];
+                ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:[type toColorizationType] gradientPaletteName:_gradientPalette refresh:refreshColors];
                 OARouteColorize *colorizationHelper =
                         [[OARouteColorize alloc] initWithGpxFile:doc
                                                                   analysis:[doc getAnalysis:0]

@@ -583,7 +583,6 @@
 		46330AEF2C034C1100E60CA2 /* FabMarginPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */; };
 		46339CED2891AAC10090BB93 /* OAWeatherForecastViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */; };
 		4635DDE82A02A7DE00D36203 /* ColorItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4635DDE72A02A7DE00D36203 /* ColorItem.swift */; };
-		46374E1F2C333CD100D4C22B /* OAColorPaletteHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 46374E1E2C333CD100D4C22B /* OAColorPaletteHelper.m */; };
 		464076CA2B55B3FC005AA91F /* SimpleWidgetInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */; };
 		464167D428AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */; };
 		464167D528AE4F2D00C6AA8F /* ic_custom_checkbox_unselected@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */; };
@@ -704,6 +703,7 @@
 		46903D6929B5F734004459F1 /* OABaseWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6829B5F734004459F1 /* OABaseWebViewContoller.m */; };
 		46903D6B29B5F77A004459F1 /* OABaseWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */; };
 		46903D6E29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m in Sources */ = {isa = PBXBuildFile; fileRef = 46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */; };
+		46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 46964F752C345448007F3938 /* ColorPaletteHelper.swift */; };
 		46993C0A2986BCB70047F2F5 /* img_help_announcement_time_day@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */; };
 		46A27270281DD05E00FF591D /* osm-carto.render.xml in Resources */ = {isa = PBXBuildFile; fileRef = 46A2726F281DD05D00FF591D /* osm-carto.render.xml */; };
 		46A8FD33297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = 46A8FD32297D985700AF9C0C /* OAUninstallSpeedCamerasViewController.mm */; };
@@ -4060,7 +4060,6 @@
 		46330AEE2C034C1100E60CA2 /* FabMarginPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FabMarginPreference.swift; sourceTree = "<group>"; };
 		46339CEC2891AAC10090BB93 /* OAWeatherForecastViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAWeatherForecastViewController.xib; sourceTree = "<group>"; };
 		4635DDE72A02A7DE00D36203 /* ColorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorItem.swift; sourceTree = "<group>"; };
-		46374E1E2C333CD100D4C22B /* OAColorPaletteHelper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAColorPaletteHelper.m; sourceTree = "<group>"; };
 		463EFDD92C2C92A300549EF7 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWidgetInfo.swift; sourceTree = "<group>"; };
 		464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@2x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@2x.png"; sourceTree = "<group>"; };
@@ -4122,7 +4121,6 @@
 		46453B3E283524E4001F9A3A /* ic_custom_wikipedia_download_colored_big@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wikipedia_download_colored_big@2x.png"; path = "Resources/Icons/ic_custom_wikipedia_download_colored_big@2x.png"; sourceTree = "<group>"; };
 		46453B41283524E5001F9A3A /* ic_custom_wikipedia_download_colored_big@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_wikipedia_download_colored_big@3x.png"; path = "Resources/Icons/ic_custom_wikipedia_download_colored_big@3x.png"; sourceTree = "<group>"; };
 		46453B4728358854001F9A3A /* OAChoosePlanViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAChoosePlanViewController.xib; sourceTree = "<group>"; };
-		4647C7582C2DDA7E00CAC715 /* OAColorPaletteHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAColorPaletteHelper.h; sourceTree = "<group>"; };
 		4647D3532838137A002BBD11 /* OAPlanTypeCardRow.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OAPlanTypeCardRow.xib; sourceTree = "<group>"; };
 		46494277286DB36600A44103 /* ic_custom_compass_rotated@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_rotated@3x.png"; path = "Resources/Icons/ic_custom_compass_rotated@3x.png"; sourceTree = "<group>"; };
 		46494278286DB36700A44103 /* ic_custom_compass_rotated@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_compass_rotated@2x.png"; path = "Resources/Icons/ic_custom_compass_rotated@2x.png"; sourceTree = "<group>"; };
@@ -4196,6 +4194,7 @@
 		46903D6A29B5F77A004459F1 /* OABaseWebViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OABaseWebViewController.xib; sourceTree = "<group>"; };
 		46903D6C29B6649A004459F1 /* OAWikiLanguagesWebViewContoller.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAWikiLanguagesWebViewContoller.h; sourceTree = "<group>"; };
 		46903D6D29B664B2004459F1 /* OAWikiLanguagesWebViewContoller.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAWikiLanguagesWebViewContoller.m; sourceTree = "<group>"; };
+		46964F752C345448007F3938 /* ColorPaletteHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPaletteHelper.swift; sourceTree = "<group>"; };
 		46993C092986BCB60047F2F5 /* img_help_announcement_time_day@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "img_help_announcement_time_day@3x.png"; path = "Resources/Icons/img_help_announcement_time_day@3x.png"; sourceTree = "<group>"; };
 		46A2726F281DD05D00FF591D /* osm-carto.render.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; name = "osm-carto.render.xml"; path = "../resources/rendering_styles/osm-carto.render.xml"; sourceTree = "<group>"; };
 		46A8FD31297D982200AF9C0C /* OAUninstallSpeedCamerasViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAUninstallSpeedCamerasViewController.h; sourceTree = "<group>"; };
@@ -13577,11 +13576,10 @@
 			isa = PBXGroup;
 			children = (
 				463EFDD92C2C92A300549EF7 /* ColorPalette.swift */,
+				46964F752C345448007F3938 /* ColorPaletteHelper.swift */,
 				DA9A2C3526FF0F4D00BEC681 /* OAColoringType.h */,
 				DA9A2C3626FF0F4D00BEC681 /* OAColoringType.mm */,
 				DA58337426FF436800BB42FF /* OAColorizationType.h */,
-				4647C7582C2DDA7E00CAC715 /* OAColorPaletteHelper.h */,
-				46374E1E2C333CD100D4C22B /* OAColorPaletteHelper.m */,
 				DA9A2C2E26FDB72800BEC681 /* OARouteColorize.h */,
 				DA9A2C2F26FDB72800BEC681 /* OARouteColorize.mm */,
 			);
@@ -17156,7 +17154,6 @@
 				DA5A836026C563A800F274C7 /* OAGPXTableViewCell.m in Sources */,
 				32672A0A2AAF3D0200D46608 /* GpxTravelCell.swift in Sources */,
 				DA5A83F526C563A800F274C7 /* OADeleteCustomFiltersViewController.mm in Sources */,
-				46374E1F2C333CD100D4C22B /* OAColorPaletteHelper.m in Sources */,
 				DA5A818126C563A700F274C7 /* OATerrainAction.m in Sources */,
 				DA5A842326C563A800F274C7 /* OAGPXWptListViewController.mm in Sources */,
 				DA5A817F26C563A700F274C7 /* OAUnsupportedAction.m in Sources */,
@@ -17330,6 +17327,7 @@
 				DA5A847126C563A900F274C7 /* OATimeWidgetState.m in Sources */,
 				DA5A815F26C563A700F274C7 /* OALiveMonitoringHelper.m in Sources */,
 				DA5A84B426C563A900F274C7 /* OAInstallMapillaryBottomSheetViewController.mm in Sources */,
+				46964F762C345448007F3938 /* ColorPaletteHelper.swift in Sources */,
 				DA5A839A26C563A800F274C7 /* OALocalResourceInfoCell.m in Sources */,
 				DA5A823926C563A700F274C7 /* OAOsmAccountSettingsViewController.m in Sources */,
 				DA5A815C26C563A700F274C7 /* OAPlugin.mm in Sources */,
@@ -17927,7 +17925,7 @@
 				COMPRESS_PNG_FILES = NO;
 				CONFIGURATION_BUILD_DIR = "$(BUILD_DIR)/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)";
 				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;

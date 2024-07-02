@@ -25,7 +25,6 @@
 #import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
-#import "OAColorPaletteHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -822,7 +821,7 @@
                     || refreshColors))
         {
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-            ColorPalette *colorPalette = [[OAColorPaletteHelper sharedInstance] getGradientColorPaletteSync:[routeColoringType toColorizationType] gradientPaletteName:_routeGradientPalette refresh:refreshColors];
+            ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:[routeColoringType toColorizationType] gradientPaletteName:_routeGradientPalette refresh:refreshColors];
             OARouteColorize *colorizationHelper =
                     [[OARouteColorize alloc] initWithGpxFile:gpx
                                                               analysis:[gpx getAnalysis:0]

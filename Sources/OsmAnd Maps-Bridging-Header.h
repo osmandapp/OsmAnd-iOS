@@ -45,6 +45,7 @@
 #import "QuadRect.h"
 #import "OASearchPoiTypeFilter.h"
 #import "OAPOI.h"
+#import "OARouteColorize.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

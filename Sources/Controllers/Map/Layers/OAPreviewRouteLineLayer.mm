@@ -20,7 +20,6 @@
 #import "OARouteColorize.h"
 #import "OAMapPresentationEnvironment.h"
 #import "OAColoringType.h"
-#import "OAColorPaletteHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
@@ -593,7 +592,7 @@
     if (gradientScaleType)
     {
         EOAColorizationType colorizationType = [gradientScaleType toColorizationType];
-        previewPalette = [[OAColorPaletteHelper sharedInstance] requireGradientColorPaletteSync:colorizationType gradientPaletteName:_routeGradientPalette];
+        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType gradientPaletteName:_routeGradientPalette];
     }
     NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
     for (ColorValue *colorValue in [previewPalette colorValues])

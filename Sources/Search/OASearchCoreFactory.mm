@@ -1281,7 +1281,8 @@
                 {
                     OASearchResult *res = [[OASearchResult alloc] initWithPhrase:phrase];
                     res.localeName = match.translatedValue;
-                    res.object = [[OATopIndexFilter alloc] initWithPoiSubType:entry.key().toNSString() value:match.value];
+                    //TODO crash in UI
+                    //res.object = [[OATopIndexFilter alloc] initWithPoiSubType:entry.key().toNSString() value:match.value];
                     [self addPoiTypeResult:phrase resultMatcher:resultMatcher topFiltersOnly:NO stdFilterId:nil searchResult:res];
                 }
             }
@@ -1407,7 +1408,7 @@
     return _nameFilter;
 }
 
-- (void)searchPoi:(int)countExtraWords nameFilter:(NSString *)nameFilter phrase:(OASearchPhrase *)phrase poiAdditionals:(NSMutableOrderedSet<NSString *> *)poiAdditionals poiTypeFilter:(OASearchPoiTypeFilter *)poiTypeFilter resultMatcher:(OASearchResultMatcher *)resultMatcher
+- (void)searchPoi:(int)countExtraWords nameFilter:(NSString *)nameFilter phrase:(OASearchPhrase *)phrase poiAdditionals:(NSMutableOrderedSet<NSString *> *)poiAdditionals poiTypeFilter:(OASearchPoiTypeFilter *)poiTypeFilter /*poiAdditionalFilter:(OASearchPoiAdditionalFilter *)poiAdditionalFilter*/ resultMatcher:(OASearchResultMatcher *)resultMatcher
 {
     NSMutableSet<NSString *> *searchedPois = [NSMutableSet new];
     OsmAndAppInstance app = [OsmAndApp instance];
@@ -1481,6 +1482,10 @@
             continue;
         searchCriteria->localResources = {r};
         
+        /* Test
+        searchCriteria->poiAdditionalFilter = QPair<QString, QString>("top_index_brand", "McDonald's");
+        searchCriteria->categoriesFilter = QHash<QString, QStringList>();//ACCEPT_ALL_POI_TYPE_FILTER;
+         */
         search->performSearch(*searchCriteria,
                               [self, &rm]
                               (const OsmAnd::ISearch::Criteria& criteria, const OsmAnd::ISearch::IResultEntry& resultEntry)
@@ -1505,6 +1510,7 @@
 {
     _unselectedPoiType = nil;
     OASearchPoiTypeFilter *poiTypeFilter = nil;
+    //OASearchPoiAdditionalFilter *poiAdditionalFilter = nil;
     NSString *nameFilter = nil;
     int countExtraWords = 0;
     NSMutableOrderedSet<NSString *> *poiAdditionals = [NSMutableOrderedSet new];
@@ -1515,6 +1521,11 @@
             poiTypeFilter = [self getPoiTypeFilter:(OAPOIBaseType *)obj poiAdditionals:poiAdditionals];
         else if ([obj isKindOfClass:OASearchPoiTypeFilter.class])
             poiTypeFilter = (OASearchPoiTypeFilter *) obj;
+        /*else if([obj isKindOfClass:OASearchPoiAdditionalFilter.class])
+        {
+            poiTypeFilter = ACCEPT_ALL_POI_TYPE_FILTER;
+            poiAdditionalFilter = (OASearchPoiAdditionalFilter *) obj;
+        }*/
         else
             @throw [NSException exceptionWithName:@"UnsupportedOperationException" reason:@"Incorrect last result" userInfo:nil];
         
@@ -1567,7 +1578,7 @@
     _nameFilter = nameFilter;
     if (poiTypeFilter != nil)
     {
-        [self searchPoi:countExtraWords nameFilter:nameFilter phrase:phrase poiAdditionals:poiAdditionals poiTypeFilter:poiTypeFilter resultMatcher:resultMatcher];
+        [self searchPoi:countExtraWords nameFilter:nameFilter phrase:phrase poiAdditionals:poiAdditionals poiTypeFilter:poiTypeFilter /*poiAdditionalFilter:poiAdditionalFilter*/ resultMatcher:resultMatcher];
     }
     return YES;
 }

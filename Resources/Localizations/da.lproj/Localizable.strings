@@ -55,7 +55,7 @@
 "daynight_mode_night" = "Nat";
 "map_widget_renderer" = "Kortstilart";
 "map_settings_overunder" = "Over-/underlejring";
-"map_settings_under" = "Underlejret";
+"map_settings_under" = "Underlejring";
 "shared_string_none" = "Ingen";
 "shared_string_online_maps" = "Onlinekort";
 "map_settings_avail_lay" = "Tilgængelige lag";
@@ -202,7 +202,7 @@
 "track_continue_rec_q" = "Fortsæt optagelsen?";
 "map_settings_type" = "Korttype";
 "map_mode" = "Korttilstand";
-"map_settings_over" = "Overlejret";
+"map_settings_over" = "Overlejring";
 "map_settings_offline" = "Stil for offline kort";
 "shared_string_transparency" = "Gennemsigtighed";
 // Intro
@@ -1083,10 +1083,10 @@
 "toggle_online_notes" = "Skift visning af OSM-noter";
 "toggle_local_edits" = "Skift visning af lokale OSM-noter";
 "quick_action_add_poi" = "Tilføj IP";
-"quick_action_map_style" = "Skift kortstil";
+"quick_action_map_style" = "Kortstil";
 "quick_action_map_source" = "Skift kortkilde";
-"quick_action_map_overlay" = "Skift kortoverlejring";
-"quick_action_map_underlay" = "Skift kortunderlejring";
+"quick_action_map_overlay" = "Overlejring";
+"quick_action_map_underlay" = "Underlejring";
 "quick_action_replace_destination" = "Udskift destination";
 "add_destination" = "Tilføj destination";
 "quick_action_add_first_intermediate" = "Tilføj første mellemliggende punkt";
@@ -1273,7 +1273,7 @@
 "rendering_attr_undefined_name" = "Ikke defineret";
 "rendering_attr_piste_difficulty_expert_name" = "Ekspert";
 "rendering_attr_contourLines_name" = "Vis højdekurver";
-"rendering_attr_showAccess_name" = "Vis adgangsbegrænsninger";
+"rendering_attr_showAccess_name" = "Vis adgangs- og vejafgiftsbegrænsninger";
 "routing_attr_allow_intermediate_name" = "Tillad middelsvære ruter";
 "routing_attr_avoid_stairs_name" = "Ingen trapper";
 "rendering_value_brown_name" = "Brun";
@@ -1796,7 +1796,7 @@
 "routing_attr_length_name" = "Længde";
 "default_profile_descr" = "Vælg en profil, der skal bruges ved start af app.";
 "shared_string_next" = "Næste";
-"quick_action_remove_next_destination" = "Slet næste destinationspunkt";
+"quick_action_remove_next_destination" = "Næste destinationspunkt";
 "quick_action_mapillary_show" = "Vis Mapillary";
 "next_segment" = "Næste segment";
 "arrived_at_destination" = "Ankommet.";
@@ -2708,7 +2708,7 @@
 "routing_attr_length_description" = "Angiv køretøjslængde der skal være tilladt på ruter.";
 "rendering_attr_OSMMapperAssistantNote_description" = "Vis notat-mærker";
 "rendering_attr_natureReserves_name" = "Naturreservat";
-"rendering_attr_showWaterwayTunnels_name" = "Tunneler til vandveje";
+"rendering_attr_showWaterwayTunnels_name" = "Øg synlighed af vandveje";
 "routing_attr_hazmat_category_description" = "Kategori af farligt gods / Tag højde for adgangstilladelser for farligt gods";
 "rendering_attr_horse_scale_impossible_name" = "Umulig";
 "routing_attr_allow_streams_description" = "Tillad vandløb og afløb";
@@ -2744,7 +2744,7 @@
 "rendering_attr_weatherWindSpeedContours_name" = "Konturlinjer for vindhastighed";
 "rendering_attr_weatherPrecipitationContours_name" = "Nedbørs-konturlinjer";
 "rendering_attr_showTramRoutes_name" = "Sporvognsruter";
-"rendering_attr_showWaterwayTunnels_description" = "Skjul ikke vandvejstunneller";
+"rendering_attr_showWaterwayTunnels_description" = "Øg synlighed af vandvejstunneller";
 "routing_attr_difficulty_preference_intermediate_name" = "Mellemsvær";
 "rendering_attr_depthContourColorScheme_description" = "Farvesætning for dybdekonturlinjer";
 "rendering_attr_horse_scale_demanding_name" = "Krævende";
@@ -3119,7 +3119,7 @@
 "no_travel_guides_data_title" = "Du har ikke rejsedata";
 "map_orientation_landscape" = "Landskab";
 "map_widget_ant_heart_rate_desc" = "Viser brugerens puls under en given aktivitet i realtid";
-"external_device_status_connect" = "Tilslut";
+"external_device_status_connect" = "Forbind";
 "default_appearance_desc" = "Standard farve, ikon og form vil gælde for de tilføjede favoritpunkter i gruppen.";
 "shared_string_result" = "Resultat";
 "no_travel_guides_data_descr" = "Download Wikivoyage-rejseguider for at se artikler om steder rundt om i verden uden forbindelse til internettet.";
@@ -3391,15 +3391,15 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Brug særlig ruteberegning (kun HH)";
 "online_plugins" = "Online udvidelser";
 "vertical_exaggeration" = "Vertikal overdrivelse";
-"vertical_exaggeration_description" = "Ved at ændre skalaværdien kan du fremhæve 3D-relieffet.";
+"vertical_exaggeration_description" = "Ved atændre skalaværdien kan du fremhæve 3D-relieffet.";
 "shared_string_scale" = "Skala";
 "missing_or_outdated_maps_title" = "Manglende eller forældede kort";
-"missing_or_outdated_maps_description" = "Nogle offline-kort, der kræves til denne rute, mangler eller er ikke opdaterede. Download eller opdater disse kort.";
+"missing_or_outdated_maps_description" = "Nogle offline-kort, der er kræves for denne rute, mangler eller er ikke opdaterede. Download eller opdater disse kort.";
 "required_maps" = "Nødvendige kort";
 "calculate_online" = "Beregn online";
 "required_maps_list" = "Kort, der også vil blive brugt: %@";
 "getting_list_required_maps" = "Henter en liste over nødvendige kort...";
-"calculate_online_title" = "Listen over nødvendige kort er baseret på ruten i lige linje. For at få en nøjagtig liste over kort kan OsmAnd forudberegne din rute online";
+"calculate_online_title" = "Listen over manglende kort er baseret på ruten i lige linje. For at få en nøjagtig liste over kort kan OsmAnd forudberegne din rute online";
 "average_vertical_speed" = "Gennemsnitlig vertikal hastighed";
 "osm_id" = "OSM ID";
 "osmand_depelopment_use_old_routing" = "Brug gammel ruteberegning (A*)";
@@ -3421,7 +3421,7 @@
 "track_3d_empty_view_title" = "3D-sporvisning";
 "track_3d_empty_view_description" = "Udforsk sporet i interaktiv 3D! Visualiser højde, hastighed og meget mere direkte på kortet.";
 "ft_s" = "fod/s";
-"track_vertical_exaggeration_description" = "Ved at ændre skalaværdien kan du ændre 3D-sporets højde";
+"track_vertical_exaggeration_description" = "Ved atændre skalaværdien kan du ændre 3D-sporets højde.";
 "visualization_3d_visualized_by" = "Visualiseret af";
 "visualization_3d_wall_color" = "Vægfarve";
 "short_min" = "m";
@@ -3455,3 +3455,9 @@
 "avoid_pt_types" = "Undgå transportformer…";
 "dangerous_goods" = "Farligt gods";
 "dangerous_goods_description" = "På nogle veje og i nogle tunneler er det forbudt at transportere farlige materialer.";
+"rendering_value_dark_orange_name" = "Mørk orange";
+"routing_attr_avoid_cobblestone_description" = "Undgå brosten";
+"routing_attr_avoid_cobblestone_name" = "Undgå brosten";
+"missing_maps_ignore" = "Brug eksisterende kort";
+"missing_maps_ignore_details" = "Nogle allerede downloadede kort kan være velegnede til din rute. Hvis du kender området og kortene, kan du prøve at lave en rute ved hjælp af de eksisterende kort.";
+"ios_release_4_8" = "• Nyt \"Speedometer\"-modul, der er kompatibelt med CarPlay\n• Tilføjet sving for sving-instruktioner til ruteoplysninger\n• Tilpas kortskærmen ved at tilføje flere \"\"Hurtig handling\"-knapper\n• Forbedringer af 3D-spor: nye visualiserings- og farvelægningsmuligheder\n• Brugerdefinerede farvepaletter til terræn, spor og ruter\n• Tilføjet forbedret flervalgstilstand for spor\n• 3D-variant for ikoner for placeringsposition\n• Udvidet udvalg af turistruter på kortet\n• Vejret: Brugerflade-opdatering, tilføjet vindanimation\n• Tilføj bløde overgange, når du zoomer i 3D-tilstand\n• \"Placering på skærmen\" er nu i Konfigurer skærm\n• Skift \"Hjulomkreds\" i BLE-sensorindstillingerne\n• Tilføjet separat navigationsadvarsel om \"Hastighedsgrænse\"\n• Rettet navne for pejling-moduler\n• Rettet synlighed af \"Radiuslineal\" i alle modulpaneler\n";

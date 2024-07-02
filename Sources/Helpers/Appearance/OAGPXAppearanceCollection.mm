@@ -139,7 +139,7 @@
 
     for (NSNumber *customValue in customValues)
     {
-        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue]];
+        [titles addObject:[OAOsmAndFormatter getFormattedDistanceInterval:customValue.intValue withParams:[OsmAndFormatterParams noTrailingZeros]]];
         [values addObject:@([OAOsmAndFormatter calculateRoundedDist:customValue.intValue])];
     }
     self.titles = titles;

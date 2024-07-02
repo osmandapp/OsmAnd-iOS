@@ -412,6 +412,7 @@
             _routeCalcErrorShort = OALocalizedString(@"empty_route_calculated");
             [self showMessage:_routeCalcError];
         }
+        _settings.ignoreMissingMaps = NO;
     }
 }
 

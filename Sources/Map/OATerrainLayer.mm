@@ -141,7 +141,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
         {
             QByteArray data;
             int64_t time;
-            if (t->obtainTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr) && data.length() > 0)
+            if (t->retrieveTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr) && data.length() > 0)
             {
                 if (timeHolder)
                     *timeHolder = [NSNumber numberWithLongLong:(long long)time];
@@ -162,7 +162,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
         {
             QByteArray data;
             int64_t time;
-            if (t->obtainTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr) && data.length() > 0)
+            if (t->retrieveTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr) && data.length() > 0)
             {
                 if (timeHolder)
                     *timeHolder = [NSNumber numberWithLongLong:(long long)time];
@@ -183,7 +183,7 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
         {
             QByteArray data;
             int64_t time;
-            if (t->obtainTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr))
+            if (t->retrieveTileData(OsmAnd::TileId::fromXY(x, y), (OsmAnd::ZoomLevel) zoom, data, timeHolder ? &time : nullptr))
             {
                 if (!data.isEmpty())
                 {

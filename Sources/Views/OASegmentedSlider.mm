@@ -508,6 +508,13 @@ NSString *getTimeStringAtIndex(int index) {
             _selectingMark += slider.value - selectingMarkValue > 0 ? 1 : -1;
             [self generateFeedback];
         }
+        
+        if (self.stepsAmountWithoutDrawMark > 0)
+        {
+            _selectedMark = [self getIndex];
+            _selectingMark = _selectedMark;
+        }
+        
         [self paintMarks];
 
         if (_selectingMarkTitleBackground)

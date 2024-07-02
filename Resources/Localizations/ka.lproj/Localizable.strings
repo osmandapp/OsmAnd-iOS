@@ -2462,7 +2462,7 @@
 "wikivoyage_download_pics" = "სურათების გადმოწერა";
 "route_info" = "ინფორმაცია გზის შესახებ";
 "shared_string_markers" = "სანიშნები";
-"map_settings_topography" = "კონტურული ხაზები";
+"map_settings_topography" = "კოტურული ხაზების მონაცემები";
 "shared_string_uploading" = "ატვირთვა";
 "activity_type_racing_name" = "მანქანით";
 "external_device_status_connect" = "დაკავშირება";
@@ -2566,3 +2566,18 @@
 "speed_mode" = "სიჩქარის რეჟიმი";
 "rendering_attr_showFunicularRoutes_name" = "ფუნიკულიორის გზები";
 "add_page" = "გვერდის დამატება";
+"shared_string_top" = "ზედა";
+"shared_string_class" = "კლასი";
+"shared_string_bottom" = "ქვედა";
+"shared_string_millimeters" = "მილიმეტრი";
+"avoid_pt_types" = "ტრანსპორტის ტიპების თავიდან აცილება…";
+"shared_string_item" = "ელემენტი";
+"shared_string_always" = "ყოველთვის";
+"auto_zoom" = "ავტოგადიდება";
+"shared_string_precise" = "ზუსტი";
+"step_by_step" = "სათითაოდ";
+"shared_string_development" = "განვითარება";
+"edit_tilesource_maxzoom" = "მაქს. გადიდება";
+"horseback_riding" = "ცხენის ჭენება";
+"shared_string_millimeters_short" = "მმ";
+"edit_tilesource_minzoom" = "მინ. გადიდება";

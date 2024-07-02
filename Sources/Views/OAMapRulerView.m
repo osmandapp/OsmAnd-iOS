@@ -13,6 +13,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
 #import "OAShapeLayer.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kAnimationDuration .2
 #define kBlurBackgroundTag -999
@@ -217,7 +218,7 @@
         if (rulerWidth < 0)
             rulerWidth = 0;
         else
-            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist forceTrailingZeroes:NO];
+            vl = [OAOsmAndFormatter getFormattedDistance: roundedDist withParams:[OsmAndFormatterParams noTrailingZeros]];
     }
     CGRect frame = self.frame;
     self.hidden = rulerWidth == 0 ? true : false;

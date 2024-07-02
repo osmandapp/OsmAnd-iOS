@@ -376,7 +376,7 @@
     OsmAndAppInstance app = [OsmAndApp instance];
     const auto& obfsCollection = app.resourcesManager->obfsCollection;
 
-    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 20];
+    QuadRect *bbox = [phrase getRadiusBBox31ToSearch:DEFAULT_ADDRESS_BBOX_RADIUS * 5];
     NSArray<NSString *> *offlineIndexes = [phrase getOfflineIndexes:bbox dt:P_DATA_TYPE_ADDRESS];
     for (NSString *resId in offlineIndexes)
     {

@@ -2198,7 +2198,7 @@
 "transport" = "Transport";
 "settings_item_read_error" = "Nisam uspeo dačitam iz „%@”.";
 "app_mode_default" = "Pretraga mape";
-"app_mode_car" = "Auto";
+"app_mode_car" = "Vožnja";
 "app_mode_bicycle" = "Bicikla";
 "app_mode_pedestrian" = "Hodanje";
 "app_mode_taxi" = "Taksi";

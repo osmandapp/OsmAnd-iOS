@@ -716,7 +716,7 @@
                                             children:@[none]] atIndex:0];
     
     
-    return [UIMenu menuWithChildren:menuElements];
+    return [UIMenu menuWithChildren:[menuElements copy]];
 }
 
 - (void)showWeatherDataSourceViewController {

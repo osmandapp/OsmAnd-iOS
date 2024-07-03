@@ -60,25 +60,6 @@
     {
         pagedWidgets = @[];
     }
-//        NSArray *weatherWidgets = @[kWeatherTemp, kWeatherPressure, kWeatherWind, kWeatherCloud, kWeatherPrecip];
-//        NSMutableOrderedSet<OAMapWidgetInfo *> *pageWeatherWidget = [NSMutableOrderedSet orderedSet];
-//        int priority = 0;
-//        for (NSString *key in weatherWidgets) {
-//            NSPredicate *keyPredicate = [NSPredicate predicateWithFormat:@"key = %@", key];
-//            NSArray<OAMapWidgetInfo *> *filteredWidgets = [[self getAllWidgets] filteredArrayUsingPredicate:keyPredicate];
-//            if (filteredWidgets.count > 0)
-//            {
-//                OAMapWidgetInfo *item = filteredWidgets.firstObject;
-//                item.priority = priority;
-//                priority ++;
-//                [pageWeatherWidget addObject:filteredWidgets.firstObject];
-//            }
-//        }
-//        if (pageWeatherWidget.count > 0)
-//        {
-//            pagedWidgets = @[pageWeatherWidget];
-//        }
-//    }
     for (NSOrderedSet<OAMapWidgetInfo *> *page in pagedWidgets)
     {
         NSArray<OAMapWidgetInfo *> *sortedWidgets =

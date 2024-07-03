@@ -847,22 +847,8 @@
 
 - (BOOL)allLayersAreDisabled
 {
-    NSArray<OAWeatherBand *> *bandsArray = self.bands;
-    NSMutableArray<NSNumber *> *isVisibleArray = [[NSMutableArray alloc] initWithCapacity:bandsArray.count];
-    for (OAWeatherBand *band in bandsArray) {
-        [isVisibleArray addObject:@([band isBandVisible])];
-    }
-    
-    BOOL allDisabled = YES;
-    for (NSNumber *isVisibleNumber in isVisibleArray) {
-        BOOL isVisible = [isVisibleNumber boolValue];
-        if (isVisible) {
-            allDisabled = NO;
-            break;
-        }
-    }
-    
-    return allDisabled;
+    QList<OsmAnd::BandIndex> bands = [self getVisibleBands];
+    return bands.isEmpty();
 }
 
 @end

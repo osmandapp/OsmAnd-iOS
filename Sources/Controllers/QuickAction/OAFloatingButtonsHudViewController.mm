@@ -456,8 +456,6 @@ static NSInteger const kQuickActionSecondaryBackgroundTag = -2;
     quickActionButton.alpha = [quickActionButtonState isEnabled] ? 1 : 0;
     quickActionButton.userInteractionEnabled = [quickActionButtonState isEnabled];
     quickActionButton.accessibilityLabel = OALocalizedString(@"configure_screen_quick_action");
-    quickActionButton.tintColorDay = UIColorFromRGB(color_primary_purple);
-    quickActionButton.tintColorNight = UIColorFromRGB(color_primary_light_blue);
     [quickActionButton updateColorsForPressedState:NO];
     [quickActionButton addTarget:self action:@selector(quickActionButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
 

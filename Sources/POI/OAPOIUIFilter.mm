@@ -20,6 +20,7 @@
 #import "OAUtilities.h"
 #import "OANameStringMatcher.h"
 #import "OAOsmAndFormatter.h"
+#import "OASvgHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
@@ -1071,12 +1072,20 @@
 
 - (NSString *) getIconId
 {
+    NSString *iconName;
     if ([filterId hasPrefix:STD_PREFIX])
-        return standardIconId;
+        iconName = standardIconId;
     else if ([filterId hasPrefix:USER_PREFIX])
-        return [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
-
-    return filterId;
+        iconName = [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
+    if ([OASvgHelper hasMapImageNamed:iconName])
+    {
+        return iconName;
+    }
+    else
+    {
+        iconName = [self.class getCustomFilterIconName:self];
+        return iconName && [OASvgHelper hasMapImageNamed:iconName] ? iconName : filterId;
+    }
 }
 
 - (BOOL) accept:(OAPOICategory *)type subcategory:(NSString *)subcategory
@@ -1131,15 +1140,18 @@
     return nil;
 }
 
-+ (NSString *) getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
++ (NSString *)getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
 {
-    if (abstractPoiType != nil && abstractPoiType.iconName) {
+    if (abstractPoiType != nil && [OASvgHelper hasMapImageNamed:abstractPoiType.iconName])
+    {
         return abstractPoiType.iconName;
-    } else if ([abstractPoiType isKindOfClass:OAPOIType.class]) {
+    }
+    else if ([abstractPoiType isKindOfClass:OAPOIType.class])
+    {
         OAPOIType *poiType = (OAPOIType *) abstractPoiType;
         NSString *iconId = [NSString stringWithFormat:@"%@_%@", poiType.getOsmTag, poiType.getOsmValue];
-        if (poiType.iconName.length > 0)
-            return poiType.iconName;
+        if ([OASvgHelper hasMapImageNamed:iconId])
+            return iconId;
         else if (poiType.parent != nil)
             return [self getPoiTypeIconName:poiType.parent.type];
     }

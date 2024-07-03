@@ -15,6 +15,11 @@ const static float kDefaultIconSize = 24.0f;
 
 @implementation OASvgHelper
 
++ (BOOL)hasMapImageNamed:(NSString *)name
+{
+    return name && ([self mapImagePathFromSvgResource:[name hasPrefix:@"mx_"] ? name : [@"mx_" stringByAppendingString:name]]) != nil;
+}
+
 + (nullable UIImage *) mapImageNamed:(NSString *)name
 {
     CGFloat scaleFactor = [[UIScreen mainScreen] scale];
@@ -44,22 +49,23 @@ const static float kDefaultIconSize = 24.0f;
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:scaledSize height:scaledSize]];
 }
 
-+ (UIImage *) mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
++ (nullable NSString *)mapImagePathFromSvgResource:(NSString *)resourceName
 {
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"svg"
-                                                         inDirectory:@"map-icons-svg"];
+    return [[NSBundle mainBundle] pathForResource:resourceName ofType:@"svg" inDirectory:@"map-icons-svg"];
+}
+
++ (nullable UIImage *)mapImageFromSvgResource:(NSString *)resourceName width:(float)width height:(float)height
+{
+    NSString *resourcePath = [self mapImagePathFromSvgResource:resourceName];
     if (resourcePath == nil)
         return nil;
 
     return [OANativeUtilities skImageToUIImage:[OANativeUtilities skImageFromSvgResourcePath:resourcePath width:width height:height]];
 }
 
-+ (UIImage *) mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale
++ (nullable UIImage *)mapImageFromSvgResource:(NSString *)resourceName scale:(float)scale
 {
-    const auto resourcePath = [[NSBundle mainBundle] pathForResource:resourceName
-                                                              ofType:@"svg"
-                                                         inDirectory:@"map-icons-svg"];
+    NSString *resourcePath = [self mapImagePathFromSvgResource:resourceName];
     if (resourcePath == nil)
         return nil;
 

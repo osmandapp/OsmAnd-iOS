@@ -93,6 +93,7 @@
     self.dateCollectionView.foldersDelegate = _datesHandler;
     
     self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
+    [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 

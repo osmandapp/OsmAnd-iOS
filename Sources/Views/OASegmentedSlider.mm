@@ -70,13 +70,9 @@
 
     [self removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
     [self addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    if (self.stepsAmountWithoutDrawMark > 0)
-    {
-        [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside];
-        [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside];
-        [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpOutside];
-    }
+    
+    [self clearTouchEventsUpInsideUpOutside];
+    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 }
 
 - (void)layoutSubviews
@@ -88,6 +84,11 @@
         [self layoutCurrentMarkLine];
     if (_selectingMarkTitleBackground)
         [self layoutSelectingTitle];
+}
+
+- (void)clearTouchEventsUpInsideUpOutside
+{
+    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside | UIControlEventTouchUpInside];
 }
 
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks additionalMarksBetween:(NSInteger)additionalMarksBetween
@@ -400,8 +401,10 @@
         return nextMark - 1;
 }
 
-NSString *getTimeStringAtIndex(int index) {
-    if (index < 0 || index >= 144) {
+- (NSString *)getTimeStringAtIndex:(int)index
+{
+    if (index < 0 || index >= 144)
+    {
         return @"00:00";
     }
     int hours = index / 6;
@@ -417,10 +420,9 @@ NSString *getTimeStringAtIndex(int index) {
 {
     _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
     NSInteger index = self.stepsAmountWithoutDrawMark > 0 ? [self getIndexForOptionStepsAmountWithoutDrawMark] : [self getIndex];
-    NSLog(@"%d", index);
     if (self.stepsAmountWithoutDrawMark > 0)
     {
-        _selectingMarkTitle.text = getTimeStringAtIndex(index);
+        _selectingMarkTitle.text = [self getTimeStringAtIndex:index];
     }
     else
     {

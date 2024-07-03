@@ -17,6 +17,7 @@
 @property (nonatomic) NSInteger stepsAmountWithoutDrawMark;
 
 - (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark;
+- (void)clearTouchEventsUpInsideUpOutside;
 
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks
   additionalMarksBetween:(NSInteger)additionalMarksBetween;

@@ -202,7 +202,7 @@ const sk_sp<SkImage> OASQLiteTileSourceMapLayerProvider::downloadShiftedTile(con
     const auto& db = getDatabase();
     QByteArray dataNext;
     int64_t timeNext;
-    bool ok = db && db->open() && db->obtainTileData(tileIdNext, zoom, dataNext, &timeNext);
+    bool ok = db && db->open() && db->retrieveTileData(tileIdNext, zoom, dataNext, &timeNext);
     if (ok && !expired(timeNext))
     {
         const auto shiftedTile = createShiftedTileBitmap(data, dataNext, offsetY);
@@ -259,7 +259,7 @@ sk_sp<const SkImage> OASQLiteTileSourceMapLayerProvider::obtainImage(const OsmAn
     const auto& db = getDatabase();
     QByteArray data;
     int64_t time;
-    bool ok = db && db->open() && db->obtainTileData(tileId, zoom, data, &time);
+    bool ok = db && db->open() && db->retrieveTileData(tileId, zoom, data, &time);
     if (ok && !data.isEmpty() && !expired(time))
     {
         if (shiftedTile)

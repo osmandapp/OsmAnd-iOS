@@ -166,10 +166,25 @@
             OATableRowData *calculateOnlineTitleRow = [calculateOnlineSection createNewRow];
             calculateOnlineTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
             calculateOnlineTitleRow.title = OALocalizedString(@"calculate_online_title");
-            
+
             OATableRowData *calculateOnlineButtonRow = [calculateOnlineSection createNewRow];
             calculateOnlineButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
             calculateOnlineButtonRow.title = OALocalizedString(@"calculate_online");
+            calculateOnlineButtonRow.key = @"calculate_online_button";
+        }
+
+        if (_potentiallyUsedMaps.count > 0)
+        {
+            OATableSectionData *ignoreMissingMapsSection = [_data createNewSection];
+
+            OATableRowData *ignoreMissingMapsTitleRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsTitleRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            ignoreMissingMapsTitleRow.title = OALocalizedString(@"missing_maps_ignore_details");
+
+            OATableRowData *ignoreMissingMapsButtonRow = [ignoreMissingMapsSection createNewRow];
+            ignoreMissingMapsButtonRow.cellType = [OAButtonTableViewCell getCellIdentifier];
+            ignoreMissingMapsButtonRow.title = OALocalizedString(@"missing_maps_ignore");
+            ignoreMissingMapsButtonRow.key = @"missing_maps_ignore_button";
         }
     }
 }
@@ -277,7 +292,16 @@
             [cell.button setTitleColor:[UIColor colorNamed:ACColorNameTextColorActive] forState:UIControlStateHighlighted];
             cell.button.tag = indexPath.section << 10 | indexPath.row;
             [cell.button removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+
+            if ([item.key isEqualToString:@"calculate_online_button"])
+            {
+                [cell.button addTarget:self action:@selector(onCalculateOnlineButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+            else if ([item.key isEqualToString:@"missing_maps_ignore_button"])
+            {
+                [cell.button addTarget:self action:@selector(onIgnoreMissingMapsButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+            }
+
             return cell;
         }
         else if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
@@ -479,9 +503,15 @@
     [self setupNavbarButtons];
 }
 
+- (void)onIgnoreMissingMapsButtonPressed:(id)sender
+{
+    [OAAppSettings sharedManager].ignoreMissingMaps = YES;
+    [OARoutingHelper.sharedInstance recalculateRouteDueToSettingsChange];
+    [self dismissViewController];
+}
+
 - (void)onCalculateOnlineButtonPressed:(id)sender
 {
-    NSLog(@"onCalculateOnlineButtonPressed");
     if (AFNetworkReachabilityManager.sharedManager.isReachable)
     {
         auto missingMapsCalculator = [MissingMapsCalculator new];

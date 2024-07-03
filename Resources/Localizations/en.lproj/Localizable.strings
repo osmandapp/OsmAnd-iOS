@@ -1673,7 +1673,7 @@
 "osm_editing_settings_descr" = "This plugin's settings are global and apply to all profiles.";
 
 "routing_algorithm" = "Routing algorithm";
-"auto_zoom" = "Auto-zoom";
+"auto_zoom" = "Autozoom";
 "shared_string_development" = "Development";
 "routing_algorithm_highway_hierarchies" = "Highway hierarchies";
 "routing_algorithm_a" = "A*";
@@ -1854,10 +1854,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Add POI";
-"quick_action_map_style" = "Change map style";
+"quick_action_map_style" = "Map style";
 "quick_action_map_source" = "Change map source";
-"quick_action_map_overlay" = "Change map overlay";
-"quick_action_map_underlay" = "Change map underlay";
+"quick_action_map_overlay" = "Overlay";
+"quick_action_map_underlay" = "Underlay";
 "quick_action_replace_destination" = "Replace destination";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Add point of departure";
@@ -1947,7 +1947,7 @@
 "quick_action_showhide_mapillary_descr" = "A toggle to show or hide the Mapillary layer on the map.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Delete next destination point";
+"quick_action_remove_next_destination" = "Next destination point";
 "quick_action_remove_next_destination_descr" = "Deletes the next destination on your route. If that is the final destination, the navigation will stop.";
 "change_application_profile" = "Change app profile";
 "select_application_profile" = "Select application profile";
@@ -2796,7 +2796,7 @@
 "rendering_value_bicycle_name" = "Bicycle";
 "rendering_value_translucent_lightgreen_name" = "Translucent light green";
 "rendering_attr_contourLines_name" = "Show contour lines";
-"rendering_attr_showAccess_name" = "Show access restrictions";
+"rendering_attr_showAccess_name" = "Show access and toll restrictions";
 "rendering_attr_surface_dirt_name" = "Dirt";
 "routing_attr_piste_type_skitour_name" = "Ski touring";
 "routing_attr_driving_style_prefer_unpaved_name" = "Prefer unpaved roads";
@@ -2992,7 +2992,7 @@
 "app_mode_horse" = "Horse";
 "app_mode_helicopter" = "Helicopter";
 "app_mode_skiing" = "Skiing";
-"horseback_riding" = "Riding";
+"horseback_riding" = "Horseback riding";
 "app_mode_personal_transporter" = "Personal transporter";
 "app_mode_monowheel" = "Monowheel";
 "app_mode_scooter" = "Scooter";
@@ -3443,9 +3443,24 @@
 • Fixed status bar color for older iOS versions\n
 • Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
 
+"ios_release_4_8" = "• New \"Speedometer\" widget compatible with CarPlay\n
+• Added Turn-by-turn instructions to route details\n
+• Customize the map screen by adding multiple \"Quick Action\" buttons\n
+• 3D Track Improvements: new visualization and colorization options\n
+• Custom color palettes for terrain, tracks, and routes\n
+• Added improved multi-selection mode for Tracks\n
+• 3D variant for location position icons\n
+• Expanded selection of tourist routes on the map\n
+• Weather: UI refresh, added wind animation\n
+• Add smooth transitions while zooming in 3D mode\n
+• \"Location position on screen\" is now in Configure Screen\n
+• Change \"Wheel circumference\" in BLE sensor settings\n
+• Added separate \"Speed limit\" navigation alert\n
+• Fixed names for bearing widgets\n
+• Fixed \"Radius ruler\" visibility in all widget panels\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
-"rendering_attr_showWaterwayTunnels_description" = "Don\'t hide waterway tunnels";
+"rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";
 "rendering_attr_natureReserves_description" = "Show nature reserve, protected areas, and national parks.";
 "routing_attr_avoid_highway_description" = "Avoid highways";
 "routing_attr_prefer_hiking_routes_description" = "Prefer hiking routes";
@@ -3494,7 +3509,7 @@
 "rendering_attr_weatherTempContours_name" = "Temperature isolines";
 "rendering_attr_showTramRoutes_name" = "Tram routes";
 "routing_attr_hazmat_category_description" = "Hazardous materials category / Consider hazmat access permissions";
-"rendering_attr_showWaterwayTunnels_name" = "Waterway tunnels";
+"rendering_attr_showWaterwayTunnels_name" = "Increase visibility for waterway tunnels";
 "rendering_attr_seabedDetail_name" = "Seabed detail";
 "routing_attr_driving_style_description" = "Select driving purpose to get shorter, faster or safer route";
 "rendering_attr_weatherPrecipitationContours_name" = "Precipitation isolines";
@@ -3753,16 +3768,18 @@
 "missing_or_outdated_maps_description" = "Some offline maps required for this route are missing or not up to date. Please download or update these maps.";
 "required_maps" = "Required Maps";
 "calculate_online" = "Calculate online";
-"calculate_online_title" = "The list of required maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
+"calculate_online_title" = "The list of missing maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
-"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height";
+"missing_maps_ignore" = "Use existing maps";
+"missing_maps_ignore_details" = "Some already downloaded maps might be suitable for your route. If you are familiar with the area and the maps, you can try routing using the existing maps.";
 
+"track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height.";
 "visualization_3d_visualized_by" = "Visualized by";
 "visualization_3d_wall_color" = "Wall color";
 "visualization_3d_track_line" = "Track line";
 "track_3d" = "3d track";
-"fixed_height" = "Fixed Height";
+"fixed_height" = "Fixed height";
 "downward_gradient" = "Downward gradient";
 "upward_gradient" = "Upward gradient";
 "shared_string_top" = "Top";
@@ -3795,3 +3812,7 @@
 "add_button" = "Add button";
 "empty_name" = "Empty name";
 "custom_map_button_name_present" = "Such button already present";
+
+"routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
+"routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
+"rendering_value_dark_orange_name" = "Dark orange";;

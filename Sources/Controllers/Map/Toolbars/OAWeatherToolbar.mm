@@ -296,7 +296,8 @@
         [timeValuesTotal addObject:data];
         if (index <= timeValues.count - 2)
         {
-            for (NSInteger min = 1; min <= minuteSteps; min++) {
+            for (NSInteger min = 1; min <= minuteSteps; min++)
+            {
                 NSDate *next10MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
                                                              value:min * 10
                                                             toDate:data

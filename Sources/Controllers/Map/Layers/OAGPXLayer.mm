@@ -512,7 +512,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             return NAN;
     }
     
-    double validElevation = [self getValidElevation:point.elevation];
+    double elevationValue = [self getValidElevation:point.elevation];
     OAGpxExtension *trackpointextension = [point getExtensionByKey:isSpeedSensorTag ? @"speed_sensor" : @"trackpointextension"];
     if (trackpointextension)
     {
@@ -520,7 +520,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         {
             NSNumber *value = [numberFormatter numberFromString:trackpointextension.value];
             float processedValue = value ? [value floatValue] * kSpeedToHeightScale : defaultValue;
-            return [self is3DMapsEnabled] && value ? processedValue +validElevation : processedValue;
+            return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
         }
         else
         {
@@ -530,7 +530,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 {
                     NSNumber *value = [numberFormatter numberFromString:subextension.value];
                     float processedValue = value ? [value floatValue] : defaultValue;
-                    return [self is3DMapsEnabled] && value ? processedValue + validElevation : processedValue;
+                    return [self is3DMapsEnabled] && value ? processedValue + elevationValue : processedValue;
                 }
             }
         }
@@ -544,7 +544,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     OAGpxExtension *trackpointextension = [point getExtensionByKey:@"trackpointextension"];
     NSNumber *waterTempValue = nil;
     NSNumber *airTempValue = nil;
-    double validElevation = [self getValidElevation:point.elevation];
+    double elevationValue = [self getValidElevation:point.elevation];
     
     if (trackpointextension)
     {
@@ -554,13 +554,13 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             {
                 waterTempValue = [numberFormatter numberFromString:subextension.value];
                 float processedWaterTemp = waterTempValue ? [waterTempValue floatValue] : NAN;
-                return [self is3DMapsEnabled] && waterTempValue ? processedWaterTemp + validElevation : processedWaterTemp;
+                return [self is3DMapsEnabled] && waterTempValue ? processedWaterTemp + elevationValue : processedWaterTemp;
             }
             else if ([subextension.name isEqualToString:OAPointAttributes.sensorTagTemperatureA])
             {
                 airTempValue = [numberFormatter numberFromString:subextension.value];
                 float processedAirTemp = airTempValue ? [airTempValue floatValue] : NAN;
-                return [self is3DMapsEnabled] && airTempValue ? processedAirTemp + validElevation : processedAirTemp;
+                return [self is3DMapsEnabled] && airTempValue ? processedAirTemp + elevationValue : processedAirTemp;
             }
         }
     }
@@ -1023,8 +1023,8 @@ colorizationScheme:(int)colorizationScheme
                         const auto& seg = segments[i];
                         if (seg->points.count() < 2)
                             continue;
-                        double validFirstPointElevation = [self getValidElevation:seg->points.first()->elevation];
-                        double validLastPointElevation = [self getValidElevation:seg->points.last()->elevation];
+                        double firstPointElevation = [self getValidElevation:seg->points.first()->elevation];
+                        double lastPointElevation = [self getValidElevation:seg->points.last()->elevation];
                         if (gpx.joinSegments)
                         {
                             if (i == 0)
@@ -1036,9 +1036,9 @@ colorizationScheme:(int)colorizationScheme
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
                                         startPointElevation = seg->points.first()->elevation;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
-                                        startPointElevation = [self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + validFirstPointElevation : seg->points.first()->speed * kSpeedToHeightScale;
+                                        startPointElevation = [self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + firstPointElevation : seg->points.first()->speed * kSpeedToHeightScale;
                                     else
-                                        startPointElevation = [self is3DMapsEnabled] ? validFirstPointElevation + gpx.elevationMeters : gpx.elevationMeters;
+                                        startPointElevation = [self is3DMapsEnabled] ? firstPointElevation + gpx.elevationMeters : gpx.elevationMeters;
                                 }
                             }
                             else if (i == segments.size() - 1)
@@ -1049,9 +1049,9 @@ colorizationScheme:(int)colorizationScheme
                                     if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeAltitude)
                                         finishPointElevation = seg->points.last()->elevation;
                                     else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
-                                        finishPointElevation = [self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + validLastPointElevation : seg->points.last()->speed * kSpeedToHeightScale;
+                                        finishPointElevation = [self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + lastPointElevation : seg->points.last()->speed * kSpeedToHeightScale;
                                     else
-                                        finishPointElevation = [self is3DMapsEnabled] ? validLastPointElevation + gpx.elevationMeters : gpx.elevationMeters;
+                                        finishPointElevation = [self is3DMapsEnabled] ? lastPointElevation + gpx.elevationMeters : gpx.elevationMeters;
                                 }
                             }
                         }
@@ -1067,13 +1067,13 @@ colorizationScheme:(int)colorizationScheme
                                 }
                                 else if (gpx.visualization3dByType == EOAGPX3DLineVisualizationByTypeSpeed)
                                 {
-                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + validFirstPointElevation : seg->points.first()->speed * kSpeedToHeightScale);
-                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + validLastPointElevation : seg->points.last()->speed * kSpeedToHeightScale);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.first()->speed * kSpeedToHeightScale) + firstPointElevation : seg->points.first()->speed * kSpeedToHeightScale);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? (seg->points.last()->speed * kSpeedToHeightScale) + lastPointElevation : seg->points.last()->speed * kSpeedToHeightScale);
                                 }
                                 else
                                 {
-                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? validFirstPointElevation + gpx.elevationMeters : gpx.elevationMeters);
-                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? validLastPointElevation + gpx.elevationMeters : gpx.elevationMeters);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? firstPointElevation + gpx.elevationMeters : gpx.elevationMeters);
+                                    startFinishPointsElevations.append([self is3DMapsEnabled] ? lastPointElevation + gpx.elevationMeters : gpx.elevationMeters);
                                 }
                             }
                             startFinishPoints.append({

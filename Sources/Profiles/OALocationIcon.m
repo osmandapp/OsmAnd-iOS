@@ -93,6 +93,12 @@
         centerImage = [UIImage imageNamed:@"map_location_bicycle_center"];
         topImage = [UIImage imageNamed:@"map_location_bicycle_top"];
     }
+    else if ([self isModel:iconName])
+    {
+        bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
+        centerImage = [UIImage imageNamed:@"map_location_default_center"];
+        topImage = [UIImage imageNamed:@"map_location_default_top"];
+    }
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 

@@ -149,21 +149,12 @@
 
     if (isFullSize && shadowIcon && backgroundIcon && poiIcon && highlightIcon)
     {
-        const QList<sk_sp<const SkImage>> toMerge({
-            [OANativeUtilities getScaledSkImage:shadowIcon scaleFactor:scale],
-            [OANativeUtilities getScaledSkImage:backgroundIcon scaleFactor:scale],
-            poiIcon,
-            [OANativeUtilities getScaledSkImage:highlightIcon scaleFactor:scale]
-        });
+        const QList<sk_sp<const SkImage>> toMerge({ shadowIcon, backgroundIcon, poiIcon, highlightIcon });
         result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     else if (!isFullSize && shadowIcon && backgroundIcon && highlightIcon)
     {
-        const QList<sk_sp<const SkImage>> toMerge({
-            [OANativeUtilities getScaledSkImage:shadowIcon scaleFactor:scale],
-            [OANativeUtilities getScaledSkImage:backgroundIcon scaleFactor:scale],
-            [OANativeUtilities getScaledSkImage:highlightIcon scaleFactor:scale]
-        });
+        const QList<sk_sp<const SkImage>> toMerge({ shadowIcon, backgroundIcon, highlightIcon });
         result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     return result;
@@ -191,7 +182,7 @@
             img = [OAUtilities tintImageWithColor:img color:color];
         result = [OANativeUtilities skImageFromCGImage:img.CGImage];
     }
-    return result;
+    return [OANativeUtilities getScaledSkImage:result scaleFactor:scale];
 }
 
 + (UIImage *)getIcon:(NSString *)iconName defaultIconName:(NSString *)defaultIconName scale:(float)scale

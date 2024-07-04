@@ -46,7 +46,7 @@
 - (void) initLayer
 {
     [super initLayer];
-    _textSize = OAAppSettings.sharedManager.textSize.get;
+    _textSize = [[OAAppSettings sharedManager].textSize get];
 
     _avoidRoads = [OAAvoidSpecificRoads instance];
     [self updatePoints];
@@ -85,7 +85,7 @@
             .setIsAccuracyCircleSupported(false)
             .setBaseOrder(self.pointsOrder + 1)
             .setIsHidden(false)
-            .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:avoidIcon scaleFactor:_textSize]))
+            .setPinIcon(OsmAnd::SingleSkImage(avoidIcon))
             .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
             .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
             .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

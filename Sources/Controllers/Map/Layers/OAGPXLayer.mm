@@ -1119,12 +1119,9 @@ colorizationScheme:(int)colorizationScheme
                                                                               UIScreen.mainScreen.scale,
                                                                               _startFinishPoints,
                                                                               _splitLabels,
-                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startIcon
-                                                                                                                            scaleFactor:_textScaleFactor]),
-                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:finishIcon
-                                                                                                                            scaleFactor:_textScaleFactor]),
-                                                                              OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:startFinishIcon
-                                                                                                                            scaleFactor:_textScaleFactor]),
+                                                                              OsmAnd::SingleSkImage(startIcon),
+                                                                              OsmAnd::SingleSkImage(finishIcon),
+                                                                              OsmAnd::SingleSkImage(startFinishIcon),
                                                                               _startFinishPointsElevations,
                                                                               _elevationScaleFactor
                                                                               ));

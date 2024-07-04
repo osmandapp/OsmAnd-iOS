@@ -225,7 +225,7 @@
     builder.setIsAccuracyCircleSupported(false)
     .setBaseOrder(self.pointsOrder)
     .setIsHidden(false)
-    .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:markerIcon scaleFactor:_textSize]))
+    .setPinIcon(OsmAnd::SingleSkImage(markerIcon))
     .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))
     .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
     .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)

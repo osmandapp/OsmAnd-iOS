@@ -15,6 +15,7 @@
 #import "OATargetPoint.h"
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
+#import "OACompoundIconUtils.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>
@@ -33,7 +34,7 @@
 @implementation OAImpassableRoadsLayer
 {
     OAAvoidSpecificRoads *_avoidRoads;
-    
+    double _textSize;
     std::shared_ptr<OsmAnd::MapMarkersCollection> _markersCollection;
 }
 
@@ -45,7 +46,8 @@
 - (void) initLayer
 {
     [super initLayer];
-    
+    _textSize = OAAppSettings.sharedManager.textSize.get;
+
     _avoidRoads = [OAAvoidSpecificRoads instance];
     [self updatePoints];
     [_avoidRoads addListener:self];
@@ -74,12 +76,16 @@
         CLLocation *location = [_avoidRoads getLocation:roadInfo.roadId];
         if (location)
         {
+            auto avoidIcon = [OACompoundIconUtils getScaledIcon:@"map_pin_avoid_road" scale:_textSize];
+            if (!avoidIcon)
+                return;
+
             const OsmAnd::LatLon latLon(location.coordinate.latitude, location.coordinate.longitude);
             std::shared_ptr<OsmAnd::MapMarker> mapMarker = OsmAnd::MapMarkerBuilder()
             .setIsAccuracyCircleSupported(false)
             .setBaseOrder(self.pointsOrder + 1)
             .setIsHidden(false)
-            .setPinIcon(OsmAnd::SingleSkImage([OANativeUtilities skImageFromPngResource:@"map_pin_avoid_road"]))
+            .setPinIcon(OsmAnd::SingleSkImage(avoidIcon))
             .setPinIconVerticalAlignment(OsmAnd::MapMarker::Top)
             .setPinIconHorisontalAlignment(OsmAnd::MapMarker::CenterHorizontal)
             .setPosition(OsmAnd::Utilities::convertLatLonTo31(latLon))

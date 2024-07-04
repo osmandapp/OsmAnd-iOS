@@ -170,24 +170,37 @@
 }
 
 + (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName
+                          scale:(CGFloat)scale
+{
+    return [self getScaledIcon:resourceName defaultResourceName:nil scale:scale color:nil];
+}
+
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName
             defaultResourceName:(NSString *)defaultResourceName
                           scale:(CGFloat)scale
                           color:(UIColor *)color
 {
+    sk_sp<SkImage> result;
     NSString *iconName = [OANativeUtilities getScaledResourceName:resourceName];
     UIImage *img = [self getIcon:iconName
-                 defaultIconName:[OANativeUtilities getScaledResourceName:defaultResourceName]
+                 defaultIconName:defaultResourceName ? [OANativeUtilities getScaledResourceName:defaultResourceName] : nil
                            scale:scale];
-    if (color)
-        img = [OAUtilities tintImageWithColor:img color:color];
-    return [OANativeUtilities skImageFromCGImage:img.CGImage];
+    if (img)
+    {
+        if (color)
+            img = [OAUtilities tintImageWithColor:img color:color];
+        result = [OANativeUtilities skImageFromCGImage:img.CGImage];
+    }
+    return result;
 }
 
-+ (UIImage *) getIcon:(NSString *)iconName defaultIconName:(NSString *)defaultIconName scale:(float)scale
++ (UIImage *)getIcon:(NSString *)iconName defaultIconName:(NSString *)defaultIconName scale:(float)scale
 {
     UIImage *iconImage = [UIImage imageNamed:iconName];
-    if (!iconImage)
+    if (!iconImage && defaultIconName)
         iconImage = [UIImage imageNamed:defaultIconName];
+    if (!iconImage)
+        return nil;
     CGSize iconPtSize = { iconImage.size.width * scale, iconImage.size.height * scale };
     return [OAUtilities resizeImage:iconImage newSize:iconPtSize];
 }

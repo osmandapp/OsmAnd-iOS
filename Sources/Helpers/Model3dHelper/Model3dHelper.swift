@@ -29,10 +29,8 @@ final class Model3dHelper: NSObject {
     
     func getModel(modelName: String, callbackOnLoad: callbackWithModel3d?) -> OAModel3dWrapper? {
         if !modelName.hasPrefix(MODEL_NAME_PREFIX) {
-            if let callbackOnLoad {
+            guard let callbackOnLoad else { return nil }
                 callbackOnLoad(nil)
-            }
-            return nil
         }
         
         let pureModelName = modelName.replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
@@ -66,13 +64,13 @@ final class Model3dHelper: NSObject {
         
         modelsInProgress.insert(modelName)
         
-        let task = OALoad3dModelTask(modelName) { model in
+        let task = OALoad3dModelTask(modelName) { [weak self] model in
             if model == nil {
-                self.failedModels.insert(modelName)
+                self?.failedModels.insert(modelName)
             } else {
-                self.modelsCache[modelName] = model
+                self?.modelsCache[modelName] = model
             }
-            self.modelsInProgress.remove(modelName)
+            self?.modelsInProgress.remove(modelName)
             if let callback {
                 callback(model)
             }
@@ -93,7 +91,8 @@ final class Model3dHelper: NSObject {
                     }
                 }
             }
-        } catch {
+        } catch let error {
+            debugPrint(error)
         }
         return modelsDirNames
     }
@@ -112,7 +111,8 @@ final class Model3dHelper: NSObject {
                     }
                 }
             }
-        } catch {
+        } catch let error {
+            debugPrint(error)
         }
         return false
     }

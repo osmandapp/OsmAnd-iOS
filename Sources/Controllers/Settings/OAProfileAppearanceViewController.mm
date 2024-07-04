@@ -370,18 +370,16 @@
 
 - (NSArray<NSString *> *) getlocationIconNames
 {
-    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    [iconNames addObject:LOCATION_ICON_DEFAULT];
-    [iconNames addObject:LOCATION_ICON_CAR];
-    [iconNames addObject:LOCATION_ICON_BICYCLE];
+    NSMutableArray<NSString *> *iconNames = [@[
+        LOCATION_ICON_DEFAULT,
+        LOCATION_ICON_CAR,
+        LOCATION_ICON_BICYCLE
+    ] mutableCopy];
     
     Model3dHelper *helper = [Model3dHelper shared];
     NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
-    for (NSString *modelIconName in model3dIconsNames)
-    {
-        [iconNames addObject:modelIconName];
-    }
-    return iconNames;
+    [iconNames addObjectsFromArray:model3dIconsNames];
+    return [iconNames copy];
 }
 
 - (NSArray<UIImage *> *) getlocationIcons
@@ -404,11 +402,8 @@
     
     Model3dHelper *helper = [Model3dHelper shared];
     NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
-    for (NSString *modelIconName in model3dIconsNames)
-    {
-        [iconNames addObject:modelIconName];
-    }
-    return iconNames;
+    [iconNames addObjectsFromArray:model3dIconsNames];
+    return [iconNames copy];
 }
 
 - (NSArray<UIImage *> *) getNavigationIcons

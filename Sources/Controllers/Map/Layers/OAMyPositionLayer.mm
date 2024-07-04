@@ -517,6 +517,7 @@ typedef enum {
 {
     // Create location and course markers
     int baseOrder = self.pointsOrder;
+    __weak OAMyPositionLayer *weakSelf = self;
     
     _modeMarkers = [NSMapTable strongToStrongObjectsMapTable];
     NSArray<OAApplicationMode *> *modes = [OAApplicationMode allPossibleValues];
@@ -555,7 +556,7 @@ typedef enum {
         if ([navIcon isModel])
         {
             navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callbackOnLoad:^(OAModel3dWrapper * _Nullable model) {
-                [self refreshMarkersCollection];
+                [weakSelf refreshMarkersCollection];
                 return;
             }];
             if (!navigationModel)
@@ -571,7 +572,7 @@ typedef enum {
             if (![navIcon isModel] || navigationModel)
             {
                 locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callbackOnLoad:^(OAModel3dWrapper *_Nullable model) {
-                    [self refreshMarkersCollection];
+                    [weakSelf refreshMarkersCollection];
                     return;
                 }];
                 if (!locationModel)

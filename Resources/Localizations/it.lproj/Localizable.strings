@@ -3442,3 +3442,4 @@
 "missing_maps_ignore_details" = "Alcune mappe già scaricate potrebbero essere adatte al tuo percorso. Se hai familiarità con l'area e le mappe, puoi provare a muoverti utilizzando le mappe esistenti.";
 "missing_maps_ignore" = "Utilizza mappe esistenti";
 "online_plugins" = "Componenti aggiuntivi online";
+"osmand_depelopment_use_discrete_autozoom" = "Autozoom discreto (vecchia versione)";

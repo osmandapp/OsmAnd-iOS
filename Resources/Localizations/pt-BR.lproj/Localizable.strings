@@ -1031,9 +1031,9 @@
 "quick_action_add_osm_bug" = "Adicionar nota OSM";
 "toggle_online_notes" = "Mostrar/esconder notas do OSM";
 "quick_action_add_poi" = "Adicionar POI";
-"quick_action_map_style" = "Mudar estilo de mapa";
+"quick_action_map_style" = "Estilo do mapa";
 "quick_action_map_source" = "Mudar fonte de mapa";
-"quick_action_map_overlay" = "Mudar mapa da camada superior";
+"quick_action_map_overlay" = "Sobreposição";
 "quick_action_map_underlay" = "Mudar mapa da camada inferior";
 "quick_action_replace_destination" = "Substituir destino";
 "add_destination" = "Adicionar destino";
@@ -1618,7 +1618,7 @@
 "map_look_descr" = "Aparência do mapa";
 "public_transport_show" = "Mostrar transporte público";
 "application_profiles" = "Perfis de aplicação";
-"quick_action_remove_next_destination" = "Excluir próximo ponto de destino";
+"quick_action_remove_next_destination" = "Próximo ponto de destino";
 "shared_string_terrain" = "Terreno";
 "accessibility_announce" = "Anunciar";
 "profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão.";
@@ -1864,7 +1864,7 @@
 "units_of_speed" = "Unidades de velocidade";
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Não rodar";
-"settings_app_theme" = "Tema";
+"settings_app_theme" = "Tema do aplicativo";
 "map_settings_line_density_slowdown_warning" = "A alta densidade de linhas pode abrandar a renderização do mapa";
 "map_settings_contour_zoom_level_descr" = "Selecione o nível de ampliação, a partir do qual as curvas de nível serão mostradas";
 "map_settings_line_density" = "Densidade da linha";
@@ -3451,3 +3451,8 @@
 "dangerous_goods" = "Mercadorias perigosas";
 "custom_buttons" = "Botões personalizados";
 "default_buttons" = "Botões padrões";
+"wall_height" = "Altura da parede";
+"shared_string_instructions" = "Instruções";
+"missing_maps_ignore" = "Usar mapas existentes";
+"rendering_value_dark_orange_name" = "Laranja escuro";
+"select_items" = "Usar mapas existentes";

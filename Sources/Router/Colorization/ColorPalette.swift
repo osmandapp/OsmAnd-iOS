@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc
 @objcMembers
 final class ColorPalette: NSObject {
 
@@ -135,11 +134,10 @@ final class ColorPalette: NSObject {
     }
     
     static func parseColorPalette(from filePath: String) throws -> ColorPalette {
-        var comments = [String]()
-        return try parseColorPalette(from: filePath, comments: &comments, shouldSort: true)
+        return try parseColorPalette(from: filePath, shouldSort: true)
     }
 
-    static func parseColorPalette(from filePath: String, comments: inout [String], shouldSort: Bool) throws -> ColorPalette {
+    static func parseColorPalette(from filePath: String, shouldSort: Bool) throws -> ColorPalette {
         let palette = ColorPalette()
         let content = try String(contentsOfFile: filePath, encoding: .utf8)
         let lines = content.components(separatedBy: .newlines)
@@ -147,7 +145,6 @@ final class ColorPalette: NSObject {
         for line in lines {
             let t = line.trimmingCharacters(in: .whitespacesAndNewlines)
             if t.starts(with: "#") {
-                comments.append(t)
                 continue
             }
             let values = t.split(separator: ",").map { String($0) }

@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc
 @objcMembers
 final class ColorPaletteHelper: NSObject {
 
@@ -30,25 +29,26 @@ final class ColorPaletteHelper: NSObject {
     }
 
     func requireGradientColorPaletteSync(_ colorizationType: EOAColorizationType, gradientPaletteName: String) -> ColorPalette {
-        let colorPalette = getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName)
-        return isValidPalette(colorPalette) ? colorPalette! : OARouteColorize.getDefaultPalette(colorizationType)
+        guard let colorPalette = getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName), isValidPalette(colorPalette) else {
+            return OARouteColorize.getDefaultPalette(colorizationType)
+        }
+        return colorPalette
     }
 
     func getGradientColorPaletteSync(_ colorizationType: EOAColorizationType, gradientPaletteName: String) -> ColorPalette? {
-        return getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName, refresh: false)
+        getGradientColorPaletteSync(colorizationType, gradientPaletteName: gradientPaletteName, refresh: false)
     }
 
     func getGradientColorPaletteSync(_ colorizationType: EOAColorizationType, gradientPaletteName: String, refresh: Bool) -> ColorPalette? {
-        let colorPaletteFileName = "route_\(getColorizationTypeName(colorizationType))_\(gradientPaletteName)\(TXT_EXT)"
-        return getGradientColorPalette(colorPaletteFileName, refresh: refresh)
+        getGradientColorPalette("route_\(getColorizationTypeName(colorizationType))_\(gradientPaletteName)\(TXT_EXT)", refresh: refresh)
     }
 
     func getGradientColorPaletteSyncWithModeKey(_ modeKey: String) -> ColorPalette? {
-        return getGradientColorPalette(modeKey)
+        getGradientColorPalette(modeKey)
     }
 
     func getGradientColorPalette(_ colorPaletteFileName: String) -> ColorPalette? {
-        return getGradientColorPalette(colorPaletteFileName, refresh: false)
+        getGradientColorPalette(colorPaletteFileName, refresh: false)
     }
 
     func getGradientColorPalette(_ colorPaletteFileName: String, refresh: Bool) -> ColorPalette? {
@@ -62,7 +62,7 @@ final class ColorPaletteHelper: NSObject {
                 cachedColorPalette[colorPaletteFileName] = colorPalette
                 return colorPalette
             } catch {
-                print("Error reading color file: \(error)")
+                debugPrint("Error reading color file: \(error)")
             }
         }
         return nil
@@ -74,18 +74,16 @@ final class ColorPaletteHelper: NSObject {
         
         do {
             let colorFiles = try FileManager.default.contentsOfDirectory(atPath: getColorPaletteDir())
-            for fileName in colorFiles {
-                if fileName.hasPrefix(colorTypePrefix) && fileName.hasSuffix(TXT_EXT) {
-                    let colorPalleteName = fileName.replacingOccurrences(of: colorTypePrefix, with: "").replacingOccurrences(of: TXT_EXT, with: "")
-                    if let colorPalette = getGradientColorPalette(fileName) {
-                        let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileName)
-                        let modificationDate = fileAttributes[.modificationDate] as! Date
-                        colorPalettes[colorPalleteName] = [colorPalette, modificationDate.timeIntervalSince1970]
-                    }
+            for fileName in colorFiles where fileName.hasPrefix(colorTypePrefix) && fileName.hasSuffix(TXT_EXT) {
+                let colorPalleteName = fileName.replacingOccurrences(of: colorTypePrefix, with: "").replacingOccurrences(of: TXT_EXT, with: "")
+                if let colorPalette = getGradientColorPalette(fileName) {
+                    let fileAttributes = try FileManager.default.attributesOfItem(atPath: fileName)
+                    let modificationDate = fileAttributes[.modificationDate] as! Date
+                    colorPalettes[colorPalleteName] = [colorPalette, modificationDate.timeIntervalSince1970]
                 }
             }
         } catch {
-            print("Error reading color palette directory: \(error)")
+            debugPrint("Error reading color palette directory: \(error)")
         }
         
         return colorPalettes
@@ -93,23 +91,23 @@ final class ColorPaletteHelper: NSObject {
 
     private func getTerrainModePallets(_ type: TerrainMode.TerrainType) -> [String: [Any]] {
         var colorPalettes: [String: [Any]] = [:]
-        let modes = TerrainMode.values
-        for mode in modes {
-            if mode.type == type {
-                let fileName = mode.getMainFile()
-                let filePath = getColorPaletteDir().appendingPathComponent(fileName)
-                if let colorPalette = getGradientColorPalette(fileName), FileManager.default.fileExists(atPath: filePath) {
-                    let fileAttributes = try? FileManager.default.attributesOfItem(atPath: filePath)
-                    let modificationDate = fileAttributes?[.modificationDate] as? Date
-                    colorPalettes[mode.getKeyName()] = [colorPalette, modificationDate?.timeIntervalSince1970 ?? 0]
-                }
+        for mode in TerrainMode.values where mode.type == type {
+            let fileName = mode.getMainFile()
+            let filePath = getColorPaletteDir().appendingPathComponent(fileName)
+            if let colorPalette = getGradientColorPalette(fileName), FileManager.default.fileExists(atPath: filePath) {
+                let fileAttributes = try? FileManager.default.attributesOfItem(atPath: filePath)
+                let modificationDate = fileAttributes?[.modificationDate] as? Date
+                colorPalettes[mode.getKeyName()] = [colorPalette, modificationDate?.timeIntervalSince1970 ?? 0]
             }
         }
         return colorPalettes
     }
 
     private func isValidPalette(_ palette: ColorPalette?) -> Bool {
-        return palette != nil && palette!.colorValues.count >= 2
+        guard let palette else {
+            return false
+        }
+        return palette.colorValues.count >= 2
     }
 
     private func getColorPaletteDir() -> String {

@@ -8,30 +8,20 @@
 
 import Foundation
 
-@objc
 @objcMembers
 final class ColorsPaletteUtils: NSObject {
 
-    static let kRoutePrefix = "route_"
-    static let kWeatherPrefix = "weather_"
-    static let kUserPalettePrefix = "user_palette_"
+    private static let kRoutePrefix = "route_"
+    private static let kWeatherPrefix = "weather_"
+    private static let kUserPalettePrefix = "user_palette_"
+    private static let prefixes = [kRoutePrefix, kWeatherPrefix, kUserPalettePrefix]
 
     static func getPaletteName(_ filePath: String) -> String {
         var fileName = filePath.lastPathComponent()
-        var prefix: String?
-
-        if fileName.hasPrefix(Self.kRoutePrefix) {
-            prefix = Self.kRoutePrefix
-        } else if fileName.hasPrefix(Self.kWeatherPrefix) {
-            prefix = Self.kWeatherPrefix
-        } else if fileName.hasPrefix(Self.kUserPalettePrefix) {
-            prefix = Self.kUserPalettePrefix
+        for prefix in prefixes where fileName.hasPrefix(prefix) {
+            fileName = String(fileName.dropFirst(prefix.count))
+            break
         }
-
-        if let prefix {
-            fileName = fileName.replacingOccurrences(of: prefix, with: "")
-        }
-
         fileName = fileName.replacingOccurrences(of: TXT_EXT, with: "")
         return fileName.components(separatedBy: "_").map { OAUtilities.capitalizeFirstLetter($0) }.joined(separator: " ")
     }

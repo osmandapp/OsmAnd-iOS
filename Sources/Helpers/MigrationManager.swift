@@ -385,7 +385,7 @@ final class MigrationManager: NSObject {
         }
     }
 
-    func changeTerrainSettingsMigration1() {
+    private func changeTerrainSettingsMigration1() {
         if let plugin = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
             if let newTerrain = plugin.terrain,
                let newTerrainMode = plugin.terrainModeType,

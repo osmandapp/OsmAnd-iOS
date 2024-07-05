@@ -8,7 +8,6 @@
 
 import Foundation
 
-@objc
 @objcMembers
 final class TerrainMode: NSObject {
 
@@ -41,22 +40,22 @@ final class TerrainMode: NSObject {
     static let colorSlopePrefix = "slope_"
     static let heightPrefix = "height_"
 
+    static var values: [TerrainMode] {
+        guard let terrainModes else {
+            Self.reloadTerrainModes()
+            return terrainModes ?? []
+        }
+        return terrainModes
+    }
+
+    private static var terrainModes: [TerrainMode]?
+
     let type: TerrainType
 
     private let minZoom: OACommonInteger
     private let maxZoom: OACommonInteger
     private let transparency: OACommonInteger
     private let key: String
-
-    static var values: [TerrainMode] {
-        if let terrainModes {
-            return terrainModes
-        }
-        Self.reloadTerrainModes()
-        return terrainModes ?? []
-    }
-
-    private static var terrainModes: [TerrainMode]?
 
     var translateName: String
 
@@ -71,47 +70,10 @@ final class TerrainMode: NSObject {
         transparency = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
     }
 
-    static func reloadTerrainModes() {
-        var modes = [TerrainMode]()
-        modes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
-        modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
-        
-        if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
-           let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
-            for file in files {
-                guard file.hasSuffix(TXT_EXT) else { continue }
-
-                let nm = file
-                if nm.hasPrefix(hillshadePrefix) {
-                    let key = String(nm.substring(from: hillshadePrefix.length).dropLast(TXT_EXT.length))
-                    let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
-                    if key != defaultKey {
-                        modes.append(TerrainMode(key, type: .hillshade, translateName: name))
-                    }
-                } else if nm.hasPrefix(colorSlopePrefix) {
-                    let key = String(nm.substring(from: colorSlopePrefix.length).dropLast(TXT_EXT.length))
-                    let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
-                    if key != defaultKey {
-                        modes.append(TerrainMode(key, type: .slope, translateName: name))
-                    }
-                } else if nm.hasPrefix(heightPrefix) {
-                    let key = String(nm.substring(from: heightPrefix.count).dropLast(TXT_EXT.count))
-                    let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
-                    if key != defaultKey {
-                        modes.append(TerrainMode(key, type: .height, translateName: name))
-                    }
-                }
-            }
-        }
-        terrainModes = modes
-    }
-
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
         if let terrainModes {
-            for mode in terrainModes {
-                if mode.type == type && mode.getKeyName() == keyName {
-                    return mode
-                }
+            for mode in terrainModes where mode.type == type && mode.getKeyName() == keyName {
+                return mode
             }
         }
         return nil
@@ -119,10 +81,8 @@ final class TerrainMode: NSObject {
 
     static func getDefaultMode(_ type: TerrainType) -> TerrainMode? {
         if let terrainModes {
-            for mode in terrainModes {
-                if mode.type == type && mode.isDefaultMode() {
-                    return mode
-                }
+            for mode in terrainModes where mode.type == type && mode.isDefaultMode() {
+                return mode
             }
         }
         return nil
@@ -135,6 +95,40 @@ final class TerrainMode: NSObject {
 
     static func isModeExist(_ key: String) -> Bool {
         terrainModes?.contains { $0.getKeyName() == key } ?? false
+    }
+
+    private static func reloadTerrainModes() {
+        var modes = [TerrainMode]()
+        modes.append(TerrainMode(defaultKey, type: .hillshade, translateName: localizedString("shared_string_hillshade")))
+        modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
+
+        let prefixes = [
+            Pair(hillshadePrefix, TerrainType.hillshade.rawValue),
+            Pair(colorSlopePrefix, TerrainType.slope.rawValue),
+            Pair(heightPrefix, TerrainType.height.rawValue)
+        ]
+        if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
+           let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
+            for file in files where file.hasSuffix(TXT_EXT) {
+                for prefix in prefixes {
+                    if let terrainMode = getTerrainMode(by: file, prefix: prefix) {
+                        modes.append(terrainMode)
+                    }
+                }
+            }
+        }
+        terrainModes = modes
+    }
+
+    private static func getTerrainMode(by file: String, prefix: Pair<String, Int32>) -> TerrainMode? {
+        if file.hasPrefix(prefix.first) {
+            let key = String(file.substring(from: prefix.first.length).dropLast(TXT_EXT.length))
+            let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
+            if key != defaultKey, let type = TerrainType(rawValue: prefix.second) {
+                return TerrainMode(key, type: type, translateName: name)
+            }
+        }
+        return nil
     }
 
     func isHillshade() -> Bool {
@@ -220,11 +214,12 @@ final class TerrainMode: NSObject {
     }
 
     func getDescription() -> String {
-        if type == .hillshade {
+        switch type {
+        case .hillshade:
             return localizedString("shared_string_hillshade")
-        } else if type == .slope {
+        case .slope:
             return localizedString("shared_string_slope")
-        } else {
+        case .height:
             return localizedString("altitude")
         }
     }

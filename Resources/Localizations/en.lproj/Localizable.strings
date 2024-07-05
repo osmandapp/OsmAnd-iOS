@@ -2954,6 +2954,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"transport_hazmat_title" = "Transporting of hazardous materials";
 "routing_attr_hazmat_category_name" = "Hazmat category";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
 "transport_hazmat_yes_desc" = "Select the applicable category.";

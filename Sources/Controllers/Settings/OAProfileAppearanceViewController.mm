@@ -376,7 +376,6 @@
         LOCATION_ICON_BICYCLE
     ] mutableCopy];
     
-    Model3dHelper *helper = [Model3dHelper shared];
     NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
     [iconNames addObjectsFromArray:model3dIconsNames];
     return [iconNames copy];
@@ -400,7 +399,6 @@
     [iconNames addObject:NAVIGATION_ICON_NAUTICAL];
     [iconNames addObject:NAVIGATION_ICON_CAR];
     
-    Model3dHelper *helper = [Model3dHelper shared];
     NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
     [iconNames addObjectsFromArray:model3dIconsNames];
     return [iconNames copy];

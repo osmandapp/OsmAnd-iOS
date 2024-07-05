@@ -4299,7 +4299,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profilePreferences setObject:_showSpeedometer forKey:@"show_speedometer"];
         
         _speedometerSize = [OACommonWidgetSizeStyle withKey:speedometerSizeKey defValue:EOAWidgetSizeStyleMedium];
-        [_speedometerSize setModeDefaultValue:EOAWidgetSizeStyleSmall mode:OAApplicationMode.CAR];
+        [_speedometerSize setModeDefaultValue:@(EOAWidgetSizeStyleSmall) mode:OAApplicationMode.CAR];
         [self registerPreference:_speedometerSize forKey:speedometerSizeKey];
         
         _showSpeedLimitWarning = [OACommonSpeedLimitWarningState withKey:showSpeedLimitWarningKey defValue:EOASpeedLimitWarningStateWhenExceeded];

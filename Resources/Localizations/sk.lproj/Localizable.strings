@@ -1084,7 +1084,7 @@
 "download_depth_countours" = "Námorné hĺbkové vrstevnice";
 // Route info
 "quick_action_add_marker" = "Pridať mapovú značku";
-"quick_action_map_style" = "Zmeniť štýl mapy";
+"quick_action_map_style" = "Štýl mapy";
 "add_gpx_waypoint" = "Pridať GPX waypoint";
 "quick_action_add_parking" = "Pridať miesto zaparkovania";
 "quick_action_map_underlay_title" = "Podkladové mapy";
@@ -1095,7 +1095,7 @@
 "gpx_tags_txt" = "Tagy";
 "quick_action_add_create_items" = "Vytvoriť položky";
 "hide_contour_lines" = "Skryť vrstevnice";
-"quick_action_map_overlay" = "Zmeniť prekrývaciu mapu";
+"quick_action_map_overlay" = "Prekryv";
 "quick_action_pause_nav_descr" = "Použite toto tlačidlo pre pozastavenie alebo obnovenie navigácie.";
 "average_altitude" = "Priemerná výška";
 "gpx_descent" = "Klesanie";
@@ -1114,7 +1114,7 @@
 "no_underlay" = "Žiadna podkladová vrstva";
 "quick_action_map_source" = "Zmeniť zdroj mapy";
 "favorite_home_category" = "Doma";
-"quick_action_map_underlay" = "Zmeniť podkladovú mapu";
+"quick_action_map_underlay" = "Podklad";
 "quick_action_bug_descr" = "Táto správa je zahrnutá do poľa komentára.";
 "shared_string_deselect" = "Zrušiť výber";
 "nautical_maps" = "Námorné mapy";
@@ -1564,7 +1564,7 @@
 "shared_string_one" = "Jedna";
 "save_as_new_track" = "Uložiť ako novú stopu";
 "ltr_or_rtl_combine_via_space" = "%@ %@";
-"quick_action_remove_next_destination" = "Vymazať ďalší cieľový bod";
+"quick_action_remove_next_destination" = "Ďalší cieľový bod";
 "profile_prefs_reset_successful" = "Všetky nastavenia profilov obnovené do východzieho stavu.";
 "route_between_points" = "Trasa medzi bodmi";
 "select_icon_profile_dialog_title" = "Zvoľte ikonu";

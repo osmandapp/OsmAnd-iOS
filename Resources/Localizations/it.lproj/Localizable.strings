@@ -3437,3 +3437,8 @@
 "avoid_pt_types" = "Evita tipi di trasporto…";
 "select_items" = "Seleziona elementi";
 "routing_algorithm_highway_hierarchies" = "Gerarchie autostradali";
+"ios_release_4_8" = "• Nuovo widget \"Tachimetro\" compatibile con CarPlay\n• Aggiunte istruzioni passo-passo ai dettagli del percorso\n• Personalizza la schermata della mappa aggiungendo più pulsanti \"Azione rapida\"\n• Miglioramenti al tracciato 3D: nuove opzioni di visualizzazione e colorazione\n• Tavolozze di colori personalizzate per terreno, piste e percorsi\n• Aggiunta una modalità di selezione multipla migliorata per le tracce\n• Variante 3D per le icone della ubicazione della posizione\n• Selezione ampliata di percorsi turistici sulla mappa\n• Meteo: aggiornamento dell'interfaccia utente, aggiunta animazione del vento\n• Aggiungi transizioni fluide durante lo zoom in modalità 3D\n• \"Ubicazione della posizione sullo schermo\" è ora in Configura schermata\n• Modifica la \"Circonferenza della ruota\" nelle impostazioni del sensore BLE\n• Aggiunto avviso di navigazione separato \"Limite di velocità\"\n• Nomi corretti per i widget di rilevamento\n• Corretta la visibilità del \"righello del raggio\" in tutti i pannelli widget\n";
+"wall_height_description" = "Modificando il valore dell'altezza, è possibile alzare la linea superiore della traccia sopra il livello del suolo.";
+"missing_maps_ignore_details" = "Alcune mappe già scaricate potrebbero essere adatte al tuo percorso. Se hai familiarità con l'area e le mappe, puoi provare a muoverti utilizzando le mappe esistenti.";
+"missing_maps_ignore" = "Utilizza mappe esistenti";
+"online_plugins" = "Componenti aggiuntivi online";

@@ -1994,7 +1994,7 @@
 "map_widget_parking" = "Parcare";
 "route_add_start_point" = "Adăugați punctul de pornire";
 "add_destination" = "Adăugați destinația";
-"quick_action_map_underlay" = "Modificați fundalul hărții";
+"quick_action_map_underlay" = "Substrat";
 "quick_action_map_overlay" = "Modificarea suprapunerii hărții";
 "quick_action_map_source" = "Schimbă sursa hărții";
 "quick_action_map_style" = "Schimbă stil hartă";

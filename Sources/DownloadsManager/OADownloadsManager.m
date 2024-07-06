@@ -80,6 +80,11 @@
 {
 }
 
+- (BOOL)backgroundDownloadTaskActive
+{
+    return _backgroundDownloadTask != UIBackgroundTaskInvalid;
+}
+
 - (NSArray*)keysOfDownloadTasks
 {
     @synchronized(_tasksSync)
@@ -151,8 +156,6 @@
             for (id<OADownloadTask> task in tasks)
                 [task cancel];
         }];
-
-        [_backgroundDownloadCanceledObservable notifyEvent];
     }
 }
 
@@ -499,6 +502,8 @@
                     NSLog(@"End background download task (time expired)");
                     [[UIApplication sharedApplication] endBackgroundTask:_backgroundDownloadTask];
                     _backgroundDownloadTask = UIBackgroundTaskInvalid;
+
+                    [_backgroundDownloadCanceledObservable notifyEvent];
                 }
             }];
         }

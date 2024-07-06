@@ -78,7 +78,7 @@
 
     if (self.cancelled && hasTasks)
     {
-        NSLog(@"OAFetchBackgroundDataOperation LiveUpdates cancel tasks %d", [downloadManager downloadTasksWithKeySuffix:@"tifsqlite"]);
+        NSLog(@"OAFetchBackgroundDataOperation LiveUpdates cancel tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@".live.obf"]);
         NSArray *tasks = [downloadManager downloadTasksWithKeySuffix:@".live.obf"];
         for (id<OADownloadTask> task in tasks)
             [task cancel];
@@ -102,7 +102,7 @@
 
         if (self.cancelled && hasTasks)
         {
-            NSLog(@"OAFetchBackgroundDataOperation ForecastsUpdates cancel tasks %d", [downloadManager downloadTasksWithKeySuffix:@"tifsqlite"]);
+            NSLog(@"OAFetchBackgroundDataOperation ForecastsUpdates cancel tasks %d", [downloadManager numberOfDownloadTasksWithKeySuffix:@"tifsqlite"]);
             NSArray *tasks = [downloadManager downloadTasksWithKeySuffix:@"tifsqlite"];
             for (id<OADownloadTask> task in tasks)
                 [task cancel];

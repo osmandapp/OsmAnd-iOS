@@ -61,5 +61,6 @@
 @property(readonly) OAObservable* progressCompletedObservable;
 @property(readonly) OAObservable* completedObservable;
 @property(readonly) OAObservable* backgroundDownloadCanceledObservable;
+@property(readonly) BOOL backgroundDownloadTaskActive;
 
 @end

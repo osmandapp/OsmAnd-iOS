@@ -75,11 +75,9 @@
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
 
-- (void)updateScreenTurnOffSetting;
+- (void)allowScreenTurnOff:(BOOL)allow;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
-
-@property(readonly) BOOL allowScreenTurnOff;
 
 @property(readonly) id<OAAppearanceProtocol> appearance;
 @property(readonly) OAObservable* appearanceChangeObservable;
@@ -110,7 +108,7 @@
 - (void) showToastMessage:(NSString *)message;
 - (void) showShortToastMessage:(NSString *)message;
 
-- (void) checkAndDownloadOsmAndLiveUpdates;
+- (void) checkAndDownloadOsmAndLiveUpdates:(BOOL)checkUpdatesAsync;
 - (void) checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;

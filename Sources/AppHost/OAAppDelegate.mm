@@ -226,7 +226,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
         if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
         {
-            [_app checkAndDownloadOsmAndLiveUpdates];
+            [_app checkAndDownloadOsmAndLiveUpdates:YES];
             [_app checkAndDownloadWeatherForecastsUpdates];
         }
     }];
@@ -257,7 +257,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)performUpdatesCheck
 {
-    [_app checkAndDownloadOsmAndLiveUpdates];
+    [_app checkAndDownloadOsmAndLiveUpdates:YES];
     [_app checkAndDownloadWeatherForecastsUpdates];
 }
 
@@ -355,7 +355,16 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 {
     NSLog(@"OAAppDelegate applicationWillEnterForeground %d", _appInitDone);
     if (_appInitDone)
+    {
         [_app onApplicationWillEnterForeground];
+
+        // Start next resource download task if such exists
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        {
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            [nextTask resume];
+        }
+    }
 }
 
 - (void)applicationDidBecomeActive

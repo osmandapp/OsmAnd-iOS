@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, ELiveUpdateFrequency)
 
 + (BOOL) isPreferencesInited:(NSString *)regionName;
 
-+ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager;
++ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager checkUpdatesAsync:(BOOL)checkUpdatesAsync;
 
 @end
 

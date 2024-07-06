@@ -202,8 +202,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     if (self.isVisible)
     {
         [self.mapView addKeyedSymbolsProvider:_collection];

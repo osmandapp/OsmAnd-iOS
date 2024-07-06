@@ -31,9 +31,12 @@ class DownloadingCellBaseHelper: NSObject {
     private var progresses = [String: Float]()
     private weak var hostTableView: UITableView?
     
+    private var backgroundStateObserver: OAAutoObserverProxy?
+    
     override init() {
         super.init()
         NotificationCenter.default.addObserver(self, selector: #selector(onApplicationWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
+        backgroundStateObserver = OAAutoObserverProxy(self, withHandler: #selector(refreshDownloadingContent), andObserve: OsmAndApp.swiftInstance().backgroundStateObservable)
     }
     
     deinit {
@@ -84,6 +87,11 @@ class DownloadingCellBaseHelper: NSObject {
     func helperHasItemFor(_ resourceId: String) -> Bool {
         statuses[resourceId] != nil
     }
+    
+    func allResourceIds() -> [String] {
+        Array(statuses.keys)
+    }
+    
     
     // MARK: - Cell setup methods
     
@@ -316,5 +324,11 @@ class DownloadingCellBaseHelper: NSObject {
     
     func cleanCellCache() {
         cells.removeAll()
+    }
+    
+    @objc func refreshDownloadingContent() {
+        DispatchQueue.main.async { [weak self] in
+            self?.refreshCellSpinners()
+        }
     }
 }

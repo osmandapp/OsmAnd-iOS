@@ -33,6 +33,8 @@
 
     NSObject* _activeTasksSync;
     NSMutableDictionary* _activeTasks;
+
+    UIBackgroundTaskIdentifier _backgroundDownloadTask;
 }
 
 - (instancetype)init
@@ -51,21 +53,7 @@
 
 - (void)commonInit
 {
-    NSURLSessionConfiguration* sessionConfiguration;
-    
-    /*
-    if ([OAUtilities iosVersionIsAtLeast:@"8.0"])
-    {
-        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
-    }
-    else
-    {
-        sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfiguration:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
-    }
-    */
-    sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
-//    sessionConfiguration = [NSURLSessionConfiguration defaultSessionConfiguration];
-    
+    NSURLSessionConfiguration *sessionConfiguration = [NSURLSessionConfiguration backgroundSessionConfigurationWithIdentifier:[[[NSBundle mainBundle] bundleIdentifier] stringByAppendingString:@":OADownloadsManager"]];
     sessionConfiguration.sessionSendsLaunchEvents = YES;
     sessionConfiguration.allowsCellularAccess = YES;
     sessionConfiguration.HTTPMaximumConnectionsPerHost = 1;
@@ -83,6 +71,9 @@
     _activeTasksCollectionChangedObservable = [[OAObservable alloc] init];
     _progressCompletedObservable = [[OAObservable alloc] init];
     _completedObservable = [[OAObservable alloc] init];
+    _backgroundDownloadCanceledObservable = [[OAObservable alloc] init];
+
+    _backgroundDownloadTask = UIBackgroundTaskInvalid;
 }
 
 - (void)deinit
@@ -150,6 +141,48 @@
     }
 }
 
+- (void)cancelDownloadTasks
+{
+    @synchronized(_tasksSync)
+    {
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSArray* tasks = (NSArray*)obj_;
+            for (id<OADownloadTask> task in tasks)
+                [task cancel];
+        }];
+
+        [_backgroundDownloadCanceledObservable notifyEvent];
+    }
+}
+
+- (void)pauseDownloadTasks
+{
+    @synchronized(_tasksSync)
+    {
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSArray* tasks = (NSArray*)obj_;
+            for (id<OADownloadTask> task in tasks)
+                [task pause];
+        }];
+    }
+}
+
+- (id<OADownloadTask>)firstActiveDownloadTask
+{
+    @synchronized(_activeTasksSync)
+    {
+        __block id<OADownloadTask> result = nil;
+
+        [_activeTasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSArray* tasks = (NSArray*)obj_;
+            result = [tasks firstObject];
+            *stop = (result != nil);
+        }];
+
+        return result;
+    }
+}
+
 - (id<OADownloadTask>)firstActiveDownloadTasksWithKey:(NSString*)key
 {
     @synchronized(_activeTasksSync)
@@ -207,6 +240,26 @@
     }
 }
 
+- (NSArray*)downloadTasksWithKeySuffix:(NSString*)suffix
+{
+    @synchronized(_tasksSync)
+    {
+        NSMutableArray* result = [NSMutableArray array];
+
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasSuffix:suffix])
+                return;
+
+            [result addObjectsFromArray:tasks];
+        }];
+
+        return result;
+    }
+}
+
 - (NSArray*)activeDownloadTasksWithKey:(NSString*)key
 {
     @synchronized(_activeTasksSync)
@@ -231,6 +284,26 @@
             [result addObjectsFromArray:tasks];
         }];
         
+        return result;
+    }
+}
+
+- (NSArray*)activeDownloadTasksWithKeySuffix:(NSString*)suffix
+{
+    @synchronized(_activeTasksSync)
+    {
+        NSMutableArray* result = [NSMutableArray array];
+
+        [_activeTasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasSuffix:suffix])
+                return;
+
+            [result addObjectsFromArray:tasks];
+        }];
+
         return result;
     }
 }
@@ -263,6 +336,26 @@
             result += [tasks count];
         }];
         
+        return result;
+    }
+}
+
+- (NSUInteger)numberOfDownloadTasksWithKeySuffix:(NSString*)suffix
+{
+    @synchronized(_tasksSync)
+    {
+        __block NSUInteger result = 0;
+
+        [_tasks enumerateKeysAndObjectsUsingBlock:^(id key_, id obj_, BOOL *stop) {
+            NSString* key = (NSString*)key_;
+            NSArray* tasks = (NSArray*)obj_;
+
+            if (![key hasSuffix:suffix] || tasks == nil)
+                return;
+
+            result += [tasks count];
+        }];
+
         return result;
     }
 }
@@ -391,6 +484,19 @@
         [list addObject:task];
 
         [_tasksCollectionChangedObservable notifyEventWithKey:self];
+
+        // Start background task if not started yet
+        if (_backgroundDownloadTask == UIBackgroundTaskInvalid)
+        {
+            _backgroundDownloadTask = [[UIApplication sharedApplication] beginBackgroundTaskWithName:@"DownloadManagerBackgroundTask" expirationHandler:^{
+                [self pauseDownloadTasks];
+                if (_backgroundDownloadTask != UIBackgroundTaskInvalid)
+                {
+                    [[UIApplication sharedApplication] endBackgroundTask:_backgroundDownloadTask];
+                    _backgroundDownloadTask = UIBackgroundTaskInvalid;
+                }
+            }];
+        }
     }
 
     return task;
@@ -444,6 +550,13 @@
         }
 
         [_tasksCollectionChangedObservable notifyEventWithKey:self];
+
+        // When the all task are done, end the background task
+        if (_tasks.count == 0 && _backgroundDownloadTask != UIBackgroundTaskInvalid)
+        {
+            [[UIApplication sharedApplication] endBackgroundTask:_backgroundDownloadTask];
+            _backgroundDownloadTask = UIBackgroundTaskInvalid;
+        }
     }
 }
 
@@ -515,14 +628,6 @@
 @synthesize activeTasksCollectionChangedObservable = _activeTasksCollectionChangedObservable;
 @synthesize progressCompletedObservable = _progressCompletedObservable;
 @synthesize completedObservable = _completedObservable;
-
-- (BOOL)allowScreenTurnOff
-{
-    //if (_sessionManager != nil)
-    //    return YES; // For iOS 7.0+ there's no sense of keeping screen on
-
-    // For iOS pre-7.0 don't turn off screen while downloading something
-    return ![self hasActiveDownloadTasks];
-}
+@synthesize backgroundDownloadCanceledObservable = _backgroundDownloadCanceledObservable;
 
 @end

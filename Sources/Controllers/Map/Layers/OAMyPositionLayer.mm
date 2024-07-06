@@ -581,7 +581,8 @@ typedef enum {
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     CGFloat textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     if (_textScaleFactor != textScaleFactor)

@@ -128,12 +128,12 @@
     }
 }
 
-+ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager
++ (void)downloadUpdatesForRegion:(QString)regionName resourcesManager:(std::shared_ptr<OsmAnd::ResourcesManager>) resourcesManager checkUpdatesAsync:(BOOL)checkUpdatesAsync
 {
     if (![OAAppSettings sharedManager].settingOsmAndLiveEnabled.get || ![OAIAPHelper isSubscribedToLiveUpdates])
         return;
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    void (^downloadUpdatesBlock)(void) = ^{
         NSString *regionNameStr = regionName.toNSString();
         if ([OAOsmAndLiveHelper getPreferenceEnabledForLocalIndex:regionNameStr])
         {
@@ -158,7 +158,12 @@
                 [[OsmAndApp instance].osmAndLiveUpdatedObservable notifyEvent];
             }
         }
-    });
+    };
+
+    if (checkUpdatesAsync)
+    	dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), downloadUpdatesBlock);
+    else
+        downloadUpdatesBlock();
 }
 
 @end

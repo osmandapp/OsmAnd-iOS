@@ -8,10 +8,12 @@
 
 #import "OAMapLayers.h"
 
+#import "OsmAndApp.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OAAutoObserverProxy.h"
 
 @implementation OAMapLayers
 {
@@ -19,6 +21,7 @@
     OAMapRendererView *_mapView;
     
     NSMapTable<NSString *, OAMapLayer *> *_layers;
+    OAAutoObserverProxy *_backgroundStateObserver;
 }
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController
@@ -109,14 +112,32 @@
     [self addLayer:_weatherContourLayer];
     
     [OAPluginsHelper createLayers];
+
+    _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                         withHandler:@selector(onBackgroundStateChanged)
+                                                          andObserve:OsmAndApp.instance.backgroundStateObservable];
 }
 
 - (void) destroyLayers
 {
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
+
     for (OAMapLayer *layer in _layers.objectEnumerator)
         [layer deinitLayer];
 
     [_layers removeAllObjects];
+}
+
+- (void) onBackgroundStateChanged
+{
+    if (!OsmAndApp.instance.isInBackground)
+        for (OAMapLayer *layer in _layers.objectEnumerator)
+            if (layer.invalidated)
+                [layer updateLayer];
 }
 
 - (NSArray<OAMapLayer *> *) getLayers

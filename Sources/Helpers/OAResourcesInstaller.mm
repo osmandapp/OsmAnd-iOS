@@ -35,10 +35,13 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     OsmAndAppInstance _app;
 
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
+    OAAutoObserverProxy *_backgroundStateObserver;
 
     MBProgressHUD* _progressHUD;
     
     NSObject *_sync;
+    
+    OAWorldRegion *_lastDownloadedRegionInBackground;
 }
 
 - (instancetype) init
@@ -50,9 +53,39 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
         
         _app = [OsmAndApp instance];
 
-        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self withHandler:@selector(onDownloadTaskFinished:withKey:andValue:) andObserve:_app.downloadsManager.completedObservable];
+        _downloadTaskCompletedObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                                   withHandler:@selector(onDownloadTaskFinished:withKey:andValue:)
+                                                                    andObserve:_app.downloadsManager.completedObservable];
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged)
+                                                              andObserve:_app.backgroundStateObservable];
     }
     return self;
+}
+
+- (void)dealloc
+{
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
+    if (_downloadTaskCompletedObserver)
+    {
+        [_downloadTaskCompletedObserver detach];
+        _downloadTaskCompletedObserver = nil;
+    }
+}
+
+- (void) onBackgroundStateChanged
+{
+    if (!_app.isInBackgroundOnDevice && _lastDownloadedRegionInBackground)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [OAPluginPopupViewController showRegionOnMap:_lastDownloadedRegionInBackground];
+            _lastDownloadedRegionInBackground = nil;
+        });
+    }
 }
 
 - (void) onDownloadTaskFinished:(id<OAObservableProtocol>)observer withKey:(id)key andValue:(id)value
@@ -65,12 +98,7 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
     
     // Skip other states except Finished (and completed)
     if (task.state != OADownloadTaskStateFinished || task.error)
-    {
-        if (task.state == OADownloadTaskStateFinished)
-            [_app updateScreenTurnOffSetting];
-
         return;
-    }
 
     task.installResourceRetry = 0;
 
@@ -327,7 +355,10 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
                                 if (foundRegion && foundRegion.superregion && !task.silentInstall)
                                 {
                                     dispatch_async(dispatch_get_main_queue(), ^{
-                                        [OAPluginPopupViewController showRegionOnMap:foundRegion];
+                                        if (_app.isInBackgroundOnDevice)
+                                            _lastDownloadedRegionInBackground = foundRegion;
+                                        else
+                                            [OAPluginPopupViewController showRegionOnMap:foundRegion];
                                     });
                                 }
                             }
@@ -384,14 +415,10 @@ NSString *const OAResourceInstallationFailedNotification = @"OAResourceInstallat
             [[NSNotificationCenter defaultCenter] postNotificationName:OAResourceInstallationFailedNotification object:nsResourceId userInfo:nil];
         
         // Start next resource download task if such exists
-        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0 && !_app.isInBackgroundOnDevice)
         {
-            id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
             [nextTask resume];
-        }
-        else
-        {
-            [_app updateScreenTurnOffSetting];
         }
     }
 }

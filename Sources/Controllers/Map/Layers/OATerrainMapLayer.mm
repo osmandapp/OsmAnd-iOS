@@ -88,7 +88,8 @@ static NSString * const SLOPE_SECONDARY_COLOR_FILENAME = @"hillshade_color_defau
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     EOATerrainType type = self.app.data.terrainType;
     if (type != EOATerrainTypeDisabled && [[OAPluginsHelper getPlugin:OASRTMPlugin.class] isEnabled])

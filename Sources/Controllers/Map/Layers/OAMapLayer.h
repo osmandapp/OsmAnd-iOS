@@ -23,6 +23,7 @@
 @property (nonatomic, readonly) CGFloat displayDensityFactor;
 @property (nonatomic, readonly) int baseOrder;
 @property (nonatomic) int pointsOrder;
+@property (nonatomic) BOOL invalidated;
 
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController;
 - (instancetype) initWithMapViewController:(OAMapViewController *)mapViewController baseOrder:(int)baseOrder;

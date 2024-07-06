@@ -93,8 +93,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     CGFloat textSize = [[OAAppSettings sharedManager].textSize get];
     BOOL textSizeChanged = _textSize != textSize;
     if (self.showCaptions != _showCaptionsCache || textSizeChanged)

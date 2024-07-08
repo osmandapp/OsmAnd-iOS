@@ -826,7 +826,7 @@
             OARouteColorize *colorizationHelper =
                     [[OARouteColorize alloc] initWithGpxFile:gpx
                                                               analysis:[gpx getAnalysis:0]
-                                                                  type:[[routeColoringType toGradientScaleType] toColorizationType]
+                                                                  type:[routeColoringType toColorizationType]
                                                                palette:colorPalette
                                                        maxProfileSpeed:0
                     ];

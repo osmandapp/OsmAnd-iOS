@@ -516,15 +516,6 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
 {
     self.gpx.visualization3dWallColorType = type;
 
-    if (self.gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeAltitude)
-        self.gpx.coloringType = OAColoringType.ALTITUDE.name;
-    else if (self.gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSlope)
-        self.gpx.coloringType = OAColoringType.SLOPE.name;
-    else if (self.gpx.visualization3dWallColorType == EOAGPX3DLineVisualizationWallColorTypeSpeed)
-        self.gpx.coloringType = OAColoringType.SPEED.name;
-    else
-        self.gpx.coloringType = OAColoringType.TRACK_SOLID.name;
-
     if (_wholeFolderTracks)
     {
         for (OAGPX *track in _wholeFolderTracks)

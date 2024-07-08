@@ -156,9 +156,24 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return [self isDefault] || [self isCustomColor] || [self isTrackSolid];
 }
 
-- (BOOL) isGradient
+- (BOOL)isGradient
 {
-    return self == self.class.SPEED || self == self.class.ALTITUDE || self == self.class.SLOPE;
+    return [self isSpeed] || [self isAltitude] || [self isSlope];
+}
+
+- (BOOL)isSpeed
+{
+    return self == self.class.SPEED;
+}
+
+- (BOOL)isAltitude
+{
+    return self == self.class.ALTITUDE;
+}
+
+- (BOOL)isSlope
+{
+    return self == self.class.SLOPE;
 }
 
 - (BOOL) isRouteInfoAttribute
@@ -190,7 +205,7 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
 - (BOOL) isAvailableForDrawingTrack:(OAGPXDocument *)selectedGpxFile attributeName:(NSString *)attributeName
 {
     if ([self isGradient])
-        return [[selectedGpxFile getAnalysis:0] isColorizationTypeAvailable:[[self toGradientScaleType] toColorizationType]];
+        return [[selectedGpxFile getAnalysis:0] isColorizationTypeAvailable:[self toColorizationType]];
     
     if ([self isRouteInfoAttribute])
     {

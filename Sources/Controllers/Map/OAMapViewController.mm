@@ -712,6 +712,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = 1.0f;
         _progressHUD.labelText = message;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];

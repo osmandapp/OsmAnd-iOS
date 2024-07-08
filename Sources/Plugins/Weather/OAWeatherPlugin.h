@@ -7,6 +7,7 @@
 //
 
 #import "OAPlugin.h"
+#import "OAWeatherWidget.h"
 
 #define kWeatherTemp @"weather_temp"
 #define kWeatherPressure @"weather_pressure"
@@ -18,5 +19,6 @@
 
 - (void)weatherChanged:(BOOL)isOn;
 - (void)updateWidgetsInfo;
+- (NSArray<OAWeatherWidget *> *)createWidgetsControls;
 
 @end

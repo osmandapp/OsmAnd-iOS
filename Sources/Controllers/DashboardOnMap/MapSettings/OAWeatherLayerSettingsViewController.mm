@@ -252,7 +252,9 @@
                     case WEATHER_BAND_PRECIPITATION:
                         contoursType = WEATHER_PRECIPITATION_CONTOURS_LINES_ATTR;
                         break;
-                    case WEATHER_BAND_UNDEFINED:
+                    case WEATHER_BAND_NOTHING:
+                        break;
+                    case WEATHER_BAND_WIND_ANIMATION:
                         break;
                 }
                 [contoursTypesRows addObject:@{

@@ -15,6 +15,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface OAWeatherWidget : OASimpleWidget
 
+@property (nonatomic, assign) BOOL shouldAlwaysSeparateValueAndUnitText;
+@property (nonatomic, assign) BOOL useDashSymbolWhenTextIsEmpty;
+
 - (instancetype _Nonnull)initWithType:(OAWidgetType *)type
                          band:(EOAWeatherBand)band
                      customId:(NSString *_Nullable)customId

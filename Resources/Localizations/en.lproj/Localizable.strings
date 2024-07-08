@@ -3814,6 +3814,14 @@
 "empty_name" = "Empty name";
 "custom_map_button_name_present" = "Such button already present";
 
+"data_source" = "Data source";
+"weather_data_sources_prompt" = "OsmAnd provides weather data from two sources:";
+"weather_source_ecmwf_description" = "European Centre for Medium-Range Weather Forecasts";
+"weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Wind animation";
+
 "routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
 "routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
-"rendering_value_dark_orange_name" = "Dark orange";;
+"rendering_value_dark_orange_name" = "Dark orange";

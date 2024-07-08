@@ -22,14 +22,15 @@
 #import "OAWeatherPlugin.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAWeatherWidget.h"
 
 #define kDefaultZoom 10
 
 @interface OAWeatherToolbar () <OAWeatherToolbarDelegate>
 
-@property (weak, nonatomic) IBOutlet OAFoldersCollectionView *layersCollectionView;
 @property (weak, nonatomic) IBOutlet OAFoldersCollectionView *dateCollectionView;
 @property (weak, nonatomic) IBOutlet OASegmentedSlider *timeSliderView;
+@property (weak, nonatomic) IBOutlet UIStackView *weatherStackView;
 
 @end
 
@@ -47,6 +48,7 @@
     NSInteger _previousSelectedDayIndex;
     float _prevZoom;
     OsmAnd::PointI _prevTarget31;
+    NSArray<OAWeatherWidget *> *_weatherWidgetControlsArray;
 }
 
 - (instancetype)init
@@ -58,7 +60,7 @@
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
                 [self.class calculateYOutScreen],
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
-                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 205. + [OAUtilities getBottomMargin]
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 241. + [OAUtilities getBottomMargin]
         );
 
     [self commonInit];
@@ -85,16 +87,13 @@
     _previousSelectedDayIndex = 0;
 
     _layersHandler = [[OAWeatherToolbarLayersHandler alloc] init];
-    _layersHandler.delegate = self;
     _datesHandler = [[OAWeatherToolbarDatesHandler alloc] init];
     _datesHandler.delegate = self;
 
     self.dateCollectionView.foldersDelegate = _datesHandler;
-    self.layersCollectionView.foldersDelegate = _layersHandler;
-    [self.layersCollectionView setOnlyIconCompact:YES];
-    [self.layersCollectionView addGestureRecognizer:[[UILongPressGestureRecognizer alloc] initWithTarget:self
-                                                                                                  action:@selector(handleLongPressOnLayer:)]];
-
+    
+    self.timeSliderView.stepsAmountWithoutDrawMark = 145.0;
+    [self.timeSliderView clearTouchEventsUpInsideUpOutside];
     [self.timeSliderView removeTarget:self action:NULL forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
     [self.timeSliderView addTarget:self action:@selector(timeChanged:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 
@@ -109,7 +108,6 @@
     _mapSourceUpdatedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(updateLayersHandlerData)
                                                   andObserve:[OARootViewController instance].mapPanel.mapViewController.mapSourceUpdatedObservable];
-    
     [self updateInfo];
 }
 
@@ -131,6 +129,26 @@
     }
 }
 
+- (void)configureWidgetControlsStackView
+{
+    _weatherWidgetControlsArray = [[(OAWeatherPlugin *)[OAPluginsHelper getPlugin:OAWeatherPlugin.class] createWidgetsControls] copy];
+    
+    if (_weatherWidgetControlsArray && _weatherWidgetControlsArray.count > 0) {
+        [_weatherStackView removeAllArrangedSubviews];
+        NSInteger itemCount = _weatherWidgetControlsArray.count;
+        for (NSInteger idx = 0; idx < itemCount; idx++) {
+            OAWeatherWidget *widget = _weatherWidgetControlsArray[idx];
+            widget.shouldAlwaysSeparateValueAndUnitText = YES;
+            widget.useDashSymbolWhenTextIsEmpty = YES;
+            widget.isVerticalStackImageTitleSubtitleLayout = YES;
+            [widget updateVerticalStackImageTitleSubtitleLayout];
+            BOOL showSeparator = (idx != itemCount - 1);
+            [widget showRightSeparator:showSeparator];
+            [_weatherStackView addArrangedSubview:widget];
+        }
+    }
+}
+
 - (void)resetHandlersData
 {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -140,10 +158,9 @@
         [_datesHandler updateData];
         NSInteger selectedTimeIndex = [self getSelectedTimeIndex:[OAUtilities getCurrentTimezoneDate:[NSDate date]]];
         self.timeSliderView.selectedMark = selectedTimeIndex;
-        [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers index:-1];
-        [self updateData:[_datesHandler getData] type:EOAWeatherToolbarDates index:0];
-        [self.layersCollectionView reloadData];
+        [self updateData:[_datesHandler getData] index:0];
         [self.dateCollectionView reloadData];
+        [self configureWidgetControlsStackView];
     });
 }
 
@@ -151,26 +168,8 @@
 {
     dispatch_async(dispatch_get_main_queue(), ^{
         [_layersHandler updateData];
-        [self updateData:[_layersHandler getData] type:EOAWeatherToolbarLayers index:-1];
-        [self.layersCollectionView reloadData];
+        [self configureWidgetControlsStackView];
     });
-}
-
-- (void)handleLongPressOnLayer:(UILongPressGestureRecognizer *)gestureRecognizer
-{
-    if (gestureRecognizer.state == UIGestureRecognizerStateBegan)
-    {
-        CGPoint point = [gestureRecognizer locationInView:self.layersCollectionView];
-        NSIndexPath *indexPath = [self.layersCollectionView indexPathForItemAtPoint:point];
-        if (indexPath)
-        {
-            [self.layersCollectionView reloadData];
-            _selectedLayerIndex = indexPath.row;
-            _needsSettingsForToolbar = YES;
-            OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
-            [mapPanel.hudViewController changeWeatherToolbarVisible];
-        }
-    }
 }
 
 - (void) awakeFromNib
@@ -181,16 +180,17 @@
     self.layer.shadowRadius = 5.;
     self.layer.shadowOffset = CGSizeMake(0., -1.);
     self.layer.masksToBounds = NO;
-    
-    self.layer.cornerRadius = 9.;
-    self.layer.maskedCorners = kCALayerMinXMinYCorner | kCALayerMaxXMinYCorner;
 }
 
 - (BOOL)updateInfo
 {
     OAMapInfoController *mapInfoController = [OARootViewController instance].mapPanel.hudViewController.mapInfoController;
-    BOOL visible =  mapInfoController.weatherToolbarVisible;
+    BOOL visible = mapInfoController.weatherToolbarVisible;
     [self updateVisibility:visible];
+    if (visible)
+    {
+        [self updateWidgetsInfo];
+    }
 
     return YES;
 }
@@ -268,25 +268,48 @@
     self.timeSliderView.maximumForCurrentMark = [_currentTimezoneCalendar startOfDayForDate:date].timeIntervalSince1970 - minimumForCurrentMark;
 }
 
-- (void)updateTimeValues:(NSDate *)date
-{
+- (void)updateTimeValues:(NSDate *)date {
     NSCalendar *calendar = NSCalendar.autoupdatingCurrentCalendar;
-    NSDate *selectedNextDate = [calendar startOfDayForDate:date];
-    NSMutableArray<NSDate *> *selectedTimeValues = [NSMutableArray array];
-    [selectedTimeValues addObject:selectedNextDate];
-
-    NSInteger selectedDayIndex = [self.dateCollectionView getSelectedIndex];
-    NSInteger count = selectedDayIndex == 0 ? 9 + (9 - 1) * 2 : 9;
-    for (NSInteger i = 0; i < count - 1; i++)
+    NSDate *startOfDay = [calendar startOfDayForDate:date];
+    
+    NSMutableArray<NSDate *> *timeValues = [NSMutableArray array];
+    
+    [timeValues addObject:startOfDay];
+    
+    NSInteger hourSteps = 9 + (9 - 1) * 2;
+    
+    for (NSInteger hour = 1; hour < hourSteps; hour++)
     {
-        selectedNextDate = [calendar dateByAddingUnit:NSCalendarUnitHour
-                                                value:selectedDayIndex == 0 ? 1 : 3
-                                               toDate:selectedNextDate
-                                              options:0];
-        [selectedTimeValues addObject:selectedNextDate];
+        NSDate *nextHourDate = [calendar dateByAddingUnit:NSCalendarUnitHour
+                                                    value:hour
+                                                   toDate:startOfDay
+                                                  options:0];
+        [timeValues addObject:nextHourDate];
     }
-
-    _timeValues = selectedTimeValues;
+    
+    NSInteger minuteSteps = 5;
+    NSMutableArray<NSDate *> *timeValuesTotal = [NSMutableArray array];
+    
+    for (NSInteger index = 0; index <= timeValues.count - 1; index++)
+    {
+        NSDate *data = timeValues[index];
+        [timeValuesTotal addObject:data];
+        if (index <= timeValues.count - 2)
+        {
+            for (NSInteger min = 1; min <= minuteSteps; min++)
+            {
+                NSDate *next10MinDate = [calendar dateByAddingUnit:NSCalendarUnitMinute
+                                                             value:min * 10
+                                                            toDate:data
+                                                           options:0];
+                
+                [timeValuesTotal addObject:next10MinDate];
+            }
+        }
+        
+    }
+    // [21:00:00, 21:10:00...21:50:00, 22:00:00, 22:10:00...21:00:00]
+    _timeValues = timeValuesTotal;
 }
 
 - (void)moveToScreen
@@ -304,7 +327,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -314,12 +337,12 @@
         {
             frame.size.width = DeviceScreenWidth * 0.45;
             frame.size.height = DeviceScreenHeight;
-            frame.origin = CGPointZero;
+            frame.origin = CGPointMake(0., 44);;
         }
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -341,7 +364,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -356,7 +379,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 205. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [OAUtilities getBottomMargin];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -366,59 +389,62 @@
 + (CGFloat)calculateY
 {
     if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] : 0.;
+        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44.0 : 44.0;
 
-    return DeviceScreenHeight - (205. + [OAUtilities getBottomMargin]);
+    return DeviceScreenHeight - (241. + [OAUtilities getBottomMargin]);
 }
 
 + (CGFloat)calculateYOutScreen
 {
     if ([OAUtilities isLandscape])
-        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] -1 : -1.;
+        return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44 - 1 : 44 - 1.;
 
-    return DeviceScreenHeight + 205. + [OAUtilities getBottomMargin];
+    return DeviceScreenHeight + 241. + [OAUtilities getBottomMargin];
+}
+
+- (void)updateWidgetsInfo
+{
+    for (OAWeatherWidget *itemView in _weatherWidgetControlsArray) {
+        [itemView updateInfo];
+    }
 }
 
 #pragma mark - UISlider
 
 - (void)timeChanged:(UISlider *)sender
 {
-    NSInteger index = self.timeSliderView.selectedMark;
+    NSInteger index = [self.timeSliderView getIndexForOptionStepsAmountWithoutDrawMark];
     NSDate *selectedDate = _timeValues[index];
     [[OARootViewController instance].mapPanel.mapViewController.mapLayers updateWeatherDate:selectedDate];
 
     if ([_layersHandler isAllLayersDisabled])
+    {
         [(OAWeatherPlugin *) [OAPluginsHelper getPlugin:OAWeatherPlugin.class] updateWidgetsInfo];
+        [self updateWidgetsInfo];
+    }
 }
 
 #pragma mark - OAWeatherToolbarDelegate
 
-- (void)updateData:(NSArray *)data type:(EOAWeatherToolbarDelegateType)type index:(NSInteger)index
+- (void)updateData:(NSArray *)data index:(NSInteger)index
 {
-    if (type == EOAWeatherToolbarLayers)
-    {
-        [self.layersCollectionView setValues:data withSelectedIndex:index];
-        [self.layersCollectionView reloadData];
-    }
-    else if (type == EOAWeatherToolbarDates)
-    {
-        [self updateTimeValues:data[index][@"value"]];
-        [self setCurrentMark:index];
-        [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:index > 0 ? 0 : 2];
-
-        NSInteger selectedTimeIndex = self.timeSliderView.selectedMark;
-        if (_previousSelectedDayIndex == 0 && index > 0)
-            selectedTimeIndex = (NSInteger) round(selectedTimeIndex / 3);
-        else if (_previousSelectedDayIndex > 0 && index == 0)
-            selectedTimeIndex *= 3;
-
-        self.timeSliderView.selectedMark = selectedTimeIndex;
-        [self timeChanged:nil];
-
-        [self.dateCollectionView setValues:data withSelectedIndex:index];
-        [self.dateCollectionView reloadData];
-        _previousSelectedDayIndex = index;
-    }
+    [self updateTimeValues:data[index][@"value"]];
+    [self setCurrentMark:index];
+    [self.timeSliderView setNumberOfMarks:9 additionalMarksBetween:index > 0 ? 0 : 2];
+    
+    NSInteger selectedTimeIndex = self.timeSliderView.selectedMark;
+    if (_previousSelectedDayIndex == 0 && index > 0)
+        selectedTimeIndex = (NSInteger) round(selectedTimeIndex / 3);
+    else if (_previousSelectedDayIndex > 0 && index == 0)
+        selectedTimeIndex *= 3;
+    
+    self.timeSliderView.selectedMark = selectedTimeIndex;
+    [self timeChanged:nil];
+    
+    [self.dateCollectionView setValues:data withSelectedIndex:index];
+    [self.dateCollectionView reloadData];
+    _previousSelectedDayIndex = index;
+    [self updateWidgetsInfo];
 }
 
 @end

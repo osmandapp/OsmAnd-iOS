@@ -13,7 +13,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 typedef NS_ENUM(NSInteger, EOAWeatherBand)
 {
-    WEATHER_BAND_UNDEFINED = 0,
+    WEATHER_BAND_NOTHING = -1,
+    WEATHER_BAND_WIND_ANIMATION = 0,
     WEATHER_BAND_CLOUD = 1,
     WEATHER_BAND_TEMPERATURE = 2,
     WEATHER_BAND_PRESSURE = 3,
@@ -32,6 +33,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
 + (NSString *) getInternalBandUnit:(EOAWeatherBand)bandIndex;
 
 - (BOOL) isBandVisible;
+- (void)setSelectBand:(BOOL)isSelect;
 - (NSUnit *) getBandUnit;
 - (BOOL) setBandUnit:(NSUnit *)unit;
 - (BOOL) isBandUnitAuto;

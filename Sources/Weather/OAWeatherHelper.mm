@@ -845,4 +845,10 @@
     return [NSDate dateWithTimeIntervalSince1970:round(date.timeIntervalSince1970 / hour) * hour];
 }
 
+- (BOOL)allLayersAreDisabled
+{
+    QList<OsmAnd::BandIndex> bands = [self getVisibleBands];
+    return bands.isEmpty();
+}
+
 @end

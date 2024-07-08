@@ -26,6 +26,7 @@
 @property (nonatomic) OAWidgetType * _Nullable widgetType;
 @property (nonatomic, readonly, assign) BOOL nightMode;
 @property (nonatomic, assign) BOOL isSimpleLayout;
+@property (nonatomic, assign) BOOL isVerticalStackImageTitleSubtitleLayout;
 @property (nonatomic, assign) BOOL isFullRow;
 
 @property (nonatomic, weak) id<OAWidgetListener> _Nullable delegate;
@@ -39,6 +40,7 @@
 - (BOOL)isTopText;
 - (BOOL)isTextInfo;
 - (void)updateSimpleLayout;
+- (void)updateVerticalStackImageTitleSubtitleLayout;
 - (void)updatesSeparatorsColor:(UIColor *_Nonnull)color;
 
 - (void)updateHeightConstraintWithRelation:(NSLayoutRelation)relation constant:(CGFloat)constant priority:(UILayoutPriority)priority;

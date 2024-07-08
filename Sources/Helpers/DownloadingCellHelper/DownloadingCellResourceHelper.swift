@@ -226,6 +226,29 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
         }
     }
     
+    override func refreshDownloadingContent() {
+        for resourceId in resourceItems.keys {
+            if let task = getDownloadTask(resourceId) {
+                
+                if task.progressCompleted == 1 && task.state == .finished {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.setCellProgress(resourceId: resourceId, progress: task.progressCompleted, status: .finished)
+                        // Start next downloading if needed
+                        if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), !tasks.isEmpty {
+                            if let nextTask = OsmAndApp.swiftInstance().downloadsManager.firstDownloadTasks(withKey: tasks[0] as? String) {
+                                nextTask.resume()
+                            }
+                        }
+                    }
+                } else if task.progressCompleted > 0 && task.state == .running {
+                    DispatchQueue.main.async { [weak self] in
+                        self?.setCellProgress(resourceId: resourceId, progress: task.progressCompleted, status: .inProgress)
+                    }
+                }
+            }
+        }
+    }
+    
     private func getResourceIdFromNotificationKey(key: Any, value: Any) -> String? {
         // When we're creating a cell Contour Lines resource, we don't know which subfile user will download (srtm or srtmf).
         // But we're allready need a "resourceId" key for dictionary at this moment.

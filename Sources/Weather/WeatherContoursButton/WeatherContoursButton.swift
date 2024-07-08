@@ -69,9 +69,10 @@ final class WeatherContoursButton: OAHudButton {
         
         var menuElements: [UIMenuElement] = [temperature, precipitation, wind, cloud, pressure]
         
-        let menu = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [none] + menuElements)
-        
-        return menu
+        let newMenu = UIMenu(title: "", image: nil, identifier: nil, options: .displayInline, children: [none])
+        menuElements.insert(newMenu, at: 0)
+
+        return UIMenu(children: menuElements)
     }
     
     private func updateContourLayer(_ contoursType: String) {

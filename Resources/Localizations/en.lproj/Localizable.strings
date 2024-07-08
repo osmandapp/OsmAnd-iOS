@@ -2954,6 +2954,7 @@
 "vessel_height_limit_description" = "Set vessel height to avoid low bridges. Keep in mind, if the bridge is movable, we will use its height in the open state.";
 "vessel_width_limit_description" = "Set vessel width to avoid narrow bridges";
 "default_speed_dialog_msg" = "Estimates arrival time for unknown road types, and limits speed for all roads (may affect routing)";
+"transport_hazmat_title" = "Transporting of hazardous materials";
 "routing_attr_hazmat_category_name" = "Hazmat category";
 "routing_attr_hazmat_category_no_restrictions_name" = "A (No restrictions)";
 "transport_hazmat_yes_desc" = "Select the applicable category.";
@@ -3443,6 +3444,21 @@
 • Fixed status bar color for older iOS versions\n
 • Fixed rotate and pinch to zoom map gestures for the app running on macOS\n";
 
+"ios_release_4_8" = "• New \"Speedometer\" widget compatible with CarPlay\n
+• Added Turn-by-turn instructions to route details\n
+• Customize the map screen by adding multiple \"Quick Action\" buttons\n
+• 3D Track Improvements: new visualization and colorization options\n
+• Custom color palettes for terrain, tracks, and routes\n
+• Added improved multi-selection mode for Tracks\n
+• 3D variant for location position icons\n
+• Expanded selection of tourist routes on the map\n
+• Weather: UI refresh, added wind animation\n
+• Add smooth transitions while zooming in 3D mode\n
+• \"Location position on screen\" is now in Configure Screen\n
+• Change \"Wheel circumference\" in BLE sensor settings\n
+• Added separate \"Speed limit\" navigation alert\n
+• Fixed names for bearing widgets\n
+• Fixed \"Radius ruler\" visibility in all widget panels\n";
 
 "rendering_attr_showTrainRoutes_name" = "Train routes";
 "rendering_attr_showWaterwayTunnels_description" = "Increase visibility for waterway tunnels";

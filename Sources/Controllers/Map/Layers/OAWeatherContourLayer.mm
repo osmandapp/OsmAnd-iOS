@@ -117,8 +117,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     if ([[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled])
     {
         NSString *parameterName = self.app.data.contourName;

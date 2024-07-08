@@ -78,8 +78,14 @@
 
 - (BOOL) updateLayer
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return NO;
+    }
     _nightMode = OAAppSettings.sharedManager.nightMode;
-    return NO;
+    self.invalidated = NO;
+    return YES;
 }
 
 - (void) show

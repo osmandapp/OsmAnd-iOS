@@ -1341,6 +1341,8 @@
         _app.data.lastTerrainType = _app.data.terrainType;
         _app.data.terrainType = EOATerrainTypeDisabled;
     }
+    
+    [[_app updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

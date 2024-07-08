@@ -182,18 +182,28 @@
             img = [OAUtilities tintImageWithColor:img color:color];
         result = [OANativeUtilities skImageFromCGImage:img.CGImage];
     }
-    return [OANativeUtilities getScaledSkImage:result scaleFactor:scale];
+    return result;
 }
 
-+ (UIImage *)getIcon:(NSString *)iconName defaultIconName:(NSString *)defaultIconName scale:(float)scale
++ (UIImage *)getIcon:(NSString *)iconName
+     defaultIconName:(NSString *)defaultIconName
+               scale:(float)scale
 {
     UIImage *iconImage = [UIImage imageNamed:iconName];
-    if (!iconImage && defaultIconName)
+    if (!iconImage && defaultIconName && [iconName isEqualToString:defaultIconName])
         iconImage = [UIImage imageNamed:defaultIconName];
     if (!iconImage)
         return nil;
-    CGSize iconPtSize = { iconImage.size.width * scale, iconImage.size.height * scale };
-    return [OAUtilities resizeImage:iconImage newSize:iconPtSize];
+    if (scale != 1 || iconImage.scale != scale)
+    {
+        CGSize iconPtSize = { iconImage.size.width * scale, iconImage.size.height * scale };
+        iconImage = [OAUtilities resizeImage:iconImage newSize:iconPtSize];
+        iconImage = [UIImage imageWithCGImage:iconImage.CGImage
+                                        scale:scale
+                                  orientation:UIImageOrientationUp]
+            .imageFlippedForRightToLeftLayoutDirection;
+    }
+    return iconImage;
 }
 
 @end

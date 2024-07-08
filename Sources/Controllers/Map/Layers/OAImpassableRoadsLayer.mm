@@ -60,6 +60,13 @@
     [_avoidRoads removeListener:self];
 }
 
+- (BOOL)updateLayer
+{
+    [super updateLayer];
+    _textSize = [[OAAppSettings sharedManager].textSize get];
+    return YES;
+}
+
 - (void) resetPoints
 {
     if (_markersCollection)

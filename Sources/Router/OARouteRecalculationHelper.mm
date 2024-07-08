@@ -19,6 +19,7 @@
 #import "OAUtilities.h"
 #import "OARootViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OACurrentPositionHelper.h"
 
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 

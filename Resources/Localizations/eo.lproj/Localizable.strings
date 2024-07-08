@@ -3122,7 +3122,7 @@
 "shared_string_item" = "Elemento";
 "step_by_step" = "Turno-post-turno";
 "shared_string_bottom" = "Sube";
-"display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Laŭ direkto de movado” kaj centre por ĉiuj aliaj.";
+"display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
 "visualization_3d_visualized_by" = "Vidigi per";
 "track_vertical_exaggeration_description" = "Perŝanĝi la valoron de skalo vi povas ŝanĝi alton de 3-dimensia spuro.";

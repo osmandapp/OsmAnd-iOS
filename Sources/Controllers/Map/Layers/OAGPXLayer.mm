@@ -112,7 +112,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     CGFloat textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     if (self.showCaptions != _showCaptionsCache || _textScaleFactor != textScaleFactor)

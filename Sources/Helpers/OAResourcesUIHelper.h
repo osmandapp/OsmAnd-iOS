@@ -191,7 +191,8 @@ typedef void (^LocationArrayCallback)(NSArray<CLLocation *> *locations, NSError 
 + (void)offerDownloadAndInstallOf:(OARepositoryResourceItem *)item
                     onTaskCreated:(OADownloadTaskCallback)onTaskCreated
                     onTaskResumed:(OADownloadTaskCallback)onTaskResumed
-                completionHandler:(void(^)(UIAlertController *))completionHandler;
+                completionHandler:(void(^)(UIAlertController *))completionHandler
+                           silent:(BOOL)silent;
 
 + (void)offerDownloadAndUpdateOf:(OAOutdatedResourceItem *)item
                    onTaskCreated:(OADownloadTaskCallback)onTaskCreated

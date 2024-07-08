@@ -78,7 +78,8 @@
 
 - (BOOL)updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     if ([_plugin isTerrainLayerEnabled] && [_plugin isEnabled])
     {

@@ -59,6 +59,9 @@
 @property(nonatomic) OAMapViewState* initialURLMapState;
 
 @property (nonatomic) BOOL carPlayActive;
+@property (nonatomic) BOOL isInBackground; // YES if is in background on device and carplay inactive
+@property (nonatomic) BOOL isInBackgroundOnDevice; // YES if is in background on device (carplay may be active)
+@property(readonly) OAObservable* backgroundStateObservable;
 
 - (void) loadWorldRegions;
 
@@ -73,11 +76,9 @@
 @property(readonly) OAObservable* gpxCollectionChangedObservable;
 @property(readonly) OAObservable* gpxChangedObservable;
 
-- (void)updateScreenTurnOffSetting;
+- (void)allowScreenTurnOff:(BOOL)allow;
 
 @property(readonly) unsigned long long freeSpaceAvailableOnDevice;
-
-@property(readonly) BOOL allowScreenTurnOff;
 
 @property(readonly) id<OAAppearanceProtocol> appearance;
 @property(readonly) OAObservable* appearanceChangeObservable;
@@ -108,7 +109,7 @@
 - (void) showToastMessage:(NSString *)message;
 - (void) showShortToastMessage:(NSString *)message;
 
-- (void) checkAndDownloadOsmAndLiveUpdates;
+- (void) checkAndDownloadOsmAndLiveUpdates:(BOOL)checkUpdatesAsync;
 - (void) checkAndDownloadWeatherForecastsUpdates;
 
 - (void) loadRoutingFiles;

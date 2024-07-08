@@ -95,8 +95,9 @@
 - (BOOL) updateLayer
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        [super updateLayer];
-        
+        if (![super updateLayer])
+            return;
+
         [self.app.data.mapLayersConfiguration setLayer:self.layerId
                                             Visibility:self.isVisible];
         if (self.isVisible)

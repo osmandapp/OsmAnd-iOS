@@ -448,7 +448,7 @@
 "shared_string_or" = "edo";
 "shared_string_and" = "eta";
 "shared_string_edit" = "Editatu";
-"shared_string_modify" = "Modify";
+"shared_string_modify" = "Aldatu";
 "first_time_continue" = "Geroago";
 "shared_string_of" = "of";
 "shared_string_all" = "Guztia";
@@ -3149,3 +3149,6 @@
 "speed_limit_warning" = "Abiadura mugaren abisua";
 "calculate_online" = "Kalkulatu sarean";
 "auto_zoom" = "Zoom automatikoa";
+"tomorrow" = "Bihar";
+"rendering_value_dark_orange_name" = "Laranja iluna";
+"wall_height" = "Hormaren altuera";

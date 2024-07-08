@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
@@ -18,6 +19,7 @@
 #import "OASearchWord.h"
 #import "OAPOI.h"
 #import "OAIAPHelper.h"
+#import "OAAppSettings.h"
 
 #define PLUGIN_ID kInAppId_Addon_Wiki
 #define kLastUsedWikipediaKey @"lastUsedWikipedia"

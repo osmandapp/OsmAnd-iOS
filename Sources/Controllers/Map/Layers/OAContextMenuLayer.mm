@@ -15,6 +15,7 @@
 #import "OAMapLayers.h"
 #import "OAContextMenuProvider.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAReverseGeocoder.h"
 #import "Localization.h"
 #import "OAPOILocationType.h"

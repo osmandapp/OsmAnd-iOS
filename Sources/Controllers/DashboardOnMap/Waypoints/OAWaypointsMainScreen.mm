@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAColors.h"

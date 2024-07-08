@@ -7,10 +7,10 @@
 #import "OAAppSettings.h"
 #import "OAColors.h"
 #import "OARouteStatistics.h"
-#import "OAUtilities.h"
 #import "Localization.h"
 #import "OALinks.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
@@ -46,6 +46,8 @@
 #import "OASearchPoiTypeFilter.h"
 #import "OAPOI.h"
 #import "OARouteColorize.h"
+#import "OAApplicationMode.h"
+#import "OASavingTrackHelper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -81,7 +83,6 @@
 #import "OAOsmAndDevelopmentPlugin.h"
 #import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
-#import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAExternalSensorsPlugin.h"
 
@@ -91,6 +92,8 @@
 #import "OATableSectionData.h"
 
 // Controllers
+#import "OASuperViewController.h"
+#import "OACompoundViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapViewController.h"
@@ -113,7 +116,6 @@
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OACarPlayActiveViewController.h"
 #import "OACarPlayPurchaseViewController.h"
-#import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OABaseEditorViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
@@ -133,6 +135,7 @@
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OAHistoryViewController.h"
+#import "OABaseScrollableHudViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -157,6 +160,7 @@
 // Views
 #import "OASegmentedSlider.h"
 #import "OATurnDrawable.h"
+#import "OAHudButton.h"
 
 // Apple
 #import <SafariServices/SafariServices.h>
@@ -171,6 +175,7 @@
 
 // Enums
 #import "OAGPXDataSetType.h"
+#import "OADownloadMode.h"
 
 // Backup
 #import "OABackupHelper.h"
@@ -179,6 +184,7 @@
 #import "OABackupError.h"
 #import "OANetworkSettingsHelper.h"
 #import "OAPrepareBackupResult.h"
+#import "OAPrepareBackupTask.h"
 #import "OASyncBackupTask.h"
 #import "OASettingsItem.h"
 #import "OAProfileSettingsItem.h"

@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
@@ -25,9 +26,9 @@
 #import "OAMapUtils.h"
 #import "OARoutingHelperUtils.h"
 #import "OAMapLayers.h"
+#import "CLLocation+Extension.h"
 
 #include <commonOsmAndCore.h>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QKeyValueIterator.h>

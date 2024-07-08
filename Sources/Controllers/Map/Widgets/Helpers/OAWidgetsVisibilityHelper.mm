@@ -14,6 +14,7 @@
 #import "OARootViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OATrackMenuAppearanceHudViewController.h"
 #import "OAMeasurementToolLayer.h"

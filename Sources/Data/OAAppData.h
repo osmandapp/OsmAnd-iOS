@@ -8,17 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OAObservable.h"
-#import "OAMapViewState.h"
-#import "OAMapSource.h"
-#import "OAMapLayersConfiguration.h"
-#import "OARTargetPoint.h"
-#import "OAAppSettings.h"
-
-#define kWeatherSettingsChanging @"weather_settings_changing"
-#define kWeatherSettingsChanged @"weather_settings_changed"
-#define kWeatherSettingsReseting @"weather_settings_reseting"
-#define kWeatherSettingsReset @"weather_settings_reset"
+static NSString * const kWeatherSettingsChanging = @"weather_settings_changing";
+static NSString * const kWeatherSettingsChanged = @"weather_settings_changed";
+static NSString * const kWeatherSettingsReseting = @"weather_settings_reseting";
+static NSString * const kWeatherSettingsReset = @"weather_settings_reset";
 
 static const double kHillshadeDefAlpha = 0.45;
 static const double kSlopeDefAlpha = 0.35;
@@ -31,7 +24,7 @@ static const NSInteger kHillshadeDefMaxZoom = 16;
 static const NSInteger kSlopeDefMinZoom = 3;
 static const NSInteger kSlopeDefMaxZoom = 16;
 
-@class MutableOrderedDictionary, NSUnitCloud;
+@class MutableOrderedDictionary, NSUnitCloud, OADownloadMode, OAApplicationMode, OARTargetPoint, OAMapLayersConfiguration, OAMapSource, OAMapViewState, OAObservable;
 
 @interface OAAppData : NSObject <NSCoding>
 

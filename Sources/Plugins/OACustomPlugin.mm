@@ -31,6 +31,8 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAQuickSearchHelper.h"
 #import "OASuggestedDownloadsItem.h"
+#import "OAApplicationMode.h"
+#import "OAMapSource.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/ResourcesManager.h>

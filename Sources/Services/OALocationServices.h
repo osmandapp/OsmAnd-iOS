@@ -7,11 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
-
 #import "OACommonTypes.h"
-#import "OAObservable.h"
-#import "CLLocation+Extension.h"
 
 typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
 {
@@ -21,7 +17,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
     OALocationServicesStatusSuspended
 };
 
-@class OALocationSimulation;
+@class OALocationSimulation, OAObservable, CLLocation;
 
 @interface OALocationServices : NSObject
 

@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
+#import "OAAppSettings.h"
 
 #include "OAMapillaryTilesProvider.h"
 #include <OsmAndCore/Utilities.h>

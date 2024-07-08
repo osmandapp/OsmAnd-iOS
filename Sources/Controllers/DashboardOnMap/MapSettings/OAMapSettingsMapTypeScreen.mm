@@ -13,7 +13,9 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAIndexConstants.h"
+#import "OAMapSource.h"
 
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>

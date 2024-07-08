@@ -8,6 +8,7 @@
 
 #import "OACarPlayTrackResultListController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutingHelper.h"
 #import "OASelectedGPXHelper.h"
 #import "OATargetPointsHelper.h"

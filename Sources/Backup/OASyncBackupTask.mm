@@ -17,6 +17,7 @@
 #import "OABackupInfo.h"
 #import "OARemoteFile.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 

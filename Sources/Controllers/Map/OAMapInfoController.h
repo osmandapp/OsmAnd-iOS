@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@class OAWidgetPanelViewController;
+@class OAWidgetPanelViewController, OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
 
 @protocol OAWidgetListener;
 
@@ -19,8 +19,6 @@
 - (void) widgetsLayoutDidChange:(BOOL)animated;
 
 @end
-
-@class OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
 
 @interface OATextState : NSObject
 

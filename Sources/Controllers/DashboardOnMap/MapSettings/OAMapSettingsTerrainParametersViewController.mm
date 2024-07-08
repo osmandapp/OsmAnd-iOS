@@ -16,6 +16,7 @@
 #import "OACustomPickerTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMapLayers.h"
 #import "OATerrainMapLayer.h"

@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"
+#import "OAApplicationMode.h"
 #import "OAAutoObserverProxy.h"
 #import "OASwitchTableViewCell.h"
 #import "OAPluginPopupViewController.h"

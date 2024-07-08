@@ -13,6 +13,7 @@
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 
 @implementation OAAppModeView
 {

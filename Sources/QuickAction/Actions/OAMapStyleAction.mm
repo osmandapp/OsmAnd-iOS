@@ -10,12 +10,16 @@
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARendererRegistry.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
 #import "OAIndexConstants.h"
+#import "OAMapSource.h"
+#import "OrderedDictionary.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>

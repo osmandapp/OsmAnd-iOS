@@ -14,6 +14,7 @@
 #import "OANativeUtilities.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAHistoryItem.h"
 #import "OAHistoryHelper.h"

@@ -19,6 +19,7 @@
 #import "OAPOIUIFilter.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"
@@ -27,6 +28,8 @@
 #import "OAPOIHelper.h"
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
+#import "OAPOIType.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IFavoriteLocation.h>

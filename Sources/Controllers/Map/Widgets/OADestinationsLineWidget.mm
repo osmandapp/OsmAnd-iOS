@@ -9,6 +9,8 @@
 #import "OADestinationsLineWidget.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OADestinationLineDelegate.h"

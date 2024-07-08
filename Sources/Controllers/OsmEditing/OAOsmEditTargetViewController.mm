@@ -10,6 +10,7 @@
 #import "OATransportStopRoute.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"

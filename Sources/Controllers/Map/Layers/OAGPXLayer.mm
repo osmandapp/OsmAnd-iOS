@@ -10,6 +10,7 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OADefaultFavorite.h"
 #import "OAGPXDocumentPrimitives.h"
@@ -30,6 +31,7 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
+#import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/LatLon.h>

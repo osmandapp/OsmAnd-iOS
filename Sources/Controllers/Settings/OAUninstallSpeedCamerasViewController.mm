@@ -8,6 +8,7 @@
 
 #import "OAUninstallSpeedCamerasViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"

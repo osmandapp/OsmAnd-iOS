@@ -14,7 +14,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAManageResourcesViewController.h"
 #import "OsmAndApp.h"
-
+#import "OAApplicationMode.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"

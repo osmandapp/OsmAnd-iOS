@@ -8,6 +8,7 @@
 
 #import "InitialRoutePlanningBottomSheetViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OARoutePlanningHudViewController.h"
 #import "OAOpenAddTrackViewController.h"
 #import "OATitleIconRoundCell.h"

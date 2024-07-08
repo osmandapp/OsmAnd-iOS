@@ -12,6 +12,7 @@
 
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
+#import "OAObservable.h"
 #import "OAUtilities.h"
 #import "OALog.h"
 #import "Localization.h"

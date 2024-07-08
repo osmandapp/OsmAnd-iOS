@@ -17,6 +17,7 @@
 #import "OAPointDescription.h"
 #import "OAQuickSearchListItem.h"
 #import "OAPointDescription.h"
+#import "OARTargetPoint.h"
 #import "Localization.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CarPlay/CarPlay.h>

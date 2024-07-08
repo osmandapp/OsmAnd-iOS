@@ -21,6 +21,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditActionsViewController.h"
 #import "OAMapLayers.h"

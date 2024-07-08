@@ -10,6 +10,7 @@
 #import "OAImportCompleteViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "Localization.h"
+#import "OAApplicationMode.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAResourcesUIHelper.h"

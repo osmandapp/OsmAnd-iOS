@@ -10,8 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-const static NSString *ONLINE_PLUGINS_URL = @"https://osmand.net/api/plugins/list";
-const static NSString *OSMAND_URL = @"https://osmand.net";
+static NSString * const ONLINE_PLUGINS_URL = @"https://osmand.net/api/plugins/list";
+static NSString * const OSMAND_URL = @"https://osmand.net";
 
 @class OAPlugin, OACustomPlugin, OAWorldRegion, QuickActionType, OAApplicationMode, OAPOIUIFilter, OAGPXTrackAnalysis, OAPointAttributes, OAWidgetType, OABaseWidgetView, OAOnlinePlugin;
 

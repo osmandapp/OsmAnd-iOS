@@ -7,8 +7,13 @@
 //
 
 #import "OARoutingHelper.h"
+#import "OAResultMatcher.h"
 
 #include <vector>
+#include <routeSegment.h>
+#include <routeSegmentResult.h>
+
+@class OAGpxRouteApproximation;
 
 @interface OARoutingHelper(cpp)
 

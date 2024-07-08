@@ -16,6 +16,7 @@
 #import "OAAddress.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAResultMatcher.h"
 #import "OASearchResult.h"

@@ -8,7 +8,9 @@
 
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OAResourcesUIHelper.h"

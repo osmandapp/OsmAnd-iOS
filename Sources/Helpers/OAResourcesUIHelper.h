@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "OsmAndApp.h"
-#import "OAWorldRegion.h"
 #import <FFCircularProgressView.h>
 #import "FFCircularProgressView+isSpinning.h"
 
@@ -17,7 +16,7 @@
 
 typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
 
-@class OADownloadDescriptionInfo;
+@class OADownloadDescriptionInfo, OARouteCalculationResult, OAWorldRegion;
 
 @interface OAResourceItem : NSObject
 

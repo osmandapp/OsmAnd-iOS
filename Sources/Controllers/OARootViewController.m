@@ -16,8 +16,10 @@
 #import "OAMenuViewControllerProtocol.h"
 #import "OAFavoriteImportViewController.h"
 #import "OAOptionsPanelBlackViewController.h"
+#import "OAApplicationMode.h"
 #import "OAMapCreatorHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OADonationSettingsViewController.h"
 #import "OAChoosePlanHelper.h"
 #import "OAFileImportHelper.h"
@@ -28,6 +30,8 @@
 #import "OABackupHelper.h"
 #import "OACloudAccountVerificationViewController.h"
 #import "SceneDelegate.h"
+#import "OAMapPanelViewController.h"
+#import "OANavigationController.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define _(name) OARootViewController__##name

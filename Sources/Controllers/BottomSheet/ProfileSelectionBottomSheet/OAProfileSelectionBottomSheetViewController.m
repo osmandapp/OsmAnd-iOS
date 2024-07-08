@@ -14,6 +14,7 @@
 #import "OAColors.h"
 #import "OAMapPanelViewController.h"
 #import "OARootViewController.h"
+#import "OAApplicationMode.h"
 #import "OASizes.h"
 #import "OAAppSettings.h"
 #import "OASimpleTableViewCell.h"

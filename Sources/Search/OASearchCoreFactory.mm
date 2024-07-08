@@ -17,7 +17,7 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 #import "QuadRect.h"
-
+#import "OAAppSettings.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
 #import "OAPOIFilter.h"
@@ -34,6 +34,7 @@
 #import "OALocationParser.h"
 #import "OrderedDictionary.h"
 #import "OAMapUtils.h"
+#import "OAResultMatcher.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/IObfsCollection.h>

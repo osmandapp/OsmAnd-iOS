@@ -8,7 +8,7 @@
 
 #import "OAPlugin.h"
 
-@class OACommonString, OAApplicationMode;
+@class OACommonString, OAApplicationMode, OAWidgetType;
 
 @interface OAExternalSensorsPlugin : OAPlugin
 

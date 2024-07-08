@@ -22,6 +22,7 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAutoObserverProxy.h"

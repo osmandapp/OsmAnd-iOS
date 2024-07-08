@@ -22,6 +22,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAPluginsHelper.h"
 #import "OAGPXDatabase.h"
+#import "OAColoringType.h"
 
 #import <sqlite3.h>
 #import <CoreLocation/CoreLocation.h>

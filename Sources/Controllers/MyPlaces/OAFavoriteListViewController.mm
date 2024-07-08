@@ -13,6 +13,7 @@
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OADefaultFavorite.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"

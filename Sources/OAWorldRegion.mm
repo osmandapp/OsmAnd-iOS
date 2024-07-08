@@ -22,6 +22,7 @@
 #import "Localization.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAUtilities.h"
 #import "OAPointIContainer.h"
 #import "OAIndexConstants.h"

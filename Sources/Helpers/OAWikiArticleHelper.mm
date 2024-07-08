@@ -15,6 +15,7 @@
 #import "OAPOI.h"
 #import "OAWikiWebViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAWikiLanguagesWebViewContoller.h"

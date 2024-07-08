@@ -16,7 +16,6 @@
 #import "OAMapHudViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
-#import "OAMapViewController.h"
 #import "OATextInfoWidget.h"
 #import "OAMapInfoController.h"
 #import "OAInstallMapillaryBottomSheetViewController.h"

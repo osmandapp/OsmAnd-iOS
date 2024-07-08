@@ -20,6 +20,8 @@
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
 #import "OAPluginsHelper.h"
+#import "OrderedDictionary.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kTag = @"key_tag";

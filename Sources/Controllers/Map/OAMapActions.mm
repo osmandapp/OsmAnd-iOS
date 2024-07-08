@@ -22,6 +22,7 @@
 #import "OARouteProvider.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAGPXDocument.h"
 #import "OADestinationsHelper.h"
 #import "OADestination.h"

@@ -19,6 +19,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppVersion.h"
 #import "OAColors.h"
+#import "OAAppSettings.h"
 
 #define kMarkersChanged @"markers_modified_time"
 

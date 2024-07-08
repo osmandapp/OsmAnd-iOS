@@ -20,6 +20,7 @@
 #import "OAAltitudeWidget.h"
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAIAPHelper.h"
 #import "OAResourcesBaseViewController.h"
 

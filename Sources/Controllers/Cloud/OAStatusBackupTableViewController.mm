@@ -17,6 +17,7 @@
 #import "OAPrepareBackupResult.h"
 #import "OABackupStatus.h"
 #import "OABackupInfo.h"
+#import "OAApplicationMode.h"
 #import "OASettingsItem.h"
 #import "OAProfileSettingsItem.h"
 #import "OAExportSettingsType.h"

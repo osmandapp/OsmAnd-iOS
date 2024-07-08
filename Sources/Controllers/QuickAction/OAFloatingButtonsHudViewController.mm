@@ -20,7 +20,6 @@
 #import "Localization.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAAutoObserverProxy.h"
-#import "OAMap3DModeVisibilityType.h"
 #import <AudioToolbox/AudioServices.h>
 #import "OsmAnd_Maps-Swift.h"
 

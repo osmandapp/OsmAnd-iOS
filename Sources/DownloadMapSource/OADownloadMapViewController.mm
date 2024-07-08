@@ -9,6 +9,8 @@
 #import "OADownloadMapViewController.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OsmAndApp.h"
 #import "OASelectMapSourceViewController.h"
 #import "OAMapRendererView.h"
@@ -18,15 +20,14 @@
 #import "OADownloadMapProgressViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"
-
-#include "Localization.h"
-#include "OAColors.h"
-#import "OsmAnd_Maps-Swift.h"
-#include "OASizes.h"
-
+#import "OAMapSource.h"
+#import "OASizes.h"
+#import "Localization.h"
+#import "OAColors.h"
 #import "OAValueTableViewCell.h"
 #import "OAPreviewZoomLevelsCell.h"
 #import "OACustomPickerTableViewCell.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IOnlineTileSources.h>

@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAGPXDocument.h"
 #import "OAKml2Gpx.h"
 #import "OAIndexConstants.h"

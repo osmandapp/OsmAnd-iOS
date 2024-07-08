@@ -16,6 +16,8 @@
 #import "OAPluginsViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OANavigationController.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import "GeneratedAssetSymbols.h"

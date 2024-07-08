@@ -23,6 +23,7 @@
 #import "OAPOIHelper.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OAApplicationMode.h"
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OATerrainLayer.h"
@@ -44,9 +45,10 @@
 #import "OAGPXDatabase.h"
 #import "OAExternalTimeFormatter.h"
 #import "OAFavoritesHelper.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAAppSettings.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>
 #include <QList>

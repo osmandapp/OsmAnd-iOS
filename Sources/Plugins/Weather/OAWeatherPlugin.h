@@ -8,11 +8,11 @@
 
 #import "OAPlugin.h"
 
-#define kWeatherTemp @"weather_temp"
-#define kWeatherPressure @"weather_pressure"
-#define kWeatherWind @"weather_wind"
-#define kWeatherCloud @"weather_cloud"
-#define kWeatherPrecip @"weather_precip"
+static NSString * const kWeatherTemp = @"weather_temp";
+static NSString * const kWeatherPressure = @"weather_pressure";
+static NSString * const kWeatherWind = @"weather_wind";
+static NSString * const kWeatherCloud = @"weather_cloud";
+static NSString * const kWeatherPrecip = @"weather_precip";
 
 @interface OAWeatherPlugin : OAPlugin
 

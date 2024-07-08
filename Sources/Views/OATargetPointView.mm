@@ -22,6 +22,7 @@
 #import "OAMoreOptionsBottomSheetViewController.h"
 #import "OATransportStopRoute.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"
@@ -36,9 +37,10 @@
 #import "OAPOI.h"
 #import "OAWikiMenuViewController.h"
 #import "OAGPXWptViewController.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
+#import "OAButton.h"
 #import "OAPluginsHelper.h"
+#import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static const CGFloat kMargin = 16.0;
 static const CGFloat kButtonsViewHeight = 44.0;

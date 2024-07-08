@@ -30,6 +30,7 @@
 #import "OAPointDescription.h"
 #import "OACollapsableCoordinatesView.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAWikiArticleHelper.h"
 #import "OAColors.h"

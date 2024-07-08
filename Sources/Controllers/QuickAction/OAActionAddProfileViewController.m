@@ -12,6 +12,7 @@
 #import "OsmAndApp.h"
 #import "OAProfileDataObject.h"
 #import "OAProfileDataUtils.h"
+#import "OAApplicationMode.h"
 
 @interface OAActionAddProfileViewController () <UITextFieldDelegate>
 

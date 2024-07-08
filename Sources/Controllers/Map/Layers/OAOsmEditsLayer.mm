@@ -30,6 +30,7 @@
 #import "OAColors.h"
 #import "OACompoundIconUtils.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

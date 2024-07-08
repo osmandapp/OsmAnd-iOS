@@ -22,7 +22,6 @@
 #import "OAIndexConstants.h"
 #import <MBProgressHUD.h>
 #import "OALinks.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import <mach/mach.h>
 #import <mach/mach_host.h>

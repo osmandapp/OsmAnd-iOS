@@ -12,6 +12,7 @@
 #import "OAWorldRegion.h"
 #import "OAManageResourcesViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 
 @implementation OAResourceSwiftItem
 

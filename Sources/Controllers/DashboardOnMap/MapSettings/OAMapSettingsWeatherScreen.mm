@@ -10,6 +10,7 @@
 #import "OAMapSettingsViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"

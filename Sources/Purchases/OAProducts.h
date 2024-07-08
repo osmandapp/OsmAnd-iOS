@@ -61,6 +61,12 @@ NS_ASSUME_NONNULL_BEGIN
 #define kInApp_Addon_Mapillary_Default_Price 0.0
 #define kInApp_Addon_OsmandDevelopment_Default_Price 0.0
 
+// Addons internal ids
+#define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
+#define kId_Addon_TrackRecording_Edit_Waypoint @"addon.track_recording.edit_waypoint"
+#define kId_Addon_Parking_Set @"addon.parking.set"
+#define kId_Addon_OsmEditing_Edit_POI @"addon.osm_editing.edit_poi"
+
 // Subscriptions ids
 #define kSubscriptionId_Osm_Live_Subscription_Monthly @"net.osmand.maps.subscription.monthly"
 #define kSubscriptionId_Osm_Live_Subscription_3_Months @"net.osmand.maps.subscription.3months"
@@ -84,12 +90,6 @@ NS_ASSUME_NONNULL_BEGIN
 #define kSubscription_Pro_Annual_Price 29.99
 #define kSubscription_Maps_Annual_Price 9.99
 #define kInApp_Maps_Full_Price 24.99
-
-// Addons internal ids
-#define kId_Addon_TrackRecording_Add_Waypoint @"addon.track_recording.add_waypoint"
-#define kId_Addon_TrackRecording_Edit_Waypoint @"addon.track_recording.edit_waypoint"
-#define kId_Addon_Parking_Set @"addon.parking.set"
-#define kId_Addon_OsmEditing_Edit_POI @"addon.osm_editing.edit_poi"
 
 @class SKProduct, OAFeature;
 

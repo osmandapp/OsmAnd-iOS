@@ -25,6 +25,7 @@
 #import "OAGpxWptItem.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATargetInfoViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OACollectionViewCellState.h"

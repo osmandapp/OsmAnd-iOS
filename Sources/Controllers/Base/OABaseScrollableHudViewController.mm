@@ -9,6 +9,7 @@
 #import "OABaseScrollableHudViewController.h"
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 

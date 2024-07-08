@@ -11,9 +11,12 @@
 #import "OASimpleTableViewCell.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARendererRegistry.h"
 #import "OAResourcesUIHelper.h"
 #import "OAIndexConstants.h"
+#import "OAMapSource.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 

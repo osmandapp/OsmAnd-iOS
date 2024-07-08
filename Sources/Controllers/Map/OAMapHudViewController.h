@@ -8,15 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "OAMapModeHeaders.h"
-#import "OAHudButton.h"
 
-@class OAFloatingButtonsHudViewController;
-@class OAToolbarViewController;
-@class OAMapRulerView;
-@class OAMapInfoController;
-@class OADownloadMapWidget;
-@class OAWeatherToolbar;
-@class OAObservable;
+@class OAFloatingButtonsHudViewController, OAToolbarViewController, OAMapRulerView, OAMapInfoController, OADownloadMapWidget, OAWeatherToolbar, OAHudButton;
 
 @interface OAMapHudViewController : UIViewController
 

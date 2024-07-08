@@ -20,12 +20,12 @@
 #import "OARouteDirectionInfo.h"
 #import "Localization.h"
 #import "OAExitInfo.h"
+#import "OAApplicationMode.h"
 #import "OAAnnounceTimeDistances.h"
 #import "OARoutingHelper+cpp.h"
 #import <AudioToolbox/AudioToolbox.h>
 
 #include <routeSegmentResult.h>
-
 
 @implementation OAVoiceRouter
 {

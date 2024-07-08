@@ -9,6 +9,7 @@
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OANativeUtilities.h"
+#import "OAObservable.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>

@@ -12,6 +12,7 @@
 #import "OAGpxWptItem.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMultiselectableHeaderView.h"
 #import "OASimpleTableViewCell.h"
 #import "OAColors.h"

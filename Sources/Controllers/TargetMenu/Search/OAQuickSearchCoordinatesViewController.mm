@@ -18,6 +18,7 @@
 #import "OALocationParser.h"
 #import "OAMapUtils.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OANameStringMatcher.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"

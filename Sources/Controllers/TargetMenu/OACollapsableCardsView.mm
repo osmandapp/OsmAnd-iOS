@@ -10,6 +10,7 @@
 #import "OAUtilities.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAAbstractCard.h"
 #import "OAImageCard.h"

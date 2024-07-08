@@ -15,6 +15,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OARendererRegistry.h"

@@ -13,6 +13,7 @@
 #import "OASubscriptionBannerCardView.h"
 #import "OAChoosePlanHelper.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAWeatherForecastViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OASimpleTableViewCell.h"

@@ -7,18 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
 #import "OACommonTypes.h"
-#import "OAMapRendererViewProtocol.h"
-#import "OAObservable.h"
-#import "OAAppSettings.h"
-#import "OAPOIType.h"
 
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
-static NSString *kNotificationMapGestureAction = @"kNotificationMapGestureAction";
-static NSString *kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
+static NSString * const kNotificationMapGestureAction = @"kNotificationMapGestureAction";
+static NSString * const kNotificationLayersConfigurationChanged = @"kNotificationLayersConfigurationChanged";
 
 static const float kCorrectionMinLeftSpace = 40.0;
 static const float kCorrectionMinBottomSpace = 40.0;
@@ -55,17 +50,9 @@ static const float kNavAnimatonTime = 1.0f;
 static const int CENTER_CONSTANT = 0;
 static const int BOTTOM_CONSTANT = 1;
 
-@class OAGPX;
-@class OAWptPt;
-@class OAMetadata;
-@class OAPOIUIFilter;
-@class OASearchWptAPI;
-@class OAMapRendererView;
-@class OAMapLayers;
-@class OAWorldRegion;
-@class OAMapRendererEnvironment;
-@class OAMapPresentationEnvironment;
-@class OAGPXDocument;
+@protocol OAMapRendererViewProtocol;
+
+@class OAGPX, OAWptPt, OAMetadata, OAPOIUIFilter, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAGPXDocument, OAObservable, CLLocation;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 

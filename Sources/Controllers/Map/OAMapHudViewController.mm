@@ -10,6 +10,7 @@
 #import "OAAppSettings.h"
 #import "OAMapRulerView.h"
 #import "OAMapInfoController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
 #import "OADownloadMapWidget.h"
@@ -30,6 +31,8 @@
 #import "Localization.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAReverseGeocoder.h"
+#import "OAMapRendererViewProtocol.h"
+#import "OAApplicationMode.h""
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

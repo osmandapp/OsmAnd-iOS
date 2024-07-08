@@ -1,5 +1,5 @@
 //
-//  OADebugSettings.m
+//  OAAppSettings.m
 //  OsmAnd
 //
 //  Created by AntonRogachevskiy on 10/16/14.
@@ -14,6 +14,12 @@
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "OADownloadMode.h"
+#import "OAColoringType.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAMapSource.h"
+#import "OAApplicationMode.h"
+#import "OAMapLayersConfiguration.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";

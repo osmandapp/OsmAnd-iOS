@@ -11,6 +11,7 @@
 #import "OAResourcesUIHelper.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAMapLayers.h"
 #import "OALog.h"

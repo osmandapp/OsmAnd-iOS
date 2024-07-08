@@ -7,20 +7,17 @@
 //
 
 #import "OAMapViewController.h"
-
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
-
 #import <UIViewController+JASidePanel.h>
 #import <MBProgressHUD.h>
-
 #import "OAAppData.h"
 #import "OAMapRendererView.h"
-
 #import "OAIndexConstants.h"
 #import "OAAutoObserverProxy.h"
 #import "OANavigationController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAFloatingButtonsHudViewController.h"
 #import "OAResourcesBaseViewController.h"
@@ -36,6 +33,7 @@
 #import "OADestination.h"
 #import "OAPluginPopupViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapCreatorHelper.h"
 #import "OAPOI.h"
 #import "OAMapSettingsPOIScreen.h"
@@ -61,7 +59,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAZoom.h"
-
+#import "OAMapSource.h"
 #import "OARoutingHelper.h"
 #import "OATransportRoutingHelper.h"
 #import "OAPointDescription.h"
@@ -69,9 +67,9 @@
 #import "OATargetPointsHelper.h"
 #import "OAAvoidSpecificRoads.h"
 #import "OAPluginsHelper.h"
-
 #import "OASubscriptionCancelViewController.h"
 #import "OAWhatsNewBottomSheetViewController.h"
+#import "OAApplicationMode.h"
 #import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>

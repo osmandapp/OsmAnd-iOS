@@ -9,9 +9,11 @@
 #import "OAUnderlayMapLayer.h"
 #import "OAMapCreatorHelper.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OAAutoObserverProxy.h"
 #import "OARootViewController.h"
+#import "OAMapSource.h"
 
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"

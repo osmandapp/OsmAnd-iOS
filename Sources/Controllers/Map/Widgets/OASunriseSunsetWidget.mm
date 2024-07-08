@@ -7,7 +7,6 @@
 //
 
 #import "OASunriseSunsetWidget.h"
-#import "Localization.h"
 #import "SunriseSunset.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"

@@ -19,7 +19,6 @@
 #import "OATitleSliderTableViewCell.h"
 #import "OAIconTextDescButtonCell.h"
 #import "OAButtonTableViewCell.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapCreatorHelper.h"
@@ -28,6 +27,8 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import "GeneratedAssetSymbols.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QSet>
 

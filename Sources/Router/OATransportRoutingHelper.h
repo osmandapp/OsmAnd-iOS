@@ -26,8 +26,7 @@
 
 @end
 
-@class OARouteCalculationResult;
-@class OAApplicationMode;
+@class OARouteCalculationResult, OAApplicationMode;
 
 @interface OATransportRouteResultSegment : NSObject
 @property (nonatomic, assign) std::shared_ptr<TransportRouteResultSegment> segment;

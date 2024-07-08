@@ -14,7 +14,6 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoriteItem.h"
 #import "OAPluginPopupViewController.h"
-#import "OAIAPHelper.h"
 #import "OAFavoriteViewController.h"
 #import "OATargetDestinationViewController.h"
 #import "OATargetHistoryItemViewController.h"
@@ -47,7 +46,9 @@
 #import "OAResourcesUIHelper.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OADownloadMapViewController.h"
 #import "OAPlugin.h"

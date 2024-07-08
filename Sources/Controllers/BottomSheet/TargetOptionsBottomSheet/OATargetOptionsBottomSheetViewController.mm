@@ -9,6 +9,7 @@
 #import "OATargetOptionsBottomSheetViewController.h"
 #import "OAAddDestinationBottomSheetViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OATargetPoint.h"
 #import "OARTargetPoint.h"

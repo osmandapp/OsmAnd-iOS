@@ -15,6 +15,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAGPXDatabase.h"
 #import <UIViewController+JASidePanel.h>
 #import "OAPluginPopupViewController.h"
@@ -96,17 +97,16 @@
 #import "OASearchToolbarViewController.h"
 #import "OAWeatherLayerSettingsViewController.h"
 #import "OAMapInfoController.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAMapViewController.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
 #import "OADiscountToolbarViewController.h"
 #import "OAGPXMutableDocument.h"
 #import "OAPluginsHelper.h"
-
+#import "OAApplicationMode.h"
 #import "OARouteKey.h"
 #import "OANetworkRouteSelectionTask.h"
 #import <MBProgressHUD.h>
-
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/NetworkRouteContext.h>

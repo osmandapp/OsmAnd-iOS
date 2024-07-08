@@ -14,6 +14,7 @@
 #import "OAZoom.h"
 #import "OARouteCalculationResult.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OANativeUtilities.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewTrackingUtilities.h"

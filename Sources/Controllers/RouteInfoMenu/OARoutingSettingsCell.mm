@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 #import "OAVoiceRouter.h"
 #import "OARoutingHelper.h"
+#import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"

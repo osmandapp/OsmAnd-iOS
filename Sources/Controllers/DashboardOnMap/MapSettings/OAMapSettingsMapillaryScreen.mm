@@ -19,6 +19,7 @@
 #import "OAPOIFiltersHelper.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"

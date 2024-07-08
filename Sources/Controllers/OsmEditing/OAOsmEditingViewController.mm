@@ -22,6 +22,7 @@
 #import "OAOpenStreetMapRemoteUtil.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAMapLayers.h"
 #import "Localization.h"

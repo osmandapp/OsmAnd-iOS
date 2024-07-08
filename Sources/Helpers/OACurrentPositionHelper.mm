@@ -14,6 +14,7 @@
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationParams.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

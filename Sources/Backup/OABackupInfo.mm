@@ -13,6 +13,7 @@
 #import "OABackupHelper.h"
 #import "OAExportSettingsType.h"
 #import "OAIAPHelper.h"
+#import "OAAppSettings.h"
 
 @implementation OABackupInfo
 {
@@ -88,7 +89,7 @@
     for (OARemoteFile *remoteFile in _filesToDownload)
     {
         OAExportSettingsType *type = [OAExportSettingsType findByRemoteFile:remoteFile];
-        if (type != nil && [helper getBackupTypePref:type].get)
+        if (type != nil && [[helper getBackupTypePref:type] get])
         {
             [files addObject:remoteFile];
         }
@@ -103,7 +104,7 @@
     for (OALocalFile *localFile in _filesToUpload)
     {
         OAExportSettingsType *type = [OAExportSettingsType findBySettingsItem:localFile.item];
-        if (type != nil && [helper getBackupTypePref:type].get && (type.isAllowedInFreeVersion || [OAIAPHelper isOsmAndProAvailable]))
+        if (type != nil && [[helper getBackupTypePref:type] get] && (type.isAllowedInFreeVersion || [OAIAPHelper isOsmAndProAvailable]))
         {
             [files addObject:localFile];
         }
@@ -118,7 +119,7 @@
     for (OARemoteFile *remoteFile in _filesToDelete)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:remoteFile];
-        if (exportType != nil && [helper getBackupTypePref:exportType].get)
+        if (exportType != nil && [[helper getBackupTypePref:exportType] get])
         {
             [files addObject:remoteFile];
         }
@@ -133,7 +134,7 @@
     for (OALocalFile *localFile in _localFilesToDelete)
     {
         OAExportSettingsType *exportType = [OAExportSettingsType findBySettingsItem:localFile.item];
-        if (exportType != nil && [helper getBackupTypePref:exportType].get)
+        if (exportType != nil && [[helper getBackupTypePref:exportType] get])
         {
             [files addObject:localFile];
         }
@@ -152,7 +153,7 @@
         if (![items containsObject:item])
         {
             OAExportSettingsType *exportType = [OAExportSettingsType findByRemoteFile:pair.lastObject];
-            if (exportType != nil && [helper getBackupTypePref:exportType].get)
+            if (exportType != nil && [[helper getBackupTypePref:exportType] get])
             {
                 [files addObject:pair];
                 [items addObject:item];

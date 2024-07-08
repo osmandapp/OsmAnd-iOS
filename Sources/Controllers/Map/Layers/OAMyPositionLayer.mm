@@ -18,6 +18,8 @@
 #import "OANavigationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>

@@ -20,6 +20,7 @@
 #import "OAPOI.h"
 #import "OAPOIHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "OAHistoryItem.h"

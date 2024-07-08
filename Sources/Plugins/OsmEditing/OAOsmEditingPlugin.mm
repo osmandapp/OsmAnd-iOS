@@ -13,6 +13,7 @@
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapInfoController.h"
@@ -21,7 +22,6 @@
 #import "OADestinationsHelper.h"
 #import "OADestination.h"
 #import "OARoutingHelper.h"
-#import "OAMapViewController.h"
 #import "OANativeUtilities.h"
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditsDBHelper.h"
@@ -44,6 +44,8 @@
 #import "OAShowHideOSMBugAction.h"
 #import "OAOsmBugsDBHelper.h"
 #import "OALinks.h"
+#import "OsmAnd_Maps-Swift.h"
+
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 
@@ -196,7 +198,7 @@
     return category;
 }
 
-- (NSArray *)getQuickActionTypes
+- (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAAddPOIAction.TYPE, OAAddOSMBugAction.TYPE, OAShowHideOSMBugAction.TYPE, OAShowHideLocalOSMChanges.TYPE];
 }

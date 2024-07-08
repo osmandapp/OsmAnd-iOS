@@ -13,9 +13,9 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OASimpleTableViewCell.h"
+#import "OAMapSource.h"
 
 #include <QSet>
-
 #include <OsmAndCore/Map/IOnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 

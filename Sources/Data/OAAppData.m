@@ -15,6 +15,13 @@
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherBand.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
+#import "OAMapLayersConfiguration.h"
+#import "OAMapSource.h"
+#import "OAApplicationMode.h"
+#import "OADownloadMode.h"
+#import "OAMapViewState.h"
+#import "OARTargetPoint.h"
 
 #define kLastMapSourceKey @"lastMapSource"
 #define kOverlaySourceKey @"overlayMapSource"

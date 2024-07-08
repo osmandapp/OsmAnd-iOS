@@ -12,7 +12,6 @@
 #import "OAGPXMutableDocument.h"
 #import "OAMeasurementToolLayer.h"
 #import "OAMapLayers.h"
-#import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMeasurementEditingContext.h"
 #import "Localization.h"

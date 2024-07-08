@@ -9,6 +9,7 @@
 #import "OACoordinatesFormatViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OALinks.h"
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"

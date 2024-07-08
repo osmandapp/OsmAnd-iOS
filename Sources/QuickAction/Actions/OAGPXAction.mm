@@ -22,6 +22,8 @@
 #import "OASwitchTableViewCell.h"
 #import "OAInputTableViewCell.h"
 #import "OAFavoritesHelper.h"
+#import "OrderedDictionary.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kName = @"name";

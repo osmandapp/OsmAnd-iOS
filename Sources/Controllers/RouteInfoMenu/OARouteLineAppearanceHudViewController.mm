@@ -10,7 +10,9 @@
 #import "OABaseTrackMenuHudViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
 #import "OAProfileNavigationSettingsViewController.h"
@@ -40,8 +42,10 @@
 #import "OARouteStatisticsHelper.h"
 #import "OAProducts.h"
 #import "OASizes.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAColoringType.h"
+#import "OAApplicationMode.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kColorDayMode OALocalizedString(@"day")
 #define kColorNightMode OALocalizedString(@"daynight_mode_night")

@@ -20,6 +20,8 @@
 #import "OAReverseGeocoder.h"
 #import "OAPointDescription.h"
 #import "OAMapLayers.h"
+#import "OARTargetPoint.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>

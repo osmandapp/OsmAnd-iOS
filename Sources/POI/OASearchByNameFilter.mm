@@ -11,6 +11,7 @@
 #import "OAUtilities.h"
 #import "OAPOIHelper.h"
 #import "OAMapUtils.h"
+#import "OAResultMatcher.h"
 
 static NSString* const FILTER_ID = BY_NAME_FILTER_ID;
 

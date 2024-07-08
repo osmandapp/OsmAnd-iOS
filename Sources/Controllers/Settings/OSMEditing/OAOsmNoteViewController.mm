@@ -20,6 +20,7 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAMapLayers.h"
 #import "OAUploadOsmPointsAsyncTask.h"
+#import "OAOsmBugsUtilsProtocol.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMappersViewController.h"
 #import "GeneratedAssetSymbols.h"

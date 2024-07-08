@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"

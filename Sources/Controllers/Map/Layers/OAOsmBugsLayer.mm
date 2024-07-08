@@ -20,6 +20,7 @@
 #import "OAOsmNotesMapLayerProvider.h"
 #import "OAOnlineOsmNoteWrapper.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

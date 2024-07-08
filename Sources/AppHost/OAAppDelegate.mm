@@ -7,17 +7,15 @@
 //
 
 #import "OAAppDelegate.h"
-
 #import <UIKit/UIKit.h>
 #import <BackgroundTasks/BackgroundTasks.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "SceneDelegate.h"
-
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
+#import "OAMapPanelViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
@@ -32,6 +30,7 @@
 #import "OADiscountHelper.h"
 #import "OALinks.h"
 #import "OABackupHelper.h"
+#import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
@@ -39,7 +38,6 @@
 
 #include <QDir>
 #include <QFile>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 #include <OsmAndCore/Logging.h>

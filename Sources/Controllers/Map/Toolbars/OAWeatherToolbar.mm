@@ -8,7 +8,9 @@
 
 #import "OAWeatherToolbar.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapRendererView.h"
 #import "OAWeatherLayerSettingsViewController.h"

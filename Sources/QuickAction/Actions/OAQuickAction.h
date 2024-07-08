@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OrderedDictionary.h"
-#import "Localization.h"
 
 static NSString * _Nonnull const kSectionNoName = @"no_name";
 static NSString * _Nonnull const kDialog = @"dialog";

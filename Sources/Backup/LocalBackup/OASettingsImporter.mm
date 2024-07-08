@@ -14,6 +14,7 @@
 #import "OAOsmEditsSettingsItem.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAMapLayers.h"
 #import "OARouteLayer.h"
@@ -40,6 +41,7 @@
 #import "OAResourcesSettingsItem.h"
 #import "OASuggestedDownloadsItem.h"
 #import "OAExportAsyncTask.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore/ArchiveReader.h>
 #include <OsmAndCore/ResourcesManager.h>

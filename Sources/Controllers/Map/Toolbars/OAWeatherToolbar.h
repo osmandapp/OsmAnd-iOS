@@ -10,8 +10,6 @@
 #import "OABaseWidgetView.h"
 #import "OAFoldersCollectionView.h"
 
-@class OAObservable;
-
 @interface OAWeatherToolbar : OABaseWidgetView
 
 @property (nonatomic) BOOL topControlsVisibleInLandscape;

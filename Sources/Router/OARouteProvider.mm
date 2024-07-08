@@ -25,6 +25,8 @@
 #import "OATargetPointsHelper.h"
 #import "OAIndexConstants.h"
 #import "MissingMapsCalculator.h"
+#import "OARTargetPoint.h"
+#import "CLLocation+Extension.h"
 
 #include <precalculatedRouteDirection.h>
 #include <routePlannerFrontEnd.h>

@@ -14,6 +14,8 @@
 #import "OADonationSettingsViewController.h"
 #import "OACheckBackupSubscriptionTask.h"
 #import "OAAppVersion.h"
+#import "OAAppSettings.h"
+#import "OAProducts.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 NSString *const OAIAPProductsRequestSucceedNotification = @"OAIAPProductsRequestSucceedNotification";

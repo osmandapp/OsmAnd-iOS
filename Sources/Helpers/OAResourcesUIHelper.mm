@@ -11,10 +11,12 @@
 #import <MBProgressHUD.h>
 #import "OALog.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OAManageResourcesViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASQLiteTileSource.h"
 #import "OAChoosePlanHelper.h"
 #import "OAJsonHelper.h"
@@ -24,14 +26,14 @@
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OAAppVersion.h"
 #import "OARouteCalculationResult.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/WorldRegions.h>
-
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>

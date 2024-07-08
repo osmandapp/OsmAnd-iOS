@@ -10,16 +10,18 @@
 #import "Localization.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAGpxWptItem.h"
 #import "OAGPXDocument.h"
 #import "OAFavoriteItem.h"
 #import "OAFavoritesHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapLayers.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"
+#import "OAButton.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kMaxItemsCount 11
 #define kButtonHeight 32.0

@@ -19,6 +19,7 @@
 #import "OAWikiArticleHelper.h"
 #import "OAIAPHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OAPluginPopupViewController.h"
 #import "OAManageResourcesViewController.h"

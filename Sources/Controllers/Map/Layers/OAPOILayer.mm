@@ -23,6 +23,7 @@
 #import "OARouteKey.h"
 #import "OANetworkRouteDrawable.h"
 #import "OAPluginsHelper.h"
+#import "OAAppSettings.h"
 
 #include "OACoreResourcesAmenityIconProvider.h"
 #include <OsmAndCore/Data/Amenity.h>

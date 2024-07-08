@@ -7,8 +7,9 @@
 //
 
 #import "OARouteDetailsGraphViewController.h"
-#import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OAStateChangedListener.h"
 #import "OARoutingHelper.h"

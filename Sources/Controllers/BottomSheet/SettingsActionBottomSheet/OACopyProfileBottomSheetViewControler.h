@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "OABaseBottomSheetViewController.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode;
 
 @protocol OACopyProfileBottomSheetDelegate <NSObject>
 

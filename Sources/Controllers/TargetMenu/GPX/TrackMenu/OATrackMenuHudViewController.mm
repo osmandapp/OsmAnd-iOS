@@ -19,6 +19,7 @@
 #import "OADeleteWaypointsGroupBottomSheetViewController.h"
 #import "OARouteBaseViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARouteKey.h"
 #import "OAMapRendererView.h"
@@ -62,6 +63,7 @@
 #import "OANetworkRouteDrawable.h"
 #import "OATrackMenuTabSegments.h"
 #import "OAGPXAppearanceCollection.h"
+#import "OAProducts.h"
 #import "MBProgressHUD.h"
 #import "GeneratedAssetSymbols.h"
 

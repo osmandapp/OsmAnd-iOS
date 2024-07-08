@@ -7,6 +7,8 @@
 //
 
 #import "OATextInfoWidget.h"
+#import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
 #import "OAAppSettings.h"

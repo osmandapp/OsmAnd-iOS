@@ -13,10 +13,12 @@
 #import "OAAppSettings.h"
 #import "OADiscountToolbarViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAUtilities.h"
 #import "OAPluginsViewController.h"
 #import "OAPluginDetailsViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAManageResourcesViewController.h"
 #import "OASearchUICore.h"
 #import "OAQuickSearchHelper.h"
@@ -25,6 +27,7 @@
 #import "OAPOIUIFilter.h"
 #import "OAChoosePlanHelper.h"
 #import "OAAppVersion.h"
+#import "OAPOIType.h"
 
 const static NSString *URL = @"https://osmand.net/api/motd";
 

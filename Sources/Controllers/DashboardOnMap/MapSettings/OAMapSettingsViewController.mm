@@ -14,7 +14,7 @@
 #import "OAMapRendererView.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
-
+#import "OAMapSource.h"
 #import "OAMapSettingsMainScreen.h"
 #import "OAMapSettingsMapTypeScreen.h"
 #import "OAMapSettingsCategoryScreen.h"

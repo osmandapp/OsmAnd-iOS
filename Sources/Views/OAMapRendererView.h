@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OAMapRendererViewProtocol.h"
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/CommonTypes.h>
@@ -21,9 +22,6 @@
 #include <OsmAndCore/Map/MapRendererDebugSettings.h>
 #include <OsmAndCore/Map/IMapRenderer.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
-#import "OAMapRendererViewProtocol.h"
-#import "OAObservable.h"
 
 static const float kViewportScale = 1.0f;
 static const float kViewportBottomScale = 1.5f;
@@ -54,6 +52,8 @@ typedef NS_OPTIONS(NSUInteger, OAMapRendererViewStateEntry)
     _DECLARE_ENTRY(Zoom)
 };
 #undef _DECLARE_ENTRY
+
+@class OAObservable;
 
 @protocol OAMapRendererDelegate
 

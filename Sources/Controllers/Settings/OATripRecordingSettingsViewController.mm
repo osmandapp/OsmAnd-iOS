@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 #import "OARoutingHelper.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OASavingTrackHelper.h"

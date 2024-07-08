@@ -10,6 +10,7 @@
 #import <MBProgressHUD.h>
 #import "OAAutoObserverProxy.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAMapCreatorHelper.h"
 #import "OACustomSourceDetailsViewController.h"

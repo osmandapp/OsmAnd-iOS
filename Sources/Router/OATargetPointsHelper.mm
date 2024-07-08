@@ -10,6 +10,7 @@
 #import "OAPointDescription.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 #import "OAAppSettings.h"
 #import "OARoutingHelper.h"
 #import "OARTargetPoint.h"

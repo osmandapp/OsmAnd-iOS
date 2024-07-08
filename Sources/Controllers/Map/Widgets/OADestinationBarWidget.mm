@@ -15,6 +15,7 @@
 #import "OALog.h"
 #import "OAUtilities.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OADestinationsHelper.h"
 #import "OAHistoryHelper.h"
 #import "OAHistoryItem.h"

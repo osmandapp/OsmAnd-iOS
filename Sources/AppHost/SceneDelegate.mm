@@ -14,6 +14,8 @@
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OANavigationController.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
@@ -36,6 +38,7 @@
 #import "OADiscountHelper.h"
 #import "OALinks.h"
 #import "OABackupHelper.h"
+#import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>

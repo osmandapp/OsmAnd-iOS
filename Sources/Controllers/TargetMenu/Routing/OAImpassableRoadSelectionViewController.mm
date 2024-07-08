@@ -9,6 +9,7 @@
 #import "OAImpassableRoadSelectionViewController.h"
 #import "Localization.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASizes.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAAvoidSpecificRoads.h"

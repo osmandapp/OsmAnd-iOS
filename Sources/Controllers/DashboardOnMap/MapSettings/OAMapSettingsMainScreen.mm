@@ -26,15 +26,17 @@
 #import "OAIAPHelper.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAPOIHelper.h"
+#import "OAProducts.h"
 #import "OASizes.h"
 #import "OAColors.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #define kContourLinesDensity @"contourDensity"
 #define kContourLinesWidth @"contourWidth"

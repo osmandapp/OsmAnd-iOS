@@ -15,7 +15,6 @@
 #import "OAUtilities.h"
 #import "OATextInfoWidget.h"
 #import "OALocationConvert.h"
-#import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"

@@ -16,6 +16,7 @@
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAGPXUIHelper.h"
+#import "OAButton.h"
 
 #define kTitleHeightMax 44.
 #define kTitleHeightMin 30.

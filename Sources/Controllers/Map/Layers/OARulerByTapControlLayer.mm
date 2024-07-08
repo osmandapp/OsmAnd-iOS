@@ -12,6 +12,8 @@
 #import "OAUtilities.h"
 #import "OAFingerRulerDelegate.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OAMapLayers.h"

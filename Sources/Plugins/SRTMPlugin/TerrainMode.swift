@@ -71,19 +71,21 @@ final class TerrainMode: NSObject {
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
-        if let terrainModes {
-            for mode in terrainModes where mode.type == type && mode.getKeyName() == keyName {
-                return mode
-            }
+        guard let terrainModes else {
+            return nil
+        }
+        for mode in terrainModes where mode.type == type && mode.getKeyName() == keyName {
+            return mode
         }
         return nil
     }
 
     static func getDefaultMode(_ type: TerrainType) -> TerrainMode? {
-        if let terrainModes {
-            for mode in terrainModes where mode.type == type && mode.isDefaultMode() {
-                return mode
-            }
+        guard let terrainModes else {
+            return nil
+        }
+        for mode in terrainModes where mode.type == type && mode.isDefaultMode() {
+            return mode
         }
         return nil
     }
@@ -141,11 +143,12 @@ final class TerrainMode: NSObject {
 
     func getMainFile() -> String {
         let prefix: String
-        if type == .height {
+        switch type {
+        case .hillshade:
             prefix = Self.heightPrefix
-        } else if type == .slope {
+        case .slope:
             prefix = Self.colorSlopePrefix
-        } else {
+        case .height:
             prefix = Self.hillshadePrefix
         }
         return prefix + key + TXT_EXT

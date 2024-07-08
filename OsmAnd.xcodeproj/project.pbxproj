@@ -3328,6 +3328,7 @@
 		FAE0B7132AFCDC6B00C02438 /* BLEPairedSensors.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */; };
 		FAE0B7162AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */; };
 		FAE6E8642C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */; };
+		FAF068332C3BC6840054BBEA /* WeatherContoursButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */; };
 		FAF6C89B2AD013F400A3ED94 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */; };
 		FAF6C89F2AD014C900A3ED94 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */; };
 		FAF6C8A02AD014C900A3ED94 /* Theme.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAF6C89E2AD014C800A3ED94 /* Theme.swift */; };
@@ -7896,6 +7897,7 @@
 		FAE0B7122AFCDC6B00C02438 /* BLEPairedSensors.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = BLEPairedSensors.storyboard; sourceTree = "<group>"; };
 		FAE0B7152AFCEF4D00C02438 /* СhoicePairedDeviceTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "СhoicePairedDeviceTableViewCell.swift"; sourceTree = "<group>"; };
 		FAE6E8632C2A9BC600907FBE /* WeatherLayerSettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherLayerSettingsViewController.swift; sourceTree = "<group>"; };
+		FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherContoursButton.swift; sourceTree = "<group>"; };
 		FAF6C89A2AD013F400A3ED94 /* UIColor+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
 		FAF6C89D2AD014C800A3ED94 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		FAF6C89E2AD014C800A3ED94 /* Theme.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Theme.swift; sourceTree = "<group>"; };
@@ -9699,6 +9701,7 @@
 		46C04FAB2885645B00607301 /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				FAF068312C3BC66C0054BBEA /* WeatherContoursButton */,
 				FA282AF52C2C456700CC7AC1 /* WeatherNavigationBarView */,
 				CA4ED3D00AC3839226291450 /* OAWeatherHelper.h */,
 				CA4ED61F6893CC4346F50D14 /* OAWeatherHelper.mm */,
@@ -14144,6 +14147,14 @@
 			path = Cells;
 			sourceTree = "<group>";
 		};
+		FAF068312C3BC66C0054BBEA /* WeatherContoursButton */ = {
+			isa = PBXGroup;
+			children = (
+				FAF068322C3BC6840054BBEA /* WeatherContoursButton.swift */,
+			);
+			path = WeatherContoursButton;
+			sourceTree = "<group>";
+		};
 		FAF6C89C2AD014C800A3ED94 /* ThemeManager */ = {
 			isa = PBXGroup;
 			children = (
@@ -16771,6 +16782,7 @@
 				FAC166242B21BEF900D63755 /* SwiftyBluetooth.swift in Sources */,
 				DA5A814726C563A700F274C7 /* OAUploadOsmPointsAsyncTask.m in Sources */,
 				DA5A81E526C563A700F274C7 /* OAGPXDatabase.mm in Sources */,
+				FAF068332C3BC6840054BBEA /* WeatherContoursButton.swift in Sources */,
 				DA5A83C926C563A800F274C7 /* OAEditPointViewController.mm in Sources */,
 				DA5A84AD26C563A900F274C7 /* OARootViewController.m in Sources */,
 				DA5A81BC26C563A700F274C7 /* OAPOIMyLocationType.m in Sources */,

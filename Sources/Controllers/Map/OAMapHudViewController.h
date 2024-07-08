@@ -18,6 +18,7 @@
 @class OAWeatherToolbar;
 @class OAObservable;
 @class WeatherNavigationBarView;
+@class WeatherContoursButton;
 
 @interface OAMapHudViewController : UIViewController
 
@@ -34,7 +35,7 @@
 @property (weak, nonatomic) IBOutlet OAHudButton *compassButton;
 @property (weak, nonatomic) IBOutlet UIImageView *compassImage;
 
-@property (weak, nonatomic) IBOutlet OAHudButton *weatherContoursButton;
+@property (weak, nonatomic) IBOutlet WeatherContoursButton *weatherContoursButton;
 @property (weak, nonatomic) IBOutlet OAHudButton *weatherLayersButton;
 
 @property (weak, nonatomic) IBOutlet UIView *widgetsView;

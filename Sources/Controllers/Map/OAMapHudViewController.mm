@@ -238,12 +238,12 @@ static const float kDistanceMeters = 100.0;
 
 - (void)configureWeatherContoursButton
 {
+    [_weatherContoursButton configure];
     __weak __typeof(self) weakSelf = self;
-    _weatherContoursButton.showsMenuAsPrimaryAction = YES;
-    _weatherContoursButton.menu = [_mapInfoController createContourMenu:^{
+    _weatherContoursButton.onTapMenuAction = ^{
         [weakSelf updateStateWeatherContoursButton];
         [weakSelf configureWeatherContoursButton];
-    }];
+    };
 }
 
 - (void)updateStateWeatherContoursButton

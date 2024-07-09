@@ -555,10 +555,10 @@ typedef enum {
         OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
         if ([navIcon isModel])
         {
-            navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callbackOnLoad:^(OAModel3dWrapper * _Nullable model) {
+            OAModel3dCallback *callback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
                 [weakSelf refreshMarkersCollection];
-                return;
             }];
+            navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callback:callback];
             if (!navigationModel)
             {
                 navigationIconName = NAVIGATION_ICON_DEFAULT;
@@ -569,10 +569,10 @@ typedef enum {
         OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
         if ([locIcon isModel])
         {
-            locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callbackOnLoad:^(OAModel3dWrapper *_Nullable model) {
+            OAModel3dCallback *callback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
                 [weakSelf refreshMarkersCollection];
-                return;
             }];
+            locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callback:callback];
             if (!locationModel)
             {
                 locationIconName = LOCATION_ICON_DEFAULT;

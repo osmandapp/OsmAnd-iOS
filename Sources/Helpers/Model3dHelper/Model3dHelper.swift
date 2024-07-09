@@ -8,10 +8,10 @@
 
 import Foundation
 
+typealias callbackWithModel3d = (_ model: OAModel3dWrapper?) -> Void
+
 @objcMembers
 final class Model3dHelper: NSObject {
-    
-    typealias callbackWithModel3d = (_ model: OAModel3dWrapper?) -> Void
     
     static let shared = Model3dHelper()
     
@@ -21,39 +21,70 @@ final class Model3dHelper: NSObject {
     private var modelsCache = [String: OAModel3dWrapper]()
     private var modelsInProgress = Set<String>()
     private var failedModels = Set<String>()
+    private var pendingCallbacks = [String: [OAModel3dCallback]]()
     
     private override init() {
         app = OsmAndApp.swiftInstance()
         settings = OAAppSettings.sharedManager()
     }
     
-    func getModel(modelName: String, callbackOnLoad: callbackWithModel3d?) -> OAModel3dWrapper? {
+    func getModel(modelName: String, callback: OAModel3dCallback?) -> OAModel3dWrapper? {
+        let pureModelName = modelName.replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
+        
         if !modelName.hasPrefix(MODEL_NAME_PREFIX) {
-            guard let callbackOnLoad else { return nil }
-                callbackOnLoad(nil)
+            processCallback(modelName: pureModelName, model: nil, callback: callback)
+            return nil
         }
         
-        let pureModelName = modelName.replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
         let model3D = modelsCache[pureModelName]
         if model3D == nil {
-            loadModel(modelName: pureModelName, callback: callbackOnLoad)
+            loadModel(modelName: pureModelName, callback: callback)
         }
         
         return model3D
     }
     
-    private func loadModel(modelName: String, callback: callbackWithModel3d?) {
+    private func loadModel(modelName: String, callback: OAModel3dCallback?) {
         DispatchQueue.main.async { [weak self] in
             self?.loadModelImpl(modelName: modelName, callback: callback)
         }
     }
     
-    private func loadModelImpl(modelName: String, callback: callbackWithModel3d?) {
-        if modelsCache[modelName] != nil || modelsInProgress.contains(modelName) || failedModels.contains(modelName) {
+    private func processCallback(modelName: String, model: OAModel3dWrapper?, callback: OAModel3dCallback?) {
+        if let callback {
+            if let callbacks = pendingCallbacks[modelName] {
+                if let index = callbacks.firstIndex(of: callback) {
+                    self.pendingCallbacks[modelName]?.remove(at: index)
+                    if !callbacks.isEmpty {
+                        for pendingCallback in callbacks {
+                            pendingCallback.processResult(model)
+                        }
+                    }
+                    self.pendingCallbacks.removeValue(forKey: modelName)
+                }
+            }
+            callback.processResult(model)
+        }
+    }
+    
+    private func loadModelImpl(modelName: String, callback: OAModel3dCallback?) {
+        if let model = modelsCache[modelName] {
+            processCallback(modelName: modelName, model: model, callback: callback)
             return
         }
-        
-        modelsInProgress.insert(modelName)
+        if failedModels.contains(modelName) {
+            processCallback(modelName: modelName, model: nil, callback: callback)
+            return
+        }
+        if modelsInProgress.contains(modelName) {
+            if let callback {
+                if pendingCallbacks[modelName] == nil {
+                    pendingCallbacks[modelName] = Array<OAModel3dCallback>()
+                    pendingCallbacks[modelName]?.append(callback)
+                }
+            }
+            return
+        }
         
         let task = OALoad3dModelTask(modelName) { [weak self] model in
             if model == nil {
@@ -62,16 +93,19 @@ final class Model3dHelper: NSObject {
                 self?.modelsCache[modelName] = model
             }
             self?.modelsInProgress.remove(modelName)
+            self?.processCallback(modelName: modelName, model: model, callback: callback)
             if let callback {
-                callback(model)
+                callback.processResult(model)
             }
             return true
         }
         
         if let task {
             if !Model3dHelper.isModelExist(dir: task.modelDirPath) {
+                processCallback(modelName: modelName, model: nil, callback: callback)
                 return
             }
+            modelsInProgress.insert(modelName)
             task.execute()
         }
     }
@@ -112,5 +146,19 @@ final class Model3dHelper: NSObject {
             debugPrint(error)
         }
         return false
+    }
+}
+
+@objcMembers
+final class OAModel3dCallback: NSObject {
+    private var callback: callbackWithModel3d?
+    
+    init(callback: callbackWithModel3d?) {
+        super.init()
+        self.callback = callback
+    }
+    
+    func processResult(_ model: OAModel3dWrapper?) {
+        callback?(model)
     }
 }

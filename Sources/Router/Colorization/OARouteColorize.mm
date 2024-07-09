@@ -7,6 +7,7 @@
 //
 
 #import "OARouteColorize.h"
+#import "OARouteColorize+cpp.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAGPXTrackAnalysis.h"
@@ -253,6 +254,17 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     }
     [self setColorsToPoints:result];
     return result;
+}
+
+- (QList<OsmAnd::FColorARGB>)getResultQList
+{
+    NSArray<OARouteColorizationPoint *> *result = [self getResult];
+    QList<OsmAnd::FColorARGB> qResult;
+    for (OARouteColorizationPoint *colorizationPoint in result)
+    {
+        qResult.append(OsmAnd::ColorARGB(colorizationPoint.color));
+    }
+    return qResult;
 }
 
 - (NSArray<OARouteColorizationPoint *> *)getSimplifiedResult:(NSInteger)simplificationZoom

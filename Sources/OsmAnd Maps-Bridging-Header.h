@@ -48,6 +48,7 @@
 #import "OARouteColorize.h"
 #import "OAApplicationMode.h"
 #import "OASavingTrackHelper.h"
+#import "OAMapStyleSettings.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

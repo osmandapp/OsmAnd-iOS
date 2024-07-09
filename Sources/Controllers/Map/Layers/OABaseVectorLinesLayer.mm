@@ -109,8 +109,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
-    
+    if (![super updateLayer])
+        return NO;
+
     return YES;
 }
 

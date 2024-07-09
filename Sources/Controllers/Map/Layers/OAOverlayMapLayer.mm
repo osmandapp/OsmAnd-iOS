@@ -70,7 +70,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     [self updateOpacitySliderVisibility];
     

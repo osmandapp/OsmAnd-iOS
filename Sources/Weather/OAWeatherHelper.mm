@@ -182,7 +182,7 @@
                     : updateFrequency == EOAWeatherForecastUpdatesDaily ? kWeatherForecastFrequencyDay
                             : kWeatherForecastFrequencyWeek;
             if (nowTime >= lastUpdateTime + secondsRequired)
-                [self downloadForecastByRegion:region];
+                [self downloadForecastByRegion:region silent:YES];
         }
 
         if (forecastsDownloading == regionIds.count)
@@ -195,7 +195,7 @@
     return [[_app.downloadsManager downloadTasksWithKey:[@"resource:" stringByAppendingString:resourceId]] firstObject];
 }
 
-- (void)downloadForecastByRegion:(OAWorldRegion *)region
+- (void)downloadForecastByRegion:(OAWorldRegion *)region silent:(BOOL)silent
 {
     if (![[OAPluginsHelper getPlugin:OAWeatherPlugin.class] isEnabled] || ![OAIAPHelper isOsmAndProAvailable])
         return;
@@ -207,6 +207,7 @@
         return;
     else if (!networkManager.isReachableViaWiFi && [OAWeatherHelper getPreferenceWeatherAutoUpdate:regionId] == EOAWeatherAutoUpdateOverWIFIOnly)
         return;
+
     NSString *resourceId = [region.downloadsIdPrefix stringByAppendingString:@"tifsqlite"];
     const auto localResource = _app.resourcesManager->getLocalResource(QString::fromNSString(resourceId));
     OAResourceItem *localResourceItem;
@@ -241,9 +242,8 @@
             localResourceItem = item;
         }
     }
-    if (localResourceItem) {
-        [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)localResourceItem onTaskCreated:nil onTaskResumed:nil];
-    }
+    if (localResourceItem)
+        [OAResourcesUIHelper offerDownloadAndInstallOf:(OARepositoryResourceItem *)localResourceItem onTaskCreated:nil onTaskResumed:nil completionHandler:nil silent:silent];
 }
 
 - (void)downloadForecastsByRegionIds:(NSArray<NSString *> *)regionIds;
@@ -253,7 +253,7 @@
     {
         if ([regionIds containsObject:[self.class checkAndGetRegionId:region]])
         {
-            [self downloadForecastByRegion:region];
+            [self downloadForecastByRegion:region silent:NO];
             forecastsDownloading++;
         }
 
@@ -844,6 +844,12 @@
 {
     NSTimeInterval hour = 3600.0;
     return [NSDate dateWithTimeIntervalSince1970:round(date.timeIntervalSince1970 / hour) * hour];
+}
+
+- (BOOL)allLayersAreDisabled
+{
+    QList<OsmAnd::BandIndex> bands = [self getVisibleBands];
+    return bands.isEmpty();
 }
 
 @end

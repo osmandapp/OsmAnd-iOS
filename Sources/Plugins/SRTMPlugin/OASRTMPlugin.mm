@@ -98,6 +98,7 @@ static NSString * const kTerrain = @"terrain_layer";
 - (void)setTerrainLayerEnabled:(BOOL)enabled
 {
     [_terrain set:enabled];
+    [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
 - (NSInteger)getTerrainMinZoom

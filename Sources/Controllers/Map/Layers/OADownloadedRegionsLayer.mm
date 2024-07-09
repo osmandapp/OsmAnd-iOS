@@ -107,7 +107,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     [self refreshLayer];
     return YES;
@@ -347,11 +348,16 @@
 
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
+    if (OsmAndApp.instance.isInBackground)
+    {
+        self.invalidated = YES;
+        return;
+    }
+
     dispatch_async(dispatch_get_main_queue(), ^{
         [self updateLayer];
     });
 }
-
 
 - (void)onWeatherToolbarStateChanged
 {

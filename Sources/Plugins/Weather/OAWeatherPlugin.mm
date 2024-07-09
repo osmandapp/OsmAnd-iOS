@@ -10,7 +10,6 @@
 #import "OARootViewController.h"
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
-#import "OAWeatherWidget.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegInfo.h"
 #import "OAIAPHelper.h"
@@ -154,6 +153,37 @@
 - (NSArray<QuickActionType *> *)getQuickActionTypes
 {
     return @[OAShowHideTemperatureAction.TYPE, OAShowHideWindAction.TYPE, OAShowHideAirPressureAction.TYPE, OAShowHidePrecipitationAction.TYPE, OAShowHideCloudAction.TYPE];
+}
+
+- (NSArray<OAWeatherWidget *> *)createWidgetsControls
+{
+    OAApplicationMode *appMode = [OAAppSettings sharedManager].applicationMode.get;
+    return @[
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherTemperatureWidget
+                                         band:WEATHER_BAND_TEMPERATURE
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherAirPressureWidget
+                                         band:WEATHER_BAND_PRESSURE
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherCloudsWidget
+                                         band:WEATHER_BAND_CLOUD
+                                     customId:nil
+                                      appMode:appMode widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherPrecipitationWidget
+                                         band:WEATHER_BAND_PRECIPITATION
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil],
+        [[OAWeatherWidget alloc] initWithType:OAWidgetType.weatherWindWidget
+                                         band:WEATHER_BAND_WIND_SPEED
+                                     customId:nil
+                                      appMode:appMode
+                                 widgetParams:nil]
+    ];
 }
 
 @end

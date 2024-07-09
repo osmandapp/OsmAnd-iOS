@@ -85,7 +85,8 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
 
     if (self.app.data.mapillary)
     {

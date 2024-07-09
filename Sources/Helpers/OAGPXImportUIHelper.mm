@@ -140,6 +140,7 @@ static UIViewController *parentController;
         UIView *topView = [UIApplication sharedApplication].mainWindow;
         _progressHUD = [[MBProgressHUD alloc] initWithView:topView];
         _progressHUD.minShowTime = .5f;
+        _progressHUD.removeFromSuperViewOnHide = YES;
         [topView addSubview:_progressHUD];
         
         [_progressHUD show:!wasVisible];

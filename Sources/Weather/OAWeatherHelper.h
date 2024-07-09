@@ -103,6 +103,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherAutoUpdate)
 + (void)removePreferences:(NSString *)regionId;
 
 + (NSDate *) roundForecastTimeToHour:(NSDate *)date;
+- (BOOL)allLayersAreDisabled;
 
 @end
 

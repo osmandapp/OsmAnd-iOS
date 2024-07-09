@@ -1599,7 +1599,7 @@
 "map_settings_add_maps_hillshade" = "Sono necessarie mappe aggiuntive per visualizzare le ombre sulla mappa.";
 "map_settings_zoom_level_description" = "Imposta lo zoom minimo e massimo al quale verrà visualizzato il livello";
 "map_settings_hillshade_description" = "La mappa Hillshade usa tonalità scure per mostrare pendii, picchi e pianure.";
-"map_settings_slopes_description" = "La pendenza è una visualizzazione colorata sul terreno.";
+"map_settings_slopes_description" = "La pendenza è visualizzata con un colore sul terreno.";
 "map_settings_slopes_legend" = "Puoi leggere di più sulle piste su Wikipedia";
 "map_settings_layer_transparency" = "Trasparenza del livello";
 "shared_string_terrain" = "Terreno";
@@ -2712,14 +2712,14 @@
 "rendering_attr_showMtbScale_description" = "Mostra i percorsi nella scala di difficoltà MTB.";
 "routing_attr_carriage_restrictions_description" = "Considera l\'accesso consentito ai veicoli a trazione animale";
 "routing_attr_allow_streams_name" = "Permetti ruscelli e scoli";
-"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilità per i tunnel dei corsi d\'acqua";
+"rendering_attr_showWaterwayTunnels_description" = "Aumenta la visibilità per i tunnel dei corsi d'acqua";
 "rendering_attr_showBusRoutes_name" = "Linee dell\'autobus";
 "rendering_attr_OSMMapperAssistantIconsLowZooms_name" = "Icone a zoom bassi";
 "routing_attr_prefer_hiking_routes_description" = "Preferisci i percorsi escursionistici";
 "rendering_attr_OSMMapperAssistantFixme_description" = "Mostra etichette Fixme";
 "routing_attr_hazmat_category_description" = "Categoria materiali pericolosi / Considera i permessi di accesso per i materiali pericolosi";
 "routing_attr_difficulty_preference_beginner_name" = "Principiante";
-"rendering_attr_showWaterwayTunnels_name" = "Aumenta la visibilità per i tunnel dei corsi d\'acqua";
+"rendering_attr_showWaterwayTunnels_name" = "Aumenta visibilità tunnel corsi d'acqua";
 "routing_attr_difficulty_preference_no_preference_name" = "Nessuna preferenza";
 "routing_attr_avoid_fords_name" = "Evita i guadi";
 "routing_attr_freeride_policy_allow_name" = "Permetti";
@@ -3378,8 +3378,8 @@
 "required_maps" = "Mappe richieste";
 "average_vertical_speed" = "Velocità verticale media";
 "osm_id" = "OSM ID";
-"calculate_online_title" = "L'elenco delle mappe richieste si basa sul percorso in linea retta. Per ottenere un elenco accurato delle mappe, OsmAnd può precalcolare il percorso online";
-"auto_zoom_smooth" = "Liscio";
+"calculate_online_title" = "L'elenco delle mappe mancanti si basa sul percorso in linea retta. Per ottenere un elenco accurato delle mappe, OsmAnd può precalcolare il percorso online";
+"auto_zoom_smooth" = "Fluido";
 "vertical_exaggeration" = "Esagerazione verticale";
 "upward_gradient" = "Gradiente verso l\'alto";
 "downward_gradient" = "Gradiente verso il basso";
@@ -3442,3 +3442,5 @@
 "missing_maps_ignore_details" = "Alcune mappe già scaricate potrebbero essere adatte al tuo percorso. Se hai familiarità con l'area e le mappe, puoi provare a muoverti utilizzando le mappe esistenti.";
 "missing_maps_ignore" = "Utilizza mappe esistenti";
 "online_plugins" = "Componenti aggiuntivi online";
+"osmand_depelopment_use_discrete_autozoom" = "Autozoom discreto (vecchia versione)";
+"transport_hazmat_title" = "Trasporto di materiali pericolosi";

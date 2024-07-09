@@ -295,7 +295,7 @@
                 completionHandler:(void(^)(UIAlertController *))completionHandler
 {
     OARepositoryResourceItem *res = (OARepositoryResourceItem *)item.objcResourceItem;
-    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler];
+    [OAResourcesUIHelper offerDownloadAndInstallOf:res onTaskCreated:onTaskCreated onTaskResumed:onTaskResumed completionHandler:completionHandler silent:NO];
 }
 
 + (void) offerCancelDownloadOf:(OAResourceSwiftItem *)item onTaskStop:(OADownloadTaskCallback)onTaskStop completionHandler:(void(^)(UIAlertController *))completionHandler

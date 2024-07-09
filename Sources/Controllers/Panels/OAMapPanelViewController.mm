@@ -464,6 +464,10 @@ typedef enum
 
     if (_customStatusBarStyleNeeded)
         return _customStatusBarStyle;
+    
+    if (self.hudViewController.mapInfoController.weatherToolbarVisible) {
+        return [[ThemeManager shared] isLightTheme] ? UIStatusBarStyleDarkContent : UIStatusBarStyleLightContent;
+    }
 
     UIStatusBarStyle style = self.hudViewController ? self.hudViewController.preferredStatusBarStyle : UIStatusBarStyleDefault;
     return [self.targetMenuView getStatusBarStyle:[self contextMenuMode] defaultStyle:style];

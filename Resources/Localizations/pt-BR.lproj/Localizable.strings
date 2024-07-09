@@ -1031,9 +1031,9 @@
 "quick_action_add_osm_bug" = "Adicionar nota OSM";
 "toggle_online_notes" = "Mostrar/esconder notas do OSM";
 "quick_action_add_poi" = "Adicionar POI";
-"quick_action_map_style" = "Mudar estilo de mapa";
+"quick_action_map_style" = "Estilo do mapa";
 "quick_action_map_source" = "Mudar fonte de mapa";
-"quick_action_map_overlay" = "Mudar mapa da camada superior";
+"quick_action_map_overlay" = "Sobreposição";
 "quick_action_map_underlay" = "Mudar mapa da camada inferior";
 "quick_action_replace_destination" = "Substituir destino";
 "add_destination" = "Adicionar destino";
@@ -1618,7 +1618,7 @@
 "map_look_descr" = "Aparência do mapa";
 "public_transport_show" = "Mostrar transporte público";
 "application_profiles" = "Perfis de aplicação";
-"quick_action_remove_next_destination" = "Excluir próximo ponto de destino";
+"quick_action_remove_next_destination" = "Próximo ponto de destino";
 "shared_string_terrain" = "Terreno";
 "accessibility_announce" = "Anunciar";
 "profile_prefs_reset_successful" = "Todas as configurações de perfil são restauradas para o padrão.";
@@ -1864,7 +1864,7 @@
 "units_of_speed" = "Unidades de velocidade";
 "allow_3D_view" = "Vista 2.5D";
 "do_not_rotate" = "Não rodar";
-"settings_app_theme" = "Tema";
+"settings_app_theme" = "Tema do aplicativo";
 "map_settings_line_density_slowdown_warning" = "A alta densidade de linhas pode abrandar a renderização do mapa";
 "map_settings_contour_zoom_level_descr" = "Selecione o nível de ampliação, a partir do qual as curvas de nível serão mostradas";
 "map_settings_line_density" = "Densidade da linha";
@@ -3040,7 +3040,7 @@
 "weather_update_parameters_any_network" = "A previsão do tempo será atualizada em qualquer rede. Dados móveis podem ser usados.";
 "upload_poi" = "Subir POI";
 "shared_string_system_default" = "Padrão do sistema";
-"ios_release_4_6" = "• Agora você pode visualizar o mapa diretamente no painel do CarPlay\n• Mude para o tema noturno para uma experiência de visualização mais confortável em condições de pouca luz\n• Diálogos aprimorados para adicionar notas e carregar notas e POIs para o OpenStreetMap\n• Restaure facilmente as configurações do seu plugin para os padrões de instalação com uma nova opção \"Redefinir para padrão\"\n";
+"ios_release_4_6" = "- Registre e acompanhe suas métricas com sensores externos, incluindo velocidade da bicicleta, cadência da bicicleta, distância da bicicleta, frequência cardíaca e temperatura\n- Agora você pode visualizar o mapa diretamente no painel do CarPlay\n- Tema noturno adicionado para uma experiência de visualização confortável em condições de pouca luz\n- Descubra os guias de viagem do \"Wikivoyage\"\n- Diálogos aprimorados para adicionar notas e fazer upload de notas e POIs para o OpenStreetMap\n- Restaure facilmente as configurações do plug-in para os padrões de instalação com uma nova opção \"Reset to Default\" (Redefinir para o padrão)\n- Foi adicionada a opção \"Orientação da tela\" para definir a orientação de sua preferência sem alternância automática\n- Foi adicionado um botão separado para alternar o modo 3D diretamente na tela do CarPlay\n- As informações de elevação mínima e máxima foram adicionadas às rotas de navegação, além de subidas e descidas\n- Melhoria na coloração da trilha no modo Slope com um novo gradiente simétrico\n - As pastas favoritas agora armazenam a aparência padrão que é aplicada automaticamente a cada ponto adicionado\n- Correção da incompatibilidade do ponto central da \"Régua de raio\" com o centro do mapa\n- Foi adicionado o botão \"Ler artigo\" ao menu de contexto de PIs da Wikipédia\n- Corrigido o problema com a importação de arquivos GPX para os favoritos\n- Corrigido o problema com o evento do calendário para a posição de estacionamento\n- Corrigido o problema com a remoção de cores da paleta\n";
 "article_has_no_points" = "O artigo não tem pontos";
 "images" = "Imagens";
 "shared_string_bookmark" = "Marcar";
@@ -3385,7 +3385,7 @@
 "osmand_depelopment_use_special_routing_hh_only" = "Usar roteamento especial (apenas HH)";
 "rendering_value_managerName_name" = "Por nome do gerente";
 "rendering_attr_padusHideBoundaries_description" = "Ocultar fronteiras dos terrenos públicos, mas deixar áreas";
-"ios_release_4_7" = "- Painéis de widgets superior e inferior melhorados para acomodar todos os widgets\n- Gerenciamento melhorado das trilhas visíveis no mapa\n- Atualização de \"Analisar no mapa\" com a capacidade de apresentar métricas de sensores\n- Foi adicionado um suporte melhorado de etiquetas para GPX: hiperligação, autor, direitos de autor e palavras-chave\n- Melhoria da configuração do widget, permitindo aos utilizadores mover páginas e linhas\n- Melhoria da gestão de trilhos em \"Os meus locais\" com subpastas e menus de contexto para trilhos e pastas\n- Novos widgets: \"Rácio de deslizamento\" e \"Posição do sol\"\n- Personalização da \"Distância durante a navegação\": escolha entre números exatos ou arredondados\n- O idioma do aplicativo será usado para os nomes no mapa geral mundial em vez dos idiomas locais\n- OsmAnd Cloud: Adicionada a capacidade de gerir os seus dados, incluindo o restauro de ficheiros eliminados e a eliminação da sua conta\n- Adicionado suporte de etiquetas adicionais para rotas turísticas\n- Correção do widget \"Coordenadas\" em que, em alguns casos, os últimos dígitos eram omitidos\n- Correção do comportamento do botão \"Modo 3D\": ao tocar no botão, o ângulo de inclinação não era guardado\n- Correção da cor da barra de estado para versões mais antigas do iOS\n- Correção dos gestos de rotação e de pinça para ampliar o mapa para a aplicação executada no macOS\n";
+"ios_release_4_7" = "- Painéis de widgets superior e inferior aprimorados para acomodar todos os widgets\n- Gerenciamento aprimorado das trilhas visíveis no mapa\n- Atualização de \"Analisar no mapa\" com a capacidade de exibir métricas de sensores\n- Foi adicionado suporte aprimorado a tags para GPX: link, autor, direitos autorais e palavras-chave\n- Melhoria na configuração do widget, permitindo que os usuários movam páginas e linhas\n- Gerenciamento aprimorado de trilhas no \"Meus lugares\" com subpastas e menus de contexto para trilhas e pastas\n- A rotatória com número de saída agora é exibida no CarPlay durante a navegação\n- Controle do relevo 3D com a nova opção \"Vertical exaggeration\" (Exagero vertical) para uma paisagem mais dramática\n- Visualize a elevação da trilha diretamente no mapa em uma visualização dinâmica em 3D\n- Novos widgets: \"Glide Ratio\" (taxa de deslizamento) e \"Sun Position\" (posição do sol)\n- Personalização da \"Distância durante a navegação\": escolha entre números precisos ou arredondados\n- O idioma do aplicativo será usado para nomes no mapa de visão geral do mundo em vez dos idiomas locais\n- OsmAnd Cloud: Adicionada a capacidade de gerenciar seus dados, incluindo a restauração de arquivos excluídos e a exclusão de sua conta\n- Adicionado suporte a tags adicionais para rotas turísticas\n- Correção do widget \"Coordinates\" em que, em alguns casos, os últimos dígitos eram perdidos\n- Correção do comportamento do botão \"Modo 3D\": tocar no botão não salvava o ângulo de inclinação\n- Correção da cor da barra de status para versões mais antigas do iOS\n- Correção dos gestos de rotação e pinça para zoom do mapa para o aplicativo em execução no macOS\n";
 "delete_all_items_desc" = "Tem certeza de que deseja excluir permanentemente todos os itens da Lixeira? Esta ação não pode ser desfeita.";
 "average_glide_ratio_time_interval_desc" = "Mostra a razão de planeio média ou velocidade vertical para o intervalo definido.";
 "osmand_depelopment_use_old_routing" = "Usar roteamento antigo (A*)";
@@ -3413,7 +3413,7 @@
 "track_3d" = "Trilha 3D";
 "track_3d_empty_view_description" = "Explore a trilha em 3D interativa! Visualize altura, velocidade e muito mais diretamente no mapa.";
 "missing_or_outdated_maps_description" = "Alguns mapas off-line necessários para esta rota estão faltando ou não estão atualizados. Baixe ou atualize esses mapas.";
-"calculate_online_title" = "A lista de mapas necessários é baseada na rota em linha reta. Para obter uma lista precisa de mapas, o OsmAnd pode pré-calcular sua rota online";
+"calculate_online_title" = "A lista de mapas ausentes é baseada na rota em linha reta. Para obter uma lista precisa de mapas, o OsmAnd pode pré-calcular sua rota online";
 "osm_id" = "ID do OSM";
 "getting_list_required_maps" = "Obtendo uma lista de mapas necessários...";
 "visualization_3d_wall_color" = "Cor das paredes";
@@ -3451,3 +3451,12 @@
 "dangerous_goods" = "Mercadorias perigosas";
 "custom_buttons" = "Botões personalizados";
 "default_buttons" = "Botões padrões";
+"wall_height" = "Altura da parede";
+"shared_string_instructions" = "Instruções";
+"missing_maps_ignore" = "Usar mapas existentes";
+"rendering_value_dark_orange_name" = "Laranja escuro";
+"select_items" = "Usar mapas existentes";
+"wall_height_description" = "Ao alterar o valor da altura, você pode elevar a linha superior da pista acima do nível do solo.";
+"shared_string_analysis" = "Análise";
+"missing_maps_ignore_details" = "Alguns mapas já baixados podem ser adequados para sua rota. Se você estiver familiarizado com a área e os mapas, poderá tentar fazer a rota usando os mapas existentes.";
+"ios_release_4_8" = "- Novo widget \"Velocímetro\" compatível com o CarPlay\n- Adicionadas instruções passo a passo aos detalhes da rota\n- Personalização da tela do mapa com a adição de vários botões de \"Ação rápida\"\n- Melhorias na trilha 3D: novas opções de visualização e coloração\n- Paletas de cores personalizadas para terreno, trilhas e rotas\n- Adicionado o modo de seleção múltipla aprimorado para trilhas\n- Variante 3D para ícones de posição de localização\n- Seleção ampliada de rotas turísticas no mapa\n- Clima: Atualização da interface do usuário, adição de animação de vento\n- Adição de transições suaves durante o zoom no modo 3D\n- \"Posição do local na tela\" agora está na tela de configuração\n- Alteração da \"circunferência da roda\" nas configurações do sensor BLE\n- Adicionado o alerta de navegação \"Limite de velocidade\" separado\n- Correção dos nomes dos widgets de rolamento\n- Corrigida a visibilidade da \"Régua de raio\" em todos os painéis de widgets\n";

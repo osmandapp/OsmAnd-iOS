@@ -342,6 +342,7 @@
 {
     NSMutableSet<NSString *> *_nativeFiles;
     MissingMapsCalculator *_missingMapsCalculator;
+    NSObject *_nativeRoutingLock;
 }
 
 - (instancetype)init
@@ -350,6 +351,7 @@
     if (self)
     {
         _nativeFiles = [NSMutableSet set];
+        _nativeRoutingLock = [[NSObject alloc] init];
         [OsmAndApp instance].resourcesManager->localResourcesChangeObservable.attach(reinterpret_cast<OsmAnd::IObservable::Tag>((__bridge const void*)self),
             [self]
             (const OsmAnd::ResourcesManager* const resourcesManager,
@@ -780,11 +782,6 @@
     return NO;
 }
 
-- (void)checkInitializedForZoomLevelWithEmptyRect:(OsmAnd::ZoomLevel)zoomLevel;
-{
-    [self checkInitialized:zoomLevel leftX:0 rightX:0 bottomY:0 topY:0];
-}
-
 - (void)checkInitialized:(int)zoom leftX:(int)leftX rightX:(int)rightX bottomY:(int)bottomY topY:(int)topY
 {
     @synchronized (self)
@@ -967,19 +964,21 @@
                                                          points:(std::vector<SHARED_PTR<GpxPoint>> &)points
                                                   resultMatcher:(OAResultMatcher<OAGpxRouteApproximation *> *)resultMatcher
 {
-    const auto resultAcceptor =
-    [resultMatcher]
-    (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
-    {
-        OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
-        [resultMatcher publish:approx];
-        return true;
-    };
+    @synchronized (_nativeRoutingLock) {
+        const auto resultAcceptor =
+        [resultMatcher]
+        (SHARED_PTR<GpxRouteApproximation> approximation) -> bool
+        {
+            OAGpxRouteApproximation *approx = [[OAGpxRouteApproximation alloc] initWithApproximation:approximation];
+            [resultMatcher publish:approx];
+            return true;
+        };
 
-    env.router->setUseGeometryBasedApproximation(true);
-    env.router->searchGpxRoute(gctx, points, resultAcceptor);
+        env.router->setUseGeometryBasedApproximation(true);
+        env.router->searchGpxRoute(gctx, points, resultAcceptor);
 
-    return gctx;
+        return gctx;
+    }
 }
 
 - (OARoutingEnvironment *) calculateRoutingEnvironment:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute skipComplex:(BOOL)skipComplex
@@ -1072,32 +1071,44 @@
     return [[OARoutingEnvironment alloc] initWithRouter:router context:ctx complextCtx:complexCtx precalculated:precalculated];
 }
 
+- (void) runSyncWithNativeRouting:(void (^)(void))runBlock
+{
+    @synchronized (_nativeRoutingLock)
+    {
+        if (runBlock)
+            runBlock();
+    }
+}
+
 - (OARouteCalculationResult *) findVectorMapsRoute:(OARouteCalculationParams *)params calcGPXRoute:(BOOL)calcGPXRoute
 {
-    OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:calcGPXRoute skipComplex:NO];
-    
-    if (!env)
-        return [self applicationModeNotSupported:params];
-    
-    CLLocation *start = [[CLLocation alloc] initWithLatitude:params.start.coordinate.latitude longitude:params.start.coordinate.longitude];
-    CLLocation *end = [[CLLocation alloc] initWithLatitude:params.end.coordinate.latitude longitude:params.end.coordinate.longitude];
-    NSArray<CLLocation *> *inters = [NSArray new];
-    
-    if (params.intermediates)
-        inters = [NSArray arrayWithArray:params.intermediates];
-    
-    OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
-    NSMutableArray<CLLocation *> *points = [NSMutableArray array];
-    [points addObject:start];
-    [points addObjectsFromArray:inters];
-    [points addObject:end];
-    [result setMissingMaps:result.missingMaps
-              mapsToUpdate:result.mapsToUpdate
-                  usedMaps:result.potentiallyUsedMaps
-                       ctx:env.ctx
-                    points:points];
+    @synchronized (_nativeRoutingLock)
+    {
+        OARoutingEnvironment *env = [self calculateRoutingEnvironment:params calcGPXRoute:calcGPXRoute skipComplex:NO];
 
-    return result;
+        if (!env)
+            return [self applicationModeNotSupported:params];
+
+        CLLocation *start = [[CLLocation alloc] initWithLatitude:params.start.coordinate.latitude longitude:params.start.coordinate.longitude];
+        CLLocation *end = [[CLLocation alloc] initWithLatitude:params.end.coordinate.latitude longitude:params.end.coordinate.longitude];
+        NSArray<CLLocation *> *inters = [NSArray new];
+
+        if (params.intermediates)
+            inters = [NSArray arrayWithArray:params.intermediates];
+
+        OARouteCalculationResult *result = [self calcOfflineRouteImpl:params router:env.router ctx:env.ctx complexCtx:env.complexCtx st:start en:end inters:inters precalculated:env.precalculated];
+        NSMutableArray<CLLocation *> *points = [NSMutableArray array];
+        [points addObject:start];
+        [points addObjectsFromArray:inters];
+        [points addObject:end];
+        [result setMissingMaps:result.missingMaps
+                  mapsToUpdate:result.mapsToUpdate
+                      usedMaps:result.potentiallyUsedMaps
+                           ctx:env.ctx
+                        points:points];
+
+        return result;
+    }
 }
 
 - (OARouteCalculationResult *) calculateOsmAndRouteWithIntermediatePoints:(OARouteCalculationParams *)routeParams intermediates:(NSArray<CLLocation *> *)intermediates connectRtePts:(BOOL)connectRtePts
@@ -1668,34 +1679,7 @@
             }
             else if (params.mode.getRouterService == OSMAND)
             {
-                if (params.inPublicTransportMode)
-                {
-                    res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
-                }
-                else
-                {
-                    // TODO: Implement MissingMapsHelper
-                    //OAMissingMapsHelper *missingMapsHelper = [[OAMissingMapsHelper alloc] initWithParams:params];
-                    //NSArray<CLLocation *> *points = [missingMapsHelper getStartFinishIntermediatePoints];
-                    //NSArray<OAWorldRegion *> *missingMaps = [missingMapsHelper getMissingMaps:points];
-                    //NSArray<CLLocation *> *pathPoints = [missingMapsHelper getDistributedPathPoints:points];
-                    //if (missingMaps && missingMaps.count > 0)
-                    //{
-                    //    res = [[OARouteCalculationResult alloc] initWithErrorMessage:@"Additional maps available"];
-                    //    res.missingMaps = [missingMapsHelper getMissingMaps:pathPoints];
-                    //}
-                    //else
-                    //{
-                    //    if (![missingMapsHelper isAnyPointOnWater:pathPoints])
-                    //    {
-                    // TODO: how to store OAWorldRegion in cpp calculationProgress class?
-                    //         params.calculationProgress.missingMaps = missingMapsHelper.getMissingMaps(pathPoints);
-                    //    }
-                    
-                        res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
-                    
-                    //}
-                }
+                res = [self findVectorMapsRoute:params calcGPXRoute:calcGPXRoute];
             }
             //else if (params.mode.getRouterService == BROUTER)
             //{

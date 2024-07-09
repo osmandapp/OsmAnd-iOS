@@ -105,12 +105,11 @@
     OAResourcesInstaller* _resourcesInstaller;
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
-    OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
-
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
 
     BOOL _carPlayActive;
+    BOOL _isInBackground;
 }
 
 @synthesize initialized = _initialized;
@@ -155,6 +154,7 @@
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
 @synthesize carPlayActive = _carPlayActive;
+@synthesize backgroundStateObservable = _backgroundStateObservable;
 
 - (instancetype) init
 {
@@ -667,6 +667,7 @@
     _osmEditsChangeObservable = [[OAObservable alloc] init];
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
     _simulateRoutingObservable = [[OAObservable alloc] init];
+    _backgroundStateObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
@@ -676,9 +677,6 @@
     _mapModeObservable = [[OAObservable alloc] init];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
-    _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                                     withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
-                                                                                      andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
 
     if (_terminating)
         return NO;
@@ -689,7 +687,7 @@
     if (_locationServices.available && _locationServices.allowed)
         [_locationServices start];
 
-    [self updateScreenTurnOffSetting];
+    [self allowScreenTurnOff:NO];
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
@@ -1016,6 +1014,27 @@
     // TODO toast
 }
 
+- (void)setCarPlayActive:(BOOL)carPlayActive
+{
+    BOOL prevIsInBackground = self.isInBackground;
+
+    _carPlayActive = carPlayActive;
+
+    BOOL isInBackground = self.isInBackground;
+    if (prevIsInBackground != isInBackground)
+        [self.backgroundStateObservable notifyEvent];
+}
+
+- (BOOL) isInBackground
+{
+    return _isInBackground && !self.carPlayActive;
+}
+
+- (BOOL) isInBackgroundOnDevice
+{
+    return _isInBackground;
+}
+
 - (void)startRepositoryUpdateAsync:(BOOL)async
 {
     _isRepositoryUpdating = YES;
@@ -1039,7 +1058,7 @@
 }
 
 
-- (void) checkAndDownloadOsmAndLiveUpdates
+- (void) checkAndDownloadOsmAndLiveUpdates:(BOOL)checkUpdatesAsync
 {
     if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
@@ -1049,9 +1068,8 @@
         NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates start");
         QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
         for (const auto& localResource : _resourcesManager->getLocalResources())
-        {
-            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager];
-        }
+            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager checkUpdatesAsync:checkUpdatesAsync];
+
         NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates finish");
     }
 }
@@ -1135,6 +1153,7 @@
         [_locationServices stop];
         _locationServices = nil;
 
+        [_downloadsManager cancelDownloadTasks];
         _downloadsManager = nil;
     }
     else
@@ -1251,42 +1270,20 @@
     return deviceMemoryAvailable;
 }
 
-- (BOOL) allowScreenTurnOff
+- (void) allowScreenTurnOff:(BOOL)allow
 {
-    BOOL allowScreenTurnOff = NO;
-
-    allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
-
-    return allowScreenTurnOff;
-}
-
-- (void) updateScreenTurnOffSetting
-{
-    BOOL allowScreenTurnOff = self.allowScreenTurnOff;
-
-    if (allowScreenTurnOff)
+    if (allow)
         OALog(@"Going to enable screen turn-off");
     else
         OALog(@"Going to disable screen turn-off");
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
+        [UIApplication sharedApplication].idleTimerDisabled = !allow;
     });
 }
 
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
-
-- (void) onDownloadManagerActiveTasksCollectionChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // In background, don't change screen turn-off setting
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-            return;
-        
-        [self updateScreenTurnOffSetting];
-    });
-}
 
 - (void) onApplicationWillResignActive
 {
@@ -1294,22 +1291,35 @@
 
 - (void) onApplicationDidEnterBackground
 {
+    _isInBackground = YES;
+    [self.backgroundStateObservable notifyEvent];
+
     [self saveDataToPermamentStorage];
 
     // In background allow to turn off screen
-    OALog(@"Going to enable screen turn-off");
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [self allowScreenTurnOff:YES];
+
+    NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
+    if (backgroundTimeRemaining == DBL_MAX) {
+        OALog(@"Background time remaining: unlimited");
+    } else {
+        OALog(@"Background time remaining: %f seconds", backgroundTimeRemaining);
+    }
 }
 
 - (void) onApplicationWillEnterForeground
 {
-    [self updateScreenTurnOffSetting];
+    [self allowScreenTurnOff:NO];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 
 - (void) onApplicationDidBecomeActive
 {
+    _isInBackground = NO;
+
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
+
+    [self.backgroundStateObservable notifyEvent];
 }
 
 - (void) stopNavigation

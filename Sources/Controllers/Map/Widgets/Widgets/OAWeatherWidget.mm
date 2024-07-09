@@ -123,7 +123,7 @@
                         const auto bandValueStr = [OsmAndApp instance].resourcesManager->getWeatherResourcesManager()->getFormattedBandValue(selfWeak.band, bandValue, true);
 
                         BOOL unitsWithBigFont = selfWeak.band == WEATHER_BAND_TEMPERATURE;
-                        if (unitsWithBigFont)
+                        if (unitsWithBigFont && !selfWeak.shouldAlwaysSeparateValueAndUnitText)
                         {
                             NSString *fullText = [NSString stringWithFormat:@"%@ %@", bandValueStr.toNSString(), bandUnit];
                             [selfWeak setText:fullText subtext:nil];
@@ -137,7 +137,10 @@
                 else if (selfWeak.cachedValue != selfWeak.undefined)
                 {
                     selfWeak.cachedValue = selfWeak.undefined;
-                    [selfWeak setText:nil subtext:nil];
+                    if (selfWeak.useDashSymbolWhenTextIsEmpty)
+                        [selfWeak setText:@"-" subtext:nil];
+                    else
+                        [selfWeak setText:nil subtext:nil];
                 }
             });
         };

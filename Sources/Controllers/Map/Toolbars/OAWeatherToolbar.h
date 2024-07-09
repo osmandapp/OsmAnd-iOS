@@ -23,5 +23,6 @@
 
 + (CGFloat)calculateY;
 + (CGFloat)calculateYOutScreen;
+- (void)updateWidgetsInfo;
 
 @end

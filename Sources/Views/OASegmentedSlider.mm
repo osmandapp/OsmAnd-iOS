@@ -70,10 +70,9 @@
 
     [self removeTarget:nil action:NULL forControlEvents:UIControlEventValueChanged];
     [self addTarget:self action:@selector(sliderValueChanged:) forControlEvents:UIControlEventValueChanged];
-    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside];
-    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside];
-    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpOutside];
+    
+    [self clearTouchEventsUpInsideUpOutside];
+    [self addTarget:self action:@selector(sliderDidEndEditing:) forControlEvents:UIControlEventTouchUpInside | UIControlEventTouchUpOutside];
 }
 
 - (void)layoutSubviews
@@ -85,6 +84,11 @@
         [self layoutCurrentMarkLine];
     if (_selectingMarkTitleBackground)
         [self layoutSelectingTitle];
+}
+
+- (void)clearTouchEventsUpInsideUpOutside
+{
+    [self removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpOutside | UIControlEventTouchUpInside];
 }
 
 - (void)setNumberOfMarks:(NSInteger)numberOfMarks additionalMarksBetween:(NSInteger)additionalMarksBetween
@@ -377,14 +381,56 @@
         _currentRightLineView.frame = CGRectMake(inset, trackRect.origin.y, trackWidth, trackHeight);
 }
 
+- (NSInteger)getIndexForOptionStepsAmountWithoutDrawMark
+{
+    CGFloat value = self.value;
+    NSInteger marks = self.stepsAmountWithoutDrawMark;
+    CGFloat step = 1. / (marks - 1);
+    int nextMark = 0;
+    for (int i = 0; i < marks; i++)
+    {
+        if (i * step >= value)
+        {
+            nextMark = i;
+            break;
+        }
+    }
+    if ((nextMark * step - value) < (value - (nextMark - 1) * step))
+        return nextMark;
+    else
+        return nextMark - 1;
+}
+
+- (NSString *)getTimeStringAtIndex:(int)index
+{
+    if (index < 0 || index >= 144)
+    {
+        return @"00:00";
+    }
+    int hours = index / 6;
+    int minutes = (index % 6) * 10;
+    
+    NSString *hourString = [NSString stringWithFormat:@"%02d", hours];
+    NSString *minuteString = [NSString stringWithFormat:@"%02d", minutes];
+    
+    return [NSString stringWithFormat:@"%@:%@", hourString, minuteString];
+}
+
 - (void)layoutSelectingTitle
 {
     _selectingMarkTitle.textColor = self.userInteractionEnabled ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameTextColorSecondary];
-    NSInteger index = [self getIndex];
-    NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
-    _selectingMarkTitle.text = !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
-            : [markValue < 10 || index == [self getMarksCount] - 1 ? @"0" : @""
-                    stringByAppendingString:[NSString stringWithFormat:@"%li:00", index == [self getMarksCount] - 1 ? 0 : markValue]];
+    NSInteger index = self.stepsAmountWithoutDrawMark > 0 ? [self getIndexForOptionStepsAmountWithoutDrawMark] : [self getIndex];
+    if (self.stepsAmountWithoutDrawMark > 0)
+    {
+        _selectingMarkTitle.text = [self getTimeStringAtIndex:index];
+    }
+    else
+    {
+        NSInteger markValue = _additionalMarksBetween > 0 ? index : index * 3;
+        _selectingMarkTitle.text = !self.userInteractionEnabled ? OALocalizedString(@"rendering_value_disabled_name")
+                : [markValue < 10 || index == [self getMarksCount] - 1 ? @"0" : @""
+                        stringByAppendingString:[NSString stringWithFormat:@"%li:00", index == [self getMarksCount] - 1 ? 0 : markValue]];
+    }
 
     CGSize textSize = [OAUtilities calculateTextBounds:_selectingMarkTitle.text font:_selectingMarkTitle.font];
     _selectingMarkTitle.frame = CGRectMake(6., 2., textSize.width, textSize.height);
@@ -464,6 +510,13 @@
             _selectingMark += slider.value - selectingMarkValue > 0 ? 1 : -1;
             [self generateFeedback];
         }
+        
+        if (self.stepsAmountWithoutDrawMark > 0)
+        {
+            _selectedMark = [self getIndex];
+            _selectingMark = _selectedMark;
+        }
+        
         [self paintMarks];
 
         if (_selectingMarkTitleBackground)

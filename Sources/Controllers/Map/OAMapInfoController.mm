@@ -46,6 +46,8 @@
 
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAWeatherHelper.h"
+#import "OAMapStyleSettings.h"
 
 #define kWidgetsTopPadding 10.0
 
@@ -69,6 +71,7 @@
     BOOL _isBordersOfDownloadedMaps;
     OADownloadMapWidget *_downloadMapWidget;
     OAWeatherToolbar *_weatherToolbar;
+    WeatherNavigationBarView *_weatherNavigationBarView;
     OAAlarmWidget *_alarmControl;
     OARulerWidget *_rulerControl;
     
@@ -588,6 +591,9 @@
     {
         [_weatherToolbar moveOutOfScreen];
         _weatherToolbar.hidden = NO;
+        _weatherNavigationBarView.hidden = NO;
+        CGFloat top = [OAUtilities isLandscape] ? [OAUtilities getTopMargin] : 44 + [OAUtilities getTopMargin];
+        _weatherNavigationBarView.frame = CGRectMake(0, 0, _weatherToolbar.frame.size.width, top);
         [_mapHudViewController updateWeatherButtonVisibility];
     }
 
@@ -604,6 +610,24 @@
         [_mapHudViewController.floatingButtonsController updateViewVisibility];
         [self recreateControls];
     }];
+    _weatherNavigationBarView.frame = CGRectMake(0, 0, _weatherToolbar.frame.size.width, 44 + [OAUtilities getTopMargin]);
+}
+
+- (void)showWeatherDataSourceViewController {
+    auto weatherDataSourceViewController = [WeatherDataSourceViewController new];
+    UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:weatherDataSourceViewController];
+    
+    navigationController.modalPresentationStyle = UIModalPresentationPageSheet;
+    
+    UISheetPresentationController *sheet = navigationController.sheetPresentationController;
+    if (sheet)
+    {
+        sheet.detents = @[UISheetPresentationControllerDetent.mediumDetent];
+        sheet.preferredCornerRadius = 20;
+        sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = YES;
+    }
+    
+    [OARootViewController.instance.navigationController presentViewController:navigationController animated:YES completion:nil];
 }
 
 - (void)hideWeatherToolbar
@@ -624,7 +648,9 @@
     }
 
     _weatherToolbar.hidden = YES;
+    _weatherNavigationBarView.hidden = YES;
     [_mapHudViewController updateWeatherButtonVisibility];
+    
     [UIView animateWithDuration:.3 animations: ^{
         [_weatherToolbar moveOutOfScreen];
     }                completion:^(BOOL finished) {
@@ -661,7 +687,7 @@
     OAApplicationMode *appMode = _settings.applicationMode.get;
 
     [_mapHudViewController setDownloadMapWidget:_downloadMapWidget];
-    [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar];
+    [_mapHudViewController setWeatherToolbarMapWidget:_weatherToolbar navBar:_weatherNavigationBarView];
 
     [_rulerControl removeFromSuperview];
     [[OARootViewController instance].mapPanel.mapViewController.view insertSubview:_rulerControl atIndex:0];
@@ -818,6 +844,16 @@
     [widgetsToUpdate addObject:_downloadMapWidget];
 
     _weatherToolbar = [[OAWeatherToolbar alloc] init];
+    _weatherNavigationBarView = [WeatherNavigationBarView initView];
+    _weatherNavigationBarView.title = NSLocalizedString(@"shared_string_weather", nil);
+    _weatherNavigationBarView.onLeftButtonAction = ^{
+        OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
+        [mapPanel.hudViewController changeWeatherToolbarVisible];
+    };
+    _weatherNavigationBarView.onRightButtonAction = ^{
+        [weakSelf showWeatherDataSourceViewController];
+    };
+    _weatherNavigationBarView.hidden = YES;
     _weatherToolbar.delegate = self;
     [widgetsToUpdate addObject:_weatherToolbar];
 

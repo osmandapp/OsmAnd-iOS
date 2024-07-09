@@ -951,6 +951,11 @@
     return OALocalizedString([self isSelected] ? @"transport_hazmat_yes_desc" : @"transport_hazmat_no_desc");
 }
 
+- (NSString *)getText
+{
+    return OALocalizedString(@"transport_hazmat_title");
+}
+
 - (NSString *)getValue
 {
     return [self getValue:[_property get:[self getApplicationMode]].integerValue];

@@ -206,9 +206,11 @@
             }
             if (_ctx)
             {
-                [self checkInitialized:loc];
-                auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
-                _road = segment ? segment->road : nullptr;
+                [_provider runSyncWithNativeRouting:^{
+                    [self checkInitialized:loc];
+                    auto segment = findRouteSegment(position31.x, position31.y, _ctx.get());
+                    _road = segment ? segment->road : nullptr;
+                }];
             }
         }
     });

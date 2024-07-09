@@ -139,7 +139,7 @@ static NSString *kPrecipContourStyleName;
     return obj;
 }
 
-- (BOOL) isBandVisible
+- (BOOL)isBandVisible
 {
     switch (self.bandIndex)
     {
@@ -153,10 +153,38 @@ static NSString *kPrecipContourStyleName;
             return _app.data.weatherWind;
         case WEATHER_BAND_PRECIPITATION:
             return _app.data.weatherPrecip;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            return _app.data.weatherWindAnimation;
+        case WEATHER_BAND_NOTHING:
             return NO;
     }
     return NO;
+}
+
+- (void)setSelectBand:(BOOL)isSelect
+{
+    switch (self.bandIndex)
+    {
+        case WEATHER_BAND_CLOUD:
+            _app.data.weatherCloud = isSelect;
+            break;
+        case WEATHER_BAND_TEMPERATURE:
+            _app.data.weatherTemp = isSelect;
+            break;
+        case WEATHER_BAND_PRESSURE:
+            _app.data.weatherPressure = isSelect;
+            break;
+        case WEATHER_BAND_WIND_SPEED:
+            _app.data.weatherWind = isSelect;
+            break;
+        case WEATHER_BAND_PRECIPITATION:
+            _app.data.weatherPrecip = isSelect;
+            break;
+        case WEATHER_BAND_WIND_ANIMATION:
+            _app.data.weatherWindAnimation = isSelect;
+        case WEATHER_BAND_NOTHING:
+            break;
+    }
 }
 
 - (NSUnit *) getBandUnit
@@ -173,7 +201,9 @@ static NSString *kPrecipContourStyleName;
             return _app.data.weatherWindUnit;
         case WEATHER_BAND_PRECIPITATION:
             return _app.data.weatherPrecipUnit;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            return _app.data.weatherWindAnimationUnit;
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -201,7 +231,10 @@ static NSString *kPrecipContourStyleName;
         case WEATHER_BAND_PRECIPITATION:
             _app.data.weatherPrecipUnit = (NSUnitLength *) unit;
             break;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            _app.data.weatherWindAnimationUnit = (NSUnitLength *) unit;
+            break;
+        case WEATHER_BAND_NOTHING:
             break;
     }
     return YES;
@@ -221,7 +254,9 @@ static NSString *kPrecipContourStyleName;
             return _app.data.weatherWindUnitAuto;
         case WEATHER_BAND_PRECIPITATION:
             return _app.data.weatherPrecipUnitAuto;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            return _app.data.weatherWindAnimationUnitAuto;
+        case WEATHER_BAND_NOTHING:
             return NO;
     }
     return NO;
@@ -246,7 +281,10 @@ static NSString *kPrecipContourStyleName;
         case WEATHER_BAND_PRECIPITATION:
             _app.data.weatherPrecipUnitAuto = unitAuto;
             break;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            _app.data.weatherWindAnimationUnitAuto = unitAuto;
+            break;
+        case WEATHER_BAND_NOTHING:
             break;
     }
 }
@@ -261,11 +299,12 @@ static NSString *kPrecipContourStyleName;
             return @"ic_custom_thermometer";
         case WEATHER_BAND_PRESSURE:
             return @"ic_custom_air_pressure";
+        case WEATHER_BAND_WIND_ANIMATION:
         case WEATHER_BAND_WIND_SPEED:
             return @"ic_custom_wind";
         case WEATHER_BAND_PRECIPITATION:
             return @"ic_custom_precipitation";
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -285,7 +324,9 @@ static NSString *kPrecipContourStyleName;
             return OALocalizedString(@"map_settings_weather_wind");
         case WEATHER_BAND_PRECIPITATION:
             return OALocalizedString(@"map_settings_weather_precip");
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            return OALocalizedString(@"map_settings_weather_wind_animation");
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -311,11 +352,12 @@ static NSString *kPrecipContourStyleName;
             return kDefaultTempUnit;
         case WEATHER_BAND_PRESSURE:
             return kDefaultPressureUnit;
+        case WEATHER_BAND_WIND_ANIMATION:
         case WEATHER_BAND_WIND_SPEED:
             return kDefaultWindSpeedUnit;
         case WEATHER_BAND_PRECIPITATION:
             return kDefaultPrecipUnit;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -331,11 +373,12 @@ static NSString *kPrecipContourStyleName;
             return kInternalTempUnit;
         case WEATHER_BAND_PRESSURE:
             return kInternalPressureUnit;
+        case WEATHER_BAND_WIND_ANIMATION:
         case WEATHER_BAND_WIND_SPEED:
             return kInternalWindSpeedUnit;
         case WEATHER_BAND_PRECIPITATION:
             return kInternalPrecipUnit;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -361,11 +404,12 @@ static NSString *kPrecipContourStyleName;
             return kTempUnits;
         case WEATHER_BAND_PRESSURE:
             return kPressureUnits;
+        case WEATHER_BAND_WIND_ANIMATION:
         case WEATHER_BAND_WIND_SPEED:
             return kWindSpeedUnits;
         case WEATHER_BAND_PRECIPITATION:
             return kPrecipUnits;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_NOTHING:
             return @[];
     }
     return @[];
@@ -385,7 +429,9 @@ static NSString *kPrecipContourStyleName;
             return _app.data.weatherWindAlpha;
         case WEATHER_BAND_PRECIPITATION:
             return _app.data.weatherPrecipAlpha;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+            return _app.data.weatherWindAnimationAlpha;
+        case WEATHER_BAND_NOTHING:
             return 0.0;
     }
     return 0.0;
@@ -396,16 +442,18 @@ static NSString *kPrecipContourStyleName;
     switch (self.bandIndex)
     {
         case WEATHER_BAND_CLOUD:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_cloud.txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_cloud"];
         case WEATHER_BAND_TEMPERATURE:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_temperature.txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_temperature"];
         case WEATHER_BAND_PRESSURE:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_pressure.txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_pressure"];
         case WEATHER_BAND_WIND_SPEED:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind.txt"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind"];
         case WEATHER_BAND_PRECIPITATION:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_precip.txt"];
-        case WEATHER_BAND_UNDEFINED:
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_precip"];
+        case WEATHER_BAND_WIND_ANIMATION:
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind_animation"];
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -422,10 +470,11 @@ static NSString *kPrecipContourStyleName;
         case WEATHER_BAND_PRESSURE:
             return kPressureContourStyleName;
         case WEATHER_BAND_WIND_SPEED:
+        case WEATHER_BAND_WIND_ANIMATION:
             return kWindSpeedContourStyleName;
         case WEATHER_BAND_PRECIPITATION:
             return kPrecipContourStyleName;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
     return nil;
@@ -456,12 +505,13 @@ static NSString *kPrecipContourStyleName;
             type = QStringLiteral("pressure");
             break;
         case WEATHER_BAND_WIND_SPEED:
+        case WEATHER_BAND_WIND_ANIMATION:
             type = QStringLiteral("wind_speed");
             break;
         case WEATHER_BAND_PRECIPITATION:
             type = QStringLiteral("precip");
             break;
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_NOTHING:
             break;
     }
     
@@ -513,6 +563,7 @@ static NSString *kPrecipContourStyleName;
                             delete pressure;
                             break;
                         }
+                        case WEATHER_BAND_WIND_ANIMATION:
                         case WEATHER_BAND_WIND_SPEED:
                         {
                             const auto unit_ = OsmAnd::WeatherDataConverter::Speed::unitFromString(QString::fromNSString(unit));
@@ -531,7 +582,7 @@ static NSString *kPrecipContourStyleName;
                             delete precip;
                             break;
                         }
-                        case WEATHER_BAND_UNDEFINED:
+                        case WEATHER_BAND_NOTHING:
                             break;
                     }
                 }
@@ -568,7 +619,8 @@ static NSString *kPrecipContourStyleName;
             return [[OAAutoObserverProxy alloc] initWith:owner
                                              withHandler:handler
                                               andObserve:_app.data.weatherPrecipChangeObservable];
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
 }
@@ -597,7 +649,8 @@ static NSString *kPrecipContourStyleName;
             return [[OAAutoObserverProxy alloc] initWith:owner
                                              withHandler:handler
                                               andObserve:_app.data.weatherPrecipAlphaChangeObservable];
-        case WEATHER_BAND_UNDEFINED:
+        case WEATHER_BAND_WIND_ANIMATION:
+        case WEATHER_BAND_NOTHING:
             return nil;
     }
 }

@@ -67,6 +67,12 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (nonatomic) BOOL weatherPrecipUnitAuto;
 @property (nonatomic) double weatherPrecipAlpha;
 
+@property (nonatomic) NSString *weatherSource;
+@property (nonatomic) BOOL weatherWindAnimation;
+@property (nonatomic) NSUnitLength *weatherWindAnimationUnit;
+@property (nonatomic) double weatherWindAnimationAlpha;
+@property (nonatomic) BOOL weatherWindAnimationUnitAuto;
+
 @property (readonly) OAObservable *weatherSettingsChangeObservable;
 
 @property (readonly) OAObservable* weatherChangeObservable;
@@ -101,6 +107,12 @@ static const NSInteger kSlopeDefMaxZoom = 16;
 @property (readonly) OAObservable* weatherPrecipUnitToolbarChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaChangeObservable;
 @property (readonly) OAObservable* weatherPrecipAlphaToolbarChangeObservable;
+
+@property (nonatomic) OAObservable *weatherSourceChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationUnitChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationAlphaChangeObservable;
+@property (nonatomic) OAObservable *weatherWindAnimationUnitAutoChangeObservable;
 
 @property (nonatomic) NSString *contourName;
 @property (nonatomic) NSString *contourNameLastUsed;

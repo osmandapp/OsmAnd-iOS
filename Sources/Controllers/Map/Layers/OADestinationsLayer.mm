@@ -173,7 +173,9 @@
 
 - (BOOL) updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
+
     BOOL widgetUpdated = [_destinationLayerWidget updateLayer];
     BOOL attributesChanged = [_destinationLayerWidget areAttributesChanged];
     if (widgetUpdated || self.showCaptions != _showCaptionsCache || _textSize != OAAppSettings.sharedManager.textSize.get || attributesChanged)

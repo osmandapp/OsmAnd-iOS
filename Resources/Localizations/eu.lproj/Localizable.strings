@@ -1303,10 +1303,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Gehitu POI";
-"quick_action_map_style" = "Aldatu maparen estiloa";
+"quick_action_map_style" = "Mapa estiloa";
 "quick_action_map_source" = "Aldatu maparen iturria";
-"quick_action_map_overlay" = "Aldatu maparen gain-azala";
-"quick_action_map_underlay" = "Aldatu maparen azpi-azala";
+"quick_action_map_overlay" = "Gaineko geruza";
+"quick_action_map_underlay" = "Azpiko geruza";
 "quick_action_replace_destination" = "Ordeztu helburua";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Gehitu irteera puntua";
@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Mapillary geruza mapan erakutsi edo ezkutatzeko botoia.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Ezabatu hurrengo norako puntua";
+"quick_action_remove_next_destination" = "Hurrengo helmuga puntua";
 "quick_action_remove_next_destination_descr" = "Zure ibilbidean hurrengo helmuga ezabatzen du. Azken helmuga hori bada, nabigazioa geldituko da.";
 "change_application_profile" = "Aldatu aplikazioaren profila";
 "select_application_profile" = "Select application profile";

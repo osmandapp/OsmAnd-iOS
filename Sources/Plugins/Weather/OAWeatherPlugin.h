@@ -14,9 +14,12 @@ static NSString * const kWeatherWind = @"weather_wind";
 static NSString * const kWeatherCloud = @"weather_cloud";
 static NSString * const kWeatherPrecip = @"weather_precip";
 
+@class OAWeatherWidget;
+
 @interface OAWeatherPlugin : OAPlugin
 
 - (void)weatherChanged:(BOOL)isOn;
 - (void)updateWidgetsInfo;
+- (NSArray<OAWeatherWidget *> *)createWidgetsControls;
 
 @end

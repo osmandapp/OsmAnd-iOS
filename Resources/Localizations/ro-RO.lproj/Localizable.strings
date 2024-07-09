@@ -1997,7 +1997,7 @@
 "quick_action_map_underlay" = "Substrat";
 "quick_action_map_overlay" = "Suprapunere";
 "quick_action_map_source" = "Schimbă sursa hărții";
-"quick_action_map_style" = "Stilul hărții";
+"quick_action_map_style" = "Stil hartă";
 "quick_action_add_poi" = "Adaugă punct de interes";
 "toggle_local_edits" = "Comutați editările OSM locale";
 "toggle_online_notes" = "Comutați notele OSM";

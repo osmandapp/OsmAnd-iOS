@@ -501,6 +501,7 @@ typedef enum {
 @implementation OAMyPositionLayer
 {
     OAMapViewTrackingUtilities *_mapViewTrackingUtilities;
+    Model3dHelper *_model3dHelper;
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     CLLocation *_lastLocation;
@@ -517,7 +518,6 @@ typedef enum {
 {
     // Create location and course markers
     int baseOrder = self.pointsOrder;
-    __weak OAMyPositionLayer *weakSelf = self;
     
     _modeMarkers = [NSMapTable strongToStrongObjectsMapTable];
     NSArray<OAApplicationMode *> *modes = [OAApplicationMode allPossibleValues];
@@ -555,10 +555,7 @@ typedef enum {
         OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
         if ([navIcon isModel])
         {
-            OAModel3dCallback *callback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
-                [weakSelf refreshMarkersCollection];
-            }];
-            navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callback:callback];
+            navigationModel = [_model3dHelper getModelWithModelName:navigationIconName callback:nil];
             if (!navigationModel)
             {
                 navigationIconName = NAVIGATION_ICON_DEFAULT;
@@ -569,10 +566,7 @@ typedef enum {
         OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
         if ([locIcon isModel])
         {
-            OAModel3dCallback *callback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
-                [weakSelf refreshMarkersCollection];
-            }];
-            locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callback:callback];
+            locationModel = [_model3dHelper getModelWithModelName:locationIconName callback:nil];
             if (!locationModel)
             {
                 locationIconName = LOCATION_ICON_DEFAULT;
@@ -737,6 +731,15 @@ typedef enum {
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
 
     _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
+    
+    __weak OAMyPositionLayer *weakSelf = self;
+    _model3dHelper = Model3dHelper.shared;
+    OAModel3dCallback *callback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf refreshMarkersCollection];
+        });
+    }];
+    [_model3dHelper loadAllPluginModelsWithCallback:callback];
 
     [self generateMarkersCollection];
     
@@ -804,7 +807,6 @@ typedef enum {
             OAMarkerCollection *c = [_modeMarkers objectForKey:mode];
             if (mode == currentMode)
             {
-                [c updateState];
                 [self updateLocation:mode];
                 [self.mapView addKeyedSymbolsProvider:c.markerCollection];
             }

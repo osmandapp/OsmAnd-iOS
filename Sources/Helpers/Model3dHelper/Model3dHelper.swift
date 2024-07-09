@@ -15,17 +15,13 @@ final class Model3dHelper: NSObject {
     
     static let shared = Model3dHelper()
     
-    private let app: OsmAndAppProtocol
-    private let settings: OAAppSettings
-    
     private var modelsCache = [String: OAModel3dWrapper]()
     private var modelsInProgress = Set<String>()
     private var failedModels = Set<String>()
     private var pendingCallbacks = [String: [OAModel3dCallback]]()
+    private var isIniting = false
     
     private override init() {
-        app = OsmAndApp.swiftInstance()
-        settings = OAAppSettings.sharedManager()
     }
     
     func getModel(modelName: String, callback: OAModel3dCallback?) -> OAModel3dWrapper? {
@@ -42,6 +38,22 @@ final class Model3dHelper: NSObject {
         }
         
         return model3D
+    }
+
+    func loadAllPluginModels(callback: OAModel3dCallback?) {
+        let modelFoldersNames = Model3dHelper.listModels()
+        if !modelFoldersNames.isEmpty {
+            var loadingsCount = modelFoldersNames.count
+            
+            for modelName in modelFoldersNames {
+                getModel(modelName: modelName, callback: OAModel3dCallback { [weak self] model in
+                    loadingsCount -= 1
+                    if loadingsCount == 0 {
+                        callback?.processResult(model)
+                    }
+                })
+            }
+        }
     }
     
     private func loadModel(modelName: String, callback: OAModel3dCallback?) {

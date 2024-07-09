@@ -77,7 +77,7 @@
         {
             OAWptPt *point = [[OAWptPt alloc] init];
             [point setPosition:l.coordinate];
-            if (l.altitude != 0)
+            if (!isnan(l.altitude) && l.altitude != 0)
             {
                 if (gpx)
                     gpx.hasAltitude = YES;

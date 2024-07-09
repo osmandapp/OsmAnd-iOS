@@ -88,7 +88,7 @@
                 {
                     for (OAWptPt *pt in pts)
                     {
-                        if (pt.elevation == NAN)
+                        if (isnan(pt.elevation))
                             pt.elevation = h;
                     }
                 }

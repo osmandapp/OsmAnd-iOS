@@ -14,6 +14,7 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
+#import "OAWeatherWidget.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"

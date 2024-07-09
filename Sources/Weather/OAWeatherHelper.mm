@@ -18,10 +18,11 @@
 #import "OANativeUtilities.h"
 #import "OAIAPHelper.h"
 #import "OAWeatherPlugin.h"
+#import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/WeatherTileResourceProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>

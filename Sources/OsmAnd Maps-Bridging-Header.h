@@ -49,6 +49,7 @@
 #import "OAApplicationMode.h"
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
+#import "OAWeatherBand.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

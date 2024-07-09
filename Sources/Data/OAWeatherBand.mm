@@ -9,6 +9,7 @@
 #import "OAWeatherBand.h"
 #import "OsmAndApp.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAAutoObserverProxy.h"
 #import "Localization.h"
 
 #include <OsmAndCore/Map/WeatherDataConverter.h>

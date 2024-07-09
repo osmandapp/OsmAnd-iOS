@@ -42,16 +42,15 @@
 
 @implementation OALoad3dModelTask
 {
-    NSString *_modelDirPath;
     BOOL (^_callback)(OAModel3dWrapper *);
 }
 
-- (instancetype)initWith:(NSString *)modelDirPath callback:(BOOL (^)(OAModel3dWrapper *))callback
+- (instancetype)initWith:(NSString *)modelDirName callback:(BOOL (^)(OAModel3dWrapper *))callback
 {
     self = [super init];
     if (self) 
     {
-        _modelDirPath = modelDirPath;
+        _modelDirPath = [[OsmAndApp.instance.documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] stringByAppendingPathComponent:modelDirName];
         _callback = callback;
     }
     return self;
@@ -69,14 +68,13 @@
 
 - (OAModel3dWrapper *) doInBackground
 {
-    NSString *documentsPath = OsmAndApp.instance.documentsPath;
     NSString *name = _modelDirPath.lastPathComponent;
     
     // .../Documents/models/map_default_location/map_default_location.obj
-    QString objFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@/%@/%@.obj", documentsPath, MODEL_3D_DIR, name, name]);
+    QString objFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@.obj", _modelDirPath, name]);
     
     // .../Documents/models/map_default_location
-    QString mtlFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@/%@", documentsPath, MODEL_3D_DIR, name]);
+    QString mtlFilePath = QString::fromNSString(_modelDirPath);
     
     const auto parser = OsmAnd::ObjParser(objFilePath, mtlFilePath);
     std::shared_ptr<const OsmAnd::Model3D> model = parser.parse();

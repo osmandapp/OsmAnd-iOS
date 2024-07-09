@@ -43,22 +43,13 @@ final class Model3dHelper: NSObject {
     }
     
     private func loadModel(modelName: String, callback: callbackWithModel3d?) {
-        if !app.initialized {
-            
-            // TODO: implement
-            
-        } else {
-            loadModelImpl(modelName: modelName, callback: callback)
+        DispatchQueue.main.async { [weak self] in
+            self?.loadModelImpl(modelName: modelName, callback: callback)
         }
     }
     
     private func loadModelImpl(modelName: String, callback: callbackWithModel3d?) {
         if modelsCache[modelName] != nil || modelsInProgress.contains(modelName) || failedModels.contains(modelName) {
-            return
-        }
-        
-        let modelDirPath = app.documentsPath.appendingPathComponent(MODEL_3D_DIR).appendingPathComponent(modelName)
-        if !Model3dHelper.isModelExist(dir: modelDirPath) {
             return
         }
         
@@ -76,7 +67,13 @@ final class Model3dHelper: NSObject {
             }
             return true
         }
-        task?.execute()
+        
+        if let task {
+            if !Model3dHelper.isModelExist(dir: task.modelDirPath) {
+                return
+            }
+            task.execute()
+        }
     }
     
     static func listModels() -> [String] {

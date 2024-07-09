@@ -556,11 +556,10 @@
     {
         [fileManager createDirectoryAtPath:destFilePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
-    
-    NSString *parentDir = [destFilePath stringByDeletingLastPathComponent];
-    if (![fileManager fileExistsAtPath:destFilePath])
+    else if (!exists)
     {
-        [fileManager createDirectoryAtPath:parentDir withIntermediateDirectories:YES attributes:nil error:nil];
+        NSString *directory = [destFilePath stringByDeletingLastPathComponent];
+        [fileManager createDirectoryAtPath:directory withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
     BOOL res = NO;

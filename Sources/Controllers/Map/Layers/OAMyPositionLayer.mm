@@ -569,17 +569,14 @@ typedef enum {
         OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
         if ([locIcon isModel])
         {
-            if (![navIcon isModel] || navigationModel)
+            locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callbackOnLoad:^(OAModel3dWrapper *_Nullable model) {
+                [weakSelf refreshMarkersCollection];
+                return;
+            }];
+            if (!locationModel)
             {
-                locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callbackOnLoad:^(OAModel3dWrapper *_Nullable model) {
-                    [weakSelf refreshMarkersCollection];
-                    return;
-                }];
-                if (!locationModel)
-                {
-                    locationIconName = LOCATION_ICON_DEFAULT;
-                    locIcon = [OALocationIcon withIconName:locationIconName];
-                }
+                locationIconName = LOCATION_ICON_DEFAULT;
+                locIcon = [OALocationIcon withIconName:locationIconName];
             }
         }
                 

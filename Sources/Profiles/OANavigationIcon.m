@@ -26,7 +26,7 @@
     if (obj)
     {
         NSString *migratedOldValue = [self getMigratedValue:iconName];
-        obj.iconName = migratedOldValue ?: iconName;;
+        obj.iconName = migratedOldValue ?: iconName;
     }
 
     return obj;

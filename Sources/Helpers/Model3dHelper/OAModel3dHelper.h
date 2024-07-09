@@ -17,7 +17,9 @@
 
 @interface OALoad3dModelTask : NSObject
 
-- (instancetype)initWith:(NSString *)modelDirPath callback:(BOOL (^)(OAModel3dWrapper *))callback;
+@property (nonatomic) NSString *modelDirPath;
+
+- (instancetype)initWith:(NSString *)modelDirName callback:(BOOL (^)(OAModel3dWrapper *))callback;
 - (void) execute;
 
 @end

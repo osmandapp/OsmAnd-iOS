@@ -34,12 +34,21 @@ final class WidgetSizeStyleObjWrapper: NSObject {
         @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }
-
-    static func getTopBottomPadding(type: EOAWidgetSizeStyle) -> CGFloat {
+    
+    static func getTopPadding(type: EOAWidgetSizeStyle) -> CGFloat {
         switch type {
-        case .small: 7
-        case .medium: 10
+        case .small: 9
+        case .medium: 12
         case .large: 12
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
+    
+    static func getBottomPadding(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
+        case .small: 9
+        case .medium: 5
+        case .large: 7
         @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
         }
     }

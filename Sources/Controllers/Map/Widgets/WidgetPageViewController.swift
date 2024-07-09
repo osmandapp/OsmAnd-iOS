@@ -127,7 +127,8 @@ extension WidgetPageViewController {
         if !WidgetType.isComplexWidget(widget.widgetType?.id ?? "") {
             widget.isSimpleLayout = true
             widget.updateSimpleLayout()
-            height = 44
+            // minimal size of widget for S layout option
+            height = 48
         } else {
             widget.isSimpleLayout = false
             // NOTE: not isComplex widget has static height (waiting redesign)

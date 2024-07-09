@@ -4067,6 +4067,7 @@
 		4635DDE72A02A7DE00D36203 /* ColorItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorItem.swift; sourceTree = "<group>"; };
 		463EFDD92C2C92A300549EF7 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		464076C92B55B3FC005AA91F /* SimpleWidgetInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleWidgetInfo.swift; sourceTree = "<group>"; };
+		464105612C3D50AC001A46AD /* OARouteColorize+cpp.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OARouteColorize+cpp.h"; sourceTree = "<group>"; };
 		464167D228AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@2x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@2x.png"; sourceTree = "<group>"; };
 		464167D328AE4F2C00C6AA8F /* ic_custom_checkbox_unselected@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_checkbox_unselected@3x.png"; path = "Resources/Icons/ic_custom_checkbox_unselected@3x.png"; sourceTree = "<group>"; };
 		4641A4642B98B4A5000D8B32 /* GlideTargetWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlideTargetWidget.swift; sourceTree = "<group>"; };
@@ -13596,6 +13597,7 @@
 				DA58337426FF436800BB42FF /* OAColorizationType.h */,
 				DA9A2C2E26FDB72800BEC681 /* OARouteColorize.h */,
 				DA9A2C2F26FDB72800BEC681 /* OARouteColorize.mm */,
+				464105612C3D50AC001A46AD /* OARouteColorize+cpp.h */,
 			);
 			path = Colorization;
 			sourceTree = "<group>";

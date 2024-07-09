@@ -22,6 +22,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OAGPXUIHelper.h"
 #import "OARouteColorize.h"
+#import "OARouteColorize+cpp.h"
 #import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
@@ -833,12 +834,7 @@
             _colorizationScheme = COLORIZATION_GRADIENT;
             _colors.clear();
             if (colorizationHelper)
-            {
-                for (OARouteColorizationPoint *colorizationPoint in [colorizationHelper getResult])
-                {
-                    _colors.append(OsmAnd::ColorARGB(colorizationPoint.color));
-                }
-            }
+                _colors.append([colorizationHelper getResultQList]);
             _route = route;
             routeUpdated = YES;
         }

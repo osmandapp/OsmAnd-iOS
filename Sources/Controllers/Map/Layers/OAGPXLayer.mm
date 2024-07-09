@@ -22,6 +22,7 @@
 #import "OAWaypointsMapLayerProvider.h"
 #import "OAFavoritesLayer.h"
 #import "OARouteColorize.h"
+#import "OARouteColorize+cpp.h"
 #import "OAGPXAppearanceCollection.h"
 #import "QuadRect.h"
 #import "OAMapUtils.h"
@@ -256,12 +257,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                      maxProfileSpeed:0];
         _cachedWallColors[key].clear();
         if (routeColorize)
-        {
-            for (OARouteColorizationPoint *colorizationPoint in [routeColorize getResult])
-            {
-                _cachedWallColors[key].append(OsmAnd::ColorARGB(colorizationPoint.color));
-            }
-        }
+            _cachedWallColors[key].append([routeColorize getResultQList]);
     }
 }
 
@@ -349,12 +345,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                                  maxProfileSpeed:0];
                     _cachedColors[key].clear();
                     if (routeColorize)
-                    {
-                        for (OARouteColorizationPoint *colorizationPoint in [routeColorize getResult])
-                        {
-                            _cachedColors[key].append(OsmAnd::ColorARGB(colorizationPoint.color));
-                        }
-                    }
+                        _cachedColors[key].append([routeColorize getResultQList]);
                 }
                 else
                 {

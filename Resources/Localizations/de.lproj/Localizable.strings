@@ -3477,3 +3477,10 @@
 "missing_maps_ignore" = "Vorhandene Karten verwenden";
 "ios_release_4_8" = "• Neues \"Speedometer\"-Widget kompatibel mit CarPlay\n• Hinzugefügt: Turn-by-Turn-Anweisungen zu Routeninformationen\n• Passe den Kartenbildschirm an, indem du mehrere \"Quick Action\"-Buttons hinzufügst\n• 3D-Track-Verbesserungen: neue Visualisierungs- und Farboptionen\n• Benutzerdefinierte Farbpaletten für Gelände, Tracks und Routen\n• Verbesserter Mehrfachauswahlmodus für Tracks hinzugefügt\n• 3D-Variante für Standortpositionssymbole\n• Erweiterte Auswahl an Touristenrouten auf der Karte\n• Wetter: UI-Aktualisierung, Windanimation hinzugefügt\n• Füge sanfte Übergänge beim Zoomen im 3D-Modus hinzu\n• \"Standortposition auf dem Bildschirm\" ist jetzt im Konfigurationsbildschirm\n• Ändere \"Radumfang\" in den BLE-Sensoreinstellungen\n• Hinzugefügt: separate Navigationswarnung für \"Geschwindigkeitsbegrenzung\"\n• Namen für Peilungs-Widgets korrigiert\n• Sichtbarkeit des \"Radius Lineals\" in allen Widget-Panels behoben\n";
 "transport_hazmat_title" = "Transport von Gefahrgut";
+"weather_source_ecmwf_description" = "Europäisches Zentrum für mittelfristige Wettervorhersage";
+"weather_source_GFS_description" = "Globales Vorhersagesystem der Nationalen Zentren zur Umweltvorhersage";
+"data_source" = "Datenquelle";
+"weather_data_sources_prompt" = "OsmAnd liefert Wetterdaten aus zwei Quellen:";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Wind-Animation";

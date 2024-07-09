@@ -1869,7 +1869,7 @@
 "profile_type_user_string" = "ملف تعريف المستخدم";
 "quick_action_switch_profile_descr" = "سيتم تبديل زر الإجراء التسجيل بين التشكيلات الجانبية المحددة.";
 "arrived_at_destination" = "لقد وصلت.";
-"quick_action_remove_next_destination" = "حذف نقطة الوجهة التالية";
+"quick_action_remove_next_destination" = "نقطة الوجهة التالية";
 "quick_action_mapillary_show" = "إظهار مابيلاري";
 "reverse_route" = "عكس الطريق";
 "quick_action_mapillary_hide" = "إخفاء مابيلاري";

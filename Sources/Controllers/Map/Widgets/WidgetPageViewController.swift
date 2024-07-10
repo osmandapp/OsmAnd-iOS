@@ -16,8 +16,10 @@ final class WidgetPageViewController: UIViewController {
     var simpleWidgetViews: [[OABaseWidgetView]] = []
     var isHiddenPageControl = true
     
+    // swiftlint:disable force_unwrapping
     private var stackView: UIStackView!
     private var bottomStackViewConstraint: NSLayoutConstraint!
+    // swiftlint:enable force_unwrapping
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -123,18 +125,18 @@ extension WidgetPageViewController {
     
     private func configureSimple(widget: OABaseWidgetView) {
         widget.translatesAutoresizingMaskIntoConstraints = false
-        let height: CGFloat
         if !WidgetType.isComplexWidget(widget.widgetType?.id ?? "") {
             widget.isSimpleLayout = true
             widget.updateSimpleLayout()
-            // minimal size of widget for S layout option
-            height = 48
+            if let textInfoWidget = widget as? OATextInfoWidget {
+                widget.updateHeightConstraint(with: .equal, constant: WidgetSizeStyleObjWrapper.getMaxWidgetHeightFor(type: textInfoWidget.widgetSizeStyle), priority: .defaultHigh)
+            }
         } else {
             widget.isSimpleLayout = false
-            // NOTE: not isComplex widget has static height (waiting redesign)
-            height = 50
+            // NOTE: isComplex widget has static height 50 (waiting redesign)
+            widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: 50, priority: .defaultHigh)
         }
-        widget.updateHeightConstraint(with: .greaterThanOrEqual, constant: height, priority: .defaultHigh)
+
         widget.showBottomSeparator(false)
         widget.showRightSeparator(false)
     }

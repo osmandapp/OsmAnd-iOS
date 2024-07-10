@@ -11,6 +11,15 @@ import Foundation
 @objc(OAWidgetSizeStyleObjWrapper)
 @objcMembers
 final class WidgetSizeStyleObjWrapper: NSObject {
+    
+    static func getMaxWidgetHeightFor(type: EOAWidgetSizeStyle) -> CGFloat {
+        switch type {
+        case .small: 48
+        case .medium: 72
+        case .large: 96
+        @unknown default: fatalError("Unknown EOAWidgetSizeStyle enum value")
+        }
+    }
 
     static func getLabelFontSizeFor(type: EOAWidgetSizeStyle) -> CGFloat {
         switch type {

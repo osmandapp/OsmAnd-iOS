@@ -12,6 +12,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "OALocationServices.h"
 #import "OAMapHudViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapRendererView.h"
@@ -20,6 +21,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OAIAPHelper.h"
 #import "OAWeatherToolbar.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 

@@ -46,6 +46,7 @@
 #import "OAAppSettings.h"
 #import "OAPluginsHelper.h"
 #import "OAMapSource.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <algorithm>

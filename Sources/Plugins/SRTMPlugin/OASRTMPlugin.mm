@@ -20,6 +20,7 @@
 #import "OATerrainAction.h"
 #import "Localization.h"
 #import "OALinks.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const PLUGIN_ID = kInAppId_Addon_Srtm;

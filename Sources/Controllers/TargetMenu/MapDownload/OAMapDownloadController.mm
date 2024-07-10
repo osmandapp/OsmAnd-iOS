@@ -8,6 +8,7 @@
 
 #import "OAMapDownloadController.h"
 #import "OADownloadedRegionsLayer.h"
+#import "OADownloadsManager.h"
 #import "OAWorldRegion.h"
 #import "OAResourcesUIHelper.h"
 #import "OAManageResourcesViewController.h"

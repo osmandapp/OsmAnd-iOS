@@ -13,6 +13,7 @@
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"
 #import "OALinks.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 
 @interface OAFunctionalAddon()

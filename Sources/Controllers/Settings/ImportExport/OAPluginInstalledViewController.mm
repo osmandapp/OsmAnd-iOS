@@ -11,6 +11,7 @@
 #import "OAPlugin.h"
 #import "OAColors.h"
 #import "OAProducts.h"
+#import "OADownloadsManager.h"
 #import "Localization.h"
 #import "OAResourcesUIHelper.h"
 #import "OAIAPHelper.h"

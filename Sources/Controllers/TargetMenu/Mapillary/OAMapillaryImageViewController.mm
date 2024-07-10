@@ -19,10 +19,11 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
+#import "OAObservable.h"
 #import <WebKit/WebKit.h>
+#import "Localization.h"
 
 #include <OsmAndCore.h>
-#include "Localization.h"
 
 @interface OAMapillaryImageViewController () <WKScriptMessageHandler, WKNavigationDelegate>
 

@@ -7,7 +7,7 @@
 //
 
 #import "OAOsmEditingPlugin.h"
-
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OATextInfoWidget.h"

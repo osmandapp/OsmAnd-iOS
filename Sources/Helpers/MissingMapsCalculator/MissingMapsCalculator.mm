@@ -11,6 +11,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "OARoutingHelper.h"
 #import "OARouteProvider.h"
+#import "OAWorldRegion.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <binaryRead.h>

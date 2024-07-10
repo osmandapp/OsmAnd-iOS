@@ -25,6 +25,8 @@
 #import "OAPluginsHelper.h"
 #import "OAWeatherWidget.h"
 #import "OAAutoObserverProxy.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define kDefaultZoom 10

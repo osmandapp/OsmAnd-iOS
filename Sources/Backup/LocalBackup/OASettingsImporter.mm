@@ -8,6 +8,7 @@
 
 #import "OASettingsImporter.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OASettingsHelper.h"
 #import "OAOsmNotesSettingsItem.h"

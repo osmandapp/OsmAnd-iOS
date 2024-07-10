@@ -23,6 +23,8 @@
 #import "OAMapViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OARouteKey.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
 #import "OAMapRendererView.h"
 #import "OATabBar.h"
 #import "OASimpleTableViewCell.h"
@@ -40,6 +42,7 @@
 #import "OARadiusCellEx.h"
 #import "Localization.h"
 #import "OAColors.h"
+#import "OAObservable.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
 #import "OASavingTrackHelper.h"
@@ -67,7 +70,6 @@
 #import "OAProducts.h"
 #import "MBProgressHUD.h"
 #import "GeneratedAssetSymbols.h"
-
 #import <SafariServices/SafariServices.h>
 #import <Charts/Charts-Swift.h>
 #import "OsmAnd_Maps-Swift.h"

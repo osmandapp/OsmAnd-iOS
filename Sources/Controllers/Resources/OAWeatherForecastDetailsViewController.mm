@@ -13,6 +13,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OAValueTableViewCell.h"
 #import "MBProgressHUD.h"
+#import "OADownloadsManager.h"
 #import "OATableViewCustomHeaderView.h"
 #import "OAResourcesUIHelper.h"
 #import "OAWeatherHelper.h"

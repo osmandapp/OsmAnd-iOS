@@ -10,6 +10,7 @@
 #import "OAHistoryItem.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OASearchUICore.h"
 #import "OASearchResult.h"
 #import "OAQuickSearchHelper.h"
@@ -18,6 +19,7 @@
 #import "OAQuickSearchListItem.h"
 #import "OAPointDescription.h"
 #import "OARTargetPoint.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import <CoreLocation/CoreLocation.h>
 #import <CarPlay/CarPlay.h>

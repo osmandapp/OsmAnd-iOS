@@ -8,7 +8,9 @@
 
 #import "OATargetMenuViewController.h"
 #import "OAUtilities.h"
+#import "OADownloadsManager.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoritesHelper.h"

@@ -20,6 +20,7 @@
 #import "OAMapHudViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
 
 #define kLayersSection 1
 #define kContoursSection 2

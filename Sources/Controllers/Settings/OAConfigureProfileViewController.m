@@ -16,6 +16,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAPlugin.h"
+#import "OAAppData.h"
 #import "OAMonitoringPlugin.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmEditingSettingsViewController.h"
@@ -48,6 +49,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 #import "OAMapSource.h"
+#import "OAObservable.h"
 
 #define kSidePadding 16.
 #define BACKUP_INDEX_DIR @"backup"

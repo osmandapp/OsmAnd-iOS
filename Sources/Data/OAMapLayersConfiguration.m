@@ -9,6 +9,7 @@
 #import "OAMapLayersConfiguration.h"
 #import "OAAppData.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 
 @implementation OAMapLayersConfiguration
 {

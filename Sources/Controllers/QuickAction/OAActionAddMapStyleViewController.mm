@@ -17,6 +17,8 @@
 #import "OAIndexConstants.h"
 #import "OAMapSource.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAApplicationMode.h"
 
 #include <OsmAndCore/Map/UnresolvedMapStyle.h>
 

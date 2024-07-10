@@ -11,6 +11,7 @@
 #import "OAOsmAndFormatter.h"
 #import "OADestination.h"
 #import "OADestinationItem.h"
+#import "OALocationServices.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"

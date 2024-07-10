@@ -15,6 +15,8 @@
 #import "OAAutoObserverProxy.h"
 #import "OANativeUtilities.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include "OAMapillaryTilesProvider.h"
 #include <OsmAndCore/Utilities.h>

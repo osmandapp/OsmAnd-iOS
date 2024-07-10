@@ -9,6 +9,7 @@
 #import "OAMaxSpeedWidget.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OARoutingHelper.h"
+#import "OALocationServices.h"
 #import "OAApplicationMode.h"
 #import "OACurrentPositionHelper.h"
 #import "OsmAndApp.h"

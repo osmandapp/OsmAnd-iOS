@@ -30,6 +30,7 @@
 #import "OAMapActions.h"
 #import "OADiscountHelper.h"
 #import "OALinks.h"
+#import "OADownloadsManager.h"
 #import "OABackupHelper.h"
 #import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"

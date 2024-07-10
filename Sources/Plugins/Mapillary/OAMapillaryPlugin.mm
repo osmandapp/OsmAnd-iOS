@@ -7,7 +7,7 @@
 //
 
 #import "OAMapillaryPlugin.h"
-
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAPlugin.h"

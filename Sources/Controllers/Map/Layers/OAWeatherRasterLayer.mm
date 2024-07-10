@@ -19,6 +19,8 @@
 #import "OAMapLayers.h"
 #import "OAMapWidgetRegistry.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/WeatherRasterLayerProvider.h>

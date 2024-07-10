@@ -11,6 +11,7 @@
 #import "Localization.h"
 #import "OABottomSheetHeaderCell.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "OARootViewController.h"
 #import "OASwitchableAction.h"
 #import "OASimpleTableViewCell.h"

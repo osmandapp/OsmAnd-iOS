@@ -26,6 +26,7 @@
 #import "OAManageResourcesViewController.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
 
 #define kCellTypeMap @"MapCell"
 

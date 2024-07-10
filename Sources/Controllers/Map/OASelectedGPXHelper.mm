@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "OAGPXDatabase.h"
 #import "OAGPXDocument.h"
+#import "OAObservable.h"
 
 #define kBackupSuffix @"_osmand_backup"
 

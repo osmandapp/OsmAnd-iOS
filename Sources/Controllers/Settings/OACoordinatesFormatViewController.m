@@ -12,6 +12,7 @@
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OALinks.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"
 #import "OATableViewCustomFooterView.h"

@@ -13,6 +13,8 @@
 #import "OASRTMPlugin.h"
 #import "OAAutoObserverProxy.h"
 #import "OAPluginsHelper.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include "OATerrainMapLayerProvider.h"

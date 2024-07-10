@@ -20,6 +20,7 @@
 #import "OAAppSettings.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
+#import "OAObservable.h"
 #import "OAOsmEditsDBHelper.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmNotePoint.h"

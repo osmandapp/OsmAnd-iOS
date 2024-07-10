@@ -11,6 +11,7 @@
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OALocationServices.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OADestinationLineDelegate.h"

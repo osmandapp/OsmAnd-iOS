@@ -13,6 +13,8 @@
 #import "OAPOILayer.h"
 #import "OAResultMatcher.h"
 #import "OAPOI.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
 #import "OAPOIFilter.h"

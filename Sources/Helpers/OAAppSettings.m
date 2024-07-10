@@ -8,6 +8,7 @@
 
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OADayNightHelper.h"
 #import "OAColors.h"
@@ -17,6 +18,7 @@
 #import "OADownloadMode.h"
 #import "OAColoringType.h"
 #import "OAMapWidgetRegistry.h"
+#import "OAObservable.h"
 #import "OAMapSource.h"
 #import "OAApplicationMode.h"
 #import "OAMapLayersConfiguration.h"

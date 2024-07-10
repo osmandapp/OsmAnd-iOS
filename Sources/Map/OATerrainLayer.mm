@@ -12,6 +12,8 @@
 #import "OALog.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/CommonTypes.h>

@@ -7,16 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
-
 #import "OACommonTypes.h"
-#import "OAObservable.h"
-#import "OAAppData.h"
-#import "OAMapViewState.h"
-#import "OALocationServices.h"
-#import "OAWorldRegion.h"
-#import "OADownloadsManager.h"
-#import "OAAppearanceProtocol.h"
-#import "OAApplicationMode.h"
+
+@class OAApplicationMode, OADownloadsManager, OAWorldRegion, OALocationServices, OAMapViewState, OAAppData, OAObservable;
+
+@protocol OAAppearanceProtocol;
 
 @protocol OsmAndAppProtocol <NSObject>
 @required
@@ -37,7 +32,6 @@
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
 @property(nonatomic, readonly) NSString *routingMapsCachePath;
 @property(nonatomic, readonly) NSString *colorsPalettePath;
-
 
 @property(readonly) BOOL initialized;
 

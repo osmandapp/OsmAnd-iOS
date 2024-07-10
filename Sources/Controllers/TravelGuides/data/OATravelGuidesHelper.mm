@@ -12,6 +12,7 @@
 #import "OAGPXDocument.h"
 #import "OAPOIHelper.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAPOI.h"
 #import "OAUtilities.h"
 #import "OAQuickSearchHelper.h"

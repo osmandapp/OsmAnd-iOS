@@ -9,7 +9,9 @@
 #import "OAHistoryViewController.h"
 #import "OADirectionTableViewCell.h"
 #import "OAMapViewController.h"
+#import "OALocationServices.h"
 #import "OADefaultFavorite.h"
+#import "OAObservable.h"
 #import "OAUtilities.h"
 #import "OANativeUtilities.h"
 #import "OAMultiselectableHeaderView.h"
@@ -22,14 +24,13 @@
 #import "MGSwipeTableCell.h"
 #import "OAOsmAndFormatter.h"
 #import "OAColors.h"
-#import "OsmAnd_Maps-Swift.h"
-#import "GeneratedAssetSymbols.h"
 #import "OsmAndApp.h"
+#import "Localization.h"
+#import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
-#include "Localization.h"
-
 
 @interface HistoryTableItem : NSObject
 

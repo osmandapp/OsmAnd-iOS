@@ -13,11 +13,12 @@
 #import "OASQLiteTileSource.h"
 #import "OAMapTileDownloader.h"
 #import "OARootViewController.h"
+#import "OAObservable.h"
 #import "OAMapPanelViewController.h"
-
-#include "Localization.h"
-#include "OASizes.h"
-#include "OAColors.h"
+#import "OsmAndApp.h"
+#import "Localization.h"
+#import "OASizes.h"
+#import "OAColors.h"
 
 @interface OADownloadMapProgressViewController() <UITableViewDelegate, UITableViewDataSource, OATileDownloadDelegate>
 

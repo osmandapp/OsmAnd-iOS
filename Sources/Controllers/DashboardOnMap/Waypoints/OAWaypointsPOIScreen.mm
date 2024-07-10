@@ -17,7 +17,6 @@
 #import "OALocationPointWrapper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
-
 #import "OALocationPointWrapper.h"
 #import "OASimpleTableViewCell.h"
 

@@ -10,6 +10,7 @@
 #import "OAIAPHelper.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
+#import "OAObservable.h"
 #import "OAResourcesBaseViewController.h"
 #import "Localization.h"
 #import "OAPluginDetailsViewController.h"
@@ -25,6 +26,7 @@
 #import "OAPluginsHelper.h"
 #import "OAOnlinePlugin.h"
 #import "OAInAppCell.h"
+#import "OsmAndApp.h"
 
 @interface OAPluginsViewController () <OASubscriptionBannerCardViewDelegate, OAPluginDetailsDelegate, OAOnlinePluginsCallback, OAPluginInstallListener>
 

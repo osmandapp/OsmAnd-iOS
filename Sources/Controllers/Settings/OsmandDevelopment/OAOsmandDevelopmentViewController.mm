@@ -8,6 +8,7 @@
 
 #import "OAOsmandDevelopmentViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OALocationSimulation.h"

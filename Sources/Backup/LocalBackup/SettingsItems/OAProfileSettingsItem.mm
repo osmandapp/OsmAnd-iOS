@@ -21,6 +21,7 @@
 #import "OAMapWidgetRegistry.h"
 #import "OAPluginsHelper.h"
 #import "OAMapSource.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
 @implementation OAProfileSettingsItem

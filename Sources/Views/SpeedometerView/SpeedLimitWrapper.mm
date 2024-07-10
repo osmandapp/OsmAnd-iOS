@@ -8,6 +8,7 @@
 
 #import "SpeedLimitWrapper.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
 #import "OACurrentPositionHelper.h"

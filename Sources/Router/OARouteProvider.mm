@@ -16,6 +16,7 @@
 #import "OARouteCalculationResult.h"
 #import "OARouteCalculationParams.h"
 #import "QuadRect.h"
+#import "OALocationServices.h"
 #import "Localization.h"
 #import "OAUtilities.h"
 #import "OAMapUtils.h"

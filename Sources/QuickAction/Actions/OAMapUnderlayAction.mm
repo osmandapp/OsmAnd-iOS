@@ -8,6 +8,7 @@
 
 #import "OAMapUnderlayAction.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAMapSource.h"
 #import "Localization.h"

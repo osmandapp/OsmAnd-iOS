@@ -12,6 +12,7 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAOsmAndFormatter.h"
+#import "OALocationServices.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OAWikiArticleHelper.h"
 #import "GeneratedAssetSymbols.h"

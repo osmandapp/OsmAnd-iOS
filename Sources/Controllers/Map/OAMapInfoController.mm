@@ -9,6 +9,7 @@
 #import "OAMapInfoController.h"
 #import "OAMapHudViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OARootViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
@@ -48,6 +49,7 @@
 #import "GeneratedAssetSymbols.h"
 #import "OAWeatherHelper.h"
 #import "OAMapStyleSettings.h"
+#import "OAObservable.h"
 
 #define kWidgetsTopPadding 10.0
 

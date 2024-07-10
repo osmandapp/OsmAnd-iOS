@@ -10,11 +10,13 @@
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
 #import "OAMapRendererView.h"
+#import "OALocationServices.h"
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAAutoObserverProxy.h"
 #import "OARoutingHelper.h"
 #import "OATargetPointsHelper.h"
+#import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OATargetPointView.h"
 #import "OARootViewController.h"
@@ -26,6 +28,7 @@
 #import "OAMapUtils.h"
 #import "OARoutingHelperUtils.h"
 #import "OAMapLayers.h"
+#import "OAObservable.h"
 #import "CLLocation+Extension.h"
 
 #include <commonOsmAndCore.h>

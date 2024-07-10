@@ -12,6 +12,8 @@
 #import "OAFavoriteListViewController.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OAHelpViewController.h"
 #import "OAPluginsViewController.h"
 #import "OsmAnd_Maps-Swift.h"

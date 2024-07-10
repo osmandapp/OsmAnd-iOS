@@ -11,6 +11,8 @@
 #import "Localization.h"
 #import "OAMapCreatorHelper.h"
 #import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>

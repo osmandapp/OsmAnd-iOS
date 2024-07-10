@@ -31,6 +31,7 @@
 #import "OAAppVersion.h"
 #import "OAPOIType.h"
 #import "OAPOICategory.h"
+#import "OsmAndApp.h"
 
 const static NSString *URL = @"https://osmand.net/api/motd";
 

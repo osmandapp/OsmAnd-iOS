@@ -32,6 +32,8 @@
 #import "OAAutoObserverProxy.h"
 #import "OALinks.h"
 #import "OASizes.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import <SafariServices/SafariServices.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"

@@ -8,6 +8,7 @@
 
 #import "OAShowHideMapillaryAction.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "Localization.h"

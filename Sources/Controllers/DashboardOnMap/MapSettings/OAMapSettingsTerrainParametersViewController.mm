@@ -19,6 +19,7 @@
 #import "OAMapPanelViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAMapLayers.h"
+#import "OAAppData.h"
 #import "OATerrainMapLayer.h"
 #import "GeneratedAssetSymbols.h"
 

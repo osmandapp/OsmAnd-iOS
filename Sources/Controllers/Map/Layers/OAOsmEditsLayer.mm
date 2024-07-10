@@ -31,6 +31,8 @@
 #import "OACompoundIconUtils.h"
 #import "OAPluginsHelper.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

@@ -12,7 +12,7 @@
 #import "OAUtilities.h"
 #import "OsmAndApp.h"
 
-#include "Localization.h"
+#import "Localization.h"
 
 @implementation OAEditColorViewController
 

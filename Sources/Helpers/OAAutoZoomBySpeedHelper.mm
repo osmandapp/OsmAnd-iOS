@@ -12,6 +12,7 @@
 #import "OARouteDirectionInfo.h"
 #import "OAMapRendererView.h"
 #import "OAZoom.h"
+#import "OAObservable.h"
 #import "OARouteCalculationResult.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"

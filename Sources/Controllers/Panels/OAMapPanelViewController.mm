@@ -13,6 +13,8 @@
 #import "OAMapillaryImageViewController.h"
 #import "OARouteDetailsGraphViewController.h"
 #import "OAAutoObserverProxy.h"
+#import "OAAppData.h"
+#import "OALocationServices.h"
 #import "OALog.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
@@ -106,6 +108,7 @@
 #import "OAPluginsHelper.h"
 #import "OAApplicationMode.h"
 #import "OARouteKey.h"
+#import "OAObservable.h"
 #import "OANetworkRouteSelectionTask.h"
 #import <MBProgressHUD.h>
 #import "OsmAnd_Maps-Swift.h"

@@ -15,6 +15,7 @@
 #import "OADownloadMode.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"

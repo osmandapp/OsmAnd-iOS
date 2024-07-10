@@ -12,6 +12,7 @@
 #import "OAMapHudViewController.h"
 #import "OAMapInfoWidgetsFactory.h"
 #import "OAMapWidgetRegInfo.h"
+#import "OAAppData.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OAWeatherWidget.h"

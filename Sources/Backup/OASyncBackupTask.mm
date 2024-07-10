@@ -8,6 +8,7 @@
 
 #import "OASyncBackupTask.h"
 #import "OANetworkSettingsHelper.h"
+#import "OAObservable.h"
 #import "OAPrepareBackupResult.h"
 #import "OAPrepareBackupTask.h"
 #import "OAExportBackupTask.h"

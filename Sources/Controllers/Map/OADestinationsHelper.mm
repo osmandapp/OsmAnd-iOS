@@ -10,6 +10,8 @@
 #import "OsmAndApp.h"
 #import "OADestination.h"
 #import "OAUtilities.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "OALog.h"
 #import "Localization.h"
 #import "OAHistoryItem.h"
@@ -19,6 +21,7 @@
 #import "OAGPXDocumentPrimitives.h"
 #import "OAAppVersion.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "OAAppSettings.h"
 
 #define kMarkersChanged @"markers_modified_time"
@@ -181,9 +184,7 @@
 {
     @synchronized(_syncObj)
     {
-        NSUInteger newIndex = 0;
-        OADestination *firstDestination = [_sortedDestinations firstObject];
-        
+        NSUInteger newIndex = 0;       
         [_sortedDestinations removeObject:destination];
         [_sortedDestinations insertObject:destination atIndex:newIndex];
         

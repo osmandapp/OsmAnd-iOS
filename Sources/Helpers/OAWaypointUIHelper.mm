@@ -14,6 +14,7 @@
 #import "Localization.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OALocationServices.h"
 #import "OALocationPointWrapper.h"
 #import "OALocationPoint.h"
 #import "OATargetPointsHelper.h"

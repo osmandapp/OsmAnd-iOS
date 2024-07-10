@@ -13,6 +13,7 @@
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
 #import "OAOsmPoint.h"
+#import "OAObservable.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAColors.h"
 #import "OAPOIType.h"

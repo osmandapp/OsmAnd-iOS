@@ -10,6 +10,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAOsmAndLiveSelectionViewController.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAPurchasesViewController.h"

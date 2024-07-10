@@ -7,6 +7,7 @@
 //
 
 #import "OAGPXLayer.h"
+#import "OAAppData.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OARootViewController.h"
@@ -32,6 +33,7 @@
 #import "OAGpxTrackAnalysis.h"
 #import "OAOsmAndFormatter.h"
 #import "OAAtomicInteger.h"
+#import "OAObservable.h"
 #import "OAColoringType.h"
 #import "OsmAnd_Maps-Swift.h"
 

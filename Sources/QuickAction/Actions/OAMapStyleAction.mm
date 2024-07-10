@@ -8,8 +8,10 @@
 
 #import "OAMapStyleAction.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAIAPHelper.h"
+#import "OAApplicationMode.h"
 #import "OAProducts.h"
 #import "OAQuickActionSelectionBottomSheetViewController.h"
 #import "OARendererRegistry.h"

@@ -11,6 +11,7 @@
 #import "OAPointDescription.h"
 #import "OAAutoObserverProxy.h"
 #import "OrderedDictionary.h"
+#import "OAObservable.h"
 #import "OAPOIFiltersHelper.h"
 #import "OAWikipediaPlugin.h"
 #import "OAWeatherBand.h"

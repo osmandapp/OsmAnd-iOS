@@ -12,6 +12,7 @@
 #import "OAMapViewTrackingUtilities.h"
 #import "OAWaypointHelper.h"
 #import "OAAlarmInfo.h"
+#import "OALocationServices.h"
 #import "OACurrentPositionHelper.h"
 #import "OAOsmAndFormatter.h"
 #import "OsmAnd_Maps-Swift.h"

@@ -71,10 +71,12 @@
 #import "OAWhatsNewBottomSheetViewController.h"
 #import "OAApplicationMode.h"
 #import "OAAppVersion.h"
+#import "OALocationServices.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OANativeUtilities.h"
 #import "OALog.h"
+#import "OAObservable.h"
 #import "Localization.h"
 
 //#include "OAMapMarkersCollection.h"

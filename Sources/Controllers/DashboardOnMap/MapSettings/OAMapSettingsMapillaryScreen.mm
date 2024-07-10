@@ -12,6 +12,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAQuickSearchListItem.h"
 #import "Localization.h"
+#import "OAAppData.h"
 #import "OACustomSearchPoiFilter.h"
 #import "OAUtilities.h"
 #import "OAQuickSearchButtonListItem.h"

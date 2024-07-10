@@ -52,6 +52,10 @@
 #import "OAMapStyleSettings.h"
 #import "OAWeatherBand.h"
 #import "OADayNightHelper.h"
+#import "OALocationServices.h"
+#import "OAAppData.h"
+#import "OAWorldRegion.h"
+#import "OADownloadsManager.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"

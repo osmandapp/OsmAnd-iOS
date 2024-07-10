@@ -10,6 +10,7 @@
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <MBProgressHUD.h>
 #import "OALog.h"
+#import "OADownloadsManager.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
@@ -22,16 +23,20 @@
 #import "OAChoosePlanHelper.h"
 #import "OAJsonHelper.h"
 #import "OATileSource.h"
+#import "OAWorldRegion.h"
 #import "OAIndexConstants.h"
 #import "OAResourcesInstaller.h"
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
+#import "OAApplicationMode.h"
 #import "Localization.h"
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"
 #import "OAAppVersion.h"
+#import "OAAppData.h"
 #import "OARouteCalculationResult.h"
 #import "OAMapSource.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/WorldRegions.h>

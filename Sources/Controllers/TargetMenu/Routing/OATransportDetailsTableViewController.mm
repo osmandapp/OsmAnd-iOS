@@ -24,6 +24,7 @@
 #import "OAMapViewController.h"
 #import "OAPublicTransportRouteShieldCell.h"
 #import "OADividerCell.h"
+#import "OALocationServices.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
 

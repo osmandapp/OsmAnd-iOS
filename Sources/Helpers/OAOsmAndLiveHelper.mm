@@ -11,6 +11,8 @@
 #import "OAAppSettings.h"
 #import "OAIAPHelper.h"
 #import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 
 #define kLiveUpdatesOnPrefix @"live_updates_on_"

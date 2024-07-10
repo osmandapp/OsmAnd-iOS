@@ -12,6 +12,8 @@
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "Localization.h"
+#import "OAObservable.h"
+#import "OAWorldRegion.h"
 #import "OsmAndApp.h"
 #import "OAResourcesUIHelper.h"
 #import "OAPluginsViewController.h"

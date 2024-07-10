@@ -11,6 +11,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAAppSettings.h"
 #import "OASearchSettings.h"
+#import "OALocationServices.h"
 #import "OAQuickSearchListItem.h"
 #import "OsmAndApp.h"
 #import "OAAddress.h"

@@ -7,10 +7,12 @@
 //
 
 #import "OATargetPointView.h"
+#import "OALocationServices.h"
 #import "OsmAndApp.h"
 #import "OAMapRendererView.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"
+#import "OAObservable.h"
 #import "OADestinationCell.h"
 #import "OAAutoObserverProxy.h"
 #import "OAGPXDocumentPrimitives.h"

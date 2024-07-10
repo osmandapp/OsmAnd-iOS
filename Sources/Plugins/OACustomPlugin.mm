@@ -9,6 +9,7 @@
 #import "OACustomPlugin.h"
 #import "OAWorldRegion.h"
 #import "OAJsonHelper.h"
+#import "OAAppData.h"
 #import "OASettingsHelper.h"
 #import "Localization.h"
 #import "OsmAndApp.h"

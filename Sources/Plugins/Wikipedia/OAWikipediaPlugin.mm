@@ -7,6 +7,7 @@
 //
 
 #import "Localization.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAProducts.h"
 #import "OARootViewController.h"

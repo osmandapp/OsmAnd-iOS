@@ -17,6 +17,7 @@
 #import "OAPOIHelper.h"
 #import "OAPOIType.h"
 #import "OAEditPOIData.h"
+#import "OAObservable.h"
 #import "OAButtonTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OARootViewController.h"

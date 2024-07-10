@@ -8,6 +8,7 @@
 
 #import "OAShowHideAirPressureAction.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 

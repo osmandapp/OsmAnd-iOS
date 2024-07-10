@@ -7,6 +7,7 @@
 //
 
 #import "OAPOIFiltersHelper.h"
+#import "OAAppData.h"
 #import "OAPOIUIFilter.h"
 #import "OASearchByNameFilter.h"
 #import "Localization.h"
@@ -24,6 +25,7 @@
 #import "OAApplicationMode.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPluginsHelper.h"
+#import "OAObservable.h"
 
 static NSString* const UDF_CAR_AID = @"car_aid";
 static NSString* const UDF_FOR_TOURISTS = @"for_tourists";

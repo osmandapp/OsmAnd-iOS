@@ -7,9 +7,8 @@
 //
 
 #import "OALocationServices.h"
-
 #import <UIKit/UIKit.h>
-
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "OAAutoObserverProxy.h"
 #import "OAObservable.h"

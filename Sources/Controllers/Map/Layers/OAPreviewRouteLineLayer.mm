@@ -22,6 +22,7 @@
 #import "OAMapPresentationEnvironment.h"
 #import "OAColoringType.h"
 #import "OAMapSource.h"
+#import "OAAppData.h"
 #import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
 

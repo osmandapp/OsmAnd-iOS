@@ -28,6 +28,7 @@
 #import "OAMapSettingsOnlineSourcesScreen.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAAppData.h"
 #import "OAMapSettingsContourLinesScreen.h"
 #import "OAMapSettingsTerrainScreen.h"
 #import "OAMapSettingsWikipediaScreen.h"

@@ -28,6 +28,7 @@
 #import <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #import "GeneratedAssetSymbols.h"
 #import "OAMapSource.h"
+#import "OAAppData.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #include <QSet>

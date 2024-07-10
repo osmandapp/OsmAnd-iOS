@@ -8,7 +8,9 @@
 
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OAPOI.h"
+#import "OAWorldRegion.h"
 #import "OARootViewController.h"
+#import "OADownloadsManager.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"

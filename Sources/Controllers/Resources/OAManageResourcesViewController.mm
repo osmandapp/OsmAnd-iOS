@@ -11,6 +11,7 @@
 #import <MBProgressHUD.h>
 #import "UITableViewCell+getTableView.h"
 #import "OARootViewController.h"
+#import "OALocationServices.h"
 #import "OALocalResourceInformationViewController.h"
 #import "OAOutdatedResourcesViewController.h"
 #import "OAOcbfHelper.h"
@@ -29,6 +30,7 @@
 #import "OADownloadDescriptionInfo.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OAColors.h"
+#import "OAWorldRegion.h"
 #import "OANauticalMapsPlugin.h"
 #import "Localization.h"
 #import "OAResourcesInstaller.h"

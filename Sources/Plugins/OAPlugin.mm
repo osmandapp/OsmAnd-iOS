@@ -15,6 +15,7 @@
 #import "OAMapHudViewController.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
+#import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapButtonsHelper.h"
 #import "OACustomPlugin.h"

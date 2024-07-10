@@ -12,6 +12,7 @@
 #import "OAMapViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OASelectMapSourceViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapCreatorHelper.h"

@@ -8,15 +8,20 @@
 
 #import "OAMapHudViewController.h"
 #import "OAAppSettings.h"
+#import "OADownloadsManager.h"
 #import "OAMapRulerView.h"
 #import "OAMapInfoController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
+#import "OALocationServices.h"
+#import "OAMapViewState.h"
 #import "OADownloadMapWidget.h"
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
 #import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"

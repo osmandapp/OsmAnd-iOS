@@ -22,6 +22,8 @@
 #import "OAMapRendererView.h"
 #import "OAToolbarViewController.h"
 #import "OAResourcesUIHelper.h"
+#import "OADownloadsManager.h"
+#import "OAObservable.h"
 #import "Localization.h"
 #import "GeneratedAssetSymbols.h"
 

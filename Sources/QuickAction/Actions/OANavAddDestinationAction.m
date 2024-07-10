@@ -8,6 +8,7 @@
 
 #import "OANavAddDestinationAction.h"
 #import "OARootViewController.h"
+#import "OAAppData.h"
 #import "OAMapPanelViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OAPointDescription.h"

@@ -10,6 +10,7 @@
 
 #import "OALocationSimulation.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OALocationServices.h"
 #import "OARoutingHelper.h"
 #import "Localization.h"

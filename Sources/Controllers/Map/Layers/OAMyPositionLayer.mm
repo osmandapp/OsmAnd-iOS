@@ -18,6 +18,7 @@
 #import "OANavigationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
+#import "OAObservable.h"
 #import "OAAppSettings.h"
 #import "OAApplicationMode.h"
 

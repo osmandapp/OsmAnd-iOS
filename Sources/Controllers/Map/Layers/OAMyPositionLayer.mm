@@ -501,7 +501,6 @@ typedef enum {
 @implementation OAMyPositionLayer
 {
     OAMapViewTrackingUtilities *_mapViewTrackingUtilities;
-    Model3dHelper *_model3dHelper;
     
     NSMapTable<OAApplicationMode *, OAMarkerCollection *> *_modeMarkers;
     CLLocation *_lastLocation;
@@ -555,7 +554,7 @@ typedef enum {
         OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
         if ([navIcon isModel])
         {
-            navigationModel = [_model3dHelper getModelWithModelName:navigationIconName callback:nil];
+            navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callback:nil];
             if (!navigationModel)
             {
                 navigationIconName = NAVIGATION_ICON_DEFAULT;
@@ -566,7 +565,7 @@ typedef enum {
         OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
         if ([locIcon isModel])
         {
-            locationModel = [_model3dHelper getModelWithModelName:locationIconName callback:nil];
+            locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callback:nil];
             if (!locationModel)
             {
                 locationIconName = LOCATION_ICON_DEFAULT;
@@ -733,13 +732,12 @@ typedef enum {
     _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     
     __weak OAMyPositionLayer *weakSelf = self;
-    _model3dHelper = Model3dHelper.shared;
     OAModel3dCallback *callback = [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf refreshMarkersCollection];
         });
     }];
-    [_model3dHelper loadAllPluginModelsWithCallback:callback];
+    [Model3dHelper.shared loadAllPluginModelsWithCallback:callback];
 
     [self generateMarkersCollection];
     

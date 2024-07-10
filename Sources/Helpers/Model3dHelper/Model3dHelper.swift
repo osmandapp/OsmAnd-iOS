@@ -63,19 +63,21 @@ final class Model3dHelper: NSObject {
     }
     
     private func processCallback(modelName: String, model: OAModel3dWrapper?, callback: OAModel3dCallback?) {
-        if let callback {
-            if let callbacks = pendingCallbacks[modelName] {
-                if let index = callbacks.firstIndex(of: callback) {
-                    pendingCallbacks[modelName]?.remove(at: index)
-                    if !callbacks.isEmpty {
-                        for pendingCallback in callbacks {
-                            pendingCallback.processResult(model)
+        DispatchQueue.main.async { [weak self] in
+            if let callback {
+                if let callbacks = self?.pendingCallbacks[modelName] {
+                    if let index = callbacks.firstIndex(of: callback) {
+                        self?.pendingCallbacks[modelName]?.remove(at: index)
+                        if !callbacks.isEmpty {
+                            for pendingCallback in callbacks {
+                                pendingCallback.processResult(model)
+                            }
                         }
+                        self?.pendingCallbacks.removeValue(forKey: modelName)
                     }
-                    pendingCallbacks.removeValue(forKey: modelName)
                 }
+                callback.processResult(model)
             }
-            callback.processResult(model)
         }
     }
     

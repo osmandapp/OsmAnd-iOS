@@ -29,7 +29,7 @@
 
 - (std::shared_ptr<const OsmAnd::Model3D>) model
 {
-    return std::const_pointer_cast<OsmAnd::Model3D>(_model);
+    return std::const_pointer_cast<const OsmAnd::Model3D>(_model);
 }
 
 - (void) setMainColor:(UIColor *)color

@@ -20,6 +20,7 @@
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
+#import "OADownloadTask.h"
 #import "OAMapViewState.h"
 #import "OAIAPHelper.h"
 #import "OAChoosePlanHelper.h"

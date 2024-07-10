@@ -56,6 +56,7 @@
 #import "OAPlugin.h"
 #import "OAWikipediaPlugin.h"
 #import "OAPOI.h"
+#import "OADownloadTask.h"
 #import "OAPOIHelper.h"
 #import "OAAddWaypointViewController.h"
 #import "OAObservable.h"

@@ -11,6 +11,7 @@
 #import "OADownloadsManager.h"
 #import "OsmAndAppImpl.h"
 #import "OAWorldRegion.h"
+#import "OADownloadTask.h"
 #import "OAManageResourcesViewController.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"

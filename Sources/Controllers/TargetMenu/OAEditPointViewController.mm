@@ -44,6 +44,7 @@
 #import "OAColorCollectionViewController.h"
 #import "OAGPXDocument.h"
 #import "OATargetMenuViewController.h"
+#import "MaterialTextFields.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"

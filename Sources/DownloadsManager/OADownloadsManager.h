@@ -8,7 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OADownloadTask.h"
+@class OAObservable;
+
+@protocol OADownloadTask;
 
 @interface OADownloadsManager : NSObject
 

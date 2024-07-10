@@ -10,11 +10,12 @@
 // So we can use this adapter for new Swit classes
 
 #import <Foundation/Foundation.h>
-#import "OADownloadTask.h"
 
-typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
+@protocol OADownloadTask;
 
 @class OAWorldRegion, FFCircularProgressView;
+
+typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
 
 typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
     EOAOAResourceSwiftItemTypeUnknown = -1,

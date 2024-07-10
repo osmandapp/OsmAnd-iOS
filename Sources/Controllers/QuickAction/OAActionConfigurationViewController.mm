@@ -23,6 +23,7 @@
 #import "OsmAndApp.h"
 #import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
+#import "MaterialTextFields.h"
 #import "OAActionAddCategoryViewController.h"
 #import "OAQuickSearchListItem.h"
 #import "OAPOIUIFilter.h"

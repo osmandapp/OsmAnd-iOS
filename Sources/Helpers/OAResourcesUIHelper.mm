@@ -29,6 +29,7 @@
 #import "OAPlugin.h"
 #import "OAWeatherHelper.h"
 #import "OAApplicationMode.h"
+#import "OADownloadTask.h"
 #import "Localization.h"
 #import "OAWeatherPlugin.h"
 #import "OAPluginsHelper.h"

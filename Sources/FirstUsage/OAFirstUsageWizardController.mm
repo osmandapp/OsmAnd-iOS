@@ -16,6 +16,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAAutoObserverProxy.h"
 #import "OAOcbfHelper.h"
+#import "OADownloadTask.h"
 #import "OAWorldRegion.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"

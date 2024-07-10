@@ -17,6 +17,7 @@
 #import "OAManageResourcesViewController.h"
 #import "OAMapLayers.h"
 #import "OALog.h"
+#import "OADownloadTask.h"
 #import "OAWorldRegion.h"
 #import "OANativeUtilities.h"
 #import "OAIAPHelper.h"

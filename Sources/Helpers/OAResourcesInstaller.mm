@@ -19,6 +19,7 @@
 #import "OAAppSettings.h"
 #import "OAResourcesUIHelper.h"
 #import "OAMapCreatorHelper.h"
+#import "OADownloadTask.h"
 #import "OAIAPHelper.h"
 #import "OAGPXDocument.h"
 #import "OAGPXDatabase.h"

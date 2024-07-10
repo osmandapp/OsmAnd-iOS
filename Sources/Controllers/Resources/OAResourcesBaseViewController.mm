@@ -27,6 +27,7 @@
 #import "OAChoosePlanHelper.h"
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
+#import "OADownloadTask.h"
 #import "OsmAndApp.h"
 
 #include <OsmAndCore/WorldRegions.h>

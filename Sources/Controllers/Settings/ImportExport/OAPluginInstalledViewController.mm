@@ -21,6 +21,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OARootViewController.h"
 #import "OASizes.h"
+#import "OADownloadTask.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"

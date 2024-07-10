@@ -185,20 +185,29 @@
             else
                 _poiUiNameFilter = [f getNameAmenityFilter:f.filterByName];
 
+            __weak OAAmenityExtendedNameFilter *weakWikiUiNameFilter = _wikiUiNameFilter;
+            __weak OAPOIUIFilter *weakWikiUiFilter = _wikiUiFilter;
+            __weak OAAmenityExtendedNameFilter *weakPoiUiNameFilter = _poiUiNameFilter;
+            __weak OAPOIUIFilter *weakPoiUiFilter = _poiUiFilter;
             OsmAnd::ObfPoiSectionReader::VisitorFunction amenityFilter =
                     [=](const std::shared_ptr<const OsmAnd::Amenity> &amenity)
                     {
+                        OAAmenityExtendedNameFilter *wikiUiNameFilter = weakWikiUiNameFilter;
+                        OAPOIUIFilter *wikiUiFilter = weakWikiUiFilter;
+                        OAAmenityExtendedNameFilter *poiUiNameFilter = weakPoiUiNameFilter;
+                        OAPOIUIFilter *poiUiFilter = weakPoiUiFilter;
+
                         OAPOIType *type = [OAPOIHelper parsePOITypeByAmenity:amenity];
                         QHash<QString, QString> decodedValues = amenity->getDecodedValuesHash();
                         
-                        BOOL check = !_wikiUiNameFilter && !_wikiUiFilter && _poiUiNameFilter
-                                && _poiUiFilter && _poiUiFilter.filterByName && _poiUiFilter.filterByName.length > 0;
-                        BOOL accepted = [_poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
-                        
+                        BOOL check = !wikiUiNameFilter && !wikiUiFilter && poiUiNameFilter
+                                && poiUiFilter && poiUiFilter.filterByName && poiUiFilter.filterByName.length > 0;
+                        BOOL accepted = poiUiNameFilter && [poiUiNameFilter acceptAmenity:amenity values:decodedValues type:type];
+
                         if (!isWiki && [type.tag isEqualToString:OSM_WIKI_CATEGORY])
                             return check ? accepted : false;
                         
-                        if ((check && accepted) || (isWiki ? [_wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
+                        if ((check && accepted) || (isWiki ? wikiUiNameFilter && [wikiUiNameFilter acceptAmenity:amenity values:decodedValues type:type] : accepted))
                         {
                             BOOL isClosed = decodedValues[QString::fromNSString(OSM_DELETE_TAG)] == QString::fromNSString(OSM_DELETE_VALUE);
                             return !isClosed;

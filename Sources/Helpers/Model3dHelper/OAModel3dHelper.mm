@@ -14,7 +14,7 @@
 
 @implementation OAModel3dWrapper
 {
-    OsmAnd::Model3D *_model;
+    std::shared_ptr<OsmAnd::Model3D> _model;
 }
 
 - (instancetype)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
@@ -22,14 +22,14 @@
     self = [super init];
     if (self)
     {
-        _model = new OsmAnd::Model3D(model->vertices, model->materials, model->bbox);
+        _model = std::const_pointer_cast<OsmAnd::Model3D>(model);
     }
     return self;
 }
 
 - (std::shared_ptr<const OsmAnd::Model3D>) model
 {
-    return std::shared_ptr<const OsmAnd::Model3D>(new OsmAnd::Model3D(_model->vertices, _model->materials, _model->bbox, _model->mainColor));
+    return std::const_pointer_cast<OsmAnd::Model3D>(_model);
 }
 
 - (void) setMainColor:(UIColor *)color

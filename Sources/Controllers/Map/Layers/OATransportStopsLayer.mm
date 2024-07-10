@@ -24,11 +24,11 @@
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Data/TransportStop.h>
 #include <OsmAndCore/Map/VectorLine.h>
-#include <OsmAndCore/Map/VectorLine.h>
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/Map/TransportStopSymbolsProvider.h>
+#include <OsmAndCore/Map/VectorLinesCollection.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
 #include <OsmAndCore/Data/ObfMapObject.h>

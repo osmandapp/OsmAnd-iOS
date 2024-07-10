@@ -42,7 +42,6 @@
 #include <OsmAndCore/Map/MapStyleEvaluationResult.h>
 #include <OsmAndCore/Map/MapStyleBuiltinValueDefinitions.h>
 #include <OsmAndCore/TextRasterizer.h>
-
 #include <binaryRead.h>
 
 @interface OATopTextView ()

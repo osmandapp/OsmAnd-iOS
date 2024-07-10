@@ -9,6 +9,17 @@
 #define kWorld @"world"
 
 #import "OAWorldRegion.h"
+#import "Localization.h"
+#import "OALog.h"
+#import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAUtilities.h"
+#import "OAPointIContainer.h"
+#import "OAIndexConstants.h"
+#import "OAWorldRegion+Protected.h"
+#import "OAResourcesUIHelper.h"
+#import "QuadRect.h"
+#import "Weather/OAWeatherHelper.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>
@@ -18,19 +29,6 @@
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/KeyedEntriesCollection.h>
-
-#import "Localization.h"
-#import "OALog.h"
-#import "OAIAPHelper.h"
-#import "OAProducts.h"
-#import "OAUtilities.h"
-#import "OAPointIContainer.h"
-#import "OAIndexConstants.h"
-
-#import "OAWorldRegion+Protected.h"
-#import "OAResourcesUIHelper.h"
-#import "QuadRect.h"
-#import "Weather/OAWeatherHelper.h"
 
 @implementation OAWorldRegion
 {

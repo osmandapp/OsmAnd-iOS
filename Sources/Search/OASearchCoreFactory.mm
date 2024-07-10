@@ -54,7 +54,6 @@
 #include <OsmAndCore/QKeyValueIterator.h>
 #include <OsmAndCore/ICU.h>
 #include <OsmAndCore/Search/CommonWords.h>
-
 #include <GeographicLib/GeoCoords.hpp>
 
 #define OLC_RECALC_DISTANCE_THRESHOLD 100000 // 100 km

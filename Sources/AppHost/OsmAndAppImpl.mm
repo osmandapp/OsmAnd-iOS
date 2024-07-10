@@ -7,9 +7,7 @@
 //
 
 #import "OsmAndAppImpl.h"
-
 #import <UIKit/UIKit.h>
-
 #import "OsmAndApp.h"
 #import "OAResourcesInstaller.h"
 #import "OADaytimeAppearance.h"
@@ -53,13 +51,11 @@
 #include <algorithm>
 #include <QList>
 #include <QHash>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IWebClient.h>
 #include "OAWebClient.h"
 #include "OAWeatherWebClient.h"
 #include "CoreResourcesFromBundleProvider.h"
-
 #include <CommonCollections.h>
 #include <binaryRead.h>
 #include <routingContext.h>
@@ -72,7 +68,6 @@
 #include <OsmAndCore/Map/ResolvedMapStyle.h>
 #include <OsmAndCore/Map/MapPresentationEnvironment.h>
 #include <OsmAndCore/Map/GeoCommonTypes.h>
-
 #include <openingHoursParser.h>
 
 #define k3MonthInSeconds 60 * 60 * 24 * 90

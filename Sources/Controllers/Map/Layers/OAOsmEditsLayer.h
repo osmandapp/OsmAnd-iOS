@@ -12,7 +12,7 @@
 #include <OsmAndCore.h>
 #include <OsmAndCore/Map/MapMarkersCollection.h>
 
-@class OAOsmEditingPlugin;
+@class OAMapViewController;
 
 @interface OAOsmEditsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 

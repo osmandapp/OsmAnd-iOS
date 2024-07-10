@@ -8,13 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
+#import "OARoutingHelper.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
 #include <transportRouteResult.h>
 #include <transportRouteResultSegment.h>
-
-#import "OARoutingHelper.h"
 
 @protocol OATransportRouteCalculationProgressCallback <NSObject>
 

@@ -23,7 +23,6 @@
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
-
 #include <binaryRead.h>
 
 @interface OAImpassableRoadsLayer () <OAStateChangedListener>

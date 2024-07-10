@@ -24,7 +24,6 @@
 #import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
 #include "Localization.h"
 

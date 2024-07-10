@@ -73,18 +73,17 @@
 #import "OAAppVersion.h"
 #import "OsmAnd_Maps-Swift.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
+#import "OANativeUtilities.h"
+#import "OALog.h"
+#import "Localization.h"
 
+//#include "OAMapMarkersCollection.h"
 #include "OASQLiteTileSourceMapLayerProvider.h"
 #include "OAWebClient.h"
 #include <OsmAndCore/IWebClient.h>
-
-//#include "OAMapMarkersCollection.h"
-
 #include <OpenGLES/ES2/gl.h>
-
 #include <QtMath>
 #include <QStandardPaths>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/IMapStylesCollection.h>
@@ -110,18 +109,12 @@
 #include <OsmAndCore/Map/SqliteHeightmapTileProvider.h>
 #include <OsmAndCore/Map/WeatherTileResourcesManager.h>
 #include <OsmAndCore/Map/MapRendererTypes.h>
-
 #include <OsmAndCore/IObfsCollection.h>
 #include <OsmAndCore/ObfDataInterface.h>
 #include <OsmAndCore/Data/Amenity.h>
 #include <OsmAndCore/Data/ObfMapObject.h>
 #include <OsmAndCore/Data/ObfPoiSectionInfo.h>
-
 #include <OsmAndCore/QKeyValueIterator.h>
-
-#import "OANativeUtilities.h"
-#import "OALog.h"
-#include "Localization.h"
 
 #define _(name) OAMapRendererViewController__##name
 #define commonInit _(commonInit)

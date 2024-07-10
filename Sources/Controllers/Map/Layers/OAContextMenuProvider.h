@@ -7,13 +7,12 @@
 //
 
 #import <CoreLocation/CoreLocation.h>
-#include <OsmAndCore/Map/IMapRenderer.h>
 
-#include <OsmAndCore/Map/MapMarker.h>
+#include <OsmAndCore/Map/IMapRenderer.h>
 
 const static CGFloat kDefaultSearchRadiusOnMap = 20.0;
 
-@class OATargetPoint, OAPointDescription;
+@class OATargetPoint;
 
 typedef NS_ENUM(NSInteger, EOAPinVerticalAlignment)
 {

@@ -132,7 +132,6 @@ static int PROFILE_TRUCK = 1000;
 
 + (OAApplicationMode *) CAR
 {
-//    NSLog()
     return _CAR;
 }
 

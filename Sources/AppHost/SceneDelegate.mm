@@ -7,10 +7,8 @@
 //
 
 #import "SceneDelegate.h"
-
 #import <UIKit/UIKit.h>
 #import <BackgroundTasks/BackgroundTasks.h>
-
 #import "OsmAndApp.h"
 #import "OsmAndAppPrivateProtocol.h"
 #import "OARootViewController.h"
@@ -42,21 +40,18 @@
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
-
 #import "OAAppDelegate.h"
+#import "OAFirstUsageWizardController.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <QDir>
 #include <QFile>
-
 #include <OsmAndCore.h>
 #include <OsmAndCore/IncrementalChangesManager.h>
 #include <OsmAndCore/Logging.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/QIODeviceLogSink.h>
 #include <OsmAndCore/FunctorLogSink.h>
-
-#import "OAFirstUsageWizardController.h"
-#import "OsmAnd_Maps-Swift.h"
 
 #define kCheckUpdatesInterval 3600
 

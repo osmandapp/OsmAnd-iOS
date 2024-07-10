@@ -96,7 +96,15 @@ final class Model3dHelper: NSObject {
             return
         }
         
-        let task = OALoad3dModelTask(modelName) { [weak self] model in
+        let dir = OsmAndApp.swiftInstance().documentsPath.appendingPathComponent(MODEL_3D_DIR).appendingPathComponent(modelName)
+        if !Model3dHelper.isModelExist(dir: dir) {
+            processCallback(modelName: modelName, model: nil, callback: callback)
+            return
+        }
+        
+        modelsInProgress.insert(modelName)
+        
+        let task = OALoad3dModelTask(dir) { [weak self] model in
             if model == nil {
                 self?.failedModels.insert(modelName)
             } else {
@@ -109,15 +117,7 @@ final class Model3dHelper: NSObject {
             }
             return true
         }
-        
-        if let task {
-            if !Model3dHelper.isModelExist(dir: task.modelDirPath) {
-                processCallback(modelName: modelName, model: nil, callback: callback)
-                return
-            }
-            modelsInProgress.insert(modelName)
-            task.execute()
-        }
+        task?.execute()
     }
     
     static func listModels() -> [String] {

@@ -45,12 +45,12 @@
     BOOL (^_callback)(OAModel3dWrapper *);
 }
 
-- (instancetype)initWith:(NSString *)modelDirName callback:(BOOL (^)(OAModel3dWrapper *))callback
+- (instancetype)initWith:(NSString *)modelDirPath callback:(BOOL (^)(OAModel3dWrapper *))callback
 {
     self = [super init];
     if (self) 
     {
-        _modelDirPath = [[OsmAndApp.instance.documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] stringByAppendingPathComponent:modelDirName];
+        _modelDirPath = modelDirPath;
         _callback = callback;
     }
     return self;

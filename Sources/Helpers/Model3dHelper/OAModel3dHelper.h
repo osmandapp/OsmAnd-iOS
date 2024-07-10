@@ -19,7 +19,7 @@
 
 @property (nonatomic) NSString *modelDirPath;
 
-- (instancetype)initWith:(NSString *)modelDirName callback:(BOOL (^)(OAModel3dWrapper *))callback;
+- (instancetype)initWith:(NSString *)modelDirPath callback:(BOOL (^)(OAModel3dWrapper *))callback;
 - (void) execute;
 
 @end

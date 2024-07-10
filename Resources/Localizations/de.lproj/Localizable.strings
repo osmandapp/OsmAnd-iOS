@@ -161,7 +161,7 @@
 "help_quiz" = "Rätsel";
 "import_export" = "Import/Export";
 "shared_string_control_start" = "Start";
-"shared_string_currently_recording_track" = "Momentane Track-Aufzeichnung";
+"shared_string_currently_recording_track" = "Momentane Trackaufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
 "gpx_start_new_segment" = "Neues Segment starten";
 "track_start_rec" = "Trackaufzeichnung beginnen";
@@ -3464,7 +3464,7 @@
 "custom_map_button_name_present" = "Diese Schaltfläche ist bereits vorhanden";
 "shared_string_item" = "Element";
 "dangerous_goods" = "Gefahrgut";
-"avoid_pt_types_descr" = "Wähle die öffentlichen Verkehrsmittel aus, die Du für die Navigation vermeiden möchtest:";
+"avoid_pt_types_descr" = "Wählen Sie die öffentlichen Verkehrsmittel aus, die Sie für die Navigation vermeiden möchten:";
 "route_recalculation_dist_title" = "Mindestabstand für Neuberechnung der Route";
 "in_case_of_reverse_direction" = "Bei umgekehrter Richtung";
 "avoid_pt_types" = "Verkehrsmittel ausschließen …";

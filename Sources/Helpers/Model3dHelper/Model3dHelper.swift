@@ -46,7 +46,7 @@ final class Model3dHelper: NSObject {
             var loadingsCount = modelFoldersNames.count
             
             for modelName in modelFoldersNames {
-                getModel(modelName: modelName, callback: OAModel3dCallback { [weak self] model in
+                getModel(modelName: modelName, callback: OAModel3dCallback { model in
                     loadingsCount -= 1
                     if loadingsCount == 0 {
                         callback?.processResult(model)
@@ -66,13 +66,13 @@ final class Model3dHelper: NSObject {
         if let callback {
             if let callbacks = pendingCallbacks[modelName] {
                 if let index = callbacks.firstIndex(of: callback) {
-                    self.pendingCallbacks[modelName]?.remove(at: index)
+                    pendingCallbacks[modelName]?.remove(at: index)
                     if !callbacks.isEmpty {
                         for pendingCallback in callbacks {
                             pendingCallback.processResult(model)
                         }
                     }
-                    self.pendingCallbacks.removeValue(forKey: modelName)
+                    pendingCallbacks.removeValue(forKey: modelName)
                 }
             }
             callback.processResult(model)
@@ -89,11 +89,9 @@ final class Model3dHelper: NSObject {
             return
         }
         if modelsInProgress.contains(modelName) {
-            if let callback {
-                if pendingCallbacks[modelName] == nil {
-                    pendingCallbacks[modelName] = Array<OAModel3dCallback>()
-                    pendingCallbacks[modelName]?.append(callback)
-                }
+            if let callback, pendingCallbacks[modelName] == nil {
+                pendingCallbacks[modelName] = Array<OAModel3dCallback>()
+                pendingCallbacks[modelName]?.append(callback)
             }
             return
         }

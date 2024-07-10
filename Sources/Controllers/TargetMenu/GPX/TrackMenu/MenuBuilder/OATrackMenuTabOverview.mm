@@ -13,6 +13,7 @@
 #import "OAColors.h"
 #import "OAWikiArticleHelper.h"
 #import "OAImageDescTableViewCell.h"
+#import "OAPOIType.h"
 #import "OARouteKey.h"
 #import "OAPOIHelper.h"
 #import "OAGPXDocumentPrimitives.h"

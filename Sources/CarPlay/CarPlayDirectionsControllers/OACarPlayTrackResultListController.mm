@@ -17,6 +17,7 @@
 #import "OAMapActions.h"
 #import "OAGpxInfo.h"
 #import "OAGPXDocumentPrimitives.h"
+#import "OAGPXDatabase.h"
 #import "Localization.h"
 #import <CarPlay/CarPlay.h>
 

@@ -15,6 +15,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAContourLinesAction.h"
 #import "OATerrainAction.h"
 #import "Localization.h"

@@ -10,6 +10,7 @@
 #import "OAImportDuplicatesViewController.h"
 #import "OAImportCompleteViewController.h"
 #import "OASettingsImporter.h"
+#import "OASettingsHelper.h"
 #import "OsmAndApp.h"
 #import "OAProgressTitleCell.h"
 #import "Localization.h"

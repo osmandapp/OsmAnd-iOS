@@ -31,6 +31,7 @@
 #import "OACloudAccountVerificationViewController.h"
 #import "SceneDelegate.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OANavigationController.h"
 #import "OsmAnd_Maps-Swift.h"
 

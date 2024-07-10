@@ -23,7 +23,7 @@
 #define kWidgetVisibilityChangedMotification @"onWidgetVisibilityChanged"
 #define kWidgetsCleared @"onWidgetsCleared"
 
-@class OAApplicationMode, OATextInfoWidget, OAWidgetState, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
+@class OAApplicationMode, OATextInfoWidget, OAMapWidgetInfo, OAWidgetsPanel, OAWidgetType, OAWidgetPanelViewController;
 
 @interface OAMapWidgetRegistry : NSObject
 

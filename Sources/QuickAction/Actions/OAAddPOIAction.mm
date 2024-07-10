@@ -19,6 +19,8 @@
 #import "OATextInputFloatingCellWithIcon.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIHelper.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAPluginsHelper.h"
 #import "OrderedDictionary.h"
 #import "Localization.h"

@@ -15,6 +15,7 @@
 #import "OAUtilities.h"
 #import "OAPOIBaseType.h"
 #import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import <sqlite3.h>
 #import "OALog.h"
 #import "OAAppSettings.h"

@@ -22,6 +22,7 @@
 #import "OARootViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAOsmEditsLayer.h"
 #import "OAOsmEditActionsViewController.h"
 #import "OAMapLayers.h"

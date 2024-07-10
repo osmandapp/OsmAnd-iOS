@@ -14,6 +14,7 @@
 #import "OARoutingHelper.h"
 #import "OASettingsItemReader.h"
 #import "OAApplicationMode.h"
+#import "Localization.h"
 
 #define APPROXIMATE_AVOID_ROAD_SIZE_BYTES 185
 

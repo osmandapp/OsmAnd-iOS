@@ -10,6 +10,7 @@
 #import "OAPOI.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OANativeUtilities.h"
 #import "Localization.h"

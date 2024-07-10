@@ -16,6 +16,7 @@
 #import "OANativeUtilities.h"
 #import "OAMapRendererView.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAOnlineTilesEditingViewController.h"
 #import "OAMapLayers.h"
 #import "OAPOILayer.h"
@@ -33,6 +34,7 @@
 #import "OAApplicationMode.h"
 #import "OAFetchBackgroundDataOperation.h"
 #import "OACloudAccountVerificationViewController.h"
+#import "OARootViewController.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "OsmAnd_Maps-Swift.h"
 

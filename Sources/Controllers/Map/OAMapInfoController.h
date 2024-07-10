@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "OABaseWidgetView.h"
 
-@class OAWidgetPanelViewController, OAMapHudViewController, OATextInfoWidget, OAWidgetState, OAMapWidgetRegInfo, OARulerWidget;
-
-@protocol OAWidgetListener;
+@class OAWidgetPanelViewController, OAMapHudViewController, OATextInfoWidget;
 
 @protocol OAMapInfoControllerProtocol
 

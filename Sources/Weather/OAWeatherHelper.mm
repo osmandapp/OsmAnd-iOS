@@ -12,6 +12,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAManageResourcesViewController.h"
 #import "OAMapLayers.h"
 #import "OALog.h"

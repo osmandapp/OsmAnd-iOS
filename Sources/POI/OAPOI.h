@@ -7,8 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
-#import "OAPOIType.h"
 
 #define URL_TAG @"url"
 #define WEBSITE_TAG @"website"
@@ -46,6 +44,8 @@
 #define ROUTE_ARTICLE @"route_article"
 #define ROUTE_TRACK @"route_track"
 #define ROUTE_TRACK_POINT @"route_track_point"
+
+@class OAPOIType;
 
 @interface OAPOIRoutePoint : NSObject
 

@@ -9,6 +9,7 @@
 #import "OATrackMenuTabSegments.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OARouteBaseViewController.h"
 #import "OAValueTableViewCell.h"
 #import "OALineChartCell.h"

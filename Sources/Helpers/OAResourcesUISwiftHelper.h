@@ -9,6 +9,7 @@
 // Swift can't use OAResourceItem OAResourcesUIHelper because they have cpp in headers.
 // So we can use this adapter for new Swit classes
 
+#import <Foundation/Foundation.h>
 #import "OADownloadTask.h"
 
 typedef void (^OADownloadTaskCallback)(id<OADownloadTask> task);
@@ -101,5 +102,3 @@ typedef NS_ENUM(NSInteger, EOAOAResourceSwiftItemType) {
 + (void) onDownldedResourceInstalled;
 
 @end
-
-

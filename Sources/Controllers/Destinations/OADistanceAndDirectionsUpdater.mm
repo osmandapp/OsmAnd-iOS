@@ -9,6 +9,7 @@
 #import "OADistanceAndDirectionsUpdater.h"
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"
+#import "OADestination.h"
 #import "OADestinationItem.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"

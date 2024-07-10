@@ -8,7 +8,6 @@
 
 #import "OAWidgetState.h"
 
-
 @class OACommonInteger, OAWidgetType;
 
 @interface OASunriseSunsetWidgetState : OAWidgetState

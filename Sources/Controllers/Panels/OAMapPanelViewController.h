@@ -7,23 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
-
-#import "OAMapViewController.h"
+#import "OATargetPoint.h"
 #import "OATargetPointView.h"
+#import "OACommonTypes.h"
 #import "OABaseTrackMenuHudViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
 
-@class OAFavoriteItem;
-@class OAGpxWptItem;
-@class OAGPX;
-@class OADestination, OAPointDescription;
-@class OAHistoryItem, OAAddress, OARTargetPoint;
-@class OAToolbarViewController;
-@class OAMapActions, OAMapWidgetRegistry;
-@class OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode;
-@class OAGPXDocument, OAGPXTrackAnalysis;
-@class OARoutePlanningHudViewController;
-@class OATrackMenuViewControllerState;
+@class OAMapViewController, OAFavoriteItem, OAGpxWptItem, OAGPX, OADestination, OAPointDescription, OAHistoryItem, OAAddress, OARTarg, OAToolbarViewController, OAMapActions, OAMapWidgetRegistry, OAMapHudViewController, OABaseScrollableHudViewController, OAApplicationMode, OAGPXDocument, OAGPXTrackAnalysis, OARoutePlanningHudViewController, OATrackMenuViewControllerState, OAObservable, OARTargetPoint, OATargetMenuViewControllerState, OAPOIUIFilter;
 
 @interface OAMapPanelViewController : UIViewController<OATargetPointViewDelegate>
 

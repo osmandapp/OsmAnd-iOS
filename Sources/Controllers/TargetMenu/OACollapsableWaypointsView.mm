@@ -16,6 +16,7 @@
 #import "OAFavoritesHelper.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapLayers.h"
 #import "OAGPXDatabase.h"
 #import "OASavingTrackHelper.h"

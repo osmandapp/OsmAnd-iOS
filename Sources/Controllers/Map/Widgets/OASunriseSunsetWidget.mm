@@ -7,10 +7,13 @@
 //
 
 #import "OASunriseSunsetWidget.h"
+#import "OASunriseSunsetWidgetState.h"
 #import "SunriseSunset.h"
 #import "OAOsmAndFormatter.h"
 #import "Localization.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAResourcesUIHelper.h"
 

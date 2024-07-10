@@ -15,6 +15,7 @@
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAColors.h"
+#import "OAPOIType.h"
 #import "OAPOIHelper.h"
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"

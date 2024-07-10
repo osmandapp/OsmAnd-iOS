@@ -11,6 +11,7 @@
 #import "OsmAndApp.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherHelper.h"

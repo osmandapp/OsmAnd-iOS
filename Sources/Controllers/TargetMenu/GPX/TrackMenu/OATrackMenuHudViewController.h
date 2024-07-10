@@ -11,7 +11,7 @@
 #import "OATargetMenuViewController.h"
 #import "OATrackMenuHudViewControllerConstants.h"
 
-@class LineChartView, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis;
+@class LineChartView, OATrack, OATrkSegment, OARouteLineChartHelper, OARouteKey, OAAuthor, OACopyright, OALink, OAMetadata, OATravelArticleIdentifier, OAGpxWptItem, OAGPXTrackAnalysis, OAGPXTableData, OAGPX;
 
 @protocol OATrackMenuViewControllerDelegate <NSObject>
 

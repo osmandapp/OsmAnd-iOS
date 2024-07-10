@@ -45,11 +45,13 @@
 #import "QuadRect.h"
 #import "OASearchPoiTypeFilter.h"
 #import "OAPOI.h"
+#import "OAPOICategory.h"
 #import "OARouteColorize.h"
 #import "OAApplicationMode.h"
 #import "OASavingTrackHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OAWeatherBand.h"
+#import "OADayNightHelper.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -113,6 +115,8 @@
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OABaseWebViewController.h"
 #import "OATrackMenuHudViewController.h"
+#import "OABaseTrackMenuHudViewController.h"
+#import "OABaseScrollableHudViewController.h"
 #import "OATrackMenuHeaderView.h"
 #import "OACarPlayMapViewController.h"
 #import "OACarPlayDashboardInterfaceController.h"
@@ -137,7 +141,6 @@
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
 #import "OAHistoryViewController.h"
-#import "OABaseScrollableHudViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -166,12 +169,11 @@
 
 // Apple
 #import <SafariServices/SafariServices.h>
+#import <CoreBluetooth/CoreBluetooth.h>
 
 // Other
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import "SceneDelegate.h"
-#import "OADayNightHelper.h"
-#import <CoreBluetooth/CoreBluetooth.h>
 #import "FFCircularProgressView.h"
 #import "FFCircularProgressView+isSpinning.h"
 

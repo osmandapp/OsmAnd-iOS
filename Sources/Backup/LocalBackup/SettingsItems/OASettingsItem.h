@@ -6,11 +6,10 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import "OASettingsHelper.h"
+#import <Foundation/Foundation.h>
 #import "OASettingsItemReader.h"
 #import "OASettingsItemWriter.h"
 #import "OASettingsItemType.h"
-#import "Localization.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

@@ -54,6 +54,7 @@
 #import "OADestination.h"
 #import "OAMapSettingsViewController.h"
 #import "OAQuickSearchViewController.h"
+#import "OAPOI.h"
 #import "OAPOIType.h"
 #import "OADefaultFavorite.h"
 #import "Localization.h"

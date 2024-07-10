@@ -20,6 +20,7 @@
 #import "OACustomSearchPoiFilter.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASearchWord.h"
 #import "Localization.h"
 #import "OAAutoObserverProxy.h"

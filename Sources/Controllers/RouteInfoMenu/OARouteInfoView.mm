@@ -18,6 +18,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OsmAndApp.h"
 #import "OACommonTypes.h"
 #import "OAApplicationMode.h"

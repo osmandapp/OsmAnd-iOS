@@ -19,6 +19,7 @@
 #import "OAOsmEditingPlugin.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OAEditPOIData.h"
+#import "OAPOIType.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAPluginsHelper.h"
 

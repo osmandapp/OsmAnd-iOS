@@ -32,6 +32,7 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAndApp.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAIAPHelper.h"
 #import "OAProducts.h"
 #import "OAPluginPopupViewController.h"

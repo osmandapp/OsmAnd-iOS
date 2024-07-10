@@ -6,8 +6,6 @@
 //  Copyright © 2017 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
 #import "OABaseWidgetView.h"
 
 #define kTextInfoWidgetWidth 94
@@ -15,7 +13,7 @@
 
 #define UPDATE_INTERVAL_MILLIS 1000
 
-@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle;
+@class OAWidgetType, OutlineLabel, OACommonWidgetSizeStyle, OAWidgetsPanel, OATextState;
 
 @interface OATextInfoWidget : OABaseWidgetView
 

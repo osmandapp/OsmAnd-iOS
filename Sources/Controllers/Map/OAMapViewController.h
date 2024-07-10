@@ -52,7 +52,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 @protocol OAMapRendererViewProtocol;
 
-@class OAGPX, OAWptPt, OAMetadata, OAPOIUIFilter, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAGPXDocument, OAObservable, CLLocation;
+@class OAWptPt, OAMetadata, OASearchWptAPI, OAMapRendererView, OAMapLayers, OAWorldRegion, OAMapRendererEnvironment, OAMapPresentationEnvironment, OAGPXDocument, OAObservable;
 
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 

@@ -43,7 +43,7 @@
 #import "OAAltitudeWidget.h"
 #import "OAMapRendererView.h"
 #import "OAApplicationMode.h"
-
+#import "OAAppSettings.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAWeatherHelper.h"

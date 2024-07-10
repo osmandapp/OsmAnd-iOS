@@ -17,6 +17,8 @@
 #import "Localization.h"
 #import "OAPOIHelper.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OATransportStop.h"
 #import "OACollapsableNearestPoiWikiView.h"
 #import "OATransportStopRoute.h"

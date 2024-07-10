@@ -21,6 +21,7 @@
 #import "OACollectionSettingsItem.h"
 #import "OAOperationLog.h"
 #import "OAAtomicInteger.h"
+#import "Localization.h"
 
 @interface OAItemFileDownloadTask : NSOperation
 

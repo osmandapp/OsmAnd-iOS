@@ -7,6 +7,8 @@
 //
 
 #import "OABasePointEditingHandler.h"
+#import "OAPOI.h"
+#import "OAPOIType.h"
 
 @implementation OAPointEditingData
 

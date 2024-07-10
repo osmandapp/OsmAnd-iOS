@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapActions.h"
 #import "OAUtilities.h"
 #import "OAColors.h"

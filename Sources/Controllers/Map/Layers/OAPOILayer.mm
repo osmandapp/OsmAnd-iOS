@@ -10,6 +10,8 @@
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAPOILocationType.h"
 #import "OAPOIMyLocationType.h"
 #import "OAPOIUIFilter.h"

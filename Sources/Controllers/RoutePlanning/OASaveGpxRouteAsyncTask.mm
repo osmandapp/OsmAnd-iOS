@@ -13,6 +13,7 @@
 #import "OAMeasurementToolLayer.h"
 #import "OAMapLayers.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMeasurementEditingContext.h"
 #import "Localization.h"
 #import "OARootViewController.h"

@@ -9,6 +9,7 @@
 #import "OAAltitudeWidget.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"

@@ -7,8 +7,8 @@
 //
 
 #import "OASimpleWidget.h"
-#import "OAAppSettings.h"
-#import "OASunriseSunsetWidgetState.h"
+
+@class OACommonInteger, OAApplicationMode, OASunriseSunsetWidgetState;
 
 @interface OASunriseSunsetWidget : OASimpleWidget
 

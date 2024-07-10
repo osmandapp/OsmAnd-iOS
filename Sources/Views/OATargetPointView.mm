@@ -23,6 +23,7 @@
 #import "OATransportStopRoute.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapHudViewController.h"
 #import "OAMapLayers.h"
 #import "OANativeUtilities.h"

@@ -21,6 +21,7 @@
 #import "OAPublicTransportCollapsableCell.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAPublicTransportRouteShieldCell.h"
 #import "OADividerCell.h"
 #import "OAOsmAndFormatter.h"

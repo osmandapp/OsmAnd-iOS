@@ -15,6 +15,7 @@
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OAPOIFiltersHelper.h"
+#import "OAPOIFilter.h"
 #import "OAResultMatcher.h"
 #import "OAMapUtils.h"
 #import "OAUtilities.h"

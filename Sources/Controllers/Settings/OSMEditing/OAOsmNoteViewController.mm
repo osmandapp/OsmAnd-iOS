@@ -16,6 +16,7 @@
 #import "OASwitchTableViewCell.h"
 #import "OAOsmNotePoint.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAMapLayers.h"

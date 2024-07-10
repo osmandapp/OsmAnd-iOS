@@ -28,6 +28,7 @@
 #import "OAFavoritesHelper.h"
 #import "OAFavoritesSettingsItem.h"
 #import "OAOsmNotePoint.h"
+#import "OASettingsHelper.h"
 #import "OAOpenStreetMapPoint.h"
 #import "OADestination.h"
 #import "OATileSource.h"

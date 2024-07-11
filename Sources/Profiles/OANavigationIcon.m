@@ -11,6 +11,7 @@
 #import "OAAppSettings.h"
 #import "OAIndexConstants.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OANavigationIcon()
 
@@ -27,6 +28,7 @@
     {
         NSString *migratedOldValue = [self getMigratedValue:iconName];
         obj.iconName = migratedOldValue ?: iconName;
+        obj.iconName = [self changeNameFor3dMode:obj.iconName];
     }
 
     return obj;
@@ -45,6 +47,34 @@
             return NAVIGATION_ICON_CAR;
     }
     return nil;
+}
+
++ (NSString *) changeNameFor3dMode:(NSString *)savedIconName
+{
+    if (OAAppSettings.sharedManager.use3dIconsByDefault.get)
+    {
+        if ([savedIconName isEqualToString:NAVIGATION_ICON_DEFAULT])
+            return NAVIGATION_MODEL_ICON_DEFAULT;
+        else if ([savedIconName isEqualToString:NAVIGATION_ICON_NAUTICAL])
+            return NAVIGATION_MODEL_ICON_NAUTICAL;
+        else if ([savedIconName isEqualToString:NAVIGATION_ICON_CAR])
+            return NAVIGATION_MODEL_ICON_CAR;
+    }
+    else
+    {
+        if ([savedIconName isEqualToString:NAVIGATION_MODEL_ICON_DEFAULT])
+            return NAVIGATION_ICON_DEFAULT;
+        else if ([savedIconName isEqualToString:NAVIGATION_MODEL_ICON_NAUTICAL])
+            return NAVIGATION_ICON_NAUTICAL;
+        else if ([savedIconName isEqualToString:NAVIGATION_MODEL_ICON_CAR])
+            return NAVIGATION_ICON_CAR;
+    }
+    return savedIconName;
+}
+
+- (NSString *) iconName
+{
+    return _iconName;
 }
 
 - (UIImage *) iconWithColor:(UIColor *)color
@@ -106,8 +136,11 @@
 {
     if ([self isModel:iconName])
     {
+        NSDictionary<NSString *, NSString *> *dirs = [Model3dHelper listModelsWithNames];
+        
         NSString *shortIconName = [iconName substringFromIndex:MODEL_NAME_PREFIX.length];
-        NSString *iconFilePath = [[[[[OsmAndApp.instance documentsPath] stringByAppendingPathComponent:MODEL_3D_DIR] stringByAppendingPathComponent:shortIconName] stringByAppendingPathComponent:shortIconName] stringByAppendingPathExtension:@"png"];
+        NSString *modelDirPath = dirs[[MODEL_NAME_PREFIX stringByAppendingString:shortIconName]];
+        NSString *iconFilePath = [Model3dHelper getModelIconFilePathWithDirPath:modelDirPath];
         if ([NSFileManager.defaultManager fileExistsAtPath:iconFilePath])
         {
             return [UIImage imageNamed:iconFilePath];

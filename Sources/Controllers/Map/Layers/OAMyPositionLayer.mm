@@ -509,6 +509,7 @@ typedef enum {
     float _textScaleFactor;
 
     OAAutoObserverProxy* _appModeChangeObserver;
+    OAAutoObserverProxy* _mapSettingsChangeObserver;
 
     BOOL _initDone;
 }
@@ -554,6 +555,7 @@ typedef enum {
         BOOL notInited = NO;
         
         OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
+        navigationIconName = [navIcon iconName];
         if ([navIcon isModel])
         {
             navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callback:nil];
@@ -565,6 +567,7 @@ typedef enum {
         }
         
         OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
+        locationIconName = [locIcon iconName];
         if ([locIcon isModel])
         {
             locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callback:nil];
@@ -732,6 +735,10 @@ typedef enum {
     _appModeChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                        withHandler:@selector(onAvailableAppModesChanged)
                                                         andObserve:[OsmAndApp instance].availableAppModesChangedObservable];
+    
+    _mapSettingsChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                       withHandler:@selector(onSettingsChanged)
+                                                        andObserve:[OsmAndApp instance].mapSettingsChangeObservable];
 
     _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     
@@ -779,6 +786,11 @@ typedef enum {
         [self generateMarkersCollection];
         [self updateMyLocationCourseProvider];
     }];
+}
+
+- (void) onSettingsChanged
+{
+    [self refreshMarkersCollection];
 }
 
 - (void) onAvailableAppModesChanged

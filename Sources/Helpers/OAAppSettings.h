@@ -852,6 +852,7 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonString *parentAppMode;
 @property (nonatomic) OACommonString *navigationIcon;
 @property (nonatomic) OACommonString *locationIcon;
+@property (nonatomic) OACommonBoolean *use3dIconsByDefault;
 @property (nonatomic) OACommonInteger *appModeOrder;
 
 @property (nonatomic) OACommonDouble *defaultSpeed;

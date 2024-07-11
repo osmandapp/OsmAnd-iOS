@@ -27,6 +27,7 @@
     {
         NSString *migratedOldValue = [self getMigratedValue:iconName];
         obj.iconName = migratedOldValue ?: iconName;
+        obj.iconName = [self changeNameFor3dMode:obj.iconName];
     }
 
     return obj;
@@ -45,6 +46,34 @@
             return LOCATION_ICON_BICYCLE;
     }
     return nil;
+}
+
++ (NSString *) changeNameFor3dMode:(NSString *)savedIconName
+{
+    if (OAAppSettings.sharedManager.use3dIconsByDefault.get)
+    {
+        if ([savedIconName isEqualToString:LOCATION_ICON_DEFAULT])
+            return LOCATION_MODEL_ICON_DEFAULT;
+        else if ([savedIconName isEqualToString:LOCATION_ICON_CAR])
+            return LOCATION_MODEL_ICON_CAR;
+        else if ([savedIconName isEqualToString:LOCATION_ICON_BICYCLE])
+            return LOCATION_MODEL_ICON_BICYCLE;
+    }
+    else
+    {
+        if ([savedIconName isEqualToString:LOCATION_MODEL_ICON_DEFAULT])
+            return LOCATION_ICON_DEFAULT;
+        else if ([savedIconName isEqualToString:LOCATION_MODEL_ICON_CAR])
+            return LOCATION_ICON_CAR;
+        else if ([savedIconName isEqualToString:LOCATION_MODEL_ICON_BICYCLE])
+            return LOCATION_ICON_BICYCLE;
+    }
+    return savedIconName;
+}
+
+- (NSString *) iconName
+{
+    return _iconName;
 }
 
 - (UIImage *) iconWithColor:(UIColor *)color

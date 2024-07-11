@@ -122,6 +122,7 @@ static NSString * const parentAppModeKey = @"parentAppMode";
 static NSString * const routeServiceKey = @"routeService";
 static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
+static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
@@ -4584,6 +4585,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
+        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];;
+        [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
+        
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 

@@ -115,6 +115,9 @@
     NSArray<NSString *> *_navigationIconNames;
     NSArray<UIImage *> *_locationIcons;
     NSArray<UIImage *> *_navigationIcons;
+    
+    NSDictionary<NSString *, NSString *> *_modelIconPathes;
+    NSArray<NSString *> *_modelIconNames;
 }
 
 - (instancetype) initWithParentProfile:(OAApplicationMode *)profile
@@ -305,6 +308,7 @@
 
 - (void) generateData
 {
+    _modelIconPathes = [Model3dHelper listPluginModelsWithNames];
     _locationIconNames = [self getlocationIconNames];
     _navigationIconNames = [self getNavigationIconNames];
     _locationIcons = [self getlocationIcons];
@@ -370,14 +374,28 @@
 
 - (NSArray<NSString *> *) getlocationIconNames
 {
-    NSMutableArray<NSString *> *iconNames = [@[
-        LOCATION_ICON_DEFAULT,
-        LOCATION_ICON_CAR,
-        LOCATION_ICON_BICYCLE
-    ] mutableCopy];
+    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
+    if (OAAppSettings.sharedManager.use3dIconsByDefault.get)
+    {
+        [iconNames addObject:LOCATION_MODEL_ICON_DEFAULT];
+        [iconNames addObject:LOCATION_MODEL_ICON_CAR];
+        [iconNames addObject:LOCATION_MODEL_ICON_BICYCLE];
+    }
+    else
+    {
+        [iconNames addObject:LOCATION_ICON_DEFAULT];
+        [iconNames addObject:LOCATION_ICON_CAR];
+        [iconNames addObject:LOCATION_ICON_BICYCLE];
+    }
     
-    NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
-    [iconNames addObjectsFromArray:model3dIconsNames];
+    NSMutableArray<NSString *> *displayingModelIconNames = [NSMutableArray array];
+    NSString *embeddedModelsDirParh = [Model3dHelper getEmbeddedModelsDirParh];
+    
+    NSArray<NSString *> *sortedModelIconNames = [[_modelIconPathes allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    [iconNames addObjectsFromArray:sortedModelIconNames];
     return [iconNames copy];
 }
 
@@ -387,7 +405,9 @@
     UIColor *currColor = UIColorFromRGB(_changedProfile.color);
     for (NSString *iconName in _locationIconNames)
     {
-        [icons addObject:[OALocationIcon getPreviewIcon:iconName color:currColor]];
+        UIImage *icon = [OALocationIcon getPreviewIcon:iconName color:currColor];
+        if (icon)
+            [icons addObject:icon];
     }
     return icons;
 }
@@ -395,12 +415,27 @@
 - (NSArray<NSString *> *) getNavigationIconNames
 {
     NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    [iconNames addObject:NAVIGATION_ICON_DEFAULT];
-    [iconNames addObject:NAVIGATION_ICON_NAUTICAL];
-    [iconNames addObject:NAVIGATION_ICON_CAR];
+    if (OAAppSettings.sharedManager.use3dIconsByDefault.get)
+    {
+        [iconNames addObject:NAVIGATION_MODEL_ICON_DEFAULT];
+        [iconNames addObject:NAVIGATION_MODEL_ICON_NAUTICAL];
+        [iconNames addObject:NAVIGATION_MODEL_ICON_CAR];
+    }
+    else
+    {
+        [iconNames addObject:NAVIGATION_ICON_DEFAULT];
+        [iconNames addObject:NAVIGATION_ICON_NAUTICAL];
+        [iconNames addObject:NAVIGATION_ICON_CAR];
+    }
     
-    NSArray<NSString *> *model3dIconsNames = [Model3dHelper listModels];
-    [iconNames addObjectsFromArray:model3dIconsNames];
+    NSMutableArray<NSString *> *displayingModelIconNames = [NSMutableArray array];
+    NSString *embeddedModelsDirParh = [Model3dHelper getEmbeddedModelsDirParh];
+    
+    NSArray<NSString *> *sortedModelIconNames = [[_modelIconPathes allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    
+    [iconNames addObjectsFromArray:sortedModelIconNames];
     return [iconNames copy];
 }
 
@@ -410,7 +445,9 @@
     UIColor *currColor = UIColorFromRGB(_changedProfile.color);
     for (NSString *iconName in _navigationIconNames)
     {
-        [icons addObject:[OANavigationIcon getPreviewIcon:iconName color:currColor]];
+        UIImage *icon = [OANavigationIcon getPreviewIcon:iconName color:currColor];
+        if (icon)
+            [icons addObject:icon];
     }
     return icons;
 }

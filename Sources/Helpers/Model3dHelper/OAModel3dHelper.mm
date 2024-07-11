@@ -11,6 +11,7 @@
 #import "OANativeUtilities.h"
 #import "OsmAndApp.h"
 #import "OAIndexConstants.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAModel3dWrapper
 {
@@ -75,7 +76,7 @@
     NSString *name = _modelDirPath.lastPathComponent;
     
     // .../Documents/models/map_default_location/map_default_location.obj
-    QString objFilePath = QString::fromNSString([NSString stringWithFormat:@"%@/%@.obj", _modelDirPath, name]);
+    QString objFilePath = QString::fromNSString([Model3dHelper getModelObjFilePathWithDirPath:_modelDirPath]);
     
     // .../Documents/models/map_default_location
     QString mtlFilePath = QString::fromNSString(_modelDirPath);

@@ -2027,7 +2027,8 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) onAppModeChanged
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
+        if (self.mapRendererView)
+            self.mapRendererView.elevationAngle = _app.data.mapLastViewedState.elevationAngle;
     });
 }
 

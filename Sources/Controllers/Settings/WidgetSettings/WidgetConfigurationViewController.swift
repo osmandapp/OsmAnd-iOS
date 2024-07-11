@@ -26,7 +26,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     var isFirstGenerateData = true
     var onWidgetStateChangedAction: (() -> Void)?
     
-    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+    lazy private var widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -330,7 +330,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
     }
     
     private func onWidgetDeleted() {
-        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry!
+        let widgetRegistry = OARootViewController.instance().mapPanel.mapWidgetRegistry
         widgetRegistry.enableDisableWidget(for: selectedAppMode, widgetInfo: widgetInfo, enabled: NSNumber(value: false), recreateControls: true)
     }
     

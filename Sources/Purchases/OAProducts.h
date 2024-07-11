@@ -211,7 +211,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 
 @property (nonatomic) SKProduct *skProduct;
 
-- (instancetype) initWithSkProduct:(SKProduct * _Nonnull)skProduct;
+- (instancetype) initWithSkProduct:(SKProduct *)skProduct;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier title:(NSString *)title desc:(NSString *)desc price:(NSDecimalNumber *)price priceLocale:(NSLocale *)priceLocale;
 - (instancetype) initWithIdentifier:(NSString *)productIdentifier;
 
@@ -253,9 +253,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 - (NSArray<OASubscription *> *) getAllSubscriptions;
 - (NSArray<OASubscription *> *) getVisibleSubscriptions;
 - (NSArray<OASubscription *> *) getPurchasedSubscriptions;
-- (OASubscription * _Nullable) getSubscriptionByIdentifier:(NSString * _Nonnull)identifier;
-- (BOOL) containsIdentifier:(NSString * _Nonnull)identifier;
-- (OASubscription * _Nullable) upgradeSubscription:(NSString *)identifier;
+- (nullable OASubscription *) getSubscriptionByIdentifier:(NSString *)identifier;
+- (BOOL) containsIdentifier:(NSString *)identifier;
+- (nullable OASubscription *) upgradeSubscription:(NSString *)identifier;
 
 @end
 
@@ -411,7 +411,7 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 @property (nonatomic, readonly) NSArray<OAProduct *> *inAppAddonsPurchased;
 
 @property (nonatomic, readonly) NSArray<OAFunctionalAddon *> *functionalAddons;
-@property (nonatomic, readonly) OAFunctionalAddon *singleAddon;
+@property (nonatomic, readonly, nullable) OAFunctionalAddon *singleAddon;
 
 @property (nonatomic, readonly) OASubscription *monthlyLiveUpdates;
 @property (nonatomic, readonly) OASubscription *proMonthly;
@@ -423,9 +423,9 @@ typedef NS_ENUM(NSUInteger, OAProductDiscountType)
 + (NSSet<NSString *> *) getProductIdentifiers:(NSArray<OAProduct *> *)products;
 - (OAProduct *) getProduct:(NSString *)productIdentifier;
 - (BOOL) updateProduct:(SKProduct *)skProduct;
-- (BOOL) setPurchased:(NSString * _Nonnull)productIdentifier;
-- (BOOL) setExpired:(NSString * _Nonnull)productIdentifier;
-- (BOOL) setExpirationDate:(NSString * _Nonnull)productIdentifier expirationDate:(NSDate * _Nullable)expirationDate;
+- (BOOL) setPurchased:(NSString *)productIdentifier;
+- (BOOL) setExpired:(NSString *)productIdentifier;
+- (BOOL) setExpirationDate:(NSString *)productIdentifier expirationDate:(nullable NSDate *)expirationDate;
 - (void) disableProduct:(OAProduct *)product;
 - (void) enableProduct:(OAProduct *)product;
 

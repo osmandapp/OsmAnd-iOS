@@ -939,8 +939,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     }
     
     private func onTrackUploadToOsmClicked(_ track: OAGPX?, isCurrentTrack: Bool) {
-        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track {
-            let vc = OAOsmUploadGPXViewConroller(gpxItems: [gpx])
+        if let gpx = isCurrentTrack ? savingHelper.getCurrentGPX() : track, let vc = OAOsmUploadGPXViewConroller(gpxItems: [gpx]) {
             show(vc)
         }
     }
@@ -952,8 +951,9 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 state.openedFromTracksList = true
                 state.gpxFilePath = gpx.gpxFilePath
                 state.navControllerHistory = newCurrentHistory
-                let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false)
-                rootVC.mapPanel.showScrollableHudViewController(vc)
+                if let vc = OARoutePlanningHudViewController(fileName: gpx.gpxFilePath, targetMenuState: state, adjustMapPosition: false) {
+                    rootVC.mapPanel.showScrollableHudViewController(vc)
+                }
             }
         }
     }
@@ -1400,9 +1400,10 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             configureToolbar()
         } else {
             if item.key == visibleTracksKey {
-                let vc = MapSettingsGpxViewController()
-                vc?.delegate = self
-                show(vc)
+                if let vc = MapSettingsGpxViewController() {
+                    vc.delegate = self
+                    show(vc)
+                }
             } else if item.key == tracksFolderKey {
                 if let subfolderPath = item.obj(forKey: pathKey) as? String {
                     let storyboard = UIStoryboard(name: "MyPlaces", bundle: nil)

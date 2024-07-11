@@ -113,7 +113,7 @@
 
 
 // Uses for reopening previous screens (with all NavController history) after opening track on map from MyPlaces
-@property (nonatomic, nullable) NSArray<UIViewController *> *navControllerHistory;
+@property (nonatomic) NSArray<UIViewController *> *navControllerHistory;
 
 @end
 

@@ -36,7 +36,7 @@ FOUNDATION_EXTERN NSInteger const kSettingsItemErrorCodeAlreadyRead;
 @property (nonatomic, assign) BOOL shouldReplace;
 @property (nonatomic, assign) BOOL read;
 
-- (instancetype _Nullable) initWithJson:(id)json error:(NSError * _Nullable *)error;
+- (nullable instancetype) initWithJson:(id)json error:(NSError * _Nullable *)error;
 - (instancetype) initWithBaseItem:(OASettingsItem *)baseItem;
 - (void) initialization;
 

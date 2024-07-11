@@ -433,7 +433,7 @@ static const float kDistanceMeters = 100.0;
 
 - (BOOL) shouldShowCompass
 {
-    return [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
+    return _mapViewController.mapRendererView && [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
 }
 
 - (BOOL)needsSettingsForWeatherToolbar

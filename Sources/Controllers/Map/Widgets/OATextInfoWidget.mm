@@ -952,7 +952,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     return [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:YES];
 }
 
-- (OAApplicationMode *_Nonnull)getAppMode
+- (OAApplicationMode *)getAppMode
 {
     return _appMode;
 }

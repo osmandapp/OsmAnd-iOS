@@ -83,8 +83,8 @@ typedef NS_ENUM(NSUInteger, EOAFeature)
 
 + (void) showChoosePlanScreenWithSuffix:(NSString *)productIdentifierSuffix navController:(UINavigationController *)navController;
 + (void) showChoosePlanScreen:(UINavigationController *)navController;
-+ (void) showChoosePlanScreenWithFeature:(OAFeature * _Nullable)feature navController:(UINavigationController *)navController;
-+ (void) showChoosePlanScreenWithProduct:(OAProduct * _Nullable)product navController:(UINavigationController *)navController;
++ (void) showChoosePlanScreenWithFeature:(nullable OAFeature *)feature navController:(UINavigationController *)navController;
++ (void) showChoosePlanScreenWithProduct:(nullable OAProduct *)product navController:(UINavigationController *)navController;
 
 @end
 

@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "OACommonTypes.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 #define kUserInteractionAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(1)
 #define kLocationServicesAnimationKey reinterpret_cast<OsmAnd::MapAnimator::Key>(2)
 
@@ -57,31 +59,29 @@ static const int BOTTOM_CONSTANT = 1;
 @interface OAMapViewController : UIViewController <UIGestureRecognizerDelegate>
 
 @property (nonatomic, readonly) OAMapRendererView *mapView;
-@property (weak, readonly) id<OAMapRendererViewProtocol> mapRendererView;
+@property (weak, readonly, nullable) id<OAMapRendererViewProtocol> mapRendererView;
 @property (nonatomic, readonly) OAMapLayers *mapLayers;
 @property unsigned int referenceTileSizeRasterOrigInPixels;
 
-@property (readonly) OAObservable* stateObservable;
-@property (readonly) OAObservable* settingsObservable;
+@property (readonly) OAObservable *stateObservable;
+@property (readonly) OAObservable *settingsObservable;
 
-@property (readonly) OAObservable* azimuthObservable;
-@property (readonly) OAObservable* zoomObservable;
-@property (readonly) OAObservable* elevationAngleObservable;
-@property (readonly) OAObservable* mapObservable;
-@property (readonly) OAObservable* mapSourceUpdatedObservable;
+@property (readonly) OAObservable *azimuthObservable;
+@property (readonly) OAObservable *zoomObservable;
+@property (readonly) OAObservable *elevationAngleObservable;
+@property (readonly) OAObservable *mapObservable;
+@property (readonly) OAObservable *mapSourceUpdatedObservable;
 
-@property (nonatomic) OAWptPt *foundWpt;
-@property (nonatomic) NSArray *foundWptGroups;
-@property (nonatomic) NSString *foundWptDocPath;
+@property (nonatomic, nullable) OAWptPt *foundWpt;
+@property (nonatomic, nullable) NSArray *foundWptGroups;
+@property (nonatomic, nullable) NSString *foundWptDocPath;
 
 @property (nonatomic) int mapPosition;
 @property (nonatomic) int mapPositionX;
 
 @property(readonly) CGFloat displayDensityFactor;
 
-@property(readonly) OAObservable* framePreparedObservable;
-@property(readonly) OAObservable* frameDisplayedObservable;
-@property(readonly) OAObservable* idleObservable;
+@property(readonly) OAObservable *framePreparedObservable;
 
 @property(nonatomic, assign) BOOL minimap;
 
@@ -111,8 +111,8 @@ static const int BOTTOM_CONSTANT = 1;
 - (BOOL) findWpt:(CLLocationCoordinate2D)location currentTrackOnly:(BOOL)currentTrackOnly;
 - (BOOL) deleteFoundWpt;
 - (BOOL) saveFoundWpt;
-- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(NSString *)gpxFileName;
-- (NSArray<OAWptPt *> * _Nonnull)getPointsOf:(NSString * _Nullable)gpxFileName groupName:(NSString * _Nonnull)groupName;
+- (BOOL) addNewWpt:(OAWptPt *)wpt gpxFileName:(nullable NSString *)gpxFileName;
+- (NSArray<OAWptPt *> *)getPointsOf:(nullable NSString *)gpxFileName groupName:(NSString *)groupName;
 
 - (BOOL) canZoomIn;
 - (void) zoomIn;
@@ -155,7 +155,7 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (BOOL) isMyLocationVisible;
 - (BOOL) isLocationVisible:(double)latitude longitude:(double)longitude;
-- (void) updateLocation:(CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
+- (void) updateLocation:(nullable CLLocation *)newLocation heading:(CLLocationDirection)newHeading;
 - (CGFloat) screensToFly:(Point31)position31;
 
 - (void) showContextPinMarker:(double)latitude longitude:(double)longitude animated:(BOOL)animated;
@@ -164,7 +164,7 @@ static const int BOTTOM_CONSTANT = 1;
 - (void) highlightRegion:(OAWorldRegion *)region;
 - (void) hideRegionHighlight;
 
-- (BOOL) simulateContextMenuPress:(UIGestureRecognizer*)recognizer;
+- (BOOL) simulateContextMenuPress:(UIGestureRecognizer *)recognizer;
 
 - (void) showTempGpxTrack:(NSString *)filePath update:(BOOL)update;
 - (void) showTempGpxTrack:(NSString *)filePath;
@@ -180,18 +180,18 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (BOOL) deleteWpts:(NSArray *)items docPath:(NSString *)docPath;
 - (BOOL) updateWpts:(NSArray *)items docPath:(NSString *)docPath updateMap:(BOOL)updateMap;
-- (BOOL) updateMetadata:(OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
+- (BOOL) updateMetadata:(nullable OAMetadata *)metadata oldPath:(NSString *)oldPath docPath:(NSString *)docPath;
 
 - (void) setWptData:(OASearchWptAPI *)wptApi;
 
-- (void) runWithRenderSync:(void (^)(void))runnable;
+- (void) runWithRenderSync:(nullable void (^)(void))runnable;
 - (void) updateLayer:(NSString *)layerId;
 
-- (UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
-- (NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
+- (nullable UIColor *) getTransportRouteColor:(BOOL)nightMode renderAttrName:(NSString *)renderAttrName;
+- (nullable NSDictionary<NSString *, NSNumber *> *) getLineRenderingAttributes:(NSString *)renderAttrName;
 - (NSDictionary<NSString *, NSNumber *> *) getGpxColors;
 - (NSDictionary<NSString *, NSArray<NSNumber *> *> *) getGpxWidth;
-- (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(NSDictionary<NSString *, NSString*> *) additionalSettings;
+- (NSDictionary<NSString *, NSNumber *> *) getRoadRenderingAttributes:(NSString *)renderAttrName additionalSettings:(nullable NSDictionary<NSString *, NSString*> *) additionalSettings;
 
 - (void) showProgressHUD;
 - (void) showProgressHUDWithMessage:(NSString *)message;
@@ -207,7 +207,9 @@ static const int BOTTOM_CONSTANT = 1;
 
 - (void) updateTapRulerLayer;
 
-- (void)getAltitudeForMapCenter:(void (^ _Nonnull)(float height))callback;
-- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^ _Nonnull)(float height))callback;
+- (void)getAltitudeForMapCenter:(void (^)(float height))callback;
+- (void)getAltitudeForLatLon:(CLLocationCoordinate2D)latLon callback:(void (^)(float height))callback;
 
 @end
+
+NS_ASSUME_NONNULL_END

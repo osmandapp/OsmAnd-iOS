@@ -1036,8 +1036,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
-- (OACommonBoolean * _Nonnull)registerBooleanPreference:(NSString * _Nonnull)key defValue:(BOOL)defValue;
-- (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)key defValue:(NSString * _Nullable)defValue;
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue;
 - (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 - (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;

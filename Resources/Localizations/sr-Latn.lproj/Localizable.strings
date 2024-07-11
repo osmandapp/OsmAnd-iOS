@@ -3460,3 +3460,10 @@
 "missing_maps_ignore_details" = "Neke preuzete mape mogle bi biti prikladnije za rutu. Ako si upoznat s područjem i mapama, možeš pokušati odrediti rutu koristeći postojeće mape.";
 "ios_release_4_8" = "• Novi vidžet „Brzinometer“ kompatibilan sa KarPlej-om\n• Dodata detaljna uputstva za detalje rute\n• Prilagodite ekran mape dodavanjem više dugmadi „Brza radnja“\n• Poboljšanja 3D staza: nove opcije vizuelizacije i kolorizacije\n• Prilagođene palete boja za teren, staze i rute\n• Dodat je poboljšani režim višestrukog izbora za Staze\n• 3D varijanta za ikone položaja lokacije\n• Proširen izbor turističkih ruta na mapi\n• Vreme: Osvežavanje korisničkog interfejsa, dodata animacija vetra\n• Dodajte glatke prelaze dok zumirate u 3D režimu\n• „Položaj lokacije na ekranu“ je sada na ekranu za konfigurisanje\n• Promenite „Obim točka“ u podešavanjima BLE senzora\n• Dodato posebno navigaciono upozorenje „Ograničenje brzine“\n• Popravljeni nazivi za vidžete usmeravanja\n• Ispravljena vidljivost „Radijusa lenjira“ u svim panelima vidžeta\n";
 "transport_hazmat_title" = "Prevoženje opasnih materija";
+"data_source" = "Izvor podataka";
+"weather_data_sources_prompt" = "OsmAnd pruža vremenske podatke iz dva izvora:";
+"weather_source_ecmwf_description" = "Evropski Centar za srednjeročne vremenske prognoze";
+"weather_source_GFS_title" = "GFS";
+"weather_source_GFS_description" = "Globalni sistem prognoze Nacionalnog centra za predviđanje životne sredine";
+"weather_source_ecmwf_title" = "ECMWF";
+"map_settings_weather_wind_animation" = "Animacija vetra";

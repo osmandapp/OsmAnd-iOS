@@ -3444,3 +3444,10 @@
 "online_plugins" = "Componenti aggiuntivi online";
 "osmand_depelopment_use_discrete_autozoom" = "Autozoom discreto (vecchia versione)";
 "transport_hazmat_title" = "Trasporto di materiali pericolosi";
+"data_source" = "Fonte dati";
+"weather_data_sources_prompt" = "OsmAnd fornisce dati meteorologici da due fonti:";
+"weather_source_ecmwf_description" = "European Centre for Medium-Range Weather Forecasts";
+"weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
+"weather_source_ecmwf_title" = "ECMWF";
+"map_settings_weather_wind_animation" = "Animazione del vento";
+"weather_source_GFS_title" = "GFS";

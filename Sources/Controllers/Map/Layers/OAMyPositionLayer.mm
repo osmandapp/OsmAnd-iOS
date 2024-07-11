@@ -518,6 +518,8 @@ typedef enum {
     // Create location and course markers
     int baseOrder = self.pointsOrder;
     
+    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
+    
     _modeMarkers = [NSMapTable strongToStrongObjectsMapTable];
     NSArray<OAApplicationMode *> *modes = [OAApplicationMode allPossibleValues];
     for (OAApplicationMode *mode in modes)
@@ -575,12 +577,14 @@ typedef enum {
                 
         if (navigationModel)
         {
-            [navigationModel setMainColor:iconColor];
+            if (mode == currentMode)
+                [navigationModel setMainColor:iconColor];
             navigationModelCpp = [navigationModel model];
         }
         if (locationModel)
         {
-            [locationModel setMainColor:iconColor];
+            if (mode == currentMode)
+                [locationModel setMainColor:iconColor];
             locationModelCpp = [locationModel model];
         }
         
@@ -732,7 +736,7 @@ typedef enum {
     _textScaleFactor = [[OAAppSettings sharedManager].textSize get];
     
     __weak OAMyPositionLayer *weakSelf = self;
-    [Model3dHelper.shared loadAllPluginModelsWithCallback:
+    [Model3dHelper.shared loadAllModelsWithCallback:
          [[OAModel3dCallback alloc] initWithCallback:^(OAModel3dWrapper * _Nullable model) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf refreshMarkersCollection];

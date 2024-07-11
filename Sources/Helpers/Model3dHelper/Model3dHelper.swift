@@ -20,15 +20,18 @@ final class Model3dHelper: NSObject {
     private var failedModels = Set<String>()
     private var pendingCallbacks = [String: [OAModel3dCallback]]()
     private var isIniting = false
+    private let lock = NSLock()
     
     private override init() {
     }
     
     func getModel(modelName: String, callback: OAModel3dCallback?) -> OAModel3dWrapper? {
+        //lock.lock()
         let pureModelName = modelName.replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
         
         if !modelName.hasPrefix(MODEL_NAME_PREFIX) {
             processCallback(modelName: pureModelName, model: nil, callback: callback)
+            //lock.unlock()
             return nil
         }
         
@@ -37,10 +40,11 @@ final class Model3dHelper: NSObject {
             loadModel(modelName: pureModelName, callback: callback)
         }
         
+        //lock.unlock()
         return model3D
     }
 
-    func loadAllPluginModels(callback: OAModel3dCallback?) {
+    func loadAllModels(callback: OAModel3dCallback?) {
         let modelFoldersNames = Model3dHelper.listModels()
         if !modelFoldersNames.isEmpty {
             var loadingsCount = modelFoldersNames.count
@@ -57,27 +61,23 @@ final class Model3dHelper: NSObject {
     }
     
     private func loadModel(modelName: String, callback: OAModel3dCallback?) {
-        DispatchQueue.main.async { [weak self] in
-            self?.loadModelImpl(modelName: modelName, callback: callback)
-        }
+        self.loadModelImpl(modelName: modelName, callback: callback)
     }
     
     private func processCallback(modelName: String, model: OAModel3dWrapper?, callback: OAModel3dCallback?) {
-        DispatchQueue.main.async { [weak self] in
-            if let callback {
-                if let callbacks = self?.pendingCallbacks[modelName] {
-                    if let index = callbacks.firstIndex(of: callback) {
-                        self?.pendingCallbacks[modelName]?.remove(at: index)
-                        if !callbacks.isEmpty {
-                            for pendingCallback in callbacks {
-                                pendingCallback.processResult(model)
-                            }
+        if let callback {
+            if let callbacks = self.pendingCallbacks[modelName] {
+                if let index = callbacks.firstIndex(of: callback) {
+                    self.pendingCallbacks[modelName]?.remove(at: index)
+                    if !callbacks.isEmpty {
+                        for pendingCallback in callbacks {
+                            pendingCallback.processResult(model)
                         }
-                        self?.pendingCallbacks.removeValue(forKey: modelName)
                     }
+                    self.pendingCallbacks.removeValue(forKey: modelName)
                 }
-                callback.processResult(model)
             }
+            callback.processResult(model)
         }
     }
     
@@ -107,22 +107,26 @@ final class Model3dHelper: NSObject {
         modelsInProgress.insert(modelName)
         
         let task = OALoad3dModelTask(dir) { [weak self] model in
+            guard let strongSelf = self else { return false }
+            
+            //strongSelf.lock.lock()
             if model == nil {
-                self?.failedModels.insert(modelName)
+                strongSelf.failedModels.insert(modelName)
             } else {
-                self?.modelsCache[modelName] = model
+                strongSelf.modelsCache[modelName] = model
             }
-            self?.modelsInProgress.remove(modelName)
-            self?.processCallback(modelName: modelName, model: model, callback: callback)
-            if let callback {
-                callback.processResult(model)
-            }
+            strongSelf.modelsInProgress.remove(modelName)
+            strongSelf.processCallback(modelName: modelName, model: model, callback: callback)
+            //strongSelf.lock.unlock()
             return true
         }
         task?.execute()
     }
     
     static func listModels() -> [String] {
+        // if plugin off return []
+        // add from bundle
+        
         var modelsDirNames = [String]()
         do {
             let modelsDir = OsmAndApp.swiftInstance().documentsPath.appendingPathComponent(MODEL_3D_DIR)

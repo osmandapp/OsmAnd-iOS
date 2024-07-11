@@ -15,6 +15,7 @@
 @implementation OAModel3dWrapper
 {
     std::shared_ptr<OsmAnd::Model3D> _model;
+    UIColor *_color;
 }
 
 - (instancetype)initWith:(std::shared_ptr<const OsmAnd::Model3D>)model;
@@ -22,7 +23,7 @@
     self = [super init];
     if (self)
     {
-        _model = std::const_pointer_cast<OsmAnd::Model3D>(model);
+        _model = std::make_shared<OsmAnd::Model3D>(model->vertices, model->materials, model->bbox, model->mainColor);
     }
     return self;
 }
@@ -60,9 +61,12 @@
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OAModel3dWrapper *result = [self doInBackground];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [self onPostExecute:result];
-        });
+        if (_callback)
+        {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                _callback(result);
+            });
+        }
     });
 }
 
@@ -79,12 +83,6 @@
     const auto parser = OsmAnd::ObjParser(objFilePath, mtlFilePath);
     std::shared_ptr<const OsmAnd::Model3D> model = parser.parse();
     return [[OAModel3dWrapper alloc] initWith:model];
-}
-
-- (void) onPostExecute:(OAModel3dWrapper *)result
-{
-    if (_callback)
-        _callback(result);
 }
 
 @end

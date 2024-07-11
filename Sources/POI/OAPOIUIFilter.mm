@@ -511,20 +511,16 @@
 {
     return [[OAAmenityExtendedNameFilter alloc] initWithAcceptAmenityFunc:^BOOL(std::shared_ptr<const OsmAnd::Amenity> amenity, QHash<QString, QString> values, OAPOIType *type) {
         
-        QString openingHours = nullptr;
-        openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
-        
+        auto openingHours = values[QString::fromNSString(OPENING_HOURS_TAG)];
         if (allTime)
         {
-            if (openingHours == nullptr  || (openingHours != QString("24/7") && openingHours != QString("Mo-Su 00:00-24:00")) )
-            {
+            if (openingHours.isNull() || (openingHours != QStringLiteral("24/7") && openingHours != QStringLiteral("Mo-Su 00:00-24:00")) )
                 return NO;
-            }
         }
         
         if (open)
         {
-            if (openingHours == nullptr)
+            if (openingHours.isNull())
             {
                 return NO;
             }
@@ -764,7 +760,7 @@
     if (filterValue == nullptr || filterValue.size() == 0)
         return NO;
     
-    QStringList items = filterValue.split( ";" );
+    QStringList items = filterValue.split(";");
     QString val = QString::fromNSString([[filter getOsmValue] trim].lowercaseString);
     for (int i = 0; i < items.length(); i++)
     {

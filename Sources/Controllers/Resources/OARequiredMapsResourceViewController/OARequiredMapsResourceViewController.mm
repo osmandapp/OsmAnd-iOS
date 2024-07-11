@@ -160,7 +160,7 @@
             resourceRow.cellType = [OASimpleTableViewCell getCellIdentifier];
         }
         
-        if ([self isAvailableCalculateOnlineSection] && !_isOnlineCalculateFinished)
+        if (!_isOnlineCalculateFinished)
         {
             OATableSectionData *calculateOnlineSection = [_data createNewSection];
             OATableRowData *calculateOnlineTitleRow = [calculateOnlineSection createNewRow];
@@ -602,12 +602,6 @@
 {
     _isActiveOnlineCalculateRequest = NO;
     _isOnlineCalculateFinished = YES;
-}
-
-- (BOOL)isAvailableCalculateOnlineSection
-{
-    OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-    return [@[OAApplicationMode.CAR, OAApplicationMode.BICYCLE] containsObject:currentMode];
 }
 
 @end

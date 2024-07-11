@@ -2584,7 +2584,7 @@
 "telegram_chats" = "Telegram csevegések";
 "shared_string_delete_immediately" = "Azonnali törlés";
 "skip_download" = "Letöltés kihagyása";
-"shared_string_move" = "Áthelyezés";
+"shared_string_move" = "Mozgatás";
 "shared_string_format" = "Formátum";
 "help_article_navigation_setup_gpx_navigation_name" = "Navigálás nyomvonallal";
 "external_device_status_disconnect" = "Szétkapcsolás";

@@ -161,7 +161,7 @@
 "help_quiz" = "Rätsel";
 "import_export" = "Import/Export";
 "shared_string_control_start" = "Start";
-"shared_string_currently_recording_track" = "Momentane Track-Aufzeichnung";
+"shared_string_currently_recording_track" = "Momentane Trackaufzeichnung";
 "track_stop_rec" = "Aufzeichnung stoppen";
 "gpx_start_new_segment" = "Neues Segment starten";
 "track_start_rec" = "Trackaufzeichnung beginnen";
@@ -3464,7 +3464,7 @@
 "custom_map_button_name_present" = "Diese Schaltfläche ist bereits vorhanden";
 "shared_string_item" = "Element";
 "dangerous_goods" = "Gefahrgut";
-"avoid_pt_types_descr" = "Wähle die öffentlichen Verkehrsmittel aus, die Du für die Navigation vermeiden möchtest:";
+"avoid_pt_types_descr" = "Wählen Sie die öffentlichen Verkehrsmittel aus, die Sie für die Navigation vermeiden möchten:";
 "route_recalculation_dist_title" = "Mindestabstand für Neuberechnung der Route";
 "in_case_of_reverse_direction" = "Bei umgekehrter Richtung";
 "avoid_pt_types" = "Verkehrsmittel ausschließen …";
@@ -3477,3 +3477,10 @@
 "missing_maps_ignore" = "Vorhandene Karten verwenden";
 "ios_release_4_8" = "• Neues \"Speedometer\"-Widget kompatibel mit CarPlay\n• Hinzugefügt: Turn-by-Turn-Anweisungen zu Routeninformationen\n• Passe den Kartenbildschirm an, indem du mehrere \"Quick Action\"-Buttons hinzufügst\n• 3D-Track-Verbesserungen: neue Visualisierungs- und Farboptionen\n• Benutzerdefinierte Farbpaletten für Gelände, Tracks und Routen\n• Verbesserter Mehrfachauswahlmodus für Tracks hinzugefügt\n• 3D-Variante für Standortpositionssymbole\n• Erweiterte Auswahl an Touristenrouten auf der Karte\n• Wetter: UI-Aktualisierung, Windanimation hinzugefügt\n• Füge sanfte Übergänge beim Zoomen im 3D-Modus hinzu\n• \"Standortposition auf dem Bildschirm\" ist jetzt im Konfigurationsbildschirm\n• Ändere \"Radumfang\" in den BLE-Sensoreinstellungen\n• Hinzugefügt: separate Navigationswarnung für \"Geschwindigkeitsbegrenzung\"\n• Namen für Peilungs-Widgets korrigiert\n• Sichtbarkeit des \"Radius Lineals\" in allen Widget-Panels behoben\n";
 "transport_hazmat_title" = "Transport von Gefahrgut";
+"weather_source_ecmwf_description" = "Europäisches Zentrum für mittelfristige Wettervorhersage";
+"weather_source_GFS_description" = "Globales Vorhersagesystem der Nationalen Zentren zur Umweltvorhersage";
+"data_source" = "Datenquelle";
+"weather_data_sources_prompt" = "OsmAnd liefert Wetterdaten aus zwei Quellen:";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Wind-Animation";

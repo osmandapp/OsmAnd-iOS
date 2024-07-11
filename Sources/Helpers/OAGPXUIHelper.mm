@@ -103,10 +103,92 @@
             [pts addObject:point];
         }
     }
+    [OAGPXUIHelper interpolateEmptyElevationWpts:pts];
     seg.points = pts;
     track.segments = @[seg];
     gpx.tracks = @[track];
     return gpx;
+}
+
++ (void)interpolateEmptyElevationWpts:(NSMutableArray<OAWptPt *> *)pts
+{
+    for (int i = 0; i < pts.count; )
+    {
+        int processedPoints = 0;
+        OAWptPt *currentPt = pts[i];
+        if (isnan(currentPt.elevation))
+        {
+            int startIndex = i, prevValidIndex = -1, nextValidIndex = -1;
+            double prevValidElevation = NAN, nextValidElevation = NAN;
+
+            for (int j = startIndex - 1; j >= 0; j--)
+            {
+                OAWptPt *prevPt = pts[j];
+                if (!isnan(prevPt.elevation))
+                {
+                    prevValidElevation = prevPt.elevation;
+                    prevValidIndex = j;
+                    break;
+                }
+            }
+
+            for (int j = startIndex + 1; j < pts.count; j++)
+            {
+                OAWptPt *nextPt = pts[j];
+                if (!isnan(nextPt.elevation))
+                {
+                    nextValidElevation = nextPt.elevation;
+                    nextValidIndex = j;
+                    break;
+                }
+            }
+
+            if (prevValidIndex == -1 && nextValidIndex == -1)
+            {
+                return; // no elevation at all
+            }
+
+            if (prevValidIndex == -1 || nextValidIndex == -1)
+            {
+                // outermost section without interpolation
+                for (int j = startIndex; j < pts.count; j++)
+                {
+                    OAWptPt *pt = pts[j];
+                    if (isnan(pt.elevation))
+                    {
+                        pt.elevation = startIndex == 0 ? nextValidElevation : prevValidElevation;
+                        processedPoints++;
+                    } else
+                    {
+                        break;
+                    }
+                }
+            } else
+            {
+                // inner section
+                double totalDistance = 0;
+                NSMutableArray<NSNumber *> *distanceArray = [NSMutableArray arrayWithCapacity:(nextValidIndex - prevValidIndex)];
+                for (int j = prevValidIndex; j < nextValidIndex; j++)
+                {
+                    OAWptPt *thisPt = pts[j];
+                    OAWptPt *nextPt = pts[j + 1];
+                    double distance = getDistance(thisPt.position.latitude, thisPt.position.longitude,
+                                                  nextPt.position.latitude, nextPt.position.longitude);
+                    [distanceArray addObject:@(distance)];
+                    totalDistance += distance;
+                }
+                double deltaElevation = pts[nextValidIndex].elevation - pts[prevValidIndex].elevation;
+                for (int j = startIndex; totalDistance > 0 && j < nextValidIndex; j++)
+                {
+                    double currentDistance = [distanceArray[j - startIndex] doubleValue];
+                    double increaseElevation = deltaElevation * (currentDistance / totalDistance);
+                    pts[j].elevation = pts[j - 1].elevation + increaseElevation;
+                    processedPoints++;
+                }
+            }
+        }
+        i += processedPoints > 0 ? processedPoints : 1;
+    }
 }
 
 + (NSString *) getDescription:(OAGPX *)gpx

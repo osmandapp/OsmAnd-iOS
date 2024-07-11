@@ -398,8 +398,8 @@
 "si_min_m" = "Menit per mil";
 "si_nm_h" = "Mil laut per jam (knot)";
 "units_nm_h" = "nmi/h";
-"min_mile" = "men/m";
-"min_km" = "men/km";
+"min_mile" = "mnt/m";
+"min_km" = "mnt/km";
 "m_s" = "m/d";
 "shared_string_tones" = "ton";
 "nothing_found" = "Tidak ada yang ditemukan";
@@ -1444,7 +1444,7 @@
 "km_h" = "km/j";
 "mile_per_hour" = "mph";
 "int_hour" = "j";
-"int_min" = "men.";
+"int_min" = "mnt.";
 "shared_string_sec" = "det";
 "units_sec_short" = "s";
 "metric_ton" = "t";

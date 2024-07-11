@@ -2330,7 +2330,7 @@ includeHidden:(BOOL)includeHidden
     
     NSString *routeMode = @"car";
     GeneralRouterProfile profile = routeCalculationResult.missingMapsRoutingContext->config->router->getProfile();
-    if (profile == GeneralRouterProfile::BICYCLE)
+    if (profile == GeneralRouterProfile::BICYCLE || profile == GeneralRouterProfile::PEDESTRIAN)
     {
         routeMode = @"bicycle";
     }

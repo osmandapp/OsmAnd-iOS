@@ -41,7 +41,7 @@
 @property (nonatomic, strong, nullable) UILabel *titleOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *unitOrEmptyLabel;
 @property (nonatomic, strong, nullable) UILabel *valueLabel;
-@property (nonatomic, strong, nullable) UIView *iconWidgetView;
+@property (nonatomic, strong, nullable) UIStackView *iconWidgetStackView;
 @property (nonatomic) OACommonWidgetSizeStyle *widgetSizePref;
 
 @property (strong) BOOL(^updateInfoFunction)();

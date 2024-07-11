@@ -25,11 +25,11 @@
                     <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                     <subviews>
                         <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="skp-uv-S5T">
-                            <rect key="frame" x="0.0" y="824" width="391" height="26"/>
+                            <rect key="frame" x="2" y="830" width="389" height="20"/>
                             <color key="backgroundColor" name="viewBgColor"/>
                             <color key="tintColor" name="iconColorActive"/>
                             <constraints>
-                                <constraint firstAttribute="height" constant="26" id="1bH-FK-9lc"/>
+                                <constraint firstAttribute="height" constant="20" id="1bH-FK-9lc"/>
                             </constraints>
                             <connections>
                                 <action selector="pageControlTapped:" destination="-1" eventType="valueChanged" id="gaW-WV-FQ3"/>
@@ -38,7 +38,7 @@
                     </subviews>
                     <constraints>
                         <constraint firstAttribute="bottom" secondItem="skp-uv-S5T" secondAttribute="bottom" constant="2" id="Q6U-lP-hgl"/>
-                        <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" id="kmS-9A-Kcj"/>
+                        <constraint firstItem="skp-uv-S5T" firstAttribute="leading" secondItem="PVB-gi-Qrg" secondAttribute="leading" constant="2" id="kmS-9A-Kcj"/>
                         <constraint firstAttribute="trailing" secondItem="skp-uv-S5T" secondAttribute="trailing" constant="2" id="zPn-gh-3vl"/>
                     </constraints>
                 </view>

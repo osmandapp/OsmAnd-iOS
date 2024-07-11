@@ -187,7 +187,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
 - (void)updateSimpleLayout
 {
     NSArray *viewsToRemove = [self subviews];
-    for (UIView *v in viewsToRemove) {
+    for (UIView *v in viewsToRemove)
+    {
         [v removeFromSuperview];
     }
     [self initSeparatorsView];
@@ -196,7 +197,8 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     verticalStackView.translatesAutoresizingMaskIntoConstraints = NO;
     verticalStackView.axis = UILayoutConstraintAxisVertical;
     verticalStackView.alignment = UIStackViewAlignmentFill;
-    switch (self.widgetSizeStyle) {
+    switch (self.widgetSizeStyle)
+    {
         case EOAWidgetSizeStyleLarge:
             verticalStackView.spacing = 4;
             break;
@@ -234,13 +236,14 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     nameView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.topNameUnitStackView addArrangedSubview:nameView];
     [NSLayoutConstraint activateConstraints:@[
-        [nameView.heightAnchor constraintGreaterThanOrEqualToConstant:13]
+        [nameView.heightAnchor constraintEqualToConstant:13]
     ]];
     
     // Create the name label ("SPEED")
     self.nameLabel = [UILabel new];
     self.nameLabel.translatesAutoresizingMaskIntoConstraints = NO;
     self.nameLabel.allowsDefaultTighteningForTruncation = YES;
+    self.nameLabel.lineBreakMode = NSLineBreakByTruncatingTail;
     self.nameLabel.font = [UIFont scaledSystemFontOfSize:[OAWidgetSizeStyleObjWrapper
                                                           getLabelFontSizeForType:self.widgetSizeStyle] weight:UIFontWeightMedium];
     [nameView addSubview:self.nameLabel];
@@ -256,7 +259,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     self.unitView.translatesAutoresizingMaskIntoConstraints = NO;
     [self.topNameUnitStackView addArrangedSubview:self.unitView];
     [NSLayoutConstraint activateConstraints:@[
-        [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:11],
+        [self.unitView.heightAnchor constraintGreaterThanOrEqualToConstant:13],
         [self.unitView.widthAnchor constraintGreaterThanOrEqualToConstant:15]
     ]];
     self.unitView.hidden = _subtext.length == 0;
@@ -273,7 +276,6 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
         [self.unitLabel.leadingAnchor constraintEqualToAnchor:self.unitView.leadingAnchor],
         [self.unitLabel.trailingAnchor constraintEqualToAnchor:self.unitView.trailingAnchor],
         [self.unitLabel.bottomAnchor constraintEqualToAnchor:self.unitView.bottomAnchor],
-        [self.unitLabel.widthAnchor constraintGreaterThanOrEqualToConstant:15]
     ]];
     
     // Create the _contentStackViewSimpleWidget
@@ -601,12 +603,7 @@ static NSString * _Nonnull const kSizeStylePref = @"simple_widget_size";
     
     self.valueLabel.text = _text;
  
-    NSMutableDictionary<NSAttributedStringKey, id> *attributes = [self getAttributes:labelFontSize label:self.nameLabel fontMetrics:[UIFontMetrics defaultMetrics]];
-    NSMutableParagraphStyle *paragraphStyle = attributes[NSParagraphStyleAttributeName];
-    paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-    attributes[NSParagraphStyleAttributeName] = paragraphStyle;
-    
-    self.nameLabel.attributedText = [[NSMutableAttributedString alloc] initWithString:[_contentTitle upperCase] attributes:attributes];
+    self.nameLabel.text = [_contentTitle upperCase];
     self.topNameUnitStackView.hidden = self.widgetSizeStyle == EOAWidgetSizeStyleSmall;
 
     _verticalStackViewSimpleWidgetTopConstraint.constant = [OAWidgetSizeStyleObjWrapper getTopPaddingWithType:self.widgetSizeStyle];

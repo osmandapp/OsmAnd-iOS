@@ -71,8 +71,6 @@
     NSMutableArray<OAWptPt *> *pts = [NSMutableArray new];
     if (locations)
     {
-        double lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
-        double lastValidHeight = NAN;
         for (CLLocation *l in locations)
         {
             OAWptPt *point = [[OAWptPt alloc] init];
@@ -81,22 +79,7 @@
             {
                 if (gpx)
                     gpx.hasAltitude = YES;
-                CLLocationDistance h = l.altitude;
-                point.elevation = h;
-                lastValidHeight = h;
-                if (lastHeight == RouteDataObject::HEIGHT_UNDEFINED && pts.count > 0)
-                {
-                    for (OAWptPt *pt in pts)
-                    {
-                        if (isnan(pt.elevation))
-                            pt.elevation = h;
-                    }
-                }
-                lastHeight = h;
-            }
-            else
-            {
-                lastHeight = RouteDataObject::HEIGHT_UNDEFINED;
+                point.elevation = l.altitude;
             }
             if (pts.count == 0)
             {
@@ -118,16 +101,6 @@
                 }
             }
             [pts addObject:point];
-        }
-        if (!isnan(lastValidHeight) && lastHeight == RouteDataObject::HEIGHT_UNDEFINED)
-        {
-            for (OAWptPt *point in [pts reverseObjectEnumerator])
-            {
-                if (!isnan(point.elevation))
-                    break;
-
-                point.elevation = lastValidHeight;
-            }
         }
     }
     seg.points = pts;

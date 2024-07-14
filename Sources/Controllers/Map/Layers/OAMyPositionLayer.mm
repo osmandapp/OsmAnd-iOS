@@ -551,9 +551,7 @@ typedef enum {
         OAModel3dWrapper *locationModel;
         std::shared_ptr<const OsmAnd::Model3D> navigationModelCpp;
         std::shared_ptr<const OsmAnd::Model3D> locationModelCpp;
-        
-        BOOL notInited = NO;
-        
+
         OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
         navigationIconName = [navIcon iconName];
         if ([navIcon isModel])

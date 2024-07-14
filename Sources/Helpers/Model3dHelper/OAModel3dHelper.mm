@@ -63,21 +63,14 @@
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         OAModel3dWrapper *result = [self doInBackground];
         if (_callback)
-        {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                _callback(result);
-            });
-        }
+            _callback(result);
     });
 }
 
 - (OAModel3dWrapper *) doInBackground
 {
-    NSString *name = _modelDirPath.lastPathComponent;
-    
     // .../Documents/models/map_default_location/map_default_location.obj
     QString objFilePath = QString::fromNSString([Model3dHelper getModelObjFilePathWithDirPath:_modelDirPath]);
-    
     // .../Documents/models/map_default_location
     QString mtlFilePath = QString::fromNSString(_modelDirPath);
     

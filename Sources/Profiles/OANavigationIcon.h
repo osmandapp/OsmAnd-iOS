@@ -11,13 +11,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString *NAVIGATION_ICON_DEFAULT = @"map_navigation_default";
-static NSString *NAVIGATION_ICON_NAUTICAL = @"map_navigation_nautical";
-static NSString *NAVIGATION_ICON_CAR = @"map_navigation_car";
-
-static NSString *NAVIGATION_MODEL_ICON_DEFAULT = @"model_map_car_bearing";
-static NSString *NAVIGATION_MODEL_ICON_NAUTICAL = @"model_map_navigation_nautical";
-static NSString *NAVIGATION_MODEL_ICON_CAR = @"model_map_navigation_car";
+static NSString *NAVIGATION_ICON_DEFAULT = @"DEFAULT";
+static NSString *NAVIGATION_ICON_NAUTICAL = @"BOAT";
+static NSString *NAVIGATION_ICON_CAR = @"CAR";
 
 @interface OANavigationIcon : NSObject
 
@@ -32,6 +28,9 @@ static NSString *NAVIGATION_MODEL_ICON_CAR = @"model_map_navigation_car";
 
 + (BOOL) isModel:(NSString *)iconName;
 - (BOOL) isModel;
+
++ (NSArray<NSString *> *) getIconNames;
++ (NSString *) getStandardIconModelName:(NSString *)iconName;
 
 @end
 

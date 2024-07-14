@@ -4585,7 +4585,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
-        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];;
+        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];
         [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
         
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];

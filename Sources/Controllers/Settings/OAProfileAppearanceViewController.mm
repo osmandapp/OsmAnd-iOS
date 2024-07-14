@@ -116,8 +116,7 @@
     NSArray<UIImage *> *_locationIcons;
     NSArray<UIImage *> *_navigationIcons;
     
-    NSDictionary<NSString *, NSString *> *_modelIconPathes;
-    NSArray<NSString *> *_modelIconNames;
+    NSArray<NSString *> *_models;
 }
 
 - (instancetype) initWithParentProfile:(OAApplicationMode *)profile
@@ -308,7 +307,7 @@
 
 - (void) generateData
 {
-    _modelIconPathes = [Model3dHelper listPluginModelsWithNames];
+    _models = [Model3dHelper listModels];
     _locationIconNames = [self getlocationIconNames];
     _navigationIconNames = [self getNavigationIconNames];
     _locationIcons = [self getlocationIcons];
@@ -375,27 +374,13 @@
 - (NSArray<NSString *> *) getlocationIconNames
 {
     NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    if (OAAppSettings.sharedManager.use3dIconsByDefault.get)
-    {
-        [iconNames addObject:LOCATION_MODEL_ICON_DEFAULT];
-        [iconNames addObject:LOCATION_MODEL_ICON_CAR];
-        [iconNames addObject:LOCATION_MODEL_ICON_BICYCLE];
-    }
-    else
-    {
-        [iconNames addObject:LOCATION_ICON_DEFAULT];
-        [iconNames addObject:LOCATION_ICON_CAR];
-        [iconNames addObject:LOCATION_ICON_BICYCLE];
-    }
-    
-    NSMutableArray<NSString *> *displayingModelIconNames = [NSMutableArray array];
-    NSString *embeddedModelsDirParh = [Model3dHelper getEmbeddedModelsDirParh];
-    
-    NSArray<NSString *> *sortedModelIconNames = [[_modelIconPathes allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+    if (!OAAppSettings.sharedManager.use3dIconsByDefault.get)
+	    [iconNames addObjectsFromArray:OALocationIcon.getIconNames];
+
+    NSArray<NSString *> *sortedModelNames = [_models sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [obj1 compare:obj2];
     }];
-    
-    [iconNames addObjectsFromArray:sortedModelIconNames];
+    [iconNames addObjectsFromArray:sortedModelNames];
     return [iconNames copy];
 }
 
@@ -415,27 +400,13 @@
 - (NSArray<NSString *> *) getNavigationIconNames
 {
     NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    if (OAAppSettings.sharedManager.use3dIconsByDefault.get)
-    {
-        [iconNames addObject:NAVIGATION_MODEL_ICON_DEFAULT];
-        [iconNames addObject:NAVIGATION_MODEL_ICON_NAUTICAL];
-        [iconNames addObject:NAVIGATION_MODEL_ICON_CAR];
-    }
-    else
-    {
-        [iconNames addObject:NAVIGATION_ICON_DEFAULT];
-        [iconNames addObject:NAVIGATION_ICON_NAUTICAL];
-        [iconNames addObject:NAVIGATION_ICON_CAR];
-    }
-    
-    NSMutableArray<NSString *> *displayingModelIconNames = [NSMutableArray array];
-    NSString *embeddedModelsDirParh = [Model3dHelper getEmbeddedModelsDirParh];
-    
-    NSArray<NSString *> *sortedModelIconNames = [[_modelIconPathes allKeys] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+    if (!OAAppSettings.sharedManager.use3dIconsByDefault.get)
+    	[iconNames addObjectsFromArray:OANavigationIcon.getIconNames];
+
+    NSArray<NSString *> *sortedModelNames = [_models sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [obj1 compare:obj2];
     }];
-    
-    [iconNames addObjectsFromArray:sortedModelIconNames];
+    [iconNames addObjectsFromArray:sortedModelNames];
     return [iconNames copy];
 }
 
@@ -687,10 +658,18 @@
             cell.dataArray = isAtRestRow ? _locationIcons : _navigationIcons;
             
             if (isAtRestRow)
+            {
                 cell.selectedIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
+                if (cell.selectedIndex == NSNotFound)
+	                cell.selectedIndex = [_locationIconNames indexOfObject:[OALocationIcon getStandardIconModelName:_changedProfile.locationIcon]];
+            }
             else
+            {
                 cell.selectedIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
-            
+                if (cell.selectedIndex == NSNotFound)
+	                cell.selectedIndex = [_navigationIconNames indexOfObject:[OANavigationIcon getStandardIconModelName:_changedProfile.navigationIcon]];
+            }
+
             cell.titleLabel.text = item[@"title"];
             cell.currentColor = _changedProfile.color;
             cell.delegate = self;

@@ -26,45 +26,33 @@ final class Model3dHelper: NSObject {
     
     private override init() {
     }
-    
+
     func getModel(modelName: String, callback: OAModel3dCallback?) -> OAModel3dWrapper? {
-        let dirs = Model3dHelper.listModelsWithNames()
-        if let modelDirPath = dirs[modelName] {
-            return getModel(modelDirPath: modelDirPath, callback: callback)
-        }
-        return nil
-    }
-    
-    func getModel(modelDirPath: String, callback: OAModel3dCallback?) -> OAModel3dWrapper? {
-        //FIXME: lock.lock()
-        let pureModelName = Model3dHelper.getPureModelName(modelPath: modelDirPath)
+        lock.lock()
         
-        if !modelDirPath.lastPathComponent().hasPrefix(MODEL_NAME_PREFIX) && modelDirPath.length == pureModelName.length {
+        let pureModelName = modelName.lastPathComponent().replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
+        if !modelName.hasPrefix(MODEL_NAME_PREFIX) {
             processCallback(modelName: pureModelName, model: nil, callback: callback)
-            //FIXME: lock.unlock()
+            
+            lock.unlock()
             return nil
         }
         
         let model3D = modelsCache[pureModelName]
         if model3D == nil {
-            loadModel(modelDirPath: modelDirPath, callback: callback)
+            loadModelImpl(modelName: pureModelName, callback: callback)
         }
         
-        //FIXME: lock.unlock()
+        lock.unlock()
         return model3D
-    }
-    
-    static func getPureModelName(modelPath: String) -> String {
-        modelPath.lastPathComponent().replacingOccurrences(of: MODEL_NAME_PREFIX, with: "")
     }
 
     func loadAllModels(callback: OAModel3dCallback?) {
         let modelDirPaths = Model3dHelper.listModels()
         if !modelDirPaths.isEmpty {
             var loadingsCount = modelDirPaths.count
-            
             for modelDirPath in modelDirPaths {
-                getModel(modelDirPath: modelDirPath, callback: OAModel3dCallback { model in
+                getModel(modelName: modelDirPath, callback: OAModel3dCallback { model in
                     loadingsCount -= 1
                     if loadingsCount == 0 {
                         callback?.processResult(model)
@@ -73,30 +61,26 @@ final class Model3dHelper: NSObject {
             }
         }
     }
-    
-    private func loadModel(modelDirPath: String, callback: OAModel3dCallback?) {
-        self.loadModelImpl(modelDirPath: modelDirPath, callback: callback)
-    }
-    
+
     private func processCallback(modelName: String, model: OAModel3dWrapper?, callback: OAModel3dCallback?) {
         if let callback {
+            DispatchQueue.global(qos: .default).async {
+                callback.processResult(model)
+            }
             if let callbacks = self.pendingCallbacks[modelName] {
-                if let index = callbacks.firstIndex(of: callback) {
-                    self.pendingCallbacks[modelName]?.remove(at: index)
-                    if !callbacks.isEmpty {
-                        for pendingCallback in callbacks {
+                self.pendingCallbacks.removeValue(forKey: modelName)
+                if !callbacks.isEmpty {
+                    DispatchQueue.global(qos: .default).async {
+                        for pendingCallback in callbacks where pendingCallback != callback {
                             pendingCallback.processResult(model)
                         }
                     }
-                    self.pendingCallbacks.removeValue(forKey: modelName)
                 }
             }
-            callback.processResult(model)
         }
     }
     
-    private func loadModelImpl(modelDirPath: String, callback: OAModel3dCallback?) {
-        let modelName = Model3dHelper.getPureModelName(modelPath: modelDirPath)
+    private func loadModelImpl(modelName: String, callback: OAModel3dCallback?) {
         if let model = modelsCache[modelName] {
             processCallback(modelName: modelName, model: model, callback: callback)
             return
@@ -106,112 +90,66 @@ final class Model3dHelper: NSObject {
             return
         }
         if modelsInProgress.contains(modelName) {
-            if let callback, pendingCallbacks[modelName] == nil {
-                pendingCallbacks[modelName] = Array<OAModel3dCallback>()
-                pendingCallbacks[modelName]?.append(callback)
+            if let callback = callback {
+                if var callbacks = pendingCallbacks[modelName] {
+                    callbacks.append(callback)
+                    pendingCallbacks[modelName] = callbacks
+                } else {
+                    pendingCallbacks[modelName] = [callback]
+                }
             }
             return
         }
         
-        let modelFilePath = Model3dHelper.getModelObjFilePath(dirPath: modelDirPath)
-        if !Model3dHelper.isModelFileExist(path: modelFilePath) {
+        let modelDir = OsmAndApp.swiftInstance().models3dPath.appendingPathComponent(modelName)
+        if !Model3dHelper.isModelExist(dir: modelDir) {
             processCallback(modelName: modelName, model: nil, callback: callback)
             return
         }
         
         modelsInProgress.insert(modelName)
         
-        let task = OALoad3dModelTask(modelDirPath) { [weak self] model in
-            
-            //FIXME: strongSelf.lock.lock()
+        let task = OALoad3dModelTask(modelDir) { [weak self] model in
             guard let strongSelf = self else { return false }
-            
-            DispatchQueue.main.async { [weak self] in
-                guard let strongSelf = self else { return }
-                
-                if model == nil {
-                    strongSelf.failedModels.insert(modelName)
-                } else {
-                    strongSelf.modelsCache[modelName] = model
-                }
-                strongSelf.modelsInProgress.remove(modelName)
-                strongSelf.processCallback(modelName: modelName, model: model, callback: callback)
+            strongSelf.lock.lock()
+
+            if model == nil {
+                strongSelf.failedModels.insert(modelName)
+            } else {
+                strongSelf.modelsCache[modelName] = model
             }
-            
-            //FIXME: strongSelf.lock.unlock()
+            strongSelf.modelsInProgress.remove(modelName)
+            strongSelf.processCallback(modelName: modelName, model: model, callback: callback)
+
+            strongSelf.lock.unlock()
             return true
         }
         task?.execute()
     }
     
     static func listModels() -> [String] {
-        return Array(listModelsWithNames().values)
-    }
-    
-    static func listModelsWithNames() -> [String: String] {
-        var modelsDirPaths = [String: String]()
-        
-        let embeddedModels = listEmbeddedModelsWithNames()
-        embeddedModels.map { modelsDirPaths[$0.key] = $0.value }
-        
-        // if online-plugin has a file with the same name like a embedded one, use it instead
-        let pluginModels = listPluginModelsWithNames()
-        pluginModels.map { modelsDirPaths[$0.key] = $0.value }
-        
-        // ("map_default_location" : "...Data/Documents/models/map_default_location/map_default_location")
-        return modelsDirPaths
-    }
-    
-    static func listEmbeddedModelsWithNames() -> [String: String] {
-        var modelsDirPaths = [String: String]()
+        var res = [String]()
         do {
-            if let embeddedModelsDirPath = getEmbeddedModelsDirParh() {
-                let modelsDirs = try FileManager.default.contentsOfDirectory(atPath: embeddedModelsDirPath)
-                if !modelsDirs.isEmpty {
-                    for modelDirName in modelsDirs {
-                        let dirPath = embeddedModelsDirPath.appendingPathComponent(modelDirName)
-                        if isModelExist(dir: dirPath) {
-                            let name = MODEL_NAME_PREFIX + modelDirName
-                            modelsDirPaths[name] = dirPath
-                        }
+            let modelsDir: String = OsmAndApp.swiftInstance().models3dPath
+            let modelsDirs = try FileManager.default.contentsOfDirectory(atPath: modelsDir)
+            if !modelsDirs.isEmpty {
+                for modelDirName in modelsDirs {
+                    let dirPath = modelsDir.appendingPathComponent(modelDirName)
+                    if isModelExist(dir: dirPath) {
+                        res.append(MODEL_NAME_PREFIX + modelDirName)
                     }
                 }
             }
         } catch let error {
             debugPrint(error)
         }
-        return modelsDirPaths
+        return res
     }
     
-    static func listPluginModelsWithNames() -> [String: String] {
-        var modelsDirPaths = [String: String]()
-        if let plugin = OAPluginsHelper.getPluginById(pluginId), plugin.isEnabled() {
-            do {
-                let pluginModelsDir = OsmAndApp.swiftInstance().documentsPath.appendingPathComponent(MODEL_3D_DIR)
-                let modelsDirs = try FileManager.default.contentsOfDirectory(atPath: pluginModelsDir)
-                if !modelsDirs.isEmpty {
-                    for modelDirName in modelsDirs {
-                        let dirPath = pluginModelsDir.appendingPathComponent(modelDirName)
-                        if isModelExist(dir: dirPath) {
-                            let name = MODEL_NAME_PREFIX + modelDirName
-                            modelsDirPaths[name] = dirPath
-                        }
-                    }
-                }
-            } catch let error {
-                debugPrint(error)
-            }
-        }
-        return modelsDirPaths
+    static func getModelPath(modelName: String) -> String {
+        return OsmAndApp.swiftInstance().models3dPath.appendingPathComponent(modelName)
     }
-    
-    static func getEmbeddedModelsDirParh() -> String? {
-        if let appBundlePath = Bundle.main.resourcePath {
-            return appBundlePath.appendingPathComponent(MODEL_3D_DIR)
-        }
-        return nil
-    }
-    
+
     static func getModelObjFilePath(dirPath: String) -> String {
         let name = dirPath.lastPathComponent()
         return dirPath.appendingPathComponent(name).appendingPathExtension("obj")
@@ -230,21 +168,14 @@ final class Model3dHelper: NSObject {
             
             let modelFiles = try FileManager.default.contentsOfDirectory(atPath: dir)
             if !modelFiles.isEmpty {
-                for file in modelFiles {
-                    if file.hasSuffix(OBJ_FILE_EXT) {
-                        return true
-                    }
+                for file in modelFiles where file.hasSuffix(OBJ_FILE_EXT) {
+                    return true
                 }
             }
         } catch let error {
             debugPrint(error)
         }
         return false
-    }
-    
-    static func isModelFileExist(path: String) -> Bool {
-        let exists = FileManager.default.fileExists(atPath: path)
-        return exists && path.hasSuffix(OBJ_FILE_EXT)
     }
 }
 

@@ -10,13 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString *LOCATION_ICON_DEFAULT = @"map_location_default";
-static NSString *LOCATION_ICON_CAR = @"map_location_car";
-static NSString *LOCATION_ICON_BICYCLE = @"map_location_bicycle";
-
-static NSString *LOCATION_MODEL_ICON_DEFAULT = @"model_map_default_location";
-static NSString *LOCATION_MODEL_ICON_CAR = @"model_map_car_location";
-static NSString *LOCATION_MODEL_ICON_BICYCLE = @"model_map_bicycle_location";
+static NSString *LOCATION_ICON_DEFAULT = @"DEFAULT";
+static NSString *LOCATION_ICON_CAR = @"CAR";
+static NSString *LOCATION_ICON_BICYCLE = @"BICYCLE";
 
 @interface OALocationIcon : NSObject
 
@@ -31,6 +27,9 @@ static NSString *LOCATION_MODEL_ICON_BICYCLE = @"model_map_bicycle_location";
 
 + (BOOL) isModel:(NSString *)iconName;
 - (BOOL) isModel;
+
++ (NSArray<NSString *> *) getIconNames;
++ (NSString *) getStandardIconModelName:(NSString *)iconName;
 
 @end
 

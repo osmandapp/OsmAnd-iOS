@@ -125,6 +125,7 @@
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
+@synthesize models3dPath = _models3dPath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -168,6 +169,7 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _models3dPath = [_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
@@ -292,12 +294,15 @@
 
 - (void) migrateResourcesToDocumentsIfNeeded
 {
-    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
+    BOOL movedRes = [self moveOrCopyContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR] move:YES];
+    BOOL movedSqlite = [self moveOrCopyContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR] move:YES];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
+
+    NSString *modelsBundlePath = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:MODEL_3D_DIR];
+    [self moveOrCopyContentsOfDirectory:modelsBundlePath toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] move:NO];
 }
 
 - (BOOL) initializeCore
@@ -730,7 +735,7 @@
     return YES;
 }
 
-- (BOOL) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
+- (BOOL) moveOrCopyContentsOfDirectory:(NSString *)src toDest:(NSString *)dest move:(BOOL)move
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:src])
@@ -745,9 +750,15 @@
         if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
             continue;
         NSError *err = nil;
-        [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
-                    toPath:[dest stringByAppendingPathComponent:file]
-                     error:&err];
+        if (move)
+            [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
+            	        toPath:[dest stringByAppendingPathComponent:file]
+                	     error:&err];
+        else
+            [fm copyItemAtPath:[src stringByAppendingPathComponent:file]
+                        toPath:[dest stringByAppendingPathComponent:file]
+                         error:&err];
+
         if (err)
             tryAgain = YES;
     }

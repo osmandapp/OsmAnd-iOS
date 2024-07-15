@@ -3467,5 +3467,4 @@
 "weather_source_GFS_description" = "Globalni sistem prognoze Nacionalnog centra za predviđanje životne sredine";
 "weather_source_ecmwf_title" = "ECMWF";
 "map_settings_weather_wind_animation" = "Animacija vetra";
-
-"rendering_value_pale_name" = "Bledo";;
+"rendering_value_pale_name" = "Bledo";

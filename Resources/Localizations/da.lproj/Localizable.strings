@@ -1758,7 +1758,7 @@
 "plan_route" = "Planlæg en rute";
 "checking_for_duplicates" = "Søger efter dubletter...";
 "after_tapping_done" = "Tryk på Udført og slettede profiler går helt tabt.";
-"profile_alert_delete_msg" = "Slet profilen \"%@\"\?";
+"profile_alert_delete_msg" = "Slet profilen \"%@\"";
 "added_items" = "Tilføjede elementer: %@";
 "shared_string_finish" = "Afslut";
 "shared_string_import_complete" = "Importen er fuldført";

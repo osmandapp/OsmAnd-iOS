@@ -662,8 +662,8 @@
 "daynight_mode_night" = "לילה";
 "map_widget_renderer" = "סגנון עיבוד התמונה";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_over" = "Overlay";
-"map_settings_under" = "Underlay";
+"map_settings_over" = "שכבת על";
+"map_settings_under" = "שכבת רקע";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
@@ -2787,7 +2787,7 @@
 "my_data" = "הנתונים שלי";
 "route_maneuvers" = "מעקפים";
 "map_widget_trip_recording_downhill" = "במורד ההר";
-"map_settings_topography" = "מפות SRTM";
+"map_settings_topography" = "קווי מתאר";
 "activity_type_walking_name" = "הליכה";
 "map_markers_bar_widget_desc" = "בווידג׳ט הסרגל העליון אפשר לראות את המרחק ואת הכיוון לסמן מהמיקום הנוכחי. אפשר להגדיר כדי לראות סמן או שניים מובילים בווידג׳ט.";
 "download_file" = "הורדת קובץ";
@@ -2921,3 +2921,6 @@
 "shared_string_precise" = "מדויק";
 "shared_string_all_colors" = "כל הצבעים";
 "add_button" = "הוספת כפתור";
+"missing_maps_ignore_details" = "המפות שהורדו מכסות את הנתיב שלך? אפשר לנווט באמצעות אם האזור הזה לא מוכר לך.";
+"missing_maps_ignore" = "להשתמש במפות שהורדו";
+"transport_hazmat_title" = "העברת חומרים מסוכנים";

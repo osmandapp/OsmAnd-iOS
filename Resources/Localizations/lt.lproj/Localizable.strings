@@ -2490,7 +2490,7 @@
 "shared_string_read" = "Skaityti";
 "shared_string_any" = "Bet kurią";
 "map_marker_1st" = "Pirmojižymė";
-"weather_update_disabled" = "Išjungta";
+"weather_update_disabled" = "Išjungtas";
 "shared_string_move" = "Perkelti";
 "global_settings" = "Globalūs nustatymai";
 "visibility" = "Matomumas";
@@ -2519,7 +2519,7 @@
 "map_orientation_default" = "Kaip irįrenginys";
 "route_info" = "Maršruto informacija";
 "shared_string_dark" = "Tamsi";
-"map_settings_topography" = "SRTMžemėlapiai";
+"map_settings_topography" = "Kontūrinės linijos";
 "activity_type_offroad_name" = "Bekelė";
 "shared_string_explore" = "Tyrinėti";
 "short_min" = "m";

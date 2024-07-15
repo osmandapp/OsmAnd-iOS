@@ -60,9 +60,8 @@
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? -kInfoViewLandscapeWidthPad : -(DeviceScreenWidth * .45) : 0.,
                 [self.class calculateYOutScreen],
                 [OAUtilities isLandscape] ? [OAUtilities isIPad] ? kInfoViewLandscapeWidthPad : DeviceScreenWidth * .45 : DeviceScreenWidth,
-                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 241. + [OAUtilities getBottomMargin]
+                [OAUtilities isLandscape] ? [OAUtilities isIPad] ? DeviceScreenHeight - [OAUtilities getStatusBarHeight] : DeviceScreenHeight : 241. + [[self class] bottomOffset]
         );
-
     [self commonInit];
     return self;
 }
@@ -312,6 +311,12 @@
     _timeValues = timeValuesTotal;
 }
 
++ (CGFloat)bottomOffset
+{
+    CGFloat bottomMargin = [OAUtilities getBottomMargin];
+    return bottomMargin != 0.0 ? bottomMargin : 20.0;
+}
+
 - (void)moveToScreen
 {
     CGRect frame = self.frame;
@@ -327,7 +332,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 241. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [[self class] bottomOffset];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -342,7 +347,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 241. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [[self class] bottomOffset];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -364,7 +369,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 241. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [[self class] bottomOffset];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -379,7 +384,7 @@
         else
         {
             frame.size.width = DeviceScreenWidth;
-            frame.size.height = 241. + [OAUtilities getBottomMargin];
+            frame.size.height = 241. + [[self class] bottomOffset];
             frame.origin = CGPointMake(0., y);
         }
     }
@@ -391,7 +396,7 @@
     if ([OAUtilities isLandscape])
         return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44.0 : 44.0;
 
-    return DeviceScreenHeight - (241. + [OAUtilities getBottomMargin]);
+    return DeviceScreenHeight - (241. + [[self class] bottomOffset]);
 }
 
 + (CGFloat)calculateYOutScreen
@@ -399,7 +404,7 @@
     if ([OAUtilities isLandscape])
         return [OAUtilities isIPad] ? [OAUtilities getStatusBarHeight] + 44 - 1 : 44 - 1.;
 
-    return DeviceScreenHeight + 241. + [OAUtilities getBottomMargin];
+    return DeviceScreenHeight + 241. + [[self class] bottomOffset];
 }
 
 - (void)updateWidgetsInfo

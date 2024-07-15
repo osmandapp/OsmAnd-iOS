@@ -3410,3 +3410,11 @@
 "custom_map_button_name_present" = "Takové tlačítko už tu je";
 "add_button" = "Přidat tlačítko";
 "shared_string_millimeters" = "milimetrech";
+"weather_data_sources_prompt" = "OsmAnd poskytuje data o počasí ze dvou zdrojů:";
+"transport_hazmat_title" = "Přeprava nebezpečných materiálů";
+"weather_source_ecmwf_title" = "ECMWF";
+"missing_maps_ignore" = "Použít existující mapy";
+"weather_source_GFS_title" = "GFS";
+"weather_source_ecmwf_description" = "Evropské centrum pro střednědobé předpovědi počasí";
+"weather_source_GFS_description" = "Globální předpovědní systém od Národních center pro environmentální předpovědi";
+"data_source" = "Zdroj dat";

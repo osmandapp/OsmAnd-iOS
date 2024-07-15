@@ -8,7 +8,7 @@
 
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
-#import "OAInputTableViewCell.h"
+#import "OAValueTableViewCell.h"
 #import "OAFilledButtonCell.h"
 #import "OADividerCell.h"
 #import "OASimpleTableViewCell.h"
@@ -77,8 +77,10 @@
         @"left_inset" : @(0.)
     }];
     [loginLogoutSection addObject:@{
-        @"key" : @"email_input_cell",
-        @"type" : [OAInputTableViewCell getCellIdentifier]
+        @"key" : @"user_name",
+        @"type" : [OAValueTableViewCell getCellIdentifier],
+        @"title" : OALocalizedString(@"user_name"),
+        @"value" : _settings.osmUserDisplayName.get
     }];
     _userNameIndexPath = [NSIndexPath indexPathForRow:loginLogoutSection.count - 1 inSection:data.count - 1];
 
@@ -117,31 +119,22 @@
     UITableViewCell *outCell = nil;
 
     NSString *type = item[@"type"];
-    if ([type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+    if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
     {
-        OAInputTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAInputTableViewCell getCellIdentifier]];
-        if (cell == nil)
+        OAValueTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAValueTableViewCell getCellIdentifier]];
+        if (!cell)
         {
-            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAInputTableViewCell getCellIdentifier] owner:self options:nil];
-            cell = (OAInputTableViewCell *) nib[0];
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAValueTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OAValueTableViewCell *) nib[0];
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            cell.valueLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
             [cell leftIconVisibility:NO];
-            [cell clearButtonVisibility:NO];
-            [cell.inputField removeTarget:self action:NULL forControlEvents:UIControlEventEditingChanged];
-            [cell.inputField addTarget:self action:@selector(textViewDidChange:) forControlEvents:UIControlEventEditingChanged];
-            cell.inputField.delegate = self;
+            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
-            cell.titleLabel.text = [OAOsmOAuthHelper isOAuthAuthorised] ? OALocalizedString(@"user_name") : OALocalizedString(@"shared_string_email");
-            cell.inputField.text = _settings.osmUserDisplayName.get;
-            cell.inputField.placeholder = OALocalizedString(@"email_example_hint");
-            cell.inputField.textContentType = UITextContentTypeUsername;
-            cell.inputField.secureTextEntry = NO;
-            
-            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
-            cell.inputField.userInteractionEnabled = NO;
-            cell.inputField.tag = indexPath.section << 10 | indexPath.row;;
-            cell.inputField.returnKeyType = UIReturnKeyDone;
+            cell.titleLabel.text = item[@"title"];
+            cell.valueLabel.text = item[@"value"];
         }
         return cell;
     }
@@ -236,7 +229,7 @@
     }
     else if (estimated)
     {
-        if ([type isEqualToString:[OAInputTableViewCell getCellIdentifier]])
+        if ([type isEqualToString:[OAValueTableViewCell getCellIdentifier]])
             return 48.;
         else if ([type isEqualToString:[OAFilledButtonCell getCellIdentifier]])
             return 42.;

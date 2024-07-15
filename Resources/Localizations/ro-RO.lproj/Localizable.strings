@@ -3449,5 +3449,4 @@
 "data_source" = "Sursa datelor";
 "weather_data_sources_prompt" = "OsmAnd furnizează date meteorologice din două surse:";
 "weather_source_ecmwf_title" = "ECMWF";
-
-"rendering_value_pale_name" = "Palid";;
+"rendering_value_pale_name" = "Palid";

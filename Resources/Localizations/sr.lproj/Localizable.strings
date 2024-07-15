@@ -3469,5 +3469,4 @@
 "data_source" = "Извор података";
 "weather_data_sources_prompt" = "ОсмАнд пружа временске податке из два извора:";
 "map_settings_weather_wind_animation" = "Анимација ветра";
-
-"rendering_value_pale_name" = "Бледо";;
+"rendering_value_pale_name" = "Бледо";

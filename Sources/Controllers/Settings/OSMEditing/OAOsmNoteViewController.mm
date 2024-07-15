@@ -42,6 +42,7 @@
     BOOL _isNoteTextChanged;
     BOOL _uploadAnonymously;
     BOOL _isAuthorised;
+    BOOL _isOAuthAllowed;
 }
 
 #pragma mark - Initialization
@@ -64,6 +65,7 @@
 - (void)commonInit
 {
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
+    _isOAuthAllowed = [OAOsmOAuthHelper isOAuthAllowed];
 }
 
 - (void)registerNotifications
@@ -141,7 +143,7 @@
         if (!_uploadAnonymously)
         {
             OATableRowData *accountCell = [accountSection createNewRow];
-            if ([OAOsmOAuthHelper isOAuthAllowed])
+            if (_isAuthorised)
             {
                 [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
                 [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
@@ -391,7 +393,8 @@
     }
     else
     {
-        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
+        if (_isOAuthAllowed)
+            [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
     }
 }
 

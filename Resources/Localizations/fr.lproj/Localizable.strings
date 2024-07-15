@@ -3467,5 +3467,4 @@
 "weather_source_GFS_description" = "Système de prévision global des Centres Nationaux pour la Prédiction Environnementale";
 "data_source" = "Source des données";
 "weather_data_sources_prompt" = "OsmAnd fournit des données météorologiques à partir de deux sources :";
-
-"rendering_value_pale_name" = "Pâle";;
+"rendering_value_pale_name" = "Pâle";

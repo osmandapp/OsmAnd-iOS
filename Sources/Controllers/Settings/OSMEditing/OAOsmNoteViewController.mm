@@ -373,7 +373,7 @@
     }
     else
     {
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
     }
 }
 

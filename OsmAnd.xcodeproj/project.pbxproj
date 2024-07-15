@@ -367,6 +367,7 @@
 		3240977A27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977827BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@2x.png */; };
 		3240977B27BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */; };
 		3240977F27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */; };
+		32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32414F002C454F9D000B4B79 /* OsmBenefitsOAuthView.swift */; };
 		3241BC8B2B613F0D00101894 /* OATwoButtonsTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */; };
 		3242A46F26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */; };
 		3245D96C2AF014BE000AA660 /* TravelGuidesSettingsCacheViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3245D96B2AF014BE000AA660 /* TravelGuidesSettingsCacheViewController.swift */; };
@@ -3793,6 +3794,7 @@
 		3240977927BBBD4A006522E3 /* ic_navbar_overflow_menu_stroke@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_navbar_overflow_menu_stroke@3x.png"; path = "Resources/Icons/ic_navbar_overflow_menu_stroke@3x.png"; sourceTree = "<group>"; };
 		3240977D27BBF983006522E3 /* OAGPXListDeletingBottomSheet.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAGPXListDeletingBottomSheet.h; sourceTree = "<group>"; };
 		3240977E27BBF995006522E3 /* OAGPXListDeletingBottomSheet.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OAGPXListDeletingBottomSheet.m; sourceTree = "<group>"; };
+		32414F002C454F9D000B4B79 /* OsmBenefitsOAuthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OsmBenefitsOAuthView.swift; sourceTree = "<group>"; };
 		3241BC852B611D0500101894 /* OATwoButtonsTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OATwoButtonsTableViewCell.xib; sourceTree = "<group>"; };
 		3242A46D26CB0F05001CA174 /* OACollapsableNearestPoiTypeView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OACollapsableNearestPoiTypeView.h; sourceTree = "<group>"; };
 		3242A46E26CB0F1C001CA174 /* OACollapsableNearestPoiTypeView.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OACollapsableNearestPoiTypeView.mm; sourceTree = "<group>"; };
@@ -8144,6 +8146,7 @@
 			isa = PBXGroup;
 			children = (
 				32048FC82A26132600AA4B71 /* OsmOAuthView.swift */,
+				32414F002C454F9D000B4B79 /* OsmBenefitsOAuthView.swift */,
 				32048FC62A26084000AA4B71 /* OsmOAuthHelper.swift */,
 				32AD5D592A2F111600A51B60 /* OsmAccessTokenModel.swift */,
 				32AD5D5B2A2F11A200A51B60 /* OsmUserDataModel.swift */,
@@ -17090,6 +17093,7 @@
 				DA4ABEE72876DA5D00B996EF /* OASettingsItemWriter.m in Sources */,
 				DA5A830626C563A800F274C7 /* OAImagesTableViewCell.m in Sources */,
 				DA5A816426C563A700F274C7 /* OANighttimeAppearance.m in Sources */,
+				32414F012C454F9D000B4B79 /* OsmBenefitsOAuthView.swift in Sources */,
 				DA5A853626C563A900F274C7 /* OACustomRegion.mm in Sources */,
 				FAE0B7112AFCDAD400C02438 /* BLEPairedSensorsViewController.swift in Sources */,
 				DA5A814C26C563A700F274C7 /* OACarPlayCategoryResultListController.mm in Sources */,

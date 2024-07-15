@@ -95,11 +95,25 @@ class OsmOAuthHelper: BaseOAuthHelper {
         NotificationCenter.default.post(name: Notification.Name(notificationKey), object: nil)
     }
 
-    static func showAuthIntroScreen(hostVC: UIViewController) {
+    static func showOAuthScreen(hostVC: UIViewController) {
         if #available(iOS 16.4, *) {
             hostVC.present(OsmOAuthSwiftUIViewWrapper.get(), animated: true)
         }
         // No auth by login & password for older ios version.
+    }
+    
+    static func showBenefitsIntroScreen(hostVC: UIViewController) {
+        if #available(iOS 16.4, *) {
+            hostVC.present(OAOsmBenefitsOAuthSwiftUIViewWrapper.get(), animated: true)
+        } else {
+            let targetVC = OABenefitsOsmContributorsViewController()
+            if let settingsHostVC = hostVC as? OAOsmEditingSettingsViewController {
+                targetVC.accountDelegate = settingsHostVC as? OAAccountSettingDelegate
+                settingsHostVC.showModalViewController(targetVC)
+            } else {
+                hostVC.present(targetVC, animated: true)
+            }
+        }
     }
     
     // MARK: - Legacy methods

@@ -11,7 +11,7 @@ import Foundation
 import AuthenticationServices
 
 @available(iOS 16.4, *)
-struct OsmOAuthView: View {
+private struct OsmOAuthView: View {
     
     //WebAuthenticationSession is SwiftUI-only method for OAuth
     @Environment(\.webAuthenticationSession) private var webAuthenticationSession
@@ -61,7 +61,7 @@ struct OsmOAuthButtonCancelView: View {
     }
 }
 
-struct OsmOAuthImageView: View {
+private struct OsmOAuthImageView: View {
     var body: some View {
         Image(uiImage: UIImage(named: "img_openstreetmap_logo_big")!)
             .resizable()
@@ -74,7 +74,7 @@ struct OsmOAuthImageView: View {
 
 
 @available(iOS 16.0, *)
-struct OsmOAuthTextHeaderView: View {
+private struct OsmOAuthTextHeaderView: View {
     var body: some View {
         Text(localizedString("login_open_street_map_org"))
             .font(.system(size: 30))
@@ -90,7 +90,7 @@ struct OsmOAuthTextHeaderView: View {
 
 
 @available(iOS 16.0, *)
-struct OsmOAuthTextDescriptionView: View {
+private struct OsmOAuthTextDescriptionView: View {
     var body: some View {
         Text(localizedString("open_street_map_login_mode_simple"))
             .frame(maxWidth: .infinity)
@@ -132,52 +132,8 @@ struct OsmOAuthButtonOAuthView: View {
     }
 }
 
-
-struct OsmOAuthButtonLoginPasswordView: View {
-    @State var isPresented: Bool
-    var dismiss: DismissAction
-    
-    var body: some View {
-        Button(
-            action: { isPresented = true },
-            label: {
-                Text(localizedString("use_login_and_password"))
-                	.frame(maxWidth: .infinity, minHeight: 42)
-            }
-        )
-        .background(Color(UIColor.buttonBgColorDisabled))
-        .foregroundColor(Color(UIColor.buttonTextColorSecondary))
-        .clipShape(RoundedRectangle(cornerRadius: 9))
-        .padding(.leading, 16)
-        .padding(.trailing, 16)
-        .padding(.top, 8)
-        .padding(.bottom, 21)
-        .sheet(isPresented: $isPresented) {
-            
-            NavigationView {
-                AccountSettingsVCWrapper(self)
-                    .ignoresSafeArea()
-                    .navigationBarTitleDisplayMode(NavigationBarItem.TitleDisplayMode.inline)
-                    .navigationTitle(Text(localizedString("shared_string_account_add")))
-                    .navigationBarItems(
-                        leading: Button(
-                            action: { isPresented = false },
-                            label: {
-                                Text(localizedString("shared_string_cancel"))
-                                    .font(.body)
-                                    .foregroundColor(Color(UIColor.textColorActive))
-                            }
-                        )
-                    )
-            }
-        }
-    }
-}
-
-
-
 @available(iOS 16.4, *)
-struct OsmOAuthView_Previews: PreviewProvider {
+private struct OsmOAuthView_Previews: PreviewProvider {
     static var previews: some View {
         OsmOAuthView()
     }
@@ -190,46 +146,5 @@ struct OsmOAuthView_Previews: PreviewProvider {
 class OsmOAuthSwiftUIViewWrapper: NSObject {
     static func get() -> UIViewController {
         return UIHostingController(rootView: OsmOAuthView())
-    }
-}
-
-//Wrapper to open ViewController from this SwiftUI view
-struct AccountSettingsVCWrapper: UIViewControllerRepresentable {
-
-    class Coordinator: NSObject, OAAccountSettingDelegate {
-
-        var parent: OsmOAuthButtonLoginPasswordView
-
-        init(_ parent: OsmOAuthButtonLoginPasswordView) {
-            self.parent = parent
-        }
-
-        // MARK: - <OAAccountSettingDelegate>
-
-        func onAccountInformationUpdated() {
-            parent.dismiss()
-        }
-    }
-
-    typealias UIViewControllerType = OAOsmAccountSettingsViewController
-
-    var parent: OsmOAuthButtonLoginPasswordView
-
-    init(_ parent: OsmOAuthButtonLoginPasswordView) {
-        self.parent = parent
-    }
-
-    func makeUIViewController(context: Context) -> OAOsmAccountSettingsViewController {
-        let vc: OAOsmAccountSettingsViewController = OAOsmAccountSettingsViewController()
-        vc.accountDelegate = context.coordinator
-        return vc
-    }
-
-    func updateUIViewController(_ uiViewController: OAOsmAccountSettingsViewController, context: Context) {
-        //Do nothing
-    }
-
-    func makeCoordinator() -> Coordinator {
-        Coordinator(parent)
     }
 }

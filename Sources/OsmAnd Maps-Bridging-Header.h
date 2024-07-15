@@ -130,6 +130,8 @@
 #import "OAMainSettingsViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
+#import "OABenefitsOsmContributorsViewController.h"
+#import "OAOsmEditingSettingsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

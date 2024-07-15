@@ -103,7 +103,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     [super viewDidAppear:animated];
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
     if (!_isAuthorised)
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
 }
 
 #pragma mark - Base UI
@@ -542,7 +542,7 @@ typedef NS_ENUM(NSInteger, EOAOsmUploadGPXViewConrollerMode) {
     }
     else
     {
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
     }
 }
 

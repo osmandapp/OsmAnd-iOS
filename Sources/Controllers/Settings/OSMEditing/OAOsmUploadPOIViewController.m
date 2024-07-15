@@ -81,7 +81,7 @@
     [super viewDidAppear:animated];
     
     if (!_isAuthorised)
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
 }
 
 #pragma mark - Base UI
@@ -413,7 +413,7 @@
     }
     else
     {
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
     }
 }
 

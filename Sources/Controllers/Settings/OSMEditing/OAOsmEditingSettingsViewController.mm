@@ -9,7 +9,6 @@
 #import "OAOsmEditingSettingsViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
 #import "OAOsmEditsListViewController.h"
-#import "OABenefitsOsmContributorsViewController.h"
 #import "OAMappersViewController.h"
 #import "OASimpleTableViewCell.h"
 #import "OARightIconTableViewCell.h"
@@ -338,7 +337,7 @@
             }
             else
             {
-                [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+                [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
             }
         }
     }
@@ -351,9 +350,7 @@
         }
         else
         {
-            OABenefitsOsmContributorsViewController *benefitsViewController = [[OABenefitsOsmContributorsViewController alloc] init];
-            benefitsViewController.accountDelegate = self;
-            [self showModalViewController:benefitsViewController];
+            [OAOsmOAuthHelper showBenefitsIntroScreenWithHostVC:self];
         }
     }
 }

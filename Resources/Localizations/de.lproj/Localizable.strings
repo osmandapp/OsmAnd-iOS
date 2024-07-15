@@ -3484,5 +3484,4 @@
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Wind-Animation";
-
-"rendering_value_pale_name" = "Blass";;
+"rendering_value_pale_name" = "Blass";

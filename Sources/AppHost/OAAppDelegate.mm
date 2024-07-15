@@ -158,6 +158,8 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?
             [OAApplicationMode valueOfStringKey:[appSettings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] : appSettings.defaultApplicationMode.get;
             [[ThemeManager shared] configureWithAppMode:initialAppMode];
+            
+            [OAOsmOAuthHelper logOutIfNeeded];
 
             [self askReview];
 

@@ -121,21 +121,13 @@
                     @"left_icon": @"ic_custom_unlimited_downloads_colored",
                     @"right_icon": @"img_openstreetmap_logo"
             },
-            /*@{
+            @{
                     @"key" : @"oauth_login_button",
                     @"type" : [OAFilledButtonCell getCellIdentifier],
                     @"title" : OALocalizedString(@"sign_in_with_open_street_map"),
-                    @"icon": @"ic_action_openstreetmap_logo",
-                    @"background_color": UIColorFromRGB(color_primary_purple),
-                    @"tint_color": UIColor.whiteColor,
-                    @"top_margin": @(9.)
-            },*/
-            @{
-                    @"key" : @"email_login_button",
-                    @"type" : [OAFilledButtonCell getCellIdentifier],
-                    @"title" : OALocalizedString(@"use_login_and_password"),
-                    @"background_color": [UIColor colorNamed:ACColorNameButtonBgColorDisabled],
-                    @"tint_color": [UIColor colorNamed:ACColorNameButtonTextColorSecondary],
+                    @"background_color": [UIColor colorNamed:ACColorNameButtonBgColorPrimary],
+                    @"tint_color": [UIColor colorNamed:ACColorNameButtonTextColorPrimary],
+                    @"icon" : @"ic_action_openstreetmap_logo",
                     @"top_margin": @(16.),
                     @"bottom_margin": @(20.)
             },
@@ -304,12 +296,8 @@
         NSString *key = item[@"key"];
         if ([key isEqualToString:@"oauth_login_button"])
         {
-        }
-        else if ([key isEqualToString:@"email_login_button"])
-        {
-            OAOsmAccountSettingsViewController *accountSettings = [[OAOsmAccountSettingsViewController alloc] init];
-            accountSettings.accountDelegate = self;
-            [self showModalViewController:accountSettings];
+            OAOsmOAuthHelper.delegate = self;
+            [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
         }
     }
 }

@@ -150,23 +150,6 @@ static const NSString* URL_TO_UPLOAD_GPX = @"https://api.openstreetmap.org/api/0
     return responseString;
 }
 
-- (void)URLSession:(NSURLSession *)session
-              task:(NSURLSessionTask *)task
-didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
- completionHandler:(void (^)(NSURLSessionAuthChallengeDisposition, NSURLCredential *))completionHandler {
-    if (challenge.previousFailureCount > 1)
-    {
-        completionHandler(NSURLSessionAuthChallengeCancelAuthenticationChallenge, nil);
-    }
-    else
-    {
-        NSURLCredential *credential = [NSURLCredential credentialWithUser:_settings.osmUserName.get
-                                                                 password:_settings.osmUserPassword.get
-                                                              persistence:NSURLCredentialPersistenceForSession];
-        completionHandler(NSURLSessionAuthChallengeUseCredential, credential);
-    }
-}
-
 - (NSString *)createOpenChangesetRequestString:(NSString *)comment {
     QString endXml;
     QXmlStreamWriter xmlWriter(&endXml);
@@ -215,7 +198,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     return [NSString stringWithFormat:@"%@ %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleDisplayName"], OAAppVersion.getVersion];
 }
 
--(void)writeNode:(OANode *)node entityInfo:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user
+-(void)writeNode:(OANode *)node entityInfo:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId
 {
     xmlWriter.writeStartElement(QLatin1String("node"));
     xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([node getId]));
@@ -233,7 +216,7 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     xmlWriter.writeEndElement();
 }
 
--(void)writeWay:(OAWay *)way info:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId user:(NSString *)user
+-(void)writeWay:(OAWay *)way info:(OAEntityInfo *)info xmlWriter:(QXmlStreamWriter &)xmlWriter changesetId:(long)changeSetId
 {
     xmlWriter.writeStartElement(QLatin1String("way"));
     xmlWriter.writeAttribute(QStringLiteral("id"), QString::number([way getId]));
@@ -316,9 +299,9 @@ didReceiveChallenge:(NSURLAuthenticationChallenge *)challenge
     xmlWriter.writeAttribute(QStringLiteral("version"), QStringLiteral("0.6"));
     xmlWriter.writeAttribute(QStringLiteral("generator"), QString::fromNSString([self getAppFullName]));
     if ([entity isKindOfClass:OANode.class])
-        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName.get];
+        [self writeNode:(OANode *)entity entityInfo:info xmlWriter:xmlWriter changesetId:_changeSetId];
     else if ([entity isKindOfClass:OAWay.class])
-        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId user:_settings.osmUserName.get];
+        [self writeWay:(OAWay *)entity info:info xmlWriter:xmlWriter changesetId:_changeSetId];
     // </action>
     xmlWriter.writeEndElement();
     // </osmChange>

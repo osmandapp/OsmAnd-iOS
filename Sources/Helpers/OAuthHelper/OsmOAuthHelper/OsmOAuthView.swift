@@ -36,8 +36,6 @@ struct OsmOAuthView: View {
                 Spacer()
 
                 OsmOAuthButtonOAuthView(session: webAuthenticationSession, dismiss: dismiss)
-
-                OsmOAuthButtonLoginPasswordView(isPresented: isLoginPaswordVCPresented, dismiss: dismiss)
             }
         }
     }
@@ -118,19 +116,19 @@ struct OsmOAuthButtonOAuthView: View {
                     let _ = await OsmOAuthHelper.performOAuth(session: session)
                     dismiss()
                 }
-            },
-            label: {
-                Text(localizedString("sign_in_with_open_street_map"))
-                    .frame(maxWidth: .infinity, minHeight: 42)
             }
-        )
-        .background(Color(UIColor.buttonBgColorPrimary))
-        .foregroundColor(Color(UIColor.buttonTextColorPrimary))
-        .clipShape(RoundedRectangle(cornerRadius: 9))
-        .padding(.leading, 16)
-        .padding(.trailing, 16)
-        .padding(.top, 9)
-        .padding(.bottom, 8)
+        ) {
+            Label(localizedString("sign_in_with_open_street_map"), image: "ic_action_openstreetmap_logo")
+                .frame(maxWidth: .infinity, minHeight: 42)
+                .background(Color(UIColor.buttonBgColorPrimary))
+                .foregroundColor(Color(UIColor.buttonTextColorPrimary))
+                .cornerRadius(9)
+                .clipShape(RoundedRectangle(cornerRadius: 9))
+                .padding(.leading, 16)
+                .padding(.trailing, 16)
+                .padding(.top, 9)
+                .padding(.bottom, 8)
+        }
     }
 }
 

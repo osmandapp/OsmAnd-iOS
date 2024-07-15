@@ -14,7 +14,7 @@ import AuthenticationServices
 
 @objc(OAOsmOAuthHelper)
 @objcMembers
-class OsmOAuthHelper : BaseOAuthHelper {
+class OsmOAuthHelper: BaseOAuthHelper {
     
     override class var authURL: String { return "https://www.openstreetmap.org/oauth2/authorize" }
     override class var accessTokenURL: String { return "https://www.openstreetmap.org/oauth2/token" }
@@ -27,10 +27,10 @@ class OsmOAuthHelper : BaseOAuthHelper {
     override class var token: String? {
         get { return OAAppSettings.sharedManager().osmUserAccessToken.get(OAApplicationMode.default()) }
         set { OAAppSettings.sharedManager().osmUserAccessToken.set(newValue, mode: OAApplicationMode.default()) }
-        
     }
     
     static let notificationKey = "OsmOAuthTokenKey"
+    static var delegate: OAAccountSettingDelegate?
     
     override class func parseTokenJSON(data: Data) -> (ParsedTokenResponce) {
         do {
@@ -45,6 +45,9 @@ class OsmOAuthHelper : BaseOAuthHelper {
     override class func onComplete() async {
         await fetchUserData()
         sendNotifications()
+        if let delegate {
+            delegate.onAccountInformationUpdated()
+        }
     }
     
     static func fetchUserData() async {
@@ -64,49 +67,27 @@ class OsmOAuthHelper : BaseOAuthHelper {
     }
     
     static func getAutorizationHeader() -> String? {
-        if (isOAuthAuthorised()) {
+        if isOAuthAuthorised() {
             return "Bearer " + token!
-        } else if (isLegacyAuthorised()) {
-            var content = getUserName() + ":" + getLegacyPassword()
-            content = content.data(using: .utf8)!.base64EncodedString(options: NSData.Base64EncodingOptions(rawValue: 0))
-            return "Basic " + content
         }
         return nil
     }
     
     static func isAuthorised() -> Bool {
-        return isLegacyAuthorised() || isOAuthAuthorised()
-    }
-    
-    static func isLegacyAuthorised() -> Bool {
-        return OAAppSettings.sharedManager().osmUserName != nil &&
-            OAAppSettings.sharedManager().osmUserPassword != nil &&
-            OAAppSettings.sharedManager().osmUserName.get().length > 0 &&
-            OAAppSettings.sharedManager().osmUserPassword.get().length > 0
+        return isOAuthAuthorised()
     }
     
     static func isOAuthAuthorised() -> Bool {
         return token != nil && token!.length > 0
     }
-    
-    static func getUserName() -> String {
-        return OAAppSettings.sharedManager().osmUserName.get()
-    }
 
     static func getUserDisplayName() -> String {
         return OAAppSettings.sharedManager().osmUserDisplayName.get()
     }
-
-    static func getLegacyPassword() -> String {
-        return OAAppSettings.sharedManager().osmUserPassword.get()
-    }
     
     static func logOut() {
-        OAAppSettings.sharedManager().osmUserName.resetToDefault()
-        OAAppSettings.sharedManager().osmUserPassword.resetToDefault()
-        OAAppSettings.sharedManager().osmUserDisplayName.resetToDefault()
-        OAAppSettings.sharedManager().osmUserDisplayName.resetToDefault()
         token = ""
+        OAAppSettings.sharedManager().osmUserDisplayName.resetToDefault()
         sendNotifications()
     }
     
@@ -117,12 +98,30 @@ class OsmOAuthHelper : BaseOAuthHelper {
     static func showAuthIntroScreen(hostVC: UIViewController) {
         if #available(iOS 16.4, *) {
             hostVC.present(OsmOAuthSwiftUIViewWrapper.get(), animated: true)
-        } else {
-            let targetVC = OAOsmLoginMainViewController()
-            if let delegateHostVC = hostVC as? OAAccountSettingDelegate {
-                targetVC.delegate = delegateHostVC
-            }
-            hostVC.present(targetVC, animated: true)
+        }
+        // No auth by login & password for older ios version.
+    }
+    
+    // MARK: - Legacy methods
+    
+    // We're using for OAuth ios standard library "WebAuthenticationSession".
+    // But it available only since ios 16.4 .
+    // For previous ios versions we sended user to screen with auth by login & password.
+    // But since 2024 OSM removed auth by login & password from their site at all.
+    // So now we have to unlogin all user earlier authed by login & password, because that will work no more.
+    // And show them screen with login by OAuth.
+    // For users with ios older that 16.4 we can only show message to update ios version to have app with OAuth.
+    
+    static func isOAuthAllowed() -> Bool {
+        if #available(iOS 16.4, *) {
+            return true
+        }
+        return false
+    }
+    
+    static func logOutIfNeeded() {
+        if !isOAuthAllowed() {
+            logOut()
         }
     }
 }

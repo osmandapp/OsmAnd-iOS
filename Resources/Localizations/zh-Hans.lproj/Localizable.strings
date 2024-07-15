@@ -76,8 +76,8 @@
 "shared_string_gpx_tracks" = "轨迹";
 // GPX
 "plugin_distance_point" = "点";
-"shared_string_waypoint" = "路点";
-"shared_string_waypoints" = "航路点";
+"shared_string_waypoint" = "路径点";
+"shared_string_waypoints" = "路径点";
 "gpx_points" = "";
 "shared_string_export" = "导出";
 "import_export" = "导入／导出";
@@ -223,7 +223,7 @@
 "other_options" = "";
 "add_parking" = "";
 "add_parking_short" = "";
-"add_waypoint" = "添加路点";
+"add_waypoint" = "添加路径点";
 "add_waypoint_short" = "";
 "edit_waypoint_short" = "";
 "more" = "More";
@@ -655,7 +655,7 @@
 "shared_string_sound" = "语音";
 "fast_route_mode" = "最快路线";
 "avoid_in_routing_title" = "避开…";
-"prefer_in_routing_title" = "偏好…";
+"prefer_in_routing_title" = "路线偏好…";
 "prefer_in_routing_descr" = "高速公路优先。";
 "choose_auto_follow_route" = "地图视图自动居中";
 "choose_auto_follow_route_descr" = "与当前位置的地图视图同步时间。";
@@ -670,10 +670,10 @@
 "auto_zoom_far" = "中距";
 "auto_zoom_farthest" = "远距";
 "keep_informing_never" = "只有手动（轻触箭头）";
-"arrival_distance_factor_early" = "提早";
+"arrival_distance_factor_early" = "提前";
 "arrival_distance_factor_normally" = "正常";
-"arrival_distance_factor_late" = "稍迟";
-"arrival_distance_factor_at_last" = "非常晚";
+"arrival_distance_factor_late" = "延后";
+"arrival_distance_factor_at_last" = "延后更多";
 "snap_to_road" = "吸附道路";
 "show_warnings_title" = "显示警报…";
 "speak_title" = "播报…";
@@ -992,7 +992,7 @@
 "rendering_attr_hikingRoutesOSMC_name" = "徒步旅行路线";
 "routing_attr_prefer_unpaved_description" = "偏好未铺设道路。";
 "rendering_attr_highway_class_street_name" = "街道";
-"routing_attr_height_obstacles_name" = "使用标高数据";
+"routing_attr_height_obstacles_name" = "使用海拔数据";
 "rendering_attr_pisteRoutes_name" = "滑雪斜坡";
 "routing_attr_height_name" = "高度";
 "rendering_attr_roadColors_name" = "道路颜色主题";
@@ -1070,7 +1070,7 @@
 "rendering_value_medium_name" = "中等";
 "rendering_attr_contourColorScheme_name" = "等高线的颜色调配";
 "rendering_value_dark_brown_name" = "深棕色";
-"rendering_value_pedestrian_name" = "徒步";
+"rendering_value_pedestrian_name" = "步行";
 "rendering_attr_highway_class_footway_name" = "人行道";
 "rendering_attr_hideHouseNumbers_name" = "隐藏门牌号码";
 "rendering_value_defaultTranslucentCyan_name" = "默认 (半透明青色)";
@@ -1283,7 +1283,7 @@
 "special_routing_type" = "特殊路线规划";
 "update_tile" = "更新";
 "layer_amenity_label" = "点状标签（兴趣点、收藏）";
-"shared_string_gpx_waypoints" = "轨迹航路点";
+"shared_string_gpx_waypoints" = "轨迹路径点";
 "coord_input_add_point" = "添加点";
 "personal_category_name" = "个人";
 "default_speed_dialog_msg" = "估计未知道路类型的到达时间，并限制所有道路的速度（可能会影响路线）";
@@ -1364,7 +1364,7 @@
 "unlock_all_features" = "解锁所有 OsmAnd 功能";
 "rendering_attr_highway_class_state_road_name" = "国道";
 "base_profile_descr_boat" = "船、划船、帆船";
-"base_profile_descr_pedestrian" = "散步、徒步、跑步";
+"base_profile_descr_pedestrian" = "步行、徒步、跑步";
 "base_profile_descr_bicycle" = "山地自行车、轻便摩托车、马";
 "base_profile_descr_car" = "汽车、卡车、摩托车";
 "show_compass_ruler" = "显示指南针标尺";
@@ -1377,7 +1377,7 @@
 "icon_group_emergency" = "紧急救助";
 "shared_string_others" = "其它";
 "download_regular_maps" = "定期地图";
-"recalculate_route_distance_promo" = "如果路线到当前位置的距离大于选定的数值，路线将被重新计算。";
+"recalculate_route_distance_promo" = "如果路线到当前位置的距离大于所选择的数值，路线将被重新计算。";
 "coordinates" = "坐标";
 "navigation_profiles_item" = "导航配置文件";
 "ui_customization_short_descr" = "抽屉项目，上下文菜单";
@@ -1427,7 +1427,7 @@
 "coordinates_widget_current_location" = "坐标：当前位置";
 "shared_string_square" = "方形";
 "rearrange_categories" = "重新排列类别";
-"select_distance_route_will_recalc" = "选择之后重新计算路径的距离。";
+"select_distance_route_will_recalc" = "选择重新计算路线的距离。";
 "shared_string_gpx_points" = "点";
 "icon_group_amenity" = "便利设施";
 "start_editing_card_image_text" = "任何人都可以编辑的自由的全球旅游指南。";
@@ -1844,7 +1844,7 @@
 "backup_deleting_all_data" = "正在删除所有数据…";
 "shared_string_progress" = "进度";
 "shared_string_not_included" = "不包括";
-"public_transport_ped_route_title" = "徒步完成此路径需要约 %@，可能比公共交通更快";
+"public_transport_ped_route_title" = "步行路线约为 %@，可能比公共交通更快";
 "benefits_for_contributors_secondary_descr" = "登录 OpenStreetMap 以检查您是否有资格获得无限制的每月和每小时地图更新。";
 "track_has_no_needed_data" = "轨迹缺少相应的数据。";
 "add_group" = "添加组";
@@ -2105,7 +2105,7 @@
 "quick_action_navigation_voice_off" = "取消静音";
 "osm_editing_plugin_name" = "OpenStreetMap编辑";
 "auth_failed" = "授权失败";
-"only_selected_segment_recalc" = "只有选定的片段将使用选定的配置文件重新计算。";
+"only_selected_segment_recalc" = "只有已选中的区段将使用所选择的配置文件重新计算。";
 "add_point_before" = "在之前添加点";
 "local_openstreetmap_uploading" = "正在上传…";
 "quick_action_map_style_action" = "添加地图样式";
@@ -2174,7 +2174,7 @@
 "generate_hillshade_from_3d_maps" = "从3D地图生成的山体阴影栅格地图";
 "app_mode_utv" = "并排";
 "weather_forecast" = "天气预报";
-"speak_route_deviation" = "播报路线偏离";
+"speak_route_deviation" = "偏离原路线时播报";
 "map_markers_history" = "地图标记历史记录";
 "rendering_attr_alpineHiking_name" = "难度分级";
 "visible_in_3d_mode" = "在 3D 模式下可见";
@@ -2259,7 +2259,7 @@
 "osmand_cloud_deleting_account_descr" = "片刻后，您的所有数据和账户将从 OsmAnd Cloud 中删除。 \n \n设备上的所有数据仍保持不变。";
 "distance_to_destination_widget_desc" = "该小工具会显示到最终目的地点的剩余距离。";
 "average_speed_time_interval_desc" = "指定速度平均的时间间隔。";
-"announcement_time_descr" = "不同语音提示的公告时间取决于提示类型、当前导航速度和默认导航速度。";
+"announcement_time_descr" = "不同语音提示的播报时间取决于提示类型、当前导航速度和默认导航速度。";
 "map_widget_ant_bicycle_cadence" = "自行车踏频";
 "help_article_navigation_guidance_map_during_navigation_name" = "导航期间的地图屏幕";
 "rotate_map_manual_opt" = "手动旋转";
@@ -2336,7 +2336,7 @@
 "shared_string_mode" = "模式";
 "last_seven_days" = "最近 7 天";
 "help_article_start_with_first_steps_name" = "第一步";
-"route_maneuvers_desc" = "导航小工具将在导航期间启用，以显示距离、到达或离开时间、下一个转弯、方位、当前街道名称、车道信息、最大速度、接近警报、兴趣点、航路点等信息。";
+"route_maneuvers_desc" = "导航小工具将在导航期间启用，以显示距离、到达或离开时间、下一个转弯、方位、当前街道名称、车道信息、最大速度、接近警报、兴趣点、路径点等信息。";
 "shared_string_foot" = "脚";
 "side_marker_eta" = "预计的到达时间";
 "radius_rules_widget_desc" = "半径量尺工具显示地图上所选点周围的距离圆。";
@@ -2389,7 +2389,7 @@
 "beats_per_minute_short" = "每分钟心跳次数";
 "map_widget_distance_to_intermediate" = "到中继点的距离";
 "map_widget_glide_average_desc" = "显示给定时间间隔内的平均滑行比。";
-"announcement_time_title" = "公告时间";
+"announcement_time_title" = "播报时间";
 "carplay" = "CarPlay";
 "gitHub_discussion" = "GitHub讨论";
 "external_device_blood_pressure" = "血压";
@@ -2698,3 +2698,5 @@
 "shared_string_is_deleted" = "%@已删除。";
 "dangerous_goods_description" = "某些道路和隧道禁止运输危险品。";
 "shared_string_setup_route" = "设置路线";
+"missing_maps_ignore" = "使用现有地图";
+"transport_hazmat_title" = "危险品运输";

@@ -205,6 +205,7 @@ class WidgetConfigurationViewController: OABaseButtonsViewController, WidgetStat
                     NotificationCenter.default.post(name: .SimpleWidgetStyleUpdated,
                                                     object: widgetInfo,
                                                     userInfo: nil)
+                    OARootViewController.instance().mapPanel.recreateControls()
                 }
             }
             outCell = cell

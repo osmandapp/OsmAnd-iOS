@@ -405,9 +405,22 @@
     view.direction = [_settings.transparentMapTheme get] ? ShadowPathDirectionClear : direction;
 }
 
-- (void)viewWillTransition
+- (void)viewWillTransition:(CGSize)size
 {
     [self layoutWidgets];
+    
+    if (!_weatherNavigationBarView.isHidden && [OAUtilities isiOSAppOnMac])
+    {
+        CGRect weatherNavigationBarViewRect = _weatherNavigationBarView.frame;
+        weatherNavigationBarViewRect.origin.x = 0;
+        weatherNavigationBarViewRect.origin.y = 0;
+        weatherNavigationBarViewRect.size.width = size.width;
+        _weatherNavigationBarView.frame = weatherNavigationBarViewRect;
+        
+        CGRect weatherToolbarRect = _weatherToolbar.frame;
+        weatherToolbarRect.size.width = _weatherNavigationBarView.frame.size.width;
+        _weatherToolbar.frame = weatherToolbarRect;
+    }
 }
 
 - (void) layoutWidgets
@@ -843,7 +856,7 @@
 
     _weatherToolbar = [[OAWeatherToolbar alloc] init];
     _weatherNavigationBarView = [WeatherNavigationBarView initView];
-    _weatherNavigationBarView.title = NSLocalizedString(@"shared_string_weather", nil);
+    _weatherNavigationBarView.title = OALocalizedString(@"shared_string_weather");
     _weatherNavigationBarView.onLeftButtonAction = ^{
         OAMapPanelViewController *mapPanel = [OARootViewController instance].mapPanel;
         [mapPanel.hudViewController changeWeatherToolbarVisible];

@@ -3469,5 +3469,4 @@
 "data_source" = "Datakilde";
 "weather_data_sources_prompt" = "OsmAnd leverer vejrdata fra to kilder:";
 "weather_source_GFS_description" = "Globalt prognosesystem fra nationale centre for miljøforudsigelser";
-
-"rendering_value_pale_name" = "Bleg";;
+"rendering_value_pale_name" = "Bleg";

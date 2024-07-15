@@ -3477,5 +3477,4 @@
 "map_settings_weather_wind_animation" = "Animación del viento";
 "weather_source_ecmwf_description" = "Centro Europeo de Previsiones Meteorológicas a Plazo Medio";
 "weather_source_GFS_title" = "GFS";
-
-"rendering_value_pale_name" = "Pálido";;
+"rendering_value_pale_name" = "Pálido";

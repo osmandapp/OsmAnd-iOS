@@ -1255,7 +1255,7 @@
 "units_of_speed" = "Unități de viteză";
 "allow_3D_view" = "Vedere 2.5D";
 "do_not_rotate" = "Nu rotiți";
-"settings_app_theme" = "Temă aplicație";
+"settings_app_theme" = "Tema aplicației";
 "map_settings_available_srtm_maps_descr" = "Hărți suplimentare sunt necesare pentru a vedea Hillshade pe hartă";
 "map_settings_line_density_slowdown_warning" = "Densitatea mare a liniilor poate încetini redarea hărților";
 "map_settings_contour_zoom_level_descr" = "Selectați nivelul de zoom, de la care vor fi afișate curbele (izolinii)";
@@ -1277,7 +1277,7 @@
 "map_settings_offline" = "Stiluri pentru hărți offline";
 "map_settings_install_more" = "Instalați mai mult...";
 "map_settings_install_maps" = "Alegeți hărțile de instalat sau de actualizat";
-"map_settings_under" = "Fundal";
+"map_settings_under" = "Substrat";
 "map_settings_over" = "Suprapunere";
 "map_settings_overunder" = "Suprapunere / Fundal";
 "map_settings_type" = "Tipul de hartă";
@@ -2369,7 +2369,7 @@
 "cloud_backup" = "Copie de rezervă";
 "weather_pressure_enable_descr" = "Activează pentru a vizualiza stratul de presiune pe hartă.";
 "backup_and_restore" = "Backupși restaurare";
-"osmand_depelopment_simulate_location_section" = "Simulați";
+"osmand_depelopment_simulate_location_section" = "Simulează";
 "simulate_in_progress" = "În curs de desfășurare";
 "product_desc_development" = "Pentru dezvoltatori și utilizatori experimentați";
 "plugin_popup_nautical_ask" = "Vă rugăm să activați plugin-ul Nautical";
@@ -2872,7 +2872,7 @@
 "activity_type_racing_name" = "Cursă";
 "map_widget_altitude_map_center_desc" = "Arată altitudinea deasupra nivelului mării a centrului actual al hărții.";
 "generate_slope_from_3d_maps" = "Generarea de hărți raster de pantă din hărți 3D";
-"shared_string_app_profile" = "Profilul aplicației";
+"shared_string_app_profile" = "Profil aplicație";
 "activity_type_walking_name" = "Mers pe jos";
 "shared_string_duplicate" = "Duplică";
 "shared_string_location_unknown" = "Locație necunoscută";
@@ -3006,7 +3006,7 @@
 "weather_updates_manual" = "Prognoza meteo trebuie actualizată manual.";
 "click_on_widget" = "Atingeți widgetul";
 "purchases_feature_relief_3d_description" = "Dețineți și observați macheta la scară a cartierului dumneavoastră sau a întregului continent.";
-"weather_update_disabled" = "Dezactivată";
+"weather_update_disabled" = "Inactiv";
 "unsaved_changes_will_be_lost_discard" = "Modificările nesalvate vor fi pierdute. Doriți să renunțați la ele?";
 "terrain_3D_maps" = "Hărți de teren";
 "weather_update_parameters_wifi" = "Prognoza meteo va fi actualizată doar când este disponibilă o rețea Wi-Fi.";
@@ -3078,7 +3078,7 @@
 "troubleshooting" = "Deparare";
 "about_osmAnd" = "Despre OsmAnd";
 "shared_string_data_type" = "Tip date";
-"map_settings_topography" = "Curbe de nivel";
+"map_settings_topography" = "Curbe (izolinii)";
 "shared_string_discard_changes" = "Anulați modificările";
 "setup" = "Configurează";
 "gitHub_discussion" = "Discuții pe GitHub";
@@ -3260,7 +3260,7 @@
 "ant_plus_searching_text_description" = "Țineți dispozitivul aproape de senzor. Trebuie să activați senzorul pentru ca OsmAnd să îl poată găsi.";
 "external_device_forget_sensor" = "Uită senzor";
 "external_device_forget_sensor_description" = "Senzorul va fi eliminat din listă. Veți putea să împerecheați din nou acest senzor în orice moment.";
-"external_device_status_connect" = "Conectați-vă";
+"external_device_status_connect" = "Conectare";
 "ant_plus_nothing_found_description" = "Asigurați-vă că: \n– Bluetooth e pornit \n– Senzorul e activ \n– Acest dispozitiv se află lângă senzor";
 "purchases_feature_desc_external_sensors" = "Afișați și înregistrați date de la senzorii externi: viteza bicicletei, puterea exercitată, cadența pedalării și pulsul.";
 "default_appearance_desc" = "Culoarea, pictogramași forma implicite se vor aplica punctelor favorite adăugate în grup.";
@@ -3440,8 +3440,8 @@
 "avoid_pt_types_descr" = "Selectați tipurile de transport public evitate la navigare:";
 "ios_release_4_8" = "• Noul widget \"Vitezometru\" compatibil cu CarPlay\n• Instrucțiuni Turn-by-Turn adăugate la detaliile traseului\n• Personalizarea ecranului hărții prin adăugarea mai multor butoane \"Acțiune rapidă\"\n• Îmbunătățiri ale pistelor 3D: noi opțiuni de vizualizare și colorizare\n• Palete de culori personalizate pentru teren, trasee și rute\n• Adăugarea unui mod îmbunătățit de selectare multiplă pentru trasee\n• Variantă 3D pentru pictogramele poziției locației\n• Selecție extinsă de rute turistice pe hartă\n• Vremea: Reîmprospătare UI, adăugare animație vânt\n• Adăugarea de tranziții fluide în timpul măririi în modul 3D\n• \"Poziția locației pe ecran\" este acum în ecranul de configurare\n• Modificarea \"Circumferinței roții\" în setările senzorului BLE\n• A fost adăugată alerta de navigare separată \"Limită de viteză\"\n• Fixarea denumirilor pentru widget-urile de rulment\n• S-a fixat vizibilitatea \"Riglei razei\" în toate panourile de widgeturi\n";
 "transport_hazmat_title" = "Transportul de materiale periculoase";
-"missing_maps_ignore" = "Utilizați hărțile existente";
-"missing_maps_ignore_details" = "Unele hărți deja descărcate ar putea fi potrivite pentru traseul dumneavoastră. Dacă sunteți familiarizat cu zona și hărțile, puteți încerca să folosiți hărțile existente.";
+"missing_maps_ignore" = "Utilizați hărți descărcate";
+"missing_maps_ignore_details" = "Hărțile descărcate acoperă traseul dumneavoastră? Navigați cu ajutorul acestora dacă sunteți familiarizat cu zona.";
 "weather_source_ecmwf_description" = "Centrul european pentru prognoze meteorologice pe termen mediu";
 "weather_source_GFS_description" = "Sistemul de prognoză globală de la Centrele naționale pentru prognoza mediului";
 "weather_source_GFS_title" = "GFS";
@@ -3449,3 +3449,5 @@
 "data_source" = "Sursa datelor";
 "weather_data_sources_prompt" = "OsmAnd furnizează date meteorologice din două surse:";
 "weather_source_ecmwf_title" = "ECMWF";
+
+"rendering_value_pale_name" = "Palid";;

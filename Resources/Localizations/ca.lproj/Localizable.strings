@@ -1515,7 +1515,7 @@
 "rendering_attr_noAdminboundaries_name" = "Límits administratius";
 "routing_attr_avoid_subway_description" = "Evita el metro i el tram";
 "routing_attr_avoid_bus_description" = "Evita autobús i troleibús";
-"rendering_attr_showAccess_name" = "Mostra les restriccions d'accés i els peatges";
+"rendering_attr_showAccess_name" = "Mostra les restriccions d\'accés i els peatges";
 "rendering_attr_hmRendered_name" = "Mostra més detalls al mapa";
 "routeInfo_steepness_name" = "Inclinació";
 "routing_attr_avoid_unpaved_description" = "Evita les vies sense pavimentar";
@@ -2529,7 +2529,7 @@
 "specify_number_of_dir_indicators_desc" = "Indiqueu el nombre d\'indicadors de direcció.";
 "shared_string_light" = "Lluminós";
 "external_sensors_source_of_data" = "Procedència de les dades";
-"map_settings_topography" = "Corbes de nivell";
+"map_settings_topography" = "Dades de corbes de nivell";
 "map_screen_orientation" = "Orientació de pantalla";
 "shared_string_hand" = "Mà";
 "default_appearance_desc" = "El color, l’icona i la forma predeterminada s’aplicaran als punts preferits agregats al grup.";
@@ -2608,3 +2608,4 @@
 "route_recalculation_dist_title" = "Desviació mínima per recalcular la ruta";
 "shared_string_millimeters_short" = "mm";
 "shared_string_millimeters" = "Mil·limetres";
+"transport_hazmat_title" = "Transport de materials perillosos";

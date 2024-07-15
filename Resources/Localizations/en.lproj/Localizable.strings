@@ -3772,8 +3772,8 @@
 "calculate_online_title" = "The list of missing maps is based on the straight line route. To get an accurate list of maps, OsmAnd can pre-calculate your route online";
 "required_maps_list" = "Maps that will also be used: %@";
 "getting_list_required_maps" = "Getting a list of required maps...";
-"missing_maps_ignore" = "Use existing maps";
-"missing_maps_ignore_details" = "Some already downloaded maps might be suitable for your route. If you are familiar with the area and the maps, you can try routing using the existing maps.";
+"missing_maps_ignore" = "Use downloaded maps";
+"missing_maps_ignore_details" = "Downloaded maps cover your route? Navigate with them if you\'re familiar with the area.";
 
 "track_vertical_exaggeration_description" = "By changing the scale value, you can change 3D track height.";
 "visualization_3d_visualized_by" = "Visualized by";
@@ -3814,7 +3814,7 @@
 "empty_name" = "Empty name";
 "custom_map_button_name_present" = "Such button already present";
 
-"data_source" = "Data source";
+"data_source" = "Data Source";
 "weather_data_sources_prompt" = "OsmAnd provides weather data from two sources:";
 "weather_source_ecmwf_description" = "European Centre for Medium-Range Weather Forecasts";
 "weather_source_GFS_description" = "Global Forecast System from National Centers for Environmental Prediction";
@@ -3825,3 +3825,5 @@
 "routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
 "routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
 "rendering_value_dark_orange_name" = "Dark orange";
+
+"rendering_value_pale_name" = "Pale";;

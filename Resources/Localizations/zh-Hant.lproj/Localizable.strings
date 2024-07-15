@@ -107,8 +107,8 @@
 "daynight_mode_night" = "夜間";
 "map_widget_renderer" = "地圖樣式";
 "map_settings_overunder" = "上層 / 下層";
-"map_settings_over" = "上層";
-"map_settings_under" = "下層";
+"map_settings_over" = "覆蓋層";
+"map_settings_under" = "底層";
 "shared_string_none" = "無";
 "map_settings_offline" = "離線地圖的樣式";
 "shared_string_online_maps" = "線上地圖";
@@ -973,7 +973,7 @@
 "shared_string_deselect" = "取消選擇";
 "quick_action_map_overlay_action" = "增加上圖層";
 "map_magnifier" = "地圖放大鏡";
-"quick_action_map_underlay" = "更改地圖底層";
+"quick_action_map_underlay" = "底層";
 "quick_action_map_underlay_title" = "地圖襯底層";
 "toggle_poi" = "顯示/隱藏 POI";
 "hide_contour_lines" = "隱藏等高線";
@@ -982,7 +982,7 @@
 "shared_string_add_photos" = "新增照片";
 "download_select_map_types" = "其它地圖";
 "shared_string_example" = "範例";
-"quick_action_map_style" = "更改地圖樣式";
+"quick_action_map_style" = "地圖樣式";
 "quick_action_map_styles" = "地圖樣式";
 "quick_action_map_underlay_action" = "增加襯底層";
 "quick_action_switch_day_mode" = "日間模式";
@@ -991,7 +991,7 @@
 "work_button" = "工作";
 "shared_string_slope" = "斜坡";
 "quick_action_navigation_voice" = "聲音開/關";
-"quick_action_map_overlay" = "更改地圖上圖層";
+"quick_action_map_overlay" = "覆蓋層";
 "no_underlay" = "無下圖層";
 "altitude_range" = "海拔高度範圍";
 "show_from_zoom_level" = "自此縮放等級開始顯示";
@@ -1411,7 +1411,7 @@
 "osm_edit_close_note" = "關閉 OSM 註記";
 "select_data_to_import" = "選取要匯入的資料。";
 "update_tile" = "更新";
-"quick_action_remove_next_destination" = "刪除下一個目的地點";
+"quick_action_remove_next_destination" = "下一個目的地點";
 "public_transport_hide" = "隱藏大眾運輸";
 "coord_input_add_point" = "新增標點";
 "profile_alert_need_save_title" = "儲存變更";
@@ -2580,7 +2580,7 @@
 "quick_action_get_info" = "取得資訊";
 "quick_action_dialog" = "對話框";
 "units_of_speed" = "速度單位";
-"settings_app_theme" = "應用程式主題";
+"settings_app_theme" = "應用程式佈景主題";
 "map_settings_available_srtm_maps_descr" = "需要額外的地圖才能在地圖上檢視地形陰影";
 "res_url_warning" = "URL 不能為空";
 "toggle_day_night" = "切換日/夜模式";
@@ -3273,7 +3273,7 @@
 "restore_from_trash" = "從回收桶還原";
 "external_device_blood_pressure" = "血壓";
 "osmand_cloud_deletion_account_warning" = "您的帳號與所有帳號詳細資訊都將會 %@";
-"external_device_status_connect" = "連接";
+"external_device_status_connect" = "連結";
 "shared_string_wrist" = "手腕";
 "external_device_characteristic_speed" = "速度";
 "longest_duration_first" = "最長時間優先";
@@ -3348,7 +3348,7 @@
 "step_by_step" = "按步驟";
 "add_button" = "新增按鈕";
 "shared_string_always" = "總是";
-"shared_string_bottom" = "下面";
+"shared_string_bottom" = "底部";
 "auto_zoom" = "自動縮放";
 "track_3d_empty_view_description" = "以互動式 3D 方式探索軌跡！在地圖上直接視覺化高度、速度等。";
 "shared_string_millimeters" = "公釐";
@@ -3358,3 +3358,15 @@
 "default_buttons" = "預設按鈕";
 "display_position_automatic_descr" = "取決於地圖方向：底部為移動方向，中心為其他所有方向。";
 "wall_height" = "牆的高度";
+
+"rendering_value_pale_name" = "灰白";;
+"missing_maps_ignore_details" = "已下載的地圖涵蓋了您的路線嗎？若您熟悉該區域，請使用它們來導航。";
+"transport_hazmat_title" = "危險物品運輸";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "風動畫";
+"weather_source_ecmwf_title" = "ECMWF";
+"data_source" = "資料來源";
+"weather_source_ecmwf_description" = "歐洲中期天氣預報中心";
+"weather_source_GFS_description" = "國家環境預報中心的全球預報系統";
+"weather_data_sources_prompt" = "OsmAnd提供來自兩個來源的天氣資料：";
+"missing_maps_ignore" = "使用已下載的地圖";

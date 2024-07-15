@@ -96,8 +96,8 @@
 "daynight_mode_night" = "Éjszakai";
 "map_widget_renderer" = "Térképstílus";
 "map_settings_overunder" = "Rátét / alátét";
-"map_settings_over" = "Rátét";
-"map_settings_under" = "Alátét";
+"map_settings_over" = "Fedvény";
+"map_settings_under" = "Alátétréteg";
 "shared_string_none" = "Nincs";
 "map_settings_offline" = "Kapcsolat nélküli térképek stílusai";
 "shared_string_online_maps" = "Online térképek";
@@ -1825,7 +1825,7 @@
 "annual_subscription" = "Éves előfizetés";
 "osmand_pro_tagline" = "Azösszes funkció beszerzése";
 "osmand_maps_plus_tagline" = "Bővített funkciók beszerzése";
-"purchases_feature_desc_wikivoyage" = "Fedezze fel a Wikivoyage útikalauzt offline módon. A cikkek országok és régiók szerint vannak felosztva, és minden nyelven elérhetők.";
+"purchases_feature_desc_wikivoyage" = "Fedezze fel a Wikivoyageútikalauzt offline módon. A cikkek országok és régiók szerint vannak felosztva, és minden nyelven elérhetők.";
 "copy_address" = "Cím másolása";
 "new_device_account" = "Új készülék / új fiók";
 "monthly_subscription" = "Havi előfizetés";
@@ -2319,7 +2319,7 @@
 "calc_pedestrian_route" = "Gyalogos útvonal tervezése";
 "quick_action_map_style_action" = "Térképstílus hozzáadása";
 "only_selected_segment_recalc" = "Csak a kijelölt szakasz lesz újraszámítva a kiválasztott profilnak megfelelően.";
-"osm_editing_plugin_description" = "SzerkesszeÖn is az OpenStreetMapet azzal a globális közösséggel, amelynek célja a világ átfogó térképének létrehozása és naprakész és nyílt forráskódú adatok biztosítása mindenkinek. \n \nA térkép szerkesztésére vonatkozó tudnivalókat a %@ weboldalon találja .";
+"osm_editing_plugin_description" = "SzerkesszeÖn is az OpenStreetMapet azzal a globális közösséggel, amelynek célja a világ átfogó térképének létrehozása és naprakész, nyílt forráskódú adatok biztosítása mindenki számára. \n \nA térkép szerkesztésére vonatkozó tudnivalókat a %@ weboldalon találja.";
 "download_wikipedia_data" = "Wikipédia adatok letöltése";
 "quick_action_add_marker_descr" = "Gomb, amely létrehoz a képernyő közepén egy térképjelölőt.";
 "osm_edit_reopened_note" = "Újranyitott OSM Jegyzet";
@@ -2347,7 +2347,7 @@
 "kg" = "kg";
 "plugin_nautical_descr" = "Gazdagítsa a térképet a hajózási útvonalakra, navigációs fényekre, hajózási veszélyzónákra, hajózási vagy kikötési korlátozásokkal érintett zónákra stb. vonatkozó adatokkal. Használatához töltse le a megfelelő tengeri térképeket, és engedélyezze a „Térkép beállítása”menüpontban a „Hajózási térkép” stílust. \n \nTovábbi olvasnivalók a %@ oldalon.";
 "lang_zh-Hant" = "kínai (hagyományos)";
-"speed_cameras_legal_descr" = "Bizonyos országokban és régiókban jogszabály tiltja a traffipaxra figyelmeztető alkalmazások használatát. \n \nOrszágának törvényei alapján kell döntenie: \n \n%@: figyelmeztetéseket és riasztásokat kap a traffipaxokról. \n \n%@: törlődik az összes traffipaxszal kapcsolatos adat (riasztások, értesítések, POI-k), amit csak az OsmAnd teljes újratelepítésével állíthat helyre.";
+"speed_cameras_legal_descr" = "Bizonyos országokban és régiókban jogszabály tiltja a traffipaxra figyelmeztető alkalmazások használatát. \n \nOrszágának törvényei alapján kell döntenie. \n \n%@: figyelmeztetéseket és riasztásokat kap a traffipaxokról. \n \n%@: törlődik az összes traffipaxszal kapcsolatos adat (riasztások, értesítések, POI-k), amit csak az OsmAnd teljes újratelepítésével állíthat helyre.";
 "shared_string_height" = "Magasság";
 "privacy_and_security" = "Adatvédelem és biztonság";
 "speed_cameras_alert" = "Bizonyos országokban a törvény tiltja a traffipaxriasztást.";
@@ -2460,7 +2460,7 @@
 "external_device_menu_forget" = "Elfelejtés";
 "external_device_status_disconnected" = "Szétkapcsolódva";
 "help_article_navigation_guidance_name" = "Navigáció útmutató";
-"audionotes_plugin_name" = "Hang- és videójegyzetek";
+"audionotes_plugin_name" = "Hang-és videójegyzetek";
 "ltr_or_rtl_combine_via_colon_with_space" = "%@ : %@";
 "external_device_characteristic_total_distance" = "Összes távolság";
 "activity_type_racing_name" = "Versenykerékpározás";
@@ -2828,7 +2828,7 @@
 "my_data" = "Adataim";
 "app_mode_moped" = "Moped";
 "help_article_search_search_coordinates_name" = "Koordináták keresése";
-"offline_wikivoyage" = "Offline Wikivoyage útikalauz";
+"offline_wikivoyage" = "Offline Wikivoyageútikalauz";
 "weather_forecast_is_outdated" = "Az előrejelzés elavult.";
 "shared_string_result" = "Eredmény";
 "map_widget_ant_bicycle_power_desc" = "Megjeleníti a kerékpárosnak a kerékpár meghajtása során leadott teljesítményét";
@@ -2880,7 +2880,7 @@
 "shared_string_top" = "Fent";
 "shared_string_top_bottom" = "Fentés lent";
 "missing_or_outdated_maps_title" = "Hiányzó vagy nem naprakész térképek";
-"shared_string_bottom" = "Alulra";
+"shared_string_bottom" = "Lent";
 "avoid_pt_types_descr" = "A navigáció során elkerülendő tömegközlekedési módok kijelölése:";
 "add_button" = "Gomb hozzáadása";
 "shared_string_millimeters" = "milliméter";
@@ -2903,3 +2903,16 @@
 "empty_name" = "Üres név";
 "track_vertical_exaggeration_description" = "A skála értékének változtatásával módosíthatja a 3D nyomvonal magasságát.";
 "track_3d_empty_view_description" = "Fedezze fel a nyomvonalat interaktív 3D-ben! Lássa közvetlenül a térképen a magasságot, sebességet és egyebeket.";
+
+"rendering_value_pale_name" = "Halvány";;
+"weather_source_GFS_description" = "Az amerikai Nemzeti Környezeti Előrejelző Központok adatait felhasználó Globális Előrejelzési Rendszer";
+"weather_data_sources_prompt" = "Az OsmAnd időjárási adatai két forrásból származnak:";
+"weather_source_ecmwf_description" = "Középtávú Időjárás-előrejelzések Európai Központja";
+"map_settings_weather_wind_animation" = "Szél animáció";
+"weather_source_ecmwf_title" = "ECMWF";
+"transport_hazmat_title" = "Veszélyes anyag szállítása";
+"weather_source_GFS_title" = "GFS";
+"missing_maps_ignore_details" = "Lefedik-e azútvonalat a már letöltött térképek? Navigáljon azokkal, ha ismeri a környéket.";
+"shared_string_app_profile" = "Alkalmazásprofil";
+"missing_maps_ignore" = "Letöltött térképek használata";
+"data_source" = "Adatforrás";

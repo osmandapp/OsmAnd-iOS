@@ -3193,7 +3193,7 @@
 "help_article_navigation_routing_straight_line_routing_name" = "التوجيه بخط مستقيم (الطائرات)";
 "help_article_navigation_routing_train_routing_name" = "توجيه القطار";
 "help_article_navigation_setup_gpx_navigation_name" = "التنقل عن طريق المسار";
-"map_settings_topography" = "بيانات الخطوط الكنتورية";
+"map_settings_topography" = "خرائط الخطوط الكنتورية";
 "travel_guides_no_file_error" = "خطأ: لا توجد بيانات ملف المنطقة";
 "shared_string_accessibility" = "تسهيلات الاستخدام";
 "help_article_map_legend_nautical_map_name" = "نمط الخرائط البحرية";
@@ -3453,3 +3453,4 @@
 "custom_buttons" = "أزرار مخصصة";
 "speed_limit_warning" = "تحذير السرعة";
 "in_case_of_reverse_direction" = "في حالة عكس الاتجاه";
+"transport_hazmat_title" = "نقل المواد الخطرة";

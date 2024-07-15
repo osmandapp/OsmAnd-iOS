@@ -662,8 +662,8 @@
 "daynight_mode_night" = "Nocturno";
 "map_widget_renderer" = "Estilo del mapa";
 "map_settings_overunder" = "Superpuesta / Subyacente";
-"map_settings_over" = "Superposición";
-"map_settings_under" = "Subyacente";
+"map_settings_over" = "Capa superpuesta";
+"map_settings_under" = "Capa subyacente";
 "map_settings_install_maps" = "Elige los mapas a instalar o actualizar";
 "map_settings_install_more" = "Instalar más...";
 "map_settings_offline" = "Estilos de mapas sin conexión";
@@ -2869,7 +2869,7 @@
 "map_widget_trip_recording_uphill" = "Ascenso";
 "map_widget_trip_recording_duration" = "Duración";
 "map_widget_trip_recording_distance" = "Distancia";
-"shared_string_app_profile" = "Perfiles de la aplicación";
+"shared_string_app_profile" = "Perfil de la aplicación";
 "route_info" = "Información de la ruta";
 "network" = "Red";
 "poi_operator" = "Operador";
@@ -3466,5 +3466,12 @@
 "dangerous_goods" = "Mercancías peligrosas";
 "transport_hazmat_title" = "Transporte de materiales peligrosos";
 "ios_release_4_8" = "• Nuevo widget de «Velocímetro» compatible con CarPlay.\n• Se añadieron indicaciones giro a giro a los detalles de la ruta\n• Se ha mejorado la personalización de la pantalla del mapa, añadiendo múltiples botones de «Acción rápida»\n• Se han mejorado las trazas en 3D: nuevas opciones de visualización y coloración\n• Paletas de colores personalizadas para el terreno, las trazas y las rutas\n• Se ha añadido un sistema mejorado de marcado múltiple para las trazas\n• Se ha añadido una variante en 3D, para los iconos de la ubicación\n• Se han ampliado las rutas turísticas en el mapa\n• Meteorología: actualización de la interfaz de usuario y adición de la animación del viento\n• Se añadieron transiciones suaves al hacer zum en el modo 3D\n• Se ha movido la opción «Posición de la ubicación» dentro de «Configurar pantalla»\n• Se ha cambiado la opción «Circunferencia de rueda» en los ajustes del sensor BLE\n• Se ha añadido la alerta de navegación «Límite de velocidad» a una sección independiente\n• Se corrigieron los nombres de widgets del rumbo\n• Se ha corregido la visibilidad de «Regla radial» en todos los paneles de widgets\n";
-"missing_maps_ignore" = "Ignorar mapas faltantes";
-"missing_maps_ignore_details" = "Algunos mapas descargados pueden adecuarse a la ruta. Si conoces la zona y los mapas, intenta trazar la ruta usando los mapas existente.";
+"missing_maps_ignore" = "Usar mapas descargados";
+"missing_maps_ignore_details" = "¿Los mapas descargados cubren tu ruta? Puedes navegar con ellos si conoces la zona.";
+"map_settings_weather_wind_animation" = "Animación del viento";
+"weather_data_sources_prompt" = "OsmAnd ofrece datos meteorológicos de dos proveedores:";
+"data_source" = "Proveedor de datos";
+"weather_source_ecmwf_description" = "Centro Europeo de Previsiones Meteorológicas a Plazo Medio";
+"weather_source_GFS_description" = "Sistema Global de Predicción de los Centros Nacionales de Predicción Medioambiental";
+"weather_source_GFS_title" = "GFS";
+"weather_source_ecmwf_title" = "CEPMPM (ECMWF)";

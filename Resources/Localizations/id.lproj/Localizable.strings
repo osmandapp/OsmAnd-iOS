@@ -508,7 +508,7 @@
 
 // Favorites
 "shared_string_color" = "Warna";
-"fav_colors" = "Colors";
+"fav_colors" = "Warna";
 "shared_string_name" = "Nama";
 "fav_group" = "Group";
 "shared_string_groups" = "Grup-grup";
@@ -662,8 +662,8 @@
 "daynight_mode_night" = "Malam";
 "map_widget_renderer" = "Gaya peta";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_over" = "Overlay";
-"map_settings_under" = "Underlay";
+"map_settings_over" = "Hamparan";
+"map_settings_under" = "Dasaran";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
@@ -3157,3 +3157,7 @@
 "tomorrow" = "Besok";
 "rendering_value_dark_orange_name" = "Oranye gelap";
 "wall_height" = "Ketinggian tembok";
+"osmand_depelopment_simulate_location_section" = "Simulasikan";
+"transport_hazmat_title" = "Pengangkutan bahan berbahaya";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GPS";

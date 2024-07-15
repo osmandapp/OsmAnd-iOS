@@ -3359,7 +3359,7 @@
 "display_position_automatic_descr" = "取決於地圖方向：底部為移動方向，中心為其他所有方向。";
 "wall_height" = "牆的高度";
 
-"rendering_value_pale_name" = "灰白";;
+"rendering_value_pale_name" = "灰白";
 "missing_maps_ignore_details" = "已下載的地圖涵蓋了您的路線嗎？若您熟悉該區域，請使用它們來導航。";
 "transport_hazmat_title" = "危險物品運輸";
 "weather_source_GFS_title" = "GFS";

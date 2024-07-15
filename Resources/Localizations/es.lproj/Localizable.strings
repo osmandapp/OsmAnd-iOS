@@ -3469,4 +3469,4 @@
 "weather_source_GFS_description" = "Sistema de pronóstico global de los centros nacionales de predicción ambiental";
 "weather_source_ecmwf_title" = "ECMWF";
 
-"rendering_value_pale_name" = "Pálido";;
+"rendering_value_pale_name" = "Pálido";

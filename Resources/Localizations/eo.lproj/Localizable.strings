@@ -3156,7 +3156,7 @@
 "auto_zoom_discrete" = "Diskreta";
 "empty_name" = "Malplena nomo";
 
-"rendering_value_pale_name" = "Pala";;
+"rendering_value_pale_name" = "Pala";
 "weather_source_ecmwf_title" = "ECMWF";
 "missing_maps_ignore" = "Uzi elŝutitajn mapojn";
 "weather_source_GFS_description" = "«Global Forecast System» de «National Centers for Environmental Prediction»";

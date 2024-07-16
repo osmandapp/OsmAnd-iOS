@@ -212,8 +212,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
-        tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        addRefreshControl()
         if isRootFolder && rootFolder.tracks.isEmpty && rootFolder.subfolders.isEmpty {
             buildFoldersTree()
         }
@@ -627,6 +626,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - Navbar Toolbar Actions
     
     private func onNavbarSelectButtonClicked() {
+        removeRefreshControl()
         tableView.setEditing(true, animated: false)
         tableView.allowsMultipleSelectionDuringEditing = true
         updateData()
@@ -757,6 +757,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     @objc private func onNavbarCancelButtonClicked() {
         selectedTracks.removeAll()
         selectedFolders.removeAll()
+        addRefreshControl()
         tableView.setEditing(false, animated: true)
         tableView.allowsMultipleSelectionDuringEditing = false
         updateData()
@@ -1652,5 +1653,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         isSearchActive = false
         isFiltered = false
         updateSearchController()
+    }
+}
+
+// MARK: - UIRefreshControl
+
+extension TracksViewController {
+    private func addRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    }
+    
+    private func removeRefreshControl() {
+        tableView.refreshControl = nil
     }
 }

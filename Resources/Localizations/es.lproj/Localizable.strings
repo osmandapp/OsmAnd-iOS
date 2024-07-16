@@ -3457,14 +3457,16 @@
 "rendering_value_dark_orange_name" = "Naranja oscuro";
 "routing_attr_avoid_cobblestone_description" = "Evite los adoquines";
 "routing_attr_avoid_cobblestone_name" = "Evite los adoquines";
-"missing_maps_ignore" = "Usar mapas existentes";
-"missing_maps_ignore_details" = "Es posible que algunos mapas ya descargados sean adecuados para su ruta. Si está familiarizado con la zona y los mapas, puede intentar trazar una ruta utilizando los mapas existentes.";
+"missing_maps_ignore" = "Utilizar mapas descargados";
+"missing_maps_ignore_details" = "¿Los mapas descargados cubren tu ruta? Navega con ellos si estás familiarizado con la zona.";
 "ios_release_4_8" = "• Nuevo widget \"Velocímetro\" compatible con CarPlay.\n• Añadidas instrucciones giro a giro a los detalles de la ruta\n• Personalización de la pantalla del mapa añadiendo múltiples botones de \"Acción rápida\"\n• Mejoras en las pistas 3D: nuevas opciones de visualización y coloración\n• Paletas de colores personalizadas para el terreno, las pistas y las rutas\n• Se ha añadido un modo de multiselección mejorado para los Tracks\n• Variante 3D para los iconos de posición de localización\n• Selección ampliada de rutas turísticas en el mapa\n• Meteorología: Actualización de la interfaz de usuario, animación del viento añadida\n• Añadidas transiciones suaves al hacer zoom en el modo 3D\n• \"Posición de ubicación en pantalla\" ahora en Pantalla de configuración\n• Cambio de \"Circunferencia de la rueda\" en los ajustes del sensor BLE\n• Añadida alerta de navegación \"Límite de velocidad\" independiente\n• Corregidos los nombres de los widgets de rodamiento\n• Corregida la visibilidad de \"Regla de radio\" en todos los paneles de widgets\n";
 "transport_hazmat_title" = "Transporte de materiales peligrosos";
-"data_source" = "Origen de los datos";
+"data_source" = "Fuente de datos";
 "weather_data_sources_prompt" = "OsmAnd proporciona datos meteorológicos de dos fuentes:";
 "weather_source_ecmwf_description" = "Centro Europeo de Previsiones Meteorológicas a Medio Plazo";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animación del viento";
 "weather_source_GFS_description" = "Sistema de pronóstico global de los centros nacionales de predicción ambiental";
 "weather_source_ecmwf_title" = "ECMWF";
+
+"rendering_value_pale_name" = "Pálido";

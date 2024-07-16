@@ -103,7 +103,7 @@
 "daynight_mode_night" = "Noite";
 "map_widget_renderer" = "Estilo do mapa";
 "map_settings_overunder" = "Camada superior / inferior";
-"map_settings_over" = "Camada superior";
+"map_settings_over" = "Sobreposição";
 "map_settings_under" = "Camada inferior";
 "shared_string_none" = "Nenhum";
 "map_settings_offline" = "Estilos de mapas offline";
@@ -1034,7 +1034,7 @@
 "quick_action_map_style" = "Estilo do mapa";
 "quick_action_map_source" = "Mudar fonte de mapa";
 "quick_action_map_overlay" = "Sobreposição";
-"quick_action_map_underlay" = "Mudar mapa da camada inferior";
+"quick_action_map_underlay" = "Camada inferior";
 "quick_action_replace_destination" = "Substituir destino";
 "add_destination" = "Adicionar destino";
 "quick_action_add_first_intermediate" = "Adicione o primeiro intermediário";
@@ -3402,7 +3402,7 @@
 "vertical_exaggeration" = "Exagero vertical";
 "vertical_exaggeration_description" = "Ao alterar o valor da escala, você pode enfatizar o relevo 3D.";
 "calculate_online" = "Calcular on-line";
-"required_maps_list" = "Mapas que também podem ser usados: %@";
+"required_maps_list" = "Mapas que também serão usados: %@";
 "online_plugins" = "Complementos on-line";
 "downward_gradient" = "Gradiente descendente";
 "upward_gradient" = "Gradiente ascendente";
@@ -3453,10 +3453,18 @@
 "default_buttons" = "Botões padrões";
 "wall_height" = "Altura da parede";
 "shared_string_instructions" = "Instruções";
-"missing_maps_ignore" = "Usar mapas existentes";
+"missing_maps_ignore" = "Usar mapas baixados";
 "rendering_value_dark_orange_name" = "Laranja escuro";
 "select_items" = "Usar mapas existentes";
 "wall_height_description" = "Ao alterar o valor da altura, você pode elevar a linha superior da pista acima do nível do solo.";
 "shared_string_analysis" = "Análise";
-"missing_maps_ignore_details" = "Alguns mapas já baixados podem ser adequados para sua rota. Se você estiver familiarizado com a área e os mapas, poderá tentar fazer a rota usando os mapas existentes.";
+"missing_maps_ignore_details" = "Os mapas baixados cobrem sua rota? Navegue com eles se você estiver familiarizado com a área.";
 "ios_release_4_8" = "- Novo widget \"Velocímetro\" compatível com o CarPlay\n- Adicionadas instruções passo a passo aos detalhes da rota\n- Personalização da tela do mapa com a adição de vários botões de \"Ação rápida\"\n- Melhorias na trilha 3D: novas opções de visualização e coloração\n- Paletas de cores personalizadas para terreno, trilhas e rotas\n- Adicionado o modo de seleção múltipla aprimorado para trilhas\n- Variante 3D para ícones de posição de localização\n- Seleção ampliada de rotas turísticas no mapa\n- Clima: Atualização da interface do usuário, adição de animação de vento\n- Adição de transições suaves durante o zoom no modo 3D\n- \"Posição do local na tela\" agora está na tela de configuração\n- Alteração da \"circunferência da roda\" nas configurações do sensor BLE\n- Adicionado o alerta de navegação \"Limite de velocidade\" separado\n- Correção dos nomes dos widgets de rolamento\n- Corrigida a visibilidade da \"Régua de raio\" em todos os painéis de widgets\n";
+"transport_hazmat_title" = "Transporte de materiais perigosos";
+"data_source" = "Fonte de dados";
+"weather_data_sources_prompt" = "OsmAnd fornece a previsão meteorológica de duas fontes:";
+"weather_source_ecmwf_description" = "Centro Europeu de Previsões Meteorológicas de Médio Prazo";
+"weather_source_GFS_description" = "Sistema de Previsão Global dos Centros Nacionais de Previsão Ambiental";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Animação do vento";

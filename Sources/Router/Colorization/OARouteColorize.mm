@@ -267,104 +267,12 @@ static CGFloat const minDifferenceSlope = 0.05; //5%
     return qResult;
 }
 
-- (NSArray<OARouteColorizationPoint *> *)getSimplifiedResult:(NSInteger)simplificationZoom
-{
-    NSArray<OARouteColorizationPoint *> *simplifiedResult = [self simplify:simplificationZoom];
-    [self setColorsToPoints:simplifiedResult];
-    return simplifiedResult;
-}
-
 - (void)setColorsToPoints:(NSArray<OARouteColorizationPoint *> *)points
 {
     for (OARouteColorizationPoint *point in points)
     {
         point.color = [_palette getColorByValue:point.val];
     }
-}
-
-- (NSArray<OARouteColorizationPoint *> *)simplify:(NSInteger)simplificationZoom
-{
-    if (!_dataList)
-    {
-        _dataList = [NSMutableArray array];
-        for (NSInteger i = 0; i < _latitudes.count; i++)
-        {
-            [_dataList addObject:[[OARouteColorizationPoint alloc] initWithIdentifier:i lat:_latitudes[i].doubleValue lon:_longitudes[i].doubleValue val:_values[i].doubleValue]];
-        }
-    }
-    NSMutableArray<OANode *> *nodes = [NSMutableArray array];
-    NSMutableArray<OANode *> *result = [NSMutableArray array];
-    for (OARouteColorizationPoint *data in _dataList)
-    {
-        [nodes addObject:[[OANode alloc] initWithId:data.identifier latitude:data.lat longitude:data.lon]];
-    }
-    
-    CGFloat epsilon = pow(2.0, defaultBase - simplificationZoom);
-    [result addObject:nodes[0]];
-    [OAOsmMapUtils simplifyDouglasPeucker:nodes start:0 end:nodes.count - 1 result:result epsilon:epsilon];
-    
-    NSMutableArray<OARouteColorizationPoint *> *simplified = [NSMutableArray array];
-    for (NSInteger i = 1; i < result.count; i++)
-    {
-        NSInteger prevId = [result[i - 1] getId];
-        NSInteger currentId = [result[i] getId];
-        NSArray<OARouteColorizationPoint *> *sublist = [_dataList subarrayWithRange:NSMakeRange(prevId, currentId - prevId)];
-        [simplified addObjectsFromArray:[self getExtremums:sublist]];
-    }
-    
-    OANode *lastSurvivedPoint = result.lastObject;
-    [simplified addObject:_dataList[[lastSurvivedPoint getId]]];
-    return simplified;
-}
-
-- (NSArray<OARouteColorizationPoint *> *)getExtremums:(NSArray<OARouteColorizationPoint *> *)subDataList
-{
-    if (subDataList.count <= 2)
-    {
-        return subDataList;
-    }
-
-    NSMutableArray<OARouteColorizationPoint *> *result = [NSMutableArray array];
-    double min = subDataList[0].val;
-    double max = subDataList[0].val;
-
-    for (OARouteColorizationPoint *pt in subDataList)
-    {
-        if (min > pt.val)
-            min = pt.val;
-        if (max < pt.val)
-            max = pt.val;
-    }
-
-    double diff = max - min;
-
-    [result addObject:subDataList[0]];
-    for (NSInteger i = 1; i < subDataList.count - 1; i++)
-    {
-        double prev = subDataList[i - 1].val;
-        double current = subDataList[i].val;
-        double next = subDataList[i + 1].val;
-        OARouteColorizationPoint *currentData = subDataList[i];
-
-        if ((current > prev && current > next) || (current < prev && current < next)
-            || (current < prev && current == next) || (current == prev && current < next)
-            || (current > prev && current == next) || (current == prev && current > next))
-        {
-            OARouteColorizationPoint *prevInResult;
-            if (result.count > 0)
-            {
-                prevInResult = result[0];
-                if (prevInResult.val / diff > minDifferenceSlope)
-                    [result addObject:currentData];
-            }
-            else
-            {
-                [result addObject:currentData];
-            }
-        }
-    }
-    [result addObject:subDataList[subDataList.count - 1]];
-    return result;
 }
 
 /**

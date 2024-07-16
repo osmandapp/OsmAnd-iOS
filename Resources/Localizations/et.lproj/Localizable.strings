@@ -2682,3 +2682,5 @@
 "required_maps_list" = "Lisaks kasutatame kaarte: %@";
 "speedometer_description" = "Näitab sinu praegust kiirust, nii nagu seda GPS\'i andmete alusel saab arvutada";
 "rendering_attr_alpineHiking_name" = "Raskusastme klassifikatsioon";
+"missing_maps_ignore" = "Kasuta olemasolevaid kaarte";
+"delete_history_items" = "Kas kustutame %@ ajalookirjet?";

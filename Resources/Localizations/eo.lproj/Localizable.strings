@@ -661,8 +661,8 @@
 "daynight_mode_night" = "Nokta";
 "map_widget_renderer" = "Map-aspekto";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_over" = "Overlay";
-"map_settings_under" = "Underlay";
+"map_settings_over" = "Surtavolo";
+"map_settings_under" = "Subtavolo";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
@@ -692,7 +692,7 @@
 "shared_string_appearance" = "Aspekto";
 "map_settings_line_density_slowdown_warning" = "High line density may slowdown map rendering";
 "map_settings_available_srtm_maps_descr" = "Additional maps are needed to view Hillshade on the map";
-"settings_app_theme" = "Etoso";
+"settings_app_theme" = "Etoso de aplikaĵo";
 "light_theme" = "Hela";
 "do_not_rotate" = "Do not rotate";
 "allow_3D_view" = "2.5D view";
@@ -3121,7 +3121,7 @@
 "dangerous_goods_description" = "Sur kelkaj vojoj kaj tuneloj transporto de danĝeraj materialoj estas malpermesata.";
 "shared_string_item" = "Elemento";
 "step_by_step" = "Turno-post-turno";
-"shared_string_bottom" = "Sube";
+"shared_string_bottom" = "malsupro";
 "display_position_automatic_descr" = "Dependas de map-orientiĝo: sube por “Direkto de movado” kaj centre por ĉiuj aliaj.";
 "visualization_3d_track_line" = "Linio de spuro";
 "visualization_3d_visualized_by" = "Vidigi per";
@@ -3155,3 +3155,17 @@
 "track_3d_empty_view_description" = "Vidu la spuron interage en 3D! Bildigi altitudon, rapidon kaj pli senpere sur la mapo.";
 "auto_zoom_discrete" = "Diskreta";
 "empty_name" = "Malplena nomo";
+
+"rendering_value_pale_name" = "Pala";
+"weather_source_ecmwf_title" = "ECMWF";
+"missing_maps_ignore" = "Uzi elŝutitajn mapojn";
+"weather_source_GFS_description" = "«Global Forecast System» de «National Centers for Environmental Prediction»";
+"weather_source_GFS_title" = "GFS";
+"data_source" = "Fonto de datumoj";
+"map_settings_weather_wind_animation" = "Movbildi venton";
+"missing_maps_ignore_details" = "Ĉu jam elŝutitaj mapoj taŭgos por via kurso? Navigu per ili se vi ekkonis kun la regiono.";
+"osmand_depelopment_simulate_location_section" = "Simuli";
+"transport_hazmat_title" = "Transporto de danĝeraj materialoj";
+"shared_string_app_profile" = "Aplikaĵa profilo";
+"weather_source_ecmwf_description" = "Eŭropa Centro por Meztemplimaj Veterprognozoj";
+"weather_data_sources_prompt" = "OsmAnd liveras veterajn datumojn el du fontoj:";

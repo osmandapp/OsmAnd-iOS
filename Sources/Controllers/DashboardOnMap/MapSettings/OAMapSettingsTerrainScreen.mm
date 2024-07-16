@@ -177,11 +177,11 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             kCellTypeKey : isRelief3D ? [OASwitchTableViewCell getCellIdentifier] : [OAButtonTableViewCell getCellIdentifier],
             kCellTitleKey : OALocalizedString(@"shared_string_relief_3d"),
             kCellIconNameKey : @"ic_custom_3d_relief",
-            kCellIconTintColor : ![_plugin.enable3DMaps get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
+            kCellIconTintColor : ![_plugin.enable3dMapsPref get] || !isRelief3D ? [UIColor colorNamed:ACColorNameIconColorDisabled] : [UIColor colorNamed:ACColorNameIconColorSelected],
             kCellSecondaryIconName : @"ic_payment_label_pro",
-            @"value" : @([_plugin.enable3DMaps get]),
+            @"value" : @([_plugin.enable3dMapsPref get]),
         }];
-        if (isRelief3D && [_plugin.enable3DMaps get])
+        if (isRelief3D && [_plugin.enable3dMapsPref get])
         {
             double scaleValue = _app.data.verticalExaggerationScale;
             NSString *alphaValueString = scaleValue <= kExaggerationDefScale ? OALocalizedString(@"shared_string_none") : (scaleValue < 1.0 ? [NSString stringWithFormat:@"x%.2f", scaleValue] : [NSString stringWithFormat:@"x%.1f", scaleValue]);
@@ -277,7 +277,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
             [weakSelf terrainTypeChanged];
         }];
 
-        if ([mode getKeyName] == [_plugin.terrainModeType get])
+        if ([mode getKeyName] == [_plugin.terrainModeTypePref get])
         {
             action.state = UIMenuElementStateOn;
 
@@ -607,7 +607,7 @@ typedef OsmAnd::ResourcesManager::ResourceType OsmAndResourceType;
     }
     else if ([item.key isEqualToString:@"relief3D"])
     {
-        [_plugin.enable3DMaps set:isOn];
+        [_plugin.enable3dMapsPref set:isOn];
     }
 
     [self updateAvailableMaps];

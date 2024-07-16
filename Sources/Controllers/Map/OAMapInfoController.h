@@ -60,7 +60,7 @@
 - (void) updateRuler;
 
 - (void)updateLayout;
-- (void)viewWillTransition;
+- (void)viewWillTransition:(CGSize)size;
 - (void)updateSpeedometer;
 
 @end

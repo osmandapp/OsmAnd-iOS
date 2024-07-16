@@ -247,8 +247,8 @@
 "shared_string_or" = "oder";
 "show_info" = "Zeige Info";
 "map_settings_avail_lay" = "Verfügbare Ebenen";
-"map_settings_under" = "Unterlagerung";
-"map_settings_over" = "Einblendung";
+"map_settings_under" = "Unterlage";
+"map_settings_over" = "Überlagerung";
 "map_settings_overunder" = "Überlagerung / Unterlagerung";
 "shared_string_and" = "und";
 "hud_no_movement" = "Keine Bewegung";
@@ -3473,8 +3473,8 @@
 "rendering_value_dark_orange_name" = "Dunkelorange";
 "routing_attr_avoid_cobblestone_description" = "Kopfsteinpflaster vermeiden";
 "routing_attr_avoid_cobblestone_name" = "Kopfsteinpflaster vermeiden";
-"missing_maps_ignore_details" = "Einige bereits heruntergeladene Karten könnten für deine Route geeignet sein. Wenn du dich in der Gegend und mit den Karten auskennst, kannst du versuchen, deine Route mit den vorhandenen Karten zu planen.";
-"missing_maps_ignore" = "Vorhandene Karten verwenden";
+"missing_maps_ignore_details" = "Decken heruntergeladene Karten Ihre Route ab? Navigieren Sie mit ihnen, wenn Sie sich in der Gegend auskennen.";
+"missing_maps_ignore" = "Heruntergeladene Karten verwenden";
 "ios_release_4_8" = "• Neues \"Speedometer\"-Widget kompatibel mit CarPlay\n• Hinzugefügt: Turn-by-Turn-Anweisungen zu Routeninformationen\n• Passe den Kartenbildschirm an, indem du mehrere \"Quick Action\"-Buttons hinzufügst\n• 3D-Track-Verbesserungen: neue Visualisierungs- und Farboptionen\n• Benutzerdefinierte Farbpaletten für Gelände, Tracks und Routen\n• Verbesserter Mehrfachauswahlmodus für Tracks hinzugefügt\n• 3D-Variante für Standortpositionssymbole\n• Erweiterte Auswahl an Touristenrouten auf der Karte\n• Wetter: UI-Aktualisierung, Windanimation hinzugefügt\n• Füge sanfte Übergänge beim Zoomen im 3D-Modus hinzu\n• \"Standortposition auf dem Bildschirm\" ist jetzt im Konfigurationsbildschirm\n• Ändere \"Radumfang\" in den BLE-Sensoreinstellungen\n• Hinzugefügt: separate Navigationswarnung für \"Geschwindigkeitsbegrenzung\"\n• Namen für Peilungs-Widgets korrigiert\n• Sichtbarkeit des \"Radius Lineals\" in allen Widget-Panels behoben\n";
 "transport_hazmat_title" = "Transport von Gefahrgut";
 "weather_source_ecmwf_description" = "Europäisches Zentrum für mittelfristige Wettervorhersage";
@@ -3484,3 +3484,4 @@
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Wind-Animation";
+"rendering_value_pale_name" = "Blass";

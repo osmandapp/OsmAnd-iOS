@@ -79,8 +79,6 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
 - (void) onTerrainResourcesChanged
 {
     [self initCollection];
-    [[NSNotificationCenter defaultCenter] postNotificationName:kNotificationSetProfileSetting
-                                                        object:((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]).terrain];
 }
 
 - (void) initCollection

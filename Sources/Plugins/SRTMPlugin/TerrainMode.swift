@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class TerrainMode: NSObject {
 
-    @objc enum TerrainType: Int32 {
+    @objc enum TerrainType: Int32, Comparable {
         case hillshade
         case slope
         case height
@@ -22,6 +22,10 @@ final class TerrainMode: NSObject {
             case .slope: "slope"
             case .height: "height"
             }
+        }
+
+        static func < (a: TerrainType, b: TerrainType) -> Bool {
+            return a.rawValue < b.rawValue
         }
     }
 
@@ -52,9 +56,9 @@ final class TerrainMode: NSObject {
 
     let type: TerrainType
 
-    private let minZoom: OACommonInteger
-    private let maxZoom: OACommonInteger
-    private let transparency: OACommonInteger
+    private let minZoomPref: OACommonInteger
+    private let maxZoomPref: OACommonInteger
+    private let transparencyPref: OACommonInteger
     private let key: String
 
     var translateName: String
@@ -65,9 +69,9 @@ final class TerrainMode: NSObject {
         self.translateName = translateName
 
         let settings = OAAppSettings.sharedManager()!
-        minZoom = settings.registerIntPreference(key + "_min_zoom", defValue: 3).makeProfile()
-        maxZoom = settings.registerIntPreference(key + "_max_zoom", defValue: 17).makeProfile()
-        transparency = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
+        minZoomPref = settings.registerIntPreference(key + "_min_zoom", defValue: 3).makeProfile()
+        maxZoomPref = settings.registerIntPreference(key + "_max_zoom", defValue: 17).makeProfile()
+        transparencyPref = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
@@ -105,9 +109,9 @@ final class TerrainMode: NSObject {
         modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
 
         let prefixes = [
-            Pair(hillshadePrefix, TerrainType.hillshade.rawValue),
-            Pair(colorSlopePrefix, TerrainType.slope.rawValue),
-            Pair(heightPrefix, TerrainType.height.rawValue)
+            Pair(hillshadePrefix, TerrainType.hillshade),
+            Pair(colorSlopePrefix, TerrainType.slope),
+            Pair(heightPrefix, TerrainType.height)
         ]
         if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
            let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
@@ -122,12 +126,12 @@ final class TerrainMode: NSObject {
         terrainModes = modes
     }
 
-    private static func getTerrainMode(by file: String, prefix: Pair<String, Int32>) -> TerrainMode? {
+    private static func getTerrainMode(by file: String, prefix: Pair<String, TerrainType>) -> TerrainMode? {
         if file.hasPrefix(prefix.first) {
             let key = String(file.substring(from: prefix.first.length).dropLast(TXT_EXT.length))
             let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
-            if key != defaultKey, let type = TerrainType(rawValue: prefix.second) {
-                return TerrainMode(key, type: type, translateName: name)
+            if key != defaultKey {
+                return TerrainMode(key, type: prefix.second, translateName: name)
             }
         }
         return nil
@@ -145,11 +149,11 @@ final class TerrainMode: NSObject {
         let prefix: String
         switch type {
         case .hillshade:
-            prefix = Self.heightPrefix
+            prefix = Self.hillshadePrefix
         case .slope:
             prefix = Self.colorSlopePrefix
         case .height:
-            prefix = Self.hillshadePrefix
+            prefix = Self.heightPrefix
         }
         return prefix + key + TXT_EXT
     }
@@ -174,42 +178,42 @@ final class TerrainMode: NSObject {
     }
 
     func setZoomValues(minZoom: Int32, maxZoom: Int32) {
-        self.minZoom.set(minZoom)
-        self.maxZoom.set(maxZoom)
+        self.minZoomPref.set(minZoom)
+        self.maxZoomPref.set(maxZoom)
     }
 
     func setZoomValues(minZoom: Int32, maxZoom: Int32, mode: OAApplicationMode) {
-        self.minZoom.set(minZoom, mode: mode)
-        self.maxZoom.set(maxZoom, mode: mode)
+        self.minZoomPref.set(minZoom, mode: mode)
+        self.maxZoomPref.set(maxZoom, mode: mode)
     }
 
     func setTransparency(_ transparency: Int32) {
-        self.transparency.set(transparency)
+        self.transparencyPref.set(transparency)
     }
 
     func setTransparency(_ transparency: Int32, mode: OAApplicationMode) {
-        self.transparency.set(transparency, mode: mode)
+        self.transparencyPref.set(transparency, mode: mode)
     }
 
     func getTransparency() -> Int32 {
-        transparency.get()
+        transparencyPref.get()
     }
 
     func resetZoomsToDefault() {
-        minZoom.resetToDefault()
-        maxZoom.resetToDefault()
+        minZoomPref.resetToDefault()
+        maxZoomPref.resetToDefault()
     }
 
     func resetTransparencyToDefault() {
-        transparency.resetToDefault()
+        transparencyPref.resetToDefault()
     }
 
     func getMinZoom() -> Int32 {
-        minZoom.get()
+        minZoomPref.get()
     }
 
     func getMaxZoom() -> Int32 {
-        maxZoom.get()
+        maxZoomPref.get()
     }
 
     func getDefaultDescription() -> String {
@@ -228,10 +232,10 @@ final class TerrainMode: NSObject {
     }
 
     func isTransparencySetting(_ setting: OACommonInteger) -> Bool {
-        setting == transparency
+        setting == transparencyPref
     }
 
     func isZoomSetting(_ setting: OACommonInteger) -> Bool {
-        setting == minZoom || setting == maxZoom
+        setting == minZoomPref || setting == maxZoomPref
     }
 }

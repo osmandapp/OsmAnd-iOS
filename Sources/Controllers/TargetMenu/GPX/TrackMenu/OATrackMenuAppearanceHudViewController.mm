@@ -666,9 +666,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     UIMenu *sensorMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:sensorActions];
     UIMenu *fixedHeightMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[fixedHeightAction]];
     
-    UIMenu *mainMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:@[noneMenu, sensorMenu, fixedHeightMenu]];
     NSString *selectedTitle = visualizationTypes[@(weakSelf.gpx.visualization3dByType)];
-    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[mainMenu]];
+    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[noneMenu, sensorMenu, fixedHeightMenu]];
 }
 
 - (UIMenu *)createWallColorMenuForCellButton:(UIButton *)button
@@ -721,9 +720,8 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
     
     [menuElements addObject:[UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:dataActions]];
     
-    UIMenu *mainMenu = [UIMenu menuWithTitle:@"" image:nil identifier:nil options:UIMenuOptionsDisplayInline children:menuElements];
     NSString *selectedTitle = wallColorTypes[@(weakSelf.gpx.visualization3dWallColorType)];
-    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:@[mainMenu]];
+    return [self createChevronMenu:OALocalizedString(selectedTitle) button:button menuElements:[menuElements copy]];
 }
 
 - (UIMenu *)createTrackLineMenuForCellButton:(UIButton *)button
@@ -2246,7 +2244,7 @@ static const NSInteger kColorGridOrDescriptionCell = 1;
             [self.settings.currentTrackColor resetToDefault];
             
             [self.doc setWidth:[self.settings.currentTrackWidth get]];
-            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];            
+            [self.doc setShowArrows:[self.settings.currentTrackShowArrows get]];
             [self.doc setShowStartFinish:[self.settings.currentTrackShowStartFinish get]];
             [self.doc setVerticalExaggerationScale:[self.settings.currentTrackVerticalExaggerationScale get]];
             [self.doc setElevationMeters:[self.settings.currentTrackElevationMeters get]];

@@ -662,8 +662,8 @@
 "daynight_mode_night" = "Ноћ";
 "map_widget_renderer" = "Начин приказа карте";
 "map_settings_overunder" = "Слој изнад / испод";
-"map_settings_over" = "Слој преко";
-"map_settings_under" = "Подлога";
+"map_settings_over" = "Надслој";
+"map_settings_under" = "Подслој";
 "map_settings_install_maps" = "Изаберите мапе које желите да инсталирате или ажурирате";
 "map_settings_install_more" = "Инсталирај више...";
 "map_settings_offline" = "Стилови за ванмрежне мапе";
@@ -2981,7 +2981,7 @@
 "shared_string_deleting" = "Брисање";
 "shared_string_deleting_complete" = "Брисање завршено";
 "shared_string_open_track" = "Отвори путању";
-"shared_string_app_profile" = "Апликациони профил";
+"shared_string_app_profile" = "Додај профил";
 "download_file" = "Преузми фајл";
 "travel_card_download_descr" = "Преузмите туристичке водиче Викивојажа ради читања чланака о местима по целом свету без везе са интернетом.";
 "saved_articles" = "Забележени чланци";
@@ -3199,7 +3199,7 @@
 "speak_route_recalculation" = "Најављује прерачунавање путање";
 "announcement_time_title" = "Време објаве";
 "ant_plus_open_settings" = "Отвори поставке";
-"external_device_status_connect" = "Повежи";
+"external_device_status_connect" = "Повежи се";
 "external_device_status_disconnecting" = "Прекидање везе";
 "external_device_unpair_description" = "Повежите пријемник са уређајем да бисте добили информације.";
 "external_device_status_connected" = "Повезан";
@@ -3458,7 +3458,15 @@
 "rendering_value_dark_orange_name" = "Тамно наранџаста";
 "routing_attr_avoid_cobblestone_description" = "Избегавање калдрме";
 "routing_attr_avoid_cobblestone_name" = "Избегавај калдрму";
-"missing_maps_ignore_details" = "Неке већ преузете мапе могу бити прикладне за вашу руту. Ако сте упознати са подручјем и мапама, можете покушати са рутирањем користећи постојеће мапе.";
-"missing_maps_ignore" = "Користи постојеће мапе";
+"missing_maps_ignore_details" = "Преузете мапе покривају вашу руту? Крећите се са њима ако сте упознати са подручјем.";
+"missing_maps_ignore" = "Користи преузете мапе";
 "ios_release_4_8" = "• Нови виџет „Брзинометер“ компатибилан са КарПлеј-ом\n• Додата детаљна упутства за детаље руте\n• Прилагодите екран мапе додавањем више дугмади „Брза радња“\n• Побољшања 3Д стаза: нове опције визуелизације и колоризације\n• Прилагођене палете боја за терен, стазе и руте\n• Додат је побољшани режим вишеструког избора за стазе\n• 3Д варијанта за иконе положаја локације\n• Проширен избор туристичких рута на мапи\n• Време: Освежавање корисничког интерфејса, додата анимација ветра\n• Додајте глатке прелазе док зумирате у 3Д режиму\n• „Положај локације на екрану“ је сада на екрану за конфигурисање\n• Промените „Обим точка“ у подешавањима БЛЕ сензора\n• Додато посебно навигационо упозорење „Ограничење брзине“\n• Поправљени називи за виџете усмеравања\n• Исправљена видљивост „Радијуса лењира“ у свим панелима виџета\n";
 "transport_hazmat_title" = "Превожење опасних материја";
+"weather_source_ecmwf_description" = "Европски Центар за средњерочне временске прогнозе";
+"weather_source_ecmwf_title" = "ЕЦМВП";
+"weather_source_GFS_title" = "ГФС";
+"weather_source_GFS_description" = "Глобални систем прогнозе Националног центра за предвиђање животне средине";
+"data_source" = "Извор података";
+"weather_data_sources_prompt" = "ОсмАнд пружа временске податке из два извора:";
+"map_settings_weather_wind_animation" = "Анимација ветра";
+"rendering_value_pale_name" = "Бледо";

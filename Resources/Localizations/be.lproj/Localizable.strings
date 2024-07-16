@@ -2603,7 +2603,7 @@
 "map_widget_time_to_intermediate" = "Час для прамежкавага пункта";
 "announcement_time_passing" = "Пры праходжанні";
 "map_widget_sunset_desc" = "Паказвае час заходу сонца або час, які застаўся да заходу сонца.";
-"external_device_status_connect" = "Злучыць";
+"external_device_status_connect" = "Злучэнне";
 "map_widget_distance_to_intermediate" = "Адлегласць да прамежкавага пункта";
 "reset_all_settings_desc" = "Вы ўпэўнены, што хочаце скінуць усе налады да прадвызначаных\?";
 "shared_string_contents" = "Змест";
@@ -2859,3 +2859,6 @@
 "step_by_step" = "Падказкі";
 "custom_map_button_name_present" = "Такая кнопка ўжо існуе";
 "distance_during_navigation" = "Адлегласць падчас навігацыі";
+"shared_string_round_up" = "Акругленая";
+"shared_string_precise" = "Дакладная";
+"transport_hazmat_title" = "Перавозка небяспечных матэрыялаў";

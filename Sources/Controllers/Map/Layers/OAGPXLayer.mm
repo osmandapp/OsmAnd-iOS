@@ -139,11 +139,6 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     return YES;
 }
 
-- (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs refreshColors:(BOOL)refreshColors
-{
-    [self refreshGpxTracks:gpxDocs reset:YES refreshColors:refreshColors];
-}
-
 - (void) refreshGpxTracks:(QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> >)gpxDocs reset:(BOOL)reset refreshColors:(BOOL)refreshColors
 {
     if (reset)
@@ -1712,7 +1707,7 @@ colorizationScheme:(int)colorizationScheme
                 doc->saveTo(QString::fromNSString(item.docPath), QString::fromNSString([OAAppVersion getFullVersionWithAppName]));
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > docs;
                 docs[QString::fromNSString(item.docPath)] = doc;
-                [self refreshGpxTracks:docs refreshColors:NO];
+                [self refreshGpxTracks:docs reset:YES refreshColors:NO];
             }
         }
         else

@@ -15,9 +15,9 @@ static NSInteger const terrainMaxSupportedZoom = 19;
 
 @interface OASRTMPlugin : OAPlugin
 
-@property (nonatomic) OACommonBoolean *enable3DMaps;
-@property (nonatomic) OACommonBoolean *terrain;
-@property (nonatomic) OACommonString *terrainModeType;
+@property (nonatomic) OACommonBoolean *enable3dMapsPref;
+@property (nonatomic) OACommonBoolean *terrainEnabledPref;
+@property (nonatomic) OACommonString *terrainModeTypePref;
 
 - (TerrainMode *)getTerrainMode;
 - (void)setTerrainMode:(TerrainMode *)mode;

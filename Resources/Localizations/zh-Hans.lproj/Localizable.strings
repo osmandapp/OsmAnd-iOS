@@ -1844,7 +1844,7 @@
 "backup_deleting_all_data" = "正在删除所有数据…";
 "shared_string_progress" = "进度";
 "shared_string_not_included" = "不包括";
-"public_transport_ped_route_title" = "徒步完成此路径需要约 %@，可能比公共交通更快";
+"public_transport_ped_route_title" = "步行路线约为 %@，可能比公共交通更快";
 "benefits_for_contributors_secondary_descr" = "登录 OpenStreetMap 以检查您是否有资格获得无限制的每月和每小时地图更新。";
 "track_has_no_needed_data" = "轨迹缺少相应的数据。";
 "add_group" = "添加组";
@@ -2698,3 +2698,5 @@
 "shared_string_is_deleted" = "%@已删除。";
 "dangerous_goods_description" = "某些道路和隧道禁止运输危险品。";
 "shared_string_setup_route" = "设置路线";
+"missing_maps_ignore" = "使用现有地图";
+"transport_hazmat_title" = "危险品运输";

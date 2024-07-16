@@ -2804,7 +2804,7 @@
 "ant_plus_bluetooth_off_description" = "Включване на Bluetooth, търсене и сдвояване със сензори.";
 "external_sensors_source_of_data" = "Източник на данни";
 "map_widget_ant_bicycle_cadence" = "Каданс на велосипеда";
-"weather_update_disabled" = "Спрян";
+"weather_update_disabled" = "Изключено";
 "map_widget_zoom_level_desc" = "Показва текущото увеличение на картата.";
 "help_article_navigation_routing_brouter_name" = "BRouter";
 "radius_rules_widget_desc" = "Инструментът „Линия за радиуси“ показва окръжности с разстояния около избрана точка от картата.";
@@ -2909,3 +2909,4 @@
 "dangerous_goods_description" = "По някои пътища и тунели превозването на опасни товари е забранено.";
 "shared_string_class" = "Клас";
 "shared_string_bottom" = "Долу";
+"transport_hazmat_title" = "Превоз на опасни товари";

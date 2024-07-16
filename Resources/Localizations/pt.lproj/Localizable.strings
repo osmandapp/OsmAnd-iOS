@@ -1030,10 +1030,10 @@
 "quick_action_add_osm_bug" = "Adicionar nota OSM";
 "toggle_online_notes" = "Mostrar/esconder notas do OSM";
 "quick_action_add_poi" = "Adicionar POI";
-"quick_action_map_style" = "Mudar estilo do mapa";
+"quick_action_map_style" = "Estilo do mapa";
 "quick_action_map_source" = "Alterar origem do mapa";
-"quick_action_map_overlay" = "Mudar mapa da camada superior";
-"quick_action_map_underlay" = "Mudar mapa da camada inferior";
+"quick_action_map_overlay" = "Camada superior";
+"quick_action_map_underlay" = "Camada inferior";
 "quick_action_replace_destination" = "Substituir destino";
 "add_destination" = "Adicionar destino";
 "quick_action_add_first_intermediate" = "Adicionar primeiro intermédio";
@@ -1618,7 +1618,7 @@
 "map_look_descr" = "Aparência do mapa";
 "public_transport_show" = "Mostrar transporte público";
 "application_profiles" = "Perfis da aplicação";
-"quick_action_remove_next_destination" = "Eliminar o próximo ponto de destino";
+"quick_action_remove_next_destination" = "Próximo ponto de destino";
 "shared_string_terrain" = "Terreno";
 "accessibility_announce" = "Avisar por voz";
 "profile_prefs_reset_successful" = "Todas as configurações do perfil foram repostas para os valores de origem.";
@@ -2266,7 +2266,7 @@
 "routing_attr_only_permitted_ways_name" = "Vias com permissão expressa";
 "routing_attr_prefer_horse_routes_description" = "Preferir percursos que podem ser utilizador a cavalo";
 "routing_attr_prefer_horse_routes_name" = "Preferir percursos a cavalo";
-"horseback_riding" = "Equitação";
+"horseback_riding" = "Andar a cavalo";
 "shared_string_open_street_map" = "OpenStreetMap";
 "routing_attr_only_permitted_ways_description" = "Usar apenas vias (trilhos, caminhos) com utilização permitida assinalada";
 "start_point" = "Iniciar";
@@ -3397,7 +3397,7 @@
 "missing_or_outdated_maps_description" = "Alguns mapas offline necessários para este itinerário estão em falta ou não estão atualizados. Descarregue ou atualize estes mapas.";
 "required_maps" = "Mapas necessários";
 "calculate_online" = "Calcular online";
-"calculate_online_title" = "A lista de mapas necessários baseia-se no trajeto em linha reta. Para obter uma lista exata de mapas, o OsmAnd pode pré-calcular o seu itinerário online";
+"calculate_online_title" = "A lista de mapas que faltam baseia-se no trajeto em linha reta. Para obter uma lista exata de mapas, o OsmAnd pode pré-calcular o seu itinerário online";
 "required_maps_list" = "Mapas que também serão utilizados: %@";
 "getting_list_required_maps" = "A obter uma lista de mapas necessários...";
 "osmand_depelopment_use_old_routing" = "Utilizar o antigo roteamento (A*)";
@@ -3458,3 +3458,16 @@
 "rendering_value_dark_orange_name" = "Laranja escuro";
 "routing_attr_avoid_cobblestone_description" = "Evitar pedras irregulares";
 "routing_attr_avoid_cobblestone_name" = "Evitar pedras irregulares";
+"transport_hazmat_title" = "Transporte de matérias perigosas";
+"missing_maps_ignore" = "Usar mapas descarregados";
+"data_source" = "Fonte de dados";
+"weather_data_sources_prompt" = "O OsmAnd fornece a previsão meteorológica de duas fontes:";
+"weather_source_ecmwf_description" = "Centro Europeu de Previsão do Tempo a Médio Prazo";
+"weather_source_GFS_description" = "Sistema de Previsão Global dos Centros Nacionais de Previsão Ambiental";
+"weather_source_ecmwf_title" = "ECMWF";
+"missing_maps_ignore_details" = "Os mapas descarregados cobrem o seu percurso? Navegue com eles se estiver familiarizado com a zona.";
+"weather_source_GFS_title" = "GFS";
+"map_settings_weather_wind_animation" = "Animação do vento";
+"ios_release_4_8" = "• Novo widget \"Velocímetro\" compatível com CarPlay\n• Adicionadas instruções passo a passo aos detalhes do percurso\n• Personalização do ecrã do mapa com a adição de vários botões de \"Ação rápida\"\n• Melhorias no trajeto 3D: novas opções de visualização e coloração\n• Paletas de cores personalizadas para terreno, trilhos e rotas\n• Adicionado um modo de seleção múltipla melhorado para trilhos\n• Variante 3D para ícones de posição de localização\n• Seleção alargada de rotas turísticas no mapa\n• Previsão meteorologia: atualização da interface do utilizador, animação do vento adicionada\n• Adição de transições suaves durante o zoom no modo 3D\n• \"Posição da localização no ecrã\" está agora no ecrã Configurar\n• Alterar a \"circunferência da roda\" nas definições do sensor BLE\n• Adicionado um alerta de navegação \"Limite de velocidade\" separado\n• Corrigidos os nomes dos widgets de rolamentos\n• Corrigida a visibilidade da \"Régua de raio\" em todos os painéis de widgets\n";
+
+"rendering_value_pale_name" = "Pálido";

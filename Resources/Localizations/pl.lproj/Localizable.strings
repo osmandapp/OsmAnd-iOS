@@ -3274,3 +3274,13 @@
 "dangerous_goods_description" = "Na niektórych drogach i w tunelach przewożenie materiałów niebezpiecznych jest zabronione.";
 "visualization_3d_wall_color" = "Kolorściany";
 "display_position_automatic_descr" = "Zależy od orientacji mapy: dół dla kierunku ruchu, środek dla wszystkich innych.";
+"transport_hazmat_title" = "Transport materiałów niebezpiecznych";
+"weather_source_GFS_description" = "Globalny system prognoz z Krajowych Centrów Prognoz Środowiskowych";
+"missing_maps_ignore_details" = "Niektóre już pobrane mapy mogą być odpowiednie dla danej trasy. Jeśli znasz obszar i mapy, możesz spróbować wyznaczyć trasę przy użyciu istniejących map.";
+"missing_maps_ignore" = "Skorzystaj z istniejących map";
+"weather_data_sources_prompt" = "OsmAnd dostarcza dane pogodowe z dwóch źródeł:";
+"map_settings_weather_wind_animation" = "Animacja wiatru";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_ecmwf_description" = "Europejskie Centrum PrognozŚrednioterminowych";
+"weather_source_GFS_title" = "GFS";
+"data_source" = "Źródło danych";

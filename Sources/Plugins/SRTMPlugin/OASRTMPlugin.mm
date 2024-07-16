@@ -24,9 +24,9 @@
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const PLUGIN_ID = kInAppId_Addon_Srtm;
-static NSString * const kEnable3dMaps = @"enable_3d_maps";
-static NSString * const kTerrainMode = @"terrain_mode";
-static NSString * const kTerrain = @"terrain_layer";
+static NSString * const kEnable3dMapsPrefName = @"enable_3d_maps";
+static NSString * const kTerrainModePrefName = @"terrain_mode";
+static NSString * const kTerrainEnabledPrefName = @"terrain_layer";
 
 @implementation OASRTMPlugin
 
@@ -36,11 +36,11 @@ static NSString * const kTerrain = @"terrain_layer";
     if (self)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        _enable3DMaps = [[[settings registerBooleanPreference:kEnable3dMaps defValue:YES] makeProfile] makeShared];
+        _enable3dMapsPref = [[[settings registerBooleanPreference:kEnable3dMapsPrefName defValue:YES] makeProfile] makeShared];
 
-        _terrain = [[self registerBooleanPreference:kTerrain defValue:YES] makeProfile];
+        _terrainEnabledPref = [[self registerBooleanPreference:kTerrainEnabledPrefName defValue:YES] makeProfile];
         NSArray<TerrainMode *> *tms = TerrainMode.values;
-        _terrainModeType = [[self registerStringPreference:kTerrainMode defValue:tms.count == 0 ? @"" : [tms.firstObject getKeyName]] makeProfile];
+        _terrainModeTypePref = [[self registerStringPreference:kTerrainModePrefName defValue:tms.count == 0 ? @"" : [tms.firstObject getKeyName]] makeProfile];
 
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(onProfileSettingSet:)
@@ -84,22 +84,22 @@ static NSString * const kTerrain = @"terrain_layer";
 
 - (TerrainMode *)getTerrainMode
 {
-    return [TerrainMode getByKey:[_terrainModeType get]];
+    return [TerrainMode getByKey:[_terrainModeTypePref get]];
 }
 
 - (void)setTerrainMode:(TerrainMode *)mode
 {
-    return [_terrainModeType set:[mode getKeyName]];
+    return [_terrainModeTypePref set:[mode getKeyName]];
 }
 
 - (BOOL)isTerrainLayerEnabled
 {
-    return [_terrain get];
+    return [_terrainEnabledPref get];
 }
 
 - (void)setTerrainLayerEnabled:(BOOL)enabled
 {
-    [_terrain set:enabled];
+    [_terrainEnabledPref set:enabled];
     [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
 }
 
@@ -126,12 +126,12 @@ static NSString * const kTerrain = @"terrain_layer";
 
 - (BOOL)is3DMapsEnabled
 {
-    return [self isHeightmapEnabled] && [_enable3DMaps get];
+    return [self isHeightmapEnabled] && [_enable3dMapsPref get];
 }
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _enable3DMaps)
+    if (notification.object == _enable3dMapsPref)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];

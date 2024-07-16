@@ -721,7 +721,6 @@
     if (updateColorPalette)
     {
         [app.updateGpxTracksOnMapObservable notifyEvent];
-        [[OARootViewController instance].mapPanel.mapViewController.mapLayers.routeMapLayer refreshRouteWithSync:YES refreshColors:YES];
     }
     if (updateRoutingFiles)
         [app loadRoutingFiles];

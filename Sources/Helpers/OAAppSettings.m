@@ -216,9 +216,6 @@ static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
 
-static NSString * const osmUserNameKey = @"osm_user_name";
-static NSString * const userOsmBugNameKey = @"userOsmBugName";
-static NSString * const osmPasswordKey = @"osm_pass";
 static NSString * const osmUserAccessTokenKey = @"osm_user_access_token";
 static NSString * const osmUserAccessTokenSecretKey = @"osm_user_access_token_secret";
 static NSString * const oprAccessTokenKey = @"opr_access_token";
@@ -4301,11 +4298,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _rulerMode = [[[OACommonRulerWidgetMode withKey:rulerModeKey defValue:RULER_MODE_DARK] makeGlobal] makeShared];
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
-        _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
         _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
-        _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
-        _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
@@ -4315,11 +4309,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _offlineEditing = [[[OACommonBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
         _osmUseDevUrl = [[[OACommonBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
         [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];
         [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
-        [_globalPreferences setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
-        [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
         [_globalPreferences setObject:_osmUserAccessToken forKey:@"user_access_token"];
         [_globalPreferences setObject:_osmUserAccessTokenSecret forKey:@"user_access_token_secret"];
         [_globalPreferences setObject:_oprAccessToken forKey:@"opr_user_access_token_secret"];

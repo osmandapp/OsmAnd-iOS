@@ -3825,5 +3825,7 @@
 "routing_attr_avoid_cobblestone_description" = "Avoid cobblestone";
 "routing_attr_avoid_cobblestone_name" = "Avoid cobblestone";
 "rendering_value_dark_orange_name" = "Dark orange";
+"rendering_value_pale_name" = "Pale";
 
-"rendering_value_pale_name" = "Pale";;
+"shared_string_update_required" = "Update Required";
+"osm_login_needs_ios_16_4" = "OpenStreetMap login needs iOS 16.4+";

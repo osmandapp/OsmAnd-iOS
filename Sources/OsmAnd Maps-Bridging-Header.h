@@ -102,7 +102,6 @@
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OACreateProfileViewController.h"
 #import "OAOsmAccountSettingsViewController.h"
-#import "OAOsmLoginMainViewController.h"
 #import "OACopyProfileBottomSheetViewControler.h"
 #import "OABaseWebViewController.h"
 #import "OATrackMenuHudViewController.h"
@@ -130,6 +129,8 @@
 #import "OAMainSettingsViewController.h"
 #import "OADownloadMultipleResourceViewController.h"
 #import "OAPluginPopupViewController.h"
+#import "OABenefitsOsmContributorsViewController.h"
+#import "OAOsmEditingSettingsViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"

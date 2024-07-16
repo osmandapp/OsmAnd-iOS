@@ -3468,5 +3468,6 @@
 "map_settings_weather_wind_animation" = "Animación del viento";
 "weather_source_GFS_description" = "Sistema de pronóstico global de los centros nacionales de predicción ambiental";
 "weather_source_ecmwf_title" = "ECMWF";
-
-"rendering_value_pale_name" = "Pálido";;
+"rendering_value_pale_name" = "Pálido";
+"osm_login_needs_ios_16_4" = "Para iniciar sesión en OpenStreetMap se necesita iOS 16.4+";
+"shared_string_update_required" = "Actualización requerida";

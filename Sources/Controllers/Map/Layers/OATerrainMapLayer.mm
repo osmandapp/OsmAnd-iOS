@@ -120,7 +120,7 @@
 
 - (void)onProfileSettingSet:(NSNotification *)notification
 {
-    if (notification.object == _plugin.terrain || notification.object == _plugin.terrainModeType)
+    if (notification.object == _plugin.terrainEnabledPref || notification.object == _plugin.terrainModeTypePref)
     {
         [self updateTerrainLayer];
     }

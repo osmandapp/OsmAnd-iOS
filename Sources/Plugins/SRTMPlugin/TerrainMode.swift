@@ -11,7 +11,7 @@ import Foundation
 @objcMembers
 final class TerrainMode: NSObject {
 
-    @objc enum TerrainType: Int32 {
+    @objc enum TerrainType: Int32, Comparable {
         case hillshade
         case slope
         case height
@@ -22,6 +22,10 @@ final class TerrainMode: NSObject {
             case .slope: "slope"
             case .height: "height"
             }
+        }
+
+        static func < (a: TerrainType, b: TerrainType) -> Bool {
+            return a.rawValue < b.rawValue
         }
     }
 
@@ -105,9 +109,9 @@ final class TerrainMode: NSObject {
         modes.append(TerrainMode(defaultKey, type: .slope, translateName: localizedString("shared_string_slope")))
 
         let prefixes = [
-            Pair(hillshadePrefix, TerrainType.hillshade.rawValue),
-            Pair(colorSlopePrefix, TerrainType.slope.rawValue),
-            Pair(heightPrefix, TerrainType.height.rawValue)
+            Pair(hillshadePrefix, TerrainType.hillshade),
+            Pair(colorSlopePrefix, TerrainType.slope),
+            Pair(heightPrefix, TerrainType.height)
         ]
         if let dir = OsmAndApp.swiftInstance().colorsPalettePath,
            let files = try? FileManager.default.contentsOfDirectory(atPath: dir) {
@@ -122,12 +126,12 @@ final class TerrainMode: NSObject {
         terrainModes = modes
     }
 
-    private static func getTerrainMode(by file: String, prefix: Pair<String, Int32>) -> TerrainMode? {
+    private static func getTerrainMode(by file: String, prefix: Pair<String, TerrainType>) -> TerrainMode? {
         if file.hasPrefix(prefix.first) {
             let key = String(file.substring(from: prefix.first.length).dropLast(TXT_EXT.length))
             let name = OAUtilities.capitalizeFirstLetter(key).replacingOccurrences(of: "_", with: " ")
-            if key != defaultKey, let type = TerrainType(rawValue: prefix.second) {
-                return TerrainMode(key, type: type, translateName: name)
+            if key != defaultKey {
+                return TerrainMode(key, type: prefix.second, translateName: name)
             }
         }
         return nil
@@ -145,11 +149,11 @@ final class TerrainMode: NSObject {
         let prefix: String
         switch type {
         case .hillshade:
-            prefix = Self.heightPrefix
+            prefix = Self.hillshadePrefix
         case .slope:
             prefix = Self.colorSlopePrefix
         case .height:
-            prefix = Self.hillshadePrefix
+            prefix = Self.heightPrefix
         }
         return prefix + key + TXT_EXT
     }

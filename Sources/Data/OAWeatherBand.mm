@@ -442,17 +442,17 @@ static NSString *kPrecipContourStyleName;
     switch (self.bandIndex)
     {
         case WEATHER_BAND_CLOUD:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_cloud"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_cloud.txt"];
         case WEATHER_BAND_TEMPERATURE:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_temperature"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_temperature.txt"];
         case WEATHER_BAND_PRESSURE:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_pressure"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_pressure.txt"];
         case WEATHER_BAND_WIND_SPEED:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind.txt"];
         case WEATHER_BAND_PRECIPITATION:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_precip"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_precip.txt"];
         case WEATHER_BAND_WIND_ANIMATION:
-            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind_animation"];
+            return [_app.colorsPalettePath stringByAppendingPathComponent:@"weather_wind_animation.txt"];
         case WEATHER_BAND_NOTHING:
             return nil;
     }

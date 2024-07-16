@@ -3682,7 +3682,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs refreshColors:YES];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES refreshColors:YES];
 }
 
 - (void) refreshGpxTracks

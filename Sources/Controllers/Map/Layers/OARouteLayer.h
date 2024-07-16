@@ -13,7 +13,6 @@
 @interface OARouteLayer : OABaseVectorLinesLayer
 
 - (void) refreshRoute;
-- (void) refreshRouteWithSync:(BOOL)sync refreshColors:(BOOL)refreshColors;
 
 - (OAPreviewRouteLineInfo *) getPreviewRouteLineInfo;
 - (void) setPreviewRouteLineInfo:(OAPreviewRouteLineInfo *)previewInfo;

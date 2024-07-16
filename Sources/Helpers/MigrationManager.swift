@@ -387,8 +387,8 @@ final class MigrationManager: NSObject {
 
     private func changeTerrainSettingsMigration1() {
         if let plugin = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
-            if let newTerrain = plugin.terrain,
-               let newTerrainMode = plugin.terrainModeType,
+            if let newTerrain = plugin.terrainEnabledPref,
+               let newTerrainMode = plugin.terrainModeTypePref,
                let oldTerrainMode = OACommonInteger.withKey("terrainType", defValue: 0),
                let oldLastTerrainMode = OACommonInteger.withKey("lastTerrainType", defValue: 1) {
                 for appMode in OAApplicationMode.allPossibleValues() {
@@ -413,7 +413,7 @@ final class MigrationManager: NSObject {
 
             let terrainMode = plugin.getTerrainMode()
             for appMode in OAApplicationMode.allPossibleValues() {
-                if plugin.terrainModeType.get(appMode) == TerrainMode.TerrainType.hillshade.name {
+                if plugin.terrainModeTypePref.get(appMode) == TerrainMode.TerrainType.hillshade.name {
                     if let oldHillshadeMinZoom, let oldHillshadeMaxZoom {
                         terrainMode?.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode), mode: appMode)
                     }

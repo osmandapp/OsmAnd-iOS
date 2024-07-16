@@ -17,7 +17,6 @@
 #import "OARouteImporter.h"
 #import "OARouteStatistics.h"
 #import "OARootViewController.h"
-#import "OARouteColorize.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>

@@ -52,7 +52,8 @@
     sk_sp<SkImage> _transportShieldIcon;
     
     std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
-    OAAutoObserverProxy* _mapZoomObserver;
+    OAAutoObserverProxy *_mapZoomObserver;
+    OAAutoObserverProxy *_updateGpxTracksOnMapObserver;
     
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
     NSCache<NSString *, NSNumber *> *_сoloringTypeAvailabilityCache;
@@ -87,7 +88,16 @@
 
 - (void)dealloc
 {
-    [_mapZoomObserver detach];
+    if (_mapZoomObserver)
+    {
+        [_mapZoomObserver detach];
+        _mapZoomObserver = nil;
+    }
+    if (_updateGpxTracksOnMapObserver)
+    {
+        [_updateGpxTracksOnMapObserver detach];
+        _updateGpxTracksOnMapObserver = nil;
+    }
 }
 
 - (void) initLayer
@@ -125,6 +135,9 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
+    _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onUpdateGpxTracksOnMapObservable)
+                                                               andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 }
 
 - (void) resetLayer
@@ -742,6 +755,11 @@
 {
     CLLocation *p = [[CLLocation alloc] initWithLatitude:lp.coordinate.latitude + part * (l.coordinate.latitude - lp.coordinate.latitude) longitude:lp.coordinate.longitude + part * (l.coordinate.longitude - lp.coordinate.longitude)];
     return p;
+}
+
+- (void)onUpdateGpxTracksOnMapObservable
+{
+    [self refreshRouteWithSync:YES refreshColors:YES];
 }
 
 - (void) refreshRoute

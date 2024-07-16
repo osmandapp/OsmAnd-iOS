@@ -56,9 +56,9 @@ final class TerrainMode: NSObject {
 
     let type: TerrainType
 
-    private let minZoom: OACommonInteger
-    private let maxZoom: OACommonInteger
-    private let transparency: OACommonInteger
+    private let minZoomPref: OACommonInteger
+    private let maxZoomPref: OACommonInteger
+    private let transparencyPref: OACommonInteger
     private let key: String
 
     var translateName: String
@@ -69,9 +69,9 @@ final class TerrainMode: NSObject {
         self.translateName = translateName
 
         let settings = OAAppSettings.sharedManager()!
-        minZoom = settings.registerIntPreference(key + "_min_zoom", defValue: 3).makeProfile()
-        maxZoom = settings.registerIntPreference(key + "_max_zoom", defValue: 17).makeProfile()
-        transparency = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
+        minZoomPref = settings.registerIntPreference(key + "_min_zoom", defValue: 3).makeProfile()
+        maxZoomPref = settings.registerIntPreference(key + "_max_zoom", defValue: 17).makeProfile()
+        transparencyPref = settings.registerIntPreference(key + "_transparency", defValue: type == .hillshade ? 100 : 80).makeProfile()
     }
 
     static func getMode(_ type: TerrainType, keyName: String) -> TerrainMode? {
@@ -178,42 +178,42 @@ final class TerrainMode: NSObject {
     }
 
     func setZoomValues(minZoom: Int32, maxZoom: Int32) {
-        self.minZoom.set(minZoom)
-        self.maxZoom.set(maxZoom)
+        self.minZoomPref.set(minZoom)
+        self.maxZoomPref.set(maxZoom)
     }
 
     func setZoomValues(minZoom: Int32, maxZoom: Int32, mode: OAApplicationMode) {
-        self.minZoom.set(minZoom, mode: mode)
-        self.maxZoom.set(maxZoom, mode: mode)
+        self.minZoomPref.set(minZoom, mode: mode)
+        self.maxZoomPref.set(maxZoom, mode: mode)
     }
 
     func setTransparency(_ transparency: Int32) {
-        self.transparency.set(transparency)
+        self.transparencyPref.set(transparency)
     }
 
     func setTransparency(_ transparency: Int32, mode: OAApplicationMode) {
-        self.transparency.set(transparency, mode: mode)
+        self.transparencyPref.set(transparency, mode: mode)
     }
 
     func getTransparency() -> Int32 {
-        transparency.get()
+        transparencyPref.get()
     }
 
     func resetZoomsToDefault() {
-        minZoom.resetToDefault()
-        maxZoom.resetToDefault()
+        minZoomPref.resetToDefault()
+        maxZoomPref.resetToDefault()
     }
 
     func resetTransparencyToDefault() {
-        transparency.resetToDefault()
+        transparencyPref.resetToDefault()
     }
 
     func getMinZoom() -> Int32 {
-        minZoom.get()
+        minZoomPref.get()
     }
 
     func getMaxZoom() -> Int32 {
-        maxZoom.get()
+        maxZoomPref.get()
     }
 
     func getDefaultDescription() -> String {
@@ -232,10 +232,10 @@ final class TerrainMode: NSObject {
     }
 
     func isTransparencySetting(_ setting: OACommonInteger) -> Bool {
-        setting == transparency
+        setting == transparencyPref
     }
 
     func isZoomSetting(_ setting: OACommonInteger) -> Bool {
-        setting == minZoom || setting == maxZoom
+        setting == minZoomPref || setting == maxZoomPref
     }
 }

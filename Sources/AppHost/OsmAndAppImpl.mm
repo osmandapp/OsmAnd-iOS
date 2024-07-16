@@ -300,12 +300,12 @@
     BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
                                               toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
                                   removeOriginalFile:YES];
-    BOOL movedColorsPalette = [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
-                                                     toDest:_colorsPalettePath
-                                  removeOriginalFile:NO];
+    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
+                           toDest:_colorsPalettePath
+               removeOriginalFile:NO];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-    if (movedRes || movedSqlite || movedColorsPalette)
+    if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
 }
 

@@ -802,7 +802,7 @@
 "base_profile_descr_car" = "Mașină, camion, motocicletă";
 "save_track_logging_accuracy" = "Precizieînregistrare";
 "reverse_route" = "Inversează ruta";
-"replace_all" = "Înlocuiți tot";
+"replace_all" = "Înlocuire toate";
 "vehicle_parameters" = "Parametrii vehicul";
 "select_base_profile_dialog_message" = "Bazați-vă profilul personalizat pe unul dintre profilurile implicite ale aplicației. acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgeturilor și unitățile de viteză și distanță. Acestea sunt profiluri implicite din aplicație, împreună cu exemple de profiluri personalizate la care pot fi extinse:";
 "routing_profile_ski" = "Ski";
@@ -851,7 +851,7 @@
 "select_navigation_icon" = "Selectați icon pentru navigație";
 "quick_action_showhide_mapillary_title" = "Afișare/ascundere Mapillary";
 "shared_string_settings" = "Setări";
-"keep_both" = "Păstrați ambele";
+"keep_both" = "Păstrare ambele";
 "shared_string_poi_types" = "Tipuri POI";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "import_duplicates_title" = "Unele elemente există deja";

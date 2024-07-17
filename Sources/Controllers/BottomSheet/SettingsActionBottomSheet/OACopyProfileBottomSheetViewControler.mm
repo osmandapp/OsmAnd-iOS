@@ -192,8 +192,8 @@
     [_targetAppMode setRoutingProfile:_sourceAppMode.getRoutingProfile];
     [_targetAppMode setRouterService:_sourceAppMode.getRouterService];
     [_targetAppMode setIconColor:_sourceAppMode.getIconColor];
-    [_targetAppMode setLocationIcon:_sourceAppMode.getLocationIcon];
-    [_targetAppMode setNavigationIcon:_sourceAppMode.getNavigationIcon];
+    [_targetAppMode setLocationIconName:[_sourceAppMode.getLocationIcon name]];
+    [_targetAppMode setNavigationIconName:[_sourceAppMode.getNavigationIcon name]];
     
     [app.data.mapLayerChangeObservable notifyEvent];
 }

@@ -6,30 +6,41 @@
 //  Copyright © 2020 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString *LOCATION_ICON_DEFAULT = @"DEFAULT";
-static NSString *LOCATION_ICON_CAR = @"CAR";
-static NSString *LOCATION_ICON_BICYCLE = @"BICYCLE";
-
 @interface OALocationIcon : NSObject
 
-+ (instancetype) withIconName:(NSString *)iconName;
++ (instancetype) withModelName:(NSString *)modelName;
++ (instancetype) withName:(NSString *)name iconName:(NSString *)iconName headingIconName:(NSString *)headingIconName modelName:(NSString *)modelName;
+
++ (void) initialize;
++ (OALocationIcon *) locationIconWithName:(NSString *)name;
+
++ (OALocationIcon *) DEFAULT;
++ (OALocationIcon *) CAR;
++ (OALocationIcon *) BICYCLE;
++ (OALocationIcon *) MOVEMENT_DEFAULT;
++ (OALocationIcon *) MOVEMENT_NAUTICAL;
++ (OALocationIcon *) MOVEMENT_CAR;
+
++ (NSArray<OALocationIcon *> *) defaultIcons;
++ (NSArray<NSString *> *) defaultIconNames;
++ (NSArray<NSString *> *) defaultIconModels;
+
+- (NSString *) name;
 - (NSString *) iconName;
-- (UIImage *) iconWithColor:(UIColor *)color;
+- (NSString *) headingIconName;
+- (NSString *) modelName;
+
 - (UIImage *) getMapIcon:(UIColor *)color;
-- (UIImage *) headingIconWithColor:(UIColor *)color;
+- (UIImage *) getHeadingIconWithColor:(UIColor *)color;
+- (UIImage *) getPreviewIconWithColor:(UIColor *)color;
 
-+ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color;
-+ (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color;
-
-+ (BOOL) isModel:(NSString *)iconName;
++ (BOOL) isModel:(NSString *)modelName;
 - (BOOL) isModel;
-
-+ (NSArray<NSString *> *) getIconNames;
-+ (NSString *) getStandardIconModelName:(NSString *)iconName;
+- (BOOL) shouldDisplayModel;
 
 @end
 

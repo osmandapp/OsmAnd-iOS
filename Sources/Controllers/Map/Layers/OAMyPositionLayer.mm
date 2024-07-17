@@ -15,7 +15,6 @@
 #import "OATargetPoint.h"
 #import "Localization.h"
 #import "OALocationIcon.h"
-#import "OANavigationIcon.h"
 #import "OAAutoObserverProxy.h"
 #import "OAColors.h"
 #import "OAModel3dHelper+cpp.h"
@@ -152,8 +151,8 @@ typedef enum {
     bool withCircle = false;
     
     OAApplicationMode *currentMode = [OAAppSettings sharedManager].applicationMode.get;
-    OANavigationIcon *locIcon = [OANavigationIcon withIconName:currentMode.getLocationIcon];
-    OANavigationIcon *navIcon = [OANavigationIcon withIconName:currentMode.getNavigationIcon];
+    OALocationIcon *locIcon = [currentMode getLocationIcon];
+    OALocationIcon *navIcon = [currentMode getNavigationIcon];
     bool showHeading = false;
     float sectorDirection = 0.0f;
     float sectorRadius = 0.0f;
@@ -540,8 +539,8 @@ typedef enum {
         
         UIColor *iconColor = UIColorFromRGB(mode.getIconColor);
         
-        NSString *locationIconName = mode.getLocationIcon;
-        NSString *navigationIconName = mode.getNavigationIcon;
+        NSString *locationIconName = [mode.getLocationIcon name];
+        NSString *navigationIconName = [mode.getNavigationIcon name];
         sk_sp<SkImage> navigationSkImage;
         sk_sp<SkImage> navigationLostSkImage;
         sk_sp<SkImage> locationSkImage;
@@ -552,27 +551,27 @@ typedef enum {
         std::shared_ptr<const OsmAnd::Model3D> navigationModelCpp;
         std::shared_ptr<const OsmAnd::Model3D> locationModelCpp;
 
-        OANavigationIcon *navIcon = [OANavigationIcon withIconName:navigationIconName];
+        OALocationIcon *navIcon = [OALocationIcon locationIconWithName:navigationIconName];
         navigationIconName = [navIcon iconName];
-        if ([navIcon isModel])
+        if ([navIcon shouldDisplayModel])
         {
-            navigationModel = [Model3dHelper.shared getModelWithModelName:navigationIconName callback:nil];
+            navigationModel = [Model3dHelper.shared getModelWithModelName:[navIcon modelName] callback:nil];
             if (!navigationModel)
             {
-                navigationIconName = NAVIGATION_ICON_DEFAULT;
-                navIcon = [OANavigationIcon withIconName:navigationIconName];
+                navIcon = [OALocationIcon MOVEMENT_DEFAULT];
+                navigationIconName = [navIcon iconName];
             }
         }
         
-        OALocationIcon *locIcon = [OALocationIcon withIconName:locationIconName];
+        OALocationIcon *locIcon = [OALocationIcon locationIconWithName:locationIconName];
         locationIconName = [locIcon iconName];
-        if ([locIcon isModel])
+        if ([locIcon shouldDisplayModel])
         {
-            locationModel = [Model3dHelper.shared getModelWithModelName:locationIconName callback:nil];
+            locationModel = [Model3dHelper.shared getModelWithModelName:[locIcon modelName] callback:nil];
             if (!locationModel)
             {
-                locationIconName = LOCATION_ICON_DEFAULT;
-                locIcon = [OALocationIcon withIconName:locationIconName];
+                locIcon = [OALocationIcon DEFAULT];
+                locationIconName = [locIcon iconName];
             }
         }
                 
@@ -602,7 +601,7 @@ typedef enum {
             locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyDay,
                                                                OsmAnd::SingleSkImage(locationMainIcon));
     
-            sk_sp<SkImage> locationHeadingIcon = [OANativeUtilities skImageFromCGImage:[locIcon headingIconWithColor:iconColor].CGImage];
+            sk_sp<SkImage> locationHeadingIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor:iconColor].CGImage];
             locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyDay,
                                                                OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingIcon scaleFactor:_textScaleFactor]));
         }
@@ -650,7 +649,7 @@ typedef enum {
             locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationMainIconKeyNight,
                                                                OsmAnd::SingleSkImage(locationMainNightIcon));
             
-            sk_sp<SkImage> locationHeadingNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon headingIconWithColor:iconColor].CGImage];
+            sk_sp<SkImage> locationHeadingNightIcon = [OANativeUtilities skImageFromCGImage:[locIcon getHeadingIconWithColor :iconColor].CGImage];
             locationAndCourseMarkerBuilder.addOnMapSurfaceIcon(c.locationHeadingIconKeyNight,
                                                                OsmAnd::SingleSkImage([OANativeUtilities getScaledSkImage:locationHeadingNightIcon scaleFactor:_textScaleFactor]));
         }

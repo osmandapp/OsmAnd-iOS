@@ -291,8 +291,8 @@ static int PROFILE_TRUCK = 1000;
         @"routeService" : self.getRouterServiceName,
         @"derivedProfile" : self.getDerivedProfile,
         @"routingProfile" : self.getRoutingProfile,
-        @"locIcon" : self.getLocationIconName,
-        @"navIcon" : self.getNavigationIconName,
+        @"locIcon" : [self.getLocationIcon name],
+        @"navIcon" : [self.getNavigationIcon name],
         @"order" : @(self.getOrder)
     };
 }
@@ -473,52 +473,26 @@ static int PROFILE_TRUCK = 1000;
     [OAAppSettings.sharedManager.routerService set:(int) routerService mode:self];
 }
 
-- (NSString *) getNavigationIconName
+- (OALocationIcon *) getNavigationIcon
 {
-    NSString *navigationIcon = [self getLocationIcon];
-    if ([navigationIcon isEqualToString:NAVIGATION_ICON_DEFAULT])
-        return @"DEFAULT";
-    else if ([navigationIcon isEqualToString:NAVIGATION_ICON_NAUTICAL])
-        return @"NAUTICAL";
-    else if ([navigationIcon isEqualToString:NAVIGATION_ICON_CAR])
-        return @"CAR";
-    else if ([navigationIcon hasPrefix:MODEL_NAME_PREFIX])
-        return navigationIcon;
-    else
-        return @"DEFAULT";
+    NSString *savedName = [OAAppSettings.sharedManager.navigationIcon get:self];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName];
+    return icon ? icon : [OALocationIcon MOVEMENT_DEFAULT];
 }
 
-- (NSString *) getNavigationIcon
-{
-    return [OAAppSettings.sharedManager.navigationIcon get:self];
-}
-
-- (void) setNavigationIcon:(NSString *) navIcon
+- (void) setNavigationIconName:(NSString *) navIcon
 {
     [OAAppSettings.sharedManager.navigationIcon set:navIcon mode:self];
 }
 
-- (NSString *) getLocationIconName
+- (OALocationIcon *) getLocationIcon
 {
-    NSString *locationIcon = [self getLocationIcon];
-    if ([locationIcon isEqualToString:LOCATION_ICON_DEFAULT])
-        return @"DEFAULT";
-    else if ([locationIcon isEqualToString:LOCATION_ICON_CAR])
-        return @"CAR";
-    else if ([locationIcon isEqualToString:LOCATION_ICON_BICYCLE])
-        return @"BICYCLE";
-    else if ([locationIcon hasPrefix:MODEL_NAME_PREFIX])
-        return locationIcon;
-    else
-        return @"DEFAULT";
+    NSString *savedName = [OAAppSettings.sharedManager.locationIcon get:self];
+    OALocationIcon *icon = [OALocationIcon locationIconWithName:savedName];
+    return icon ? icon : [OALocationIcon DEFAULT];
 }
 
-- (NSString *) getLocationIcon
-{
-    return [OAAppSettings.sharedManager.locationIcon get:self];
-}
-
-- (void) setLocationIcon:(NSString *) locIcon
+- (void) setLocationIconName:(NSString *) locIcon
 {
     [OAAppSettings.sharedManager.locationIcon set:locIcon mode:self];
 }
@@ -698,8 +672,8 @@ static int PROFILE_TRUCK = 1000;
         [mode setDerivedProfile:builder.derivedProfile];
         [mode setRouterService:builder.routeService];
         [mode setIconColor:(int)builder.iconColor];
-        [mode setLocationIcon:builder.locationIcon];
-        [mode setNavigationIcon:builder.navigationIcon];
+        [mode setLocationIconName:builder.locationIcon];
+        [mode setNavigationIconName:builder.navigationIcon];
         [mode setOrder:(int)builder.order];
     }
     else if (![_values containsObject:mode])
@@ -900,8 +874,8 @@ static int PROFILE_TRUCK = 1000;
     res.userProfileName = jsonData[@"userProfileName"];
     res.iconColor = [self parseColor:jsonData[@"iconColor"]];
     res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
-    res.locIcon = [self parseLocationIcon:jsonData[@"locIcon"]];
-    res.navIcon = [self parseNavIcon:jsonData[@"navIcon"]];
+    res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"]] name];
+    res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"]] name];
     res.order = [jsonData[@"order"] intValue];
     NSInteger routerService = [self.class parseRouterService:jsonData[@"routeService"]];
     res.routeService = routerService;
@@ -917,32 +891,6 @@ static int PROFILE_TRUCK = 1000;
     if ([iconName isEqualToString:@"ic_action_truck_dark"])
         return @"ic_action_truck";
     return iconName;
-}
-
-+ (NSString *) parseNavIcon:(NSString *)locIcon
-{
-    if ([locIcon isEqualToString:@"DEFAULT"])
-        return NAVIGATION_ICON_DEFAULT;
-    else if ([locIcon isEqualToString:@"NAUTICAL"])
-        return NAVIGATION_ICON_NAUTICAL;
-    else if ([locIcon isEqualToString:@"CAR"])
-        return NAVIGATION_ICON_CAR;
-    else if ([locIcon hasPrefix:MODEL_NAME_PREFIX])
-        return locIcon;
-    return NAVIGATION_ICON_DEFAULT;
-}
-
-+ (NSString *) parseLocationIcon:(NSString *)locIcon
-{
-    if ([locIcon isEqualToString:@"DEFAULT"])
-        return LOCATION_ICON_DEFAULT;
-    else if ([locIcon isEqualToString:@"CAR"])
-        return LOCATION_ICON_CAR;
-    else if ([locIcon isEqualToString:@"BICYCLE"])
-        return LOCATION_ICON_BICYCLE;
-    else if ([locIcon hasPrefix:MODEL_NAME_PREFIX])
-        return locIcon;
-    return LOCATION_ICON_DEFAULT;
 }
 
 + (NSInteger) parseRouterService:(NSString *)routerService
@@ -991,8 +939,8 @@ static int PROFILE_TRUCK = 1000;
     [_am setRoutingProfile:_routingProfile];
     [_am setRouterService:_routeService];
     [_am setIconColor:(int)_iconColor];
-    [_am setLocationIcon:_locationIcon];
-    [_am setNavigationIcon:_navigationIcon];
+    [_am setLocationIconName:_locationIcon];
+    [_am setNavigationIconName:_navigationIcon];
     [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];
     
     return _am;

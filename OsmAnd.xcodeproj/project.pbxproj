@@ -2124,7 +2124,6 @@
 		DA5A81EB26C563A700F274C7 /* OAHistoryDB.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACA26C563A100F274C7 /* OAHistoryDB.mm */; };
 		DA5A81EC26C563A700F274C7 /* OARendererRegistry.mm in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7ACF26C563A100F274C7 /* OARendererRegistry.mm */; };
 		DA5A81ED26C563A700F274C7 /* OAProfileIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */; };
-		DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */; };
 		DA5A81EF26C563A700F274C7 /* OAProfileDataUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */; };
 		DA5A81F026C563A700F274C7 /* OALocationIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD726C563A100F274C7 /* OALocationIcon.m */; };
 		DA5A81F126C563A700F274C7 /* OAProfileIconColor.m in Sources */ = {isa = PBXBuildFile; fileRef = DA5A7AD826C563A100F274C7 /* OAProfileIconColor.m */; };
@@ -6130,13 +6129,11 @@
 		DA5A7AD226C563A100F274C7 /* OALocationIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALocationIcon.h; sourceTree = "<group>"; };
 		DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIcon.m; sourceTree = "<group>"; };
 		DA5A7AD426C563A100F274C7 /* OAProfileIconColor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileIconColor.h; sourceTree = "<group>"; };
-		DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OANavigationIcon.m; sourceTree = "<group>"; };
 		DA5A7AD626C563A100F274C7 /* OAProfileDataUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileDataUtils.m; sourceTree = "<group>"; };
 		DA5A7AD726C563A100F274C7 /* OALocationIcon.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OALocationIcon.m; sourceTree = "<group>"; };
 		DA5A7AD826C563A100F274C7 /* OAProfileIconColor.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OAProfileIconColor.m; sourceTree = "<group>"; };
 		DA5A7AD926C563A100F274C7 /* OAProfileIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileIcon.h; sourceTree = "<group>"; };
 		DA5A7ADA26C563A100F274C7 /* OAProfileDataUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAProfileDataUtils.h; sourceTree = "<group>"; };
-		DA5A7ADB26C563A100F274C7 /* OANavigationIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OANavigationIcon.h; sourceTree = "<group>"; };
 		DA5A7ADC26C563A100F274C7 /* OAWorldRegion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAWorldRegion.h; sourceTree = "<group>"; };
 		DA5A7ADD26C563A100F274C7 /* OAApplicationMode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OAApplicationMode.h; sourceTree = "<group>"; };
 		DA5A7AE026C563A100F274C7 /* OALaunchScreenViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OALaunchScreenViewController.h; sourceTree = "<group>"; };
@@ -11441,8 +11438,6 @@
 				46D38A9529C394C4000AAE0C /* Data */,
 				DA5A7AD226C563A100F274C7 /* OALocationIcon.h */,
 				DA5A7AD726C563A100F274C7 /* OALocationIcon.m */,
-				DA5A7ADB26C563A100F274C7 /* OANavigationIcon.h */,
-				DA5A7AD526C563A100F274C7 /* OANavigationIcon.m */,
 				DA5A7AD926C563A100F274C7 /* OAProfileIcon.h */,
 				DA5A7AD326C563A100F274C7 /* OAProfileIcon.m */,
 				DA5A7AD426C563A100F274C7 /* OAProfileIconColor.h */,
@@ -17222,7 +17217,6 @@
 				C573544F2AAB5144008B3214 /* OAMapSettingsTerrainParametersViewController.mm in Sources */,
 				DA5A84FB26C563A900F274C7 /* OADownloadProgressView.m in Sources */,
 				3216E9532BA097BD0087D0EF /* StringExtensions.swift in Sources */,
-				DA5A81EE26C563A700F274C7 /* OANavigationIcon.m in Sources */,
 				DA5A823426C563A700F274C7 /* OAImportCompleteViewController.mm in Sources */,
 				327DF98A2C2494C800B5069C /* RouteParameterHazmatUsa.swift in Sources */,
 				FA4D7F572B03D366003208D7 /* BLEWheelSettingsViewController.swift in Sources */,

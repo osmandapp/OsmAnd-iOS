@@ -334,25 +334,25 @@ final class MigrationManager: NSObject {
                 if let oldLocationIconPref = OACommonInteger.withKey("locationIcon", defValue: 0).makeProfile() {
                     switch oldLocationIconPref.get(appMode) {
                     case 0:
-                        settings.locationIcon.set(LOCATION_ICON_DEFAULT, mode: appMode)
+                        settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
                     case 1:
-                        settings.locationIcon.set(LOCATION_ICON_CAR, mode: appMode)
+                        settings.locationIcon.set(OALocationIcon.car().name(), mode: appMode)
                     case 2:
-                        settings.locationIcon.set(LOCATION_ICON_BICYCLE, mode: appMode)
+                        settings.locationIcon.set(OALocationIcon.bicycle().name(), mode: appMode)
                     default:
-                        settings.locationIcon.set(LOCATION_ICON_DEFAULT, mode: appMode)
+                        settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
                     }
                 }
                 if let oldNavigationIconPref = OACommonInteger.withKey("navigationIcon", defValue: 0).makeProfile() {
                     switch oldNavigationIconPref.get(appMode) {
                     case 0:
-                        settings.navigationIcon.set(NAVIGATION_ICON_DEFAULT, mode: appMode)
+                        settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
                     case 1:
-                        settings.navigationIcon.set(NAVIGATION_ICON_NAUTICAL, mode: appMode)
+                        settings.navigationIcon.set(OALocationIcon.movement_NAUTICAL().name(), mode: appMode)
                     case 2:
-                        settings.navigationIcon.set(NAVIGATION_ICON_CAR, mode: appMode)
+                        settings.navigationIcon.set(OALocationIcon.movement_CAR().name(), mode: appMode)
                     default:
-                        settings.navigationIcon.set(NAVIGATION_ICON_DEFAULT, mode: appMode)
+                        settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
                     }
                 }                    
             }

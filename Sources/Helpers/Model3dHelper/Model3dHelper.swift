@@ -146,6 +146,27 @@ final class Model3dHelper: NSObject {
         return res
     }
     
+    static func listUniquePluginModels() -> [String] {
+        var res = [String]()
+        let defaultIconModels = OALocationIcon.defaultIconModels()
+        do {
+            let modelsDir: String = OsmAndApp.swiftInstance().models3dPath
+            let modelsDirs = try FileManager.default.contentsOfDirectory(atPath: modelsDir)
+            if !modelsDirs.isEmpty {
+                for modelDirName in modelsDirs {
+                    let dirPath = modelsDir.appendingPathComponent(modelDirName)
+                    let name = MODEL_NAME_PREFIX + modelDirName
+                    if isModelExist(dir: dirPath) && !defaultIconModels.contains(name) {
+                        res.append(name)
+                    }
+                }
+            }
+        } catch let error {
+            debugPrint(error)
+        }
+        return res
+    }
+    
     static func getModelPath(modelName: String) -> String {
         return OsmAndApp.swiftInstance().models3dPath.appendingPathComponent(modelName)
     }

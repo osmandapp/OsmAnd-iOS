@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 
-#import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 
 @class OAApplicationModeBuilder;
@@ -108,10 +107,10 @@
 - (void) setRoutingProfile:(NSString *) routingProfile;
 - (NSInteger) getRouterService;
 - (void) setRouterService:(NSInteger) routerService;
-- (NSString *) getNavigationIcon;
-- (void) setNavigationIcon:(NSString *) navIcon;
-- (NSString *) getLocationIcon;
-- (void) setLocationIcon:(NSString *) locIcon;
+- (OALocationIcon *) getNavigationIcon;
+- (void) setNavigationIconName:(NSString *) navIcon;
+- (OALocationIcon *) getLocationIcon;
+- (void) setLocationIconName:(NSString *) locIcon;
 - (int) getIconColor;
 - (void) setIconColor:(int)iconColor;
 - (int) getOrder;

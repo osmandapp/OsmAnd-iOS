@@ -10,7 +10,6 @@
 #import "Localization.h"
 #import "OAColors.h"
 #import "OAApplicationMode.h"
-#import "OANavigationIcon.h"
 #import "OALocationIcon.h"
 #import "OAMainSettingsViewController.h"
 #import "OAConfigureProfileViewController.h"
@@ -111,12 +110,13 @@
     NSDictionary<NSNumber *, NSString *> *_colorNames;
     NSArray<NSString *> *_icons;
     
+    NSArray<NSString *> *_uniquePluginModels;
+    NSArray<OALocationIcon *> *_locationIcons;
+    NSArray<OALocationIcon *> *_navigationIcons;
     NSArray<NSString *> *_locationIconNames;
     NSArray<NSString *> *_navigationIconNames;
-    NSArray<UIImage *> *_locationIcons;
-    NSArray<UIImage *> *_navigationIcons;
-    
-    NSArray<NSString *> *_models;
+    NSArray<UIImage *> *_locationIconImages;
+    NSArray<UIImage *> *_navigationIconImages;
 }
 
 - (instancetype) initWithParentProfile:(OAApplicationMode *)profile
@@ -178,8 +178,8 @@
     _profile.derivedProfile = baseModeForNewProfile.getDerivedProfile;
     _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
     _profile.routeService = (EOARouteService) baseModeForNewProfile.getRouterService;
-    _profile.locationIcon = baseModeForNewProfile.getLocationIcon;
-    _profile.navigationIcon = baseModeForNewProfile.getNavigationIcon;
+    _profile.locationIcon = [baseModeForNewProfile.getLocationIcon name];
+    _profile.navigationIcon = [baseModeForNewProfile.getNavigationIcon name];
 }
 
 - (void) commonInit
@@ -307,11 +307,13 @@
 
 - (void) generateData
 {
-    _models = [Model3dHelper listModels];
-    _locationIconNames = [self getlocationIconNames];
-    _navigationIconNames = [self getNavigationIconNames];
+    _uniquePluginModels = [Model3dHelper listUniquePluginModels];
     _locationIcons = [self getlocationIcons];
-    _navigationIcons = [self getNavigationIcons];
+    _locationIconNames = [self getlocationIconNames];
+    _navigationIcons = [self getlocationIcons];
+    _navigationIconNames = [self getlocationIconNames];
+    _locationIconImages = [self getlocationIconImages];
+    _navigationIconImages = [self getlocationIconImages];
     
     _colors = @[
         @(profile_icon_color_blue_light_default),
@@ -371,56 +373,45 @@
                @"ic_action_light_aircraft"];
 }
 
+- (NSArray<OALocationIcon *> *) getlocationIcons
+{
+    NSMutableArray<OALocationIcon *> *icons = [NSMutableArray array];
+    [icons addObjectsFromArray:[OALocationIcon defaultIcons]];
+    
+    NSArray<NSString *> *uniquePluginModelNames = [_uniquePluginModels sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+        return [obj1 compare:obj2];
+    }];
+    for (NSString *modelName in uniquePluginModelNames)
+    {
+        OALocationIcon *icon = [OALocationIcon locationIconWithName:modelName];
+        if (icon)
+            [icons addObject:icon];
+    }
+    return icons;
+}
+
+
 - (NSArray<NSString *> *) getlocationIconNames
 {
     NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    if (!OAAppSettings.sharedManager.use3dIconsByDefault.get)
-	    [iconNames addObjectsFromArray:OALocationIcon.getIconNames];
-
-    NSArray<NSString *> *sortedModelNames = [_models sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    [iconNames addObjectsFromArray:sortedModelNames];
+    for (OALocationIcon *icon in _locationIcons)
+    {
+        [iconNames addObject:[icon name]];
+    }
     return [iconNames copy];
 }
 
-- (NSArray<UIImage *> *) getlocationIcons
+- (NSArray<UIImage *> *) getlocationIconImages
 {
-    NSMutableArray<UIImage *> *icons = [NSMutableArray array];
+    NSMutableArray<UIImage *> *images = [NSMutableArray array];
     UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    for (NSString *iconName in _locationIconNames)
+    for (OALocationIcon *icon in _locationIcons)
     {
-        UIImage *icon = [OALocationIcon getPreviewIcon:iconName color:currColor];
-        if (icon)
-            [icons addObject:icon];
+        UIImage *image = [icon getPreviewIconWithColor:currColor];
+        if (image)
+            [images addObject:image];
     }
-    return icons;
-}
-
-- (NSArray<NSString *> *) getNavigationIconNames
-{
-    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    if (!OAAppSettings.sharedManager.use3dIconsByDefault.get)
-    	[iconNames addObjectsFromArray:OANavigationIcon.getIconNames];
-
-    NSArray<NSString *> *sortedModelNames = [_models sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-        return [obj1 compare:obj2];
-    }];
-    [iconNames addObjectsFromArray:sortedModelNames];
-    return [iconNames copy];
-}
-
-- (NSArray<UIImage *> *) getNavigationIcons
-{
-    NSMutableArray<UIImage *> *icons = [NSMutableArray array];
-    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
-    for (NSString *iconName in _navigationIconNames)
-    {
-        UIImage *icon = [OANavigationIcon getPreviewIcon:iconName color:currColor];
-        if (icon)
-            [icons addObject:icon];
-    }
-    return icons;
+    return images;
 }
 
 - (UIStatusBarStyle) preferredStatusBarStyle
@@ -497,8 +488,8 @@
         [mode setRoutingProfile:_changedProfile.routingProfile];
         [mode setRouterService:_changedProfile.routeService];
         [mode setIconColor:_changedProfile.color];
-        [mode setLocationIcon:_changedProfile.locationIcon];
-        [mode setNavigationIcon:_changedProfile.navigationIcon];
+        [mode setLocationIconName:_changedProfile.locationIcon];
+        [mode setNavigationIconName:_changedProfile.navigationIcon];
         
         [[[OsmAndApp instance] availableAppModesChangedObservable] notifyEvent];
     }
@@ -655,19 +646,19 @@
         {
             BOOL isAtRestRow = indexPath.row == kIconsAtRestRow;
             cell.locationType = isAtRestRow ? EOALocationTypeRest : EOALocationTypeMoving;
-            cell.dataArray = isAtRestRow ? _locationIcons : _navigationIcons;
+            cell.dataArray = isAtRestRow ? _locationIconImages : _navigationIconImages;
             
             if (isAtRestRow)
             {
                 cell.selectedIndex = [_locationIconNames indexOfObject:_changedProfile.locationIcon];
                 if (cell.selectedIndex == NSNotFound)
-	                cell.selectedIndex = [_locationIconNames indexOfObject:[OALocationIcon getStandardIconModelName:_changedProfile.locationIcon]];
+                    cell.selectedIndex = 0;
             }
             else
             {
                 cell.selectedIndex = [_navigationIconNames indexOfObject:_changedProfile.navigationIcon];
                 if (cell.selectedIndex == NSNotFound)
-	                cell.selectedIndex = [_navigationIconNames indexOfObject:[OANavigationIcon getStandardIconModelName:_changedProfile.navigationIcon]];
+                    cell.selectedIndex = 0;
             }
 
             cell.titleLabel.text = item[@"title"];

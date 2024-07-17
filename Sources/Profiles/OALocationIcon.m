@@ -11,71 +11,154 @@
 #import "OAAppSettings.h"
 #import "OAIndexConstants.h"
 
-static NSString *LOCATION_MODEL_ICON_DEFAULT = @"model_map_default_location";
-static NSString *LOCATION_MODEL_ICON_CAR = @"model_map_car_location";
-static NSString *LOCATION_MODEL_ICON_BICYCLE = @"model_map_bicycle_location";
+#import "OsmAnd_Maps-Swift.h"
 
 @interface OALocationIcon()
 
+@property (nonatomic) NSString *name;
 @property (nonatomic) NSString *iconName;
+@property (nonatomic) NSString *headingIconName;
+@property (nonatomic) NSString *modelName;
 
 @end
 
 
 @implementation OALocationIcon
+{
+    NSString *_name;
+    NSString *_iconName;
+    NSString *_headingIconName;
+    NSString *_modelName;
+}
 
-+ (instancetype) withIconName:(NSString *)iconName
+static OALocationIcon *_DEFAULT;
+static OALocationIcon *_CAR;
+static OALocationIcon *_BICYCLE;
+static OALocationIcon *_MOVEMENT_DEFAULT;
+static OALocationIcon *_MOVEMENT_NAUTICAL;
+static OALocationIcon *_MOVEMENT_CAR;
+
++ (instancetype) withName:(NSString *)name iconName:(NSString *)iconName headingIconName:(NSString *)headingIconName modelName:(NSString *)modelName
 {
     OALocationIcon *obj = [[OALocationIcon alloc] init];
     if (obj)
+    {
+        obj.name = name;
         obj.iconName = iconName;
+        obj.headingIconName = headingIconName;
+        obj.modelName = modelName;
+    }
 
     return obj;
 }
 
-+ (BOOL) isStandardIcon:(NSString *)iconName
++ (instancetype) withModelName:(NSString *)modelName
 {
-    return [iconName isEqualToString:LOCATION_ICON_DEFAULT]
-        || [iconName isEqualToString:LOCATION_ICON_CAR]
-    	|| [iconName isEqualToString:LOCATION_ICON_BICYCLE];
+    OALocationIcon *obj = [[OALocationIcon alloc] init];
+    if (obj)
+    {
+        obj.name = modelName;
+        obj.headingIconName = @"map_location_default_view_angle";
+        obj.modelName = modelName;
+    }
+    return obj;
 }
 
-+ (NSString *) getStandardIconModelName:(NSString *)iconName
++ (void) initialize
 {
-    if ([iconName isEqualToString:LOCATION_ICON_DEFAULT])
-        return LOCATION_MODEL_ICON_DEFAULT;
-    if ([iconName isEqualToString:LOCATION_ICON_CAR])
-        return LOCATION_MODEL_ICON_CAR;
-    if ([iconName isEqualToString:LOCATION_ICON_BICYCLE])
-        return LOCATION_MODEL_ICON_BICYCLE;
-
-    return iconName;
+    _DEFAULT = [OALocationIcon withName:@"DEFAULT" iconName:@"map_location_default" headingIconName:@"map_location_default_view_angle" modelName:@"model_map_default_location"];
+    _CAR = [OALocationIcon withName:@"CAR" iconName:@"map_location_car" headingIconName:@"map_location_car_view_angle" modelName:@"model_map_car_location"];
+    _BICYCLE = [OALocationIcon withName:@"BICYCLE" iconName:@"map_location_bicycle" headingIconName:@"map_location_bicycle_view_angle" modelName:@"model_map_bicycle_location"];
+    _MOVEMENT_DEFAULT = [OALocationIcon withName:@"MOVEMENT_DEFAULT" iconName:@"map_navigation_default" headingIconName:@"map_location_default_view_angle" modelName:@"model_map_car_bearing"];
+    _MOVEMENT_NAUTICAL = [OALocationIcon withName:@"MOVEMENT_NAUTICAL" iconName:@"map_navigation_nautical" headingIconName:@"map_location_default_view_angle" modelName:@"model_map_navigation_nautical"];
+    _MOVEMENT_CAR = [OALocationIcon withName:@"MOVEMENT_CAR" iconName:@"map_navigation_car" headingIconName:@"map_location_default_view_angle" modelName:@"model_map_navigation_car"];
 }
 
-+ (NSString *) getIconName:(NSString *)iconName
++ (OALocationIcon *) locationIconWithName:(NSString *)name
 {
-    return OAAppSettings.sharedManager.use3dIconsByDefault.get && [self.class isStandardIcon:iconName]
-	    ? [self.class getStandardIconModelName:iconName]
-        : iconName;
+    for (OALocationIcon *icon in [self defaultIcons])
+    {
+        if ([name isEqualToString:icon.name] ||
+            [name isEqualToString:icon.iconName] ||
+            [name isEqualToString:icon.modelName])
+        {
+            return icon;
+        }
+    }
+    return _DEFAULT;
 }
 
-+ (NSArray<NSString *> *) getIconNames
++ (OALocationIcon *) DEFAULT
+{
+    return _DEFAULT;
+}
+
++ (OALocationIcon *) CAR
+{
+    return _CAR;
+}
+
++ (OALocationIcon *) BICYCLE
+{
+    return _BICYCLE;
+}
+
++ (OALocationIcon *) MOVEMENT_DEFAULT
+{
+    return _MOVEMENT_DEFAULT;
+}
+
++ (OALocationIcon *) MOVEMENT_NAUTICAL
+{
+    return _MOVEMENT_NAUTICAL;
+}
+
++ (OALocationIcon *) MOVEMENT_CAR
+{
+    return _MOVEMENT_CAR;
+}
+
++ (NSArray<OALocationIcon *> *) defaultIcons
+{
+    return @[_DEFAULT, _CAR, _BICYCLE, _MOVEMENT_DEFAULT, _MOVEMENT_NAUTICAL, _MOVEMENT_CAR];
+}
+
++ (NSArray<NSString *> *) defaultIconNames
 {
     NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
-    [iconNames addObject:[self.class getIconName:LOCATION_ICON_DEFAULT]];
-    [iconNames addObject:[self.class getIconName:LOCATION_ICON_CAR]];
-    [iconNames addObject:[self.class getIconName:LOCATION_ICON_BICYCLE]];
+    for (OALocationIcon *icon in [self defaultIcons]){
+        [iconNames addObject:[icon iconName]];
+    }
     return iconNames;
+}
+
++ (NSArray<NSString *> *) defaultIconModels
+{
+    NSMutableArray<NSString *> *iconNames = [NSMutableArray array];
+    for (OALocationIcon *icon in [self defaultIcons]){
+        [iconNames addObject:[icon modelName]];
+    }
+    return iconNames;
+}
+
+- (NSString *) name
+{
+    return _name;
 }
 
 - (NSString *) iconName
 {
-    return [self.class getIconName:_iconName];
+    return _iconName;
 }
 
-- (UIImage *) iconWithColor:(UIColor *)color
+- (NSString *) headingIconName
 {
-    return [self.class getIcon:self.iconName color:color];
+    return _iconName;
+}
+
+- (NSString *) modelName
+{
+    return _modelName;
 }
 
 - (UIImage *) getMapIcon:(UIColor *)color
@@ -83,44 +166,16 @@ static NSString *LOCATION_MODEL_ICON_BICYCLE = @"model_map_bicycle_location";
     return [self.class getIcon:self.iconName color:color scaleFactor:[[OAAppSettings sharedManager].textSize get]];
 }
 
-- (UIImage *) headingIconWithColor:(UIColor *)color
-{
-    return [self.class getHeadingIcon:self.iconName color:color];
-}
-
-+ (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color
-{
-    return [self getIcon:iconName color:color scaleFactor:1.0];
-}
-
 + (UIImage *) getIcon:(NSString *)iconName color:(UIColor *)color scaleFactor:(CGFloat)currentScaleFactor
 {
     UIImage *bottomImage;
     UIImage *centerImage;
     UIImage *topImage;
-    if ([iconName isEqualToString:LOCATION_ICON_DEFAULT])
+    if ([[self defaultIconNames] containsObject:iconName])
     {
-        bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
-        centerImage = [UIImage imageNamed:@"map_location_default_center"];
-        topImage = [UIImage imageNamed:@"map_location_default_top"];
-    }
-    else if ([iconName isEqualToString:LOCATION_ICON_CAR])
-    {
-        bottomImage = [UIImage imageNamed:@"map_location_car_bottom"];
-        centerImage = [UIImage imageNamed:@"map_location_car_center"];
-        topImage = [UIImage imageNamed:@"map_location_car_top"];
-    }
-    else if ([iconName isEqualToString:LOCATION_ICON_BICYCLE])
-    {
-        bottomImage = [UIImage imageNamed:@"map_location_bicycle_bottom"];
-        centerImage = [UIImage imageNamed:@"map_location_bicycle_center"];
-        topImage = [UIImage imageNamed:@"map_location_bicycle_top"];
-    }
-    else if ([self isModel:iconName])
-    {
-        bottomImage = [UIImage imageNamed:@"map_location_default_bottom"];
-        centerImage = [UIImage imageNamed:@"map_location_default_center"];
-        topImage = [UIImage imageNamed:@"map_location_default_top"];
+        bottomImage = [UIImage imageNamed:[iconName stringByAppendingString:@"_bottom"]];
+        centerImage = [UIImage imageNamed:[iconName stringByAppendingString:@"_center"]];
+        topImage = [UIImage imageNamed:[iconName stringByAppendingString:@"_top"]];
     }
     else
     {
@@ -131,35 +186,53 @@ static NSString *LOCATION_MODEL_ICON_BICYCLE = @"model_map_bicycle_location";
     return [OAUtilities layeredImageWithColor:color bottom:bottomImage center:centerImage top:topImage scaleFactor:currentScaleFactor];
 }
 
-+ (UIImage *) getHeadingIcon:(NSString *)iconName color:(UIColor *)color
+- (UIImage *) getHeadingIconWithColor:(UIColor *)color
 {
-    if ([iconName isEqualToString:LOCATION_ICON_DEFAULT])
-        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_default_location_view_angle"] color:color];
-    else if ([iconName isEqualToString:LOCATION_ICON_CAR])
-        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_car_location_view_angle"] color:color];
-    else if ([iconName isEqualToString:LOCATION_ICON_BICYCLE])
-        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_bicycle_location_view_angle"] color:color];
-    else if ([self isModel:iconName])
-        return [OAUtilities tintImageWithColor:[UIImage imageNamed:@"map_car_location_view_angle"] color:color];
+    return [OAUtilities tintImageWithColor:[UIImage imageNamed:_headingIconName] color:color];
+}
+
+- (UIImage *) getPreviewIconWithColor:(UIColor *)color
+{
+    if ([[self.class defaultIcons] containsObject:self])
+    {
+        // for embedded icons for 2D & 3D mode show 2D preview
+        return [self.class getIcon:_iconName color:color scaleFactor:1];
+    }
+    else if ([self isModel])
+    {
+        // for models from 3D plugin show preview image from plugin folder
+        return [self getModelPreviewDrawable];
+    }
+}
+
+- (UIImage *) getModelPreviewDrawable
+{
+    NSString *shortIconName = [_modelName substringFromIndex:MODEL_NAME_PREFIX.length];
+    NSString *modelDirPath = [Model3dHelper getModelPathWithModelName:shortIconName];
+    NSString *iconFilePath = [Model3dHelper getModelIconFilePathWithDirPath:modelDirPath];
+    if ([NSFileManager.defaultManager fileExistsAtPath:iconFilePath])
+    {
+        return [UIImage imageNamed:iconFilePath];
+    }
     return nil;
 }
 
-+ (UIImage *) getPreviewIcon:(NSString *)iconName color:(UIColor *)color
++ (BOOL) isModel:(NSString *)modelName
 {
-    UIImage *modelPreview = [OANavigationIcon getModelPreviewDrawable:iconName];
-    if (modelPreview)
-        return modelPreview;
-    return [self getIcon:iconName color:color scaleFactor:1];
-}
-
-+ (BOOL) isModel:(NSString *)iconName
-{
-    return [iconName hasPrefix:MODEL_NAME_PREFIX];
+    return modelName && [modelName hasPrefix:MODEL_NAME_PREFIX];
 }
 
 - (BOOL) isModel
 {
-    return [self.class isModel:self.iconName];
+    return _modelName && [_modelName hasPrefix:MODEL_NAME_PREFIX];
+}
+
+- (BOOL) shouldDisplayModel
+{
+    BOOL use3dIconsByDefault = [[OAAppSettings.sharedManager use3dIconsByDefault] get];
+    BOOL hasModel = [self isModel];
+    BOOL hasIcon = _iconName;
+    return (use3dIconsByDefault && hasModel) || (!hasIcon && hasModel);
 }
 
 @end

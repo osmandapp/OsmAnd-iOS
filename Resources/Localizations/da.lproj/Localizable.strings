@@ -3470,3 +3470,5 @@
 "weather_data_sources_prompt" = "OsmAnd leverer vejrdata fra to kilder:";
 "weather_source_GFS_description" = "Globalt prognosesystem fra nationale centre for miljøforudsigelser";
 "rendering_value_pale_name" = "Bleg";
+"shared_string_update_required" = "Opdatering påkrævet";
+"osm_login_needs_ios_16_4" = "OpenStreetMap-login kræver iOS 16.4+";

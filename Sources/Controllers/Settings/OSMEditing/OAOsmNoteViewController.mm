@@ -42,6 +42,7 @@
     BOOL _isNoteTextChanged;
     BOOL _uploadAnonymously;
     BOOL _isAuthorised;
+    BOOL _isOAuthAllowed;
 }
 
 #pragma mark - Initialization
@@ -64,6 +65,7 @@
 - (void)commonInit
 {
     _isAuthorised = [OAOsmOAuthHelper isAuthorised];
+    _isOAuthAllowed = [OAOsmOAuthHelper isOAuthAllowed];
 }
 
 - (void)registerNotifications
@@ -141,13 +143,27 @@
         if (!_uploadAnonymously)
         {
             OATableRowData *accountCell = [accountSection createNewRow];
-            [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
-            [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
-            [accountCell setIconName:@"ic_custom_user_profile"];
-            [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive]) forKey:@"title_color"];
-            [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
-            [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
-            [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
+            if (_isAuthorised)
+            {
+                [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
+                [accountCell setTitle: _isAuthorised ? [OAOsmOAuthHelper getUserDisplayName] : OALocalizedString(@"login_open_street_map_org")];
+                [accountCell setIconName:@"ic_custom_user_profile"];
+                [accountCell setObj:(_isAuthorised ? [UIColor colorNamed:ACColorNameTextColorPrimary] : [UIColor colorNamed:ACColorNameIconColorActive]) forKey:@"title_color"];
+                [accountCell setObj:([UIFont systemFontOfSize:17. weight:_isAuthorised ? UIFontWeightRegular : UIFontWeightMedium]) forKey:@"title_font"];
+                [accountCell setObj:(_isAuthorised ? @(UITableViewCellAccessoryDisclosureIndicator) : @(UITableViewCellAccessoryNone)) forKey:@"accessory_type"];
+                [accountCell setObj: (^void(){ [weakSelf onAccountButtonPressed]; }) forKey:@"actionBlock"];
+            }
+            else
+            {
+                [accountCell setCellType:[OASimpleTableViewCell getCellIdentifier]];
+                [accountCell setTitle: OALocalizedString(@"shared_string_update_required")];
+                [accountCell setDescr: OALocalizedString(@"osm_login_needs_ios_16_4")];
+                [accountCell setIconName:@"ic_custom_alert"];
+                [accountCell setIconTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+                [accountCell setObj:[UIColor colorNamed:ACColorNameTextColorPrimary] forKey:@"title_color"];
+                [accountCell setObj:[UIFont scaledSystemFontOfSize:17. weight:UIFontWeightRegular] forKey:@"title_font"];
+                [accountCell setObj:@(UITableViewCellAccessoryNone) forKey:@"accessory_type"];
+            }
         }
     }
 }
@@ -233,7 +249,6 @@
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OASimpleTableViewCell *) nib[0];
             [cell leftIconVisibility:YES];
-            [cell descriptionVisibility:NO];
         }
         if (cell)
         {
@@ -242,8 +257,13 @@
             cell.titleLabel.text = title;
             cell.titleLabel.textColor = [item objForKey:@"title_color"];
             cell.titleLabel.font = [item objForKey:@"title_font"];
+            [cell descriptionVisibility:item.descr];
+            cell.descriptionLabel.text = item.descr;
             cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+            if (item.iconTintColor)
+                cell.leftIconView.tintColor = item.iconTintColor;
+            else
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             cell.accessoryType = (UITableViewCellAccessoryType) [item integerForKey:@"accessory_type"];
             cell.accessibilityTraits = UIAccessibilityTraitButton;
         }
@@ -373,7 +393,8 @@
     }
     else
     {
-        [OAOsmOAuthHelper showAuthIntroScreenWithHostVC:self];
+        if (_isOAuthAllowed)
+            [OAOsmOAuthHelper showOAuthScreenWithHostVC:self];
     }
 }
 

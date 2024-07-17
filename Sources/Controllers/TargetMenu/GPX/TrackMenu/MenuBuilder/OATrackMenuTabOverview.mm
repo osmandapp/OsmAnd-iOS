@@ -200,8 +200,6 @@
     NSMutableArray<OAGPXTableCellData *> *subjects = [NSMutableArray array];
     QMap<QString, QString> tagsToGpx = routeKey.routeKey.tagsToGpx();
     _nameTags = [[NSMutableArray alloc] init];
-    OAMetadata *metadata = [self.trackMenuDelegate getMetadata];
-    NSString *nameTagString = tagsToGpx["name"].toNSString();
     BOOL hasName = NO;
     for (auto i = tagsToGpx.cbegin(), end = tagsToGpx.cend(); i != end; ++i)
     {
@@ -234,7 +232,7 @@
                 kTableKey: @"name",
                 kCellType: [OAValueTableViewCell getCellIdentifier],
                 kCellTitle: OALocalizedString(@"shared_string_name"),
-                kCellDesc: (nameTagString.length > 0) ? nameTagString : metadata.name,
+                kCellDesc: [self.trackMenuDelegate getGpxName],
                 kTableValues: @{ @"order": routeTagOrder },
                 kCellToggle: @YES
             }];

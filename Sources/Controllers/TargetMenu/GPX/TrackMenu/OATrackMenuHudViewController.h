@@ -46,6 +46,7 @@
 - (void)openDeleteWaypointsScreen:(OAGPXTableData *)tableData;
 - (void)openWaypointsGroupOptionsScreen:(NSString *)groupName;
 - (void)openNewWaypointScreen;
+- (NSString *)getGpxName;
 - (NSString *)checkGroupName:(NSString *)groupName;
 - (BOOL)isDefaultGroup:(NSString *)groupName;
 - (BOOL)isRteGroup:(NSString *)groupName;

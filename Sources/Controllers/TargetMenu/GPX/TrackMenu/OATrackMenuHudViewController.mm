@@ -1208,6 +1208,11 @@
     }];
 }
 
+- (NSString *)getGpxName
+{
+    return [self.gpx getNiceTitle];
+}
+
 - (NSString *)checkGroupName:(NSString *)groupName
 {
     return !groupName || groupName.length == 0 ? OALocalizedString(@"shared_string_gpx_points") : groupName;

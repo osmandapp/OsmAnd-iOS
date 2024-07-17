@@ -3446,7 +3446,9 @@
 "weather_source_GFS_description" = "Sistemul de prognoză globală de la Centrele naționale pentru prognoza mediului";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animația vântului";
-"data_source" = "Sursa datelor";
+"data_source" = "Sursa Datelor";
 "weather_data_sources_prompt" = "OsmAnd furnizează date meteorologice din două surse:";
 "weather_source_ecmwf_title" = "ECMWF";
 "rendering_value_pale_name" = "Palid";
+"osm_login_needs_ios_16_4" = "Conectarea la OpenStreetMap necesită iOS 16.4+";
+"shared_string_update_required" = "Actualizare necesară";

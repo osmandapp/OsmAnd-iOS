@@ -3468,3 +3468,6 @@
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animação do vento";
+"rendering_value_pale_name" = "Pálido";
+"shared_string_update_required" = "Atualização necessária";
+"osm_login_needs_ios_16_4" = "O login do OpenStreetMap precisa do iOS 16.4+";

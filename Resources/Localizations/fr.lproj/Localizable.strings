@@ -3468,3 +3468,5 @@
 "data_source" = "Source des données";
 "weather_data_sources_prompt" = "OsmAnd fournit des données météorologiques à partir de deux sources :";
 "rendering_value_pale_name" = "Pâle";
+"shared_string_update_required" = "Mise à jour nécessaire";
+"osm_login_needs_ios_16_4" = "La connexion à OpenStreetMap nécessite iOS 16.4 ou ultérieur";

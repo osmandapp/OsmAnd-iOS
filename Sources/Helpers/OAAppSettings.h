@@ -956,8 +956,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonSpeedLimitWarningState *showSpeedLimitWarning;
 
 // OSM Editing
-@property (nonatomic) OACommonString *osmUserName;
-@property (nonatomic) OACommonString *osmUserPassword;
 @property (nonatomic) OACommonString *osmUserAccessToken;
 @property (nonatomic) OACommonString *osmUserAccessTokenSecret;
 @property (nonatomic) OACommonString *oprAccessToken;
@@ -1116,8 +1114,6 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 @property (nonatomic) OACommonLong *backupLastUploadedTime;
 
 @property (nonatomic) OACommonString *userIosId;
-
-@property (nonatomic) OACommonString *userOsmBugName;
 
 @property (nonatomic) OACommonInteger *delayToStartNavigation;
 

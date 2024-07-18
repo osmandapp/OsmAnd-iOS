@@ -2553,7 +2553,7 @@
 "cloud_contains_newer_changes" = "Versiunea OsmAnd Cloud conține modificări mai noi.";
 "dowload_cloud_version" = "Descărcați versiunea cloud";
 "shared_string_progress" = "Progres";
-"activity_type_mountainbike_name" = "Mountain bike";
+"activity_type_mountainbike_name" = "Bicicletă de munte";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Arată trasee MTB IMBA";
 "mtb_imba_full" = "Asociația Internațională de Ciclism Montan";
 "backup_version_history" = "Istoricul versiunilor";
@@ -2580,7 +2580,7 @@
 "shared_string_not_included" = "Nu este inclus";
 "backup_deleting_all_data" = "Seșterg toate datele…";
 "shared_string_download_update" = "Descărcați actualizarea";
-"cloud_conflict" = "Conflict";
+"cloud_conflict" = "Conflictul";
 "logout_from_osmand_cloud_decsr" = "Vă deconectați\? \nVa trebui să vă conectați din nou pentru a face backup sau a restaura date.";
 "backup_delete_all_data_in_progress" = "Vă rugăm să așteptați până când OsmAnd va șterge toate datele dumneavoastră din cloud. Toate datele de pe dispozitiv rămân neatinse.";
 "backup_delete_types_descr" = "Ștergeți toate datele pentru tipurile de date depreciate din OsmAnd Cloud\?";

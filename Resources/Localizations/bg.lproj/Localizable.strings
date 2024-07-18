@@ -2910,3 +2910,4 @@
 "shared_string_class" = "Клас";
 "shared_string_bottom" = "Долу";
 "transport_hazmat_title" = "Превоз на опасни товари";
+"weather_data_sources_prompt" = "OsmAnd черпи прогноза за времето от два изтичника:";

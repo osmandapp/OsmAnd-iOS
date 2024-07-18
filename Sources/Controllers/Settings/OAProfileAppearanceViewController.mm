@@ -32,6 +32,7 @@
 @property (nonatomic) OAApplicationMode *parent;
 @property (nonatomic) NSString *name;
 @property (nonatomic) int color;
+@property (nonatomic) int customColor;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSString *derivedProfile;
@@ -40,6 +41,8 @@
 @property (nonatomic) NSString *locationIcon;
 @property (nonatomic) CGFloat minSpeed;
 @property (nonatomic) CGFloat maxSpeed;
+
+- (int) profileColor;
 
 @end
 
@@ -62,6 +65,8 @@
             return NO;
         if (_color != that.color)
             return NO;
+        if (_customColor != that.customColor)
+            return NO;
         if (_routingProfile != nil ? ![_routingProfile isEqualToString:that.routingProfile] : that.routingProfile != nil)
             return NO;
         if (_routeService != that.routeService)
@@ -76,12 +81,20 @@
     }
 }
 
+- (int) profileColor
+{
+    if (_customColor != -1)
+        return _customColor;
+    return _color;
+}
+
 - (NSUInteger)hash
 {
     NSUInteger result = _stringKey != nil ? _stringKey.hash : 0;
     result = 31 * result + (_parent != nil ? _parent.hash : 0);
     result = 31 * result + (_name != nil ? _name.hash : 0);
     result = 31 * result + @(_color).hash;
+    result = 31 * result + @(_customColor).hash;
     result = 31 * result + (_iconName != nil ? _iconName.hash : 0);
     result = 31 * result + (_routingProfile != nil ? _routingProfile.hash : 0);
     result = 31 * result + @(_routeService).hash;
@@ -158,6 +171,7 @@
     _changedProfile.parent = _profile.parent;
     _changedProfile.name = _isNewProfile ? [self createNonDuplicateName:_profile.name] : _profile.name;
     _changedProfile.color = _profile.color;
+    _changedProfile.customColor = _profile.customColor;
     _changedProfile.iconName = _profile.iconName;
     _changedProfile.routeService = _profile.routeService;
     _changedProfile.derivedProfile = _profile.derivedProfile;
@@ -174,6 +188,7 @@
     _profile.parent = baseModeForNewProfile.parent;
     _profile.name = baseModeForNewProfile.toHumanString;
     _profile.color = baseModeForNewProfile.getIconColor;
+    _profile.customColor = baseModeForNewProfile.getCustomIconColor;
     _profile.iconName = baseModeForNewProfile.getIconName;
     _profile.derivedProfile = baseModeForNewProfile.getDerivedProfile;
     _profile.routingProfile = baseModeForNewProfile.getRoutingProfile;
@@ -235,7 +250,7 @@
 - (void) setupNavBar
 {
     _profileIconImageView.image = [UIImage templateImageNamed:_changedProfile.iconName];
-    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
+    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
     _profileIconView.layer.cornerRadius = _profileIconView.frame.size.height/2;
 }
 
@@ -404,7 +419,7 @@
 - (NSArray<UIImage *> *) getlocationIconImages
 {
     NSMutableArray<UIImage *> *images = [NSMutableArray array];
-    UIColor *currColor = UIColorFromRGB(_changedProfile.color);
+    UIColor *currColor = UIColorFromRGB(_changedProfile.profileColor);
     for (OALocationIcon *icon in _locationIcons)
     {
         UIImage *image = [icon getPreviewIconWithColor:currColor];
@@ -488,6 +503,7 @@
         [mode setRoutingProfile:_changedProfile.routingProfile];
         [mode setRouterService:_changedProfile.routeService];
         [mode setIconColor:_changedProfile.color];
+        [mode setCustomIconColor:_changedProfile.customColor];
         [mode setLocationIconName:_changedProfile.locationIcon];
         [mode setNavigationIconName:_changedProfile.navigationIcon];
         
@@ -506,6 +522,7 @@
     [builder setDerivedProfile:_changedProfile.derivedProfile];
     [builder setRouteService:_changedProfile.routeService];
     [builder setIconColor:_changedProfile.color];
+    [builder setCustomIconColor:_changedProfile.customColor];
     [builder setLocationIcon:_changedProfile.locationIcon];
     [builder setNavigationIcon:_changedProfile.navigationIcon];
     [builder setOrder:(int) OAApplicationMode.allPossibleValues.count];
@@ -623,7 +640,7 @@
         if (cell)
         {
             cell.titleLabel.text = item[@"title"];
-            cell.currentColor = _changedProfile.color;
+            cell.currentColor = _changedProfile.profileColor;
             cell.currentIcon = [_icons indexOfObject:_changedProfile.iconName];
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -662,7 +679,8 @@
             }
 
             cell.titleLabel.text = item[@"title"];
-            cell.currentColor = _changedProfile.color;
+            cell.currentColor = _changedProfile.profileColor;
+            
             cell.delegate = self;
             [cell.collectionView reloadData];
             [cell layoutIfNeeded];
@@ -692,9 +710,12 @@
 {
     _hasChangesBeenMade = YES;
     _changedProfile.color = _colors[tag].intValue;
+    _changedProfile.customColor = -1;
     
+    _locationIconImages = [self getlocationIconImages];
+    _navigationIconImages = [self getlocationIconImages];
     [self setupView];
-    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.color);
+    _profileIconImageView.tintColor = UIColorFromRGB(_changedProfile.profileColor);
     [_tableView reloadSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(1, _tableView.numberOfSections - 1)] withRowAnimation:UITableViewRowAnimationNone];
 }
 

@@ -537,7 +537,7 @@ typedef enum {
         locationAndCourseMarkerBuilder.setIsHidden(true);
         locationAndCourseMarkerBuilder.setModel3DMaxSizeInPixels(int(MODEL_3D_MAX_SIZE_DP * _textScaleFactor * [[UIScreen mainScreen] scale]));
         
-        UIColor *iconColor = UIColorFromRGB(mode.getIconColor);
+        UIColor *iconColor = [mode getProfileColor];
         
         NSString *locationIconName = [mode.getLocationIcon name];
         NSString *navigationIconName = [mode.getNavigationIcon name];

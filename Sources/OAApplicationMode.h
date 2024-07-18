@@ -19,6 +19,7 @@
 @property (nonatomic) NSString *parent;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) int iconColor;
+@property (nonatomic) int customIconColor;
 @property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSInteger routeService;
@@ -27,6 +28,7 @@
 @property (nonatomic) int order;
 
 + (OAApplicationModeBean *) fromJson:(NSDictionary *)jsonData;
+- (UIColor *) getProfileColor;
 
 @end
 
@@ -111,8 +113,11 @@
 - (void) setNavigationIconName:(NSString *) navIcon;
 - (OALocationIcon *) getLocationIcon;
 - (void) setLocationIconName:(NSString *) locIcon;
+- (UIColor *) getProfileColor;
 - (int) getIconColor;
 - (void) setIconColor:(int)iconColor;
+- (int) getCustomIconColor;
+- (void) setCustomIconColor:(int)iconColor;
 - (int) getOrder;
 - (void) setOrder:(int)order;
 - (NSString *) getRoutingProfile;
@@ -142,6 +147,7 @@
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSString *iconResName;
 @property (nonatomic) NSInteger iconColor;
+@property (nonatomic) NSInteger customIconColor;
 @property (nonatomic) NSString *locationIcon;
 @property (nonatomic) NSString *navigationIcon;
 @property (nonatomic) NSInteger order;

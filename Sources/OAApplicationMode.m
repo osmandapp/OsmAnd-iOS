@@ -205,6 +205,7 @@ static int PROFILE_TRUCK = 1000;
     [builder setUserProfileName:modeBean.userProfileName];
     [builder setIconResName:modeBean.iconName];
     [builder setIconColor:modeBean.iconColor];
+    [builder setCustomIconColor:modeBean.customIconColor];
     [builder setRoutingProfile:modeBean.routingProfile];
     [builder setDerivedProfile:modeBean.derivedProfile];
     [builder setRouteService:modeBean.routeService];
@@ -286,6 +287,7 @@ static int PROFILE_TRUCK = 1000;
         @"stringKey" : self.stringKey,
         @"userProfileName" : self.getUserProfileName,
         @"iconColor" : self.getIconColorName,
+        @"customIconColor" : @([self getColorToExport]),
         @"iconName" : self.getIconName,
         @"parent" : self.parent ? self.parent.stringKey : @"",
         @"routeService" : self.getRouterServiceName,
@@ -295,6 +297,17 @@ static int PROFILE_TRUCK = 1000;
         @"navIcon" : [self.getNavigationIcon name],
         @"order" : @(self.getOrder)
     };
+}
+
+- (int) getColorToExport
+{
+    int customColor = [self getCustomIconColor];
+    if (customColor == -1)
+    {
+        UIColor *color = UIColorFromRGB([self getIconColor]);
+        return [color toARGBNumber];
+    }
+    return customColor;
 }
 
 - (BOOL) hasFastSpeed
@@ -530,6 +543,24 @@ static int PROFILE_TRUCK = 1000;
     [OAAppSettings.sharedManager.profileIconColor set:iconColor mode:self];
 }
 
+- (int) getCustomIconColor
+{
+    return [OAAppSettings.sharedManager.profileCustomIconColor get:self];
+}
+
+- (void) setCustomIconColor:(int)iconColor
+{
+    [OAAppSettings.sharedManager.profileCustomIconColor set:iconColor mode:self];
+}
+
+- (UIColor *) getProfileColor
+{
+    int customProfileColor = [self getCustomIconColor];
+    if (customProfileColor != -1)
+        return UIColorFromARGB(customProfileColor);
+    return UIColorFromRGB([self getIconColor]);
+}
+
 - (int) getOrder
 {
     return [OAAppSettings.sharedManager.appModeOrder get:self];
@@ -672,6 +703,7 @@ static int PROFILE_TRUCK = 1000;
         [mode setDerivedProfile:builder.derivedProfile];
         [mode setRouterService:builder.routeService];
         [mode setIconColor:(int)builder.iconColor];
+        [mode setCustomIconColor:(int)builder.customIconColor];
         [mode setLocationIconName:builder.locationIcon];
         [mode setNavigationIconName:builder.navigationIcon];
         [mode setOrder:(int)builder.order];
@@ -873,6 +905,7 @@ static int PROFILE_TRUCK = 1000;
     OAApplicationModeBean *res = [[OAApplicationModeBean alloc] init];
     res.userProfileName = jsonData[@"userProfileName"];
     res.iconColor = [self parseColor:jsonData[@"iconColor"]];
+    res.customIconColor = [self parseCustomColor:jsonData[@"customIconColor"]];
     res.iconName = [self parseProfileIcon:jsonData[@"iconName"]];
     res.locIcon = [[OALocationIcon locationIconWithName:jsonData[@"locIcon"]] name];
     res.navIcon = [[OALocationIcon locationIconWithName:jsonData[@"navIcon"]] name];
@@ -924,6 +957,25 @@ static int PROFILE_TRUCK = 1000;
     return profile_icon_color_blue_light_default;
 }
 
++ (int) parseCustomColor:(id)value
+{
+    if (value)
+    {
+        if ([value isKindOfClass:NSString.class])
+            return [[UIColor colorFromString:((NSString *)value)] toARGBNumber];
+        else if ([value isKindOfClass:NSNumber.class])
+            return ((NSNumber *) value).intValue;
+    }
+    return -1;
+}
+
+- (UIColor *) getProfileColor
+{
+    if (_customIconColor != -1)
+        return UIColorFromARGB(_customIconColor);
+    return UIColorFromRGB(_iconColor);
+}
+
 @end
 
 @implementation OAApplicationModeBuilder
@@ -939,6 +991,7 @@ static int PROFILE_TRUCK = 1000;
     [_am setRoutingProfile:_routingProfile];
     [_am setRouterService:_routeService];
     [_am setIconColor:(int)_iconColor];
+    [_am setCustomIconColor:(int)_customIconColor];
     [_am setLocationIconName:_locationIcon];
     [_am setNavigationIconName:_navigationIcon];
     [_am setOrder:_order ? (int)_order : (int)OAApplicationMode.values.count];

@@ -117,6 +117,7 @@ static NSString * const routingProfileKey = @"routingProfile";
 static NSString * const derivedProfileKey = @"derivedProfile";
 static NSString * const profileIconNameKey = @"profileIconName";
 static NSString * const profileIconColorKey = @"profileIconColor";
+static NSString * const profileCustomIconColorKey = @"profileCustomIconColor";
 static NSString * const userProfileNameKey = @"userProfileName";
 static NSString * const parentAppModeKey = @"parentAppMode";
 static NSString * const routeServiceKey = @"routeService";
@@ -3921,6 +3922,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
             @"app_mode_icon_color",
+            @"custom_icon_color",
             @"user_profile_name",
             @"parent_app_mode",
             @"routing_profile",
@@ -3983,6 +3985,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
         _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 

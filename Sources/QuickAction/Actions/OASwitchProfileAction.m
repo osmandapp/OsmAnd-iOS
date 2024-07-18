@@ -139,7 +139,7 @@ static QuickActionType *TYPE;
                 @"title" : [mode toHumanString],
                 @"stringKey" : stringKeys[i],
                 @"img" : [mode getIconName],
-                @"iconColor" : @([mode getIconColor])
+                @"iconColor" : [mode getProfileColor]
             }];
         }
     }

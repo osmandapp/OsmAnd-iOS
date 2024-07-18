@@ -113,7 +113,7 @@
             BOOL checkForDerived = ![derivedProfile isEqualToString:@"default"];
             BOOL isSelected = [profile.stringKey isEqual:[self.appMode getRoutingProfile]] && ((!checkForDerived && !profile.derivedProfile) || (checkForDerived && [profile.derivedProfile isEqualToString:derivedProfile]));
             cell.accessoryType = isSelected ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
-            cell.leftIconView.tintColor = isSelected ? UIColorFromRGB([self.appMode getIconColor]) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = isSelected ? [self.appMode getProfileColor] : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }

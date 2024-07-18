@@ -113,7 +113,7 @@
         
         OAApplicationMode *appMode = OARoutingHelper.sharedInstance.getAppMode;
         OALocationIcon *navIcon = appMode.getNavigationIcon ?: [OALocationIcon MOVEMENT_DEFAULT];
-        UIColor *iconColor = UIColorFromRGB(appMode.getIconColor);
+        UIColor *iconColor = [appMode getProfileColor];
         
         OsmAnd::MapMarkerBuilder locationMarkerBuilder;
         locationMarkerBuilder.setIsAccuracyCircleSupported(false);

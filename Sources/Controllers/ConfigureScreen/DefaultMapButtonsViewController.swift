@@ -85,7 +85,7 @@ final class DefaultMapButtonsViewController: OABaseNavbarViewController {
     override func generateData() {
         tableData.clearAllData()
         
-        let iconTintColor = UIColor(rgb: Int(appMode.getIconColor()))
+        let iconTintColor = appMode.getProfileColor()
         let buttonsSection = tableData.createNewSection()
         
         let compassRow = buttonsSection.createNewRow()

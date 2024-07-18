@@ -211,7 +211,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     UIImage *img = [OASvgHelper mapImageNamed:name];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }

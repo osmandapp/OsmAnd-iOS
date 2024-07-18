@@ -3470,3 +3470,5 @@
 "weather_data_sources_prompt" = "ОсмАнд пружа временске податке из два извора:";
 "map_settings_weather_wind_animation" = "Анимација ветра";
 "rendering_value_pale_name" = "Бледо";
+"shared_string_update_required" = "Потребно ажурирање";
+"osm_login_needs_ios_16_4" = "ОпенСтритМап логин треба ајОС 16.4+";

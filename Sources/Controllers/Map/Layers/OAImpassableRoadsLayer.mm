@@ -62,7 +62,9 @@
 
 - (BOOL)updateLayer
 {
-    [super updateLayer];
+    if (![super updateLayer])
+        return NO;
+        
     _textSize = [[OAAppSettings sharedManager].textSize get];
     return YES;
 }

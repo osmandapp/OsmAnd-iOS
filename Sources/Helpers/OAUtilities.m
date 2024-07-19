@@ -211,7 +211,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     UIImage *img = [OASvgHelper mapImageNamed:name];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }
@@ -220,7 +220,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
 {
     UIImage *img = [OASvgHelper mapImageNamed:name scale:scale];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }
@@ -230,7 +230,7 @@ static NSInteger const kMap3DModeButtonTag = -990;
     CGFloat scale = [[UIScreen mainScreen] scale];
     UIImage *img = [OASvgHelper mapImageFromSvgResource:name width:width * scale height:height * scale];
     if (img)
-        img = [img imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected]];
+        img = [OAUtilities imageWithTintColor:[UIColor colorNamed:ACColorNameIconColorSelected] image:img];
 
     return img;
 }

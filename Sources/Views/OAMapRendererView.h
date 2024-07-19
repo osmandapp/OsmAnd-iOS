@@ -86,6 +86,8 @@ struct CLLocationCoordinate2D;
 - (void)setMyLocationCircleColor:(OsmAnd::FColorARGB)color;
 - (void)setMyLocationCirclePosition:(OsmAnd::PointI)location31;
 - (void)setMyLocationCircleRadius:(float)radiusInMeters;
+- (void)setMyLocationSectorDirection:(float)directionAngle;
+- (void)setMyLocationSectorRadius:(float)radius;
 
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsAt:(OsmAnd::PointI)screenPoint;
 - (QList<OsmAnd::IMapRenderer::MapSymbolInformation>)getSymbolsIn:(OsmAnd::AreaI)screenArea strict:(BOOL)strict;

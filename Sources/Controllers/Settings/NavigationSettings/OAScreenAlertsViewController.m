@@ -149,7 +149,7 @@
             if ([item[@"key"] isEqualToString:@"screenAlerts"])
             {
                 cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-                cell.leftIconView.tintColor = _showAlerts ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+                cell.leftIconView.tintColor = _showAlerts ? self.appMode.getProfileColor : UIColorFromRGB(color_icon_inactive);
             }
             else
             {

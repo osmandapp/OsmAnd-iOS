@@ -97,16 +97,22 @@ sk_sp<SkImage> OAWaypointsMapLayerProvider::getBitmapByWaypoint(const OsmAnd::Re
     
     QString iconId = QString([NSString stringWithFormat:@"%@_%@_%@_%@_%.2f", [color toHexString], iconName, shapeName, size, _symbolsScaleFactor].UTF8String);
 
-    const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;
-    if (bitmapIt == _iconsCache.end())
+    bool isNew = false;
+    {
+        QReadLocker scopedLocker(&_iconsCacheLock);
+        const auto bitmapIt = _iconsCache.find(iconId);
+        isNew = bitmapIt == _iconsCache.end();
+        if (!isNew)
+        {
+            bitmap = bitmapIt.value();
+        }
+    }
+    if (isNew)
     {
         bitmap = [OACompoundIconUtils createCompositeBitmapFromWpt:point isFullSize:isFullSize scale:_symbolsScaleFactor];
+        QWriteLocker scopedLocker(&_iconsCacheLock);
         _iconsCache[iconId] = bitmap;
-    }
-    else
-    {
-        bitmap = bitmapIt.value();
     }
 
     return bitmap;

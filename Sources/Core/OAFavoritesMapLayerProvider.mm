@@ -81,16 +81,22 @@ sk_sp<SkImage> OAFavoritesMapLayerProvider::getBitmapByFavorite(const std::share
         .arg(QString::number(color.argb), iconName, backgroundIconName, size)
         .arg(_symbolsScaleFactor, 0, 'f', 2);
 
-    const auto bitmapIt = _iconsCache.find(iconId);
     sk_sp<SkImage> bitmap;
-    if (bitmapIt == _iconsCache.end())
+    bool isNew = false;
+    {
+        QReadLocker scopedLocker(&_iconsCacheLock);
+        const auto bitmapIt = _iconsCache.find(iconId);
+        isNew = bitmapIt == _iconsCache.end();
+        if (!isNew)
+        {
+            bitmap = bitmapIt.value();
+        }
+    }
+    if (isNew)
     {
         bitmap = [OACompoundIconUtils createCompositeBitmapFromFavorite:fav isFullSize:isFullSize scale:_symbolsScaleFactor];
+        QWriteLocker scopedLocker(&_iconsCacheLock);
         _iconsCache[iconId] = bitmap;
-    }
-    else
-    {
-        bitmap = bitmapIt.value();
     }
 
     return bitmap;

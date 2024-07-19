@@ -322,7 +322,7 @@
 
 - (void) generateData
 {
-    _uniquePluginModels = [Model3dHelper listUniquePluginModels];
+    _uniquePluginModels = [Model3dHelper getCustomModelNames];
     _locationIcons = [self getlocationIcons];
     _locationIconNames = [self getlocationIconNames];
     _navigationIcons = [self getlocationIcons];

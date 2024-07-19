@@ -146,7 +146,7 @@ final class Model3dHelper: NSObject {
         return res
     }
     
-    static func listUniquePluginModels() -> [String] {
+    static func getCustomModelNames() -> [String] {
         var res = [String]()
         let defaultIconModels = OALocationIcon.defaultIconModels()
         do {

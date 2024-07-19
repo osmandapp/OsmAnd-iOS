@@ -155,6 +155,11 @@
     return YES;
 }
 
+- (CLLocation *)getLastRouteProjection
+{
+    return _lastProj;
+}
+
 - (NSInteger)getCustomRouteWidthMin
 {
     return 1;

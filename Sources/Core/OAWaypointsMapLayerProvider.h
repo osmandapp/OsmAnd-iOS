@@ -13,6 +13,7 @@
 
 #include <OsmAndCore/QtExtensions.h>
 #include <OsmAndCore/ignore_warnings_on_external_includes.h>
+#include <QReadWriteLock>
 #include <QHash>
 #include <QList>
 #include <OsmAndCore/restore_internal_warnings.h>
@@ -29,6 +30,7 @@ public:
 private:
     QList<OsmAnd::Ref<OsmAnd::GpxDocument::WptPt>> _wptPtPoints;
     QList<OsmAnd::PointI> _points;
+    mutable QReadWriteLock _iconsCacheLock;
     QHash<QString, sk_sp<SkImage>> _iconsCache;
     float _symbolsScaleFactor;
     sk_sp<SkImage> getBitmapByWaypoint(const OsmAnd::Ref<OsmAnd::GpxDocument::WptPt> &point, bool isFullSize);

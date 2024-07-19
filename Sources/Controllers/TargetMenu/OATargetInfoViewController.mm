@@ -832,6 +832,7 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
             cell.textView.textColor = info.textColor;
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+            cell.accessoryType = [info.key isEqualToString:@"name"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 
             return cell;
         }
@@ -989,6 +990,12 @@ static const NSInteger kNearbyPoiSearchFactory = 2;
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
+    }
+    else if ([info.key isEqualToString:@"name"])
+    {
+        NameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:info.detailsArray];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
+        [self.navController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

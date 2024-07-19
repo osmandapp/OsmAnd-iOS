@@ -123,7 +123,7 @@
     NSDictionary<NSNumber *, NSString *> *_colorNames;
     NSArray<NSString *> *_icons;
     
-    NSArray<NSString *> *_uniquePluginModels;
+    NSArray<NSString *> *_customModelNames;
     NSArray<OALocationIcon *> *_locationIcons;
     NSArray<OALocationIcon *> *_navigationIcons;
     NSArray<NSString *> *_locationIconNames;
@@ -322,7 +322,7 @@
 
 - (void) generateData
 {
-    _uniquePluginModels = [Model3dHelper getCustomModelNames];
+    _customModelNames = [Model3dHelper getCustomModelNames];
     _locationIcons = [self getlocationIcons];
     _locationIconNames = [self getlocationIconNames];
     _navigationIcons = [self getlocationIcons];
@@ -393,10 +393,10 @@
     NSMutableArray<OALocationIcon *> *icons = [NSMutableArray array];
     [icons addObjectsFromArray:[OALocationIcon defaultIcons]];
     
-    NSArray<NSString *> *uniquePluginModelNames = [_uniquePluginModels sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
+    NSArray<NSString *> *sortedCustomModelNames = [_customModelNames sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
         return [obj1 compare:obj2];
     }];
-    for (NSString *modelName in uniquePluginModelNames)
+    for (NSString *modelName in sortedCustomModelNames)
     {
         OALocationIcon *icon = [OALocationIcon locationIconWithName:modelName];
         if (icon)

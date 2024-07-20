@@ -178,28 +178,6 @@ class DownloadingCellResourceHelper: DownloadingCellBaseHelper {
     
     // MARK: - Downloading cell progress observer's methods
     
-    func refreshDownloadingContent() {
-        for resourceId in resourceItems.keys {
-            if let task = getDownloadTask(resourceId) {
-                if task.progressCompleted == 1 {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.setCellProgress(resourceId: resourceId, progress: task.progressCompleted, status: .finished)
-                        // Start next downloading if needed
-                        if let tasks = OsmAndApp.swiftInstance().downloadsManager.keysOfDownloadTasks(), !tasks.isEmpty {
-                            if let nextTask = OsmAndApp.swiftInstance().downloadsManager.firstDownloadTasks(withKey: tasks[0] as? String) {
-                                nextTask.resume()
-                            }
-                        }
-                    }
-                } else if task.progressCompleted > 0 {
-                    DispatchQueue.main.async { [weak self] in
-                        self?.setCellProgress(resourceId: resourceId, progress: task.progressCompleted, status: .inProgress)
-                    }
-                }
-            }
-        }
-    }
-    
     @objc private func onDownloadResourceTaskProgressChanged(observer: Any, key: Any, value: Any) {
         guard let resourceId = getResourceIdFromNotificationKey(key: key, value: value) else { return }
         guard let parsedValue = value as? NSNumber else { return }

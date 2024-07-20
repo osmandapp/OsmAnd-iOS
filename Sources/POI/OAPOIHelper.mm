@@ -39,6 +39,8 @@
 #define kRadiusKmToMetersKoef 1200.0
 #define kZoomToSearchPOI 16.0
 
+static NSArray<NSString *> *const kNameTagPrefixes = @[@"name:", @"int_name", @"nat_name", @"reg_name", @"loc_name", @"old_name", @"alt_name", @"short_name", @"official_name"];
+
 @implementation OAPOIHelper {
 
     OsmAndAppInstance _app;
@@ -1492,6 +1494,17 @@
 {
     _breakSearch = !_isSearchDone;
     return _breakSearch;
+}
+
+- (BOOL) isNameTag:(NSString *)tag
+{
+    for (NSString *prefix in kNameTagPrefixes)
+    {
+        if ([tag hasPrefix:prefix])
+            return YES;
+    }
+    
+    return NO;
 }
 
 - (void) onPOIFound:(const OsmAnd::ISearch::IResultEntry&)resultEntry

@@ -175,7 +175,7 @@ final class CloudTrashViewController: OABaseNavbarViewController, OAOnPrepareBac
                 
                 var iconColor: UIColor
                 if let profileItem = trashItem.settingsItem as? OAProfileSettingsItem {
-                    iconColor = UIColor(rgb: profileItem.appMode.getIconColor())
+                    iconColor = profileItem.appMode.getProfileColor()
                 } else {
                     iconColor = UIColor.iconColorDefault
                 }

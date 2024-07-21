@@ -773,21 +773,21 @@
 "hide_notes" = "Skjul OSM-notater";
 "show_edits" = "Show local edits";
 "hide_edits" = "Hide local edits";
-"search_results" = "Search results";
+"search_results" = "Søkeresultater";
 "shared_string_action_name" = "Handlingsnavn";
 "quick_action_name_alert" = "Quick action name was changed to %@ to avoid duplication.";
 "quick_action_screen_header" = "Screen %ld";
-"confirm_bulk_delete" = "Do you want to delete %ld items?";
+"confirm_bulk_delete" = "Vil du slette %ld elementer?";
 "quick_action_add_actions_descr" = "Add actions to access them quickly from the map.";
 "quick_action_interim_dialog" = "Vis en midlertidig dialog";
 "quick_action_dialog_descr" = "Turn on to show dialog before applying the action";
 "quick_action_template_name" = "Template name";
 "quick_action_fav_name_descr" = "La stå tomt for å bruke adressen eller stedsnavnet.";
-"quick_action_select_group" = "Select the group to save the favorite in.";
+"quick_action_select_group" = "Velg gruppen å lagre favoritten i.";
 "quick_action_add_category" = "Legg til en kategori";
-"quick_action_add_category_descr" = "You can select multiple POI categories.";
-"quick_action_show_poi_descr" = "Add one or more POI categories to be displayed on the map.";
-"quick_action_fill_params_alert" = "Please fill out the parameters first";
+"quick_action_add_category_descr" = "Du kan velge flere interessepunktkategorier.";
+"quick_action_show_poi_descr" = "Legg til en eller flere interessepunktkategorier som skal vises på kartet.";
+"quick_action_fill_params_alert" = "Fyll ut parametrene først";
 "quick_action_dialog" = "Dialog";
 "quick_action_edit_action" = "Rediger handling";
 "quick_action_add_tag" = "Legg til merke";
@@ -890,7 +890,7 @@
 "loc_access_denied" = "Access denied";
 "loc_access_denied_desc" = "Access to location service has been denied";
 // Colors
-"col_gray" = "Gray";
+"col_gray" = "Grå";
 "shared_string_color_magenta" = "Magenta";
 // GPX colors
 // World Regions
@@ -1606,7 +1606,7 @@
 "ltr_or_rtl_combine_via_space" = "%@ %@";
 "selected_profile" = "Valgt profil";
 "select_icon_profile_dialog_title" = "Velg ikon";
-"import_complete_description" = "Importert alle data fra %@. Bruk knappene nedenfor tilå åpne en hvilken som helst del av programmet for å håndtere det.";
+"import_complete_description" = "Importert alle data fra %@. Bruk knappene nedenfor til å åpne enhver del av programmet for å håndtere det.";
 "route_between_points" = "Rute mellom punkter";
 "shared_string_importing" = "Importerer";
 "quick_action_map_source_title" = "Kartkilder";
@@ -1686,7 +1686,7 @@
 "profile_type_osmand_string" = "OsmAnd-profil";
 "quick_action_switch_profile_descr" = "Handlingsknappen veksler mellom valgte profiler.";
 "shared_string_legend" = "Tegnforklaring";
-"vessel_width_limit_description" = "Sett skipsbredde forå unngå smale broer";
+"vessel_width_limit_description" = "Still inn fartøyets bredde for å unngå smale broer";
 "shared_string_walk" = "Gå";
 "shared_string_settings" = "Innstillinger";
 "next_segment" = "Neste segment";
@@ -1769,7 +1769,7 @@
 // Route planning
 "plan_route" = "Ruteplanlegging";
 "downloading" = "Laster ned …";
-"empty_profile_name_warning" = "Profilnavnet kan ikke være tomt";
+"empty_profile_name_warning" = "Profilnavnet kan ikke være tomt.";
 "profile_appearance_descr" = "Ikon, farge og navn";
 "profile_settings" = "Profilspesifikke innstillinger";
 "added_items" = "Tillagte elementer: %@";
@@ -1848,7 +1848,7 @@
 "select_folder_descr" = "Velg mappe eller legg til en ny";
 "plan_route_folder" = "Mappe";
 "select_track_to_follow" = "Velg spor å følge";
-"not_available_profile_name" = "En profil med dette navnet finnes allerede";
+"not_available_profile_name" = "En profil med dette navnet finnes allerede.";
 "profile_import_success" = "Programprofil importert";
 "preparing_file" = "Forbereder fil …";
 "reading_file" = "Leser fil …";
@@ -1857,7 +1857,7 @@
 "export_failed" = "Kunne ikke eksportere profil";
 "selected_of" = "Valgt - %d/%d";
 "export_profile_select_descr" = "Velg data å eksportere.";
-"global_settings_descr" = "Har innvirkning på hele programmet";
+"global_settings_descr" = "Påvirker hele programmet.";
 "units_and_formats" = "Enheter og formater";
 "gpxup_private" = "Privat";
 "gpxup_trackable" = "Sporbar";
@@ -3106,3 +3106,6 @@
 "rendering_value_dark_orange_name" = "Mørk oransje";
 "missing_maps_ignore_details" = "Dekker nedlastede kart ruten din? Naviger med dem hvis du er kjent i området.";
 "track_vertical_exaggeration_description" = "Ved å endre skalaverdien kan du endre 3D-sporets høyde.";
+"res_name_warning" = "Filnavnet kan ikke være tomt";
+"invalid_format" = "Ugyldig format";
+"toggle_public_transport" = "Vis/skjul kollektivtransport";

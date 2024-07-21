@@ -3486,3 +3486,4 @@
 "rendering_value_pale_name" = "Blass";
 "shared_string_update_required" = "Aktualisierung erforderlich";
 "osm_login_needs_ios_16_4" = "Für die Anmeldung bei OpenStreetMap wird iOS 16.4+ benötigt";
+"osmand_depelopment_use_3d_icons" = "3D-Positionssymbole verwenden";

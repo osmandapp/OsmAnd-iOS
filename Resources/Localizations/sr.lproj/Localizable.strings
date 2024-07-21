@@ -3471,3 +3471,4 @@
 "rendering_value_pale_name" = "Бледо";
 "shared_string_update_required" = "Потребно ажурирање";
 "osm_login_needs_ios_16_4" = "ОпенСтритМап логин треба ајОС 16.4+";
+"osmand_depelopment_use_3d_icons" = "Користи 3Д иконе позиције локације";

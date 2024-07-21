@@ -3469,5 +3469,7 @@
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animação do vento";
 "ios_release_4_8" = "• Novo widget \"Velocímetro\" compatível com CarPlay\n• Adicionadas instruções passo a passo aos detalhes do percurso\n• Personalização do ecrã do mapa com a adição de vários botões de \"Ação rápida\"\n• Melhorias no trajeto 3D: novas opções de visualização e coloração\n• Paletas de cores personalizadas para terreno, trilhos e rotas\n• Adicionado um modo de seleção múltipla melhorado para trilhos\n• Variante 3D para ícones de posição de localização\n• Seleção alargada de rotas turísticas no mapa\n• Previsão meteorologia: atualização da interface do utilizador, animação do vento adicionada\n• Adição de transições suaves durante o zoom no modo 3D\n• \"Posição da localização no ecrã\" está agora no ecrã Configurar\n• Alterar a \"circunferência da roda\" nas definições do sensor BLE\n• Adicionado um alerta de navegação \"Limite de velocidade\" separado\n• Corrigidos os nomes dos widgets de rolamentos\n• Corrigida a visibilidade da \"Régua de raio\" em todos os painéis de widgets\n";
-
-"rendering_value_pale_name" = "Pálido";;
+"rendering_value_pale_name" = "Pálido";
+"osmand_depelopment_use_3d_icons" = "Usar ícones de posição de localização 3D";
+"shared_string_update_required" = "Atualização necessária";
+"osm_login_needs_ios_16_4" = "Para iniciar sessão no OpenStreetMap necessita do iOS 16.4+";

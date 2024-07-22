@@ -3470,3 +3470,4 @@
 "rendering_value_pale_name" = "Pálido";
 "osm_login_needs_ios_16_4" = "Para iniciar sesión en OpenStreetMap se necesita iOS 16.4+";
 "shared_string_update_required" = "Actualización requerida";
+"osmand_depelopment_use_3d_icons" = "Utiliza iconos con la posición de la ubicación 3D";

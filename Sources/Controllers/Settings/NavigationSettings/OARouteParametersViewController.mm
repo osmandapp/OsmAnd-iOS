@@ -36,7 +36,7 @@
 {
     NSArray<NSArray *> *_data;
     OAAppSettings *_settings;
-    NSInteger _iconColor;
+    UIColor *_iconColor;
     vector<RoutingParameter> _otherRoutingParameters;
     vector<RoutingParameter> _avoidParameters;
     vector<RoutingParameter> _preferParameters;
@@ -85,7 +85,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
 
 - (void)postInit
 {
-    _iconColor = [self.appMode getIconColor];
+    _iconColor = [self.appMode getProfileColor];
 }
 
 #pragma mark - Base UI
@@ -495,7 +495,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         keyKey : recalculateRouteKey,
         titleKey : OALocalizedString(@"route_recalculation_dist_title"),
         iconKey : [UIImage templateImageNamed:@"ic_custom_minimal_distance"],
-        iconTintKey: [_settings.routeRecalculationDistance get:self.appMode] == -1 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : UIColorFromRGB(_iconColor),
+        iconTintKey: [_settings.routeRecalculationDistance get:self.appMode] == -1 ? [UIColor colorNamed:ACColorNameIconColorDisabled] : _iconColor,
         valueKey : descr
     }];
 }
@@ -646,7 +646,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
             else if (param && ![param isSelected] && ![item.allKeys containsObject:iconKey])
                 cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorDisabled];
             else
-                cell.leftIconView.tintColor = UIColorFromRGB(_iconColor);
+                cell.leftIconView.tintColor = _iconColor;
             
             cell.titleLabel.text = param ? [param getText] : item[titleKey];
 
@@ -670,7 +670,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
         {
             cell.titleLabel.text = item[titleKey];
             cell.leftIconView.image = [UIImage templateImageNamed:item[iconKey]];
-            cell.leftIconView.tintColor = [item[valueKey] boolValue] ? UIColorFromRGB(_iconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = [item[valueKey] boolValue] ? _iconColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
         }
         return cell;
     }
@@ -703,7 +703,7 @@ static NSString *foregroundImageKey = @"foregroundImage";
                 cell.switchView.on = [v boolValue];
                 [cell.switchView addTarget:self action:@selector(applyParameter:) forControlEvents:UIControlEventValueChanged];
             }
-            cell.leftIconView.tintColor = cell.switchView.on ? UIColorFromRGB(_iconColor) : [UIColor colorNamed:ACColorNameIconColorDisabled];
+            cell.leftIconView.tintColor = cell.switchView.on ? _iconColor : [UIColor colorNamed:ACColorNameIconColorDisabled];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
         }
         return cell;

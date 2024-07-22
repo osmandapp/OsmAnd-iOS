@@ -1262,7 +1262,7 @@ static OAApplicationMode *DEFAULT_APP_MODE;
     if (_appMode == DEFAULT_APP_MODE)
         return OsmAnd::ColorARGB(0xff, 0xff, 0x88, 0x00);
     else
-        return [UIColorFromRGB(_appMode.getIconColor) toFColorARGB];
+        return [_appMode.getProfileColor toFColorARGB];
 }
 
 @end

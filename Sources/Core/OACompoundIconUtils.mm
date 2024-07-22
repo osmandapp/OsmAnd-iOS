@@ -74,24 +74,39 @@
     return [self createCompositeIconWithcolor:color shapeName:shapeName iconName:iconName isFullSize:isFullSize icon:nil scale:scale];
 }
 
-+ (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon scale:(float)scale
++ (sk_sp<SkImage>)createCompositeIconWithcolor:(UIColor *)color
+                                     shapeName:(NSString *)shapeName
+                                      iconName:(NSString *)iconName
+                                    isFullSize:(BOOL)isFullSize
+                                          icon:(UIImage *)icon
+                                         scale:(float)scale
 {
     CGFloat screenScale = [[UIScreen mainScreen] scale];
     NSString *sizeName = isFullSize ? @"" : @"_small";
     sk_sp<SkImage> result;
 
     // shadow icon
-    NSString *shadowIconName = [NSString stringWithFormat:@"ic_bg_point_%@_bottom%@", shapeName, sizeName];
-    auto shadowIcon = [OANativeUtilities skImageFromPngResource:shadowIconName];
+    auto shadowIcon = [self getScaledIcon:[NSString stringWithFormat:@"ic_bg_point_%@_bottom%@", shapeName, sizeName]
+                      defaultResourceName:@"ic_bg_point_circle_bottom"
+                                    scale:scale
+                                    color:nil];
     if (!shadowIcon)
         return result;
 
     // color filled background icon
-    NSString *backgroundIconName = [OANativeUtilities getScaledResourceName:[NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName]];
-    UIImage *img = [self getIcon:backgroundIconName defaultIconName:[OANativeUtilities getScaledResourceName:@"ic_bg_point_circle_center"]];
-    img = [OAUtilities tintImageWithColor:img color:color];
-    auto backgroundIcon = [OANativeUtilities skImageFromCGImage:img.CGImage];
+    auto backgroundIcon = [self getScaledIcon:[NSString stringWithFormat:@"ic_bg_point_%@_center%@", shapeName, sizeName]
+                          defaultResourceName:@"ic_bg_point_circle_center"
+                                        scale:scale
+                                        color:color];
     if (!backgroundIcon)
+        return result;
+
+    // highlight icon
+    auto highlightIcon = [self getScaledIcon:[NSString stringWithFormat:@"ic_bg_point_%@_top%@", shapeName, sizeName]
+                         defaultResourceName:@"ic_bg_point_circle_top"
+                                       scale:scale
+                                       color:nil];
+    if (!highlightIcon)
         return result;
 
     // poi image icon
@@ -132,38 +147,62 @@
             return result;
     }
 
-    // highlight icon
-    NSString *highlightIconName = [NSString stringWithFormat:@"ic_bg_point_%@_top%@", shapeName, sizeName];
-    auto highlightIcon = [OANativeUtilities skImageFromPngResource:highlightIconName];
-    if (!highlightIcon)
-        return result;
-
-    
     if (isFullSize && shadowIcon && backgroundIcon && poiIcon && highlightIcon)
     {
-        const QList<sk_sp<const SkImage>> toMerge({
-            [OANativeUtilities getScaledSkImage:shadowIcon scaleFactor:scale], 
-            [OANativeUtilities getScaledSkImage:backgroundIcon scaleFactor:scale],
-            poiIcon,
-            [OANativeUtilities getScaledSkImage:highlightIcon scaleFactor:scale]});
+        const QList<sk_sp<const SkImage>> toMerge({ shadowIcon, backgroundIcon, poiIcon, highlightIcon });
         result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     else if (!isFullSize && shadowIcon && backgroundIcon && highlightIcon)
     {
-        const QList<sk_sp<const SkImage>> toMerge({
-            [OANativeUtilities getScaledSkImage:shadowIcon scaleFactor:scale],
-            [OANativeUtilities getScaledSkImage:backgroundIcon scaleFactor:scale],
-            [OANativeUtilities getScaledSkImage:highlightIcon scaleFactor:scale]});
+        const QList<sk_sp<const SkImage>> toMerge({ shadowIcon, backgroundIcon, highlightIcon });
         result = OsmAnd::SkiaUtilities::mergeImages(toMerge);
     }
     return result;
 }
 
-+ (UIImage *) getIcon:(NSString *)iconName defaultIconName:(NSString *)defaultIconName
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName
+                          scale:(CGFloat)scale
+{
+    return [self getScaledIcon:resourceName defaultResourceName:nil scale:scale color:nil];
+}
+
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName
+            defaultResourceName:(NSString *)defaultResourceName
+                          scale:(CGFloat)scale
+                          color:(UIColor *)color
+{
+    sk_sp<SkImage> result;
+    NSString *iconName = [OANativeUtilities getScaledResourceName:resourceName];
+    UIImage *img = [self getIcon:iconName
+                 defaultIconName:defaultResourceName ? [OANativeUtilities getScaledResourceName:defaultResourceName] : nil
+                           scale:scale];
+    if (img)
+    {
+        if (color)
+            img = [OAUtilities tintImageWithColor:img color:color];
+        result = [OANativeUtilities skImageFromCGImage:img.CGImage];
+    }
+    return result;
+}
+
++ (UIImage *)getIcon:(NSString *)iconName
+     defaultIconName:(NSString *)defaultIconName
+               scale:(float)scale
 {
     UIImage *iconImage = [UIImage imageNamed:iconName];
-    if (!iconImage)
+    if (!iconImage && defaultIconName && [iconName isEqualToString:defaultIconName])
         iconImage = [UIImage imageNamed:defaultIconName];
+    if (!iconImage)
+        return nil;
+    if (scale != 1 || iconImage.scale != scale)
+    {
+        CGSize iconPtSize = { iconImage.size.width * scale, iconImage.size.height * scale };
+        iconImage = [OAUtilities resizeImage:iconImage newSize:iconPtSize];
+        iconImage = [UIImage imageWithCGImage:iconImage.CGImage
+                                        scale:scale
+                                  orientation:UIImageOrientationUp]
+            .imageFlippedForRightToLeftLayoutDirection;
+    }
     return iconImage;
 }
 

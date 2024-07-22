@@ -106,7 +106,7 @@
                 @"type" : [OATitleIconRoundCell getCellIdentifier],
                 @"title" : mode.toHumanString,
                 @"img" : mode.getIconName,
-                @"tintColor" : UIColorFromRGB(mode.getIconColor),
+                @"tintColor" : mode.getProfileColor,
                 @"mode" : mode
             }
         ];

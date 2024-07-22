@@ -20,4 +20,9 @@
 + (sk_sp<SkImage>) createCompositeBitmapFromFavorite:(const std::shared_ptr<OsmAnd::IFavoriteLocation> &)fav isFullSize:(BOOL)isFullSize scale:(float)scale;
 + (sk_sp<SkImage>) createCompositeIconWithcolor:(UIColor *)color shapeName:(NSString *)shapeName iconName:(NSString *)iconName isFullSize:(BOOL)isFullSize icon:(UIImage *)icon scale:(float)scale;
 
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName scale:(CGFloat)scale;
++ (sk_sp<SkImage>)getScaledIcon:(NSString *)resourceName
+            defaultResourceName:(NSString *)defaultResourceName
+                          scale:(CGFloat)scale
+                          color:(UIColor *)color;
 @end

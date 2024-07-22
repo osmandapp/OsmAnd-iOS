@@ -117,11 +117,13 @@ static NSString * const routingProfileKey = @"routingProfile";
 static NSString * const derivedProfileKey = @"derivedProfile";
 static NSString * const profileIconNameKey = @"profileIconName";
 static NSString * const profileIconColorKey = @"profileIconColor";
+static NSString * const profileCustomIconColorKey = @"profileCustomIconColor";
 static NSString * const userProfileNameKey = @"userProfileName";
 static NSString * const parentAppModeKey = @"parentAppMode";
 static NSString * const routeServiceKey = @"routeService";
 static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
+static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
@@ -3850,6 +3852,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
             @"app_mode_icon_color",
+            @"custom_icon_color",
             @"user_profile_name",
             @"parent_app_mode",
             @"routing_profile",
@@ -3912,6 +3915,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
         _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 
@@ -3923,17 +3927,17 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_routerService set:2 mode:OAApplicationMode.DEFAULT];
 
         [_profilePreferences setObject:_routerService forKey:@"route_service"];
-        _navigationIcon = [OACommonInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
-        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        _navigationIcon = [OACommonString withKey:navigationIconKey defValue:[[OALocationIcon MOVEMENT_DEFAULT] name]];
+        [_navigationIcon setModeDefaultValue:[[OALocationIcon MOVEMENT_NAUTICAL] name] mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_navigationIcon forKey:@"navigation_icon"];
 
-        _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
+        _locationIcon = [OACommonString withKey:locationIconKey defValue:[[OALocationIcon DEFAULT] name]];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon DEFAULT] name] mode:OAApplicationMode.BOAT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
@@ -4511,6 +4515,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
+        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
+        
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 

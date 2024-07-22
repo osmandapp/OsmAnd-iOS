@@ -124,6 +124,7 @@
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
+@synthesize models3dPath = _models3dPath;
 @synthesize colorsPalettePath = _colorsPalettePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
@@ -169,6 +170,7 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _models3dPath = [_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
@@ -307,6 +309,9 @@
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
+
+    NSString *modelsBundlePath = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:MODEL_3D_DIR];
+    [self moveOrCopyContentsOfDirectory:modelsBundlePath toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] move:NO];
 }
 
 - (BOOL) initializeCore

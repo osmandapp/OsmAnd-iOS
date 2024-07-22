@@ -148,7 +148,7 @@
     {
         cell.titleLabel.text = mode.toHumanString;
         cell.leftIconView.image = [UIImage templateImageNamed:[mode getIconName]];
-        cell.leftIconView.tintColor = UIColorFromRGB([mode getIconColor]);
+        cell.leftIconView.tintColor = [mode getProfileColor];
 
         NSString *imageName = !isAllProfiles ? @"ic_custom_undo_button" : [mode isCustomProfile] ? @"ic_custom_delete" : @"ic_custom_delete_disable";
         [cell.leftEditButton setImage:[UIImage imageNamed:imageName] forState:UIControlStateNormal];

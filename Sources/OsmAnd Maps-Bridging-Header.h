@@ -33,6 +33,7 @@
 #import "OAMapUtils.h"
 #import "OADestination.h"
 #import "OACollatorStringMatcher.h"
+#import "OAModel3dHelper.h"
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"

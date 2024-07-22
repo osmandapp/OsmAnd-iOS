@@ -830,10 +830,12 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 // Application mode related settings
 @property (nonatomic) OACommonString *profileIconName;
 @property (nonatomic) OACommonInteger *profileIconColor;
+@property (nonatomic) OACommonInteger *profileCustomIconColor;
 @property (nonatomic) OACommonString *userProfileName;
 @property (nonatomic) OACommonString *parentAppMode;
-@property (nonatomic) OACommonInteger *navigationIcon;
-@property (nonatomic) OACommonInteger *locationIcon;
+@property (nonatomic) OACommonString *navigationIcon;
+@property (nonatomic) OACommonString *locationIcon;
+@property (nonatomic) OACommonBoolean *use3dIconsByDefault;
 @property (nonatomic) OACommonInteger *appModeOrder;
 
 @property (nonatomic) OACommonDouble *defaultSpeed;

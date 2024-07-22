@@ -3451,3 +3451,4 @@
 "weather_source_ecmwf_title" = "ECMWF";
 "map_settings_weather_wind_animation" = "Animazione del vento";
 "weather_source_GFS_title" = "GFS";
+"osm_login_needs_ios_16_4" = "Per effettuare il login a OpenStreetMap occorre iOS 16.4 o superiore";

@@ -152,7 +152,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
 
 - (UIColor *)getRightIconTintColorLargeTitle
 {
-    return UIColorFromRGB([_appMode getIconColor]);
+    return [_appMode getProfileColor];
 }
 
 - (EOABaseNavbarStyle)getNavbarStyle

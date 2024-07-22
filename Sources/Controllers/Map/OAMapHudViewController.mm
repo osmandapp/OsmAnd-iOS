@@ -1497,8 +1497,8 @@ static const float kDistanceMeters = 100.0;
 {
     OAApplicationMode *mode = [_settings.applicationMode get];
     [_mapSettingsButton setImage:mode.getIcon forState:UIControlStateNormal];
-    _mapSettingsButton.tintColorDay = UIColorFromRGB(mode.getIconColor);
-    _mapSettingsButton.tintColorNight = UIColorFromRGB(mode.getIconColor);
+    _mapSettingsButton.tintColorDay = [mode getProfileColor];
+    _mapSettingsButton.tintColorNight = [mode getProfileColor];
     [_mapSettingsButton updateColorsForPressedState:NO];
     [self updateMapSettingsButtonAccessibilityValue];
 }

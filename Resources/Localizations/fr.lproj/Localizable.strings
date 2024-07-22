@@ -1657,7 +1657,7 @@
 "profile_appearance" = "Apparence du profil";
 "profile_settings" = "Paramètres pour le profil";
 "configure_profile" = "Configurer le profil";
-"profile_alert_delete_msg" = "Supprimer le profil« %@ » \?";
+"profile_alert_delete_msg" = "Supprimer le profil « %@ »";
 "copy_from_other_profile_descr" = "Vous pouvez copier tous les paramètres de n'importe quel profil vers le profil sélectionné : ";
 "shared_string_next" = "Suivant";
 "nav_type_hint" = "Type de navigation";
@@ -2381,7 +2381,7 @@
 "plugin_popup_weather_title" = "Activer la météo";
 "plugin_popup_weather_ask" = "Veuillez activer le greffon Météo";
 "product_desc_weather" = "Prévisions horaires 24h/24 et sur 7 jours sur la carte";
-"weather_plugin_description" = "Fournit: \n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position \n- Les cartes d\'isobares et d\'isothermes \n \nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
+"weather_plugin_description" = "Fournit :\n- Les prévisions météorologiques pour les 24 prochaines heures et les 7 prochains jours, avec 5 sur-couches \n- Des widgets basés sur la position\n- Les cartes d'isobares et d'isothermes\n\nLes données météorologiques sont fournies par le modèle GFS (Global Forecast System, %@).";
 "measurement_units" = "Unités de mesure";
 "weather_pressure_hectopascals" = "Hectopascals";
 "weather_pressure_millimeters_of_mercury" = "Millimètres de mercure";
@@ -3411,7 +3411,7 @@
 "fixed_height" = "Hauteur fixe";
 "shared_string_top" = "En haut";
 "track_3d_empty_view_title" = "Vue des traces en 3D";
-"track_3d_empty_view_description" = "Explorez la trace en 3D interactif! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
+"track_3d_empty_view_description" = "Explorez la trace en 3D interactif ! Visualisez directement sur la carte : hauteur, vitesse et bien plus.";
 "osm_id" = "ID OSM";
 "shared_string_millimeters" = "Millimètres";
 "shared_string_speedometer" = "Compteur de vitesse";
@@ -3468,3 +3468,5 @@
 "data_source" = "Source des données";
 "weather_data_sources_prompt" = "OsmAnd fournit des données météorologiques à partir de deux sources :";
 "rendering_value_pale_name" = "Pâle";
+"shared_string_update_required" = "Mise à jour nécessaire";
+"osm_login_needs_ios_16_4" = "La connexion à OpenStreetMap nécessite iOS 16.4 ou ultérieur";

@@ -741,7 +741,7 @@
 "toggle_online_notes" = "Vis/skjul OSM-notater";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Legg til interessepunkt";
-"quick_action_map_style" = "Endre kartstil";
+"quick_action_map_style" = "Kartstil";
 "quick_action_map_source" = "Endre kartkilde";
 "quick_action_map_overlay" = "Endre overleggskart";
 "quick_action_map_underlay" = "Endre kartunderlag";
@@ -1636,7 +1636,7 @@
 "light_theme" = "Lys";
 "shared_string_finish" = "Fullfør";
 "search_activity" = "Søk";
-"quick_action_remove_next_destination" = "Slett nærmeste reisemål";
+"quick_action_remove_next_destination" = "Neste målpunkt";
 "osmand_purchases_item" = "OsmAnd-kjøp";
 "select_color" = "Velg farge";
 "width_limit_description" = "Angi kjøretøybredde, noen rutebegrensninger for brede kjøretøy kan tilkomme.";
@@ -3103,3 +3103,4 @@
 "missing_maps_ignore" = "Bruk eksisterende kart";
 "transport_hazmat_title" = "Transport av farlig gods";
 "weather_data_sources_prompt" = "OsmAnd tilbyr værdata fra to kilder:";
+"rendering_value_dark_orange_name" = "Mørkeoransje";

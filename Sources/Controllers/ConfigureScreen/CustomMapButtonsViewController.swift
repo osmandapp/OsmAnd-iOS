@@ -52,7 +52,7 @@ final class CustomMapButtonsViewController: OABaseNavbarViewController {
             quickActionRow.key = mapButtonState.id
             quickActionRow.cellType = OAValueTableViewCell.reuseIdentifier
             quickActionRow.setObj(mapButtonState, forKey: "buttonState")
-            quickActionRow.iconTintColor = enabled ? UIColor(rgb: Int(appMode.getIconColor())) : UIColor.iconColorDefault
+            quickActionRow.iconTintColor = enabled ? appMode.getProfileColor() : UIColor.iconColorDefault
             quickActionRow.descr = localizedString(enabled ? "shared_string_on" : "shared_string_off")
             quickActionRow.accessibilityLabel = quickActionRow.title
             quickActionRow.accessibilityValue = quickActionRow.descr

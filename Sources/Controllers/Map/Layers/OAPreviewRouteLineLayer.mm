@@ -119,8 +119,8 @@
         _centerMarkerCollection = std::make_shared<OsmAnd::MapMarkersCollection>();
         
         OAApplicationMode *appMode = OARoutingHelper.sharedInstance.getAppMode;
-        OANavigationIcon *navIcon = [OANavigationIcon withNavigationIcon:appMode.getNavigationIcon];
-        UIColor *iconColor = UIColorFromRGB(appMode.getIconColor);
+        OALocationIcon *navIcon = appMode.getNavigationIcon ?: [OALocationIcon MOVEMENT_DEFAULT];
+        UIColor *iconColor = [appMode getProfileColor];
         
         OsmAnd::MapMarkerBuilder locationMarkerBuilder;
         locationMarkerBuilder.setIsAccuracyCircleSupported(false);
@@ -128,7 +128,7 @@
         locationMarkerBuilder.setIsHidden(true);
         _locationMainIconKey = reinterpret_cast<OsmAnd::MapMarker::OnSurfaceIconKey>(1);
         locationMarkerBuilder.addOnMapSurfaceIcon(_locationMainIconKey,
-                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon iconWithColor:iconColor].CGImage]));
+                                                  OsmAnd::SingleSkImage([OANativeUtilities skImageFromCGImage:[navIcon getMapIcon:iconColor].CGImage]));
         _locationMarker = locationMarkerBuilder.buildAndAddToCollection(_centerMarkerCollection);
         [self.mapView addKeyedSymbolsProvider:_centerMarkerCollection];
     }

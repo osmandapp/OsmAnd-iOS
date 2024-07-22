@@ -146,13 +146,15 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
 - (void) buildRows:(NSMutableArray<OARowInfo *> *)rows
 {
     BOOL hasWiki = NO;
+    BOOL hasName = NO;
     NSString *preferredLang = [OAUtilities preferredLang];
     NSMutableArray<OARowInfo *> *infoRows = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *descriptions = [NSMutableArray array];
     NSMutableArray<OARowInfo *> *urlRows = [NSMutableArray array];
-
+    NSMutableArray<NSDictionary *> *nameTags = [[NSMutableArray alloc] init];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *poiAdditionalCategories = [NSMutableDictionary dictionary];
     OARowInfo *cuisineRow;
+    OARowInfo *nameRow;
     //NSMutableArray<OAPOIType *> *collectedPoiTypes = [NSMutableArray array];
     NSMutableDictionary<NSString *, NSMutableArray<OAPOIType *> *> *collectedPoiTypes = [[NSMutableDictionary alloc] init];
 
@@ -166,11 +168,18 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
         UIColor *textColor;
         NSString *vl = [self.poi getAdditionalInfo][key];
         NSString *convertedKey = [key stringByReplacingOccurrencesOfString:@"_-_" withString:@":"];
+        if (!hasName && [_poiHelper isNameTag:convertedKey])
+        {
+            nameRow = [self addNameRowWithText:self.poi.name iconSize:iconSize];
+            [infoRows addObject:nameRow];
+            hasName = YES;
+        }
+        
         if ([convertedKey isEqualToString:@"image"]
-                || [convertedKey isEqualToString:MAPILLARY_TAG]
-                || [convertedKey isEqualToString:@"subway_region"]
-                || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
-                || [convertedKey hasPrefix:@"lang_yes"])
+            || [convertedKey isEqualToString:MAPILLARY_TAG]
+            || [convertedKey isEqualToString:@"subway_region"]
+            || ([convertedKey isEqualToString:@"note"] && !osmEditingEnabled)
+            || [convertedKey hasPrefix:@"lang_yes"])
             continue;
 
         NSString *textPrefix = @"";
@@ -261,8 +270,14 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                 continue;
             }
         }
-        else if ([convertedKey hasPrefix:@"name:"])
+        else if ([_poiHelper isNameTag:convertedKey])
         {
+            [nameTags addObject:@{
+                @"key": convertedKey,
+                @"value": vl,
+                @"localizedTitle": pt.nameLocalized
+            }];
+            [nameRow setDetailsArray:nameTags];
             continue;
         }
         else if ([convertedKey isEqualToString:COLLECTION_TIMES_TAG] || [convertedKey isEqualToString:SERVICE_TIMES_TAG])
@@ -648,6 +663,26 @@ static const NSArray<NSString *> *kPrefixTags = @[@"start_date"];
                                          isPhoneNumber:NO
                                                  isUrl:YES]];
     }
+}
+
+- (OARowInfo *)addNameRowWithText:(NSString *)textValue iconSize:(CGSize)iconSize
+{
+    OARowInfo *row = [[OARowInfo alloc] initWithKey:@"name"
+                                               icon:[OATargetInfoViewController getIcon:@"ic_navbar_languge" size:iconSize]
+                                         textPrefix:OALocalizedString(@"shared_string_name")
+                                               text:textValue
+                                          textColor:nil
+                                             isText:NO
+                                          needLinks:NO
+                                              order:90
+                                           typeName:@""
+                                      isPhoneNumber:NO
+                                              isUrl:NO];
+    
+    row.collapsable = NO;
+    row.collapsed = YES;
+    row.collapsableView = nil;
+    return row;
 }
 
 - (void) addRowIfNotExsists:(OARowInfo *)newRow toDestinationRows:(NSMutableArray<OARowInfo *> *)rows

@@ -125,11 +125,13 @@ static NSString * const routingProfileKey = @"routingProfile";
 static NSString * const derivedProfileKey = @"derivedProfile";
 static NSString * const profileIconNameKey = @"profileIconName";
 static NSString * const profileIconColorKey = @"profileIconColor";
+static NSString * const profileCustomIconColorKey = @"profileCustomIconColor";
 static NSString * const userProfileNameKey = @"userProfileName";
 static NSString * const parentAppModeKey = @"parentAppMode";
 static NSString * const routeServiceKey = @"routeService";
 static NSString * const navigationIconKey = @"navigationIcon";
 static NSString * const locationIconKey = @"locationIcon";
+static NSString * const use3dIconsByDefaultKey = @"use3dIconsByDefault";
 static NSString * const appModeOrderKey = @"appModeOrder";
 static NSString * const defaultSpeedKey = @"defaultSpeed";
 static NSString * const minSpeedKey = @"minSpeed";
@@ -225,9 +227,6 @@ static NSString * const showSpeedometerKey = @"show_speedometer";
 static NSString * const speedometerSizeKey = @"speedometer_size";
 static NSString * const showSpeedLimitWarningKey = @"show_speed_limit_warning";
 
-static NSString * const osmUserNameKey = @"osm_user_name";
-static NSString * const userOsmBugNameKey = @"userOsmBugName";
-static NSString * const osmPasswordKey = @"osm_pass";
 static NSString * const osmUserAccessTokenKey = @"osm_user_access_token";
 static NSString * const osmUserAccessTokenSecretKey = @"osm_user_access_token_secret";
 static NSString * const oprAccessTokenKey = @"opr_access_token";
@@ -3861,6 +3860,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _appModeBeanPrefsIds = [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] ? [[NSUserDefaults standardUserDefaults] objectForKey:appModeBeanPrefsIdsKey] :
         @[
             @"app_mode_icon_color",
+            @"custom_icon_color",
             @"user_profile_name",
             @"parent_app_mode",
             @"routing_profile",
@@ -3923,6 +3923,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_profileIconName setModeDefaultValue:@"ic_action_horse" mode:OAApplicationMode.HORSE];
         
         _profileIconColor = [OACommonInteger withKey:profileIconColorKey defValue:profile_icon_color_blue_dark_default];
+        _profileCustomIconColor = [OACommonInteger withKey:profileCustomIconColorKey defValue:-1];
         _userProfileName = [OACommonString withKey:userProfileNameKey defValue:@""];
         _parentAppMode = [OACommonString withKey:parentAppModeKey defValue:nil];
 
@@ -3934,17 +3935,17 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_routerService set:2 mode:OAApplicationMode.DEFAULT];
 
         [_profilePreferences setObject:_routerService forKey:@"route_service"];
-        _navigationIcon = [OACommonInteger withKey:navigationIconKey defValue:NAVIGATION_ICON_DEFAULT];
-        [_navigationIcon setModeDefaultValue:@(NAVIGATION_ICON_NAUTICAL) mode:OAApplicationMode.BOAT];
+        _navigationIcon = [OACommonString withKey:navigationIconKey defValue:[[OALocationIcon MOVEMENT_DEFAULT] name]];
+        [_navigationIcon setModeDefaultValue:[[OALocationIcon MOVEMENT_NAUTICAL] name] mode:OAApplicationMode.BOAT];
         [_profilePreferences setObject:_navigationIcon forKey:@"navigation_icon"];
 
-        _locationIcon = [OACommonInteger withKey:locationIconKey defValue:LOCATION_ICON_DEFAULT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.CAR];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.BICYCLE];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_DEFAULT) mode:OAApplicationMode.BOAT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_CAR) mode:OAApplicationMode.AIRCRAFT];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.SKI];
-        [_locationIcon setModeDefaultValue:@(LOCATION_ICON_BICYCLE) mode:OAApplicationMode.HORSE];
+        _locationIcon = [OACommonString withKey:locationIconKey defValue:[[OALocationIcon DEFAULT] name]];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.CAR];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.BICYCLE];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon DEFAULT] name] mode:OAApplicationMode.BOAT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon CAR] name] mode:OAApplicationMode.AIRCRAFT];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.SKI];
+        [_locationIcon setModeDefaultValue:[[OALocationIcon BICYCLE] name] mode:OAApplicationMode.HORSE];
         [_profilePreferences setObject:_locationIcon forKey:@"location_icon"];
 
         _appModeOrder = [OACommonInteger withKey:appModeOrderKey defValue:0];
@@ -4245,11 +4246,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _rulerMode = [[[OACommonRulerWidgetMode withKey:rulerModeKey defValue:RULER_MODE_DARK] makeGlobal] makeShared];
         [_globalPreferences setObject:_rulerMode forKey:@"ruler_mode"];
 
-        _osmUserName = [[[OACommonString withKey:osmUserNameKey defValue:@""] makeGlobal] makeShared];
         _osmUserDisplayName = [[[OACommonString withKey:osmUserDisplayNameKey defValue:@""] makeGlobal] makeShared];
         _osmUploadVisibility = [[[OACommonUploadVisibility withKey:osmUploadVisibilityKey defValue:EOAUploadVisibilityPublic] makeGlobal] makeShared];
-        _userOsmBugName = [[[OACommonString withKey:userOsmBugNameKey defValue:@"NoName/OsmAnd"] makeGlobal] makeShared];
-        _osmUserPassword = [[[OACommonString withKey:osmPasswordKey defValue:@""] makeGlobal] makeShared];
         _osmUserAccessToken = [[OACommonString withKey:osmUserAccessTokenKey defValue:@""] makeGlobal];
         _osmUserAccessTokenSecret = [[OACommonString withKey:osmUserAccessTokenSecretKey defValue:@""] makeGlobal];
         _oprAccessToken = [[OACommonString withKey:oprAccessTokenKey defValue:@""] makeGlobal];
@@ -4259,11 +4257,8 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _offlineEditing = [[[OACommonBoolean withKey:offlineEditingKey defValue:YES] makeGlobal] makeShared];
         _osmUseDevUrl = [[[OACommonBoolean withKey:osmUseDevUrlKey defValue:NO] makeGlobal] makeShared];
 
-        [_globalPreferences setObject:_osmUserName forKey:@"user_name"];
         [_globalPreferences setObject:_osmUserDisplayName forKey:@"user_display_name"];
         [_globalPreferences setObject:_osmUploadVisibility forKey:@"upload_visibility"];
-        [_globalPreferences setObject:_userOsmBugName forKey:@"user_osm_bug_name"];
-        [_globalPreferences setObject:_osmUserPassword forKey:@"user_password"];
         [_globalPreferences setObject:_osmUserAccessToken forKey:@"user_access_token"];
         [_globalPreferences setObject:_osmUserAccessTokenSecret forKey:@"user_access_token_secret"];
         [_globalPreferences setObject:_oprAccessToken forKey:@"opr_user_access_token_secret"];
@@ -4528,6 +4523,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _debugRenderingInfo = [[[OACommonBoolean withKey:debugRenderingInfoKey defValue:NO] makeGlobal] makeShared];
         [_globalPreferences setObject:_debugRenderingInfo forKey:@"debug_rendering"];
 
+        _use3dIconsByDefault = [[[OACommonBoolean withKey:use3dIconsByDefaultKey defValue:YES] makeGlobal] makeShared];
+        [_globalPreferences setObject:_use3dIconsByDefault forKey:@"_use3dIconsByDefault"];
+        
         _levelToSwitchVectorRaster = [[OACommonInteger withKey:debugRenderingInfoKey defValue:1] makeGlobal];
         [_globalPreferences setObject:_levelToSwitchVectorRaster forKey:@"level_to_switch_vector_raster"];
 

@@ -345,7 +345,7 @@
             cell.titleLabel.text = item[@"title"];
 
             cell.leftIconView.image = [UIImage templateImageNamed:item[@"icon"]];
-            cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? UIColorFromRGB(self.appMode.getIconColor) : UIColorFromRGB(color_icon_inactive);
+            cell.leftIconView.tintColor = [item[@"isOn"] boolValue] ? self.appMode.getProfileColor : UIColorFromRGB(color_icon_inactive);
 
             cell.switchView.on = [item[@"isOn"] boolValue];
             cell.switchView.tag = indexPath.section << 10 | indexPath.row;
@@ -363,7 +363,7 @@
             cell = (OAValueTableViewCell *)[nib objectAtIndex:0];
             [cell descriptionVisibility:NO];
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.leftIconView.tintColor = UIColorFromRGB(self.appMode.getIconColor);
+            cell.leftIconView.tintColor = self.appMode.getProfileColor;
         }
         if (cell)
         {

@@ -122,6 +122,7 @@
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
+@synthesize models3dPath = _models3dPath;
 @synthesize colorsPalettePath = _colorsPalettePath;
 
 @synthesize initialURLMapState = _initialURLMapState;
@@ -167,6 +168,7 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _models3dPath = [_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
@@ -298,13 +300,17 @@
     BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
                                               toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
                                   removeOriginalFile:YES];
-    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
-                           toDest:_colorsPalettePath
-               removeOriginalFile:NO];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
+
+    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
+                           toDest:_colorsPalettePath
+               removeOriginalFile:NO];
+    [self moveContentsOfDirectory:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:MODEL_3D_DIR]
+                           toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR]
+               removeOriginalFile:NO];
 }
 
 - (BOOL) initializeCore

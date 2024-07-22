@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OANavigationIcon.h"
+
 #import "OALocationIcon.h"
 
 @class OAApplicationModeBuilder;
@@ -19,14 +19,16 @@
 @property (nonatomic) NSString *parent;
 @property (nonatomic) NSString *iconName;
 @property (nonatomic) int iconColor;
+@property (nonatomic) int customIconColor;
 @property (nonatomic) NSString *derivedProfile;
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSInteger routeService;
-@property (nonatomic) EOALocationIcon locIcon;
-@property (nonatomic) EOANavigationIcon navIcon;
+@property (nonatomic) NSString *locIcon;
+@property (nonatomic) NSString *navIcon;
 @property (nonatomic) int order;
 
 + (OAApplicationModeBean *) fromJson:(NSDictionary *)jsonData;
+- (UIColor *) getProfileColor;
 
 @end
 
@@ -107,12 +109,15 @@
 - (void) setRoutingProfile:(NSString *) routingProfile;
 - (NSInteger) getRouterService;
 - (void) setRouterService:(NSInteger) routerService;
-- (EOANavigationIcon) getNavigationIcon;
-- (void) setNavigationIcon:(EOANavigationIcon) navIcon;
-- (EOALocationIcon) getLocationIcon;
-- (void) setLocationIcon:(EOALocationIcon) locIcon;
+- (OALocationIcon *) getNavigationIcon;
+- (void) setNavigationIconName:(NSString *) navIcon;
+- (OALocationIcon *) getLocationIcon;
+- (void) setLocationIconName:(NSString *) locIcon;
+- (UIColor *) getProfileColor;
 - (int) getIconColor;
 - (void) setIconColor:(int)iconColor;
+- (int) getCustomIconColor;
+- (void) setCustomIconColor:(int)iconColor;
 - (int) getOrder;
 - (void) setOrder:(int)order;
 - (NSString *) getRoutingProfile;
@@ -142,8 +147,9 @@
 @property (nonatomic) NSString *routingProfile;
 @property (nonatomic) NSString *iconResName;
 @property (nonatomic) NSInteger iconColor;
-@property (nonatomic) EOALocationIcon locationIcon;
-@property (nonatomic) EOANavigationIcon navigationIcon;
+@property (nonatomic) NSInteger customIconColor;
+@property (nonatomic) NSString *locationIcon;
+@property (nonatomic) NSString *navigationIcon;
 @property (nonatomic) NSInteger order;
 
 - (OAApplicationMode *) customReg;

@@ -370,7 +370,7 @@
                 [cell descriptionVisibility:YES];
 
                 cell.leftIconView.image = [[appMode getIcon] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate].imageFlippedForRightToLeftLayoutDirection;
-                cell.leftIconView.tintColor = UIColorFromRGB([appMode getIconColor]);
+                cell.leftIconView.tintColor = [appMode getProfileColor];
                 [cell leftIconVisibility:YES];
             }
             else

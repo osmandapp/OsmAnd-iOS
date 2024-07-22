@@ -241,7 +241,7 @@
                         item[@"description"] = [NSString stringWithFormat:@"%@: %@", OALocalizedString(@"nav_type_hint"), routingProfile];
                     
                     item[@"icon"] = [UIImage imageNamed:modeBean.iconName];
-                    item[@"iconColor"] = UIColorFromRGB(modeBean.iconColor);
+                    item[@"iconColor"] = [modeBean getProfileColor];
                     item[@"cellType"] = [OASimpleTableViewCell getCellIdentifier];
                 }
                 else if ([currentItem isKindOfClass:OAQuickAction.class])

@@ -522,8 +522,8 @@ typedef NS_ENUM(NSInteger, EOAHudMode) {
     if (_editingContext.appMode != OAApplicationMode.DEFAULT)
     {
         img = [_editingContext.appMode.getIcon imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-        _modeButton.tintColorDay = UIColorFromRGB(_editingContext.appMode.getIconColor);
-        _modeButton.tintColorNight = UIColorFromRGB(_editingContext.appMode.getIconColor);
+        _modeButton.tintColorDay = _editingContext.appMode.getProfileColor;
+        _modeButton.tintColorNight = _editingContext.appMode.getProfileColor;
     }
     else
     {

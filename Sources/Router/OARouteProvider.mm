@@ -975,7 +975,7 @@
             return true;
         };
 
-        env.router->setUseGeometryBasedApproximation(true);
+        // env.router->setUseGeometryBasedApproximation(true); // r4.8 is switched to old approximation
         env.router->searchGpxRoute(gctx, points, resultAcceptor);
 
         return gctx;

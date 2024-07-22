@@ -26,6 +26,7 @@
 #import "OAIndexConstants.h"
 #import "OAPluginsHelper.h"
 #import "OASwitchTableViewCell.h"
+#import "OAObservable.h"
 
 @interface OAOsmandDevelopmentViewController () <OAOsmandDevelopmentSimulateLocationDelegate>
 

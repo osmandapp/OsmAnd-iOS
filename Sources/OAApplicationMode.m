@@ -12,6 +12,7 @@
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OALocationIcon.h"
 #import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 

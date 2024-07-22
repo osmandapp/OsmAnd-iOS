@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OACompoundIconUtils.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>

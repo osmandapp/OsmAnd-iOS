@@ -237,7 +237,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
     return ceil([OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle) == kDefaultElevationAngle;
 }
 
-- (void)startTilting:(float)elevationAngle
+- (void)startTilting:(float)elevationAngle timePeriod:(float)timePeriod
 {
     float initialElevationAngle = [OARootViewController instance].mapPanel.mapViewController.mapView.elevationAngle;
     float elevationAngleDiff = elevationAngle - initialElevationAngle;
@@ -254,7 +254,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
         _mapView.mapAnimator->cancelCurrentAnimation(kUserInteractionAnimationKey, OsmAnd::MapAnimator::AnimatedValue::ElevationAngle);
     }
     _mapView.mapAnimator->animateElevationAngleTo(elevationAngle,
-                                                  duration,
+                                                  timePeriod > 0.0f ? timePeriod : duration,
                                                   OsmAnd::MapAnimator::TimingFunction::Linear,
                                                   kUserInteractionAnimationKey);
     _mapView.mapAnimator->resume();
@@ -264,7 +264,7 @@ static double const SKIP_ANIMATION_DP_THRESHOLD = 20.0;
 {
     BOOL defaultElevationAngle = [self isDefaultElevationAngle];
     float tiltAngle = defaultElevationAngle ? [self getElevationAngle:floor(_mapView.zoom)] : kDefaultElevationAngle;
-    [self startTilting:tiltAngle];
+    [self startTilting:tiltAngle timePeriod:0.0f];
 }
 
 - (float) getElevationAngle:(int)zoom

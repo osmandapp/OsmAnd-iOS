@@ -45,6 +45,6 @@
 - (CGPoint) projectRatioToVisibleMapRect:(CGPoint)ratio;
 - (void) setZoomTime:(NSTimeInterval)time;
 
-- (void)startTilting:(float)elevationAngle;
+- (void)startTilting:(float)elevationAngle timePeriod:(float)timePeriod;
 
 @end

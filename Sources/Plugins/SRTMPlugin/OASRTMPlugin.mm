@@ -17,31 +17,37 @@
 #import "OATerrainAction.h"
 #import "Localization.h"
 #import "OALinks.h"
+#import "OsmAnd_Maps-Swift.h"
 
-#define PLUGIN_ID kInAppId_Addon_Srtm
-
-#define kEnable3dMaps @"enable_3d_maps"
+static NSString * const PLUGIN_ID = kInAppId_Addon_Srtm;
+static NSString * const kEnable3dMapsPrefName = @"enable_3d_maps";
+static NSString * const kTerrainModePrefName = @"terrain_mode";
+static NSString * const kTerrainEnabledPrefName = @"terrain_layer";
 
 @implementation OASRTMPlugin
-{
-    OACommonBoolean *_enable3dMap;
-}
 
-- (instancetype) init
+- (instancetype)init
 {
     self = [super init];
     if (self)
     {
         OAAppSettings *settings = [OAAppSettings sharedManager];
-        _enable3DMaps = [[[settings registerBooleanPreference:kEnable3dMaps defValue:YES] makeProfile] makeShared];
-        [[settings getPreferences:NO] setObject:_enable3DMaps forKey:@"enable_3d_maps"];
+        _enable3dMapsPref = [[[settings registerBooleanPreference:kEnable3dMapsPrefName defValue:YES] makeProfile] makeShared];
 
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onProfileSettingSet:) name:kNotificationSetProfileSetting object:nil];
+        _terrainEnabledPref = [[self registerBooleanPreference:kTerrainEnabledPrefName defValue:YES] makeProfile];
+        NSArray<TerrainMode *> *tms = TerrainMode.values;
+        _terrainModeTypePref = [[self registerStringPreference:kTerrainModePrefName defValue:tms.count == 0 ? @"" : [tms.firstObject getKeyName]] makeProfile];
+
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(onProfileSettingSet:)
+                                                     name:kNotificationSetProfileSetting
+                                                   object:nil];
+        
     }
     return self;
 }
 
-- (NSString *) getId
+- (NSString *)getId
 {
     return PLUGIN_ID;
 }
@@ -51,7 +57,7 @@
     return [super isEnabled] && [[OAIAPHelper sharedInstance].srtm isActive];
 }
 
-- (NSArray<OAResourceItem *> *) getSuggestedMaps
+- (NSArray<OAResourceItem *> *)getSuggestedMaps
 {
     NSMutableArray *suggestedMaps = [NSMutableArray new];
     CLLocationCoordinate2D latLon = [OAResourcesUIHelper getMapLocation];
@@ -62,36 +68,66 @@
     return suggestedMaps;
 }
 
-- (NSString *) getName
+- (NSString *)getName
 {
     return OALocalizedString(@"srtm_plugin_name");
 }
 
-- (NSString *)getDescription {
+- (NSString *)getDescription
+{
     return [NSString stringWithFormat:NSLocalizedString(@"srtm_plugin_description", nil), k_docs_plugin_srtm];
 }
 
+- (TerrainMode *)getTerrainMode
+{
+    return [TerrainMode getByKey:[_terrainModeTypePref get]];
+}
+
+- (void)setTerrainMode:(TerrainMode *)mode
+{
+    return [_terrainModeTypePref set:[mode getKeyName]];
+}
+
+- (BOOL)isTerrainLayerEnabled
+{
+    return [_terrainEnabledPref get];
+}
+
+- (void)setTerrainLayerEnabled:(BOOL)enabled
+{
+    [_terrainEnabledPref set:enabled];
+    [[[OsmAndApp instance] updateGpxTracksOnMapObservable] notifyEvent];
+}
+
+- (NSInteger)getTerrainMinZoom
+{
+    return MAX(terrainMinSupportedZoom, [[self getTerrainMode] getMinZoom]);
+}
 
 
-- (BOOL) isHeightmapEnabled
+- (NSInteger)getTerrainMaxZoom
+{
+    return MIN(terrainMaxSupportedZoom, [[self getTerrainMode] getMaxZoom]);
+}
+
+- (BOOL)isHeightmapEnabled
 {
     return [self isHeightmapAllowed];
 }
 
-- (BOOL) isHeightmapAllowed
+- (BOOL)isHeightmapAllowed
 {
     return [OAIAPHelper isOsmAndProAvailable];
 }
 
-- (BOOL) is3DMapsEnabled
+- (BOOL)is3DMapsEnabled
 {
-    return [self isHeightmapEnabled] && [_enable3DMaps get];
+    return [self isHeightmapEnabled] && [_enable3dMapsPref get];
 }
 
-- (void) onProfileSettingSet:(NSNotification *)notification
+- (void)onProfileSettingSet:(NSNotification *)notification
 {
-    OACommonPreference *obj = notification.object;
-    if (obj == _enable3DMaps)
+    if (notification.object == _enable3dMapsPref)
     {
         dispatch_async(dispatch_get_main_queue(), ^{
             [OARootViewController.instance.mapPanel.mapViewController recreateHeightmapProvider];

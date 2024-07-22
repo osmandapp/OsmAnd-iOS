@@ -9,6 +9,7 @@
 #include "OATerrainMapLayerProvider.h"
 #import "OATerrainLayer.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/SkiaUtilities.h>
 
@@ -46,10 +47,10 @@ long long OATerrainMapLayerProvider::obtainImageData(const OsmAnd::IMapTiledData
 sk_sp<const SkImage> OATerrainMapLayerProvider::obtainImage(const OsmAnd::IMapTiledDataProvider::Request& request)
 {
     QByteArray byteArray;
-    OsmAndAppInstance app = [OsmAndApp instance];
-    if (app.data.terrainType == EOATerrainTypeHillshade)
+    TerrainMode *terrainMode = [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) getTerrainMode];
+    if ([terrainMode isHillshade])
         byteArray = [[OATerrainLayer sharedInstanceHillshade] getByteArray:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
-    else if (app.data.terrainType == EOATerrainTypeSlope)
+    else if ([terrainMode isSlope])
         byteArray = [[OATerrainLayer sharedInstanceSlope] getByteArray:request.tileId.x y:request.tileId.y zoom:request.zoom timeHolder:nil];
     if (!byteArray.isEmpty())
     {

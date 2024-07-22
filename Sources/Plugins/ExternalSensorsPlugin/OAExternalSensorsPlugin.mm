@@ -41,10 +41,10 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
     {
         _lastUsedSensor = [OACommonBoolean withKey:kLastUsedExternalSensorKey defValue:NO];
 
-        _speedSensorWriteToTrackDeviceID = [self registerStringPreference:@"speed_sensor_write_to_track_device" defValue:@""];
-        _cadenceSensorWriteToTrackDeviceID = [self registerStringPreference:@"cadence_sensor_write_to_track_device" defValue:@""];
-        _heartSensorWriteToTrackDeviceID = [self registerStringPreference:@"heart_rate_sensor_write_to_track_device" defValue:@""];
-        _temperatureSensorWriteToTrackDeviceID = [self registerStringPreference:@"temperature_sensor_write_to_track_device" defValue:@""];
+        _speedSensorWriteToTrackDeviceID = [[self registerStringPreference:@"speed_sensor_write_to_track_device" defValue:@""] makeProfile];
+        _cadenceSensorWriteToTrackDeviceID = [[self registerStringPreference:@"cadence_sensor_write_to_track_device" defValue:@""] makeProfile];
+        _heartSensorWriteToTrackDeviceID = [[self registerStringPreference:@"heart_rate_sensor_write_to_track_device" defValue:@""] makeProfile];
+        _temperatureSensorWriteToTrackDeviceID = [[self registerStringPreference:@"temperature_sensor_write_to_track_device" defValue:@""] makeProfile];
 
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.heartRate appModes:@[]];
         [OAWidgetsAvailabilityHelper regWidgetVisibilityWithWidgetType:OAWidgetType.bicycleCadence appModes:@[]];

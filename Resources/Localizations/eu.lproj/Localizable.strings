@@ -3153,7 +3153,7 @@
 "rendering_value_dark_orange_name" = "Laranja iluna";
 "wall_height" = "Hormaren altuera";
 
-"rendering_value_pale_name" = "Zurbila";;
+"rendering_value_pale_name" = "Zurbila";
 "osmand_depelopment_simulate_location_section" = "Simulatu";
 "missing_maps_ignore" = "Erabili deskargatutako mapak";
 "weather_source_GFS_description" = "Eguraldia Iragartzeko Zentro Nazionaletako Iragarpen Sistema Globala";

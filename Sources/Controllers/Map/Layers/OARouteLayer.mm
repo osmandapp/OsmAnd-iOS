@@ -21,10 +21,12 @@
 #import "OAPreviewRouteLineInfo.h"
 #import "OAGPXAppearanceCollection.h"
 #import "OAGPXUIHelper.h"
-#import "OARouteColorizationHelper.h"
+#import "OARouteColorize.h"
+#import "OARouteColorize+cpp.h"
 #import "OAGPXDocument.h"
 #import "OAMapLayers.h"
 #import "OAMapUtils.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -50,7 +52,8 @@
     sk_sp<SkImage> _transportShieldIcon;
     
     std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
-    OAAutoObserverProxy* _mapZoomObserver;
+    OAAutoObserverProxy *_mapZoomObserver;
+    OAAutoObserverProxy *_updateGpxTracksOnMapObserver;
     
     NSDictionary<NSString *, NSNumber *> *_routeAttributes;
     NSCache<NSString *, NSNumber *> *_сoloringTypeAvailabilityCache;
@@ -63,6 +66,7 @@
     NSInteger _customTurnArrowsColor;
     OAColoringType *_routeColoringType;
     NSString *_routeInfoAttribute;
+    NSString *_routeGradientPalette;
     OAGPXAppearanceCollection *_appearanceCollection;
 
     OARouteCalculationResult *_route;
@@ -84,13 +88,23 @@
 
 - (void)dealloc
 {
-    [_mapZoomObserver detach];
+    if (_mapZoomObserver)
+    {
+        [_mapZoomObserver detach];
+        _mapZoomObserver = nil;
+    }
+    if (_updateGpxTracksOnMapObserver)
+    {
+        [_updateGpxTracksOnMapObserver detach];
+        _updateGpxTracksOnMapObserver = nil;
+    }
 }
 
 - (void) initLayer
 {
     [super initLayer];
-    
+
+    _routeGradientPalette = @"default";
     _routingHelper = [OARoutingHelper sharedInstance];
     _transportHelper = [OATransportRoutingHelper sharedInstance];
     
@@ -121,6 +135,9 @@
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)
                                                   andObserve:self.mapViewController.zoomObservable];
+    _updateGpxTracksOnMapObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                              withHandler:@selector(onUpdateGpxTracksOnMapObservable)
+                                                               andObserve:[OsmAndApp instance].updateGpxTracksOnMapObservable];
 }
 
 - (void) resetLayer
@@ -424,6 +441,7 @@
     {
         _routeColoringType = _previewRouteLineInfo.coloringType;
         _routeInfoAttribute = _previewRouteLineInfo.routeInfoAttribute;
+        _routeGradientPalette = _previewRouteLineInfo.gradientPalette;
     }
     else
     {
@@ -431,6 +449,7 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         _routeColoringType = [settings.routeColoringType get:mode];
         _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
+        _routeGradientPalette = [settings.routeGradientPalette get:mode];
     }
 }
 
@@ -738,12 +757,17 @@
     return p;
 }
 
-- (void) refreshRoute
+- (void)onUpdateGpxTracksOnMapObservable
 {
-    [self refreshRouteWithSync:YES];
+    [self refreshRouteWithSync:YES refreshColors:YES];
 }
 
-- (void) refreshRouteWithSync:(BOOL)sync
+- (void) refreshRoute
+{
+    [self refreshRouteWithSync:YES refreshColors:NO];
+}
+
+- (void) refreshRouteWithSync:(BOOL)sync refreshColors:(BOOL)refreshColors
 {
     if (!_routeAttributes)
         _routeAttributes = [self.mapViewController getLineRenderingAttributes:@"route"];
@@ -811,17 +835,24 @@
         NSArray<CLLocation *> *locations = [route getImmutableAllLocations];
         BOOL routeUpdated = NO;
         if ([routeColoringType isGradient]
-                && (_route != route || _prevRouteColoringType != routeColoringType || _colorizationScheme != COLORIZATION_GRADIENT))
+                && (_route != route
+                    || _prevRouteColoringType != routeColoringType
+                    || _colorizationScheme != COLORIZATION_GRADIENT
+                    || refreshColors))
         {
             OAGPXDocument *gpx = [OAGPXUIHelper makeGpxFromRoute:route];
-            OARouteColorizationHelper *colorizationHelper =
-                    [[OARouteColorizationHelper alloc] initWithGpxFile:gpx
+            ColorPalette *colorPalette = [[ColorPaletteHelper shared] getGradientColorPaletteSync:[routeColoringType toColorizationType] gradientPaletteName:_routeGradientPalette refresh:refreshColors];
+            OARouteColorize *colorizationHelper =
+                    [[OARouteColorize alloc] initWithGpxFile:gpx
                                                               analysis:[gpx getAnalysis:0]
-                                                                  type:[[routeColoringType toGradientScaleType] toColorizationType]
+                                                                  type:[routeColoringType toColorizationType]
+                                                               palette:colorPalette
                                                        maxProfileSpeed:0
                     ];
             _colorizationScheme = COLORIZATION_GRADIENT;
-            _colors = colorizationHelper ? [colorizationHelper getResult] : QList<OsmAnd::FColorARGB>();
+            _colors.clear();
+            if (colorizationHelper)
+                _colors.append([colorizationHelper getResultQList]);
             _route = route;
             routeUpdated = YES;
         }
@@ -965,7 +996,7 @@
 - (void) onMapFrameAnimatorsUpdated
 {
     if (_routingHelper && ![_routingHelper isPublicTransportMode])
-        [self refreshRouteWithSync:NO];
+        [self refreshRouteWithSync:NO refreshColors:NO];
 }
 
 @end

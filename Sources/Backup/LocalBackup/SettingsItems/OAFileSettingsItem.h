@@ -28,6 +28,7 @@ typedef NS_ENUM(NSInteger, EOASettingsItemFileSubtype) {
     EOASettingsItemFileSubtypeVoiceTTS,
     EOASettingsItemFileSubtypeTravel,
 //    EOASettingsItemFileSubtypeMultimediaFile,
+    EOASettingsItemFileSubtypeColorPalette,
     EOASettingsItemFileSubtypesCount
 };
 

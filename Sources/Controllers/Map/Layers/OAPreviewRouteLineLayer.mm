@@ -17,8 +17,10 @@
 #import "OAColors.h"
 #import "OAPreviewRouteLineInfo.h"
 #import "OAGPXAppearanceCollection.h"
-#import "OARouteColorizationHelper.h"
+#import "OARouteColorize.h"
 #import "OAMapPresentationEnvironment.h"
+#import "OAColoringType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/Map/VectorLineBuilder.h>
 #include <OsmAndCore/Map/MapMarker.h>
@@ -34,7 +36,6 @@
 {
     std::shared_ptr<OsmAnd::VectorLinesCollection> _collection;
     
-    
     OARoutingHelper *_routingHelper;
     std::shared_ptr<OsmAnd::VectorLinesCollection> _actionLinesCollection;
     
@@ -48,6 +49,7 @@
     NSInteger _customTurnArrowsColor;
     OAColoringType *_routeColoringType;
     NSString *_routeInfoAttribute;
+    NSString *_routeGradientPalette;
     OAGPXAppearanceCollection *_appearanceCollection;
 
     OARouteCalculationResult *_route;
@@ -70,7 +72,8 @@
 - (void) initLayer
 {
     [super initLayer];
-    
+
+    _routeGradientPalette = @"default";
     _routingHelper = OARoutingHelper.sharedInstance;
     
     _collection = std::make_shared<OsmAnd::VectorLinesCollection>();
@@ -300,6 +303,7 @@
     {
         _routeColoringType = _previewRouteLineInfo.coloringType;
         _routeInfoAttribute = _previewRouteLineInfo.routeInfoAttribute;
+        _routeGradientPalette = _previewRouteLineInfo.gradientPalette;
     }
     else
     {
@@ -307,6 +311,7 @@
         OAAppSettings *settings = [OAAppSettings sharedManager];
         _routeColoringType = [settings.routeColoringType get:mode];
         _routeInfoAttribute = [settings.routeInfoAttribute get:mode];
+        _routeGradientPalette = [settings.routeGradientPalette get:mode];
     }
 }
 
@@ -556,7 +561,7 @@
 
 - (void) fillAltitudeGradientArrays:(NSArray<NSNumber *> *)distances colors:(QList<OsmAnd::FColorARGB> &)colors
 {
-    NSArray<NSNumber *> *colorsArr = OARouteColorizationHelper.COLORS;
+    NSArray<NSNumber *> *colorsArr = ColorPalette.colors;
     for (int i = 1; i < distances.count; i++)
     {
         double prevDist = distances[i - 1].doubleValue;
@@ -573,18 +578,36 @@
     if (index == 0)
         return OsmAnd::ColorARGB(colors[0].intValue);
     else if (index > 0 && index < colors.count)
-        return [OARouteColorizationHelper getIntermediateColor:colors[index - 1].intValue maxPaletteColor:colors[index].intValue percent:coeff];
+        return OsmAnd::ColorARGB([ColorPalette getIntermediateColorWithMin:colors[index - 1].intValue max:colors[index].intValue percent:coeff]);
     else if (index == colors.count)
         return OsmAnd::ColorARGB(colors[index - 1].intValue);
 
     return OsmAnd::ColorARGB(0);
 }
 
-- (void) fillSlopeGradientArrays:(QVector<OsmAnd::PointI> &)points distances:(NSMutableArray<NSNumber *> *)distances
+- (void)fillSlopeGradientArrays:(QVector<OsmAnd::PointI> &)points distances:(NSMutableArray<NSNumber *> *)distances
                           angles:(NSMutableArray<NSNumber *> *)angles colors:(QList<OsmAnd::FColorARGB> &)colors
 {
-    NSArray<NSNumber *> *palette = OARouteColorizationHelper.SLOPE_COLORS;
-    NSArray<NSNumber *> *gradientLengthsRatio = @[@0.145833, @0.130209, @0.291031];
+    ColorPalette *previewPalette = ColorPalette.minMaxPalette;
+    OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
+    if (gradientScaleType)
+    {
+        EOAColorizationType colorizationType = [gradientScaleType toColorizationType];
+        previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType gradientPaletteName:_routeGradientPalette];
+    }
+    NSMutableArray<NSNumber *> *palette = [NSMutableArray array];
+    for (ColorValue *colorValue in [previewPalette colorValues])
+    {
+        [palette addObject:@(colorValue.clr)];
+    }
+    
+    NSUInteger ratiosAmount = palette.count - 1;
+    double lengthRatio = 1.0 / palette.count;
+    NSMutableArray<NSNumber *> *gradientLengthsRatio = [NSMutableArray arrayWithCapacity:ratiosAmount];
+    for (NSUInteger i = 0; i < ratiosAmount; i++)
+    {
+        [gradientLengthsRatio addObject:@(lengthRatio)];
+    }
     NSMutableArray<NSNumber *> *cols = [NSMutableArray array];
 
     [self fillMultiColorLineArrays:palette lengthRatios:gradientLengthsRatio points:points distances:distances angles:angles colors:cols];

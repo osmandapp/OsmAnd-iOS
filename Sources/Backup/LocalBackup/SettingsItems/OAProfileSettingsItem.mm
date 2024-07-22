@@ -208,18 +208,6 @@
                 }
             }
         }
-        else if ([key isEqualToString:@"terrain_layer"])
-        {
-            if ([value isEqualToString:@"true"])
-            {
-                [app.data setTerrainType:[app.data getLastTerrainType:_appMode] mode:_appMode];
-            }
-            else
-            {
-                [app.data setLastTerrainType:[app.data getTerrainType:_appMode] mode:_appMode];
-                [app.data setLastTerrainType:EOATerrainTypeDisabled mode:_appMode];
-            }
-        }
         else
         {
             [app.data setSettingValue:value forKey:key mode:_appMode];

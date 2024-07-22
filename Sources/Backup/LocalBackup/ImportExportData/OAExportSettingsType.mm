@@ -40,6 +40,7 @@ static OAExportSettingsType * OFFLINE_MAPS;
 static OAExportSettingsType * TTS_VOICE;
 static OAExportSettingsType * VOICE;
 static OAExportSettingsType * ONLINE_ROUTING_ENGINES;
+static OAExportSettingsType * COLOR_DATA;
 
 static NSArray<OAExportSettingsType *> *allValues;
 
@@ -72,7 +73,6 @@ static NSArray<OAExportSettingsType *> *allValues;
 
     for (OAExportSettingsType *exportType in self.getAllValues)
     {
-        NSString *type = remoteFile.type;
         if ([exportType.itemName isEqualToString:remoteFile.type])
             return exportType;
     }
@@ -81,24 +81,22 @@ static NSArray<OAExportSettingsType *> *allValues;
 
 + (OAExportSettingsType *)findByFileSubtype:(EOASettingsItemFileSubtype)subtype
 {
-    if (subtype == EOASettingsItemFileSubtypeRenderingStyle) {
+    if (subtype == EOASettingsItemFileSubtypeRenderingStyle)
         return CUSTOM_RENDER_STYLE;
-    } else if (subtype == EOASettingsItemFileSubtypeRoutingConfig) {
+    else if (subtype == EOASettingsItemFileSubtypeRoutingConfig)
         return CUSTOM_ROUTING;
-    }
-//    else if (subtype == EOASettingsItemFileSubtypeMultimediaFile) {
+//    else if (subtype == EOASettingsItemFileSubtypeMultimediaFile)
 //        return MULTIMEDIA_NOTES;
-//    }
-    else if (subtype == EOASettingsItemFileSubtypeGpx) {
+    else if (subtype == EOASettingsItemFileSubtypeGpx)
         return TRACKS;
-    } else if ([OAFileSettingsItemFileSubtype isMap:subtype]) {
+    else if (subtype == EOASettingsItemFileSubtypeColorPalette)
+        return COLOR_DATA;
+    else if ([OAFileSettingsItemFileSubtype isMap:subtype])
         return OFFLINE_MAPS;
-    }
-//    else if (subtype == FileSubtype.TTS_VOICE) {
+//    else if (subtype == FileSubtype.TTS_VOICE)
 //        return ExportSettingsType.TTS_VOICE;
-//    } else if (subtype == FileSubtype.VOICE) {
+//    else if (subtype == FileSubtype.VOICE)
 //        return ExportSettingsType.VOICE;
-//    }
     return nil;
 }
 
@@ -128,6 +126,7 @@ static NSArray<OAExportSettingsType *> *allValues;
 //        [res addObject:self.TTS_VOICE];
 //        [res addObject:self.VOICE];
 //        [res addObject:self.ONLINE_ROUTING_ENGINES];
+        [res addObject:self.COLOR_DATA];
         allValues = res;
     }
     
@@ -316,10 +315,17 @@ static NSArray<OAExportSettingsType *> *allValues;
     return nil; // Not implemented
 }
 
++ (OAExportSettingsType *)COLOR_DATA
+{
+    if (!COLOR_DATA)
+        COLOR_DATA = [[OAExportSettingsType alloc] initWithTitle:OALocalizedString(@"shared_string_colors") name:@"COLOR_DATA" itemName:@"FILE" icon:[UIImage templateImageNamed:@"ic_custom_appearance"] isAllowedInFreeVersion:NO];
+    return COLOR_DATA;
+}
+
 - (BOOL) isSettingsCategory
 {
     return self == self.class.PROFILE || self == self.class.GLOBAL || self == self.class.QUICK_ACTIONS || self == self.class.POI_TYPES
-    || self == self.class.AVOID_ROADS;
+    || self == self.class.AVOID_ROADS || self == self.class.COLOR_DATA;
 }
 
 - (BOOL) isMyPlacesCategory

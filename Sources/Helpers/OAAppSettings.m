@@ -162,6 +162,7 @@ static NSString * const routeRecalculationDistanceKey = @"routeRecalculationDist
 static NSString * const customRouteColorDayKey = @"customRouteColorDay";
 static NSString * const customRouteColorNightKey = @"customRouteColorNight";
 static NSString * const routeColoringTypeKey = @"routeColoringType";
+static NSString * const routeGradientPaletteKey = @"route_gradient_palette";
 static NSString * const routeInfoAttributeKey = @"routeInfoAttribute";
 static NSString * const routeLineWidthKey = @"routeLineWidth";
 static NSString * const routeShowTurnArrowsKey = @"routeShowTurnArrows";
@@ -2204,74 +2205,6 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
 
 @end
 
-@implementation OACommonTerrain
-
-@dynamic defValue;
-
-+ (instancetype) withKey:(NSString *)key defValue:(EOATerrainType)defValue
-{
-    OACommonTerrain *obj = [[OACommonTerrain alloc] init];
-    if (obj)
-    {
-        obj.key = key;
-        obj.defValue = defValue;
-    }
-    return obj;
-}
-
-- (EOATerrainType) get
-{
-    return [super get];
-}
-
-- (EOATerrainType) get:(OAApplicationMode *)mode
-{
-    return [super get:mode];
-}
-
-- (void) set:(EOATerrainType)terrainType
-{
-    [super set:(int)terrainType];
-}
-
-- (void) set:(EOATerrainType)terrainType mode:(OAApplicationMode *)mode
-{
-    [super set:(int)terrainType mode:mode];
-}
-
-- (void) resetToDefault
-{
-    EOATerrainType defaultValue = self.defValue;
-    NSObject *pDefault = [self getProfileDefaultValue:self.appMode];
-    if (pDefault)
-        defaultValue = (EOATerrainType)((NSNumber *)pDefault).intValue;
-
-    [self set:defaultValue];
-}
-
-- (void)setValueFromString:(NSString *)strValue appMode:(OAApplicationMode *)mode
-{
-    if ([strValue isEqualToString:@"HILLSHADE"])
-        return [self set:EOATerrainTypeHillshade mode:mode];
-    else if ([strValue isEqualToString:@"SLOPE"])
-        return [self set:EOATerrainTypeSlope mode:mode];
-}
-
-- (NSString *)toStringValue:(OAApplicationMode *)mode
-{
-    switch ([self get:mode])
-    {
-        case EOATerrainTypeHillshade:
-            return @"HILLSHADE";
-        case EOATerrainTypeSlope:
-            return @"SLOPE";
-        default:
-            return @"HILLSHADE";
-    }
-}
-
-@end
-
 @implementation OACommonSpeedLimitWarningState
 
 @dynamic defValue;
@@ -4195,6 +4128,9 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
 
         _routeColoringType = [OACommonColoringType withKey:routeColoringTypeKey defValue:OAColoringType.DEFAULT values:[OAColoringType getRouteColoringTypes]];
         [_profilePreferences setObject:_routeColoringType forKey:@"route_line_coloring_type"];
+
+        _routeGradientPalette = [OACommonString withKey:routeGradientPaletteKey defValue:@"default"];
+        [_profilePreferences setObject:_routeGradientPalette forKey:routeGradientPaletteKey];
 
         _routeInfoAttribute = [OACommonString withKey:routeInfoAttributeKey defValue:nil];
         [_profilePreferences setObject:_routeInfoAttribute forKey:@"route_info_attribute"];

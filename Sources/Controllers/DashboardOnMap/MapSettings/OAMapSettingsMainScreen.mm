@@ -741,7 +741,7 @@
     else if ([key isEqualToString:@"contour_lines_layer"])
         return ![[_styleSettings getParameter:CONTOUR_LINES].value isEqualToString:@"disabled"];
     else if ([key isEqualToString:@"terrain_layer"])
-        return _app.data.terrainType != EOATerrainTypeDisabled;
+        return [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) isTerrainLayerEnabled];
     else if ([key isEqualToString:@"overlay_layer"])
         return _app.data.overlayMapSource != nil;
     else if ([key isEqualToString:@"underlay_layer"])
@@ -1331,18 +1331,7 @@
 
 - (void)terrainChanged:(BOOL)isOn
 {
-    if (isOn)
-    {
-        EOATerrainType lastType = _app.data.lastTerrainType;
-        _app.data.terrainType = lastType != EOATerrainTypeDisabled ? lastType : EOATerrainTypeHillshade;
-    }
-    else
-    {
-        _app.data.lastTerrainType = _app.data.terrainType;
-        _app.data.terrainType = EOATerrainTypeDisabled;
-    }
-    
-    [[_app updateGpxTracksOnMapObservable] notifyEvent];
+    [((OASRTMPlugin *) [OAPluginsHelper getPlugin:OASRTMPlugin.class]) setTerrainLayerEnabled:isOn];
 }
 
 - (void)nauticalDepthChanged:(BOOL)isOn

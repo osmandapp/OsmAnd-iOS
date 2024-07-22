@@ -37,6 +37,7 @@
 @property(nonatomic, readonly) NSString *hiddenMapsPath;
 @property(nonatomic, readonly) NSString *routingMapsCachePath;
 @property(nonatomic, readonly) NSString *models3dPath;
+@property(nonatomic, readonly) NSString *colorsPalettePath;
 
 
 @property(readonly) BOOL initialized;

@@ -19,7 +19,6 @@
 #import "OADestinationItem.h"
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OAUtilities.h"
 #import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
@@ -34,23 +33,26 @@
 #import "OADestination.h"
 #import "OACollatorStringMatcher.h"
 #import "OAModel3dHelper.h"
-
-// Adapters
-#import "OAResourcesUISwiftHelper.h"
-#import "OATravelGuidesHelper.h"
-#import "OAGPXDocumentAdapter.h"
-#import "OATravelLocalDataDbHelper.h"
-#import "OAPOI.h"
-
 #import "OsmAndApp.h"
 #import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OALocationConvert.h"
 #import "OAWidgetsVisibilityHelper.h"
 #import "OADistanceAndDirectionsUpdater.h"
-#import "OAHistoryViewController.h"
 #import "OAAppDelegate.h"
 #import "SpeedLimitWrapper.h"
+#import "OAIndexConstants.h"
+#import "QuadRect.h"
+#import "OASearchPoiTypeFilter.h"
+#import "OAPOI.h"
+#import "OARouteColorize.h"
+#import "OAMapStyleSettings.h"
+
+// Adapters
+#import "OAResourcesUISwiftHelper.h"
+#import "OATravelGuidesHelper.h"
+#import "OAGPXDocumentAdapter.h"
+#import "OATravelLocalDataDbHelper.h"
 
 // Widgets
 #import "OAMapWidgetRegistry.h"
@@ -80,7 +82,6 @@
 #import "OAOsmAndDevelopmentPlugin.h"
 #import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
-#import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAExternalSensorsPlugin.h"
 
@@ -111,7 +112,6 @@
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OACarPlayActiveViewController.h"
 #import "OACarPlayPurchaseViewController.h"
-#import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OABaseEditorViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
@@ -132,6 +132,7 @@
 #import "OAPluginPopupViewController.h"
 #import "OABenefitsOsmContributorsViewController.h"
 #import "OAOsmEditingSettingsViewController.h"
+#import "OAHistoryViewController.h"
 
 // Cells
 #import "OAValueTableViewCell.h"
@@ -147,12 +148,6 @@
 #import "OASearchMoreCell.h"
 #import "OADividerCell.h"
 #import "OADownloadProgressBarCell.h"
-
-// Other
-#import "OAIndexConstants.h"
-#import "QuadRect.h"
-#import "OASearchPoiTypeFilter.h"
-#import "OAPOI.h"
 #import "OADirectionTableViewCell.h"
 #import "OASegmentSliderTableViewCell.h"
 #import "OATextMultilineTableViewCell.h"
@@ -208,4 +203,3 @@
 #import "OAShowHidePrecipitationAction.h"
 #import "OAMapStyleAction.h"
 #import "OAUnsupportedAction.h"
-#import "OAMapStyleSettings.h"

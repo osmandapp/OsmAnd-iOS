@@ -12,6 +12,7 @@
 #import "OALog.h"
 #import "OAAutoObserverProxy.h"
 #import "OsmAndApp.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <OsmAndCore/CommonTypes.h>
 #include <OsmAndCore/TileSqliteDatabase.h>
@@ -76,7 +77,6 @@ typedef NS_ENUM(NSInteger, EOATerrainLayerType)
 - (void) onTerrainResourcesChanged
 {
     [self initCollection];
-    [[OsmAndApp instance].data.terrainChangeObservable notifyEvent];
 }
 
 - (void) initCollection

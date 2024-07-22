@@ -110,7 +110,7 @@
 
 - (void) copyRegisteredPreferences
 {
-    for (NSString *key in [_settings getPreferences:NO].keyEnumerator)
+    for (NSString *key in [_settings getRegisteredPreferences].keyEnumerator)
     {
         OACommonPreference *setting = [_settings getPreferenceByKey:key];
         if (setting)

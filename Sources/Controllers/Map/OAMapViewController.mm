@@ -2542,7 +2542,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) recreateHeightmapProvider
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    if (!plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled)
+    if (!plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled])
     {
         _mapView.heightmapSupported = NO;
         [_mapView resetElevationDataProvider:YES];
@@ -2556,7 +2556,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 - (void) updateElevationConfiguration
 {
     OASRTMPlugin *plugin = (OASRTMPlugin *) [OAPluginsHelper getEnabledPlugin:OASRTMPlugin.class];
-    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || _app.data.terrainType == EOATerrainTypeDisabled;
+    BOOL disableVertexHillshade = !plugin || ![plugin is3DMapsEnabled] || ![plugin isTerrainLayerEnabled];
     OsmAnd::ElevationConfiguration elevationConfiguration;
     if (disableVertexHillshade)
     {
@@ -2900,7 +2900,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
 
                 QHash< QString, std::shared_ptr<const OsmAnd::GpxDocument> > gpxDocs;
                 gpxDocs[QString::fromNSString(kCurrentTrack)] = doc;
-                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO];
+                [_mapLayers.gpxRecMapLayer refreshGpxTracks:gpxDocs reset:NO refreshColors:NO];
             }
         }];
     }
@@ -3682,7 +3682,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         if (_gpxDocFileTemp && !_gpxDocsTemp.isEmpty())
             docs[QString::fromNSString(_gpxDocFileTemp)] = _gpxDocsTemp.first();
     }
-    [_mapLayers.gpxMapLayer refreshGpxTracks:docs];
+    [_mapLayers.gpxMapLayer refreshGpxTracks:docs reset:YES refreshColors:YES];
 }
 
 - (void) refreshGpxTracks

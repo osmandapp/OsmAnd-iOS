@@ -260,6 +260,13 @@ static NSMutableArray<OAPlugin *> *allPlugins;
     return _pluginPreferences;
 }
 
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)prefId defValue:(BOOL)defValue
+{
+    OACommonBoolean *preference = [[OAAppSettings sharedManager] registerBooleanPreference:prefId defValue:defValue];
+    [_pluginPreferences addObject:preference];
+    return preference;
+}
+
 - (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(NSString *)defValue
 {
     OACommonString *preference = [[OAAppSettings sharedManager] registerStringPreference:prefId defValue:defValue];

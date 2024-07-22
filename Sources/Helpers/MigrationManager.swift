@@ -15,10 +15,11 @@ final class MigrationManager: NSObject {
     static let importExportVersionMigration1 = 1
     static let importExportVersionMigration2 = 2
 
-    enum MigrationKey: String {
+    enum MigrationKey: String, CaseIterable{
         case migrationChangeWidgetIds1Key
         case migrationChangeQuickActionIds1Key
         case migrationLocationNavigationIconsKey
+        case migrationChangeTerrainIds1Key
     }
 
     static let shared = MigrationManager()
@@ -29,8 +30,7 @@ final class MigrationManager: NSObject {
 
     func migrateIfNeeded(_ isFirstLaunch: Bool) {
         if isFirstLaunch {
-            defaults.set(true, forKey: MigrationKey.migrationChangeWidgetIds1Key.rawValue)
-            defaults.set(true, forKey: MigrationKey.migrationChangeQuickActionIds1Key.rawValue)
+            MigrationKey.allCases.forEach { defaults.set(true, forKey: $0.rawValue) }
         } else {
 
             /*  Migration 1, sync with android
@@ -65,6 +65,10 @@ final class MigrationManager: NSObject {
             if !defaults.bool(forKey: MigrationKey.migrationLocationNavigationIconsKey.rawValue) {
                 migrateLocationNavigationIcons()
                 defaults.set(true, forKey: MigrationKey.migrationLocationNavigationIconsKey.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrationChangeTerrainIds1Key.rawValue) {
+                changeTerrainSettingsMigration1()
+                defaults.set(true, forKey: MigrationKey.migrationChangeTerrainIds1Key.rawValue)
             }
         }
     }
@@ -416,6 +420,55 @@ final class MigrationManager: NSObject {
             }
         }
     }
+
+    private func changeTerrainSettingsMigration1() {
+        if let plugin = OAPluginsHelper.getPlugin(OASRTMPlugin.self) as? OASRTMPlugin {
+            if let newTerrain = plugin.terrainEnabledPref,
+               let newTerrainMode = plugin.terrainModeTypePref,
+               let oldTerrainMode = OACommonInteger.withKey("terrainType", defValue: 0),
+               let oldLastTerrainMode = OACommonInteger.withKey("lastTerrainType", defValue: 1) {
+                for appMode in OAApplicationMode.allPossibleValues() {
+                    let oldValue = oldTerrainMode.get(appMode)
+                    if oldValue == 0 {
+                        newTerrain.set(false, mode: appMode)
+                        newTerrainMode.set(oldLastTerrainMode.get(appMode) == 2 ? "slope" : "hillshade", mode: appMode)
+                    } else {
+                        newTerrain.set(true, mode: appMode)
+                        newTerrainMode.set(oldValue == 2 ? "slope" : "hillshade", mode: appMode)
+                    }
+                }
+            }
+
+            let oldHillshadeMinZoom = OACommonInteger.withKey("hillshadeMinZoom", defValue: 3)
+            let oldHillshadeMaxZoom = OACommonInteger.withKey("hillshadeMaxZoom", defValue: 16)
+            let oldSlopeMinZoom = OACommonInteger.withKey("slopeMinZoom", defValue: 3)
+            let oldSlopeMaxZoom = OACommonInteger.withKey("slopeMaxZoom", defValue: 16)
+
+            let oldHillshadeAlpha = OACommonDouble.withKey("hillshadeAlpha", defValue: 0.45)
+            let oldSlopeAlpha = OACommonDouble.withKey("slopeAlpha", defValue: 0.35)
+
+            let terrainMode = plugin.getTerrainMode()
+            for appMode in OAApplicationMode.allPossibleValues() {
+                if plugin.terrainModeTypePref.get(appMode) == TerrainMode.TerrainType.hillshade.name {
+                    if let oldHillshadeMinZoom, let oldHillshadeMaxZoom {
+                        terrainMode?.setZoomValues(minZoom: oldHillshadeMinZoom.get(appMode), maxZoom: oldHillshadeMaxZoom.get(appMode), mode: appMode)
+                    }
+                    if let oldHillshadeAlpha {
+                        terrainMode?.setTransparency(Int32(oldHillshadeAlpha.get(appMode) / 0.01), mode: appMode)
+                    }
+                } else {
+                    if let oldSlopeMinZoom, let oldSlopeMaxZoom {
+                        terrainMode?.setZoomValues(minZoom: oldSlopeMinZoom.get(appMode), maxZoom: oldSlopeMaxZoom.get(appMode), mode: appMode)
+                    }
+                    if let oldSlopeAlpha {
+                        terrainMode?.setTransparency(Int32(oldSlopeAlpha.get(appMode) / 0.01), mode: appMode)
+                    }
+                }
+            }
+        }
+    }
+
+    // MARK: - Import old versions
 
     func changeJsonMigrationToV2(_ json: [String: String]) -> [String: String] {
 

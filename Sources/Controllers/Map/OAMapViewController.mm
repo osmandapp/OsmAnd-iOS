@@ -1873,7 +1873,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
         int angle = 90 - (baseZoom - 2) * 5;
         if (angle >= kMinAllowedElevationAngle && angle < kDefaultElevationAngle)
         {
-            [[OAMapViewTrackingUtilities instance] startTilting:angle];
+            [[OAMapViewTrackingUtilities instance] startTilting:angle timePeriod:kQuickAnimationTime];
         }
     }
 }

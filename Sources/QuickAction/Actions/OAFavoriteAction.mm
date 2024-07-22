@@ -38,13 +38,14 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsFavoriteActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsFavoriteActionId
                                             stringId:@"fav.add"
                                                   cl:self.class]
-               name:OALocalizedString(@"ctx_mnu_add_fav")]
+               name:OALocalizedString(@"shared_string_favorite")]
+              nameAction:OALocalizedString(@"shared_string_add")]
               iconName:@"ic_custom_favorites"]
              secondaryIconName:@"ic_custom_compound_action_add"]
-            category:QuickActionTypeCategoryCreateCategory];
+            category:QuickActionTypeCategoryMyPlaces];
 }
 
 - (void)execute

@@ -24,10 +24,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideFavoritesActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideFavoritesActionId
                                             stringId:@"favorites.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_fav")]
+               name:OALocalizedString(@"shared_string_favorites")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_favorites"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

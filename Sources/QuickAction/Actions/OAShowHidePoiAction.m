@@ -32,10 +32,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId
+    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePoiActionId
                                            stringId:@"poi.showhide"
                                                  cl:self.class]
-              name:OALocalizedString(@"toggle_poi")]
+              name:OALocalizedString(@"poi")]
+             nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
              iconName:@"ic_custom_poi"]
             category:QuickActionTypeCategoryConfigureMap];
 }

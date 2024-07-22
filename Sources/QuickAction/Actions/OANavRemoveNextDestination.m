@@ -22,10 +22,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavRemoveNextDestinationActionId
                                              stringId:@"nav.destination.remove"
                                                    cl:self.class]
                 name:OALocalizedString(@"quick_action_remove_next_destination")]
+               nameAction:OALocalizedString(@"shared_string_remove")]
                iconName:@"ic_action_intermediate"]
               secondaryIconName:@"ic_custom_compound_action_remove"] 
              category:QuickActionTypeCategoryNavigation]

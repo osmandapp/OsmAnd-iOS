@@ -24,10 +24,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideLocalOsmChangesActionId
                                             stringId:@"osmedit.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_local_edits")]
+               name:OALocalizedString(@"osm_edits_title")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_osm_edits"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

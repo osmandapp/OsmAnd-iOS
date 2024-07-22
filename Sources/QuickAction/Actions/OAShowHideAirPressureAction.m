@@ -21,10 +21,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideAirPressureLayerActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideAirPressureLayerActionId
                                             stringId:@"pressure.layer.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_pressure")]
+               name:OALocalizedString(@"pressure_layer")]
+               nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_air_pressure"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

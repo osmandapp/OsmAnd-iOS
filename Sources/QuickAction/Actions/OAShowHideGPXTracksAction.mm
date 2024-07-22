@@ -26,10 +26,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideGpxTracksActionId
                                             stringId:@"gpx.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"show_hide_gpx")]
+               name:OALocalizedString(@"show_gpx")]
+               nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_trip"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

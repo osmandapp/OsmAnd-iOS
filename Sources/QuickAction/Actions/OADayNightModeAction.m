@@ -30,11 +30,13 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsDayNightModeActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsDayNightModeActionId
                                             stringId:@"daynight.switch"
                                                   cl:self.class]
-               name:OALocalizedString(@"quick_action_switch_day_mode")]
+               name:OALocalizedString(@"map_mode")]
+              nameAction:OALocalizedString(@"shared_string_change")]
               iconName:@"ic_custom_sun"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];
 }

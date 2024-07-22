@@ -21,10 +21,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideCloudLayerActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideCloudLayerActionId
                                             stringId:@"cloud.layer.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_cloud")]
+               name:OALocalizedString(@"cloud_layer")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               category:QuickActionTypeCategoryConfigureMap]
              iconName:@"ic_custom_clouds"]
             nonEditable];

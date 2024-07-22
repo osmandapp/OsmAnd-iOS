@@ -17,12 +17,13 @@
 
 + (OAMapButtonsHelper * _Nonnull)sharedInstance;
 
-+ (QuickActionType * _Nonnull)TYPE_ADD_ITEMS;
++ (QuickActionType * _Nonnull)TYPE_CREATE_CATEGORY;
 + (QuickActionType * _Nonnull)TYPE_CONFIGURE_MAP;
 + (QuickActionType * _Nonnull)TYPE_NAVIGATION;
 + (QuickActionType * _Nonnull)TYPE_CONFIGURE_SCREEN;
 + (QuickActionType * _Nonnull)TYPE_SETTINGS;
-+ (QuickActionType * _Nonnull)TYPE_OPEN;
++ (QuickActionType * _Nonnull)TYPE_MAP_INTERACTIONS;
++ (QuickActionType * _Nonnull)TYPE_MY_PLACES;
 
 - (Map3DButtonState * _Nonnull)getMap3DButtonState;
 - (CompassButtonState * _Nonnull)getCompassButtonState;

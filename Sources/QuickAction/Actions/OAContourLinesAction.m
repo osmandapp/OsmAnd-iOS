@@ -26,10 +26,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsContourLinesActionId
                                             stringId:@"contourlines.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_contour_lines")]
+               name:OALocalizedString(@"download_srtm_maps")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_contour_lines"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

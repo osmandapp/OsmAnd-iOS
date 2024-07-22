@@ -26,10 +26,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAddDestinationActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavAddDestinationActionId
                                              stringId:@"nav.destination.add"
                                                    cl:self.class]
-                name:OALocalizedString(@"add_destination")]
+                name:OALocalizedString(@"quick_action_destination")]
+               nameAction:OALocalizedString(@"shared_string_set")]
                iconName:@"ic_action_target"]
               secondaryIconName:@"ic_custom_compound_action_add"]
              category:QuickActionTypeCategoryNavigation]

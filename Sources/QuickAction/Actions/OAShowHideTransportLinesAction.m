@@ -20,10 +20,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTransportLinesActionId
                                             stringId:@"transport.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_public_transport")]
+               name:OALocalizedString(@"poi_filter_public_transport")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_transport_bus"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

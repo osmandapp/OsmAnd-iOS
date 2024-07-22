@@ -21,10 +21,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePrecipitationLayerActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHidePrecipitationLayerActionId
                                             stringId:@"precipitation.layer.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_precipitation")]
+               name:OALocalizedString(@"precipitation_layer")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_precipitation"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

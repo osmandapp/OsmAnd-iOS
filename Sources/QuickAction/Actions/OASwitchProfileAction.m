@@ -38,12 +38,14 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsSwitchProfileActionId
                                            stringId:@"profile.change"
                                                  cl:self.class]
-              name:OALocalizedString(@"change_application_profile")]
+              name:OALocalizedString(@"app_profile")]
+             nameAction:OALocalizedString(@"shared_string_change")]
              iconName:@"ic_custom_manage_profiles"]
-            category:QuickActionTypeCategoryNavigation];
+            secondaryIconName:@"ic_custom_compound_action_change"]
+            category:QuickActionTypeCategorySettings];
 }
 
 - (void)execute

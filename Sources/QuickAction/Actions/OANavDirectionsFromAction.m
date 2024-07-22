@@ -22,10 +22,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavDirectionsFromActionId
                                             stringId:@"nav.directions"
                                                   cl:self.class]
-               name:OALocalizedString(@"context_menu_item_directions_from")]
+               name:OALocalizedString(@"quick_action_directions_from")]
+               nameAction:OALocalizedString(@"shared_string_set")]
               iconName:@"ic_action_directions_from"]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];

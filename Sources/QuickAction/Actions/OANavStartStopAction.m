@@ -26,10 +26,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavStartStopActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavStartStopActionId
                                             stringId:@"nav.startstop"
                                                   cl:self.class]
-               name:OALocalizedString(@"quick_action_start_stop_navigation")]
+               name:OALocalizedString(@"shared_string_navigation")]
+               nameAction:OALocalizedString(@"quick_action_verb_start_stop")]
               iconName:@"ic_custom_navigation_arrow"]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];

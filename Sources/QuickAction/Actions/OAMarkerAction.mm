@@ -23,13 +23,14 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMarkerActionId
                                             stringId:@"marker.add"
                                                   cl:self.class]
-               name:OALocalizedString(@"quick_action_add_marker")]
+               name:OALocalizedString(@"map_marker")]
+              nameAction:OALocalizedString(@"shared_string_add")]
               iconName:@"ic_custom_favorites"]
              secondaryIconName:@"ic_custom_compound_action_add"]
-            category:QuickActionTypeCategoryCreateCategory];
+            category:QuickActionTypeCategoryMyPlaces];
 }
 
 - (void)execute

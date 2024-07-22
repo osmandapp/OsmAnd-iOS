@@ -361,6 +361,7 @@ static NSString * const currentTrackVisualization3dPositionTypeKey = @"currentTr
 static NSString * const customTrackColorsKey = @"customTrackColors";
 static NSString * const customTrackColorsLastUsedKey = @"customTrackColorsLastUsed";
 static NSString * const lastUsedFavIconsKey = @"lastUsedFavIcons";
+static NSString * const gradientPalettesKey = @"gradient_color_palettes";
 
 static NSString * const gpsStatusAppKey = @"gpsStatusApp";
 
@@ -969,16 +970,16 @@ static NSString * const useOldRoutingKey = @"useOldRoutingKey";
     }
 }
 
-- (EOAColorizationType) toColorizationType
+- (NSInteger)toColorizationType
 {
     if (self.gst == EOAGradientScaleTypeSpeed)
-        return EOAColorizationTypeSpeed;
+        return ColorizationTypeSpeed;
     else if (self.gst == EOAGradientScaleTypeAltitude)
-        return EOAColorizationTypeElevation;
+        return ColorizationTypeElevation;
     else if (self.gst == EOAGradientScaleTypeSlope)
-        return EOAColorizationTypeSlope;
+        return ColorizationTypeSlope;
     else
-        return EOAColorizationTypeNone;
+        return ColorizationTypeNone;
 }
 
 @end
@@ -4493,6 +4494,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         _customTrackColors = [[[OACommonStringList withKey:customTrackColorsKey defValue:@[]] makeGlobal] makeShared];
         _customTrackColorsLastUsed = [[[OACommonStringList withKey:customTrackColorsLastUsedKey defValue:@[]] makeGlobal] makeShared];
         _lastUsedFavIcons = [[[OACommonStringList withKey:lastUsedFavIconsKey defValue:@[]] makeGlobal] makeShared];
+        _gradientPalettes = [[[OACommonString withKey:gradientPalettesKey defValue:nil] makeGlobal] makeShared];
 
         [_globalPreferences setObject:_currentTrackColor forKey:@"current_track_color"];
         [_globalPreferences setObject:_currentTrackColoringType forKey:@"current_track_coloring_type"];
@@ -4512,6 +4514,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         [_globalPreferences setObject:_customTrackColors forKey:@"custom_track_colors"];
         [_globalPreferences setObject:_customTrackColorsLastUsed forKey:@"custom_track_colors_last_used"];
         [_globalPreferences setObject:_lastUsedFavIcons forKey:@"last_used_favorite_icons"];
+        [_globalPreferences setObject:_gradientPalettes forKey:gradientPalettesKey];
 
         _gpsStatusApp = [[[OACommonString withKey:gpsStatusAppKey defValue:@""] makeGlobal] makeShared];
         [_globalPreferences setObject:_gpsStatusApp forKey:@"gps_status_app"];

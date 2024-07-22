@@ -73,7 +73,6 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     QList<float> _startFinishPointsElevations;
     QList<OsmAnd::GpxAdditionalIconsProvider::SplitLabel> _splitLabels;
     OASRTMPlugin *_plugin;
-    NSString *_gradientPalette;
 }
 
 - (NSString *) layerId
@@ -84,8 +83,6 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
 - (void) initLayer
 {
     [super initLayer];
-
-    _gradientPalette = @"default";
 
     _splitLock = [[NSObject alloc] init];
     _splitLabelsQueue = [[NSOperationQueue alloc] init];
@@ -224,6 +221,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
         cachedTrack[@"doc"] = doc;
         cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
         cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
+        cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
         cachedTrack[@"prev_wall_coloring_type"] = @(gpx.visualization3dWallColorType);
         _cachedTracks[filePath] = cachedTrack;
         _cachedColors[key] = QList<OsmAnd::FColorARGB>();
@@ -236,6 +234,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                                  key:(QString)key
                             analysis:(OAGPXTrackAnalysis *_Nullable)analysis
                shouldCheckColorCache:(BOOL)shouldCheckColorCache
+                     gradientPalette:(NSString *)gradientPalette
 {
     // if color type line and wall type are equal, we try to select calculated data from _cachedColors
     if (shouldCheckColorCache && !_cachedColors[key].isEmpty())
@@ -245,8 +244,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
     else
     {
         ColorPalette *palette =
-            [[ColorPaletteHelper shared] getGradientColorPaletteSync:[type toColorizationType]
-                                                 gradientPaletteName:_gradientPalette
+            [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
+                                                 gradientPaletteName:gradientPalette
                                                              refresh:NO];
         OARouteColorize *routeColorize =
             [[OARouteColorize alloc] initWithGpxFile:doc
@@ -293,25 +292,26 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             OAGPXDocument *doc = cachedTrack[@"doc"];
             if (!gpx || !doc)
                 continue;
-
+            
             OAColoringType *type = gpx.coloringType.length > 0
-                    ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]
-                    : OAColoringType.TRACK_SOLID;
-
+            ? [OAColoringType getNonNullTrackColoringTypeByName:gpx.coloringType]
+            : OAColoringType.TRACK_SOLID;
+            
             BOOL isAvailable = [type isAvailableInSubscription];
             if (!isAvailable)
                 type = OAColoringType.DEFAULT;
-
+            
             OAGPXTrackAnalysis *analysis;
-
+            
             if ([type isGradient]
                 && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
+                    || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                     || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_GRADIENT
-                    || _cachedColors[key].isEmpty()
-                    || refreshColors))
+                    || _cachedColors[key].isEmpty()))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_GRADIENT);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
                 BOOL shouldCalculateColorCache = YES;
                 // check if we already have a cached array of wall color points that can be reused for route line color, provided that the coloring type matches
                 switch (gpx.visualization3dWallColorType)
@@ -333,8 +333,8 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 {
                     analysis = [doc getAnalysis:0];
                     ColorPalette *palette =
-                        [[ColorPaletteHelper shared] getGradientColorPaletteSync:[type toColorizationType]
-                                                             gradientPaletteName:_gradientPalette
+                        [[ColorPaletteHelper shared] getGradientColorPaletteSync:(ColorizationType) [type toColorizationType]
+                                                             gradientPaletteName:cachedTrack[@"prev_color_palette"]
                                                                          refresh:refreshColors];
                     OARouteColorize *routeColorize =
                         [[OARouteColorize alloc] initWithGpxFile:doc
@@ -353,6 +353,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             }
             else if ([type isRouteInfoAttribute]
                      && (![cachedTrack[@"prev_coloring_type"] isEqualToString:gpx.coloringType]
+                         || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                         || [cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_SOLID
                         || _cachedColors[key].isEmpty()))
             {
@@ -369,6 +370,7 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 }
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_SOLID);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
                 _cachedColors[key].clear();
                 [self calculateSegmentsColor:_cachedColors[key]
                                     attrName:gpx.coloringType
@@ -377,10 +379,12 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
             }
             else if ([type isSolidSingleColor]
                      && ([cachedTrack[@"colorization_scheme"] intValue] != COLORIZATION_NONE
+                         || ![cachedTrack[@"prev_color_palette"] isEqualToString:gpx.gradientPaletteName]
                          || !_cachedColors[key].isEmpty()))
             {
                 cachedTrack[@"colorization_scheme"] = @(COLORIZATION_NONE);
                 cachedTrack[@"prev_coloring_type"] = gpx.coloringType;
+                cachedTrack[@"prev_color_palette"] = gpx.gradientPaletteName.length > 0 ? gpx.gradientPaletteName : @"default";
                 _cachedColors[key].clear();
             }
             
@@ -389,13 +393,28 @@ static const CGFloat kTemperatureToHeightOffset = 100.0;
                 switch (gpx.visualization3dWallColorType)
                 {
                     case EOAGPX3DLineVisualizationWallColorTypeAltitude:
-                        [self configureCachedWallColorsFor:OAColoringType.ALTITUDE doc:doc key:key analysis:analysis shouldCheckColorCache:[type isAltitude]];
+                        [self configureCachedWallColorsFor:OAColoringType.ALTITUDE
+                                                       doc:doc
+                                                       key:key
+                                                  analysis:analysis
+                                     shouldCheckColorCache:[type isAltitude]
+                                           gradientPalette:cachedTrack[@"prev_color_palette"]];
                         break;
                     case EOAGPX3DLineVisualizationWallColorTypeSlope:
-                        [self configureCachedWallColorsFor:OAColoringType.SLOPE doc:doc key:key analysis:analysis shouldCheckColorCache:[type isSlope]];
+                        [self configureCachedWallColorsFor:OAColoringType.SLOPE
+                                                       doc:doc
+                                                       key:key
+                                                  analysis:analysis
+                                     shouldCheckColorCache:[type isSlope]
+                                           gradientPalette:cachedTrack[@"prev_color_palette"]];
                         break;
                     case EOAGPX3DLineVisualizationWallColorTypeSpeed:
-                        [self configureCachedWallColorsFor:OAColoringType.SPEED doc:doc key:key analysis:analysis shouldCheckColorCache:[type isSpeed]];
+                        [self configureCachedWallColorsFor:OAColoringType.SPEED
+                                                       doc:doc
+                                                       key:key
+                                                  analysis:analysis
+                                     shouldCheckColorCache:[type isSpeed]
+                                           gradientPalette:cachedTrack[@"prev_color_palette"]];
                         break;
                     default:
                         _cachedWallColors[key].clear();

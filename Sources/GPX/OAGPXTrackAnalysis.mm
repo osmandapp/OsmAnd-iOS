@@ -217,9 +217,9 @@
 
 - (BOOL) isColorizationTypeAvailable:(NSInteger)colorizationType
 {
-    if (colorizationType == EOAColorizationTypeSpeed)
+    if (colorizationType == ColorizationTypeSpeed)
         return [self isSpeedSpecified];
-    else if (colorizationType == EOAColorizationTypeElevation || colorizationType == EOAColorizationTypeSlope)
+    else if (colorizationType == ColorizationTypeElevation || colorizationType == ColorizationTypeSlope)
         return [self isElevationSpecified];
     else
         return YES;

@@ -17,6 +17,7 @@
 #import "OARouteExporter.h"
 #import "OARouteProvider.h"
 #import "OAIAPHelper.h"
+#import "OsmAnd_Maps-Swift.h"
 
 #include <CommonCollections.h>
 #include <commonOsmAndCore.h>
@@ -279,16 +280,16 @@ static NSArray<OAColoringType *> * TRACK_COLORING_TYPES = @[OAColoringType.TRACK
     return nil;
 }
 
-- (EOAColorizationType)toColorizationType
+- (NSInteger)toColorizationType
 {
     if (self == self.class.SPEED)
-        return EOAColorizationTypeSpeed;
+        return ColorizationTypeSpeed;
     else if (self == self.class.ALTITUDE)
-        return EOAColorizationTypeElevation;
+        return ColorizationTypeElevation;
     else if (self == self.class.SLOPE)
-        return EOAColorizationTypeSlope;
+        return ColorizationTypeSlope;
     else
-        return EOAColorizationTypeNone;
+        return ColorizationTypeNone;
 }
 
 + (NSString *) getRouteInfoAttribute:(NSString *)name

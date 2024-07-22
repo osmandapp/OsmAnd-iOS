@@ -596,7 +596,7 @@
     OAGradientScaleType *gradientScaleType = [_routeColoringType toGradientScaleType];
     if (gradientScaleType)
     {
-        EOAColorizationType colorizationType = [gradientScaleType toColorizationType];
+        ColorizationType colorizationType = (ColorizationType) [gradientScaleType toColorizationType];
         previewPalette = [[ColorPaletteHelper shared] requireGradientColorPaletteSync:colorizationType gradientPaletteName:_routeGradientPalette];
     }
     NSMutableArray<NSNumber *> *palette = [NSMutableArray array];

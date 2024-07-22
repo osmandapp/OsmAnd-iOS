@@ -67,7 +67,9 @@
     NSString *cellIdentifier = [_collectionHandler getCellIdentifier];
     [self.collectionView registerNib:[UINib nibWithNibName:cellIdentifier bundle:nil] forCellWithReuseIdentifier:cellIdentifier];
     NSIndexPath *selectedIndexPath = [_collectionHandler getSelectedIndexPath];
-    if (selectedIndexPath.row != NSNotFound)
+    if (selectedIndexPath.row != NSNotFound
+        && selectedIndexPath.section < [collectionHandler sectionsCount]
+        && selectedIndexPath.row < [collectionHandler itemsCount:selectedIndexPath.section])
     {
         [self.collectionView scrollToItemAtIndexPath:selectedIndexPath
                                     atScrollPosition:layout.scrollDirection == UICollectionViewScrollDirectionHorizontal

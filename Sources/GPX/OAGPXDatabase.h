@@ -79,6 +79,7 @@ typedef NS_ENUM(NSInteger, EOAGPX3DLineVisualizationPositionType) {
 
 @property (nonatomic) NSString *width;
 @property (nonatomic) NSString *coloringType;
+@property (nonatomic) NSString *gradientPaletteName;
 
 @property (nonatomic, assign) EOAGpxSplitType splitType;
 @property (nonatomic, assign) double splitInterval;

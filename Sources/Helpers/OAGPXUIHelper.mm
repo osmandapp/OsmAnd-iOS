@@ -352,6 +352,9 @@
     
     if (gpxItem.coloringType && gpxItem.coloringType.length > 0)
         [gpxFile setColoringType:gpxItem.coloringType];
+
+    if (gpxItem.gradientPaletteName && gpxItem.gradientPaletteName.length > 0)
+        [gpxFile setGradientColorPalette:gpxItem.gradientPaletteName];
 }
 
 + (CLLocationCoordinate2D)getSegmentPointByTime:(OATrkSegment *)segment

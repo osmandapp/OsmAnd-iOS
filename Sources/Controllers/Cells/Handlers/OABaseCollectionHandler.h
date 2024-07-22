@@ -29,7 +29,9 @@
 
 - (NSIndexPath *)getSelectedIndexPath;
 - (void)setSelectedIndexPath:(NSIndexPath *)selectedIndexPath;
-
+- (void)generateData:(NSArray<NSArray *> *)data;
+- (void)addItem:(NSIndexPath *)indexPath newItem:(id)newItem;
+- (void)removeItem:(NSIndexPath *)indexPath;
 - (NSInteger)itemsCount:(NSInteger)section;
 - (UICollectionViewCell *)getCollectionViewCell:(NSIndexPath *)indexPath;
 - (NSInteger)sectionsCount;

@@ -110,7 +110,9 @@
                             segment:(OATrkSegment *)segment;
 - (NSString *) getColoringType;
 - (NSString *) getGradientScaleType;
+- (NSString *)getGradientColorPalette;
 - (void) setColoringType:(NSString *)coloringType;
+- (void)setGradientColorPalette:(NSString *)gradientColorPaletteName;
 - (void) removeGradientScaleType;
 - (NSString *) getSplitType;
 - (void) setSplitType:(NSString *)gpxSplitType;

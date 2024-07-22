@@ -28,7 +28,7 @@
 #include <OsmAndCore/SingleSkImage.h>
 
 static float kRotateAnimationTime = 1.0f;
-static int MODEL_3D_MAX_SIZE_DP = 24;
+static int MODEL_3D_MAX_SIZE_DP = 6;
 
 typedef enum {
     

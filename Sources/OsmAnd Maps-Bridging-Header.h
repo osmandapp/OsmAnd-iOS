@@ -19,7 +19,6 @@
 #import "OADestinationItem.h"
 #import "OAMapViewHelper.h"
 #import "OAMapViewTrackingUtilities.h"
-#import "OAUtilities.h"
 #import "OAMapButtonsHelper.h"
 #import "OAWikiArticleHelper.h"
 #import "OAGPXDatabase.h"
@@ -47,6 +46,7 @@
 #import "OASearchPoiTypeFilter.h"
 #import "OAPOI.h"
 #import "OARouteColorize.h"
+#import "OAMapStyleSettings.h"
 
 // Adapters
 #import "OAResourcesUISwiftHelper.h"
@@ -82,7 +82,6 @@
 #import "OAOsmAndDevelopmentPlugin.h"
 #import "OASRTMPlugin.h"
 #import "OAWeatherPlugin.h"
-#import "OAMapillaryPlugin.h"
 #import "OAParkingPositionPlugin.h"
 #import "OAExternalSensorsPlugin.h"
 
@@ -113,7 +112,6 @@
 #import "OACarPlayDashboardInterfaceController.h"
 #import "OACarPlayActiveViewController.h"
 #import "OACarPlayPurchaseViewController.h"
-#import "OAAppDelegate.h"
 #import "OADirectionAppearanceViewController.h"
 #import "OABaseEditorViewController.h"
 #import "OACarPlayMapDashboardViewController.h"
@@ -205,4 +203,3 @@
 #import "OAShowHidePrecipitationAction.h"
 #import "OAMapStyleAction.h"
 #import "OAUnsupportedAction.h"
-#import "OAMapStyleSettings.h"

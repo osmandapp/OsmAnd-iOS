@@ -302,16 +302,17 @@
     BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] 
                                               toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]
                                   removeOriginalFile:YES];
-    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
-                           toDest:_colorsPalettePath
-               removeOriginalFile:NO];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
 
-    NSString *modelsBundlePath = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:MODEL_3D_DIR];
-    [self moveOrCopyContentsOfDirectory:modelsBundlePath toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] move:NO];
+    [self moveContentsOfDirectory:[[NSBundle mainBundle] pathForResource:CLR_PALETTE_DIR ofType:nil]
+                           toDest:_colorsPalettePath
+               removeOriginalFile:NO];
+    [self moveContentsOfDirectory:[[NSBundle mainBundle].resourcePath stringByAppendingPathComponent:MODEL_3D_DIR]
+                           toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR]
+               removeOriginalFile:NO];
 }
 
 - (BOOL) initializeCore

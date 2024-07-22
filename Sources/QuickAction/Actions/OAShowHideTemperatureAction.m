@@ -23,10 +23,11 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTemperatureLayerActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsShowHideTemperatureLayerActionId
                                             stringId:@"temperature.layer.showhide"
                                                   cl:self.class]
-               name:OALocalizedString(@"toggle_temperature")]
+               name:OALocalizedString(@"temperature_layer")]
+              nameAction:OALocalizedString(@"quick_action_verb_show_hide")]
               iconName:@"ic_custom_thermometer"]
              category:QuickActionTypeCategoryConfigureMap]
             nonEditable];

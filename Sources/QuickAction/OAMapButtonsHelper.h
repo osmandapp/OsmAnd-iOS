@@ -19,12 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (OAMapButtonsHelper *)sharedInstance;
 
-+ (QuickActionType *)TYPE_ADD_ITEMS;
++ (QuickActionType *)TYPE_CREATE_CATEGORY;
 + (QuickActionType *)TYPE_CONFIGURE_MAP;
 + (QuickActionType *)TYPE_NAVIGATION;
 + (QuickActionType *)TYPE_CONFIGURE_SCREEN;
 + (QuickActionType *)TYPE_SETTINGS;
-+ (QuickActionType *)TYPE_OPEN;
++ (QuickActionType *)TYPE_MAP_INTERACTIONS;
++ (QuickActionType *)TYPE_MY_PLACES;
+
 
 - (Map3DButtonState *)getMap3DButtonState;
 - (CompassButtonState *)getCompassButtonState;

@@ -47,11 +47,13 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
+    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsMapUnderlayActionId
                                            stringId:@"mapunderlay.change"
                                                  cl:self.class]
               name:OALocalizedString(@"quick_action_map_underlay")]
+             nameAction:OALocalizedString(@"shared_string_change")]
              iconName:@"ic_custom_underlay_map"]
+             secondaryIconName:@"ic_custom_compound_action_change"]
             category:QuickActionTypeCategoryConfigureMap];
 }
 

@@ -14,7 +14,8 @@ enum QuickActionTypeCategory: Int {
     case navigation
     case configureScreen
     case settings
-    case open
+    case mapInteractions
+    case myPlaces
 }
 
 @objcMembers
@@ -23,6 +24,7 @@ final class QuickActionType: NSObject {
     let stringId: String
     private var _actionEditable = false
     private var _name: String?
+    private var _nameAction: String?
     private var _iconName: String?
     private var _secondaryIconName: String?
     private var cl: OAQuickAction.Type?
@@ -44,6 +46,12 @@ final class QuickActionType: NSObject {
         _name = name
         return self
     }
+    
+    func nameAction(_ nameAction: String) -> QuickActionType {
+        _nameAction = nameAction
+        return self
+    }
+    
 
     func category(_ category: Int) -> QuickActionType {
         _category = category
@@ -88,6 +96,10 @@ final class QuickActionType: NSObject {
     var name: String? {
         _name
     }
+    
+    var nameAction: String? {
+        _nameAction
+    }
 
     var iconName: String? {
         _iconName
@@ -99,5 +111,16 @@ final class QuickActionType: NSObject {
 
     var category: Int {
         _category ?? QuickActionTypeCategory.unsupported.rawValue
+    }
+    
+    func getFullName() -> String? {
+        if let _name {
+            if let _nameAction, !_nameAction.isEmpty {
+                return String(format: localizedString("ltr_or_rtl_combine_via_dash"), _name, _nameAction)
+            } else {
+                return _name
+            }
+        }
+        return nil
     }
 }

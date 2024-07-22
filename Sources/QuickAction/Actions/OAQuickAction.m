@@ -24,7 +24,7 @@ static NSInteger SEQ = 0;
 
 - (instancetype)init
 {
-    return [self initWithActionType:OAMapButtonsHelper.TYPE_ADD_ITEMS];
+    return [self initWithActionType:OAMapButtonsHelper.TYPE_CREATE_CATEGORY];
 }
 
 - (instancetype)initWithActionType:(QuickActionType *)type

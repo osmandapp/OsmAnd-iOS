@@ -31,9 +31,9 @@ static QuickActionType *TYPE;
     TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId
                                              stringId:@"nav.resumepause"
                                                    cl:self.class]
-                name:OALocalizedString(@"quick_action_resume_pause_navigation")]
+                name:OALocalizedString(@"shared_string_navigation")]
+               nameAction:OALocalizedString(@"quick_action_verb_pause_resume")]
                iconName:@"ic_custom_navigation_arrow"]
-              secondaryIconName:@"ic_custom_compound_action_add"]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }

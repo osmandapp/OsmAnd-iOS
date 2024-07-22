@@ -1073,14 +1073,14 @@
         iconName = standardIconId;
     else if ([filterId hasPrefix:USER_PREFIX])
         iconName = [[filterId substringFromIndex:USER_PREFIX.length] lowerCase];
-    if ([OASvgHelper hasMapImageNamed:iconName])
+    if ([OASvgHelper hasMXSvgMapImageBy:iconName])
     {
         return iconName;
     }
     else
     {
         iconName = [self.class getCustomFilterIconName:self];
-        return iconName && [OASvgHelper hasMapImageNamed:iconName] ? iconName : filterId;
+        return iconName && [OASvgHelper hasMXSvgMapImageBy:iconName] ? iconName : filterId;
     }
 }
 
@@ -1138,7 +1138,7 @@
 
 + (NSString *)getPoiTypeIconName:(OAPOIBaseType *)abstractPoiType
 {
-    if (abstractPoiType != nil && [OASvgHelper hasMapImageNamed:abstractPoiType.iconName])
+    if (abstractPoiType != nil && [OASvgHelper hasMXSvgMapImageBy:abstractPoiType.iconName])
     {
         return abstractPoiType.iconName;
     }
@@ -1146,7 +1146,7 @@
     {
         OAPOIType *poiType = (OAPOIType *) abstractPoiType;
         NSString *iconId = [NSString stringWithFormat:@"%@_%@", poiType.getOsmTag, poiType.getOsmValue];
-        if ([OASvgHelper hasMapImageNamed:iconId])
+        if ([OASvgHelper hasMXSvgMapImageBy:iconId])
             return iconId;
         else if (poiType.parent != nil)
             return [self getPoiTypeIconName:poiType.parent.type];

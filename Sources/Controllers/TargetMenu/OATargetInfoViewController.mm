@@ -50,16 +50,23 @@
 
 #include <OsmAndCore/Utilities.h>
 
-#define kWikiLink @".wikipedia.org/w"
-#define kWhatsAppLink @"https://wa.me/%@"
-#define kViberLink @"viber://contact?number=%@"
-#define kSkypeLink @"skype:%@"
-#define kMailLink @"mailto:%@"
-#define kViewPortHtml @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>"
-#define kNearbyPoiMaxCount 10
-#define kNearbyPoiMinRadius 250
-#define kNearbyPoiMaxRadius 1000
-#define kNearbyPoiSearchFactory 2
+// Links
+static NSString *kWikiLink = @".wikipedia.org/w";
+static NSString *kWhatsAppLink = @"https://wa.me/%@";
+static NSString *kViberLink = @"viber://contact?number=%@";
+static NSString *kSkypeLink = @"skype:%@";
+static NSString *kMailLink = @"mailto:%@";
+static NSString *kInstagramLink = @"https://www.instagram.com/%@";
+static NSString *kFacebookLink = @"https://www.facebook.com/%@";
+
+// HTML for ViewPort
+static NSString *const kViewPortHtml = @"<header><meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no'></header>";
+
+// Constants for Nearby POI
+static const NSInteger kNearbyPoiMaxCount = 10;
+static const NSInteger kNearbyPoiMinRadius = 250;
+static const NSInteger kNearbyPoiMaxRadius = 1000;
+static const NSInteger kNearbyPoiSearchFactory = 2;
 
 @interface OATargetInfoViewController() <OACollapsableCardViewDelegate, OAEditDescriptionViewControllerDelegate>
 
@@ -825,6 +832,7 @@
             cell.textView.textColor = info.textColor;
             cell.textView.font = [info getFont];
             cell.textView.numberOfLines = info.height > 50.0 ? 20 : 1;
+            cell.accessoryType = [info.key isEqualToString:@"name"] ? UITableViewCellAccessoryDisclosureIndicator : UITableViewCellAccessoryNone;
 
             return cell;
         }
@@ -950,6 +958,14 @@
         {
             [OAUtilities callUrl:[NSString stringWithFormat:kMailLink, info.text]];
         }
+        else if ([info.key isEqual:@"facebook"] && ![info.text hasPrefix:@"http"])
+        {
+            [OAUtilities callUrl:[NSString stringWithFormat:kFacebookLink, info.text]];
+        }
+        else if ([info.key isEqual:@"instagram"] && ![info.text hasPrefix:@"http"])
+        {
+            [OAUtilities callUrl:[NSString stringWithFormat:kInstagramLink, info.text]];
+        }
         else
         {
             [OAUtilities callUrl:info.text];
@@ -974,6 +990,12 @@
         OAEditDescriptionViewController *editDescController = [[OAEditDescriptionViewController alloc] initWithDescription:info.text isNew:NO isEditing:NO isComment:[info.typeName isEqualToString:kCommentRowType] readOnly:YES];
         editDescController.delegate = self;
         [self.navController pushViewController:editDescController animated:YES];
+    }
+    else if ([info.key isEqualToString:@"name"])
+    {
+        NameTagsDetailsViewController *tagsDetailsController = [[NameTagsDetailsViewController alloc] initWithTags:info.detailsArray];
+        UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:tagsDetailsController];
+        [self.navController presentViewController:navigationController animated:YES completion:nil];
     }
 }
 

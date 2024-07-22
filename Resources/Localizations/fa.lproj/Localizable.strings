@@ -900,7 +900,7 @@
 "poi_context_menu_modify" = "اصلاح POI";
 "mapillary_menu_title_pano" = "فقط نمایش عکس‌های ۳۶۰ درجه";
 "phone" = "تلفن";
-"shared_string_distance" = "فاصله";
+"shared_string_distance" = "مسافت";
 "nautical_maps" = "نقشه‌های دریایی";
 "offline_edition" = "ویرایش آفلاین";
 "use_osm_live_routing" = "مسیریابی با OsmAnd Live";
@@ -2248,3 +2248,4 @@
 "route_recalculation_dist_title" = "مسافت کمینی برای مسیریابی مجدد";
 "avoid_pt_types_descr" = "انواع روش‌های حمل‌ونقل که می‌خواهید در مسیریابی نباشند را انتخاب کنید:";
 "custom_buttons" = "دکمه های شخصی";
+"transport_hazmat_title" = "حمل و نقل مواد خطرناک";

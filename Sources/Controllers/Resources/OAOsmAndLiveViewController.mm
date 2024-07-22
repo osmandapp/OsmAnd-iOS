@@ -598,7 +598,7 @@ static const NSInteger sectionCount = 2;
     [_settings.settingOsmAndLiveEnabled set:newValue];
     [btn setOn:newValue];
     if (newValue)
-        [_app checkAndDownloadOsmAndLiveUpdates];
+        [_app checkAndDownloadOsmAndLiveUpdates:YES];
 }
 
 #pragma mark - OASubscriptionBannerCardViewDelegate

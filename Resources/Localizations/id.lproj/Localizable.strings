@@ -398,8 +398,8 @@
 "si_min_m" = "Menit per mil";
 "si_nm_h" = "Mil laut per jam (knot)";
 "units_nm_h" = "nmi/h";
-"min_mile" = "men/m";
-"min_km" = "men/km";
+"min_mile" = "mnt/m";
+"min_km" = "mnt/km";
 "m_s" = "m/d";
 "shared_string_tones" = "ton";
 "nothing_found" = "Tidak ada yang ditemukan";
@@ -448,7 +448,7 @@
 "shared_string_or" = "atau";
 "shared_string_and" = "dan";
 "shared_string_edit" = "Sunting";
-"shared_string_modify" = "Modify";
+"shared_string_modify" = "Ubah";
 "first_time_continue" = "Nanti";
 "shared_string_of" = "of";
 "shared_string_all" = "Semua";
@@ -508,7 +508,7 @@
 
 // Favorites
 "shared_string_color" = "Warna";
-"fav_colors" = "Colors";
+"fav_colors" = "Warna";
 "shared_string_name" = "Nama";
 "fav_group" = "Group";
 "shared_string_groups" = "Grup-grup";
@@ -662,8 +662,8 @@
 "daynight_mode_night" = "Malam";
 "map_widget_renderer" = "Gaya peta";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_over" = "Overlay";
-"map_settings_under" = "Underlay";
+"map_settings_over" = "Hamparan";
+"map_settings_under" = "Dasaran";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
@@ -1303,10 +1303,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Tambahkan POI";
-"quick_action_map_style" = "Ubah gaya peta";
+"quick_action_map_style" = "Gaya peta";
 "quick_action_map_source" = "Ubah sumber peta";
-"quick_action_map_overlay" = "Ubah hamparan peta";
-"quick_action_map_underlay" = "Ubah dasaran peta";
+"quick_action_map_overlay" = "Hamparan";
+"quick_action_map_underlay" = "Dasaran";
 "quick_action_replace_destination" = "Ubah tujuan";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Tambahkan titik keberangkatan";
@@ -1444,7 +1444,7 @@
 "km_h" = "km/j";
 "mile_per_hour" = "mph";
 "int_hour" = "j";
-"int_min" = "men.";
+"int_min" = "mnt.";
 "shared_string_sec" = "det";
 "units_sec_short" = "s";
 "metric_ton" = "t";
@@ -1758,7 +1758,7 @@
 "skip_map_downloading" = "Lewati download peta";
 "skip_map_downloading_desc_ios" = "You have no offline map installed. You may choose a map from the list or download maps later via Menu - Manage map files";
 "wiki_around" = "Artikel Wikipedia terdekat";
-"search_categories" = "Kategori-kategori";
+"search_categories" = "Kategori";
 "items_selected" = "%d selected";
 "how_to_open_wiki_title" = "Bagaimana cara membuka artikel-artikel Wikipedia\?";
 "download_wiki_data" = "Download Wikipedia data for %@";
@@ -3154,3 +3154,10 @@
 "display_position_automatic_descr" = "Tergantung pada orientasi Peta: bagian bawah untuk arah pergerakan, bagian tengah untuk yang lainnya.";
 "visualization_3d_visualized_by" = "Divisualisasikan oleh";
 "upward_gradient" = "Gradien ke atas";
+"tomorrow" = "Besok";
+"rendering_value_dark_orange_name" = "Oranye gelap";
+"wall_height" = "Ketinggian tembok";
+"osmand_depelopment_simulate_location_section" = "Simulasikan";
+"transport_hazmat_title" = "Pengangkutan bahan berbahaya";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GPS";

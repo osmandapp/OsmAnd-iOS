@@ -445,7 +445,7 @@
 "shared_string_from" = "lähtien";
 "shared_string_time" = "Aika";
 "time_of_day" = "Vuorokaudenaika";
-"shared_string_distance" = "Etäisyys";
+"shared_string_distance" = "Matka";
 "retry" = "Yritä uudelleen";
 "shared_string_enabled" = "Käytössä";
 "shared_string_start_date" = "Start date";
@@ -484,7 +484,7 @@
 
 // Favorites
 "shared_string_color" = "Väri";
-"fav_colors" = "Colors";
+"fav_colors" = "Värit";
 "shared_string_name" = "Nimi";
 "fav_group" = "Group";
 "shared_string_groups" = "Ryhmät";
@@ -875,7 +875,7 @@
 "point_to_navigate" = "Navigate to";
 "start_of_the_track" = "Jäljen alku";
 "nearest_point" = "Lähin piste";
-"plan_route_folder" = "Folder";
+"plan_route_folder" = "Kansio";
 "change_folder" = "Vaihda kansio";
 "select_folder" = "Valitse kansio";
 "select_folder_descr" = "Valitse kansio tai lisää uusi";
@@ -2847,3 +2847,9 @@
 "required_maps" = "Vaaditut kartat";
 "rendering_value_dark_orange_name" = "Tummanoranssi";
 "help_article_troubleshooting_general_name" = "Yleistä";
+"transport_hazmat_title" = "Vaarallisten aineiden kuljetus";
+"widget_secondary_desc_part_of" = "Osa %@ laajennusta.";
+"shared_string_is_deleted" = "%@ on poistettu.";
+"shared_string_app_profile" = "Sovellusprofiili";
+"show_icon" = "Näytä kuvake";
+"terrain_3D_maps" = "Maastokartat";

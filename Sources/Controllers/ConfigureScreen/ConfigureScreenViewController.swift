@@ -49,7 +49,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
     override func getRightNavbarButtons() -> [UIBarButtonItem] {
         var buttons = [UIBarButtonItem]()
         if let button = createRightNavbarButton(nil, iconName: appMode.getIconName(), action: #selector(onRightNavbarButtonPressed), menu: nil) {
-            button.customView?.tintColor = UIColor(rgb: Int(appMode.getIconColor()))
+            button.customView?.tintColor = appMode.getProfileColor()
             button.accessibilityLabel = localizedString("selected_profile")
             button.accessibilityValue = appMode.toHumanString()
             buttons.append(button)
@@ -91,7 +91,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
             row.title = panel.title
             row.iconName = panel.iconName
             row.setObj(panel, forKey: "panel")
-            row.iconTintColor = (widgetsCount == 0) ? .iconColorDefault : UIColor(rgb: Int(appMode!.getIconColor()));
+            row.iconTintColor = (widgetsCount == 0) ? .iconColorDefault : appMode!.getProfileColor();
             row.descr = String(widgetsCount)
             row.accessibilityLabel = panel.title
             row.accessibilityValue = String(format: localizedString("ltr_or_rtl_combine_via_colon"), localizedString("shared_string_widgets"), String(widgetsCount))
@@ -115,7 +115,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         defaultButtonsRow.key = "defaultButtons"
         defaultButtonsRow.title = localizedString("default_buttons")
         defaultButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(defaultButtonsEnabledCount)", "\(defaultButtons.count)")
-        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? UIColor(rgb: Int(appMode.getIconColor())) : .iconColorDefault
+        defaultButtonsRow.iconTintColor = defaultButtonsEnabledCount > 0 ? appMode.getProfileColor() : .iconColorDefault
         defaultButtonsRow.iconName = "ic_custom_button_default"
         defaultButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         defaultButtonsRow.accessibilityLabel = defaultButtonsRow.title
@@ -127,7 +127,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         customButtonsRow.key = "customButtons"
         customButtonsRow.title = localizedString("custom_buttons")
         customButtonsRow.descr = String(format: localizedString("ltr_or_rtl_combine_via_slash"), "\(enabledCustomButtons.count)", "\(customButtons.count)")
-        customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? UIColor(rgb: Int(appMode.getIconColor())) : .iconColorDefault
+        customButtonsRow.iconTintColor = !enabledCustomButtons.isEmpty ? appMode.getProfileColor() : .iconColorDefault
         customButtonsRow.iconName = "ic_custom_quick_action"
         customButtonsRow.cellType = OAValueTableViewCell.reuseIdentifier
         customButtonsRow.accessibilityLabel = customButtonsRow.title
@@ -138,7 +138,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let positionMapRow = otherSection.createNewRow()
         positionMapRow.title = localizedString("position_on_map")
         positionMapRow.iconName = getLocationPositionIcon()
-        positionMapRow.iconTintColor = UIColor(rgb: Int(appMode.getIconColor()))
+        positionMapRow.iconTintColor = appMode.getProfileColor()
         positionMapRow.key = "position_on_map"
         positionMapRow.descr = getLocationPositionValue()
         positionMapRow.cellType = OAValueTableViewCell.reuseIdentifier
@@ -148,7 +148,7 @@ class ConfigureScreenViewController: OABaseNavbarViewController, AppModeSelectio
         let distByTapRow = otherSection.createNewRow()
         distByTapRow.title = localizedString("map_widget_distance_by_tap")
         distByTapRow.iconName = "ic_action_ruler_line"
-        distByTapRow.iconTint = Int(appMode.getIconColor())
+        distByTapRow.iconTintColor = appMode.getProfileColor()
         distByTapRow.key = "map_widget_distance_by_tap"
         distByTapRow.setObj(NSNumber(value: settings.showDistanceRuler.get()), forKey: Self.selectedKey)
         distByTapRow.cellType = OASwitchTableViewCell.reuseIdentifier
@@ -260,7 +260,7 @@ extension ConfigureScreenViewController {
             }
 
             let selected = item.bool(forKey: Self.selectedKey)
-            cell.leftIconView.tintColor = selected ? UIColor(rgb: item.iconTint) : .iconColorDefault
+            cell.leftIconView.tintColor = selected ?item.iconTintColor : .iconColorDefault
             cell.titleLabel.text = item.title
             cell.switchView.removeTarget(nil, action: nil, for: .allEvents)
             cell.switchView.isOn = selected
@@ -290,7 +290,7 @@ extension ConfigureScreenViewController {
         
         if let cell = self.tableView.cellForRow(at: indexPath) as? OASwitchTableViewCell, !cell.leftIconView.isHidden {
             UIView.animate(withDuration: 0.2) {
-                cell.leftIconView.tintColor = sw.isOn ? UIColor(rgb: Int(self.settings.applicationMode.get().getIconColor())) : .iconColorDefault
+                cell.leftIconView.tintColor = sw.isOn ? self.settings.applicationMode.get().getProfileColor() : .iconColorDefault
             }
         }
         

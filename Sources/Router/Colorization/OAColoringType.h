@@ -42,6 +42,9 @@
 - (BOOL) isSolidSingleColor;
 - (BOOL) isGradient;
 - (BOOL) isRouteInfoAttribute;
+- (BOOL)isSpeed;
+- (BOOL)isAltitude;
+- (BOOL)isSlope;
 
 @end
 

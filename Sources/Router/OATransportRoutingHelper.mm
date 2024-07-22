@@ -206,7 +206,6 @@
 
 - (vector<SHARED_PTR<TransportRouteResult>>) calculateRouteImpl:(OATransportRouteCalculationParams *)params
 {
-    vector<SHARED_PTR<TransportRouteResult>> res;
     MAP_STR_STR paramsRes;
     auto router = [_app getRouter:params.mode];
     string derivedProfile(params.mode.getDerivedProfile.UTF8String);
@@ -234,30 +233,33 @@
         paramsRes["profile_" + derivedProfile] = "true";
     params.params = paramsRes;
     
-    auto cfg = make_shared<TransportRoutingConfiguration>(router, params.params);
-    const auto planner = unique_ptr<TransportRoutePlanner>(new TransportRoutePlanner());
-    auto ctx = unique_ptr<TransportRoutingContext>(new TransportRoutingContext(cfg));
-    ctx->startX = get31TileNumberX(params.start.coordinate.longitude);
-    ctx->startY = get31TileNumberY(params.start.coordinate.latitude);
-    ctx->targetX = get31TileNumberX(params.end.coordinate.longitude);
-    ctx->targetY = get31TileNumberY(params.end.coordinate.latitude);
-    ctx->calculationProgress = params.calculationProgress;
-    
-    int leftX = get31TileNumberX(params.start.coordinate.longitude);
-    int rightX = leftX;
-    int bottomY = get31TileNumberY(params.start.coordinate.latitude);
-    int topY = bottomY;
-    
-    CLLocation *l = params.end;
-    leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
-    rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
-    bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
-    topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
-    
-    [OARoutingHelper.sharedInstance.getRouteProvider checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
-    
-    planner->buildTransportRoute(ctx, res);
-    
+    OARouteProvider *routeProvider = OARoutingHelper.sharedInstance.getRouteProvider;
+    vector<SHARED_PTR<TransportRouteResult>> __block res;
+    [routeProvider runSyncWithNativeRouting:^{
+        auto cfg = make_shared<TransportRoutingConfiguration>(router, params.params);
+        const auto planner = unique_ptr<TransportRoutePlanner>(new TransportRoutePlanner());
+        auto ctx = unique_ptr<TransportRoutingContext>(new TransportRoutingContext(cfg));
+        ctx->startX = get31TileNumberX(params.start.coordinate.longitude);
+        ctx->startY = get31TileNumberY(params.start.coordinate.latitude);
+        ctx->targetX = get31TileNumberX(params.end.coordinate.longitude);
+        ctx->targetY = get31TileNumberY(params.end.coordinate.latitude);
+        ctx->calculationProgress = params.calculationProgress;
+
+        int leftX = get31TileNumberX(params.start.coordinate.longitude);
+        int rightX = leftX;
+        int bottomY = get31TileNumberY(params.start.coordinate.latitude);
+        int topY = bottomY;
+
+        CLLocation *l = params.end;
+        leftX = MIN(get31TileNumberX(l.coordinate.longitude), leftX);
+        rightX = MAX(get31TileNumberX(l.coordinate.longitude), rightX);
+        bottomY = MAX(get31TileNumberY(l.coordinate.latitude), bottomY);
+        topY = MIN(get31TileNumberY(l.coordinate.latitude), topY);
+
+        [routeProvider checkInitialized:15 leftX:leftX rightX:rightX bottomY:bottomY topY:topY];
+        planner->buildTransportRoute(ctx, res);
+    }];
+
     return res;
 }
 

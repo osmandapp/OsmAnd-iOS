@@ -103,12 +103,11 @@
     OAResourcesInstaller* _resourcesInstaller;
     std::shared_ptr<OsmAnd::IWebClient> _webClient;
 
-    OAAutoObserverProxy* _downloadsManagerActiveTasksCollectionChangeObserver;
-
     BOOL _firstLaunch;
     UNORDERED_map<std::string, std::shared_ptr<RoutingConfigurationBuilder>> _customRoutingConfigs;
 
     BOOL _carPlayActive;
+    BOOL _isInBackground;
 }
 
 @synthesize initialized = _initialized;
@@ -125,6 +124,7 @@
 @synthesize gpxTravelPath = _gpxTravelPath;
 @synthesize hiddenMapsPath = _hiddenMapsPath;
 @synthesize routingMapsCachePath = _routingMapsCachePath;
+@synthesize models3dPath = _models3dPath;
 
 @synthesize initialURLMapState = _initialURLMapState;
 
@@ -152,6 +152,7 @@
 @synthesize isRepositoryUpdating = _isRepositoryUpdating;
 
 @synthesize carPlayActive = _carPlayActive;
+@synthesize backgroundStateObservable = _backgroundStateObservable;
 
 - (instancetype) init
 {
@@ -168,6 +169,7 @@
         _documentsPath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
         _documentsDir = QDir(QString::fromNSString(_documentsPath));
         _gpxPath = [_documentsPath stringByAppendingPathComponent:@"GPX"];
+        _models3dPath = [_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR];
         _inboxPath = [_documentsPath stringByAppendingPathComponent:@"Inbox"];
         _cachePath = [NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject];
         _weatherForecastPath = [_cachePath stringByAppendingPathComponent:@"WeatherForecast"];
@@ -292,12 +294,15 @@
 
 - (void) migrateResourcesToDocumentsIfNeeded
 {
-    BOOL movedRes = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
-    BOOL movedSqlite = [self moveContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR]];
+    BOOL movedRes = [self moveOrCopyContentsOfDirectory:[_dataPath stringByAppendingPathComponent:RESOURCES_DIR] toDest:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR] move:YES];
+    BOOL movedSqlite = [self moveOrCopyContentsOfDirectory:[_dataPath stringByAppendingPathComponent:MAP_CREATOR_DIR] toDest:[_documentsPath stringByAppendingPathComponent:MAP_CREATOR_DIR] move:YES];
     if (movedRes)
         [self migrateMapNames:[_documentsPath stringByAppendingPathComponent:RESOURCES_DIR]];
     if (movedRes || movedSqlite)
         _resourcesManager->rescanUnmanagedStoragePaths(true);
+
+    NSString *modelsBundlePath = [NSBundle.mainBundle.resourcePath stringByAppendingPathComponent:MODEL_3D_DIR];
+    [self moveOrCopyContentsOfDirectory:modelsBundlePath toDest:[_documentsPath stringByAppendingPathComponent:MODEL_3D_DIR] move:NO];
 }
 
 - (BOOL) initializeCore
@@ -656,6 +661,7 @@
     _osmEditsChangeObservable = [[OAObservable alloc] init];
     _mapillaryImageChangedObservable = [[OAObservable alloc] init];
     _simulateRoutingObservable = [[OAObservable alloc] init];
+    _backgroundStateObservable = [[OAObservable alloc] init];
 
     _trackRecordingObservable = [[OAObservable alloc] init];
     _trackStartStopRecObservable = [[OAObservable alloc] init];
@@ -665,9 +671,6 @@
     _mapModeObservable = [[OAObservable alloc] init];
 
     _downloadsManager = [[OADownloadsManager alloc] init];
-    _downloadsManagerActiveTasksCollectionChangeObserver = [[OAAutoObserverProxy alloc] initWith:self
-                                                                                     withHandler:@selector(onDownloadManagerActiveTasksCollectionChanged)
-                                                                                      andObserve:_downloadsManager.activeTasksCollectionChangedObservable];
 
     if (_terminating)
         return NO;
@@ -678,7 +681,7 @@
     if (_locationServices.available && _locationServices.allowed)
         [_locationServices start];
 
-    [self updateScreenTurnOffSetting];
+    [self allowScreenTurnOff:NO];
 
     _appearance = [[OADaytimeAppearance alloc] init];
     _appearanceChangeObservable = [[OAObservable alloc] init];
@@ -730,7 +733,7 @@
     return YES;
 }
 
-- (BOOL) moveContentsOfDirectory:(NSString *)src toDest:(NSString *)dest
+- (BOOL) moveOrCopyContentsOfDirectory:(NSString *)src toDest:(NSString *)dest move:(BOOL)move
 {
     NSFileManager *fm = [NSFileManager defaultManager];
     if (![fm fileExistsAtPath:src])
@@ -745,9 +748,15 @@
         if ([fm fileExistsAtPath:[dest stringByAppendingPathComponent:file]])
             continue;
         NSError *err = nil;
-        [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
-                    toPath:[dest stringByAppendingPathComponent:file]
-                     error:&err];
+        if (move)
+            [fm moveItemAtPath:[src stringByAppendingPathComponent:file]
+            	        toPath:[dest stringByAppendingPathComponent:file]
+                	     error:&err];
+        else
+            [fm copyItemAtPath:[src stringByAppendingPathComponent:file]
+                        toPath:[dest stringByAppendingPathComponent:file]
+                         error:&err];
+
         if (err)
             tryAgain = YES;
     }
@@ -994,6 +1003,27 @@
     // TODO toast
 }
 
+- (void)setCarPlayActive:(BOOL)carPlayActive
+{
+    BOOL prevIsInBackground = self.isInBackground;
+
+    _carPlayActive = carPlayActive;
+
+    BOOL isInBackground = self.isInBackground;
+    if (prevIsInBackground != isInBackground)
+        [self.backgroundStateObservable notifyEvent];
+}
+
+- (BOOL) isInBackground
+{
+    return _isInBackground && !self.carPlayActive;
+}
+
+- (BOOL) isInBackgroundOnDevice
+{
+    return _isInBackground;
+}
+
 - (void)startRepositoryUpdateAsync:(BOOL)async
 {
     _isRepositoryUpdating = YES;
@@ -1017,7 +1047,7 @@
 }
 
 
-- (void) checkAndDownloadOsmAndLiveUpdates
+- (void) checkAndDownloadOsmAndLiveUpdates:(BOOL)checkUpdatesAsync
 {
     if (!AFNetworkReachabilityManager.sharedManager.isReachable)
         return;
@@ -1027,9 +1057,8 @@
         NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates start");
         QList<std::shared_ptr<const OsmAnd::IncrementalChangesManager::IncrementalUpdate> > updates;
         for (const auto& localResource : _resourcesManager->getLocalResources())
-        {
-            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager];
-        }
+            [OAOsmAndLiveHelper downloadUpdatesForRegion:QString(localResource->id).remove(QStringLiteral(".obf")) resourcesManager:_resourcesManager checkUpdatesAsync:checkUpdatesAsync];
+
         NSLog(@"Prepare checkAndDownloadOsmAndLiveUpdates finish");
     }
 }
@@ -1113,6 +1142,7 @@
         [_locationServices stop];
         _locationServices = nil;
 
+        [_downloadsManager cancelDownloadTasks];
         _downloadsManager = nil;
     }
     else
@@ -1229,42 +1259,20 @@
     return deviceMemoryAvailable;
 }
 
-- (BOOL) allowScreenTurnOff
+- (void) allowScreenTurnOff:(BOOL)allow
 {
-    BOOL allowScreenTurnOff = NO;
-
-    allowScreenTurnOff = allowScreenTurnOff && _downloadsManager.allowScreenTurnOff;
-
-    return allowScreenTurnOff;
-}
-
-- (void) updateScreenTurnOffSetting
-{
-    BOOL allowScreenTurnOff = self.allowScreenTurnOff;
-
-    if (allowScreenTurnOff)
+    if (allow)
         OALog(@"Going to enable screen turn-off");
     else
         OALog(@"Going to disable screen turn-off");
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        [UIApplication sharedApplication].idleTimerDisabled = !allowScreenTurnOff;
+        [UIApplication sharedApplication].idleTimerDisabled = !allow;
     });
 }
 
 @synthesize appearance = _appearance;
 @synthesize appearanceChangeObservable = _appearanceChangeObservable;
-
-- (void) onDownloadManagerActiveTasksCollectionChanged
-{
-    dispatch_async(dispatch_get_main_queue(), ^{
-        // In background, don't change screen turn-off setting
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)
-            return;
-        
-        [self updateScreenTurnOffSetting];
-    });
-}
 
 - (void) onApplicationWillResignActive
 {
@@ -1272,22 +1280,35 @@
 
 - (void) onApplicationDidEnterBackground
 {
+    _isInBackground = YES;
+    [self.backgroundStateObservable notifyEvent];
+
     [self saveDataToPermamentStorage];
 
     // In background allow to turn off screen
-    OALog(@"Going to enable screen turn-off");
-    [UIApplication sharedApplication].idleTimerDisabled = NO;
+    [self allowScreenTurnOff:YES];
+
+    NSTimeInterval backgroundTimeRemaining = [UIApplication sharedApplication].backgroundTimeRemaining;
+    if (backgroundTimeRemaining == DBL_MAX) {
+        OALog(@"Background time remaining: unlimited");
+    } else {
+        OALog(@"Background time remaining: %f seconds", backgroundTimeRemaining);
+    }
 }
 
 - (void) onApplicationWillEnterForeground
 {
-    [self updateScreenTurnOffSetting];
+    [self allowScreenTurnOff:NO];
     [[OADiscountHelper instance] checkAndDisplay];
 }
 
 - (void) onApplicationDidBecomeActive
 {
+    _isInBackground = NO;
+
     [[OASavingTrackHelper sharedInstance] saveIfNeeded];
+
+    [self.backgroundStateObservable notifyEvent];
 }
 
 - (void) stopNavigation

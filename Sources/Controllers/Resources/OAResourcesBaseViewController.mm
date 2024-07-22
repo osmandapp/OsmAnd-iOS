@@ -30,6 +30,16 @@ typedef OsmAnd::IncrementalChangesManager::IncrementalUpdate IncrementalUpdate;
 
 static BOOL dataInvalidated = NO;
 
+
+@interface OASuspendedDownloadTask : NSObject
+@property id<OADownloadTask> task;
+@property id<OADownloadTask> nextTask;
+@end
+
+@implementation OASuspendedDownloadTask
+@end
+
+
 @interface OAResourcesBaseViewController ()
 
 @end
@@ -45,7 +55,10 @@ static BOOL dataInvalidated = NO;
     OAAutoObserverProxy* _downloadTaskCompletedObserver;
     OAAutoObserverProxy* _sqlitedbResourcesChangedObserver;
 
+    OAAutoObserverProxy *_backgroundStateObserver;
+
     MBProgressHUD* _deleteResourceProgressHUD;
+    NSMutableArray<OASuspendedDownloadTask *> *_finishedBackgroundDownloadings;
 }
 
 - (instancetype) initWithCoder:(NSCoder *)aDecoder
@@ -55,6 +68,7 @@ static BOOL dataInvalidated = NO;
     {
         _app = [OsmAndApp instance];
         _iapHelper = [OAIAPHelper sharedInstance];
+        _finishedBackgroundDownloadings = [NSMutableArray array];
 
         _downloadTaskProgressObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                   withHandler:@selector(onDownloadTaskProgressChanged:withKey:andValue:)
@@ -72,6 +86,10 @@ static BOOL dataInvalidated = NO;
         _sqlitedbResourcesChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                                    withHandler:@selector(onSqlitedbResourcesChanged:withKey:)
                                                                     andObserve:[OAMapCreatorHelper sharedInstance].sqlitedbResourcesChangedObservable];
+
+        _backgroundStateObserver = [[OAAutoObserverProxy alloc] initWith:self
+                                                             withHandler:@selector(onBackgroundStateChanged)
+                                                              andObserve:OsmAndApp.instance.backgroundStateObservable];
 
         _resourceItemsComparator = ^NSComparisonResult(id obj1, id obj2) {
             NSString *str1;
@@ -129,6 +147,11 @@ static BOOL dataInvalidated = NO;
 
 - (void) dealloc
 {
+    if (_backgroundStateObserver)
+    {
+        [_backgroundStateObserver detach];
+        _backgroundStateObserver = nil;
+    }
     if (_downloadTaskProgressObserver)
     {
         [_downloadTaskProgressObserver detach];
@@ -174,7 +197,7 @@ static BOOL dataInvalidated = NO;
     _deleteResourceProgressHUD = [[MBProgressHUD alloc] initWithView:self.view];
     _deleteResourceProgressHUD.labelText = OALocalizedString(@"res_deleting");
     [self.view addSubview:_deleteResourceProgressHUD];
-    
+
     if (_app.downloadsManager.hasDownloadTasks)
         [self showDownloadViewForTask:[_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks firstObject]]];
 }
@@ -482,7 +505,7 @@ static BOOL dataInvalidated = NO;
 - (void) onLocalResourcesChanged:(id<OAObservableProtocol>)observer withKey:(id)key
 {
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackgroundOnDevice)
         {
             self.dataInvalidated = YES;
             return;
@@ -501,11 +524,13 @@ static BOOL dataInvalidated = NO;
         return;
 
     dispatch_async(dispatch_get_main_queue(), ^{
-        if (!self.isViewLoaded || self.view.window == nil)
+        if (!self.isViewLoaded || self.view.window == nil || _app.isInBackgroundOnDevice)
             return;
         
         if (!self.downloadView || !self.downloadView.superview)
             [self showDownloadViewForTask:task];
+        if (![task.key hasSuffix:self.downloadView.taskName])
+            return;
         
         [self.downloadView setProgress:[value floatValue]];
     });
@@ -551,22 +576,14 @@ static BOOL dataInvalidated = NO;
         if ([[task.key stringByReplacingOccurrencesOfString:@"resource:" withString:@""] isEqualToString:self.downloadView.taskName])
             [self.downloadView removeFromSuperview];
         
+        id<OADownloadTask> nextTask = nil;
+        if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
+            nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+        
         if (task.progressCompleted < 1.0)
         {
-            if ([_app.downloadsManager.keysOfDownloadTasks count] > 0)
-            {
-                id<OADownloadTask> nextTask =  [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            if (nextTask)
                 [nextTask resume];
-
-                //update balance
-                double delayInSeconds = 0.5;
-                dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
-                dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-                    [self showDownloadViewForTask:nextTask];
-                });
-                
-            }
-            [self updateContent];
         }
         else
         {
@@ -574,8 +591,67 @@ static BOOL dataInvalidated = NO;
                 || (resource == nullptr && [nsResourceId hasSuffix:@".live.obf"]))
                 [_app.data.mapLayerChangeObservable notifyEvent];
         }
+        
+        OASuspendedDownloadTask *suspendedTask = [[OASuspendedDownloadTask alloc] init];
+        suspendedTask.task = task;
+        suspendedTask.nextTask = nextTask;
+        if (_app.isInBackgroundOnDevice)
+            [_finishedBackgroundDownloadings addObject:suspendedTask];
+        else
+            [self refreshUIOnTaskFinished:suspendedTask];
 
     });
+}
+
+- (void)refreshUIOnTaskFinished:(OASuspendedDownloadTask *)suspendedTask
+{
+    if (suspendedTask.task.progressCompleted < 1.0)
+    {
+        if (suspendedTask.nextTask)
+        {
+            //update balance
+            double delayInSeconds = 0.5;
+            __weak OAResourcesBaseViewController *weakSelf = self;
+            dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(delayInSeconds * NSEC_PER_SEC));
+            dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+                [weakSelf showDownloadViewForTask:suspendedTask.nextTask];
+            });
+        }
+        [self updateContent];
+    }
+    else
+    {
+        // TODO: FIX
+        //[self refreshDownloadingContent:suspendedTask.task.key];
+    }
+}
+
+- (void) onBackgroundStateChanged
+{
+    if (!_app.isInBackgroundOnDevice)
+    {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            while (_finishedBackgroundDownloadings && _finishedBackgroundDownloadings.count > 0)
+            {
+                OASuspendedDownloadTask *suspendedTask = [_finishedBackgroundDownloadings firstObject];
+                [self refreshUIOnTaskFinished:suspendedTask];
+                [_finishedBackgroundDownloadings removeObjectAtIndex:0];
+            }
+
+            if (self.dataInvalidated || dataInvalidated)
+            {
+                [self updateContent];
+                self.dataInvalidated = NO;
+                dataInvalidated = NO;
+            }
+
+
+            [self updateContent];
+            [self.getTableView reloadData];
+            // TODO: FIX
+            //[self refreshDownloadingContent:nil]; // restart all cells animations
+        });
+    }
 }
 
 - (void) updateTableLayout

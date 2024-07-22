@@ -152,12 +152,16 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
             // Initialize application in main thread
             //[_app initialize];
             [[OAScreenOrientationHelper sharedInstance] updateSettings];
+            
+            [OALocationIcon initialize];
 
             // Configure ThemeManager
             OAAppSettings *appSettings = [OAAppSettings sharedManager];
             OAApplicationMode *initialAppMode = [appSettings.useLastApplicationModeByDefault get] ?
             [OAApplicationMode valueOfStringKey:[appSettings.lastUsedApplicationMode get] def:OAApplicationMode.DEFAULT] : appSettings.defaultApplicationMode.get;
             [[ThemeManager shared] configureWithAppMode:initialAppMode];
+            
+            [OAOsmOAuthHelper logOutIfNeeded];
 
             [self askReview];
 
@@ -226,7 +230,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
         if (status == AFNetworkReachabilityStatusReachableViaWWAN || status == AFNetworkReachabilityStatusReachableViaWiFi)
         {
-            [_app checkAndDownloadOsmAndLiveUpdates];
+            [_app checkAndDownloadOsmAndLiveUpdates:YES];
             [_app checkAndDownloadWeatherForecastsUpdates];
         }
     }];
@@ -257,7 +261,7 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 
 - (void)performUpdatesCheck
 {
-    [_app checkAndDownloadOsmAndLiveUpdates];
+    [_app checkAndDownloadOsmAndLiveUpdates:YES];
     [_app checkAndDownloadWeatherForecastsUpdates];
 }
 
@@ -355,7 +359,20 @@ NSNotificationName const OALaunchUpdateStateNotification = @"OALaunchUpdateState
 {
     NSLog(@"OAAppDelegate applicationWillEnterForeground %d", _appInitDone);
     if (_appInitDone)
+    {
         [_app onApplicationWillEnterForeground];
+
+        // Start suspended resource download task if such exists
+        if (![_app.downloadsManager hasActiveDownloadTasks] && [_app.downloadsManager.keysOfDownloadTasks count] > 0)
+        {
+            id<OADownloadTask> nextTask = [_app.downloadsManager firstDownloadTasksWithKey:[_app.downloadsManager.keysOfDownloadTasks objectAtIndex:0]];
+            if (nextTask)
+            {
+                NSLog(@"Resume suspended download %@", nextTask.key);
+                [nextTask resume];
+            }
+        }
+    }
 }
 
 - (void)applicationDidBecomeActive

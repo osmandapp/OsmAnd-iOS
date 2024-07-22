@@ -18,6 +18,7 @@ final class MigrationManager: NSObject {
     enum MigrationKey: String {
         case migrationChangeWidgetIds1Key
         case migrationChangeQuickActionIds1Key
+        case migrationLocationNavigationIconsKey
     }
 
     static let shared = MigrationManager()
@@ -60,6 +61,10 @@ final class MigrationManager: NSObject {
                 changeQuickActionIdsMigration1()
                 migrateActionButtons()
                 defaults.set(true, forKey: MigrationKey.migrationChangeQuickActionIds1Key.rawValue)
+            }
+            if !defaults.bool(forKey: MigrationKey.migrationLocationNavigationIconsKey.rawValue) {
+                migrateLocationNavigationIcons()
+                defaults.set(true, forKey: MigrationKey.migrationLocationNavigationIconsKey.rawValue)
             }
         }
     }
@@ -323,6 +328,37 @@ final class MigrationManager: NSObject {
         return true
     }
     
+    private func migrateLocationNavigationIcons() {
+        if let settings = OAAppSettings.sharedManager() {
+            for appMode in OAApplicationMode.allPossibleValues() {
+                if let oldLocationIconPref = OACommonInteger.withKey("locationIcon", defValue: 0).makeProfile() {
+                    switch oldLocationIconPref.get(appMode) {
+                    case 0:
+                        settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
+                    case 1:
+                        settings.locationIcon.set(OALocationIcon.car().name(), mode: appMode)
+                    case 2:
+                        settings.locationIcon.set(OALocationIcon.bicycle().name(), mode: appMode)
+                    default:
+                        settings.locationIcon.set(OALocationIcon.default().name(), mode: appMode)
+                    }
+                }
+                if let oldNavigationIconPref = OACommonInteger.withKey("navigationIcon", defValue: 0).makeProfile() {
+                    switch oldNavigationIconPref.get(appMode) {
+                    case 0:
+                        settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
+                    case 1:
+                        settings.navigationIcon.set(OALocationIcon.movement_NAUTICAL().name(), mode: appMode)
+                    case 2:
+                        settings.navigationIcon.set(OALocationIcon.movement_CAR().name(), mode: appMode)
+                    default:
+                        settings.navigationIcon.set(OALocationIcon.movement_DEFAULT().name(), mode: appMode)
+                    }
+                }                    
+            }
+        }
+    }
+
     private func migrateActionButtons() {
         let helper = OAMapButtonsHelper.sharedInstance()
         guard let buttonState = helper.getButtonState(byId: QuickActionButtonState.defaultButtonId) else {

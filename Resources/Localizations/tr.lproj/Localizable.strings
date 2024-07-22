@@ -1704,7 +1704,7 @@
 "allow_3D_view" = "2.5B görünüm";
 "do_not_rotate" = "Döndürme";
 "light_theme" = "Açık";
-"settings_app_theme" = "Uygulama gövdesi";
+"settings_app_theme" = "Uygulama teması";
 "shared_string_meters" = "metre";
 "shared_string_tones" = "ton";
 "accessibility_announce" = "Duyuru";
@@ -2929,7 +2929,7 @@
 "announcement_time_approach" = "Yaklaşma";
 "route_info" = "Rota bilgisi";
 "image_cache" = "Resimönbelleği";
-"external_device_status_connect" = "Bağlan";
+"external_device_status_connect" = "Bağlamak";
 "coordinates_widget_secondary_desc" = "Koordinat biçimi %@ – %@ – %@ içinde değiştirilebilir.";
 "map_widget_sunrise_sunset_time_left" = "Kalan zaman";
 "shared_string_view" = "Görünüm";
@@ -3333,3 +3333,9 @@
 "avoid_pt_types_descr" = "Kaçınılacak toplu taşıma türlerini seçin:";
 "edit_tilesource_maxzoom" = "En fazla yakınlaştırma";
 "empty_name" = "Boş ad";
+"missing_maps_ignore_details" = "Rotanız için indirdiğiniz haritalar uygun olabilir. Eğer bölgeye ve haritaya tanıdık iseniz, yönlendirmeyi var olan haritaları kullanarak yapmayı deneyebilirsiniz.";
+"transport_hazmat_title" = "Tehlikeli maddelerin taşınması";
+"data_source" = "Veri Kaynağı";
+"weather_data_sources_prompt" = "OsmAnd hava verisini iki kaynaktan sağlar:";
+"missing_maps_ignore" = "Var olan haaritaları kullan";
+"map_settings_weather_wind_animation" = "Rüzgar animasyonu";

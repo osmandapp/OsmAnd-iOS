@@ -75,8 +75,8 @@
 "daynight_mode_night" = "Nočný režim";
 "map_widget_renderer" = "Štýl vykresľovania";
 "map_settings_overunder" = "Prekrývacia/Podkladová";
-"map_settings_over" = "Prekrývacia";
-"map_settings_under" = "Podkladová";
+"map_settings_over" = "Prekryv";
+"map_settings_under" = "Podklad";
 "shared_string_none" = "Žiadne";
 "map_settings_offline" = "Štýly pre offline mapy";
 "shared_string_online_maps" = "Online mapy";
@@ -2500,7 +2500,7 @@
 "shared_string_trash" = "Kôš";
 "shortest_distance_first" = "Najkratšia vzdialenosť nahor";
 "external_device_status_connect" = "Pripojiť";
-"map_settings_topography" = "Vrstevnice";
+"map_settings_topography" = "Údaje vrstevníc";
 "precipitation_widget_desc" = "Zobrazí zrážky pre súčasný stred mapy.";
 "nav_type_brouter" = "BRouter";
 "map_widget_sunset_desc" = "Zobrazuječas najbližšieho západu slnka alebo zostávajúci čas do západu slnka.";
@@ -2673,7 +2673,7 @@
 "map_markers_bar" = "Panel mapových značiek";
 "map_widget_trip_recording_downhill" = "Z kopca";
 "shared_string_loading" = "Načítanie";
-"weather_update_disabled" = "Zakázané";
+"weather_update_disabled" = "Vypnuté";
 "average_speed_time_interval_desc" = "Zadajtečasový interval pre priemerovanie rýchlosti.";
 "map_widget_sun_position_desc" = "Zobrazuječas do východu alebo západu slnka.";
 "temperature_widget_desc" = "Zobrazí teplotu pre súčasný stred mapy.";
@@ -2882,3 +2882,15 @@
 "shared_string_top" = "Hore";
 "shared_string_development" = "Vývoj";
 "display_position_automatic_descr" = "Závisí od orientácie mapy: naspodu v režime \'v smere pohybu\', v strede obrazovky v iných prípadoch.";
+"missing_maps_ignore_details" = "Pokrývajú stiahnuté mapy vašu trasu? Navigujte s nimi ak poznáte danú oblasť.";
+"osmand_depelopment_simulate_location_section" = "Simulovať";
+"transport_hazmat_title" = "Prevoz nebezpečných látok";
+"data_source" = "Zdrojúdajov";
+"weather_source_GFS_description" = "Globálny systém predpovedí z národných centier predpovedí životného prostredia";
+"weather_source_ecmwf_description" = "Európske centrum strednodobých predpovedí počasia";
+"weather_source_GFS_title" = "GFS";
+"shared_string_app_profile" = "Profil aplikácie";
+"weather_source_ecmwf_title" = "ECMWF";
+"map_settings_weather_wind_animation" = "Animácia vetra";
+"weather_data_sources_prompt" = "OsmAnd poskytujeúdaje o počasí z dvoch zdrojov:";
+"missing_maps_ignore" = "Použiť stiahnuté mapy";

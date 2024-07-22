@@ -94,7 +94,7 @@ class AppModeSelectionViewController: OABaseNavbarViewController {
         if let cell = cell {
             cell.titleLabel.text = appMode.toHumanString()
             cell.leftIconView.image = UIImage.templateImageNamed(appMode.getIconName())
-            cell.leftIconView.tintColor = UIColor(rgb: Int(appMode.getIconColor()))
+            cell.leftIconView.tintColor = appMode.getProfileColor()
             let selected = appMode == self.appMode
             cell.accessoryType = selected ? .checkmark : .none
             cell.accessibilityValue = localizedString(selected ? "shared_string_selected" : "shared_string_not_selected")

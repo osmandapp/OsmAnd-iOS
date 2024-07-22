@@ -448,7 +448,7 @@
 "shared_string_or" = "edo";
 "shared_string_and" = "eta";
 "shared_string_edit" = "Editatu";
-"shared_string_modify" = "Modify";
+"shared_string_modify" = "Aldatu";
 "first_time_continue" = "Geroago";
 "shared_string_of" = "of";
 "shared_string_all" = "Guztia";
@@ -508,7 +508,7 @@
 
 // Favorites
 "shared_string_color" = "Kolorea";
-"fav_colors" = "Colors";
+"fav_colors" = "Koloreak";
 "shared_string_name" = "Izena";
 "fav_group" = "Group";
 "shared_string_groups" = "Taldeak";
@@ -662,8 +662,8 @@
 "daynight_mode_night" = "Gaua";
 "map_widget_renderer" = "Maparen errendatze-estiloa";
 "map_settings_overunder" = "Overlay / Underlay";
-"map_settings_over" = "Overlay";
-"map_settings_under" = "Underlay";
+"map_settings_over" = "Gaineko geruza";
+"map_settings_under" = "Azpiko geruza";
 "map_settings_install_maps" = "Choose maps to install or update";
 "map_settings_install_more" = "Install more...";
 "map_settings_offline" = "Styles for offline maps";
@@ -1303,10 +1303,10 @@
 "toggle_online_notes" = "Toggle OSM notes";
 "toggle_local_edits" = "Toggle local OSM edits";
 "quick_action_add_poi" = "Gehitu POI";
-"quick_action_map_style" = "Aldatu maparen estiloa";
+"quick_action_map_style" = "Mapa estiloa";
 "quick_action_map_source" = "Aldatu maparen iturria";
-"quick_action_map_overlay" = "Aldatu maparen gain-azala";
-"quick_action_map_underlay" = "Aldatu maparen azpi-azala";
+"quick_action_map_overlay" = "Gaineko geruza";
+"quick_action_map_underlay" = "Azpiko geruza";
 "quick_action_replace_destination" = "Ordeztu helburua";
 "add_destination" = "Add destination";
 "route_add_start_point" = "Gehitu irteera puntua";
@@ -1394,7 +1394,7 @@
 "quick_action_showhide_mapillary_descr" = "Mapillary geruza mapan erakutsi edo ezkutatzeko botoia.";
 "quick_action_mapillary_hide" = "Hide Mapillary";
 "quick_action_mapillary_show" = "Show Mapillary";
-"quick_action_remove_next_destination" = "Ezabatu hurrengo norako puntua";
+"quick_action_remove_next_destination" = "Hurrengo helmuga puntua";
 "quick_action_remove_next_destination_descr" = "Zure ibilbidean hurrengo helmuga ezabatzen du. Azken helmuga hori bada, nabigazioa geldituko da.";
 "change_application_profile" = "Aldatu aplikazioaren profila";
 "select_application_profile" = "Select application profile";
@@ -3149,3 +3149,20 @@
 "speed_limit_warning" = "Abiadura mugaren abisua";
 "calculate_online" = "Kalkulatu sarean";
 "auto_zoom" = "Zoom automatikoa";
+"tomorrow" = "Bihar";
+"rendering_value_dark_orange_name" = "Laranja iluna";
+"wall_height" = "Hormaren altuera";
+
+"rendering_value_pale_name" = "Zurbila";;
+"osmand_depelopment_simulate_location_section" = "Simulatu";
+"missing_maps_ignore" = "Erabili deskargatutako mapak";
+"weather_source_GFS_description" = "Eguraldia Iragartzeko Zentro Nazionaletako Iragarpen Sistema Globala";
+"weather_source_ecmwf_description" = "Epe Ertaineko Eguraldi Iragarpenen Europako Zentroa";
+"weather_source_GFS_title" = "GFS";
+"missing_maps_ignore_details" = "Deskargatutako mapek zure ibilbidea hartzen dute? Nabigatu haiekin ingurua ezagutzen baduzu.";
+"weather_source_ecmwf_title" = "ECMWF";
+"transport_hazmat_title" = "Material arriskutsuak garraiatzea";
+"weather_data_sources_prompt" = "OsmAnd-ek bi iturritatik eskaintzen ditu eguraldiaren datuak:";
+"data_source" = "Datu-iturria";
+"shared_string_app_profile" = "Aplikazioaren profila";
+"map_settings_weather_wind_animation" = "Haizearen animazioa";

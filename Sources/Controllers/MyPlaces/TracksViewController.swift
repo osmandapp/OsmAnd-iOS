@@ -212,8 +212,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     override func viewDidLoad() {
         super.viewDidLoad()
         tableView.keyboardDismissMode = .onDrag
-        tableView.refreshControl = UIRefreshControl()
-        tableView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+        addRefreshControl()
         if isRootFolder && rootFolder.tracks.isEmpty && rootFolder.subfolders.isEmpty {
             buildFoldersTree()
         }
@@ -221,7 +220,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
 
         tableView.register(UINib(nibName: OAButtonTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OAButtonTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OATwoButtonsTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OATwoButtonsTableViewCell.reuseIdentifier)
-        tableView.register(UINib(nibName: OARightIconTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OARightIconTableViewCell.reuseIdentifier)
+        tableView.register(UINib(nibName: OASimpleTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OASimpleTableViewCell.reuseIdentifier)
         tableView.register(UINib(nibName: OALargeImageTitleDescrTableViewCell.reuseIdentifier, bundle: nil), forCellReuseIdentifier: OALargeImageTitleDescrTableViewCell.reuseIdentifier)
     }
     
@@ -327,7 +326,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
             } else {
                 if isRootFolder && !tableView.isEditing {
                     let visibleTracksFolderRow = section.createNewRow()
-                    visibleTracksFolderRow.cellType = OARightIconTableViewCell.reuseIdentifier
+                    visibleTracksFolderRow.cellType = OASimpleTableViewCell.reuseIdentifier
                     visibleTracksFolderRow.key = visibleTracksKey
                     visibleTracksFolderRow.title = localizedString("tracks_on_map")
                     visibleTracksFolderRow.iconName = "ic_custom_map_pin"
@@ -362,7 +361,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate func createRowFor(folder: TrackFolder, section: OATableSectionData) {
         let folderRow = section.createNewRow()
         let folderName = folder.path.lastPathComponent()
-        folderRow.cellType = OARightIconTableViewCell.reuseIdentifier
+        folderRow.cellType = OASimpleTableViewCell.reuseIdentifier
         folderRow.key = tracksFolderKey
         folderRow.title = folderName
         folderRow.iconName = "ic_custom_folder"
@@ -381,7 +380,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     fileprivate func createRowFor(track: OAGPX, section: OATableSectionData) {
         let trackRow = section.createNewRow()
         let fileName = track.gpxFileName ?? ""
-        trackRow.cellType = OARightIconTableViewCell.reuseIdentifier
+        trackRow.cellType = OASimpleTableViewCell.reuseIdentifier
         trackRow.key = trackKey
         trackRow.title = fileName.lastPathComponent().deletingPathExtension()
         trackRow.setObj(track.gpxFilePath as Any, forKey: pathKey)
@@ -627,6 +626,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     // MARK: - Navbar Toolbar Actions
     
     private func onNavbarSelectButtonClicked() {
+        removeRefreshControl()
         tableView.setEditing(true, animated: false)
         tableView.allowsMultipleSelectionDuringEditing = true
         updateData()
@@ -757,6 +757,7 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
     @objc private func onNavbarCancelButtonClicked() {
         selectedTracks.removeAll()
         selectedFolders.removeAll()
+        addRefreshControl()
         tableView.setEditing(false, animated: true)
         tableView.allowsMultipleSelectionDuringEditing = false
         updateData()
@@ -1316,19 +1317,17 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
                 recCell = cell
                 outCell = cell
             }
-        } else if item.cellType == OARightIconTableViewCell.reuseIdentifier {
-            let cell = tableView.dequeueReusableCell(withIdentifier: OARightIconTableViewCell.reuseIdentifier) as? OARightIconTableViewCell
+        } else if item.cellType == OASimpleTableViewCell.reuseIdentifier {
+            let cell = tableView.dequeueReusableCell(withIdentifier: OASimpleTableViewCell.reuseIdentifier) as? OASimpleTableViewCell
             if let cell {
                 cell.selectionStyle = tableView.isEditing ? .default : .none
                 cell.selectedBackgroundView = UIView()
                 cell.selectedBackgroundView?.backgroundColor = .groupBg
                 cell.titleLabel.textColor = UIColor.textColorPrimary
                 cell.descriptionLabel.textColor = UIColor.textColorSecondary
-                cell.rightIconView.tintColor = UIColor.iconColorDefault
-                
                 cell.titleLabel.text = item.title
                 cell.descriptionLabel.text = item.descr
-                cell.rightIconView.image = UIImage.templateImageNamed("ic_custom_arrow_right")
+                cell.accessoryType = tableView.isEditing ? .none : .disclosureIndicator
                 cell.leftIconView.image = UIImage.templateImageNamed(item.iconName)
                 if let color = item.obj(forKey: colorKey) as? UIColor {
                     cell.leftIconView.tintColor = color
@@ -1651,5 +1650,18 @@ class TracksViewController: OACompoundViewController, UITableViewDelegate, UITab
         isSearchActive = false
         isFiltered = false
         updateSearchController()
+    }
+}
+
+// MARK: - UIRefreshControl
+
+extension TracksViewController {
+    private func addRefreshControl() {
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(onRefresh), for: .valueChanged)
+    }
+    
+    private func removeRefreshControl() {
+        tableView.refreshControl = nil
     }
 }

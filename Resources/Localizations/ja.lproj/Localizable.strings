@@ -2975,3 +2975,4 @@
 "avoid_pt_types" = "利用を避ける交通機関の種類…";
 "step_by_step" = "ターンバイターン";
 "shared_string_millimeters" = "ミリメートル";
+"transport_hazmat_title" = "危険物の輸送";

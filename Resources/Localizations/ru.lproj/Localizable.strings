@@ -82,7 +82,7 @@
 "daynight_mode_night" = "Ночь";
 "map_widget_renderer" = "Стиль карты";
 "map_settings_overunder" = "Покрытие и подложка";
-"map_settings_over" = "Покрытие";
+"map_settings_over" = "Наложение";
 "map_settings_under" = "Подложка";
 "map_settings_map_over" = "Покрытие";
 "map_settings_map_under" = "Подложка";
@@ -2889,7 +2889,7 @@
 "shared_string_deleted" = "Удалено";
 "longest_duration_first" = "Сначала более продолжительные";
 "temperature_widget_desc" = "Виджет показывает температуру для текущего центра карты.";
-"external_device_status_connect" = "Подключить";
+"external_device_status_connect" = "Соединение";
 "no_widgets_here_yet" = "Виджеты не добавлены";
 "help_article_start_with_main_menu_name" = "Главное меню";
 "osmand_cloud_deletion_secondary_devices_warning" = "Вторичные устройства будут отключены от OsmAnd Cloud и потеряют доступ к платным функциям.";
@@ -3215,3 +3215,16 @@
 "avoid_pt_types" = "Исключить виды транспорта…";
 "required_maps_list" = "Карты, которые также можно использовать: %@";
 "speedometer_description" = "Показывает вашу текущую скорость, определенную по GPS";
+"missing_maps_ignore" = "Использовать загруженные карты";
+"map_settings_weather_wind_animation" = "Анимация ветра";
+"weather_source_GFS_description" = "Глобальная система прогнозов от национальных центров экологического прогнозирования";
+"weather_source_ecmwf_title" = "ECMWF";
+"data_source" = "Источник данных";
+"missing_maps_ignore_details" = "Некоторые уже загруженные карты могут подойти для вашего маршрута. Если вы знакомы с местностью и картами, вы можете попробовать проложить маршрут, используя существующие карты.";
+"weather_data_sources_prompt" = "OsmAndпредоставляет данные о погоде из двух источников:";
+"osmand_depelopment_simulate_location_section" = "Моделировать";
+"transport_hazmat_title" = "Перевозка опасных грузов";
+"weather_source_GFS_title" = "GFS";
+"shared_string_app_profile" = "Профиль приложения";
+"weather_source_ecmwf_description" = "Европейский центр среднесрочных прогнозов погоды";
+"rendering_value_pale_name" = "Бледный";

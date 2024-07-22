@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, OALocationServicesStatus)
     OALocationServicesStatusSuspended
 };
 
-@class OALocationSimulation, OAObservable, CLLocation;
+@class OALocationSimulation, OAObservable;
 
 @interface OALocationServices : NSObject
 

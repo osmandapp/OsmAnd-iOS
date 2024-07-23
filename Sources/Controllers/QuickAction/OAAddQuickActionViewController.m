@@ -23,15 +23,21 @@
 
 @implementation OAAddQuickActionViewController
 {
-    OrderedDictionary<NSString *, NSArray<QuickActionType *> *> *_actions;
+    OATableDataModel *_data;
+    NSString *_selectedGroup;
     
+    OrderedDictionary<NSString *, NSArray<QuickActionType *> *> *_actions;
     NSMutableArray<QuickActionType *> *_filteredData;
+    
     UISearchController *_searchController;
     BOOL _isFiltered;
+    NSString *_query;
 
     OAMapButtonsHelper *_mapButtonsHelper;
     QuickActionButtonState *_buttonState;
 }
+
+static NSString *_kActionObjectKey = @"actionObjectKey";
 
 #pragma mark - Initialization
 
@@ -41,6 +47,18 @@
     if (self)
     {
         _buttonState = buttonState;
+    }
+    return self;
+}
+
+- (instancetype)initWithButtonState:(QuickActionButtonState *)buttonState selectedGroup:(NSString *)selectedGroup actions:(OrderedDictionary<NSString *, NSArray<QuickActionType *> *> *)actions
+{
+    self = [super init];
+    if (self)
+    {
+        _buttonState = buttonState;
+        _selectedGroup = selectedGroup;
+        _actions = actions;
     }
     return self;
 }
@@ -63,12 +81,16 @@
 {
     [super viewWillAppear:animated];
     
-    _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
-    _searchController.searchBar.delegate = self;
-    _searchController.obscuresBackgroundDuringPresentation = NO;
-    self.navigationItem.searchController = _searchController;
-    [self setupSearchControllerWithFilter:NO];
-    _isFiltered = NO;
+    if (!_selectedGroup)
+    {
+        _searchController = [[UISearchController alloc] initWithSearchResultsController:nil];
+        _searchController.searchBar.delegate = self;
+        _searchController.obscuresBackgroundDuringPresentation = NO;
+        self.navigationItem.searchController = _searchController;
+        [self setupSearchControllerWithFilter:_isFiltered];
+        if (_query)
+            _searchController.searchBar.searchTextField.text = _query;
+    }
     [self.tableView reloadData];
 }
 
@@ -83,17 +105,15 @@
 
 - (NSString *)getTitle
 {
-    return OALocalizedString(@"quick_action_new_action");
+    if (_selectedGroup)
+        return _selectedGroup;
+    else
+        return _isFiltered ? OALocalizedString(@"search_results") : OALocalizedString(@"quick_action_new_action");
 }
 
 - (EOABaseNavbarColorScheme)getNavbarColorScheme
 {
-    return EOABaseNavbarColorSchemeOrange;
-}
-
-- (NSString *)getTableHeaderDescription
-{
-    return OALocalizedString(@"quick_action_add_actions_descr");
+    return EOABaseNavbarColorSchemeGray;
 }
 
 - (void)setupSearchControllerWithFilter:(BOOL)isFiltered
@@ -115,7 +135,7 @@
 
 #pragma mark - Table data
 
-- (void)generateData
+- (void)buildData
 {
     NSArray<QuickActionType *> *all = [_mapButtonsHelper produceTypeActionsListWithHeaders:_buttonState];
     NSMutableArray<QuickActionType *> *actionsInSection = nil;
@@ -142,74 +162,159 @@
     _actions = [OrderedDictionary dictionaryWithDictionary:mapping];
 }
 
-- (QuickActionType *)getItem:(NSIndexPath *)indexPath
+- (void)generateData
 {
-    if (_isFiltered)
-        return _filteredData[indexPath.row];
+    if (!_actions || _actions.count == 0)
+        [self buildData];
     
-    NSString *sectionKey = _actions.allKeys[indexPath.section];
-    return _actions[sectionKey][indexPath.row];
+    _data = [[OATableDataModel alloc] init];
+    OATableSectionData *section = [_data createNewSection];
+    
+    if (!_selectedGroup)
+    {
+        // Main screen - groups list
+        if (!_isFiltered)
+        {
+            /*
+            OATableRowData *mapInteractionsRow = [section createNewRow];
+            mapInteractionsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            mapInteractionsRow.title = OALocalizedString(@"key_event_category_map_interactions");
+            mapInteractionsRow.iconName = @"ic_custom_show_on_map";
+            mapInteractionsRow.key = [OAMapButtonsHelper TYPE_MAP_INTERACTIONS].name;
+            */
+            
+            OATableRowData *configureMapRow = [section createNewRow];
+            configureMapRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            configureMapRow.title = OALocalizedString(@"configure_map");
+            configureMapRow.iconName = @"ic_custom_overlay_map";
+            configureMapRow.key = [OAMapButtonsHelper TYPE_CONFIGURE_MAP].name;
+            
+            OATableRowData *myPlacesRow = [section createNewRow];
+            myPlacesRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            myPlacesRow.title = OALocalizedString(@"shared_string_my_places");
+            myPlacesRow.iconName = @"ic_custom_favorites";
+            myPlacesRow.key = [OAMapButtonsHelper TYPE_MY_PLACES].name;
+            
+            OATableRowData *navigationRow = [section createNewRow];
+            navigationRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            navigationRow.title = OALocalizedString(@"shared_string_navigation");
+            navigationRow.iconName = @"ic_custom_navigation";
+            navigationRow.key = [OAMapButtonsHelper TYPE_NAVIGATION].name;
+            
+            OATableRowData *settingsRow = [section createNewRow];
+            settingsRow.cellType = [OASimpleTableViewCell getCellIdentifier];
+            settingsRow.title = OALocalizedString(@"shared_string_settings");
+            settingsRow.iconName = @"ic_custom_settings";
+            settingsRow.key = [OAMapButtonsHelper TYPE_SETTINGS].name;
+        }
+        else
+        {
+            NSArray<QuickActionType *> *selectedGroupActions = _actions[_selectedGroup];
+            for (QuickActionType *action in _filteredData)
+            {
+                OATableRowData *row = [section createNewRow];
+                row.cellType = [OAButtonTableViewCell getCellIdentifier];
+                row.title = action.nameAction;
+                row.descr = action.name;
+                row.iconName = action.iconName;
+                row.secondaryIconName = action.secondaryIconName;
+                [row setObj:action forKey:_kActionObjectKey];
+            }
+        }
+    }
+    else
+    {
+        NSArray<QuickActionType *> *selectedGroupActions = _actions[_selectedGroup];
+        for (QuickActionType *action in selectedGroupActions)
+        {
+            OATableRowData *row = [section createNewRow];
+            row.cellType = [OAButtonTableViewCell getCellIdentifier];
+            row.title = action.nameAction;
+            row.descr = action.name;
+            row.iconName = action.iconName;
+            row.secondaryIconName = action.secondaryIconName;
+            [row setObj:action forKey:_kActionObjectKey];
+        }
+    }
 }
 
 - (NSInteger)sectionsCount
 {
-    return _isFiltered ? 1 : _actions.allKeys.count;
-}
-
-- (NSString *)getTitleForHeader:(NSInteger)section
-{
-    return _isFiltered ? OALocalizedString(@"search_results") : _actions.allKeys[section];
+    return [_data sectionCount];
 }
 
 - (NSInteger)rowsCount:(NSInteger)section
 {
-    if (_isFiltered)
-        return _filteredData.count;
-    
-    NSString *key = _actions.allKeys[section];
-    return _actions[key].count;
+    return [_data rowCount:section];
 }
 
 - (UITableViewCell *)getRow:(NSIndexPath *)indexPath
 {
-    QuickActionType *action = [self getItem:indexPath];
-    if (action)
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
+    {
+        OASimpleTableViewCell* cell = nil;
+        cell = [self.tableView dequeueReusableCellWithIdentifier:[OASimpleTableViewCell getCellIdentifier]];
+        if (cell == nil)
+        {
+            NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OASimpleTableViewCell getCellIdentifier] owner:self options:nil];
+            cell = (OASimpleTableViewCell *)[nib objectAtIndex:0];
+            [cell descriptionVisibility:NO];
+            [cell leftIconVisibility:YES];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        }
+        if (cell)
+        {
+            cell.titleLabel.text = item.title;
+            if (item.iconName)
+            {
+                cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+                cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
+                
+                BOOL leftIconVisible = YES;
+                cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + (leftIconVisible ? kPaddingToLeftOfContentWithIcon : kPaddingOnSideOfContent), 0., 0.);
+            }
+        }
+        return cell;
+    }
+    if ([item.cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
     {
         OAButtonTableViewCell *cell = [self.tableView dequeueReusableCellWithIdentifier:[OAButtonTableViewCell getCellIdentifier]];
         if (cell == nil)
         {
             NSArray *nib = [[NSBundle mainBundle] loadNibNamed:[OAButtonTableViewCell getCellIdentifier] owner:self options:nil];
             cell = (OAButtonTableViewCell *) nib[0];
-            [cell descriptionVisibility:NO];
+            [cell descriptionVisibility:YES];
             [cell.button setTitle:nil forState:UIControlStateNormal];
         }
         if (cell)
         {
             cell.separatorInset = UIEdgeInsetsMake(0., [OAUtilities getLeftMargin] + kPaddingToLeftOfContentWithIcon, 0., 0.);
-            cell.titleLabel.text = action.name;
-            cell.leftIconView.image = [UIImage templateImageNamed:action.iconName];
-            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorSelected];
+            cell.titleLabel.text = item.title;
+            cell.titleLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
+            cell.titleLabel.textColor = [UIColor colorNamed:ACColorNameTextColorSecondary];
+            
+            cell.descriptionLabel.text = item.descr;
+            cell.descriptionLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
+            cell.descriptionLabel.textColor = [UIColor colorNamed:ACColorNameTextColorPrimary];
+            
+            cell.leftIconView.image = [UIImage templateImageNamed:item.iconName];
+            cell.leftIconView.tintColor = [UIColor colorNamed:ACColorNameIconColorActive];
             if (cell.leftIconView.subviews.count > 0)
                 [[cell.leftIconView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
-            
-            if (action.secondaryIconName != nil)
+
+            if (item.secondaryIconName != nil)
             {
-                OAQuickAction *act = [action createNew];
                 CGRect frame = CGRectMake(0., 0., cell.leftIconView.frame.size.width, cell.leftIconView.frame.size.height);
                 UIImage *imgBackground = [UIImage templateImageNamed:@"ic_custom_compound_action_background"];
                 UIImageView *background = [[UIImageView alloc] initWithImage:imgBackground];
                 [background setTintColor:[UIColor colorNamed:ACColorNameGroupBg]];
                 [cell.leftIconView addSubview:background];
-                UIImage *img = [UIImage imageNamed:act.getSecondaryIconName];
+                UIImage *img = [UIImage imageNamed:item.secondaryIconName];
                 UIImageView *view = [[UIImageView alloc] initWithImage:img];
                 view.frame = frame;
                 [cell.leftIconView addSubview:view];
             }
-            cell.button.tag = indexPath.section << 10 | indexPath.row;
-            [cell.button setImage:[[UIImage imageNamed:@"ic_custom_plus"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal]
-                         forState:UIControlStateNormal];
-            [cell.button removeTarget:nil action:NULL forControlEvents:UIControlEventTouchUpInside];
-            [cell.button addTarget:self action:@selector(addAction:) forControlEvents:UIControlEventTouchUpInside];
         }
         return cell;
     }
@@ -218,28 +323,25 @@
 
 - (void)onRowSelected:(NSIndexPath *)indexPath
 {
-    [self openQuickActionSetupFor:indexPath];
-}
-
-#pragma mark - Selectors
-
-- (void)addAction:(id)sender
-{
-    if ([sender isKindOfClass:UIButton.class])
+    OATableRowData *item = [_data itemForIndexPath:indexPath];
+    if ([item.cellType isEqualToString:[OASimpleTableViewCell getCellIdentifier]])
     {
-        UIButton *button = (UIButton *) sender;
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:button.tag & 0x3FF inSection:button.tag >> 10];
-        [self openQuickActionSetupFor:indexPath];
+        OAActionConfigurationViewController *groupContentVC = [[OAAddQuickActionViewController alloc] initWithButtonState:_buttonState selectedGroup:item.key actions:_actions];
+        groupContentVC.delegate = self.delegate;
+        [self.navigationController pushViewController:groupContentVC animated:YES];
+    }
+    else if ([item.cellType isEqualToString:[OAButtonTableViewCell getCellIdentifier]])
+    {
+        QuickActionType *action = [item objForKey:_kActionObjectKey];
+        if (action)
+        {
+            OAActionConfigurationViewController *actionSetupVC = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState typeId:action.id];
+            actionSetupVC.delegate = self.delegate;
+            [self.navigationController pushViewController:actionSetupVC animated:YES];
+        }
     }
 }
 
-- (void)openQuickActionSetupFor:(NSIndexPath *)indexPath
-{
-    QuickActionType *item = [self getItem:indexPath];
-    OAActionConfigurationViewController *actionScreen = [[OAActionConfigurationViewController alloc] initWithButtonState:_buttonState typeId:item.id];
-    actionScreen.delegate = self.delegate;
-    [self.navigationController pushViewController:actionScreen animated:YES];
-}
 
 #pragma mark - Keyboard Notifications
 
@@ -285,12 +387,13 @@
     {
         [self setupSearchControllerWithFilter:YES];
         _isFiltered = YES;
+        _query = searchText;
         _filteredData = [NSMutableArray new];
         for (NSArray *actionGroup in _actions.allValues)
         {
             for (QuickActionType *actionType in actionGroup)
             {
-                NSRange nameRange = [actionType.name rangeOfString:searchText options:NSCaseInsensitiveSearch];
+                NSRange nameRange = [[actionType getFullName] rangeOfString:searchText options:NSCaseInsensitiveSearch];
                 if (nameRange.location != NSNotFound)
                     [_filteredData addObject:actionType];
             }
@@ -299,8 +402,11 @@
     else
     {
         _isFiltered = NO;
+        _query = nil;
         [self setupSearchControllerWithFilter:NO];
     }
+    self.title = [self getTitle];
+    [self generateData];
     [self.tableView reloadData];
 }
 

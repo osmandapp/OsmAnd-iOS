@@ -116,7 +116,7 @@ final class QuickActionType: NSObject {
     func getFullName() -> String? {
         if let _name {
             if let _nameAction, !_nameAction.isEmpty {
-                return String(format: localizedString("ltr_or_rtl_combine_via_dash"), _name, _nameAction)
+                return String(format: localizedString("ltr_or_rtl_combine_via_dash"), _nameAction, _name)
             } else {
                 return _name
             }

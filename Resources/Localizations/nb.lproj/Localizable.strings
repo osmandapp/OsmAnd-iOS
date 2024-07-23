@@ -1686,7 +1686,7 @@
 "profile_type_osmand_string" = "OsmAnd-profil";
 "quick_action_switch_profile_descr" = "Handlingsknappen veksler mellom valgte profiler.";
 "shared_string_legend" = "Tegnforklaring";
-"vessel_width_limit_description" = "Still inn fartøyets bredde for å unngå smale broer";
+"vessel_width_limit_description" = "Angi fartøyets bredde for å unngå smale broer";
 "shared_string_walk" = "Gå";
 "shared_string_settings" = "Innstillinger";
 "next_segment" = "Neste segment";
@@ -2383,7 +2383,7 @@
 "compass_visible_if_map_rotated" = "Synlig hvis kartet er rotert";
 "local_backup_descr" = "Sikkerhetskopier eller gjenopprett data fra en lokal fil.";
 "gpx_upload_trackable_visibility_descr" = "\"Sporbar\" betyr at sporet ikke vil vises i offentlige lister, men bearbeidede sporpunkter med tidsstempel (som ikke direkte kan knyttes til deg) vil være tilgjengelig gjennom nedlastinger fra det offentlige GPS-API-et.";
-"vessel_height_limit_description" = "Sett skipshøyde for å unngå lave broer. Husk at hvis broen åpner seg, brukes høyden fra åpen tilstand.";
+"vessel_height_limit_description" = "Angi skipshøyde for å unngå lave broer. Husk at hvis broen åpner seg, brukes høyden fra åpen tilstand.";
 "download_all" = "Last ned alt";
 "backup_into_file" = "Sikkerhetskopier som fil";
 "shared_string_weather" = "Vær";

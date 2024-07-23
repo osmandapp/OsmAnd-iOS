@@ -3419,3 +3419,4 @@
 "weather_source_ecmwf_title" = "ECMWF";
 "weather_source_GFS_title" = "GFS";
 "wall_height" = "Hæð veggs";
+"weather_source_ecmwf_description" = "Evrópumiðstöð fyrir meðallangar veðurspár";

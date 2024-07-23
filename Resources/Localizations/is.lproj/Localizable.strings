@@ -663,7 +663,7 @@
 "route_tl" = "Beygðu til vinstri og haltu áfram";
 "route_tshl" = "Beygðu skarpt til vinstri og haltu áfram";
 "route_tsll" = "Beygðu örlítið til vinstri og haltu áfram";
-"route_tu" = "Taktu U-beygju og haltuáfram";
+"route_tu" = "Taktu U-beygju og haltu áfram";
 "route_head" = "Beint";
 "looking_up_address" = "Fletti upp heimilisfangi";
 "no_address_found" = "Ekkert heimilisfang erákvarðað";
@@ -1080,10 +1080,10 @@
 "toggle_online_notes" = "Víxla OSM-minnispunktum af/á";
 "toggle_local_edits" = "Víxla staðværum OSM-breytingum af/á";
 "quick_action_add_poi" = "Bæta við merkisstað";
-"quick_action_map_style" = "Breyta stíl korts";
+"quick_action_map_style" = "Stíll korts";
 "quick_action_map_source" = "Breyta gagnagjafa korts";
-"quick_action_map_overlay" = "Breytaþekju korts";
-"quick_action_map_underlay" = "Breyta undirlagi korts";
+"quick_action_map_overlay" = "Yfirlag";
+"quick_action_map_underlay" = "Undirlag";
 "quick_action_replace_destination" = "Skiptaút áfangastað";
 "add_destination" = "Bæta við áfangastað";
 "quick_action_add_first_intermediate" = "Bæta við fyrsta milliáfanga";
@@ -3364,8 +3364,8 @@
 "shared_string_scale" = "Kvarði";
 "rendering_value_access_name" = "Eftir tegund aðgangs";
 "rendering_value_managerName_name" = "Eftir nafni stjórnanda";
-"routing_attr_avoid_cobblestone_name" = "";
-"routing_attr_avoid_cobblestone_description" = "";
+"routing_attr_avoid_cobblestone_name" = "Forðast götusteina";
+"routing_attr_avoid_cobblestone_description" = "Forðast götusteina";
 "visualization_3d_track_line" = "Ferillína";
 "shared_string_round_up" = "Rúnna upp";
 "empty_name" = "Autt heiti";
@@ -3408,3 +3408,13 @@
 "display_position_automatic_descr" = "Fer eftir stefnu korts: neðst fyrir stefnu hreyfingar, á miðju fyrir allt annað.";
 "speedometer_description" = "Sýnir núverandi hraða þinn mældan með GPS";
 "transport_hazmat_title" = "Flutningur hættulegra spilliefna";
+"rendering_value_dark_orange_name" = "Dökkappelsínugult";
+"shared_string_colors" = "Litir";
+"missing_maps_ignore" = "Nota sótt kort";
+"user_palette" = "Litaspjald notanda";
+"data_source" = "Gagnagjafi";
+"weather_data_sources_prompt" = "OsmAnd gefur upp veðurgögn frá tveimur gagnaveitum:";
+"weather_source_GFS_description" = "Global Forecast System frá National Centers for Environmental Prediction";
+"weather_source_ecmwf_title" = "ECMWF";
+"weather_source_GFS_title" = "GFS";
+"wall_height" = "Hæð veggs";

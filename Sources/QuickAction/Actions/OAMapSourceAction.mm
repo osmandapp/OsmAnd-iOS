@@ -17,6 +17,7 @@
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OrderedDictionary.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kLayerOsmVector = @"LAYER_OSM_VECTOR";

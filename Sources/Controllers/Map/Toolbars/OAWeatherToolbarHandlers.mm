@@ -8,6 +8,7 @@
 
 #import "OAWeatherToolbarHandlers.h"
 #import "OAMapStyleSettings.h"
+#import "OAAppData.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 

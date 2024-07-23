@@ -10,6 +10,8 @@
 #import "OAAppSettings.h"
 #import "OASelectedGPXHelper.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;

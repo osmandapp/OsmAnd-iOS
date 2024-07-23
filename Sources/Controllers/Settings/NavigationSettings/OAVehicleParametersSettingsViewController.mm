@@ -17,6 +17,7 @@
 #import "OAColors.h"
 #import "OASizes.h"
 #import "OAUtilities.h"
+#import "OAApplicationMode.h"
 
 #define kDot @"."
 #define kComma @","

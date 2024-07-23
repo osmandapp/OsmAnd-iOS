@@ -9,11 +9,11 @@
 #import "OATravelLocalDataDbHelper.h"
 #import "OsmAndApp.h"
 #import "OAGPXDocument.h"
-#include <OsmAndCore/ArchiveReader.h>
-#include <OsmAndCore/ArchiveWriter.h>
-
 #import "OsmAnd_Maps-Swift.h"
 #import <sqlite3.h>
+
+#include <OsmAndCore/ArchiveReader.h>
+#include <OsmAndCore/ArchiveWriter.h>
 
 #define kTravlGuidesDbName @"travel_guides.db"
 #define DB_VERSION 9
@@ -46,8 +46,6 @@
 #define BOOKMARKS_COL_CONTENT @"content"
 #define BOOKMARKS_COL_LAST_MODIFIED @"last_modified"
 #define BOOKMARKS_COL_GPX_GZ @"gpx_gz"
-
-
 
 @interface OAAddArticleGpxReader : NSObject <OAGpxReadDelegate>
 

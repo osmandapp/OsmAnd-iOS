@@ -270,19 +270,18 @@ final class MigrationManager: NSObject {
                 let id = data["type"] as? Int
                 let stringId = data["actionType"] as? String
                 if let index = changeQuickActionIntStringIds.firstIndex(where: {
-                    (id == -1 && $0.value?.stringId == stringId)
+                    (id == -1 && $0.value.stringId == stringId)
                     || (($0.key.first == id || $0.key.second == stringId)
                         && !excludedIds.contains(where: { $0.first == id && $0.second == stringId }))
                 }) {
-                    if let quickActionType = changeQuickActionIntStringIds[index].value {
-                        data["type"] = quickActionType.id
-                        data["actionType"] = quickActionType.stringId
-                        if let oldName = data["name"] as? String,
-                           (oldName.contains(changeQuickActionIntStringIds[index].key.second) || oldName.contains(quickActionType.stringId)) {
-                            data["name"] = quickActionType.name
-                        }
-                        mutableArr[i] = data
+                    let quickActionType = changeQuickActionIntStringIds[index].value
+                    data["type"] = quickActionType.id
+                    data["actionType"] = quickActionType.stringId
+                    if let oldName = data["name"] as? String,
+                       (oldName.contains(changeQuickActionIntStringIds[index].key.second) || oldName.contains(quickActionType.stringId)) {
+                        data["name"] = quickActionType.name
                     }
+                    mutableArr[i] = data
                 } else {
                     let isMapSource = stringId == "mapsource.change"
                     let isProfile = stringId == "profile.change"

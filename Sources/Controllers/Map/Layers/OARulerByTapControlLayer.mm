@@ -9,15 +9,19 @@
 #import "OARulerByTapControlLayer.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OALocationServices.h"
 #import "OAUtilities.h"
 #import "OAFingerRulerDelegate.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OAMapLayers.h"
 #import "OAMyPositionLayer.h"
 #import "OANativeUtilities.h"
 #import "OAOsmAndFormatter.h"
+#import "OAAppData.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapMarker.h>

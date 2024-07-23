@@ -12,6 +12,8 @@
 #import "OAMultilineTextViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAPluginsHelper.h"
+#import "OrderedDictionary.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kMessage = @"message";

@@ -15,6 +15,8 @@
 #import "OAButtonTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OATitleDescrDraggableCell.h"
+#import "OrderedDictionary.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const kProfiles = @"profiles";

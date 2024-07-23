@@ -15,6 +15,7 @@
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
 #import "OATableRowData.h"
+#import "OAApplicationMode.h"
 #import "OAColors.h"
 #import "Localization.h"
 

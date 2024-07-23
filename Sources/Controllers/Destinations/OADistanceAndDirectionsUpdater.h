@@ -7,9 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OATableDataModel.h"
 
-@class OADestinationItem;
+@class OADestinationItem, OATableDataModel;
 
 @interface OADistanceAndDirectionsUpdater : NSObject
 

@@ -8,12 +8,12 @@
 
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAAppSettings.h"
-#import "OAAppSettings.h"
 #import "OAFileNameTranslationHelper.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OARootViewController.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapViewController.h"
+#import "OAApplicationMode.h"
 #import "OASimpleTableViewCell.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"

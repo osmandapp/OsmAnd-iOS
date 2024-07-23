@@ -42,6 +42,7 @@
 #import "OAFileNameTranslationHelper.h"
 #import "OsmAndApp.h"
 #import "OACustomPlugin.h"
+#import "OAApplicationMode.h"
 
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"

@@ -17,6 +17,7 @@
 #import "OAGPXMutableDocument.h"
 #import "OAGPXTrackAnalysis.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OsmAnd_Maps-Swift.h"
 

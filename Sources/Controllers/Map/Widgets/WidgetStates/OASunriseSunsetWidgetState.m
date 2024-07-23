@@ -10,6 +10,7 @@
 #import "Localization.h"
 #import "OARootViewController.h"
 #import "OAAppSettings.h"
+#import "OAApplicationMode.h"
 #import "OASunriseSunsetWidget.h"
 #import "OsmAnd_Maps-Swift.h"
 

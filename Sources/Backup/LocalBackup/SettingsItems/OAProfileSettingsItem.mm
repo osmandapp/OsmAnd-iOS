@@ -19,8 +19,10 @@
 #import "OAIndexConstants.h"
 #import "OARoutePreferencesParameters.h"
 #import "OAMapWidgetRegistry.h"
-#import "OsmAnd_Maps-Swift.h"
 #import "OAPluginsHelper.h"
+#import "OAMapSource.h"
+#import "OAAppData.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAProfileSettingsItem
 {

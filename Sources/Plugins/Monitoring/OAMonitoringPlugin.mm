@@ -12,6 +12,7 @@
 #import "OATextInfoWidget.h"
 #import "OAApplicationMode.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OARoutingHelper.h"
 #import "OAMapPanelViewController.h"
 #import "OAMapHudViewController.h"
@@ -26,6 +27,8 @@
 #import "OATripRecordingDistanceWidget.h"
 #import "OATripRecordingTimeWidget.h"
 #import "OATripRecordingElevationWidget.h"
+#import "OALiveMonitoringHelper.h"
+#import "OASavingTrackHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define PLUGIN_ID kInAppId_Addon_TrackRecording

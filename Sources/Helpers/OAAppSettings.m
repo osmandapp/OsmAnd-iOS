@@ -1,5 +1,5 @@
 //
-//  OADebugSettings.m
+//  OAAppSettings.m
 //  OsmAnd
 //
 //  Created by AntonRogachevskiy on 10/16/14.
@@ -8,12 +8,20 @@
 
 #import "OAAppSettings.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OADayNightHelper.h"
 #import "OAColors.h"
 #import "OAAvoidRoadInfo.h"
 #import "OAGPXDatabase.h"
 #import "OAIAPHelper.h"
+#import "OADownloadMode.h"
+#import "OAColoringType.h"
+#import "OAMapWidgetRegistry.h"
+#import "OAObservable.h"
+#import "OAMapSource.h"
+#import "OAApplicationMode.h"
+#import "OAMapLayersConfiguration.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static NSString * const settingShowMapRuletKey = @"settingShowMapRuletKey";
@@ -5009,7 +5017,6 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
         [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
-        [[OAScreenOrientationHelper sharedInstance] updateSettings];
     }
 }
 

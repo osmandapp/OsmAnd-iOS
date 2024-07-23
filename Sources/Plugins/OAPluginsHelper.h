@@ -10,8 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-const static NSString *ONLINE_PLUGINS_URL = @"https://osmand.net/api/plugins/list";
-const static NSString *OSMAND_URL = @"https://osmand.net";
+static NSString * const ONLINE_PLUGINS_URL = @"https://osmand.net/api/plugins/list";
+static NSString * const OSMAND_URL = @"https://osmand.net";
 
 @class OAPlugin, OACustomPlugin, OAWorldRegion, QuickActionType, OAApplicationMode, OAPOIUIFilter, OAGPXTrackAnalysis, OAPointAttributes, OAWidgetType, OABaseWidgetView, OAOnlinePlugin;
 
@@ -35,15 +35,15 @@ const static NSString *OSMAND_URL = @"https://osmand.net";
 + (NSArray<OAPlugin *> *) getEnabledVisiblePlugins;
 + (NSArray<OAPlugin *> *) getNotEnabledPlugins;
 + (NSArray<OAPlugin *> *) getNotEnabledVisiblePlugins;
-+ (OAPlugin * _Nullable) getEnabledPlugin:(Class) cl;
-+ (OAPlugin * _Nullable) getPlugin:(Class) cl;
-+ (OAPlugin * _Nullable) getPluginById:(NSString *)pluginId;
++ (nullable OAPlugin *) getEnabledPlugin:(Class) cl;
++ (nullable OAPlugin *) getPlugin:(Class) cl;
++ (nullable OAPlugin *) getPluginById:(NSString *)pluginId;
 + (BOOL) isEnabled:(Class) cl;
 + (BOOL) onDestinationReached;
 + (void) createLayers;
 + (void) updateLocationPlugins:(CLLocation *)location;
 + (void) registerQuickActionTypesPlugins:(NSMutableArray<QuickActionType *> *)allTypes enabledTypes:(NSMutableArray<QuickActionType *> *)enabledTypes;
-+ (void) createMapWidgets:(id<OAWidgetRegistrationDelegate> _Nullable)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
++ (void) createMapWidgets:(nullable id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
 + (void) enablePluginsByMapWidgets:(NSSet<NSString *> *)widgetIds;
 
 + (NSArray<OACustomPlugin *> *) getCustomPlugins;
@@ -54,12 +54,12 @@ const static NSString *OSMAND_URL = @"https://osmand.net";
 + (void)registerCustomPoiFilters:(NSMutableArray<OAPOIUIFilter *> *)poiUIFilters;
 + (void)onPrepareExtraTopPoiFilters:(NSSet<OAPOIUIFilter *> *)poiUIFilters;
 + (NSString *) getAbsoulutePluginPathByRegion:(OAWorldRegion *)region;
-+ (OABaseWidgetView * _Nullable)createMapWidget:(OAWidgetType *)widgetType customId:(NSString * _Nullable)customId appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary * _Nullable)widgetParams;
++ (nullable OABaseWidgetView *)createMapWidget:(OAWidgetType *)widgetType customId:(nullable NSString *)customId appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
 + (void)attachAdditionalInfoToRecordedTrack:(CLLocation *)location json:(NSMutableData *)json;
 + (void)analysePoint:(OAGPXTrackAnalysis *)analysis point:(NSObject *)point attribute:(OAPointAttributes *)attribute;
 + (void)getAvailableGPXDataSetTypes:(OAGPXTrackAnalysis *)analysis
                      availableTypes:(NSMutableArray<NSArray<NSNumber *> *> *)availableTypes;
-+ (void) fetchOnlinePlugins:(id<OAOnlinePluginsCallback> _Nullable)callback;
++ (void) fetchOnlinePlugins:(nullable id<OAOnlinePluginsCallback>)callback;
 
 @end
 

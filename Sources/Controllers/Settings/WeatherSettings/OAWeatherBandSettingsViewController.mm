@@ -14,6 +14,7 @@
 #import "OAWeatherBand.h"
 #import "OAWeatherHelper.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OASizes.h"
 #import "GeneratedAssetSymbols.h"
 

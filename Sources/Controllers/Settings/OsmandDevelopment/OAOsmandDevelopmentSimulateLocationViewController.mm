@@ -8,7 +8,9 @@
 
 #import "OAOsmandDevelopmentSimulateLocationViewController.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OAAppSettings.h"
+#import "OAObservable.h"
 #import "OAGPXDocument.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"

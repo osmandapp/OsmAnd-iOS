@@ -15,6 +15,8 @@
 #import "OASimpleTableViewCell.h"
 #import "OAIAPHelper.h"
 #import "OAAppSettings.h"
+#import "OAAppData.h"
+#import "OAObservable.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

@@ -16,6 +16,7 @@
 #import "OAUtilities.h"
 #import "OAPointDescription.h"
 #import "OACompoundIconUtils.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/Map/MapPrimitiviser.h>
@@ -24,7 +25,6 @@
 #include <OsmAndCore/Map/MapRasterLayerProvider_Software.h>
 #include <OsmAndCore/Map/MapMarkerBuilder.h>
 #include <OsmAndCore/SingleSkImage.h>
-
 #include <binaryRead.h>
 
 @interface OAImpassableRoadsLayer () <OAStateChangedListener>

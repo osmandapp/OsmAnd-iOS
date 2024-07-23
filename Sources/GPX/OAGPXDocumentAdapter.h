@@ -7,8 +7,6 @@
 //
 
 @class OAGPXTrackAnalysis, OAGPXDocument;
-@class OASplitMetric, QuadRect, OAApplicationMode;
-
 
 @interface OAGPXDocumentAdapter : NSObject
 

@@ -13,6 +13,7 @@
 #import "OAParkingPositionPlugin.h"
 #import "OATargetPoint.h"
 #import "OAPluginsHelper.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static QuickActionType *TYPE;

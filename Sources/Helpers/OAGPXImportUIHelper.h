@@ -6,6 +6,7 @@
 //  Copyright © 2024 OsmAnd. All rights reserved.
 //
 
+#import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
 
 @protocol OAGPXImportUIHelperDelegate <NSObject>
@@ -13,7 +14,6 @@
 - (void) updateDelegateVCData;
 
 @end
-
 
 @interface OAGPXImportUIHelper : NSObject
 

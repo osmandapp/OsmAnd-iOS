@@ -395,7 +395,6 @@
 		326B770A29D9CA6400FB23DF /* OATripRecordingTimeWidget.mm in Sources */ = {isa = PBXBuildFile; fileRef = 326B770929D9CA6400FB23DF /* OATripRecordingTimeWidget.mm */; };
 		326C0BA02A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326C0B9F2A5D531700CC8BC5 /* GeomagnetismObjCBridge.swift */; };
 		3271171D2B9B27340082C2EA /* OATransportStopAggregated.m in Sources */ = {isa = PBXBuildFile; fileRef = 3271171C2B9B18D70082C2EA /* OATransportStopAggregated.m */; };
-		3271CC6E2A38C27900DCEBAC /* OAMap3DModeVisibilityType.mm in Sources */ = {isa = PBXBuildFile; fileRef = 321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */; };
 		32725F3B2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3A2B7E6B2300995806 /* OAAutoZoomBySpeedHelper.mm */; };
 		32725F3E2B7E7B1500995806 /* OAZoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 32725F3D2B7E7B1500995806 /* OAZoom.m */; };
 		3274BDAD2AB486FD00AC5E34 /* OAMapAlgorithms.mm in Sources */ = {isa = PBXBuildFile; fileRef = 3274BDAC2AB486FD00AC5E34 /* OAMapAlgorithms.mm */; };
@@ -3700,8 +3699,6 @@
 		3219705625FA0DCD00C3FED6 /* bg_point_octagon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_octagon@3x.png"; path = "Resources/Icons/bg_point_octagon@3x.png"; sourceTree = "<group>"; };
 		3219705725FA0DCE00C3FED6 /* bg_point_circle@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "bg_point_circle@3x.png"; path = "Resources/Icons/bg_point_circle@3x.png"; sourceTree = "<group>"; };
 		3219995C2AA22E910000ADC4 /* TravelGuidesUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelGuidesUtils.swift; sourceTree = "<group>"; };
-		321E08062A37793100105DAE /* OAMap3DModeVisibilityType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OAMap3DModeVisibilityType.h; sourceTree = "<group>"; };
-		321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OAMap3DModeVisibilityType.mm; sourceTree = "<group>"; };
 		321E95232823B5980040312C /* OASimulationNavigationSettingViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OASimulationNavigationSettingViewController.h; sourceTree = "<group>"; };
 		321E95242823B5C10040312C /* OASimulationNavigationSettingViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = OASimulationNavigationSettingViewController.mm; sourceTree = "<group>"; };
 		32210DAD298929AF005D16CB /* ic_custom_upload_to_openstreetmap_outlined@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "ic_custom_upload_to_openstreetmap_outlined@3x.png"; path = "Resources/Icons/ic_custom_upload_to_openstreetmap_outlined@3x.png"; sourceTree = "<group>"; };
@@ -9750,8 +9747,6 @@
 			children = (
 				46DC808429B8887600C477C3 /* OADownloadMode.h */,
 				46DC808529B8889200C477C3 /* OADownloadMode.mm */,
-				321E08062A37793100105DAE /* OAMap3DModeVisibilityType.h */,
-				321E08072A37794000105DAE /* OAMap3DModeVisibilityType.mm */,
 			);
 			path = Enums;
 			sourceTree = "<group>";
@@ -17444,7 +17439,6 @@
 				FAA650572ADD42C50020DCEA /* BLEHeartRateDevice.swift in Sources */,
 				DA5A840D26C563A800F274C7 /* OAFavoriteEditingHandler.mm in Sources */,
 				DA5A813626C563A700F274C7 /* OAEditPOIData.mm in Sources */,
-				3271CC6E2A38C27900DCEBAC /* OAMap3DModeVisibilityType.mm in Sources */,
 				DA5A84F326C563A900F274C7 /* OAMapViewState.m in Sources */,
 				DA5A814326C563A700F274C7 /* OAOsmBugsLocalUtil.mm in Sources */,
 				DA5A816726C563A700F274C7 /* OAUrlImageCard.m in Sources */,

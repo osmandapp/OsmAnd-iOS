@@ -8,6 +8,7 @@
 
 #import "OAMapillaryImageCard.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAMapillaryImage.h"
 #import "OAMapLayers.h"
 

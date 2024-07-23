@@ -10,6 +10,8 @@
 #import "OsmAnd_Maps-Swift.h"
 #import "Localization.h"
 #import "OAUtilities.h"
+#import "OAGPXDatabase.h"
+#import "OAGpxInfo.h"
 #import "OARightIconTableViewCell.h"
 #import "OASimpleTableViewCell.h"
 #import "OAAddTrackFolderViewController.h"

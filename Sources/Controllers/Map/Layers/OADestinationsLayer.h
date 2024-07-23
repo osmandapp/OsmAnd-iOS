@@ -9,9 +9,6 @@
 #import "OASymbolMapLayer.h"
 #import "OAContextMenuProvider.h"
 
-#include <OsmAndCore.h>
-#include <OsmAndCore/Map/MapMarkersCollection.h>
-
 @interface OADestinationsLayer : OASymbolMapLayer<OAContextMenuProvider, OAMoveObjectProvider>
 
 - (void) addDestinationPin:(NSString *)markerResourceName color:(UIColor *)color latitude:(double)latitude longitude:(double)longitude description:(NSString *)description;

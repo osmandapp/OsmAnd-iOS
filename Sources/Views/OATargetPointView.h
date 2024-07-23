@@ -6,19 +6,16 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
-#import "OANavigationController.h"
-#import "OATargetMenuViewController.h"
-#import "OAButton.h"
-#import "OATargetPoint.h"
 #import "OAScrollView.h"
+#import "OATargetMenuViewController.h"
+#import "OATargetPoint.h"
 
 #define kInfoViewLanscapeWidth 320.0
 #define kOATargetPointButtonsViewHeight 82.0
 #define kOATargetPointInfoViewHeight 50.0
 #define kOATargetPointViewFullHeightKoef 0.75
 
-@class OATargetPoint, OAFavoriteItem, OAGpxWptItem, OAGPX;
+@class OAFavoriteItem, OAGpxWptItem, OAGPX;
 
 @protocol OATargetPointViewDelegate;
 

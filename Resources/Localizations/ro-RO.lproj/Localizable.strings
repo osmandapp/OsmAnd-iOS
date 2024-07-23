@@ -802,7 +802,7 @@
 "base_profile_descr_car" = "Mașină, camion, motocicletă";
 "save_track_logging_accuracy" = "Precizieînregistrare";
 "reverse_route" = "Inversează ruta";
-"replace_all" = "Înlocuiți tot";
+"replace_all" = "Înlocuire toate";
 "vehicle_parameters" = "Parametrii vehicul";
 "select_base_profile_dialog_message" = "Bazați-vă profilul personalizat pe unul dintre profilurile implicite ale aplicației. acest lucru definește configurarea de bază, cum ar fi vizibilitatea implicită a widgeturilor și unitățile de viteză și distanță. Acestea sunt profiluri implicite din aplicație, împreună cu exemple de profiluri personalizate la care pot fi extinse:";
 "routing_profile_ski" = "Ski";
@@ -851,7 +851,7 @@
 "select_navigation_icon" = "Selectați icon pentru navigație";
 "quick_action_showhide_mapillary_title" = "Afișare/ascundere Mapillary";
 "shared_string_settings" = "Setări";
-"keep_both" = "Păstrați ambele";
+"keep_both" = "Păstrare ambele";
 "shared_string_poi_types" = "Tipuri POI";
 "ltr_or_rtl_combine_via_colon" = "%@: %@";
 "import_duplicates_title" = "Unele elemente există deja";
@@ -2554,7 +2554,7 @@
 "cloud_contains_newer_changes" = "Versiunea OsmAnd Cloud conține modificări mai noi.";
 "dowload_cloud_version" = "Descărcați versiunea cloud";
 "shared_string_progress" = "Progres";
-"activity_type_mountainbike_name" = "Mountain bike";
+"activity_type_mountainbike_name" = "Bicicletă de munte";
 "rendering_attr_showMtbScaleIMBATrails_name" = "Arată trasee MTB IMBA";
 "mtb_imba_full" = "Asociația Internațională de Ciclism Montan";
 "backup_version_history" = "Istoricul versiunilor";
@@ -3446,7 +3446,9 @@
 "weather_source_GFS_description" = "Sistemul de prognoză globală de la Centrele naționale pentru prognoza mediului";
 "weather_source_GFS_title" = "GFS";
 "map_settings_weather_wind_animation" = "Animația vântului";
-"data_source" = "Sursa datelor";
+"data_source" = "Sursa Datelor";
 "weather_data_sources_prompt" = "OsmAnd furnizează date meteorologice din două surse:";
 "weather_source_ecmwf_title" = "ECMWF";
 "rendering_value_pale_name" = "Palid";
+"osm_login_needs_ios_16_4" = "Conectarea la OpenStreetMap necesită iOS 16.4+";
+"shared_string_update_required" = "Actualizare necesară";

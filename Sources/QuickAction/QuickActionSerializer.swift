@@ -45,8 +45,10 @@ final class QuickActionSerializer: NSObject {
         var obj: [String: Any] = [:]
         obj["actionType"] = quickAction.getTypeId()
         obj["id"] = "\(quickAction.id)"
-        obj["name"] = quickAction.getRawName()
-        
+        if let name = quickAction.getRawName() {
+            obj["name"] = name
+        }
+
         let params = Self.adjustParamsForExport(quickAction.getParams(), action: quickAction)
         if let jsonData = try? JSONSerialization.data(withJSONObject: params) {
             obj["params"] = String(data: jsonData, encoding: .utf8)

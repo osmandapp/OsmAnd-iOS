@@ -15,6 +15,7 @@
 #import "OARoutingHelper.h"
 #import "OAAppSettings.h"
 #import "OAMapViewTrackingUtilities.h"
+#import "CLLocation+Extension.h"
 
 #define CACHE_RADIUS 100000
 #define MAX_BEARING_DEVIATION 45

@@ -9,6 +9,7 @@
 #import "OAGpxWptEditingHandler.h"
 #import "OAGpxWptItem.h"
 #import "OAFavoriteItem.h"
+#import "OAPOI.h"
 #import "OADefaultFavorite.h"
 #import "OsmAndApp.h"
 #import "OARootViewController.h"

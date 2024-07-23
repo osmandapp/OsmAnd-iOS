@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "OACarPlayDashboardInterfaceController.h"
 
 @protocol OACarPlayDashboardDelegate;
 

@@ -6,8 +6,8 @@
 //  Copyright © 2018 OsmAnd. All rights reserved.
 //
 #import <AVFoundation/AVFoundation.h>
-#include "OAAbstractCommandPlayer.h"
-#include "OAVoiceRouter.h"
+#import "OAAbstractCommandPlayer.h"
+#import "OAVoiceRouter.h"
 
 @interface OATTSCommandPlayerImpl : OAAbstractCommandPlayer<AVSpeechSynthesizerDelegate>
 

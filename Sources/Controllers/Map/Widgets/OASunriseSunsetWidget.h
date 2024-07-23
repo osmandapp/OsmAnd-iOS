@@ -7,15 +7,19 @@
 //
 
 #import "OASimpleWidget.h"
-#import "OAAppSettings.h"
-#import "OASunriseSunsetWidgetState.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@class OACommonInteger, OAApplicationMode, OASunriseSunsetWidgetState;
 
 @interface OASunriseSunsetWidget : OASimpleWidget
 
-- (instancetype _Nonnull)initWithState:(OASunriseSunsetWidgetState *_Nonnull)state
-                      appMode:(OAApplicationMode * _Nonnull)appMode
-                 widgetParams:(NSDictionary * _Nullable)widgetParams;
+- (instancetype _Nonnull)initWithState:(OASunriseSunsetWidgetState *)state
+                      appMode:(OAApplicationMode *)appMode
+                 widgetParams:(nullable NSDictionary *)widgetParams;
 
 - (OACommonInteger *)getPreference;
 
 @end
+
+NS_ASSUME_NONNULL_END

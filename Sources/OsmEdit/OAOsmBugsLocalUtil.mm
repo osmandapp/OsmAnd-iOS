@@ -11,6 +11,7 @@
 #import "OAOsmBugResult.h"
 #import "OAOsmNotePoint.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 
 @implementation OAOsmBugsLocalUtil
 

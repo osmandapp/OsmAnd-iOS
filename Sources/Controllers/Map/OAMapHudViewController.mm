@@ -8,14 +8,20 @@
 
 #import "OAMapHudViewController.h"
 #import "OAAppSettings.h"
+#import "OADownloadsManager.h"
 #import "OAMapRulerView.h"
 #import "OAMapInfoController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMapViewTrackingUtilities.h"
 #import "OAColors.h"
+#import "OALocationServices.h"
+#import "OAMapViewState.h"
 #import "OADownloadMapWidget.h"
 #import <JASidePanelController.h>
 #import <UIViewController+JASidePanel.h>
 #import "OsmAndApp.h"
+#import "OAObservable.h"
+#import "OAAppData.h"
 #import "OAAutoObserverProxy.h"
 #import "OAMapViewController.h"
 #import "OARootViewController.h"
@@ -30,6 +36,8 @@
 #import "Localization.h"
 #import "OAProfileGeneralSettingsParametersViewController.h"
 #import "OAReverseGeocoder.h"
+#import "OAMapRendererViewProtocol.h"
+#import "OAApplicationMode.h""
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAMapStyleSettings.h"
@@ -425,7 +433,7 @@ static const float kDistanceMeters = 100.0;
 
 - (BOOL) shouldShowCompass
 {
-    return [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
+    return _mapViewController.mapRendererView && [self shouldShowCompass:_mapViewController.mapRendererView.azimuth];
 }
 
 - (BOOL)needsSettingsForWeatherToolbar

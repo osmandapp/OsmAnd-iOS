@@ -1,5 +1,5 @@
 //
-//  OADebugSettings.h
+//  OAAppSettings.h
 //  OsmAnd
 //
 //  Created by AntonRogachevskiy on 10/16/14.
@@ -7,12 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
-#import "OAApplicationMode.h"
 #import "OAColorizationType.h"
-#import "OAColoringType.h"
-#import "OADownloadMode.h"
-#import "OAMap3DModeVisibilityType.h"
+
+@class OAApplicationMode, OAColoringType, OADownloadMode, OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 static NSString * const kNotificationSetProfileSetting = @"kNotificationSetProfileSetting";
 static NSString * const VOICE_PROVIDER_NOT_USE = @"VOICE_PROVIDER_NOT_USE";
@@ -69,8 +66,6 @@ static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDERLAY = 1;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_OFF = 2;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_UNDEFINED = 3;
 static const NSInteger LAYER_TRANSPARENCY_SEEKBAR_MODE_ALL = 4;
-
-@class OAAvoidRoadInfo, OAMapSource, OAMapLayersConfiguration, OASubscriptionState;
 
 typedef NS_ENUM(NSInteger, EOAWidgetSizeStyle)
 {
@@ -1041,8 +1036,8 @@ typedef NS_ENUM(NSInteger, EOARateUsState)
 - (NSMapTable<NSString *, OACommonPreference *> *)getGlobalPreferences;
 - (OACommonPreference *)getPreferenceByKey:(NSString *)key;
 - (void)registerPreference:(OACommonPreference *)preference forKey:(NSString *)key;
-- (OACommonBoolean * _Nonnull)registerBooleanPreference:(NSString * _Nonnull)key defValue:(BOOL)defValue;
-- (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)key defValue:(NSString * _Nullable)defValue;
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)key defValue:(BOOL)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)key defValue:(NSString *)defValue;
 - (OACommonStringList *)registerStringListPreference:(NSString *)key defValue:(NSArray<NSString *> *)defValue;
 - (OACommonInteger *)registerIntPreference:(NSString *)key defValue:(int)defValue;
 - (OACommonLong *)registerLongPreference:(NSString *)key defValue:(long)defValue;

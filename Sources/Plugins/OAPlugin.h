@@ -7,9 +7,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 
-@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OACustomPlugin, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OAPOI, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString, OACommonBoolean;
+NS_ASSUME_NONNULL_BEGIN
+
+@class OAMapPanelViewController, OAMapInfoController, OAMapViewController, QuickActionType, OAWorldRegion, OAResourceItem, OAApplicationMode, OAPOIUIFilter, OABaseWidgetView, OAWidgetType, OAGPXTrackAnalysis, OAPointAttributes, OACommonPreference, OACommonString, OACommonBoolean;
 
 @protocol OAWidgetRegistrationDelegate;
 
@@ -25,15 +26,15 @@
 - (OAMapViewController *) getMapViewController;
 - (OAMapInfoController *) getMapInfoController;
 
-- (NSString *) getId;
+- (nullable NSString *) getId;
 - (NSString *) getDescription;
 - (NSString *) getName;
-- (NSString *) getLogoResourceId;
-- (NSString *) getAssetResourceName;
-- (UIImage *) getAssetResourceImage;
-- (UIImage *) getLogoResource;
+- (nullable NSString *) getLogoResourceId;
+- (nullable NSString *) getAssetResourceName;
+- (nullable UIImage *) getAssetResourceImage;
+- (nullable UIImage *) getLogoResource;
 
-- (UIViewController *) getSettingsController;
+- (nullable UIViewController *) getSettingsController;
 - (NSString *) getVersion;
 
 - (NSArray<OAWorldRegion *> *) getDownloadMaps;
@@ -41,12 +42,12 @@
 - (NSArray<OAApplicationMode *> *) getAddedAppModes;
 - (NSArray<NSString *> *) getWidgetIds;
 
-- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(NSDictionary *)widgetParams;
-- (OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(NSString *)customId appMode:(OAApplicationMode *)appMode  widgetParams:(NSDictionary *)widgetParams;
+- (void) createWidgets:(id<OAWidgetRegistrationDelegate>)delegate appMode:(OAApplicationMode *)appMode widgetParams:(nullable NSDictionary *)widgetParams;
+- (nullable OABaseWidgetView *)createMapWidgetForParams:(OAWidgetType *)widgetType customId:(nullable NSString *)customId appMode:(OAApplicationMode *)appMode  widgetParams:(nullable NSDictionary *)widgetParams;
 
-- (NSArray<OACommonPreference *> * _Nonnull)getPreferences;
-- (OACommonBoolean * _Nonnull)registerBooleanPreference:(NSString * _Nonnull)prefId defValue:(BOOL)defValue;
-- (OACommonString * _Nonnull)registerStringPreference:(NSString * _Nonnull)prefId defValue:(NSString * _Nullable)defValue;
+- (NSArray<OACommonPreference *> *)getPreferences;
+- (OACommonBoolean *)registerBooleanPreference:(NSString *)prefId defValue:(BOOL)defValue;
+- (OACommonString *)registerStringPreference:(NSString *)prefId defValue:(nullable NSString *)defValue;
 
 - (BOOL) initPlugin;
 - (void) setEnabled:(BOOL)enabled;
@@ -54,9 +55,9 @@
 - (BOOL) isVisible;
 - (BOOL) isEnableByDefault;
 - (void) disable;
-- (void) install:(id<OAPluginInstallListener> _Nullable)callback;
+- (void) install:(nullable id<OAPluginInstallListener>)callback;
 
-- (NSString *) getHelpFileName;
+- (nullable NSString *) getHelpFileName;
 - (NSArray<QuickActionType *> *) getQuickActionTypes;
 
 - (NSString *)getMapObjectsLocale:(NSObject *)object preferredLocale:(NSString *)preferredLocale;
@@ -76,3 +77,5 @@
 - (void) showInstalledScreen;
 
 @end
+
+NS_ASSUME_NONNULL_END

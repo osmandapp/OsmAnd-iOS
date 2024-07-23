@@ -13,10 +13,12 @@
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "OAUtilities.h"
+#import "OAObservable.h"
 #import "OAAutoObserverProxy.h"
 #import "OADefaultFavorite.h"
 #import "OAFavoritesHelper.h"
 #import "OsmAndApp.h"
+#import "OALocationServices.h"
 #import "OAPointTableViewCell.h"
 #import "OASegmentTableViewCell.h"
 #import "OAGPXDocument.h"
@@ -24,9 +26,8 @@
 #import "GeneratedAssetSymbols.h"
 
 #include <OsmAndCore/IFavoriteLocation.h>
-#include <OsmAndCore/IFavoriteLocation.h>
 #include <OsmAndCore/Utilities.h>
-#include "Localization.h"
+#import "Localization.h"
 
 #define kVerticalMargin 16.
 #define kHorizontalMargin 16.

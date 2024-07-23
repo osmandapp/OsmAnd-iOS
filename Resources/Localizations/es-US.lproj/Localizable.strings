@@ -3475,3 +3475,6 @@
 "weather_source_GFS_description" = "Sistema Global de Predicción de los Centros Nacionales de Predicción Medioambiental";
 "weather_source_GFS_title" = "GFS";
 "weather_source_ecmwf_title" = "CEPMPM (ECMWF)";
+"rendering_value_pale_name" = "Pálido";
+"shared_string_update_required" = "Se debe actualizar";
+"osm_login_needs_ios_16_4" = "El inicio de sesión en OpenStreetMap, necesita una versión superior a «iOS 16.4»";

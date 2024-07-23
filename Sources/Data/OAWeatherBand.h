@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OAAutoObserverProxy.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -22,7 +21,7 @@ typedef NS_ENUM(NSInteger, EOAWeatherBand)
     WEATHER_BAND_PRECIPITATION = 5
 };
 
-@class OAMapPresentationEnvironment;
+@class OAMapPresentationEnvironment, OAAutoObserverProxy;
 
 @interface OAWeatherBand : NSObject
 

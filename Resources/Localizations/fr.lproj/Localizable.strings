@@ -444,7 +444,7 @@
 "driving_region_japan" = "Japon";
 "driving_region_us" = "États-Unis";
 "driving_region_canada" = "Canada";
-"driving_region_uk" = "Royaume-Uni, Inde etéquivalents";
+"driving_region_uk" = "Royaume-Uni, Inde et équivalents";
 "driving_region_australia" = "Australie";
 "left_side_navigation" = "Conduiteà gauche";
 "si_mi_feet" = "Miles / pieds";
@@ -3470,3 +3470,4 @@
 "rendering_value_pale_name" = "Pâle";
 "shared_string_update_required" = "Mise à jour nécessaire";
 "osm_login_needs_ios_16_4" = "La connexion à OpenStreetMap nécessite iOS 16.4 ou ultérieur";
+"osmand_depelopment_use_3d_icons" = "Utiliser les icônes de position 3D";

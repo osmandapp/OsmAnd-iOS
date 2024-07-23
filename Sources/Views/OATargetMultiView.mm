@@ -10,6 +10,7 @@
 #import "OATargetPoint.h"
 #import "OATargetPointViewCell.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATargetPointsHelper.h"
 #import "OAUtilities.h"
 #import "Localization.h"

@@ -8,12 +8,14 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OAAutoObserverProxy;
 
 @interface OASuperViewController : UIViewController
 
 - (void)registerNotifications;
-- (void)addNotification:(NSNotificationName)name selector:(SEL)selector;
+- (void)addNotification:(nullable NSNotificationName)name selector:(SEL)selector;
 - (void)registerObservers;
 - (OAAutoObserverProxy *)addObserver:(OAAutoObserverProxy *)observer;
 
@@ -26,10 +28,12 @@
 - (void)onLeftNavbarButtonPressed;
 - (void)onContentSizeChanged:(NSNotification *)notification;
 
-- (void)dismissViewControllerWithAnimated:(BOOL)flag completion:(void (^ __nullable)(void))completion;
+- (void)dismissViewControllerWithAnimated:(BOOL)flag completion:(nullable void (^)(void))completion;
 - (void)dismissViewController;
 - (void)showViewController:(UIViewController *)viewController;
 - (void)showModalViewController:(UIViewController *)viewController;
 - (void)showMediumSheetViewController:(UIViewController *)viewController isLargeAvailable:(BOOL)isLargeAvailable;
 
 @end
+
+NS_ASSUME_NONNULL_END

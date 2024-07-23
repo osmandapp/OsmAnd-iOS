@@ -11,6 +11,7 @@
 
 #import "OAUploadOsmPointsAsyncTask.h"
 #import "OsmAndApp.h"
+#import "OAObservable.h"
 #import "OAOsmEditingPlugin.h"
 #import "OAOsmPoint.h"
 #import "OAOpenStreetMapPoint.h"

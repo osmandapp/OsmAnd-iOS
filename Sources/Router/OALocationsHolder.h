@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class CLLocation, OAWptPt;
+@class OAWptPt;
 
 @interface OALocationsHolder : NSObject <NSCopying>
 

@@ -8,7 +8,9 @@
 
 #import "OASyncBackupTask.h"
 #import "OANetworkSettingsHelper.h"
+#import "OAObservable.h"
 #import "OAPrepareBackupResult.h"
+#import "OAPrepareBackupTask.h"
 #import "OAExportBackupTask.h"
 #import "OAImportBackupTask.h"
 #import "OAExportSettingsType.h"
@@ -17,6 +19,7 @@
 #import "OABackupInfo.h"
 #import "OARemoteFile.h"
 #import "OsmAndApp.h"
+#import "OAAppSettings.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 

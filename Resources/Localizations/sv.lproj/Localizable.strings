@@ -3423,3 +3423,4 @@
 "shared_string_round_up" = "Avrunda uppåt";
 "avoid_pt_types" = "Undvik transporttyper…";
 "transport_hazmat_title" = "Transport av farligt gods";
+"weather_source_ecmwf_description" = "Europeiskt center för medellånga väderprognoser (ECMWF)";

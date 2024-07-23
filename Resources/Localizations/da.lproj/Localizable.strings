@@ -3472,3 +3472,6 @@
 "shared_string_update_required" = "Opdatering påkrævet";
 "osm_login_needs_ios_16_4" = "OpenStreetMap-login kræver iOS 16.4+";
 "osmand_depelopment_use_3d_icons" = "Brug 3D-positionsikoner til placering";
+"shared_string_colors" = "Farver";
+"height_legend_description" = "Højdefarvekort bruges til at visualisere relief.";
+"user_palette" = "Brugerpalet";

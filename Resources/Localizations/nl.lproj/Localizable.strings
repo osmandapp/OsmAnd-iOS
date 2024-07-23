@@ -2676,3 +2676,4 @@
 "edit_tilesource_maxzoom" = "Max zoomniveau";
 "avoid_pt_types_descr" = "Selecteer de te vermijden openbaar vervoer opties:";
 "transport_hazmat_title" = "Vervoeren van gevaarlijke stoffen";
+"weather_source_ecmwf_description" = "Europees Centrum voor weersvoorspellingen op middellange termijn (ECMWF)";

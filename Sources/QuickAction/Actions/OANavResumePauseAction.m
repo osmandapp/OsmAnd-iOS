@@ -28,12 +28,13 @@ static QuickActionType *TYPE;
 
 + (void)initialize
 {
-    TYPE = [[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId
+    TYPE = [[[[[[[[QuickActionType alloc] initWithId:EOAQuickActionIdsNavResumePauseActionId
                                              stringId:@"nav.resumepause"
                                                    cl:self.class]
                 name:OALocalizedString(@"shared_string_navigation")]
                nameAction:OALocalizedString(@"quick_action_verb_pause_resume")]
                iconName:@"ic_custom_navigation_arrow"]
+             secondaryIconName:@"ic_custom_compound_action_play"]
              category:QuickActionTypeCategoryNavigation]
             nonEditable];
 }

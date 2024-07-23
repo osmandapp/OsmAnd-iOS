@@ -174,7 +174,7 @@
 "mapillary_menu_title_tile_cache" = "Κρυφή μνήμη πλακιδίου";
 "shared_string_clear_all" = "Καθαρισμός όλων";
 "quick_action_start_stop_navigation" = "Έναρξη/στάση πλοήγησης";
-"wikivoyage_offline" = "Βικιταξίδια χωρίς διαδίκτυο";
+"wikivoyage_offline" = "Βικιταξίδια εκτός σύνδεσης";
 "show_from_zoom_level" = "Η προβολή ξεκινά σε επίπεδο ζουμ";
 "shared_string_export" = "Εξαγωγή";
 "index_name_central_america" = "Κεντρική Αμερική";
@@ -1352,7 +1352,7 @@
 "monthly_map_updates" = "Μηνιαίες ενημερώσεις χαρτών";
 "altitude_ascent" = "Ανηφόρα";
 "toast_empty_name_error" = "Ανώνυμη τοποθεσία";
-"osm_live_banner_desc" = "Κάντε απεριόριστες λήψεις χαρτών, προσθέτοντας εβδομαδιαία, ημερησίως, ή ακόμα και ωριαίες ενημερώσεις.";
+"osm_live_banner_desc" = "Αποκτήστε απεριόριστες λήψεις χάρτη, προσθέτοντας εβδομαδιαίες, ημερήσιες, ή ακόμα και ωριαίες ενημερώσεις.";
 "share_geo" = "γεω:";
 "shared_string_capacity" = "Χωρητικότητα";
 "copy_coordinates" = "Αντέγραψε συντεταγμένες";
@@ -2036,3 +2036,9 @@
 "fav_export_select" = "Παρακαλώ επιλέξτε αγαπημένα για εξαγωγή";
 "map_widget_current_speed" = "Τρέχουσα ταχύτητα";
 "show_hide_gpx" = "Εμφάνιση/απόκρυψη ιχνών";
+"offline_wikivoyage" = "Βικιταξίδια χωρίς σύνδεσης";
+"product_desc_track_recording" = "Καταγραφή και αποθήκευση των ταξιδιών σας ως ίχνη GPX";
+"subscription_banner_osmand_pro_title" = "Αποκτήστε ωριαίες, ημερήσιες ή εβδομαδιαίες ενημερώσεις χάρτη με το OsmAnd Pro.";
+"preferred_languages" = "Προτιμώμενες γλώσσες";
+"wikipedia_and_wikivoyage_offline" = "Βικιπαίδεια και Βικιταξίδια εκτός σύνδεσης";
+"available_languages" = "Διαθέσιμες γλώσσες";

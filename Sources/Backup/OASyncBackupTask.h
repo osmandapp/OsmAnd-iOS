@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "OANetworkSettingsHelper.h"
+#import "OAPrepareBackupResult.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

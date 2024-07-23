@@ -15,6 +15,7 @@
 #import "OAMapWidgetRegInfo.h"
 #import "OAGPXDocumentPrimitives.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OsmAndApp.h"
 #import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"

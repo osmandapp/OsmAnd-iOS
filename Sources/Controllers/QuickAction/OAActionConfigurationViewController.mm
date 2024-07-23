@@ -23,6 +23,7 @@
 #import "OsmAndApp.h"
 #import "OASimpleTableViewCell.h"
 #import "OAButtonTableViewCell.h"
+#import "MaterialTextFields.h"
 #import "OAActionAddCategoryViewController.h"
 #import "OAQuickSearchListItem.h"
 #import "OAPOIUIFilter.h"
@@ -187,10 +188,14 @@
 - (MutableOrderedDictionary<NSString *, NSArray<NSDictionary *> *> *)generateDataAction
 {
     MutableOrderedDictionary *dataModel = [[MutableOrderedDictionary alloc] init];
-    [dataModel setObject:@[@{
-        @"type" : [OAInputTableViewCell getCellIdentifier],
-        @"title" : _action.getName
-    }] forKey:OALocalizedString(@"shared_string_action_name")];
+    NSString *actionName = [_action getName];
+    if (actionName)
+    {
+        [dataModel setObject:@[@{
+            @"type" : [OAInputTableViewCell getCellIdentifier],
+            @"title" : actionName
+        }] forKey:OALocalizedString(@"shared_string_action_name")];
+    }
     
     OrderedDictionary *actionSpecific = _action.getUIModel;
     [dataModel addEntriesFromDictionary:actionSpecific];

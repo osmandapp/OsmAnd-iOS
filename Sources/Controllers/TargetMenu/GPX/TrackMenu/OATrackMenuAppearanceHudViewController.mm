@@ -12,6 +12,7 @@
 #import "OATableViewCustomFooterView.h"
 #import "OAFoldersCollectionView.h"
 #import "OASlider.h"
+#import "OAAppData.h"
 #import "OASimpleTableViewCell.h"
 #import "OASwitchTableViewCell.h"
 #import "OAValueTableViewCell.h"
@@ -32,14 +33,18 @@
 #import "OAGPXAppearanceCollection.h"
 #import "OsmAndApp.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OASegmentedSlider.h"
 #import "OARouteStatisticsHelper.h"
 #import "OASizes.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAObservable.h"
 #import "GeneratedAssetSymbols.h"
 #import "OAMapSettingsTerrainParametersViewController.h"
+#import "OAColoringType.h"
+#import "OsmAnd_Maps-Swift.h"
 
 static const NSInteger kColorsSection = 1;
 static const NSInteger kColorGridOrDescriptionCell = 1;

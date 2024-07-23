@@ -6,11 +6,9 @@
 //  Copyright (c) 2015 OsmAnd. All rights reserved.
 //
 
-#import <Foundation/Foundation.h>
 #import "OAPOIBaseType.h"
 
-@class OAPOIType;
-@class OAPOIFilter;
+@class OAPOIType, OAPOIFilter;
 
 @interface OAPOICategory : OAPOIBaseType
 

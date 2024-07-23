@@ -23,6 +23,8 @@
 #import "OASaveTrackViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OASavingTrackHelper.h"
 #import "OAGPXMutableDocument.h"
 

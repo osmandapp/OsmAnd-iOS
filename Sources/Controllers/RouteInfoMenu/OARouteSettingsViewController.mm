@@ -12,6 +12,7 @@
 #import "OAAppSettings.h"
 #import "Localization.h"
 #import "OAFavoriteItem.h"
+#import "OAApplicationMode.h"
 #import "OADefaultFavorite.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"

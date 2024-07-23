@@ -8,6 +8,7 @@
 
 #import "OAImportCompleteViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAMainSettingsViewController.h"
 #import "OAMapSettingsViewController.h"
 #import "OARouteAvoidSettingsViewController.h"
@@ -24,6 +25,7 @@
 #import "OARightIconTableViewCell.h"
 #import "OAIndexConstants.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAPluginPopupViewController.h"
 #import "OAOsmNotesSettingsItem.h"
 #import "OAOsmEditsSettingsItem.h"

@@ -7,55 +7,57 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "OrderedDictionary.h"
-#import "Localization.h"
 
-static NSString * _Nonnull const kSectionNoName = @"no_name";
-static NSString * _Nonnull const kDialog = @"dialog";
+NS_ASSUME_NONNULL_BEGIN
+
+static NSString * const kSectionNoName = @"no_name";
+static NSString * const kDialog = @"dialog";
 
 @class OrderedDictionary, QuickActionType;
 
 @interface OAQuickAction : NSObject
 
-@property (nonatomic, readonly) QuickActionType * _Nullable actionType;
+@property (nonatomic, readonly, nullable) QuickActionType *actionType;
 @property (nonatomic, readonly) long id;
 
-- (instancetype _Nonnull)initWithActionType:(QuickActionType * _Nonnull)type;
-- (instancetype _Nonnull)initWithAction:(OAQuickAction * _Nonnull)action;
+- (instancetype)initWithActionType:(QuickActionType *)type;
+- (instancetype)initWithAction:(OAQuickAction *)action;
 - (void) commonInit;
 
-- (NSString * _Nullable)getIconResName;
-- (NSString * _Nullable)getSecondaryIconName;
-- (UIImage * _Nullable)getActionIcon;
+- (nullable NSString *)getIconResName;
+- (nullable NSString *)getSecondaryIconName;
+- (nullable UIImage *)getActionIcon;
 - (BOOL)hasSecondaryIcon;
 
 - (void)setId:(long)id;
 - (NSInteger)getType;
 - (BOOL)isActionEditable;
 - (BOOL)isActionEnabled;
-- (NSString *)getRawName;
+- (nullable NSString *)getRawName;
 - (NSString *)getDefaultName;
-- (NSString *)getName;
+- (nullable NSString *)getName;
 - (BOOL)hasCustomName;
-- (NSString *)getActionTypeId;
+- (nullable NSString *)getActionTypeId;
 
-- (NSDictionary * _Nonnull)getParams;
+- (NSDictionary *)getParams;
 - (void)setName:(NSString *)name;
 - (void)setParams:(NSDictionary *)params;
 - (BOOL)isActionWithSlash;
-- (NSString *)getActionText;
-- (NSString *)getActionStateName;
+- (nullable NSString *)getActionText;
+- (nullable NSString *)getActionStateName;
 - (CLLocation *)getMapLocation;
 
 - (void)execute;
 - (void)drawUI;
 - (OrderedDictionary *)getUIModel;
-- (BOOL)fillParams:(NSDictionary * _Nonnull)model;
+- (BOOL)fillParams:(NSDictionary *)model;
 
 - (BOOL)hasInstanceInList:(NSArray<OAQuickAction *> *)active;
-- (NSString *)getTitle:(NSArray *)filters;
-- (NSString *)getListKey;
+- (nullable NSString *)getTitle:(NSArray *)filters;
+- (nullable NSString *)getListKey;
 
 + (QuickActionType *)TYPE;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -24,14 +24,14 @@
 #import "OAPOIHelper.h"
 #import "OANativeUtilities.h"
 #import "GeneratedAssetSymbols.h"
+#import "OAMapPanelViewController.h"
+#import "Localization.h"
+#import "OARootViewController.h"
+#import "OASelectedGPXHelper.h"
 
 #include <OsmAndCore.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/GpxDocument.h>
-#include "Localization.h"
-#include "OARootViewController.h"
-#include "OASelectedGPXHelper.h"
-
 
 @implementation OAGPXWptViewController
 {

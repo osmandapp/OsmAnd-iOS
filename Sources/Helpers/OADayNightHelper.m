@@ -9,7 +9,9 @@
 #import "OADayNightHelper.h"
 #import "OsmAndApp.h"
 #import "OAAppSettings.h"
+#import "OAObservable.h"
 #import "SunriseSunset.h"
+#import "OALocationServices.h"
 
 @implementation OADayNightHelper
 {

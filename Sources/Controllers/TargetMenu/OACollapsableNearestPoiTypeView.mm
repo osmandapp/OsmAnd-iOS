@@ -8,10 +8,14 @@
 
 #import "OACollapsableNearestPoiTypeView.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OAPOIUIFilter.h"
 #import "OAPOIFiltersHelper.h"
 #import "OATargetInfoViewController.h"
+#import "OAButton.h"
 #import "OsmAnd_Maps-Swift.h"
 #import "GeneratedAssetSymbols.h"
 

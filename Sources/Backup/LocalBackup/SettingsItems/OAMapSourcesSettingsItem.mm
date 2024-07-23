@@ -14,6 +14,7 @@
 #import "OAResourcesUIHelper.h"
 #import "OAMapStyleSettings.h"
 #import "OATileSource.h"
+#import "Localization.h"
 
 #include <OsmAndCore/ResourcesManager.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>

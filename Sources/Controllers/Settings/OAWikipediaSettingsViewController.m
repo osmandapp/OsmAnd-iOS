@@ -17,6 +17,7 @@
 #import "OAApplicationMode.h"
 #import "OsmAndApp.h"
 #import "OAColors.h"
+#import "OAAppData.h"
 #import "Localization.h"
 #import "OAPluginsHelper.h"
 

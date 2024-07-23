@@ -20,8 +20,11 @@
 #import "OATargetInfoViewController.h"
 #import "OAPublicTransportCollapsableCell.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OAPublicTransportRouteShieldCell.h"
 #import "OADividerCell.h"
+#import "OALocationServices.h"
 #import "OAOsmAndFormatter.h"
 #import "GeneratedAssetSymbols.h"
 
@@ -202,19 +205,22 @@
     NSString *str = [NSString stringWithUTF8String:route->color.c_str()];
     str = str.length == 0 ? stopType.renderAttr : str;
     UIColor *color = [OARootViewController.instance.mapPanel.mapViewController getTransportRouteColor:OAAppSettings.sharedManager.nightMode renderAttrName:str];
-    
-    [arr addObject:@{
-        @"cell" : [OAPublicTransportPointCell getCellIdentifier],
-        @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
-        @"title" : [NSString stringWithUTF8String:startStop.name.c_str()],
-        @"descr" : OALocalizedString(@"board_at"),
-        @"time" : timeText,
-        @"top_route_line" : @(NO),
-        @"bottom_route_line" : @(YES),
-        @"custom_icon" : @(YES),
-        @"line_color" : color,
-        @"coords" : @[[[CLLocation alloc] initWithLatitude:startStop.lat longitude:startStop.lon]],
-    }];
+    if (color)
+    {
+        [arr addObject:@{
+            @"cell" : [OAPublicTransportPointCell getCellIdentifier],
+            @"img" : stopType ? stopType.resId : [OATransportStopType getResId:TST_BUS],
+            @"title" : [NSString stringWithUTF8String:startStop.name.c_str()],
+            @"descr" : OALocalizedString(@"board_at"),
+            @"time" : timeText,
+            @"top_route_line" : @(NO),
+            @"bottom_route_line" : @(YES),
+            @"custom_icon" : @(YES),
+            @"line_color" : color,
+            @"coords" : @[[[CLLocation alloc] initWithLatitude:startStop.lat longitude:startStop.lon]],
+        }];
+    }
+
     // TODO: fix later for schedule
     [startTime setObject:@(startTime.firstObject.integerValue + segment->travelTime) atIndexedSubscript:0];
     timeText = [OAOsmAndFormatter getFormattedTimeHM:startTime.firstObject.doubleValue];

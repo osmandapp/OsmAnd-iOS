@@ -223,10 +223,9 @@ final class SavedArticlesTabViewController: OACompoundViewController, GpxReadDel
         article.gpxFile = gpxFile
         let filename = TravelObfHelper.shared.createGpxFile(article: article)
         OATravelGuidesHelper.createGpxFile(article, fileName: filename)
-        let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile)
-        
         view.removeSpinner()
-        if gpx == nil || gpx?.wptPoints == 0 {
+
+        guard let gpx = OATravelGuidesHelper.buildGpx(filename, title: article.title, document: gpxFile), gpx.wptPoints != 0 else {
             OAUtilities.showToast(nil, details: localizedString("article_has_no_points"), duration: 4, in: self.view)
             return
         }

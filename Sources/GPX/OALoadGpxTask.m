@@ -9,7 +9,8 @@
 #import "OALoadGpxTask.h"
 #import "OsmAndApp.h"
 #import "OAUtilities.h"
-
+#import "OAGPXDatabase.h"
+#import "OAGpxInfo.h"
 #import "Localization.h"
 
 @implementation OALoadGpxTask

@@ -10,9 +10,7 @@
 
 #define kMinDistanceFor2ndRowAutoSelection 100.0
 
-@class OADestination;
-@class OADestinationItem;
-@class OAGPXDocument;
+@class OADestination, OADestinationItem, OAGPXDocument;
 
 @interface OADestinationsHelper : NSObject
 

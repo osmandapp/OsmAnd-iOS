@@ -8,11 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <AVFoundation/AVFoundation.h>
-#include <JavaScriptCore/JavaScriptCore.h>
 #import "OATTSCommandPlayerImpl.h"
 #import "OACommandBuilder.h"
 #import "OAVoiceRouter.h"
 #import "OAAppSettings.h"
+
+#include <JavaScriptCore/JavaScriptCore.h>
 
 @implementation OATTSCommandPlayerImpl {
     AVSpeechSynthesizer *synthesizer;

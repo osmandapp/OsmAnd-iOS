@@ -19,6 +19,8 @@
 #import "OATargetPoint.h"
 #import "OAOsmMapUtils.h"
 #import "OAPOI.h"
+#import "OAPOIType.h"
+#import "OAPOICategory.h"
 #import "OAOsmBaseStorage.h"
 #import "OATransportStop.h"
 #import "OAPOILocationType.h"

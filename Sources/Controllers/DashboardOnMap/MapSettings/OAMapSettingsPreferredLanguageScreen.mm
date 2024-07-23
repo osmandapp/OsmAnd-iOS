@@ -9,8 +9,9 @@
 #import "OAMapSettingsPreferredLanguageScreen.h"
 #import "OAMapSettingsViewController.h"
 #import "OAValueTableViewCell.h"
-#include "Localization.h"
-
+#import "Localization.h"
+#import "OAObservable.h"
+#import "OsmAndApp.h"
 
 @implementation OAMapSettingsPreferredLanguageScreen
 {

@@ -9,10 +9,12 @@
 #import "OARoutingHelper.h"
 #import "OARoutingHelper+cpp.h"
 #import "OsmAndApp.h"
+#import "OAAppData.h"
 #import "OARouteProvider.h"
 #import "OARouteCalculationResult.h"
 #import "OAAppSettings.h"
 #import "OAVoiceRouter.h"
+#import "OAObservable.h"
 #import "OAMapUtils.h"
 #import "Localization.h"
 #import "OATargetPointsHelper.h"
@@ -29,7 +31,10 @@
 #import "OACurrentStreetName.h"
 #import "OARouteRecalculationHelper.h"
 #import "OARoutingHelperUtils.h"
-
+#import "OARTargetPoint.h"
+#import "OAResultMatcher.h"
+#import "OAApplicationMode.h"
+#import "CLLocation+Extension.h"
 #import <AFNetworking/AFNetworkReachabilityManager.h>
 #import <OsmAndCore/Utilities.h>
 

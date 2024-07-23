@@ -13,6 +13,7 @@
 #import "OAAppSettings.h"
 #import "OASimpleTableViewCell.h"
 #import "OAMapPanelViewController.h"
+#import "OAMapViewController.h"
 #import "OARootViewController.h"
 #import "OsmAndApp.h"
 #import "OALocationConvert.h"

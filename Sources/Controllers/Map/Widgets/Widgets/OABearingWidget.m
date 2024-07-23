@@ -10,6 +10,7 @@
 #import "OsmAndApp.h"
 #import "OALocationServices.h"
 #import "OADestinationsHelper.h"
+#import "CLLocation+Extension.h"
 #import "OsmAnd_Maps-Swift.h"
 
 static float MIN_SPEED_FOR_HEADING = 1.f;

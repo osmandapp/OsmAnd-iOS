@@ -8,6 +8,8 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 typedef NS_ENUM(NSInteger, EOATableRowType) {
     EOATableRowTypeRegular,
     EOATableRowTypeCollapsable
@@ -29,34 +31,36 @@ typedef NS_ENUM(NSInteger, EOATableRowType) {
 #define kCellAccessibilityLabel @"accessibilityLabel"
 #define kCellAccessibilityValue @"accessibilityValue"
 
-+ (instancetype _Nonnull ) rowData;
++ (instancetype) rowData;
 
-- (instancetype _Nonnull)initWithData:(NSDictionary *_Nonnull)data;
+- (instancetype)initWithData:(NSDictionary *)data;
 
-@property (nonatomic) NSString * _Nullable cellType;
-@property (nonatomic) NSString * _Nullable key;
-@property (nonatomic) NSString * _Nullable title;
-@property (nonatomic) NSString * _Nullable descr;
-@property (nonatomic) NSString * _Nullable iconName;
-@property (nonatomic) UIImage * _Nullable icon;
+@property (nonatomic, nullable) NSString *cellType;
+@property (nonatomic, nullable) NSString *key;
+@property (nonatomic, nullable) NSString *title;
+@property (nonatomic, nullable) NSString *descr;
+@property (nonatomic, nullable) NSString *iconName;
+@property (nonatomic, nullable) UIImage *icon;
 @property (nonatomic) NSInteger iconTint;
-@property (nonatomic) UIColor * _Nullable iconTintColor;
-@property (nonatomic) UIColor * _Nullable secondaryIconTintColor;
-@property (nonatomic) NSString * _Nullable secondaryIconName;
-@property (nonatomic) NSString * _Nullable accessibilityLabel;
-@property (nonatomic) NSString * _Nullable accessibilityValue;
+@property (nonatomic, nullable) UIColor *iconTintColor;
+@property (nonatomic, nullable) UIColor *secondaryIconTintColor;
+@property (nonatomic, nullable) NSString *secondaryIconName;
+@property (nonatomic, nullable) NSString *accessibilityLabel;
+@property (nonatomic, nullable) NSString *accessibilityValue;
 @property (nonatomic) UITableViewCellAccessoryType accessoryType;
 
 @property (nonatomic, readonly, assign) EOATableRowType rowType;
 
-- (void) setObj:(id _Nonnull )data forKey:(nonnull NSString *)key;
-- (id _Nullable ) objForKey:(nonnull NSString *)key;
+- (void) setObj:(id)data forKey:(NSString *)key;
+- (nullable id) objForKey:(NSString *)key;
 
-- (NSString *_Nullable) stringForKey:(nonnull NSString *)key;
-- (NSInteger) integerForKey:(nonnull NSString *)key;
-- (BOOL) boolForKey:(nonnull NSString *)key;
+- (nullable NSString *) stringForKey:(NSString *)key;
+- (NSInteger) integerForKey:(NSString *)key;
+- (BOOL) boolForKey:(NSString *)key;
 
 - (NSInteger) dependentRowsCount;
-- (OATableRowData *_Nonnull) getDependentRow:(NSUInteger)index;
+- (OATableRowData *) getDependentRow:(NSUInteger)index;
 
 @end
+
+NS_ASSUME_NONNULL_END

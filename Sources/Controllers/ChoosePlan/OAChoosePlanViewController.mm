@@ -10,6 +10,7 @@
 #import "OAChoosePlanHelper.h"
 #import "Localization.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OAFeatureCardView.h"
 #import "OASubscriptionCardView.h"
 #import "OsmAnd_Maps-Swift.h"

@@ -8,6 +8,7 @@
 
 #import "OANextTurnWidget.h"
 #import "OsmAndApp.h"
+#import "OAApplicationMode.h"
 #import "OATurnDrawable.h"
 #import "OATurnDrawable+cpp.h"
 #import "OARoutingHelper.h"

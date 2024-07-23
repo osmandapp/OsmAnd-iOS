@@ -16,6 +16,7 @@
 #import "OALocalFile.h"
 #import "OARemoteFile.h"
 #import "OAIAPHelper.h"
+#import "OAProducts.h"
 #import "OANetworkUtilities.h"
 #import "OABackupError.h"
 #import "OABackupDbHelper.h"
@@ -30,6 +31,8 @@
 #import "OADeleteOldFilesCommand.h"
 #import "OARegisterUserCommand.h"
 #import "OARegisterDeviceCommand.h"
+#import "OABackupListeners.h"
+#import "OAPrepareBackupTask.h"
 #import "OAURLSessionProgress.h"
 #import "OsmAnd_Maps-Swift.h"
 

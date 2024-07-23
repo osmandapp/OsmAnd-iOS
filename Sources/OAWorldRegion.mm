@@ -6,9 +6,20 @@
 //  Copyright (c) 2014 OsmAnd. All rights reserved.
 //
 
-#define kWorld @"world"
-
 #import "OAWorldRegion.h"
+#import "OADownloadsManager.h"
+#import "Localization.h"
+#import "OALog.h"
+#import "OAIAPHelper.h"
+#import "OAProducts.h"
+#import "OAUtilities.h"
+#import "OAPointIContainer.h"
+#import "OAIndexConstants.h"
+#import "OAWorldRegion+Protected.h"
+#import "OAResourcesUIHelper.h"
+#import "QuadRect.h"
+#import "Weather/OAWeatherHelper.h"
+#import "OsmAndApp.h"
 
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/WorldRegion.h>
@@ -19,17 +30,7 @@
 #include <OsmAndCore/Data/ObfMapSectionInfo.h>
 #include <OsmAndCore/KeyedEntriesCollection.h>
 
-#import "Localization.h"
-#import "OALog.h"
-#import "OAIAPHelper.h"
-#import "OAUtilities.h"
-#import "OAPointIContainer.h"
-#import "OAIndexConstants.h"
-
-#import "OAWorldRegion+Protected.h"
-#import "OAResourcesUIHelper.h"
-#import "QuadRect.h"
-#import "Weather/OAWeatherHelper.h"
+#define kWorld @"world"
 
 @implementation OAWorldRegion
 {

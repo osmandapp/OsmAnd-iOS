@@ -8,6 +8,7 @@
 
 #import "OAUninstallSpeedCamerasViewController.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATextMultilineTableViewCell.h"
 #import "OATableDataModel.h"
 #import "OATableSectionData.h"
@@ -19,8 +20,9 @@
 #import "OASizes.h"
 #import "OAColors.h"
 #import "Localization.h"
-#import "OsmAnd_Maps-Swift.h"
+#import "OAObservable.h"
 #import "GeneratedAssetSymbols.h"
+#import "OsmAnd_Maps-Swift.h"
 
 @implementation OAUninstallSpeedCamerasViewController
 {

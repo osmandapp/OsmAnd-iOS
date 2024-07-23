@@ -8,6 +8,8 @@
 
 #import "OAAddWaypointViewController.h"
 #import "OARootViewController.h"
+#import "OAMapViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OATrackMenuHudViewController.h"
 #import "OAMapRendererView.h"
 #import "OAContextMenuLayer.h"

@@ -9,6 +9,7 @@
 #import "OASettingsItem.h"
 #import "OAGPXDocument.h"
 #import "OrderedDictionary.h"
+#import "OASettingsHelper.h"
 #import "OsmAnd_Maps-Swift.h"
 
 NSString *const kSettingsItemErrorDomain = @"SettingsItem";

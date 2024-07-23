@@ -11,6 +11,8 @@
 #import "OAProducts.h"
 #import "OAIAPHelper.h"
 #import "OAPlugin.h"
+#import "OAApplicationMode.h"
+#import "OASettingsHelper.h"
 #import "Localization.h"
 
 @implementation OAGlobalSettingsItem

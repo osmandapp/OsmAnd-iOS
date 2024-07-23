@@ -7,7 +7,7 @@
 //
 
 #import "OAMapLayers.h"
-
+#import "OAObservable.h"
 #import "OsmAndApp.h"
 #import "OAMapViewController.h"
 #import "OAMapRendererView.h"

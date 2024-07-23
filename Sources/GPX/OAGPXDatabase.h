@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <CoreLocation/CoreLocation.h>
 #import "OACommonTypes.h"
 
 static NSInteger const kDefaultTrackColor = 0xFFFF0000;

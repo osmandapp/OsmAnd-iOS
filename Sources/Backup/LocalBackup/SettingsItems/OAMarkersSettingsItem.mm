@@ -12,6 +12,7 @@
 #import "OAGPXDocument.h"
 #import "OAUtilities.h"
 #import "OAColors.h"
+#import "Localization.h"
 
 #define APPROXIMATE_MARKER_SIZE_BYTES 240
 

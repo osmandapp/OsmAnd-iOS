@@ -18,6 +18,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OASearchSettings.h"
 #import "OAPOIType.h"
+#import "OAResultMatcher.h"
 #import "OAPOIFilterViewController.h"
 #import "GeneratedAssetSymbols.h"
 

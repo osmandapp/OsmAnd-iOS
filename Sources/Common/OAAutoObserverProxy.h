@@ -7,9 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
-
-#import "OAObservableProtocol.h"
 #import "OAObserverProtocol.h"
+
+@protocol OAObservableProtocol;
 
 @interface OAAutoObserverProxy : NSObject <OAObserverProtocol>
 

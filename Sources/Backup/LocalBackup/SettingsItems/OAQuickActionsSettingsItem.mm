@@ -16,6 +16,7 @@
 #import "OASwitchableAction.h"
 #import "OASwitchProfileAction.h"
 #import "OAShowHidePoiAction.h"
+#import "Localization.h"
 #import "OsmAnd_Maps-Swift.h"
 
 #define APPROXIMATE_QUICK_ACTION_SIZE_BYTES 135

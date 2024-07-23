@@ -7,9 +7,8 @@
 //
 
 #import "OABasePointEditingHandler.h"
-#import "OAPOI.h"
 
-@class OAGpxWptItem, OAGPXDocument;
+@class OAGpxWptItem, OAGPXDocument, OAPOI;
 
 NS_ASSUME_NONNULL_BEGIN
 

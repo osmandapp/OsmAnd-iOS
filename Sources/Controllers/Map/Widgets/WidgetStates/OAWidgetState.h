@@ -8,31 +8,26 @@
 
 #import <Foundation/Foundation.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class OAApplicationMode;
 
 @interface OAWidgetState : NSObject
 
-- (NSString *) getMenuTitle;
-- (NSString *_Nullable)getWidgetTitle;
-
-- (NSString *) getMenuDescription;
-
-- (NSString *) getMenuIconId;
-
-- (NSString *) getMenuItemId;
-
-- (NSArray<NSString *> *) getMenuTitles;
-
-- (NSArray<NSString *> *) getMenuDescriptions;
-
-- (NSArray<NSString *> *) getMenuIconIds;
-
-- (NSArray<NSString *> *) getMenuItemIds;
-
+- (nullable NSString *) getMenuTitle;
+- (nullable NSString *) getWidgetTitle;
+- (nullable NSString *) getMenuDescription;
+- (nullable NSString *) getMenuIconId;
+- (nullable NSString *) getMenuItemId;
+- (nullable NSArray<NSString *> *) getMenuTitles;
+- (nullable NSArray<NSString *> *) getMenuDescriptions;
+- (nullable NSArray<NSString *> *) getMenuIconIds;
+- (nullable NSArray<NSString *> *) getMenuItemIds;
 - (void) changeState:(NSString *)stateId;
-
-- (NSString *) getSettingsIconId:(BOOL)nightMode;
+- (nullable NSString *) getSettingsIconId:(BOOL)nightMode;
 - (void) changeToNextState;
-- (void) copyPrefs:(OAApplicationMode *)appMode customId:(NSString *)customId;
+- (void) copyPrefs:(OAApplicationMode *)appMode customId:(nullable NSString *)customId;
 
 @end
+
+NS_ASSUME_NONNULL_END

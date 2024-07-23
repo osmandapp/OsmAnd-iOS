@@ -6,7 +6,6 @@
 //  Copyright © 2021 OsmAnd. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
 #import "OABaseButtonsViewController.h"
 #import "OASettingsHelper.h"
 

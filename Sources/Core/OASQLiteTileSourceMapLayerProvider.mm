@@ -8,21 +8,19 @@
 
 #import "OASQLiteTileSourceMapLayerProvider.h"
 #import "OANativeUtilities.h"
+#import "OAWebClient.h"
+#import "OAMapCreatorDbHelper.h"
 
 #include <SkImageEncoder.h>
 #include <SkStream.h>
 #include <SkData.h>
 #include <SkImage.h>
-
 #include <OsmAndCore/WebClient.h>
 #include <OsmAndCore/Utilities.h>
 #include <OsmAndCore/SkiaUtilities.h>
 #include <OsmAndCore/Map/OnlineTileSources.h>
 #include <OsmAndCore/Map/OnlineRasterMapLayerProvider.h>
 #include <OsmAndCore/Logging.h>
-
-#import "OAWebClient.h"
-#import "OAMapCreatorDbHelper.h"
 
 OASQLiteTileSourceMapLayerProvider::OASQLiteTileSourceMapLayerProvider(const QString& fileName)
 : _webClient(std::shared_ptr<const OsmAnd::IWebClient>(new OAWebClient()))

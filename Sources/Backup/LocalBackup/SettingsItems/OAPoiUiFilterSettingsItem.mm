@@ -14,6 +14,7 @@
 #import "OAQuickSearchHelper.h"
 #import "OAPOICategory.h"
 #import "OAPOIType.h"
+#import "Localization.h"
 
 #define kNAME_KEY @"name"
 #define kFILTER_ID_KEY @"filterId"

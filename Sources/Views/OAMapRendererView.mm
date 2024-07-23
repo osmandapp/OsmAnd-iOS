@@ -9,6 +9,8 @@
 #import "OAMapRendererView.h"
 #import "OAMapUtils.h"
 #import "OANativeUtilities.h"
+#import "OAObservable.h"
+#import "OALog.h"
 
 #import <Foundation/Foundation.h>
 #import <QuartzCore/QuartzCore.h>
@@ -25,8 +27,6 @@
 #include <OsmAndCore/Map/IAtlasMapRenderer.h>
 #include <OsmAndCore/Map/AtlasMapRendererConfiguration.h>
 #include <OsmAndCore/Map/AtlasMapRenderer_Metrics.h>
-
-#import "OALog.h"
 
 #if defined(DEBUG)
 #   define validateGL() [self validateOpenGLES]

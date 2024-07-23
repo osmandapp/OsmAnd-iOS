@@ -12,6 +12,8 @@
 #import "OAPointWithRegionTableViewCell.h"
 #import "OASelectionCollapsableCell.h"
 #import "OAGpxWptItem.h"
+#import "OALocationServices.h"
+#import "OAObservable.h"
 #import "Localization.h"
 #import "OAColors.h"
 #import "OsmAnd_Maps-Swift.h"

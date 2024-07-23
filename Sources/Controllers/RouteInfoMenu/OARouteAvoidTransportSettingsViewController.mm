@@ -25,6 +25,7 @@
 #import "OATargetPointsHelper.h"
 #import "OARTargetPoint.h"
 #import "OARootViewController.h"
+#import "OAMapPanelViewController.h"
 #import "OASelectedGPXHelper.h"
 #import "OAGPXDatabase.h"
 #import "OAMapActions.h"

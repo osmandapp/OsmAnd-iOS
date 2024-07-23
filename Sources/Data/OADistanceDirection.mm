@@ -9,6 +9,7 @@
 #import "OADistanceDirection.h"
 #import "OsmAndApp.h"
 #import "OAOsmAndFormatter.h"
+#import "OALocationServices.h"
 
 #include <OsmAndCore/Utilities.h>
 

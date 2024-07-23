@@ -8,14 +8,19 @@
 
 #import "OASettingsItem.h"
 
+NS_ASSUME_NONNULL_BEGIN
+
 @class QuickActionButtonState, OAQuickAction;
 
 @interface OAQuickActionsSettingsItem : OASettingsItem
 
-- (instancetype)initWithBaseItem:(OASettingsItem *)baseItem buttonState:(QuickActionButtonState *)buttonState;
+- (instancetype _Nonnull)initWithBaseItem:(OASettingsItem *)baseItem
+                              buttonState:(QuickActionButtonState *)buttonState;
 
 - (QuickActionButtonState *)getButtonState;
-+ (void)parseParams:(NSString * _Nonnull)paramsString quickAction:(OAQuickAction * _Nonnull)quickAction;
++ (void)parseParams:(NSString *)paramsString quickAction:(OAQuickAction *)quickAction;
 + (void)parseParamsWithKey:(NSString *)key params:(NSMutableDictionary *)params toString:(BOOL)toString;
 
 @end
+
+NS_ASSUME_NONNULL_END

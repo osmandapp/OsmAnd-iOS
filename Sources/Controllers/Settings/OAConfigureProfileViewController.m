@@ -742,7 +742,7 @@ typedef NS_ENUM(NSInteger, EOADashboardScreenType) {
     [[OARootViewController instance].mapPanel recreateAllControls];
     [OAMapStyleSettings.sharedInstance loadParameters];
     [[[OsmAndApp instance] mapSettingsChangeObservable] notifyEvent];
-    [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:nil];
+    [OsmAndApp.instance.applicationModeChangedObservable notifyEventWithKey:nil];
     [self updateView];
 }
 

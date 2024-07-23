@@ -85,7 +85,7 @@
                                                  andObserve:[OsmAndApp instance].availableAppModesChangedObservable]];
     [self addObserver:[[OAAutoObserverProxy alloc] initWith:self
                                                 withHandler:@selector(onAvailableAppModesChanged)
-                                                 andObserve:OsmAndApp.instance.data.applicationModeChangedObservable]];
+                                                 andObserve:OsmAndApp.instance.applicationModeChangedObservable]];
 }
 
 #pragma mark - UIViewController

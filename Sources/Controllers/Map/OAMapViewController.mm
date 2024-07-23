@@ -350,7 +350,7 @@ static const NSInteger kReplaceLocalNamesMaxZoom = 6;
     
     _applicationModeChangedObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                            withHandler:@selector(onAppModeChanged)
-                                                            andObserve:[OsmAndApp instance].data.applicationModeChangedObservable];
+                                                            andObserve:[OsmAndApp instance].applicationModeChangedObservable];
 
     _mapZoomObserver = [[OAAutoObserverProxy alloc] initWith:self
                                                  withHandler:@selector(onMapZoomChanged:withKey:andValue:)

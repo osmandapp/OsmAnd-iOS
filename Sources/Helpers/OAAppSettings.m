@@ -5016,7 +5016,7 @@ static NSString *kWhenExceededKey = @"WHAN_EXCEEDED";
         if (markAsLastUsed)
             [_lastUsedApplicationMode set:applicationMode.stringKey];
         [[ThemeManager shared] configureWithAppMode: applicationMode];
-        [[[OsmAndApp instance].data applicationModeChangedObservable] notifyEventWithKey:prevAppMode];
+        [OsmAndApp.instance.applicationModeChangedObservable notifyEventWithKey:prevAppMode];
     }
 }
 

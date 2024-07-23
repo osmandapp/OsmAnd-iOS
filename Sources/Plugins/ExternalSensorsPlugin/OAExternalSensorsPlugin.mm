@@ -70,7 +70,10 @@ NSString * const OATrackRecordingAnyConnectedDevice = @"any_connected_device_wri
 - (void)setEnabled:(BOOL)enabled
 {
     [super setEnabled:enabled];
-    [[OARootViewController instance] updateLeftPanelMenu];
+    if (OsmAndApp.instance.initialized)
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[OARootViewController instance] updateLeftPanelMenu];
+        });
 }
 
 - (BOOL)isEnabled

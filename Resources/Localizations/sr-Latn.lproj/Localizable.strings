@@ -3470,3 +3470,6 @@
 "shared_string_update_required" = "Potrebno ažuriranje";
 "osm_login_needs_ios_16_4" = "OpenStreetMap login treba iOS 16.4+";
 "osmand_depelopment_use_3d_icons" = "Koristi 3D ikone pozicije lokacije";
+"user_palette" = "Korisnička paleta";
+"shared_string_colors" = "Boje";
+"height_legend_description" = "Za vizualizaciju reljefa koriste se mape visina u boji.";

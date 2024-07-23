@@ -2684,3 +2684,4 @@
 "rendering_attr_alpineHiking_name" = "Raskusastme klassifikatsioon";
 "missing_maps_ignore" = "Kasuta olemasolevaid kaarte";
 "delete_history_items" = "Kas kustutame %@ ajalookirjet?";
+"weather_source_ecmwf_description" = "Euroopa Keskpika Ilmaennustuse Keskus (ECMWF)";

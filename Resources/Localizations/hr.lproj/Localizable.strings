@@ -2316,3 +2316,4 @@
 "weather_update_disabled" = "Onemogućeno";
 "images" = "Slike";
 "shared_string_bottom" = "Na dnu";
+"weather_source_ecmwf_description" = "Europski centar za srednjoročne prognoze vremena (ECMWF)";
